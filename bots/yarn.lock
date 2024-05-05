@@ -218,10 +218,10 @@ core-js@^3.8.2:
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.24.1.tgz#cf7724d41724154010a6576b7b57d94c5d66e64f"
   integrity sha512-0QTBSYSUZ6Gq21utGzkfITDylE8jWC9Ne1D2MrhvlsZBI1x39OdDIVbzSqtgMndIy6BlHxBXpMGqzZmnztg2rg==
 
-danger@12.1.0:
-  version "12.1.0"
-  resolved "https://registry.yarnpkg.com/danger/-/danger-12.1.0.tgz#d2625ffab6976d3f365a9abb4ef9019a2a626c31"
-  integrity sha512-pD3PxXSPuEhlLpiR3pUupt/kkwNKhWbmPCPTq/KuKEE9E0WimDsNsozboZLiBLit6bbBJBlttpDtFXGpVMqM1A==
+danger@12.2.0:
+  version "12.2.0"
+  resolved "https://registry.yarnpkg.com/danger/-/danger-12.2.0.tgz#b0fe37adffa4c7a80e99405dde685c510da1538a"
+  integrity sha512-5IZmIEs87CyeWkPtPLq/qF4wrjdkdY/d9nx+kP0zeTFd1YE/iIAr3jPePiKI8wHVRs17ZsJDXdvGI+lqoQf9eA==
   dependencies:
     "@gitbeaker/rest" "^38.0.0"
     "@octokit/rest" "^18.12.0"
@@ -235,7 +235,7 @@ danger@12.1.0:
     http-proxy-agent "^5.0.0"
     https-proxy-agent "^5.0.1"
     hyperlinker "^1.0.0"
-    json5 "^2.1.0"
+    json5 "^2.2.3"
     jsonpointer "^5.0.0"
     jsonwebtoken "^9.0.0"
     lodash.find "^4.6.0"
@@ -457,10 +457,10 @@ is-plain-object@^5.0.0:
   resolved "https://registry.yarnpkg.com/is-plain-object/-/is-plain-object-5.0.0.tgz#4427f50ab3429e9025ea7d52e9043a9ef4159344"
   integrity sha512-VRSzKkbMm5jMDoKLbltAkFQ5Qr7VDiTFGXxYFXXowVj387GeGNOCsOH6Msy00SGZ3Fp84b1Naa1psqgcCIEP5Q==
 
-json5@^2.1.0:
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/json5/-/json5-2.2.1.tgz#655d50ed1e6f95ad1a3caababd2b0efda10b395c"
-  integrity sha512-1hqLFMSrGHRHxav9q9gNjJ5EXznIxGVO09xQRrwplcS8qs28pZ8s8hupZAmqDwZUmVZ2Qb2jnyPOWcDH8m8dlA==
+json5@^2.2.3:
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/json5/-/json5-2.2.3.tgz#78cd6f1a19bdc12b73db5ad0c61efd66c1e29283"
+  integrity sha512-XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg==
 
 jsonpointer@^5.0.0:
   version "5.0.1"
