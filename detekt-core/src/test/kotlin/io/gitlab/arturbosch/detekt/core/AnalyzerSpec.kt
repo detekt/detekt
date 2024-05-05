@@ -354,7 +354,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             return createProcessingSettings(config = config) { project { basePath = root } }
                 .use { settings ->
                     Analyzer(settings, listOf(CustomRuleSetProvider()), emptyList())
-                        .run(listOf(compileContentForTest("", root, Path(path))))
+                        .run(listOf(compileContentForTest("", Path(path))))
                         .isNotEmpty()
                 }
         }

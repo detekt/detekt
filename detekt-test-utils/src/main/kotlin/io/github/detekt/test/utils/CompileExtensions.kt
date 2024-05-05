@@ -24,8 +24,7 @@ fun compileContentForTest(
  */
 fun compileContentForTest(
     @Language("kotlin") content: String,
-    basePath: Path = Path("/").absolute(),
-    path: Path = basePath.resolve("Test.kt"),
+    path: Path = Path("/").absolute().resolve("Test.kt"),
 ): KtFile {
     return KtTestCompiler.createKtFile(content, path)
 }
