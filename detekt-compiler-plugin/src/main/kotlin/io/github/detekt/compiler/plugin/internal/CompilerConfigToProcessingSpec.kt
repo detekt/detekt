@@ -4,6 +4,7 @@ import io.github.detekt.compiler.plugin.Keys
 import io.github.detekt.tooling.api.spec.ProcessingSpec
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.config.CompilerConfiguration
+import kotlin.io.path.Path
 
 internal fun CompilerConfiguration.toSpec(log: MessageCollector) = ProcessingSpec.invoke {
     config {
@@ -17,6 +18,9 @@ internal fun CompilerConfiguration.toSpec(log: MessageCollector) = ProcessingSpe
         debug = get(Keys.DEBUG, false)
         outputChannel = AppendableAdapter { log.info(it) }
         errorChannel = AppendableAdapter { log.error(it) }
+    }
+    project {
+        basePath = get(Keys.ROOT_PATH, Path(System.getProperty("user.dir")))
     }
     reports {
         getMap(Keys.REPORTS).forEach {

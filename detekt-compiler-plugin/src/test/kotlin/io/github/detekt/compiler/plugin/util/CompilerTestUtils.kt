@@ -32,6 +32,11 @@ object CompilerTestUtils {
                     "detekt-compiler-plugin",
                     "useDefaultConfig",
                     useDefaultConfig.toString(),
+                ),
+                PluginOption(
+                    "detekt-compiler-plugin",
+                    "rootDir",
+                    workingDir.absolutePath
                 )
             )
         }.compile()
