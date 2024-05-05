@@ -209,10 +209,12 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
         ktElement = fakeKtElement()
     )
     val entity2 = createEntity(
-        location = createLocation("src/main/com/sample/Sample2.kt", basePath, position = 22 to 2)
+        location = createLocation("src/main/com/sample/Sample2.kt", basePath, position = 22 to 2, text = 10..14),
+        ktElement = fakeKtElement()
     )
     val entity3 = createEntity(
-        location = createLocation("src/main/com/sample/Sample3.kt", basePath, position = 33 to 3)
+        location = createLocation("src/main/com/sample/Sample3.kt", basePath, position = 33 to 3, text = 10..14),
+        ktElement = fakeKtElement()
     )
 
     return TestDetektion(
