@@ -11,6 +11,7 @@ dependencies {
 
     testImplementation(projects.detektTest)
     testImplementation(libs.assertj)
+    testFixturesImplementation(projects.detektTestUtils)
 }
 
 detekt {
