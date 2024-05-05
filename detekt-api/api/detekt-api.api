@@ -121,7 +121,6 @@ public abstract interface class io/gitlab/arturbosch/detekt/api/Detektion : org/
 public final class io/gitlab/arturbosch/detekt/api/Entity : io/gitlab/arturbosch/detekt/api/Compactable {
 	public static final field Companion Lio/gitlab/arturbosch/detekt/api/Entity$Companion;
 	public fun <init> (Ljava/lang/String;Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/Location;Lorg/jetbrains/kotlin/psi/KtElement;)V
-	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/Location;Lorg/jetbrains/kotlin/psi/KtElement;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun compact ()Ljava/lang/String;
 	public final fun getKtElement ()Lorg/jetbrains/kotlin/psi/KtElement;
 	public final fun getLocation ()Lio/gitlab/arturbosch/detekt/api/Location;
