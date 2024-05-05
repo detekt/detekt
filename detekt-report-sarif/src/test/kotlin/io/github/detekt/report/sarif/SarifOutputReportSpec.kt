@@ -52,7 +52,7 @@ class SarifOutputReportSpec {
             .render(result)
 
         val expectedReport = readResourceContent("vanilla.sarif.json")
-            .replace("<PREFIX>", Path("/").absolute().toUri().toString())
+            .replace("<PREFIX>", Path("").toUri().toString())
 
         assertThat(report).isEqualToIgnoringWhitespace(expectedReport)
     }
@@ -83,7 +83,7 @@ class SarifOutputReportSpec {
             .render(result)
 
         val expectedReport = readResourceContent("rule_warning.sarif.json")
-            .replace("<PREFIX>", Path("/").absolute().toUri().toString())
+            .replace("<PREFIX>", Path("").toUri().toString())
 
         assertThat(report).isEqualToIgnoringWhitespace(expectedReport)
     }

@@ -190,10 +190,10 @@ public abstract interface class io/gitlab/arturbosch/detekt/api/Issue$RuleInfo {
 
 public final class io/gitlab/arturbosch/detekt/api/Location : io/gitlab/arturbosch/detekt/api/Compactable {
 	public static final field Companion Lio/gitlab/arturbosch/detekt/api/Location$Companion;
-	public fun <init> (Lio/gitlab/arturbosch/detekt/api/SourceLocation;Lio/gitlab/arturbosch/detekt/api/SourceLocation;Lio/gitlab/arturbosch/detekt/api/TextLocation;Lio/github/detekt/psi/FilePath;)V
+	public fun <init> (Lio/gitlab/arturbosch/detekt/api/SourceLocation;Lio/gitlab/arturbosch/detekt/api/SourceLocation;Lio/gitlab/arturbosch/detekt/api/TextLocation;Ljava/nio/file/Path;)V
 	public fun compact ()Ljava/lang/String;
 	public final fun getEndSource ()Lio/gitlab/arturbosch/detekt/api/SourceLocation;
-	public final fun getFilePath ()Lio/github/detekt/psi/FilePath;
+	public final fun getPath ()Ljava/nio/file/Path;
 	public final fun getSource ()Lio/gitlab/arturbosch/detekt/api/SourceLocation;
 	public final fun getText ()Lio/gitlab/arturbosch/detekt/api/TextLocation;
 	public fun toString ()Ljava/lang/String;

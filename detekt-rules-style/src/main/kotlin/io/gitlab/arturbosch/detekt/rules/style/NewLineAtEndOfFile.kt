@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.github.detekt.psi.absolutePath
 import io.github.detekt.psi.getLineAndColumnInPsiFile
-import io.github.detekt.psi.toFilePath
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
@@ -36,7 +36,7 @@ class NewLineAtEndOfFile(config: Config) : Rule(
                 source = sourceLocation,
                 endSource = sourceLocation,
                 text = textLocation,
-                filePath = file.containingFile.toFilePath()
+                path = file.containingFile.absolutePath()
             )
             report(
                 CodeSmell(

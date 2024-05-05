@@ -34,45 +34,6 @@ instead.
 */
 fun PsiFile.absolutePath(): Path = absolutePath ?: Path(virtualFile.path)
 
-/**
- * Represents both absolute path and relative path if available.
- */
-class FilePath(
-    val absolutePath: Path,
-    val basePath: Path? = null,
-    val relativePath: Path? = null
-) {
-
-    init {
-        require(
-            basePath == null ||
-                relativePath == null ||
-                absolutePath == basePath.resolve(relativePath).normalize()
-        ) {
-            "Absolute path = $absolutePath much match base path = $basePath and relative path = $relativePath"
-        }
-        require(absolutePath.isAbsolute) { "absolutePath should be absolute" }
-        require(basePath?.isAbsolute != false) { "basePath should be absolute" }
-        require(relativePath?.isAbsolute != true) { "relativePath should not be absolute" }
-    }
-
-    override fun toString(): String =
-        "FilePath(absolutePath=$absolutePath, basePath=$basePath, relativePath=$relativePath)"
-}
-
-fun PsiFile.toFilePath(): FilePath {
-    return when {
-        basePath != null && relativePath != null -> FilePath(
-            absolutePath = absolutePath(),
-            basePath = basePath,
-            relativePath = relativePath
-        )
-
-        basePath == null && relativePath == null -> FilePath(absolutePath = absolutePath())
-        else -> error("Cannot build a FilePath from base path = $basePath and relative path = $relativePath")
-    }
-}
-
 // #3317 If any rule mutates the PsiElement, searching the original PsiElement may throw an exception.
 fun getLineAndColumnInPsiFile(file: PsiFile, range: TextRange): PsiDiagnosticUtils.LineAndColumn? {
     return if (file.textLength == 0) {

@@ -90,7 +90,7 @@ class ForbiddenAnnotation(config: Config) : Rule(
                     location.source,
                     location.endSource,
                     TextLocation(location.text.start, element.children.firstOrNull()?.endOffset ?: location.text.end),
-                    location.filePath
+                    location.path
                 )
             }
             report(CodeSmell(Entity.from(element, location), message))

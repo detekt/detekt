@@ -142,7 +142,7 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
                 issues
                     .sortedWith(
                         compareBy(
-                            { it.location.filePath.absolutePath.toString() },
+                            { it.location.path },
                             { it.location.source.line },
                             { it.location.source.column },
                         )
@@ -157,8 +157,7 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
     }
 
     private fun FlowContent.renderIssue(issue: Issue) {
-        val filePath = basePath?.let { issue.location.filePath.absolutePath.relativeTo(it) }
-            ?: issue.location.filePath.absolutePath
+        val filePath = basePath?.let { issue.location.path.relativeTo(it) } ?: issue.location.path
         val pathString = filePath.invariantSeparatorsPathString
         span("location") {
             text(

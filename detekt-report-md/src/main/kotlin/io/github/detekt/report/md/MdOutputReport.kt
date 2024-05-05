@@ -119,7 +119,7 @@ private fun MarkdownContent.renderRule(ruleInfo: Issue.RuleInfo, issues: List<Is
         issues
             .sortedWith(
                 compareBy(
-                    { it.location.filePath.absolutePath.toString() },
+                    { it.location.path },
                     { it.location.source.line },
                     { it.location.source.column },
                 )
@@ -145,8 +145,7 @@ private fun MarkdownContent.renderIssues(issues: List<Issue>, basePath: Path?) {
 }
 
 private fun MarkdownContent.renderIssue(issue: Issue, basePath: Path?): String {
-    val filePath = basePath?.let { issue.location.filePath.absolutePath.relativeTo(it) }
-        ?: issue.location.filePath.absolutePath
+    val filePath = basePath?.let { issue.location.path.relativeTo(it) } ?: issue.location.path
     val location =
         "${filePath.invariantSeparatorsPathString}:${issue.location.source.line}:${issue.location.source.column}"
 

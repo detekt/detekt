@@ -73,11 +73,11 @@ class HtmlOutputReportSpec {
     @Test
     fun `renders the right file locations`() {
         val result = htmlReport.render(createTestDetektionWithMultipleSmells())
-        val root = Path("/").absolute().invariantSeparatorsPathString
+        val root = Path("Users/tester/detekt/").absolute().invariantSeparatorsPathString
 
-        assertThat(result).contains("<span class=\"location\">${root}src/main/com/sample/Sample1.kt:11:1</span>")
-        assertThat(result).contains("<span class=\"location\">${root}src/main/com/sample/Sample2.kt:22:2</span>")
-        assertThat(result).contains("<span class=\"location\">${root}src/main/com/sample/Sample3.kt:33:3</span>")
+        assertThat(result).contains("<span class=\"location\">$root/src/main/com/sample/Sample1.kt:11:1</span>")
+        assertThat(result).contains("<span class=\"location\">$root/src/main/com/sample/Sample2.kt:22:2</span>")
+        assertThat(result).contains("<span class=\"location\">$root/src/main/com/sample/Sample3.kt:33:3</span>")
     }
 
     @Test
@@ -165,7 +165,10 @@ class HtmlOutputReportSpec {
     @Test
     fun `asserts that the generated HTML is the same as expected`() {
         val expectedString = readResourceContent("HtmlOutputFormatTest.html")
-            .replace("<PREFIX>", Path("/").absolute().invariantSeparatorsPathString)
+            .replace(
+                "<PREFIX>",
+                Path("Users/tester/detekt/").absolute().invariantSeparatorsPathString
+            )
         val expected = createTempFileForTest("expected-report", ".html").apply { writeText(expectedString) }
 
         val result = htmlReport.render(createTestDetektionWithMultipleSmells())
@@ -196,12 +199,17 @@ private fun fakeKtElement(): KtElement {
 }
 
 private fun createTestDetektionWithMultipleSmells(): Detektion {
+    val basePath = "Users/tester/detekt/"
     val entity1 = createEntity(
-        location = createLocation("src/main/com/sample/Sample1.kt", position = 11 to 1, text = 10..14),
+        location = createLocation("src/main/com/sample/Sample1.kt", basePath, position = 11 to 1, text = 10..14),
         ktElement = fakeKtElement()
     )
-    val entity2 = createEntity(location = createLocation("src/main/com/sample/Sample2.kt", position = 22 to 2))
-    val entity3 = createEntity(location = createLocation("src/main/com/sample/Sample3.kt", position = 33 to 3))
+    val entity2 = createEntity(
+        location = createLocation("src/main/com/sample/Sample2.kt", basePath, position = 22 to 2)
+    )
+    val entity3 = createEntity(
+        location = createLocation("src/main/com/sample/Sample3.kt", basePath, position = 33 to 3)
+    )
 
     return TestDetektion(
         createIssue(createRuleInfo("id_a", "RuleSet1"), entity1, "Issue message 1"),
@@ -211,7 +219,7 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
 }
 
 private fun createTestDetektionFromRelativePath(): Detektion {
-    val basePath = "${System.getProperty("user.dir")}/Users/tester/detekt/"
+    val basePath = "Users/tester/detekt/"
     val entity1 = createEntity(
         location = createLocation(
             path = "src/main/com/sample/Sample1.kt",
