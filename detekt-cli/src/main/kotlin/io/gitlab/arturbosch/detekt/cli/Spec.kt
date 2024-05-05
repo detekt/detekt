@@ -23,7 +23,7 @@ internal fun CliArgs.createSpec(output: Appendable, error: Appendable): Processi
         }
 
         project {
-            basePath = args.basePath
+            basePath = args.basePath.absolute()
             val pathFilters = PathFilters.of(
                 args.excludes?.let(::asPatterns).orEmpty(),
                 args.includes?.let(::asPatterns).orEmpty(),
