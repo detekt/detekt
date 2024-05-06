@@ -3,7 +3,6 @@ package io.github.detekt.parser
 import io.github.detekt.test.utils.resourceAsPath
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
-import org.jetbrains.kotlin.com.intellij.psi.PsiErrorElement
 import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -52,17 +51,11 @@ class KtCompilerSpec {
 
         @Test
         fun `parses with errors for non kotlin files`() {
-            val cssPath = resourceAsPath("css")
-            val ktFile = ktCompiler.compile(cssPath.resolve("test.css"))
+            val cssPath = resourceAsPath("css/test.css")
 
-            val errors = mutableListOf<PsiErrorElement>()
-            ktFile.accept(object : KtTreeVisitorVoid() {
-                override fun visitErrorElement(element: PsiErrorElement) {
-                    errors.add(element)
-                }
-            })
-
-            assertThat(errors).isNotEmpty()
+            assertThatIllegalArgumentException()
+                .isThrownBy { ktCompiler.compile(cssPath) }
+                .withMessage("$cssPath is not a Kotlin file")
         }
     }
 
