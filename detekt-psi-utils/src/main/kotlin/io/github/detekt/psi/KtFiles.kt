@@ -1,9 +1,6 @@
 package io.github.detekt.psi
 
-import org.jetbrains.kotlin.com.intellij.openapi.util.TextRange
 import org.jetbrains.kotlin.com.intellij.psi.PsiFile
-import org.jetbrains.kotlin.diagnostics.DiagnosticUtils
-import org.jetbrains.kotlin.diagnostics.PsiDiagnosticUtils
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
 import kotlin.io.path.Path
@@ -29,18 +26,6 @@ fun PsiFile.absolutePath(): Path = Path(virtualFile.path)
 
 // KtFile.virtualFilePath is cached so should be a tiny bit more performant when called repeatedly for the same file.
 fun KtFile.absolutePath(): Path = Path(virtualFilePath)
-
-// #3317 If any rule mutates the PsiElement, searching the original PsiElement may throw an exception.
-fun getLineAndColumnInPsiFile(file: PsiFile, range: TextRange): PsiDiagnosticUtils.LineAndColumn? {
-    return if (file.textLength == 0) {
-        null
-    } else {
-        runCatching {
-            @Suppress("ForbiddenMethodCall")
-            DiagnosticUtils.getLineAndColumnInPsiFile(file, range)
-        }.getOrNull()
-    }
-}
 
 private fun buildPlatformSpecificSuffixes(platforms: List<String>): List<String> =
     platforms.map { platform -> ".$platform.kt" }
