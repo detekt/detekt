@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.api.internal
+package io.github.detekt.utils
 
 import java.nio.file.Path
 import java.nio.file.PathMatcher
