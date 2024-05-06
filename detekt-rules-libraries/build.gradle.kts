@@ -5,6 +5,7 @@ plugins {
 dependencies {
     compileOnly(kotlin("stdlib-jdk8"))
     compileOnly(projects.detektApi)
+    compileOnly(projects.detektPsiUtils)
     testImplementation(projects.detektTest)
     testImplementation(libs.assertj)
 }

@@ -6,6 +6,7 @@ val extraDepsToPackage: Configuration by configurations.creating
 
 dependencies {
     compileOnly(projects.detektApi)
+    compileOnly(projects.detektPsiUtils)
     implementation(libs.ktlintRulesetStandard) {
         exclude(group = "org.jetbrains.kotlin")
     }

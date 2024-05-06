@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.api
 
 import dev.drewhamilton.poko.Poko
-import io.github.detekt.psi.absolutePath
 import org.jetbrains.kotlin.com.intellij.openapi.util.TextRange
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.diagnostics.DiagnosticUtils.getLineAndColumnInPsiFile
@@ -10,6 +9,7 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.endOffset
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
 import java.nio.file.Path
+import kotlin.io.path.Path
 
 /**
  * Specifies a position within a source code fragment.
@@ -37,7 +37,12 @@ class Location(
             val end = endLineAndColumn(element, offset)
             val endSourceLocation = SourceLocation(end.line, end.column)
             val textLocation = TextLocation(element.startOffset + offset, element.endOffset + offset)
-            return Location(sourceLocation, endSourceLocation, textLocation, element.containingFile.absolutePath())
+            return Location(
+                sourceLocation,
+                endSourceLocation,
+                textLocation,
+                Path((element.containingFile as KtFile).virtualFilePath)
+            )
         }
 
         /**
