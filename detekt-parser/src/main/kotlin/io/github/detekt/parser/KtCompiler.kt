@@ -27,21 +27,8 @@ open class KtCompiler(
         }
     }
 
-    fun createKtFile(@Language("kotlin") content: String, path: Path): KtFile {
-        val psiFile = psiFileFactory.createPhysicalFile(path.name, StringUtilRt.convertLineSeparators(content))
-
-        return psiFile.apply {
-            val normalizedAbsolutePath = path.absolute().normalize()
-            this.absolutePath = normalizedAbsolutePath
-            virtualFile.detectedLineSeparator = content.determineLineSeparator()
+    fun createKtFile(@Language("kotlin") content: String, path: Path): KtFile =
+        psiFileFactory.createPhysicalFile(path.name, StringUtilRt.convertLineSeparators(content)).apply {
+            absolutePath = path.absolute().normalize()
         }
-    }
-}
-
-internal fun String.determineLineSeparator(): String {
-    val i = this.lastIndexOf('\n')
-    if (i == -1) {
-        return if (this.lastIndexOf('\r') == -1) System.lineSeparator() else "\r"
-    }
-    return if (i != 0 && this[i - 1] == '\r') "\r\n" else "\n"
 }
