@@ -1,7 +1,6 @@
 package io.github.detekt.parser
 
 import io.github.detekt.psi.absolutePath
-import io.github.detekt.psi.lineSeparator
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
@@ -30,7 +29,7 @@ open class KtCompiler(
         return psiFile.apply {
             val normalizedAbsolutePath = path.absolute().normalize()
             this.absolutePath = normalizedAbsolutePath
-            this.lineSeparator = content.determineLineSeparator()
+            virtualFile.detectedLineSeparator = content.determineLineSeparator()
         }
     }
 }
