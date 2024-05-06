@@ -166,7 +166,7 @@ class CliArgs {
 
     @Parameter(
         names = ["--run-rule"],
-        description = "Specify a rule by [RuleSet:Rule] pattern and run it on input.",
+        description = "Specify a rule by [RuleSet:RuleId] pattern and run it on input.",
         hidden = true
     )
     var runRule: String? = null
