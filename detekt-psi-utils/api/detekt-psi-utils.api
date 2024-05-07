@@ -44,7 +44,6 @@ public final class io/gitlab/arturbosch/detekt/rules/JunkKt {
 	public static final fun companionObject (Lorg/jetbrains/kotlin/psi/KtClass;)Lorg/jetbrains/kotlin/psi/KtObjectDeclaration;
 	public static final fun hasCommentInside (Lorg/jetbrains/kotlin/com/intellij/psi/PsiElement;)Z
 	public static final fun hasCommentInside (Lorg/jetbrains/kotlin/psi/KtClassOrObject;)Z
-	public static final fun isUsedForNesting (Lorg/jetbrains/kotlin/psi/KtCallExpression;)Z
 	public static final fun receiverIsUsed (Lorg/jetbrains/kotlin/psi/KtCallExpression;Lorg/jetbrains/kotlin/resolve/BindingContext;)Z
 }
 
