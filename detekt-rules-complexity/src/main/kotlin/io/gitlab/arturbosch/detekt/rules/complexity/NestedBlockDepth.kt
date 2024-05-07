@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.rules.isUsedForNesting
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtContainerNodeForControlStructureBody
 import org.jetbrains.kotlin.psi.KtIfExpression
@@ -16,6 +15,7 @@ import org.jetbrains.kotlin.psi.KtLoopExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtTryExpression
 import org.jetbrains.kotlin.psi.KtWhenExpression
+import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 
 /**
  * This rule reports excessive nesting depth in functions. Excessively nested code becomes harder to read and increases
@@ -110,5 +110,8 @@ class NestedBlockDepth(config: Config) : Rule(
                 }
             }
         }
+
+        private fun KtCallExpression.isUsedForNesting(): Boolean =
+            getCallNameExpression()?.text in setOf("run", "let", "apply", "with", "use", "forEach")
     }
 }
