@@ -14,7 +14,6 @@ import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.config.check
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
-import kotlin.io.path.Path
 
 class AnalysisFacade(
     private val spec: ProcessingSpec
@@ -23,11 +22,6 @@ class AnalysisFacade(
     override fun run(): AnalysisResult = runAnalysis {
         DefaultLifecycle(spec.getDefaultConfiguration(), it, inputPathsToKtFiles)
     }
-
-    override fun run(sourceCode: String, filename: String): AnalysisResult =
-        runAnalysis {
-            DefaultLifecycle(spec.getDefaultConfiguration(), it, contentToKtFile(sourceCode, Path(filename)))
-        }
 
     override fun run(files: Collection<KtFile>, bindingContext: BindingContext): AnalysisResult =
         runAnalysis {

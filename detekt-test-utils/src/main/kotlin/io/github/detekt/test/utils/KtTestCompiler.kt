@@ -2,6 +2,7 @@ package io.github.detekt.test.utils
 
 import io.github.detekt.parser.KtCompiler
 import kotlinx.coroutines.CoroutineScope
+import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
@@ -10,17 +11,23 @@ import org.jetbrains.kotlin.cli.jvm.config.addJavaSourceRoots
 import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoot
 import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoots
 import org.jetbrains.kotlin.cli.jvm.config.configureJdkClasspathRoots
-import org.jetbrains.kotlin.com.intellij.openapi.project.Project
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
+import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
 import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.config.JVMConfigurationKeys
+import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.KtPsiFactory
 import java.io.File
+import java.nio.file.Path
+import kotlin.io.path.name
 
 /**
  * Test compiler extends kt compiler and adds ability to compile from text content.
  */
 internal object KtTestCompiler : KtCompiler() {
+
+    private val psiFileFactory = KtPsiFactory(environment.project, markGenerated = false)
 
     /**
      * Not sure why but this function only works from this context.
@@ -55,7 +62,8 @@ internal object KtTestCompiler : KtCompiler() {
         return KotlinCoreEnvironmentWrapper(kotlinCoreEnvironment, parentDisposable)
     }
 
-    fun project(): Project = environment.project
+    fun createKtFile(@Language("kotlin") content: String, path: Path): KtFile =
+        psiFileFactory.createPhysicalFile(path.name, StringUtilRt.convertLineSeparators(content))
 
     private fun kotlinStdLibPath(): File {
         return File(CharRange::class.java.protectionDomain.codeSource.location.path)
