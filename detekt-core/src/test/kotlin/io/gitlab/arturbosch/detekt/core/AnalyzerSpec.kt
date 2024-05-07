@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.core
 import io.github.detekt.test.utils.StringPrintStream
 import io.github.detekt.test.utils.compileContentForTest
 import io.github.detekt.test.utils.compileForTest
+import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
@@ -25,8 +26,6 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
-import kotlin.io.path.Path
-import kotlin.io.path.absolute
 
 @KotlinCoreEnvironmentTest
 class AnalyzerSpec(val env: KotlinCoreEnvironment) {
@@ -349,12 +348,13 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             path: String,
             config: Config,
         ): Boolean {
-            val root = Path("").absolute()
+            val root = resourceAsPath("include_exclude")
+            val pathToCheck = resourceAsPath("include_exclude").resolve(path)
 
             return createProcessingSettings(config = config) { project { basePath = root } }
                 .use { settings ->
                     Analyzer(settings, listOf(CustomRuleSetProvider()), emptyList())
-                        .run(listOf(compileContentForTest("", Path(path))))
+                        .run(listOf(compileForTest(pathToCheck)))
                         .isNotEmpty()
                 }
         }

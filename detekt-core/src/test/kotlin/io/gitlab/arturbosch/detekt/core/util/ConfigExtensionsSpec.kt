@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.core.util
 
-import io.github.detekt.test.utils.compileContentForTest
+import io.github.detekt.test.utils.compileForTest
+import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
@@ -8,8 +9,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import kotlin.io.path.Path
-import kotlin.io.path.absolute
 
 class IsActiveOrDefaultSpec {
 
@@ -35,8 +34,8 @@ class IsActiveOrDefaultSpec {
 @Nested
 class ShouldAnalyzeFileSpec {
 
-    private val basePath = Path("/cases").absolute()
-    private val file = compileContentForTest("", path = Path("/cases/Default.kt"))
+    private val basePath = resourceAsPath("cases")
+    private val file = compileForTest(basePath.resolve("Default.kt"))
 
     @Test
     fun `analyzes file with an empty config`() {
