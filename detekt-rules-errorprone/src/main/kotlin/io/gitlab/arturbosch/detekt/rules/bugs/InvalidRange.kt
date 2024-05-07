@@ -5,9 +5,8 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.rules.getIntValueForPsiElement
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtBinaryExpression
+import org.jetbrains.kotlin.psi.KtConstantExpression
 
 /**
  * Reports ranges which are empty.
@@ -35,38 +34,21 @@ class InvalidRange(config: Config) : Rule(
     "If a for loops condition is false before the first iteration, the loop will never get executed."
 ) {
 
-    private val minimumSize = 3
-
     override fun visitBinaryExpression(expression: KtBinaryExpression) {
-        val range = expression.children
-        if (range.size >= minimumSize && hasInvalidLoopRange(range)) {
-            report(
-                CodeSmell(
-                    Entity.from(expression),
-                    "This loop will never be executed due to its expression."
-                )
-            )
+        if (expression.isInvalidLoopRange()) {
+            report(CodeSmell(Entity.from(expression), "This loop will never be executed due to its expression."))
         }
         super.visitBinaryExpression(expression)
     }
 
-    private fun hasInvalidLoopRange(range: Array<PsiElement>): Boolean {
-        val lowerValue = getIntValueForPsiElement(range[0])
-        val upperValue = getIntValueForPsiElement(range[2])
-        if (lowerValue == null || upperValue == null) {
-            return false
-        }
-        return when (range[1].text) {
-            ".." -> checkRangeTo(lowerValue, upperValue)
-            "downTo" -> checkDownTo(lowerValue, upperValue)
-            "until", "..<" -> checkUntil(lowerValue, upperValue)
+    private fun KtBinaryExpression.isInvalidLoopRange(): Boolean {
+        val lower = (left as? KtConstantExpression)?.text?.toIntOrNull() ?: return false
+        val upper = (right as? KtConstantExpression)?.text?.toIntOrNull() ?: return false
+        return when (operationReference.text) {
+            ".." -> lower > upper
+            "downTo" -> lower < upper
+            "until", "..<" -> lower >= upper
             else -> false
         }
     }
-
-    private fun checkRangeTo(lower: Int, upper: Int) = lower > upper
-
-    private fun checkDownTo(lower: Int, upper: Int) = lower < upper
-
-    private fun checkUntil(lower: Int, upper: Int) = lower >= upper
 }
