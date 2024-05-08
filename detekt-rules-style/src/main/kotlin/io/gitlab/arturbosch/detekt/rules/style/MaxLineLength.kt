@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.github.detekt.psi.absolutePath
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
@@ -13,7 +14,10 @@ import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.lastArgumentMatchesKotlinReferenceUrlSyntax
 import io.gitlab.arturbosch.detekt.rules.lastArgumentMatchesMarkdownUrlSyntax
 import io.gitlab.arturbosch.detekt.rules.lastArgumentMatchesUrl
+import org.jetbrains.kotlin.KtPsiSourceFileLinesMapping
+import org.jetbrains.kotlin.com.intellij.openapi.util.TextRange
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.diagnostics.DiagnosticUtils.getLineAndColumnRangeInPsiFile
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
@@ -48,26 +52,26 @@ class MaxLineLength(config: Config) : Rule(
 
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)
-        var offset = 0
-        val lines = file.text.lines()
 
-        for (line in lines) {
-            offset += line.length
-            if (!isValidLine(file, offset, line)) {
+        val sourceFileLinesMapping = KtPsiSourceFileLinesMapping(file)
+
+        file.text.lines().withIndex()
+            .filterNot { isValidLine(file, sourceFileLinesMapping.getLineStartOffset(it.index), it.value) }
+            .forEach {
+                val offset = sourceFileLinesMapping.getLineStartOffset(it.index)
+                val line = it.value
                 val ktElement = findFirstMeaningfulKtElementInParents(file, offset, line) ?: file
-                val location = Location.from(file, offset - line.length).let { location ->
+                val textRange = TextRange(offset, offset + line.length)
+                val lineAndColumnRange = getLineAndColumnRangeInPsiFile(file, textRange)
+                val location =
                     Location(
-                        source = location.source,
-                        endSource = SourceLocation(location.source.line, line.length + 1),
-                        text = TextLocation(offset - line.length, offset),
-                        path = location.path,
+                        source = SourceLocation(lineAndColumnRange.start.line, lineAndColumnRange.start.column),
+                        endSource = SourceLocation(lineAndColumnRange.end.line, lineAndColumnRange.end.column),
+                        text = TextLocation(offset, offset + line.length),
+                        path = file.absolutePath(),
                     )
-                }
                 report(CodeSmell(Entity.from(ktElement, location), description))
             }
-
-            offset += 1 // '\n'
-        }
     }
 
     private fun isValidLine(file: KtFile, offset: Int, line: String): Boolean {
