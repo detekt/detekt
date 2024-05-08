@@ -2,9 +2,9 @@ package io.gitlab.arturbosch.detekt.api
 
 import dev.drewhamilton.poko.Poko
 import io.github.detekt.psi.absolutePath
-import io.github.detekt.psi.getLineAndColumnInPsiFile
 import org.jetbrains.kotlin.com.intellij.openapi.util.TextRange
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.diagnostics.DiagnosticUtils.getLineAndColumnInPsiFile
 import org.jetbrains.kotlin.diagnostics.PsiDiagnosticUtils
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.endOffset
@@ -58,10 +58,12 @@ class Location(
                 TextRange(element.textRange.endOffset + offset, element.textRange.endOffset + offset)
             )
 
-        private fun lineAndColumn(element: PsiElement, range: TextRange): PsiDiagnosticUtils.LineAndColumn {
-            return getLineAndColumnInPsiFile(element.containingFile, range)
-                ?: PsiDiagnosticUtils.LineAndColumn(1, 1, null)
-        }
+        private fun lineAndColumn(element: PsiElement, range: TextRange): PsiDiagnosticUtils.LineAndColumn =
+            if (element.containingFile.text.isNotEmpty()) {
+                getLineAndColumnInPsiFile(element.containingFile, range)
+            } else {
+                PsiDiagnosticUtils.LineAndColumn(1, 1, null)
+            }
     }
 }
 

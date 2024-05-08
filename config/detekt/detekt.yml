@@ -212,7 +212,6 @@ style:
       - 'java.net.URL.openStream'
       - 'java.lang.Class.getResourceAsStream'
       - 'java.lang.ClassLoader.getResourceAsStream'
-      - 'org.jetbrains.kotlin.diagnostics.DiagnosticUtils.getLineAndColumnInPsiFile'
   ForbiddenVoid:
     active: true
     ignoreOverridden: true

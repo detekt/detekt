@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.github.detekt.psi.absolutePath
-import io.github.detekt.psi.getLineAndColumnInPsiFile
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
@@ -12,6 +11,7 @@ import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.api.config
 import org.jetbrains.kotlin.com.intellij.psi.PsiFile
+import org.jetbrains.kotlin.diagnostics.DiagnosticUtils
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtLiteralStringTemplateEntry
 import org.jetbrains.kotlin.psi.KtStringTemplateEntry
@@ -75,7 +75,7 @@ class MultilineRawStringIndentation(config: Config) : Rule(
             return
         }
 
-        val lineAndColumn = getLineAndColumnInPsiFile(expression.containingFile, expression.textRange) ?: return
+        val lineAndColumn = DiagnosticUtils.getLineAndColumnInPsiFile(expression.containingFile, expression.textRange)
         val lineCount = expression.text.lines().count()
 
         expression.checkIndentation(
