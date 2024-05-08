@@ -97,7 +97,7 @@ open class Rule(
     }
 
     /**
-     * Reports a single code smell finding.
+     * Adds a code smell to the findings,
      */
     fun report(finding: Finding) {
         findings.add(finding)
