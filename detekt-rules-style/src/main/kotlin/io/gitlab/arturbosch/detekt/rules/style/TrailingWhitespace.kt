@@ -1,13 +1,18 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.github.detekt.psi.absolutePath
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.rules.isPartOfString
+import org.jetbrains.kotlin.KtPsiSourceFileLinesMapping
+import org.jetbrains.kotlin.com.intellij.openapi.util.TextRange
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.diagnostics.DiagnosticUtils.getLineAndColumnRangeInPsiFile
 import org.jetbrains.kotlin.psi.KtFile
 
 /**
@@ -26,29 +31,29 @@ class TrailingWhitespace(config: Config) : Rule(
 
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)
-        var offset = 0
+
+        val sourceFileLinesMapping = KtPsiSourceFileLinesMapping(file)
+
         file.text.lineSequence().forEachIndexed { index, line ->
-            offset += line.length
             val trailingWhitespaces = countTrailingWhitespace(line)
             if (trailingWhitespaces > 0) {
-                val ktElement = findFirstKtElementInParentsOrNull(file, offset, line)
+                val lineEndOffset = sourceFileLinesMapping.getLineStartOffset(index) + line.length
+                val ktElement = findFirstKtElementInParentsOrNull(file, lineEndOffset, line)
                 if (ktElement == null || !ktElement.isPartOfString()) {
-                    val entity = Entity.from(file, offset - trailingWhitespaces).let { entity ->
-                        Entity(
-                            entity.name,
-                            entity.signature,
-                            location = Location(
-                                entity.location.source,
-                                entity.location.endSource,
-                                TextLocation(entity.location.text.start, offset),
-                                entity.location.path
-                            )
+                    val startOffset = lineEndOffset - trailingWhitespaces
+                    val textRange = TextRange(startOffset, lineEndOffset)
+                    val lineAndColumnRange = getLineAndColumnRangeInPsiFile(file, textRange)
+                    val location =
+                        Location(
+                            source = SourceLocation(lineAndColumnRange.start.line, lineAndColumnRange.start.column),
+                            endSource = SourceLocation(lineAndColumnRange.end.line, lineAndColumnRange.end.column),
+                            text = TextLocation(startOffset, lineEndOffset),
+                            path = file.absolutePath(),
                         )
-                    }
-                    report(CodeSmell(entity, createMessage(index)))
+
+                    report(CodeSmell(Entity.from(file, location), createMessage(index)))
                 }
             }
-            offset += 1 // '\n'
         }
     }
 
