@@ -14,11 +14,11 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.internal.isSuppressedBy
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import io.gitlab.arturbosch.detekt.api.internal.whichJava
 import io.gitlab.arturbosch.detekt.api.internal.whichOS
 import io.gitlab.arturbosch.detekt.core.suppressors.buildSuppressors
+import io.gitlab.arturbosch.detekt.core.suppressors.isSuppressedBy
 import io.gitlab.arturbosch.detekt.core.util.isActiveOrDefault
 import io.gitlab.arturbosch.detekt.core.util.shouldAnalyzeFile
 import org.jetbrains.kotlin.config.languageVersionSettings
@@ -115,6 +115,9 @@ internal class Analyzer(
 
         return (correctableRules + otherRules).flatMap { (ruleInfo, rule) ->
             rule.visitFile(file, bindingContext, compilerResources)
+                .filterNot {
+                    it.entity.ktElement?.isSuppressedBy(ruleInfo.id, rule.aliases, ruleInfo.ruleSetId) == true
+                }
                 .filterSuppressedFindings(rule, bindingContext)
                 .map { it.toIssue(ruleInfo, rule.computeSeverity()) }
         }
