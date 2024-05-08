@@ -20,7 +20,7 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtVisitor
 import javax.swing.Icon
 
-class FakeKtElement(val psiFile: PsiFile) : KtElement {
+class FakeKtElement(private val psiFile: PsiFile = FakePsiFile("")) : KtElement {
 
     override fun <R, D> accept(visitor: KtVisitor<R, D>, data: D): R {
         error("Fake not implemented yet")
