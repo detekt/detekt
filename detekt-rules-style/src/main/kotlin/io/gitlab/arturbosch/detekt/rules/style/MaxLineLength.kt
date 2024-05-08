@@ -56,10 +56,9 @@ class MaxLineLength(config: Config) : Rule(
         val sourceFileLinesMapping = KtPsiSourceFileLinesMapping(file)
 
         file.text.lines().withIndex()
-            .filterNot { isValidLine(file, sourceFileLinesMapping.getLineStartOffset(it.index), it.value) }
-            .forEach {
-                val offset = sourceFileLinesMapping.getLineStartOffset(it.index)
-                val line = it.value
+            .filterNot { (index, line) -> isValidLine(file, sourceFileLinesMapping.getLineStartOffset(index), line) }
+            .forEach { (index, line) ->
+                val offset = sourceFileLinesMapping.getLineStartOffset(index)
                 val ktElement = findFirstMeaningfulKtElementInParents(file, offset, line) ?: file
                 val textRange = TextRange(offset, offset + line.length)
                 val lineAndColumnRange = getLineAndColumnRangeInPsiFile(file, textRange)
