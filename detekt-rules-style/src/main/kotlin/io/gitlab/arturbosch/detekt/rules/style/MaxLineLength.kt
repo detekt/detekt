@@ -20,7 +20,7 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.diagnostics.DiagnosticUtils.getLineAndColumnRangeInPsiFile
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
-import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
+import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 
 /**
  * This rule reports lines of code which exceed a defined maximum line length.
@@ -127,5 +127,5 @@ class MaxLineLength(config: Config) : Rule(
 }
 
 private fun PsiElement.isInsideRawString(): Boolean {
-    return this is KtStringTemplateExpression || getParentOfType<KtStringTemplateExpression>(false) != null
+    return this is KtStringTemplateExpression || getNonStrictParentOfType<KtStringTemplateExpression>() != null
 }
