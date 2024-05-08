@@ -12,7 +12,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
  * the given [line] from a given offset in a [KtFile].
  */
 internal fun findKtElementInParents(file: KtFile, offset: Int, line: String): Sequence<PsiElement> {
-    return file.elementsInRange(TextRange.create(offset - line.length, offset))
+    return file.elementsInRange(TextRange.create(offset, offset + line.length))
         .asSequence()
         .plus(file.findElementAt(offset))
         .mapNotNull { it?.getNonStrictParentOfType() }
