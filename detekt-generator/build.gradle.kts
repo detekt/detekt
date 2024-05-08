@@ -16,6 +16,7 @@ val generatedUsageOutput by configurations.resolvable("generatedUsageOutput") {
 dependencies {
     implementation(projects.detektParser)
     implementation(projects.detektApi)
+    implementation(projects.detektPsiUtils)
     generatedUsage(projects.detektCli) {
         targetConfiguration = "generatedCliUsage"
     }
