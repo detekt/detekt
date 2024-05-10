@@ -116,16 +116,15 @@ class IgnoredReturnValue(config: Config) : Rule(
 
         if (ignoreFunctionCall.any { it.match(resultingDescriptor) }) return
 
-        val annotations = resultingDescriptor.annotations + resultingDescriptor.findPackage().annotations
-        if (resultingDescriptor.annotations.any { it in ignoreReturnValueAnnotations } ||
-            resultingDescriptor.findPackage().annotations.any { it in ignoreReturnValueAnnotations }
-        ) {
-            return
+        val annotations = buildList {
+            addAll(resultingDescriptor.annotations)
+            addAll(resultingDescriptor.findPackage().annotations)
+            addAll(resultingDescriptor.containingDeclaration.annotations)
         }
+        if (annotations.any { it in ignoreReturnValueAnnotations }) return
         if (restrictToConfig &&
             resultingDescriptor.returnType !in returnValueTypes &&
-            annotations.none { it in returnValueAnnotations } &&
-            resultingDescriptor.containingDeclaration.annotations.none { it in returnValueAnnotations }
+            annotations.none { it in returnValueAnnotations }
         ) {
             return
         }
