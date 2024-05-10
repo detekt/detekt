@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtLambdaArgument
+import org.jetbrains.kotlin.resolve.calls.components.isVararg
 import org.jetbrains.kotlin.resolve.calls.util.getParameterForArgument
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 
@@ -58,17 +59,14 @@ class NamedArguments(config: Config) : Rule(
         val unnamedArguments = valueArguments.mapNotNull { argument ->
             if (argument.isNamed() || argument is KtLambdaArgument) return@mapNotNull null
             val parameter = resolvedCall.getParameterForArgument(argument) ?: return@mapNotNull null
-            if (ignoreArgumentsMatchingNames &&
-                parameter.name.asString() == argument.getArgumentExpression()?.text
-            ) {
+            if (ignoreArgumentsMatchingNames && parameter.name.asString() == argument.getArgumentExpression()?.text) {
                 return@mapNotNull null
             }
             argument to parameter
         }
-        if (unnamedArguments.isEmpty()) return false
 
-        return unnamedArguments.all { (argument, parameter) ->
-            argument.getSpreadElement() != null || parameter.varargElementType == null
-        }
+        return unnamedArguments.isNotEmpty() &&
+            unnamedArguments.count { (argument, _) -> argument.isSpread } <= 1 &&
+            unnamedArguments.all { (argument, parameter) -> argument.isSpread || !parameter.isVararg }
     }
 }
