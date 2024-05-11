@@ -145,6 +145,21 @@ class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Test
+    fun `invocation with spread varargs should not be flagged`() {
+        val code = """
+            fun varargFun(str: String, vararg nums: Int) {}
+            fun call() {
+                val nums1 = intArrayOf(1, 2, 3)
+                val nums2 = intArrayOf(4, 5, 6)
+                val nums3 = intArrayOf(7, 8, 9)
+                varargFun("a", *nums1, *nums2, *nums3)
+            }
+        """.trimIndent()
+        val findings = subject.compileAndLintWithContext(env, code)
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
     fun `invocation with spread operator should be flagged`() {
         val code = """
             fun bar(a: Int, b: Int, c: Int, vararg s: String) {}
