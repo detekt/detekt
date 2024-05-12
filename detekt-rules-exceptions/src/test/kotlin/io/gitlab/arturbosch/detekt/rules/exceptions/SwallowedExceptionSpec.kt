@@ -266,6 +266,23 @@ class SwallowedExceptionSpec {
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
+    @Test
+    fun `does not report when an exception is used as a receiver and the return value is thrown`() {
+        val code = """
+            fun Exception.transformException(): Exception {
+               return this
+            }
+            
+            fun test() {
+               try {
+               } catch (e: Exception) {
+                  throw e.transformException()
+               }
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLint(code)).isEmpty()
+    }
+
     @ParameterizedTest(name = "ignores {0} in the catch clause by default")
     @MethodSource("io.gitlab.arturbosch.detekt.rules.exceptions.SwallowedException#getEXCEPTIONS_IGNORED_BY_DEFAULT")
     fun `ignores $exceptionName in the catch clause by default`(exceptionName: String) {
