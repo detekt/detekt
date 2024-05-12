@@ -54,7 +54,7 @@ class XmlOutputReportSpec {
 
     @Test
     fun `renders one reported issue in single file`() {
-        val smell = createIssue("id_a", entity1, "TestMessage")
+        val smell = createIssue("rule_a", entity1, "TestMessage")
 
         val result = outputReport.render(TestDetektion(smell))
 
@@ -63,7 +63,7 @@ class XmlOutputReportSpec {
                 <?xml version="1.0" encoding="UTF-8"?>
                 <checkstyle version="4.3">
                 <file name="${entity1.location.path.invariantSeparatorsPathString}">
-                $TAB<error line="11" column="1" severity="error" message="TestMessage" source="detekt.id_a" />
+                $TAB<error line="11" column="1" severity="error" message="TestMessage" source="detekt.rule_a" />
                 </file>
                 </checkstyle>
             """.trimIndent()
@@ -72,8 +72,8 @@ class XmlOutputReportSpec {
 
     @Test
     fun `renders two reported issues in single file`() {
-        val smell1 = createIssue("id_a", entity1, "TestMessage")
-        val smell2 = createIssue("id_b", entity1, "TestMessage")
+        val smell1 = createIssue("rule_a", entity1, "TestMessage")
+        val smell2 = createIssue("rule_b", entity1, "TestMessage")
 
         val result = outputReport.render(TestDetektion(smell1, smell2))
 
@@ -82,8 +82,8 @@ class XmlOutputReportSpec {
                 <?xml version="1.0" encoding="UTF-8"?>
                 <checkstyle version="4.3">
                 <file name="${entity1.location.path.invariantSeparatorsPathString}">
-                $TAB<error line="11" column="1" severity="error" message="TestMessage" source="detekt.id_a" />
-                $TAB<error line="11" column="1" severity="error" message="TestMessage" source="detekt.id_b" />
+                $TAB<error line="11" column="1" severity="error" message="TestMessage" source="detekt.rule_a" />
+                $TAB<error line="11" column="1" severity="error" message="TestMessage" source="detekt.rule_b" />
                 </file>
                 </checkstyle>
             """.trimIndent()
@@ -92,8 +92,8 @@ class XmlOutputReportSpec {
 
     @Test
     fun `renders one reported issue across multiple files`() {
-        val smell1 = createIssue("id_a", entity1, "TestMessage")
-        val smell2 = createIssue("id_a", entity2, "TestMessage")
+        val smell1 = createIssue("rule_a", entity1, "TestMessage")
+        val smell2 = createIssue("rule_a", entity2, "TestMessage")
 
         val result = outputReport.render(TestDetektion(smell1, smell2))
 
@@ -102,10 +102,10 @@ class XmlOutputReportSpec {
                 <?xml version="1.0" encoding="UTF-8"?>
                 <checkstyle version="4.3">
                 <file name="${entity1.location.path.invariantSeparatorsPathString}">
-                $TAB<error line="11" column="1" severity="error" message="TestMessage" source="detekt.id_a" />
+                $TAB<error line="11" column="1" severity="error" message="TestMessage" source="detekt.rule_a" />
                 </file>
                 <file name="${entity2.location.path.invariantSeparatorsPathString}">
-                $TAB<error line="22" column="2" severity="error" message="TestMessage" source="detekt.id_a" />
+                $TAB<error line="22" column="2" severity="error" message="TestMessage" source="detekt.rule_a" />
                 </file>
                 </checkstyle>
             """.trimIndent()
@@ -115,12 +115,12 @@ class XmlOutputReportSpec {
     @Test
     fun `renders issues with relative path`() {
         val issueA = createIssueForRelativePath(
-            ruleInfo = createRuleInfo("id_a"),
+            ruleInfo = createRuleInfo("rule_a"),
             basePath = "${System.getProperty("user.dir")}/Users/tester/detekt/",
             relativePath = "Sample1.kt"
         )
         val issueB = createIssueForRelativePath(
-            ruleInfo = createRuleInfo("id_b"),
+            ruleInfo = createRuleInfo("rule_b"),
             basePath = "${System.getProperty("user.dir")}/Users/tester/detekt/",
             relativePath = "Sample2.kt"
         )
@@ -135,10 +135,10 @@ class XmlOutputReportSpec {
                 <?xml version="1.0" encoding="UTF-8"?>
                 <checkstyle version="4.3">
                 <file name="Sample1.kt">
-                $TAB<error line="1" column="1" severity="error" message="TestMessage" source="detekt.id_a" />
+                $TAB<error line="1" column="1" severity="error" message="TestMessage" source="detekt.rule_a" />
                 </file>
                 <file name="Sample2.kt">
-                $TAB<error line="1" column="1" severity="error" message="TestMessage" source="detekt.id_b" />
+                $TAB<error line="1" column="1" severity="error" message="TestMessage" source="detekt.rule_b" />
                 </file>
                 </checkstyle>
             """.trimIndent()
@@ -147,10 +147,10 @@ class XmlOutputReportSpec {
 
     @Test
     fun `renders two reported issues across multiple files`() {
-        val smell1 = createIssue("id_a", entity1, "TestMessage")
-        val smell2 = createIssue("id_b", entity1, "TestMessage")
-        val smell3 = createIssue("id_a", entity2, "TestMessage")
-        val smell4 = createIssue("id_b", entity2, "TestMessage")
+        val smell1 = createIssue("rule_a", entity1, "TestMessage")
+        val smell2 = createIssue("rule_b", entity1, "TestMessage")
+        val smell3 = createIssue("rule_a", entity2, "TestMessage")
+        val smell4 = createIssue("rule_b", entity2, "TestMessage")
 
         val result = outputReport.render(
             TestDetektion(
@@ -166,12 +166,12 @@ class XmlOutputReportSpec {
                 <?xml version="1.0" encoding="UTF-8"?>
                 <checkstyle version="4.3">
                 <file name="${entity1.location.path.invariantSeparatorsPathString}">
-                $TAB<error line="11" column="1" severity="error" message="TestMessage" source="detekt.id_a" />
-                $TAB<error line="11" column="1" severity="error" message="TestMessage" source="detekt.id_b" />
+                $TAB<error line="11" column="1" severity="error" message="TestMessage" source="detekt.rule_a" />
+                $TAB<error line="11" column="1" severity="error" message="TestMessage" source="detekt.rule_b" />
                 </file>
                 <file name="${entity2.location.path.invariantSeparatorsPathString}">
-                $TAB<error line="22" column="2" severity="error" message="TestMessage" source="detekt.id_a" />
-                $TAB<error line="22" column="2" severity="error" message="TestMessage" source="detekt.id_b" />
+                $TAB<error line="22" column="2" severity="error" message="TestMessage" source="detekt.rule_a" />
+                $TAB<error line="22" column="2" severity="error" message="TestMessage" source="detekt.rule_b" />
                 </file>
                 </checkstyle>
             """.trimIndent()

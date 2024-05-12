@@ -96,8 +96,8 @@ class HtmlOutputReportSpec {
     fun `renders the right number of issues per rule`() {
         val result = htmlReport.render(createTestDetektionWithMultipleSmells())
 
-        assertThat(result).contains("<span class=\"rule\">id_a: 2 </span>")
-        assertThat(result).contains("<span class=\"rule\">id_b: 1 </span>")
+        assertThat(result).contains("<span class=\"rule\">rule_a: 2 </span>")
+        assertThat(result).contains("<span class=\"rule\">rule_b: 1 </span>")
     }
 
     @Test
@@ -113,8 +113,8 @@ class HtmlOutputReportSpec {
     fun `renders the right violation description for the rules`() {
         val result = htmlReport.render(createTestDetektionWithMultipleSmells())
 
-        assertThat(result).contains("<span class=\"description\">Description id_a</span>")
-        assertThat(result).contains("<span class=\"description\">Description id_b</span>")
+        assertThat(result).contains("<span class=\"description\">Description rule_a</span>")
+        assertThat(result).contains("<span class=\"description\">Description rule_b</span>")
     }
 
     @Test
@@ -212,9 +212,9 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
     )
 
     return TestDetektion(
-        createIssue(createRuleInfo("id_a", "RuleSet1"), entity1, "Issue message 1"),
-        createIssue(createRuleInfo("id_a", "RuleSet1"), entity2, "Issue message 2"),
-        createIssue(createRuleInfo("id_b", "RuleSet2"), entity3, "Issue message 3"),
+        createIssue(createRuleInfo("rule_a", "RuleSet1"), entity1, "Issue message 1"),
+        createIssue(createRuleInfo("rule_a", "RuleSet1"), entity2, "Issue message 2"),
+        createIssue(createRuleInfo("rule_b", "RuleSet2"), entity3, "Issue message 3"),
     )
 }
 
@@ -245,9 +245,9 @@ private fun createTestDetektionFromRelativePath(): Detektion {
     )
 
     return TestDetektion(
-        createIssue(createRuleInfo("id_a", "RuleSet1"), entity1, "Issue message 1"),
-        createIssue(createRuleInfo("id_a", "RuleSet1"), entity2, "Issue message 2"),
-        createIssue(createRuleInfo("id_b", "RuleSet2"), entity3, "Issue message 3"),
+        createIssue(createRuleInfo("rule_a", "RuleSet1"), entity1, "Issue message 1"),
+        createIssue(createRuleInfo("rule_a", "RuleSet1"), entity2, "Issue message 2"),
+        createIssue(createRuleInfo("rule_b", "RuleSet2"), entity3, "Issue message 3"),
     )
 }
 
@@ -258,16 +258,16 @@ private fun issues(): Array<Issue> {
     val entity4 = createEntity(location = createLocation("src/main/com/sample/Sample2.kt", position = 1 to 1))
 
     return arrayOf(
-        createIssue(createRuleInfo("id_a", "RuleSet1"), entity1),
-        createIssue(createRuleInfo("id_a", "RuleSet1"), entity2),
-        createIssue(createRuleInfo("id_a", "RuleSet1"), entity3),
-        createIssue(createRuleInfo("id_a", "RuleSet1"), entity4),
-        createIssue(createRuleInfo("id_b", "RuleSet1"), entity2),
-        createIssue(createRuleInfo("id_b", "RuleSet1"), entity1),
-        createIssue(createRuleInfo("id_b", "RuleSet1"), entity4),
-        createIssue(createRuleInfo("id_b", "RuleSet2"), entity3),
-        createIssue(createRuleInfo("id_c", "RuleSet2"), entity1),
-        createIssue(createRuleInfo("id_c", "RuleSet2"), entity2),
+        createIssue(createRuleInfo("rule_a", "RuleSet1"), entity1),
+        createIssue(createRuleInfo("rule_a", "RuleSet1"), entity2),
+        createIssue(createRuleInfo("rule_a", "RuleSet1"), entity3),
+        createIssue(createRuleInfo("rule_a", "RuleSet1"), entity4),
+        createIssue(createRuleInfo("rule_b", "RuleSet1"), entity2),
+        createIssue(createRuleInfo("rule_b", "RuleSet1"), entity1),
+        createIssue(createRuleInfo("rule_b", "RuleSet1"), entity4),
+        createIssue(createRuleInfo("rule_b", "RuleSet2"), entity3),
+        createIssue(createRuleInfo("rule_c", "RuleSet2"), entity1),
+        createIssue(createRuleInfo("rule_c", "RuleSet2"), entity2),
     )
 }
 
