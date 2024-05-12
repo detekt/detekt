@@ -109,7 +109,7 @@ internal class Analyzer(
                     }
             }
             .filterNot { (ruleInstance, rule) ->
-                file.isSuppressedBy(ruleInstance.name, rule.aliases, ruleInstance.ruleSetId)
+                file.isSuppressedBy(ruleInstance.id, rule.aliases, ruleInstance.ruleSetId)
             }
             .filter { (_, rule) ->
                 bindingContext != BindingContext.EMPTY || !rule::class.hasAnnotation<RequiresTypeResolution>()
@@ -119,7 +119,7 @@ internal class Analyzer(
         return (correctableRules + otherRules).flatMap { (ruleInstance, rule) ->
             rule.visitFile(file, bindingContext, compilerResources)
                 .filterNot {
-                    it.entity.ktElement?.isSuppressedBy(ruleInstance.name, rule.aliases, ruleInstance.ruleSetId) == true
+                    it.entity.ktElement?.isSuppressedBy(ruleInstance.id, rule.aliases, ruleInstance.ruleSetId) == true
                 }
                 .filterSuppressedFindings(rule, bindingContext)
                 .map { it.toIssue(ruleInstance, rule.computeSeverity()) }

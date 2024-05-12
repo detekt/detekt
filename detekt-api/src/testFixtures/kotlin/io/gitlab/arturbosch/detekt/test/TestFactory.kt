@@ -14,13 +14,13 @@ import kotlin.io.path.Path
 import kotlin.io.path.absolute
 
 fun createIssue(
-    ruleName: String = "TestSmell",
+    ruleId: String = "TestSmell/id",
     entity: Entity = createEntity(),
     message: String = "TestMessage",
     severity: Severity = Severity.Error,
     autoCorrectEnabled: Boolean = false,
 ): Issue = createIssue(
-    ruleInstance = createRuleInstance(ruleName),
+    ruleInstance = createRuleInstance(ruleId),
     entity = entity,
     message = message,
     severity = severity,
@@ -56,16 +56,18 @@ fun createIssue(
 )
 
 fun createRuleInstance(
-    name: String = "TestSmell",
-    ruleSetId: String = "RuleSet$name",
-    id: String = "$name/id",
-    description: String = "Description $name",
-): RuleInstance = RuleInstanceImpl(
-    id = id,
-    name = Rule.Name(name),
-    ruleSetId = RuleSet.Id(ruleSetId),
-    description = description
-)
+    id: String = "TestSmell/id",
+    ruleSetId: String = "RuleSet${id.split("/", limit = 2).first()}",
+    description: String = "Description ${id.split("/", limit = 2).first()}",
+): RuleInstance {
+    val split = id.split("/", limit = 2)
+    return RuleInstanceImpl(
+        id = id,
+        name = Rule.Name(split.first()),
+        ruleSetId = RuleSet.Id(ruleSetId),
+        description = description
+    )
+}
 
 fun createIssueForRelativePath(
     ruleInstance: RuleInstance,

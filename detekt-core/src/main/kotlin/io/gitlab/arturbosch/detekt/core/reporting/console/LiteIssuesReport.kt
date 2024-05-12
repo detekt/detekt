@@ -13,7 +13,7 @@ class LiteIssuesReport : AbstractIssuesReport() {
     override fun render(issues: List<Issue>): String {
         return buildString {
             issues.forEach { issue ->
-                append("${issue.location.compact()}: ${issue.message} [${issue.ruleInstance.name}]")
+                append("${issue.location.compact()}: ${issue.message} [${issue.ruleInstance.id}]")
                 appendLine()
             }
         }

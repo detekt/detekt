@@ -29,10 +29,10 @@ class FileBasedIssuesReportSpec {
         assertThat(output).isEqualTo(
             """
                 ${location1.path}
-                	TestSmell - [TestMessage] at ${location1.compact()}
-                	TestSmell - [TestMessage] at ${location1.compact()}
+                	TestSmell/id - [TestMessage] at ${location1.compact()}
+                	TestSmell/id - [TestMessage] at ${location1.compact()}
                 ${location2.path}
-                	TestSmell - [TestMessage] at ${location2.compact()}
+                	TestSmell/id - [TestMessage] at ${location2.compact()}
                 
             """.trimIndent()
         )

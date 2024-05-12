@@ -21,22 +21,22 @@ class TxtOutputReportSpec {
         val location = createLocation()
         val detektion = TestDetektion(createIssue(createRuleInstance(), location))
         assertThat(TxtOutputReport().render(detektion))
-            .isEqualTo("TestSmell - [TestEntity] at ${location.compact()} - Signature=TestEntitySignature\n")
+            .isEqualTo("TestSmell/id - [TestEntity] at ${location.compact()} - Signature=TestEntitySignature\n")
     }
 
     @Test
     fun `renders multiple`() {
         val location = createLocation()
         val detektion = TestDetektion(
-            createIssue(createRuleInstance("TestSmellA"), location),
-            createIssue(createRuleInstance("TestSmellB"), location),
+            createIssue(createRuleInstance("TestSmellA/id"), location),
+            createIssue(createRuleInstance("TestSmellB/id"), location),
             createIssue(createRuleInstance("TestSmellC"), location),
         )
         assertThat(TxtOutputReport().render(detektion))
             .isEqualTo(
                 """
-                    TestSmellA - [TestEntity] at ${location.compact()} - Signature=TestEntitySignature
-                    TestSmellB - [TestEntity] at ${location.compact()} - Signature=TestEntitySignature
+                    TestSmellA/id - [TestEntity] at ${location.compact()} - Signature=TestEntitySignature
+                    TestSmellB/id - [TestEntity] at ${location.compact()} - Signature=TestEntitySignature
                     TestSmellC - [TestEntity] at ${location.compact()} - Signature=TestEntitySignature
 
                 """.trimIndent()

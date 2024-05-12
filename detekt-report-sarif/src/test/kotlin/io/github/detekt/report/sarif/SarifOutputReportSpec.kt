@@ -31,17 +31,17 @@ class SarifOutputReportSpec {
     fun `renders multiple issues`() {
         val result = TestDetektion(
             createIssue(
-                ruleInstance = createRuleInstance("TestSmellA", "RuleSet1"),
+                ruleInstance = createRuleInstance("TestSmellA/id", "RuleSet1"),
                 entity = createEntity(location = createLocation(position = 1 to 1, endPosition = 2 to 3)),
                 severity = Severity.Error
             ),
             createIssue(
-                ruleInstance = createRuleInstance("TestSmellB", "RuleSet2"),
+                ruleInstance = createRuleInstance("TestSmellB/id", "RuleSet2"),
                 entity = createEntity(location = createLocation(position = 3 to 5, endPosition = 3 to 5)),
                 severity = Severity.Warning
             ),
             createIssue(
-                ruleInstance = createRuleInstance("TestSmellC", "RuleSet2"),
+                ruleInstance = createRuleInstance("TestSmellC/id", "RuleSet2"),
                 entity = createEntity(location = createLocation(position = 2 to 1, endPosition = 3 to 1)),
                 severity = Severity.Info
             )
@@ -60,9 +60,9 @@ class SarifOutputReportSpec {
     @Test
     fun `renders multiple issues with rule set to warning by default`() {
         val result = TestDetektion(
-            createIssue(createRuleInstance("TestSmellA", "RuleSet1"), severity = Severity.Error),
-            createIssue(createRuleInstance("TestSmellB", "RuleSet2"), severity = Severity.Warning),
-            createIssue(createRuleInstance("TestSmellC", "RuleSet2"), severity = Severity.Info)
+            createIssue(createRuleInstance("TestSmellA/id", "RuleSet1"), severity = Severity.Error),
+            createIssue(createRuleInstance("TestSmellB/id", "RuleSet2"), severity = Severity.Warning),
+            createIssue(createRuleInstance("TestSmellC/id", "RuleSet2"), severity = Severity.Info)
         )
 
         val testConfig = yamlConfig("config_with_rule_set_to_warning.yml")
@@ -91,9 +91,9 @@ class SarifOutputReportSpec {
     @Test
     fun `renders multiple issues with relative path`() {
         val result = TestDetektion(
-            createIssueForRelativePath(createRuleInstance("TestSmellA", "RuleSet1")),
-            createIssueForRelativePath(createRuleInstance("TestSmellB", "RuleSet2")),
-            createIssueForRelativePath(createRuleInstance("TestSmellC", "RuleSet2")),
+            createIssueForRelativePath(createRuleInstance("TestSmellA/id", "RuleSet1")),
+            createIssueForRelativePath(createRuleInstance("TestSmellB/id", "RuleSet2")),
+            createIssueForRelativePath(createRuleInstance("TestSmellC/id", "RuleSet2")),
         )
 
         val basePath = Path("/").absolute().resolve("Users/tester/detekt/")
