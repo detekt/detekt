@@ -24,6 +24,8 @@ class ObjectPropertyNaming(config: Config) : Rule(
     "Property names inside objects should follow the naming convention set in the projects configuration."
 ) {
 
+    override val defaultRuleIdAliases: Set<String> = setOf("ObjectPropertyName")
+
     @Configuration("naming pattern")
     private val constantPattern: Regex by config("[A-Za-z][_A-Za-z0-9]*") { it.toRegex() }
 
