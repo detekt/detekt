@@ -35,7 +35,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * class CorrectSerializable : Serializable {
  *
  *     companion object {
- *         const val serialVersionUID = 1L
+ *         private const val serialVersionUID = 1L
  *     }
  * }
  * </compliant>
