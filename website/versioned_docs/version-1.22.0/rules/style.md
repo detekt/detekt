@@ -547,8 +547,9 @@ Detekt will then report all method or constructor invocations that are forbidden
 ```kotlin
 import java.lang.System
 fun main() {
-    System.gc()
-    System::gc
+    println()
+    val myPrintln : () -> Unit = ::println
+    kotlin.io.print("Hello, World!")
 }
 ```
 
