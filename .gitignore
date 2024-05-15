@@ -166,4 +166,4 @@ target/
 !gradle-wrapper.jar
 
 # VSCode
-.vscode/settings.json
+.vscode
