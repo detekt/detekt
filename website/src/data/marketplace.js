@@ -230,6 +230,17 @@ export const extensions = [
     usesTypeResolution: true,
   },
   {
+    title: "Kiolk's Detekt Rules",
+    description: "This set contains rule that helps to improve readability and to keep single convention in the whole project.",
+    repo: "https://github.com/Kiolk/Detekt-rules",
+    ruleset: "kiolk-detekt-rules",
+    rules: [
+      "UseInvokeForOperator",
+    ],
+    usesTypeResolution: true,
+    tags: ["ruleset"],
+   },
+  {
     title: "ktlint",
     description:
       "This rule set provides wrappers for rules implemented by ktlint.",
