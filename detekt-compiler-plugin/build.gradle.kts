@@ -95,6 +95,8 @@ val testPluginKotlinc by tasks.registering(Task::class) {
 
         args = listOf(
             sourceFile.path,
+            "-language-version",
+            "1.9",
             "-Xplugin=${tasks.shadowJar.get().archiveFile.get().asFile.absolutePath}",
             "-P",
             "plugin:detekt-compiler-plugin:debug=true".toArg(),

@@ -39,6 +39,7 @@ object CompilerTestUtils {
                     workingDir.absolutePath
                 )
             )
+            languageVersion = "1.9"
         }.compile()
     }
 }
