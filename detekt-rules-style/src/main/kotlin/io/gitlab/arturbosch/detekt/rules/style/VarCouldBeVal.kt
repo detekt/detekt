@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.Alias
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
@@ -55,8 +56,9 @@ import org.jetbrains.kotlin.util.containingNonLocalDeclaration
  * }
  * </compliant>
  */
-@ActiveByDefault(since = "1.16.0")
 @RequiresTypeResolution
+@ActiveByDefault(since = "1.16.0")
+@Alias("CanBeVal")
 class VarCouldBeVal(config: Config) : Rule(
     config,
     "Var declaration could be val."

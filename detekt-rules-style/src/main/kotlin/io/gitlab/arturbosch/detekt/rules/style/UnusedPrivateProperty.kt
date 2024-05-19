@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.Alias
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
@@ -60,6 +61,7 @@ import org.jetbrains.kotlin.resolve.bindingContextUtil.getReferenceTargets
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.23.0")
+@Alias("UNUSED_PARAMETER", "unused", "UnusedPrivateMember")
 class UnusedPrivateProperty(config: Config) : Rule(
     config,
     "Property is unused and should be removed."

@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.Alias
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
@@ -37,6 +38,7 @@ import org.jetbrains.kotlin.utils.addIfNotNull
  * can lead to confusion and potential bugs.
  */
 @ActiveByDefault(since = "1.2.0")
+@Alias("unused")
 class UnusedPrivateClass(config: Config) : Rule(
     config,
     "Private class is unused and should be removed."

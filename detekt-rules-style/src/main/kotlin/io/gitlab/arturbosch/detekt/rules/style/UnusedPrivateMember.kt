@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.Alias
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
@@ -45,6 +46,7 @@ private const val ARRAY_GET_METHOD_NAME = "get"
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.16.0")
+@Alias("UNUSED_VARIABLE", "UNUSED_PARAMETER", "unused")
 class UnusedPrivateMember(config: Config) : Rule(
     config,
     "Private function is unused and should be removed."

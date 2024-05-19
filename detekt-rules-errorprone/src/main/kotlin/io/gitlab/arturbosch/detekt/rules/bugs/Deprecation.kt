@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
+import io.gitlab.arturbosch.detekt.api.Alias
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
@@ -14,6 +15,7 @@ import org.jetbrains.kotlin.psi.KtNamedDeclaration
  *
  */
 @RequiresTypeResolution
+@Alias("DEPRECATION")
 class Deprecation(config: Config) : Rule(
     config,
     "Deprecated elements should not be used."

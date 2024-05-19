@@ -27,7 +27,7 @@ internal class RuleSetConfigPrinterTest {
         nonCompliantCodeExample = "",
         compliantCodeExample = "",
         defaultActivationStatus = Inactive,
-        aliases = null,
+        aliases = listOf("alias1", "alias2"),
         parent = ""
     )
 

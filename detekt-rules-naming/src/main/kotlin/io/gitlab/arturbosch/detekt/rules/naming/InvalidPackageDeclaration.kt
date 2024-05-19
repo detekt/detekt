@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.naming
 
 import io.github.detekt.psi.absolutePath
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.Alias
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
@@ -16,6 +17,7 @@ import org.jetbrains.kotlin.psi.KtPackageDirective
  * Reports when the file location does not match the declared package.
  */
 @ActiveByDefault(since = "1.21.0")
+@Alias("PackageDirectoryMismatch")
 class InvalidPackageDeclaration(config: Config) : Rule(
     config,
     "Kotlin source files should be stored in the directory corresponding to its package statement."

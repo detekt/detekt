@@ -1,12 +1,11 @@
 package io.gitlab.arturbosch.detekt.generator.collection
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.Alias
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
-import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidAliasesDeclaration
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
-import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtProperty
@@ -23,7 +22,7 @@ internal class RuleVisitor(textReplacements: Map<String, String>) : DetektVisito
     private var defaultActivationStatus: DefaultActivationStatus = Inactive
     private var autoCorrect = false
     private var requiresTypeResolution = false
-    private var aliases: String? = null
+    private var aliases: List<String> = emptyList()
     private var parent = ""
     private val configurationCollector = ConfigurationCollector()
     private val classesMap = mutableMapOf<String, Boolean>()
@@ -112,16 +111,11 @@ internal class RuleVisitor(textReplacements: Map<String, String>) : DetektVisito
     }
 
     private fun extractAliases(klass: KtClass) {
-        val initializer = klass.getProperties()
-            .singleOrNull { it.name == "defaultRuleIdAliases" }
-            ?.initializer
-        if (initializer != null) {
-            aliases = (
-                initializer as? KtCallExpression
-                    ?: throw InvalidAliasesDeclaration()
-                )
-                .valueArguments
-                .joinToString(", ") { it.text.replace("\"", "") }
+        val annotation = klass.getAnnotation(Alias::class) ?: return
+        aliases = annotation.valueArguments.mapNotNull {
+            it.getArgumentExpression()
+                ?.text
+                ?.withoutQuotes()
         }
     }
 

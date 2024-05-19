@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.Alias
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
@@ -19,6 +20,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * Reports property names inside objects that do not follow the specified naming convention.
  */
 @ActiveByDefault(since = "1.0.0")
+@Alias("ObjectPropertyName")
 class ObjectPropertyNaming(config: Config) : Rule(
     config,
     "Property names inside objects should follow the naming convention set in the projects configuration."

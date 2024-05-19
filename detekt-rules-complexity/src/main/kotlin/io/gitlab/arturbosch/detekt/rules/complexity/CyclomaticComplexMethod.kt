@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.github.detekt.metrics.CyclomaticComplexity
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.Alias
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
@@ -33,6 +34,7 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  *  [Reference](https://kotlinlang.org/docs/scope-functions.html)
  */
 @ActiveByDefault(since = "1.0.0")
+@Alias("ComplexMethod")
 class CyclomaticComplexMethod(config: Config) : Rule(
     config,
     "Prefer splitting up complex methods into smaller, easier to test methods."
