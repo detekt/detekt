@@ -5,4 +5,3 @@ package io.gitlab.arturbosch.detekt.rules
  */
 
 const val IT_LITERAL = "it"
-const val LET_LITERAL = "let"

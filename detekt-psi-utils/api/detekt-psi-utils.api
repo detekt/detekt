@@ -46,7 +46,6 @@ public final class io/gitlab/arturbosch/detekt/rules/JunkKt {
 
 public final class io/gitlab/arturbosch/detekt/rules/KeywordsKt {
 	public static final field IT_LITERAL Ljava/lang/String;
-	public static final field LET_LITERAL Ljava/lang/String;
 }
 
 public final class io/gitlab/arturbosch/detekt/rules/KtAnnotatedExtensionsKt {
