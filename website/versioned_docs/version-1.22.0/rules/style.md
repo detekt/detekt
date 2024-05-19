@@ -545,7 +545,6 @@ Detekt will then report all method or constructor invocations that are forbidden
 #### Noncompliant Code:
 
 ```kotlin
-import java.lang.System
 fun main() {
     println()
     val myPrintln : () -> Unit = ::println
