@@ -33,7 +33,6 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.overriddenTreeUniqueAsSequenc
  * of unstable, experimental or deprecated methods, especially for methods imported from external libraries.
  *
  * <noncompliant>
- * import java.lang.System
  * fun main() {
  *   println()
  *   val myPrintln : () -> Unit = ::println
