@@ -990,10 +990,10 @@ of unstable, experimental or deprecated methods, especially for methods imported
 #### Noncompliant Code:
 
 ```kotlin
-import java.lang.System
 fun main() {
-    System.gc()
-    System::gc
+    println()
+    val myPrintln : () -> Unit = ::println
+    kotlin.io.print("Hello, World!")
 }
 ```
 

@@ -504,9 +504,10 @@ Detekt will then report all method invocations that are forbidden.
 #### Noncompliant Code:
 
 ```kotlin
-import java.lang.System
 fun main() {
-    System.gc()
+    println()
+    val myPrintln : () -> Unit = ::println
+    kotlin.io.print("Hello, World!")
 }
 ```
 
