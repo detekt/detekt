@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.rules.identifierName
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtProperty
 
@@ -26,7 +25,9 @@ class VariableMaxLength(config: Config) : Rule(
             return
         }
 
-        if (property.identifierName().length > maximumVariableNameLength) {
+        val propertyName = property.name ?: return
+
+        if (propertyName.length > maximumVariableNameLength) {
             report(
                 CodeSmell(
                     Entity.atName(property),

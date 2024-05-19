@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.rules.identifierName
 import io.gitlab.arturbosch.detekt.rules.isOperator
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -29,8 +28,9 @@ class FunctionNameMaxLength(config: Config) : Rule(
         if (function.isOverride() || function.isOperator()) {
             return
         }
+        val functionName = function.name ?: return
 
-        if (function.identifierName().length > maximumFunctionNameLength) {
+        if (functionName.length > maximumFunctionNameLength) {
             report(
                 CodeSmell(
                     Entity.atName(function),

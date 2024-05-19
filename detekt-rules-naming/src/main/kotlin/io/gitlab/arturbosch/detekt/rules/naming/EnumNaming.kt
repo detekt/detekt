@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.rules.identifierName
 import org.jetbrains.kotlin.psi.KtEnumEntry
 
 /**
@@ -23,7 +22,7 @@ class EnumNaming(config: Config) : Rule(
     private val enumEntryPattern: Regex by config("[A-Z][_a-zA-Z0-9]*") { it.toRegex() }
 
     override fun visitEnumEntry(enumEntry: KtEnumEntry) {
-        if (!enumEntry.identifierName().matches(enumEntryPattern)) {
+        if (enumEntry.name?.matches(enumEntryPattern) != true) {
             report(
                 CodeSmell(
                     Entity.atName(enumEntry),

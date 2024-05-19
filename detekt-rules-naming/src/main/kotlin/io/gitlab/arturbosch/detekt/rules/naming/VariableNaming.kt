@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.rules.identifierName
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import io.gitlab.arturbosch.detekt.rules.naming.util.isContainingExcludedClassOrObject
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
@@ -51,7 +50,7 @@ class VariableNaming(config: Config) : Rule(
             return
         }
 
-        val identifier = property.identifierName()
+        val identifier = property.name ?: return
         if (property.isPrivate()) {
             if (!identifier.matches(privateVariablePattern)) {
                 report(property, "Private variable names should match the pattern: $privateVariablePattern")
