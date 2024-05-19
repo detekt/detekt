@@ -21,7 +21,6 @@ public final class io/github/detekt/psi/KtFilesKt {
 }
 
 public final class io/gitlab/arturbosch/detekt/rules/AllowedExceptionNamePatternKt {
-	public static final field ALLOWED_EXCEPTION_NAME Ljava/lang/String;
 	public static final fun isAllowedExceptionName (Lorg/jetbrains/kotlin/psi/KtCatchClause;Lkotlin/text/Regex;)Z
 }
 
