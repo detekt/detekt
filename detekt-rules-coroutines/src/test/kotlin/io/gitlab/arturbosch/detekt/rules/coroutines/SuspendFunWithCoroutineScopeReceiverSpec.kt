@@ -130,12 +130,12 @@ class SuspendFunWithCoroutineScopeReceiverSpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
-        fun `should ignore the issue by alias suppression`() {
+        fun `should ignore the issue suppression`() {
             val code = """
                 import kotlinx.coroutines.CoroutineScope
                 import kotlinx.coroutines.delay
 
-                @Suppress("SuspendFunctionOnCoroutineScope")
+                @Suppress("SuspendFunWithCoroutineScopeReceiver")
                 suspend fun CoroutineScope.foo() {
                     delay(timeMillis = 1000)
                 }

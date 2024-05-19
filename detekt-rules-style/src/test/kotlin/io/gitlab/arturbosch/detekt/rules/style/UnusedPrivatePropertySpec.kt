@@ -468,7 +468,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report annotated private constructor properties`() {
             val code = """
-                class Test(@Suppress("unused") private val foo: String) {}
+                class Test(@Suppress("UnusedPrivateProperty") private val foo: String) {}
             """.trimIndent()
 
             assertThat(subject.lintWithContext(env, code)).isEmpty()
@@ -478,7 +478,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
         fun `reports private constructor properties without annotation`() {
             val code = """
                 class Test(
-                    @Suppress("unused") private val foo: String,
+                    @Suppress("UnusedPrivateProperty") private val foo: String,
                     private val bar: String
                 ) {}
             """.trimIndent()
@@ -492,7 +492,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report private constructor properties in annotated class`() {
             val code = """
-                @Suppress("unused")
+                @Suppress("UnusedPrivateProperty")
                 class Test(
                     private val foo: String,
                     private val bar: String
@@ -505,7 +505,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report private constructor properties in class with annotated outer class`() {
             val code = """
-                @Suppress("unused")
+                @Suppress("UnusedPrivateProperty")
                 class Test(
                     private val foo: String,
                     private val bar: String
@@ -523,7 +523,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
         fun `does not report annotated private properties`() {
             val code = """
                 class Test {
-                    @Suppress("unused") private val foo: String = "foo"
+                    @Suppress("UnusedPrivateProperty") private val foo: String = "foo"
                 }
             """.trimIndent()
 
@@ -534,7 +534,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
         fun `reports private properties without annotation`() {
             val code = """
                 class Test {
-                    @Suppress("unused") private val foo: String = "foo"
+                    @Suppress("UnusedPrivateProperty") private val foo: String = "foo"
                     private val bar: String = "bar"
                 }
             """.trimIndent()
@@ -548,7 +548,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report private properties in annotated class`() {
             val code = """
-                @Suppress("unused")
+                @Suppress("UnusedPrivateProperty")
                 class Test {
                     private val foo: String = "foo"
                     private val bar: String = "bar"
@@ -561,12 +561,12 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report private properties in class with annotated outer class`() {
             val code = """
-                @Suppress("unused")
+                @Suppress("UnusedPrivateProperty")
                 class Test {
                     private val foo: String = "foo"
                     private val bar: String = "bar"
                     
-                    @Suppress("unused")
+                    @Suppress("UnusedPrivateProperty")
                     class InnerTest {
                         private val baz: String = "baz"
                     }
