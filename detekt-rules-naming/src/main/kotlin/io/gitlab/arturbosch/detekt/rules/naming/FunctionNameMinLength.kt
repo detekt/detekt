@@ -21,8 +21,6 @@ class FunctionNameMinLength(config: Config) : Rule(
     "Function names should not be shorter than the minimum defined in the configuration."
 ) {
 
-    override val defaultRuleIdAliases: Set<String> = setOf("FunctionMinNameLength")
-
     @Configuration("minimum name length")
     private val minimumFunctionNameLength: Int by config(3)
 

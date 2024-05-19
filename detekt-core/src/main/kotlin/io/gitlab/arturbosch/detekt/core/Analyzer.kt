@@ -209,3 +209,5 @@ internal fun parseToSeverity(severity: String): Severity {
     return Severity.entries.find { it.name.lowercase() == lowercase }
         ?: error("$severity is not a valid Severity. Allowed values are ${Severity.entries}")
 }
+
+private val Rule.aliases: Set<String> get() = config.valueOrDefault(Config.ALIASES_KEY, emptyList<String>()).toSet()

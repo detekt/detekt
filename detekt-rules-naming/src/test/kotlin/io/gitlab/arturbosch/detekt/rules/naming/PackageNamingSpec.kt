@@ -15,12 +15,6 @@ class PackageNamingSpec {
     }
 
     @Test
-    fun `should ignore the issue by alias suppression - PackageDirectoryMismatch`() {
-        assertThat(PackageNaming(Config.empty).aliases)
-            .containsExactlyInAnyOrder("PackageDirectoryMismatch", "PackageName")
-    }
-
-    @Test
     fun `should find a uppercase package name`() {
         assertThat(PackageNaming(Config.empty).compileAndLint("package FOO.BAR")).hasSize(1)
     }

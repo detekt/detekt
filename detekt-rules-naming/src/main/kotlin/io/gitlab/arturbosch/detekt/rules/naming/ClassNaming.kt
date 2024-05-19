@@ -21,8 +21,6 @@ class ClassNaming(config: Config) : Rule(
     "A class or object name should fit the naming pattern defined in the projects configuration."
 ) {
 
-    override val defaultRuleIdAliases: Set<String> = setOf("ClassName")
-
     @Configuration("naming pattern")
     private val classPattern: Regex by config("[A-Z][a-zA-Z0-9]*") { it.toRegex() }
 

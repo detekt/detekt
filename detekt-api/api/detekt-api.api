@@ -280,12 +280,10 @@ public abstract interface annotation class io/gitlab/arturbosch/detekt/api/Requi
 
 public class io/gitlab/arturbosch/detekt/api/Rule : io/gitlab/arturbosch/detekt/api/DetektVisitor {
 	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Config;Ljava/lang/String;)V
-	public final fun getAliases ()Ljava/util/Set;
 	public final fun getAutoCorrect ()Z
 	public final fun getBindingContext ()Lorg/jetbrains/kotlin/resolve/BindingContext;
 	public final fun getCompilerResources ()Lio/gitlab/arturbosch/detekt/api/CompilerResources;
 	public final fun getConfig ()Lio/gitlab/arturbosch/detekt/api/Config;
-	public fun getDefaultRuleIdAliases ()Ljava/util/Set;
 	public final fun getDescription ()Ljava/lang/String;
 	public fun getRuleId ()Lio/gitlab/arturbosch/detekt/api/Rule$Id;
 	protected fun postVisit (Lorg/jetbrains/kotlin/psi/KtFile;)V

@@ -4,6 +4,7 @@ import io.github.detekt.test.utils.KotlinScriptEngine
 import io.github.detekt.test.utils.compileContentForTest
 import io.github.detekt.test.utils.compileForTest
 import io.gitlab.arturbosch.detekt.api.CompilerResources
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
@@ -69,3 +70,5 @@ private fun List<Finding>.filterSuppressed(rule: Rule): List<Finding> {
         it.entity.ktElement?.isSuppressedBy(rule.ruleId, rule.aliases, RuleSet.Id("NoARuleSetId")) == true
     }
 }
+
+private val Rule.aliases: Set<String> get() = config.valueOrDefault(Config.ALIASES_KEY, emptyList<String>()).toSet()

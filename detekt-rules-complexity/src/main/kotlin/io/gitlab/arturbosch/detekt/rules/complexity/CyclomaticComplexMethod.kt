@@ -40,8 +40,6 @@ class CyclomaticComplexMethod(config: Config) : Rule(
     "Prefer splitting up complex methods into smaller, easier to test methods."
 ) {
 
-    override val defaultRuleIdAliases: Set<String> = setOf("ComplexMethod")
-
     @Configuration("The maximum allowed McCabe's Cyclomatic Complexity (MCC) for a method.")
     private val allowedComplexity: Int by config(defaultValue = 14)
 

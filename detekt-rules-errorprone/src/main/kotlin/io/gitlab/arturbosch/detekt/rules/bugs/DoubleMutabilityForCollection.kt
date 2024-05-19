@@ -50,8 +50,6 @@ class DoubleMutabilityForCollection(config: Config) : Rule(
         "Consider using val or immutable collection or value types."
 ) {
 
-    override val defaultRuleIdAliases: Set<String> = setOf("DoubleMutability")
-
     @Configuration("Define a list of mutable types to trigger on when defined with `var`.")
     private val mutableTypes: Set<FqName> by config(defaultMutableTypes) { types ->
         types.map { FqName(it) }.toSet()

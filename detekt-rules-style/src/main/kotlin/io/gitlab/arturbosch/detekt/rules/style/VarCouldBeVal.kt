@@ -64,8 +64,6 @@ class VarCouldBeVal(config: Config) : Rule(
     "Var declaration could be val."
 ) {
 
-    override val defaultRuleIdAliases: Set<String> = setOf("CanBeVal")
-
     @Configuration("Whether to ignore uninitialized lateinit vars")
     private val ignoreLateinitVar: Boolean by config(defaultValue = false)
 

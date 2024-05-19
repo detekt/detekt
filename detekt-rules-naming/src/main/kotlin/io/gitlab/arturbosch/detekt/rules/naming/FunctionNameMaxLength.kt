@@ -21,8 +21,6 @@ class FunctionNameMaxLength(config: Config) : Rule(
     "Function names should not be longer than the maximum set in the project configuration."
 ) {
 
-    override val defaultRuleIdAliases: Set<String> = setOf("FunctionMaxNameLength")
-
     @Configuration("maximum name length")
     private val maximumFunctionNameLength: Int by config(DEFAULT_MAXIMUM_FUNCTION_NAME_LENGTH)
 

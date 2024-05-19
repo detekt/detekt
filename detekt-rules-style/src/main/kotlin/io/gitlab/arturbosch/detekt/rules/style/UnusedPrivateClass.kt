@@ -44,8 +44,6 @@ class UnusedPrivateClass(config: Config) : Rule(
     "Private class is unused and should be removed."
 ) {
 
-    override val defaultRuleIdAliases: Set<String> = setOf("unused")
-
     override fun visit(root: KtFile) {
         super.visit(root)
 

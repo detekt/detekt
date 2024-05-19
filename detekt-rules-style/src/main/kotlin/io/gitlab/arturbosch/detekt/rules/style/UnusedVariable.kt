@@ -53,9 +53,6 @@ class UnusedVariable(config: Config) : Rule(
     config,
     "Variable is unused and should be removed."
 ) {
-
-    override val defaultRuleIdAliases: Set<String> = setOf("UNUSED_VARIABLE", "unused")
-
     @Configuration("unused variables names matching this regex are ignored")
     private val allowedNames: Regex by config(
         "ignored|_",

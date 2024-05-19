@@ -21,8 +21,6 @@ class Deprecation(config: Config) : Rule(
     "Deprecated elements should not be used."
 ) {
 
-    override val defaultRuleIdAliases = setOf("DEPRECATION")
-
     override fun visitElement(element: PsiElement) {
         val diagnostic = hasDeprecationCompilerWarnings(element)
         if (diagnostic != null) {
