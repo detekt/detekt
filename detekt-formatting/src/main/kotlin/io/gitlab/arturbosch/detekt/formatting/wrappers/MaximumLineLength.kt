@@ -24,8 +24,7 @@ class MaximumLineLength(config: Config) : FormattingRule(
 
     override val wrapping = MaxLineLengthRule()
 
-    override val defaultRuleIdAliases: Set<String>
-        get() = setOf("MaxLineLength")
+    override val defaultRuleIdAliases: Set<String> = setOf("MaxLineLength")
 
     @Configuration("maximum line length")
     private val maxLineLength: Int by configWithAndroidVariants(120, 100)
