@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.rules.IT_LITERAL
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
@@ -47,7 +46,7 @@ class AlsoCouldBeApply(config: Config) : Rule(
             ?: expression.valueArguments.singleOrNull()?.getArgumentExpression() as? KtLambdaExpression
             ?: return
         val statements = lambda.bodyExpression?.statements.orEmpty().ifEmpty { return }
-        if (statements.all { (it as? KtQualifiedExpression)?.receiverExpression?.text == IT_LITERAL }) {
+        if (statements.all { (it as? KtQualifiedExpression)?.receiverExpression?.text == "it" }) {
             report(CodeSmell(Entity.from(callee), description))
         }
     }

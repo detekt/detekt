@@ -5,10 +5,10 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.rules.IT_LITERAL
 import io.gitlab.arturbosch.detekt.rules.firstParameter
 import io.gitlab.arturbosch.detekt.rules.isCalling
 import io.gitlab.arturbosch.detekt.rules.receiverIsUsed
+import org.jetbrains.kotlin.builtins.StandardNames.IMPLICIT_LAMBDA_PARAMETER_NAME
 import org.jetbrains.kotlin.descriptors.impl.ValueParameterDescriptorImpl.WithDestructuringDeclaration
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -98,14 +98,14 @@ private fun canBeReplacedWithCall(lambdaExpr: KtLambdaExpression?): Boolean {
 
     val lambdaParameter = lambdaExpr.valueParameters.singleOrNull()
     val lambdaParameterNames = if (lambdaParameter == null) {
-        listOf(IT_LITERAL)
+        listOf(IMPLICIT_LAMBDA_PARAMETER_NAME)
     } else {
         lambdaParameter.destructuringDeclaration?.entries.orEmpty()
             .plus(lambdaParameter)
             .filterIsInstance<KtNamedDeclaration>()
-            .map { it.nameAsSafeName.asString() }
+            .map { it.nameAsSafeName }
     }
-    return lambdaParameterNames.any { receiver.textMatches(it) }
+    return lambdaParameterNames.any { receiver.textMatches(it.asString()) }
 }
 
 private fun KtLambdaExpression.countLambdaParameterReference(context: BindingContext): Int {

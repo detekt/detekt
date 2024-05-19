@@ -5,9 +5,9 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.rules.IT_LITERAL
 import io.gitlab.arturbosch.detekt.rules.hasImplicitParameterReference
 import io.gitlab.arturbosch.detekt.rules.implicitParameter
+import org.jetbrains.kotlin.builtins.StandardNames.IMPLICIT_LAMBDA_PARAMETER_NAME
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 
 /**
@@ -71,8 +71,8 @@ class MultilineLambdaItParameter(config: Config) : Rule(
 
         if (!lambdaExpression.isMultiline()) return
 
-        val parameterNames = lambdaExpression.valueParameters.map { it.name }
-        if (IT_LITERAL in parameterNames) {
+        val parameterNames = lambdaExpression.valueParameters.map { it.nameAsName }
+        if (IMPLICIT_LAMBDA_PARAMETER_NAME in parameterNames) {
             // Explicit `it`
             report(
                 CodeSmell(
