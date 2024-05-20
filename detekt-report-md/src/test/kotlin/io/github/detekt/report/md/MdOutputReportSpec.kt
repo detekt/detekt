@@ -62,8 +62,8 @@ class MdOutputReportSpec {
 
     @Test
     fun `renders the right number of issues per rule`() {
-        assertThat(result).contains("id_a (2)")
-        assertThat(result).contains("id_b (1)")
+        assertThat(result).contains("rule_a (2)")
+        assertThat(result).contains("rule_b (1)")
     }
 
     @Test
@@ -74,8 +74,8 @@ class MdOutputReportSpec {
 
     @Test
     fun `renders the right violation description for the rules`() {
-        assertThat(result).contains("Description id_a")
-        assertThat(result).contains("Description id_b")
+        assertThat(result).contains("Description rule_a")
+        assertThat(result).contains("Description rule_b")
     }
 
     @Test
@@ -161,9 +161,9 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
     )
 
     return createMdDetektion(
-        createIssue(createRuleInfo("id_a", "Section-1"), entity1, "Issue message 1"),
-        createIssue(createRuleInfo("id_a", "Section-1"), entity2, "Issue message 2"),
-        createIssue(createRuleInfo("id_b", "Section-2"), entity3, "Issue message 3"),
+        createIssue(createRuleInfo("rule_a", "Section-1"), entity1, "Issue message 1"),
+        createIssue(createRuleInfo("rule_a", "Section-1"), entity2, "Issue message 2"),
+        createIssue(createRuleInfo("rule_b", "Section-2"), entity3, "Issue message 3"),
     ).also {
         it.putUserData(complexityKey, 10)
         it.putUserData(CognitiveComplexity.KEY, 10)
@@ -188,15 +188,15 @@ private fun issues(): Array<Issue> {
     val entity4 = createEntity(location = createLocation("src/main/com/sample/Sample2.kt", position = 1 to 1))
 
     return arrayOf(
-        createIssue(createRuleInfo("id_a", "RuleSet1"), entity1),
-        createIssue(createRuleInfo("id_a", "RuleSet1"), entity2),
-        createIssue(createRuleInfo("id_a", "RuleSet1"), entity3),
-        createIssue(createRuleInfo("id_a", "RuleSet1"), entity4),
-        createIssue(createRuleInfo("id_b", "RuleSet1"), entity2),
-        createIssue(createRuleInfo("id_b", "RuleSet1"), entity1),
-        createIssue(createRuleInfo("id_b", "RuleSet1"), entity4),
-        createIssue(createRuleInfo("id_b", "RuleSet2"), entity3),
-        createIssue(createRuleInfo("id_c", "RuleSet2"), entity1),
-        createIssue(createRuleInfo("id_c", "RuleSet2"), entity2),
+        createIssue(createRuleInfo("rule_a", "RuleSet1"), entity1),
+        createIssue(createRuleInfo("rule_a", "RuleSet1"), entity2),
+        createIssue(createRuleInfo("rule_a", "RuleSet1"), entity3),
+        createIssue(createRuleInfo("rule_a", "RuleSet1"), entity4),
+        createIssue(createRuleInfo("rule_b", "RuleSet1"), entity2),
+        createIssue(createRuleInfo("rule_b", "RuleSet1"), entity1),
+        createIssue(createRuleInfo("rule_b", "RuleSet1"), entity4),
+        createIssue(createRuleInfo("rule_b", "RuleSet2"), entity3),
+        createIssue(createRuleInfo("rule_c", "RuleSet2"), entity1),
+        createIssue(createRuleInfo("rule_c", "RuleSet2"), entity2),
     )
 }
