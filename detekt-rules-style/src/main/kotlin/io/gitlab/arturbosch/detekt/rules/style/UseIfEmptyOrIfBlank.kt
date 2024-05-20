@@ -5,7 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.rules.isElseIf
+import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.FqName
@@ -54,7 +54,7 @@ class UseIfEmptyOrIfBlank(config: Config) : Rule(
     override fun visitIfExpression(expression: KtIfExpression) {
         super.visitIfExpression(expression)
 
-        if (expression.isElseIf()) return
+        if (expression.parent.node.elementType == KtNodeTypes.ELSE) return
         val thenExpression = expression.then ?: return
         val elseExpression = expression.`else` ?: return
         if (elseExpression is KtIfExpression) return
