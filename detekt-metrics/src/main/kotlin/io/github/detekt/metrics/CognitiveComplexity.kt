@@ -1,7 +1,6 @@
 package io.github.detekt.metrics
 
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
-import io.gitlab.arturbosch.detekt.rules.isElseIf
 import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.com.intellij.psi.tree.IElementType
@@ -96,7 +95,7 @@ class CognitiveComplexity private constructor() : DetektVisitor() {
             if (element is KtContainerNodeForControlStructureBody && parent is KtIfExpression) {
                 when (element.node.elementType) {
                     KtNodeTypes.THEN -> {
-                        if (parent.isElseIf()) {
+                        if (parent.parent.node.elementType == KtNodeTypes.ELSE) {
                             complexity++
                         } else {
                             addComplexity()
