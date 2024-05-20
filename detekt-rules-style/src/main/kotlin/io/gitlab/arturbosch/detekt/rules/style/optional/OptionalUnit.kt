@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.cfg.WhenChecker
-import org.jetbrains.kotlin.js.translate.callTranslator.getReturnType
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtIfExpression
@@ -125,7 +124,7 @@ class OptionalUnit(config: Config) : Rule(
         "defines a return type of Unit. This is unnecessary and can safely be removed."
 
     private fun KtExpression.isGenericOrNothingType(): Boolean {
-        val isGenericType = getResolvedCall(bindingContext)?.getReturnType()?.isTypeParameter() == true
+        val isGenericType = getResolvedCall(bindingContext)?.candidateDescriptor?.returnType?.isTypeParameter() == true
         val isNothingType = getType(bindingContext)?.isNothing() == true
         // Either the function initializer returns Nothing or it is a generic function
         // into which Unit is passed, but not both.

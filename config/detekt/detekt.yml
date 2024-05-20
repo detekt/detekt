@@ -204,6 +204,8 @@ style:
       #- value: 'org.junit.jupiter.api.assertTimeoutPreemptively'
       - value: 'java.util.stream.*'
         reason: "Use Kotlin's sequences instead."
+      - value: 'org.jetbrains.kotlin.js.*'
+        reason: "detekt does not support Kotlin/JS at this time"
   ForbiddenMethodCall:
     active: true
     methods:
