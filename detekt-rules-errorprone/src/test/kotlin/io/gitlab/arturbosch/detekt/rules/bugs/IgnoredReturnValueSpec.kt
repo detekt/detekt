@@ -976,6 +976,33 @@ class IgnoredReturnValueSpec {
         }
 
         @Test
+        fun `does not report when a function has a custom annotation on parent`() {
+            val code = """
+                package foo
+                
+                annotation class CustomIgnoreReturn
+                
+                @CustomIgnoreReturn
+                object Foo {
+                    fun listOfChecked(value: String) = listOf(value)
+                }
+                
+                fun foo() : Int {
+                    Foo.listOfChecked("hello")
+                    return 42
+                }
+            """.trimIndent()
+            val rule = IgnoredReturnValue(
+                TestConfig(
+                    "ignoreReturnValueAnnotations" to listOf("*.CustomIgnoreReturn"),
+                    "restrictToConfig" to false,
+                )
+            )
+            val findings = rule.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
         fun `does not report when a function is in ignoreFunctionCall`() {
             val code = """
                 package foo
