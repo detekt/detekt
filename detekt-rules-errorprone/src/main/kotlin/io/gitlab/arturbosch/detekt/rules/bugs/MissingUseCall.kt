@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
-import io.gitlab.arturbosch.detekt.rules.getParentExpressionAfterParenthesis
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.ConstructorDescriptor
@@ -25,6 +24,7 @@ import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectLiteralExpression
+import org.jetbrains.kotlin.psi.KtParenthesizedExpression
 import org.jetbrains.kotlin.psi.KtPostfixExpression
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
@@ -32,6 +32,8 @@ import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfTypes
+import org.jetbrains.kotlin.psi.psiUtil.parents
+import org.jetbrains.kotlin.psi.psiUtil.parentsWithSelf
 import org.jetbrains.kotlin.psi.psiUtil.siblings
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
@@ -214,7 +216,8 @@ class MissingUseCall(config: Config = Config.empty) : Rule(
                 parent.siblings(forward = true, withItself = false).filter {
                     it.text.isNotBlank()
                 }.mapNotNull {
-                    it.getParentExpressionAfterParenthesis(false) as? KtQualifiedExpression
+                    it.parentsWithSelf
+                        .firstOrNull { element -> element !is KtParenthesizedExpression } as? KtQualifiedExpression
                 }.filter {
                     it.doesEndWithUse()
                 }.any {
@@ -230,7 +233,7 @@ class MissingUseCall(config: Config = Config.empty) : Rule(
 
     @Suppress("ReturnCount")
     private fun isPartOfIfElseExpressionReturningCloseable(expression: KtExpression): Boolean {
-        val expressionAfterParens = expression.getParentExpressionAfterParenthesis() ?: return false
+        val expressionAfterParens = expression.parents.firstOrNull { it !is KtParenthesizedExpression } ?: return false
         val (ifExpression, containerExpression) =
             @Suppress("BracesOnIfStatements")
             if (expressionAfterParens is KtContainerNodeForControlStructureBody) {

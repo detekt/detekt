@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.rules.getParentExpressionAfterParenthesis
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtElement
@@ -15,6 +14,7 @@ import org.jetbrains.kotlin.psi.KtParenthesizedExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfTypesAndPredicate
+import org.jetbrains.kotlin.psi.psiUtil.parents
 import org.jetbrains.kotlin.psi2ir.deparenthesize
 
 /**
@@ -88,7 +88,7 @@ class StringShouldBeRawString(config: Config) : Rule(
             return
         }
 
-        val expressionParent = expression.getParentExpressionAfterParenthesis()
+        val expressionParent = expression.parents.firstOrNull { it !is KtParenthesizedExpression }
         val rootElement = expression.getRootExpression()
         if (
             expressionParent !is KtBinaryExpression ||
