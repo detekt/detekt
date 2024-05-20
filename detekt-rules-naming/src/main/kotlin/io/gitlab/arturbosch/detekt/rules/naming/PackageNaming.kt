@@ -14,7 +14,7 @@ import org.jetbrains.kotlin.psi.KtPackageDirective
  * Reports package names that do not follow the specified naming convention.
  */
 @ActiveByDefault(since = "1.0.0")
-@Alias("PackageName", "PackageDirectoryMismatch")
+@Alias("PackageName")
 class PackageNaming(config: Config) : Rule(
     config,
     "Package names should match the naming convention set in the configuration."

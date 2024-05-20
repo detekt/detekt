@@ -100,7 +100,6 @@ complexity:
     ignoreOverloaded: false
   CyclomaticComplexMethod:
     active: true
-    aliases: ['ComplexMethod']
     allowedComplexity: 14
     ignoreSingleWhenExpression: false
     ignoreSimpleWhenEntries: false
@@ -378,7 +377,7 @@ naming:
     privatePropertyPattern: '(_)?[A-Za-z][_A-Za-z0-9]*'
   PackageNaming:
     active: true
-    aliases: ['PackageName', 'PackageDirectoryMismatch']
+    aliases: ['PackageName']
     packagePattern: '[a-z]+(\.[a-z][A-Za-z0-9]*)*'
   TopLevelPropertyNaming:
     active: true
@@ -777,18 +776,18 @@ style:
     active: false
   UnusedParameter:
     active: true
-    aliases: ['UNUSED_VARIABLE', 'UNUSED_PARAMETER', 'unused', 'UnusedPrivateMember']
+    aliases: ['UNUSED_PARAMETER', 'unused']
     allowedNames: 'ignored|expected'
   UnusedPrivateClass:
     active: true
     aliases: ['unused']
   UnusedPrivateMember:
     active: true
-    aliases: ['UNUSED_VARIABLE', 'UNUSED_PARAMETER', 'unused']
+    aliases: ['unused']
     allowedNames: ''
   UnusedPrivateProperty:
     active: true
-    aliases: ['UNUSED_PARAMETER', 'unused', 'UnusedPrivateMember']
+    aliases: ['unused']
     allowedNames: 'ignored|expected|serialVersionUID'
   UnusedVariable:
     active: true

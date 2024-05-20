@@ -46,7 +46,7 @@ private const val ARRAY_GET_METHOD_NAME = "get"
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.16.0")
-@Alias("UNUSED_VARIABLE", "UNUSED_PARAMETER", "unused")
+@Alias("unused")
 class UnusedPrivateMember(config: Config) : Rule(
     config,
     "Private function is unused and should be removed."
@@ -73,7 +73,7 @@ private class UnusedFunctionVisitor(
     private val invokeOperatorReferences = mutableMapOf<CallableDescriptor, MutableList<KtReferenceExpression>>()
     private val propertyDelegates = mutableListOf<KtPropertyDelegate>()
 
-    @Suppress("ComplexMethod", "LongMethod")
+    @Suppress("CyclomaticComplexMethod", "LongMethod")
     fun getUnusedReports(): List<CodeSmell> {
         val propertyDelegateResultingDescriptors by lazy(LazyThreadSafetyMode.NONE) {
             propertyDelegates.flatMap { it.resultingDescriptors() }

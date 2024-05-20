@@ -43,7 +43,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isProtected
  * </compliant>
  */
 @ActiveByDefault(since = "1.23.0")
-@Alias("UNUSED_VARIABLE", "UNUSED_PARAMETER", "unused", "UnusedPrivateMember")
+@Alias("UNUSED_PARAMETER", "unused")
 class UnusedParameter(config: Config) : Rule(
     config,
     "Function parameter is unused and should be removed."

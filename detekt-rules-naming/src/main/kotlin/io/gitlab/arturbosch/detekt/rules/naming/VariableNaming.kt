@@ -35,7 +35,7 @@ class VariableNaming(config: Config) : Rule(
 
     @Configuration("ignores member properties that have the override modifier")
     @Deprecated("This configuration is ignored and will be removed in the future")
-    @Suppress("UnusedPrivateMember")
+    @Suppress("unused")
     private val ignoreOverridden: Boolean by config(true)
 
     override fun visitProperty(property: KtProperty) {

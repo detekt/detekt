@@ -27,7 +27,7 @@ class Indentation(config: Config) : FormattingRule(
 
     @Configuration("continuation indentation size")
     @Deprecated("`continuationIndentSize` is ignored by KtLint and will have no effect")
-    @Suppress("UnusedPrivateMember")
+    @Suppress("unused")
     private val continuationIndentSize by config(4)
 
     override fun overrideEditorConfigProperties(): Map<EditorConfigProperty<*>, String> =
