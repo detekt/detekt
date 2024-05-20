@@ -10,7 +10,6 @@ import io.gitlab.arturbosch.detekt.rules.isCalling
 import org.jetbrains.kotlin.contracts.parsing.isEqualsDescriptor
 import org.jetbrains.kotlin.descriptors.VariableDescriptor
 import org.jetbrains.kotlin.descriptors.impl.ValueParameterDescriptorImpl.WithDestructuringDeclaration
-import org.jetbrains.kotlin.js.translate.callTranslator.getReturnType
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtBinaryExpression
@@ -168,9 +167,9 @@ class UnnecessaryAny(config: Config) : Rule(
 
             itRefCountInLeft == 1 -> {
                 val valueExpressionType =
-                    rightExpression.getResolvedCall(bindingContext)?.getReturnType() ?: return null
+                    rightExpression.getResolvedCall(bindingContext)?.resultingDescriptor?.returnType ?: return null
                 val itExpressionType =
-                    leftExpression.getResolvedCall(bindingContext)?.getReturnType() ?: return null
+                    leftExpression.getResolvedCall(bindingContext)?.resultingDescriptor?.returnType ?: return null
                 if (leftExpression is KtReferenceExpression &&
                     valueExpressionType.isSubtypeOf(itExpressionType)
                 ) {

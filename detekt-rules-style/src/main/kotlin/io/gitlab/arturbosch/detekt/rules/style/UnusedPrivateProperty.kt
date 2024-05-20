@@ -13,10 +13,10 @@ import io.gitlab.arturbosch.detekt.rules.isExpect
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.descriptors.ClassConstructorDescriptor
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
+import org.jetbrains.kotlin.descriptors.DeclarationDescriptorWithSource
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
 import org.jetbrains.kotlin.descriptors.Visibilities
 import org.jetbrains.kotlin.descriptors.isTopLevelInPackage
-import org.jetbrains.kotlin.js.resolve.diagnostics.findPsi
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtConstructor
@@ -35,6 +35,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.getReferenceTargets
+import org.jetbrains.kotlin.resolve.source.getPsi
 
 /**
  * An unused private property can be removed to simplify the source file.
@@ -186,7 +187,7 @@ private class UnusedPrivatePropertyVisitor(
                 it.containingDeclaration is ClassConstructorDescriptor || it.isPrivateProperty()
             }
             .forEach { descriptor ->
-                val psi = descriptor.findPsi() ?: return@forEach
+                val psi = (descriptor as? DeclarationDescriptorWithSource)?.source?.getPsi() ?: return@forEach
                 when {
                     descriptor.isTopLevelInPackage() -> usedTopLevelProperties.add(psi)
                     descriptor.isPropertyParameter() -> usedClassProperties.add(psi)
@@ -208,4 +209,5 @@ fun DeclarationDescriptor.isPrivateProperty() =
     this is PropertyDescriptor && visibility.name == Visibilities.Private.name
 
 private fun DeclarationDescriptor.isPropertyParameter() =
-    this is PropertyDescriptor || (findPsi() as? KtParameter)?.isPropertyParameter() ?: false
+    this is PropertyDescriptor ||
+        ((this as? DeclarationDescriptorWithSource)?.source?.getPsi() as? KtParameter)?.isPropertyParameter() ?: false

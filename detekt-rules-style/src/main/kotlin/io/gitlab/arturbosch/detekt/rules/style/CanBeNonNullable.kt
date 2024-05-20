@@ -16,7 +16,6 @@ import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
-import org.jetbrains.kotlin.js.translate.callTranslator.getReturnType
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtBinaryExpression
@@ -234,7 +233,7 @@ class CanBeNonNullable(config: Config) : Rule(
                 ?.collectDescendantsOfType<KtNameReferenceExpression>()
                 .orEmpty()
                 .mapNotNull { it.getResolvedCall(bindingContext) }
-                .filter { callDescriptor -> callDescriptor.getReturnType().isNullable() }
+                .filter { callDescriptor -> callDescriptor.resultingDescriptor.returnType?.isNullable() == true }
                 .mapNotNull { callDescriptor -> callDescriptor.resultingDescriptor as? ValueParameterDescriptor }
             val whenConditions = expression.entries.flatMap { it.conditions.asList() }
             if (nullCheckedDescriptor.isNotEmpty()) {
