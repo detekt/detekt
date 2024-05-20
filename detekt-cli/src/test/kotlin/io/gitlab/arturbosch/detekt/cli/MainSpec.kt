@@ -27,7 +27,7 @@ class MainSpec {
     @Nested
     inner class `Build runner` {
 
-        @Suppress("UnusedPrivateMember")
+        @Suppress("UnusedPrivateFunction")
         private fun runnerConfigs(): List<Arguments> {
             return listOf(
                 arguments(arrayOf("--generate-config", "detekt-test.yml"), ConfigExporter::class),

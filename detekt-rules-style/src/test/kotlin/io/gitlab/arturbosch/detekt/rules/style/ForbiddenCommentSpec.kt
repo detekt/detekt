@@ -716,7 +716,7 @@ class ForbiddenCommentSpec {
     @Nested
     inner class `comment getContent` {
 
-        @Suppress("LongMethod", "UnusedPrivateMember")
+        @Suppress("LongMethod", "UnusedPrivateFunction")
         private fun getCommentsContentArguments() = listOf(
             Arguments.of("// comment", "comment"),
             Arguments.of("//  comment", " comment"),

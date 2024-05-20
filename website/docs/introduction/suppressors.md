@@ -10,7 +10,7 @@ The `Suppressor`s are a tool that you can use to customize the reports of detekt
 An example is the **annotation** suppressor. It works like this. First, you need to configure the tag `ignoreAnnotated` with a list of annotations, you want the suppressor to consider. Example:
 
 ```yaml
-UnusedPrivateMember:
+UnusedPrivateFunction:
   active: true
   ignoreAnnotated:
     - 'Preview'

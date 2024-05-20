@@ -66,7 +66,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             ::UnusedImport,
             ::UnusedParameter,
             ::UnusedPrivateClass,
-            ::UnusedPrivateMember,
+            ::UnusedPrivateFunction,
             ::UnusedPrivateProperty,
             ::UnusedVariable,
             ::ExpressionBodySyntax,
