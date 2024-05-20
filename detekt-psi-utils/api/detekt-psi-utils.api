@@ -43,11 +43,6 @@ public final class io/gitlab/arturbosch/detekt/rules/JunkKt {
 	public static final fun receiverIsUsed (Lorg/jetbrains/kotlin/psi/KtCallExpression;Lorg/jetbrains/kotlin/resolve/BindingContext;)Z
 }
 
-public final class io/gitlab/arturbosch/detekt/rules/KeywordsKt {
-	public static final field IT_LITERAL Ljava/lang/String;
-	public static final field LET_LITERAL Ljava/lang/String;
-}
-
 public final class io/gitlab/arturbosch/detekt/rules/KtAnnotatedExtensionsKt {
 	public static final fun hasAnnotation (Lorg/jetbrains/kotlin/psi/KtAnnotated;[Ljava/lang/String;)Z
 }

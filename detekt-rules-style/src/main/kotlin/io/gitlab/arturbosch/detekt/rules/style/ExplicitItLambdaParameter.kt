@@ -5,7 +5,7 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.rules.IT_LITERAL
+import org.jetbrains.kotlin.builtins.StandardNames.IMPLICIT_LAMBDA_PARAMETER_NAME
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 
 /**
@@ -48,8 +48,8 @@ class ExplicitItLambdaParameter(config: Config) : Rule(
 
     override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
         super.visitLambdaExpression(lambdaExpression)
-        val parameterNames = lambdaExpression.valueParameters.map { it.name }
-        if (IT_LITERAL in parameterNames) {
+        val parameterNames = lambdaExpression.valueParameters.map { it.nameAsName }
+        if (IMPLICIT_LAMBDA_PARAMETER_NAME in parameterNames) {
             val message =
                 if (
                     parameterNames.size == 1 &&
