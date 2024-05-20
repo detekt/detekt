@@ -273,9 +273,6 @@ style:
     ignoreAnnotated: ['Nested']
   UnusedImport:
     active: false # formatting already have this rule enabled
-  UnusedPrivateMember:
-    active: true
-    allowedNames: '(_|ignored|expected)'
   UseAnyOrNoneInsteadOfFind:
     active: true
   UseCheckOrError:
