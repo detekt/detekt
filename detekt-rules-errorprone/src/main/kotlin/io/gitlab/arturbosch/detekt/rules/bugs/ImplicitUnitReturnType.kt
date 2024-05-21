@@ -8,7 +8,6 @@ import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.hasImplicitUnitReturnType
-import io.gitlab.arturbosch.detekt.rules.isUnitExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
@@ -52,10 +51,7 @@ class ImplicitUnitReturnType(config: Config) : Rule(
             return
         }
 
-        val bodyExpression = function.bodyExpression
-        if (bodyExpression == null || bodyExpression.isUnitExpression()) {
-            return
-        }
+        if (function.bodyExpression?.text == "Unit") return
 
         if (function.hasImplicitUnitReturnType(bindingContext)) {
             val message = buildString {

@@ -9,7 +9,6 @@ import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.hasImplicitUnitReturnType
-import io.gitlab.arturbosch.detekt.rules.isUnitExpression
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtProperty
@@ -77,13 +76,8 @@ class LibraryCodeMustSpecifyReturnType(config: Config) : Rule(
         super.visitNamedFunction(function)
     }
 
-    private fun KtNamedFunction.isUnitOmissionAllowed(): Boolean {
-        val bodyExpression = this.bodyExpression
-        if (bodyExpression == null || bodyExpression.isUnitExpression()) {
-            return true
-        }
-        return allowOmitUnit && this.hasImplicitUnitReturnType(bindingContext)
-    }
+    private fun KtNamedFunction.isUnitOmissionAllowed(): Boolean =
+        bodyExpression?.text == "Unit" || (allowOmitUnit && this.hasImplicitUnitReturnType(bindingContext))
 
     private fun KtCallableDeclaration.explicitReturnTypeRequired(): Boolean =
         ExplicitApiDeclarationChecker.returnTypeCheckIsApplicable(this) &&
