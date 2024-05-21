@@ -8,7 +8,6 @@ import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
-import io.gitlab.arturbosch.detekt.rules.identifierName
 import io.gitlab.arturbosch.detekt.rules.isConstant
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
@@ -56,7 +55,7 @@ class BooleanPropertyNaming(config: Config) : Rule(
     }
 
     private fun validateDeclaration(declaration: KtCallableDeclaration) {
-        val name = declaration.identifierName()
+        val name = declaration.name ?: return
         val typeName = getTypeName(declaration)
         val isBooleanType =
             typeName == KOTLIN_BOOLEAN_TYPE_NAME || typeName == JAVA_BOOLEAN_TYPE_NAME

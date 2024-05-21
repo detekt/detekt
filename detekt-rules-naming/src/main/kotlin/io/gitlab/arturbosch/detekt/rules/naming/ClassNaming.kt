@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.rules.identifierName
 import org.jetbrains.kotlin.psi.KtClassOrObject
 
 /**
@@ -28,7 +27,7 @@ class ClassNaming(config: Config) : Rule(
         if (classOrObject.nameAsSafeName.isSpecial || classOrObject.nameIdentifier?.parent?.javaClass == null) {
             return
         }
-        if (!classOrObject.identifierName().removeSurrounding("`").matches(classPattern)) {
+        if (classOrObject.name?.matches(classPattern) != true) {
             report(
                 CodeSmell(
                     Entity.atName(classOrObject),

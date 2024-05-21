@@ -24,10 +24,6 @@ public final class io/gitlab/arturbosch/detekt/rules/AllowedExceptionNamePattern
 	public static final fun isAllowedExceptionName (Lorg/jetbrains/kotlin/psi/KtCatchClause;Lkotlin/text/Regex;)Z
 }
 
-public final class io/gitlab/arturbosch/detekt/rules/IdentifierNameKt {
-	public static final fun identifierName (Lorg/jetbrains/kotlin/psi/KtNamedDeclaration;)Ljava/lang/String;
-}
-
 public final class io/gitlab/arturbosch/detekt/rules/IsPartOfUtilsKt {
 	public static final fun isPartOfString (Lorg/jetbrains/kotlin/com/intellij/psi/PsiElement;)Z
 }

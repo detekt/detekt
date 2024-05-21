@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.rules.identifierName
 import io.gitlab.arturbosch.detekt.rules.isConstant
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
@@ -51,17 +50,17 @@ class ObjectPropertyNaming(config: Config) : Rule(
         this.isMember && this.getNonStrictParentOfType<KtClassOrObject>() is KtObjectDeclaration
 
     private fun handleConstant(property: KtProperty) {
-        if (!property.identifierName().matches(constantPattern)) {
+        if (property.name?.matches(constantPattern) != true) {
             report(property, "Object constant names should match the pattern: $constantPattern")
         }
     }
 
     private fun handleProperty(property: KtProperty) {
         if (property.isPrivate()) {
-            if (!property.identifierName().matches(privatePropertyPattern)) {
+            if (property.name?.matches(privatePropertyPattern) != true) {
                 report(property, "Private object property names should match the pattern: $privatePropertyPattern")
             }
-        } else if (!property.identifierName().matches(propertyPattern)) {
+        } else if (property.name?.matches(propertyPattern) != true) {
             report(property, "Object property names should match the pattern: $propertyPattern")
         }
     }

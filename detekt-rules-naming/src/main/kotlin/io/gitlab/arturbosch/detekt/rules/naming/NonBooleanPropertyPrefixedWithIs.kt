@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
-import io.gitlab.arturbosch.detekt.rules.identifierName
 import org.jetbrains.kotlin.builtins.isFunctionOrKFunctionTypeWithAnySuspendability
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
@@ -55,7 +54,7 @@ class NonBooleanPropertyPrefixedWithIs(config: Config) : Rule(
     }
 
     private fun validateDeclaration(declaration: KtCallableDeclaration) {
-        val name = declaration.identifierName()
+        val name = declaration.name ?: return
         if (name.startsWith("is") && name.getOrNull(2)?.isUpperCase() == true) {
             val (type, typeFqName) = getType(declaration) ?: return
             if (!type.isBoolean()) {
