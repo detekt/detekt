@@ -17,8 +17,8 @@ import io.gitlab.arturbosch.detekt.api.internal.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.simplePatternToRegex
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import io.gitlab.arturbosch.detekt.rules.isCalling
-import org.jetbrains.kotlin.backend.common.serialization.findPackage
 import org.jetbrains.kotlin.descriptors.annotations.AnnotationDescriptor
+import org.jetbrains.kotlin.descriptors.findPackage
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression

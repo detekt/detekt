@@ -1,10 +1,11 @@
 [versions]
-dokka = "1.8.10"
-jacoco = "0.8.10"
-kotlin = "1.9.24"
+dokka = "1.9.20"
+jacoco = "0.8.12"
+kotlin = "2.0.0"
 ktlint = "0.50.0"
-junit = "5.9.3"
+junit = "5.10.2"
 contester = "0.2.0"
+slf4j = "2.0.13"
 
 [libraries]
 githubRelease-gradle = "com.github.breadmoirai:github-release:2.4.1"
@@ -36,15 +37,16 @@ slf4j-simple = { module = "org.slf4j:slf4j-simple", version = "2.0.7" }
 
 junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 
-sarif4k = "io.github.detekt.sarif4k:sarif4k:0.4.0"
-assertj = "org.assertj:assertj-core:3.24.2"
+sarif4k = "io.github.detekt.sarif4k:sarif4k:0.6.0"
+assertj = "org.assertj:assertj-core:3.25.3"
 reflections = "org.reflections:reflections:0.10.2"
 mockk = "io.mockk:mockk:1.13.5"
-snakeyaml = "org.snakeyaml:snakeyaml-engine:2.6"
-jcommander = "com.beust:jcommander:1.82"
+snakeyaml = "org.snakeyaml:snakeyaml-engine:2.7"
+jcommander = "com.beust:jcommander:1.83"
 contester-breakpoint = { module = "io.github.davidburstrom.contester:contester-breakpoint", version.ref = "contester" }
 contester-driver = { module = "io.github.davidburstrom.contester:contester-driver", version.ref = "contester" }
-kotlinCompileTesting = { module = "dev.zacsweers.kctfork:core", version = "0.4.0" }
+kotlinCompileTesting = { module = "dev.zacsweers.kctfork:core", version = "0.5.0-alpha07" }
+jetbrains-annotations = "org.jetbrains:annotations:24.1.0"
 
 [plugins]
 binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.13.1" }

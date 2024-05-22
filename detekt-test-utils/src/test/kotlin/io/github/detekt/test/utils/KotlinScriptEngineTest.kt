@@ -47,7 +47,7 @@ class KotlinScriptEngineTest {
 
         assertThatThrownBy { KotlinScriptEngine.compile(codeWithMissingImport) }
             .isInstanceOf(IllegalStateException::class.java)
-            .hasMessage("ERROR Unresolved reference: Random (script.main.kts:2:5)")
+            .hasMessage("ERROR Unresolved reference 'Random'. (script.main.kts:2:5)")
     }
 
     @RepeatedTest(10)

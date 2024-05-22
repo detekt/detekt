@@ -3,8 +3,9 @@ import org.jetbrains.dokka.gradle.DokkaTask
 plugins {
     id("module")
     alias(libs.plugins.dokka)
-    `java-test-fixtures`
+    id("java-test-fixtures")
     alias(libs.plugins.binaryCompatibilityValidator)
+    id("dev.drewhamilton.poko") version "0.16.0-beta01"
 }
 
 dependencies {
