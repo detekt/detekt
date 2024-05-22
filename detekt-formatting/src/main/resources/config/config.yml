@@ -136,6 +136,7 @@ formatting:
     indentSize: 4
   MaximumLineLength:
     active: true
+    aliases: ['MaxLineLength']
     maxLineLength: 120
     ignoreBackTickedIdentifier: false
   MixedConditionOperators:

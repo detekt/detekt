@@ -300,7 +300,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report annotated private functions`() {
             val code = """
-                @Suppress("unused")
+                @Suppress("UnusedPrivateMember")
                 private fun foo(): String = ""
             """.trimIndent()
 
@@ -322,7 +322,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report private functions in annotated class`() {
             val code = """
-                @Suppress("unused")
+                @Suppress("UnusedPrivateMember")
                 class Test {
                     private fun foo(): String = ""
                 }
@@ -334,7 +334,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report private functions in class with annotated outer class`() {
             val code = """
-                @Suppress("unused")
+                @Suppress("UnusedPrivateMember")
                 class Test {
                     private fun foo(): String = ""
                     private fun bar(): String = ""

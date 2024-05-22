@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
+import io.gitlab.arturbosch.detekt.api.Alias
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
@@ -13,13 +14,11 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 /**
  * Reports when very short function names are used.
  */
+@Alias("FunctionMinNameLength")
 class FunctionNameMinLength(config: Config) : Rule(
     config,
     "Function names should not be shorter than the minimum defined in the configuration."
 ) {
-
-    override val defaultRuleIdAliases: Set<String>
-        get() = setOf("FunctionMinNameLength")
 
     @Configuration("minimum name length")
     private val minimumFunctionNameLength: Int by config(3)

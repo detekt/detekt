@@ -26,23 +26,8 @@ open class Rule(
      */
     open val ruleId: Id get() = Id(javaClass.simpleName)
 
-    /**
-     * List of rule ids which can optionally be used in suppress annotations to refer to this rule.
-     */
-    val aliases: Set<String> get() = config.valueOrDefault("aliases", defaultRuleIdAliases.toList()).toSet()
-
     var bindingContext: BindingContext = BindingContext.EMPTY
     var compilerResources: CompilerResources? = null
-
-    /**
-     * The default names which can be used instead of this [ruleId] to refer to this rule in suppression's.
-     *
-     * When overriding this property make sure to meet following structure for detekt-generator to pick
-     * it up and generate documentation for aliases:
-     *
-     *      override val defaultRuleIdAliases = setOf("Name1", "Name2")
-     */
-    open val defaultRuleIdAliases: Set<String> = emptySet()
 
     val autoCorrect: Boolean
         get() = config.valueOrDefault(Config.AUTO_CORRECT_KEY, false) &&

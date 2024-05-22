@@ -14,7 +14,7 @@ internal class RulePrinterTest {
         nonCompliantCodeExample = "",
         compliantCodeExample = "",
         defaultActivationStatus = Inactive,
-        aliases = "alias1, alias2",
+        aliases = listOf("alias1", "alias2"),
         parent = "",
     )
 
@@ -72,21 +72,14 @@ internal class RulePrinterTest {
     inner class Aliases {
         @Test
         fun `no alias`() {
-            val rule = ruleTemplate.copy(aliases = null)
-            val actual = RulePrinter.print(rule)
-            assertThat(actual).doesNotContainIgnoringCase("aliases")
-        }
-
-        @Test
-        fun `empty alias`() {
-            val rule = ruleTemplate.copy(aliases = "")
+            val rule = ruleTemplate.copy(aliases = emptyList())
             val actual = RulePrinter.print(rule)
             assertThat(actual).doesNotContainIgnoringCase("aliases")
         }
 
         @Test
         fun `with alias`() {
-            val rule = ruleTemplate.copy(aliases = "alias1, alias2")
+            val rule = ruleTemplate.copy(aliases = listOf("alias1", "alias2"))
             val actual = RulePrinter.print(rule)
             assertThat(actual).contains("""**Aliases**: alias1, alias2""")
         }

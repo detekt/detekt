@@ -172,7 +172,7 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report annotated parameters`() {
             val code = """
-                fun foo(@Suppress("UNUSED_PARAMETER") unused: String){}
+                fun foo(@Suppress("UnusedParameter") unused: String){}
             """.trimIndent()
 
             assertThat(subject.lint(code)).isEmpty()
@@ -181,7 +181,7 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `reports parameters without annotation`() {
             val code = """
-                fun foo(@Suppress("UNUSED_PARAMETER") unused: String, unusedWithoutAnnotation: String){}
+                fun foo(@Suppress("UnusedParameter") unused: String, unusedWithoutAnnotation: String){}
             """.trimIndent()
 
             val lint = subject.lint(code)
@@ -193,7 +193,7 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report parameters in annotated function`() {
             val code = """
-                @Suppress("UNUSED_PARAMETER")
+                @Suppress("UnusedParameter")
                 fun foo(unused: String, otherUnused: String){}
             """.trimIndent()
 
@@ -203,7 +203,7 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report parameters in annotated class`() {
             val code = """
-                @Suppress("UNUSED_PARAMETER")
+                @Suppress("UnusedParameter")
                 class Test {
                     fun foo(unused: String, otherUnused: String){}
                     fun bar(unused: String){}
@@ -216,7 +216,7 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report parameters in annotated object`() {
             val code = """
-                @Suppress("UNUSED_PARAMETER")
+                @Suppress("UnusedParameter")
                 object Test {
                     fun foo(unused: String){}
                 }
@@ -228,7 +228,7 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report parameters in class with annotated outer class`() {
             val code = """
-                @Suppress("UNUSED_PARAMETER")
+                @Suppress("UnusedParameter")
                 class Test {
                     fun foo(unused: String){}
                 

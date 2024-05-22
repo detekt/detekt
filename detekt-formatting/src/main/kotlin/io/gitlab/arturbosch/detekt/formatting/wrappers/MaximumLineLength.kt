@@ -4,6 +4,7 @@ import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfigProper
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.MAX_LINE_LENGTH_PROPERTY
 import com.pinterest.ktlint.ruleset.standard.rules.MaxLineLengthRule
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.Alias
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.config
@@ -17,15 +18,13 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  * from the standard rules, make sure to enable just one or keep them aligned.
  */
 @ActiveByDefault(since = "1.0.0")
+@Alias("MaxLineLength")
 class MaximumLineLength(config: Config) : FormattingRule(
     config,
     "Reports lines with exceeded length"
 ) {
 
     override val wrapping = MaxLineLengthRule()
-
-    override val defaultRuleIdAliases: Set<String>
-        get() = setOf("MaxLineLength")
 
     @Configuration("maximum line length")
     private val maxLineLength: Int by configWithAndroidVariants(120, 100)

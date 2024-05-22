@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
+import io.gitlab.arturbosch.detekt.api.Alias
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
@@ -13,13 +14,11 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 /**
  * Reports when very long function names are used.
  */
+@Alias("FunctionMaxNameLength")
 class FunctionNameMaxLength(config: Config) : Rule(
     config,
     "Function names should not be longer than the maximum set in the project configuration."
 ) {
-
-    override val defaultRuleIdAliases: Set<String>
-        get() = setOf("FunctionMaxNameLength")
 
     @Configuration("maximum name length")
     private val maximumFunctionNameLength: Int by config(DEFAULT_MAXIMUM_FUNCTION_NAME_LENGTH)

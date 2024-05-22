@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.generator.collection
 
 import io.gitlab.arturbosch.detekt.api.valuesWithReason
 import io.gitlab.arturbosch.detekt.generator.collection.DefaultValue.Companion.of
-import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidAliasesDeclaration
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidCodeExampleDocumentationException
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
 import io.gitlab.arturbosch.detekt.generator.util.run
@@ -172,12 +171,12 @@ class RuleCollectorSpec {
             /**
              * description
              */
+            @Alias("RULE", "RULE2")
             class SomeRandomClass : Rule(Config.empty, "") {
-                override val defaultRuleIdAliases = setOf("RULE", "RULE2")
             }
         """.trimIndent()
         val items = subject.run(code)
-        assertThat(items[0].aliases).isEqualTo("RULE, RULE2")
+        assertThat(items[0].aliases).isEqualTo(listOf("RULE", "RULE2"))
     }
 
     @Nested
@@ -818,21 +817,6 @@ class RuleCollectorSpec {
         """.trimIndent()
         assertThatExceptionOfType(InvalidCodeExampleDocumentationException::class.java)
             .isThrownBy { subject.run(code) }
-    }
-
-    @Test
-    fun `has wrong aliases property structure`() {
-        val code = """
-            /**
-             * description
-             */
-            class SomeRandomClass : Rule(Config.empty, "") {
-            
-                val a = setOf("UNUSED_VARIABLE")
-                override val defaultRuleIdAliases = a
-            }
-        """.trimIndent()
-        assertThatExceptionOfType(InvalidAliasesDeclaration::class.java).isThrownBy { subject.run(code) }
     }
 
     @Test

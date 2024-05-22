@@ -24,12 +24,6 @@ class InvalidPackageDeclarationSpec {
     }
 
     @Test
-    fun `has correct aliases`() {
-        assertThat(InvalidPackageDeclaration(Config.empty).aliases)
-            .containsExactlyInAnyOrder("PackageDirectoryMismatch")
-    }
-
-    @Test
     fun `should report if package declaration does not match source location`() {
         val ktFile = compileForTest(Path("src/test/resources/InvalidPackageDeclarationSpec/src/bar/incorrect.kt"))
         val findings = InvalidPackageDeclaration(Config.empty).lint(ktFile)

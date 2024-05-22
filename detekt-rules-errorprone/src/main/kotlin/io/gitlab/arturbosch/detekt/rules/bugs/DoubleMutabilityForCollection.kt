@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.Alias
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
@@ -42,13 +43,12 @@ import org.jetbrains.kotlin.resolve.BindingContext
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
+@Alias("DoubleMutability")
 class DoubleMutabilityForCollection(config: Config) : Rule(
     config,
     "Using var with mutable collections or values leads to double mutability. " +
         "Consider using val or immutable collection or value types."
 ) {
-
-    override val defaultRuleIdAliases: Set<String> = setOf("DoubleMutability")
 
     @Configuration("Define a list of mutable types to trigger on when defined with `var`.")
     private val mutableTypes: Set<FqName> by config(defaultMutableTypes) { types ->

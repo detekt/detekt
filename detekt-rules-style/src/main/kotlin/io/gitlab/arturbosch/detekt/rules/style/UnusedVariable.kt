@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.Alias
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
@@ -47,14 +48,11 @@ import org.jetbrains.kotlin.resolve.source.toSourceElement
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "2.0.0")
+@Alias("UNUSED_VARIABLE", "unused")
 class UnusedVariable(config: Config) : Rule(
     config,
     "Variable is unused and should be removed."
 ) {
-
-    override val defaultRuleIdAliases: Set<String> =
-        setOf("UNUSED_VARIABLE", "unused")
-
     @Configuration("unused variables names matching this regex are ignored")
     private val allowedNames: Regex by config(
         "ignored|_",

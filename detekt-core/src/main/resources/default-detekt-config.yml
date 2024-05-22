@@ -100,6 +100,7 @@ complexity:
     ignoreOverloaded: false
   CyclomaticComplexMethod:
     active: true
+    aliases: ['ComplexMethod']
     allowedComplexity: 14
     ignoreSingleWhenExpression: false
     ignoreSimpleWhenEntries: false
@@ -192,6 +193,7 @@ coroutines:
     active: false
   SuspendFunWithCoroutineScopeReceiver:
     active: false
+    aliases: ['SuspendFunctionOnCoroutineScope']
   SuspendFunWithFlowReturnType:
     active: true
 
@@ -308,6 +310,7 @@ naming:
     allowedPattern: '^(is|has|are)'
   ClassNaming:
     active: true
+    aliases: ['ClassName']
     classPattern: '[A-Z][a-zA-Z0-9]*'
   ConstructorParameterNaming:
     active: true
@@ -322,12 +325,15 @@ naming:
     forbiddenName: []
   FunctionNameMaxLength:
     active: false
+    aliases: ['FunctionMaxNameLength']
     maximumFunctionNameLength: 30
   FunctionNameMinLength:
     active: false
+    aliases: ['FunctionMinNameLength']
     minimumFunctionNameLength: 3
   FunctionNaming:
     active: true
+    aliases: ['FunctionName']
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
     functionPattern: '[a-z][a-zA-Z0-9]*'
     excludeClassPattern: '$^'
@@ -337,6 +343,7 @@ naming:
     excludeClassPattern: '$^'
   InvalidPackageDeclaration:
     active: true
+    aliases: ['PackageDirectoryMismatch']
     rootPackage: ''
     requireRootInDeclaration: false
   LambdaParameterNaming:
@@ -365,11 +372,13 @@ naming:
     active: false
   ObjectPropertyNaming:
     active: true
+    aliases: ['ObjectPropertyName']
     constantPattern: '[A-Za-z][_A-Za-z0-9]*'
     propertyPattern: '[A-Za-z][_A-Za-z0-9]*'
     privatePropertyPattern: '(_)?[A-Za-z][_A-Za-z0-9]*'
   PackageNaming:
     active: true
+    aliases: ['PackageName', 'PackageDirectoryMismatch']
     packagePattern: '[a-z]+(\.[a-z][A-Za-z0-9]*)*'
   TopLevelPropertyNaming:
     active: true
@@ -421,10 +430,12 @@ potential-bugs:
     active: false
   Deprecation:
     active: false
+    aliases: ['DEPRECATION']
   DontDowncastCollectionTypes:
     active: false
   DoubleMutabilityForCollection:
     active: true
+    aliases: ['DoubleMutability']
     mutableTypes:
       - 'kotlin.collections.MutableList'
       - 'kotlin.collections.MutableMap'
@@ -517,6 +528,7 @@ potential-bugs:
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
   UnsafeCast:
     active: true
+    aliases: ['UNCHECKED_CAST']
   UnusedUnaryOperator:
     active: true
   UselessPostfixExpression:
@@ -765,17 +777,22 @@ style:
     active: false
   UnusedParameter:
     active: true
+    aliases: ['UNUSED_VARIABLE', 'UNUSED_PARAMETER', 'unused', 'UnusedPrivateMember']
     allowedNames: 'ignored|expected'
   UnusedPrivateClass:
     active: true
+    aliases: ['unused']
   UnusedPrivateMember:
     active: true
+    aliases: ['UNUSED_VARIABLE', 'UNUSED_PARAMETER', 'unused']
     allowedNames: ''
   UnusedPrivateProperty:
     active: true
+    aliases: ['UNUSED_PARAMETER', 'unused', 'UnusedPrivateMember']
     allowedNames: 'ignored|expected|serialVersionUID'
   UnusedVariable:
     active: true
+    aliases: ['UNUSED_VARIABLE', 'unused']
     allowedNames: 'ignored|_'
   UseAnyOrNoneInsteadOfFind:
     active: true
@@ -813,6 +830,7 @@ style:
     active: true
   VarCouldBeVal:
     active: true
+    aliases: ['CanBeVal']
     ignoreLateinitVar: false
   WildcardImport:
     active: true

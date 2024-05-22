@@ -13,9 +13,9 @@ import java.util.regex.PatternSyntaxException
 class FunctionNamingSpec {
 
     @Test
-    fun `allows FunctionName as alias for suppressing`() {
+    fun `allows FunctionName for suppressing`() {
         val code = """
-            @Suppress("FunctionName")
+            @Suppress("FunctionNaming")
             fun MY_FUN() {}
         """.trimIndent()
         assertThat(FunctionNaming(Config.empty).compileAndLint(code)).isEmpty()

@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.coroutines
 
+import io.gitlab.arturbosch.detekt.api.Alias
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
@@ -45,14 +46,12 @@ import org.jetbrains.kotlin.types.typeUtil.supertypes
  *
  */
 @RequiresTypeResolution
+@Alias("SuspendFunctionOnCoroutineScope")
 class SuspendFunWithCoroutineScopeReceiver(config: Config) : Rule(
     config,
     "The `suspend` modifier should not be used for functions that use a CoroutinesScope as receiver. You should " +
         "use suspend functions without the receiver or use plain functions and use coroutineScope { } instead."
 ) {
-
-    override val defaultRuleIdAliases = setOf("SuspendFunctionOnCoroutineScope")
-
     override fun visitNamedFunction(function: KtNamedFunction) {
         checkReceiver(function)
     }

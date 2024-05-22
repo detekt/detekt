@@ -85,9 +85,9 @@ class ClassNamingSpec {
     }
 
     @Test
-    fun `should ignore the issue by alias suppression`() {
+    fun `should ignore the issue suppression`() {
         val code = """
-            @Suppress("ClassName")
+            @Suppress("ClassNaming")
             class namingConventions {}
         """.trimIndent()
         assertThat(ClassNaming(Config.empty).compileAndLint(code)).isEmpty()

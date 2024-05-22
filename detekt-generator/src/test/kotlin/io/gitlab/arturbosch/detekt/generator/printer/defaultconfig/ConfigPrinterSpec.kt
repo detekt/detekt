@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.generator.printer.defaultconfig
 
-import io.github.detekt.test.utils.readResourceContent
 import io.gitlab.arturbosch.detekt.generator.util.createRuleSetPage
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -12,9 +11,34 @@ class ConfigPrinterSpec {
 
     @Test
     fun `prints the rule set in the correct yaml format`() {
-        val expectedRulePart = readResourceContent("RuleSetConfig.yml")
+        val expectedRulePart = """
+            style:
+              active: true
+              rulesetconfig1: true
+              rulesetconfig2:
+                - 'foo'
+                - 'bar'
+              rulesetconfig3:
+                - 'first'
+                - 'se*cond'
+              MagicNumber:
+                active: true
+                aliases: ['alias1', 'alias2']
+                excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**', '**/*.kts']
+                conf1: 'foo'
+                conf3:
+                  - 'a'
+                  - 'b'
+                conf5: 120
+              EqualsNull:
+                active: false
+              NoUnitKeyword:
+                active: true
+                autoCorrect: true
 
-        assertThat(yamlString).contains(expectedRulePart)
+        """.trimIndent()
+
+        assertThat(yamlString).endsWith(expectedRulePart)
     }
 
     @Test

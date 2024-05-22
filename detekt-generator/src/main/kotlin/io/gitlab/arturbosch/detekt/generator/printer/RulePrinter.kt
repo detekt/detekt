@@ -39,9 +39,9 @@ internal object RulePrinter : DocumentationPrinter<Rule> {
                 }
             }
 
-            if (!item.aliases.isNullOrEmpty()) {
+            if (item.aliases.isNotEmpty()) {
                 paragraph {
-                    "${bold { "Aliases" }}: ${item.aliases}"
+                    "${bold { "Aliases" }}: ${item.aliases.joinToString(", ")}"
                 }
             }
 

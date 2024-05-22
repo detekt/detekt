@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.Alias
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
@@ -61,13 +62,11 @@ import org.jetbrains.kotlin.resolve.source.getPsi
  */
 @RequiresTypeResolution
 @ActiveByDefault(since = "1.23.0")
+@Alias("UNUSED_PARAMETER", "unused", "UnusedPrivateMember")
 class UnusedPrivateProperty(config: Config) : Rule(
     config,
     "Property is unused and should be removed."
 ) {
-
-    override val defaultRuleIdAliases: Set<String> =
-        setOf("UNUSED_PARAMETER", "unused", "UnusedPrivateMember")
 
     @Configuration("unused property names matching this regex are ignored")
     private val allowedNames: Regex by config(

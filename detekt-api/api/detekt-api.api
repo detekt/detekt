@@ -2,6 +2,10 @@ public abstract interface annotation class io/gitlab/arturbosch/detekt/api/Activ
 	public abstract fun since ()Ljava/lang/String;
 }
 
+public abstract interface annotation class io/gitlab/arturbosch/detekt/api/Alias : java/lang/annotation/Annotation {
+	public abstract fun values ()[Ljava/lang/String;
+}
+
 public final class io/gitlab/arturbosch/detekt/api/AutocorrectKt {
 	public static final fun getModifiedText (Lorg/jetbrains/kotlin/psi/KtFile;)Ljava/lang/String;
 	public static final fun setModifiedText (Lorg/jetbrains/kotlin/psi/KtFile;Ljava/lang/String;)V
@@ -28,6 +32,7 @@ public final class io/gitlab/arturbosch/detekt/api/CompilerResources {
 
 public abstract interface class io/gitlab/arturbosch/detekt/api/Config {
 	public static final field ACTIVE_KEY Ljava/lang/String;
+	public static final field ALIASES_KEY Ljava/lang/String;
 	public static final field AUTO_CORRECT_KEY Ljava/lang/String;
 	public static final field CONFIG_SEPARATOR Ljava/lang/String;
 	public static final field Companion Lio/gitlab/arturbosch/detekt/api/Config$Companion;
@@ -44,6 +49,7 @@ public abstract interface class io/gitlab/arturbosch/detekt/api/Config {
 
 public final class io/gitlab/arturbosch/detekt/api/Config$Companion {
 	public static final field ACTIVE_KEY Ljava/lang/String;
+	public static final field ALIASES_KEY Ljava/lang/String;
 	public static final field AUTO_CORRECT_KEY Ljava/lang/String;
 	public static final field CONFIG_SEPARATOR Ljava/lang/String;
 	public static final field EXCLUDES_KEY Ljava/lang/String;
@@ -274,12 +280,10 @@ public abstract interface annotation class io/gitlab/arturbosch/detekt/api/Requi
 
 public class io/gitlab/arturbosch/detekt/api/Rule : io/gitlab/arturbosch/detekt/api/DetektVisitor {
 	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Config;Ljava/lang/String;)V
-	public final fun getAliases ()Ljava/util/Set;
 	public final fun getAutoCorrect ()Z
 	public final fun getBindingContext ()Lorg/jetbrains/kotlin/resolve/BindingContext;
 	public final fun getCompilerResources ()Lio/gitlab/arturbosch/detekt/api/CompilerResources;
 	public final fun getConfig ()Lio/gitlab/arturbosch/detekt/api/Config;
-	public fun getDefaultRuleIdAliases ()Ljava/util/Set;
 	public final fun getDescription ()Ljava/lang/String;
 	public fun getRuleId ()Lio/gitlab/arturbosch/detekt/api/Rule$Id;
 	protected fun postVisit (Lorg/jetbrains/kotlin/psi/KtFile;)V
