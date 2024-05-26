@@ -34,7 +34,7 @@ class FunctionParameterNaming(config: Config) : Rule(
 
     @Configuration("ignores overridden functions with parameters not matching the pattern")
     @Deprecated("This configuration is ignored and will be removed in the future")
-    @Suppress("DEPRECATION", "UnusedPrivateMember")
+    @Suppress("DEPRECATION", "unused")
     private val ignoreOverridden: Boolean by configWithFallback(::ignoreOverriddenFunctions, true)
 
     override fun visitParameter(parameter: KtParameter) {
