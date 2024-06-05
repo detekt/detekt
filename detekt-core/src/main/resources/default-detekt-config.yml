@@ -781,7 +781,7 @@ style:
   UnusedPrivateClass:
     active: true
     aliases: ['unused']
-  UnusedPrivateMember:
+  UnusedPrivateFunction:
     active: true
     aliases: ['unused']
     allowedNames: ''

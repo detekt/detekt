@@ -874,7 +874,7 @@ class MagicNumberSpec {
     @Nested
     inner class `a number as part of a range` {
 
-        @Suppress("UnusedPrivateMember")
+        @Suppress("UnusedPrivateFunction")
         private fun cases() = listOf(
             "val range = 1..27",
             "val range = (1..27)",

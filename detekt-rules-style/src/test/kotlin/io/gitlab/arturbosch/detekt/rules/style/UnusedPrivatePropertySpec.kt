@@ -95,7 +95,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
         fun `does fail when enabled with invalid regex`() {
             val config = TestConfig(ALLOWED_NAMES_PATTERN to "*foo")
             assertThatExceptionOfType(PatternSyntaxException::class.java)
-                .isThrownBy { UnusedPrivateMember(config).lint(regexTestingCode) }
+                .isThrownBy { UnusedPrivateProperty(config).lint(regexTestingCode) }
         }
     }
 

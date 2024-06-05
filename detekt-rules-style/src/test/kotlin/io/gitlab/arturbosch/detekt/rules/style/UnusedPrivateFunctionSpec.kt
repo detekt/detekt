@@ -12,8 +12,8 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
-    val subject = UnusedPrivateMember(Config.empty)
+class UnusedPrivateFunctionSpec(val env: KotlinCoreEnvironment) {
+    val subject = UnusedPrivateFunction(Config.empty)
 
     @Nested
     inner class `interface functions` {
@@ -300,7 +300,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report annotated private functions`() {
             val code = """
-                @Suppress("UnusedPrivateMember")
+                @Suppress("UnusedPrivateFunction")
                 private fun foo(): String = ""
             """.trimIndent()
 
@@ -322,7 +322,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report private functions in annotated class`() {
             val code = """
-                @Suppress("UnusedPrivateMember")
+                @Suppress("UnusedPrivateFunction")
                 class Test {
                     private fun foo(): String = ""
                 }
@@ -334,7 +334,7 @@ class UnusedPrivateMemberSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report private functions in class with annotated outer class`() {
             val code = """
-                @Suppress("UnusedPrivateMember")
+                @Suppress("UnusedPrivateFunction")
                 class Test {
                     private fun foo(): String = ""
                     private fun bar(): String = ""
