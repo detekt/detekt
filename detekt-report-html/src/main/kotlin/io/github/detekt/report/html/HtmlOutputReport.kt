@@ -6,6 +6,7 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
+import io.gitlab.arturbosch.detekt.api.RuleInstance
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.TextLocation
@@ -102,7 +103,7 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
         text("Total: %,d".format(Locale.ROOT, total))
 
         issues
-            .groupBy { it.ruleInfo.ruleSetId }
+            .groupBy { it.ruleInstance.ruleSetId }
             .toList()
             .sortedBy { (group, _) -> group.value }
             .forEach { (group, groupIssues) ->
@@ -114,27 +115,27 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
         h3 { text("$group: %,d".format(Locale.ROOT, issues.size)) }
 
         issues
-            .groupBy { it.ruleInfo }
+            .groupBy { it.ruleInstance }
             .toList()
-            .sortedBy { (ruleInfo, _) -> ruleInfo.id.value }
-            .forEach { (ruleInfo, ruleIssues) ->
-                renderRule(ruleInfo, ruleIssues)
+            .sortedBy { (ruleInstance, _) -> ruleInstance.name.value }
+            .forEach { (ruleInstance, ruleIssues) ->
+                renderRule(ruleInstance, ruleIssues)
             }
     }
 
-    private fun FlowContent.renderRule(ruleInfo: Issue.RuleInfo, issues: List<Issue>) {
-        val ruleId = ruleInfo.id.value
-        val ruleSetId = ruleInfo.ruleSetId.value
+    private fun FlowContent.renderRule(ruleInstance: RuleInstance, issues: List<Issue>) {
+        val ruleName = ruleInstance.name.value
+        val ruleSetId = ruleInstance.ruleSetId.value
         details {
-            id = ruleId
+            id = ruleName
             open = true
 
             summary("rule-container") {
-                span("rule") { text("$ruleId: %,d ".format(Locale.ROOT, issues.size)) }
-                span("description") { text(ruleInfo.description) }
+                span("rule") { text("$ruleName: %,d ".format(Locale.ROOT, issues.size)) }
+                span("description") { text(ruleInstance.description) }
             }
 
-            a("$DETEKT_WEBSITE_BASE_URL/docs/rules/${ruleSetId.lowercase()}#${ruleId.lowercase()}") {
+            a("$DETEKT_WEBSITE_BASE_URL/docs/rules/${ruleSetId.lowercase()}#${ruleName.lowercase()}") {
                 +"Documentation"
             }
 
@@ -172,7 +173,7 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
         val psiFile = issue.entity.ktElement?.containingFile
         if (psiFile != null) {
             val lineSequence = psiFile.text.splitToSequence('\n')
-            snippetCode(issue.ruleInfo.id, lineSequence, issue.location.source, issue.location.text.length())
+            snippetCode(issue.ruleInstance.name, lineSequence, issue.location.source, issue.location.text.length())
         }
     }
 

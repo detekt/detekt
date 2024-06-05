@@ -16,7 +16,7 @@ import io.gitlab.arturbosch.detekt.test.createEntity
 import io.gitlab.arturbosch.detekt.test.createIssue
 import io.gitlab.arturbosch.detekt.test.createIssueForRelativePath
 import io.gitlab.arturbosch.detekt.test.createLocation
-import io.gitlab.arturbosch.detekt.test.createRuleInfo
+import io.gitlab.arturbosch.detekt.test.createRuleInstance
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -31,17 +31,17 @@ class SarifOutputReportSpec {
     fun `renders multiple issues`() {
         val result = TestDetektion(
             createIssue(
-                ruleInfo = createRuleInfo("TestSmellA", "RuleSet1"),
+                ruleInstance = createRuleInstance("TestSmellA", "RuleSet1"),
                 entity = createEntity(location = createLocation(position = 1 to 1, endPosition = 2 to 3)),
                 severity = Severity.Error
             ),
             createIssue(
-                ruleInfo = createRuleInfo("TestSmellB", "RuleSet2"),
+                ruleInstance = createRuleInstance("TestSmellB", "RuleSet2"),
                 entity = createEntity(location = createLocation(position = 3 to 5, endPosition = 3 to 5)),
                 severity = Severity.Warning
             ),
             createIssue(
-                ruleInfo = createRuleInfo("TestSmellC", "RuleSet2"),
+                ruleInstance = createRuleInstance("TestSmellC", "RuleSet2"),
                 entity = createEntity(location = createLocation(position = 2 to 1, endPosition = 3 to 1)),
                 severity = Severity.Info
             )
@@ -60,9 +60,9 @@ class SarifOutputReportSpec {
     @Test
     fun `renders multiple issues with rule set to warning by default`() {
         val result = TestDetektion(
-            createIssue(createRuleInfo("TestSmellA", "RuleSet1"), severity = Severity.Error),
-            createIssue(createRuleInfo("TestSmellB", "RuleSet2"), severity = Severity.Warning),
-            createIssue(createRuleInfo("TestSmellC", "RuleSet2"), severity = Severity.Info)
+            createIssue(createRuleInstance("TestSmellA", "RuleSet1"), severity = Severity.Error),
+            createIssue(createRuleInstance("TestSmellB", "RuleSet2"), severity = Severity.Warning),
+            createIssue(createRuleInstance("TestSmellC", "RuleSet2"), severity = Severity.Info)
         )
 
         val testConfig = yamlConfig("config_with_rule_set_to_warning.yml")
@@ -91,9 +91,9 @@ class SarifOutputReportSpec {
     @Test
     fun `renders multiple issues with relative path`() {
         val result = TestDetektion(
-            createIssueForRelativePath(createRuleInfo("TestSmellA", "RuleSet1")),
-            createIssueForRelativePath(createRuleInfo("TestSmellB", "RuleSet2")),
-            createIssueForRelativePath(createRuleInfo("TestSmellC", "RuleSet2")),
+            createIssueForRelativePath(createRuleInstance("TestSmellA", "RuleSet1")),
+            createIssueForRelativePath(createRuleInstance("TestSmellB", "RuleSet2")),
+            createIssueForRelativePath(createRuleInstance("TestSmellC", "RuleSet2")),
         )
 
         val basePath = Path("/").absolute().resolve("Users/tester/detekt/")

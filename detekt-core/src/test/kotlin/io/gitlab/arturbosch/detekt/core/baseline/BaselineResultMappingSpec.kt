@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.test.createEntity
 import io.gitlab.arturbosch.detekt.test.createIssue
-import io.gitlab.arturbosch.detekt.test.createRuleInfo
+import io.gitlab.arturbosch.detekt.test.createRuleInstance
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
@@ -24,7 +24,7 @@ class BaselineResultMappingSpec {
     private val existingBaselineFile = resourceAsPath("/baseline_feature/valid-baseline.xml")
     private val issues = listOf(
         createIssue(
-            ruleInfo = createRuleInfo("SomeIssueId", "RuleSet"),
+            ruleInstance = createRuleInstance("SomeIssueId", "RuleSet"),
             entity = createEntity(signature = "SomeSignature"),
         ),
         createIssue(

@@ -6,13 +6,13 @@ import java.util.Properties
 internal sealed class Deprecation
 internal data class DeprecatedRule(
     val ruleSetId: String,
-    val ruleId: String,
+    val ruleName: String,
     val description: String
 ) : Deprecation()
 
 internal data class DeprecatedProperty(
     val ruleSetId: String,
-    val ruleId: String,
+    val ruleName: String,
     val propertyName: String,
     val description: String
 ) : Deprecation()
@@ -39,13 +39,13 @@ private fun deprecationFromPath(path: String, description: String): Deprecation 
     return when (pathElements.size) {
         RULE_PATH_SEGMENTS -> DeprecatedRule(
             ruleSetId = pathElements[0],
-            ruleId = pathElements[1],
+            ruleName = pathElements[1],
             description = description
         )
 
         PROPERTY_PATH_SEGMENTS -> DeprecatedProperty(
             ruleSetId = pathElements[0],
-            ruleId = pathElements[1],
+            ruleName = pathElements[1],
             propertyName = pathElements[2],
             description = description
         )

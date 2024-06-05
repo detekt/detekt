@@ -6,7 +6,7 @@ import io.gitlab.arturbosch.detekt.core.reporting.decolorized
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.createIssue
 import io.gitlab.arturbosch.detekt.test.createLocation
-import io.gitlab.arturbosch.detekt.test.createRuleInfo
+import io.gitlab.arturbosch.detekt.test.createRuleInstance
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -18,9 +18,9 @@ class IssuesReportSpec {
     fun `has the reference content`() {
         val location = createLocation()
         val detektion = TestDetektion(
-            createIssue(createRuleInfo(ruleSetId = "Ruleset1"), location),
-            createIssue(createRuleInfo(ruleSetId = "Ruleset1"), location),
-            createIssue(createRuleInfo(ruleSetId = "Ruleset2"), location),
+            createIssue(createRuleInstance(ruleSetId = "Ruleset1"), location),
+            createIssue(createRuleInstance(ruleSetId = "Ruleset1"), location),
+            createIssue(createRuleInstance(ruleSetId = "Ruleset2"), location),
         )
 
         val output = subject.render(detektion)?.decolorized()
@@ -53,11 +53,11 @@ class IssuesReportSpec {
     fun `truncates long message`() {
         val detektion = TestDetektion(
             createIssue(
-                createRuleInfo("LongRule", "Ruleset"),
+                createRuleInstance("LongRule", "Ruleset"),
                 message = "This is just a long message that should be truncated after a given threshold is reached.",
             ),
             createIssue(
-                createRuleInfo("MultilineRule", "Ruleset"),
+                createRuleInstance("MultilineRule", "Ruleset"),
                 message = "A multiline\n\r\tmessage.\t ",
             ),
         )

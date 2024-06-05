@@ -24,7 +24,7 @@ open class Rule(
      *
      * By default, it is the name of the class name. Override to change it.
      */
-    open val ruleId: Id get() = Id(javaClass.simpleName)
+    open val ruleName: Name get() = Name(javaClass.simpleName)
 
     var bindingContext: BindingContext = BindingContext.EMPTY
     var compilerResources: CompilerResources? = null
@@ -89,7 +89,7 @@ open class Rule(
     }
 
     @Poko
-    class Id(val value: String) {
+    class Name(val value: String) {
         init {
             validateIdentifier(value)
         }

@@ -10,7 +10,6 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
 import org.jetbrains.kotlin.name.FqName
-import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtForExpression
@@ -24,6 +23,7 @@ import org.jetbrains.kotlin.resolve.calls.util.getParameterForArgument
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
+import org.jetbrains.kotlin.name.Name as KotlinName
 
 /**
  * `suspend` functions should not be called inside `runCatching`'s lambda block, because `runCatching` catches all the
@@ -119,6 +119,7 @@ class SuspendFunSwallowedCancellation(config: Config) : Rule(
 
                 callableDescriptor.fqNameSafe != RUN_CATCHING_FQ && callableDescriptor.isInline
             }
+
             is KtValueArgument -> {
                 val callExpression = psiElement.getParentOfType<KtCallExpression>(true)
                 val valueParameterDescriptor =
@@ -126,6 +127,7 @@ class SuspendFunSwallowedCancellation(config: Config) : Rule(
 
                 valueParameterDescriptor.isCrossinline.not() && valueParameterDescriptor.isNoinline.not()
             }
+
             else -> true
         }
     }
@@ -142,15 +144,18 @@ class SuspendFunSwallowedCancellation(config: Config) : Rule(
                     it?.resultingDescriptor?.isSuspend == true
                 }
             }
+
             is KtCallExpression, is KtOperationExpression -> {
                 val resolvedCall = getResolvedCall(bindingContext) ?: return false
                 (resolvedCall.resultingDescriptor as? FunctionDescriptor)?.isSuspend == true
             }
+
             is KtNameReferenceExpression -> {
                 val resolvedCall = getResolvedCall(bindingContext) ?: return false
                 val propertyDescriptor = resolvedCall.resultingDescriptor as? PropertyDescriptor
                 propertyDescriptor?.fqNameSafe == COROUTINE_CONTEXT_FQ_NAME
             }
+
             else -> {
                 false
             }
@@ -175,6 +180,7 @@ class SuspendFunSwallowedCancellation(config: Config) : Rule(
 
         // Based on code from Kotlin project:
         // https://github.com/JetBrains/kotlin/commit/87bbac9d43e15557a2ff0dc3254fd41a9d5639e1
-        private val COROUTINE_CONTEXT_FQ_NAME = COROUTINES_PACKAGE_FQ_NAME.child(Name.identifier("coroutineContext"))
+        private val COROUTINE_CONTEXT_FQ_NAME =
+            COROUTINES_PACKAGE_FQ_NAME.child(KotlinName.identifier("coroutineContext"))
     }
 }

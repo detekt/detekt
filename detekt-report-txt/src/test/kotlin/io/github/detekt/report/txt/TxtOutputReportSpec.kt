@@ -3,7 +3,7 @@ package io.github.detekt.report.txt
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.createIssue
 import io.gitlab.arturbosch.detekt.test.createLocation
-import io.gitlab.arturbosch.detekt.test.createRuleInfo
+import io.gitlab.arturbosch.detekt.test.createRuleInstance
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -19,7 +19,7 @@ class TxtOutputReportSpec {
     @Test
     fun `renders one`() {
         val location = createLocation()
-        val detektion = TestDetektion(createIssue(createRuleInfo(), location))
+        val detektion = TestDetektion(createIssue(createRuleInstance(), location))
         assertThat(TxtOutputReport().render(detektion))
             .isEqualTo("TestSmell - [TestEntity] at ${location.compact()} - Signature=TestEntitySignature\n")
     }
@@ -28,9 +28,9 @@ class TxtOutputReportSpec {
     fun `renders multiple`() {
         val location = createLocation()
         val detektion = TestDetektion(
-            createIssue(createRuleInfo("TestSmellA"), location),
-            createIssue(createRuleInfo("TestSmellB"), location),
-            createIssue(createRuleInfo("TestSmellC"), location),
+            createIssue(createRuleInstance("TestSmellA"), location),
+            createIssue(createRuleInstance("TestSmellB"), location),
+            createIssue(createRuleInstance("TestSmellC"), location),
         )
         assertThat(TxtOutputReport().render(detektion))
             .isEqualTo(

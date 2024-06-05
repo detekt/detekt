@@ -6,7 +6,7 @@ import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.createIssue
 import io.gitlab.arturbosch.detekt.test.createIssueForRelativePath
 import io.gitlab.arturbosch.detekt.test.createLocation
-import io.gitlab.arturbosch.detekt.test.createRuleInfo
+import io.gitlab.arturbosch.detekt.test.createRuleInstance
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -115,12 +115,12 @@ class XmlOutputReportSpec {
     @Test
     fun `renders issues with relative path`() {
         val issueA = createIssueForRelativePath(
-            ruleInfo = createRuleInfo("rule_a"),
+            ruleInstance = createRuleInstance("rule_a"),
             basePath = "${System.getProperty("user.dir")}/Users/tester/detekt/",
             relativePath = "Sample1.kt"
         )
         val issueB = createIssueForRelativePath(
-            ruleInfo = createRuleInfo("rule_b"),
+            ruleInstance = createRuleInstance("rule_b"),
             basePath = "${System.getProperty("user.dir")}/Users/tester/detekt/",
             relativePath = "Sample2.kt"
         )
@@ -196,7 +196,7 @@ class XmlOutputReportSpec {
                 <?xml version="1.0" encoding="UTF-8"?>
                 <checkstyle version="4.3">
                 <file name="${entity1.location.path.invariantSeparatorsPathString}">
-                $TAB<error line="${issue.location.source.line}" column="${issue.location.source.column}" severity="$xmlSeverity" message="${issue.message}" source="detekt.${issue.ruleInfo.id}" />
+                $TAB<error line="${issue.location.source.line}" column="${issue.location.source.column}" severity="$xmlSeverity" message="${issue.message}" source="detekt.${issue.ruleInstance.name}" />
                 </file>
                 </checkstyle>
             """.trimIndent()

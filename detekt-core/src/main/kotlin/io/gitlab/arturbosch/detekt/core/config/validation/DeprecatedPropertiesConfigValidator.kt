@@ -23,7 +23,7 @@ internal class DeprecatedPropertiesConfigValidator(
     @Suppress("UNCHECKED_CAST")
     private fun hasValue(configAsMap: Map<String, Any>, deprecatedProperty: DeprecatedProperty): Boolean {
         val ruleSetSubMap = configAsMap[deprecatedProperty.ruleSetId] as? Map<String, Any> ?: return false
-        val ruleSubMap = ruleSetSubMap[deprecatedProperty.ruleId] as? Map<String, Any> ?: return false
+        val ruleSubMap = ruleSetSubMap[deprecatedProperty.ruleName] as? Map<String, Any> ?: return false
         return ruleSubMap.containsKey(deprecatedProperty.propertyName)
     }
 
@@ -37,5 +37,5 @@ internal class DeprecatedPropertiesConfigValidator(
         )
     }
 
-    private fun DeprecatedProperty.asPath() = "$ruleSetId>$ruleId>$propertyName"
+    private fun DeprecatedProperty.asPath() = "$ruleSetId>$ruleName>$propertyName"
 }

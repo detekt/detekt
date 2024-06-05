@@ -18,7 +18,7 @@ import org.junit.jupiter.params.provider.ValueSource
 class SuppressionsSpec {
 
     private fun KtElement.isSuppressedBy(): Boolean {
-        return isSuppressedBy(Rule.Id("RuleId"), setOf("alias1", "alias2"), RuleSet.Id("RuleSetId"))
+        return isSuppressedBy(Rule.Name("RuleName"), setOf("alias1", "alias2"), RuleSet.Id("RuleSetId"))
     }
 
     @Nested
@@ -27,7 +27,7 @@ class SuppressionsSpec {
         inner class AtFile {
             val file = compileContentForTest(
                 """
-                    @file:Suppress("RuleId")
+                    @file:Suppress("RuleName")
                     
                     class OneClass {
                         fun function(parameter: String) {
@@ -69,7 +69,7 @@ class SuppressionsSpec {
         inner class AtClass {
             val file = compileContentForTest(
                 """
-                    @Suppress("RuleId")
+                    @Suppress("RuleName")
                     class OneClass {
                         fun function(parameter: String) {
                             val a = 0
@@ -111,7 +111,7 @@ class SuppressionsSpec {
             val file = compileContentForTest(
                 """
                     class OneClass {
-                        @Suppress("RuleId")
+                        @Suppress("RuleName")
                         fun function(parameter: String) {
                             val a = 0
                         }
@@ -152,7 +152,7 @@ class SuppressionsSpec {
             val file = compileContentForTest(
                 """
                     class OneClass {
-                        fun function(@Suppress("RuleId") parameter: String) {
+                        fun function(@Suppress("RuleName") parameter: String) {
                             val a = 0
                         }
                     }
@@ -197,7 +197,7 @@ class SuppressionsSpec {
                         }
                     }
                     
-                    @Suppress("RuleId")
+                    @Suppress("RuleName")
                     fun topLevelFunction() = Unit
                 """.trimIndent()
             )
@@ -232,12 +232,12 @@ class SuppressionsSpec {
     @ParameterizedTest
     @ValueSource(strings = ["Suppress", "SuppressWarnings"])
     fun `works with both annotations`(annotation: String) {
-        assertThat(compileContentForTest("""@file:$annotation("RuleId")""").isSuppressedBy()).isTrue()
+        assertThat(compileContentForTest("""@file:$annotation("RuleName")""").isSuppressedBy()).isTrue()
     }
 
     @ParameterizedTest
     @ValueSource(
-        strings = ["all", "All", "ALL", "RuleId", "RuleSetId", "RuleSetId.RuleId", "RuleSetId:RuleId", "alias1", "alias2"]
+        strings = ["all", "All", "ALL", "RuleName", "RuleSetId", "RuleSetId.RuleName", "RuleSetId:RuleName", "alias1", "alias2"]
     )
     fun shouldSuppress(value: String) {
         assertThat(compileContentForTest("""@file:Suppress("$value")""").isSuppressedBy()).isTrue()
@@ -248,7 +248,7 @@ class SuppressionsSpec {
 
     @ParameterizedTest
     @ValueSource(
-        strings = ["aLL", "ruleid", "RuleId2", "RuleId.RuleSetId", "RuleSetId.alias1", "RuleSetId:alias2"]
+        strings = ["aLL", "Rulename", "RuleName2", "RuleName.RuleSetId", "RuleSetId.alias1", "RuleSetId:alias2"]
     )
     fun `should not suppress with @Suppress annotation with unexpected value`(value: String) {
         assertThat(compileContentForTest("""@file:Suppress("$value")""").isSuppressedBy()).isFalse()
@@ -262,7 +262,7 @@ class SuppressionsSpec {
         val file = compileContentForTest(
             """
                 @file:Suppress("Foo")
-                @file:SuppressWarnings("RuleId")
+                @file:SuppressWarnings("RuleName")
             """.trimIndent()
         )
         assertThat(file.isSuppressedBy()).isTrue()
@@ -272,7 +272,7 @@ class SuppressionsSpec {
     fun checkAllAnnotations2() {
         val file = compileContentForTest(
             """
-                @file:Suppress("RuleId")
+                @file:Suppress("RuleName")
                 @file:SuppressWarnings("Foo")
             """.trimIndent()
         )
