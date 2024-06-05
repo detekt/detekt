@@ -40,6 +40,12 @@ internal class InvalidPropertiesConfigValidatorSpec {
     }
 
     @Test
+    fun `passes for rules defined with rule id`() {
+        val result = subject.validate(yamlConfig("config_validation/rule-id.yml"))
+        assertThat(result).isEmpty()
+    }
+
+    @Test
     fun `reports different rule set name`() {
         val result = subject.validate(yamlConfig("config_validation/other-ruleset-name.yml"))
         assertThat(result).contains(propertyDoesNotExists("code-smell"))
