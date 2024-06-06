@@ -1,9 +1,11 @@
 package io.gitlab.arturbosch.detekt.formatting
 
+import com.pinterest.ktlint.rule.engine.core.api.AutocorrectDecision
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.CODE_STYLE_PROPERTY
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfig
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfigProperty
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.INDENT_STYLE_PROPERTY
+import com.pinterest.ktlint.ruleset.standard.StandardRule
 import io.github.detekt.psi.absolutePath
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
@@ -27,7 +29,7 @@ import java.nio.file.Path
  */
 abstract class FormattingRule(config: Config, description: String) : Rule(config, description) {
 
-    abstract val wrapping: com.pinterest.ktlint.rule.engine.core.api.Rule
+    abstract val wrapping: StandardRule
 
     /**
      * Should the android style guide be enforced?
@@ -107,14 +109,16 @@ abstract class FormattingRule(config: Config, description: String) : Rule(config
     }
 
     private fun beforeVisitChildNodes(node: ASTNode) {
-        wrapping.beforeVisitChildNodes(node, autoCorrect) { offset, errorMessage, canBeAutoCorrected ->
+        wrapping.beforeVisitChildNodes(node) { offset, errorMessage, canBeAutoCorrected ->
             emitFinding(offset, errorMessage, canBeAutoCorrected, node)
+            if (autoCorrect) AutocorrectDecision.ALLOW_AUTOCORRECT else AutocorrectDecision.NO_AUTOCORRECT
         }
     }
 
     private fun afterVisitChildNodes(node: ASTNode) {
-        wrapping.afterVisitChildNodes(node, autoCorrect) { offset, errorMessage, canBeAutoCorrected ->
+        wrapping.afterVisitChildNodes(node) { offset, errorMessage, canBeAutoCorrected ->
             emitFinding(offset, errorMessage, canBeAutoCorrected, node)
+            if (autoCorrect) AutocorrectDecision.ALLOW_AUTOCORRECT else AutocorrectDecision.NO_AUTOCORRECT
         }
     }
 
