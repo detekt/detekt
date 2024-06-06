@@ -42,7 +42,7 @@ assertj = "org.assertj:assertj-core:3.26.0"
 classgraph = "io.github.classgraph:classgraph:4.8.173"
 snakeyaml = "org.snakeyaml:snakeyaml-engine:2.7"
 jcommander = "org.jcommander:jcommander:1.83"
-kotlinCompileTesting = { module = "dev.zacsweers.kctfork:core", version = "0.5.0-alpha08" }
+kotlinCompileTesting = { module = "dev.zacsweers.kctfork:core", version = "0.5.0" }
 jetbrains-annotations = "org.jetbrains:annotations:24.1.0"
 
 [plugins]
