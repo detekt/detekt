@@ -1,7 +1,11 @@
 package io.gitlab.arturbosch.detekt.formatting.wrappers
 
+import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfigProperty
 import com.pinterest.ktlint.ruleset.standard.rules.FunctionNamingRule
+import com.pinterest.ktlint.ruleset.standard.rules.FunctionNamingRule.Companion.IGNORE_WHEN_ANNOTATED_WITH_PROPERTY
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Configuration
+import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 
 /**
@@ -13,4 +17,12 @@ class FunctionName(config: Config) : FormattingRule(
     "Function name should start with a lowercase letter (except factory methods) and use camel case."
 ) {
     override val wrapping = FunctionNamingRule()
+
+    @Configuration("ignore functions annotated with")
+    private val ignoreWhenAnnotatedWith by config("")
+
+    override fun overrideEditorConfigProperties(): Map<EditorConfigProperty<*>, String> =
+        mapOf(
+            IGNORE_WHEN_ANNOTATED_WITH_PROPERTY to ignoreWhenAnnotatedWith,
+        )
 }
