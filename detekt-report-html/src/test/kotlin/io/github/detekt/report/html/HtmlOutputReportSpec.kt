@@ -96,7 +96,7 @@ class HtmlOutputReportSpec {
     fun `renders the right number of issues per rule`() {
         val result = htmlReport.render(createTestDetektionWithMultipleSmells())
 
-        assertThat(result).contains("<span class=\"rule\">rule_a: 2 </span>")
+        assertThat(result).contains("<span class=\"rule\">rule_a/id: 2 </span>")
         assertThat(result).contains("<span class=\"rule\">rule_b: 1 </span>")
     }
 
@@ -212,8 +212,8 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
     )
 
     return TestDetektion(
-        createIssue(createRuleInstance("rule_a", "RuleSet1"), entity1, "Issue message 1"),
-        createIssue(createRuleInstance("rule_a", "RuleSet1"), entity2, "Issue message 2"),
+        createIssue(createRuleInstance("rule_a/id", "RuleSet1"), entity1, "Issue message 1"),
+        createIssue(createRuleInstance("rule_a/id", "RuleSet1"), entity2, "Issue message 2"),
         createIssue(createRuleInstance("rule_b", "RuleSet2"), entity3, "Issue message 3"),
     )
 }

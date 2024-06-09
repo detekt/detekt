@@ -30,7 +30,7 @@
           "message": {
             "text": "TestMessage"
           },
-          "ruleId": "detekt.RuleSet1.TestSmellA"
+          "ruleId": "detekt.RuleSet1.TestSmellA/id"
         },
         {
           "level": "error",
@@ -53,7 +53,7 @@
           "message": {
             "text": "TestMessage"
           },
-          "ruleId": "detekt.RuleSet2.TestSmellB"
+          "ruleId": "detekt.RuleSet2.TestSmellB/id"
         },
         {
           "level": "error",
@@ -76,7 +76,7 @@
           "message": {
             "text": "TestMessage"
           },
-          "ruleId": "detekt.RuleSet2.TestSmellC"
+          "ruleId": "detekt.RuleSet2.TestSmellC/id"
         }
       ],
       "tool": {

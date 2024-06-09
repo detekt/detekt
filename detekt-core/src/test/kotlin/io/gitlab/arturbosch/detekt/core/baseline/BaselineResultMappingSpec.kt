@@ -24,19 +24,19 @@ class BaselineResultMappingSpec {
     private val existingBaselineFile = resourceAsPath("/baseline_feature/valid-baseline.xml")
     private val issues = listOf(
         createIssue(
-            ruleInstance = createRuleInstance("SomeIssueId", "RuleSet"),
+            ruleInstance = createRuleInstance("SomeIssue", "RuleSet"),
             entity = createEntity(signature = "SomeSignature"),
         ),
         createIssue(
-            ruleName = "LongParameterList",
+            ruleId = "LongParameterList",
             entity = createEntity(signature = "Signature")
         ),
         createIssue(
-            ruleName = "LongMethod",
+            ruleId = "LongMethod",
             entity = createEntity(signature = "Signature")
         ),
         createIssue(
-            ruleName = "FeatureEnvy",
+            ruleId = "FeatureEnvy",
             entity = createEntity(signature = "Signature")
         ),
     )
@@ -206,7 +206,7 @@ class BaselineResultMappingSpec {
                     <ID>LongMethod:Signature</ID>
                   </ManuallySuppressedIssues>
                   <CurrentIssues>
-                    <ID>TestSmell:TestEntitySignature</ID>
+                    <ID>TestSmell/id:TestEntitySignature</ID>
                   </CurrentIssues>
                 </SmellBaseline>
             """.trimIndent()

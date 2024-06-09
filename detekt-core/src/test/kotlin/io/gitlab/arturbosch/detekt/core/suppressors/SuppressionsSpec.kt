@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.suppressors
 
 import io.github.detekt.test.utils.compileContentForTest
-import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtClass
@@ -18,7 +17,7 @@ import org.junit.jupiter.params.provider.ValueSource
 class SuppressionsSpec {
 
     private fun KtElement.isSuppressedBy(): Boolean {
-        return isSuppressedBy(Rule.Name("RuleName"), setOf("alias1", "alias2"), RuleSet.Id("RuleSetId"))
+        return isSuppressedBy("RuleName", setOf("alias1", "alias2"), RuleSet.Id("RuleSetId"))
     }
 
     @Nested

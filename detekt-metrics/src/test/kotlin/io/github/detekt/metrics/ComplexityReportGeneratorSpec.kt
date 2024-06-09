@@ -19,7 +19,7 @@ internal class ComplexityReportGeneratorSpec {
 
     @BeforeEach
     fun setupMocks() {
-        detektion = TestDetektion(createIssue(ruleName = "test")).withTestData()
+        detektion = TestDetektion(createIssue("test")).withTestData()
     }
 
     @Nested

@@ -62,7 +62,7 @@ class MdOutputReportSpec {
 
     @Test
     fun `renders the right number of issues per rule`() {
-        assertThat(result).contains("rule_a (2)")
+        assertThat(result).contains("rule_a/id (2)")
         assertThat(result).contains("rule_b (1)")
     }
 
@@ -161,8 +161,8 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
     )
 
     return createMdDetektion(
-        createIssue(createRuleInstance("rule_a", "Section-1"), entity1, "Issue message 1"),
-        createIssue(createRuleInstance("rule_a", "Section-1"), entity2, "Issue message 2"),
+        createIssue(createRuleInstance("rule_a/id", "Section-1"), entity1, "Issue message 1"),
+        createIssue(createRuleInstance("rule_a/id", "Section-1"), entity2, "Issue message 2"),
         createIssue(createRuleInstance("rule_b", "Section-2"), entity3, "Issue message 3"),
     ).also {
         it.putUserData(complexityKey, 10)

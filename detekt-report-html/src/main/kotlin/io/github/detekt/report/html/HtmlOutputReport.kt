@@ -117,21 +117,22 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
         issues
             .groupBy { it.ruleInstance }
             .toList()
-            .sortedBy { (ruleInstance, _) -> ruleInstance.name.value }
+            .sortedBy { (ruleInstance, _) -> ruleInstance.id }
             .forEach { (ruleInstance, ruleIssues) ->
                 renderRule(ruleInstance, ruleIssues)
             }
     }
 
     private fun FlowContent.renderRule(ruleInstance: RuleInstance, issues: List<Issue>) {
+        val ruleId = ruleInstance.id
         val ruleName = ruleInstance.name.value
         val ruleSetId = ruleInstance.ruleSetId.value
         details {
-            id = ruleName
+            id = ruleId
             open = true
 
             summary("rule-container") {
-                span("rule") { text("$ruleName: %,d ".format(Locale.ROOT, issues.size)) }
+                span("rule") { text("$ruleId: %,d ".format(Locale.ROOT, issues.size)) }
                 span("description") { text(ruleInstance.description) }
             }
 
