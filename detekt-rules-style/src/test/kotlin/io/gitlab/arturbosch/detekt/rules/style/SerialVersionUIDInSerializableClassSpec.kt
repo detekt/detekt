@@ -248,6 +248,20 @@ class SerialVersionUIDInSerializableClassSpec {
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
+    @Test
+    fun `does not report constant in private companion object`() {
+        val code = """
+            import java.io.Serializable
+            
+            class C : Serializable {
+                private companion object {
+                    const val serialVersionUID: Long = 1
+                }
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLint(code)).isEmpty()
+    }
+
     companion object {
         private const val WRONG_SERIAL_VERSION_UID_MESSAGE =
             "The property `serialVersionUID` signature is not correct. `serialVersionUID` should be " +
