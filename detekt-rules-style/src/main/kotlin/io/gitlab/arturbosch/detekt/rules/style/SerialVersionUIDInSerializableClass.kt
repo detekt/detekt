@@ -96,7 +96,8 @@ class SerialVersionUIDInSerializableClass(config: Config) : Rule(
                     if (parentDeclaration is KtClass) "class" else "object"
                 )
             )
-        return if (property.isConstant() && isLongProperty(property) && property.isPrivate()) {
+        val isPropertyPrivate = declaration.isPrivate() || property.isPrivate()
+        return if (property.isConstant() && isLongProperty(property) && isPropertyPrivate) {
             null
         } else {
             SerialVersionUIDFindings(
