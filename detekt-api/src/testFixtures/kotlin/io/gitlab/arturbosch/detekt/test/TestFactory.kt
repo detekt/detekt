@@ -76,16 +76,13 @@ fun createIssueForRelativePath(
 ): Issue {
     return IssueImpl(
         ruleInstance = ruleInstance,
-        entity = Entity(
-            name = "TestEntity",
-            signature = "TestEntitySignature",
+        entity = createEntity(
             location = Location(
                 source = SourceLocation(1, 1),
                 endSource = SourceLocation(1, 1),
                 text = TextLocation(0, 0),
                 path = Path("/").absolute().resolve(basePath).resolve(relativePath)
             ),
-            ktElement = null
         ),
         message = "TestMessage"
     )
