@@ -31,7 +31,7 @@ class ChainMethodContinuation(config: Config) : FormattingRule(
     private val maxLineLength by configWithAndroidVariants(120, 100)
 
     @Configuration("chain operator count means multiline threshold")
-    private val forceMultilineWhenChainOperatorCountGreaterOrEqualThan by config(2_147_483_647)
+    private val forceMultilineWhenChainOperatorCountGreaterOrEqualThan by config(4)
 
     override fun overrideEditorConfigProperties(): Map<EditorConfigProperty<*>, String> =
         mapOf(
