@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.internal.existingVariantOrBaseFile
 import io.gitlab.arturbosch.detekt.internal.registerCreateBaselineTask
 import io.gitlab.arturbosch.detekt.internal.registerDetektTask
 import org.gradle.api.Project
+import org.gradle.util.GradleVersion
 import org.jetbrains.kotlin.gradle.dsl.KotlinCommonOptions
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
 import org.jetbrains.kotlin.gradle.plugin.KotlinTarget
@@ -22,7 +23,11 @@ internal fun Project.registerJvmCompilationDetektTask(
         val siblingTask = compilation.compileTaskProvider.get() as KotlinJvmCompile
 
         setSource(siblingTask.sources)
-        classpath.setFrom(compilation.output.classesDirs, siblingTask.libraries)
+        if (GradleVersion.current() >= GradleVersion.version("8.8")) {
+            classpath.convention(compilation.output.classesDirs, siblingTask.libraries)
+        } else {
+            classpath.setFrom(compilation.output.classesDirs, siblingTask.libraries)
+        }
 
         // If a baseline file is configured as input file, it must exist to be configured, otherwise the task fails.
         // We try to find the configured baseline or alternatively a specific variant matching this task.
@@ -48,7 +53,11 @@ internal fun Project.registerJvmCompilationCreateBaselineTask(
         val siblingTask = compilation.compileTaskProvider.get() as KotlinJvmCompile
 
         setSource(siblingTask.sources)
-        classpath.setFrom(compilation.output.classesDirs, siblingTask.libraries)
+        if (GradleVersion.current() >= GradleVersion.version("8.8")) {
+            classpath.convention(compilation.output.classesDirs, siblingTask.libraries)
+        } else {
+            classpath.setFrom(compilation.output.classesDirs, siblingTask.libraries)
+        }
 
         val variantBaselineFile = extension.baseline.asFile.orNull?.addVariantName(compilation.name)
         baseline.convention(layout.file(provider { variantBaselineFile }))
