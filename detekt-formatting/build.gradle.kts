@@ -15,6 +15,7 @@ dependencies {
 
     testImplementation(projects.detektTest)
     testImplementation(libs.assertj)
+    testImplementation(libs.classgraph)
 
     testRuntimeOnly(libs.slf4j.nop)
     extraDepsToPackage(libs.slf4j.nop)
