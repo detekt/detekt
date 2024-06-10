@@ -71,7 +71,5 @@ class ConstructorParameterNaming(config: Config) : Rule(
         }
     }
 
-    private fun KtParameter.isConstructor(): Boolean {
-        return this.ownerFunction is KtConstructor<*>
-    }
+    private fun KtParameter.isConstructor(): Boolean = this.ownerFunction is KtConstructor<*>
 }

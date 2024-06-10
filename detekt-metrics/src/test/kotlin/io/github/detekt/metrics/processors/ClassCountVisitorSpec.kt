@@ -34,13 +34,10 @@ class ClassCountVisitorSpec {
     }
 }
 
-private fun getClassCount(files: Array<KtFile>): Int {
-    return files.sumOf { getData(it) }
-}
+private fun getClassCount(files: Array<KtFile>): Int = files.sumOf { getData(it) }
 
-private fun getData(file: KtFile): Int {
-    return with(file) {
+private fun getData(file: KtFile): Int =
+    with(file) {
         accept(ClassCountVisitor())
         checkNotNull(getUserData(numberOfClassesKey))
     }
-}

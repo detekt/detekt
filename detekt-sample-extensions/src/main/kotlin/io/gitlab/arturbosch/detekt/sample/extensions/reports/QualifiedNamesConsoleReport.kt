@@ -7,7 +7,5 @@ class QualifiedNamesConsoleReport : ConsoleReport() {
 
     override val id: String = "QualifiedNamesConsoleReport"
 
-    override fun render(detektion: Detektion): String? {
-        return qualifiedNamesReport(detektion)
-    }
+    override fun render(detektion: Detektion): String? = qualifiedNamesReport(detektion)
 }

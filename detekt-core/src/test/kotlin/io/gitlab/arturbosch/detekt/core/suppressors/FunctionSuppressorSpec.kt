@@ -212,6 +212,5 @@ class FunctionSuppressorSpec {
     }
 }
 
-private fun buildFunctionSuppressor(ignoreFunction: List<String>, bindingContext: BindingContext): Suppressor {
-    return functionSuppressorFactory(buildRule("ignoreFunction" to ignoreFunction), bindingContext)!!
-}
+private fun buildFunctionSuppressor(ignoreFunction: List<String>, bindingContext: BindingContext): Suppressor =
+    functionSuppressorFactory(buildRule("ignoreFunction" to ignoreFunction), bindingContext)!!

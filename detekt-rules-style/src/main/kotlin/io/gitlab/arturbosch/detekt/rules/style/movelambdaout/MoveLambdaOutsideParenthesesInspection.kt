@@ -55,13 +55,12 @@ private fun KtCallExpression.canMoveLambdaOutsideParentheses(bindingContext: Bin
     return true
 }
 
-private fun KtCallExpression.isEligible(): Boolean {
-    return when {
+private fun KtCallExpression.isEligible(): Boolean =
+    when {
         valueArguments.lastOrNull()?.isNamed() == true -> false
         valueArguments.count { it.getArgumentExpression()?.unpackFunctionLiteral() != null } > 1 -> false
         else -> true
     }
-}
 
 internal fun shouldReportUnnecessaryBracesAroundTrailingLambda(
     bindingContext: BindingContext,
@@ -74,6 +73,5 @@ private fun KtCallExpression.getLastLambdaExpression(): KtLambdaExpression? {
     return valueArguments.lastOrNull()?.getArgumentExpression()?.unpackFunctionLiteral()
 }
 
-private fun KtExpression.parentLabeledExpression(): KtLabeledExpression? {
-    return getStrictParentOfType<KtLabeledExpression>()?.takeIf { it.baseExpression == this }
-}
+private fun KtExpression.parentLabeledExpression(): KtLabeledExpression? =
+    getStrictParentOfType<KtLabeledExpression>()?.takeIf { it.baseExpression == this }

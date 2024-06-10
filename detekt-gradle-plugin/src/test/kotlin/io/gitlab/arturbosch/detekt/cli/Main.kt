@@ -11,7 +11,5 @@ fun buildRunner(
     outputPrinter: PrintStream,
     errorPrinter: PrintStream
 ) = object {
-    fun execute() {
-        throw ClassCastException("testing reflection wrapper...")
-    }
+    fun execute(): Unit = throw ClassCastException("testing reflection wrapper...")
 }

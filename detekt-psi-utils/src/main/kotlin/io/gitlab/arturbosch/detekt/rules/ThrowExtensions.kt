@@ -13,17 +13,15 @@ fun KtThrowExpression.isIllegalStateException() =
 fun KtThrowExpression.isIllegalArgumentException() =
     isExceptionOfType<IllegalArgumentException>()
 
-inline fun <reified T : Exception> KtThrowExpression.isExceptionOfType(): Boolean {
-    return findDescendantOfType<KtCallExpression>()?.firstChild?.text == T::class.java.simpleName
-}
+inline fun <reified T : Exception> KtThrowExpression.isExceptionOfType(): Boolean =
+    findDescendantOfType<KtCallExpression>()?.firstChild?.text == T::class.java.simpleName
 
 val KtThrowExpression.arguments: List<KtValueArgument>
     get() = findDescendantOfType<KtCallExpression>()?.valueArguments.orEmpty()
 
-fun KtThrowExpression.isEnclosedByConditionalStatement(): Boolean {
-    return when (parent) {
+fun KtThrowExpression.isEnclosedByConditionalStatement(): Boolean =
+    when (parent) {
         is KtContainerNodeForControlStructureBody -> true
         is KtBlockExpression -> parent.parent is KtContainerNodeForControlStructureBody
         else -> false
     }
-}

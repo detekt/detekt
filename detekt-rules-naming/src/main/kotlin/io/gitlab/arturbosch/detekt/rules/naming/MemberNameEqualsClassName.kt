@@ -92,12 +92,11 @@ class MemberNameEqualsClassName(config: Config) : Rule(
             .filter { it.name?.equals(name, ignoreCase = true) == true }
     }
 
-    private fun getMisnamedCompanionObjectMembers(klass: KtClass): Sequence<KtNamedDeclaration> {
-        return klass.companionObjects
+    private fun getMisnamedCompanionObjectMembers(klass: KtClass): Sequence<KtNamedDeclaration> =
+        klass.companionObjects
             .asSequence()
             .flatMap { getMisnamedMembers(it, klass.name) }
             .filterNot { it is KtNamedFunction && isFactoryMethod(it, klass) }
-    }
 
     private fun isFactoryMethod(function: KtNamedFunction, klass: KtClass): Boolean {
         val typeReference = function.typeReference

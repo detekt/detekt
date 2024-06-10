@@ -122,24 +122,22 @@ class UnnecessaryParentheses(config: Config) : Rule(
          * Retrieves the [IElementType] of the binary operation from this element if it is a non-assignment binary
          * expression, or null otherwise.
          */
-        private fun PsiElement.binaryOp(): IElementType? {
-            return when (this) {
+        private fun PsiElement.binaryOp(): IElementType? =
+            when (this) {
                 is KtBinaryExpression ->
                     operationReference.takeUnless { operationToken in KtTokens.ALL_ASSIGNMENTS }
                 is KtBinaryExpressionWithTypeRHS -> operationReference
                 is KtIsExpression -> operationReference
                 else -> null
             }?.getReferencedNameElementType()
-        }
 
         /**
          * Returns either the parent of this [KtExpression] or its first parent expression which is not a
          * [KtParenthesizedExpression].
          */
-        private fun KtExpression.firstNonParenParent(): PsiElement? {
-            return generateSequence(parent) { (it as? KtParenthesizedExpression)?.parent }
+        private fun KtExpression.firstNonParenParent(): PsiElement? =
+            generateSequence(parent) { (it as? KtParenthesizedExpression)?.parent }
                 .firstOrNull { it !is KtParenthesizedExpression }
-        }
 
         /**
          * Determines whether this is a binary expression whose operation precedence is unclear with the parent binary

@@ -796,12 +796,11 @@ class MissingUseCallSpec(private val env: KotlinCoreEnvironment) {
     }
 }
 
-private fun myClosable(clazz: String = "java.io.Closeable", isOpen: Boolean = false): String {
-    return """
+private fun myClosable(clazz: String = "java.io.Closeable", isOpen: Boolean = false): String =
+    """
         ${if (isOpen) "open " else ""} class MyCloseable(private val i: Int) : $clazz {
             override fun close() { /* no-op */ }
 
             fun doStuff() { /* no-op */ }
         }
     """.trimIndent().replaceIndent("    ".repeat(3)).trim()
-}

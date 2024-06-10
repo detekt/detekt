@@ -26,8 +26,8 @@ class ComplexityReportGenerator(private val complexityMetric: ComplexityMetric) 
         )
     }
 
-    private fun cannotGenerate(): Boolean {
-        return when {
+    private fun cannotGenerate(): Boolean =
+        when {
             null in setOf(
                 complexityMetric.mcc,
                 complexityMetric.cloc,
@@ -43,7 +43,6 @@ class ComplexityReportGenerator(private val complexityMetric: ComplexityMetric) 
                 false
             }
         }
-    }
 
     companion object Factory {
         fun create(detektion: Detektion): ComplexityReportGenerator =

@@ -309,8 +309,8 @@ class CanBeNonNullable(config: Config) : Rule(
             return receiverExpression
         }
 
-        private fun KtExpression?.determineSingleExpression(candidateDescriptors: Set<DeclarationDescriptor>): Boolean {
-            return when (this) {
+        private fun KtExpression?.determineSingleExpression(candidateDescriptors: Set<DeclarationDescriptor>): Boolean =
+            when (this) {
                 is KtReturnExpression -> INELIGIBLE_SINGLE_EXPRESSION
                 is KtIfExpression -> ELIGIBLE_SINGLE_EXPRESSION
                 is KtDotQualifiedExpression -> {
@@ -322,15 +322,13 @@ class CanBeNonNullable(config: Config) : Rule(
                 is KtCallExpression -> INELIGIBLE_SINGLE_EXPRESSION
                 else -> ELIGIBLE_SINGLE_EXPRESSION
             }
-        }
 
-        private fun KtElement?.getNonNullChecks(parentOperatorToken: IElementType?): List<CallableDescriptor>? {
-            return when (this) {
+        private fun KtElement?.getNonNullChecks(parentOperatorToken: IElementType?): List<CallableDescriptor>? =
+            when (this) {
                 is KtBinaryExpression -> evaluateBinaryExpression(parentOperatorToken)
                 is KtIsExpression -> evaluateIsExpression()
                 else -> null
             }
-        }
 
         private fun KtExpression?.evaluateCheckStatement(elseExpression: KtExpression?) {
             this.getNonNullChecks(null)?.let { nonNullChecks ->
@@ -370,14 +368,13 @@ class CanBeNonNullable(config: Config) : Rule(
             return nonNullChecks
         }
 
-        private fun getDescriptor(leftExpression: KtElement?, rightExpression: KtElement?): CallableDescriptor? {
-            return when {
+        private fun getDescriptor(leftExpression: KtElement?, rightExpression: KtElement?): CallableDescriptor? =
+            when {
                 leftExpression is KtNameReferenceExpression -> leftExpression
                 rightExpression is KtNameReferenceExpression -> rightExpression
                 else -> null
             }?.getResolvedCall(bindingContext)
                 ?.resultingDescriptor
-        }
 
         private fun KtIsExpression.evaluateIsExpression(): List<CallableDescriptor> {
             val descriptor = this.leftHandSide.getResolvedCall(bindingContext)?.resultingDescriptor
@@ -432,13 +429,11 @@ class CanBeNonNullable(config: Config) : Rule(
             return (isNullable && !isNegated) || (!isNullable && isNegated)
         }
 
-        private fun KtExpression?.isValidElseExpression(): Boolean {
-            return this != null && this !is KtIfExpression && this !is KtWhenExpression
-        }
+        private fun KtExpression?.isValidElseExpression(): Boolean =
+            this != null && this !is KtIfExpression && this !is KtWhenExpression
 
-        private fun KtTypeReference?.isNullable(bindingContext: BindingContext): Boolean {
-            return this?.let { bindingContext[BindingContext.TYPE, it] }?.isMarkedNullable == true
-        }
+        private fun KtTypeReference?.isNullable(bindingContext: BindingContext): Boolean =
+            this?.let { bindingContext[BindingContext.TYPE, it] }?.isMarkedNullable == true
 
         private fun updateNullableParam(expression: KtExpression, updateCallback: (NullableParam) -> Unit) {
             expression.getResolvedCall(bindingContext)
@@ -519,9 +514,8 @@ class CanBeNonNullable(config: Config) : Rule(
          * - non-nullable: <T : Any>
          * But even if T is nullable, a property `val t: T` cannot be made into a non-nullable type.
          */
-        private fun KotlinType.isNullableAndCanBeNonNullable(): Boolean {
-            return if (TypeUtils.isTypeParameter(this)) isMarkedNullable else isNullable()
-        }
+        private fun KotlinType.isNullableAndCanBeNonNullable(): Boolean =
+            if (TypeUtils.isTypeParameter(this)) isMarkedNullable else isNullable()
 
         private fun KtProperty.isCandidate(): Boolean {
             if (isOpen() || isAbstract() || containingClass()?.isInterface() == true) return false
@@ -548,8 +542,8 @@ class CanBeNonNullable(config: Config) : Rule(
             } ?: false
         }
 
-        private fun KtExpression?.isNullableType(): Boolean {
-            return when (this) {
+        private fun KtExpression?.isNullableType(): Boolean =
+            when (this) {
                 is KtConstantExpression -> {
                     this.text == "null"
                 }
@@ -572,7 +566,6 @@ class CanBeNonNullable(config: Config) : Rule(
                     this?.getType(bindingContext)?.isNullableAndCanBeNonNullable() == true
                 }
             }
-        }
     }
 
     private companion object {

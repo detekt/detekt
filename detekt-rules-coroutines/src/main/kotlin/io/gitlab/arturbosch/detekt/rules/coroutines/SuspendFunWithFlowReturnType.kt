@@ -79,12 +79,11 @@ class SuspendFunWithFlowReturnType(config: Config) : Rule(
             }
     }
 
-    private fun KotlinType.isCoroutinesFlow(): Boolean {
-        return sequence {
+    private fun KotlinType.isCoroutinesFlow(): Boolean =
+        sequence {
             yield(this@isCoroutinesFlow)
             yieldAll(this@isCoroutinesFlow.supertypes())
         }
             .mapNotNull { it.fqNameOrNull()?.asString() }
             .contains("kotlinx.coroutines.flow.Flow")
-    }
 }

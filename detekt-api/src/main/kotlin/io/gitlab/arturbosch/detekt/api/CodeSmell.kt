@@ -16,11 +16,10 @@ open class CodeSmell(
         require(message.isNotBlank()) { "The message should not be empty" }
     }
 
-    override fun toString(): String {
-        return "CodeSmell(entity=$entity, " +
+    override fun toString(): String =
+        "CodeSmell(entity=$entity, " +
             "message=$message, " +
             "references=$references)"
-    }
 }
 
 /**
@@ -38,11 +37,10 @@ open class CorrectableCodeSmell(
     message,
     references
 ) {
-    override fun toString(): String {
-        return "CorrectableCodeSmell(" +
+    override fun toString(): String =
+        "CorrectableCodeSmell(" +
             "autoCorrectEnabled=$autoCorrectEnabled, " +
             "entity=$entity, " +
             "message=$message, " +
             "references=$references)"
-    }
 }

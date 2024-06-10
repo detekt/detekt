@@ -161,9 +161,8 @@ private fun Rule.report(element: KtElement, location: Location, message: String)
     report(CodeSmell(Entity.from(element, location), message))
 }
 
-private fun message(desiredIntent: Int, currentIndent: Int): String {
-    return "The indentation should be $desiredIntent but it is $currentIndent."
-}
+private fun message(desiredIntent: Int, currentIndent: Int): String =
+    "The indentation should be $desiredIntent but it is $currentIndent."
 
 private fun KtStringTemplateExpression.isSurroundedByLineBreaks(): Boolean {
     val entries = this.entries
@@ -180,9 +179,7 @@ private fun Char.isTabChar() = this == ' ' || this == '\t'
 
 private fun String.countIndent() = this.takeWhile { it.isTabChar() }.count()
 
-private fun PsiFile.getLine(line: Int): String {
-    return text.lineSequence().drop(line - 1).first()
-}
+private fun PsiFile.getLine(line: Int): String = text.lineSequence().drop(line - 1).first()
 
 private fun PsiFile.getLocation(start: SourceLocation, end: SourceLocation): Location {
     val lines = this.text.lines()

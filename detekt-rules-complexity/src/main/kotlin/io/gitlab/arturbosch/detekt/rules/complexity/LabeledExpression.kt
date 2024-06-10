@@ -87,10 +87,9 @@ class LabeledExpression(config: Config) : Rule(
         return !containingClasses.any { it.name == expression.getLabelName() }
     }
 
-    private fun isAllowedToReferenceContainingClass(klass: KtClass, expression: KtExpressionWithLabel): Boolean {
-        return !klass.isInner() ||
+    private fun isAllowedToReferenceContainingClass(klass: KtClass, expression: KtExpressionWithLabel): Boolean =
+        !klass.isInner() ||
             expression.getStrictParentOfType<KtNamedFunction>()?.isExtensionDeclaration() == true
-    }
 
     private fun getClassHierarchy(element: KtElement, classes: MutableList<KtClass>) {
         val containingClass = element.containingClass() ?: return

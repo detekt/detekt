@@ -64,11 +64,10 @@ private class UnusedParameterVisitor(private val allowedNames: Regex) : DetektVi
 
     private val unusedParameters: MutableSet<KtParameter> = mutableSetOf()
 
-    fun getUnusedReports(): List<CodeSmell> {
-        return unusedParameters.map {
+    fun getUnusedReports(): List<CodeSmell> =
+        unusedParameters.map {
             CodeSmell(Entity.atName(it), "Function parameter `${it.nameAsSafeName.identifier}` is unused.")
         }
-    }
 
     override fun visitClassOrObject(klassOrObject: KtClassOrObject) {
         if (klassOrObject.isExpect()) return

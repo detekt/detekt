@@ -19,9 +19,7 @@ internal class InvalidPropertiesConfigValidator(
     override fun validate(
         configToValidate: YamlConfig,
         settings: ValidationSettings
-    ): Collection<Notification> {
-        return testKeys(configToValidate.properties, baseline.properties)
-    }
+    ): Collection<Notification> = testKeys(configToValidate.properties, baseline.properties)
 
     private fun testKeys(
         configToValidate: Map<String, Any>,

@@ -58,11 +58,10 @@ class ObjectExtendsThrowable(config: Config) : Rule(
         }
     }
 
-    private fun KtObjectDeclaration.isSubtypeOfThrowable(): Boolean {
-        return bindingContext[BindingContext.CLASS, this]
+    private fun KtObjectDeclaration.isSubtypeOfThrowable(): Boolean =
+        bindingContext[BindingContext.CLASS, this]
             ?.defaultType
             ?.supertypes()
             .orEmpty()
             .any { it.isNotNullThrowable() }
-    }
 }

@@ -12,7 +12,5 @@ abstract class CustomDetektReport {
     @get:OutputFile
     abstract val outputLocation: RegularFileProperty
 
-    override fun toString(): String {
-        return "CustomDetektReport(reportId=$reportId, outputLocation=$outputLocation)"
-    }
+    override fun toString(): String = "CustomDetektReport(reportId=$reportId, outputLocation=$outputLocation)"
 }

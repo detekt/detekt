@@ -33,13 +33,9 @@ private val result = object : Detektion, UserDataHolderBase() {
     override val notifications: Collection<Notification> = emptyList()
     override val metrics: Collection<ProjectMetric> = emptyList()
 
-    override fun add(notification: Notification) {
-        throw UnsupportedOperationException("not implemented")
-    }
+    override fun add(notification: Notification): Unit = throw UnsupportedOperationException("not implemented")
 
-    override fun add(projectMetric: ProjectMetric) {
-        throw UnsupportedOperationException("not implemented")
-    }
+    override fun add(projectMetric: ProjectMetric): Unit = throw UnsupportedOperationException("not implemented")
 }
 
 private val code = """

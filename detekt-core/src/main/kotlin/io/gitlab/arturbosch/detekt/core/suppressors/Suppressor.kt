@@ -11,9 +11,8 @@ fun interface Suppressor {
     fun shouldSuppress(finding: Finding): Boolean
 }
 
-internal fun buildSuppressors(rule: Rule, bindingContext: BindingContext): List<Suppressor> {
-    return listOfNotNull(
+internal fun buildSuppressors(rule: Rule, bindingContext: BindingContext): List<Suppressor> =
+    listOfNotNull(
         annotationSuppressorFactory(rule, bindingContext),
         functionSuppressorFactory(rule, bindingContext),
     )
-}

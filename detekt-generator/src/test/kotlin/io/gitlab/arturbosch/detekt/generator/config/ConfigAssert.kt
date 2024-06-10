@@ -60,13 +60,12 @@ class ConfigAssert(
     private fun getYmlRuleConfig() = config.subConfig(name) as? YamlConfig
         ?: error("yaml config expected but got ${config.javaClass}")
 
-    private fun getRulesDefinedByRuleSet(): List<Rule> {
-        return getRuleSetProviderInPackageOrNull()
+    private fun getRulesDefinedByRuleSet(): List<Rule> =
+        getRuleSetProviderInPackageOrNull()
             ?.instance()
             ?.rules
             ?.map { (_, provider) -> provider(Config.empty) }
             .orEmpty()
-    }
 
     private fun getRuleSetProviderInPackageOrNull(): RuleSetProvider? =
         ClassGraph()

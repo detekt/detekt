@@ -71,12 +71,11 @@ internal class MissingRulesConfigValidator(
     companion object {
 
         private val ruleSetNames: List<RuleSet.Id> by lazy(Companion::loadRuleSets)
-        private fun loadRuleSets(): List<RuleSet.Id> {
-            return ServiceLoader.load(
+        private fun loadRuleSets(): List<RuleSet.Id> =
+            ServiceLoader.load(
                 RuleSetProvider::class.java,
                 MissingRulesConfigValidator::class.java.classLoader
             )
                 .map { it.ruleSetId }
-        }
     }
 }

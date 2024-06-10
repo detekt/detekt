@@ -67,14 +67,13 @@ class SleepInsteadOfDelay(config: Config) : Rule(
     }
 
     private fun KtExpression.isThreadSleepFunction(): Boolean {
-        fun KtCallableReferenceExpression.isSleepCallableRef(): Boolean {
-            return if (this.parent is KtValueArgument) {
+        fun KtCallableReferenceExpression.isSleepCallableRef(): Boolean =
+            if (this.parent is KtValueArgument) {
                 // Only checking if this is used as for invocation
                 this.callableReference.isThreadSleepFunction()
             } else {
                 false
             }
-        }
         return if (this is KtCallableReferenceExpression) {
             this.isSleepCallableRef()
         } else {
@@ -124,8 +123,8 @@ class SleepInsteadOfDelay(config: Config) : Rule(
         }
     }
 
-    private fun PsiElement.isSuspendAllowed(): Boolean {
-        return when (this) {
+    private fun PsiElement.isSuspendAllowed(): Boolean =
+        when (this) {
             is KtValueArgument -> {
                 this.isSuspendAllowed()
             }
@@ -142,7 +141,6 @@ class SleepInsteadOfDelay(config: Config) : Rule(
                 false
             }
         }
-    }
 
     private fun KtValueArgument.isSuspendAllowed(): Boolean {
         val parent = this.getParentOfTypes(true, KtCallExpression::class.java) ?: return false

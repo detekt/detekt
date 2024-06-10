@@ -94,8 +94,6 @@ open class Rule(
             validateIdentifier(value)
         }
 
-        override fun toString(): String {
-            return value
-        }
+        override fun toString(): String = value
     }
 }

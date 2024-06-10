@@ -48,7 +48,6 @@ class UnnecessaryBracesAroundTrailingLambda(config: Config) : Rule(
         }
     }
 
-    private fun getIssueElement(expression: KtCallExpression): PsiElement {
-        return (expression.calleeExpression as? KtNameReferenceExpression) ?: expression
-    }
+    private fun getIssueElement(expression: KtCallExpression): PsiElement =
+        (expression.calleeExpression as? KtNameReferenceExpression) ?: expression
 }

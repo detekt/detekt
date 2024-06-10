@@ -14,8 +14,8 @@ fun Config.valueOrDefaultInternal(
     result: Any?,
     default: Any,
     parser: (result: String, default: Any) -> Any = ::tryParseBasedOnDefault
-): Any {
-    return try {
+): Any =
+    try {
         if (result != null) {
             when {
                 result is String -> parser(result, default)
@@ -49,7 +49,6 @@ fun Config.valueOrDefaultInternal(
                 " required type ${default::class.simpleName}."
         )
     }
-}
 
 fun tryParseBasedOnDefault(result: String, defaultResult: Any): Any = when (defaultResult) {
     is Int -> result.toInt()

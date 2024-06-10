@@ -77,12 +77,11 @@ class BooleanPropertyNaming(config: Config) : Rule(
         )
     }
 
-    private fun getTypeName(parameter: KtCallableDeclaration): String {
-        return parameter.createTypeBindingForReturnType(bindingContext)
+    private fun getTypeName(parameter: KtCallableDeclaration): String =
+        parameter.createTypeBindingForReturnType(bindingContext)
             ?.type
             ?.fqNameOrNull()
             .toString()
-    }
 
     companion object {
         const val KOTLIN_BOOLEAN_TYPE_NAME = "kotlin.Boolean"

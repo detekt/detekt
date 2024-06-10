@@ -56,9 +56,8 @@ class ForbiddenImport(config: Config) : Rule(
         }
     }
 
-    private fun defaultReason(forbiddenImport: String): String {
-        return "The import `$forbiddenImport` has been forbidden in the detekt config."
-    }
+    private fun defaultReason(forbiddenImport: String): String =
+        "The import `$forbiddenImport` has been forbidden in the detekt config."
 
     private fun containsForbiddenPattern(import: String): Boolean =
         forbiddenPatterns.pattern.isNotEmpty() && forbiddenPatterns.containsMatchIn(import)

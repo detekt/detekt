@@ -71,14 +71,12 @@ class MissingSuperCall(config: Config) : Rule(
         report(CodeSmell(Entity.from(function), "Overriding method is missing a call to overridden super method."))
     }
 
-    private fun CallableDescriptor.superFunctionWithAnnotation(): CallableDescriptor? {
-        return overriddenDescriptors.firstOrNull { d -> d.annotations.any { it.fqName in mustInvokeSuperAnnotations } }
+    private fun CallableDescriptor.superFunctionWithAnnotation(): CallableDescriptor? =
+        overriddenDescriptors.firstOrNull { d -> d.annotations.any { it.fqName in mustInvokeSuperAnnotations } }
             ?: overriddenDescriptors.firstNotNullOfOrNull { it.superFunctionWithAnnotation() }
-    }
 
-    private fun KtNamedFunction.hasSuperCall(superFunctionDescriptor: CallableDescriptor): Boolean {
-        return anyDescendantOfType<KtQualifiedExpression> {
+    private fun KtNamedFunction.hasSuperCall(superFunctionDescriptor: CallableDescriptor): Boolean =
+        anyDescendantOfType<KtQualifiedExpression> {
             it.getResolvedCall(bindingContext)?.resultingDescriptor == superFunctionDescriptor
         }
-    }
 }

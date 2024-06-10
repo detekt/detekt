@@ -62,9 +62,7 @@ class UnusedPrivateClass(config: Config) : Rule(
         private val namedClasses = mutableSetOf<String>()
         private val importedFqNames = mutableSetOf<FqName>()
 
-        fun getUnusedClasses(): List<KtNamedDeclaration> {
-            return privateClasses.filter { !it.isUsed() }
-        }
+        fun getUnusedClasses(): List<KtNamedDeclaration> = privateClasses.filter { !it.isUsed() }
 
         private fun KtNamedDeclaration.isUsed(): Boolean {
             if (nameAsSafeName.identifier in namedClasses) return true

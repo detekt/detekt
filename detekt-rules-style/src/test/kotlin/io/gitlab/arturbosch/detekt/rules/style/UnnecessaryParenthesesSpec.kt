@@ -578,8 +578,8 @@ class UnnecessaryParenthesesSpec {
         }
 
         @JvmStatic
-        fun cases(): List<Arguments> {
-            return listOf(
+        fun cases(): List<Arguments> =
+            listOf(
                 Arguments.of(
                     Named.of("Without allow for unclear precedence", RuleTestCase(allowForUnclearPrecedence = false))
                 ),
@@ -587,6 +587,5 @@ class UnnecessaryParenthesesSpec {
                     Named.of("With allow for unclear precedence", RuleTestCase(allowForUnclearPrecedence = true))
                 ),
             )
-        }
     }
 }

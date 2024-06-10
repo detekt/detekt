@@ -65,11 +65,8 @@ internal object KtTestCompiler : KtCompiler() {
     fun createKtFile(@Language("kotlin") content: String, path: Path): KtFile =
         psiFileFactory.createPhysicalFile(path.name, StringUtilRt.convertLineSeparators(content))
 
-    private fun kotlinStdLibPath(): File {
-        return File(CharRange::class.java.protectionDomain.codeSource.location.path)
-    }
+    private fun kotlinStdLibPath(): File = File(CharRange::class.java.protectionDomain.codeSource.location.path)
 
-    private fun kotlinxCoroutinesCorePath(): File {
-        return File(CoroutineScope::class.java.protectionDomain.codeSource.location.path)
-    }
+    private fun kotlinxCoroutinesCorePath(): File =
+        File(CoroutineScope::class.java.protectionDomain.codeSource.location.path)
 }

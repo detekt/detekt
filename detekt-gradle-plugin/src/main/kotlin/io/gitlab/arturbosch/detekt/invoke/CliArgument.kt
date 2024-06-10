@@ -71,13 +71,12 @@ internal data class BaselineArgument(val baseline: RegularFile?) : CliArgument()
 }
 
 internal data class DefaultReportArgument(val report: DetektReport) : CliArgument() {
-    override fun toArgument(): List<String> {
-        return if (report.required.get()) {
+    override fun toArgument(): List<String> =
+        if (report.required.get()) {
             listOf(REPORT_PARAMETER, "${report.type.reportId}:${report.outputLocation.get().asFile.absoluteFile}")
         } else {
             emptyList()
         }
-    }
 }
 
 internal data class CustomReportArgument(val reportId: String, val file: RegularFile) : CliArgument() {

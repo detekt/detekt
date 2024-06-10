@@ -8,7 +8,5 @@ class QualifiedNamesOutputReport : OutputReport() {
     override val id: String = "QualifiedNamesOutputReport"
     override val ending: String = "txt"
 
-    override fun render(detektion: Detektion): String? {
-        return qualifiedNamesReport(detektion)
-    }
+    override fun render(detektion: Detektion): String? = qualifiedNamesReport(detektion)
 }

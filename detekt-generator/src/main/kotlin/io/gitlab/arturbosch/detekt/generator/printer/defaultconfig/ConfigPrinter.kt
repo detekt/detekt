@@ -6,8 +6,8 @@ import io.gitlab.arturbosch.detekt.generator.printer.DocumentationPrinter
 
 object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
 
-    override fun print(item: List<RuleSetPage>): String {
-        return yaml {
+    override fun print(item: List<RuleSetPage>): String =
+        yaml {
             yaml { defaultBuildConfiguration() }
             emptyLine()
             yaml { defaultConfigConfiguration() }
@@ -22,14 +22,12 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
             item.sortedBy { it.ruleSet.name }
                 .forEach { printRuleSetPage(it) }
         }
-    }
 
-    fun printCustomRuleConfig(item: List<RuleSetPage>): String {
-        return yaml {
+    fun printCustomRuleConfig(item: List<RuleSetPage>): String =
+        yaml {
             item.sortedBy { it.ruleSet.name }
                 .forEach { printRuleSetPage(it) }
         }
-    }
 
     private fun defaultBuildConfiguration(): String = """
         build:

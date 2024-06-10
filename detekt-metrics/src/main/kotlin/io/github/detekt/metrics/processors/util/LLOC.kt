@@ -77,9 +77,7 @@ object LLOC {
             }
         }
 
-        private fun isEscaped(trimmed: String, rules: Array<String>): Boolean {
-            return rules.any { trimmed.startsWith(it) }
-        }
+        private fun isEscaped(trimmed: String, rules: Array<String>): Boolean = rules.any { trimmed.startsWith(it) }
 
         private fun frequency(source: String, part: String): Int {
             if (source.isEmpty() || part.isEmpty()) {

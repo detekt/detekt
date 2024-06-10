@@ -90,8 +90,8 @@ class AbstractClassCanBeInterface(config: Config) : Rule(
 
     private fun KtClass.hasConstructorParameter() = primaryConstructor?.valueParameters?.isNotEmpty() == true
 
-    private fun KtClass.hasInheritedMember(isAbstract: Boolean): Boolean {
-        return when {
+    private fun KtClass.hasInheritedMember(isAbstract: Boolean): Boolean =
+        when {
             superTypeListEntries.isEmpty() -> false
             bindingContext == BindingContext.EMPTY -> true
             else -> {
@@ -101,7 +101,6 @@ class AbstractClassCanBeInterface(config: Config) : Rule(
                 }
             }
         }
-    }
 
     private fun KtClass.isAnyParentAbstract() =
         (bindingContext[BindingContext.CLASS, this]?.unsubstitutedMemberScope as? LazyClassMemberScope)

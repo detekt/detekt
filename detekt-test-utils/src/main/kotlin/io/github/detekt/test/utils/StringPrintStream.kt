@@ -9,7 +9,5 @@ class StringPrintStream private constructor(
 
     constructor() : this(ByteArrayOutputStream())
 
-    override fun toString(): String {
-        return stream.toString()
-    }
+    override fun toString(): String = stream.toString()
 }

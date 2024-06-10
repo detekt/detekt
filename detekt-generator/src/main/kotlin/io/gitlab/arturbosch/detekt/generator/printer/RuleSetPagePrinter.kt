@@ -6,8 +6,8 @@ import io.gitlab.arturbosch.detekt.generator.collection.RuleSetPage
 
 object RuleSetPagePrinter : DocumentationPrinter<RuleSetPage> {
 
-    override fun print(item: RuleSetPage): String {
-        return markdown {
+    override fun print(item: RuleSetPage): String =
+        markdown {
             if (item.ruleSet.description.isNotEmpty()) {
                 paragraph { item.ruleSet.description }
             } else {
@@ -17,5 +17,4 @@ object RuleSetPagePrinter : DocumentationPrinter<RuleSetPage> {
                 markdown { RulePrinter.print(it) }
             }
         }
-    }
 }

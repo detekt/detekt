@@ -15,9 +15,8 @@ class MethodCountVisitorSpec {
     }
 }
 
-private fun getMethodCount(file: KtFile): Int {
-    return with(file) {
+private fun getMethodCount(file: KtFile): Int =
+    with(file) {
         accept(FunctionCountVisitor())
         checkNotNull(getUserData(numberOfFunctionsKey))
     }
-}

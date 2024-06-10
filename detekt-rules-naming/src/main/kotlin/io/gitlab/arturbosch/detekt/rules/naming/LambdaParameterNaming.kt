@@ -39,7 +39,6 @@ class LambdaParameterNaming(config: Config) : Rule(
             }
     }
 
-    private fun KtParameter.getNamedDeclarations(): List<KtNamedDeclaration> {
-        return this.destructuringDeclaration?.entries ?: listOf(this)
-    }
+    private fun KtParameter.getNamedDeclarations(): List<KtNamedDeclaration> =
+        this.destructuringDeclaration?.entries ?: listOf(this)
 }

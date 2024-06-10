@@ -128,7 +128,5 @@ class TestOutputReport : OutputReport() {
     override val id: String = "TestOutputReport"
     override val ending: String = "yml"
 
-    override fun render(detektion: Detektion): String? {
-        throw UnsupportedOperationException("not implemented")
-    }
+    override fun render(detektion: Detektion): String? = throw UnsupportedOperationException("not implemented")
 }

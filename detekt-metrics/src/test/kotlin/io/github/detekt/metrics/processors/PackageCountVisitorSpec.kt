@@ -20,9 +20,8 @@ class PackageCountVisitorSpec {
     }
 }
 
-private fun getData(file: KtFile): String {
-    return with(file) {
+private fun getData(file: KtFile): String =
+    with(file) {
         accept(PackageCountVisitor())
         checkNotNull(getUserData(numberOfPackagesKey))
     }
-}

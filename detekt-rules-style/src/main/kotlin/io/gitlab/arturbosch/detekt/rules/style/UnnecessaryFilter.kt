@@ -112,11 +112,10 @@ class UnnecessaryFilter(config: Config) : Rule(
     private fun getReferrers(
         property: KtProperty,
         propertyDescriptor: DeclarationDescriptor
-    ): Sequence<KtNameReferenceExpression> {
-        return property.siblings(forward = true, withItself = false).flatMap { sibling ->
+    ): Sequence<KtNameReferenceExpression> =
+        property.siblings(forward = true, withItself = false).flatMap { sibling ->
             sibling.collectDescendantsOfType<KtNameReferenceExpression> { it.descriptor() == propertyDescriptor }
         }
-    }
 
     private fun KtProperty.descriptor(): DeclarationDescriptor? =
         bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, this]

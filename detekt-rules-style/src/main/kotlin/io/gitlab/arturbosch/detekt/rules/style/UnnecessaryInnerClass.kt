@@ -104,12 +104,11 @@ class UnnecessaryInnerClass(config: Config) : Rule(
         (bindingContext[BindingContext.REFERENCE_TARGET, expression]?.containingDeclaration as? ClassifierDescriptor)
             ?.classId
 
-    private fun KtThisExpression.referenceClassId(): ClassId? {
-        return getResolvedCall(bindingContext)
+    private fun KtThisExpression.referenceClassId(): ClassId? =
+        getResolvedCall(bindingContext)
             ?.resultingDescriptor
             ?.returnType
             ?.constructor
             ?.declarationDescriptor
             ?.classId
-    }
 }

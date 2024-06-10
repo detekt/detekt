@@ -121,15 +121,14 @@ private fun <T : Any> getValueOrDefault(config: Config, propertyName: String, de
     }
 }
 
-private fun Config.getListOrDefault(propertyName: String, defaultValue: List<*>): List<String> {
-    return if (defaultValue.all { it is String }) {
+private fun Config.getListOrDefault(propertyName: String, defaultValue: List<*>): List<String> =
+    if (defaultValue.all { it is String }) {
         @Suppress("UNCHECKED_CAST")
         val defaultValueAsListOfStrings = defaultValue as List<String>
         valueOrDefault(propertyName, defaultValueAsListOfStrings)
     } else {
         error("Only lists of strings are supported. '$propertyName' is invalid. ")
     }
-}
 
 private fun Config.getValuesWithReasonOrDefault(
     propertyName: String,
@@ -163,9 +162,8 @@ private fun Config.getValuesWithReasonOrDefault(
 private abstract class MemoizedConfigProperty<U : Any> : ReadOnlyProperty<Rule, U> {
     private var value: U? = null
 
-    override fun getValue(thisRef: Rule, property: KProperty<*>): U {
-        return value ?: doGetValue(thisRef, property).also { value = it }
-    }
+    override fun getValue(thisRef: Rule, property: KProperty<*>): U =
+        value ?: doGetValue(thisRef, property).also { value = it }
 
     abstract fun doGetValue(thisRef: Rule, property: KProperty<*>): U
 }
@@ -189,9 +187,8 @@ private class TransformedConfigProperty<T : Any, U : Any>(
     private val defaultValue: T,
     private val transform: (T) -> U
 ) : MemoizedConfigProperty<U>() {
-    override fun doGetValue(thisRef: Rule, property: KProperty<*>): U {
-        return transform(getValueOrDefault(thisRef.config, property.name, defaultValue))
-    }
+    override fun doGetValue(thisRef: Rule, property: KProperty<*>): U =
+        transform(getValueOrDefault(thisRef.config, property.name, defaultValue))
 }
 
 private class FallbackConfigProperty<T : Any, U : Any>(

@@ -77,13 +77,12 @@ class UseIsNullOrEmpty(config: Config) : Rule(
         }?.takeIf { it.getType(bindingContext)?.isNullable() == true }
     }
 
-    private fun KtExpression.sizeCheckedExpression(): KtExpression? {
-        return when (this) {
+    private fun KtExpression.sizeCheckedExpression(): KtExpression? =
+        when (this) {
             is KtDotQualifiedExpression -> sizeCheckedExpression()
             is KtBinaryExpression -> sizeCheckedExpression()
             else -> null
         }
-    }
 
     private fun KtDotQualifiedExpression.sizeCheckedExpression(): KtExpression? {
         if (!selectorExpression.isCalling(emptyCheckFunctions)) return null

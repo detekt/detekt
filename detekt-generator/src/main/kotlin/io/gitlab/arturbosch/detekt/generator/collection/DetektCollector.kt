@@ -28,11 +28,10 @@ class DetektCollector(textReplacements: Map<String, String>) : Collector<RuleSet
         }
     }
 
-    private fun List<Rule>.findRuleByName(ruleName: String): Rule {
-        return find { it.name == ruleName } ?: throw InvalidDocumentationException(
+    private fun List<Rule>.findRuleByName(ruleName: String): Rule =
+        find { it.name == ruleName } ?: throw InvalidDocumentationException(
             "Rule '$ruleName' was specified in a provider but it was not defined."
         )
-    }
 
     override fun visit(file: KtFile) {
         collectors.forEach {

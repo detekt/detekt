@@ -56,9 +56,7 @@ class TooGenericExceptionCaught(config: Config) : Rule(
         super.visitCatchSection(catchClause)
     }
 
-    private fun isTooGenericException(typeReference: KtTypeReference?): Boolean {
-        return typeReference?.text in exceptionNames
-    }
+    private fun isTooGenericException(typeReference: KtTypeReference?): Boolean = typeReference?.text in exceptionNames
 
     companion object {
         val caughtExceptionDefaults = listOf(

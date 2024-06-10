@@ -133,8 +133,8 @@ class NullCheckOnMutableProperty(config: Config) : Rule(
                 }
         }
 
-        private fun KtBinaryExpression.collectNonNullChecks(): List<KtBinaryExpression> {
-            return if (isNonNullCheck()) {
+        private fun KtBinaryExpression.collectNonNullChecks(): List<KtBinaryExpression> =
+            if (isNonNullCheck()) {
                 listOf(this)
             } else {
                 val nonNullChecks = mutableListOf<KtBinaryExpression>()
@@ -142,6 +142,5 @@ class NullCheckOnMutableProperty(config: Config) : Rule(
                 (right as? KtBinaryExpression)?.let { nonNullChecks.addAll(it.collectNonNullChecks()) }
                 nonNullChecks
             }
-        }
     }
 }

@@ -73,11 +73,10 @@ class UnderscoresInNumericLiterals(config: Config) : Rule(
         }
     }
 
-    private fun isNotDecimalNumber(rawText: String): Boolean {
-        return rawText.replace("_", "").toDoubleOrNull() == null ||
+    private fun isNotDecimalNumber(rawText: String): Boolean =
+        rawText.replace("_", "").toDoubleOrNull() == null ||
             rawText.startsWith(HEX_PREFIX) ||
             rawText.startsWith(BIN_PREFIX)
-    }
 
     private fun KtConstantExpression.isSerialUidProperty(): Boolean {
         val propertyElement = if (parent is KtPrefixExpression) parent?.parent else parent
@@ -95,13 +94,12 @@ class UnderscoresInNumericLiterals(config: Config) : Rule(
             ?.any { it.text == SERIALIZABLE } == true
     }
 
-    private fun normalizeForMatching(text: String): String {
-        return text.trim()
+    private fun normalizeForMatching(text: String): String =
+        text.trim()
             .lowercase(Locale.ROOT)
             .removeSuffix("l")
             .removeSuffix("d")
             .removeSuffix("f")
-    }
 
     private fun doReport(expression: KtConstantExpression, message: String) {
         report(CodeSmell(Entity.from(expression), message))

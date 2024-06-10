@@ -19,23 +19,19 @@ internal data class AllRulesConfig(
     override fun subConfig(key: String) =
         AllRulesConfig(wrapped.subConfig(key), deprecatedRules, this)
 
-    override fun subConfigKeys(): Set<String> {
-        return wrapped.subConfigKeys()
-    }
+    override fun subConfigKeys(): Set<String> = wrapped.subConfigKeys()
 
-    override fun <T : Any> valueOrDefault(key: String, default: T): T {
-        return when (key) {
+    override fun <T : Any> valueOrDefault(key: String, default: T): T =
+        when (key) {
             Config.ACTIVE_KEY -> if (isDeprecated()) false as T else wrapped.valueOrDefault(key, true) as T
             else -> wrapped.valueOrDefault(key, default)
         }
-    }
 
-    override fun <T : Any> valueOrNull(key: String): T? {
-        return when (key) {
+    override fun <T : Any> valueOrNull(key: String): T? =
+        when (key) {
             Config.ACTIVE_KEY -> if (isDeprecated()) false as T else wrapped.valueOrNull(key) ?: true as? T
             else -> wrapped.valueOrNull(key)
         }
-    }
 
     override fun validate(baseline: Config, excludePatterns: Set<Regex>) =
         validateConfig(wrapped, baseline, excludePatterns)

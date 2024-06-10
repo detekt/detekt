@@ -37,17 +37,14 @@ private fun functionSuppressor(
     element: KtElement,
     bindingContext: BindingContext,
     functionMatchers: List<FunctionMatcher>,
-): Boolean {
-    return element.isInFunctionNamed(bindingContext, functionMatchers)
-}
+): Boolean = element.isInFunctionNamed(bindingContext, functionMatchers)
 
 private fun KtElement.isInFunctionNamed(
     bindingContext: BindingContext,
     functionMatchers: List<FunctionMatcher>,
-): Boolean {
-    return if (this is KtNamedFunction && functionMatchers.any { it.match(this, bindingContext) }) {
+): Boolean =
+    if (this is KtNamedFunction && functionMatchers.any { it.match(this, bindingContext) }) {
         true
     } else {
         getStrictParentOfType<KtNamedFunction>()?.isInFunctionNamed(bindingContext, functionMatchers) ?: false
     }
-}

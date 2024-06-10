@@ -67,7 +67,6 @@ class UnusedUnaryOperator(config: Config) : Rule(
         report(CodeSmell(Entity.from(expression), message))
     }
 
-    private fun KtExpression.parentBinaryExpressionOrThis(): KtExpression {
-        return parents.takeWhile { it is KtBinaryExpression }.lastOrNull() as? KtBinaryExpression ?: this
-    }
+    private fun KtExpression.parentBinaryExpressionOrThis(): KtExpression =
+        parents.takeWhile { it is KtBinaryExpression }.lastOrNull() as? KtBinaryExpression ?: this
 }

@@ -17,9 +17,7 @@ import org.jetbrains.kotlin.types.isFlexible
 import org.jetbrains.kotlin.types.isNullable
 import org.jetbrains.kotlin.util.containingNonLocalDeclaration
 
-fun KotlinType.fqNameOrNull(): FqName? {
-    return TypeUtils.getClassDescriptor(this)?.fqNameOrNull()
-}
+fun KotlinType.fqNameOrNull(): FqName? = TypeUtils.getClassDescriptor(this)?.fqNameOrNull()
 
 /**
  * Returns types considering data flow.

@@ -9,8 +9,8 @@ import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
 internal fun defaultReportMapping(report: OutputReport) =
     if (report is BuiltInOutputReport) report.ending else report.id
 
-internal fun printIssues(issues: Map<String, List<Issue>>): String {
-    return buildString {
+internal fun printIssues(issues: Map<String, List<Issue>>): String =
+    buildString {
         issues.forEach { (key, issues) ->
             append(key)
             append("\n")
@@ -21,7 +21,6 @@ internal fun printIssues(issues: Map<String, List<Issue>>): String {
             }
         }
     }
-}
 
 const val BUILD = "build"
 const val EXCLUDE_CORRECTABLE = "excludeCorrectable"
@@ -33,10 +32,7 @@ private val messageReplacementRegex = Regex("\\s+")
 
 fun Config.excludeCorrectable(): Boolean = subConfig(BUILD).valueOrDefault(EXCLUDE_CORRECTABLE, false)
 
-fun Detektion.filterEmptyIssues(config: Config): List<Issue> {
-    return this
-        .filterAutoCorrectedIssues(config)
-}
+fun Detektion.filterEmptyIssues(config: Config): List<Issue> = this.filterAutoCorrectedIssues(config)
 
 fun Detektion.filterAutoCorrectedIssues(config: Config): List<Issue> {
     if (!config.excludeCorrectable()) {

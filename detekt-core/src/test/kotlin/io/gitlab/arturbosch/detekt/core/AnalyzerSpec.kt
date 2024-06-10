@@ -447,30 +447,27 @@ private open class MaxLineLength(config: Config) : Rule(config, "TestDescription
         }
     }
 
-    private fun KtFile.findFirstMeaningfulKtElementInParents(range: IntRange): PsiElement {
-        return elementsInRange(TextRange.create(range.first, range.last))
+    private fun KtFile.findFirstMeaningfulKtElementInParents(range: IntRange): PsiElement =
+        elementsInRange(TextRange.create(range.first, range.last))
             .asSequence()
             .plus(findElementAt(range.last))
             .mapNotNull { it?.getNonStrictParentOfType() }
             .first { it.text.isNotBlank() }
-    }
 }
 
 @RequiresTypeResolution
 private class RequiresTypeResolutionMaxLineLength(config: Config) : MaxLineLength(config)
 
 private class FaultyRule(config: Config) : Rule(config, "") {
-    override fun visitKtFile(file: KtFile) {
+    override fun visitKtFile(file: KtFile): Unit =
         throw object : IllegalStateException("Deliberately triggered error.") {}
-    }
 }
 
 private class FaultyRuleNoStackTrace(config: Config) : Rule(config, "") {
-    override fun visitKtFile(file: KtFile) {
+    override fun visitKtFile(file: KtFile): Unit =
         throw object : IllegalStateException("Deliberately triggered error without stack trace.") {
             init {
                 stackTrace = emptyArray()
             }
         }
-    }
 }

@@ -20,12 +20,11 @@ import org.jetbrains.kotlin.psi.psiUtil.lastBlockStatementOrThis
  * Util function to search for the [KtElement]s in the parents of
  * the given [line] from a given offset in a [KtFile].
  */
-internal fun findKtElementInParents(file: KtFile, offset: Int, line: String): Sequence<PsiElement> {
-    return file.elementsInRange(TextRange.create(offset, offset + line.length))
+internal fun findKtElementInParents(file: KtFile, offset: Int, line: String): Sequence<PsiElement> =
+    file.elementsInRange(TextRange.create(offset, offset + line.length))
         .asSequence()
         .plus(file.findElementAt(offset))
         .mapNotNull { it?.getNonStrictParentOfType() }
-}
 
 inline fun <reified T : KtExpression> KtNamedFunction.yieldStatementsSkippingGuardClauses(): Sequence<KtExpression> =
     sequence {
@@ -40,9 +39,7 @@ inline fun <reified T : KtExpression> KtNamedFunction.yieldStatementsSkippingGua
         }
     }
 
-fun KtExpression.isSuperCall(): Boolean {
-    return (this as? KtDotQualifiedExpression)?.receiverExpression is KtSuperExpression
-}
+fun KtExpression.isSuperCall(): Boolean = (this as? KtDotQualifiedExpression)?.receiverExpression is KtSuperExpression
 
 inline fun <reified T : KtExpression> KtExpression.isGuardClause(): Boolean {
     val descendantExpr = this.findDescendantOfType<T>() ?: return false

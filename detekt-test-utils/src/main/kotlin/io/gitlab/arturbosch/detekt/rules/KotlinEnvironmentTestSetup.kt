@@ -23,9 +23,8 @@ internal class KotlinEnvironmentResolver : ParameterResolver {
         get() = getStore(NAMESPACE)[WRAPPER_KEY, CloseableWrapper::class.java]
         set(value) = getStore(NAMESPACE).put(WRAPPER_KEY, value)
 
-    override fun supportsParameter(parameterContext: ParameterContext, extensionContext: ExtensionContext): Boolean {
-        return parameterContext.parameter.type == KotlinCoreEnvironment::class.java
-    }
+    override fun supportsParameter(parameterContext: ParameterContext, extensionContext: ExtensionContext): Boolean =
+        parameterContext.parameter.type == KotlinCoreEnvironment::class.java
 
     override fun resolveParameter(parameterContext: ParameterContext, extensionContext: ExtensionContext): Any {
         val closeableWrapper = extensionContext.wrapper

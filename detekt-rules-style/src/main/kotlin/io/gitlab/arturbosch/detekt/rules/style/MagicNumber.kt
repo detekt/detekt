@@ -169,14 +169,13 @@ class MagicNumber(config: Config) : Rule(
         }
     }
 
-    private fun normalizeForParsingAsDouble(text: String): String {
-        return text.trim()
+    private fun normalizeForParsingAsDouble(text: String): String =
+        text.trim()
             .lowercase(Locale.US)
             .replace("_", "")
             .removeSuffix("l")
             .removeSuffix("d")
             .removeSuffix("f")
-    }
 
     private fun KtConstantExpression.isNamedArgument(): Boolean {
         val valueArgument = this.getNonStrictParentOfType<KtValueArgument>()
@@ -186,13 +185,12 @@ class MagicNumber(config: Config) : Rule(
     private fun KtConstantExpression.isPartOfFunctionReturnConstant() =
         parent is KtNamedFunction || parent is KtReturnExpression && parent.parent.children.size == 1
 
-    private fun KtConstantExpression.isPartOfConstructorOrFunctionConstant(): Boolean {
-        return parent is KtParameter &&
+    private fun KtConstantExpression.isPartOfConstructorOrFunctionConstant(): Boolean =
+        parent is KtParameter &&
             when (parent.parent.parent) {
                 is KtNamedFunction, is KtPrimaryConstructor, is KtSecondaryConstructor -> true
                 else -> false
             }
-    }
 
     private fun KtConstantExpression.isPartOfRange(): Boolean {
         val theParent = parent
@@ -205,9 +203,7 @@ class MagicNumber(config: Config) : Rule(
         }
     }
 
-    private fun KtConstantExpression.isSubjectOfExtensionFunction(): Boolean {
-        return parent is KtDotQualifiedExpression
-    }
+    private fun KtConstantExpression.isSubjectOfExtensionFunction(): Boolean = parent is KtDotQualifiedExpression
 
     private fun KtConstantExpression.isPartOfHashCode(): Boolean {
         val containingFunction = getNonStrictParentOfType<KtNamedFunction>()

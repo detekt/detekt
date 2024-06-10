@@ -9,10 +9,9 @@ package io.gitlab.arturbosch.detekt.api
  * '*' matches any zero or more characters
  * '?' matches any one character
  */
-fun String.simplePatternToRegex(): Regex {
-    return this
+fun String.simplePatternToRegex(): Regex =
+    this
         .replace(".", "\\.")
         .replace("*", ".*")
         .replace("?", ".")
         .toRegex()
-}

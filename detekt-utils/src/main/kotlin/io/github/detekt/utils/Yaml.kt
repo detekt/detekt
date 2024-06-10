@@ -18,12 +18,11 @@ sealed class YML(open val indent: Int = 0, open var content: String = "") {
 
 data class YamlNode(override val indent: Int = 0, override var content: String = "") : YML()
 
-inline fun yaml(content: YamlNode.() -> Unit): String {
-    return YamlNode().let { yaml ->
+inline fun yaml(content: YamlNode.() -> Unit): String =
+    YamlNode().let { yaml ->
         content(yaml)
         yaml.content
     }
-}
 
 fun YamlNode.node(name: String, node: YamlNode.() -> Unit) {
     val yamlNode = YamlNode(indent = indent + 1, content = "$name:")
@@ -78,8 +77,8 @@ private fun YamlNode.map(map: Map<String, String?>) {
 
 inline fun YamlNode.yaml(yaml: () -> String): Unit = append(yaml())
 
-private fun String.ensureQuoted(): String {
-    return when {
+private fun String.ensureQuoted(): String =
+    when {
         isBlank() -> quoted()
         startsWith(SINGLE_QUOTE) &&
             endsWith(SINGLE_QUOTE) ||
@@ -87,7 +86,6 @@ private fun String.ensureQuoted(): String {
             endsWith(DOUBLE_QUOTE) -> this
         else -> quoted()
     }
-}
 
 private fun String.quoted() = "'$this'"
 

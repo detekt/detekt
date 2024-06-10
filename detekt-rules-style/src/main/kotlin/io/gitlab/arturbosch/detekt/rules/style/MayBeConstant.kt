@@ -99,20 +99,19 @@ class MayBeConstant(config: Config) : Rule(
         return annotationEntries.isNotEmpty() && !isJvmField
     }
 
-    private fun KtProperty.cannotBeConstant(): Boolean {
-        return isLocal ||
+    private fun KtProperty.cannotBeConstant(): Boolean =
+        isLocal ||
             isVar ||
             isActual ||
             getter != null ||
             isConstant() ||
             isOverride()
-    }
 
     private fun KtProperty.isInObject() =
         !isTopLevel && containingClassOrObject !is KtObjectDeclaration
 
-    private fun KtExpression.isConstantExpression(): Boolean {
-        return this is KtStringTemplateExpression &&
+    private fun KtExpression.isConstantExpression(): Boolean =
+        this is KtStringTemplateExpression &&
             !hasInterpolation() ||
             node.elementType == KtNodeTypes.BOOLEAN_CONSTANT ||
             node.elementType == KtNodeTypes.INTEGER_CONSTANT ||
@@ -122,16 +121,14 @@ class MayBeConstant(config: Config) : Rule(
             companionObjectConstants.contains(text) ||
             isBinaryExpression(this) ||
             isParenthesizedExpression(this)
-    }
 
     private fun isParenthesizedExpression(expression: KtExpression) =
         (expression as? KtParenthesizedExpression)?.expression?.isConstantExpression() == true
 
-    private fun isBinaryExpression(expression: KtExpression): Boolean {
-        return expression is KtBinaryExpression &&
+    private fun isBinaryExpression(expression: KtExpression): Boolean =
+        expression is KtBinaryExpression &&
             expression.node.elementType == KtNodeTypes.BINARY_EXPRESSION &&
             binaryTokens.contains(expression.operationToken) &&
             expression.left?.isConstantExpression() == true &&
             expression.right?.isConstantExpression() == true
-    }
 }

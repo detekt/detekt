@@ -80,8 +80,8 @@ internal fun loadDetektVersion(classLoader: ClassLoader): String {
 
 // Copy-paste from io.github.detekt.utils.openSafeStream in Resources.kt.
 // Can't use that function, because gradle-plugin is minimising dependencies: see #4748.
-private fun URL.openSafeStream(): InputStream {
-    return openConnection()
+private fun URL.openSafeStream(): InputStream =
+    openConnection()
         /*
          * Due to https://bugs.openjdk.java.net/browse/JDK-6947916 and https://bugs.openjdk.java.net/browse/JDK-8155607,
          * it is necessary to disallow caches to maintain stability on JDK 8 and 11 (and possibly more).
@@ -91,4 +91,3 @@ private fun URL.openSafeStream(): InputStream {
          */
         .apply { useCaches = false }
         .getInputStream()
-}

@@ -178,9 +178,8 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
         }
     }
 
-    private fun getComplexityMetrics(detektion: Detektion): List<String> {
-        return ComplexityReportGenerator.create(detektion).generate().orEmpty()
-    }
+    private fun getComplexityMetrics(detektion: Detektion): List<String> =
+        ComplexityReportGenerator.create(detektion).generate().orEmpty()
 }
 
 @HtmlTagMarker

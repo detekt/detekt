@@ -165,19 +165,17 @@ private fun throwIllegalStateException(file: KtFile, error: Throwable): Nothing 
     throw IllegalStateException(message, error)
 }
 
-private fun Finding.toIssue(rule: RuleInstance, severity: Severity): Issue {
-    return when (this) {
+private fun Finding.toIssue(rule: RuleInstance, severity: Severity): Issue =
+    when (this) {
         is CorrectableCodeSmell -> IssueImpl(rule, entity, message, references, severity, autoCorrectEnabled)
 
         is CodeSmell -> IssueImpl(rule, entity, message, references, severity)
 
         else -> error("wtf?")
     }
-}
 
-private fun Rule.toRuleInstance(id: String, ruleSetId: RuleSet.Id): RuleInstance {
-    return RuleInstanceImpl(id, ruleName, ruleSetId, description)
-}
+private fun Rule.toRuleInstance(id: String, ruleSetId: RuleSet.Id): RuleInstance =
+    RuleInstanceImpl(id, ruleName, ruleSetId, description)
 
 private data class IssueImpl(
     override val ruleInstance: RuleInstance,
