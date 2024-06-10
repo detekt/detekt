@@ -37,6 +37,7 @@ formatting:
     autoCorrect: true
     indentSize: 4
     maxLineLength: 120
+    forceMultilineWhenChainOperatorCountGreaterOrEqualThan: 2147483647
   ChainWrapping:
     active: true
     autoCorrect: true
