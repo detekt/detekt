@@ -3,7 +3,7 @@ dokka = "1.9.20"
 jacoco = "0.8.12"
 kotlin = "2.0.0"
 coroutines = "1.8.1"
-ktlint = "1.2.1"
+ktlint = "1.3.0"
 junit = "5.10.2"
 slf4j = "2.0.13"
 
