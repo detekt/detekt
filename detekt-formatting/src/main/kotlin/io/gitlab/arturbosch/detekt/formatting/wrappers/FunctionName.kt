@@ -18,11 +18,8 @@ class FunctionName(config: Config) : FormattingRule(
 ) {
     override val wrapping = FunctionNamingRule()
 
-    @Configuration("ignore functions annotated with")
-    private val ignoreWhenAnnotatedWith by config("")
-
     override fun overrideEditorConfigProperties(): Map<EditorConfigProperty<*>, String> =
         mapOf(
-            IGNORE_WHEN_ANNOTATED_WITH_PROPERTY to ignoreWhenAnnotatedWith,
+            IGNORE_WHEN_ANNOTATED_WITH_PROPERTY to "",
         )
 }

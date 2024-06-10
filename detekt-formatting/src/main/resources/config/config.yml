@@ -93,7 +93,6 @@ formatting:
     maxLineLength: 120
   FunctionName:
     active: false
-    ignoreWhenAnnotatedWith: ''
   FunctionReturnTypeSpacing:
     active: true
     autoCorrect: true
