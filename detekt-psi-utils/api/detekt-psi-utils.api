@@ -16,8 +16,6 @@ public final class io/github/detekt/psi/FunctionMatcher$Companion {
 public final class io/github/detekt/psi/KtFilesKt {
 	public static final fun absolutePath (Lorg/jetbrains/kotlin/com/intellij/psi/PsiFile;)Ljava/nio/file/Path;
 	public static final fun absolutePath (Lorg/jetbrains/kotlin/psi/KtFile;)Ljava/nio/file/Path;
-	public static final fun fileNameWithoutSuffix (Lorg/jetbrains/kotlin/com/intellij/psi/PsiFile;Ljava/util/List;)Ljava/lang/String;
-	public static synthetic fun fileNameWithoutSuffix$default (Lorg/jetbrains/kotlin/com/intellij/psi/PsiFile;Ljava/util/List;ILjava/lang/Object;)Ljava/lang/String;
 }
 
 public final class io/gitlab/arturbosch/detekt/rules/AllowedExceptionNamePatternKt {
