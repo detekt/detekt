@@ -100,6 +100,7 @@ class UnusedImport(config: Config) : Rule(
                     val identifier = it.identifier()
                     identifier?.contains("*")?.not() == true &&
                         !operatorSet.contains(identifier) &&
+                        !additionalOperatorSet.contains(identifier) &&
                         !componentNRegex.matches(identifier)
                 }
                 .toList()
@@ -156,11 +157,17 @@ class UnusedImport(config: Config) : Rule(
     }
 
     companion object {
+        // Kotlin language default operators
         private val operatorSet = setOf(
             "unaryPlus", "unaryMinus", "not", "inc", "dec", "plus", "minus", "times", "div",
             "mod", "rangeTo", "rangeUntil", "contains", "get", "set", "invoke",
-            "assign", "plusAssign", "minusAssign", "timesAssign", "divAssign", "modAssign",
+            "plusAssign", "minusAssign", "timesAssign", "divAssign", "modAssign",
             "equals", "compareTo", "iterator", "getValue", "setValue", "provideDelegate",
+        )
+
+        // Additional operators from libraries or tools, e.g. compiler plugins for gradle
+        private val additionalOperatorSet = setOf(
+            "assign"
         )
 
         private val kotlinDocReferencesRegExp = Regex("\\[([^]]+)](?!\\[)")
