@@ -15,4 +15,4 @@ jobs:
       - name: Checkout sources
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - name: Generate and submit dependency graph
-        uses: gradle/actions/dependency-submission@db19848a5fa7950289d3668fb053140cf3028d43 # v3
+        uses: gradle/actions/dependency-submission@d9336dac04dea2507a617466bc058a3def92b18b # v3
