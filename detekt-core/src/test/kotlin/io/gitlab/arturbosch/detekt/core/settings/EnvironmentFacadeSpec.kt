@@ -2,8 +2,8 @@ package io.gitlab.arturbosch.detekt.core.settings
 
 import io.gitlab.arturbosch.detekt.core.createProcessingSettings
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.konan.file.File
 import org.junit.jupiter.api.Test
+import java.io.File
 
 class EnvironmentFacadeSpec {
 
