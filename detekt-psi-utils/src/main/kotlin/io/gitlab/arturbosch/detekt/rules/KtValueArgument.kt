@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.rules
 
-import org.jetbrains.kotlin.builtins.KotlinBuiltIns
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -10,7 +9,7 @@ fun KtValueArgument.isString(bindingContext: BindingContext): Boolean {
     val argumentExpression = getArgumentExpression()
     return if (bindingContext != BindingContext.EMPTY) {
         val type = argumentExpression?.getResolvedCall(bindingContext)?.resultingDescriptor?.returnType
-        argumentExpression is KtStringTemplateExpression || type != null && KotlinBuiltIns.isString(type)
+        argumentExpression is KtStringTemplateExpression || type.isString()
     } else {
         argumentExpression is KtStringTemplateExpression
     }

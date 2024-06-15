@@ -57,8 +57,8 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.util.getType
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 import org.jetbrains.kotlin.types.KotlinType
-import org.jetbrains.kotlin.types.TypeUtils
 import org.jetbrains.kotlin.types.isNullable
+import org.jetbrains.kotlin.types.typeUtil.isTypeParameter
 
 /**
  * This rule inspects variables marked as nullable and reports which could be
@@ -520,7 +520,7 @@ class CanBeNonNullable(config: Config) : Rule(
          * But even if T is nullable, a property `val t: T` cannot be made into a non-nullable type.
          */
         private fun KotlinType.isNullableAndCanBeNonNullable(): Boolean {
-            return if (TypeUtils.isTypeParameter(this)) isMarkedNullable else isNullable()
+            return if (isTypeParameter()) isMarkedNullable else isNullable()
         }
 
         private fun KtProperty.isCandidate(): Boolean {

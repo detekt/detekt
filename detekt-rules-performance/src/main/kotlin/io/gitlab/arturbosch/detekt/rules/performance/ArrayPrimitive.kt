@@ -6,7 +6,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
-import org.jetbrains.kotlin.builtins.KotlinBuiltIns
+import io.gitlab.arturbosch.detekt.rules.isPrimitiveType
 import org.jetbrains.kotlin.builtins.PrimitiveType
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.name.FqName
@@ -69,7 +69,7 @@ class ArrayPrimitive(config: Config) : Rule(
 
     private fun isArrayPrimitive(descriptor: CallableDescriptor): Boolean {
         val type = descriptor.returnType?.arguments?.singleOrNull()?.type
-        return descriptor.fqNameOrNull() in factoryMethodFqNames && type != null && KotlinBuiltIns.isPrimitiveType(type)
+        return descriptor.fqNameOrNull() in factoryMethodFqNames && type?.isPrimitiveType() == true
     }
 
     private fun isArrayPrimitive(it: KtTypeReference): Boolean {

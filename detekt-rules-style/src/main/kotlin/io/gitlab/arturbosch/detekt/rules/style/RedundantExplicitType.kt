@@ -5,8 +5,8 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.rules.isString
 import org.jetbrains.kotlin.KtNodeTypes
-import org.jetbrains.kotlin.builtins.KotlinBuiltIns
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
@@ -57,7 +57,7 @@ class RedundantExplicitType(config: Config) : Rule(
 
         when (val initializer = property.initializer) {
             is KtConstantExpression -> if (!initializer.typeIsSameAs(type)) return
-            is KtStringTemplateExpression -> if (!KotlinBuiltIns.isString(type)) return
+            is KtStringTemplateExpression -> if (!type.isString()) return
             is KtNameReferenceExpression -> if (typeReference.text != initializer.getReferencedName()) return
             is KtCallExpression -> if (typeReference.text != initializer.calleeExpression?.text) return
             else -> return

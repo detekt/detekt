@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules
 
+import org.jetbrains.kotlin.builtins.KotlinBuiltIns
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.config.LanguageVersionSettings
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
@@ -20,6 +21,10 @@ import org.jetbrains.kotlin.util.containingNonLocalDeclaration
 fun KotlinType.fqNameOrNull(): FqName? {
     return TypeUtils.getClassDescriptor(this)?.fqNameOrNull()
 }
+
+fun KotlinType?.isString(): Boolean = KotlinBuiltIns.isString(this)
+
+fun KotlinType.isPrimitiveType(): Boolean = KotlinBuiltIns.isPrimitiveType(this)
 
 /**
  * Returns types considering data flow.

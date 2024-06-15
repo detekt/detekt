@@ -101,5 +101,7 @@ public final class io/gitlab/arturbosch/detekt/rules/TypeUtilsKt {
 	public static final fun getDataFlowAwareTypes (Lorg/jetbrains/kotlin/psi/KtExpression;Lorg/jetbrains/kotlin/resolve/BindingContext;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;Lorg/jetbrains/kotlin/resolve/calls/smartcasts/DataFlowValueFactory;Lorg/jetbrains/kotlin/types/KotlinType;)Ljava/util/Set;
 	public static synthetic fun getDataFlowAwareTypes$default (Lorg/jetbrains/kotlin/psi/KtExpression;Lorg/jetbrains/kotlin/resolve/BindingContext;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;Lorg/jetbrains/kotlin/resolve/calls/smartcasts/DataFlowValueFactory;Lorg/jetbrains/kotlin/types/KotlinType;ILjava/lang/Object;)Ljava/util/Set;
 	public static final fun isNullable (Lorg/jetbrains/kotlin/psi/KtExpression;Lorg/jetbrains/kotlin/resolve/BindingContext;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;Lorg/jetbrains/kotlin/resolve/calls/smartcasts/DataFlowValueFactory;Z)Z
+	public static final fun isPrimitiveType (Lorg/jetbrains/kotlin/types/KotlinType;)Z
+	public static final fun isString (Lorg/jetbrains/kotlin/types/KotlinType;)Z
 }
 
