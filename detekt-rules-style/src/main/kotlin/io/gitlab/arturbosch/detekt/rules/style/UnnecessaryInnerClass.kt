@@ -5,8 +5,6 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
-import org.jetbrains.kotlin.backend.common.peek
-import org.jetbrains.kotlin.backend.common.pop
 import org.jetbrains.kotlin.descriptors.ClassifierDescriptor
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.psi.KtClass
@@ -64,7 +62,7 @@ class UnnecessaryInnerClass(config: Config) : Rule(
             )
             candidateClassToParentClasses.remove(klass)
         }
-        classChain.pop()
+        classChain.removeLast()
     }
 
     override fun visitReferenceExpression(expression: KtReferenceExpression) {
@@ -87,7 +85,7 @@ class UnnecessaryInnerClass(config: Config) : Rule(
     }
 
     private fun checkForOuterUsage(getTargetClassId: () -> ClassId?) {
-        val currentClass = classChain.peek() ?: return
+        val currentClass = classChain.lastOrNull() ?: return
         val parentClasses = candidateClassToParentClasses[currentClass] ?: return
 
         val targetClassId = getTargetClassId() ?: return
