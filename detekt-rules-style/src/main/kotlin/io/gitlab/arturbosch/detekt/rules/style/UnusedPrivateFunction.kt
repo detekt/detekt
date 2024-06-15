@@ -11,7 +11,6 @@ import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.isOperator
-import org.jetbrains.kotlin.backend.jvm.ir.psiElement
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
@@ -33,6 +32,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
+import org.jetbrains.kotlin.resolve.source.getPsi
 import org.jetbrains.kotlin.types.expressions.OperatorConventions
 import org.jetbrains.kotlin.util.OperatorNameConventions
 
@@ -192,7 +192,7 @@ private class UnusedFunctionVisitor(
             is KtCallExpression -> {
                 val resolvedCall = expression.getResolvedCall(bindingContext) ?: return
                 val callableDescriptor = resolvedCall.resultingDescriptor
-                if ((callableDescriptor.psiElement as? KtNamedFunction)?.isOperator() == true) {
+                if ((callableDescriptor.source.getPsi() as? KtNamedFunction)?.isOperator() == true) {
                     invokeOperatorReferences.getOrPut(callableDescriptor) { mutableListOf() }.add(expression)
                 }
                 null
