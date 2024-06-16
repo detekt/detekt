@@ -1,28 +1,26 @@
 package io.gitlab.arturbosch.detekt.core.rules
 
-import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 
-internal class SingleRuleProvider(
-    private val ruleName: Rule.Name,
-    private val wrapped: RuleSetProvider
+internal class SingleRuleProvider private constructor(
+    override val ruleSetId: RuleSet.Id,
+    private val ruleSet: RuleSet,
 ) : RuleSetProvider {
 
-    init {
-        createRuleInstance() // provoke early exit when rule does not exist
+    override fun instance() = ruleSet
+
+    companion object {
+        operator fun invoke(ruleName: Rule.Name, wrapped: RuleSetProvider): SingleRuleProvider {
+            val ruleProvider = requireNotNull(wrapped.instance().rules[ruleName]) {
+                "There was not rule '$ruleName' in rule set '${wrapped.ruleSetId}'."
+            }
+
+            return SingleRuleProvider(
+                ruleSetId = wrapped.ruleSetId,
+                ruleSet = RuleSet(wrapped.ruleSetId, mapOf(ruleName to ruleProvider))
+            )
+        }
     }
-
-    override val ruleSetId = wrapped.ruleSetId
-
-    override fun instance(): RuleSet = RuleSet(
-        ruleSetId,
-        listOf(createRuleInstance())
-    )
-
-    private fun createRuleInstance(): (Config) -> Rule =
-        requireNotNull(
-            wrapped.instance().rules[ruleName]
-        ) { "There was no rule '$ruleName' in rule set '${wrapped.ruleSetId}'." }
 }

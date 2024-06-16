@@ -29,7 +29,7 @@ class SingleRuleProviderSpec {
             SingleRuleProvider(Rule.Name("ARule"), CustomRuleSetProvider())
         }
             .isInstanceOf(IllegalArgumentException::class.java)
-            .hasMessage("There was no rule 'ARule' in rule set 'custom'.")
+            .hasMessage("There was not rule 'ARule' in rule set 'custom'.")
     }
 }
 
