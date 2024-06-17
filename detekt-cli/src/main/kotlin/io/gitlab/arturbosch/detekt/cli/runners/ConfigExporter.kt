@@ -14,7 +14,6 @@ class ConfigExporter(
         val configPath = arguments.generateConfig ?: error("Unexpected error generating config file")
         val spec = ProcessingSpec {
             extensions {
-                disableDefaultRuleSets = arguments.disableDefaultRuleSets
                 fromPaths { arguments.plugins }
             }
         }

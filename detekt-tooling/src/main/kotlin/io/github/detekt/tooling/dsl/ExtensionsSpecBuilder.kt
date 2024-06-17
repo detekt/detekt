@@ -8,13 +8,11 @@ import java.nio.file.Path
 @ProcessingModelDsl
 class ExtensionsSpecBuilder : Builder<ExtensionsSpec> {
 
-    var disableDefaultRuleSets: Boolean = false
     var plugins: ExtensionsSpec.Plugins? = null
 
     private val disabledExtensions: MutableSet<ExtensionId> = mutableSetOf()
 
     override fun build(): ExtensionsSpec = ExtensionsModel(
-        disableDefaultRuleSets,
         plugins,
         disabledExtensions
     )
@@ -35,7 +33,6 @@ class ExtensionsSpecBuilder : Builder<ExtensionsSpec> {
 }
 
 private data class ExtensionsModel(
-    override val disableDefaultRuleSets: Boolean,
     override val plugins: ExtensionsSpec.Plugins?,
     override val disabledExtensions: Set<ExtensionId>
 ) : ExtensionsSpec

@@ -60,6 +60,11 @@ interface RulesSpec {
         data object NoRestrictions : RunPolicy()
 
         /**
+         * Exclude all default rule sets provided by detekt.
+         */
+        data object DisableDefaultRuleSets : RunPolicy()
+
+        /**
          * Run a single rule.
          */
         class RestrictToSingleRule(val ruleSetId: RuleSet.Id, val ruleName: Rule.Name) : RunPolicy()

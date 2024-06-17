@@ -32,8 +32,6 @@ internal class TestConfigurationProvider : DefaultConfigurationProvider {
 }
 
 private object Spec : ExtensionsSpec {
-    override val disableDefaultRuleSets: Boolean
-        get() = error("No expected call")
     override val plugins: ExtensionsSpec.Plugins?
         get() = null
     override val disabledExtensions: Set<ExtensionId>

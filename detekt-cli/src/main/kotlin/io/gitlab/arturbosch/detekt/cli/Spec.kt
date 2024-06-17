@@ -2,6 +2,8 @@ package io.gitlab.arturbosch.detekt.cli
 
 import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.github.detekt.tooling.api.spec.RulesSpec
+import io.github.detekt.tooling.api.spec.RulesSpec.RunPolicy.DisableDefaultRuleSets
+import io.github.detekt.tooling.api.spec.RulesSpec.RunPolicy.NoRestrictions
 import io.github.detekt.utils.PathFilters
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
@@ -96,7 +98,8 @@ private fun asPatterns(rawValue: String): List<String> = rawValue.trim()
     .toList()
 
 private fun CliArgs.toRunPolicy(): RulesSpec.RunPolicy {
-    val parts = runRule?.split(":") ?: return RulesSpec.RunPolicy.NoRestrictions
+    val parts = runRule?.split(":")
+        ?: return if (disableDefaultRuleSets) DisableDefaultRuleSets else NoRestrictions
     require(parts.size == 2) { "Pattern 'RuleSetId:RuleName' expected." }
     return RulesSpec.RunPolicy.RestrictToSingleRule(RuleSet.Id(parts[0]), Rule.Name(parts[1]))
 }
