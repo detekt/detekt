@@ -1,16 +1,20 @@
 package io.gitlab.arturbosch.detekt.core.rules
 
 import io.github.detekt.test.utils.resourceAsPath
+import io.github.detekt.tooling.api.spec.RulesSpec.RunPolicy.RestrictToSingleRule
+import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.core.createNullLoggingSpec
 import io.gitlab.arturbosch.detekt.core.tooling.withSettings
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 
-class RuleSetLocatorSpec {
+class RuleSetsSpec {
 
     @Test
     fun `loads all the RuleSetProviders`() {
-        val providers = createNullLoggingSpec().withSettings { RuleSetLocator(this).load() }
+        val providers = createNullLoggingSpec().withSettings { createRuleProviders() }
 
         assertThat(providers.map { it.ruleSetId.value })
             .containsExactlyInAnyOrder(
@@ -22,7 +26,7 @@ class RuleSetLocatorSpec {
     @Test
     fun `loads all the DefaultRuleSetProviders except the disabled`() {
         val providers = createNullLoggingSpec { extensions { disableExtension("style") } }
-            .withSettings { RuleSetLocator(this).load() }
+            .withSettings { createRuleProviders() }
 
         assertThat(providers.map { it.ruleSetId.value })
             .containsExactlyInAnyOrder(
@@ -34,10 +38,35 @@ class RuleSetLocatorSpec {
     @Test
     fun `does not load any default rule set provider when opt out`() {
         val providers = createNullLoggingSpec { extensions { disableDefaultRuleSets = true } }
-            .withSettings { RuleSetLocator(this).load() }
+            .withSettings { createRuleProviders() }
 
         assertThat(providers.map { it.ruleSetId.value })
             .containsExactlyInAnyOrder("sample-rule-set")
+    }
+
+    @Test
+    fun `only loads the provider with the selected rule`() {
+        val providers = createNullLoggingSpec {
+            rules { runPolicy = RestrictToSingleRule(RuleSet.Id("style"), Rule.Name("MagicNumber")) }
+        }
+            .withSettings { createRuleProviders() }
+
+        assertThat(providers.map { it.ruleSetId.value })
+            .containsExactlyInAnyOrder("style")
+        assertThat(providers.single().instance().rules)
+            .containsOnlyKeys(Rule.Name("MagicNumber"))
+    }
+
+    @Test
+    fun `throws when rule set doesn't exist`() {
+        assertThatThrownBy {
+            createNullLoggingSpec {
+                rules { runPolicy = RestrictToSingleRule(RuleSet.Id("foo"), Rule.Name("MagicNumber")) }
+            }
+                .withSettings { createRuleProviders() }
+        }
+            .isInstanceOf(IllegalArgumentException::class.java)
+            .hasMessage("There was no rule set with id 'foo'.")
     }
 
     /**
@@ -57,7 +86,7 @@ class RuleSetLocatorSpec {
             extensions {
                 fromPaths { listOf(resourceAsPath("sample-rule-set.jar")) }
             }
-        }.withSettings { RuleSetLocator(this).load() }
+        }.withSettings { createRuleProviders() }
 
         assertThat(providers.map { it.ruleSetId.value })
             .containsExactlyInAnyOrder(
