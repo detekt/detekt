@@ -191,7 +191,11 @@ class HtmlOutputReportSpec {
 }
 
 private fun fakeKtElement(): KtElement {
-    val code = "\n\n\n\n\n\n\n\n\n\nabcdef\nhi\n"
+    val code = buildString {
+        repeat(33) {
+            appendLine("val val${it + 1} = ${it + 1}")
+        }
+    }
     val fakePsiFile = FakePsiFile(code)
     val fakeKtElement = FakeKtElement(fakePsiFile)
 
