@@ -165,7 +165,7 @@ class UnusedImport(config: Config) : Rule(
             "equals", "compareTo", "iterator", "getValue", "setValue", "provideDelegate",
         )
 
-        // Additional operators from libraries or tools, e.g. compiler plugins for gradle
+        // Additional operators from libraries or tools, e.g. compiler plugins for Gradle
         private val additionalOperatorSet = setOf(
             "assign"
         )
