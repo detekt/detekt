@@ -29,10 +29,10 @@ class DetektPlugin : Plugin<Project> {
 
         project.registerDetektPlainTask(extension)
         project.registerDetektJvmTasks(extension)
-        if (project.findProperty(DETEKT_ANDROID_DISABLED_PROPERTY) != "true") {
+        if (!project.providers.gradleProperty(DETEKT_ANDROID_DISABLED_PROPERTY).getOrElse("false").toBoolean()) {
             project.registerDetektAndroidTasks(extension)
         }
-        if (project.findProperty(DETEKT_MULTIPLATFORM_DISABLED_PROPERTY) != "true") {
+        if (!project.providers.gradleProperty(DETEKT_MULTIPLATFORM_DISABLED_PROPERTY).getOrElse("false").toBoolean()) {
             project.registerDetektMultiplatformTasks(extension)
         }
         project.registerGenerateConfigTask(extension)
