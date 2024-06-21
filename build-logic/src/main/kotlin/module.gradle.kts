@@ -27,11 +27,7 @@ val versionCatalog = versionCatalogs.named("libs")
 jacoco.toolVersion = versionCatalog.findVersion("jacoco").get().requiredVersion
 
 tasks.withType<Test>().configureEach {
-    maxParallelForks = if (providers.environmentVariable("CI").isPresent) {
-        Runtime.getRuntime().availableProcessors()
-    } else {
-        (Runtime.getRuntime().availableProcessors() / 2).takeIf { it > 0 } ?: 1
-    }
+    maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
     systemProperty("junit.jupiter.testinstance.lifecycle.default", "per_class")
     val compileTestSnippets = providers.gradleProperty("compile-test-snippets").orNull.toBoolean()
     systemProperty("compile-test-snippets", compileTestSnippets)
