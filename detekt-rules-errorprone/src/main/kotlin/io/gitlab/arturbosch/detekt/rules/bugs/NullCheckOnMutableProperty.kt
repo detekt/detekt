@@ -8,8 +8,6 @@ import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isNonNullCheck
 import io.gitlab.arturbosch.detekt.rules.isNullCheck
-import org.jetbrains.kotlin.backend.common.peek
-import org.jetbrains.kotlin.backend.common.pop
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
@@ -105,7 +103,7 @@ class NullCheckOnMutableProperty(config: Config) : Rule(
             // identified in this if-expression are being referenced.
             super.visitIfExpression(expression)
             // Remove the if-expression after having iterated out of its code block.
-            modifiedCandidateQueues.forEach { it.pop() }
+            modifiedCandidateQueues.forEach { it.removeLast() }
         }
 
         override fun visitReferenceExpression(expression: KtReferenceExpression) {
@@ -123,7 +121,7 @@ class NullCheckOnMutableProperty(config: Config) : Rule(
                     ) {
                         // If there's an if-expression attached to the candidate property, a null-checked
                         // mutable property is being referenced.
-                        candidateProperties[fqName]?.peek()?.let { ifExpression ->
+                        candidateProperties[fqName]?.lastOrNull()?.let { ifExpression ->
                             report(
                                 CodeSmell(
                                     Entity.from(ifExpression),

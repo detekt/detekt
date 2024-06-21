@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
-import io.github.detekt.psi.fileNameWithoutSuffix
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
@@ -8,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
+import org.jetbrains.kotlin.com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtTypeAlias
@@ -102,4 +102,19 @@ class MatchingDeclarationName(config: Config) : Rule(
             "linuxX64"
         )
     }
+}
+
+/**
+ * Removes kotlin specific file name suffixes, e.g. .kt.
+ * Note, will not remove other possible/known file suffixes like '.java'
+ */
+internal fun PsiFile.fileNameWithoutSuffix(multiplatformTargetSuffixes: List<String> = emptyList()): String {
+    val fileName = this.name
+    val suffixesToRemove = multiplatformTargetSuffixes.map { platform -> ".$platform.kt" } + listOf(".kt", ".kts")
+    for (suffix in suffixesToRemove) {
+        if (fileName.endsWith(suffix)) {
+            return fileName.removeSuffix(suffix)
+        }
+    }
+    return fileName
 }

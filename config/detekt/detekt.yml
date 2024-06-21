@@ -206,6 +206,8 @@ style:
         reason: "Use Kotlin's sequences instead."
       - value: 'org.jetbrains.kotlin.js.*'
         reason: "detekt does not support Kotlin/JS at this time"
+      - value: 'org.jetbrains.kotlin.backend.*'
+        reason: "detekt interacts with compiler frontend only"
   ForbiddenMethodCall:
     active: true
     methods:
