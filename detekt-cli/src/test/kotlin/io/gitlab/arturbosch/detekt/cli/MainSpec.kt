@@ -28,14 +28,13 @@ class MainSpec {
     inner class `Build runner` {
 
         @Suppress("UnusedPrivateFunction")
-        private fun runnerConfigs(): List<Arguments> {
-            return listOf(
+        private fun runnerConfigs(): List<Arguments> =
+            listOf(
                 arguments(arrayOf("--generate-config", "detekt-test.yml"), ConfigExporter::class),
                 arguments(arrayOf("--run-rule", "RuleSet:Rule"), Runner::class),
                 arguments(arrayOf("--version"), VersionPrinter::class),
                 arguments(emptyArray<String>(), Runner::class),
             )
-        }
 
         @ParameterizedTest
         @MethodSource("runnerConfigs")

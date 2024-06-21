@@ -70,18 +70,16 @@ class ViolatesTypeResolutionRequirements(config: Config) : Rule(
 }
 
 context(Rule)
-private inline fun <reified T : Any> KtClass.extendsFrom(kClass: KClass<T>): Boolean {
-    return bindingContext[BindingContext.CLASS, this]
+private inline fun <reified T : Any> KtClass.extendsFrom(kClass: KClass<T>): Boolean =
+    bindingContext[BindingContext.CLASS, this]
         ?.getAllSuperclassesWithoutAny()
         .orEmpty()
         .any { it.fqNameOrNull()?.toString() == checkNotNull(kClass.qualifiedName) }
-}
 
 context(Rule)
-private inline fun <reified T : Any> KtClass.isAnnotatedWith(kClass: KClass<T>): Boolean {
-    return annotationEntries
+private inline fun <reified T : Any> KtClass.isAnnotatedWith(kClass: KClass<T>): Boolean =
+    annotationEntries
         .asSequence()
         .mapNotNull { it.typeReference }
         .mapNotNull { bindingContext[BindingContext.TYPE, it] }
         .any { it.fqNameOrNull()?.toString() == checkNotNull(kClass.qualifiedName) }
-}

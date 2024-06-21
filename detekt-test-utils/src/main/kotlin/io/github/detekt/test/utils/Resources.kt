@@ -16,6 +16,4 @@ fun resource(name: String): URI = resourceUrl(name).toURI()
 
 fun resourceAsPath(name: String): Path = resource(name).toPath()
 
-fun readResourceContent(name: String): String {
-    return resourceUrl(name).readText()
-}
+fun readResourceContent(name: String): String = resourceUrl(name).readText()

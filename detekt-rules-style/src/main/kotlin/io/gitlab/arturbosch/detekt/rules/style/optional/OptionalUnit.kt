@@ -89,8 +89,8 @@ class OptionalUnit(config: Config) : Rule(
         super.visitBlockExpression(expression)
     }
 
-    private fun KtExpression.canBeUsedAsValue(): Boolean {
-        return when (this) {
+    private fun KtExpression.canBeUsedAsValue(): Boolean =
+        when (this) {
             is KtIfExpression -> {
                 val elseExpression = `else`
                 if (elseExpression is KtIfExpression) elseExpression.canBeUsedAsValue() else elseExpression != null
@@ -102,7 +102,6 @@ class OptionalUnit(config: Config) : Rule(
             else ->
                 true
         }
-    }
 
     private fun checkFunctionWithExplicitReturnType(function: KtNamedFunction, typeReference: KtTypeReference) {
         val typeElementText = typeReference.typeElement?.text

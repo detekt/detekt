@@ -117,8 +117,8 @@ class UnnecessaryAny(config: Config) : Rule(
         return statement.shouldStatementBeReported(descriptor)
     }
 
-    private fun KtExpression.shouldStatementBeReported(descriptor: VariableDescriptor): String? {
-        return when {
+    private fun KtExpression.shouldStatementBeReported(descriptor: VariableDescriptor): String? =
+        when {
             this is KtBinaryExpression && operationToken == KtTokens.EQEQ -> {
                 isUsageOfValueAndItEligible(descriptor, left, right)
             }
@@ -136,7 +136,6 @@ class UnnecessaryAny(config: Config) : Rule(
                 if (this.getItUsageCount(descriptor) <= 0) ANY_CAN_BE_OMITTED_MSG else null
             }
         }
-    }
 
     @Suppress("ReturnCount")
     private fun isUsageOfValueAndItEligible(

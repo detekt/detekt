@@ -129,16 +129,14 @@ class OutdatedDocumentation(config: Config) : Rule(
         return typeParams + valueParams
     }
 
-    private fun getPrimaryConstructorDeclarations(constructor: KtPrimaryConstructor): List<Declaration> {
-        return getDeclarationsForValueParameters(constructor.valueParameters)
-    }
+    private fun getPrimaryConstructorDeclarations(constructor: KtPrimaryConstructor): List<Declaration> =
+        getDeclarationsForValueParameters(constructor.valueParameters)
 
-    private fun getSecondaryConstructorDeclarations(constructor: KtSecondaryConstructor): List<Declaration> {
-        return getDeclarationsForValueParameters(constructor.valueParameters)
-    }
+    private fun getSecondaryConstructorDeclarations(constructor: KtSecondaryConstructor): List<Declaration> =
+        getDeclarationsForValueParameters(constructor.valueParameters)
 
-    private fun getDeclarationsForValueParameters(valueParameters: List<KtParameter>): List<Declaration> {
-        return valueParameters.mapNotNull {
+    private fun getDeclarationsForValueParameters(valueParameters: List<KtParameter>): List<Declaration> =
+        valueParameters.mapNotNull {
             it.name?.let { name ->
                 val type = if (it.isPropertyParameter() && it.isPrivate().not()) {
                     if (allowParamOnConstructorProperties) {
@@ -152,14 +150,11 @@ class OutdatedDocumentation(config: Config) : Rule(
                 Declaration(name, type)
             }
         }
-    }
 
-    private fun getDocDeclarations(doc: KDoc): List<Declaration> {
-        return processDocChildren(doc.allChildren)
-    }
+    private fun getDocDeclarations(doc: KDoc): List<Declaration> = processDocChildren(doc.allChildren)
 
-    private fun processDocChildren(children: PsiChildRange): List<Declaration> {
-        return children
+    private fun processDocChildren(children: PsiChildRange): List<Declaration> =
+        children
             .map {
                 when (it) {
                     is KDocSection -> processDocChildren(it.allChildren)
@@ -168,7 +163,6 @@ class OutdatedDocumentation(config: Config) : Rule(
                 }
             }
             .fold(emptyList()) { acc, declarations -> acc + declarations }
-    }
 
     @Suppress("ElseCaseInsteadOfExhaustiveWhen")
     private fun processDocTag(docTag: KDocTag): List<Declaration> {
@@ -217,9 +211,8 @@ class OutdatedDocumentation(config: Config) : Rule(
         return zippedElements.all { (doc, element) -> declarationMatches(doc, element) }
     }
 
-    private fun declarationMatches(doc: Declaration, element: Declaration): Boolean {
-        return element.name == doc.name && (element.type == DeclarationType.ANY || element.type == doc.type)
-    }
+    private fun declarationMatches(doc: Declaration, element: Declaration): Boolean =
+        element.name == doc.name && (element.type == DeclarationType.ANY || element.type == doc.type)
 
     private fun reportCodeSmell(element: KtNamedDeclaration) {
         report(
@@ -230,9 +223,7 @@ class OutdatedDocumentation(config: Config) : Rule(
         )
     }
 
-    private fun String?.toParamOrNull(): Declaration? {
-        return this?.let { Declaration(it, DeclarationType.PARAM) }
-    }
+    private fun String?.toParamOrNull(): Declaration? = this?.let { Declaration(it, DeclarationType.PARAM) }
 
     data class Declaration(
         val name: String,

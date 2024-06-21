@@ -3,8 +3,8 @@ package io.github.detekt.utils
 import java.io.InputStream
 import java.net.URL
 
-fun URL.openSafeStream(): InputStream {
-    return openConnection()
+fun URL.openSafeStream(): InputStream =
+    openConnection()
         /*
          * Due to https://bugs.openjdk.java.net/browse/JDK-6947916 and https://bugs.openjdk.java.net/browse/JDK-8155607,
          * it is necessary to disallow caches to maintain stability on JDK 8 and 11 (and possibly more).
@@ -14,12 +14,7 @@ fun URL.openSafeStream(): InputStream {
          */
         .apply { useCaches = false }
         .getInputStream()
-}
 
-fun <T> Class<T>.getSafeResourceAsStream(name: String): InputStream? {
-    return getResource(name)?.openSafeStream()
-}
+fun <T> Class<T>.getSafeResourceAsStream(name: String): InputStream? = getResource(name)?.openSafeStream()
 
-fun ClassLoader.getSafeResourceAsStream(name: String): InputStream? {
-    return getResource(name)?.openSafeStream()
-}
+fun ClassLoader.getSafeResourceAsStream(name: String): InputStream? = getResource(name)?.openSafeStream()

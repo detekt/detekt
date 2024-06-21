@@ -17,18 +17,14 @@ sealed class FunctionMatcher {
     internal data class NameOnly(
         private val fullyQualifiedName: String
     ) : FunctionMatcher() {
-        override fun match(callableDescriptor: CallableDescriptor): Boolean {
-            return callableDescriptor.fqNameSafe.asString() == fullyQualifiedName
-        }
+        override fun match(callableDescriptor: CallableDescriptor): Boolean =
+            callableDescriptor.fqNameSafe.asString() == fullyQualifiedName
 
-        override fun match(function: KtNamedFunction, bindingContext: BindingContext): Boolean {
-            return function.name == fullyQualifiedName ||
+        override fun match(function: KtNamedFunction, bindingContext: BindingContext): Boolean =
+            function.name == fullyQualifiedName ||
                 function.fqName?.asString() == fullyQualifiedName
-        }
 
-        override fun toString(): String {
-            return fullyQualifiedName
-        }
+        override fun toString(): String = fullyQualifiedName
     }
 
     internal data class WithParameters(
@@ -57,9 +53,7 @@ sealed class FunctionMatcher {
             return encounteredParameters == parameters
         }
 
-        override fun toString(): String {
-            return "$fullyQualifiedName(${parameters.joinToString()})"
-        }
+        override fun toString(): String = "$fullyQualifiedName(${parameters.joinToString()})"
     }
 
     companion object {
@@ -84,13 +78,12 @@ sealed class FunctionMatcher {
     }
 }
 
-private fun KotlinType.getSignatureParameter(): String? {
-    return if (isTypeParameter()) {
+private fun KotlinType.getSignatureParameter(): String? =
+    if (isTypeParameter()) {
         toString()
     } else {
         fqNameOrNull()?.toString()
     }
-}
 
 // Extracted from: https://stackoverflow.com/a/16108347/842697
 private fun String.splitParams(): List<String> {

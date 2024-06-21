@@ -57,10 +57,9 @@ class FunctionParameterNaming(config: Config) : Rule(
         }
     }
 
-    private fun KtParameter.isParameterInFunction(): Boolean {
-        return this.nameAsSafeName.isSpecial ||
+    private fun KtParameter.isParameterInFunction(): Boolean =
+        this.nameAsSafeName.isSpecial ||
             (this.nameIdentifier?.parent?.javaClass == null) ||
             (this.ownerFunction !is KtNamedFunction) ||
             this.isContainingExcludedClass(excludeClassPattern)
-    }
 }

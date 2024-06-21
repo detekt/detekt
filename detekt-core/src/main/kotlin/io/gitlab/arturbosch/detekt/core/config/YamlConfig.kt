@@ -35,9 +35,7 @@ class YamlConfig internal constructor(
         )
     }
 
-    override fun subConfigKeys(): Set<String> {
-        return properties.keys
-    }
+    override fun subConfigKeys(): Set<String> = properties.keys
 
     override fun <T : Any> valueOrDefault(key: String, default: T): T {
         val result = properties[key]
@@ -103,8 +101,8 @@ class YamlConfig internal constructor(
 }
 
 @Suppress("MagicNumber")
-private fun Map<*, *>.toPrettyString(recursive: Int): String {
-    return if (isEmpty()) {
+private fun Map<*, *>.toPrettyString(recursive: Int): String =
+    if (isEmpty()) {
         "{}"
     } else {
         toList()
@@ -116,4 +114,3 @@ private fun Map<*, *>.toPrettyString(recursive: Int): String {
                 }
             }
     }
-}

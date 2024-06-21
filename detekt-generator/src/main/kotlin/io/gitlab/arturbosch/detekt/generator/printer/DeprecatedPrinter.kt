@@ -6,8 +6,8 @@ import io.gitlab.arturbosch.detekt.generator.collection.RuleSetPage
 
 object DeprecatedPrinter : DocumentationPrinter<List<RuleSetPage>> {
     @Suppress("NestedBlockDepth")
-    override fun print(item: List<RuleSetPage>): String {
-        return item.flatMap { ruleSet ->
+    override fun print(item: List<RuleSetPage>): String =
+        item.flatMap { ruleSet ->
             ruleSet.rules.flatMap { rule ->
                 buildList {
                     if (rule.isDeprecated()) {
@@ -24,7 +24,6 @@ object DeprecatedPrinter : DocumentationPrinter<List<RuleSetPage>> {
             .plus(migratedRules())
             .sorted()
             .joinToString("\n", postfix = "\n")
-    }
 }
 
 private fun writeRule(ruleSet: RuleSetPage, rule: Rule): String {

@@ -25,9 +25,7 @@ fun compileContentForTest(
 fun compileContentForTest(
     @Language("kotlin") content: String,
     path: Path = Path("/").absolute().resolve("Test.kt"),
-): KtFile {
-    return KtTestCompiler.createKtFile(content, path)
-}
+): KtFile = KtTestCompiler.createKtFile(content, path)
 
 /**
  * Use this method if you test a kt file/class in the test resources.

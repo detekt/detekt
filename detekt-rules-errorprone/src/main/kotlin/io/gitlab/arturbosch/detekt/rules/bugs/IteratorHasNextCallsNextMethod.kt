@@ -50,7 +50,6 @@ class IteratorHasNextCallsNextMethod(config: Config) : Rule(
         super.visitClassOrObject(classOrObject)
     }
 
-    private fun callsNextMethod(method: KtNamedDeclaration): Boolean {
-        return method.anyDescendantOfType<KtCallExpression> { it.calleeExpression?.text == "next" }
-    }
+    private fun callsNextMethod(method: KtNamedDeclaration): Boolean =
+        method.anyDescendantOfType<KtCallExpression> { it.calleeExpression?.text == "next" }
 }

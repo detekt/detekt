@@ -23,11 +23,10 @@ class SLOCVisitor : DetektVisitor() {
 
         private val comments = arrayOf("//", "/*", "*/", "*")
 
-        fun count(lines: List<String>): Int {
-            return lines
+        fun count(lines: List<String>): Int =
+            lines
                 .map { it.trim() }
                 .count { trim -> trim.isNotEmpty() && !comments.any { trim.startsWith(it) } }
-        }
     }
 }
 

@@ -49,17 +49,16 @@ enum class AutoCorrectConfig {
     False,
     Undefined;
 
-    override fun toString(): String {
-        return when (this) {
+    override fun toString(): String =
+        when (this) {
             True -> "true"
             False -> "false"
             Undefined -> "Undefined"
         }
-    }
 }
 
-private fun createConfig(ruleSet: AutoCorrectConfig, rule: AutoCorrectConfig): String {
-    return buildString {
+private fun createConfig(ruleSet: AutoCorrectConfig, rule: AutoCorrectConfig): String =
+    buildString {
         appendLine("formatting:")
         appendLine("  active: true")
         if (ruleSet != AutoCorrectConfig.Undefined) {
@@ -71,7 +70,6 @@ private fun createConfig(ruleSet: AutoCorrectConfig, rule: AutoCorrectConfig): S
             appendLine("    autoCorrect: $rule")
         }
     }
-}
 
 private fun runRule(config: Config): Pair<KtFile, List<Finding>> {
     val testFile = loadFile("configTests/fixed.kt")

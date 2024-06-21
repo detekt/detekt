@@ -15,9 +15,7 @@ class TestConfig(override val parent: Config?, vararg pairs: Pair<String, Any>) 
 
     override fun subConfig(key: String) = TestConfig(this, *values.map { (key, value) -> key to value }.toTypedArray())
 
-    override fun subConfigKeys(): Set<String> {
-        return values.keys
-    }
+    override fun subConfigKeys(): Set<String> = values.keys
 
     override fun <T : Any> valueOrDefault(key: String, default: T) =
         if (key == Config.ACTIVE_KEY) {
@@ -61,6 +59,4 @@ class TestConfig(override val parent: Config?, vararg pairs: Pair<String, Any>) 
     }
 }
 
-fun ValueWithReason.toConfig(): Map<String, String?> {
-    return mapOf("value" to value, "reason" to reason)
-}
+fun ValueWithReason.toConfig(): Map<String, String?> = mapOf("value" to value, "reason" to reason)

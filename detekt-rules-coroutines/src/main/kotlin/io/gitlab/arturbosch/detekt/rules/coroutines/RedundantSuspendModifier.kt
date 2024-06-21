@@ -72,8 +72,8 @@ class RedundantSuspendModifier(config: Config) : Rule(
         }
     }
 
-    private fun KtExpression.isValidCandidateExpression(): Boolean {
-        return when (this) {
+    private fun KtExpression.isValidCandidateExpression(): Boolean =
+        when (this) {
             is KtOperationReferenceExpression, is KtForExpression, is KtProperty, is KtNameReferenceExpression -> true
             else -> {
                 val parent = parent
@@ -84,7 +84,6 @@ class RedundantSuspendModifier(config: Config) : Rule(
                 }
             }
         }
-    }
 
     private fun KtExpression.hasSuspendCalls(): Boolean {
         if (!isValidCandidateExpression()) return false

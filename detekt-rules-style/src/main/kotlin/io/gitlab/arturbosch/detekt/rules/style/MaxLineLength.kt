@@ -81,12 +81,11 @@ class MaxLineLength(config: Config) : Rule(
         return line.length <= maxLineLength || isIgnoredStatement(file, offset, line) || isUrl || isMarkdownOrRefUrl
     }
 
-    private fun isIgnoredStatement(file: KtFile, offset: Int, line: String): Boolean {
-        return containsIgnoredPackageStatement(line) ||
+    private fun isIgnoredStatement(file: KtFile, offset: Int, line: String): Boolean =
+        containsIgnoredPackageStatement(line) ||
             containsIgnoredImportStatement(line) ||
             containsIgnoredCommentStatement(line) ||
             containsIgnoredRawString(file, offset, line)
-    }
 
     private fun containsIgnoredRawString(file: KtFile, offset: Int, line: String): Boolean {
         if (!excludeRawStrings) return false
@@ -118,13 +117,10 @@ class MaxLineLength(config: Config) : Rule(
         private const val DEFAULT_IDEA_LINE_LENGTH = 120
         private val BLANK_OR_QUOTES = """[\s"]*""".toRegex()
 
-        private fun findFirstMeaningfulKtElementInParents(file: KtFile, offset: Int, line: String): PsiElement? {
-            return findKtElementInParents(file, offset, line)
-                .firstOrNull { !BLANK_OR_QUOTES.matches(it.text) }
-        }
+        private fun findFirstMeaningfulKtElementInParents(file: KtFile, offset: Int, line: String): PsiElement? =
+            findKtElementInParents(file, offset, line).firstOrNull { !BLANK_OR_QUOTES.matches(it.text) }
     }
 }
 
-private fun PsiElement.isInsideRawString(): Boolean {
-    return this is KtStringTemplateExpression || getNonStrictParentOfType<KtStringTemplateExpression>() != null
-}
+private fun PsiElement.isInsideRawString(): Boolean =
+    this is KtStringTemplateExpression || getNonStrictParentOfType<KtStringTemplateExpression>() != null

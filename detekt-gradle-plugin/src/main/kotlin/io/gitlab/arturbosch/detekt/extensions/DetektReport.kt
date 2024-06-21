@@ -14,7 +14,5 @@ abstract class DetektReport @Inject constructor(@get:Internal val type: DetektRe
     @get:OutputFile
     abstract val outputLocation: RegularFileProperty
 
-    override fun toString(): String {
-        return "DetektReport(type='$type', required=$required, outputLocation=$outputLocation)"
-    }
+    override fun toString(): String = "DetektReport(type='$type', required=$required, outputLocation=$outputLocation)"
 }

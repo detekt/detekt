@@ -57,14 +57,12 @@ class TrailingWhitespace(config: Config) : Rule(
         }
     }
 
-    private fun countTrailingWhitespace(line: String): Int {
-        return line.length - line.indexOfLast { it != ' ' && it != '\t' } - 1
-    }
+    private fun countTrailingWhitespace(line: String): Int =
+        line.length - line.indexOfLast { it != ' ' && it != '\t' } - 1
 
     private fun createMessage(line: Int) = "Line ${line + 1} ends with a whitespace."
 
-    private fun findFirstKtElementInParentsOrNull(file: KtFile, offset: Int, line: String): PsiElement? {
-        return findKtElementInParents(file, offset, line)
+    private fun findFirstKtElementInParentsOrNull(file: KtFile, offset: Int, line: String): PsiElement? =
+        findKtElementInParents(file, offset, line)
             .firstOrNull()
-    }
 }

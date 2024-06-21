@@ -18,9 +18,8 @@ class KtFileCountVisitorSpec {
     }
 }
 
-private fun getData(file: KtFile): Int {
-    return with(file) {
+private fun getData(file: KtFile): Int =
+    with(file) {
         accept(KtFileCountVisitor())
         checkNotNull(getUserData(numberOfFilesKey))
     }
-}

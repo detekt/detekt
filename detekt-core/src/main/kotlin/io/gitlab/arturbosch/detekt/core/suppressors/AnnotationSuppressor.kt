@@ -29,20 +29,18 @@ internal fun annotationSuppressorFactory(rule: Rule, bindingContext: BindingCont
     }
 }
 
-private fun KtElement.isAnnotatedWith(excluder: AnnotationExcluder): Boolean {
-    return if (this is KtAnnotated && excluder.shouldExclude(annotationEntries)) {
+private fun KtElement.isAnnotatedWith(excluder: AnnotationExcluder): Boolean =
+    if (this is KtAnnotated && excluder.shouldExclude(annotationEntries)) {
         true
     } else {
         getStrictParentOfType<KtAnnotated>()?.isAnnotatedWith(excluder) ?: false
     }
-}
 
-private fun String.qualifiedNameGlobToRegex(): Regex {
-    return this
+private fun String.qualifiedNameGlobToRegex(): Regex =
+    this
         .replace(".", """\.""")
         .replace("**", "//")
         .replace("*", "[^.]*")
         .replace("//", ".*")
         .replace("?", ".")
         .toRegex()
-}

@@ -81,10 +81,8 @@ class DoubleNegativeExpression(config: Config) : Rule(
         return count == 2
     }
 
-    private fun KtExpression?.isBooleanNotCall(): Boolean {
-        return this is KtCallExpression &&
-            getResolvedCall(bindingContext)?.resultingDescriptor?.fqNameSafe == booleanNotFqName
-    }
+    private fun KtExpression?.isBooleanNotCall(): Boolean =
+        this is KtCallExpression && getResolvedCall(bindingContext)?.resultingDescriptor?.fqNameSafe == booleanNotFqName
 
     companion object {
         private val booleanNotFqName = FqName("kotlin.Boolean.not")

@@ -17,9 +17,7 @@ class NullableBooleanCheckSpec(val env: KotlinCoreEnvironment) {
     /**
      * The recommended replacement string for `?: [fallback]`.
      */
-    private fun replacementForElvis(fallback: Boolean): String {
-        return if (fallback) "!= false" else "== true"
-    }
+    private fun replacementForElvis(fallback: Boolean): String = if (fallback) "!= false" else "== true"
 
     @ParameterizedTest
     @ValueSource(booleans = [true, false])

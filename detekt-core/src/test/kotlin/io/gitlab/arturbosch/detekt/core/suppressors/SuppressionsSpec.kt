@@ -16,9 +16,8 @@ import org.junit.jupiter.params.provider.ValueSource
 
 class SuppressionsSpec {
 
-    private fun KtElement.isSuppressedBy(): Boolean {
-        return isSuppressedBy("RuleName", setOf("alias1", "alias2"), RuleSet.Id("RuleSetId"))
-    }
+    private fun KtElement.isSuppressedBy(): Boolean =
+        isSuppressedBy("RuleName", setOf("alias1", "alias2"), RuleSet.Id("RuleSetId"))
 
     @Nested
     inner class DifferentSuppressLocation {
@@ -279,27 +278,21 @@ class SuppressionsSpec {
     }
 }
 
-private fun KtFile.getClass(): KtElement {
-    return findChildByClass(KtClass::class.java)!!
-}
+private fun KtFile.getClass(): KtElement = findChildByClass(KtClass::class.java)!!
 
-private fun KtFile.getMethod(): KtElement {
-    return findChildByClass(KtClass::class.java)!!
+private fun KtFile.getMethod(): KtElement =
+    findChildByClass(KtClass::class.java)!!
         .body!!
         .children
         .single { it is KtFunction }
         .let { it as KtFunction }
         .bodyBlockExpression!!
-}
 
-private fun KtFile.getMethodParameter(): KtElement {
-    return findChildByClass(KtClass::class.java)!!
+private fun KtFile.getMethodParameter(): KtElement =
+    findChildByClass(KtClass::class.java)!!
         .body!!
         .children
         .single { it is KtFunction }
         .findDescendantOfType<KtParameter>()!!
-}
 
-private fun KtFile.getFunction(): KtElement {
-    return findChildByClass(KtFunction::class.java)!!
-}
+private fun KtFile.getFunction(): KtElement = findChildByClass(KtFunction::class.java)!!

@@ -22,17 +22,16 @@ internal fun Severity.toResultLevel() = when (this) {
     Severity.Info -> Level.Note
 }
 
-private fun Issue.toResult(basePath: String?): io.github.detekt.sarif4k.Result {
-    return io.github.detekt.sarif4k.Result(
+private fun Issue.toResult(basePath: String?): io.github.detekt.sarif4k.Result =
+    io.github.detekt.sarif4k.Result(
         ruleID = "detekt.${ruleInstance.ruleSetId}.${ruleInstance.id}",
         level = severity.toResultLevel(),
         locations = (listOf(location) + references.map { it.location }).map { it.toLocation(basePath) }.distinct(),
         message = Message(text = message)
     )
-}
 
-private fun Location.toLocation(basePath: String?): io.github.detekt.sarif4k.Location {
-    return io.github.detekt.sarif4k.Location(
+private fun Location.toLocation(basePath: String?): io.github.detekt.sarif4k.Location =
+    io.github.detekt.sarif4k.Location(
         physicalLocation = PhysicalLocation(
             region = Region(
                 startLine = source.line.toLong(),
@@ -50,4 +49,3 @@ private fun Location.toLocation(basePath: String?): io.github.detekt.sarif4k.Loc
             }
         )
     )
-}

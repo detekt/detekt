@@ -76,9 +76,7 @@ class LongParameterList(config: Config) : Rule(
         validateConstructor(constructor)
     }
 
-    private fun KtAnnotated.isIgnored(): Boolean {
-        return annotationExcluder.shouldExclude(annotationEntries)
-    }
+    private fun KtAnnotated.isIgnored(): Boolean = annotationExcluder.shouldExclude(annotationEntries)
 
     private fun validateConstructor(constructor: KtConstructor<*>) {
         val owner = constructor.getContainingClassOrObject()

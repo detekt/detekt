@@ -56,11 +56,10 @@ class MapGetWithNotNullAssertionOperator(config: Config) : Rule(
         super.visitPostfixExpression(expression)
     }
 
-    private fun KtPostfixExpression.isMapGet(): Boolean {
-        return this
+    private fun KtPostfixExpression.isMapGet(): Boolean =
+        this
             .baseExpression
             .getResolvedCall(bindingContext)
             ?.resultingDescriptor
             ?.fqNameSafe == FqName("kotlin.collections.Map.get")
-    }
 }

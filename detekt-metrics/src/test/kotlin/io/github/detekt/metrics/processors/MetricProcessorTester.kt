@@ -31,9 +31,7 @@ private class MetricResults : Detektion, UserDataHolderBase() {
         get() = throw UnsupportedOperationException()
     override val metrics: MutableList<ProjectMetric> = mutableListOf()
 
-    override fun add(notification: Notification) {
-        throw UnsupportedOperationException()
-    }
+    override fun add(notification: Notification): Unit = throw UnsupportedOperationException()
 
     override fun add(projectMetric: ProjectMetric) {
         metrics.add(projectMetric)

@@ -165,17 +165,15 @@ class DetektPlugin : Plugin<Project> {
 
 internal const val CONFIGURATION_DETEKT = "detekt"
 
-internal fun ProviderFactory.isWorkerApiEnabled(): Boolean {
-    return gradleProperty("detekt.use.worker.api").getOrElse("false") == "true"
-}
+internal fun ProviderFactory.isWorkerApiEnabled(): Boolean =
+    gradleProperty("detekt.use.worker.api").getOrElse("false") == "true"
 
 @Incubating
-fun getSupportedKotlinVersion(): String {
-    return DetektPlugin::class.java.classLoader.getResources("META-INF/MANIFEST.MF")
+fun getSupportedKotlinVersion(): String =
+    DetektPlugin::class.java.classLoader.getResources("META-INF/MANIFEST.MF")
         .asSequence()
         .mapNotNull { runCatching { readVersion(it) }.getOrNull() }
         .first()
-}
 
 private fun readVersion(resource: URL): String? = resource.openConnection()
     .apply { useCaches = false }

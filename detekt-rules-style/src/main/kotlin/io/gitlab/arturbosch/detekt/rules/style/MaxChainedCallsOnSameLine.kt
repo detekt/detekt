@@ -64,8 +64,8 @@ class MaxChainedCallsOnSameLine(config: Config) : Rule(
         }
     }
 
-    private fun KtExpression.countChainedCalls(): Int {
-        return when (this) {
+    private fun KtExpression.countChainedCalls(): Int =
+        when (this) {
             is KtQualifiedExpression -> when {
                 receiverExpression.isReferenceToPackageOrClass() || callOnNewLine() -> 0
                 else -> receiverExpression.countChainedCalls() + 1
@@ -73,7 +73,6 @@ class MaxChainedCallsOnSameLine(config: Config) : Rule(
             is KtUnaryExpression -> baseExpression?.countChainedCalls() ?: 0
             else -> 0
         }
-    }
 
     private fun KtExpression.isReferenceToPackageOrClass(): Boolean {
         val selectorOrThis = (this as? KtQualifiedExpression)?.selectorExpression ?: this

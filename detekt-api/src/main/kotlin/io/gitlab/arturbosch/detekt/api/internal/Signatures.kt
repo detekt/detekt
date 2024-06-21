@@ -13,9 +13,7 @@ import org.jetbrains.kotlin.psi.psiUtil.startOffsetSkippingComments
 
 private val multipleWhitespaces = Regex("\\s{2,}")
 
-internal fun PsiElement.searchName(): String {
-    return this.namedUnwrappedElement?.name ?: "<UnknownName>"
-}
+internal fun PsiElement.searchName(): String = this.namedUnwrappedElement?.name ?: "<UnknownName>"
 
 /*
  * KtCompiler wrongly used Path.filename as the name for a KtFile instead of the whole path.
@@ -51,14 +49,13 @@ internal fun PsiElement.buildFullSignature(): String {
 private fun PsiElement.extractClassName() =
     this.getNonStrictParentOfType<KtClassOrObject>()?.nameAsSafeName?.asString().orEmpty()
 
-private fun PsiElement.searchSignature(): String {
-    return when (this) {
+private fun PsiElement.searchSignature(): String =
+    when (this) {
         is KtNamedFunction -> buildFunctionSignature(this)
         is KtClassOrObject -> buildClassSignature(this)
         is KtFile -> fileSignature()
         else -> this.text
     }.replace('\n', ' ').replace(multipleWhitespaces, " ")
-}
 
 private fun KtFile.fileSignature() = "${this.packageFqName.asString()}.${this.name}"
 

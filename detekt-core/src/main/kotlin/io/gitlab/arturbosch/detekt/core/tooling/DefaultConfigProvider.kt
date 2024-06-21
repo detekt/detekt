@@ -45,16 +45,11 @@ private fun configInputStream(extensionsSpec: ExtensionsSpec): InputStream {
     return ByteArrayInputStream(outputStream.toByteArray())
 }
 
-private fun ClassLoader.getSafeResourcesAsStreams(name: String): Sequence<InputStream> {
-    return getResources(name)
+private fun ClassLoader.getSafeResourcesAsStreams(name: String): Sequence<InputStream> =
+    getResources(name)
         .asSequence()
         .map { it.openSafeStream() }
-}
 
-private fun ExtensionsSpec.getDefaultConfiguration(): Config {
-    return YamlConfig.load(configInputStream(this).reader())
-}
+private fun ExtensionsSpec.getDefaultConfiguration(): Config = YamlConfig.load(configInputStream(this).reader())
 
-fun ProcessingSpec.getDefaultConfiguration(): Config {
-    return extensionsSpec.getDefaultConfiguration()
-}
+fun ProcessingSpec.getDefaultConfiguration(): Config = extensionsSpec.getDefaultConfiguration()

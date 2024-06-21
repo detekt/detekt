@@ -21,18 +21,16 @@ fun KtLambdaExpression.implicitParameter(bindingContext: BindingContext): ValueP
 fun KtLambdaExpression.hasImplicitParameterReference(
     implicitParameter: ValueParameterDescriptor,
     bindingContext: BindingContext
-): Boolean {
-    return anyDescendantOfType<KtNameReferenceExpression> {
+): Boolean =
+    anyDescendantOfType<KtNameReferenceExpression> {
         it.isImplicitParameterReference(this, implicitParameter, bindingContext)
     }
-}
 
 private fun KtNameReferenceExpression.isImplicitParameterReference(
     lambda: KtLambdaExpression,
     implicitParameter: ValueParameterDescriptor,
     bindingContext: BindingContext
-): Boolean {
-    return text == "it" &&
+): Boolean =
+    text == "it" &&
         getStrictParentOfType<KtLambdaExpression>() == lambda &&
         getResolvedCall(bindingContext)?.resultingDescriptor == implicitParameter
-}

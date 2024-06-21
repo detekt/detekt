@@ -23,11 +23,10 @@ class WrapperSmokeTestSpec {
         assertThat(result).isEmpty()
     }
 
-    fun formattingRules(): List<FormattingRule> {
-        return ClassGraph()
+    fun formattingRules(): List<FormattingRule> =
+        ClassGraph()
             .acceptPackages("io.gitlab.arturbosch.detekt.formatting.wrappers")
             .scan()
             .use { scanResult -> scanResult.getSubclasses(FormattingRule::class.java).loadClasses() }
             .map { it.getDeclaredConstructor(Config::class.java).newInstance(Config.empty) as FormattingRule }
-    }
 }

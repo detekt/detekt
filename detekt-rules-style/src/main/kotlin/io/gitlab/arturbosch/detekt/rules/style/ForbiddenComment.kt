@@ -171,8 +171,8 @@ class ForbiddenComment(config: Config) : Rule(
     }
 }
 
-internal fun String.getCommentContent(): String {
-    return if (this.startsWith("//")) {
+internal fun String.getCommentContent(): String =
+    if (this.startsWith("//")) {
         this.removePrefix("//").removePrefix(" ")
     } else {
         this
@@ -205,7 +205,6 @@ internal fun String.getCommentContent(): String {
             // Reconstruct the comment contents.
             .joinToString("\n")
     }
-}
 
 private fun String.trimIndentIgnoringFirstLine(): String =
     if ('\n' !in this) {

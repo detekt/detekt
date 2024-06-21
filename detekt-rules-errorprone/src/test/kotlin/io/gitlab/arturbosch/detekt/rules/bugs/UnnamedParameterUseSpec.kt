@@ -456,14 +456,13 @@ class UnnamedParameterUseSpec(private val env: KotlinCoreEnvironment) {
     private fun getSubject(
         ignoreSingleParamUse: Boolean = true,
         allowAdjacentDifferentTypeParams: Boolean = true,
-    ): UnnamedParameterUse {
-        return UnnamedParameterUse(
+    ): UnnamedParameterUse =
+        UnnamedParameterUse(
             TestConfig(
                 ALLOW_SINGLE_PARAM_USE to ignoreSingleParamUse,
                 ALLOW_NON_ADJACENT_PARAM to allowAdjacentDifferentTypeParams,
             )
         )
-    }
 
     companion object {
         private const val ALLOW_SINGLE_PARAM_USE = "allowSingleParamUse"

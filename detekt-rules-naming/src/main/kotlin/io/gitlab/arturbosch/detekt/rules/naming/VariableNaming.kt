@@ -62,12 +62,11 @@ class VariableNaming(config: Config) : Rule(
         }
     }
 
-    private fun KtProperty.isPropertyTopLevelOrInCompanion(): Boolean {
-        return this.nameAsSafeName.isSpecial ||
+    private fun KtProperty.isPropertyTopLevelOrInCompanion(): Boolean =
+        this.nameAsSafeName.isSpecial ||
             this.getNonStrictParentOfType<KtObjectDeclaration>() != null ||
             this.isTopLevel ||
             this.nameIdentifier?.parent?.javaClass == null
-    }
 
     private fun report(property: KtProperty, message: String) {
         report(

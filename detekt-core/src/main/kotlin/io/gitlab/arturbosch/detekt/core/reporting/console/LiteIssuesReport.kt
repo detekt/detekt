@@ -10,12 +10,11 @@ class LiteIssuesReport : AbstractIssuesReport() {
 
     override val id: String = "LiteIssuesReport"
 
-    override fun render(issues: List<Issue>): String {
-        return buildString {
+    override fun render(issues: List<Issue>): String =
+        buildString {
             issues.forEach { issue ->
                 append("${issue.location.compact()}: ${issue.message} [${issue.ruleInstance.id}]")
                 appendLine()
             }
         }
-    }
 }

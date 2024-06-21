@@ -8,9 +8,8 @@ import io.gitlab.arturbosch.detekt.api.internal.validateIdentifier
  */
 class RuleSet(val id: Id, val rules: Map<Rule.Name, (Config) -> Rule>) {
     companion object {
-        operator fun invoke(id: Id, rules: List<(Config) -> Rule>): RuleSet {
-            return RuleSet(id, rules.associateBy { it(Config.empty).ruleName })
-        }
+        operator fun invoke(id: Id, rules: List<(Config) -> Rule>): RuleSet =
+            RuleSet(id, rules.associateBy { it(Config.empty).ruleName })
     }
 
     @Poko
@@ -19,8 +18,6 @@ class RuleSet(val id: Id, val rules: Map<Rule.Name, (Config) -> Rule>) {
             validateIdentifier(value)
         }
 
-        override fun toString(): String {
-            return value
-        }
+        override fun toString(): String = value
     }
 }

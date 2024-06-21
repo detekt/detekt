@@ -13,8 +13,8 @@ import java.util.ServiceLoader
 /**
  * Given the existing config, return a list of [ReportingDescriptor] for the rules.
  */
-internal fun toReportingDescriptors(config: Config): List<ReportingDescriptor> {
-    return ServiceLoader.load(RuleSetProvider::class.java, SarifOutputReport::class.java.classLoader)
+internal fun toReportingDescriptors(config: Config): List<ReportingDescriptor> =
+    ServiceLoader.load(RuleSetProvider::class.java, SarifOutputReport::class.java.classLoader)
         .map { it.instance() }
         .flatMap { ruleSet ->
             val ruleSetConfig = config.subConfig(ruleSet.id.value)
@@ -23,7 +23,6 @@ internal fun toReportingDescriptors(config: Config): List<ReportingDescriptor> {
                 rule.toDescriptor(ruleSet.id)
             }
         }
-}
 
 private fun Rule.toDescriptor(ruleSetId: RuleSet.Id): ReportingDescriptor {
     val formattedRuleSetId = ruleSetId.value.lowercase()

@@ -25,9 +25,8 @@ class AnnotationExcluder(
      * Is true if any given annotation name is declared in the SplitPattern
      * which basically describes entries to exclude.
      */
-    fun shouldExclude(annotations: List<KtAnnotationEntry>): Boolean {
-        return annotations.any { annotation -> annotation.typeReference?.let { isExcluded(it, context) } ?: false }
-    }
+    fun shouldExclude(annotations: List<KtAnnotationEntry>): Boolean =
+        annotations.any { annotation -> annotation.typeReference?.let { isExcluded(it, context) } ?: false }
 
     private fun isExcluded(annotation: KtTypeReference, context: BindingContext): Boolean {
         val fqName = if (context == BindingContext.EMPTY) null else annotation.fqNameOrNull(context)
@@ -71,9 +70,8 @@ private fun String.getPackage(): String {
         .joinToString(".")
 }
 
-private fun KtTypeReference.fqNameOrNull(bindingContext: BindingContext): FqName? {
-    return bindingContext[BindingContext.TYPE, this]?.fqNameOrNull()
-}
+private fun KtTypeReference.fqNameOrNull(bindingContext: BindingContext): FqName? =
+    bindingContext[BindingContext.TYPE, this]?.fqNameOrNull()
 
 private operator fun Iterable<Regex>.contains(a: String?): Boolean {
     if (a == null) return false

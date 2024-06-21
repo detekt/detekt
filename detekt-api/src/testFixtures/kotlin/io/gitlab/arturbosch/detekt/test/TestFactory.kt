@@ -73,8 +73,8 @@ fun createIssueForRelativePath(
     ruleInstance: RuleInstance,
     basePath: String = "Users/tester/detekt/",
     relativePath: String = "TestFile.kt"
-): Issue {
-    return IssueImpl(
+): Issue =
+    IssueImpl(
         ruleInstance = ruleInstance,
         entity = createEntity(
             location = Location(
@@ -86,7 +86,6 @@ fun createIssueForRelativePath(
         ),
         message = "TestMessage"
     )
-}
 
 fun createEntity(
     signature: String = "TestEntitySignature",

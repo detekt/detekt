@@ -83,9 +83,7 @@ internal fun CliArgs.createSpec(output: Appendable, error: Appendable): Processi
 }
 
 @OptIn(ExperimentalPathApi::class)
-private fun Iterable<Path>.walk(): Sequence<Path> {
-    return asSequence().flatMap { it.walk() }
-}
+private fun Iterable<Path>.walk(): Sequence<Path> = asSequence().flatMap { it.walk() }
 
 private fun Path.isKotlinFile() = extension in KT_ENDINGS
 

@@ -83,8 +83,8 @@ class DoubleNegativeLambda(config: Config) : Rule(
         }
     }
 
-    private fun KtExpression.isForbiddenNegation(): Boolean {
-        return when (this) {
+    private fun KtExpression.isForbiddenNegation(): Boolean =
+        when (this) {
             is KtOperationReferenceExpression -> operationSignTokenType in negationTokens
             is KtCallExpression -> {
                 text == "not()" ||
@@ -92,7 +92,6 @@ class DoubleNegativeLambda(config: Config) : Rule(
             }
             else -> false
         }
-    }
 
     private fun formatMessage(
         forbiddenChildren: List<KtExpression>,

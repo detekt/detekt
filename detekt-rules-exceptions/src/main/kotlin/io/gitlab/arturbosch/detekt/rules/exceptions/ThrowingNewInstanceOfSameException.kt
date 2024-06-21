@@ -55,11 +55,9 @@ class ThrowingNewInstanceOfSameException(config: Config) : Rule(
         }
     }
 
-    private fun createsSameExceptionType(thrownExpression: KtCallExpression, typeReference: String?): Boolean {
-        return thrownExpression.calleeExpression?.text == typeReference
-    }
+    private fun createsSameExceptionType(thrownExpression: KtCallExpression, typeReference: String?): Boolean =
+        thrownExpression.calleeExpression?.text == typeReference
 
-    private fun hasSameExceptionParameter(valueArguments: List<KtValueArgument>, parameterName: String?): Boolean {
-        return valueArguments.size == 1 && valueArguments.first().text == parameterName
-    }
+    private fun hasSameExceptionParameter(valueArguments: List<KtValueArgument>, parameterName: String?): Boolean =
+        valueArguments.size == 1 && valueArguments.first().text == parameterName
 }

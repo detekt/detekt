@@ -64,8 +64,8 @@ class DetektPrinter(
         }
     }
 
-    private fun markdownHeader(ruleSetName: String): String {
-        return """
+    private fun markdownHeader(ruleSetName: String): String =
+        """
             ---
             title: ${ruleSetName[0].uppercaseChar()}${ruleSetName.substring(1)} Rule Set
             sidebar: home_sidebar
@@ -75,5 +75,4 @@ class DetektPrinter(
             folder: documentation
             ---
         """.trimIndent()
-    }
 }

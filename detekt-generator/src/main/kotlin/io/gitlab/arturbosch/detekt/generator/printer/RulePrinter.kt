@@ -13,8 +13,8 @@ import io.gitlab.arturbosch.detekt.generator.collection.Rule
 
 internal object RulePrinter : DocumentationPrinter<Rule> {
 
-    override fun print(item: Rule): String {
-        return markdown {
+    override fun print(item: Rule): String =
+        markdown {
             if (item.isDeprecated()) {
                 h3 { crossOut { item.name } }
                 paragraph { item.deprecationMessage.orEmpty() }
@@ -49,7 +49,6 @@ internal object RulePrinter : DocumentationPrinter<Rule> {
 
             printRuleCodeExamples(item)
         }
-    }
 
     private fun MarkdownContent.printRuleCodeExamples(rule: Rule) {
         if (rule.nonCompliantCodeExample.isNotEmpty()) {

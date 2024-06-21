@@ -63,12 +63,11 @@ internal fun CompilerSpec.parseLanguageVersion(): LanguageVersion? {
     return languageVersion?.let(::parse)
 }
 
-internal fun CompilerSpec.parseJvmTarget(): JvmTarget {
-    return checkNotNull(JvmTarget.fromString(jvmTarget)) {
+internal fun CompilerSpec.parseJvmTarget(): JvmTarget =
+    checkNotNull(JvmTarget.fromString(jvmTarget)) {
         "Invalid value ($jvmTarget) passed to --jvm-target," +
             " must be one of ${JvmTarget.entries.map(JvmTarget::description)}"
     }
-}
 
 private object NullPrintStream : PrintStream(
     object : OutputStream() {

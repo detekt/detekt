@@ -8,14 +8,13 @@ enum class FailureSeverity {
     Info,
     Never;
 
-    internal fun toSeverity(): Severity {
-        return when (this) {
+    internal fun toSeverity(): Severity =
+        when (this) {
             Error -> Severity.Error
             Warning -> Severity.Warning
             Info -> Severity.Info
             Never -> error("'$this' does not have a corresponding severity.")
         }
-    }
 
     internal companion object {
         fun fromString(value: String): FailureSeverity {

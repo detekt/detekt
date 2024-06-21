@@ -149,8 +149,8 @@ class UseDataClass(config: Config) : Rule(
     private fun KtNamedFunction.isDefaultFunction(
         classType: KotlinType?,
         primaryConstructorParameterTypes: List<KotlinType>
-    ): Boolean {
-        return when (name) {
+    ): Boolean =
+        when (name) {
             !in DEFAULT_FUNCTION_NAMES -> false
             "copy" -> {
                 if (classType != null) {
@@ -166,7 +166,6 @@ class UseDataClass(config: Config) : Rule(
             }
             else -> true
         }
-    }
 
     companion object {
         private val DEFAULT_FUNCTION_NAMES = hashSetOf("hashCode", "equals", "toString", "copy")

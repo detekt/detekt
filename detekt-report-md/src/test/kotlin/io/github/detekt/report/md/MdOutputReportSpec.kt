@@ -174,12 +174,11 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
     }
 }
 
-private fun createMdDetektion(vararg issues: Issue): Detektion {
-    return TestDetektion(
+private fun createMdDetektion(vararg issues: Issue): Detektion =
+    TestDetektion(
         *issues,
         metrics = listOf(ProjectMetric("M1", 10_000), ProjectMetric("M2", 2))
     )
-}
 
 private fun issues(): Array<Issue> {
     val entity1 = createEntity(location = createLocation("src/main/com/sample/Sample1.kt", position = 11 to 5))

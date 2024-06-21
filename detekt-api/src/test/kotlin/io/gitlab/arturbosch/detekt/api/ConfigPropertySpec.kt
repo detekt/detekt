@@ -436,9 +436,7 @@ class ConfigPropertySpec {
                     it.toString()
                 }
 
-                fun useProperty(): String {
-                    return "something with $prop"
-                }
+                fun useProperty(): String = "something with $prop"
             }
 
             @Test

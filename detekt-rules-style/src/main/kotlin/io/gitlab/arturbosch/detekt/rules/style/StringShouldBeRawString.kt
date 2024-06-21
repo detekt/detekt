@@ -142,8 +142,8 @@ class StringShouldBeRawString(config: Config) : Rule(
         }
     }
 
-    private fun KtElement.getRootExpression(): KtElement? {
-        return this.getParentOfTypesAndPredicate(
+    private fun KtElement.getRootExpression(): KtElement? =
+        this.getParentOfTypesAndPredicate(
             false,
             KtBinaryExpression::class.java,
             KtParenthesizedExpression::class.java,
@@ -152,7 +152,6 @@ class StringShouldBeRawString(config: Config) : Rule(
             val parent = (it as KtExpression).parent
             parent !is KtBinaryExpression && parent !is KtParenthesizedExpression
         }?.deparenthesize()
-    }
 
     companion object {
         private val REGEX_FOR_ESCAPE_CHARS = """\\[t"\\n]""".toRegex()

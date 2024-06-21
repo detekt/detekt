@@ -16,12 +16,11 @@ sealed class Markdown(open var content: String = "") {
 data class MarkdownContent(override var content: String = "") : Markdown()
 data class MarkdownList(override var content: String = "") : Markdown()
 
-inline fun markdown(content: MarkdownContent.() -> Unit): String {
-    return MarkdownContent().let { markdown ->
+inline fun markdown(content: MarkdownContent.() -> Unit): String =
+    MarkdownContent().let { markdown ->
         content(markdown)
         markdown.content
     }
-}
 
 inline fun MarkdownContent.markdown(markdown: () -> String): Unit = append(markdown())
 inline fun MarkdownContent.paragraph(content: () -> String): Unit = append("${content()}\n")
@@ -47,14 +46,13 @@ inline fun MarkdownContent.codeBlock(syntax: String = "kotlin", code: () -> Stri
 
 fun MarkdownContent.emptyLine(): Unit = append("")
 
-inline fun MarkdownContent.list(listContent: MarkdownList.() -> Unit) {
-    return MarkdownList().let { list ->
+inline fun MarkdownContent.list(listContent: MarkdownList.() -> Unit): Unit =
+    MarkdownList().let { list ->
         listContent(list)
         if (list.content.isNotEmpty()) {
             append(list.content)
         }
     }
-}
 
 inline fun MarkdownList.item(item: () -> String): Unit = append("* ${item()}\n")
 inline fun MarkdownList.description(description: () -> String): Unit = append("  ${description()}\n")

@@ -40,14 +40,13 @@ class BaselineResultMapping : ReportingExtension {
         return filterByBaseline(baselinePath, this)
     }
 
-    fun filterByBaseline(baselineFile: Path, issues: List<Issue>): List<Issue> {
-        return if (baselineExists(baselineFile)) {
+    fun filterByBaseline(baselineFile: Path, issues: List<Issue>): List<Issue> =
+        if (baselineExists(baselineFile)) {
             val baseline = DefaultBaseline.load(baselineFile)
             issues.filterNot { baseline.contains(it.baselineId) }
         } else {
             issues
         }
-    }
 
     fun createOrUpdate(baselineFile: Path, issues: List<Issue>) {
         val ids = issues.map { it.baselineId }.toSortedSet()

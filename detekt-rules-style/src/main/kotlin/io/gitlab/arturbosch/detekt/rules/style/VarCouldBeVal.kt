@@ -87,9 +87,8 @@ class VarCouldBeVal(config: Config) : Rule(
         private val assignments = mutableMapOf<String, MutableSet<KtExpression>>()
         private val escapeCandidates = mutableMapOf<DeclarationDescriptor, List<KtProperty>>()
 
-        fun getNonReAssignedDeclarations(): List<KtNamedDeclaration> {
-            return declarationCandidates.filterNot { it.hasAssignments() }
-        }
+        fun getNonReAssignedDeclarations(): List<KtNamedDeclaration> =
+            declarationCandidates.filterNot { it.hasAssignments() }
 
         private fun KtNamedDeclaration.hasAssignments(): Boolean {
             val declarationName = nameAsSafeName.toString()
@@ -199,8 +198,8 @@ class VarCouldBeVal(config: Config) : Rule(
             }
         }
 
-        private fun KtProperty.isDeclarationCandidate(): Boolean {
-            return when {
+        private fun KtProperty.isDeclarationCandidate(): Boolean =
+            when {
                 !isVar || isOverride() || (ignoreLateinitVar && isLateinit()) -> false
                 isLocal || isPrivate() -> true
                 else -> {
@@ -211,12 +210,9 @@ class VarCouldBeVal(config: Config) : Rule(
                         ?.containingNonLocalDeclaration() != null
                 }
             }
-        }
 
-        private fun KtProperty.isEscapeCandidate(): Boolean {
-            return !isPrivate() &&
-                (containingClassOrObject as? KtObjectDeclaration)?.isObjectLiteral() == true
-        }
+        private fun KtProperty.isEscapeCandidate(): Boolean =
+            !isPrivate() && (containingClassOrObject as? KtObjectDeclaration)?.isObjectLiteral() == true
 
         private fun visitAssignment(assignedExpression: KtExpression) {
             val name = if (assignedExpression is KtQualifiedExpression) {

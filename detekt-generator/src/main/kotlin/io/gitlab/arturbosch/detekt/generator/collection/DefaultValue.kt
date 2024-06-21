@@ -73,7 +73,5 @@ private data class ValuesWithReasonDefault(private val defaultValue: ValuesWithR
         yaml.listOfMaps(name, asMap)
     }
 
-    override fun printAsMarkdownCode(): String {
-        return defaultValue.map { "'${it.value}'" }.toString()
-    }
+    override fun printAsMarkdownCode(): String = defaultValue.map { "'${it.value}'" }.toString()
 }

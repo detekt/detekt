@@ -76,9 +76,8 @@ class MdOutputReport : BuiltInOutputReport, OutputReport() {
         return "${OffsetDateTime.now(ZoneOffset.UTC).format(formatter)} UTC"
     }
 
-    private fun getComplexityMetrics(detektion: Detektion): List<String> {
-        return ComplexityReportGenerator.create(detektion).generate().orEmpty()
-    }
+    private fun getComplexityMetrics(detektion: Detektion): List<String> =
+        ComplexityReportGenerator.create(detektion).generate().orEmpty()
 }
 
 private fun MarkdownContent.renderMetrics(metrics: Collection<ProjectMetric>) {

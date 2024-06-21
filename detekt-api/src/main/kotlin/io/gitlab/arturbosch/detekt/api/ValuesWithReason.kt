@@ -15,9 +15,8 @@ import dev.drewhamilton.poko.Poko
  *
  * Note that the [config] property delegate only supports the factory methods when defining [ValuesWithReason].
  */
-fun valuesWithReason(vararg values: Pair<String, String?>): ValuesWithReason {
-    return valuesWithReason(values.map { ValueWithReason(it.first, it.second) })
-}
+fun valuesWithReason(vararg values: Pair<String, String?>): ValuesWithReason =
+    valuesWithReason(values.map { ValueWithReason(it.first, it.second) })
 
 /**
  * This factory method can be used by rule authors to specify one or many configuration values along with an
@@ -25,9 +24,7 @@ fun valuesWithReason(vararg values: Pair<String, String?>): ValuesWithReason {
  *
  * Note that the [config] property delegate only supports the factory methods when defining [ValuesWithReason].
  */
-fun valuesWithReason(values: List<ValueWithReason>): ValuesWithReason {
-    return ValuesWithReason(values)
-}
+fun valuesWithReason(values: List<ValueWithReason>): ValuesWithReason = ValuesWithReason(values)
 
 /**
  * [ValuesWithReason] is essentially the same as [List] of [ValueWithReason]. Due to type erasure we cannot use the

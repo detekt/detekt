@@ -563,8 +563,7 @@ class MaxChainedCallsOnSameLineSpec(private val env: KotlinCoreEnvironment) {
         }
     }
 
-    private fun getTestMessage(chainedCalls: Int, maxChainedCalls: Int): String {
-        return "$chainedCalls chained calls on a single line; more than $maxChainedCalls calls should " +
+    private fun getTestMessage(chainedCalls: Int, maxChainedCalls: Int): String =
+        "$chainedCalls chained calls on a single line; more than $maxChainedCalls calls should " +
             "be wrapped to a new line."
-    }
 }

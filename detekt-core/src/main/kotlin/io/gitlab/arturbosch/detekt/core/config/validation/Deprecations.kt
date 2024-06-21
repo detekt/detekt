@@ -17,8 +17,8 @@ internal data class DeprecatedProperty(
     val description: String
 ) : Deprecation()
 
-internal fun loadDeprecations(): Set<Deprecation> {
-    return ValidationSettings::class.java.classLoader
+internal fun loadDeprecations(): Set<Deprecation> =
+    ValidationSettings::class.java.classLoader
         .getResource("deprecation.properties")!!
         .openSafeStream()
         .use { inputStream ->
@@ -26,13 +26,11 @@ internal fun loadDeprecations(): Set<Deprecation> {
                 .apply { load(inputStream) }
                 .toDeprecations()
         }
-}
 
-private fun Properties.toDeprecations(): Set<Deprecation> {
-    return entries
+private fun Properties.toDeprecations(): Set<Deprecation> =
+    entries
         .map { deprecationFromPath(it.key as String, it.value as String) }
         .toSet()
-}
 
 private fun deprecationFromPath(path: String, description: String): Deprecation {
     val pathElements = path.split(">")

@@ -87,12 +87,11 @@ class UtilityClassWithPublicConstructor(config: Config) : Rule(
         super.visitClass(klass)
     }
 
-    private fun canBeCheckedForUtilityClass(klass: KtClass): Boolean {
-        return !klass.isInterface() &&
+    private fun canBeCheckedForUtilityClass(klass: KtClass): Boolean =
+        !klass.isInterface() &&
             !klass.superTypeListEntries.any() &&
             !klass.isAnnotation() &&
             !klass.isSealed()
-    }
 
     private fun hasOnlyUtilityClassMembers(declarations: List<KtDeclaration>?): Boolean {
         if (declarations.isNullOrEmpty()) {

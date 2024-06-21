@@ -43,13 +43,11 @@ class EmptyDefaultConstructor(config: Config) : EmptyRule(config = config) {
             constructor.annotationEntries.isEmpty() &&
             constructor.valueParameters.isEmpty()
 
-    private fun hasPublicVisibility(visibility: KtModifierKeywordToken?): Boolean {
-        return visibility == null || visibility == KtTokens.PUBLIC_KEYWORD
-    }
+    private fun hasPublicVisibility(visibility: KtModifierKeywordToken?): Boolean =
+        visibility == null || visibility == KtTokens.PUBLIC_KEYWORD
 
-    private fun isNotCalled(constructor: KtPrimaryConstructor): Boolean {
-        return constructor.getContainingClassOrObject().secondaryConstructors.none {
+    private fun isNotCalled(constructor: KtPrimaryConstructor): Boolean =
+        constructor.getContainingClassOrObject().secondaryConstructors.none {
             it.getDelegationCall().isCallToThis && it.getDelegationCall().valueArguments.isEmpty()
         }
-    }
 }

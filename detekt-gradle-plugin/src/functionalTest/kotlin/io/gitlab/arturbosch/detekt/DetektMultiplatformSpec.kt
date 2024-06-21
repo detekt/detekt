@@ -352,8 +352,8 @@ class DetektMultiplatformSpec {
     }
 }
 
-private fun setupProject(projectLayoutAction: ProjectLayout.() -> Unit): DslGradleRunner {
-    return DslGradleRunner(
+private fun setupProject(projectLayoutAction: ProjectLayout.() -> Unit): DslGradleRunner =
+    DslGradleRunner(
         projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 0).apply { projectLayoutAction() },
         buildFileName = "build.gradle.kts",
         mainBuildFileContent = """
@@ -369,7 +369,6 @@ private fun setupProject(projectLayoutAction: ProjectLayout.() -> Unit): DslGrad
     ).also {
         it.setupProject()
     }
-}
 
 private fun setupAndroidProject(projectLayoutAction: ProjectLayout.() -> Unit): DslGradleRunner {
     val gradleRunner = setupProject { projectLayoutAction() }
@@ -412,8 +411,8 @@ private val DETEKT_BLOCK = """
     }
 """.trimIndent()
 
-fun isXCodeInstalled(): Boolean {
-    return try {
+fun isXCodeInstalled(): Boolean =
+    try {
         val process = ProcessBuilder()
             .command("xcode-select", "--print-path")
             .start()
@@ -422,4 +421,3 @@ fun isXCodeInstalled(): Boolean {
     } catch (ignored: Throwable) {
         false
     }
-}
