@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.core.rules
 
 import io.github.detekt.test.utils.resourceAsPath
+import io.github.detekt.tooling.api.spec.RulesSpec.RunPolicy.DisableDefaultRuleSets
 import io.github.detekt.tooling.api.spec.RulesSpec.RunPolicy.RestrictToSingleRule
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
@@ -37,7 +38,7 @@ class RuleSetsSpec {
 
     @Test
     fun `does not load any default rule set provider when opt out`() {
-        val providers = createNullLoggingSpec { extensions { disableDefaultRuleSets = true } }
+        val providers = createNullLoggingSpec { rules { runPolicy = DisableDefaultRuleSets } }
             .withSettings { createRuleProviders() }
 
         assertThat(providers.map { it.ruleSetId.value })

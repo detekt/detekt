@@ -2,6 +2,7 @@ package io.github.detekt.compiler.plugin.internal
 
 import io.github.detekt.compiler.plugin.Keys
 import io.github.detekt.tooling.api.spec.ProcessingSpec
+import io.github.detekt.tooling.api.spec.RulesSpec
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import kotlin.io.path.Path
@@ -27,11 +28,13 @@ internal fun CompilerConfiguration.toSpec(log: MessageCollector) = ProcessingSpe
             report { it.key to it.value }
         }
     }
-    extensions {
-        disableDefaultRuleSets = get(Keys.DISABLE_DEFAULT_RULE_SETS, false)
-    }
     rules {
         activateAllRules = get(Keys.ALL_RULES, false)
+        runPolicy = if (get(Keys.DISABLE_DEFAULT_RULE_SETS, false)) {
+            RulesSpec.RunPolicy.DisableDefaultRuleSets
+        } else {
+            RulesSpec.RunPolicy.NoRestrictions
+        }
     }
     execution {
         parallelAnalysis = get(Keys.PARALLEL, false)

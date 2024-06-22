@@ -118,7 +118,6 @@ public abstract interface class io/github/detekt/tooling/api/spec/ExecutionSpec 
 }
 
 public abstract interface class io/github/detekt/tooling/api/spec/ExtensionsSpec {
-	public abstract fun getDisableDefaultRuleSets ()Z
 	public abstract fun getDisabledExtensions ()Ljava/util/Set;
 	public abstract fun getPlugins ()Lio/github/detekt/tooling/api/spec/ExtensionsSpec$Plugins;
 }
@@ -197,6 +196,13 @@ public final class io/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy$Nev
 public abstract class io/github/detekt/tooling/api/spec/RulesSpec$RunPolicy {
 }
 
+public final class io/github/detekt/tooling/api/spec/RulesSpec$RunPolicy$DisableDefaultRuleSets : io/github/detekt/tooling/api/spec/RulesSpec$RunPolicy {
+	public static final field INSTANCE Lio/github/detekt/tooling/api/spec/RulesSpec$RunPolicy$DisableDefaultRuleSets;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class io/github/detekt/tooling/api/spec/RulesSpec$RunPolicy$NoRestrictions : io/github/detekt/tooling/api/spec/RulesSpec$RunPolicy {
 	public static final field INSTANCE Lio/github/detekt/tooling/api/spec/RulesSpec$RunPolicy$NoRestrictions;
 	public fun equals (Ljava/lang/Object;)Z
@@ -271,9 +277,7 @@ public final class io/github/detekt/tooling/dsl/ExtensionsSpecBuilder : io/githu
 	public final fun disableExtension (Ljava/lang/String;)V
 	public final fun fromClassloader (Lkotlin/jvm/functions/Function0;)V
 	public final fun fromPaths (Lkotlin/jvm/functions/Function0;)V
-	public final fun getDisableDefaultRuleSets ()Z
 	public final fun getPlugins ()Lio/github/detekt/tooling/api/spec/ExtensionsSpec$Plugins;
-	public final fun setDisableDefaultRuleSets (Z)V
 	public final fun setPlugins (Lio/github/detekt/tooling/api/spec/ExtensionsSpec$Plugins;)V
 }
 

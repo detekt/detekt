@@ -7,29 +7,25 @@ import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.extensions.LIST_ITEM_SPACING
 import java.util.ServiceLoader
 
-fun ProcessingSettings.createRuleProviders(): List<RuleSetProvider> = when (val runPolicy = spec.rulesSpec.runPolicy) {
-    RulesSpec.RunPolicy.NoRestrictions -> RuleSetLocator(this).load()
-    is RulesSpec.RunPolicy.RestrictToSingleRule -> {
-        val ruleSetId = runPolicy.ruleSetId
-        val ruleName = runPolicy.ruleName
-        val realProvider = requireNotNull(
-            RuleSetLocator(this).load().find { it.ruleSetId == ruleSetId }
-        ) { "There was no rule set with id '$ruleSetId'." }
-        listOf(SingleRuleProvider(ruleName, realProvider))
+fun ProcessingSettings.createRuleProviders(): List<RuleSetProvider> {
+    val ruleSetProviders = ServiceLoader.load(RuleSetProvider::class.java, pluginLoader)
+        .filterNot { it.ruleSetId.value in spec.extensionsSpec.disabledExtensions }
+
+    return when (val runPolicy = spec.rulesSpec.runPolicy) {
+        RulesSpec.RunPolicy.NoRestrictions -> ruleSetProviders
+
+        RulesSpec.RunPolicy.DisableDefaultRuleSets ->
+            ruleSetProviders
+                .filterNot { it is DefaultRuleSetProvider }
+
+        is RulesSpec.RunPolicy.RestrictToSingleRule -> {
+            val ruleSetId = runPolicy.ruleSetId
+            val ruleName = runPolicy.ruleName
+            val realProvider = requireNotNull(ruleSetProviders.find { it.ruleSetId == ruleSetId }) {
+                "There was no rule set with id '$ruleSetId'."
+            }
+            listOf(SingleRuleProvider(ruleName, realProvider))
+        }
     }
-}
-
-private class RuleSetLocator(private val settings: ProcessingSettings) {
-
-    private val excludeDefaultRuleSets: Boolean = settings.spec.extensionsSpec.disableDefaultRuleSets
-
-    fun load(): List<RuleSetProvider> =
-        ServiceLoader.load(RuleSetProvider::class.java, settings.pluginLoader)
-            .filterNot { it.ruleSetId.value in settings.spec.extensionsSpec.disabledExtensions }
-            .filter(::shouldIncludeProvider)
-            .also { settings.debug { "Registered rule sets: $LIST_ITEM_SPACING${it.joinToString(LIST_ITEM_SPACING)}" } }
-
-    private fun shouldIncludeProvider(provider: RuleSetProvider) =
-        !excludeDefaultRuleSets ||
-            (excludeDefaultRuleSets && provider !is DefaultRuleSetProvider)
+        .also { debug { "Registered rule sets: $LIST_ITEM_SPACING${it.joinToString(LIST_ITEM_SPACING)}" } }
 }
