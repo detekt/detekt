@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.cli
 import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.github.detekt.tooling.api.spec.RulesSpec
 import io.github.detekt.utils.PathFilters
-import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import java.nio.file.Path
 import kotlin.io.path.ExperimentalPathApi
@@ -97,6 +96,6 @@ private fun asPatterns(rawValue: String): List<String> = rawValue.trim()
 
 private fun CliArgs.toRunPolicy(): RulesSpec.RunPolicy {
     val parts = runRule?.split(":") ?: return RulesSpec.RunPolicy.NoRestrictions
-    require(parts.size == 2) { "Pattern 'RuleSetId:RuleName' expected." }
-    return RulesSpec.RunPolicy.RestrictToSingleRule(RuleSet.Id(parts[0]), Rule.Name(parts[1]))
+    require(parts.size == 2) { "Pattern 'RuleSetId:RuleId' expected." }
+    return RulesSpec.RunPolicy.RestrictToSingleRule(RuleSet.Id(parts[0]), parts[1])
 }

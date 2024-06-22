@@ -97,15 +97,24 @@ internal class Analyzer(
             .flatMap { (ruleSet, ruleSetConfig) ->
                 ruleSetConfig.subConfigKeys()
                     .asSequence()
-                    .mapNotNull { runCatching { Rule.Name(it) }.getOrNull() }
-                    .mapNotNull { ruleName ->
-                        ruleSet.rules[ruleName]?.let { it to ruleSetConfig.subConfig(ruleName.value) }
+                    .mapNotNull { ruleInstanceId ->
+                        extractRuleName(ruleInstanceId)?.let { ruleName -> ruleInstanceId to ruleName }
                     }
-                    .filter { (_, config) -> config.isActiveOrDefault(false) }
-                    .filter { (_, config) -> config.shouldAnalyzeFile(file, settings.spec.projectSpec.basePath) }
-                    .map { (ruleProvider, config) ->
+                    .mapNotNull { (ruleInstanceId, ruleName) ->
+                        ruleSet.rules[ruleName]
+                            ?.let { ruleProvider ->
+                                RuleDescriptor(
+                                    ruleProvider = ruleProvider,
+                                    config = ruleSetConfig.subConfig(ruleInstanceId),
+                                    ruleInstanceId = ruleInstanceId
+                                )
+                            }
+                    }
+                    .filter { (_, config, _) -> config.isActiveOrDefault(false) }
+                    .filter { (_, config, _) -> config.shouldAnalyzeFile(file, settings.spec.projectSpec.basePath) }
+                    .map { (ruleProvider, config, ruleInstanceId) ->
                         val rule = ruleProvider(config)
-                        rule.toRuleInstance(rule.ruleName.value, ruleSet.id) to rule
+                        rule.toRuleInstance(ruleInstanceId, ruleSet.id) to rule
                     }
             }
             .filterNot { (ruleInstance, rule) ->
@@ -144,6 +153,11 @@ internal class Analyzer(
             }
     }
 }
+
+internal fun extractRuleName(key: String): Rule.Name? =
+    runCatching { Rule.Name(key.split("/", limit = 2).first()) }.getOrNull()
+
+private data class RuleDescriptor(val ruleProvider: (Config) -> Rule, val config: Config, val ruleInstanceId: String)
 
 private fun List<Finding>.filterSuppressedFindings(rule: Rule, bindingContext: BindingContext): List<Finding> {
     val suppressors = buildSuppressors(rule, bindingContext)

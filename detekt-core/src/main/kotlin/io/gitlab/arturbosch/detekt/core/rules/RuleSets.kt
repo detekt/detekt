@@ -5,16 +5,20 @@ import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.extensions.LIST_ITEM_SPACING
+import io.gitlab.arturbosch.detekt.core.extractRuleName
 import java.util.ServiceLoader
 
 fun ProcessingSettings.createRuleProviders(): List<RuleSetProvider> = when (val runPolicy = spec.rulesSpec.runPolicy) {
     RulesSpec.RunPolicy.NoRestrictions -> RuleSetLocator(this).load()
     is RulesSpec.RunPolicy.RestrictToSingleRule -> {
         val ruleSetId = runPolicy.ruleSetId
-        val ruleName = runPolicy.ruleName
+        val ruleId = runPolicy.ruleId
         val realProvider = requireNotNull(
             RuleSetLocator(this).load().find { it.ruleSetId == ruleSetId }
         ) { "There was no rule set with id '$ruleSetId'." }
+        val ruleName = requireNotNull(extractRuleName(ruleId)) {
+            "There was not rule '$ruleId' in rule set '$ruleSetId'."
+        }
         listOf(SingleRuleProvider(ruleName, realProvider))
     }
 }

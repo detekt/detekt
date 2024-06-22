@@ -136,6 +136,30 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
+        fun `with multiple instances of same rule`() {
+            val testFile = path.resolve("Test.kt")
+            val output = StringPrintStream()
+            val settings = createProcessingSettings(
+                testFile,
+                yamlConfigFromContent(
+                    """
+                        custom:
+                          MaxLineLength/foo:
+                            active: true
+                            maxLineLength: 30
+                          MaxLineLength/bar:
+                            active: true
+                            maxLineLength: 30
+                    """.trimIndent()
+                ),
+                outputChannel = output,
+            )
+            val analyzer = Analyzer(settings, listOf(CustomRuleSetProvider()), emptyList())
+
+            assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) }).hasSize(2)
+        }
+
+        @Test
         fun `with findings and context binding`() {
             val testFile = path.resolve("Test.kt")
             val output = StringPrintStream()
