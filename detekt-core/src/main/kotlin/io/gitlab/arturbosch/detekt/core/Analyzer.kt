@@ -26,6 +26,7 @@ import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactoryImpl
+import java.nio.file.Path
 import kotlin.reflect.full.hasAnnotation
 
 internal class Analyzer(
@@ -41,57 +42,11 @@ internal class Analyzer(
 
         val dataFlowValueFactory = DataFlowValueFactoryImpl(languageVersionSettings)
         val compilerResources = CompilerResources(languageVersionSettings, dataFlowValueFactory)
-        if (bindingContext == BindingContext.EMPTY) {
-            warnAboutEnabledRequiresTypeResolutionRules()
-        }
-        return if (settings.spec.executionSpec.parallelAnalysis) {
-            runAsync(ktFiles, bindingContext, compilerResources)
-        } else {
-            runSync(ktFiles, bindingContext, compilerResources)
-        }
-    }
 
-    private fun runSync(
-        ktFiles: Collection<KtFile>,
-        bindingContext: BindingContext,
-        compilerResources: CompilerResources
-    ): List<Issue> =
-        ktFiles.flatMap { file ->
-            processors.forEach { it.onProcess(file) }
-            val issues = runCatching { analyze(file, bindingContext, compilerResources) }
-                .onFailure { throwIllegalStateException(file, it) }
-                .getOrDefault(emptyList())
-            processors.forEach { it.onProcessComplete(file, issues) }
-            issues
-        }
-
-    private fun runAsync(
-        ktFiles: Collection<KtFile>,
-        bindingContext: BindingContext,
-        compilerResources: CompilerResources
-    ): List<Issue> {
-        val service = settings.taskPool
-        val tasks: TaskList<List<Issue>?> = ktFiles.map { file ->
-            service.task {
-                processors.forEach { it.onProcess(file) }
-                val issues = analyze(file, bindingContext, compilerResources)
-                processors.forEach { it.onProcessComplete(file, issues) }
-                issues
-            }.recover { throwIllegalStateException(file, it) }
-        }
-        return awaitAll(tasks).filterNotNull().flatten()
-    }
-
-    private fun analyze(
-        file: KtFile,
-        bindingContext: BindingContext,
-        compilerResources: CompilerResources
-    ): List<Issue> {
         val activeRuleSetsToRuleSetConfigs = providers.asSequence()
             .map { it to settings.config.subConfig(it.ruleSetId.value) }
             .filter { (_, ruleSetConfig) -> ruleSetConfig.isActiveOrDefault(true) }
             .map { (provider, ruleSetConfig) -> provider.instance() to ruleSetConfig }
-            .filter { (_, ruleSetConfig) -> ruleSetConfig.shouldAnalyzeFile(file, settings.spec.projectSpec.basePath) }
 
         val (correctableRules, otherRules) = activeRuleSetsToRuleSetConfigs
             .flatMap { (ruleSet, ruleSetConfig) ->
@@ -102,47 +57,86 @@ internal class Analyzer(
                         ruleSet.rules[ruleName]?.let { it to ruleSetConfig.subConfig(ruleName.value) }
                     }
                     .filter { (_, config) -> config.isActiveOrDefault(false) }
-                    .filter { (_, config) -> config.shouldAnalyzeFile(file, settings.spec.projectSpec.basePath) }
                     .map { (ruleProvider, config) ->
                         val rule = ruleProvider(config)
                         rule.toRuleInstance(rule.ruleName.value, ruleSet.id) to rule
                     }
             }
-            .filterNot { (ruleInstance, rule) ->
-                file.isSuppressedBy(ruleInstance.id, rule.aliases, ruleInstance.ruleSetId)
-            }
             .filter { (_, rule) ->
-                bindingContext != BindingContext.EMPTY || !rule::class.hasAnnotation<RequiresTypeResolution>()
+                (bindingContext != BindingContext.EMPTY || !rule::class.hasAnnotation<RequiresTypeResolution>()).also {
+                    if (!it) {
+                        settings.debug { "The rule '${rule.ruleName}' requires type resolution but it was run without it." }
+                    }
+                }
             }
             .partition { (_, rule) -> rule.autoCorrect }
 
-        return (correctableRules + otherRules).flatMap { (ruleInstance, rule) ->
-            rule.visitFile(file, bindingContext, compilerResources)
-                .filterNot {
-                    it.entity.ktElement?.isSuppressedBy(ruleInstance.id, rule.aliases, ruleInstance.ruleSetId) == true
-                }
-                .filterSuppressedFindings(rule, bindingContext)
-                .map { it.toIssue(ruleInstance, rule.computeSeverity()) }
+        return if (settings.spec.executionSpec.parallelAnalysis) {
+            runAsync(ktFiles, correctableRules + otherRules, bindingContext, compilerResources)
+        } else {
+            runSync(ktFiles, correctableRules + otherRules, bindingContext, compilerResources)
         }
     }
 
-    private fun warnAboutEnabledRequiresTypeResolutionRules() {
-        providers.asSequence()
-            .map { it to settings.config.subConfig(it.ruleSetId.value) }
-            .filter { (_, ruleSetConfig) -> ruleSetConfig.isActiveOrDefault(true) }
-            .map { (provider, ruleSetConfig) -> provider.instance() to ruleSetConfig }
-            .flatMap { (ruleSet, ruleSetConfig) ->
-                ruleSet.rules
-                    .asSequence()
-                    .map { (ruleName, ruleProvider) -> ruleProvider to ruleSetConfig.subConfig(ruleName.value) }
-                    .filter { (_, config) -> config.isActiveOrDefault(false) }
-                    .map { (ruleProvider, config) -> ruleProvider(config) }
+    private fun runSync(
+        ktFiles: Collection<KtFile>,
+        rules: List<Pair<RuleInstance, Rule>>,
+        bindingContext: BindingContext,
+        compilerResources: CompilerResources
+    ): List<Issue> =
+        ktFiles.flatMap { file ->
+            processors.forEach { it.onProcess(file) }
+            val issues = runCatching { analyze(file, rules, bindingContext, compilerResources) }
+                .onFailure { throwIllegalStateException(file, it) }
+                .getOrDefault(emptyList())
+            processors.forEach { it.onProcessComplete(file, issues) }
+            issues
+        }
+
+    private fun runAsync(
+        ktFiles: Collection<KtFile>,
+        rules: List<Pair<RuleInstance, Rule>>,
+        bindingContext: BindingContext,
+        compilerResources: CompilerResources
+    ): List<Issue> {
+        val service = settings.taskPool
+        val tasks: TaskList<List<Issue>?> = ktFiles.map { file ->
+            service.task {
+                processors.forEach { it.onProcess(file) }
+                val issues = analyze(file, rules, bindingContext, compilerResources)
+                processors.forEach { it.onProcessComplete(file, issues) }
+                issues
+            }.recover { throwIllegalStateException(file, it) }
+        }
+        return awaitAll(tasks).filterNotNull().flatten()
+    }
+
+    private fun analyze(
+        file: KtFile,
+        rules: List<Pair<RuleInstance, Rule>>,
+        bindingContext: BindingContext,
+        compilerResources: CompilerResources
+    ): List<Issue> {
+        return rules
+            .filter { (ruleInstance, rule) ->
+                file.shouldExecuteRule(ruleInstance, rule.config, settings.spec.projectSpec.basePath)
             }
-            .filter { rule -> rule::class.hasAnnotation<RequiresTypeResolution>() }
-            .forEach { rule ->
-                settings.debug { "The rule '${rule.ruleName}' requires type resolution but it was run without it." }
+            .flatMap { (ruleInstance, rule) ->
+                rule.visitFile(file, bindingContext, compilerResources)
+                    .filterNot {
+                        it.entity.ktElement
+                            ?.isSuppressedBy(ruleInstance.id, rule.config.aliases, ruleInstance.ruleSetId) == true
+                    }
+                    .filterSuppressedFindings(rule, bindingContext)
+                    .map { it.toIssue(ruleInstance, rule.computeSeverity()) }
             }
     }
+}
+
+private fun KtFile.shouldExecuteRule(ruleInstance: RuleInstance, ruleConfig: Config, basePath: Path): Boolean {
+    return ruleConfig.shouldAnalyzeFile(this, basePath) &&
+        ruleConfig.parent?.shouldAnalyzeFile(this, basePath) != false &&
+        !isSuppressedBy(ruleInstance.id, ruleConfig.aliases, ruleInstance.ruleSetId)
 }
 
 private fun List<Finding>.filterSuppressedFindings(rule: Rule, bindingContext: BindingContext): List<Finding> {
@@ -212,4 +206,4 @@ internal fun parseToSeverity(severity: String): Severity {
         ?: error("$severity is not a valid Severity. Allowed values are ${Severity.entries}")
 }
 
-private val Rule.aliases: Set<String> get() = config.valueOrDefault(Config.ALIASES_KEY, emptyList<String>()).toSet()
+private val Config.aliases: Set<String> get() = valueOrDefault(Config.ALIASES_KEY, emptyList<String>()).toSet()
