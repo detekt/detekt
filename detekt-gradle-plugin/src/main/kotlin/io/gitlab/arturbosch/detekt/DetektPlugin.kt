@@ -10,6 +10,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.ReportingBasePlugin
 import org.gradle.api.reporting.ReportingExtension
+import org.gradle.util.GradleVersion
 import java.net.URL
 import java.util.jar.Manifest
 
@@ -26,7 +27,11 @@ class DetektPlugin : Plugin<Project> {
         extension.reportsDir = project.extensions.getByType(ReportingExtension::class.java).file("detekt")
 
         val defaultConfigFile =
-            project.file("${project.rootProject.layout.projectDirectory.dir(CONFIG_DIR_NAME)}/$CONFIG_FILE")
+            if (GradleVersion.current() >= GradleVersion.version("8.8")) {
+                project.file("${project.isolated.rootProject.projectDirectory.dir(CONFIG_DIR_NAME)}/${CONFIG_FILE}")
+            } else {
+                project.file("${project.rootProject.layout.projectDirectory.dir(CONFIG_DIR_NAME)}/${CONFIG_FILE}")
+            }
         if (defaultConfigFile.exists()) {
             extension.config.setFrom(project.files(defaultConfigFile))
         }
@@ -36,10 +41,24 @@ class DetektPlugin : Plugin<Project> {
 
         project.registerDetektPlainTask(extension)
         project.registerDetektJvmTasks(extension)
-        if (project.findProperty(DETEKT_ANDROID_DISABLED_PROPERTY) != "true") {
+        @Suppress("DEPRECATION")
+        val enableAndroidTasks =
+            !project.providers
+                .gradleProperty(DETEKT_ANDROID_DISABLED_PROPERTY)
+                .forUseAtConfigurationTime()
+                .getOrElse("false")
+                .toBoolean()
+        if (enableAndroidTasks) {
             project.registerDetektAndroidTasks(extension)
         }
-        if (project.findProperty(DETEKT_MULTIPLATFORM_DISABLED_PROPERTY) != "true") {
+        @Suppress("DEPRECATION")
+        val enableMppTasks =
+            !project.providers
+                .gradleProperty(DETEKT_MULTIPLATFORM_DISABLED_PROPERTY)
+                .forUseAtConfigurationTime()
+                .getOrElse("false")
+                .toBoolean()
+        if (enableMppTasks) {
             project.registerDetektMultiplatformTasks(extension)
         }
         project.registerGenerateConfigTask(extension)
