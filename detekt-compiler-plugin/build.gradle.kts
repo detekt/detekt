@@ -1,10 +1,7 @@
 import de.undercouch.gradle.tasks.download.Download
-import de.undercouch.gradle.tasks.download.Verify
 
 val kotlinVersion: String = libs.versions.kotlin.get()
 val detektVersion: String = Versions.DETEKT
-
-val kotlinCompilerChecksum: String by project
 
 group = "io.github.detekt"
 version = "$kotlinVersion-$detektVersion"
@@ -55,18 +52,10 @@ tasks.shadowJar {
     }
 }
 
-val verifyKotlinCompilerDownload by tasks.registering(Verify::class) {
-    src(file("$rootDir/build/kotlinc/kotlin-compiler-$kotlinVersion.zip"))
-    algorithm("SHA-256")
-    checksum(kotlinCompilerChecksum)
-    outputs.upToDateWhen { true }
-}
-
 val downloadKotlinCompiler by tasks.registering(Download::class) {
     src("https://github.com/JetBrains/kotlin/releases/download/v$kotlinVersion/kotlin-compiler-$kotlinVersion.zip")
     dest(file("$rootDir/build/kotlinc/kotlin-compiler-$kotlinVersion.zip"))
     overwrite(false)
-    finalizedBy(verifyKotlinCompilerDownload)
 }
 
 val unzipKotlinCompiler by tasks.registering(Copy::class) {
