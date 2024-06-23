@@ -7,16 +7,11 @@ import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaBasePlugin
 import org.gradle.api.plugins.JavaPluginExtension
-import org.gradle.api.tasks.TaskProvider
 import org.gradle.jvm.toolchain.JavaToolchainService
 import org.gradle.util.GradleVersion
 
-internal fun Project.registerDetektTask(
-    name: String,
-    extension: DetektExtension,
-    configuration: Detekt.() -> Unit
-): TaskProvider<Detekt> =
-    tasks.register(name, Detekt::class.java) {
+internal fun Project.setDetektTaskDefaults(extension: DetektExtension) {
+    tasks.withType(Detekt::class.java) {
         project.plugins.withType(JavaBasePlugin::class.java) { _ ->
             val toolchain = project.extensions.getByType(JavaPluginExtension::class.java).toolchain
 
@@ -45,15 +40,11 @@ internal fun Project.registerDetektTask(
         }
         it.basePath.convention(extension.basePath.map { basePath -> basePath.asFile.absolutePath })
         it.allRules.convention(extension.allRules)
-        configuration(it)
     }
+}
 
-internal fun Project.registerCreateBaselineTask(
-    name: String,
-    extension: DetektExtension,
-    configuration: DetektCreateBaselineTask.() -> Unit
-): TaskProvider<DetektCreateBaselineTask> =
-    tasks.register(name, DetektCreateBaselineTask::class.java) {
+internal fun Project.setCreateBaselineTaskDefaults(extension: DetektExtension) {
+    tasks.withType(DetektCreateBaselineTask::class.java) {
         project.plugins.withType(JavaBasePlugin::class.java) { _ ->
             val toolchain = project.extensions.getByType(JavaPluginExtension::class.java).toolchain
 
@@ -81,5 +72,5 @@ internal fun Project.registerCreateBaselineTask(
         it.ignoreFailures.convention(extension.ignoreFailures)
         it.basePath.convention(extension.basePath.map { basePath -> basePath.asFile.absolutePath })
         it.allRules.convention(extension.allRules)
-        configuration(it)
     }
+}

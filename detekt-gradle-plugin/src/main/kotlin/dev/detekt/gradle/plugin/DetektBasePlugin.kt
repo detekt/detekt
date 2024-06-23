@@ -1,13 +1,15 @@
 package dev.detekt.gradle.plugin
 
+import io.gitlab.arturbosch.detekt.Detekt
+import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import io.gitlab.arturbosch.detekt.DetektPlugin
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import io.gitlab.arturbosch.detekt.extensions.FailOnSeverity
 import io.gitlab.arturbosch.detekt.extensions.loadDetektVersion
 import io.gitlab.arturbosch.detekt.internal.addVariantName
 import io.gitlab.arturbosch.detekt.internal.existingVariantOrBaseFile
-import io.gitlab.arturbosch.detekt.internal.registerCreateBaselineTask
-import io.gitlab.arturbosch.detekt.internal.registerDetektTask
+import io.gitlab.arturbosch.detekt.internal.setCreateBaselineTaskDefaults
+import io.gitlab.arturbosch.detekt.internal.setDetektTaskDefaults
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.ReportingBasePlugin
@@ -68,7 +70,13 @@ class DetektBasePlugin : Plugin<Project> {
             configuration.isCanBeConsumed = false
         }
 
+        project.setTaskDefaults(extension)
         project.registerSourceSetTasks(extension)
+    }
+
+    private fun Project.setTaskDefaults(extension: DetektExtension) {
+        setDetektTaskDefaults(extension)
+        setCreateBaselineTaskDefaults(extension)
     }
 
     private fun Project.registerSourceSetTasks(extension: DetektExtension) {
@@ -77,9 +85,9 @@ class DetektBasePlugin : Plugin<Project> {
                 .sourceSets
                 .all { sourceSet ->
                     val taskName = "${DetektPlugin.DETEKT_TASK_NAME}${sourceSet.name.capitalize()}SourceSet"
-                    project.registerDetektTask(taskName, extension) {
-                        source = sourceSet.kotlin
-                        baseline.convention(
+                    tasks.register(taskName, Detekt::class.java) { detektTask ->
+                        detektTask.source = sourceSet.kotlin
+                        detektTask.baseline.convention(
                             project.layout.file(
                                 extension.baseline.flatMap {
                                     providers.provider {
@@ -88,14 +96,14 @@ class DetektBasePlugin : Plugin<Project> {
                                 }
                             )
                         )
-                        description = "Run detekt analysis for ${sourceSet.name} source set"
+                        detektTask.description = "Run detekt analysis for ${sourceSet.name} source set"
                     }
 
                     val baseLineTaskName = "${DetektPlugin.BASELINE_TASK_NAME}${sourceSet.name.capitalize()}SourceSet"
-                    project.registerCreateBaselineTask(baseLineTaskName, extension) {
-                        source = sourceSet.kotlin
+                    tasks.register(baseLineTaskName, DetektCreateBaselineTask::class.java) { createBaselineTask ->
+                        createBaselineTask.source = sourceSet.kotlin
 
-                        baseline.convention(
+                        createBaselineTask.baseline.convention(
                             project.layout.file(
                                 extension.baseline.flatMap {
                                     providers.provider { it.asFile.addVariantName("${sourceSet.name}SourceSet") }
@@ -103,7 +111,7 @@ class DetektBasePlugin : Plugin<Project> {
                             )
                         )
 
-                        description = "Creates detekt baseline for ${sourceSet.name} source set"
+                        createBaselineTask.description = "Creates detekt baseline for ${sourceSet.name} source set"
                     }
                 }
         }

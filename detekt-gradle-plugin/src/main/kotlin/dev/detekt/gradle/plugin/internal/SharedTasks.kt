@@ -1,11 +1,11 @@
 package dev.detekt.gradle.plugin.internal
 
+import io.gitlab.arturbosch.detekt.Detekt
+import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import io.gitlab.arturbosch.detekt.DetektPlugin
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import io.gitlab.arturbosch.detekt.internal.addVariantName
 import io.gitlab.arturbosch.detekt.internal.existingVariantOrBaseFile
-import io.gitlab.arturbosch.detekt.internal.registerCreateBaselineTask
-import io.gitlab.arturbosch.detekt.internal.registerDetektTask
 import org.gradle.api.Project
 import org.gradle.util.GradleVersion
 import org.jetbrains.kotlin.gradle.dsl.KotlinCommonOptions
@@ -19,24 +19,24 @@ internal fun Project.registerJvmCompilationDetektTask(
     target: KotlinTarget? = null,
 ) {
     val taskSuffix = if (target != null) compilation.name + target.name.capitalize() else compilation.name
-    registerDetektTask(DetektPlugin.DETEKT_TASK_NAME + taskSuffix.capitalize(), extension) {
+    tasks.register(DetektPlugin.DETEKT_TASK_NAME + taskSuffix.capitalize(), Detekt::class.java) { detektTask ->
         val siblingTask = compilation.compileTaskProvider.get() as KotlinJvmCompile
 
-        setSource(siblingTask.sources)
+        detektTask.setSource(siblingTask.sources)
         if (GradleVersion.current() >= GradleVersion.version("8.8")) {
-            classpath.convention(compilation.output.classesDirs, siblingTask.libraries)
+            detektTask.classpath.convention(compilation.output.classesDirs, siblingTask.libraries)
         } else {
-            classpath.setFrom(compilation.output.classesDirs, siblingTask.libraries)
+            detektTask.classpath.setFrom(compilation.output.classesDirs, siblingTask.libraries)
         }
 
-        baseline.convention(
+        detektTask.baseline.convention(
             project.layout.file(
                 extension.baseline.flatMap {
                     providers.provider { it.asFile.existingVariantOrBaseFile(compilation.name) }
                 }
             )
         )
-        description = if (target != null) {
+        detektTask.description = if (target != null) {
             "EXPERIMENTAL: Run detekt analysis for compilation ${compilation.name} on target " +
                 "${compilation.target.name} with type resolution"
         } else {
@@ -51,24 +51,27 @@ internal fun Project.registerJvmCompilationCreateBaselineTask(
     target: KotlinTarget? = null,
 ) {
     val taskSuffix = if (target != null) compilation.name + target.name.capitalize() else compilation.name
-    registerCreateBaselineTask(DetektPlugin.BASELINE_TASK_NAME + taskSuffix.capitalize(), extension) {
+    tasks.register(
+        DetektPlugin.BASELINE_TASK_NAME + taskSuffix.capitalize(),
+        DetektCreateBaselineTask::class.java,
+    ) { createBaselineTask ->
         val siblingTask = compilation.compileTaskProvider.get() as KotlinJvmCompile
 
-        setSource(siblingTask.sources)
+        createBaselineTask.setSource(siblingTask.sources)
         if (GradleVersion.current() >= GradleVersion.version("8.8")) {
-            classpath.convention(compilation.output.classesDirs, siblingTask.libraries)
+            createBaselineTask.classpath.convention(compilation.output.classesDirs, siblingTask.libraries)
         } else {
-            classpath.setFrom(compilation.output.classesDirs, siblingTask.libraries)
+            createBaselineTask.classpath.setFrom(compilation.output.classesDirs, siblingTask.libraries)
         }
 
-        baseline.convention(
+        createBaselineTask.baseline.convention(
             project.layout.file(
                 extension.baseline.flatMap {
                     providers.provider { it.asFile.addVariantName(compilation.name) }
                 }
             )
         )
-        description = if (target != null) {
+        createBaselineTask.description = if (target != null) {
             "EXPERIMENTAL: Creates detekt baseline for compilation ${compilation.name} on target " +
                 "${compilation.target.name} with type resolution"
         } else {
