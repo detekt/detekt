@@ -13,11 +13,14 @@ import kotlin.io.path.exists
 import kotlin.io.path.isDirectory
 
 class ApiVersionConverter : IStringConverter<ApiVersion> {
-    override fun convert(value: String): ApiVersion =
-        requireNotNull(ApiVersion.parse(value)) {
+    override fun convert(value: String): ApiVersion {
+        val languageVersion = LanguageVersion.fromFullVersionString(value)
+        requireNotNull(languageVersion) {
             val validValues = LanguageVersion.entries.joinToString { it.toString() }
             "\"$value\" passed to --api-version, expected one of [$validValues]"
         }
+        return ApiVersion.createByLanguageVersion(languageVersion)
+    }
 }
 
 class LanguageVersionConverter : IStringConverter<LanguageVersion> {
