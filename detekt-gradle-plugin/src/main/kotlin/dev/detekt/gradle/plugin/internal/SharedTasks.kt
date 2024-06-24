@@ -28,6 +28,11 @@ internal fun Project.registerJvmCompilationDetektTask(
         } else {
             classpath.setFrom(compilation.output.classesDirs, siblingTask.libraries)
         }
+        apiVersion.convention(siblingTask.compilerOptions.apiVersion.map { it.version })
+        languageVersion.convention(siblingTask.compilerOptions.languageVersion.map { it.version })
+        /* Note: jvmTarget convention is also set in setDetektTaskDefaults. There may be a race between setting it here
+           as well, but they should both set the same value. This should possibly be revisited in the future. */
+        jvmTarget.convention(siblingTask.compilerOptions.jvmTarget.map { it.target })
 
         baseline.convention(
             project.layout.file(
@@ -60,6 +65,11 @@ internal fun Project.registerJvmCompilationCreateBaselineTask(
         } else {
             classpath.setFrom(compilation.output.classesDirs, siblingTask.libraries)
         }
+        apiVersion.convention(siblingTask.compilerOptions.apiVersion.map { it.version })
+        languageVersion.convention(siblingTask.compilerOptions.languageVersion.map { it.version })
+        /* Note: jvmTarget convention is also set in setCreateBaselineTaskDefaults. There may be a race between setting
+           it here as well, but they should both set the same value. This should possibly be revisited in the future. */
+        jvmTarget.convention(siblingTask.compilerOptions.jvmTarget.map { it.target })
 
         baseline.convention(
             project.layout.file(
