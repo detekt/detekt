@@ -110,6 +110,7 @@ $dokka.location:io.gitlab.arturbosch.detekt//getSupportedKotlinVersion/#/Pointin
 $dokka.location:io.gitlab.arturbosch.detekt/Detekt///PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/index.html
 $dokka.location:io.gitlab.arturbosch.detekt/Detekt/Detekt/#org.gradle.api.model.ObjectFactory#org.gradle.workers.WorkerExecutor#org.gradle.api.provider.ProviderFactory/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/-detekt.html
 $dokka.location:io.gitlab.arturbosch.detekt/Detekt/allRules/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/all-rules.html
+$dokka.location:io.gitlab.arturbosch.detekt/Detekt/apiVersion/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/api-version.html
 $dokka.location:io.gitlab.arturbosch.detekt/Detekt/autoCorrect/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/auto-correct.html
 $dokka.location:io.gitlab.arturbosch.detekt/Detekt/basePath/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/base-path.html
 $dokka.location:io.gitlab.arturbosch.detekt/Detekt/baseline/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/baseline.html
@@ -133,6 +134,7 @@ $dokka.location:io.gitlab.arturbosch.detekt/Detekt/reports/#org.gradle.api.Actio
 $dokka.location:io.gitlab.arturbosch.detekt/DetektCreateBaselineTask///PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt-create-baseline-task/index.html
 $dokka.location:io.gitlab.arturbosch.detekt/DetektCreateBaselineTask/DetektCreateBaselineTask/#org.gradle.workers.WorkerExecutor#org.gradle.api.provider.ProviderFactory/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt-create-baseline-task/-detekt-create-baseline-task.html
 $dokka.location:io.gitlab.arturbosch.detekt/DetektCreateBaselineTask/allRules/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt-create-baseline-task/all-rules.html
+$dokka.location:io.gitlab.arturbosch.detekt/DetektCreateBaselineTask/apiVersion/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt-create-baseline-task/api-version.html
 $dokka.location:io.gitlab.arturbosch.detekt/DetektCreateBaselineTask/autoCorrect/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt-create-baseline-task/auto-correct.html
 $dokka.location:io.gitlab.arturbosch.detekt/DetektCreateBaselineTask/basePath/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt-create-baseline-task/base-path.html
 $dokka.location:io.gitlab.arturbosch.detekt/DetektCreateBaselineTask/baseline/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt-create-baseline-task/baseline.html
