@@ -62,6 +62,7 @@ fun createKotlinCoreEnvironment(
  * Creates a compiler configuration for the kotlin compiler with all known sources and classpath jars.
  * Be aware that if any path of [pathsToAnalyze] is a directory it is scanned for java and kotlin files.
  */
+@Suppress("LongParameterList")
 fun createCompilerConfiguration(
     pathsToAnalyze: List<Path>,
     classpath: List<String>,
