@@ -5,6 +5,7 @@ import com.beust.jcommander.converters.PathConverter
 import io.github.detekt.tooling.api.spec.RulesSpec
 import io.github.detekt.tooling.api.spec.RulesSpec.FailurePolicy.FailOnSeverity
 import io.github.detekt.tooling.api.spec.RulesSpec.FailurePolicy.NeverFail
+import org.jetbrains.kotlin.config.ApiVersion
 import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
 import java.net.URL
@@ -181,6 +182,14 @@ class CliArgs {
             "Used for type resolution."
     )
     var classpath: String? = null
+
+    @Parameter(
+        names = ["--api-version"],
+        converter = ApiVersionConverter::class,
+        description = "EXPERIMENTAL: Kotlin API version used by the code under analysis. Some rules use this " +
+            "information to provide more specific rule violation messages."
+    )
+    var apiVersion: ApiVersion? = null
 
     @Parameter(
         names = ["--language-version"],

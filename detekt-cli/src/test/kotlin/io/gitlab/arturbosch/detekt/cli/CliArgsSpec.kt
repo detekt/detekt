@@ -270,6 +270,12 @@ internal class CliArgsSpec {
         }
 
         @Test
+        fun `--api-version is accepted`() {
+            val spec = parseArguments(arrayOf("--api-version", "1.9")).toSpec()
+            assertThat(spec.compilerSpec.apiVersion).isEqualTo("1.9")
+        }
+
+        @Test
         fun `--language-version is accepted`() {
             val spec = parseArguments(arrayOf("--language-version", "1.6")).toSpec()
             assertThat(spec.compilerSpec.languageVersion).isEqualTo("1.6")

@@ -4,12 +4,21 @@ import com.beust.jcommander.IStringConverter
 import com.beust.jcommander.IValueValidator
 import com.beust.jcommander.ParameterException
 import com.beust.jcommander.converters.IParameterSplitter
+import org.jetbrains.kotlin.config.ApiVersion
 import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
 import java.net.URL
 import java.nio.file.Path
 import kotlin.io.path.exists
 import kotlin.io.path.isDirectory
+
+class ApiVersionConverter : IStringConverter<ApiVersion> {
+    override fun convert(value: String): ApiVersion =
+        requireNotNull(ApiVersion.parse(value)) {
+            val validValues = LanguageVersion.entries.joinToString { it.toString() }
+            "\"$value\" passed to --api-version, expected one of [$validValues]"
+        }
+}
 
 class LanguageVersionConverter : IStringConverter<LanguageVersion> {
     override fun convert(value: String): LanguageVersion =

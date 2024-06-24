@@ -8,15 +8,17 @@ class CompilerSpecBuilder : Builder<CompilerSpec> {
 
     var jvmTarget: String = "1.8"
     var languageVersion: String? = null
+    var apiVersion: String? = null
     var classpath: String? = null
     var jdkHome: Path? = null
 
-    override fun build(): CompilerSpec = CompilerModel(jvmTarget, languageVersion, classpath, jdkHome)
+    override fun build(): CompilerSpec = CompilerModel(jvmTarget, languageVersion, apiVersion, classpath, jdkHome)
 }
 
 private data class CompilerModel(
     override val jvmTarget: String,
     override val languageVersion: String?,
+    override val apiVersion: String?,
     override val classpath: String?,
     override val jdkHome: Path?,
 ) : CompilerSpec

@@ -65,6 +65,7 @@ fun createKotlinCoreEnvironment(
 fun createCompilerConfiguration(
     pathsToAnalyze: List<Path>,
     classpath: List<String>,
+    apiVersion: ApiVersion?,
     languageVersion: LanguageVersion?,
     jvmTarget: JvmTarget,
     jdkHome: Path?,
@@ -84,10 +85,15 @@ fun createCompilerConfiguration(
 
     val classpathFiles = classpath.map { File(it) }
     val retrievedLanguageVersion = languageVersion ?: classpathFiles.getKotlinLanguageVersion()
+    val retrievedApiVersion = when {
+        apiVersion != null -> apiVersion
+        languageVersion != null -> ApiVersion.createByLanguageVersion(languageVersion)
+        else -> ApiVersion.LATEST_STABLE
+    }
     val languageVersionSettings: LanguageVersionSettings? = retrievedLanguageVersion?.let {
         LanguageVersionSettingsImpl(
             languageVersion = it,
-            apiVersion = ApiVersion.createByLanguageVersion(it)
+            apiVersion = retrievedApiVersion
         )
     }
 
