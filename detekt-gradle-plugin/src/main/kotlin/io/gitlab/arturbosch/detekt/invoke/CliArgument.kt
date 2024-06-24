@@ -70,6 +70,15 @@ internal data class BaselineArgument(val baseline: RegularFile?) : CliArgument()
     override fun toArgument() = baseline?.let { listOf(BASELINE_PARAMETER, it.asFile.absolutePath) }.orEmpty()
 }
 
+internal data class BaselineArgumentOrEmpty(val baseline: RegularFile?) : CliArgument() {
+    override fun toArgument(): List<String> =
+        if (baseline?.asFile?.exists() == true) {
+            listOf(BASELINE_PARAMETER, baseline.asFile.absolutePath)
+        } else {
+            emptyList()
+        }
+}
+
 internal data class DefaultReportArgument(val report: DetektReport) : CliArgument() {
     override fun toArgument(): List<String> =
         if (report.required.get()) {

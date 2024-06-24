@@ -79,12 +79,15 @@ class DetektBasePlugin : Plugin<Project> {
                     val taskName = "${DetektPlugin.DETEKT_TASK_NAME}${sourceSet.name.capitalize()}SourceSet"
                     project.registerDetektTask(taskName, extension) {
                         source = sourceSet.kotlin
-                        // If a baseline file is configured as input file, it must exist to be configured, otherwise the task fails.
-                        // We try to find the configured baseline or alternatively a specific variant matching this task.
-                        extension.baseline.asFile.orNull?.existingVariantOrBaseFile("${sourceSet.name}SourceSet")
-                            ?.let { file ->
-                                baseline.convention(project.layout.file(project.provider { file }))
-                            }
+                        baseline.convention(
+                            project.layout.file(
+                                extension.baseline.flatMap {
+                                    providers.provider {
+                                        it.asFile.existingVariantOrBaseFile("${sourceSet.name}SourceSet")
+                                    }
+                                }
+                            )
+                        )
                         description = "Run detekt analysis for ${sourceSet.name} source set"
                     }
 
@@ -92,9 +95,13 @@ class DetektBasePlugin : Plugin<Project> {
                     project.registerCreateBaselineTask(baseLineTaskName, extension) {
                         source = sourceSet.kotlin
 
-                        val variantBaselineFile =
-                            extension.baseline.asFile.orNull?.addVariantName("${sourceSet.name}SourceSet")
-                        baseline.convention(project.layout.file(project.provider { variantBaselineFile }))
+                        baseline.convention(
+                            project.layout.file(
+                                extension.baseline.flatMap {
+                                    providers.provider { it.asFile.addVariantName("${sourceSet.name}SourceSet") }
+                                }
+                            )
+                        )
 
                         description = "Creates detekt baseline for ${sourceSet.name} source set"
                     }
