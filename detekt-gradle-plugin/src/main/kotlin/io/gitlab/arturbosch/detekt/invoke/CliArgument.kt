@@ -22,6 +22,7 @@ private const val REPORT_PARAMETER = "--report"
 private const val GENERATE_CONFIG_PARAMETER = "--generate-config"
 private const val CREATE_BASELINE_PARAMETER = "--create-baseline"
 private const val CLASSPATH_PARAMETER = "--classpath"
+private const val API_VERSION_PARAMETER = "--api-version"
 private const val LANGUAGE_VERSION_PARAMETER = "--language-version"
 private const val JVM_TARGET_PARAMETER = "--jvm-target"
 private const val JDK_HOME_PARAMETER = "--jdk-home"
@@ -52,6 +53,10 @@ internal data class ClasspathArgument(val fileCollection: FileCollection) : CliA
     } else {
         emptyList()
     }
+}
+
+internal data class ApiVersionArgument(val apiVersion: String?) : CliArgument() {
+    override fun toArgument() = apiVersion?.let { listOf(API_VERSION_PARAMETER, it) }.orEmpty()
 }
 
 internal data class LanguageVersionArgument(val languageVersion: String?) : CliArgument() {

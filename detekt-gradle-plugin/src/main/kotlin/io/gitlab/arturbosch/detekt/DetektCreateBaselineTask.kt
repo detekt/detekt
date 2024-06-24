@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt
 
 import io.gitlab.arturbosch.detekt.invoke.AllRulesArgument
+import io.gitlab.arturbosch.detekt.invoke.ApiVersionArgument
 import io.gitlab.arturbosch.detekt.invoke.AutoCorrectArgument
 import io.gitlab.arturbosch.detekt.invoke.BasePathArgument
 import io.gitlab.arturbosch.detekt.invoke.BaselineArgument
@@ -110,6 +111,10 @@ abstract class DetektCreateBaselineTask @Inject constructor(
 
     @get:Input
     @get:Optional
+    abstract val apiVersion: Property<String>
+
+    @get:Input
+    @get:Optional
     abstract val languageVersion: Property<String>
 
     @get:Internal
@@ -120,6 +125,7 @@ abstract class DetektCreateBaselineTask @Inject constructor(
         get() = listOf(
             CreateBaselineArgument,
             ClasspathArgument(classpath),
+            ApiVersionArgument(apiVersion.orNull),
             LanguageVersionArgument(languageVersion.orNull),
             JvmTargetArgument(jvmTarget.orNull),
             JdkHomeArgument(jdkHome),
