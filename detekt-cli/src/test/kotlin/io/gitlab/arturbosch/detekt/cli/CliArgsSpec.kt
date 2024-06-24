@@ -7,6 +7,8 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
+import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
+import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -270,9 +272,36 @@ internal class CliArgsSpec {
         }
 
         @Test
+        fun `invalid --jvm-target returns error message`() {
+            assertThatIllegalStateException()
+                .isThrownBy { parseArguments(arrayOf("--jvm-target", "2")) }
+                .withMessageStartingWith("Invalid value passed to --jvm-target, expected one of [1.6, 1.8, 9, 10, 11, ")
+        }
+
+        @Test
+        fun `--api-version is accepted`() {
+            val spec = parseArguments(arrayOf("--api-version", "1.9")).toSpec()
+            assertThat(spec.compilerSpec.apiVersion).isEqualTo("1.9")
+        }
+
+        @Test
+        fun `invalid --api-version returns error message`() {
+            assertThatIllegalArgumentException()
+                .isThrownBy { parseArguments(arrayOf("--api-version", "0.1")) }
+                .withMessageStartingWith("\"0.1\" passed to --api-version, expected one of [1.0, 1.1, 1.2, 1.3, 1.4, ")
+        }
+
+        @Test
         fun `--language-version is accepted`() {
             val spec = parseArguments(arrayOf("--language-version", "1.6")).toSpec()
             assertThat(spec.compilerSpec.languageVersion).isEqualTo("1.6")
+        }
+
+        @Test
+        fun `invalid --language-version returns error message`() {
+            assertThatIllegalArgumentException()
+                .isThrownBy { parseArguments(arrayOf("--language-version", "2")) }
+                .withMessageStartingWith("\"2\" passed to --language-version, expected one of [1.0, 1.1, 1.2, 1.3, ")
         }
     }
 

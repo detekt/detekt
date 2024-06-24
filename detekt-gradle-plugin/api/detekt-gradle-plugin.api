@@ -44,6 +44,7 @@ public abstract class io/gitlab/arturbosch/detekt/Detekt : org/gradle/api/tasks/
 	public fun <init> (Lorg/gradle/api/model/ObjectFactory;Lorg/gradle/workers/WorkerExecutor;Lorg/gradle/api/provider/ProviderFactory;)V
 	public final fun check ()V
 	public abstract fun getAllRules ()Lorg/gradle/api/provider/Property;
+	public abstract fun getApiVersion ()Lorg/gradle/api/provider/Property;
 	public abstract fun getAutoCorrect ()Lorg/gradle/api/provider/Property;
 	public abstract fun getBasePath ()Lorg/gradle/api/provider/Property;
 	public abstract fun getBaseline ()Lorg/gradle/api/file/RegularFileProperty;
@@ -69,6 +70,7 @@ public abstract class io/gitlab/arturbosch/detekt/DetektCreateBaselineTask : org
 	public fun <init> (Lorg/gradle/workers/WorkerExecutor;Lorg/gradle/api/provider/ProviderFactory;)V
 	public final fun baseline ()V
 	public abstract fun getAllRules ()Lorg/gradle/api/provider/Property;
+	public abstract fun getApiVersion ()Lorg/gradle/api/provider/Property;
 	public abstract fun getAutoCorrect ()Lorg/gradle/api/provider/Property;
 	public abstract fun getBasePath ()Lorg/gradle/api/provider/Property;
 	public abstract fun getBaseline ()Lorg/gradle/api/file/RegularFileProperty;

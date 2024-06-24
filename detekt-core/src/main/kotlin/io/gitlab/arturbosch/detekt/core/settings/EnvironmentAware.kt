@@ -8,6 +8,7 @@ import io.github.detekt.tooling.api.spec.ProjectSpec
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.com.intellij.openapi.Disposable
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
+import org.jetbrains.kotlin.config.ApiVersion
 import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
 import java.io.Closeable
@@ -36,6 +37,7 @@ internal class EnvironmentFacade(
         val compilerConfiguration = createCompilerConfiguration(
             projectSpec.inputPaths.toList(),
             classpath,
+            compilerSpec.parseApiVersion(),
             compilerSpec.parseLanguageVersion(),
             compilerSpec.parseJvmTarget(),
             compilerSpec.jdkHome,
@@ -54,6 +56,14 @@ internal class EnvironmentFacade(
 
 internal fun CompilerSpec.classpathEntries(): List<String> =
     classpath?.split(File.pathSeparator).orEmpty()
+
+internal fun CompilerSpec.parseApiVersion(): ApiVersion? {
+    fun parse(value: String): ApiVersion {
+        val version = ApiVersion.parse(value)
+        return checkNotNull(version) { "Invalid value passed as API version." }
+    }
+    return apiVersion?.let(::parse)
+}
 
 internal fun CompilerSpec.parseLanguageVersion(): LanguageVersion? {
     fun parse(value: String): LanguageVersion {

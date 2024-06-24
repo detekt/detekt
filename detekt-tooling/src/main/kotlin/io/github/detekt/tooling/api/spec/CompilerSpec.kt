@@ -18,6 +18,11 @@ interface CompilerSpec {
     val languageVersion: String?
 
     /**
+     * Kotlin API version (e.g. 1.0, 1.1, 1.2, 1.3 ...).
+     */
+    val apiVersion: String?
+
+    /**
      * Paths to class files and jars separated by a path separator.
      */
     val classpath: String?

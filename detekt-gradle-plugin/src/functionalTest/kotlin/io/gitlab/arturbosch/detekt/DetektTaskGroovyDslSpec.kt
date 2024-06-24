@@ -49,6 +49,7 @@ class DetektTaskGroovyDslSpec {
                 baseline = file("config.yml")
                 config.setFrom(files("config.yml"))
                 classpath.setFrom(files("config.yml"))
+                apiVersion = "1.5"
                 languageVersion = "1.6"
                 jvmTarget = "1.8"
                 jdkHome = file("path/to/jdk")

@@ -62,9 +62,11 @@ fun createKotlinCoreEnvironment(
  * Creates a compiler configuration for the kotlin compiler with all known sources and classpath jars.
  * Be aware that if any path of [pathsToAnalyze] is a directory it is scanned for java and kotlin files.
  */
+@Suppress("LongParameterList")
 fun createCompilerConfiguration(
     pathsToAnalyze: List<Path>,
     classpath: List<String>,
+    apiVersion: ApiVersion?,
     languageVersion: LanguageVersion?,
     jvmTarget: JvmTarget,
     jdkHome: Path?,
@@ -84,10 +86,15 @@ fun createCompilerConfiguration(
 
     val classpathFiles = classpath.map { File(it) }
     val retrievedLanguageVersion = languageVersion ?: classpathFiles.getKotlinLanguageVersion()
+    val retrievedApiVersion = when {
+        apiVersion != null -> apiVersion
+        languageVersion != null -> ApiVersion.createByLanguageVersion(languageVersion)
+        else -> ApiVersion.LATEST_STABLE
+    }
     val languageVersionSettings: LanguageVersionSettings? = retrievedLanguageVersion?.let {
         LanguageVersionSettingsImpl(
             languageVersion = it,
-            apiVersion = ApiVersion.createByLanguageVersion(it)
+            apiVersion = retrievedApiVersion
         )
     }
 

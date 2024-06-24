@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.extensions.DetektReportType
 import io.gitlab.arturbosch.detekt.extensions.DetektReports
 import io.gitlab.arturbosch.detekt.extensions.FailOnSeverity
 import io.gitlab.arturbosch.detekt.invoke.AllRulesArgument
+import io.gitlab.arturbosch.detekt.invoke.ApiVersionArgument
 import io.gitlab.arturbosch.detekt.invoke.AutoCorrectArgument
 import io.gitlab.arturbosch.detekt.invoke.BasePathArgument
 import io.gitlab.arturbosch.detekt.invoke.BaselineArgumentOrEmpty
@@ -79,6 +80,10 @@ abstract class Detekt @Inject constructor(
 
     @get:Input
     @get:Optional
+    abstract val apiVersion: Property<String>
+
+    @get:Input
+    @get:Optional
     abstract val languageVersion: Property<String>
 
     @get:Input
@@ -139,6 +144,7 @@ abstract class Detekt @Inject constructor(
         get() = listOf(
             InputArgument(source),
             ClasspathArgument(classpath),
+            ApiVersionArgument(apiVersion.orNull),
             LanguageVersionArgument(languageVersion.orNull),
             JvmTargetArgument(jvmTarget.orNull),
             JdkHomeArgument(jdkHome),
