@@ -288,6 +288,13 @@ internal class CliArgsSpec {
             val spec = parseArguments(arrayOf("--language-version", "1.6")).toSpec()
             assertThat(spec.compilerSpec.languageVersion).isEqualTo("1.6")
         }
+
+        @Test
+        fun `invalid --language-version returns error message`() {
+            assertThatIllegalArgumentException()
+                .isThrownBy { parseArguments(arrayOf("--language-version", "2")) }
+                .withMessageStartingWith("\"2\" passed to --language-version, expected one of [1.0, 1.1, 1.2, 1.3, ")
+        }
     }
 
     @Nested
