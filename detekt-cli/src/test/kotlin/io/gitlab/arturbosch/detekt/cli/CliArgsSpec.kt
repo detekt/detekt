@@ -8,6 +8,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
+import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -268,6 +269,13 @@ internal class CliArgsSpec {
         fun `--jvm-target with decimal is accepted`() {
             val spec = parseArguments(arrayOf("--jvm-target", "1.8")).toSpec()
             assertThat(spec.compilerSpec.jvmTarget).isEqualTo("1.8")
+        }
+
+        @Test
+        fun `invalid --jvm-target returns error message`() {
+            assertThatIllegalStateException()
+                .isThrownBy { parseArguments(arrayOf("--jvm-target", "2")) }
+                .withMessageStartingWith("Invalid value passed to --jvm-target, expected one of [1.6, 1.8, 9, 10, 11, ")
         }
 
         @Test
