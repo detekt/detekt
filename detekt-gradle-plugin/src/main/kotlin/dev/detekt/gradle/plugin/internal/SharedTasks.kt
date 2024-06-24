@@ -29,11 +29,13 @@ internal fun Project.registerJvmCompilationDetektTask(
             classpath.setFrom(compilation.output.classesDirs, siblingTask.libraries)
         }
 
-        // If a baseline file is configured as input file, it must exist to be configured, otherwise the task fails.
-        // We try to find the configured baseline or alternatively a specific variant matching this task.
-        extension.baseline.asFile.orNull?.existingVariantOrBaseFile(compilation.name)?.let { baselineFile ->
-            baseline.convention(layout.file(provider { baselineFile }))
-        }
+        baseline.convention(
+            project.layout.file(
+                extension.baseline.flatMap {
+                    providers.provider { it.asFile.existingVariantOrBaseFile(compilation.name) }
+                }
+            )
+        )
         description = if (target != null) {
             "EXPERIMENTAL: Run detekt analysis for compilation ${compilation.name} on target " +
                 "${compilation.target.name} with type resolution"
@@ -59,8 +61,13 @@ internal fun Project.registerJvmCompilationCreateBaselineTask(
             classpath.setFrom(compilation.output.classesDirs, siblingTask.libraries)
         }
 
-        val variantBaselineFile = extension.baseline.asFile.orNull?.addVariantName(compilation.name)
-        baseline.convention(layout.file(provider { variantBaselineFile }))
+        baseline.convention(
+            project.layout.file(
+                extension.baseline.flatMap {
+                    providers.provider { it.asFile.addVariantName(compilation.name) }
+                }
+            )
+        )
         description = if (target != null) {
             "EXPERIMENTAL: Creates detekt baseline for compilation ${compilation.name} on target " +
                 "${compilation.target.name} with type resolution"

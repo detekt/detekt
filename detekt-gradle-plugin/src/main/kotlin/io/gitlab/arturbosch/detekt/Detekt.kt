@@ -6,7 +6,7 @@ import io.gitlab.arturbosch.detekt.extensions.FailOnSeverity
 import io.gitlab.arturbosch.detekt.invoke.AllRulesArgument
 import io.gitlab.arturbosch.detekt.invoke.AutoCorrectArgument
 import io.gitlab.arturbosch.detekt.invoke.BasePathArgument
-import io.gitlab.arturbosch.detekt.invoke.BaselineArgument
+import io.gitlab.arturbosch.detekt.invoke.BaselineArgumentOrEmpty
 import io.gitlab.arturbosch.detekt.invoke.BuildUponDefaultConfigArgument
 import io.gitlab.arturbosch.detekt.invoke.ClasspathArgument
 import io.gitlab.arturbosch.detekt.invoke.CliArgument
@@ -36,7 +36,6 @@ import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.Console
 import org.gradle.api.tasks.IgnoreEmptyDirectories
 import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.Nested
@@ -64,7 +63,7 @@ abstract class Detekt @Inject constructor(
     @get:Classpath
     abstract val pluginClasspath: ConfigurableFileCollection
 
-    @get:InputFile
+    @get:InputFiles // Why not InputFile? See https://github.com/gradle/gradle/issues/2016
     @get:Optional
     @get:PathSensitive(PathSensitivity.RELATIVE)
     abstract val baseline: RegularFileProperty
@@ -144,7 +143,7 @@ abstract class Detekt @Inject constructor(
             JvmTargetArgument(jvmTarget.orNull),
             JdkHomeArgument(jdkHome),
             ConfigArgument(config),
-            BaselineArgument(baseline.orNull),
+            BaselineArgumentOrEmpty(baseline.orNull),
             DefaultReportArgument(reports.xml),
             DefaultReportArgument(reports.html),
             DefaultReportArgument(reports.txt),
