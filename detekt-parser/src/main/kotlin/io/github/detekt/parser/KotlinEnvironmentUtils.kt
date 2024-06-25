@@ -1,9 +1,13 @@
 package io.github.detekt.parser
 
 import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
+import org.jetbrains.kotlin.cli.common.arguments.K2JVMCompilerArguments
+import org.jetbrains.kotlin.cli.common.arguments.parseCommandLineArguments
+import org.jetbrains.kotlin.cli.common.arguments.validateArguments
 import org.jetbrains.kotlin.cli.common.config.addKotlinSourceRoots
 import org.jetbrains.kotlin.cli.common.messages.MessageRenderer
 import org.jetbrains.kotlin.cli.common.messages.PrintingMessageCollector
+import org.jetbrains.kotlin.cli.common.setupLanguageVersionSettings
 import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.cli.jvm.config.addJavaSourceRoots
@@ -13,17 +17,11 @@ import org.jetbrains.kotlin.com.intellij.mock.MockProject
 import org.jetbrains.kotlin.com.intellij.openapi.Disposable
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.com.intellij.pom.PomModel
-import org.jetbrains.kotlin.config.ApiVersion
 import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.config.JVMConfigurationKeys
-import org.jetbrains.kotlin.config.JvmTarget
-import org.jetbrains.kotlin.config.LanguageVersion
-import org.jetbrains.kotlin.config.LanguageVersionSettings
-import org.jetbrains.kotlin.config.LanguageVersionSettingsImpl
 import java.io.File
 import java.io.PrintStream
-import java.net.URLClassLoader
 import java.nio.file.Path
 
 /**
@@ -66,10 +64,11 @@ fun createKotlinCoreEnvironment(
 fun createCompilerConfiguration(
     pathsToAnalyze: List<Path>,
     classpath: List<String>,
-    apiVersion: ApiVersion?,
-    languageVersion: LanguageVersion?,
-    jvmTarget: JvmTarget,
+    apiVersion: String?,
+    languageVersion: String?,
+    jvmTarget: String,
     jdkHome: Path?,
+    printStream: PrintStream,
 ): CompilerConfiguration {
     val javaFiles = pathsToAnalyze.flatMap { path ->
         path.toFile().walk()
@@ -85,27 +84,35 @@ fun createCompilerConfiguration(
     }
 
     val classpathFiles = classpath.map { File(it) }
-    val retrievedLanguageVersion = languageVersion ?: classpathFiles.getKotlinLanguageVersion()
-    val retrievedApiVersion = when {
-        apiVersion != null -> apiVersion
-        languageVersion != null -> ApiVersion.createByLanguageVersion(languageVersion)
-        else -> ApiVersion.LATEST_STABLE
-    }
-    val languageVersionSettings: LanguageVersionSettings? = retrievedLanguageVersion?.let {
-        LanguageVersionSettingsImpl(
-            languageVersion = it,
-            apiVersion = retrievedApiVersion
-        )
+
+    val jvmCompilerArguments = K2JVMCompilerArguments()
+
+    val args = buildList {
+        if (apiVersion != null) {
+            add("-api-version")
+            add(apiVersion)
+        }
+        if (languageVersion != null) {
+            add("-language-version")
+            add(languageVersion)
+        }
+        add("-jvm-target")
+        add(jvmTarget)
     }
 
+    parseCommandLineArguments(args, jvmCompilerArguments)
+
+    validateArguments(jvmCompilerArguments.errors)?.let { throw IllegalStateException(it) }
+
     return CompilerConfiguration().apply {
-        if (languageVersionSettings != null) {
-            put(CommonConfigurationKeys.LANGUAGE_VERSION_SETTINGS, languageVersionSettings)
-        }
-        put(JVMConfigurationKeys.JVM_TARGET, jvmTarget)
         addJavaSourceRoots(javaFiles)
         addKotlinSourceRoots(kotlinFiles)
         addJvmClasspathRoots(classpathFiles)
+        put(
+            CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY,
+            PrintingMessageCollector(printStream, MessageRenderer.PLAIN_FULL_PATHS, false)
+        )
+        setupLanguageVersionSettings(jvmCompilerArguments)
 
         if (jdkHome != null) {
             put(JVMConfigurationKeys.JDK_HOME, jdkHome.toFile())
@@ -114,25 +121,5 @@ fun createCompilerConfiguration(
         }
 
         configureJdkClasspathRoots()
-    }
-}
-
-/**
- * Infer the language version from the files representing classpath.
- */
-internal fun Iterable<File>.getKotlinLanguageVersion(): LanguageVersion? {
-    val urls = map { it.toURI().toURL() }
-    if (urls.isEmpty()) {
-        return null
-    }
-    return URLClassLoader(urls.toTypedArray()).use { classLoader ->
-        runCatching {
-            val clazz = classLoader.loadClass("kotlin.KotlinVersion")
-            val field = clazz.getField("CURRENT")
-            field.isAccessible = true
-            val versionObj = field[null]
-            val versionString = versionObj?.toString()
-            versionString?.let { LanguageVersion.fromFullVersionString(it) }
-        }.getOrNull()
     }
 }
