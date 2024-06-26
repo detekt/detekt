@@ -1,18 +1,20 @@
 package io.github.detekt.parser
 
-import org.jetbrains.kotlin.KtVirtualFileSourceFile
 import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
-import org.jetbrains.kotlin.cli.common.GroupedKtSources
 import org.jetbrains.kotlin.cli.common.config.addKotlinSourceRoots
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity
-import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity.*
+import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity.ERROR
+import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity.EXCEPTION
+import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity.LOGGING
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSourceLocation
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
+import org.jetbrains.kotlin.cli.jvm.compiler.FirKotlinToJvmBytecodeCompiler
+import org.jetbrains.kotlin.cli.jvm.compiler.FirKotlinToJvmBytecodeCompiler.createPendingReporter
+import org.jetbrains.kotlin.cli.jvm.compiler.FirKotlinToJvmBytecodeCompiler.runFrontend
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.cli.jvm.compiler.VfsBasedProjectEnvironment
-import org.jetbrains.kotlin.cli.jvm.compiler.pipeline.ModuleCompilerInput
-import org.jetbrains.kotlin.cli.jvm.compiler.pipeline.compileModuleToAnalyzedFir
+import org.jetbrains.kotlin.cli.jvm.compiler.messageCollector
 import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoots
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.com.intellij.openapi.vfs.StandardFileSystems
@@ -20,12 +22,11 @@ import org.jetbrains.kotlin.com.intellij.openapi.vfs.VirtualFileManager
 import org.jetbrains.kotlin.com.intellij.psi.search.GlobalSearchScope
 import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
-import org.jetbrains.kotlin.diagnostics.DiagnosticReporterFactory
+import org.jetbrains.kotlin.config.JVMConfigurationKeys
+import org.jetbrains.kotlin.fir.extensions.FirExtensionRegistrar
 import org.jetbrains.kotlin.fir.pipeline.FirResult
-import org.jetbrains.kotlin.metadata.jvm.deserialization.JvmProtoBufUtil
+import org.jetbrains.kotlin.load.kotlin.incremental.components.IncrementalCompilationComponents
 import org.jetbrains.kotlin.modules.TargetId
-import org.jetbrains.kotlin.platform.CommonPlatforms
-import org.jetbrains.kotlin.platform.jvm.JvmPlatforms
 import java.io.File
 
 /**
@@ -39,6 +40,7 @@ import java.io.File
 class KotlinFirLoader(
     private val sources: Collection<File>,
     private val classpath: Collection<File>,
+    private val compiler: KtCompiler,
 ) : AutoCloseable {
     private val disposable = Disposer.newDisposable()
 
@@ -67,9 +69,18 @@ class KotlinFirLoader(
         val configuration = CompilerConfiguration()
         configuration.put(CommonConfigurationKeys.MODULE_NAME, targetName)
         configuration.put(CommonConfigurationKeys.USE_FIR, true)
+        configuration.put(CommonConfigurationKeys.USE_LIGHT_TREE, false)
         configuration.put(CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY, messageCollector)
         configuration.addKotlinSourceRoots(sources.map { it.absolutePath })
         configuration.addJvmClasspathRoots(classpath.toList())
+
+        val files = buildList {
+            for (source in sources) {
+                source.walkTopDown().filter { it.isFile }.forEach {
+                    this += compiler.compile(it.toPath())
+                }
+            }
+        }
 
         val environment = KotlinCoreEnvironment.createForProduction(
             disposable,
@@ -77,48 +88,26 @@ class KotlinFirLoader(
             EnvironmentConfigFiles.JVM_CONFIG_FILES,
         )
         val project = environment.project
-
-        val localFileSystem = VirtualFileManager.getInstance().getFileSystem(
-            StandardFileSystems.FILE_PROTOCOL,
-        )
-        val files = buildList {
-            for (source in sources) {
-                source.walkTopDown().filter { it.isFile }.forEach {
-                    this += localFileSystem.findFileByPath(it.absolutePath)!!
-                }
-            }
-        }
-
-        val sourceFiles = files.mapTo(mutableSetOf(), ::KtVirtualFileSourceFile)
-        val input = ModuleCompilerInput(
-            targetId = TargetId(JvmProtoBufUtil.DEFAULT_MODULE_NAME, targetName),
-            groupedSources = GroupedKtSources(
-                platformSources = sourceFiles,
-                commonSources = emptyList(),
-                sourcesByModuleName = mapOf(JvmProtoBufUtil.DEFAULT_MODULE_NAME to sourceFiles),
-            ),
-            commonPlatform = CommonPlatforms.defaultCommonPlatform,
-            platform = JvmPlatforms.unspecifiedJvmPlatform,
-            configuration = configuration,
-        )
-
-        val reporter = DiagnosticReporterFactory.createReporter()
-
-        val globalScope = GlobalSearchScope.allScope(project)
-        val packagePartProvider = environment.createPackagePartProvider(globalScope)
+        val packagePartProvider = environment.createPackagePartProvider(GlobalSearchScope.allScope(project))
         val projectEnvironment = VfsBasedProjectEnvironment(
             project = project,
-            localFileSystem = localFileSystem,
+            localFileSystem = VirtualFileManager.getInstance().getFileSystem(StandardFileSystems.FILE_PROTOCOL),
             getPackagePartProviderFn = { packagePartProvider },
         )
 
-        return compileModuleToAnalyzedFir(
-            input = input,
-            projectEnvironment = projectEnvironment,
-            previousStepsSymbolProviders = emptyList(),
-            incrementalExcludesScope = null,
-            diagnosticsReporter = reporter,
-        )
+        val messageCollector = environment.messageCollector
+
+        val targetIds = configuration.get(JVMConfigurationKeys.MODULES)?.map(::TargetId)
+        val incrementalComponents = configuration.get(JVMConfigurationKeys.INCREMENTAL_COMPILATION_COMPONENTS)
+
+        return object : FirKotlinToJvmBytecodeCompiler.FrontendContext {
+            override val configuration: CompilerConfiguration = configuration
+            override val extensionRegistrars: List<FirExtensionRegistrar> = FirExtensionRegistrar.getInstances(project)
+            override val incrementalComponents: IncrementalCompilationComponents? = incrementalComponents
+            override val messageCollector: MessageCollector = messageCollector
+            override val projectEnvironment: VfsBasedProjectEnvironment = projectEnvironment
+            override val targetIds: List<TargetId>? = targetIds
+        }.runFrontend(files, createPendingReporter(messageCollector), "", emptyList())!!
     }
 
     override fun close() {
