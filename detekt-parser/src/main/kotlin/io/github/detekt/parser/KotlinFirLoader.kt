@@ -46,9 +46,8 @@ import java.io.File
  * https://github.com/cashapp/redwood/blob/afe1c9f5f95eec3cff46837a4b2749cbaf72af8b/redwood-tooling-schema/src/main/kotlin/app/cash/redwood/tooling/schema/schemaParserFir.kt
  */
 class KotlinFirLoader(
-    private val sources: Collection<File>,
+    private val sources: Collection<KtFile>,
     private val classpath: Collection<File>,
-    private val compiler: KtCompiler,
 ) : AutoCloseable {
     private val disposable = Disposer.newDisposable()
 
@@ -79,16 +78,8 @@ class KotlinFirLoader(
         configuration.put(CommonConfigurationKeys.USE_FIR, true)
         configuration.put(CommonConfigurationKeys.USE_LIGHT_TREE, false)
         configuration.put(CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY, messageCollector)
-        configuration.addKotlinSourceRoots(sources.map { it.absolutePath })
+        configuration.addKotlinSourceRoots(sources.map { it.virtualFilePath })
         configuration.addJvmClasspathRoots(classpath.toList())
-
-        val files = buildList {
-            for (source in sources) {
-                source.walkTopDown().filter { it.isFile }.forEach {
-                    this += compiler.compile(it.toPath())
-                }
-            }
-        }
 
         val environment = KotlinCoreEnvironment.createForProduction(
             disposable,
@@ -115,7 +106,7 @@ class KotlinFirLoader(
             override val messageCollector: MessageCollector = messageCollector
             override val projectEnvironment: VfsBasedProjectEnvironment = projectEnvironment
             override val targetIds: List<TargetId>? = targetIds
-        }.runFrontend2(files, createPendingReporter(messageCollector), "", emptyList())
+        }.runFrontend2(sources.toList(), createPendingReporter(messageCollector), "", emptyList())
     }
 
     override fun close() {

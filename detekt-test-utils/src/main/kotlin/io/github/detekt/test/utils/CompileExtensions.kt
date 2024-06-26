@@ -32,5 +32,5 @@ fun compileContentForTest(
 /**
  * Use this method if you test a kt file/class in the test resources.
  */
-fun compileForTest(path: Path): KtFile = KotlinFirLoader(listOf(path.toFile()), emptyList(), KtTestCompiler)
+fun compileForTest(path: Path): KtFile = KotlinFirLoader(listOf(KtTestCompiler.compile(path)), emptyList())
     .use { kotlinFirLoader -> kotlinFirLoader.load().outputs.flatMap { it.fir }.single().psi as KtFile }

@@ -10,10 +10,10 @@ import java.io.File
 typealias ParsingStrategy = (settings: ProcessingSettings) -> List<KtFile>
 
 val inputPathsToKtFiles: ParsingStrategy = { settings ->
+    val compiler = KtCompiler(settings.environment)
     KotlinFirLoader(
-        sources = settings.spec.projectSpec.inputPaths.map { it.toFile() },
+        sources = settings.spec.projectSpec.inputPaths.map { compiler.compile(it) },
         classpath = settings.classpath.map { File(it) },
-        KtCompiler(settings.environment),
     )
         .use { it.load() }
         .outputs
