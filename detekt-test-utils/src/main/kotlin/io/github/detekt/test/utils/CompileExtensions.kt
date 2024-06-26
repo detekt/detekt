@@ -1,6 +1,8 @@
 package io.github.detekt.test.utils
 
+import io.github.detekt.parser.KotlinFirLoader
 import org.intellij.lang.annotations.Language
+import org.jetbrains.kotlin.fir.psi
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
 import kotlin.io.path.Path
@@ -30,4 +32,5 @@ fun compileContentForTest(
 /**
  * Use this method if you test a kt file/class in the test resources.
  */
-fun compileForTest(path: Path) = KtTestCompiler.compile(path)
+fun compileForTest(path: Path): KtFile = KotlinFirLoader(listOf(path.toFile()), emptyList(), KtTestCompiler)
+    .use { kotlinFirLoader -> kotlinFirLoader.load().outputs.flatMap { it.fir }.single().psi as KtFile }
