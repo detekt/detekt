@@ -29,6 +29,11 @@ private const val JDK_HOME_PARAMETER = "--jdk-home"
 private const val BASE_PATH_PARAMETER = "--base-path"
 private const val OPT_IN_PARAMETER = "-opt-in"
 
+/* parameters passed with single hyphen prefix must be passed at end of command line argument list so they get passed
+   as freeCompilerArgs
+ */
+private const val FRIEND_PATHS_PARAMETER = "-Xfriend-paths"
+
 internal sealed class CliArgument {
     abstract fun toArgument(): List<String>
 }
@@ -100,6 +105,17 @@ internal data class CustomReportArgument(val reportId: String, val file: Regular
 
 internal data class FreeArgs(val args: List<String>) : CliArgument() {
     override fun toArgument(): List<String> = args
+}
+
+internal data class FriendPathArgs(val fileCollection: FileCollection) : CliArgument() {
+    override fun toArgument() = if (!fileCollection.isEmpty) {
+        listOf(
+            FRIEND_PATHS_PARAMETER,
+            fileCollection.joinToString(",") { it.absolutePath }
+        )
+    } else {
+        emptyList()
+    }
 }
 
 internal data class BasePathArgument(val basePath: String?) : CliArgument() {
