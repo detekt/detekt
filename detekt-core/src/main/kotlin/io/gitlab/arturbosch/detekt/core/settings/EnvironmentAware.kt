@@ -8,6 +8,8 @@ import io.github.detekt.tooling.api.spec.ProjectSpec
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.com.intellij.openapi.Disposable
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
+import org.jetbrains.kotlin.config.JVMConfigurationKeys
+import org.jetbrains.kotlin.load.kotlin.ModuleVisibilityManager
 import java.io.Closeable
 import java.io.File
 import java.io.OutputStream
@@ -42,11 +44,16 @@ internal class EnvironmentFacade(
             compilerSpec.freeCompilerArgs,
             printStream,
         )
-        createKotlinCoreEnvironment(
+        val env = createKotlinCoreEnvironment(
             compilerConfiguration,
             disposable,
             printStream,
         )
+
+        val moduleVisibilityManager = ModuleVisibilityManager.SERVICE.getInstance(env.project)
+        compilerConfiguration.getList(JVMConfigurationKeys.FRIEND_PATHS).forEach(moduleVisibilityManager::addFriendPath)
+
+        env
     }
 
     override fun close() {
