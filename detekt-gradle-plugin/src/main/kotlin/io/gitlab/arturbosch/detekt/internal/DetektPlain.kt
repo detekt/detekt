@@ -1,5 +1,7 @@
 package io.gitlab.arturbosch.detekt.internal
 
+import io.gitlab.arturbosch.detekt.Detekt
+import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import io.gitlab.arturbosch.detekt.DetektPlugin
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.Project
@@ -15,11 +17,11 @@ internal class DetektPlain(private val project: Project) {
     }
 
     private fun Project.registerDetektTask(extension: DetektExtension) {
-        val detektTaskProvider = registerDetektTask(DetektPlugin.DETEKT_TASK_NAME, extension) {
-            baseline.convention(extension.baseline)
-            setSource(existingInputDirectoriesProvider(project, extension))
-            setIncludes(DetektPlugin.defaultIncludes)
-            setExcludes(DetektPlugin.defaultExcludes)
+        val detektTaskProvider = tasks.register(DetektPlugin.DETEKT_TASK_NAME, Detekt::class.java) { detektTask ->
+            detektTask.baseline.convention(extension.baseline)
+            detektTask.setSource(existingInputDirectoriesProvider(project, extension))
+            detektTask.setIncludes(DetektPlugin.defaultIncludes)
+            detektTask.setExcludes(DetektPlugin.defaultExcludes)
         }
 
         tasks.matching { it.name == LifecycleBasePlugin.CHECK_TASK_NAME }.configureEach {
@@ -28,9 +30,9 @@ internal class DetektPlain(private val project: Project) {
     }
 
     private fun Project.registerCreateBaselineTask(extension: DetektExtension) {
-        registerCreateBaselineTask(DetektPlugin.BASELINE_TASK_NAME, extension) {
-            baseline.convention(extension.baseline)
-            setSource(existingInputDirectoriesProvider(project, extension))
+        tasks.register(DetektPlugin.BASELINE_TASK_NAME, DetektCreateBaselineTask::class.java) {
+            it.baseline.convention(extension.baseline)
+            it.setSource(existingInputDirectoriesProvider(project, extension))
         }
     }
 
