@@ -28,11 +28,11 @@ internal fun Project.registerJvmCompilationDetektTask(
         } else {
             detektTask.classpath.setFrom(compilation.output.classesDirs, siblingTask.libraries)
         }
-        apiVersion.convention(siblingTask.compilerOptions.apiVersion.map { it.version })
-        languageVersion.convention(siblingTask.compilerOptions.languageVersion.map { it.version })
+        detektTask.apiVersion.convention(siblingTask.compilerOptions.apiVersion.map { it.version })
+        detektTask.languageVersion.convention(siblingTask.compilerOptions.languageVersion.map { it.version })
         /* Note: jvmTarget convention is also set in setDetektTaskDefaults. There may be a race between setting it here
            as well, but they should both set the same value. This should possibly be revisited in the future. */
-        jvmTarget.convention(siblingTask.compilerOptions.jvmTarget.map { it.target })
+        detektTask.jvmTarget.convention(siblingTask.compilerOptions.jvmTarget.map { it.target })
 
         detektTask.baseline.convention(
             project.layout.file(
@@ -68,11 +68,11 @@ internal fun Project.registerJvmCompilationCreateBaselineTask(
         } else {
             createBaselineTask.classpath.setFrom(compilation.output.classesDirs, siblingTask.libraries)
         }
-        apiVersion.convention(siblingTask.compilerOptions.apiVersion.map { it.version })
-        languageVersion.convention(siblingTask.compilerOptions.languageVersion.map { it.version })
+        createBaselineTask.apiVersion.convention(siblingTask.compilerOptions.apiVersion.map { it.version })
+        createBaselineTask.languageVersion.convention(siblingTask.compilerOptions.languageVersion.map { it.version })
         /* Note: jvmTarget convention is also set in setCreateBaselineTaskDefaults. There may be a race between setting
            it here as well, but they should both set the same value. This should possibly be revisited in the future. */
-        jvmTarget.convention(siblingTask.compilerOptions.jvmTarget.map { it.target })
+        createBaselineTask.jvmTarget.convention(siblingTask.compilerOptions.jvmTarget.map { it.target })
 
         createBaselineTask.baseline.convention(
             project.layout.file(
