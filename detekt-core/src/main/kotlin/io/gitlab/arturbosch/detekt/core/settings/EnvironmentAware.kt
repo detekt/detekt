@@ -8,9 +8,6 @@ import io.github.detekt.tooling.api.spec.ProjectSpec
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.com.intellij.openapi.Disposable
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
-import org.jetbrains.kotlin.config.ApiVersion
-import org.jetbrains.kotlin.config.JvmTarget
-import org.jetbrains.kotlin.config.LanguageVersion
 import java.io.Closeable
 import java.io.File
 import java.io.OutputStream
@@ -34,18 +31,20 @@ internal class EnvironmentFacade(
     override val classpath: List<String> = compilerSpec.classpathEntries()
 
     override val environment: KotlinCoreEnvironment by lazy {
+        val printStream = if (loggingSpec.debug) loggingSpec.errorChannel.asPrintStream() else NullPrintStream
         val compilerConfiguration = createCompilerConfiguration(
             projectSpec.inputPaths.toList(),
             classpath,
-            compilerSpec.parseApiVersion(),
-            compilerSpec.parseLanguageVersion(),
-            compilerSpec.parseJvmTarget(),
+            compilerSpec.apiVersion,
+            compilerSpec.languageVersion,
+            compilerSpec.jvmTarget,
             compilerSpec.jdkHome,
+            printStream,
         )
         createKotlinCoreEnvironment(
             compilerConfiguration,
             disposable,
-            if (loggingSpec.debug) loggingSpec.errorChannel.asPrintStream() else NullPrintStream,
+            printStream,
         )
     }
 
@@ -56,28 +55,6 @@ internal class EnvironmentFacade(
 
 internal fun CompilerSpec.classpathEntries(): List<String> =
     classpath?.split(File.pathSeparator).orEmpty()
-
-internal fun CompilerSpec.parseApiVersion(): ApiVersion? {
-    fun parse(value: String): ApiVersion {
-        val version = ApiVersion.parse(value)
-        return checkNotNull(version) { "Invalid value passed as API version." }
-    }
-    return apiVersion?.let(::parse)
-}
-
-internal fun CompilerSpec.parseLanguageVersion(): LanguageVersion? {
-    fun parse(value: String): LanguageVersion {
-        val version = LanguageVersion.fromFullVersionString(value)
-        return checkNotNull(version) { "Invalid value passed as language version." }
-    }
-    return languageVersion?.let(::parse)
-}
-
-internal fun CompilerSpec.parseJvmTarget(): JvmTarget =
-    checkNotNull(JvmTarget.fromString(jvmTarget)) {
-        "Invalid value ($jvmTarget) passed to --jvm-target," +
-            " must be one of ${JvmTarget.entries.map(JvmTarget::description)}"
-    }
 
 private object NullPrintStream : PrintStream(
     object : OutputStream() {
