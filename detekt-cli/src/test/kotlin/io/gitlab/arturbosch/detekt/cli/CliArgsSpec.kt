@@ -242,12 +242,6 @@ internal class CliArgsSpec {
             assertThatExceptionOfType(HelpRequest::class.java)
                 .isThrownBy { parseArguments(arrayOf("--help")) }
         }
-
-        @Test
-        fun `throws HandledArgumentViolation on wrong options`() {
-            assertThatExceptionOfType(HandledArgumentViolation::class.java)
-                .isThrownBy { parseArguments(arrayOf("--unknown-to-us-all")) }
-        }
     }
 
     @Test

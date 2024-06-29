@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.cli.executeDetekt
 import io.gitlab.arturbosch.detekt.cli.parseArguments
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode
+import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -316,5 +317,11 @@ class RunnerSpec {
                 .contains("$modificationMessagePrefix${inputPath.absolutePathString()}$modificationMessageSuffix")
             assertThat(inputPath).content().isEqualTo("class Test {\r\n\r\n}\r\n")
         }
+    }
+
+    @Test
+    fun `throws HandledArgumentViolation on wrong options`() {
+        assertThatIllegalStateException()
+            .isThrownBy { executeDetekt("--unknown-to-us-all") }
     }
 }
