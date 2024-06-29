@@ -175,6 +175,8 @@ abstract class Detekt @Inject constructor(
             DisableDefaultRuleSetArgument(disableDefaultRuleSets.get()),
             FreeArgs(freeCompilerArgs.get()),
         ).plus(convertCustomReportsToArguments()).flatMap(CliArgument::toArgument)
+            .plus("-no-stdlib")
+            .plus("-no-reflect")
 
     @InputFiles
     @SkipWhenEmpty
