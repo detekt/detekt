@@ -27,6 +27,7 @@ private const val LANGUAGE_VERSION_PARAMETER = "--language-version"
 private const val JVM_TARGET_PARAMETER = "--jvm-target"
 private const val JDK_HOME_PARAMETER = "--jdk-home"
 private const val BASE_PATH_PARAMETER = "--base-path"
+private const val OPT_IN_PARAMETER = "-opt-in"
 
 internal sealed class CliArgument {
     abstract fun toArgument(): List<String>
@@ -141,3 +142,14 @@ internal data class BuildUponDefaultConfigArgument(
 internal data class AllRulesArgument(override val value: Boolean) : BoolCliArgument(value, ALL_RULES_PARAMETER)
 
 internal data class AutoCorrectArgument(override val value: Boolean) : BoolCliArgument(value, AUTO_CORRECT_PARAMETER)
+
+internal data class OptInArguments(val list: List<String>) : CliArgument() {
+    override fun toArgument() = if (list.isNotEmpty()) {
+        listOf(
+            OPT_IN_PARAMETER,
+            list.joinToString(",")
+        )
+    } else {
+        emptyList()
+    }
+}
