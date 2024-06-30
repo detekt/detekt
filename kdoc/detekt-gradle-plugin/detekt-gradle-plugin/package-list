@@ -129,6 +129,7 @@ $dokka.location:io.gitlab.arturbosch.detekt/Detekt/ignoreFailures/#/PointingToDe
 $dokka.location:io.gitlab.arturbosch.detekt/Detekt/jdkHome/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/jdk-home.html
 $dokka.location:io.gitlab.arturbosch.detekt/Detekt/jvmTarget/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/jvm-target.html
 $dokka.location:io.gitlab.arturbosch.detekt/Detekt/languageVersion/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/language-version.html
+$dokka.location:io.gitlab.arturbosch.detekt/Detekt/noJdk/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/no-jdk.html
 $dokka.location:io.gitlab.arturbosch.detekt/Detekt/optIn/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/opt-in.html
 $dokka.location:io.gitlab.arturbosch.detekt/Detekt/parallel/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/parallel.html
 $dokka.location:io.gitlab.arturbosch.detekt/Detekt/pluginClasspath/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/plugin-classpath.html
@@ -154,6 +155,7 @@ $dokka.location:io.gitlab.arturbosch.detekt/DetektCreateBaselineTask/ignoreFailu
 $dokka.location:io.gitlab.arturbosch.detekt/DetektCreateBaselineTask/jdkHome/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt-create-baseline-task/jdk-home.html
 $dokka.location:io.gitlab.arturbosch.detekt/DetektCreateBaselineTask/jvmTarget/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt-create-baseline-task/jvm-target.html
 $dokka.location:io.gitlab.arturbosch.detekt/DetektCreateBaselineTask/languageVersion/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt-create-baseline-task/language-version.html
+$dokka.location:io.gitlab.arturbosch.detekt/DetektCreateBaselineTask/noJdk/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt-create-baseline-task/no-jdk.html
 $dokka.location:io.gitlab.arturbosch.detekt/DetektCreateBaselineTask/optIn/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt-create-baseline-task/opt-in.html
 $dokka.location:io.gitlab.arturbosch.detekt/DetektCreateBaselineTask/parallel/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt-create-baseline-task/parallel.html
 $dokka.location:io.gitlab.arturbosch.detekt/DetektCreateBaselineTask/pluginClasspath/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt-create-baseline-task/plugin-classpath.html
