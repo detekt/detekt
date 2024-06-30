@@ -20,6 +20,7 @@ import io.gitlab.arturbosch.detekt.invoke.DetektWorkAction
 import io.gitlab.arturbosch.detekt.invoke.DisableDefaultRuleSetArgument
 import io.gitlab.arturbosch.detekt.invoke.FailOnSeverityArgument
 import io.gitlab.arturbosch.detekt.invoke.FreeArgs
+import io.gitlab.arturbosch.detekt.invoke.FriendPathArgs
 import io.gitlab.arturbosch.detekt.invoke.InputArgument
 import io.gitlab.arturbosch.detekt.invoke.JdkHomeArgument
 import io.gitlab.arturbosch.detekt.invoke.JvmTargetArgument
@@ -81,6 +82,9 @@ abstract class Detekt @Inject constructor(
     @get:Classpath
     @get:Optional
     abstract val classpath: ConfigurableFileCollection
+
+    @get:Internal
+    abstract val friendPaths: ConfigurableFileCollection
 
     @get:Input
     @get:Optional
@@ -179,6 +183,7 @@ abstract class Detekt @Inject constructor(
             DisableDefaultRuleSetArgument(disableDefaultRuleSets.get()),
             FreeArgs(freeCompilerArgs.get()),
             OptInArguments(optIn.get()),
+            FriendPathArgs(friendPaths),
         ).plus(convertCustomReportsToArguments()).flatMap(CliArgument::toArgument)
             .plus("-no-stdlib")
             .plus("-no-reflect")

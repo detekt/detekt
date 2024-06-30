@@ -25,8 +25,10 @@ internal fun Project.registerJvmCompilationDetektTask(
         detektTask.setSource(siblingTask.sources)
         if (GradleVersion.current() >= GradleVersion.version("8.8")) {
             detektTask.classpath.convention(compilation.output.classesDirs, siblingTask.libraries)
+            detektTask.friendPaths.convention(siblingTask.friendPaths)
         } else {
             detektTask.classpath.setFrom(compilation.output.classesDirs, siblingTask.libraries)
+            detektTask.friendPaths.setFrom(siblingTask.friendPaths)
         }
         detektTask.apiVersion.convention(siblingTask.compilerOptions.apiVersion.map { it.version })
         detektTask.languageVersion.convention(siblingTask.compilerOptions.languageVersion.map { it.version })
@@ -67,8 +69,10 @@ internal fun Project.registerJvmCompilationCreateBaselineTask(
         createBaselineTask.setSource(siblingTask.sources)
         if (GradleVersion.current() >= GradleVersion.version("8.8")) {
             createBaselineTask.classpath.convention(compilation.output.classesDirs, siblingTask.libraries)
+            createBaselineTask.friendPaths.convention(siblingTask.friendPaths)
         } else {
             createBaselineTask.classpath.setFrom(compilation.output.classesDirs, siblingTask.libraries)
+            createBaselineTask.friendPaths.setFrom(siblingTask.friendPaths)
         }
         createBaselineTask.apiVersion.convention(siblingTask.compilerOptions.apiVersion.map { it.version })
         createBaselineTask.languageVersion.convention(siblingTask.compilerOptions.languageVersion.map { it.version })
