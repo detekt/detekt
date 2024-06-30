@@ -61,7 +61,7 @@ class ErrorUsageWithThrowable(config: Config) : Rule(
             errorMsgValueArg.getArgumentExpression()
         ]?.type ?: return
         if (errorMsgTypeInfo.isThrowableSubtypeOfThrowable()) {
-            report(CodeSmell(Entity.from(expression), description))
+            report(CodeSmell(Entity.from(errorMsgValueArg), description))
         }
     }
 

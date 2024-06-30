@@ -2,8 +2,8 @@ package io.gitlab.arturbosch.detekt.rules.exceptions
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
+import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Test
 
@@ -23,7 +23,9 @@ class ErrorUsageWithThrowableSpec(private val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        val findings = subject.compileAndLintWithContext(env, code)
+        assertThat(findings).hasSize(1)
+        assertThat(findings[0]).hasSourceLocation(6, 15)
     }
 
     @Test
