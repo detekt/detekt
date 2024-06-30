@@ -18,6 +18,7 @@ import io.gitlab.arturbosch.detekt.invoke.DefaultReportArgument
 import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
 import io.gitlab.arturbosch.detekt.invoke.DetektWorkAction
 import io.gitlab.arturbosch.detekt.invoke.DisableDefaultRuleSetArgument
+import io.gitlab.arturbosch.detekt.invoke.ExplicitApiArgument
 import io.gitlab.arturbosch.detekt.invoke.FailOnSeverityArgument
 import io.gitlab.arturbosch.detekt.invoke.FreeArgs
 import io.gitlab.arturbosch.detekt.invoke.FriendPathArgs
@@ -154,6 +155,10 @@ abstract class Detekt @Inject constructor(
     @get:Incubating
     abstract val freeCompilerArgs: ListProperty<String>
 
+    @get:Input
+    @get:Optional
+    internal abstract val explicitApi: Property<String>
+
     init {
         group = LifecycleBasePlugin.VERIFICATION_GROUP
     }
@@ -189,6 +194,7 @@ abstract class Detekt @Inject constructor(
             OptInArguments(optIn.get()),
             FriendPathArgs(friendPaths),
             NoJdkArgument(noJdk.get()),
+            ExplicitApiArgument(explicitApi.orNull),
         ).plus(convertCustomReportsToArguments()).flatMap(CliArgument::toArgument)
             .plus("-no-stdlib")
             .plus("-no-reflect")

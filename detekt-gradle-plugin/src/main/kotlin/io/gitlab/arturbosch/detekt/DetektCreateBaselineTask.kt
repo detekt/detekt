@@ -14,6 +14,7 @@ import io.gitlab.arturbosch.detekt.invoke.DebugArgument
 import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
 import io.gitlab.arturbosch.detekt.invoke.DetektWorkAction
 import io.gitlab.arturbosch.detekt.invoke.DisableDefaultRuleSetArgument
+import io.gitlab.arturbosch.detekt.invoke.ExplicitApiArgument
 import io.gitlab.arturbosch.detekt.invoke.FreeArgs
 import io.gitlab.arturbosch.detekt.invoke.FriendPathArgs
 import io.gitlab.arturbosch.detekt.invoke.InputArgument
@@ -139,6 +140,10 @@ abstract class DetektCreateBaselineTask @Inject constructor(
     @get:Incubating
     abstract val freeCompilerArgs: ListProperty<String>
 
+    @get:Input
+    @get:Optional
+    internal abstract val explicitApi: Property<String>
+
     @get:Internal
     internal val arguments
         get() = listOf(
@@ -162,6 +167,7 @@ abstract class DetektCreateBaselineTask @Inject constructor(
             OptInArguments(optIn.get()),
             FriendPathArgs(friendPaths),
             NoJdkArgument(noJdk.get()),
+            ExplicitApiArgument(explicitApi.orNull),
         ).flatMap(CliArgument::toArgument)
             .plus("-no-stdlib")
             .plus("-no-reflect")
