@@ -319,9 +319,25 @@ class RunnerSpec {
         }
     }
 
-    @Test
-    fun `throws HandledArgumentViolation on wrong options`() {
-        assertThatIllegalStateException()
-            .isThrownBy { executeDetekt("--unknown-to-us-all") }
+    @Nested
+    inner class CompilerArgs {
+        @Test
+        fun `accepts valid compiler options that are not natively handed by detekt CLI`() {
+            val path = resourceAsPath("/cases/CleanPoko.kt")
+            assertThatCode {
+                executeDetekt(
+                    "--input",
+                    path.toString(),
+                    "-Xcontext-receivers",
+                    "-opt-in=org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi",
+                )
+            }.doesNotThrowAnyException()
+        }
+
+        @Test
+        fun `throws HandledArgumentViolation on wrong options`() {
+            assertThatIllegalStateException()
+                .isThrownBy { executeDetekt("--unknown-to-us-all") }
+        }
     }
 }

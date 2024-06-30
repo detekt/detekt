@@ -297,6 +297,20 @@ internal class CliArgsSpec {
                 .isThrownBy { parseArguments(arrayOf("--language-version", "2")) }
                 .withMessageStartingWith("\"2\" passed to --language-version, expected one of [1.0, 1.1, 1.2, 1.3, ")
         }
+
+        @Test
+        fun `valid compiler args are accepted`() {
+            val args = arrayOf(
+                "-Xcontext-receivers",
+                "-opt-in=org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi",
+            )
+            val spec = parseArguments(args).toSpec()
+
+            assertThat(spec.compilerSpec.freeCompilerArgs).containsOnly(
+                "-Xcontext-receivers",
+                "-opt-in=org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi",
+            )
+        }
     }
 
     @Nested
