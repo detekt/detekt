@@ -148,6 +148,8 @@ abstract class DetektCreateBaselineTask @Inject constructor(
             DisableDefaultRuleSetArgument(disableDefaultRuleSets.get()),
             FreeArgs(freeCompilerArgs.get()),
         ).flatMap(CliArgument::toArgument)
+            .plus("-no-stdlib")
+            .plus("-no-reflect")
 
     @InputFiles
     @SkipWhenEmpty
