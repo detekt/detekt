@@ -1,5 +1,6 @@
 package dev.detekt.gradle.plugin
 
+import dev.detekt.gradle.plugin.internal.mapExplicitArgMode
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import io.gitlab.arturbosch.detekt.DetektPlugin
@@ -96,6 +97,9 @@ class DetektBasePlugin : Plugin<Project> {
                                 }
                             )
                         )
+                        if (sourceSet.name == "main") {
+                            detektTask.explicitApi.convention(mapExplicitArgMode())
+                        }
                         detektTask.description = "Run detekt analysis for ${sourceSet.name} source set"
                     }
 
@@ -111,6 +115,9 @@ class DetektBasePlugin : Plugin<Project> {
                             )
                         )
 
+                        if (sourceSet.name == "main") {
+                            createBaselineTask.explicitApi.convention(mapExplicitArgMode())
+                        }
                         createBaselineTask.description = "Creates detekt baseline for ${sourceSet.name} source set"
                     }
                 }

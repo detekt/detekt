@@ -7,8 +7,11 @@ import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import io.gitlab.arturbosch.detekt.internal.addVariantName
 import io.gitlab.arturbosch.detekt.internal.existingVariantOrBaseFile
 import org.gradle.api.Project
+import org.gradle.api.provider.Provider
 import org.gradle.util.GradleVersion
+import org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode
 import org.jetbrains.kotlin.gradle.dsl.KotlinCommonOptions
+import org.jetbrains.kotlin.gradle.dsl.kotlinExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
 import org.jetbrains.kotlin.gradle.plugin.KotlinTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
@@ -38,6 +41,9 @@ internal fun Project.registerJvmCompilationDetektTask(
         detektTask.freeCompilerArgs.convention(siblingTask.compilerOptions.freeCompilerArgs)
         detektTask.optIn.convention(siblingTask.compilerOptions.optIn)
         detektTask.noJdk.convention(siblingTask.compilerOptions.noJdk)
+        if (compilation.name == "main") {
+            detektTask.explicitApi.convention(mapExplicitArgMode())
+        }
 
         detektTask.baseline.convention(
             project.layout.file(
@@ -83,6 +89,9 @@ internal fun Project.registerJvmCompilationCreateBaselineTask(
         createBaselineTask.freeCompilerArgs.convention(siblingTask.compilerOptions.freeCompilerArgs)
         createBaselineTask.optIn.convention(siblingTask.compilerOptions.optIn)
         createBaselineTask.noJdk.convention(siblingTask.compilerOptions.noJdk)
+        if (compilation.name == "main") {
+            createBaselineTask.explicitApi.convention(mapExplicitArgMode())
+        }
 
         createBaselineTask.baseline.convention(
             project.layout.file(
@@ -99,3 +108,12 @@ internal fun Project.registerJvmCompilationCreateBaselineTask(
         }
     }
 }
+
+internal fun Project.mapExplicitArgMode(): Provider<String> =
+    provider {
+        when (kotlinExtension.explicitApi) {
+            ExplicitApiMode.Strict -> "strict"
+            ExplicitApiMode.Warning -> "warning"
+            else -> null
+        }
+    }
