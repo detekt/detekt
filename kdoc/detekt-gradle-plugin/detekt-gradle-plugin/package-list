@@ -122,6 +122,7 @@ $dokka.location:io.gitlab.arturbosch.detekt/Detekt/debug/#/PointingToDeclaration
 $dokka.location:io.gitlab.arturbosch.detekt/Detekt/detektClasspath/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/detekt-classpath.html
 $dokka.location:io.gitlab.arturbosch.detekt/Detekt/disableDefaultRuleSets/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/disable-default-rule-sets.html
 $dokka.location:io.gitlab.arturbosch.detekt/Detekt/failOnSeverity/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/fail-on-severity.html
+$dokka.location:io.gitlab.arturbosch.detekt/Detekt/freeCompilerArgs/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/free-compiler-args.html
 $dokka.location:io.gitlab.arturbosch.detekt/Detekt/getSource/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/get-source.html
 $dokka.location:io.gitlab.arturbosch.detekt/Detekt/ignoreFailures/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/ignore-failures.html
 $dokka.location:io.gitlab.arturbosch.detekt/Detekt/jdkHome/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt/jdk-home.html
@@ -144,6 +145,7 @@ $dokka.location:io.gitlab.arturbosch.detekt/DetektCreateBaselineTask/config/#/Po
 $dokka.location:io.gitlab.arturbosch.detekt/DetektCreateBaselineTask/debug/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt-create-baseline-task/debug.html
 $dokka.location:io.gitlab.arturbosch.detekt/DetektCreateBaselineTask/detektClasspath/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt-create-baseline-task/detekt-classpath.html
 $dokka.location:io.gitlab.arturbosch.detekt/DetektCreateBaselineTask/disableDefaultRuleSets/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt-create-baseline-task/disable-default-rule-sets.html
+$dokka.location:io.gitlab.arturbosch.detekt/DetektCreateBaselineTask/freeCompilerArgs/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt-create-baseline-task/free-compiler-args.html
 $dokka.location:io.gitlab.arturbosch.detekt/DetektCreateBaselineTask/getSource/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt-create-baseline-task/get-source.html
 $dokka.location:io.gitlab.arturbosch.detekt/DetektCreateBaselineTask/ignoreFailures/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt-create-baseline-task/ignore-failures.html
 $dokka.location:io.gitlab.arturbosch.detekt/DetektCreateBaselineTask/jdkHome/#/PointingToDeclaration/detekt-gradle-plugin/io.gitlab.arturbosch.detekt/-detekt-create-baseline-task/jdk-home.html
