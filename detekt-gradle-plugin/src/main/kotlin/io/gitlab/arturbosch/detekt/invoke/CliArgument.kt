@@ -28,6 +28,7 @@ private const val JVM_TARGET_PARAMETER = "--jvm-target"
 private const val JDK_HOME_PARAMETER = "--jdk-home"
 private const val BASE_PATH_PARAMETER = "--base-path"
 private const val OPT_IN_PARAMETER = "-opt-in"
+private const val NO_JDK_PARAMETER = "-no-jdk"
 
 /* parameters passed with single hyphen prefix must be passed at end of command line argument list so they get passed
    as freeCompilerArgs
@@ -169,3 +170,5 @@ internal data class OptInArguments(val list: List<String>) : CliArgument() {
         emptyList()
     }
 }
+
+internal data class NoJdkArgument(override val value: Boolean) : BoolCliArgument(value, NO_JDK_PARAMETER)

@@ -25,6 +25,7 @@ import io.gitlab.arturbosch.detekt.invoke.InputArgument
 import io.gitlab.arturbosch.detekt.invoke.JdkHomeArgument
 import io.gitlab.arturbosch.detekt.invoke.JvmTargetArgument
 import io.gitlab.arturbosch.detekt.invoke.LanguageVersionArgument
+import io.gitlab.arturbosch.detekt.invoke.NoJdkArgument
 import io.gitlab.arturbosch.detekt.invoke.OptInArguments
 import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
 import org.gradle.api.Action
@@ -120,6 +121,9 @@ abstract class Detekt @Inject constructor(
     abstract val optIn: ListProperty<String>
 
     @get:Input
+    abstract val noJdk: Property<Boolean>
+
+    @get:Input
     abstract val ignoreFailures: Property<Boolean>
 
     @get:Input
@@ -184,6 +188,7 @@ abstract class Detekt @Inject constructor(
             FreeArgs(freeCompilerArgs.get()),
             OptInArguments(optIn.get()),
             FriendPathArgs(friendPaths),
+            NoJdkArgument(noJdk.get()),
         ).plus(convertCustomReportsToArguments()).flatMap(CliArgument::toArgument)
             .plus("-no-stdlib")
             .plus("-no-reflect")
