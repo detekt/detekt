@@ -20,6 +20,7 @@ import io.gitlab.arturbosch.detekt.invoke.InputArgument
 import io.gitlab.arturbosch.detekt.invoke.JdkHomeArgument
 import io.gitlab.arturbosch.detekt.invoke.JvmTargetArgument
 import io.gitlab.arturbosch.detekt.invoke.LanguageVersionArgument
+import io.gitlab.arturbosch.detekt.invoke.NoJdkArgument
 import io.gitlab.arturbosch.detekt.invoke.OptInArguments
 import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
 import org.gradle.api.Incubating
@@ -106,6 +107,9 @@ abstract class DetektCreateBaselineTask @Inject constructor(
     abstract val optIn: ListProperty<String>
 
     @get:Input
+    abstract val noJdk: Property<Boolean>
+
+    @get:Input
     @get:Optional
     abstract val autoCorrect: Property<Boolean>
 
@@ -157,6 +161,7 @@ abstract class DetektCreateBaselineTask @Inject constructor(
             FreeArgs(freeCompilerArgs.get()),
             OptInArguments(optIn.get()),
             FriendPathArgs(friendPaths),
+            NoJdkArgument(noJdk.get()),
         ).flatMap(CliArgument::toArgument)
             .plus("-no-stdlib")
             .plus("-no-reflect")

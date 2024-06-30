@@ -37,6 +37,7 @@ internal fun Project.registerJvmCompilationDetektTask(
         detektTask.jvmTarget.convention(siblingTask.compilerOptions.jvmTarget.map { it.target })
         detektTask.freeCompilerArgs.convention(siblingTask.compilerOptions.freeCompilerArgs)
         detektTask.optIn.convention(siblingTask.compilerOptions.optIn)
+        detektTask.noJdk.convention(siblingTask.compilerOptions.noJdk)
 
         detektTask.baseline.convention(
             project.layout.file(
@@ -81,6 +82,7 @@ internal fun Project.registerJvmCompilationCreateBaselineTask(
         createBaselineTask.jvmTarget.convention(siblingTask.compilerOptions.jvmTarget.map { it.target })
         createBaselineTask.freeCompilerArgs.convention(siblingTask.compilerOptions.freeCompilerArgs)
         createBaselineTask.optIn.convention(siblingTask.compilerOptions.optIn)
+        createBaselineTask.noJdk.convention(siblingTask.compilerOptions.noJdk)
 
         createBaselineTask.baseline.convention(
             project.layout.file(
