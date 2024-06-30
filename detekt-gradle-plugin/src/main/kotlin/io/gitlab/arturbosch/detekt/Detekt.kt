@@ -24,6 +24,7 @@ import io.gitlab.arturbosch.detekt.invoke.InputArgument
 import io.gitlab.arturbosch.detekt.invoke.JdkHomeArgument
 import io.gitlab.arturbosch.detekt.invoke.JvmTargetArgument
 import io.gitlab.arturbosch.detekt.invoke.LanguageVersionArgument
+import io.gitlab.arturbosch.detekt.invoke.OptInArguments
 import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
 import org.gradle.api.Action
 import org.gradle.api.Incubating
@@ -112,6 +113,9 @@ abstract class Detekt @Inject constructor(
     abstract val allRules: Property<Boolean>
 
     @get:Input
+    abstract val optIn: ListProperty<String>
+
+    @get:Input
     abstract val ignoreFailures: Property<Boolean>
 
     @get:Input
@@ -174,6 +178,7 @@ abstract class Detekt @Inject constructor(
             BasePathArgument(basePath.orNull),
             DisableDefaultRuleSetArgument(disableDefaultRuleSets.get()),
             FreeArgs(freeCompilerArgs.get()),
+            OptInArguments(optIn.get()),
         ).plus(convertCustomReportsToArguments()).flatMap(CliArgument::toArgument)
             .plus("-no-stdlib")
             .plus("-no-reflect")

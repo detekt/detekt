@@ -19,6 +19,7 @@ import io.gitlab.arturbosch.detekt.invoke.InputArgument
 import io.gitlab.arturbosch.detekt.invoke.JdkHomeArgument
 import io.gitlab.arturbosch.detekt.invoke.JvmTargetArgument
 import io.gitlab.arturbosch.detekt.invoke.LanguageVersionArgument
+import io.gitlab.arturbosch.detekt.invoke.OptInArguments
 import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
 import org.gradle.api.Incubating
 import org.gradle.api.file.ConfigurableFileCollection
@@ -98,6 +99,9 @@ abstract class DetektCreateBaselineTask @Inject constructor(
     abstract val allRules: Property<Boolean>
 
     @get:Input
+    abstract val optIn: ListProperty<String>
+
+    @get:Input
     @get:Optional
     abstract val autoCorrect: Property<Boolean>
 
@@ -147,6 +151,7 @@ abstract class DetektCreateBaselineTask @Inject constructor(
             BasePathArgument(basePath.orNull),
             DisableDefaultRuleSetArgument(disableDefaultRuleSets.get()),
             FreeArgs(freeCompilerArgs.get()),
+            OptInArguments(optIn.get()),
         ).flatMap(CliArgument::toArgument)
             .plus("-no-stdlib")
             .plus("-no-reflect")
