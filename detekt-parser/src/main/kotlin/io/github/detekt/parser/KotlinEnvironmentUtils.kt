@@ -13,6 +13,8 @@ import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.cli.jvm.config.addJavaSourceRoots
 import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoots
 import org.jetbrains.kotlin.cli.jvm.config.configureJdkClasspathRoots
+import org.jetbrains.kotlin.cli.jvm.configureAdvancedJvmOptions
+import org.jetbrains.kotlin.cli.jvm.setupJvmSpecificArguments
 import org.jetbrains.kotlin.com.intellij.mock.MockProject
 import org.jetbrains.kotlin.com.intellij.openapi.Disposable
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
@@ -68,6 +70,7 @@ fun createCompilerConfiguration(
     languageVersion: String?,
     jvmTarget: String,
     jdkHome: Path?,
+    freeCompilerArgs: List<String>,
     printStream: PrintStream,
 ): CompilerConfiguration {
     val javaFiles = pathsToAnalyze.flatMap { path ->
@@ -98,6 +101,7 @@ fun createCompilerConfiguration(
         }
         add("-jvm-target")
         add(jvmTarget)
+        addAll(freeCompilerArgs)
     }
 
     parseCommandLineArguments(args, jvmCompilerArguments)
@@ -113,6 +117,8 @@ fun createCompilerConfiguration(
             PrintingMessageCollector(printStream, MessageRenderer.PLAIN_FULL_PATHS, false)
         )
         setupLanguageVersionSettings(jvmCompilerArguments)
+        setupJvmSpecificArguments(jvmCompilerArguments)
+        configureAdvancedJvmOptions(jvmCompilerArguments)
 
         if (jdkHome != null) {
             put(JVMConfigurationKeys.JDK_HOME, jdkHome.toFile())

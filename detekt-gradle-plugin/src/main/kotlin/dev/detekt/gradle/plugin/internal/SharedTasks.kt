@@ -33,6 +33,7 @@ internal fun Project.registerJvmCompilationDetektTask(
         /* Note: jvmTarget convention is also set in setDetektTaskDefaults. There may be a race between setting it here
            as well, but they should both set the same value. This should possibly be revisited in the future. */
         detektTask.jvmTarget.convention(siblingTask.compilerOptions.jvmTarget.map { it.target })
+        detektTask.freeCompilerArgs.convention(siblingTask.compilerOptions.freeCompilerArgs)
 
         detektTask.baseline.convention(
             project.layout.file(
@@ -73,6 +74,7 @@ internal fun Project.registerJvmCompilationCreateBaselineTask(
         /* Note: jvmTarget convention is also set in setCreateBaselineTaskDefaults. There may be a race between setting
            it here as well, but they should both set the same value. This should possibly be revisited in the future. */
         createBaselineTask.jvmTarget.convention(siblingTask.compilerOptions.jvmTarget.map { it.target })
+        createBaselineTask.freeCompilerArgs.convention(siblingTask.compilerOptions.freeCompilerArgs)
 
         createBaselineTask.baseline.convention(
             project.layout.file(

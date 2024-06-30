@@ -14,15 +14,18 @@ import io.gitlab.arturbosch.detekt.invoke.DebugArgument
 import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
 import io.gitlab.arturbosch.detekt.invoke.DetektWorkAction
 import io.gitlab.arturbosch.detekt.invoke.DisableDefaultRuleSetArgument
+import io.gitlab.arturbosch.detekt.invoke.FreeArgs
 import io.gitlab.arturbosch.detekt.invoke.InputArgument
 import io.gitlab.arturbosch.detekt.invoke.JdkHomeArgument
 import io.gitlab.arturbosch.detekt.invoke.JvmTargetArgument
 import io.gitlab.arturbosch.detekt.invoke.LanguageVersionArgument
 import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
+import org.gradle.api.Incubating
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.FileTree
 import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.ProviderFactory
 import org.gradle.api.tasks.CacheableTask
@@ -120,6 +123,10 @@ abstract class DetektCreateBaselineTask @Inject constructor(
     @get:Internal
     abstract val jdkHome: DirectoryProperty
 
+    @get:Input
+    @get:Incubating
+    abstract val freeCompilerArgs: ListProperty<String>
+
     @get:Internal
     internal val arguments
         get() = listOf(
@@ -138,7 +145,8 @@ abstract class DetektCreateBaselineTask @Inject constructor(
             AutoCorrectArgument(autoCorrect.get()),
             AllRulesArgument(allRules.get()),
             BasePathArgument(basePath.orNull),
-            DisableDefaultRuleSetArgument(disableDefaultRuleSets.get())
+            DisableDefaultRuleSetArgument(disableDefaultRuleSets.get()),
+            FreeArgs(freeCompilerArgs.get()),
         ).flatMap(CliArgument::toArgument)
 
     @InputFiles

@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.cli.executeDetekt
 import io.gitlab.arturbosch.detekt.cli.parseArguments
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode
+import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -315,6 +316,28 @@ class RunnerSpec {
                 .contains("${inputPath.absolutePathString()}:3:1: Needless blank line(s) [NoConsecutiveBlankLines]")
                 .contains("$modificationMessagePrefix${inputPath.absolutePathString()}$modificationMessageSuffix")
             assertThat(inputPath).content().isEqualTo("class Test {\r\n\r\n}\r\n")
+        }
+    }
+
+    @Nested
+    inner class CompilerArgs {
+        @Test
+        fun `accepts valid compiler options that are not natively handed by detekt CLI`() {
+            val path = resourceAsPath("/cases/CleanPoko.kt")
+            assertThatCode {
+                executeDetekt(
+                    "--input",
+                    path.toString(),
+                    "-Xcontext-receivers",
+                    "-opt-in=org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi",
+                )
+            }.doesNotThrowAnyException()
+        }
+
+        @Test
+        fun `throws HandledArgumentViolation on wrong options`() {
+            assertThatIllegalStateException()
+                .isThrownBy { executeDetekt("--unknown-to-us-all") }
         }
     }
 }
