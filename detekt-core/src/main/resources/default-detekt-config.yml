@@ -636,6 +636,9 @@ style:
         value: 'java.math.BigDecimal.<init>(kotlin.Double)'
       - reason: 'using `BigDecimal(String)` can result in a `NumberFormatException`. Use `String.toBigDecimalOrNull()`'
         value: 'java.math.BigDecimal.<init>(kotlin.String)'
+  ForbiddenNamedParam:
+    active: false
+    methods: []
   ForbiddenSuppress:
     active: false
     rules: []
