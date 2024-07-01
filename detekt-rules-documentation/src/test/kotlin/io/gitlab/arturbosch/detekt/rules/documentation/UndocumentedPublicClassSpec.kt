@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 private const val SEARCH_IN_NESTED_CLASS = "searchInNestedClass"
@@ -200,27 +201,6 @@ class UndocumentedPublicClassSpec {
     }
 
     @Test
-    fun `should report for enum classes`() {
-        val code = """
-            enum class Enum {
-                CONSTANT
-            }
-        """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
-    }
-
-    @Test
-    fun `should not report for enum constants`() {
-        val code = """
-            /** Some doc */
-            enum class Enum {
-                CONSTANT
-            }
-        """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
-    }
-
-    @Test
     fun `should not report for fun interfaces`() {
         val code = """
             /**
@@ -301,5 +281,49 @@ class UndocumentedPublicClassSpec {
             }
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).hasSize(2)
+    }
+
+    @Nested
+    inner class `enum entries` {
+        @Test
+        fun `does not report documented enum class in public enum`() {
+            val code = """
+                /**
+                * This is PublicEnum
+                */
+                enum class PublicEnum {
+                    Foo,
+                    Bar,
+                }
+            """.trimIndent()
+            io.gitlab.arturbosch.detekt.test.assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does report undocumented enum class in public enum`() {
+            val code = """
+                enum class PublicEnum {
+                    Foo,
+                    Bar,
+                }
+            """.trimIndent()
+            io.gitlab.arturbosch.detekt.test.assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
+
+        @Test
+        fun `does not report undocumented enum entries in private and internal enum`() {
+            val code = """
+                private enum class PrivateEnum {
+                    Foo,
+                    Bar,
+                }
+
+                internal enum class InternalEnum {
+                    Foo,
+                    Bar,
+                }
+            """.trimIndent()
+            io.gitlab.arturbosch.detekt.test.assertThat(subject.compileAndLint(code)).isEmpty()
+        }
     }
 }
