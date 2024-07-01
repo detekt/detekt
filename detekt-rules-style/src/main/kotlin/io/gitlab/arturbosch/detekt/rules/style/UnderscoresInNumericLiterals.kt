@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.api.configWithFallback
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.KtPrefixExpression
@@ -33,13 +32,8 @@ class UnderscoresInNumericLiterals(config: Config) : Rule(
         "should be underscore separated to increase readability."
 ) {
 
-    @Configuration("Length under which base 10 numbers are not required to have underscores")
-    @Deprecated("Use `acceptableLength` instead")
-    private val acceptableDecimalLength: Int by config(5) { it - 1 }
-
-    @Suppress("DEPRECATION")
     @Configuration("Maximum number of consecutive digits that a numeric literal can have without using an underscore")
-    private val acceptableLength: Int by configWithFallback(::acceptableDecimalLength, 4)
+    private val acceptableLength: Int by config(4)
 
     @Configuration("If set to false, groups of exactly three digits must be used. If set to true, 100_00 is allowed.")
     private val allowNonStandardGrouping: Boolean by config(false)

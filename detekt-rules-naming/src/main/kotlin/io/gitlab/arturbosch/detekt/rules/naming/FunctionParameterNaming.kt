@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.api.configWithFallback
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import io.gitlab.arturbosch.detekt.rules.naming.util.isContainingExcludedClass
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -27,15 +26,6 @@ class FunctionParameterNaming(config: Config) : Rule(
 
     @Configuration("ignores variables in classes which match this regex")
     private val excludeClassPattern: Regex by config("$^", String::toRegex)
-
-    @Configuration("ignores overridden functions with parameters not matching the pattern")
-    @Deprecated("Use `ignoreOverridden` instead")
-    private val ignoreOverriddenFunctions: Boolean by config(true)
-
-    @Configuration("ignores overridden functions with parameters not matching the pattern")
-    @Deprecated("This configuration is ignored and will be removed in the future")
-    @Suppress("DEPRECATION", "unused")
-    private val ignoreOverridden: Boolean by configWithFallback(::ignoreOverriddenFunctions, true)
 
     override fun visitParameter(parameter: KtParameter) {
         if (parameter.isParameterInFunction()) {
