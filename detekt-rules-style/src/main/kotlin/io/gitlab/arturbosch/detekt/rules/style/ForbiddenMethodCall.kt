@@ -61,7 +61,7 @@ class ForbiddenMethodCall(config: Config) : Rule(
             "vararg parameters). To forbid methods from the companion object reference the Companion class, for " +
             "example as `TestClass.Companion.hello()` (even if it is marked `@JvmStatic`)."
     )
-    private val methods: List<Forbidden> by config(
+    private val methods: List<ForbiddenMethod> by config(
         valuesWithReason(
             "kotlin.io.print" to "print does not allow you to configure the output stream. Use a logger instead.",
             "kotlin.io.println" to "println does not allow you to configure the output stream. Use a logger instead.",
@@ -70,7 +70,7 @@ class ForbiddenMethodCall(config: Config) : Rule(
                 "`BigDecimal.<init>(kotlin.String)` instead.",
         )
     ) { list ->
-        list.map { Forbidden(fromFunctionSignature(it.value), it.reason) }
+        list.map { ForbiddenMethod(fromFunctionSignature(it.value), it.reason) }
     }
 
     private val PropertyDescriptor.unwrappedGetMethod: FunctionDescriptor?
@@ -139,5 +139,5 @@ class ForbiddenMethodCall(config: Config) : Rule(
         }
     }
 
-    private data class Forbidden(val value: FunctionMatcher, val reason: String?)
+    internal data class ForbiddenMethod(val value: FunctionMatcher, val reason: String?)
 }

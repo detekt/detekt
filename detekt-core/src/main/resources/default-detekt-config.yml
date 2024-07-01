@@ -633,6 +633,9 @@ style:
         value: 'kotlin.io.println'
       - reason: 'using `BigDecimal.<init>(kotlin.Double)` can result in unexpected float point precision behavior. Use `BigDecimal.valueOf(kotlin.Double)` or `BigDecimal.<init>(kotlin.String)` instead.'
         value: 'java.math.BigDecimal.<init>(kotlin.Double)'
+  ForbiddenNamedParam:
+    active: false
+    methods: []
   ForbiddenSuppress:
     active: false
     rules: []
