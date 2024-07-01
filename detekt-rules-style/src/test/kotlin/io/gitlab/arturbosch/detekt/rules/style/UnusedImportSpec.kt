@@ -54,6 +54,26 @@ class UnusedImportSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Test
+    fun `does not report equals operators in kotlin dsl`() {
+        val main = """
+            import org.gradle.api.Project
+            import org.gradle.kotlin.dsl.assign
+            import org.gradle.kotlin.dsl.configure
+            import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+            import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
+            
+            fun Project.configureKotlinJvm() {
+                this.extensions.configure<KotlinJvmProjectExtension> {
+                    compilerOptions {
+                        jvmTarget = JvmTarget.JVM_17
+                    }
+                }
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, main)).isEmpty()
+    }
+
+    @Test
     fun `does not report imports in documentation`() {
         val main = """
             import tasks.success
