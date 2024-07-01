@@ -392,6 +392,7 @@ naming:
     minimumVariableNameLength: 1
   VariableNaming:
     active: true
+    aliases: ['PropertyName']
     variablePattern: '[a-z][A-Za-z0-9]*'
     privateVariablePattern: '(_)?[a-z][A-Za-z0-9]*'
     excludeClassPattern: '$^'

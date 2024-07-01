@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.Alias
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
@@ -19,6 +20,7 @@ import org.jetbrains.kotlin.resolve.calls.util.isSingleUnderscore
  * Reports variable names that do not follow the specified naming convention.
  */
 @ActiveByDefault(since = "1.0.0")
+@Alias("PropertyName")
 class VariableNaming(config: Config) : Rule(
     config,
     "Variable names should follow the naming convention set in the projects configuration."
