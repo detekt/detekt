@@ -243,4 +243,8 @@ class FakeKtElement(private val psiFile: PsiFile = FakePsiFile("")) : KtElement 
     override fun textMatches(p0: PsiElement): Boolean = false
 
     override fun textToCharArray(): CharArray = "".toCharArray()
+
+    override fun toString(): String {
+        return "FakeKtElement"
+    }
 }

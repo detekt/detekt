@@ -25,8 +25,7 @@ internal fun functionSuppressorFactory(rule: Rule, bindingContext: BindingContex
         .map(FunctionMatcher::fromFunctionSignature)
     return if (functionMatchers.isNotEmpty()) {
         Suppressor { finding ->
-            val element = finding.entity.ktElement
-            element != null && functionSuppressor(element, bindingContext, functionMatchers)
+            functionSuppressor(finding.entity.ktElement, bindingContext, functionMatchers)
         }
     } else {
         null

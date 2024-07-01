@@ -156,13 +156,9 @@ private fun MarkdownContent.renderIssue(issue: Issue, basePath: Path?): String {
         ""
     }
 
-    val psiFile = issue.entity.ktElement?.containingFile
-    val snippet = if (psiFile != null) {
-        val lineSequence = psiFile.text.splitToSequence('\n')
-        snippetCode(lineSequence, issue.location.source)
-    } else {
-        ""
-    }
+    val psiFile = issue.entity.ktElement.containingFile
+    val lineSequence = psiFile.text.splitToSequence('\n')
+    val snippet = snippetCode(lineSequence, issue.location.source)
 
     return "$location\n$message\n$snippet"
 }

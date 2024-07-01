@@ -19,7 +19,7 @@ class CorrectableCodeSmellSpec {
             "CorrectableCodeSmell(autoCorrectEnabled=true, " +
                 "entity=Entity(name=TestEntity, signature=TestEntitySignature, " +
                 "location=Location(source=1:1, endSource=1:1, text=0:0, " +
-                "path=${codeSmell.location.path}), ktElement=null), " +
+                "path=${codeSmell.location.path}), ktElement=FakeKtElement), " +
                 "message=TestMessage, references=[])"
         )
     }

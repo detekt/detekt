@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.api
 
+import io.github.detekt.test.utils.internal.FakeKtElement
 import io.gitlab.arturbosch.detekt.test.location
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -20,16 +21,15 @@ class CodeSmellSpec {
                     text = TextLocation(0, 0),
                     path = Path("/").absolute().resolve("Users/tester/detekt/TestFile.kt"),
                 ),
-                ktElement = null
+                ktElement = FakeKtElement()
             ),
             message = "TestMessage"
         )
 
         assertThat(codeSmell.toString()).isEqualTo(
             "CodeSmell(entity=Entity(name=TestEntity, signature=TestEntitySignature, " +
-                "location=Location(source=1:1, endSource=1:1, text=0:0, " +
-                "path=${codeSmell.location.path}), ktElement=null), message=TestMessage, " +
-                "references=[])"
+                "location=Location(source=1:1, endSource=1:1, text=0:0, path=${codeSmell.location.path}), " +
+                "ktElement=FakeKtElement), message=TestMessage, references=[])"
         )
     }
 }

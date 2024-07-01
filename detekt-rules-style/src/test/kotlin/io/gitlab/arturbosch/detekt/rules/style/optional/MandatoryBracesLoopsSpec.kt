@@ -61,7 +61,7 @@ class MandatoryBracesLoopsSpec {
             val findings = subject.compileAndLint(code)
 
             assertThat(findings).hasSize(1)
-            assertThat(findings[0].entity.ktElement?.text).isEqualTo("println(i)")
+            assertThat(findings[0].entity.ktElement.text).isEqualTo("println(i)")
         }
 
         @Test
@@ -234,7 +234,7 @@ class MandatoryBracesLoopsSpec {
             val findings = subject.compileAndLint(code)
 
             assertThat(findings).hasSize(1)
-            assertThat(findings[0].entity.ktElement?.text).isEqualTo("println()")
+            assertThat(findings[0].entity.ktElement.text).isEqualTo("println()")
         }
 
         @Test
@@ -307,7 +307,7 @@ class MandatoryBracesLoopsSpec {
             val findings = subject.compileAndLint(code)
 
             assertThat(findings).hasSize(1)
-            assertThat(findings[0].entity.ktElement?.text).isEqualTo("println()")
+            assertThat(findings[0].entity.ktElement.text).isEqualTo("println()")
         }
 
         @Test
