@@ -9,7 +9,6 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.api.configWithFallback
 import io.gitlab.arturbosch.detekt.api.simplePatternToRegex
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import io.gitlab.arturbosch.detekt.rules.isCalling
@@ -55,13 +54,8 @@ class IgnoredReturnValue(config: Config) : Rule(
     "This call returns a value which is ignored"
 ) {
 
-    @Configuration("if the rule should check only annotated methods")
-    @Deprecated("Use `restrictToConfig` instead")
-    private val restrictToAnnotatedMethods: Boolean by config(defaultValue = true)
-
-    @Suppress("DEPRECATION")
     @Configuration("If the rule should check only methods matching to configuration, or all methods")
-    private val restrictToConfig: Boolean by configWithFallback(::restrictToAnnotatedMethods, defaultValue = true)
+    private val restrictToConfig: Boolean by config(defaultValue = true)
 
     @Configuration("List of glob patterns to be used as inspection annotation")
     private val returnValueAnnotations: List<Regex> by config(

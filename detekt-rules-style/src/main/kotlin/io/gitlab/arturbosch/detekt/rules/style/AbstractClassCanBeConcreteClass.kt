@@ -1,21 +1,17 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.github.detekt.psi.AnnotationExcluder
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.isAbstract
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.descriptors.MemberDescriptor
 import org.jetbrains.kotlin.descriptors.Modality
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtClass
-import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.isAbstract
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.lazy.descriptors.LazyClassMemberScope
@@ -54,23 +50,6 @@ class AbstractClassCanBeConcreteClass(config: Config) : Rule(
 
     private val noAbstractMember = "An abstract class without an abstract member can be refactored to a concrete class."
 
-    @Configuration("Allows you to provide a list of annotations that disable this check.")
-    @Deprecated("Use `ignoreAnnotated` instead")
-    private val excludeAnnotatedClasses: List<Regex> by config(emptyList<String>()) { list ->
-        list.map { it.replace(".", "\\.").replace("*", ".*").toRegex() }
-    }
-
-    private lateinit var annotationExcluder: AnnotationExcluder
-
-    override fun visitKtFile(file: KtFile) {
-        annotationExcluder = AnnotationExcluder(
-            file,
-            @Suppress("DEPRECATION") excludeAnnotatedClasses,
-            bindingContext,
-        )
-        super.visitKtFile(file)
-    }
-
     override fun visitClass(klass: KtClass) {
         super.visitClass(klass)
         klass.check()
@@ -78,7 +57,7 @@ class AbstractClassCanBeConcreteClass(config: Config) : Rule(
 
     private fun KtClass.check() {
         val nameIdentifier = this.nameIdentifier ?: return
-        if (annotationExcluder.shouldExclude(annotationEntries) || isInterface() || !isAbstract()) return
+        if (isInterface() || !isAbstract()) return
         val members = members()
         when {
             members.isNotEmpty() -> checkMembers(members, nameIdentifier)
