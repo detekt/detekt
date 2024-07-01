@@ -57,6 +57,33 @@ class ForbiddenNamedParamSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Test
+    fun `should report method call when using the fully qualified name with custom reason`() {
+        val code = """
+            fun main() {
+                println(message = "")
+                println(message = 1)
+                println(message = 1.0)
+            }
+        """.trimIndent()
+        val findings = ForbiddenNamedParam(
+            TestConfig(
+                METHODS to listOf(
+                    mapOf(
+                        "value" to "kotlin.io.println",
+                        "reason" to "As it is self explanatory"
+                    )
+                )
+            )
+        ).compileAndLintWithContext(env, code)
+        assertThat(findings).hasSize(3)
+        assertThat(findings).hasTextLocations(17 to 38, 43 to 63, 68 to 90)
+        assertThat(findings[0]).hasMessage(
+            "The method `kotlin.io.println` has been forbidden from using named param: " +
+                "As it is self explanatory"
+        )
+    }
+
+    @Test
     fun `should report nothing when not using named param`() {
         val code = """
             fun main() {
