@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.documentation.internal.isPublicInherited
 import io.gitlab.arturbosch.detekt.rules.isPublicNotOverridden
+import org.jetbrains.kotlin.psi.KtEnumEntry
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.KtProperty
@@ -44,6 +45,13 @@ class UndocumentedPublicProperty(config: Config) : Rule(
             report(property)
         }
         super.visitProperty(property)
+    }
+
+    override fun visitEnumEntry(enumEntry: KtEnumEntry) {
+        super.visitEnumEntry(enumEntry)
+        if (enumEntry.isPublicInherited(searchProtectedProperty) && enumEntry.docComment == null) {
+            report(enumEntry)
+        }
     }
 
     private fun KtNamedDeclaration.isUndocumented(comment: String?) =
