@@ -430,4 +430,63 @@ class UndocumentedPublicPropertySpec {
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
+
+    @Nested
+    inner class `enum entries` {
+        @Test
+        fun `does report undocumented enum entries in public enum`() {
+            val code = """
+                /**
+                * This is PublicEnum
+                */
+                enum class PublicEnum {
+                    Foo,
+                    Bar,
+                }
+            """.trimIndent()
+            assertThat(subject.compileAndLint(code)).hasSize(2)
+        }
+
+        @Test
+        fun `does not report documented enum entries in public enum`() {
+            val code = """
+                /**
+                * This is PublicEnum
+                */
+                enum class PrivateEnum {
+                    /**
+                    * This is For
+                    */
+                    Foo,
+                    /**
+                    * This is Bar
+                    */
+                    Bar,
+                }
+            """.trimIndent()
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report undocumented enum entries in private and internal enum`() {
+            val code = """
+                /**
+                * This is PrivateEnum
+                */
+                private enum class PrivateEnum {
+                    Foo,
+                    Bar,
+                }
+
+                /**
+                * This is InternalEnum
+                */
+                internal enum class InternalEnum {
+                    Foo,
+                    Bar,
+                }
+            """.trimIndent()
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+    }
 }
