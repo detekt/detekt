@@ -284,7 +284,7 @@ class UndocumentedPublicClassSpec {
     }
 
     @Nested
-    inner class `enum entries` {
+    inner class `enum classes` {
         @Test
         fun `does not report documented enum class in public enum`() {
             val code = """
