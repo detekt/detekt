@@ -7,6 +7,8 @@ import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.cfg.WhenChecker
+import org.jetbrains.kotlin.config.AnalysisFlags
+import org.jetbrains.kotlin.config.ExplicitApiMode
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtIfExpression
@@ -103,11 +105,19 @@ class OptionalUnit(config: Config) : Rule(
                 true
         }
 
+    private fun isExplicitApiModeActive(): Boolean {
+        val resources = compilerResources ?: return false
+        val flag = resources.languageVersionSettings.getFlag(AnalysisFlags.explicitApiMode)
+        return flag != ExplicitApiMode.DISABLED
+    }
+
     private fun checkFunctionWithExplicitReturnType(function: KtNamedFunction, typeReference: KtTypeReference) {
         val typeElementText = typeReference.typeElement?.text
         if (typeElementText == UNIT) {
             val initializer = function.initializer
             if (initializer?.isGenericOrNothingType() == true) return
+            // case when explicit api is on so in case of expression body we need Unit
+            if (initializer != null && isExplicitApiModeActive()) return
             report(CodeSmell(Entity.from(typeReference), createMessage(function)))
         }
     }
