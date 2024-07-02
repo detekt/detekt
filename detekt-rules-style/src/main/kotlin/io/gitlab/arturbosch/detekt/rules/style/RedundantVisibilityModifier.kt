@@ -60,7 +60,7 @@ class RedundantVisibilityModifier(config: Config) : Rule(
     private fun isExplicitApiModeActive(): Boolean {
         val resources = compilerResources ?: return false
         val flag = resources.languageVersionSettings.getFlag(AnalysisFlags.explicitApiMode)
-        return flag == ExplicitApiMode.STRICT
+        return flag != ExplicitApiMode.DISABLED
     }
 
     override fun visitKtFile(file: KtFile) {
