@@ -233,6 +233,8 @@ empty-blocks:
 
 exceptions:
   active: true
+  ErrorUsageWithThrowable:
+    active: false
   ExceptionRaisedInUnexpectedLocation:
     active: true
     methodNames:
