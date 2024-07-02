@@ -137,7 +137,7 @@ class ClassOrderingSpec {
         val findings = subject.compileAndLint(code)
         assertThat(findings).hasSize(1)
         assertThat(findings[0].message).isEqualTo(
-            "secondary constructor should be declared before method declarations."
+            "secondary constructor should be declared after property declarations and initializer blocks."
         )
     }
 
@@ -164,7 +164,7 @@ class ClassOrderingSpec {
         val findings = subject.compileAndLint(code)
         assertThat(findings).hasSize(1)
         assertThat(findings[0].message)
-            .isEqualTo("method `returnX()` should be declared before companion object.")
+            .isEqualTo("method `returnX()` should be declared after secondary constructors.")
     }
 
     @Test
@@ -297,9 +297,9 @@ class ClassOrderingSpec {
     }
 
     @Test
-    fun `does report before issue when loweset sections comes after longest change`() {
+    fun `does report before issue when lowest sections comes after longest change`() {
         val code = """
-            class SingleMisorderAtFirst(private val x: String) {
+            class SingleMisOrderAtFirst(private val x: String) {
                 companion object {
                     const val IMPORTANT_VALUE = 3
                 }
@@ -321,5 +321,35 @@ class ClassOrderingSpec {
         assertThat(findings).hasSize(1)
         assertThat(findings[0].message)
             .isEqualTo("companion object should be declared after method declarations.")
+    }
+
+    @Test
+    fun `#7407 does report before issue when there is not lower section above violating section`() {
+        val code = """
+            class ExampleClass {
+
+                var var1 = 1
+
+                fun bar() {
+            
+                }
+
+                var var2 = 2
+
+                init {
+                    /* no-op */
+                }
+ 
+                companion object {
+                    /* no-op */
+                }
+            }
+
+        """.trimIndent()
+
+        val findings = subject.compileAndLint(code)
+        assertThat(findings).hasSize(1)
+        assertThat(findings[0].message)
+            .isEqualTo("method `bar()` should be declared after property declarations and initializer blocks.")
     }
 }

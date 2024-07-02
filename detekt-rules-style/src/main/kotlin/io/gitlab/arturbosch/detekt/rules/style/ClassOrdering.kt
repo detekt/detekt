@@ -12,8 +12,6 @@ import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtSecondaryConstructor
 
-private typealias DeclarationToSectionPair = Pair<KtDeclaration, Section>
-
 /**
  * This rule ensures class contents are ordered as follows as recommended by the Kotlin
  * [Coding Conventions](https://kotlinlang.org/docs/coding-conventions.html#class-layout):
@@ -59,22 +57,39 @@ class ClassOrdering(config: Config) : Rule(
     override fun visitClassBody(classBody: KtClassBody) {
         super.visitClassBody(classBody)
 
-        val sectionList = classBody.declarations.filterNotNull()
-        if (sectionList.isEmpty()) return
-        val (violationDeclarationToSectionPair, listOfIncreasingSection) = getMinimalNumberOfViolations(sectionList)
-            ?: return
-        violationDeclarationToSectionPair.forEach { (declaration, section) ->
-            val (directionMsg, anchorSection) = listOfIncreasingSection.find { it.priority > section.priority }?.let {
-                "before" to it
-            } ?: run {
-                "after" to listOfIncreasingSection.findLast { it.priority < section.priority }
-            }
+        val declarations = classBody.declarations.filterNotNull()
+        if (declarations.isEmpty()) return
+        val (violatingDeclarationWithSections, increasingDeclarationWithSections) = getMinimalNumberOfViolations(
+            declarations
+        ) ?: return
+        violatingDeclarationWithSections.forEach { (violatingDeclaration, violatingSection) ->
+            val increasingDeclarationsBeforeViolatingElement =
+                declarations.takeWhile { it != violatingDeclaration }
+            val increasingDeclarationSectionBeforeViolatingElement =
+                increasingDeclarationWithSections.takeWhile {
+                    it.declaration in increasingDeclarationsBeforeViolatingElement
+                }
+            // for finding section from which violatingSection should be before we are only
+            // taking declarations which is already before the violatingSection
+            val (directionMsg, anchorSection) = increasingDeclarationSectionBeforeViolatingElement
+                .find {
+                    it.section.priority > violatingSection.priority
+                }
+                ?.let {
+                    "before" to it
+                }
+                ?: run {
+                    "after" to
+                        increasingDeclarationWithSections
+                            .findLast { it.section.priority < violatingSection.priority }
+                }
             anchorSection ?: return@forEach
             val message =
-                "${declaration.toDescription()} should be declared $directionMsg ${anchorSection.toDescription()}."
+                "${violatingDeclaration.toDescription()} should be declared $directionMsg " +
+                    "${anchorSection.section.toDescription()}."
             report(
                 CodeSmell(
-                    entity = Entity.from(declaration),
+                    entity = Entity.from(violatingDeclaration),
                     message = message,
                     references = listOf(Entity.from(classBody))
                 )
@@ -84,10 +99,13 @@ class ClassOrdering(config: Config) : Rule(
 
     private fun getMinimalNumberOfViolations(
         declarations: List<KtDeclaration>,
-    ): Pair<List<DeclarationToSectionPair>, List<Section>>? {
+    ): Pair<List<DeclarationWithSection>, List<DeclarationWithSection>>? {
         val declarationWithSectionList = declarations.mapNotNull { declaration ->
             declaration.toSection()?.let {
-                declaration to it
+                DeclarationWithSection(
+                    declaration,
+                    it
+                )
             }
         }
         val dp = IntArray(declarationWithSectionList.size) {
@@ -98,7 +116,8 @@ class ClassOrdering(config: Config) : Rule(
         }
         for (i in dp.indices) {
             for (j in 0..<i) {
-                if (declarationWithSectionList[i].second.priority >= declarationWithSectionList[j].second.priority &&
+                if (declarationWithSectionList[i].section.priority >=
+                    declarationWithSectionList[j].section.priority &&
                     dp[i] < dp[j] + 1
                 ) {
                     dp[i] = dp[j] + 1
@@ -118,8 +137,13 @@ class ClassOrdering(config: Config) : Rule(
             } while (index != oldIndex)
         }.reversed()
         return declarationWithSectionList.minus(listOfIncreasingSection.toSet()) to
-            listOfIncreasingSection.map { it.second }
+            listOfIncreasingSection
     }
+
+    private data class DeclarationWithSection(
+        val declaration: KtDeclaration,
+        val section: Section,
+    )
 }
 
 private fun KtDeclaration.toDescription(): String = when {
