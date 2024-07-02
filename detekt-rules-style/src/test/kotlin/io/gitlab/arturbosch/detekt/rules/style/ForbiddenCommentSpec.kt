@@ -18,10 +18,8 @@ import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import java.util.Locale
 
-private const val VALUES = "values"
 private const val COMMENTS = "comments"
 private const val ALLOWED_PATTERNS = "allowedPatterns"
-private const val MESSAGE = "customMessage"
 
 class ForbiddenCommentSpec {
     @Nested
@@ -30,34 +28,39 @@ class ForbiddenCommentSpec {
         @Test
         @DisplayName("should report TODO: usages")
         fun reportTodoColon() {
-            val findings = ForbiddenComment(Config.empty).compileAndLint("// TODO: I need to fix this.")
+            val findings =
+                ForbiddenComment(Config.empty).compileAndLint("// TODO: I need to fix this.")
             assertThat(findings).singleElement()
                 .hasMessage("Forbidden TODO todo marker in comment, please do the changes.")
         }
 
         @Test
         fun `should not report TODO usages`() {
-            val findings = ForbiddenComment(Config.empty).compileAndLint("// TODO I need to fix this.")
+            val findings =
+                ForbiddenComment(Config.empty).compileAndLint("// TODO I need to fix this.")
             assertThat(findings).isEmpty()
         }
 
         @Test
         @DisplayName("should report FIXME: usages")
         fun reportFixMe() {
-            val findings = ForbiddenComment(Config.empty).compileAndLint("// FIXME: I need to fix this.")
+            val findings =
+                ForbiddenComment(Config.empty).compileAndLint("// FIXME: I need to fix this.")
             assertThat(findings).hasSize(1)
         }
 
         @Test
         fun `should not report FIXME usages`() {
-            val findings = ForbiddenComment(Config.empty).compileAndLint("// FIXME I need to fix this.")
+            val findings =
+                ForbiddenComment(Config.empty).compileAndLint("// FIXME I need to fix this.")
             assertThat(findings).isEmpty()
         }
 
         @Test
         @DisplayName("should report STOPSHIP: usages")
         fun reportStopShipColon() {
-            val findings = ForbiddenComment(Config.empty).compileAndLint("// STOPSHIP: I need to fix this.")
+            val findings =
+                ForbiddenComment(Config.empty).compileAndLint("// STOPSHIP: I need to fix this.")
             assertThat(findings).singleElement().hasMessage(
                 "Forbidden STOPSHIP todo marker in comment, please address the problem before shipping the code."
             )
@@ -65,7 +68,8 @@ class ForbiddenCommentSpec {
 
         @Test
         fun `should not report STOPSHIP usages`() {
-            val findings = ForbiddenComment(Config.empty).compileAndLint("// STOPSHIP I need to fix this.")
+            val findings =
+                ForbiddenComment(Config.empty).compileAndLint("// STOPSHIP I need to fix this.")
             assertThat(findings).isEmpty()
         }
 
@@ -129,21 +133,24 @@ class ForbiddenCommentSpec {
             @Test
             @DisplayName("should not report TODO: usages")
             fun todoColon() {
-                val findings = ForbiddenComment(config).compileAndLint("// TODO: I need to fix this.")
+                val findings =
+                    ForbiddenComment(config).compileAndLint("// TODO: I need to fix this.")
                 assertThat(findings).isEmpty()
             }
 
             @Test
             @DisplayName("should not report FIXME: usages")
             fun fixmeColon() {
-                val findings = ForbiddenComment(config).compileAndLint("// FIXME: I need to fix this.")
+                val findings =
+                    ForbiddenComment(config).compileAndLint("// FIXME: I need to fix this.")
                 assertThat(findings).isEmpty()
             }
 
             @Test
             @DisplayName("should not report STOPME: usages")
             fun stopShipColon() {
-                val findings = ForbiddenComment(config).compileAndLint("// STOPSHIP: I need to fix this.")
+                val findings =
+                    ForbiddenComment(config).compileAndLint("// STOPSHIP: I need to fix this.")
                 assertThat(findings).isEmpty()
             }
 
@@ -155,7 +162,8 @@ class ForbiddenCommentSpec {
 
             @Test
             fun `should report Banana usages regardless of case sensitive`() {
-                val forbiddenComment = ForbiddenComment(TestConfig(VALUES to listOf("bAnAnA")))
+                val forbiddenComment =
+                    ForbiddenComment(TestConfig(COMMENTS to listOf("(?i)bAnAnA")))
                 val findings = forbiddenComment.compileAndLint(banana)
                 assertThat(findings).hasSize(1)
             }
@@ -169,34 +177,30 @@ class ForbiddenCommentSpec {
             @Test
             @DisplayName("should not report TODO: usages")
             fun todoColon() {
-                val findings = ForbiddenComment(config).compileAndLint("// TODO: I need to fix this.")
+                val findings =
+                    ForbiddenComment(config).compileAndLint("// TODO: I need to fix this.")
                 assertThat(findings).isEmpty()
             }
 
             @Test
             @DisplayName("should not report FIXME: usages")
             fun fixmeColon() {
-                val findings = ForbiddenComment(config).compileAndLint("// FIXME: I need to fix this.")
+                val findings =
+                    ForbiddenComment(config).compileAndLint("// FIXME: I need to fix this.")
                 assertThat(findings).isEmpty()
             }
 
             @Test
             @DisplayName("should not report STOPME: usages")
             fun stopShipColon() {
-                val findings = ForbiddenComment(config).compileAndLint("// STOPSHIP: I need to fix this.")
+                val findings =
+                    ForbiddenComment(config).compileAndLint("// STOPSHIP: I need to fix this.")
                 assertThat(findings).isEmpty()
             }
 
             @Test
             fun `should report Banana usages`() {
                 val findings = ForbiddenComment(config).compileAndLint(banana)
-                assertThat(findings).hasSize(1)
-            }
-
-            @Test
-            fun `should report Banana usages regardless of case sensitive`() {
-                val forbiddenComment = ForbiddenComment(TestConfig(VALUES to listOf("bAnAnA")))
-                val findings = forbiddenComment.compileAndLint(banana)
                 assertThat(findings).hasSize(1)
             }
         }
@@ -206,16 +210,8 @@ class ForbiddenCommentSpec {
     inner class `custom default values with allowed patterns are configured` {
 
         private val patternsConfig = TestConfig(
-            VALUES to listOf("Comment"),
             ALLOWED_PATTERNS to "Ticket|Task",
         )
-
-        @Test
-        fun `should report Comment usages when regex does not match`() {
-            val comment = "// Comment is added here."
-            val findings = ForbiddenComment(patternsConfig).compileAndLint(comment)
-            assertThat(findings).hasSize(1)
-        }
 
         @Test
         fun `should not report Comment usages when any one pattern is present`() {
@@ -235,8 +231,7 @@ class ForbiddenCommentSpec {
     @Nested
     inner class `custom message is configured` {
         private val messageConfig = TestConfig(
-            VALUES to listOf("Comment"),
-            MESSAGE to "Custom Message",
+            COMMENTS to listOf("Comment"),
         )
 
         @Test
@@ -244,25 +239,16 @@ class ForbiddenCommentSpec {
             val comment = "// Comment"
             val findings = ForbiddenComment(messageConfig).compileAndLint(comment)
             assertThat(findings).hasSize(1)
-            assertThat(findings.first().message).isEqualTo("Custom Message")
+            assertThat(findings.first().message)
+                .isEqualTo("This comment contains 'Comment' that has been defined as forbidden.")
         }
     }
 
     @Nested
     inner class `custom message is not configured` {
-        private val messageConfig = TestConfig(VALUES to listOf("Comment"))
         private val messageWithReasonConfig = TestConfig(
             COMMENTS to listOf(ValueWithReason("Comment", "Comment is disallowed").toConfig())
         )
-
-        @Test
-        fun `should report a Finding with default Message`() {
-            val comment = "// Comment"
-            val findings = ForbiddenComment(messageConfig).compileAndLint(comment)
-            val expectedMessage = String.format(Locale.ROOT, ForbiddenComment.DEFAULT_ERROR_MESSAGE, "Comment")
-            assertThat(findings).hasSize(1)
-            assertThat(findings.first().message).isEqualTo(expectedMessage)
-        }
 
         @Test
         fun `should report a Finding with reason`() {

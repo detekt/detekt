@@ -9,7 +9,6 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-private const val ACCEPTABLE_DECIMAL_LENGTH = "acceptableDecimalLength"
 private const val ACCEPTABLE_LENGTH = "acceptableLength"
 private const val ALLOW_NON_STANDARD_GROUPING = "allowNonStandardGrouping"
 
@@ -29,14 +28,6 @@ class UnderscoresInNumericLiteralsSpec {
         fun `should be reported if acceptableLength is 3`() {
             val findings = UnderscoresInNumericLiterals(
                 TestConfig(ACCEPTABLE_LENGTH to "3")
-            ).compileAndLint(code)
-            assertThat(findings).isNotEmpty
-        }
-
-        @Test
-        fun `should be reported if deprecated acceptableDecimalLength is 4`() {
-            val findings = UnderscoresInNumericLiterals(
-                TestConfig(ACCEPTABLE_DECIMAL_LENGTH to "4")
             ).compileAndLint(code)
             assertThat(findings).isNotEmpty
         }
