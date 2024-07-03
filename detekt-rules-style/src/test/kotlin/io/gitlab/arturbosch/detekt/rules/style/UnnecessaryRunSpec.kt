@@ -2,8 +2,8 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
+import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -30,7 +30,9 @@ class UnnecessaryRunSpec(val env: KotlinCoreEnvironment) {
                 """.trimIndent()
             )
             assertThat(findings).hasSize(1)
-            assertThat(findings.first().message).isEqualTo(MSG)
+            assertThat(findings.first()).hasMessage(MSG)
+            assertThat(findings).hasStartSourceLocation(3, 20)
+            assertThat(findings).hasEndSourceLocation(3, 23)
         }
 
         @Test
@@ -44,11 +46,12 @@ class UnnecessaryRunSpec(val env: KotlinCoreEnvironment) {
                         val a: Int? = 0
                         val result1 = a ?: run { java.lang.System.currentTimeMillis() }
                         val result2 = a ?: run { System.currentTimeMillis() }
+                        val result3 = a ?: kotlin.run { System.currentTimeMillis() }
                     }
                 """.trimIndent()
             )
-            assertThat(findings).hasSize(2)
-            assertThat(findings.first().message).isEqualTo(MSG)
+            assertThat(findings).hasSize(3)
+            assertThat(findings.first()).hasMessage(MSG)
         }
 
         @Test
@@ -86,7 +89,24 @@ class UnnecessaryRunSpec(val env: KotlinCoreEnvironment) {
                 """.trimIndent()
             )
             assertThat(findings).hasSize(1)
-            assertThat(findings.first().message).isEqualTo(MSG)
+            assertThat(findings.first()).hasMessage(MSG)
+        }
+
+        @Test
+        fun `reports run on empty block`() {
+            val findings = subject.compileAndLintWithContext(
+                env,
+                """
+                    fun f() {
+                        val a = 0
+                        val result = a.run {
+                        }
+                        run { }
+                        kotlin.run { }
+                    }
+                """.trimIndent()
+            )
+            assertThat(findings).hasSize(3)
         }
 
         @Test
@@ -104,7 +124,7 @@ class UnnecessaryRunSpec(val env: KotlinCoreEnvironment) {
                 """.trimIndent()
             )
             assertThat(findings).hasSize(1)
-            assertThat(findings.first().message).isEqualTo(IF_LET_MSG)
+            assertThat(findings.first()).hasMessage(IF_LET_MSG)
         }
 
         @Test
