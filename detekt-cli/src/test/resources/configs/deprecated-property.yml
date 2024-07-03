@@ -1,3 +1,3 @@
-complexity:
-  LongParameterList:
-    threshold: 10
+test:
+  TestRuleWithDeprecation:
+    deprecated: 10
