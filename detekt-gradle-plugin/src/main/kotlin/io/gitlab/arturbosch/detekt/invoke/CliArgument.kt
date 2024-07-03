@@ -56,7 +56,7 @@ internal data class ClasspathArgument(val fileCollection: FileCollection) : CliA
     override fun toArgument() = if (!fileCollection.isEmpty) {
         listOf(
             CLASSPATH_PARAMETER,
-            fileCollection.joinToString(File.pathSeparator) { it.absolutePath }
+            fileCollection.files.filter(File::exists).joinToString(File.pathSeparator) { it.absolutePath }
         )
     } else {
         emptyList()
