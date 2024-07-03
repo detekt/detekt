@@ -112,11 +112,13 @@ class UnnecessaryRun(config: Config) : Rule(
     }
 
     private fun KtCallExpression.getCallExpressionLambdaExpression() =
-        (lambdaArguments.firstOrNull()?.getLambdaExpression()
-            ?: valueArguments
-                .firstOrNull()
-                ?.getArgumentExpression()
-                ?.unpackFunctionLiteral())
+        (
+            lambdaArguments.firstOrNull()?.getLambdaExpression()
+                ?: valueArguments
+                    .firstOrNull()
+                    ?.getArgumentExpression()
+                    ?.unpackFunctionLiteral()
+            )
 }
 
 private val RUN_FQ_NAME = FqName("kotlin.run")
