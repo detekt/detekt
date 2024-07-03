@@ -16,6 +16,7 @@ import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.psi.KtThisExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 import org.jetbrains.kotlin.psi.unpackFunctionLiteral
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getImplicitReceiverValue
@@ -61,7 +62,12 @@ class UnnecessaryRun(config: Config) : Rule(
             } else {
                 "`run` expression can be omitted"
             }
-            report(CodeSmell(Entity.from(expression), message))
+            report(
+                CodeSmell(
+                    Entity.from(expression.getCallNameExpression() ?: expression),
+                    message
+                )
+            )
         }
     }
 
@@ -71,15 +77,11 @@ class UnnecessaryRun(config: Config) : Rule(
 
     @Suppress("ReturnCount")
     private fun KtCallExpression.hasOnlyOneMemberAccessStatement(receiverIsUsed: Boolean): Boolean {
-        val lambda =
-            (
-                lambdaArguments.firstOrNull()?.getLambdaExpression()
-                    ?: valueArguments
-                        .firstOrNull()
-                        ?.getArgumentExpression()
-                        ?.unpackFunctionLiteral()
-                ) ?: return false
-        var singleStatement = lambda.bodyExpression?.statements?.singleOrNull()
+        val lambda = getCallExpressionLambdaExpression() ?: return false
+        val bodyExpression = lambda.bodyExpression ?: return false
+        // if there is no statement in body then we can report
+        if (bodyExpression.statements.isEmpty()) return true
+        var singleStatement = bodyExpression.statements.singleOrNull()
             ?: return false
 
         if (singleStatement is KtBinaryExpression) {
@@ -108,6 +110,13 @@ class UnnecessaryRun(config: Config) : Rule(
             }
         }.size <= 1
     }
+
+    private fun KtCallExpression.getCallExpressionLambdaExpression() =
+        (lambdaArguments.firstOrNull()?.getLambdaExpression()
+            ?: valueArguments
+                .firstOrNull()
+                ?.getArgumentExpression()
+                ?.unpackFunctionLiteral())
 }
 
 private val RUN_FQ_NAME = FqName("kotlin.run")
