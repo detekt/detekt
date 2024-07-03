@@ -16,6 +16,7 @@ import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.KtWhenExpression
+import org.jetbrains.kotlin.psi.psiUtil.isPublic
 import org.jetbrains.kotlin.psi.psiUtil.siblings
 import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
@@ -117,7 +118,7 @@ class OptionalUnit(config: Config) : Rule(
             val initializer = function.initializer
             if (initializer?.isGenericOrNothingType() == true) return
             // case when explicit api is on so in case of expression body we need Unit
-            if (initializer != null && isExplicitApiModeActive()) return
+            if (initializer != null && isExplicitApiModeActive() && function.isPublic) return
             report(CodeSmell(Entity.from(typeReference), createMessage(function)))
         }
     }

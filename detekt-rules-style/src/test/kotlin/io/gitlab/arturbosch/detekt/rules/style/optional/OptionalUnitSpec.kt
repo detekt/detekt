@@ -415,9 +415,9 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
             """.trimIndent()
         )
 
-        private val expressionFunWithUnitCode = compileContentForTest(
+        private fun getExpressionFunWithUnitCode(modifier: String = "") = compileContentForTest(
             """
-                fun foo(): Unit = println("")
+                $modifier fun foo(): Unit = println("")
             """.trimIndent()
         )
 
@@ -475,7 +475,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `should not report when a function has expression with Unit return type when config is strict`() {
             val findings = subject.visitFile(
-                expressionFunWithUnitCode,
+                getExpressionFunWithUnitCode(),
                 compilerResources = fakeCompilerResources(ExplicitApiMode.STRICT)
             )
             assertThat(findings).isEmpty()
@@ -484,19 +484,40 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `should not report when a function has expression with Unit return type when config is warning`() {
             val findings = subject.visitFile(
-                expressionFunWithUnitCode,
+                getExpressionFunWithUnitCode(),
                 compilerResources = fakeCompilerResources(ExplicitApiMode.WARNING)
             )
             assertThat(findings).isEmpty()
         }
 
         @Test
-        fun `should not report when a function has expression with Unit return type when config is disabled`() {
-            val findings = subject.visitFile(
-                expressionFunWithUnitCode,
-                compilerResources = fakeCompilerResources(ExplicitApiMode.DISABLED)
+        fun `should report private when a function has expression with Unit return type when config is strict`() {
+            val findingsWithPrivate = subject.visitFile(
+                getExpressionFunWithUnitCode("private"),
+                compilerResources = fakeCompilerResources(ExplicitApiMode.STRICT)
             )
-            assertThat(findings).hasSize(1)
+            assertThat(findingsWithPrivate).hasSize(1)
+
+            val findingsWithInternal = subject.visitFile(
+                getExpressionFunWithUnitCode("internal"),
+                compilerResources = fakeCompilerResources(ExplicitApiMode.STRICT)
+            )
+            assertThat(findingsWithInternal).hasSize(1)
+        }
+
+        @Test
+        fun `should report private and internal when a function has expression with Unit return type when config is warning`() {
+            val findingsWithPrivate = subject.visitFile(
+                getExpressionFunWithUnitCode("private"),
+                compilerResources = fakeCompilerResources(ExplicitApiMode.WARNING)
+            )
+            assertThat(findingsWithPrivate).hasSize(1)
+
+            val findingsWithInternal = subject.visitFile(
+                getExpressionFunWithUnitCode("internal"),
+                compilerResources = fakeCompilerResources(ExplicitApiMode.WARNING)
+            )
+            assertThat(findingsWithInternal).hasSize(1)
         }
     }
 }
