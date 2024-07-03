@@ -754,7 +754,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
             }
 
             @Test
-            fun `should report when using BigDecimal string constructor`() {
+            fun `should not report when using BigDecimal string constructor`() {
                 val code = """
                     import java.math.BigDecimal
 
