@@ -30,8 +30,8 @@ open class Rule(
     var compilerResources: CompilerResources? = null
 
     val autoCorrect: Boolean
-        get() = config.valueOrDefault(Config.AUTO_CORRECT_KEY, false) &&
-            (config.parent?.valueOrDefault(Config.AUTO_CORRECT_KEY, true) != false)
+        get() = config.valueOrNull(Config.AUTO_CORRECT_KEY)
+            ?: (config.parent?.valueOrDefault(Config.AUTO_CORRECT_KEY, false) ?: false)
 
     private val findings: MutableList<Finding> = mutableListOf()
 
