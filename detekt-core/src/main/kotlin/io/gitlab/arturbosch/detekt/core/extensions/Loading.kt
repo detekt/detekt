@@ -20,4 +20,9 @@ inline fun <reified T : Extension> loadExtensions(
             it.init(settings.config)
             it.init(settings)
         }
-        .also { settings.debug { "Loaded extensions: $LIST_ITEM_SPACING${it.joinToString(LIST_ITEM_SPACING)}" } }
+        .also {
+            settings.debug {
+                "Loaded extensions: $LIST_ITEM_SPACING" +
+                    it.joinToString(LIST_ITEM_SPACING) { it.javaClass.canonicalName }
+            }
+        }

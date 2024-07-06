@@ -27,5 +27,10 @@ fun ProcessingSettings.createRuleProviders(): List<RuleSetProvider> {
             listOf(SingleRuleProvider(ruleName, realProvider))
         }
     }
-        .also { debug { "Registered rule sets: $LIST_ITEM_SPACING${it.joinToString(LIST_ITEM_SPACING)}" } }
+        .also {
+            debug {
+                "Registered rule sets: $LIST_ITEM_SPACING" +
+                    it.joinToString(LIST_ITEM_SPACING) { it.javaClass.canonicalName }
+            }
+        }
 }
