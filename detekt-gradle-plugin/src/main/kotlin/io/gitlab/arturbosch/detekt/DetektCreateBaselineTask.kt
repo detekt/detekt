@@ -79,7 +79,7 @@ abstract class DetektCreateBaselineTask @Inject constructor(
     @get:Optional
     abstract val classpath: ConfigurableFileCollection
 
-    @get:Internal
+    @get:Input
     abstract val friendPaths: ConfigurableFileCollection
 
     @get:Console
