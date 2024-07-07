@@ -10,9 +10,11 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtIfExpression
+import org.jetbrains.kotlin.psi.KtQualifiedExpression
 
 /**
  * This rule detects `if` statements which do not comply with the specified rules.
@@ -177,8 +179,14 @@ class BracesOnIfStatements(config: Config = Config.empty) : Rule(config) {
         var current: KtExpression? = expression
         while (current is KtIfExpression) {
             current.then?.let { list.add(it) }
-            // Don't add `if` because it's an `else if` which we treat as one unit.
-            current.`else`?.takeIf { it !is KtIfExpression }?.let { list.add(it) }
+            current.`else`?.takeIf {
+                // Don't add `if` because it's an `else if` which we treat as one unit.
+                it !is KtIfExpression &&
+                    // Don't add KtQualifiedExpression because it's `if-else` chained with other expression
+                    it !is KtQualifiedExpression &&
+                    // Don't add KtBinaryExpression because it's `if-else` chained with elvis or other binary expression
+                    it !is KtBinaryExpression
+            }?.let { list.add(it) }
             current = current.`else`
         }
         return list

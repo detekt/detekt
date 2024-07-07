@@ -1970,6 +1970,70 @@ class BracesOnIfStatementsSpec {
                     "if"(1)
                 ),
             )
+
+            @TestFactory
+            fun `no braces in chained expression are accepted`() = listOf(
+                flag(
+                    """
+                        if (true) {
+                            ""
+                        } else if (true) {
+                            ""
+                        } else {
+                            ""
+                        }.trim()
+                    """.trimIndent(),
+                    *NOTHING
+                ),
+                flag(
+                    """
+                        if (true) {
+                            ""
+                        } else if (true) {
+                            ""
+                        } else {
+                            ""
+                        }?.trim()
+                    """.trimIndent(),
+                    *NOTHING
+                ),
+                flag(
+                    """
+                        if (true) {
+                            ""
+                        } else if (true) {
+                            ""
+                        } else {
+                            ""
+                        } ?: ""
+                    """.trimIndent(),
+                    *NOTHING
+                ),
+                flag(
+                    """
+                        if (true) {
+                            true
+                        } else if (true) {
+                            true
+                        } else {
+                            true
+                        } && true
+                    """.trimIndent(),
+                    *NOTHING
+                ),
+                flag(
+                    """
+                        if (true) {
+                            1
+                        } else if (true) {
+                            1
+                        } else {
+                            1
+                        } or 1
+                    """.trimIndent(),
+                    *NOTHING
+                ),
+            )
         }
     }
 
