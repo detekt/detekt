@@ -47,7 +47,7 @@ jetbrains-annotations = "org.jetbrains:annotations:24.1.0"
 
 [plugins]
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.14.0" }
+binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.15.0" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 nexusPublish = { id = "io.github.gradle-nexus.publish-plugin", version = "2.0.0" }
 githubRelease = { id = "com.github.breadmoirai.github-release", version = "2.5.2" }
