@@ -309,7 +309,7 @@ class ForbiddenNamedParamSpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
-        fun `It doesn't raise any issue because the generics don't match`() {
+        fun `doesn't raise any issue because the generics don't match`() {
             val findings = ForbiddenNamedParam(
                 TestConfig(METHODS to listOf("org.example.bar(U, T, kotlin.String)"))
             ).compileAndLintWithContext(env, code)
@@ -338,7 +338,7 @@ class ForbiddenNamedParamSpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
-        fun `It doesn't raise any issue because the type doesn't match`() {
+        fun `doesn't raise any issue because the type doesn't match`() {
             val findings = ForbiddenNamedParam(
                 TestConfig(METHODS to listOf("org.example.bar(kotlin.Int, kotlin.String)"))
             ).compileAndLintWithContext(env, code)

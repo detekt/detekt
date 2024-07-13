@@ -25,6 +25,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.overriddenTreeUniqueAsSequenc
  *
  * <noncompliant>
  * fun foo() {
+ *     // `id =` here adds no value
  *     painterResource(id = R.drawable.ic_close)
  * }
  * </noncompliant>
