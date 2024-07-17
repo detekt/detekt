@@ -14,7 +14,7 @@ plugins {
     id("com.gradle.plugin-publish") version "1.2.1"
     // We use this published version of the detekt plugin to self analyse this project.
     id("io.gitlab.arturbosch.detekt") version "1.23.6"
-    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.15.1"
+    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.16.0"
     id("org.jetbrains.dokka") version "1.9.20"
 }
 
