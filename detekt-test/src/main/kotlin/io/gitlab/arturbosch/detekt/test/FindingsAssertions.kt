@@ -84,11 +84,12 @@ class FindingsAssert(actual: List<Finding>) :
                 return this
             } else {
                 failWithMessage("Expected ${expected.size} findings but was 0")
+                // This should never execute. `failWithMessage` always throws an exception but the kotlin compiled
+                // doesn't know that. So this line below helps it.
+                error("This should never execute, if you find this please open an issue with a reproducer")
             }
         }
-        val code = requireNotNull(finding?.entity?.ktElement?.run { containingKtFile.text }) {
-            "Finding expected to provide a KtElement."
-        }
+        val code = finding.entity.ktElement.containingKtFile.text
 
         val textLocations = expected.map { snippet ->
             val index = code.indexOf(snippet)

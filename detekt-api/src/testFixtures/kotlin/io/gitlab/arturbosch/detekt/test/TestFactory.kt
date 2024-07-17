@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.test
 
+import io.github.detekt.test.utils.internal.FakeKtElement
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
@@ -90,7 +91,7 @@ fun createIssueForRelativePath(
 fun createEntity(
     signature: String = "TestEntitySignature",
     location: Location = createLocation(),
-    ktElement: KtElement? = null,
+    ktElement: KtElement = FakeKtElement(),
 ) = Entity(
     name = "TestEntity",
     signature = signature,

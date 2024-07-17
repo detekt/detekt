@@ -261,7 +261,7 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
 
             assertThat(lint).hasSize(1)
             with(lint[0].entity) {
-                assertThat(ktElement?.text).isEqualTo("var shadowed = 1")
+                assertThat(ktElement.text).isEqualTo("var shadowed = 1")
             }
         }
     }
@@ -307,7 +307,7 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
             with(subject.compileAndLintWithContext(env, code)[0]) {
-                assertThat(entity.ktElement?.text).isEqualTo("var myVar = value")
+                assertThat(entity.ktElement.text).isEqualTo("var myVar = value")
             }
         }
     }

@@ -119,7 +119,7 @@ internal class Analyzer(
         return (correctableRules + otherRules).flatMap { (ruleInstance, rule) ->
             rule.visitFile(file, bindingContext, compilerResources)
                 .filterNot {
-                    it.entity.ktElement?.isSuppressedBy(ruleInstance.id, rule.aliases, ruleInstance.ruleSetId) == true
+                    it.entity.ktElement.isSuppressedBy(ruleInstance.id, rule.aliases, ruleInstance.ruleSetId)
                 }
                 .filterSuppressedFindings(rule, bindingContext)
                 .map { it.toIssue(ruleInstance, rule.computeSeverity()) }

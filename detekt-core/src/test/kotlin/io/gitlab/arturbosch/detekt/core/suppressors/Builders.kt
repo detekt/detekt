@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.suppressors
 
+import io.github.detekt.test.utils.compileContentForTest
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Finding
@@ -17,7 +18,7 @@ private fun buildEmptyEntity(): Entity = Entity(
     name = "",
     signature = "",
     location = createLocation(""),
-    ktElement = null,
+    ktElement = compileContentForTest(""),
 )
 
 internal fun buildRule(

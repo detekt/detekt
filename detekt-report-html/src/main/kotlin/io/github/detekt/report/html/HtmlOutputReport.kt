@@ -171,7 +171,7 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
             span("message") { text(issue.message) }
         }
 
-        val psiFile = issue.entity.ktElement?.containingFile
+        val psiFile = issue.entity.ktElement.containingFile
         if (psiFile != null) {
             val lineSequence = psiFile.text.splitToSequence('\n')
             snippetCode(issue.ruleInstance.name, lineSequence, issue.location.source, issue.location.text.length())
