@@ -20,7 +20,7 @@ class RuleSetSpec {
                 RuleSet.Id(ruleSetId),
                 emptyList()
             )
-        }.withMessageStartingWith("id '$ruleSetId' must match")
+        }.withMessageStartingWith("Id '$ruleSetId' must match")
     }
 
     companion object {

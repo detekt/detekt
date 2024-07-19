@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.api
 
 import dev.drewhamilton.poko.Poko
-import io.gitlab.arturbosch.detekt.api.internal.validateIdentifier
+import io.gitlab.arturbosch.detekt.api.internal.identifierRegex
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 
@@ -91,7 +91,7 @@ open class Rule(
     @Poko
     class Name(val value: String) {
         init {
-            validateIdentifier(value)
+            require(value.matches(identifierRegex)) { "Name '$value' must match ${identifierRegex.pattern}" }
         }
 
         override fun toString(): String = value
