@@ -12,6 +12,7 @@ import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
+import io.gitlab.arturbosch.detekt.api.name
 import io.gitlab.arturbosch.detekt.api.suppressed
 import kotlinx.html.CommonAttributeGroupFacadeFlowInteractiveContent
 import kotlinx.html.FlowContent
@@ -115,7 +116,7 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
         issues
             .groupBy { it.ruleInstance }
             .toList()
-            .sortedBy { (ruleInstance, _) -> ruleInstance.id }
+            .sortedBy { (ruleInstance, _) -> ruleInstance.id.value }
             .forEach { (ruleInstance, ruleIssues) ->
                 renderRule(ruleInstance, ruleIssues)
             }
@@ -126,7 +127,7 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
         val ruleName = ruleInstance.name.value
         val ruleSetId = ruleInstance.ruleSetId.value
         details {
-            id = ruleId
+            id = ruleId.value
             open = true
 
             summary("rule-container") {

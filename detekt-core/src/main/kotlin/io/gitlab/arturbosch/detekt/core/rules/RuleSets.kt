@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.extensions.LIST_ITEM_SPACING
-import io.gitlab.arturbosch.detekt.core.extractRuleName
 import java.util.ServiceLoader
 
 fun ProcessingSettings.createRuleProviders(): List<RuleSetProvider> {
@@ -21,14 +20,10 @@ fun ProcessingSettings.createRuleProviders(): List<RuleSetProvider> {
 
         is RulesSpec.RunPolicy.RestrictToSingleRule -> {
             val ruleSetId = runPolicy.ruleSetId
-            val ruleId = runPolicy.ruleId
             val realProvider = requireNotNull(ruleSetProviders.find { it.ruleSetId == ruleSetId }) {
                 "There was no rule set with id '$ruleSetId'."
             }
-            val ruleName = requireNotNull(extractRuleName(ruleId)) {
-                "There was not rule '$ruleId' in rule set '$ruleSetId'."
-            }
-            listOf(SingleRuleProvider(ruleName, realProvider))
+            listOf(SingleRuleProvider(runPolicy.ruleId.ruleName, realProvider))
         }
     }
         .also {

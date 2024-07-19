@@ -96,4 +96,11 @@ open class Rule(
 
         override fun toString(): String = value
     }
+
+    @Poko
+    class Id(val value: String) {
+        val ruleName: Name get() = Name(value.split("/", limit = 2).first())
+
+        override fun toString(): String = value
+    }
 }

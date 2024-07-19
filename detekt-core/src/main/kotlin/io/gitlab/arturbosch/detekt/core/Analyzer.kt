@@ -101,14 +101,12 @@ internal class Analyzer(
             .flatMap { (ruleSet, ruleSetConfig) ->
                 ruleSetConfig.subConfigKeys()
                     .asSequence()
+                    .map { Rule.Id(it) }
                     .mapNotNull { ruleId ->
-                        extractRuleName(ruleId)?.let { ruleName -> ruleId to ruleName }
-                    }
-                    .mapNotNull { (ruleId, ruleName) ->
-                        ruleSet.rules[ruleName]?.let { ruleProvider ->
+                        ruleSet.rules[ruleId.ruleName]?.let { ruleProvider ->
                             RuleDescriptor(
                                 ruleProvider = ruleProvider,
-                                config = ruleSetConfig.subConfig(ruleId),
+                                config = ruleSetConfig.subConfig(ruleId.value),
                                 ruleId = ruleId,
                             )
                         }
@@ -157,10 +155,7 @@ internal class Analyzer(
     }
 }
 
-internal fun extractRuleName(key: String): Rule.Name? =
-    runCatching { Rule.Name(key.split("/", limit = 2).first()) }.getOrNull()
-
-private data class RuleDescriptor(val ruleProvider: (Config) -> Rule, val config: Config, val ruleId: String)
+private data class RuleDescriptor(val ruleProvider: (Config) -> Rule, val config: Config, val ruleId: Rule.Id)
 
 private fun List<Finding>.filterSuppressedFindings(rule: Rule, bindingContext: BindingContext): List<Finding> {
     val suppressors = buildSuppressors(rule, bindingContext)
@@ -202,8 +197,8 @@ private fun Entity.toIssue(basePath: Path): Issue.Entity =
 private fun Location.toIssue(basePath: Path): Issue.Location =
     IssueImpl.Location(source, endSource, text, basePath.relativize(path))
 
-private fun Rule.toRuleInstance(id: String, ruleSetId: RuleSet.Id): RuleInstance =
-    RuleInstanceImpl(id, ruleName, ruleSetId, description)
+private fun Rule.toRuleInstance(id: Rule.Id, ruleSetId: RuleSet.Id): RuleInstance =
+    RuleInstanceImpl(id, ruleSetId, description)
 
 private data class IssueImpl(
     override val ruleInstance: RuleInstance,
@@ -233,8 +228,7 @@ private data class IssueImpl(
 }
 
 private data class RuleInstanceImpl(
-    override val id: String,
-    override val name: Rule.Name,
+    override val id: Rule.Id,
     override val ruleSetId: RuleSet.Id,
     override val description: String,
 ) : RuleInstance
