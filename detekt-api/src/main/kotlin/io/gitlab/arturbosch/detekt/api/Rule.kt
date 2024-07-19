@@ -99,8 +99,14 @@ open class Rule(
 
     @Poko
     class Id(val value: String) {
+        init {
+            require(value.matches(ruleIdPattern)) { "Id '$value' must match ${identifierRegex.pattern}" }
+        }
+
         val ruleName: Name get() = Name(value.split("/", limit = 2).first())
 
         override fun toString(): String = value
     }
 }
+
+private val ruleIdPattern = Regex("${identifierRegex.pattern}(/${identifierRegex.pattern})?")
