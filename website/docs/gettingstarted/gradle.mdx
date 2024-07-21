@@ -19,7 +19,7 @@ The Detekt Gradle Plugin will generate multiple tasks:
   - By default, the standard rule set without any ignore list is executed on sources files located
    in `src/main/java`, `src/test/java`, `src/main/kotlin` and `src/test/kotlin`.
   - Reports are automatically generated in xml,
-   html, txt, md, and sarif format and can be found in `build/reports/detekt/detekt.[xml|html|txt|md|sarif]` respectively.
+   html, md, and sarif format and can be found in `build/reports/detekt/detekt.[xml|html|md|sarif]` respectively.
   - Please note that the `detekt` task is automatically run when executing `gradle check`.
   - You may specify Gradle task CLI option for auto correction, such as `gradle detekt --auto-correct`.
 - `detektGenerateConfig` - Generates a default detekt configuration file into your project directory.
@@ -328,9 +328,6 @@ tasks.named("detekt").configure {
         // Enable/Disable HTML report (default: true)
         html.required.set(true)
         html.outputLocation.set(file("build/reports/detekt.html"))
-        // Enable/Disable TXT report (default: true)
-        txt.required.set(true)
-        txt.outputLocation.set(file("build/reports/detekt.txt"))
         // Enable/Disable SARIF report (default: false)
         sarif.required.set(true)
         sarif.outputLocation.set(file("build/reports/detekt.sarif"))

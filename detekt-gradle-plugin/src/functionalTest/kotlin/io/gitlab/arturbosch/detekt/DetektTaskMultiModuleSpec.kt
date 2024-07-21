@@ -45,11 +45,9 @@ class DetektTaskMultiModuleSpec {
 
             assertThat(projectFile("build/reports/detekt/detekt.xml")).doesNotExist()
             assertThat(projectFile("build/reports/detekt/detekt.html")).doesNotExist()
-            assertThat(projectFile("build/reports/detekt/detekt.txt")).doesNotExist()
             projectLayout.submodules.forEach {
                 assertThat(projectFile("${it.name}/build/reports/detekt/detekt.xml")).exists()
                 assertThat(projectFile("${it.name}/build/reports/detekt/detekt.html")).exists()
-                assertThat(projectFile("${it.name}/build/reports/detekt/detekt.txt")).exists()
             }
         }
     }
@@ -87,11 +85,9 @@ class DetektTaskMultiModuleSpec {
 
             assertThat(projectFile("build/reports/detekt/detekt.xml")).exists()
             assertThat(projectFile("build/reports/detekt/detekt.html")).exists()
-            assertThat(projectFile("build/reports/detekt/detekt.txt")).exists()
             projectLayout.submodules.forEach {
                 assertThat(projectFile("${it.name}/build/reports/detekt/detekt.xml")).exists()
                 assertThat(projectFile("${it.name}/build/reports/detekt/detekt.html")).exists()
-                assertThat(projectFile("${it.name}/build/reports/detekt/detekt.txt")).exists()
             }
         }
     }
@@ -128,11 +124,9 @@ class DetektTaskMultiModuleSpec {
 
             assertThat(projectFile("build/detekt-reports/detekt.xml")).exists()
             assertThat(projectFile("build/detekt-reports/detekt.html")).exists()
-            assertThat(projectFile("build/detekt-reports/detekt.txt")).exists()
             projectLayout.submodules.forEach {
                 assertThat(projectFile("${it.name}/build/detekt-reports/detekt.xml")).exists()
                 assertThat(projectFile("${it.name}/build/detekt-reports/detekt.html")).exists()
-                assertThat(projectFile("${it.name}/build/detekt-reports/detekt.txt")).exists()
             }
         }
     }
@@ -177,13 +171,10 @@ class DetektTaskMultiModuleSpec {
 
             assertThat(projectFile("build/detekt-reports/detekt.xml")).exists()
             assertThat(projectFile("build/detekt-reports/detekt.html")).exists()
-            assertThat(projectFile("build/detekt-reports/detekt.txt")).exists()
             assertThat(projectFile("child1/build/detekt-reports/detekt.xml")).exists()
             assertThat(projectFile("child1/build/detekt-reports/detekt.html")).exists()
-            assertThat(projectFile("child1/build/detekt-reports/detekt.txt")).exists()
             assertThat(projectFile("child2/build/custom/detekt.xml")).exists()
             assertThat(projectFile("child2/build/custom/detekt.html")).exists()
-            assertThat(projectFile("child2/build/custom/detekt.txt")).exists()
         }
     }
 
@@ -216,11 +207,9 @@ class DetektTaskMultiModuleSpec {
 
             assertThat(projectFile("build/reports/detekt/detekt.xml")).exists()
             assertThat(projectFile("build/reports/detekt/detekt.html")).exists()
-            assertThat(projectFile("build/reports/detekt/detekt.txt")).exists()
             projectLayout.submodules.forEach { submodule ->
                 assertThat(projectFile("${submodule.name}/build/reports/detekt/detekt.xml")).doesNotExist()
                 assertThat(projectFile("${submodule.name}/build/reports/detekt/detekt.html")).doesNotExist()
-                assertThat(projectFile("${submodule.name}/build/reports/detekt/detekt.txt")).doesNotExist()
             }
         }
     }

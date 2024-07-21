@@ -13,8 +13,6 @@ The `ManuallySuppressedIssues` can be used to write down false positive detectio
 
 The `ID` node has the following structure: `<RuleID>:<Codesmell_Signature>`.  
 When adding a custom issue to the xml file, make sure the `RuleID` should be self-explaining.
-The `Codesmell_Signature` is not printed to the console but can be retrieved from the **txt** output file when using
-the `--report txt:path/to/report` cli flag.
 
 ```xml
 <SmellBaseline>

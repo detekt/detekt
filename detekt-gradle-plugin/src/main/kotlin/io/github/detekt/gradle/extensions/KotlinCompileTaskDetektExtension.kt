@@ -13,7 +13,6 @@ open class KotlinCompileTaskDetektExtension(project: Project) {
 
     init {
         reports.create("xml")
-        reports.create("txt")
         reports.create("html")
         reports.create("sarif")
     }
@@ -33,6 +32,5 @@ open class KotlinCompileTaskDetektExtension(project: Project) {
 
     fun getXml(): DetektReport = reports.getByName("xml")
     fun getHtml(): DetektReport = reports.getByName("html")
-    fun getTxt(): DetektReport = reports.getByName("txt")
     fun getSarif(): DetektReport = reports.getByName("sarif")
 }
