@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.api
 
 import dev.drewhamilton.poko.Poko
-import io.gitlab.arturbosch.detekt.api.internal.identifierRegex
 
 /**
  * A rule set is a collection of rules and must be defined within a rule set provider implementation.
@@ -15,9 +14,11 @@ class RuleSet(val id: Id, val rules: Map<Rule.Name, (Config) -> Rule>) {
     @Poko
     class Id(val value: String) {
         init {
-            require(value.matches(identifierRegex)) { "Id '$value' must match ${identifierRegex.pattern}" }
+            require(value.matches(idRegex)) { "Id '$value' must match ${idRegex.pattern}" }
         }
 
         override fun toString(): String = value
     }
 }
+
+private val idRegex = Regex("[aA-zZ]+(?:[aA-zZ0-9-]+)*[aA-zZ0-9]")

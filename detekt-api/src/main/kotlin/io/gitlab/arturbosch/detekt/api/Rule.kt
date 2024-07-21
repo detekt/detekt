@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.api
 
 import dev.drewhamilton.poko.Poko
-import io.gitlab.arturbosch.detekt.api.internal.identifierRegex
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 
@@ -91,7 +90,7 @@ open class Rule(
     @Poko
     class Name(val value: String) {
         init {
-            require(value.matches(identifierRegex)) { "Name '$value' must match ${identifierRegex.pattern}" }
+            require(value.matches(nameRegex)) { "Name '$value' must match ${nameRegex.pattern}}" }
         }
 
         override fun toString(): String = value
@@ -100,7 +99,7 @@ open class Rule(
     @Poko
     class Id(val value: String) {
         init {
-            require(value.matches(ruleIdPattern)) { "Id '$value' must match ${identifierRegex.pattern}" }
+            require(value.matches(idRegex)) { "Id '$value' must match ${idRegex.pattern}" }
         }
 
         val ruleName: Name get() = Name(value.split("/", limit = 2).first())
@@ -109,4 +108,5 @@ open class Rule(
     }
 }
 
-private val ruleIdPattern = Regex("${identifierRegex.pattern}(/${identifierRegex.pattern})?")
+private val nameRegex = Regex("[aA-zZ]+(?:[aA-zZ0-9-]+)*[aA-zZ0-9]")
+private val idRegex = Regex("${nameRegex.pattern}(/${nameRegex.pattern})?")
