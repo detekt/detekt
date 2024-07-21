@@ -16,10 +16,7 @@ class Entity(
     val signature: String,
     val location: Location,
     val ktElement: KtElement
-) : Compactable {
-
-    override fun compact(): String = "[$name] at ${location.compact()}"
-
+) {
     override fun toString(): String =
         "Entity(name=$name, signature=$signature, location=$location, ktElement=$ktElement)"
 

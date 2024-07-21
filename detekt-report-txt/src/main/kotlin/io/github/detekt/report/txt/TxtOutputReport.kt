@@ -1,6 +1,7 @@
 package io.github.detekt.report.txt
 
 import io.gitlab.arturbosch.detekt.api.Detektion
+import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
@@ -23,3 +24,5 @@ class TxtOutputReport : BuiltInOutputReport, OutputReport() {
 
 private fun Issue.compactWithSignature(): String =
     "${ruleInstance.id} - ${entity.compact()} - Signature=${entity.signature}"
+
+private fun Entity.compact(): String = "[$name] at ${location.compact()}"
