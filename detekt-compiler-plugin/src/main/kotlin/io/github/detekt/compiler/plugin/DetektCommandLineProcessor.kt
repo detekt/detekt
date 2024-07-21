@@ -88,7 +88,7 @@ class DetektCommandLineProcessor : CommandLineProcessor {
             Options.REPORT,
             "<report-id:path>",
             "Generates a report for given 'report-id' and stores it on given 'path'. " +
-                "Available 'report-id' values: 'txt', 'xml', 'html'.",
+                "Available 'report-id' values: 'xml', 'html'.",
             false,
             allowMultipleOccurrences = true
         )

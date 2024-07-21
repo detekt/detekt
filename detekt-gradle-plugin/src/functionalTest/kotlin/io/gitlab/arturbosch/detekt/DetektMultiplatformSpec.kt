@@ -386,13 +386,13 @@ private fun setupMultiplatformProject(projectLayoutAction: ProjectLayout.() -> U
 
 private fun assertDetektWithoutClasspath(buildResult: BuildResult) {
     assertThat(buildResult.output).contains("--report sarif:")
-    assertThat(buildResult.output).doesNotContain("--report txt:")
+    assertThat(buildResult.output).doesNotContain("--report md:")
     assertThat(buildResult.output).doesNotContain("--classpath")
 }
 
 private fun assertDetektWithClasspath(buildResult: BuildResult) {
     assertThat(buildResult.output).contains("--report sarif:")
-    assertThat(buildResult.output).doesNotContain("--report txt:")
+    assertThat(buildResult.output).doesNotContain("--report md:")
     assertThat(buildResult.output).contains("--classpath")
 }
 
@@ -407,7 +407,7 @@ private val KMM_PLUGIN_BLOCK = """
 @Language("gradle.kts")
 private val DETEKT_BLOCK = """
     tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
-        reports.txt.required.set(false)
+        reports.md.required.set(false)
     }
 """.trimIndent()
 

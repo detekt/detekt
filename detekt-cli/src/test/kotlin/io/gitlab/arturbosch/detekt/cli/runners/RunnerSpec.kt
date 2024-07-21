@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.cli.runners
 
 import io.github.detekt.test.utils.StringPrintStream
-import io.github.detekt.test.utils.createTempFileForTest
 import io.github.detekt.test.utils.resourceAsPath
 import io.github.detekt.tooling.api.InvalidConfig
 import io.github.detekt.tooling.api.IssuesFound
@@ -16,7 +15,6 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.nio.file.Path
 import kotlin.io.path.absolutePathString
-import kotlin.io.path.readLines
 
 class RunnerSpec {
 
@@ -27,19 +25,13 @@ class RunnerSpec {
 
         @Test
         fun `should not throw`() {
-            val tmpReport = createTempFileForTest("RunnerSpec", ".txt")
-
             executeDetekt(
                 "--input",
                 inputPath.toString(),
                 "--baseline",
                 resourceAsPath("configs/baseline-empty.xml").toString(),
                 "--create-baseline",
-                "--report",
-                "txt:$tmpReport",
             )
-
-            assertThat(tmpReport).hasContent("")
         }
     }
 
@@ -163,21 +155,18 @@ class RunnerSpec {
 
         @Test
         fun `should load and run custom rule`() {
-            val tmp = createTempFileForTest("SingleRuleRunnerSpec", ".txt")
-
             assertThatThrownBy {
                 executeDetekt(
                     "--input",
                     inputPath.toString(),
-                    "--report",
-                    "txt:$tmp",
                     "--run-rule",
                     "test:TestRule",
                     "--config-resource",
                     "/configs/valid-config.yml"
                 )
-            }.isExactlyInstanceOf(IssuesFound::class.java)
-            assertThat(tmp.readLines()).hasSize(1)
+            }
+                .isExactlyInstanceOf(IssuesFound::class.java)
+                .hasMessage("Analysis failed with 1 issues.")
         }
 
         @Test

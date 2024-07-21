@@ -57,7 +57,7 @@ class DetektPlainSpec {
                 tasks.withType(Detekt::class.java).configureEach {
                     it.reports { reports ->
                         reports.sarif.required.set(true)
-                        reports.txt.required.set(false)
+                        reports.md.required.set(false)
                     }
                 }
             },
@@ -73,7 +73,7 @@ class DetektPlainSpec {
             assertThat(argumentString).containsPattern("""--baseline \S*[/\\]detekt-baseline.xml """)
             assertThat(argumentString).contains("--report xml:")
             assertThat(argumentString).contains("--report sarif:")
-            assertThat(argumentString).doesNotContain("--report txt:")
+            assertThat(argumentString).doesNotContain("--report md:")
             assertThat(argumentString).doesNotContain("--classpath")
             assertThat(argumentString).contains("--analysis-mode light")
             assertThat(argumentString).contains("--fail-on-severity error")

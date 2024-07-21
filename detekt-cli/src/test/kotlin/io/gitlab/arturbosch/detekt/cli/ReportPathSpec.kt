@@ -75,13 +75,6 @@ class ReportPathSpec {
     @Nested
     inner class `_kind_ processing` {
         @Test
-        fun `parses and maps the txt kind correctly`() {
-            val reportPath = ReportPath.from("txt:/tmp/valid/report")
-
-            assertThat(reportPath.kind).isEqualTo("txt")
-        }
-
-        @Test
         fun `parses and maps the xml kind correctly`() {
             val reportPath = ReportPath.from("xml:/tmp/valid/report")
 
