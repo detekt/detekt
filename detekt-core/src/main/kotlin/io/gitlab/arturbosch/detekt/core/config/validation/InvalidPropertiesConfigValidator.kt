@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.core.config.validation
 
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.core.config.YamlConfig
+import io.gitlab.arturbosch.detekt.core.extractRuleName
 import io.gitlab.arturbosch.detekt.core.util.SimpleNotification
 
 internal class InvalidPropertiesConfigValidator(
@@ -46,7 +47,7 @@ internal class InvalidPropertiesConfigValidator(
         return notifications
     }
 
-    @Suppress("UNCHECKED_CAST")
+    @Suppress("UNCHECKED_CAST", "ReturnCount")
     private fun checkProp(
         propertyName: String,
         propertyPath: String,
@@ -54,7 +55,10 @@ internal class InvalidPropertiesConfigValidator(
         baseline: Map<String, Any>
     ): List<Notification> {
         if (!baseline.contains(propertyName)) {
-            return listOf(propertyDoesNotExists(propertyPath))
+            val ruleName = extractRuleName(propertyName)
+            if (ruleName == null || !baseline.contains(ruleName.value)) {
+                return listOf(propertyDoesNotExists(propertyPath))
+            }
         }
         if (configToValidate[propertyName] is String && baseline[propertyName] is List<*>) {
             return listOf(propertyShouldBeAnArray(propertyPath))

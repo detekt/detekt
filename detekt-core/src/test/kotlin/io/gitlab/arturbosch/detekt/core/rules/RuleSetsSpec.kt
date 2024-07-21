@@ -10,6 +10,8 @@ import io.gitlab.arturbosch.detekt.core.tooling.withSettings
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 
 class RuleSetsSpec {
 
@@ -45,10 +47,11 @@ class RuleSetsSpec {
             .containsExactlyInAnyOrder("sample-rule-set")
     }
 
-    @Test
-    fun `only loads the provider with the selected rule`() {
+    @ParameterizedTest
+    @ValueSource(strings = ["MagicNumber", "MagicNumber/id"])
+    fun `only loads the provider with the selected rule`(ruleId: String) {
         val providers = createNullLoggingSpec {
-            rules { runPolicy = RestrictToSingleRule(RuleSet.Id("style"), Rule.Name("MagicNumber")) }
+            rules { runPolicy = RestrictToSingleRule(RuleSet.Id("style"), ruleId) }
         }
             .withSettings { createRuleProviders() }
 
@@ -58,11 +61,12 @@ class RuleSetsSpec {
             .containsOnlyKeys(Rule.Name("MagicNumber"))
     }
 
-    @Test
-    fun `throws when rule set doesn't exist`() {
+    @ParameterizedTest
+    @ValueSource(strings = ["MagicNumber", "MagicNumber/id"])
+    fun `throws when rule set doesn't exist`(ruleId: String) {
         assertThatThrownBy {
             createNullLoggingSpec {
-                rules { runPolicy = RestrictToSingleRule(RuleSet.Id("foo"), Rule.Name("MagicNumber")) }
+                rules { runPolicy = RestrictToSingleRule(RuleSet.Id("foo"), ruleId) }
             }
                 .withSettings { createRuleProviders() }
         }

@@ -1,0 +1,8 @@
+style:
+  active: true
+  WildcardImport:
+    active: true
+  WildcardImport/extra:
+    active: true
+  WildcardImport/extra2:
+    active: true
