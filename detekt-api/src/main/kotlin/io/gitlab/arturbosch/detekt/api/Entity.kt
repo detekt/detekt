@@ -62,13 +62,3 @@ class Entity(
         }
     }
 }
-
-/**
- * Provides a compact string representation.
- */
-interface Compactable {
-    /**
-     * Contract to format implementing object to a string representation.
-     */
-    fun compact(): String
-}

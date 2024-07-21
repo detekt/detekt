@@ -19,9 +19,8 @@ class Location(
     val endSource: SourceLocation,
     val text: TextLocation,
     val path: Path,
-) : Compactable {
-
-    override fun compact(): String = "$path:$source"
+) {
+    fun compact(): String = "$path:$source"
 
     override fun toString(): String =
         "Location(source=$source, endSource=$endSource, text=$text, path=$path)"
