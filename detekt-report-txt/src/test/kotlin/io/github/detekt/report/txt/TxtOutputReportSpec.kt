@@ -21,7 +21,7 @@ class TxtOutputReportSpec {
         val location = createLocation()
         val detektion = TestDetektion(createIssue(createRuleInstance(), location))
         assertThat(TxtOutputReport().render(detektion))
-            .isEqualTo("TestSmell/id - [TestEntity] at ${location.compact()} - Signature=TestEntitySignature\n")
+            .isEqualTo("TestSmell/id - [TestEntity] at ${location.path}:1:1 - Signature=TestEntitySignature\n")
     }
 
     @Test
@@ -35,9 +35,9 @@ class TxtOutputReportSpec {
         assertThat(TxtOutputReport().render(detektion))
             .isEqualTo(
                 """
-                    TestSmellA/id - [TestEntity] at ${location.compact()} - Signature=TestEntitySignature
-                    TestSmellB/id - [TestEntity] at ${location.compact()} - Signature=TestEntitySignature
-                    TestSmellC - [TestEntity] at ${location.compact()} - Signature=TestEntitySignature
+                    TestSmellA/id - [TestEntity] at ${location.path}:1:1 - Signature=TestEntitySignature
+                    TestSmellB/id - [TestEntity] at ${location.path}:1:1 - Signature=TestEntitySignature
+                    TestSmellC - [TestEntity] at ${location.path}:1:1 - Signature=TestEntitySignature
 
                 """.trimIndent()
             )

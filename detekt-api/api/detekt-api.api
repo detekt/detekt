@@ -185,7 +185,6 @@ public final class io/gitlab/arturbosch/detekt/api/Issue$DefaultImpls {
 public final class io/gitlab/arturbosch/detekt/api/Location {
 	public static final field Companion Lio/gitlab/arturbosch/detekt/api/Location$Companion;
 	public fun <init> (Lio/gitlab/arturbosch/detekt/api/SourceLocation;Lio/gitlab/arturbosch/detekt/api/SourceLocation;Lio/gitlab/arturbosch/detekt/api/TextLocation;Ljava/nio/file/Path;)V
-	public final fun compact ()Ljava/lang/String;
 	public final fun getEndSource ()Lio/gitlab/arturbosch/detekt/api/SourceLocation;
 	public final fun getPath ()Ljava/nio/file/Path;
 	public final fun getSource ()Lio/gitlab/arturbosch/detekt/api/SourceLocation;

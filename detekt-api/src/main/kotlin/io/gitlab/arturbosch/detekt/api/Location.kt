@@ -20,8 +20,6 @@ class Location(
     val text: TextLocation,
     val path: Path,
 ) {
-    fun compact(): String = "$path:$source"
-
     override fun toString(): String =
         "Location(source=$source, endSource=$endSource, text=$text, path=$path)"
 
