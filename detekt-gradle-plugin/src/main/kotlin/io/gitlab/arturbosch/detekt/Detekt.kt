@@ -176,7 +176,6 @@ abstract class Detekt @Inject constructor(
             BaselineArgumentOrEmpty(baseline.orNull),
             DefaultReportArgument(reports.xml),
             DefaultReportArgument(reports.html),
-            DefaultReportArgument(reports.txt),
             DefaultReportArgument(reports.sarif),
             DefaultReportArgument(reports.md),
             DebugArgument(debug.get()),

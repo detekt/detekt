@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.extensions
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType.HTML
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType.MD
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType.SARIF
-import io.gitlab.arturbosch.detekt.extensions.DetektReportType.TXT
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType.XML
 import org.gradle.api.Action
 import org.gradle.api.model.ObjectFactory
@@ -21,9 +20,6 @@ open class DetektReports @Inject constructor(@get:Internal val objects: ObjectFa
     open val html: DetektReport = objects.newInstance(DetektReport::class.java, HTML)
 
     @get:Nested
-    open val txt: DetektReport = objects.newInstance(DetektReport::class.java, TXT)
-
-    @get:Nested
     open val sarif: DetektReport = objects.newInstance(DetektReport::class.java, SARIF)
 
     @get:Nested
@@ -35,8 +31,6 @@ open class DetektReports @Inject constructor(@get:Internal val objects: ObjectFa
     fun xml(action: Action<in DetektReport>): Unit = action.execute(xml)
 
     fun html(action: Action<in DetektReport>): Unit = action.execute(html)
-
-    fun txt(action: Action<in DetektReport>): Unit = action.execute(txt)
 
     fun sarif(action: Action<in DetektReport>): Unit = action.execute(sarif)
 

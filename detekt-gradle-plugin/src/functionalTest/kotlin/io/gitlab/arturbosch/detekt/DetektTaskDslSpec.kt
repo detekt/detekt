@@ -40,12 +40,6 @@ class DetektTaskDslSpec {
         }
 
         @Test
-        fun `enables text report to default location`() {
-            val textReportFile = gradleRunner.projectFile("build/reports/detekt/detekt.txt")
-            assertThat(result.output).contains("--report txt:$textReportFile")
-        }
-
-        @Test
         fun `enables sarif report to default location`() {
             val sarifReportFile = gradleRunner.projectFile("build/reports/detekt/detekt.sarif")
             assertThat(result.output).contains("--report sarif:$sarifReportFile")
@@ -185,12 +179,6 @@ class DetektTaskDslSpec {
         }
 
         @Test
-        fun `configures text report to custom directory`() {
-            val textReportFile = gradleRunner.projectFile("build/detekt-reports/detekt.txt")
-            assertThat(result.output).contains("--report txt:$textReportFile")
-        }
-
-        @Test
         fun `configures sarif report to custom directory`() {
             val sarifReportFile = gradleRunner.projectFile("build/detekt-reports/detekt.sarif")
             assertThat(result.output).contains("--report sarif:$sarifReportFile")
@@ -225,12 +213,6 @@ class DetektTaskDslSpec {
             val htmlReportFile = gradleRunner.projectFile("build/detekt-reports/detekt.html")
             assertThat(result.output).contains("--report html:$htmlReportFile")
         }
-
-        @Test
-        fun `configures text report to default name in custom directory`() {
-            val textReportFile = gradleRunner.projectFile("build/detekt-reports/detekt.txt")
-            assertThat(result.output).contains("--report txt:$textReportFile")
-        }
     }
 
     @Nested
@@ -240,9 +222,6 @@ class DetektTaskDslSpec {
                 reports {
                     xml.required.set(false)
                     html {
-                        required.set(false)
-                    }
-                    txt {
                         required.set(false)
                     }
                     sarif {
@@ -556,7 +535,6 @@ class DetektTaskDslSpec {
                         outputLocation.set(file("build/reports/mydetekt.xml"))
                     }
                     html.outputLocation.set(file("build/reports/mydetekt.html"))
-                    txt.outputLocation.set(file("build/reports/mydetekt.txt"))
                     sarif {
                         required.set(true)
                         outputLocation.set(file("build/reports/mydetekt.sarif"))
@@ -588,12 +566,6 @@ class DetektTaskDslSpec {
         fun `enables html report to specified location`() {
             val htmlReportFile = gradleRunner.projectFile("build/reports/mydetekt.html")
             assertThat(result.output).contains("--report html:$htmlReportFile")
-        }
-
-        @Test
-        fun `enables text report to specified location`() {
-            val textReportFile = gradleRunner.projectFile("build/reports/mydetekt.txt")
-            assertThat(result.output).contains("--report txt:$textReportFile")
         }
 
         @Test

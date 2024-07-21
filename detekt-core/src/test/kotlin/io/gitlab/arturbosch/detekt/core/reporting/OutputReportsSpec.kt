@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.core.reporting
 
 import io.github.detekt.report.html.HtmlOutputReport
 import io.github.detekt.report.md.MdOutputReport
-import io.github.detekt.report.txt.TxtOutputReport
 import io.github.detekt.report.xml.XmlOutputReport
 import io.github.detekt.test.utils.resourceAsPath
 import io.github.detekt.tooling.dsl.ReportsSpecBuilder
@@ -25,7 +24,6 @@ class OutputReportsSpec {
         private val reportUnderTest = TestOutputReport::class.java.simpleName
         private val reports = ReportsSpecBuilder().apply {
             report { "xml" to Path("/tmp/path1") }
-            report { "txt" to Path("/tmp/path2") }
             report { reportUnderTest to Path("/tmp/path3") }
             report { "html" to Path("D:_Gradle\\xxx\\xxx\\build\\reports\\detekt\\detekt.html") }
             report { "md" to Path("/tmp/path4") }
@@ -33,7 +31,7 @@ class OutputReportsSpec {
 
         @Test
         fun `should parse multiple report entries`() {
-            assertThat(reports).hasSize(5)
+            assertThat(reports).hasSize(4)
         }
 
         @Test
@@ -44,22 +42,15 @@ class OutputReportsSpec {
         }
 
         @Test
-        fun `it should properly parse TXT report entry`() {
-            val txtReport = reports[1]
-            assertThat(txtReport.type).isEqualTo(defaultReportMapping(TxtOutputReport()))
-            assertThat(txtReport.path).isEqualTo(Path("/tmp/path2"))
-        }
-
-        @Test
         fun `it should properly parse custom report entry`() {
-            val customReport = reports[2]
+            val customReport = reports[1]
             assertThat(customReport.type).isEqualTo(reportUnderTest)
             assertThat(customReport.path).isEqualTo(Path("/tmp/path3"))
         }
 
         @Test
         fun `it should properly parse HTML report entry`() {
-            val htmlReport = reports[3]
+            val htmlReport = reports[2]
             assertThat(htmlReport.type).isEqualTo(defaultReportMapping(HtmlOutputReport()))
             assertThat(htmlReport.path).isEqualTo(
                 Path("D:_Gradle\\xxx\\xxx\\build\\reports\\detekt\\detekt.html")
@@ -68,7 +59,7 @@ class OutputReportsSpec {
 
         @Test
         fun `it should properly parse MD report entry`() {
-            val mdReport = reports[4]
+            val mdReport = reports[3]
             assertThat(mdReport.type).isEqualTo(defaultReportMapping(MdOutputReport()))
             assertThat(mdReport.path).isEqualTo(Path("/tmp/path4"))
         }

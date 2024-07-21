@@ -68,7 +68,7 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
     detekt {
         reports {
             xml.enabled.set(true)
-            txt.enabled.set(false)
+            md.enabled.set(false)
             create("custom") {
                 enabled.set(false)
             }
@@ -137,7 +137,7 @@ disableDefaultRuleSets=<true|false> # Disables all default detekt rulesets.
 parallel=<true|false> # Enables parallel compilation and analysis of source files.
 rootPath=<path> # Root path used to relativize paths when using exclude patterns.
 excludes=<base64-encoded globs> # A base64-encoded list of the globs used to exclude paths from scanning.
-report=<report-id:path> # Generates a report for given 'report-id' and stores it on given 'path'. Available 'report-id' values: 'txt', 'xml', 'html'.
+report=<report-id:path> # Generates a report for given 'report-id' and stores it on given 'path'. Available 'report-id' values: 'xml', 'html'.
 ```
 
 ## Known Issues
