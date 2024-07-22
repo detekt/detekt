@@ -10,8 +10,8 @@ import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.test.EmptySetupContext
 import io.gitlab.arturbosch.detekt.test.TestDetektion
+import io.gitlab.arturbosch.detekt.test.TestSetupContext
 import io.gitlab.arturbosch.detekt.test.createEntity
 import io.gitlab.arturbosch.detekt.test.createIssue
 import io.gitlab.arturbosch.detekt.test.createIssueForRelativePath
@@ -48,7 +48,7 @@ class SarifOutputReportSpec {
         )
 
         val report = SarifOutputReport()
-            .apply { init(EmptySetupContext()) }
+            .apply { init(TestSetupContext()) }
             .render(result)
 
         val expectedReport = readResourceContent("vanilla.sarif.json")
@@ -100,7 +100,7 @@ class SarifOutputReportSpec {
         val report = SarifOutputReport()
             .apply {
                 init(
-                    EmptySetupContext().apply {
+                    TestSetupContext().apply {
                         register(DETEKT_OUTPUT_REPORT_BASE_PATH_KEY, basePath)
                     }
                 )
