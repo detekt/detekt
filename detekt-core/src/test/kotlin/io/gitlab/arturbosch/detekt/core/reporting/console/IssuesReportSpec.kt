@@ -28,10 +28,10 @@ class IssuesReportSpec {
         assertThat(output).isEqualTo(
             """
                 Ruleset1
-                	TestSmell/id - [TestMessage] at ${location.compact()}
-                	TestSmell/id - [TestMessage] at ${location.compact()}
+                	TestSmell/id - [TestMessage] at ${location.path}:1:1
+                	TestSmell/id - [TestMessage] at ${location.path}:1:1
                 Ruleset2
-                	TestSmell/id - [TestMessage] at ${location.compact()}
+                	TestSmell/id - [TestMessage] at ${location.path}:1:1
                 
             """.trimIndent()
         )

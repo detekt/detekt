@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.core.reporting.console
 
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.core.reporting.compact
 
 /**
  * A lightweight versions of the console report, where each line contains location, messages and issue id only.

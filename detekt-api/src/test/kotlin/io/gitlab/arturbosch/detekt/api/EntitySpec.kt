@@ -38,14 +38,6 @@ class EntitySpec {
         }
 
         @Test
-        fun `includes function name in entity compact`() {
-            val memberFunction = functions.first { it.name == "memberFun" }
-
-            assertThat(Entity.atName(memberFunction).compact())
-                .isEqualTo("[memberFun] at $path:5:17")
-        }
-
-        @Test
         fun `toString gives all details`() {
             val memberFunction = functions.first { it.name == "memberFun" }
 
@@ -70,11 +62,6 @@ class EntitySpec {
         }
 
         @Test
-        fun `includes class name in entity compact`() {
-            assertThat(Entity.atName(clazz).compact()).isEqualTo("[C] at $path:3:7")
-        }
-
-        @Test
         fun `toString gives all details`() {
             assertThat(Entity.atName(clazz).toString())
                 .isEqualTo(
@@ -95,14 +82,6 @@ class EntitySpec {
 
             assertThat(Entity.from(code).signature).isEqualTo(expectedResult)
             assertThat(Entity.atPackageOrFirstDecl(code).signature).isEqualTo(expectedResult)
-        }
-
-        @Test
-        fun `includes file name in entity compact`() {
-            val expectedResult = "[EntitySpecFixture.kt] at $path:1:1"
-
-            assertThat(Entity.from(code).compact()).isEqualTo(expectedResult)
-            assertThat(Entity.atPackageOrFirstDecl(code).compact()).isEqualTo(expectedResult)
         }
 
         @Test

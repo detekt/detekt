@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.core.reporting
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
 
@@ -52,3 +53,5 @@ private fun Issue.truncatedMessage(): String {
 }
 
 private fun Issue.detailed(): String = "${ruleInstance.id} - [${truncatedMessage()}] at ${location.compact()}"
+
+internal fun Location.compact(): String = "$path:$source"

@@ -22,8 +22,8 @@ class LiteIssuesReportSpec {
         )
         assertThat(subject.render(detektion)).isEqualTo(
             """
-                ${location.compact()}: TestMessage [SpacingAfterPackageDeclaration/id]
-                ${location.compact()}: TestMessage [UnnecessarySafeCall]
+                ${location.path}:1:1: TestMessage [SpacingAfterPackageDeclaration/id]
+                ${location.path}:1:1: TestMessage [UnnecessarySafeCall]
 
             """.trimIndent()
         )

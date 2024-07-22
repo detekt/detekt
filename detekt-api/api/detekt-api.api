@@ -20,10 +20,6 @@ public class io/gitlab/arturbosch/detekt/api/CodeSmell : io/gitlab/arturbosch/de
 	public fun toString ()Ljava/lang/String;
 }
 
-public abstract interface class io/gitlab/arturbosch/detekt/api/Compactable {
-	public abstract fun compact ()Ljava/lang/String;
-}
-
 public final class io/gitlab/arturbosch/detekt/api/CompilerResources {
 	public fun <init> (Lorg/jetbrains/kotlin/config/LanguageVersionSettings;Lorg/jetbrains/kotlin/resolve/calls/smartcasts/DataFlowValueFactory;)V
 	public final fun getDataFlowValueFactory ()Lorg/jetbrains/kotlin/resolve/calls/smartcasts/DataFlowValueFactory;
@@ -118,10 +114,9 @@ public abstract interface class io/gitlab/arturbosch/detekt/api/Detektion : org/
 	public abstract fun getNotifications ()Ljava/util/Collection;
 }
 
-public final class io/gitlab/arturbosch/detekt/api/Entity : io/gitlab/arturbosch/detekt/api/Compactable {
+public final class io/gitlab/arturbosch/detekt/api/Entity {
 	public static final field Companion Lio/gitlab/arturbosch/detekt/api/Entity$Companion;
 	public fun <init> (Ljava/lang/String;Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/Location;Lorg/jetbrains/kotlin/psi/KtElement;)V
-	public fun compact ()Ljava/lang/String;
 	public final fun getKtElement ()Lorg/jetbrains/kotlin/psi/KtElement;
 	public final fun getLocation ()Lio/gitlab/arturbosch/detekt/api/Location;
 	public final fun getName ()Ljava/lang/String;
@@ -187,10 +182,9 @@ public final class io/gitlab/arturbosch/detekt/api/Issue$DefaultImpls {
 	public static fun getLocation (Lio/gitlab/arturbosch/detekt/api/Issue;)Lio/gitlab/arturbosch/detekt/api/Location;
 }
 
-public final class io/gitlab/arturbosch/detekt/api/Location : io/gitlab/arturbosch/detekt/api/Compactable {
+public final class io/gitlab/arturbosch/detekt/api/Location {
 	public static final field Companion Lio/gitlab/arturbosch/detekt/api/Location$Companion;
 	public fun <init> (Lio/gitlab/arturbosch/detekt/api/SourceLocation;Lio/gitlab/arturbosch/detekt/api/SourceLocation;Lio/gitlab/arturbosch/detekt/api/TextLocation;Ljava/nio/file/Path;)V
-	public fun compact ()Ljava/lang/String;
 	public final fun getEndSource ()Lio/gitlab/arturbosch/detekt/api/SourceLocation;
 	public final fun getPath ()Ljava/nio/file/Path;
 	public final fun getSource ()Lio/gitlab/arturbosch/detekt/api/SourceLocation;
