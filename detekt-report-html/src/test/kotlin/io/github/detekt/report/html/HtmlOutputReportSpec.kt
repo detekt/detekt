@@ -7,8 +7,6 @@ import io.github.detekt.metrics.processors.linesKey
 import io.github.detekt.metrics.processors.logicalLinesKey
 import io.github.detekt.metrics.processors.sourceLinesKey
 import io.github.detekt.test.utils.createTempFileForTest
-import io.github.detekt.test.utils.internal.FakeKtElement
-import io.github.detekt.test.utils.internal.FakePsiFile
 import io.github.detekt.test.utils.readResourceContent
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Issue
@@ -21,14 +19,15 @@ import io.gitlab.arturbosch.detekt.test.createIssue
 import io.gitlab.arturbosch.detekt.test.createLocation
 import io.gitlab.arturbosch.detekt.test.createRuleInstance
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.psi.KtElement
 import org.junit.jupiter.api.Test
 import java.nio.file.Path
+import kotlin.io.path.Path
+import kotlin.io.path.absolute
 import kotlin.io.path.writeText
 
 class HtmlOutputReportSpec {
-
-    private val htmlReport = HtmlOutputReport()
+    private val basePath = Path("src/test/resources").absolute()
+    private val htmlReport = HtmlOutputReport().apply { init(TestSetupContext(basePath = basePath)) }
 
     @Test
     fun `renders the HTML headers correctly`() {
@@ -171,30 +170,15 @@ class HtmlOutputReportSpec {
     }
 }
 
-private fun fakeKtElement(): KtElement {
-    val code = buildString {
-        repeat(33) {
-            appendLine("val val${it + 1} = ${it + 1}")
-        }
-    }
-    val fakePsiFile = FakePsiFile(code)
-    val fakeKtElement = FakeKtElement(fakePsiFile)
-
-    return fakeKtElement
-}
-
 private fun createTestDetektionWithMultipleSmells(): Detektion {
     val entity1 = createEntity(
         location = createLocation("src/main/com/sample/Sample1.kt", position = 11 to 1, text = 10..14),
-        ktElement = fakeKtElement()
     )
     val entity2 = createEntity(
         location = createLocation("src/main/com/sample/Sample2.kt", position = 22 to 2, text = 10..14),
-        ktElement = fakeKtElement()
     )
     val entity3 = createEntity(
         location = createLocation("src/main/com/sample/Sample3.kt", position = 33 to 3, text = 10..14),
-        ktElement = fakeKtElement()
     )
 
     return TestDetektion(
