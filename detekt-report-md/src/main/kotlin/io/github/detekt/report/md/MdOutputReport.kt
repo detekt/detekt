@@ -189,4 +189,5 @@ private fun MarkdownContent.snippetCode(lines: Sequence<String>, location: Sourc
     return codeBlock("kotlin") { text }
 }
 
+@Suppress("UnusedReceiverParameter")
 internal fun MarkdownContent.link(text: String, url: String) = "[$text]($url)"
