@@ -3,6 +3,11 @@
   "version": "2.1.0",
   "runs": [
     {
+      "originalUriBaseIds": {
+        "%SRCROOT%": {
+          "uri": "<BASE-URL>"
+        }
+      },
       "results": [
         {
           "level": "error",
@@ -10,7 +15,8 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "<PREFIX>TestFile.kt"
+                  "uri": "TestFile.kt",
+                  "uriBaseId": "%SRCROOT%"
                 },
                 "region": {
                   "endColumn": 3,
@@ -32,7 +38,8 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "<PREFIX>TestFile.kt"
+                  "uri": "TestFile.kt",
+                  "uriBaseId": "%SRCROOT%"
                 },
                 "region": {
                   "endColumn": 5,
@@ -54,7 +61,8 @@
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "<PREFIX>TestFile.kt"
+                  "uri": "TestFile.kt",
+                  "uriBaseId": "%SRCROOT%"
                 },
                 "region": {
                   "endColumn": 1,

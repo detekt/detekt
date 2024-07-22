@@ -15,6 +15,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import io.gitlab.arturbosch.detekt.test.TestDetektion
+import io.gitlab.arturbosch.detekt.test.TestSetupContext
 import io.gitlab.arturbosch.detekt.test.createEntity
 import io.gitlab.arturbosch.detekt.test.createIssue
 import io.gitlab.arturbosch.detekt.test.createLocation
@@ -23,14 +24,11 @@ import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtElement
 import org.junit.jupiter.api.Test
 import java.nio.file.Path
-import kotlin.io.path.Path
-import kotlin.io.path.absolute
-import kotlin.io.path.invariantSeparatorsPathString
 import kotlin.io.path.writeText
 
 class HtmlOutputReportSpec {
 
-    private val htmlReport = HtmlOutputReport()
+    private val htmlReport = HtmlOutputReport().apply { init(TestSetupContext()) }
 
     @Test
     fun `renders the HTML headers correctly`() {
@@ -73,19 +71,6 @@ class HtmlOutputReportSpec {
     @Test
     fun `renders the right file locations`() {
         val result = htmlReport.render(createTestDetektionWithMultipleSmells())
-        val root = Path("Users/tester/detekt/").absolute().invariantSeparatorsPathString
-
-        assertThat(result).contains("<span class=\"location\">$root/src/main/com/sample/Sample1.kt:11:1</span>")
-        assertThat(result).contains("<span class=\"location\">$root/src/main/com/sample/Sample2.kt:22:2</span>")
-        assertThat(result).contains("<span class=\"location\">$root/src/main/com/sample/Sample3.kt:33:3</span>")
-    }
-
-    @Test
-    fun `renders the right file locations for relative paths`() {
-        val htmlReport = HtmlOutputReport()
-        htmlReport.basePath = Path("Users/tester/detekt/").absolute()
-
-        val result = htmlReport.render(createTestDetektionFromRelativePath())
 
         assertThat(result).contains("<span class=\"location\">src/main/com/sample/Sample1.kt:11:1</span>")
         assertThat(result).contains("<span class=\"location\">src/main/com/sample/Sample2.kt:22:2</span>")
@@ -165,10 +150,6 @@ class HtmlOutputReportSpec {
     @Test
     fun `asserts that the generated HTML is the same as expected`() {
         val expectedString = readResourceContent("HtmlOutputFormatTest.html")
-            .replace(
-                "<PREFIX>",
-                Path("Users/tester/detekt/").absolute().invariantSeparatorsPathString
-            )
         val expected = createTempFileForTest("expected-report", ".html").apply { writeText(expectedString) }
 
         val result = htmlReport.render(createTestDetektionWithMultipleSmells())
@@ -203,56 +184,22 @@ private fun fakeKtElement(): KtElement {
 }
 
 private fun createTestDetektionWithMultipleSmells(): Detektion {
-    val basePath = "Users/tester/detekt/"
     val entity1 = createEntity(
-        location = createLocation("src/main/com/sample/Sample1.kt", basePath, position = 11 to 1, text = 10..14),
+        location = createLocation("src/main/com/sample/Sample1.kt", position = 11 to 1, text = 10..14),
         ktElement = fakeKtElement()
     )
     val entity2 = createEntity(
-        location = createLocation("src/main/com/sample/Sample2.kt", basePath, position = 22 to 2, text = 10..14),
+        location = createLocation("src/main/com/sample/Sample2.kt", position = 22 to 2, text = 10..14),
         ktElement = fakeKtElement()
     )
     val entity3 = createEntity(
-        location = createLocation("src/main/com/sample/Sample3.kt", basePath, position = 33 to 3, text = 10..14),
+        location = createLocation("src/main/com/sample/Sample3.kt", position = 33 to 3, text = 10..14),
         ktElement = fakeKtElement()
     )
 
     return TestDetektion(
         createIssue(createRuleInstance("rule_a/id", "RuleSet1"), entity1, "Issue message 1"),
         createIssue(createRuleInstance("rule_a/id", "RuleSet1"), entity2, "Issue message 2"),
-        createIssue(createRuleInstance("rule_b", "RuleSet2"), entity3, "Issue message 3"),
-    )
-}
-
-private fun createTestDetektionFromRelativePath(): Detektion {
-    val basePath = "Users/tester/detekt/"
-    val entity1 = createEntity(
-        location = createLocation(
-            path = "src/main/com/sample/Sample1.kt",
-            basePath = basePath,
-            position = 11 to 1,
-            text = 10..14,
-        ),
-        ktElement = fakeKtElement(),
-    )
-    val entity2 = createEntity(
-        location = createLocation(
-            path = "src/main/com/sample/Sample2.kt",
-            basePath = basePath,
-            position = 22 to 2,
-        )
-    )
-    val entity3 = createEntity(
-        location = createLocation(
-            path = "src/main/com/sample/Sample3.kt",
-            basePath = basePath,
-            position = 33 to 3,
-        )
-    )
-
-    return TestDetektion(
-        createIssue(createRuleInstance("rule_a", "RuleSet1"), entity1, "Issue message 1"),
-        createIssue(createRuleInstance("rule_a", "RuleSet1"), entity2, "Issue message 2"),
         createIssue(createRuleInstance("rule_b", "RuleSet2"), entity3, "Issue message 3"),
     )
 }
@@ -281,7 +228,7 @@ private val generatedRegex = """^generated\swith.*$""".toRegex(RegexOption.MULTI
 private const val REPLACEMENT = "generated with..."
 
 private fun createReportWithIssues(vararg issues: Issue): Path {
-    val htmlReport = HtmlOutputReport()
+    val htmlReport = HtmlOutputReport().apply { init(TestSetupContext()) }
     val detektion = TestDetektion(*issues)
     var result = htmlReport.render(detektion)
     result = generatedRegex.replace(result, REPLACEMENT)
