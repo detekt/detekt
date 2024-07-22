@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.api.RuleInstance
 import io.gitlab.arturbosch.detekt.api.RuleSet
+import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
@@ -28,6 +29,7 @@ import kotlinx.html.span
 import kotlinx.html.stream.createHTML
 import kotlinx.html.ul
 import kotlinx.html.visit
+import java.nio.file.Path
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
@@ -51,6 +53,12 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
 
     override val id: String = "HtmlOutputReport"
     override val ending = "html"
+
+    private lateinit var basePath: Path
+    override fun init(context: SetupContext) {
+        super.init(context)
+        basePath = context.basePath
+    }
 
     override fun render(detektion: Detektion) =
         javaClass.getResource("/$DEFAULT_TEMPLATE")!!
@@ -159,10 +167,11 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
             span("message") { text(issue.message) }
         }
 
-        val psiFile = issue.entity.ktElement.containingFile
-        if (psiFile != null) {
-            val lineSequence = psiFile.text.splitToSequence('\n')
-            snippetCode(issue.ruleInstance.name, lineSequence, issue.location.source, issue.location.text.length())
+        val absoluteFile = basePath.resolve(issue.location.path).toFile()
+        if (absoluteFile.exists()) {
+            absoluteFile.useLines {
+                snippetCode(issue.ruleInstance.name, it, issue.location.source, issue.location.text.length())
+            }
         }
     }
 
