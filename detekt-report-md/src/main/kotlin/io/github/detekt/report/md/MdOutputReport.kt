@@ -16,9 +16,11 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.api.RuleInstance
+import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
+import java.nio.file.Path
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
@@ -36,9 +38,14 @@ private const val EXTRA_LINES_IN_SNIPPET = 3
  * [See](https://detekt.dev/docs/introduction/configurations/#output-reports)
  */
 class MdOutputReport : BuiltInOutputReport, OutputReport() {
-
     override val id: String = "MdOutputReport"
     override val ending: String = "md"
+
+    private lateinit var basePath: Path
+    override fun init(context: SetupContext) {
+        super.init(context)
+        basePath = context.basePath
+    }
 
     override fun render(detektion: Detektion) = markdown {
         h1 { "detekt" }
@@ -49,7 +56,7 @@ class MdOutputReport : BuiltInOutputReport, OutputReport() {
         h2 { "Complexity Report" }
         renderComplexity(getComplexityMetrics(detektion))
 
-        renderIssues(detektion.issues)
+        renderIssues(detektion.issues, basePath)
         emptyLine()
 
         paragraph {
@@ -81,17 +88,17 @@ private fun MarkdownContent.renderComplexity(complexityReport: List<String>) {
     }
 }
 
-private fun MarkdownContent.renderGroup(issues: List<Issue>) {
+private fun MarkdownContent.renderGroup(issues: List<Issue>, basePath: Path) {
     issues
         .groupBy { it.ruleInstance }
         .toList()
         .sortedBy { (ruleInstance, _) -> ruleInstance.id }
         .forEach { (ruleInstance, ruleIssues) ->
-            renderRule(ruleInstance, ruleIssues)
+            renderRule(ruleInstance, ruleIssues, basePath)
         }
 }
 
-private fun MarkdownContent.renderRule(ruleInstance: RuleInstance, issues: List<Issue>) {
+private fun MarkdownContent.renderRule(ruleInstance: RuleInstance, issues: List<Issue>, basePath: Path) {
     val ruleId = ruleInstance.id
     val ruleName = ruleInstance.name.value
     val ruleSetId = ruleInstance.ruleSetId.value
@@ -115,12 +122,12 @@ private fun MarkdownContent.renderRule(ruleInstance: RuleInstance, issues: List<
                 )
             )
             .forEach {
-                item { renderIssue(it) }
+                item { renderIssue(it, basePath) }
             }
     }
 }
 
-private fun MarkdownContent.renderIssues(issues: List<Issue>) {
+private fun MarkdownContent.renderIssues(issues: List<Issue>, basePath: Path) {
     val total = issues.count()
 
     h2 { "Issues (%,d)".format(Locale.ROOT, total) }
@@ -130,11 +137,11 @@ private fun MarkdownContent.renderIssues(issues: List<Issue>) {
         .toList()
         .sortedBy { (group, _) -> group.value }
         .forEach { (_, groupIssues) ->
-            renderGroup(groupIssues)
+            renderGroup(groupIssues, basePath)
         }
 }
 
-private fun MarkdownContent.renderIssue(issue: Issue): String {
+private fun MarkdownContent.renderIssue(issue: Issue, basePath: Path): String {
     val filePath = issue.location.path
     val location =
         "${filePath.invariantSeparatorsPathString}:${issue.location.source.line}:${issue.location.source.column}"
@@ -145,11 +152,14 @@ private fun MarkdownContent.renderIssue(issue: Issue): String {
         ""
     }
 
-    val psiFile = issue.entity.ktElement.containingFile
-    val lineSequence = psiFile.text.splitToSequence('\n')
-    val snippet = snippetCode(lineSequence, issue.location.source)
+    val absoluteFile = basePath.resolve(issue.location.path).toFile()
+    val snippet = if (absoluteFile.exists()) {
+        absoluteFile.useLines { snippetCode(it, issue.location.source) }
+    } else {
+        null
+    }
 
-    return "$location\n$message\n$snippet"
+    return listOfNotNull(location, message, snippet).joinToString("\n")
 }
 
 private fun MarkdownContent.snippetCode(lines: Sequence<String>, location: SourceLocation): String {
