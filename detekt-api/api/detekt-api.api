@@ -180,7 +180,6 @@ public final class io/gitlab/arturbosch/detekt/api/Issue$DefaultImpls {
 }
 
 public abstract interface class io/gitlab/arturbosch/detekt/api/Issue$Entity {
-	public abstract fun getKtElement ()Lorg/jetbrains/kotlin/psi/KtElement;
 	public abstract fun getLocation ()Lio/gitlab/arturbosch/detekt/api/Issue$Location;
 	public abstract fun getName ()Ljava/lang/String;
 	public abstract fun getSignature ()Ljava/lang/String;

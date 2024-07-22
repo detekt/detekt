@@ -26,7 +26,6 @@ import io.gitlab.arturbosch.detekt.core.suppressors.isSuppressedBy
 import io.gitlab.arturbosch.detekt.core.util.isActiveOrDefault
 import io.gitlab.arturbosch.detekt.core.util.shouldAnalyzeFile
 import org.jetbrains.kotlin.config.languageVersionSettings
-import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactoryImpl
@@ -206,7 +205,7 @@ private fun Finding.toIssue(rule: RuleInstance, severity: Severity, basePath: Pa
     }
 
 private fun Entity.toIssue(basePath: Path): Issue.Entity =
-    IssueImpl.Entity(name, signature, location.toIssue(basePath), ktElement)
+    IssueImpl.Entity(name, signature, location.toIssue(basePath))
 
 private fun Location.toIssue(basePath: Path): Issue.Location =
     IssueImpl.Location(source, endSource, text, basePath.relativize(path))
@@ -226,7 +225,6 @@ private data class IssueImpl(
         override val name: String,
         override val signature: String,
         override val location: Issue.Location,
-        override val ktElement: KtElement
     ) : Issue.Entity
 
     data class Location(
