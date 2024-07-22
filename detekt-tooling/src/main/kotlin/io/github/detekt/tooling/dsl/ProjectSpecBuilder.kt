@@ -11,7 +11,7 @@ class ProjectSpecBuilder : Builder<ProjectSpec> {
 
     var basePath: Path = Path("").absolute()
         set(value) {
-            require(basePath.isAbsolute) { "basepath should be absolute" }
+            require(value.isAbsolute) { "basePath should be absolute" }
             field = value
         }
     var inputPaths: Collection<Path> = emptyList()

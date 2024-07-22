@@ -11,7 +11,6 @@ import io.gitlab.arturbosch.detekt.api.TextLocation
 import org.jetbrains.kotlin.psi.KtElement
 import java.nio.file.Path
 import kotlin.io.path.Path
-import kotlin.io.path.absolute
 
 fun createIssue(
     ruleId: String = "TestSmell/id",
@@ -82,7 +81,6 @@ fun createEntity(
 
 fun createLocation(
     path: String = "TestFile.kt",
-    basePath: String? = null,
     position: Pair<Int, Int> = 1 to 1,
     endPosition: Pair<Int, Int> = 1 to 1,
     text: IntRange = 0..0,
@@ -92,7 +90,7 @@ fun createLocation(
         source = SourceLocation(position.first, position.second),
         endSource = SourceLocation(endPosition.first, endPosition.second),
         text = TextLocation(text.first, text.last),
-        path = basePath?.let { Path(it).absolute().resolve(path) } ?: Path(path).absolute(),
+        path = Path(path),
     )
 }
 
@@ -116,7 +114,11 @@ private data class IssueImpl(
         override val endSource: SourceLocation,
         override val text: TextLocation,
         override val path: Path
-    ) : Issue.Location
+    ) : Issue.Location {
+        init {
+            require(!path.isAbsolute) { "Path should be always relative" }
+        }
+    }
 }
 
 private data class RuleInstanceImpl(

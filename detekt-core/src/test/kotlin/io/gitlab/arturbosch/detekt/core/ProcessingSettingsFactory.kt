@@ -25,6 +25,7 @@ fun createProcessingSettings(
     val spec = ProcessingSpec {
         project {
             inputPaths = listOfNotNull(inputPath)
+            basePath = basePath
         }
         logging {
             debug = true
