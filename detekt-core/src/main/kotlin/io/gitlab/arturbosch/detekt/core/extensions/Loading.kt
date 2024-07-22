@@ -14,8 +14,7 @@ inline fun <reified T : Extension> loadExtensions(
     ServiceLoader.load(T::class.java, settings.pluginLoader)
         .filterNot { it.id in settings.spec.extensionsSpec.disabledExtensions }
         .filter(predicate)
-        .sortedBy { it.priority }
-        .asReversed()
+        .sortedByDescending { it.priority }
         .onEach {
             it.init(settings.config)
             it.init(settings)
