@@ -6,7 +6,7 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.core.reporting.filterEmptyIssues
 
-abstract class AbstractIssuesReport : ConsoleReport() {
+abstract class AbstractIssuesReport : ConsoleReport {
 
     private lateinit var config: Config
 

@@ -7,12 +7,12 @@ package io.gitlab.arturbosch.detekt.api
  * If the default reporting mechanism should be turned off, exclude the entry 'FindingsReport'
  * in the 'console-reports' property of a detekt yaml config.
  */
-abstract class ConsoleReport : Extension {
+interface ConsoleReport : Extension {
 
     /**
      * Converts the given [detektion] into a string representation
      * to present it to the client.
      * The implementation specifies which parts of the report are important to the user.
      */
-    abstract fun render(detektion: Detektion): String?
+    fun render(detektion: Detektion): String?
 }

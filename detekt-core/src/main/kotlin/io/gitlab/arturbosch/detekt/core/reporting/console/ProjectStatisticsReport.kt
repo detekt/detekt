@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Detektion
  * Contains metrics and statistics concerning the analyzed project sorted by priority.
  * See: https://detekt.dev/configurations.html#console-reports
  */
-class ProjectStatisticsReport : ConsoleReport() {
+class ProjectStatisticsReport : ConsoleReport {
 
     override val id: String = "ProjectStatisticsReport"
     override val priority: Int = 10

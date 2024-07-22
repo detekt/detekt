@@ -87,12 +87,14 @@ public abstract interface annotation class io/gitlab/arturbosch/detekt/api/Confi
 	public abstract fun description ()Ljava/lang/String;
 }
 
-public abstract class io/gitlab/arturbosch/detekt/api/ConsoleReport : io/gitlab/arturbosch/detekt/api/Extension {
-	public fun <init> ()V
-	public fun getPriority ()I
-	public fun init (Lio/gitlab/arturbosch/detekt/api/Config;)V
-	public fun init (Lio/gitlab/arturbosch/detekt/api/SetupContext;)V
+public abstract interface class io/gitlab/arturbosch/detekt/api/ConsoleReport : io/gitlab/arturbosch/detekt/api/Extension {
 	public abstract fun render (Lio/gitlab/arturbosch/detekt/api/Detektion;)Ljava/lang/String;
+}
+
+public final class io/gitlab/arturbosch/detekt/api/ConsoleReport$DefaultImpls {
+	public static fun getPriority (Lio/gitlab/arturbosch/detekt/api/ConsoleReport;)I
+	public static fun init (Lio/gitlab/arturbosch/detekt/api/ConsoleReport;Lio/gitlab/arturbosch/detekt/api/Config;)V
+	public static fun init (Lio/gitlab/arturbosch/detekt/api/ConsoleReport;Lio/gitlab/arturbosch/detekt/api/SetupContext;)V
 }
 
 public class io/gitlab/arturbosch/detekt/api/CorrectableCodeSmell : io/gitlab/arturbosch/detekt/api/CodeSmell {
