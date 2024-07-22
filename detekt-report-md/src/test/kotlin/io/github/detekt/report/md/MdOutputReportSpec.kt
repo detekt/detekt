@@ -26,6 +26,110 @@ class MdOutputReportSpec {
     private val mdReport = MdOutputReport()
     private val detektion = createTestDetektionWithMultipleSmells()
     private val result = mdReport.render(detektion)
+        .replace("""\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d UTC""".toRegex(), "2024-07-21 21:34:16 UTC")
+        .replace("""\[detekt version \d+\.\d+.\d+]""".toRegex(), "[detekt version 1.23.6]")
+
+    @Suppress("LongMethod")
+    @Test
+    fun checkAll() {
+        assertThat(result).isEqualTo(
+            """
+                # detekt
+                
+                ## Metrics
+                
+                * 10,000 M1
+                
+                * 2 M2
+                
+                ## Complexity Report
+                
+                * 2,222 lines of code (loc)
+                
+                * 20 source lines of code (sloc)
+                
+                * 10 logical lines of code (lloc)
+                
+                * 2 comment lines of code (cloc)
+                
+                * 10 cyclomatic complexity (mcc)
+                
+                * 10 cognitive complexity
+                
+                * 3 number of total code smells
+                
+                * 10% comment source ratio
+                
+                * 1,000 mcc per 1,000 lloc
+                
+                * 300 code smells per 1,000 lloc
+                
+                ## Issues (3)
+                
+                ### Section-1, rule_a/id (2)
+                
+                Description rule_a
+                
+                [Documentation](https://detekt.dev/docs/rules/section-1#rule_a)
+                
+                * src/main/com/sample/Sample1.kt:9:17
+                ```
+                Issue message 1
+                ```
+                ```kotlin
+                6      val greeting: String = "Hello, World!"
+                7  
+                8      init {
+                9          println(greetings)
+                !                  ^ error
+                10     }
+                11 
+                12     fun foo() {
+                
+                ```
+                
+                * src/main/com/sample/Sample2.kt:13:17
+                ```
+                Issue message 2
+                ```
+                ```kotlin
+                10     }
+                11 
+                12     fun foo() {
+                13         println(greetings)
+                !!                 ^ error
+                14         return this
+                15     }
+                16 }
+                
+                ```
+                
+                ### Section-2, rule_b (1)
+                
+                Description rule_b
+                
+                [Documentation](https://detekt.dev/docs/rules/section-2#rule_b)
+                
+                * src/main/com/sample/Sample3.kt:14:16
+                ```
+                Issue message 3
+                ```
+                ```kotlin
+                11 
+                12     fun foo() {
+                13         println(greetings)
+                14         return this
+                !!                ^ error
+                15     }
+                16 }
+                
+                ```
+                
+                generated with [detekt version 1.23.6](https://detekt.dev/) on 2024-07-21 21:34:16 UTC
+                
+            """.trimIndent()
+        )
+    }
 
     @Test
     fun `renders Markdown structure correctly`() {
