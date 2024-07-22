@@ -10,6 +10,8 @@ interface ProjectSpec {
 
     /**
      * A base path to relativize paths. Mostly used for generating path in the output or report.
+     *
+     * It is always an absolute path.
      */
     val basePath: Path
 
