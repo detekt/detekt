@@ -6,24 +6,24 @@ import io.github.detekt.metrics.processors.complexityKey
 import io.github.detekt.metrics.processors.linesKey
 import io.github.detekt.metrics.processors.logicalLinesKey
 import io.github.detekt.metrics.processors.sourceLinesKey
-import io.github.detekt.test.utils.internal.FakeKtElement
-import io.github.detekt.test.utils.internal.FakePsiFile
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import io.gitlab.arturbosch.detekt.test.TestDetektion
+import io.gitlab.arturbosch.detekt.test.TestSetupContext
 import io.gitlab.arturbosch.detekt.test.createEntity
 import io.gitlab.arturbosch.detekt.test.createIssue
 import io.gitlab.arturbosch.detekt.test.createLocation
 import io.gitlab.arturbosch.detekt.test.createRuleInstance
 import org.assertj.core.api.Assertions.assertThat
-import org.intellij.lang.annotations.Language
-import org.jetbrains.kotlin.psi.KtElement
 import org.junit.jupiter.api.Test
+import kotlin.io.path.Path
+import kotlin.io.path.absolute
 
 class MdOutputReportSpec {
-    private val mdReport = MdOutputReport()
+    private val basePath = Path("src/test/resources").absolute()
+    private val mdReport = MdOutputReport().apply { init(TestSetupContext(basePath = basePath)) }
     private val detektion = createTestDetektionWithMultipleSmells()
     private val result = mdReport.render(detektion)
         .replace("""\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d UTC""".toRegex(), "2024-07-21 21:34:16 UTC")
@@ -211,54 +211,15 @@ class MdOutputReportSpec {
     }
 }
 
-private fun fakeKtElement(): KtElement {
-    @Language("kotlin")
-    val code = """
-        package com.example.test
-        
-        import io.github.*
-        
-        class Test() {
-            val greeting: String = "Hello, World!"
-        
-            init {
-                println(greetings)
-            }
-        
-            fun foo() {
-                println(greetings)
-                return this
-            }
-        }
-    """.trimIndent()
-    val fakePsiFile = FakePsiFile(code)
-    val fakeKtElement = FakeKtElement(fakePsiFile)
-
-    return fakeKtElement
-}
-
 private fun createTestDetektionWithMultipleSmells(): Detektion {
     val entity1 = createEntity(
-        location = createLocation(
-            path = "src/main/com/sample/Sample1.kt",
-            position = 9 to 17,
-            text = 17..20,
-        ),
-        ktElement = fakeKtElement(),
+        location = createLocation(path = "src/main/com/sample/Sample1.kt", position = 9 to 17, text = 17..20),
     )
     val entity2 = createEntity(
-        location = createLocation(
-            path = "src/main/com/sample/Sample2.kt",
-            position = 13 to 17,
-        ),
-        ktElement = fakeKtElement(),
+        location = createLocation(path = "src/main/com/sample/Sample2.kt", position = 13 to 17),
     )
     val entity3 = createEntity(
-        location = createLocation(
-            path = "src/main/com/sample/Sample3.kt",
-            position = 14 to 16,
-        ),
-        ktElement = fakeKtElement(),
+        location = createLocation(path = "src/main/com/sample/Sample3.kt", position = 14 to 16),
     )
 
     return createMdDetektion(
