@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.api
 
 import java.net.URI
+import java.nio.file.Path
 
 /**
  * Context providing useful processing settings to initialize extensions.
@@ -15,6 +16,8 @@ interface SetupContext : PropertiesAware {
      * Configuration which is used to set up detekt.
      */
     val config: Config
+
+    val basePath: Path
 
     /**
      * The channel to log all the output.
