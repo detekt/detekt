@@ -5,18 +5,19 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
+import java.nio.file.Path
 
 internal fun defaultReportMapping(report: OutputReport) =
     if (report is BuiltInOutputReport) report.ending else report.id
 
-internal fun printIssues(issues: Map<String, List<Issue>>): String =
+internal fun printIssues(issues: Map<String, List<Issue>>, basePath: Path): String =
     buildString {
         issues.forEach { (key, issues) ->
             append(key)
             append("\n")
             issues.forEach {
                 append("\t")
-                append(it.detailed().yellow())
+                append(it.detailed(basePath).yellow())
                 append("\n")
             }
         }
@@ -51,6 +52,7 @@ private fun Issue.truncatedMessage(): String {
     }
 }
 
-private fun Issue.detailed(): String = "${ruleInstance.id} - [${truncatedMessage()}] at ${location.compact()}"
+private fun Issue.detailed(basePath: Path): String =
+    "${ruleInstance.id} - [${truncatedMessage()}] at ${location.compact(basePath)}"
 
-internal fun Issue.Location.compact(): String = "$path:$source"
+internal fun Issue.Location.compact(basePath: Path): String = "${basePath.resolve(path)}:$source"

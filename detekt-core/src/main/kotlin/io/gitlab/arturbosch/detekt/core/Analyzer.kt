@@ -135,7 +135,7 @@ internal class Analyzer(
                     it.entity.ktElement.isSuppressedBy(ruleInstance.id, rule.aliases, ruleInstance.ruleSetId)
                 }
                 .filterSuppressedFindings(rule, bindingContext)
-                .map { it.toIssue(ruleInstance, rule.computeSeverity()) }
+                .map { it.toIssue(ruleInstance, rule.computeSeverity(), settings.spec.projectSpec.basePath) }
         }
     }
 
@@ -183,25 +183,33 @@ private fun throwIllegalStateException(file: KtFile, error: Throwable): Nothing 
     throw IllegalStateException(message, error)
 }
 
-private fun Finding.toIssue(rule: RuleInstance, severity: Severity): Issue =
+private fun Finding.toIssue(rule: RuleInstance, severity: Severity, basePath: Path): Issue =
     when (this) {
         is CorrectableCodeSmell -> IssueImpl(
             rule,
-            entity.toIssue(),
+            entity.toIssue(basePath),
             message,
-            references.map { it.toIssue() },
+            references.map { it.toIssue(basePath) },
             severity,
             autoCorrectEnabled
         )
 
-        is CodeSmell -> IssueImpl(rule, entity.toIssue(), message, references.map { it.toIssue() }, severity)
+        is CodeSmell -> IssueImpl(
+            rule,
+            entity.toIssue(basePath),
+            message,
+            references.map { it.toIssue(basePath) },
+            severity,
+        )
 
         else -> error("wtf?")
     }
 
-private fun Entity.toIssue(): Issue.Entity = IssueImpl.Entity(name, signature, location.toIssue(), ktElement)
+private fun Entity.toIssue(basePath: Path): Issue.Entity =
+    IssueImpl.Entity(name, signature, location.toIssue(basePath), ktElement)
 
-private fun Location.toIssue(): Issue.Location = IssueImpl.Location(source, endSource, text, path)
+private fun Location.toIssue(basePath: Path): Issue.Location =
+    IssueImpl.Location(source, endSource, text, basePath.relativize(path))
 
 private fun Rule.toRuleInstance(id: String, ruleSetId: RuleSet.Id): RuleInstance =
     RuleInstanceImpl(id, ruleName, ruleSetId, description)
@@ -226,7 +234,11 @@ private data class IssueImpl(
         override val endSource: SourceLocation,
         override val text: TextLocation,
         override val path: Path
-    ) : Issue.Location
+    ) : Issue.Location {
+        init {
+            require(!path.isAbsolute) { "Path should be always relative" }
+        }
+    }
 }
 
 private data class RuleInstanceImpl(

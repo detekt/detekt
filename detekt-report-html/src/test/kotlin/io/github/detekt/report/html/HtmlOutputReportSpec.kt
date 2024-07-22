@@ -28,7 +28,7 @@ import kotlin.io.path.writeText
 
 class HtmlOutputReportSpec {
 
-    private val htmlReport = HtmlOutputReport().apply { init(TestSetupContext()) }
+    private val htmlReport = HtmlOutputReport()
 
     @Test
     fun `renders the HTML headers correctly`() {
