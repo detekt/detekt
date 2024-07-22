@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.core.reporting.console
 
-import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.core.reporting.AutoCorrectableIssueAssert
 import io.gitlab.arturbosch.detekt.test.TestDetektion
+import io.gitlab.arturbosch.detekt.test.TestSetupContext
 import io.gitlab.arturbosch.detekt.test.createIssue
 import io.gitlab.arturbosch.detekt.test.createLocation
 import io.gitlab.arturbosch.detekt.test.createRuleInstance
@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 
 class LiteIssuesReportSpec {
 
-    private val subject = createIssuesReport()
+    private val subject = LiteIssuesReport().apply { init(TestSetupContext()) }
 
     @Test
     fun `reports non-empty issues`() {
@@ -40,8 +40,4 @@ class LiteIssuesReportSpec {
         val report = LiteIssuesReport()
         AutoCorrectableIssueAssert.isReportNull(report)
     }
-}
-
-private fun createIssuesReport() = LiteIssuesReport().apply {
-    init(Config.empty)
 }

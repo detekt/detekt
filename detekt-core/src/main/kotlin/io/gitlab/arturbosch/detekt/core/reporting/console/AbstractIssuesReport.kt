@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.ConsoleReport
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.core.reporting.filterEmptyIssues
 
 abstract class AbstractIssuesReport : ConsoleReport {
@@ -12,8 +13,8 @@ abstract class AbstractIssuesReport : ConsoleReport {
 
     override val priority: Int = 40
 
-    override fun init(config: Config) {
-        this.config = config
+    override fun init(context: SetupContext) {
+        this.config = context.config
     }
 
     override fun render(detektion: Detektion): String? {

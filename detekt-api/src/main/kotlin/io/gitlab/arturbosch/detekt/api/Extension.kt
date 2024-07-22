@@ -22,14 +22,6 @@ interface Extension {
     val priority: Int get() = -1
 
     /**
-     * Allows to read any or even user defined properties from the detekt yaml config
-     * to setup this extension.
-     */
-    fun init(config: Config) {
-        // implement for setup code
-    }
-
-    /**
      * Setup extension by querying common paths and config options.
      */
     fun init(context: SetupContext) {

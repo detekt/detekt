@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.core.reporting.console
 
-import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.core.reporting.AutoCorrectableIssueAssert
 import io.gitlab.arturbosch.detekt.core.reporting.decolorized
 import io.gitlab.arturbosch.detekt.test.TestDetektion
+import io.gitlab.arturbosch.detekt.test.TestSetupContext
 import io.gitlab.arturbosch.detekt.test.createIssue
 import io.gitlab.arturbosch.detekt.test.createLocation
 import io.gitlab.arturbosch.detekt.test.createRuleInstance
@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
 
 class FileBasedIssuesReportSpec {
 
-    private val subject = createFileBasedIssuesReport()
+    private val subject = FileBasedIssuesReport().apply { init(TestSetupContext()) }
 
     @Test
     fun `has the reference content`() {
@@ -49,10 +49,4 @@ class FileBasedIssuesReportSpec {
         val report = FileBasedIssuesReport()
         AutoCorrectableIssueAssert.isReportNull(report)
     }
-}
-
-private fun createFileBasedIssuesReport(): FileBasedIssuesReport {
-    val report = FileBasedIssuesReport()
-    report.init(Config.empty)
-    return report
 }

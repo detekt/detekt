@@ -16,7 +16,6 @@ inline fun <reified T : Extension> loadExtensions(
         .filter(predicate)
         .sortedByDescending { it.priority }
         .onEach {
-            it.init(settings.config)
             it.init(settings)
         }
         .also {
