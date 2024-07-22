@@ -8,7 +8,6 @@ import io.gitlab.arturbosch.detekt.api.OutputReport.Companion.DETEKT_OUTPUT_REPO
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.TestSetupContext
@@ -21,7 +20,6 @@ import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.junit.jupiter.api.Test
-import java.net.URI
 import kotlin.io.path.Path
 import kotlin.io.path.absolute
 
@@ -69,16 +67,7 @@ class SarifOutputReportSpec {
 
         val report = SarifOutputReport()
             .apply {
-                init(object : SetupContext {
-                    override val configUris: Collection<URI> = emptyList()
-                    override val config: Config = testConfig
-                    override val outputChannel: Appendable = StringBuilder()
-                    override val errorChannel: Appendable = StringBuilder()
-                    override val properties: MutableMap<String, Any?> = HashMap()
-                    override fun register(key: String, value: Any) {
-                        properties[key] = value
-                    }
-                })
+                init(TestSetupContext(testConfig))
             }
             .render(result)
 
@@ -99,11 +88,7 @@ class SarifOutputReportSpec {
         val basePath = Path("/").absolute().resolve("Users/tester/detekt/")
         val report = SarifOutputReport()
             .apply {
-                init(
-                    TestSetupContext().apply {
-                        register(DETEKT_OUTPUT_REPORT_BASE_PATH_KEY, basePath)
-                    }
-                )
+                init(TestSetupContext(properties = mapOf(DETEKT_OUTPUT_REPORT_BASE_PATH_KEY to basePath)))
             }
             .render(result)
             .stripWhitespace()

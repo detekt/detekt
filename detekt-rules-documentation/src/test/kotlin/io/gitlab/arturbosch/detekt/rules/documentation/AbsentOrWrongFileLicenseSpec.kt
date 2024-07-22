@@ -1,19 +1,16 @@
 package io.gitlab.arturbosch.detekt.rules.documentation
 
-import io.github.detekt.test.utils.NullPrintStream
 import io.github.detekt.test.utils.compileContentForTest
 import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.SetupContext
+import io.gitlab.arturbosch.detekt.test.TestSetupContext
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lint
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import java.io.PrintStream
-import java.net.URI
 
 class AbsentOrWrongFileLicenseSpec {
 
@@ -187,16 +184,12 @@ private fun checkLicence(@Language("kotlin") content: String, isRegexLicense: Bo
     val config = yamlConfig(configFileName)
 
     LicenceHeaderLoaderExtension().apply {
-        init(object : SetupContext {
-            override val configUris: Collection<URI> = listOf(resource.toUri())
-            override val config: Config = config
-            override val outputChannel: PrintStream = NullPrintStream()
-            override val errorChannel: PrintStream = NullPrintStream()
-            override val properties: MutableMap<String, Any?> = HashMap()
-            override fun register(key: String, value: Any) {
-                properties[key] = value
-            }
-        })
+        init(
+            TestSetupContext(
+                config = config,
+                configUris = listOf(resource.toUri()),
+            )
+        )
         onStart(listOf(file))
     }
 

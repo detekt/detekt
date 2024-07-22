@@ -1,18 +1,14 @@
 package io.gitlab.arturbosch.detekt.core.baseline
 
-import io.github.detekt.test.utils.NullPrintStream
 import io.github.detekt.test.utils.createTempDirectoryForTest
 import io.github.detekt.test.utils.resourceAsPath
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.SetupContext
+import io.gitlab.arturbosch.detekt.test.TestSetupContext
 import io.gitlab.arturbosch.detekt.test.createEntity
 import io.gitlab.arturbosch.detekt.test.createIssue
 import io.gitlab.arturbosch.detekt.test.createRuleInstance
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
-import java.io.PrintStream
-import java.net.URI
 import java.nio.file.Path
 import kotlin.io.path.copyTo
 import kotlin.io.path.deleteIfExists
@@ -216,18 +212,12 @@ class BaselineResultMappingSpec {
 
 private fun resultMapping(baselineFile: Path?, createBaseline: Boolean?) =
     BaselineResultMapping().apply {
-        init(object : SetupContext {
-            override val configUris: Collection<URI> = emptyList()
-            override val config: Config = Config.empty
-            override val outputChannel: PrintStream = NullPrintStream()
-            override val errorChannel: PrintStream = NullPrintStream()
-            override val properties: MutableMap<String, Any?> = mutableMapOf(
-                DETEKT_BASELINE_PATH_KEY to baselineFile,
-                DETEKT_BASELINE_CREATION_KEY to createBaseline
+        init(
+            TestSetupContext(
+                properties = mapOf(
+                    DETEKT_BASELINE_PATH_KEY to baselineFile,
+                    DETEKT_BASELINE_CREATION_KEY to createBaseline,
+                )
             )
-
-            override fun register(key: String, value: Any) {
-                properties[key] = value
-            }
-        })
+        )
     }

@@ -26,4 +26,5 @@ dependencies {
     testImplementation(projects.detektRulesStyle)
     testImplementation(libs.assertj)
     testImplementation(libs.classgraph)
+    testImplementation(testFixtures(projects.detektApi))
 }
