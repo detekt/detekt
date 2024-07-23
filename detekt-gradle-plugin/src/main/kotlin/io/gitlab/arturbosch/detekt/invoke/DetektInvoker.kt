@@ -1,13 +1,12 @@
 package io.gitlab.arturbosch.detekt.invoke
 
+import dev.detekt.gradle.plugin.internal.throwVerificationException
 import io.gitlab.arturbosch.detekt.internal.ClassLoaderCache
 import io.gitlab.arturbosch.detekt.internal.GlobalClassLoaderCache
 import org.gradle.api.GradleException
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
-import org.gradle.api.tasks.VerificationException
-import org.gradle.util.GradleVersion
 import org.gradle.workers.WorkAction
 import org.gradle.workers.WorkParameters
 import java.io.File
@@ -95,13 +94,7 @@ private fun isAnalysisFailure(msg: String) = "Analysis failed with" in msg && "i
 @Suppress("ThrowsCount")
 private fun processResult(message: String?, reflectionWrapper: Exception, ignoreFailures: Boolean) {
     if (message != null && isAnalysisFailure(message)) {
-        when {
-            ignoreFailures -> return
-            GradleVersion.current() >= GradleVersion.version("8.2") ->
-                throw VerificationException(message, reflectionWrapper)
-            GradleVersion.current() >= GradleVersion.version("7.4.2") -> throw VerificationException(message)
-            else -> throw GradleException(message, reflectionWrapper)
-        }
+        if (!ignoreFailures) throwVerificationException(message, reflectionWrapper)
     } else {
         throw GradleException(message ?: "There was a problem running detekt.", reflectionWrapper)
     }
