@@ -100,6 +100,8 @@ class DetektBasePlugin : Plugin<Project> {
                         if (sourceSet.name == "main") {
                             detektTask.explicitApi.convention(mapExplicitArgMode())
                         }
+                        detektTask.languageVersion.convention(provider { sourceSet.languageSettings.languageVersion })
+                        detektTask.apiVersion.convention(provider { sourceSet.languageSettings.apiVersion })
                         detektTask.description = "Run detekt analysis for ${sourceSet.name} source set"
                     }
 
@@ -118,6 +120,10 @@ class DetektBasePlugin : Plugin<Project> {
                         if (sourceSet.name == "main") {
                             createBaselineTask.explicitApi.convention(mapExplicitArgMode())
                         }
+                        createBaselineTask.languageVersion.convention(
+                            provider { sourceSet.languageSettings.languageVersion }
+                        )
+                        createBaselineTask.apiVersion.convention(provider { sourceSet.languageSettings.apiVersion })
                         createBaselineTask.description = "Creates detekt baseline for ${sourceSet.name} source set"
                     }
                 }
