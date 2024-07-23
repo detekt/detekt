@@ -7,6 +7,7 @@ import dev.detekt.gradle.plugin.DetektBasePlugin.Companion.CONFIG_FILE
 import dev.detekt.gradle.plugin.internal.DetektAndroidCompilations
 import dev.detekt.gradle.plugin.internal.DetektJvmCompilations
 import dev.detekt.gradle.plugin.internal.DetektKmpJvmCompilations
+import dev.detekt.gradle.plugin.internal.gradlePropertyAtConfigTimeCompat
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import io.gitlab.arturbosch.detekt.internal.DetektPlain
 import org.gradle.api.Incubating
@@ -29,21 +30,17 @@ class DetektPlugin : Plugin<Project> {
 
         project.registerDetektPlainTask(extension)
         project.registerDetektJvmTasks(extension)
-        @Suppress("DEPRECATION")
         val enableAndroidTasks =
             !project.providers
-                .gradleProperty(DETEKT_ANDROID_DISABLED_PROPERTY)
-                .forUseAtConfigurationTime()
+                .gradlePropertyAtConfigTimeCompat(DETEKT_ANDROID_DISABLED_PROPERTY)
                 .getOrElse("false")
                 .toBoolean()
         if (enableAndroidTasks) {
             project.registerDetektAndroidTasks(extension)
         }
-        @Suppress("DEPRECATION")
         val enableMppTasks =
             !project.providers
-                .gradleProperty(DETEKT_MULTIPLATFORM_DISABLED_PROPERTY)
-                .forUseAtConfigurationTime()
+                .gradlePropertyAtConfigTimeCompat(DETEKT_MULTIPLATFORM_DISABLED_PROPERTY)
                 .getOrElse("false")
                 .toBoolean()
         if (enableMppTasks) {
