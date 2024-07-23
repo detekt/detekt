@@ -1,5 +1,7 @@
 package io.gitlab.arturbosch.detekt
 
+import dev.detekt.gradle.plugin.DetektBase
+import dev.detekt.gradle.plugin.DetektCliTool
 import io.gitlab.arturbosch.detekt.invoke.AllRulesArgument
 import io.gitlab.arturbosch.detekt.invoke.ApiVersionArgument
 import io.gitlab.arturbosch.detekt.invoke.AutoCorrectArgument
@@ -25,17 +27,11 @@ import io.gitlab.arturbosch.detekt.invoke.MultiPlatformEnabledArgument
 import io.gitlab.arturbosch.detekt.invoke.NoJdkArgument
 import io.gitlab.arturbosch.detekt.invoke.OptInArguments
 import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
-import org.gradle.api.Incubating
-import org.gradle.api.file.ConfigurableFileCollection
-import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.FileTree
 import org.gradle.api.file.RegularFileProperty
-import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.ProviderFactory
 import org.gradle.api.tasks.CacheableTask
-import org.gradle.api.tasks.Classpath
-import org.gradle.api.tasks.Console
 import org.gradle.api.tasks.IgnoreEmptyDirectories
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFiles
@@ -55,7 +51,7 @@ import javax.inject.Inject
 abstract class DetektCreateBaselineTask @Inject constructor(
     private val workerExecutor: WorkerExecutor,
     private val providers: ProviderFactory,
-) : SourceTask() {
+) : DetektBase, DetektCliTool, SourceTask() {
 
     init {
         description = "Creates a detekt baseline on the given --baseline path."
@@ -63,86 +59,7 @@ abstract class DetektCreateBaselineTask @Inject constructor(
     }
 
     @get:OutputFile
-    abstract val baseline: RegularFileProperty
-
-    @get:InputFiles
-    @get:Optional
-    @get:PathSensitive(PathSensitivity.RELATIVE)
-    abstract val config: ConfigurableFileCollection
-
-    @get:Classpath
-    abstract val detektClasspath: ConfigurableFileCollection
-
-    @get:Classpath
-    abstract val pluginClasspath: ConfigurableFileCollection
-
-    @get:Classpath
-    @get:Optional
-    abstract val classpath: ConfigurableFileCollection
-
-    @get:Internal
-    abstract val friendPaths: ConfigurableFileCollection
-
-    @get:Console
-    abstract val debug: Property<Boolean>
-
-    @get:Internal
-    abstract val parallel: Property<Boolean>
-
-    @get:Input
-    @get:Optional
-    abstract val disableDefaultRuleSets: Property<Boolean>
-
-    @get:Input
-    @get:Optional
-    abstract val buildUponDefaultConfig: Property<Boolean>
-
-    @get:Input
-    @get:Optional
-    abstract val ignoreFailures: Property<Boolean>
-
-    @get:Input
-    @get:Optional
-    abstract val allRules: Property<Boolean>
-
-    @get:Input
-    abstract val optIn: ListProperty<String>
-
-    @get:Input
-    abstract val noJdk: Property<Boolean>
-
-    @get:Input
-    abstract val multiPlatformEnabled: Property<Boolean>
-
-    @get:Input
-    @get:Optional
-    abstract val autoCorrect: Property<Boolean>
-
-    /**
-     * Respect only the file path for incremental build. Using @InputFile respects both file path and content.
-     */
-    @get:Input
-    @get:Optional
-    abstract val basePath: Property<String>
-
-    @get:Input
-    @get:Optional
-    abstract val jvmTarget: Property<String>
-
-    @get:Input
-    @get:Optional
-    abstract val apiVersion: Property<String>
-
-    @get:Input
-    @get:Optional
-    abstract val languageVersion: Property<String>
-
-    @get:Internal
-    abstract val jdkHome: DirectoryProperty
-
-    @get:Input
-    @get:Incubating
-    abstract val freeCompilerArgs: ListProperty<String>
+    abstract override val baseline: RegularFileProperty
 
     @get:Input
     @get:Optional
