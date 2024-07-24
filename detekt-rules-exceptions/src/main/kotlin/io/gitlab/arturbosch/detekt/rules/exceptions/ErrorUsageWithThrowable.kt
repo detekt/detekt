@@ -39,7 +39,7 @@ import org.jetbrains.kotlin.types.typeUtil.supertypes
  *         // ... some code
  *     } catch(e: IOException) {
  *         // some addition handling
- *         error(e.message)
+ *         throw e // or throw IllegalStateException(<some custom error msg>, e)
  *     }
  * }
  * </compliant>
