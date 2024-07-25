@@ -19,8 +19,7 @@ import org.jetbrains.kotlin.types.typeUtil.supertypes
  * This rule reports usage of `error` method with [Throwable] parameter, i.e, `error(throwable)`.
  * The above will result in `throw IllegalStateException(throwable.toString())` which doesn't
  * provide any info about `throwable.message` or `stackTrace`.
- * Instead, use `error(throwable.message ?: "No error message provided")` to rethrow the throwable
- * as `IllegalStateException` with `throwable.message`.
+ * Instead, use `throw IllegalStateException(throwable)` to rethrow the throwable as `IllegalStateException`.
  *
  * <noncompliant>
  * fun foo() {
