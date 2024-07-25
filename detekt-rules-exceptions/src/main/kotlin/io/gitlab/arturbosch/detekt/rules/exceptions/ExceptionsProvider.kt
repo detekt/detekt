@@ -28,7 +28,8 @@ class ExceptionsProvider : DefaultRuleSetProvider {
             ::RethrowCaughtException,
             ::ThrowingNewInstanceOfSameException,
             ::SwallowedException,
-            ::ObjectExtendsThrowable
+            ::ObjectExtendsThrowable,
+            ::ErrorUsageWithThrowable,
         )
     )
 }
