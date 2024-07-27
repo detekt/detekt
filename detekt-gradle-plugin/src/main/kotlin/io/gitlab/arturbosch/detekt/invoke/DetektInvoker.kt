@@ -94,7 +94,7 @@ private fun isAnalysisFailure(msg: String) = "Analysis failed with" in msg && "i
 @Suppress("ThrowsCount")
 private fun processResult(message: String?, reflectionWrapper: Exception, ignoreFailures: Boolean) {
     if (message != null && isAnalysisFailure(message)) {
-        if (!ignoreFailures) throwVerificationException(message, reflectionWrapper)
+        if (!ignoreFailures) throw throwVerificationException(message, reflectionWrapper)
     } else {
         throw GradleException(message ?: "There was a problem running detekt.", reflectionWrapper)
     }
