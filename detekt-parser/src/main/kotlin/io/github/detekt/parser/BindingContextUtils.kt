@@ -14,14 +14,9 @@ import org.jetbrains.kotlin.resolve.BindingContext
 
 fun generateBindingContext(
     environment: KotlinCoreEnvironment,
-    classpath: List<String>,
     files: List<KtFile>,
     debugPrinter: (() -> String) -> Unit,
 ): BindingContext {
-    if (classpath.isEmpty()) {
-        return BindingContext.EMPTY
-    }
-
     val messageCollector = DetektMessageCollector(
         minSeverity = CompilerMessageSeverity.ERROR,
         debugPrinter = debugPrinter,

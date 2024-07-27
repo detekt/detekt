@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.cli
 
 import com.beust.jcommander.Parameter
 import com.beust.jcommander.converters.PathConverter
+import io.github.detekt.tooling.api.AnalysisMode
 import io.github.detekt.tooling.api.spec.RulesSpec
 import io.github.detekt.tooling.api.spec.RulesSpec.FailurePolicy.FailOnSeverity
 import io.github.detekt.tooling.api.spec.RulesSpec.FailurePolicy.NeverFail
@@ -23,6 +24,14 @@ class CliArgs {
             "current working directory is used."
     )
     var inputPaths: List<Path> = listOf(Path(System.getProperty("user.dir")))
+
+    @Parameter(
+        names = ["--analysis-mode"],
+        description = "Analysis mode used by detekt. 'Full' analysis mode is comprehensive but requires the correct " +
+            "classpath, API version and language version to be set. 'Light' analysis cannot utilise compiler " +
+            "information and some rules cannot be run in this mode."
+    )
+    var analysisMode: AnalysisMode = AnalysisMode.LIGHT
 
     @Parameter(
         names = ["--includes", "-in"],

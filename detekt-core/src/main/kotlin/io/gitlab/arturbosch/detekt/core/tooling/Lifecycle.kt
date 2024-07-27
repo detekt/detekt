@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.core.tooling
 
 import io.github.detekt.parser.generateBindingContext
+import io.github.detekt.tooling.api.AnalysisMode
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
@@ -59,7 +60,13 @@ internal class DefaultLifecycle(
     override val settings: ProcessingSettings,
     override val parsingStrategy: ParsingStrategy,
     override val bindingProvider: (files: List<KtFile>) -> BindingContext =
-        { generateBindingContext(settings.environment, settings.classpath, it, settings::debug) },
+        {
+            if (settings.spec.projectSpec.analysisMode == AnalysisMode.FULL) {
+                generateBindingContext(settings.environment, it, settings::debug)
+            } else {
+                BindingContext.EMPTY
+            }
+        },
     override val processorsProvider: () -> List<FileProcessListener> =
         { FileProcessorLocator(settings).load() },
     override val ruleSetsProvider: () -> List<RuleSetProvider> =

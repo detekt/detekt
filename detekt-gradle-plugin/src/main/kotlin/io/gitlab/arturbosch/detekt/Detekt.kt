@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.extensions.DetektReportType
 import io.gitlab.arturbosch.detekt.extensions.DetektReports
 import io.gitlab.arturbosch.detekt.extensions.FailOnSeverity
 import io.gitlab.arturbosch.detekt.invoke.AllRulesArgument
+import io.gitlab.arturbosch.detekt.invoke.AnalysisModeArgument
 import io.gitlab.arturbosch.detekt.invoke.ApiVersionArgument
 import io.gitlab.arturbosch.detekt.invoke.AutoCorrectArgument
 import io.gitlab.arturbosch.detekt.invoke.BasePathArgument
@@ -159,6 +160,9 @@ abstract class Detekt @Inject constructor(
     @get:Optional
     internal abstract val explicitApi: Property<String>
 
+    @get:Input
+    internal val analysisMode = providers.provider { if (classpath.isEmpty) "light" else "full" }
+
     init {
         group = LifecycleBasePlugin.VERIFICATION_GROUP
     }
@@ -190,6 +194,7 @@ abstract class Detekt @Inject constructor(
             ),
             BasePathArgument(basePath.orNull),
             DisableDefaultRuleSetArgument(disableDefaultRuleSets.get()),
+            AnalysisModeArgument(analysisMode.get()),
             FreeArgs(freeCompilerArgs.get()),
             OptInArguments(optIn.get()),
             FriendPathArgs(friendPaths),

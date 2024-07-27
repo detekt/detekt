@@ -36,6 +36,7 @@ internal fun CliArgs.createSpec(output: Appendable, error: Appendable): Processi
                 .filter { path -> pathFilters?.isIgnored(path) != false }
                 .map { path -> absoluteBasePath.resolve(path).normalize() }
                 .toSet()
+            analysisMode = args.analysisMode
         }
 
         rules {

@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.cli
 
 import io.github.detekt.test.utils.resourceAsPath
+import io.github.detekt.tooling.api.AnalysisMode
 import io.github.detekt.tooling.api.spec.RulesSpec.FailurePolicy.FailOnSeverity
 import io.github.detekt.tooling.api.spec.RulesSpec.FailurePolicy.NeverFail
 import io.gitlab.arturbosch.detekt.api.Severity
@@ -234,6 +235,28 @@ internal class CliArgsSpec {
                 assertThatCode { parseArguments(arrayOf("--baseline", directory)) }
                     .isInstanceOf(HandledArgumentViolation::class.java)
                     .hasMessage("The path specified by --baseline should be a file '$directory'.")
+            }
+        }
+
+        @Nested
+        inner class `analysis mode` {
+
+            @Test
+            fun `--analysis-mode light is accepted`() {
+                val spec = parseArguments(arrayOf("--analysis-mode", "light")).toSpec()
+                assertThat(spec.projectSpec.analysisMode).isEqualTo(AnalysisMode.LIGHT)
+            }
+
+            @Test
+            fun `--analysis-mode full is accepted`() {
+                val spec = parseArguments(arrayOf("--analysis-mode", "full")).toSpec()
+                assertThat(spec.projectSpec.analysisMode).isEqualTo(AnalysisMode.FULL)
+            }
+
+            @Test
+            fun `throws exception on invalid analysis mode`() {
+                assertThatExceptionOfType(HandledArgumentViolation::class.java)
+                    .isThrownBy { parseArguments(arrayOf("--analysis-mode", "invalid")) }
             }
         }
 

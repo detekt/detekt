@@ -10,6 +10,7 @@ import java.util.Locale
 
 private const val DEBUG_PARAMETER = "--debug"
 private const val INPUT_PARAMETER = "--input"
+private const val ANALYSIS_MODE = "--analysis-mode"
 private const val CONFIG_PARAMETER = "--config"
 private const val BASELINE_PARAMETER = "--baseline"
 private const val PARALLEL_PARAMETER = "--parallel"
@@ -42,6 +43,10 @@ internal sealed class CliArgument {
 
 internal data object CreateBaselineArgument : CliArgument() {
     override fun toArgument() = listOf(CREATE_BASELINE_PARAMETER)
+}
+
+internal data class AnalysisModeArgument(val analysisMode: String) : CliArgument() {
+    override fun toArgument() = listOf(ANALYSIS_MODE, analysisMode)
 }
 
 internal data class GenerateConfigArgument(val file: RegularFile) : CliArgument() {
