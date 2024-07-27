@@ -40,7 +40,8 @@ internal fun ConfigurableFileCollection.conventionCompat(vararg paths: Any): Con
         this
     }
 
-internal fun verificationExceptionCompat(message: String, cause: Throwable): GradleException =
+@Suppress("NOTHING_TO_INLINE") // not inlining for performance, but for simpler stack traces
+internal inline fun verificationExceptionCompat(message: String, cause: Throwable): GradleException =
     when {
         GradleVersion.current() >= GradleVersion.version("8.2") -> VerificationException(message, cause)
         GradleVersion.current() >= GradleVersion.version("7.4.2") -> VerificationException(message)
