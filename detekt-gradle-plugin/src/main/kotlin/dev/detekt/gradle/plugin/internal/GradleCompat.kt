@@ -17,7 +17,7 @@ internal fun ProviderFactory.gradlePropertyAtConfigTimeCompat(propertyName: Stri
         gradleProperty(propertyName).forUseAtConfigurationTime()
     }
 
-internal fun Project.projectDirectoryCompat(): Directory =
+internal fun Project.rootProjectDirectoryCompat(): Directory =
     if (GradleVersion.current() >= GradleVersion.version("8.8")) {
         isolated.rootProject.projectDirectory
     } else {
