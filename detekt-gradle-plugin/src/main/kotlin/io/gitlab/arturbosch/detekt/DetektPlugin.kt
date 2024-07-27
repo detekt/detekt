@@ -7,13 +7,14 @@ import dev.detekt.gradle.plugin.DetektBasePlugin.Companion.CONFIG_FILE
 import dev.detekt.gradle.plugin.internal.DetektAndroidCompilations
 import dev.detekt.gradle.plugin.internal.DetektJvmCompilations
 import dev.detekt.gradle.plugin.internal.DetektKmpJvmCompilations
+import dev.detekt.gradle.plugin.internal.conventionCompat
+import dev.detekt.gradle.plugin.internal.gradlePropertyAtConfigTimeCompat
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import io.gitlab.arturbosch.detekt.internal.DetektPlain
 import org.gradle.api.Incubating
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.provider.ProviderFactory
-import org.gradle.util.GradleVersion
 import java.net.URL
 import java.util.jar.Manifest
 
@@ -29,21 +30,17 @@ class DetektPlugin : Plugin<Project> {
 
         project.registerDetektPlainTask(extension)
         project.registerDetektJvmTasks(extension)
-        @Suppress("DEPRECATION")
         val enableAndroidTasks =
             !project.providers
-                .gradleProperty(DETEKT_ANDROID_DISABLED_PROPERTY)
-                .forUseAtConfigurationTime()
+                .gradlePropertyAtConfigTimeCompat(DETEKT_ANDROID_DISABLED_PROPERTY)
                 .getOrElse("false")
                 .toBoolean()
         if (enableAndroidTasks) {
             project.registerDetektAndroidTasks(extension)
         }
-        @Suppress("DEPRECATION")
         val enableMppTasks =
             !project.providers
-                .gradleProperty(DETEKT_MULTIPLATFORM_DISABLED_PROPERTY)
-                .forUseAtConfigurationTime()
+                .gradlePropertyAtConfigTimeCompat(DETEKT_MULTIPLATFORM_DISABLED_PROPERTY)
                 .getOrElse("false")
                 .toBoolean()
         if (enableMppTasks) {
@@ -108,13 +105,8 @@ class DetektPlugin : Plugin<Project> {
 
     private fun setTaskDefaults(project: Project, extension: DetektExtension) {
         project.tasks.withType(Detekt::class.java).configureEach { task ->
-            if (GradleVersion.current() >= GradleVersion.version("8.8")) {
-                task.detektClasspath.convention(project.configurations.getAt(CONFIGURATION_DETEKT))
-                task.pluginClasspath.convention(project.configurations.getAt(CONFIGURATION_DETEKT_PLUGINS))
-            } else {
-                task.detektClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT))
-                task.pluginClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT_PLUGINS))
-            }
+            task.detektClasspath.conventionCompat(project.configurations.getAt(CONFIGURATION_DETEKT))
+            task.pluginClasspath.conventionCompat(project.configurations.getAt(CONFIGURATION_DETEKT_PLUGINS))
             val reportName = if (task.name.startsWith(DETEKT_TASK_NAME) && task.name != DETEKT_TASK_NAME) {
                 task.name.removePrefix(DETEKT_TASK_NAME).decapitalize()
             } else {
@@ -143,23 +135,13 @@ class DetektPlugin : Plugin<Project> {
         }
 
         project.tasks.withType(DetektCreateBaselineTask::class.java).configureEach { task ->
-            if (GradleVersion.current() >= GradleVersion.version("8.8")) {
-                task.detektClasspath.convention(project.configurations.getAt(CONFIGURATION_DETEKT))
-                task.pluginClasspath.convention(project.configurations.getAt(CONFIGURATION_DETEKT_PLUGINS))
-            } else {
-                task.detektClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT))
-                task.pluginClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT_PLUGINS))
-            }
+            task.detektClasspath.conventionCompat(project.configurations.getAt(CONFIGURATION_DETEKT))
+            task.pluginClasspath.conventionCompat(project.configurations.getAt(CONFIGURATION_DETEKT_PLUGINS))
         }
 
         project.tasks.withType(DetektGenerateConfigTask::class.java).configureEach { task ->
-            if (GradleVersion.current() >= GradleVersion.version("8.8")) {
-                task.detektClasspath.convention(project.configurations.getAt(CONFIGURATION_DETEKT))
-                task.pluginClasspath.convention(project.configurations.getAt(CONFIGURATION_DETEKT_PLUGINS))
-            } else {
-                task.detektClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT))
-                task.pluginClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT_PLUGINS))
-            }
+            task.detektClasspath.conventionCompat(project.configurations.getAt(CONFIGURATION_DETEKT))
+            task.pluginClasspath.conventionCompat(project.configurations.getAt(CONFIGURATION_DETEKT_PLUGINS))
         }
     }
 

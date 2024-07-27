@@ -15,6 +15,12 @@ performance:
     excludes: ["**/test/**", "**/functionalTest/**"]
 
 style:
+  ForbiddenImport:
+    active: true
+    imports:
+      - value: 'org.gradle.util.GradleVersion'
+        reason: 'Gradle version checks must be isolated to GradleCompat.kt'
+    excludes: ["**/GradleCompat.kt"]
   MagicNumber:
     active: true
     excludes: ["**/test/**", "**/*Test.kt", "**/*Spec.kt"]
