@@ -1,3 +1,11 @@
+public final class io/github/detekt/tooling/api/AnalysisMode : java/lang/Enum {
+	public static final field FULL Lio/github/detekt/tooling/api/AnalysisMode;
+	public static final field LIGHT Lio/github/detekt/tooling/api/AnalysisMode;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/detekt/tooling/api/AnalysisMode;
+	public static fun values ()[Lio/github/detekt/tooling/api/AnalysisMode;
+}
+
 public abstract interface class io/github/detekt/tooling/api/AnalysisResult {
 	public abstract fun getContainer ()Lio/gitlab/arturbosch/detekt/api/Detektion;
 	public abstract fun getError ()Lio/github/detekt/tooling/api/DetektError;
@@ -153,6 +161,7 @@ public final class io/github/detekt/tooling/api/spec/ProcessingSpec$Companion {
 }
 
 public abstract interface class io/github/detekt/tooling/api/spec/ProjectSpec {
+	public abstract fun getAnalysisMode ()Lio/github/detekt/tooling/api/AnalysisMode;
 	public abstract fun getBasePath ()Ljava/nio/file/Path;
 	public abstract fun getInputPaths ()Ljava/util/Collection;
 }
@@ -321,8 +330,10 @@ public final class io/github/detekt/tooling/dsl/ProjectSpecBuilder : io/github/d
 	public fun <init> ()V
 	public fun build ()Lio/github/detekt/tooling/api/spec/ProjectSpec;
 	public synthetic fun build ()Ljava/lang/Object;
+	public final fun getAnalysisMode ()Lio/github/detekt/tooling/api/AnalysisMode;
 	public final fun getBasePath ()Ljava/nio/file/Path;
 	public final fun getInputPaths ()Ljava/util/Collection;
+	public final fun setAnalysisMode (Lio/github/detekt/tooling/api/AnalysisMode;)V
 	public final fun setBasePath (Ljava/nio/file/Path;)V
 	public final fun setInputPaths (Ljava/util/Collection;)V
 }
