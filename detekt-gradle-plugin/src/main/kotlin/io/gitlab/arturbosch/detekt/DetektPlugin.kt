@@ -5,12 +5,13 @@ import io.gitlab.arturbosch.detekt.internal.DetektAndroid
 import io.gitlab.arturbosch.detekt.internal.DetektJvm
 import io.gitlab.arturbosch.detekt.internal.DetektMultiplatform
 import io.gitlab.arturbosch.detekt.internal.DetektPlain
+import io.gitlab.arturbosch.detekt.internal.gradlePropertyAtConfigTimeCompat
+import io.gitlab.arturbosch.detekt.internal.rootProjectDirectoryCompat
 import org.gradle.api.Incubating
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.ReportingBasePlugin
 import org.gradle.api.reporting.ReportingExtension
-import org.gradle.util.GradleVersion
 import java.net.URL
 import java.util.jar.Manifest
 
@@ -27,11 +28,7 @@ class DetektPlugin : Plugin<Project> {
         extension.reportsDir = project.extensions.getByType(ReportingExtension::class.java).file("detekt")
 
         val defaultConfigFile =
-            if (GradleVersion.current() >= GradleVersion.version("8.8")) {
-                project.file("${project.isolated.rootProject.projectDirectory.dir(CONFIG_DIR_NAME)}/${CONFIG_FILE}")
-            } else {
-                project.file("${project.rootProject.layout.projectDirectory.dir(CONFIG_DIR_NAME)}/${CONFIG_FILE}")
-            }
+            project.file("${project.rootProjectDirectoryCompat().dir(CONFIG_DIR_NAME)}/$CONFIG_FILE")
         if (defaultConfigFile.exists()) {
             extension.config.setFrom(project.files(defaultConfigFile))
         }
@@ -41,21 +38,17 @@ class DetektPlugin : Plugin<Project> {
 
         project.registerDetektPlainTask(extension)
         project.registerDetektJvmTasks(extension)
-        @Suppress("DEPRECATION")
         val enableAndroidTasks =
             !project.providers
-                .gradleProperty(DETEKT_ANDROID_DISABLED_PROPERTY)
-                .forUseAtConfigurationTime()
+                .gradlePropertyAtConfigTimeCompat(DETEKT_ANDROID_DISABLED_PROPERTY)
                 .getOrElse("false")
                 .toBoolean()
         if (enableAndroidTasks) {
             project.registerDetektAndroidTasks(extension)
         }
-        @Suppress("DEPRECATION")
         val enableMppTasks =
             !project.providers
-                .gradleProperty(DETEKT_MULTIPLATFORM_DISABLED_PROPERTY)
-                .forUseAtConfigurationTime()
+                .gradlePropertyAtConfigTimeCompat(DETEKT_MULTIPLATFORM_DISABLED_PROPERTY)
                 .getOrElse("false")
                 .toBoolean()
         if (enableMppTasks) {
