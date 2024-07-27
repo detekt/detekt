@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.invoke
 
-import dev.detekt.gradle.plugin.internal.throwVerificationException
+import dev.detekt.gradle.plugin.internal.verificationExceptionCompat
 import io.gitlab.arturbosch.detekt.internal.ClassLoaderCache
 import io.gitlab.arturbosch.detekt.internal.GlobalClassLoaderCache
 import org.gradle.api.GradleException
@@ -94,7 +94,7 @@ private fun isAnalysisFailure(msg: String) = "Analysis failed with" in msg && "i
 @Suppress("ThrowsCount")
 private fun processResult(message: String?, reflectionWrapper: Exception, ignoreFailures: Boolean) {
     if (message != null && isAnalysisFailure(message)) {
-        if (!ignoreFailures) throw throwVerificationException(message, reflectionWrapper)
+        if (!ignoreFailures) throw verificationExceptionCompat(message, reflectionWrapper)
     } else {
         throw GradleException(message ?: "There was a problem running detekt.", reflectionWrapper)
     }

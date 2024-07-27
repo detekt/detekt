@@ -40,7 +40,7 @@ internal fun ConfigurableFileCollection.conventionCompat(vararg paths: Any): Con
         this
     }
 
-internal fun throwVerificationException(message: String, cause: Throwable): GradleException =
+internal fun verificationExceptionCompat(message: String, cause: Throwable): GradleException =
     when {
         GradleVersion.current() >= GradleVersion.version("8.2") -> VerificationException(message, cause)
         GradleVersion.current() >= GradleVersion.version("7.4.2") -> VerificationException(message)
