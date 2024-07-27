@@ -16,7 +16,7 @@ class EnvironmentFacadeSpec {
     @Test
     fun `classpath entries should be separated by platform-specific separator supports ${File_pathSeparator}`() {
         testSettings(classpath).use {
-            assertThat(it.classpath).hasSize(3)
+            assertThat(it.spec.compilerSpec.classpathEntries()).hasSize(3)
         }
     }
 }
