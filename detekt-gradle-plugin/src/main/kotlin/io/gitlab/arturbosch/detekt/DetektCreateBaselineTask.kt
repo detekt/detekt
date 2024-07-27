@@ -145,6 +145,9 @@ abstract class DetektCreateBaselineTask @Inject constructor(
     @get:Optional
     internal abstract val explicitApi: Property<String>
 
+    @get:Input
+    internal val analysisMode = providers.provider { if (classpath.isEmpty) "light" else "full" }
+
     @get:Internal
     internal val arguments
         get() = listOf(
@@ -164,7 +167,7 @@ abstract class DetektCreateBaselineTask @Inject constructor(
             AllRulesArgument(allRules.get()),
             BasePathArgument(basePath.orNull),
             DisableDefaultRuleSetArgument(disableDefaultRuleSets.get()),
-            AnalysisModeArgument(classpath.elements.map { if (it.isEmpty()) "light" else "full" }.get()),
+            AnalysisModeArgument(analysisMode.get()),
             FreeArgs(freeCompilerArgs.get()),
             OptInArguments(optIn.get()),
             FriendPathArgs(friendPaths),
