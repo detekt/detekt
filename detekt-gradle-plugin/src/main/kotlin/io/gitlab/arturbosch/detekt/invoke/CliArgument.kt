@@ -45,10 +45,6 @@ internal data object CreateBaselineArgument : CliArgument() {
     override fun toArgument() = listOf(CREATE_BASELINE_PARAMETER)
 }
 
-internal data class AnalysisModeArgument(val analysisMode: String) : CliArgument() {
-    override fun toArgument() = listOf(ANALYSIS_MODE, analysisMode)
-}
-
 internal data class GenerateConfigArgument(val file: RegularFile) : CliArgument() {
     override fun toArgument() = listOf(GENERATE_CONFIG_PARAMETER, file.asFile.absolutePath)
 }
@@ -61,10 +57,12 @@ internal data class ClasspathArgument(val fileCollection: FileCollection) : CliA
     override fun toArgument() = if (!fileCollection.isEmpty) {
         listOf(
             CLASSPATH_PARAMETER,
-            fileCollection.files.filter(File::exists).joinToString(File.pathSeparator) { it.absolutePath }
+            fileCollection.files.filter(File::exists).joinToString(File.pathSeparator) { it.absolutePath },
+            ANALYSIS_MODE,
+            "full",
         )
     } else {
-        emptyList()
+        listOf(ANALYSIS_MODE, "light")
     }
 }
 
