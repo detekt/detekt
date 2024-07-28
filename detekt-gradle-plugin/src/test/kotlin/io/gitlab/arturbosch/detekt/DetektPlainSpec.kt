@@ -75,6 +75,7 @@ class DetektPlainSpec {
             assertThat(argumentString).contains("--report sarif:")
             assertThat(argumentString).doesNotContain("--report txt:")
             assertThat(argumentString).doesNotContain("--classpath")
+            assertThat(argumentString).contains("--analysis-mode light")
             assertThat(argumentString).contains("--fail-on-severity error")
         }
     }

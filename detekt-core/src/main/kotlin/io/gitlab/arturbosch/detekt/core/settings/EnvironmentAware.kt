@@ -18,7 +18,6 @@ import java.io.PrintStream
 interface EnvironmentAware {
 
     val disposable: Disposable
-    val classpath: List<String>
     val environment: KotlinCoreEnvironment
 }
 
@@ -30,13 +29,11 @@ internal class EnvironmentFacade(
 
     override val disposable: Disposable = Disposer.newDisposable()
 
-    override val classpath: List<String> = compilerSpec.classpathEntries()
-
     override val environment: KotlinCoreEnvironment by lazy {
         val printStream = if (loggingSpec.debug) loggingSpec.errorChannel.asPrintStream() else NullPrintStream
         val compilerConfiguration = createCompilerConfiguration(
             projectSpec.inputPaths.toList(),
-            classpath,
+            compilerSpec.classpathEntries(),
             compilerSpec.apiVersion,
             compilerSpec.languageVersion,
             compilerSpec.jvmTarget,

@@ -10,6 +10,7 @@ import java.util.Locale
 
 private const val DEBUG_PARAMETER = "--debug"
 private const val INPUT_PARAMETER = "--input"
+private const val ANALYSIS_MODE = "--analysis-mode"
 private const val CONFIG_PARAMETER = "--config"
 private const val BASELINE_PARAMETER = "--baseline"
 private const val PARALLEL_PARAMETER = "--parallel"
@@ -56,10 +57,12 @@ internal data class ClasspathArgument(val fileCollection: FileCollection) : CliA
     override fun toArgument() = if (!fileCollection.isEmpty) {
         listOf(
             CLASSPATH_PARAMETER,
-            fileCollection.files.filter(File::exists).joinToString(File.pathSeparator) { it.absolutePath }
+            fileCollection.files.filter(File::exists).joinToString(File.pathSeparator) { it.absolutePath },
+            ANALYSIS_MODE,
+            "full",
         )
     } else {
-        emptyList()
+        listOf(ANALYSIS_MODE, "light")
     }
 }
 

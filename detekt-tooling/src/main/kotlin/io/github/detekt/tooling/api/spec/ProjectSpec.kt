@@ -1,5 +1,6 @@
 package io.github.detekt.tooling.api.spec
 
+import io.github.detekt.tooling.api.AnalysisMode
 import java.nio.file.Path
 
 /**
@@ -16,4 +17,9 @@ interface ProjectSpec {
      * Paths to analyze. Works with files and directories.
      */
     val inputPaths: Collection<Path>
+
+    /**
+     * The analysis mode used by detekt. See [AnalysisMode] for information about available analysis modes.
+     */
+    val analysisMode: AnalysisMode
 }
