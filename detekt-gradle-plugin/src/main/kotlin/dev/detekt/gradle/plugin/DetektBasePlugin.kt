@@ -1,6 +1,7 @@
 package dev.detekt.gradle.plugin
 
 import dev.detekt.gradle.plugin.internal.mapExplicitArgMode
+import dev.detekt.gradle.plugin.internal.rootProjectDirectoryCompat
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import io.gitlab.arturbosch.detekt.DetektPlugin
@@ -15,7 +16,6 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.ReportingBasePlugin
 import org.gradle.api.reporting.ReportingExtension
-import org.gradle.util.GradleVersion
 import org.jetbrains.kotlin.gradle.plugin.KotlinBasePlugin
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetContainer
 
@@ -46,19 +46,11 @@ class DetektBasePlugin : Plugin<Project> {
             reportsDir.convention(
                 project.extensions.getByType(ReportingExtension::class.java).baseDirectory.dir("detekt")
             )
-            if (GradleVersion.current() >= GradleVersion.version("8.8")) {
-                basePath.convention(project.isolated.rootProject.projectDirectory)
-            } else {
-                basePath.convention(project.rootProject.layout.projectDirectory)
-            }
+            basePath.convention(project.rootProjectDirectoryCompat())
         }
 
         val defaultConfigFile =
-            if (GradleVersion.current() >= GradleVersion.version("8.8")) {
-                project.file("${project.isolated.rootProject.projectDirectory.dir(CONFIG_DIR_NAME)}/$CONFIG_FILE")
-            } else {
-                project.file("${project.rootProject.layout.projectDirectory.dir(CONFIG_DIR_NAME)}/$CONFIG_FILE")
-            }
+            project.file("${project.rootProjectDirectoryCompat().dir(CONFIG_DIR_NAME)}/$CONFIG_FILE")
         if (defaultConfigFile.exists()) {
             extension.config.setFrom(project.files(defaultConfigFile))
         }

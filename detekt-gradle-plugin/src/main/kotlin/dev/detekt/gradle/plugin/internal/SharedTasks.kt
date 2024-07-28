@@ -8,7 +8,6 @@ import io.gitlab.arturbosch.detekt.internal.addVariantName
 import io.gitlab.arturbosch.detekt.internal.existingVariantOrBaseFile
 import org.gradle.api.Project
 import org.gradle.api.provider.Provider
-import org.gradle.util.GradleVersion
 import org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode
 import org.jetbrains.kotlin.gradle.dsl.KotlinCommonOptions
 import org.jetbrains.kotlin.gradle.dsl.kotlinExtension
@@ -26,13 +25,8 @@ internal fun Project.registerJvmCompilationDetektTask(
         val siblingTask = compilation.compileTaskProvider.get() as KotlinJvmCompile
 
         detektTask.setSource(siblingTask.sources)
-        if (GradleVersion.current() >= GradleVersion.version("8.8")) {
-            detektTask.classpath.convention(compilation.output.classesDirs, siblingTask.libraries)
-            detektTask.friendPaths.convention(siblingTask.friendPaths)
-        } else {
-            detektTask.classpath.setFrom(compilation.output.classesDirs, siblingTask.libraries)
-            detektTask.friendPaths.setFrom(siblingTask.friendPaths)
-        }
+        detektTask.classpath.conventionCompat(compilation.output.classesDirs, siblingTask.libraries)
+        detektTask.friendPaths.conventionCompat(siblingTask.friendPaths)
         detektTask.apiVersion.convention(siblingTask.compilerOptions.apiVersion.map { it.version })
         detektTask.languageVersion.convention(siblingTask.compilerOptions.languageVersion.map { it.version })
         /* Note: jvmTarget convention is also set in setDetektTaskDefaults. There may be a race between setting it here
@@ -74,13 +68,8 @@ internal fun Project.registerJvmCompilationCreateBaselineTask(
         val siblingTask = compilation.compileTaskProvider.get() as KotlinJvmCompile
 
         createBaselineTask.setSource(siblingTask.sources)
-        if (GradleVersion.current() >= GradleVersion.version("8.8")) {
-            createBaselineTask.classpath.convention(compilation.output.classesDirs, siblingTask.libraries)
-            createBaselineTask.friendPaths.convention(siblingTask.friendPaths)
-        } else {
-            createBaselineTask.classpath.setFrom(compilation.output.classesDirs, siblingTask.libraries)
-            createBaselineTask.friendPaths.setFrom(siblingTask.friendPaths)
-        }
+        createBaselineTask.classpath.conventionCompat(compilation.output.classesDirs, siblingTask.libraries)
+        createBaselineTask.friendPaths.conventionCompat(siblingTask.friendPaths)
         createBaselineTask.apiVersion.convention(siblingTask.compilerOptions.apiVersion.map { it.version })
         createBaselineTask.languageVersion.convention(siblingTask.compilerOptions.languageVersion.map { it.version })
         /* Note: jvmTarget convention is also set in setCreateBaselineTaskDefaults. There may be a race between setting
