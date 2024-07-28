@@ -17,6 +17,7 @@ fun generateBindingContext(
     classpath: List<String>,
     files: List<KtFile>,
     debugPrinter: (() -> String) -> Unit,
+    warningPrinter: (String) -> Unit,
 ): BindingContext {
     if (classpath.isEmpty()) {
         return BindingContext.EMPTY
@@ -25,6 +26,7 @@ fun generateBindingContext(
     val messageCollector = DetektMessageCollector(
         minSeverity = CompilerMessageSeverity.ERROR,
         debugPrinter = debugPrinter,
+        warningPrinter = warningPrinter,
     )
 
     val analyzer = AnalyzerWithCompilerReport(
@@ -42,12 +44,15 @@ fun generateBindingContext(
         )
     }
 
+    messageCollector.printIssuesCountIfAny()
+
     return analyzer.analysisResult.bindingContext
 }
 
 internal class DetektMessageCollector(
     private val minSeverity: CompilerMessageSeverity,
     private val debugPrinter: (() -> String) -> Unit,
+    private val warningPrinter: (String) -> Unit,
 ) : MessageCollector by MessageCollector.NONE {
     private var messages = 0
 
@@ -55,6 +60,15 @@ internal class DetektMessageCollector(
         if (severity.ordinal <= minSeverity.ordinal) {
             debugPrinter { DetektMessageRenderer.render(severity, message, location) }
             messages++
+        }
+    }
+
+    fun printIssuesCountIfAny() {
+        if (messages > 0) {
+            warningPrinter(
+                "There were $messages compiler errors found during analysis. This affects accuracy of reporting.\n" +
+                    "Run detekt CLI with --debug or set `detekt { debug = true }` in Gradle to see the error messages."
+            )
         }
     }
 }

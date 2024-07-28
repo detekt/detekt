@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test
 class DetektMessageCollectorSpec {
 
     private val debugPrinter = FakePrinter()
+    private val warningPrinter = FakeWarningPrinter()
     private lateinit var subject: DetektMessageCollector
 
     @BeforeEach
@@ -17,6 +18,7 @@ class DetektMessageCollectorSpec {
         subject = DetektMessageCollector(
             minSeverity = CompilerMessageSeverity.INFO,
             debugPrinter = debugPrinter,
+            warningPrinter = warningPrinter,
         )
     }
 
@@ -31,6 +33,18 @@ class DetektMessageCollectorSpec {
         fun `prints the message`() {
             assertThat(debugPrinter.messages).contains("info: message")
         }
+
+        @Test
+        fun `adds up to the message count`() {
+            subject.printIssuesCountIfAny()
+
+            assertThat(warningPrinter.messages).contains(
+                """
+                    There were 1 compiler errors found during analysis. This affects accuracy of reporting.
+                    Run detekt CLI with --debug or set `detekt { debug = true }` in Gradle to see the error messages.
+                """.trimIndent()
+            )
+        }
     }
 
     @Nested
@@ -43,6 +57,18 @@ class DetektMessageCollectorSpec {
         @Test
         fun `prints the message`() {
             assertThat(debugPrinter.messages).contains("warning: message")
+        }
+
+        @Test
+        fun `adds up to the message count`() {
+            subject.printIssuesCountIfAny()
+
+            assertThat(warningPrinter.messages).contains(
+                """
+                    There were 1 compiler errors found during analysis. This affects accuracy of reporting.
+                    Run detekt CLI with --debug or set `detekt { debug = true }` in Gradle to see the error messages.
+                """.trimIndent()
+            )
         }
     }
 
@@ -59,10 +85,24 @@ class DetektMessageCollectorSpec {
         }
     }
 
+    @Test
+    fun `doesn't add up to the message count`() {
+        subject.printIssuesCountIfAny()
+
+        assertThat(warningPrinter.messages).isEmpty()
+    }
+
     class FakePrinter : (() -> String) -> Unit {
         val messages = mutableListOf<String>()
         override fun invoke(param: () -> String) {
             messages.add(param())
+        }
+    }
+
+    class FakeWarningPrinter : (String) -> Unit {
+        val messages = mutableListOf<String>()
+        override fun invoke(param: String) {
+            messages.add(param)
         }
     }
 }
