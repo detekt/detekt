@@ -10,12 +10,6 @@ sidebar_position: 5
 
 This page describes how to use detekt's **type resolution** feature.
 
-:::caution
-
-Please note that type resolution is still an **experimental feature** of detekt. We expect it to be stable with the upcoming release of detekt (2.x)
-
-:::
-
 ## What is type resolution
 
 Type resolution is a feature that allows detekt to perform more **advanced** static analysis on your Kotlin source code. 
