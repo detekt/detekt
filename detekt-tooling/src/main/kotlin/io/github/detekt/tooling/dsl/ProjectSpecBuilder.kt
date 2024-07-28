@@ -10,7 +10,7 @@ class ProjectSpecBuilder : Builder<ProjectSpec> {
 
     var basePath: Path = Path("")
     var inputPaths: Collection<Path> = emptyList()
-    var analysisMode: AnalysisMode = AnalysisMode.LIGHT
+    var analysisMode: AnalysisMode = AnalysisMode.light
 
     override fun build(): ProjectSpec = ProjectModel(basePath, inputPaths, analysisMode)
 }

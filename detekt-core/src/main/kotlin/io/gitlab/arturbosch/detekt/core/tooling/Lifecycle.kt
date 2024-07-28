@@ -61,7 +61,7 @@ internal class DefaultLifecycle(
     override val parsingStrategy: ParsingStrategy,
     override val bindingProvider: (files: List<KtFile>) -> BindingContext =
         {
-            if (settings.spec.projectSpec.analysisMode == AnalysisMode.FULL) {
+            if (settings.spec.projectSpec.analysisMode == AnalysisMode.full) {
                 generateBindingContext(settings.environment, it, settings::debug)
             } else {
                 BindingContext.EMPTY

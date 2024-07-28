@@ -244,13 +244,13 @@ internal class CliArgsSpec {
             @Test
             fun `--analysis-mode light is accepted`() {
                 val spec = parseArguments(arrayOf("--analysis-mode", "light")).toSpec()
-                assertThat(spec.projectSpec.analysisMode).isEqualTo(AnalysisMode.LIGHT)
+                assertThat(spec.projectSpec.analysisMode).isEqualTo(AnalysisMode.light)
             }
 
             @Test
             fun `--analysis-mode full is accepted`() {
                 val spec = parseArguments(arrayOf("--analysis-mode", "full")).toSpec()
-                assertThat(spec.projectSpec.analysisMode).isEqualTo(AnalysisMode.FULL)
+                assertThat(spec.projectSpec.analysisMode).isEqualTo(AnalysisMode.full)
             }
 
             @Test
