@@ -244,6 +244,10 @@ class UnnecessaryLetSpec(val env: KotlinCoreEnvironment) {
                         it.plus(1)
                         it.plus(2)
                     }
+                    a?.let {
+                        it.plus(1)
+                        print(2)
+                    }
                     b.let { that ->
                         that.plus(1)
                         that.plus(2)
@@ -258,6 +262,23 @@ class UnnecessaryLetSpec(val env: KotlinCoreEnvironment) {
                     ?.let {
                         it.plus(1)
                         it.plus(2)
+                    }
+                }
+            """.trimIndent()
+        )
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `does not report lets with lambda body containing more than one statement with one ref count`() {
+        val findings = subject.compileAndLintWithContext(
+            env,
+            """
+                fun f() {
+                    val a: Int? = if (System.currentTimeMillis() > 0) 1 else null
+                    a?.let {
+                        it.plus(1)
+                        print(2)
                     }
                 }
             """.trimIndent()
@@ -468,6 +489,128 @@ class UnnecessaryLetSpec(val env: KotlinCoreEnvironment) {
             """.trimIndent()
         )
         assertThat(findings).hasSize(1)
+    }
+
+    @Nested
+    inner class `nested lets` {
+        @Test
+        fun `does not report nested nullable properties used with safe operator - #6373`() {
+            val findings = subject.compileAndLintWithContext(
+                env,
+                """
+                    class Dialog(val window: Int?)
+                    val dialog: Dialog? = null
+                    fun test() {
+                        dialog?.window?.let {
+                            println(it)
+                        }
+                    }
+                """.trimIndent()
+            )
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `reports nested nullable properties - #6373`() {
+            val findings = subject.compileAndLintWithContext(
+                env,
+                """
+                    class Dialog(val window: Int?)
+                    val dialog: Dialog? = null
+                    fun test() {
+                        dialog?.let {
+                            it.window?.let {
+                                println(it)
+                            }
+                        }
+                    }
+                """.trimIndent()
+            )
+            assertThat(findings).hasSize(1)
+        }
+
+        @Test
+        fun `does not report nested nullable properties when multiple expression are present`() {
+            val findings = subject.compileAndLintWithContext(
+                env,
+                """
+                    class Dialog(val window: Int?)
+                    val dialog: Dialog? = null
+                    fun test() {
+                        dialog?.let {
+                            it.window?.let {
+                                val a = it + 1
+                                println(a)
+                            }
+                            println(it.window)
+                        }
+                    }
+                """.trimIndent()
+            )
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `reports nested nullable properties when first let add more chain`() {
+            val findings = subject.compileAndLintWithContext(
+                env,
+                """
+                    class Dialog(val window: Int?)
+                    val dialog: Dialog? = null
+                    fun test() {
+                        dialog?.let {
+                            it.window?.inc()?.let {
+                                println(it)
+                            }
+                        }
+                    }
+                """.trimIndent()
+            )
+            assertThat(findings).hasSize(1)
+        }
+
+        @Test
+        fun `does not reports nested nullable properties when first let calls a fun`() {
+            val findings = subject.compileAndLintWithContext(
+                env,
+                """
+                    class Dialog(val window: Int?)
+                    val dialog: Dialog? = null
+                    fun inc(value: Int?) = value?.let { it + 1 }
+                    fun test() {
+                        dialog?.let {
+                            inc(it.window)?.let { window ->
+                                println(window)
+                            }
+                        }
+                        dialog?.window?.inc()?.let { println(it) }
+                    }
+                """.trimIndent()
+            )
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `reports double nested nullable properties`() {
+            val findings = subject.compileAndLintWithContext(
+                env,
+                """
+                    class Dialog(val window: Int?)
+                    class ParentDialog(val dialog: Dialog?)
+                    val parentDialog: ParentDialog? = null
+                    fun test() {
+                        parentDialog?.let {
+                            it.dialog?.let { dialog ->
+                                dialog.window?.let {
+                                    println(it)
+                                }
+                            }
+                        }
+                    }
+                """.trimIndent()
+            )
+            assertThat(findings).hasSize(2)
+        }
     }
 }
 

@@ -73,7 +73,12 @@ class VarCouldBeVal(config: Config) : Rule(
         file.accept(assignmentVisitor)
 
         assignmentVisitor.getNonReAssignedDeclarations().forEach {
-            report(CodeSmell(Entity.from(it), "Variable '${it.nameAsSafeName.identifier}' could be val."))
+            report(
+                CodeSmell(
+                    Entity.from(it),
+                    "Variable '${it.nameAsSafeName.identifier}' could be val."
+                )
+            )
         }
     }
 
@@ -94,7 +99,8 @@ class VarCouldBeVal(config: Config) : Rule(
             val declarationName = nameAsSafeName.toString()
             val assignments = assignments[declarationName]
             if (assignments.isNullOrEmpty()) return false
-            val declarationDescriptor = bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, this]
+            val declarationDescriptor =
+                bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, this]
             return assignments.any {
                 it.getResolvedCall(bindingContext)?.resultingDescriptor?.original == declarationDescriptor ||
                     // inside an unknown types context? (example: with-statement with unknown type)
@@ -137,9 +143,9 @@ class VarCouldBeVal(config: Config) : Rule(
                 expression.left?.let(::visitAssignment)
 
                 // Check for whether the assignment contains an object literal.
-                val descriptor = (expression.left as? KtNameReferenceExpression)?.let {
-                    it.getResolvedCall(bindingContext)?.resultingDescriptor
-                }
+                val descriptor = (expression.left as? KtNameReferenceExpression)
+                    ?.getResolvedCall(bindingContext)
+                    ?.resultingDescriptor
                 val expressionRight = expression.right
                 if (descriptor != null && expressionRight != null) {
                     evaluateAssignmentExpression(descriptor, expressionRight)
