@@ -27,9 +27,9 @@ class CliArgs {
 
     @Parameter(
         names = ["--analysis-mode"],
-        description = "Analysis mode used by detekt. 'full' analysis mode is comprehensive but requires the correct " +
-            "classpath, API version and language version to be set. 'light' analysis cannot utilise compiler " +
-            "information and some rules cannot be run in this mode."
+        description = "Analysis mode used by detekt. " +
+            "'full' analysis mode is comprehensive but requires the correct compiler options to be provided. " +
+            "'light' analysis cannot utilise compiler information and some rules cannot be run in this mode."
     )
     var analysisMode: AnalysisMode = AnalysisMode.light
 
