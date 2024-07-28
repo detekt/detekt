@@ -96,17 +96,16 @@ class NullCheckOnMutableProperty(config: Config) : Rule(config) {
                     nonNullCondition.right as? KtNameReferenceExpression
                 } else {
                     nonNullCondition.left as? KtNameReferenceExpression
-                }?.let { referenceExpression ->
-                    referenceExpression.getResolvedCall(bindingContext)
-                        ?.resultingDescriptor
-                        ?.let {
-                            it.fqNameOrNull()?.takeIf(mutableProperties::contains)
-                        }
-                }?.let { candidateFqName ->
-                    // A candidate mutable property is present, so attach the current
-                    // if-expression to it in the property candidates map.
-                    candidateProperties.getOrPut(candidateFqName) { ArrayDeque() }.apply { add(expression) }
-                }
+                }?.getResolvedCall(bindingContext)
+                    ?.resultingDescriptor
+                    ?.fqNameOrNull()
+                    ?.takeIf(mutableProperties::contains)
+                    ?.let { candidateFqName ->
+                        // A candidate mutable property is present, so attach the current
+                        // if-expression to it in the property candidates map.
+                        candidateProperties.getOrPut(candidateFqName) { ArrayDeque() }
+                            .apply { add(expression) }
+                    }
             }
             // Visit descendant expressions to see whether candidate properties
             // identified in this if-expression are being referenced.

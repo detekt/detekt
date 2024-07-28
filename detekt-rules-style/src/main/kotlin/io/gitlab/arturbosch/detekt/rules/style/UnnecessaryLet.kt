@@ -15,6 +15,7 @@ import io.gitlab.arturbosch.detekt.rules.receiverIsUsed
 import org.jetbrains.kotlin.descriptors.impl.ValueParameterDescriptorImpl.WithDestructuringDeclaration
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
@@ -53,13 +54,13 @@ class UnnecessaryLet(config: Config) : Rule(config) {
         "The `let` usage is unnecessary.",
         Debt.FIVE_MINS
     )
-
+    
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 
         if (!expression.isCalling(letFqName, bindingContext)) return
-
         val lambdaExpr = expression.lambdaArguments.firstOrNull()?.getLambdaExpression()
+
         val referenceCount = lambdaExpr?.countLambdaParameterReference(bindingContext) ?: 0
         if (referenceCount > 1) return
 
@@ -98,7 +99,7 @@ private fun canBeReplacedWithCall(lambdaExpr: KtLambdaExpression?): Boolean {
     if (lambdaExpr == null) return false
 
     val receiver = when (val statement = lambdaExpr.bodyExpression?.statements?.singleOrNull()) {
-        is KtQualifiedExpression -> statement.receiverExpression
+        is KtQualifiedExpression -> statement.getRootExpression()
         else -> null
     } ?: return false
 
@@ -111,6 +112,15 @@ private fun canBeReplacedWithCall(lambdaExpr: KtLambdaExpression?): Boolean {
             .map { it.nameAsSafeName.asString() }
     }
     return lambdaParameterNames.any { receiver.textMatches(it) }
+}
+
+private fun KtExpression?.getRootExpression(): KtExpression? {
+    // Look for the expression that was the root of a potential call chain.
+    var receiverExpression = this
+    while (receiverExpression is KtQualifiedExpression) {
+        receiverExpression = receiverExpression.receiverExpression
+    }
+    return receiverExpression
 }
 
 private fun KtLambdaExpression.countLambdaParameterReference(context: BindingContext): Int {
