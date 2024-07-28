@@ -187,7 +187,7 @@ class CliArgs {
      */
     @Parameter(
         names = ["--classpath", "-cp"],
-        description = "EXPERIMENTAL: Paths where to find user class files and depending jar files. " +
+        description = "Paths where to find user class files and depending jar files. " +
             "Used for type resolution."
     )
     var classpath: String? = null
@@ -195,7 +195,7 @@ class CliArgs {
     @Parameter(
         names = ["--api-version"],
         converter = ApiVersionConverter::class,
-        description = "EXPERIMENTAL: Kotlin API version used by the code under analysis. Some rules use this " +
+        description = "Kotlin API version used by the code under analysis. Some rules use this " +
             "information to provide more specific rule violation messages."
     )
     var apiVersion: ApiVersion? = null
@@ -203,7 +203,7 @@ class CliArgs {
     @Parameter(
         names = ["--language-version"],
         converter = LanguageVersionConverter::class,
-        description = "EXPERIMENTAL: Compatibility mode for Kotlin language version X.Y, reports errors for all " +
+        description = "Compatibility mode for Kotlin language version X.Y, reports errors for all " +
             "language features that came out later"
     )
     var languageVersion: LanguageVersion? = null
@@ -211,14 +211,14 @@ class CliArgs {
     @Parameter(
         names = ["--jvm-target"],
         converter = JvmTargetConverter::class,
-        description = "EXPERIMENTAL: Target version of the generated JVM bytecode that was generated during " +
+        description = "Target version of the generated JVM bytecode that was generated during " +
             "compilation and is now being used for type resolution"
     )
     var jvmTarget: JvmTarget = JvmTarget.DEFAULT
 
     @Parameter(
         names = ["--jdk-home"],
-        description = "EXPERIMENTAL: Use a custom JDK home directory to include into the classpath",
+        description = "Use a custom JDK home directory to include into the classpath",
         validateValueWith = [DirectoryValidator::class],
         converter = PathConverter::class
     )

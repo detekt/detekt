@@ -25,7 +25,7 @@ The Detekt Gradle Plugin will generate multiple tasks:
 - `detektGenerateConfig` - Generates a default detekt configuration file into your project directory.
 - `detektBaseline` - Similar to `detekt`, but creates a code smell baseline. Further detekt runs will only feature new smells not in this list.
 
-In addition to these standard tasks, the plugin will also generate a set of experimental tasks that have
+In addition to these standard tasks, the plugin will also generate a set of tasks that have
 [type resolution](type-resolution.md) enabled. This happens for both, pure JVM projects and Android projects that have
 the Android Gradle Plugin applied:
 
@@ -348,7 +348,7 @@ tasks.named("detekt").configure {
 
 ### Using Type Resolution
 
-Type resolution is experimental and works only for [predefined tasks listed above](#available-plugin-tasks)
+Type resolution works only for [predefined tasks listed above](#available-plugin-tasks)
 or when implementing a custom detekt task with the `classpath` and `jvmTarget` properties present.
 
 `jdkHome` is also available as an input. When this is unset, analysis is performed using the JDK classes of the JDK that
