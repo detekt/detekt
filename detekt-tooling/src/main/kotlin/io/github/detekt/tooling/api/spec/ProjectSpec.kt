@@ -19,9 +19,7 @@ interface ProjectSpec {
     val inputPaths: Collection<Path>
 
     /**
-     * The analysis mode used by detekt. 'light' mode means detekt will analyze code in individual files but cannot use
-     * compiler information like types, symbols and smart casts. 'full' mode allows rules to use additional information
-     * from the compiler when analyzing code.
+     * The analysis mode used by detekt. See [AnalysisMode] for information about available analysis modes.
      */
     val analysisMode: AnalysisMode
 }
