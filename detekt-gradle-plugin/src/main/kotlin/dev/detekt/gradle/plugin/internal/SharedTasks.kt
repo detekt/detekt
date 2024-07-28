@@ -47,10 +47,10 @@ internal fun Project.registerJvmCompilationDetektTask(
             )
         )
         detektTask.description = if (target != null) {
-            "EXPERIMENTAL: Run detekt analysis for compilation ${compilation.name} on target " +
+            "Run detekt analysis for compilation ${compilation.name} on target " +
                 "${compilation.target.name} with type resolution"
         } else {
-            "EXPERIMENTAL: Run detekt analysis for ${compilation.name} classes with type resolution"
+            "Run detekt analysis for ${compilation.name} classes with type resolution"
         }
     }
 }
@@ -90,10 +90,10 @@ internal fun Project.registerJvmCompilationCreateBaselineTask(
             )
         )
         createBaselineTask.description = if (target != null) {
-            "EXPERIMENTAL: Creates detekt baseline for compilation ${compilation.name} on target " +
+            "Creates detekt baseline for compilation ${compilation.name} on target " +
                 "${compilation.target.name} with type resolution"
         } else {
-            "EXPERIMENTAL: Creates detekt baseline for ${compilation.name} classes with type resolution"
+            "Creates detekt baseline for ${compilation.name} classes with type resolution"
         }
     }
 }

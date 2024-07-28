@@ -186,7 +186,7 @@ class CliArgs {
     @Parameter(
         names = ["--api-version"],
         converter = ApiVersionConverter::class,
-        description = "EXPERIMENTAL: Kotlin API version used by the code under analysis. Some rules use this " +
+        description = "Kotlin API version used by the code under analysis. Some rules use this " +
             "information to provide more specific rule violation messages."
     )
     var apiVersion: ApiVersion? = null
@@ -209,7 +209,7 @@ class CliArgs {
 
     @Parameter(
         names = ["--jdk-home"],
-        description = "EXPERIMENTAL: Use a custom JDK home directory to include into the classpath",
+        description = "Use a custom JDK home directory to include into the classpath",
         validateValueWith = [DirectoryValidator::class],
         converter = PathConverter::class
     )

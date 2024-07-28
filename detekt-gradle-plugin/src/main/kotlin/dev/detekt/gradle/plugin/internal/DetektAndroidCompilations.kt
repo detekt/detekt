@@ -24,28 +24,28 @@ internal object DetektAndroidCompilations {
         val mainTaskProvider =
             project.tasks.register("${DetektPlugin.DETEKT_TASK_NAME}Main") {
                 it.group = "verification"
-                it.description = "EXPERIMENTAL: Run detekt analysis for production classes across " +
+                it.description = "Run detekt analysis for production classes across " +
                     "all variants with type resolution"
             }
 
         val testTaskProvider =
             project.tasks.register("${DetektPlugin.DETEKT_TASK_NAME}Test") {
                 it.group = "verification"
-                it.description = "EXPERIMENTAL: Run detekt analysis for test classes across " +
+                it.description = "Run detekt analysis for test classes across " +
                     "all variants with type resolution"
             }
 
         val mainBaselineTaskProvider =
             project.tasks.register("${DetektPlugin.BASELINE_TASK_NAME}Main") {
                 it.group = "verification"
-                it.description = "EXPERIMENTAL: Creates detekt baseline files for production classes across " +
+                it.description = "Creates detekt baseline files for production classes across " +
                     "all variants with type resolution"
             }
 
         val testBaselineTaskProvider =
             project.tasks.register("${DetektPlugin.BASELINE_TASK_NAME}Test") {
                 it.group = "verification"
-                it.description = "EXPERIMENTAL: Creates detekt baseline files for test classes across " +
+                it.description = "Creates detekt baseline files for test classes across " +
                     "all variants with type resolution"
             }
 
