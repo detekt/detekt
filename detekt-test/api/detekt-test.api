@@ -39,7 +39,6 @@ public final class io/gitlab/arturbosch/detekt/test/RuleExtensionsKt {
 	public static final fun compileAndLint (Lio/gitlab/arturbosch/detekt/api/Rule;Ljava/lang/String;)Ljava/util/List;
 	public static final fun compileAndLintWithContext (Lio/gitlab/arturbosch/detekt/api/Rule;Lorg/jetbrains/kotlin/cli/jvm/compiler/KotlinCoreEnvironment;Ljava/lang/String;)Ljava/util/List;
 	public static final fun lint (Lio/gitlab/arturbosch/detekt/api/Rule;Ljava/lang/String;)Ljava/util/List;
-	public static final fun lint (Lio/gitlab/arturbosch/detekt/api/Rule;Ljava/nio/file/Path;)Ljava/util/List;
 	public static final fun lint (Lio/gitlab/arturbosch/detekt/api/Rule;Lorg/jetbrains/kotlin/psi/KtFile;)Ljava/util/List;
 	public static final fun lintWithContext (Lio/gitlab/arturbosch/detekt/api/Rule;Lorg/jetbrains/kotlin/cli/jvm/compiler/KotlinCoreEnvironment;Ljava/lang/String;[Ljava/lang/String;)Ljava/util/List;
 }
