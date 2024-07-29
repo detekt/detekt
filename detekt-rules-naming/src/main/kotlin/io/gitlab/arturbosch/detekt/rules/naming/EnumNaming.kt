@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.Alias
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
@@ -13,6 +14,7 @@ import org.jetbrains.kotlin.psi.KtEnumEntry
  * Reports enum names that do not follow the specified naming convention.
  */
 @ActiveByDefault(since = "1.0.0")
+@Alias("EnumEntryName")
 class EnumNaming(config: Config) : Rule(
     config,
     "Enum names should follow the naming convention set in the projects configuration."

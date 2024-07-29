@@ -67,6 +67,7 @@ formatting:
     indentSize: 4
   EnumEntryNameCase:
     active: true
+    aliases: ['EnumEntryName']
     autoCorrect: true
   EnumWrapping:
     active: true
