@@ -76,6 +76,8 @@ formatting:
     active: false
   ConditionWrapping:
     active: true
+  EnumEntryNameCase:
+    active: false
   Filename:
     active: false
   FunctionExpressionBody:
