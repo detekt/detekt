@@ -268,6 +268,7 @@ public abstract interface annotation class io/gitlab/arturbosch/detekt/api/Requi
 }
 
 public class io/gitlab/arturbosch/detekt/api/Rule : io/gitlab/arturbosch/detekt/api/DetektVisitor {
+	public field compilerResources Lio/gitlab/arturbosch/detekt/api/CompilerResources;
 	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Config;Ljava/lang/String;)V
 	public final fun getAutoCorrect ()Z
 	public final fun getBindingContext ()Lorg/jetbrains/kotlin/resolve/BindingContext;

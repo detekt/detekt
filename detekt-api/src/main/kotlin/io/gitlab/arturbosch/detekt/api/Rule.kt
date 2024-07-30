@@ -27,7 +27,7 @@ open class Rule(
     open val ruleName: Name get() = Name(javaClass.simpleName)
 
     var bindingContext: BindingContext = BindingContext.EMPTY
-    var compilerResources: CompilerResources? = null
+    lateinit var compilerResources: CompilerResources
 
     val autoCorrect: Boolean
         get() = config.valueOrDefault(Config.AUTO_CORRECT_KEY, false) &&
@@ -46,7 +46,7 @@ open class Rule(
     fun visitFile(
         root: KtFile,
         bindingContext: BindingContext = BindingContext.EMPTY,
-        compilerResources: CompilerResources?
+        compilerResources: CompilerResources
     ): List<Finding> {
         findings.clear()
         this.bindingContext = bindingContext

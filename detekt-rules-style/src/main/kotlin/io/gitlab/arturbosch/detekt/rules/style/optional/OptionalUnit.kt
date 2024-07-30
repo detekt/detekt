@@ -107,8 +107,7 @@ class OptionalUnit(config: Config) : Rule(
         }
 
     private fun isExplicitApiModeActive(): Boolean {
-        val resources = compilerResources ?: return false
-        val flag = resources.languageVersionSettings.getFlag(AnalysisFlags.explicitApiMode)
+        val flag = compilerResources.languageVersionSettings.getFlag(AnalysisFlags.explicitApiMode)
         return flag != ExplicitApiMode.DISABLED
     }
 

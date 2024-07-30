@@ -33,8 +33,6 @@ class UnnecessaryNotNullCheck(config: Config) : Rule(
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 
-        val compilerResources = compilerResources ?: return
-
         val callee = expression.calleeExpression ?: return
         val argument = expression.valueArguments.firstOrNull()?.getArgumentExpression() ?: return
 
