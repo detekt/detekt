@@ -8,12 +8,12 @@ repositories {
 }
 
 dependencies {
-    implementation(libs.plugins.kotlin.asDependency())
-    implementation(libs.plugins.githubRelease.asDependency())
+    implementation(libs.kotlin.gradle.plugin)
+    implementation(libs.gradleNexus.publish.plugin)
     implementation(libs.semver4j)
-    implementation(libs.plugins.nexusPublish.asDependency())
-    implementation(libs.plugins.binaryCompatibilityValidator.asDependency())
-    implementation(libs.plugins.dokka.asDependency())
+    implementation(libs.breadmoirai.githubRelease.plugin)
+    implementation(libs.binaryCompatibilityValidator.plugin)
+    implementation(libs.dokka.plugin)
 }
 
 kotlin {
@@ -31,6 +31,3 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
         compilerExecutionStrategy = org.jetbrains.kotlin.gradle.tasks.KotlinCompilerExecutionStrategy.OUT_OF_PROCESS
     }
 }
-
-fun Provider<PluginDependency>.asDependency(): Provider<String> =
-    this.map { "${it.pluginId}:${it.pluginId}.gradle.plugin:${it.version}" }

@@ -8,10 +8,18 @@ junit = "5.10.3"
 slf4j = "2.0.13"
 
 [libraries]
+binaryCompatibilityValidator-plugin = { module = "org.jetbrains.kotlinx.binary-compatibility-validator:org.jetbrains.kotlinx.binary-compatibility-validator.gradle.plugin", version = "0.16.2" }
+breadmoirai-githubRelease-plugin = { module = "com.github.breadmoirai:github-release", version = "2.5.2" }
+dokka-plugin = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "dokka" }
+gradleNexus-publish-plugin = { module = "io.github.gradle-nexus:publish-plugin", version = "2.0.0" }
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+# This version of AGP is used for testing and should be updated when new AGP versions are released to ensure detekt's
+# Gradle plugin remains compatible.
+android-gradle-plugin = "com.android.tools.build:gradle:8.5.1"
+
 semver4j = "org.semver4j:semver4j:5.3.0"
 
 kotlin-compilerEmbeddable = { module = "org.jetbrains.kotlin:kotlin-compiler-embeddable", version.ref = "kotlin" }
-kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-gradlePluginApi = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin-api", version.ref = "kotlin" }
 kotlin-mainKts = { module = "org.jetbrains.kotlin:kotlin-main-kts", version.ref = "kotlin" }
 kotlin-stdlibJdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
@@ -45,8 +53,4 @@ kotlinCompileTesting = { module = "dev.zacsweers.kctfork:core", version = "0.5.1
 jetbrains-annotations = "org.jetbrains:annotations:24.1.0"
 
 [plugins]
-kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.16.2" }
-dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
-nexusPublish = { id = "io.github.gradle-nexus.publish-plugin", version = "2.0.0" }
-githubRelease = { id = "com.github.breadmoirai.github-release", version = "2.5.2" }
+# Do not declare plugins here - see https://github.com/detekt/detekt/pull/7088.

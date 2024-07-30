@@ -38,7 +38,7 @@ testing {
         getByName("test", JvmTestSuite::class) {
             dependencies {
                 implementation(libs.assertj)
-                implementation(libs.kotlin.gradle)
+                implementation(libs.kotlin.gradle.plugin)
                 implementation(gradleKotlinDsl())
             }
         }
@@ -81,19 +81,19 @@ val testKitGradleMinVersionRuntimeOnly: Configuration by configurations.creating
 
 dependencies {
     compileOnly(libs.android.gradle.minSupported)
-    compileOnly(libs.kotlin.gradle)
+    compileOnly(libs.kotlin.gradle.plugin)
     compileOnly(libs.kotlin.gradlePluginApi)
     implementation(libs.sarif4k)
     testFixturesCompileOnly(libs.jetbrains.annotations)
     compileOnly(libs.jetbrains.annotations)
 
-    testKitRuntimeOnly(libs.kotlin.gradle)
-    testKitGradleMinVersionRuntimeOnly(libs.kotlin.gradle) {
+    testKitRuntimeOnly(libs.kotlin.gradle.plugin)
+    testKitGradleMinVersionRuntimeOnly(libs.kotlin.gradle.plugin) {
         attributes {
             attribute(GradlePluginApiVersion.GRADLE_PLUGIN_API_VERSION_ATTRIBUTE, objects.named("6.8.3"))
         }
     }
-    testKitJava17RuntimeOnly(libs.android.gradle.maxSupported)
+    testKitJava17RuntimeOnly(libs.android.gradle.plugin)
 
     // We use this published version of the detekt-formatting to self analyse this project.
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.6")
