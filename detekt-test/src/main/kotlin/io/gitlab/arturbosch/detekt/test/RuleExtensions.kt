@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.test
 
 import io.github.detekt.test.utils.KotlinScriptEngine
 import io.github.detekt.test.utils.compileContentForTest
-import io.github.detekt.test.utils.compileForTest
 import io.gitlab.arturbosch.detekt.api.CompilerResources
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
@@ -14,7 +13,6 @@ import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactoryImpl
-import java.nio.file.Path
 
 private val shouldCompileTestSnippets: Boolean =
     System.getProperty("compile-test-snippets", "false")!!.toBoolean()
@@ -28,11 +26,6 @@ fun Rule.compileAndLint(@Language("kotlin") content: String): List<Finding> {
 
 fun Rule.lint(@Language("kotlin") content: String): List<Finding> {
     val ktFile = compileContentForTest(content)
-    return visitFile(ktFile).filterSuppressed(this)
-}
-
-fun Rule.lint(path: Path): List<Finding> {
-    val ktFile = compileForTest(path)
     return visitFile(ktFile).filterSuppressed(this)
 }
 
