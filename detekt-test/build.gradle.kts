@@ -7,6 +7,6 @@ dependencies {
     api(projects.detektApi)
     api(projects.detektTestUtils)
     implementation(projects.detektUtils)
-    compileOnly(libs.assertj)
+    compileOnly(libs.assertj.core)
     implementation(projects.detektCore)
 }

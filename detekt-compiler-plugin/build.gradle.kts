@@ -26,8 +26,8 @@ dependencies {
     runtimeOnly(projects.detektCore)
     runtimeOnly(projects.detektRules)
 
-    testImplementation(libs.assertj)
-    testImplementation(libs.kotlinCompileTesting)
+    testImplementation(libs.assertj.core)
+    testImplementation(libs.kctfork.core)
 }
 
 val javaComponent = components["java"] as AdhocComponentWithVariants

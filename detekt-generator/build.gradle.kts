@@ -25,7 +25,7 @@ dependencies {
 
     testImplementation(projects.detektCore)
     testImplementation(projects.detektTestUtils)
-    testImplementation(libs.assertj)
+    testImplementation(libs.assertj.core)
     testImplementation(libs.classgraph)
     testRuntimeOnly(projects.detektRules)
 }

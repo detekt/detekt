@@ -7,7 +7,7 @@ plugins {
 dependencies {
     api(libs.kotlin.compilerEmbeddable)
     testImplementation(projects.detektTestUtils)
-    testImplementation(libs.assertj)
+    testImplementation(libs.assertj.core)
 }
 
 tasks.withType<Test>().configureEach {

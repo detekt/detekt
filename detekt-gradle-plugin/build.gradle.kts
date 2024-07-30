@@ -37,14 +37,14 @@ testing {
     suites {
         getByName("test", JvmTestSuite::class) {
             dependencies {
-                implementation(libs.assertj)
+                implementation(libs.assertj.core)
                 implementation(libs.kotlin.gradle.plugin)
                 implementation(gradleKotlinDsl())
             }
         }
         register<JvmTestSuite>("functionalTest") {
             dependencies {
-                implementation(libs.assertj)
+                implementation(libs.assertj.core)
                 implementation(testFixtures(project()))
             }
 
@@ -61,7 +61,7 @@ testing {
         }
         register<JvmTestSuite>("functionalTestMinSupportedGradle") {
             dependencies {
-                implementation(libs.assertj)
+                implementation(libs.assertj.core)
                 implementation(testFixtures(project()))
             }
             targets {
@@ -80,7 +80,7 @@ val testKitJava17RuntimeOnly: Configuration by configurations.creating
 val testKitGradleMinVersionRuntimeOnly: Configuration by configurations.creating
 
 dependencies {
-    compileOnly(libs.android.gradle.minSupported)
+    compileOnly(libs.android.gradleApi)
     compileOnly(libs.kotlin.gradle.plugin)
     compileOnly(libs.kotlin.gradlePluginApi)
     implementation(libs.sarif4k)

@@ -12,5 +12,5 @@ dependencies {
     testImplementation(projects.detektMetrics)
     testImplementation(projects.detektTestUtils)
     testImplementation(testFixtures(projects.detektApi))
-    testImplementation(libs.assertj)
+    testImplementation(libs.assertj.core)
 }

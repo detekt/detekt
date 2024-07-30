@@ -6,8 +6,8 @@ dependencies {
     api(projects.detektApi)
     api(projects.detektParser)
     api(projects.detektTooling)
-    implementation(libs.snakeyaml)
-    implementation(libs.kotlin.reflection)
+    implementation(libs.snakeyaml.engine)
+    implementation(libs.kotlin.reflect)
     implementation(projects.detektMetrics)
     implementation(projects.detektPsiUtils)
     implementation(projects.detektUtils)
@@ -21,7 +21,7 @@ dependencies {
     testImplementation(projects.detektTest)
     testImplementation(testFixtures(projects.detektApi))
     testImplementation(libs.classgraph)
-    testImplementation(libs.assertj)
+    testImplementation(libs.assertj.core)
     testRuntimeOnly(libs.slf4j.simple)
 }
 

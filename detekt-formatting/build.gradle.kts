@@ -7,14 +7,14 @@ val extraDepsToPackage: Configuration by configurations.creating
 dependencies {
     compileOnly(projects.detektApi)
     compileOnly(projects.detektPsiUtils)
-    implementation(libs.ktlintRulesetStandard) {
+    implementation(libs.ktlint.rulesetStandard) {
         exclude(group = "org.jetbrains.kotlin")
     }
 
     runtimeOnly(libs.slf4j.api)
 
     testImplementation(projects.detektTest)
-    testImplementation(libs.assertj)
+    testImplementation(libs.assertj.core)
     testImplementation(libs.classgraph)
 
     testRuntimeOnly(libs.slf4j.nop)

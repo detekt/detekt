@@ -4,13 +4,13 @@ plugins {
 }
 
 dependencies {
-    api(libs.kotlin.stdlibJdk8)
-    api(libs.junit.api)
+    api(libs.kotlin.stdlib)
+    api(libs.junit.jupiterApi)
     implementation(projects.detektParser)
     implementation(libs.kotlin.mainKts)
-    implementation(libs.kotlinx.coroutines)
+    implementation(libs.kotlinx.coroutinesCore)
 
-    testImplementation(libs.assertj)
+    testImplementation(libs.assertj.core)
 }
 
 apiValidation {
