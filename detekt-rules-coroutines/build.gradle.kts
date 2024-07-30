@@ -6,7 +6,7 @@ dependencies {
     compileOnly(projects.detektApi)
     compileOnly(projects.detektPsiUtils)
     testImplementation(projects.detektTest)
-    testImplementation(libs.assertj)
-    testRuntimeOnly(libs.kotlinx.coroutines)
-    testRuntimeOnly(libs.kotlinx.coroutines.test)
+    testImplementation(libs.assertj.core)
+    testRuntimeOnly(libs.kotlinx.coroutinesCore)
+    testRuntimeOnly(libs.kotlinx.coroutinesTest)
 }

@@ -7,5 +7,5 @@ dependencies {
     compileOnly(projects.detektPsiUtils)
     implementation(projects.detektTooling)
     testImplementation(projects.detektTest)
-    testImplementation(libs.assertj)
+    testImplementation(libs.assertj.core)
 }

@@ -9,6 +9,6 @@ dependencies {
     testImplementation(projects.detektTooling)
     testImplementation(projects.detektTestUtils)
     testImplementation(testFixtures(projects.detektApi))
-    testImplementation(libs.assertj)
+    testImplementation(libs.assertj.core)
     testImplementation(projects.detektTest)
 }

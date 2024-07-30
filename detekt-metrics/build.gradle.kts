@@ -7,6 +7,6 @@ dependencies {
     compileOnly(projects.detektPsiUtils)
     testImplementation(projects.detektTestUtils)
     testImplementation(testFixtures(projects.detektApi))
-    testImplementation(libs.assertj)
+    testImplementation(libs.assertj.core)
     testRuntimeOnly(projects.detektPsiUtils)
 }

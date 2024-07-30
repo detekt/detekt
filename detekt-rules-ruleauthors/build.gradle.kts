@@ -3,11 +3,11 @@ plugins {
 }
 
 dependencies {
-    compileOnly(kotlin("stdlib-jdk8"))
+    compileOnly(libs.kotlin.stdlib)
     compileOnly(projects.detektApi)
     compileOnly(projects.detektPsiUtils)
     testImplementation(projects.detektTest)
-    testImplementation(libs.assertj)
+    testImplementation(libs.assertj.core)
 }
 
 consumeGeneratedConfig(
