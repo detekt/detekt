@@ -1,5 +1,4 @@
 [versions]
-dokka = "1.9.20"
 jacoco = "0.8.12"
 kotlin = "2.0.0"
 coroutines = "1.8.1"
@@ -10,7 +9,7 @@ slf4j = "2.0.13"
 [libraries]
 binaryCompatibilityValidator-plugin = { module = "org.jetbrains.kotlinx.binary-compatibility-validator:org.jetbrains.kotlinx.binary-compatibility-validator.gradle.plugin", version = "0.16.2" }
 breadmoirai-githubRelease-plugin = { module = "com.github.breadmoirai:github-release", version = "2.5.2" }
-dokka-plugin = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "dokka" }
+dokka-plugin = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version = "1.9.20" }
 gradleNexus-publish-plugin = { module = "io.github.gradle-nexus:publish-plugin", version = "2.0.0" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 # This version of AGP is used for testing and should be updated when new AGP versions are released to ensure detekt's
