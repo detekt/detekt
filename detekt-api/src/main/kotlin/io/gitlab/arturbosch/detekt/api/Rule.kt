@@ -46,7 +46,7 @@ open class Rule(
     fun visitFile(
         root: KtFile,
         bindingContext: BindingContext = BindingContext.EMPTY,
-        compilerResources: CompilerResources? = null
+        compilerResources: CompilerResources?
     ): List<Finding> {
         findings.clear()
         this.bindingContext = bindingContext
