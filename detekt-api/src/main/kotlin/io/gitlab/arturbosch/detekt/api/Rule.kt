@@ -27,7 +27,7 @@ open class Rule(
     open val ruleName: Name get() = Name(javaClass.simpleName)
 
     var bindingContext: BindingContext = BindingContext.EMPTY
-    lateinit var compilerResources: CompilerResources
+    protected lateinit var compilerResources: CompilerResources
 
     val autoCorrect: Boolean
         get() = config.valueOrDefault(Config.AUTO_CORRECT_KEY, false) &&
