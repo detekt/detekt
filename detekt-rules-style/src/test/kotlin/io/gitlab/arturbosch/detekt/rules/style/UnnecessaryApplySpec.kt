@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
@@ -138,7 +137,8 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report if result of apply is used - #2938`() {
             assertThat(
-                subject.compileAndLint(
+                subject.compileAndLintWithContext(
+                    env,
                     """
                         fun main() {
                             val a = listOf(mutableListOf(""))

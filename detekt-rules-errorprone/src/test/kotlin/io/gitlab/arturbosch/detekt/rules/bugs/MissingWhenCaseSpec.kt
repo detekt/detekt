@@ -158,7 +158,7 @@ class MissingWhenCaseSpec(private val env: KotlinCoreEnvironment) {
                         }
                     }
                 """.trimIndent()
-                val actual = subject.lintWithContext(env, code)
+                val actual = subject.compileAndLintWithContext(env, code)
                 assertThat(actual).hasSize(1)
                 assertThat(actual.first().message).isEqualTo(
                     "When expression is missing cases: VariantC. Either add missing cases or a default `else` case."

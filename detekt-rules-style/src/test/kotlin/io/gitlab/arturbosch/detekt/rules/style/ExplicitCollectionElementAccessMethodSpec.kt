@@ -316,7 +316,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val value = field.get(null) // access static field
                     }
                 """.trimIndent()
-                assertThat(subject.lintWithContext(env, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
         }
 

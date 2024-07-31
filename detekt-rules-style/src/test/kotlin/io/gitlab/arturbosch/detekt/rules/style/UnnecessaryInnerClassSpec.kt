@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
+import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
@@ -35,7 +36,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
             }
         """.trimIndent()
 
-        assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
     @Nested
@@ -50,7 +51,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -65,7 +66,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         @Nested
@@ -85,7 +86,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
                     }
                 """.trimIndent()
 
-                assertThat(subject.lintWithContext(env, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
             @Test
@@ -103,7 +104,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
                     }
                 """.trimIndent()
 
-                assertThat(subject.lintWithContext(env, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
             @Test
@@ -121,7 +122,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
                     }
                 """.trimIndent()
 
-                assertThat(subject.lintWithContext(env, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
         }
 
@@ -142,7 +143,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
                     }
                 """.trimIndent()
 
-                assertThat(subject.lintWithContext(env, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
             @Test
@@ -161,7 +162,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
                     }
                 """.trimIndent()
 
-                assertThat(subject.lintWithContext(env, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
             @Test
@@ -180,7 +181,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
                     }
                 """.trimIndent()
 
-                assertThat(subject.lintWithContext(env, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
             @Test
@@ -218,7 +219,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -237,7 +238,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -254,7 +255,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -271,7 +272,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -288,7 +289,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -311,7 +312,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -328,7 +329,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -352,7 +353,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -371,7 +372,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -388,7 +389,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -414,7 +415,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
             }
         """.trimIndent()
 
-        assertThat(subject.lintWithContext(env, code)).isEmpty()
+        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -429,7 +430,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
             }
         """.trimIndent()
 
-        assertThat(subject.lintWithContext(env, code)).isEmpty()
+        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -438,13 +439,13 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
             class A {
                 inner class B {
                     fun inner() {
-                        return Unit.apply { this@inner }
+                        return Unit.apply { this@B }
                     }
                 }
             }
         """.trimIndent()
 
-        assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
     @Test
@@ -459,6 +460,6 @@ class UnnecessaryInnerClassSpec(val env: KotlinCoreEnvironment) {
             }
         """.trimIndent()
 
-        assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 }

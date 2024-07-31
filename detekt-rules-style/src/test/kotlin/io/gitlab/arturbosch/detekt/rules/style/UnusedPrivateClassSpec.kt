@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -429,7 +428,7 @@ class UnusedPrivateClassSpec {
                     }
                 }
             """.trimIndent()
-            val findings = UnusedPrivateClass(Config.empty).lint(code)
+            val findings = UnusedPrivateClass(Config.empty).compileAndLint(code)
             assertThat(findings).isEmpty()
         }
 
@@ -454,7 +453,7 @@ class UnusedPrivateClassSpec {
                     }
                 }
             """.trimIndent()
-            val findings = UnusedPrivateClass(Config.empty).lint(code)
+            val findings = UnusedPrivateClass(Config.empty).compileAndLint(code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasStartSourceLocation(10, 5)
         }

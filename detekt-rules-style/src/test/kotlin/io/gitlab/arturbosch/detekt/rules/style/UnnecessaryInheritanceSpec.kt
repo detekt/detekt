@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -10,7 +11,7 @@ class UnnecessaryInheritanceSpec {
 
     @Test
     fun `has unnecessary super type declarations`() {
-        val findings = subject.lint(
+        val findings = subject.compileAndLint(
             """
                 class A : Any()
                 class B : Object()

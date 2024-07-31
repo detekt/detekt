@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.test.TestConfig
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Named
@@ -15,7 +16,7 @@ class UnnecessaryParenthesesSpec {
     fun `with unnecessary parentheses on val assignment`(testCase: RuleTestCase) {
         val code = "val local = (5)"
 
-        assertThat(testCase.rule.lint(code)).hasSize(1)
+        assertThat(testCase.rule.compileAndLint(code)).hasSize(1)
     }
 
     @ParameterizedTest
@@ -23,7 +24,7 @@ class UnnecessaryParenthesesSpec {
     fun `with unnecessary parentheses on val assignment operation`(testCase: RuleTestCase) {
         val code = "val local = (5 + 3)"
 
-        assertThat(testCase.rule.lint(code)).hasSize(1)
+        assertThat(testCase.rule.compileAndLint(code)).hasSize(1)
     }
 
     @ParameterizedTest
@@ -31,7 +32,7 @@ class UnnecessaryParenthesesSpec {
     fun `with unnecessary parentheses on function call`(testCase: RuleTestCase) {
         val code = "val local = 3.plus((5))"
 
-        assertThat(testCase.rule.lint(code)).hasSize(1)
+        assertThat(testCase.rule.compileAndLint(code)).hasSize(1)
     }
 
     @ParameterizedTest
@@ -39,13 +40,13 @@ class UnnecessaryParenthesesSpec {
     fun `unnecessary parentheses in other parentheses`(testCase: RuleTestCase) {
         val code = """
             fun x(a: String, b: String) {
-                if ((a equals b)) {
+                if ((a == b)) {
                     println("Test")
                 }
             }
         """.trimIndent()
 
-        assertThat(testCase.rule.lint(code)).hasSize(1)
+        assertThat(testCase.rule.compileAndLint(code)).hasSize(1)
     }
 
     @ParameterizedTest
@@ -61,7 +62,7 @@ class UnnecessaryParenthesesSpec {
             }
         """.trimIndent()
 
-        assertThat(testCase.rule.lint(code)).isEmpty()
+        assertThat(testCase.rule.compileAndLint(code)).isEmpty()
     }
 
     @ParameterizedTest
@@ -77,7 +78,7 @@ class UnnecessaryParenthesesSpec {
             }
         """.trimIndent()
 
-        assertThat(testCase.rule.lint(code)).isEmpty()
+        assertThat(testCase.rule.compileAndLint(code)).isEmpty()
     }
 
     @ParameterizedTest
@@ -97,13 +98,13 @@ class UnnecessaryParenthesesSpec {
     fun `does not report well behaved parentheses`(testCase: RuleTestCase) {
         val code = """
             fun x(a: String, b: String) {
-                if (a equals b) {
+                if (a == b) {
                     println("Test")
                 }
             }
         """.trimIndent()
 
-        assertThat(testCase.rule.lint(code)).isEmpty()
+        assertThat(testCase.rule.compileAndLint(code)).isEmpty()
     }
 
     @ParameterizedTest
@@ -166,7 +167,7 @@ class UnnecessaryParenthesesSpec {
             }
         """.trimIndent()
 
-        assertThat(testCase.rule.lint(code)).isEmpty()
+        assertThat(testCase.rule.compileAndLint(code)).isEmpty()
     }
 
     @ParameterizedTest
@@ -185,7 +186,7 @@ class UnnecessaryParenthesesSpec {
             }
         """.trimIndent()
 
-        assertThat(testCase.rule.lint(code)).isEmpty()
+        assertThat(testCase.rule.compileAndLint(code)).isEmpty()
     }
 
     @ParameterizedTest
@@ -216,7 +217,7 @@ class UnnecessaryParenthesesSpec {
             class Clazz: Comparable<String> by ("hello".filter { it != 'l' })
         """.trimIndent()
 
-        assertThat(testCase.rule.lint(code)).isEmpty()
+        assertThat(testCase.rule.compileAndLint(code)).isEmpty()
     }
 
     @ParameterizedTest
@@ -234,7 +235,7 @@ class UnnecessaryParenthesesSpec {
             val c = (4 + 5) * 3 // parens required
         """.trimIndent()
 
-        assertThat(testCase.rule.lint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 0 else 6)
+        assertThat(testCase.rule.compileAndLint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 0 else 6)
     }
 
     @ParameterizedTest
@@ -248,7 +249,7 @@ class UnnecessaryParenthesesSpec {
             val b2 = (1 * 2) * 3
         """.trimIndent()
 
-        assertThat(testCase.rule.lint(code)).hasSize(5)
+        assertThat(testCase.rule.compileAndLint(code)).hasSize(5)
     }
 
     @ParameterizedTest
@@ -261,7 +262,7 @@ class UnnecessaryParenthesesSpec {
             val c = (true || false) && false // parens required
         """.trimIndent()
 
-        assertThat(testCase.rule.lint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 0 else 4)
+        assertThat(testCase.rule.compileAndLint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 0 else 4)
     }
 
     @ParameterizedTest
@@ -275,7 +276,7 @@ class UnnecessaryParenthesesSpec {
             val b2 = (true || false) || false
         """.trimIndent()
 
-        assertThat(testCase.rule.lint(code)).hasSize(5)
+        assertThat(testCase.rule.compileAndLint(code)).hasSize(5)
     }
 
     @ParameterizedTest
@@ -286,7 +287,7 @@ class UnnecessaryParenthesesSpec {
             val e = false or (true and false) // parens required
         """.trimIndent()
 
-        assertThat(testCase.rule.lint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 0 else 1)
+        assertThat(testCase.rule.compileAndLint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 0 else 1)
     }
 
     @ParameterizedTest
@@ -330,7 +331,7 @@ class UnnecessaryParenthesesSpec {
             }
         """.trimIndent()
 
-        assertThat(testCase.rule.lint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 0 else 1)
+        assertThat(testCase.rule.compileAndLint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 0 else 1)
     }
 
     @ParameterizedTest
@@ -347,7 +348,7 @@ class UnnecessaryParenthesesSpec {
             }
         """.trimIndent()
 
-        assertThat(testCase.rule.lint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 0 else 2)
+        assertThat(testCase.rule.compileAndLint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 0 else 2)
     }
 
     @ParameterizedTest
@@ -385,7 +386,7 @@ class UnnecessaryParenthesesSpec {
             }
         """.trimIndent()
 
-        assertThat(testCase.rule.lint(code)).isEmpty()
+        assertThat(testCase.rule.compileAndLint(code)).isEmpty()
     }
 
     @ParameterizedTest
@@ -408,7 +409,7 @@ class UnnecessaryParenthesesSpec {
             }
         """.trimIndent()
 
-        assertThat(testCase.rule.lint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 0 else 4)
+        assertThat(testCase.rule.compileAndLint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 0 else 4)
     }
 
     @ParameterizedTest
@@ -428,7 +429,7 @@ class UnnecessaryParenthesesSpec {
             }
         """.trimIndent()
 
-        assertThat(testCase.rule.lint(code)).isEmpty()
+        assertThat(testCase.rule.compileAndLint(code)).isEmpty()
     }
 
     @ParameterizedTest
@@ -447,7 +448,7 @@ class UnnecessaryParenthesesSpec {
             }
         """.trimIndent()
 
-        assertThat(testCase.rule.lint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 0 else 1)
+        assertThat(testCase.rule.compileAndLint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 0 else 1)
     }
 
     @ParameterizedTest
@@ -467,7 +468,7 @@ class UnnecessaryParenthesesSpec {
             }
         """.trimIndent()
 
-        assertThat(testCase.rule.lint(code)).hasSize(1)
+        assertThat(testCase.rule.compileAndLint(code)).hasSize(1)
     }
 
     @Test
@@ -489,7 +490,7 @@ class UnnecessaryParenthesesSpec {
             }
         """.trimIndent()
 
-        assertThat(RuleTestCase(allowForUnclearPrecedence = true).rule.lint(code)).hasSize(3)
+        assertThat(RuleTestCase(allowForUnclearPrecedence = true).rule.compileAndLint(code)).hasSize(3)
     }
 
     @Test
@@ -510,7 +511,7 @@ class UnnecessaryParenthesesSpec {
                 val violation3 = ++((a.value))
             }
         """.trimIndent()
-        assertThat(RuleTestCase(allowForUnclearPrecedence = false).rule.lint(code)).hasSize(5)
+        assertThat(RuleTestCase(allowForUnclearPrecedence = false).rule.compileAndLint(code)).hasSize(5)
     }
 
     @ParameterizedTest
@@ -533,7 +534,7 @@ class UnnecessaryParenthesesSpec {
             }
         """.trimIndent()
 
-        assertThat(testCase.rule.lint(code)).isEmpty()
+        assertThat(testCase.rule.compileAndLint(code)).isEmpty()
     }
 
     @ParameterizedTest
@@ -557,7 +558,7 @@ class UnnecessaryParenthesesSpec {
             }
         """.trimIndent()
 
-        assertThat(testCase.rule.lint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 0 else 3)
+        assertThat(testCase.rule.compileAndLint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 0 else 3)
     }
 
     @ParameterizedTest
@@ -567,7 +568,7 @@ class UnnecessaryParenthesesSpec {
             val a = ((false || (((true && false)))))
         """.trimIndent()
 
-        assertThat(testCase.rule.lint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 4 else 5)
+        assertThat(testCase.rule.compileAndLint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 4 else 5)
     }
 
     companion object {

@@ -1,17 +1,14 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-@KotlinCoreEnvironmentTest
-class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
+class UnusedParameterSpec {
     val subject = UnusedParameter(Config.empty)
 
     @Nested
@@ -24,7 +21,7 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
         @Test
@@ -35,7 +32,7 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         @Test
@@ -46,7 +43,7 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         @Test
@@ -57,7 +54,7 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
         @Test
@@ -68,7 +65,7 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
         @Test
@@ -83,7 +80,7 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
         @Test
@@ -97,13 +94,13 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
                         return 5
                     }
                 
-                    private fun usedMethod2(unusedParameter: Int) {
+                    private fun usedMethod2(unusedParameter: Int): Int {
                         return 5
                     }
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(2)
+            assertThat(subject.compileAndLint(code)).hasSize(2)
         }
 
         @Test
@@ -118,7 +115,7 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         @Test
@@ -133,7 +130,7 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         @Test
@@ -148,7 +145,7 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
         @Test
@@ -163,7 +160,7 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.compileAndLint(code)).hasSize(1)
         }
     }
 
@@ -175,7 +172,7 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
                 fun foo(@Suppress("UnusedParameter") unused: String){}
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         @Test
@@ -184,7 +181,7 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
                 fun foo(@Suppress("UnusedParameter") unused: String, unusedWithoutAnnotation: String){}
             """.trimIndent()
 
-            val lint = subject.lint(code)
+            val lint = subject.compileAndLint(code)
 
             assertThat(lint).hasSize(1)
             assertThat(lint[0].entity.signature).isEqualTo("Test.kt\$unusedWithoutAnnotation: String")
@@ -197,7 +194,7 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
                 fun foo(unused: String, otherUnused: String){}
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         @Test
@@ -210,7 +207,7 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         @Test
@@ -222,7 +219,7 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         @Test
@@ -238,7 +235,7 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
 
@@ -250,7 +247,7 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
                 fun foo(unused: Int){}
             """.trimIndent()
 
-            val lint = subject.lint(code)
+            val lint = subject.compileAndLint(code)
 
             assertThat(lint.first().message).startsWith("Function parameter")
         }
@@ -270,7 +267,7 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         @Test
@@ -280,7 +277,7 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
                     println("b")
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
 
@@ -291,7 +288,7 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 fun test(`foo bar`: Int) = `foo bar`
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
 
@@ -310,7 +307,7 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
                     ) = 1
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(1).hasStartSourceLocation(6, 9)
+            assertThat(subject.compileAndLint(code)).hasSize(1).hasStartSourceLocation(6, 9)
         }
     }
 
@@ -327,7 +324,7 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
                     println(modifier)
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1).hasStartSourceLocation(1, 9)
+            assertThat(subject.compileAndLint(code)).hasSize(1).hasStartSourceLocation(1, 9)
         }
 
         @Test
@@ -341,7 +338,7 @@ class UnusedParameterSpec(val env: KotlinCoreEnvironment) {
                     println(modifier)
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
 

@@ -175,7 +175,7 @@ class RedundantVisibilityModifierSpec {
         val code = compileContentForTest(
             """
                 public class A() {
-                    fun f()
+                    fun f() {}
                 }
             """.trimIndent()
         )

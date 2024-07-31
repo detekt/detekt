@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.exceptions
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -67,7 +66,7 @@ class ThrowingExceptionInMainSpec {
             fun main(args: String) { throw IllegalArgumentException() }
             fun main(args: Array<String>, i: Int) { throw IllegalArgumentException() }
         """.trimIndent()
-        assertThat(subject.lint(code)).isEmpty()
+        assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
     @Test

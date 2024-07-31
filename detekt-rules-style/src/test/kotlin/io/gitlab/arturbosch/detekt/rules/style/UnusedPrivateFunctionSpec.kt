@@ -194,7 +194,7 @@ class UnusedPrivateFunctionSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 private fun unusedTopLevelFunction() = 5
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -206,7 +206,7 @@ class UnusedPrivateFunctionSpec(val env: KotlinCoreEnvironment) {
                     calledFromMain()
                 }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -304,7 +304,7 @@ class UnusedPrivateFunctionSpec(val env: KotlinCoreEnvironment) {
                 private fun foo(): String = ""
             """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -313,7 +313,7 @@ class UnusedPrivateFunctionSpec(val env: KotlinCoreEnvironment) {
                 private fun foo(): String = ""
             """.trimIndent()
 
-            val findings = subject.lintWithContext(env, code)
+            val findings = subject.compileAndLintWithContext(env, code)
 
             assertThat(findings).hasSize(1)
             assertThat(findings[0].entity.signature).isEqualTo("Test.kt\$private fun foo(): String")
@@ -404,7 +404,7 @@ class UnusedPrivateFunctionSpec(val env: KotlinCoreEnvironment) {
                     fun answer() = A()(9)
                     val answer = answer()
                 """.trimIndent()
-                assertThat(subject.lintWithContext(env, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
             @Test
@@ -415,7 +415,7 @@ class UnusedPrivateFunctionSpec(val env: KotlinCoreEnvironment) {
                     fun answer() = A()(9)
                     val answer = answer()
                 """.trimIndent()
-                assertThat(subject.lintWithContext(env, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
             @Test
@@ -426,7 +426,7 @@ class UnusedPrivateFunctionSpec(val env: KotlinCoreEnvironment) {
                     private operator fun A.invoke(i: Int): Int = i
                     val answer = B()(1)
                 """.trimIndent()
-                assertThat(subject.lintWithContext(env, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
             }
 
             @Test
@@ -456,7 +456,7 @@ class UnusedPrivateFunctionSpec(val env: KotlinCoreEnvironment) {
                     fun answer() = A()(9)
                     val answer = answer()
                 """.trimIndent()
-                assertThat(subject.lintWithContext(env, code))
+                assertThat(subject.compileAndLintWithContext(env, code))
                     .hasSize(1)
                     .hasStartSourceLocations(
                         SourceLocation(3, 24)
@@ -473,7 +473,7 @@ class UnusedPrivateFunctionSpec(val env: KotlinCoreEnvironment) {
                     fun answer() = A()(nullableInt)
                     val answer = answer()
                 """.trimIndent()
-                assertThat(subject.lintWithContext(env, code))
+                assertThat(subject.compileAndLintWithContext(env, code))
                     .hasSize(1)
                     .hasStartSourceLocations(
                         SourceLocation(2, 24)
@@ -862,7 +862,7 @@ class UnusedPrivateFunctionSpec(val env: KotlinCoreEnvironment) {
                 private operator fun List<StringWrapper>.get(s: String) =
                     this.firstOrNull { it.s == s }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -881,7 +881,7 @@ class UnusedPrivateFunctionSpec(val env: KotlinCoreEnvironment) {
                 private operator fun List<StringWrapper>.get(s: String) =
                     this.firstOrNull { it.s == s }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -900,7 +900,7 @@ class UnusedPrivateFunctionSpec(val env: KotlinCoreEnvironment) {
                 private operator fun List<StringWrapper>.get(s: String) =
                     this.firstOrNull { it.s == s }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
 

@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
@@ -38,7 +37,7 @@ class ForbiddenVoidSpec(val env: KotlinCoreEnvironment) {
             val klass = Void::class
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
     @Test

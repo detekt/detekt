@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -191,7 +190,7 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `should not report a private top level function`() {
             assertThat(
-                subject.lintWithContext(
+                subject.compileAndLintWithContext(
                     env,
                     """
                         internal fun bar() = 5
