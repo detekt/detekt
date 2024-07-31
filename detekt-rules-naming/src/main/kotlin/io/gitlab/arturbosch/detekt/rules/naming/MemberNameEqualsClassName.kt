@@ -8,7 +8,6 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.api.configWithFallback
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtClass
@@ -62,12 +61,7 @@ class MemberNameEqualsClassName(config: Config) : Rule(
         "This might result in confusion. Please rename the member."
 
     @Configuration("if overridden functions and properties should be ignored")
-    @Deprecated("Use `ignoreOverridden` instead")
-    private val ignoreOverriddenFunction: Boolean by config(true)
-
-    @Suppress("DEPRECATION")
-    @Configuration("if overridden functions and properties should be ignored")
-    private val ignoreOverridden: Boolean by configWithFallback(::ignoreOverriddenFunction, true)
+    private val ignoreOverridden: Boolean by config(true)
 
     override fun visitClass(klass: KtClass) {
         if (!klass.isInterface()) {

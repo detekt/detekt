@@ -90,11 +90,6 @@ class ForbiddenComment(config: Config) : Rule(
     config,
     "Flags a forbidden comment."
 ) {
-
-    @Configuration("forbidden comment strings")
-    @Deprecated("Use `comments` instead, make sure you escape your text for Regular Expressions.")
-    private val values: List<String> by config(emptyList())
-
     @Configuration("forbidden comment string patterns")
     private val comments: List<Comment> by config(
         valuesWithReason(
@@ -109,10 +104,6 @@ class ForbiddenComment(config: Config) : Rule(
 
     @Configuration("ignores comments which match the specified regular expression. For example `Ticket|Task`.")
     private val allowedPatterns: Regex by config("", String::toRegex)
-
-    @Configuration("error message which overrides the default one")
-    @Deprecated("Use `comments` and provide `reason` against each `value`.")
-    private val customMessage: String by config("")
 
     override fun visitComment(comment: PsiComment) {
         super.visitComment(comment)
@@ -130,13 +121,6 @@ class ForbiddenComment(config: Config) : Rule(
 
     private fun checkForbiddenComment(text: String, comment: PsiElement) {
         if (allowedPatterns.pattern.isNotEmpty() && allowedPatterns.containsMatchIn(text)) return
-
-        @Suppress("DEPRECATION")
-        values.forEach {
-            if (text.contains(it, ignoreCase = true)) {
-                reportIssue(comment, getErrorMessage(it))
-            }
-        }
 
         comments.forEach {
             if (it.value.containsMatchIn(text)) {
@@ -158,11 +142,6 @@ class ForbiddenComment(config: Config) : Rule(
 
     private fun getErrorMessage(comment: Comment): String =
         comment.reason ?: String.format(Locale.ROOT, DEFAULT_ERROR_MESSAGE, comment.value.pattern)
-
-    @Suppress("DEPRECATION")
-    private fun getErrorMessage(value: String): String =
-        customMessage.takeUnless { it.isEmpty() }
-            ?: String.format(Locale.ROOT, DEFAULT_ERROR_MESSAGE, value)
 
     private data class Comment(val value: Regex, val reason: String?)
 

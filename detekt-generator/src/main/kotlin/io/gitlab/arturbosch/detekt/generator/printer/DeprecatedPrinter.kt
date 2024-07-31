@@ -36,12 +36,4 @@ private fun writeProperty(ruleSet: RuleSetPage, rule: Rule, configuration: Confi
     return "${ruleSet.ruleSet.name}>${rule.name}>${configuration.name}=${configuration.deprecated!!}"
 }
 
-@Suppress("MaxLineLength")
-internal fun migratedRules() = listOf(
-    "formatting>TrailingComma=Rule is split between `TrailingCommaOnCallSite` and `TrailingCommaOnDeclarationSite` now.",
-    "style>ForbiddenPublicDataClass=Rule migrated to `libraries` ruleset plugin",
-    "style>LibraryCodeMustSpecifyReturnType=Rule migrated to `libraries` ruleset plugin",
-    "style>LibraryEntitiesShouldNotBePublic=Rule migrated to `libraries` ruleset plugin",
-    "style>MandatoryBracesIfStatements=Use `BracesOnIfStatements` with `always` configuration instead",
-    "complexity>ComplexMethod=Rule is renamed to `CyclomaticComplexMethod` to distinguish between Cyclomatic Complexity and Cognitive Complexity",
-)
+internal fun migratedRules(): List<String> = emptyList()
