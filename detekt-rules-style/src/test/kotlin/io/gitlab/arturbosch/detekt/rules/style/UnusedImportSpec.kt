@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
+import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
@@ -592,7 +593,7 @@ class UnusedImportSpec(val env: KotlinCoreEnvironment) {
             fun doesNothing(thing: HashMap<String, String>) {
             }
         """.trimIndent()
-        val findings = subject.lintWithContext(env, code)
+        val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
@@ -607,7 +608,7 @@ class UnusedImportSpec(val env: KotlinCoreEnvironment) {
             @Ann(HashMap::class)
             fun foo() {}
         """.trimIndent()
-        val findings = subject.lintWithContext(env, code)
+        val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 

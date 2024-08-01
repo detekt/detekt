@@ -57,14 +57,14 @@ class FunctionOnlyReturningConstantSpec {
 
         @Test
         fun `reports functions which return constants`() {
-            assertThat(subject.lint(code)).hasSize(6)
+            assertThat(subject.compileAndLint(code)).hasSize(6)
         }
 
         @Test
         fun `reports overridden functions which return constants`() {
             val config = TestConfig(IGNORE_OVERRIDABLE_FUNCTION to "false")
             val rule = FunctionOnlyReturningConstant(config)
-            assertThat(rule.lint(code)).hasSize(9)
+            assertThat(rule.compileAndLint(code)).hasSize(9)
         }
 
         @Test
@@ -110,7 +110,7 @@ class FunctionOnlyReturningConstantSpec {
                 
                 fun functionNotReturningConstantString1(str: String) = "str: ${'$'}str"
             """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
 }

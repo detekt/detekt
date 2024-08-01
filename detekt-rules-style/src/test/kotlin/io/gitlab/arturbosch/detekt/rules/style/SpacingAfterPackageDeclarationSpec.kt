@@ -26,7 +26,7 @@ class SpacingAfterPackageDeclarationSpec {
     @Test
     fun `has no import declaration`() {
         val code = "package test\n\nclass A {}"
-        assertThat(subject.lint(code)).isEmpty()
+        assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
     @Test
@@ -38,7 +38,7 @@ class SpacingAfterPackageDeclarationSpec {
     @Test
     fun `has no package and import declaration`() {
         val code = "class A {}"
-        assertThat(subject.lint(code)).isEmpty()
+        assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
     @Test
@@ -49,7 +49,7 @@ class SpacingAfterPackageDeclarationSpec {
 
     @Test
     fun `is an empty kt file`() {
-        assertThat(subject.lint("")).isEmpty()
+        assertThat(subject.compileAndLint("")).isEmpty()
     }
 
     @Nested

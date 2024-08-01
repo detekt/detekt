@@ -72,7 +72,7 @@ class TopLevelPropertyNamingSpec {
                 val s_d_d_1 = listOf("")
                 private val INTERNAL_VERSION = "1.0.0"
             """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         @Test
@@ -80,7 +80,7 @@ class TopLevelPropertyNamingSpec {
             val code = """
                 val _nAme = "Artur"
             """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
         @Test
@@ -88,7 +88,7 @@ class TopLevelPropertyNamingSpec {
             val code = """
                 private val __NAME = "Artur"
             """.trimIndent()
-            io.gitlab.arturbosch.detekt.test.assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.compileAndLint(code)).hasSize(1)
         }
     }
 

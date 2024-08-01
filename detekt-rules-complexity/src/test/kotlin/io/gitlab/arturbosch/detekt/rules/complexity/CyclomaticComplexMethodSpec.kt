@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -169,7 +168,7 @@ class CyclomaticComplexMethodSpec {
             )
             val subject = CyclomaticComplexMethod(config)
 
-            assertThat(subject.lint(code)).hasStartSourceLocations(SourceLocation(39, 5))
+            assertThat(subject.compileAndLint(code)).hasStartSourceLocations(SourceLocation(39, 5))
         }
 
         @Test
@@ -177,7 +176,7 @@ class CyclomaticComplexMethodSpec {
             val config = TestConfig("allowedComplexity" to "4")
             val subject = CyclomaticComplexMethod(config)
 
-            val findings = subject.lint(code)
+            val findings = subject.compileAndLint(code)
 
             assertThat(findings).hasSize(5)
             assertThat(findings).hasStartSourceLocations(
@@ -195,7 +194,7 @@ class CyclomaticComplexMethodSpec {
             val subject = CyclomaticComplexMethod(config)
 
             val code = """
-|                fun complexMethodWith2Statements(i: Int) {
+                fun complexMethodWith2Statements(i: Int) {
                     when (i) {
                         1 -> print("one")
                         2 -> print("two")
@@ -207,7 +206,7 @@ class CyclomaticComplexMethodSpec {
                 }
             """.trimIndent()
 
-            val findings = subject.lint(code)
+            val findings = subject.compileAndLint(code)
 
             assertThat(findings).isEmpty()
         }
@@ -299,7 +298,7 @@ class CyclomaticComplexMethodSpec {
 }
 
 private fun assertExpectedComplexityValue(code: String, config: TestConfig, expectedValue: Int) {
-    val findings = CyclomaticComplexMethod(config).lint(code)
+    val findings = CyclomaticComplexMethod(config).compileAndLint(code)
 
     assertThat(findings).hasStartSourceLocations(SourceLocation(1, 5))
 

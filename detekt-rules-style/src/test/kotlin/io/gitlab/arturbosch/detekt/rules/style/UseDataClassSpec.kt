@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import io.gitlab.arturbosch.detekt.test.lint
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -367,7 +366,7 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
 
     @Test
     fun `does not report inline classes`() {
-        assertThat(subject.lint("inline class A(val x: Int)")).isEmpty()
+        assertThat(subject.compileAndLintWithContext(env, "inline class A(val x: Int)")).isEmpty()
     }
 
     @Test
@@ -376,7 +375,7 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
             @JvmInline
             value class A(val x: Int)
         """.trimIndent()
-        assertThat(subject.lint(code)).isEmpty()
+        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
     @Test

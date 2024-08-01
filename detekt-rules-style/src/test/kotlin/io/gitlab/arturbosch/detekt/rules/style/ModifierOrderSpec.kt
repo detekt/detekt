@@ -34,7 +34,7 @@ class ModifierOrderSpec {
             assertThat(subject.compileAndLint("internal data class Test(val test: String)")).isEmpty()
             assertThat(subject.lint("private actual class Test(val test: String)")).isEmpty()
             assertThat(subject.lint("expect annotation class Test")).isEmpty()
-            assertThat(subject.lint("private /* comment */ data class Test(val test: String)")).isEmpty()
+            assertThat(subject.compileAndLint("private /* comment */ data class Test(val test: String)")).isEmpty()
         }
     }
 

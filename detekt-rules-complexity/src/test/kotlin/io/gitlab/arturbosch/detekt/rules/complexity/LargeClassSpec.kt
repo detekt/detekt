@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Test
 
 private fun subject(allowedLines: Int) = LargeClass(TestConfig("allowedLines" to allowedLines))
@@ -37,7 +36,7 @@ class LargeClassSpec {
              */
             val aTopLevelPropertyOfNestedClasses = 0
         """.trimIndent()
-        val findings = subject(allowedLines = 4).lint(code)
+        val findings = subject(allowedLines = 4).compileAndLint(code)
         assertThat(findings).hasSize(1)
         assertThat(findings).hasStartSourceLocations(SourceLocation(7, 15))
     }

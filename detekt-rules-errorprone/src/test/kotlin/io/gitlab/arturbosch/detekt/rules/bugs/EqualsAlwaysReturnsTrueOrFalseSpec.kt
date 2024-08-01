@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -59,7 +58,7 @@ class EqualsAlwaysReturnsTrueOrFalseSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.lint(code)).hasSize(6)
+        assertThat(subject.compileAndLint(code)).hasSize(6)
     }
 
     @Test
@@ -108,7 +107,7 @@ class EqualsAlwaysReturnsTrueOrFalseSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.lint(code)).isEmpty()
+        assertThat(subject.compileAndLint(code)).isEmpty()
     }
 
     @Test

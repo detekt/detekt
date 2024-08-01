@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import io.gitlab.arturbosch.detekt.test.lint
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -141,7 +141,7 @@ class MaxChainedCallsOnSameLineSpec(private val env: KotlinCoreEnvironment) {
     fun `does not report long imports`() {
         val code = "import a.b.c.d.e"
 
-        assertThat(rule.lint(code)).isEmpty()
+        assertThat(rule.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
