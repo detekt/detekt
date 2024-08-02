@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.core.reporting.console
 
-import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.core.reporting.AutoCorrectableIssueAssert
 import io.gitlab.arturbosch.detekt.core.reporting.decolorized
 import io.gitlab.arturbosch.detekt.test.TestDetektion
+import io.gitlab.arturbosch.detekt.test.TestSetupContext
 import io.gitlab.arturbosch.detekt.test.createIssue
 import io.gitlab.arturbosch.detekt.test.createLocation
 import io.gitlab.arturbosch.detekt.test.createRuleInstance
@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
 
 class IssuesReportSpec {
 
-    private val subject = createIssuesReport()
+    private val subject = IssuesReport().apply { init(TestSetupContext()) }
 
     @Test
     fun `has the reference content`() {
@@ -69,10 +69,4 @@ class IssuesReportSpec {
         assertThat(output)
             .contains("MultilineRule - [A multiline message.]")
     }
-}
-
-private fun createIssuesReport(): IssuesReport {
-    val report = IssuesReport()
-    report.init(Config.empty)
-    return report
 }
