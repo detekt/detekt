@@ -4,11 +4,16 @@ import io.github.detekt.tooling.api.AnalysisMode
 import io.github.detekt.tooling.api.spec.ProjectSpec
 import java.nio.file.Path
 import kotlin.io.path.Path
+import kotlin.io.path.absolute
 
 @ProcessingModelDsl
 class ProjectSpecBuilder : Builder<ProjectSpec> {
 
-    var basePath: Path = Path("")
+    var basePath: Path = Path("").absolute()
+        set(value) {
+            require(basePath.isAbsolute) { "basepath should be absolute" }
+            field = value
+        }
     var inputPaths: Collection<Path> = emptyList()
     var analysisMode: AnalysisMode = AnalysisMode.light
 
