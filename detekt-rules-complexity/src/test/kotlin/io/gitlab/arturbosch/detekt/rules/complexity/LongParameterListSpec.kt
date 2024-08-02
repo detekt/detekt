@@ -1,13 +1,15 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
+import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-class LongParameterListSpec {
-
+@KotlinCoreEnvironmentTest
+class LongParameterListSpec(private val env: KotlinCoreEnvironment) {
     private val defaultMaximumParameters = 2
     private val defaultConfig = TestConfig(
         "allowedFunctionParameters" to defaultMaximumParameters,
@@ -25,7 +27,7 @@ class LongParameterListSpec {
     fun `does not report function parameter list that has exactly the allowed amount`() {
         val code = "fun long(a: Int, b: Int) {}"
 
-        val findings = subject.compileAndLint(code)
+        val findings = subject.compileAndLintWithContext(env, code)
 
         assertThat(findings).isEmpty()
     }
@@ -33,7 +35,7 @@ class LongParameterListSpec {
     @Test
     fun `reports too long parameter list`() {
         val code = "fun long(a: Int, b: Int, c: Int) {}"
-        val findings = subject.compileAndLint(code)
+        val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
         assertThat(findings.first().message).isEqualTo(reportMessageForFunction)
     }
@@ -41,13 +43,13 @@ class LongParameterListSpec {
     @Test
     fun `does not report short parameter list`() {
         val code = "fun long(a: Int) {}"
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
     @Test
     fun `reports too long parameter list event for parameters with defaults`() {
         val code = "fun long(a: Int, b: Int = 1, c: Int) {}"
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
     @Test
@@ -55,13 +57,13 @@ class LongParameterListSpec {
         val config = TestConfig("ignoreDefaultParameters" to "true")
         val rule = LongParameterList(config)
         val code = "fun long(a: Int, b: Int, c: Int = 2) {}"
-        assertThat(rule.compileAndLint(code)).isEmpty()
+        assertThat(rule.compileAndLintWithContext(env, code)).isEmpty()
     }
 
     @Test
     fun `reports too long parameter list for primary constructors`() {
         val code = "class LongCtor(a: Int, b: Int, c: Int)"
-        val findings = subject.compileAndLint(code)
+        val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
         assertThat(findings.first().message).isEqualTo(reportMessageForConstructor)
     }
@@ -69,13 +71,13 @@ class LongParameterListSpec {
     @Test
     fun `does not report short parameter list for primary constructors`() {
         val code = "class LongCtor(a: Int)"
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
     @Test
     fun `reports too long parameter list for secondary constructors`() {
         val code = "class LongCtor() { constructor(a: Int, b: Int, c: Int) : this() }"
-        val findings = subject.compileAndLint(code)
+        val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).hasSize(1)
         assertThat(findings.first().message).isEqualTo(reportMessageForConstructor)
     }
@@ -83,7 +85,7 @@ class LongParameterListSpec {
     @Test
     fun `does not report short parameter list for secondary constructors`() {
         val code = "class LongCtor() { constructor(a: Int) : this() }"
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -91,14 +93,14 @@ class LongParameterListSpec {
         val config = TestConfig("allowedConstructorParameters" to "1")
         val rule = LongParameterList(config)
         val code = "class LongCtor(a: Int, b: Int)"
-        assertThat(rule.compileAndLint(code)).hasSize(1)
+        assertThat(rule.compileAndLintWithContext(env, code)).hasSize(1)
     }
 
     @Test
     fun `does not report constructor parameter list that has exactly the allowed amount`() {
         val code = "data class Data(val a: Int, val b: Int)"
 
-        val findings = subject.compileAndLint(code)
+        val findings = subject.compileAndLintWithContext(env, code)
 
         assertThat(findings).isEmpty()
     }
@@ -111,12 +113,11 @@ class LongParameterListSpec {
         )
         val rule = LongParameterList(config)
         val code = "data class Data(val a: Int)"
-        assertThat(rule.compileAndLint(code)).isEmpty()
+        assertThat(rule.compileAndLintWithContext(env, code)).isEmpty()
     }
 
     @Nested
     inner class `constructors and functions with ignored annotations` {
-
         private val config = TestConfig(
             "ignoreAnnotatedParameter" to listOf(
                 "Generated",
@@ -138,7 +139,7 @@ class LongParameterListSpec {
                 
                 class Data constructor(@CustomAnnotation val a: Int, @CustomAnnotation val b: Int)
             """.trimIndent()
-            assertThat(rule.compileAndLint(code)).hasSize(1)
+            assertThat(rule.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -149,13 +150,13 @@ class LongParameterListSpec {
                 
                 class Data { fun foo(@CustomAnnotation a: Int, @CustomAnnotation b: Int) {} }
             """.trimIndent()
-            assertThat(rule.compileAndLint(code)).hasSize(1)
+            assertThat(rule.compileAndLintWithContext(env, code)).hasSize(1)
         }
 
         @Test
         fun `does not report long parameter list for constructors if enough constructor parameters are annotated with ignored annotation`() {
             val code = "class Data constructor(@kotlin.Suppress(\"\") val a: Int)"
-            assertThat(rule.compileAndLint(code)).isEmpty()
+            assertThat(rule.compileAndLintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -165,7 +166,7 @@ class LongParameterListSpec {
                     fun foo(@kotlin.Suppress("") a: Int) {}
                 }
             """.trimIndent()
-            assertThat(rule.compileAndLint(code)).isEmpty()
+            assertThat(rule.compileAndLintWithContext(env, code)).isEmpty()
         }
     }
 }
