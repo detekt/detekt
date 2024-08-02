@@ -1,21 +1,13 @@
 package io.gitlab.arturbosch.detekt.rules.style.optional
 
-import io.github.detekt.test.utils.compileContentForTest
-import io.gitlab.arturbosch.detekt.api.CompilerResources
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
+import io.gitlab.arturbosch.detekt.test.FakeCompilerResources
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.jetbrains.kotlin.config.AnalysisFlag
-import org.jetbrains.kotlin.config.AnalysisFlags
-import org.jetbrains.kotlin.config.ApiVersion
 import org.jetbrains.kotlin.config.ExplicitApiMode
-import org.jetbrains.kotlin.config.LanguageFeature
-import org.jetbrains.kotlin.config.LanguageVersion
-import org.jetbrains.kotlin.config.LanguageVersionSettings
-import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactoryImpl
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -409,114 +401,83 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
 
     @Nested
     inner class `with explicit api` {
-        private val blockFunWithUnitCode = compileContentForTest(
-            """
-                fun foo(): Unit { }
-            """.trimIndent()
-        )
-
-        private fun getExpressionFunWithUnitCode(modifier: String = "") = compileContentForTest(
-            """
-                $modifier fun foo(): Unit = println("")
-            """.trimIndent()
-        )
-
-        private fun fakeCompilerResources(mode: ExplicitApiMode): CompilerResources {
-            val languageVersionSettings = object : LanguageVersionSettings {
-                override val apiVersion: ApiVersion get() = error("This is a fake")
-
-                override val languageVersion: LanguageVersion get() = error("This is a fake")
-
-                override fun getFeatureSupport(feature: LanguageFeature) = error("This is a fake")
-
-                override fun <T> getFlag(flag: AnalysisFlag<T>): T {
-                    @Suppress("UNCHECKED_CAST")
-                    return when (flag) {
-                        AnalysisFlags.explicitApiMode -> mode as T
-                        else -> error("This is a fake")
-                    }
-                }
-
-                override fun isPreRelease() = error("This is a fake")
-            }
-            return CompilerResources(
-                languageVersionSettings,
-                DataFlowValueFactoryImpl(languageVersionSettings)
-            )
-        }
 
         @Test
         fun `should report when a function has an explicit Unit return type when config is strict`() {
-            val findings = subject.visitFile(
-                blockFunWithUnitCode,
-                compilerResources = fakeCompilerResources(ExplicitApiMode.STRICT)
-            )
+            val code = """
+                fun foo(): Unit { }
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code, FakeCompilerResources(ExplicitApiMode.STRICT))
             assertThat(findings).hasSize(1)
         }
 
         @Test
         fun `should report when a function has an explicit Unit return type when config is warning`() {
-            val findings = subject.visitFile(
-                blockFunWithUnitCode,
-                compilerResources = fakeCompilerResources(ExplicitApiMode.WARNING)
-            )
+            val code = """
+                fun foo(): Unit { }
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code, FakeCompilerResources(ExplicitApiMode.WARNING))
             assertThat(findings).hasSize(1)
         }
 
         @Test
         fun `should report when a function has an explicit Unit return type when config is disabled`() {
-            val findings = subject.visitFile(
-                blockFunWithUnitCode,
-                compilerResources = fakeCompilerResources(ExplicitApiMode.DISABLED)
-            )
+            val code = """
+                fun foo(): Unit { }
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code, FakeCompilerResources(ExplicitApiMode.DISABLED))
             assertThat(findings).hasSize(1)
         }
 
         @Test
         fun `should not report when a function has expression with Unit return type when config is strict`() {
-            val findings = subject.visitFile(
-                getExpressionFunWithUnitCode(),
-                compilerResources = fakeCompilerResources(ExplicitApiMode.STRICT)
-            )
+            val code = """
+                fun foo(): Unit = println("")
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code, FakeCompilerResources(ExplicitApiMode.STRICT))
             assertThat(findings).isEmpty()
         }
 
         @Test
         fun `should not report when a function has expression with Unit return type when config is warning`() {
-            val findings = subject.visitFile(
-                getExpressionFunWithUnitCode(),
-                compilerResources = fakeCompilerResources(ExplicitApiMode.WARNING)
-            )
+            val code = """
+                fun foo(): Unit = println("")
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code, FakeCompilerResources(ExplicitApiMode.WARNING))
             assertThat(findings).isEmpty()
         }
 
         @Test
         fun `should report private when a function has expression with Unit return type when config is strict`() {
-            val findingsWithPrivate = subject.visitFile(
-                getExpressionFunWithUnitCode("private"),
-                compilerResources = fakeCompilerResources(ExplicitApiMode.STRICT)
-            )
+            val code = """
+                private fun foo(): Unit = println("")
+            """.trimIndent()
+            val findingsWithPrivate =
+                subject.compileAndLintWithContext(env, code, FakeCompilerResources(ExplicitApiMode.STRICT))
             assertThat(findingsWithPrivate).hasSize(1)
 
-            val findingsWithInternal = subject.visitFile(
-                getExpressionFunWithUnitCode("internal"),
-                compilerResources = fakeCompilerResources(ExplicitApiMode.STRICT)
-            )
+            val code2 = """
+                internal fun foo(): Unit = println("")
+            """.trimIndent()
+            val findingsWithInternal =
+                subject.compileAndLintWithContext(env, code2, FakeCompilerResources(ExplicitApiMode.STRICT))
             assertThat(findingsWithInternal).hasSize(1)
         }
 
         @Test
         fun `should report private and internal when a function has expression with Unit return type when config is warning`() {
-            val findingsWithPrivate = subject.visitFile(
-                getExpressionFunWithUnitCode("private"),
-                compilerResources = fakeCompilerResources(ExplicitApiMode.WARNING)
-            )
+            val code = """
+                private fun foo(): Unit = println("")
+            """.trimIndent()
+            val findingsWithPrivate =
+                subject.compileAndLintWithContext(env, code, FakeCompilerResources(ExplicitApiMode.WARNING))
             assertThat(findingsWithPrivate).hasSize(1)
 
-            val findingsWithInternal = subject.visitFile(
-                getExpressionFunWithUnitCode("internal"),
-                compilerResources = fakeCompilerResources(ExplicitApiMode.WARNING)
-            )
+            val code2 = """
+                internal fun foo(): Unit = println("")
+            """.trimIndent()
+            val findingsWithInternal =
+                subject.compileAndLintWithContext(env, code2, FakeCompilerResources(ExplicitApiMode.WARNING))
             assertThat(findingsWithInternal).hasSize(1)
         }
     }

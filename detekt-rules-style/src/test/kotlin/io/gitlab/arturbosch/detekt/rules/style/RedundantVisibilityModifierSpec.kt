@@ -1,18 +1,11 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.github.detekt.test.utils.compileContentForTest
-import io.gitlab.arturbosch.detekt.api.CompilerResources
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.test.FakeCompilerResources
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.jetbrains.kotlin.config.AnalysisFlag
-import org.jetbrains.kotlin.config.AnalysisFlags
-import org.jetbrains.kotlin.config.ApiVersion
 import org.jetbrains.kotlin.config.ExplicitApiMode
-import org.jetbrains.kotlin.config.LanguageFeature
-import org.jetbrains.kotlin.config.LanguageVersion
-import org.jetbrains.kotlin.config.LanguageVersionSettings
-import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactoryImpl
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -171,59 +164,33 @@ class RedundantVisibilityModifierSpec {
 
     @Nested
     inner class `Explicit API mode` {
-
-        val code = compileContentForTest(
-            """
-                public class A() {
-                    fun f() {}
-                }
-            """.trimIndent()
-        )
-
-        val rule = RedundantVisibilityModifier(Config.empty)
-
-        private fun fakeCompilerResources(mode: ExplicitApiMode): CompilerResources {
-            val languageVersionSettings = object : LanguageVersionSettings {
-                override val apiVersion: ApiVersion get() = error("This is a fake")
-
-                override val languageVersion: LanguageVersion get() = error("This is a fake")
-
-                override fun getFeatureSupport(feature: LanguageFeature) = error("This is a fake")
-
-                override fun <T> getFlag(flag: AnalysisFlag<T>): T {
-                    @Suppress("UNCHECKED_CAST")
-                    return when (flag) {
-                        AnalysisFlags.explicitApiMode -> mode as T
-                        else -> error("This is a fake")
-                    }
-                }
-
-                override fun isPreRelease() = error("This is a fake")
+        val code = """
+            public class A() {
+                fun f() {}
             }
-            return CompilerResources(languageVersionSettings, DataFlowValueFactoryImpl(languageVersionSettings))
-        }
+        """.trimIndent()
 
         @Test
         fun `does not report public function in class if explicit API mode is set to strict`() {
-            val findings = rule.visitFile(code, compilerResources = fakeCompilerResources(ExplicitApiMode.STRICT))
+            val findings = subject.compileAndLint(code, FakeCompilerResources(ExplicitApiMode.STRICT))
             assertThat(findings).isEmpty()
         }
 
         @Test
         fun `does not report public function in class if explicit API mode is set to warning`() {
-            val findings = rule.visitFile(code, compilerResources = fakeCompilerResources(ExplicitApiMode.WARNING))
+            val findings = subject.compileAndLint(code, FakeCompilerResources(ExplicitApiMode.WARNING))
             assertThat(findings).isEmpty()
         }
 
         @Test
         fun `reports public function in class if explicit API mode is disabled`() {
-            val findings = rule.visitFile(code, compilerResources = fakeCompilerResources(ExplicitApiMode.DISABLED))
+            val findings = subject.compileAndLint(code, FakeCompilerResources(ExplicitApiMode.DISABLED))
             assertThat(findings).hasSize(1)
         }
 
         @Test
         fun `reports public function in class if compiler resources are not available`() {
-            val findings = rule.visitFile(code, compilerResources = null)
+            val findings = subject.visitFile(compileContentForTest(code), compilerResources = null)
             assertThat(findings).hasSize(1)
         }
     }

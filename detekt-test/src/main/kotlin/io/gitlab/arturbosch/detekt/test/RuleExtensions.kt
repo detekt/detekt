@@ -17,46 +17,58 @@ import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactoryImpl
 private val shouldCompileTestSnippets: Boolean =
     System.getProperty("compile-test-snippets", "false")!!.toBoolean()
 
-fun Rule.compileAndLint(@Language("kotlin") content: String): List<Finding> {
+fun Rule.compileAndLint(
+    @Language("kotlin") content: String,
+    compilerResources: CompilerResources = FakeCompilerResources(),
+): List<Finding> {
     if (shouldCompileTestSnippets) {
         KotlinScriptEngine.compile(content)
     }
-    return lint(content)
+    return lint(content, compilerResources)
 }
 
-fun Rule.lint(@Language("kotlin") content: String): List<Finding> {
+fun Rule.lint(
+    @Language("kotlin") content: String,
+    compilerResources: CompilerResources = FakeCompilerResources()
+): List<Finding> {
     val ktFile = compileContentForTest(content)
-    return visitFile(ktFile).filterSuppressed(this)
+    return visitFile(ktFile, compilerResources = compilerResources).filterSuppressed(this)
 }
 
 fun Rule.lintWithContext(
     environment: KotlinCoreEnvironment,
     @Language("kotlin") content: String,
     @Language("kotlin") vararg additionalContents: String,
+    compilerResources: CompilerResources = CompilerResources(
+        environment.configuration.languageVersionSettings,
+        DataFlowValueFactoryImpl(environment.configuration.languageVersionSettings)
+    )
 ): List<Finding> {
     val ktFile = compileContentForTest(content)
     val additionalKtFiles = additionalContents.mapIndexed { index, additionalContent ->
         compileContentForTest(additionalContent, "AdditionalTest$index.kt")
     }
     val bindingContext = environment.createBindingContext(listOf(ktFile) + additionalKtFiles)
-    val languageVersionSettings = environment.configuration.languageVersionSettings
 
-    val dataFlowValueFactory = DataFlowValueFactoryImpl(languageVersionSettings)
-    val compilerResources = CompilerResources(languageVersionSettings, dataFlowValueFactory)
     return visitFile(ktFile, bindingContext, compilerResources).filterSuppressed(this)
 }
 
 fun Rule.compileAndLintWithContext(
     environment: KotlinCoreEnvironment,
-    @Language("kotlin") content: String
+    @Language("kotlin") content: String,
+    compilerResources: CompilerResources = CompilerResources(
+        environment.configuration.languageVersionSettings,
+        DataFlowValueFactoryImpl(environment.configuration.languageVersionSettings)
+    )
 ): List<Finding> {
     if (shouldCompileTestSnippets) {
         KotlinScriptEngine.compile(content)
     }
-    return lintWithContext(environment, content)
+    return lintWithContext(environment, content, compilerResources = compilerResources)
 }
 
-fun Rule.lint(ktFile: KtFile): List<Finding> = visitFile(ktFile).filterSuppressed(this)
+fun Rule.lint(ktFile: KtFile, compilerResources: CompilerResources = FakeCompilerResources()): List<Finding> =
+    visitFile(ktFile, compilerResources = compilerResources).filterSuppressed(this)
 
 private fun List<Finding>.filterSuppressed(rule: Rule): List<Finding> =
     filterNot {
