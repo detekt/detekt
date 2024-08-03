@@ -18,7 +18,7 @@ abstract class AbstractIssuesReport : ConsoleReport {
     }
 
     override fun render(detektion: Detektion): String? {
-        val issues = detektion.filterAutoCorrectedIssues(config)
+        val issues = detektion.filterAutoCorrectedIssues()
         if (issues.isEmpty()) {
             return null
         }
