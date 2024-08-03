@@ -33,8 +33,6 @@ private val messageReplacementRegex = Regex("\\s+")
 
 fun Config.excludeCorrectable(): Boolean = subConfig(BUILD).valueOrDefault(EXCLUDE_CORRECTABLE, false)
 
-fun Detektion.filterEmptyIssues(config: Config): List<Issue> = this.filterAutoCorrectedIssues(config)
-
 fun Detektion.filterAutoCorrectedIssues(config: Config): List<Issue> {
     if (!config.excludeCorrectable()) {
         return issues
