@@ -15,7 +15,6 @@ import org.jetbrains.kotlin.psi.KtTryExpression
 import org.jetbrains.kotlin.psi.psiUtil.blockExpressionsOrSingle
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.isInsideOf
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.getTargetFunction
 import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
 import org.jetbrains.kotlin.resolve.calls.util.getType
@@ -45,8 +44,6 @@ class ReturnFromFinally(config: Config) :
         "Do not return within a finally statement. This can discard exceptions."
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     @Configuration("ignores labeled return statements")
     private val ignoreLabeled: Boolean by config(false)
 

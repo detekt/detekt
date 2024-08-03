@@ -49,8 +49,6 @@ class UnnecessaryLet(config: Config) :
         "The `let` usage is unnecessary."
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 

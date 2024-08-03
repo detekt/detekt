@@ -51,8 +51,6 @@ class AbstractClassCanBeInterface(config: Config) :
         "An abstract class is unnecessary. May be refactored to an interface."
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     private val noConcreteMember = "An abstract class without a concrete member can be refactored to an interface."
 
     override fun visitClass(klass: KtClass) {

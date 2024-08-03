@@ -76,8 +76,6 @@ class RedundantHigherOrderMapUsage(config: Config) :
         "Checks for redundant 'map' calls, which can be removed."
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

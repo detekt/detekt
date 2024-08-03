@@ -15,7 +15,6 @@ import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
-import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * Disallows shadowing variable declarations.
@@ -53,8 +52,6 @@ class NoNameShadowing(config: Config) :
         "Disallow shadowing variable declarations."
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     override fun visitProperty(property: KtProperty) {
         super.visitProperty(property)
         checkNameShadowing(property)

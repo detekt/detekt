@@ -12,7 +12,6 @@ import io.gitlab.arturbosch.detekt.rules.isIllegalStateException
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtFunctionLiteral
 import org.jetbrains.kotlin.psi.KtThrowExpression
-import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * Kotlin provides a concise way to check invariants as well as pre- and post-conditions.
@@ -43,8 +42,6 @@ class UseCheckOrError(config: Config) :
         "Use check() or error() instead of throwing an IllegalStateException."
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     override fun visitThrowExpression(expression: KtThrowExpression) {
         if (expression.isOnlyExpressionInLambda()) return
 

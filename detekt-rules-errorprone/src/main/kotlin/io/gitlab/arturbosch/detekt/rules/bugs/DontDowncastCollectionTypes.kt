@@ -11,7 +11,6 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtIsExpression
 import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.KtUserType
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getType
 
 /**
@@ -40,8 +39,6 @@ class DontDowncastCollectionTypes(config: Config) :
         "Down-casting immutable collection types is breaking the collection contract."
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     override fun visitIsExpression(expression: KtIsExpression) {
         super.visitIsExpression(expression)
 

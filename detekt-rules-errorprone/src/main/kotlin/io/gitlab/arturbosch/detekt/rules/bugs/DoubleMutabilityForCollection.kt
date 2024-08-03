@@ -50,8 +50,6 @@ class DoubleMutabilityForCollection(config: Config) :
             "Consider using val or immutable collection or value types."
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     @Configuration("Define a list of mutable types to trigger on when defined with `var`.")
     private val mutableTypes: Set<FqName> by config(defaultMutableTypes) { types ->
         types.map { FqName(it) }.toSet()

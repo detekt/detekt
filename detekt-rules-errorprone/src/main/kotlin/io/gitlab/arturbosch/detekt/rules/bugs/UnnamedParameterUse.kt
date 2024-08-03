@@ -78,8 +78,6 @@ class UnnamedParameterUse(config: Config) :
         "Passing no named parameters can cause issue when parameters order change"
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     @Configuration("Allow adjacent unnamed params when type of parameters can not be assigned to each other")
     val allowAdjacentDifferentTypeParams: Boolean by config(true)
 

@@ -34,8 +34,6 @@ class CastToNullableType(config: Config) :
         "Use safe cast instead of unsafe cast to nullable types."
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     @Suppress("ReturnCount")
     override fun visitBinaryWithTypeRHSExpression(expression: KtBinaryExpressionWithTypeRHS) {
         super.visitBinaryWithTypeRHSExpression(expression)

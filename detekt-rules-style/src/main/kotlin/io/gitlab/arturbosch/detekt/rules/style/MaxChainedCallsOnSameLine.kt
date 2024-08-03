@@ -39,8 +39,6 @@ class MaxChainedCallsOnSameLine(config: Config) :
         "Chained calls beyond the maximum should be wrapped to a new line."
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     @Configuration("maximum chained calls allowed on a single line")
     private val maxChainedCalls: Int by config(defaultValue = 5)
 

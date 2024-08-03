@@ -64,8 +64,6 @@ class VarCouldBeVal(config: Config) :
         "Var declaration could be val."
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     @Configuration("Whether to ignore uninitialized lateinit vars")
     private val ignoreLateinitVar: Boolean by config(defaultValue = false)
 

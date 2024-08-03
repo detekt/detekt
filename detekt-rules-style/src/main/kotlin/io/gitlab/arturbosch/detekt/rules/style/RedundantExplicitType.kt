@@ -48,8 +48,6 @@ class RedundantExplicitType(config: Config) :
         "Type does not need to be stated explicitly and can be removed."
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     @Suppress("ReturnCount", "ComplexMethod")
     override fun visitProperty(property: KtProperty) {
         if (!property.isLocal) return

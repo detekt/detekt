@@ -19,7 +19,6 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameterList
 import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.KtSecondaryConstructor
-import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * Reports functions and constructors which have more parameters than a certain threshold.
@@ -34,8 +33,6 @@ class LongParameterList(config: Config) :
             "Prefer functions with short parameter lists."
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     @Deprecated("Use `allowedFunctionParameters` and `allowedConstructorParameters` instead")
     @Configuration("number of parameters required to trigger the rule")
     private val threshold: Int by config(DEFAULT_ALLOWED_FUNCTION_PARAMETERS)

@@ -17,7 +17,6 @@ import org.jetbrains.kotlin.psi.KtTypeArgumentList
 import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.getAbbreviatedTypeOrType
 
 /**
@@ -42,8 +41,6 @@ class ForbiddenVoid(config: Config) :
         "`Unit` should be used instead of `Void`."
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     @Configuration("ignores void types in signatures of overridden functions")
     private val ignoreOverridden: Boolean by config(false)
 

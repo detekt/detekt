@@ -9,7 +9,6 @@ import io.gitlab.arturbosch.detekt.rules.hasImplicitParameterReference
 import io.gitlab.arturbosch.detekt.rules.implicitParameter
 import org.jetbrains.kotlin.builtins.StandardNames.IMPLICIT_LAMBDA_PARAMETER_NAME
 import org.jetbrains.kotlin.psi.KtLambdaExpression
-import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * Lambda expressions are very useful in a lot of cases, and they often include very small chunks of
@@ -67,8 +66,6 @@ class MultilineLambdaItParameter(config: Config) :
         "Multiline lambdas should not use `it` as a parameter name."
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
         super.visitLambdaExpression(lambdaExpression)
 

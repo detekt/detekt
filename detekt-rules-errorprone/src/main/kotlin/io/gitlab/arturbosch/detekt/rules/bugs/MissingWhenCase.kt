@@ -11,7 +11,6 @@ import io.gitlab.arturbosch.detekt.api.config
 import org.jetbrains.kotlin.cfg.WhenChecker
 import org.jetbrains.kotlin.diagnostics.WhenMissingCase
 import org.jetbrains.kotlin.psi.KtWhenExpression
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
 import org.jetbrains.kotlin.resolve.calls.util.getType
 
@@ -73,8 +72,6 @@ class MissingWhenCase(config: Config) :
         "Check usage of `when` used as a statement and don't compare all enum or sealed class cases."
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     @Configuration("whether `else` can be treated as a valid case for enums and sealed classes")
     private val allowElseExpression: Boolean by config(true)
 

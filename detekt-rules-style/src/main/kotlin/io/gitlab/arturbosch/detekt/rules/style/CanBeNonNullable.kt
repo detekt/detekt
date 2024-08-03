@@ -131,8 +131,6 @@ class CanBeNonNullable(config: Config) :
         "Variable can be changed to non-nullable, as it is never set to null."
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)
         PropertyCheckVisitor().visitKtFile(file)

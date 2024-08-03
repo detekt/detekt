@@ -50,8 +50,6 @@ class InstanceOfCheckForException(config: Config) :
             "use multiple catch blocks."
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     override fun visitCatchSection(catchClause: KtCatchClause) {
         val catchParameter = catchClause.catchParameter ?: return
         catchClause.catchBody?.forEachDescendantOfType<KtExpression> {

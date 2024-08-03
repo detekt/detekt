@@ -50,8 +50,6 @@ class ErrorUsageWithThrowable(config: Config) :
             "`error(throwable.message ?: \"No error message provided\")` instead."
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
         val descriptor = expression.getResolvedCall(bindingContext)?.resultingDescriptor ?: return

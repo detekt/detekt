@@ -47,8 +47,6 @@ class ObjectLiteralToLambda(config: Config) :
         "Report object literals that can be changed to lambdas."
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     private val KotlinType.couldBeSamInterface
         get() = JavaSingleAbstractMethodUtils.isSamType(this)
 

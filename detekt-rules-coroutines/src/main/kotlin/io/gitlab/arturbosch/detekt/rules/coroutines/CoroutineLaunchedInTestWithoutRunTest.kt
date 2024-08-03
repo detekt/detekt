@@ -52,8 +52,6 @@ class CoroutineLaunchedInTestWithoutRunTest(config: Config) :
             "You should use `runTest` to avoid altering test results."
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     private val funCoroutineLaunchesTraverseHelper = FunCoroutineLaunchesTraverseHelper()
 
     override fun visitNamedFunction(initialFunction: KtNamedFunction) {

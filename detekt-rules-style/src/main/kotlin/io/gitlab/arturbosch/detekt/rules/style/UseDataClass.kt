@@ -49,8 +49,6 @@ class UseDataClass(config: Config) :
         "Classes that do nothing but hold data should be replaced with a data class."
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     @Configuration("allows to provide a list of annotations that disable this check")
     @Deprecated("Use `ignoreAnnotated` instead")
     private val excludeAnnotatedClasses: List<Regex> by config(emptyList<String>()) { list ->

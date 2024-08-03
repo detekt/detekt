@@ -8,7 +8,6 @@ import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.psi.KtUnaryExpression
-import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * Reports unnecessary not-null operator usage (!!) that can be removed by the user.
@@ -30,8 +29,6 @@ class UnnecessaryNotNullOperator(config: Config) :
         "Unnecessary not-null unary operator (!!) detected."
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     override fun visitUnaryExpression(expression: KtUnaryExpression) {
         super.visitUnaryExpression(expression)
 

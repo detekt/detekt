@@ -8,7 +8,6 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
-import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * In Kotlin functions the last lambda parameter of a function is a function then a lambda expression passed as the
@@ -37,8 +36,6 @@ class UnnecessaryBracesAroundTrailingLambda(config: Config) :
         "Braces around trailing lambda is unnecessary."
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
         if (shouldReportUnnecessaryBracesAroundTrailingLambda(bindingContext, expression)) {

@@ -9,7 +9,6 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isCallingWithNonNullCheckArgument
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * Turn on this rule to flag `require` calls for not-null check that can be replaced with a `requireNotNull` call.
@@ -29,8 +28,6 @@ class UseRequireNotNull(config: Config) :
         "Use requireNotNull() instead of require() for checking not-null."
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
         if (expression.isCallingWithNonNullCheckArgument(requireFunctionFqName, bindingContext)) {

@@ -22,7 +22,6 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtPostfixExpression
 import org.jetbrains.kotlin.psi.KtPrefixExpression
 import org.jetbrains.kotlin.psi.psiUtil.isDotSelector
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getCalleeExpressionIfAny
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.overriddenTreeUniqueAsSequence
@@ -49,8 +48,6 @@ class ForbiddenMethodCall(config: Config) :
             "method and hence you might want to mark it as forbidden in order to get warned about the usage."
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     @Configuration(
         "List of fully qualified method signatures which are forbidden. " +
             "Methods can be defined without full signature (i.e. `java.time.LocalDate.now`) which will report " +

@@ -53,8 +53,6 @@ class PropertyUsedBeforeDeclaration(config: Config) :
         "Properties before declaration should not be used."
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
         super.visitClassOrObject(classOrObject)
 

@@ -32,8 +32,6 @@ class UnusedImport(config: Config) :
         "Unused Imports are dead code and should be removed."
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     override fun visit(root: KtFile) {
         with(UnusedImportVisitor(bindingContext)) {
             root.accept(this)

@@ -8,7 +8,6 @@ import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.psi.KtExpression
-import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * Reports unreachable code.
@@ -37,8 +36,6 @@ class UnreachableCode(config: Config) :
         "Unreachable code detected. This code should be removed."
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     override fun visitExpression(expression: KtExpression) {
         super.visitExpression(expression)
         if (bindingContext.diagnostics.forElement(expression)

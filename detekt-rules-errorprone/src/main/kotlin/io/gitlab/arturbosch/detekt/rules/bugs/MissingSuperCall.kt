@@ -13,7 +13,6 @@ import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.BindingContext.DECLARATION_TO_DESCRIPTOR
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 
@@ -53,8 +52,6 @@ class MissingSuperCall(config: Config) :
         "Overriding method is missing a call to overridden super method.",
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     @Configuration("Annotations to require that overriding methods invoke the super method")
     private val mustInvokeSuperAnnotations: List<FqName> by config(
         listOf(

@@ -64,8 +64,6 @@ class SuspendFunWithFlowReturnType(config: Config) :
             "streams and invoking a function that returns one should not produce any side effects."
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     override fun visitNamedFunction(function: KtNamedFunction) {
         val suspendModifier = function.modifierList?.getModifier(KtTokens.SUSPEND_KEYWORD) ?: return
         bindingContext[BindingContext.FUNCTION, function]

@@ -22,7 +22,6 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.elementsInRange
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -480,9 +479,7 @@ private open class MaxLineLength(config: Config) : Rule(config, "TestDescription
             .first { it.text.isNotBlank() }
 }
 
-private class RequiresTypeResolutionMaxLineLength(config: Config) : MaxLineLength(config), RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-}
+private class RequiresTypeResolutionMaxLineLength(config: Config) : MaxLineLength(config), RequiresTypeResolution
 
 private class FaultyRule(config: Config) : Rule(config, "") {
     override fun visitKtFile(file: KtFile): Unit =

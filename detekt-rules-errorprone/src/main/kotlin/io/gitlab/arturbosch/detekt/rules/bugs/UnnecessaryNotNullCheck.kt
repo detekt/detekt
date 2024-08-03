@@ -9,7 +9,6 @@ import io.gitlab.arturbosch.detekt.rules.getDataFlowAwareTypes
 import io.gitlab.arturbosch.detekt.rules.isCalling
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.types.isNullable
 
 /**
@@ -31,8 +30,6 @@ class UnnecessaryNotNullCheck(config: Config) :
         "Remove unnecessary not-null checks on non-null types."
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 

@@ -45,8 +45,6 @@ class ObjectExtendsThrowable(config: Config) :
             "inadvertently reused from multiple places, thus introducing shared mutable state."
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
         super.visitObjectDeclaration(declaration)
         if (!declaration.isObjectLiteral() && declaration.isSubtypeOfThrowable()) {

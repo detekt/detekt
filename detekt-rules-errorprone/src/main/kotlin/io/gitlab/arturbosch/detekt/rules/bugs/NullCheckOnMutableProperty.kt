@@ -17,7 +17,6 @@ import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtReferenceExpression
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 
@@ -52,8 +51,6 @@ class NullCheckOnMutableProperty(config: Config) :
         "Checking nullability on a mutable property is not useful because the property may be set to null afterwards."
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)
         NullCheckVisitor().visitKtFile(file)

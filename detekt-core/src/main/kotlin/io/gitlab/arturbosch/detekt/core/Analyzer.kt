@@ -121,7 +121,9 @@ internal class Analyzer(
             .filter { (_, rule) ->
                 bindingContext != BindingContext.EMPTY || rule !is RequiresTypeResolution
             }
-            .onEach { (_, rule) -> if (rule is RequiresTypeResolution) rule.bindingContext = bindingContext }
+            .onEach { (_, rule) ->
+                if (rule is RequiresTypeResolution) with(rule) { rule.setBindingContext(bindingContext) }
+            }
             .partition { (_, rule) -> rule.autoCorrect }
 
         return (correctableRules + otherRules).flatMap { (ruleInstance, rule) ->

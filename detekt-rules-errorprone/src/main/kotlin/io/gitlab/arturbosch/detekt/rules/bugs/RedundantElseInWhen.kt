@@ -8,7 +8,6 @@ import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.psi.KtWhenExpression
-import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * Reports `when` expressions that contain a redundant `else` case. This occurs when it can be
@@ -63,8 +62,6 @@ class RedundantElseInWhen(config: Config) :
         "Check for redundant `else` case in `when` expression when used as statement."
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     override fun visitWhenExpression(whenExpression: KtWhenExpression) {
         super.visitWhenExpression(whenExpression)
 

@@ -13,7 +13,6 @@ import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.lexer.KtTokens.EQEQEQ
 import org.jetbrains.kotlin.lexer.KtTokens.EXCLEQEQEQ
 import org.jetbrains.kotlin.psi.KtBinaryExpression
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getType
 
 /**
@@ -38,8 +37,6 @@ class AvoidReferentialEquality(config: Config) :
         "Avoid using referential equality and prefer to use referential equality checks instead."
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     @Configuration(
         "Specifies those types for which referential equality checks are considered a rule violation. " +
             "The types are defined by a list of simple glob patterns (supporting `*` and `?` wildcards) " +

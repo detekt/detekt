@@ -41,8 +41,6 @@ class ForbiddenAnnotation(config: Config) :
         "Avoid using this annotation."
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     @Configuration(
         "List of fully qualified annotation classes which are forbidden."
     )

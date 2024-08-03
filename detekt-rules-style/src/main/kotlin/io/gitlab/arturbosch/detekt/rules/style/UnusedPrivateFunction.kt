@@ -52,8 +52,6 @@ class UnusedPrivateFunction(config: Config) :
         "Private function is unused and should be removed."
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     @Configuration("unused private function names matching this regex are ignored")
     private val allowedNames: Regex by config("", String::toRegex)
 

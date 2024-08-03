@@ -12,7 +12,6 @@ import io.gitlab.arturbosch.detekt.rules.isEnclosedByConditionalStatement
 import io.gitlab.arturbosch.detekt.rules.isIllegalArgumentException
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtThrowExpression
-import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * Kotlin provides a much more concise way to check preconditions than to manually throw an
@@ -35,8 +34,6 @@ class UseRequire(config: Config) :
         "Use require() instead of throwing an IllegalArgumentException."
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     override fun visitThrowExpression(expression: KtThrowExpression) {
         if (!expression.isIllegalArgumentException()) return
         if (expression.hasMoreExpressionsInBlock()) return

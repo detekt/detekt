@@ -9,7 +9,6 @@ import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
-import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * Reports casts that will never succeed.
@@ -38,8 +37,6 @@ class UnsafeCast(config: Config) :
         "Cast operator throws an exception if the cast is not possible."
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     override fun visitBinaryWithTypeRHSExpression(expression: KtBinaryExpressionWithTypeRHS) {
         if (bindingContext.diagnostics.forElement(expression.operationReference)
                 .any { it.factory == Errors.CAST_NEVER_SUCCEEDS }

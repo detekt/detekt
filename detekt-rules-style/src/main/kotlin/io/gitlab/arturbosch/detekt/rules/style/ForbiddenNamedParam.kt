@@ -12,7 +12,6 @@ import io.gitlab.arturbosch.detekt.api.valuesWithReason
 import io.gitlab.arturbosch.detekt.rules.style.ForbiddenMethodCall.ForbiddenMethod
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.overriddenTreeUniqueAsSequence
 
@@ -43,8 +42,6 @@ class ForbiddenNamedParam(config: Config) :
         "Mark the methods/constructors where using named param is forbidden."
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     @Configuration(
         "List of fully qualified method signatures for which are named param is forbidden. " +
             "Methods can be defined without full signature (i.e. `java.time.LocalDate.now`) which will report " +

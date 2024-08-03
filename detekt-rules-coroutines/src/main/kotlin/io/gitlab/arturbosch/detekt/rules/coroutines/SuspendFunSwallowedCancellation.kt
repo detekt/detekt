@@ -94,8 +94,6 @@ class SuspendFunSwallowedCancellation(config: Config) :
         "`runCatching` does not propagate `CancellationException`, don't use it with `suspend` lambda blocks."
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 

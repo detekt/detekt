@@ -50,8 +50,6 @@ class UnreachableCatchBlock(config: Config) :
         "Unreachable catch block detected."
     ),
     RequiresTypeResolution {
-    override lateinit var bindingContext: BindingContext
-
     override fun visitCatchSection(catchClause: KtCatchClause) {
         super.visitCatchSection(catchClause)
 

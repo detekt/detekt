@@ -258,13 +258,12 @@ public final class io/gitlab/arturbosch/detekt/api/ReportingExtension$DefaultImp
 }
 
 public abstract interface class io/gitlab/arturbosch/detekt/api/RequiresTypeResolution {
-	public abstract fun getBindingContext ()Lorg/jetbrains/kotlin/resolve/BindingContext;
-	public abstract fun setBindingContext (Lorg/jetbrains/kotlin/resolve/BindingContext;)V
 }
 
 public class io/gitlab/arturbosch/detekt/api/Rule : io/gitlab/arturbosch/detekt/api/DetektVisitor {
 	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Config;Ljava/lang/String;)V
 	public final fun getAutoCorrect ()Z
+	public final fun getBindingContext (Lio/gitlab/arturbosch/detekt/api/RequiresTypeResolution;)Lorg/jetbrains/kotlin/resolve/BindingContext;
 	public final fun getCompilerResources ()Lio/gitlab/arturbosch/detekt/api/CompilerResources;
 	public final fun getConfig ()Lio/gitlab/arturbosch/detekt/api/Config;
 	public final fun getDescription ()Ljava/lang/String;
@@ -272,6 +271,7 @@ public class io/gitlab/arturbosch/detekt/api/Rule : io/gitlab/arturbosch/detekt/
 	protected fun postVisit (Lorg/jetbrains/kotlin/psi/KtFile;)V
 	protected fun preVisit (Lorg/jetbrains/kotlin/psi/KtFile;)V
 	public final fun report (Lio/gitlab/arturbosch/detekt/api/Finding;)V
+	public final fun setBindingContext (Lio/gitlab/arturbosch/detekt/api/RequiresTypeResolution;Lorg/jetbrains/kotlin/resolve/BindingContext;)V
 	public final fun setCompilerResources (Lio/gitlab/arturbosch/detekt/api/CompilerResources;)V
 	public fun visit (Lorg/jetbrains/kotlin/psi/KtFile;)V
 	public final fun visitFile (Lorg/jetbrains/kotlin/psi/KtFile;Lio/gitlab/arturbosch/detekt/api/CompilerResources;)Ljava/util/List;
