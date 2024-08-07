@@ -33,8 +33,4 @@ abstract class OutputReport : Extension {
      * Defines the translation process of detekt's result into a string.
      */
     abstract fun render(detektion: Detektion): String?
-
-    companion object {
-        const val DETEKT_OUTPUT_REPORT_BASE_PATH_KEY = "detekt.output.report.base.path"
-    }
 }

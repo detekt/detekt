@@ -13,7 +13,7 @@ import kotlin.io.path.Path
 import kotlin.io.path.invariantSeparatorsPathString
 import kotlin.io.path.relativeTo
 
-internal fun toResults(detektion: Detektion, basePath: String?): List<io.github.detekt.sarif4k.Result> =
+internal fun toResults(detektion: Detektion, basePath: String): List<io.github.detekt.sarif4k.Result> =
     detektion.issues.map { it.toResult(basePath) }
 
 internal fun Severity.toResultLevel() = when (this) {
@@ -22,7 +22,7 @@ internal fun Severity.toResultLevel() = when (this) {
     Severity.Info -> Level.Note
 }
 
-private fun Issue.toResult(basePath: String?): io.github.detekt.sarif4k.Result =
+private fun Issue.toResult(basePath: String): io.github.detekt.sarif4k.Result =
     io.github.detekt.sarif4k.Result(
         ruleID = "detekt.${ruleInstance.ruleSetId}.${ruleInstance.id}",
         level = severity.toResultLevel(),
@@ -30,7 +30,7 @@ private fun Issue.toResult(basePath: String?): io.github.detekt.sarif4k.Result =
         message = Message(text = message)
     )
 
-private fun Location.toLocation(basePath: String?): io.github.detekt.sarif4k.Location =
+private fun Location.toLocation(basePath: String): io.github.detekt.sarif4k.Location =
     io.github.detekt.sarif4k.Location(
         physicalLocation = PhysicalLocation(
             region = Region(
@@ -39,13 +39,9 @@ private fun Location.toLocation(basePath: String?): io.github.detekt.sarif4k.Loc
                 endLine = endSource.line.toLong(),
                 endColumn = endSource.column.toLong(),
             ),
-            artifactLocation = if (basePath != null) {
-                ArtifactLocation(
-                    uri = path.relativeTo(Path(basePath)).invariantSeparatorsPathString,
-                    uriBaseID = SRCROOT
-                )
-            } else {
-                ArtifactLocation(uri = path.toUri().toString())
-            }
+            artifactLocation = ArtifactLocation(
+                uri = path.relativeTo(Path(basePath)).invariantSeparatorsPathString,
+                uriBaseID = SRCROOT
+            )
         )
     )

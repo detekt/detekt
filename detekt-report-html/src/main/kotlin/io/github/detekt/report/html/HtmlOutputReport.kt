@@ -10,7 +10,6 @@ import io.gitlab.arturbosch.detekt.api.RuleInstance
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.TextLocation
-import io.gitlab.arturbosch.detekt.api.getOrNull
 import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import kotlinx.html.CommonAttributeGroupFacadeFlowInteractiveContent
@@ -35,7 +34,6 @@ import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.util.Locale
-import kotlin.io.path.absolute
 import kotlin.io.path.invariantSeparatorsPathString
 import kotlin.io.path.relativeTo
 
@@ -57,10 +55,10 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
     override val id: String = "HtmlOutputReport"
     override val ending = "html"
 
-    var basePath: Path? = null
+    private lateinit var basePath: Path
 
     override fun init(context: SetupContext) {
-        basePath = context.getOrNull<Path>(DETEKT_OUTPUT_REPORT_BASE_PATH_KEY)?.absolute()
+        basePath = context.basePath
     }
 
     override fun render(detektion: Detektion) =
@@ -159,8 +157,7 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
     }
 
     private fun FlowContent.renderIssue(issue: Issue) {
-        val filePath = basePath?.let { issue.location.path.relativeTo(it) } ?: issue.location.path
-        val pathString = filePath.invariantSeparatorsPathString
+        val pathString = issue.location.path.relativeTo(basePath).invariantSeparatorsPathString
         span("location") {
             text(
                 "$pathString:${issue.location.source.line}:${issue.location.source.column}"
