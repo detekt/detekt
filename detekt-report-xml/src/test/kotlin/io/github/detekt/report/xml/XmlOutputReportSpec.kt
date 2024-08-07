@@ -1,9 +1,9 @@
 package io.github.detekt.report.xml
 
 import io.github.detekt.test.utils.internal.FakeKtElement
-import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.test.TestDetektion
+import io.gitlab.arturbosch.detekt.test.createEntity
 import io.gitlab.arturbosch.detekt.test.createIssue
 import io.gitlab.arturbosch.detekt.test.createIssueForRelativePath
 import io.gitlab.arturbosch.detekt.test.createLocation
@@ -22,18 +22,16 @@ private const val TAB = "\t"
 
 class XmlOutputReportSpec {
 
-    private val entity1 = Entity(
+    private val entity1 = createEntity(
         "Sample1",
-        "",
         createLocation(
             path = "src/main/com/sample/Sample1.kt",
             position = 11 to 1,
         ),
         FakeKtElement()
     )
-    private val entity2 = Entity(
+    private val entity2 = createEntity(
         "Sample2",
-        "",
         createLocation(
             path = "src/main/com/sample/Sample2.kt",
             position = 22 to 2,

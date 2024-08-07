@@ -7,7 +7,6 @@ import io.github.detekt.sarif4k.PhysicalLocation
 import io.github.detekt.sarif4k.Region
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Severity
 import kotlin.io.path.Path
 import kotlin.io.path.invariantSeparatorsPathString
@@ -30,7 +29,7 @@ private fun Issue.toResult(basePath: String?): io.github.detekt.sarif4k.Result =
         message = Message(text = message)
     )
 
-private fun Location.toLocation(basePath: String?): io.github.detekt.sarif4k.Location =
+private fun Issue.Location.toLocation(basePath: String?): io.github.detekt.sarif4k.Location =
     io.github.detekt.sarif4k.Location(
         physicalLocation = PhysicalLocation(
             region = Region(

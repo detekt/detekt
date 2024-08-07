@@ -9,12 +9,15 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleInstance
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.SourceLocation
+import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import io.gitlab.arturbosch.detekt.api.internal.whichJava
 import io.gitlab.arturbosch.detekt.api.internal.whichOS
@@ -23,9 +26,11 @@ import io.gitlab.arturbosch.detekt.core.suppressors.isSuppressedBy
 import io.gitlab.arturbosch.detekt.core.util.isActiveOrDefault
 import io.gitlab.arturbosch.detekt.core.util.shouldAnalyzeFile
 import org.jetbrains.kotlin.config.languageVersionSettings
+import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactoryImpl
+import java.nio.file.Path
 import kotlin.reflect.full.hasAnnotation
 
 internal class Analyzer(
@@ -180,24 +185,49 @@ private fun throwIllegalStateException(file: KtFile, error: Throwable): Nothing 
 
 private fun Finding.toIssue(rule: RuleInstance, severity: Severity): Issue =
     when (this) {
-        is CorrectableCodeSmell -> IssueImpl(rule, entity, message, references, severity, autoCorrectEnabled)
+        is CorrectableCodeSmell -> IssueImpl(
+            rule,
+            entity.toIssue(),
+            message,
+            references.map { it.toIssue() },
+            severity,
+            autoCorrectEnabled
+        )
 
-        is CodeSmell -> IssueImpl(rule, entity, message, references, severity)
+        is CodeSmell -> IssueImpl(rule, entity.toIssue(), message, references.map { it.toIssue() }, severity)
 
         else -> error("wtf?")
     }
+
+private fun Entity.toIssue(): Issue.Entity = IssueImpl.Entity(name, signature, location.toIssue(), ktElement)
+
+private fun Location.toIssue(): Issue.Location = IssueImpl.Location(source, endSource, text, path)
 
 private fun Rule.toRuleInstance(id: String, ruleSetId: RuleSet.Id): RuleInstance =
     RuleInstanceImpl(id, ruleName, ruleSetId, description)
 
 private data class IssueImpl(
     override val ruleInstance: RuleInstance,
-    override val entity: Entity,
+    override val entity: Issue.Entity,
     override val message: String,
-    override val references: List<Entity>,
+    override val references: List<Issue.Entity>,
     override val severity: Severity,
     override val autoCorrectEnabled: Boolean = false,
-) : Issue
+) : Issue {
+    data class Entity(
+        override val name: String,
+        override val signature: String,
+        override val location: Issue.Location,
+        override val ktElement: KtElement
+    ) : Issue.Entity
+
+    data class Location(
+        override val source: SourceLocation,
+        override val endSource: SourceLocation,
+        override val text: TextLocation,
+        override val path: Path
+    ) : Issue.Location
+}
 
 private data class RuleInstanceImpl(
     override val id: String,
