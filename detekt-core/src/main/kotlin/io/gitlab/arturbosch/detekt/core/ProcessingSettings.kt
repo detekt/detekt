@@ -40,6 +40,8 @@ class ProcessingSettings(
 
     override val configUris: Collection<URI> = spec.configSpec.extractUris()
 
+    override val basePath: Path = spec.projectSpec.basePath
+
     /**
      * Sharable thread pool between parsing and analysis phase.
      */
