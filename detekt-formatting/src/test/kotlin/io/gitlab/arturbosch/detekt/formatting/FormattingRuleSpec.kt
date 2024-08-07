@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ChainWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoLineBreakBeforeAssignment
 import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import io.gitlab.arturbosch.detekt.test.location
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -73,7 +74,7 @@ class FormattingRuleSpec {
         val expectedPath = Path("src/test/resources/configTests/chain-wrapping-before.kt").absolute()
 
         val rule = ChainWrapping(Config.empty)
-        val findings = rule.visitFile(compileForTest(expectedPath))
+        val findings = rule.lint(compileForTest(expectedPath))
         assertThat(findings).anySatisfy { finding ->
             assertThat(finding.location.path).isEqualTo(expectedPath)
         }

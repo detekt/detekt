@@ -56,11 +56,10 @@ class CastNullableToNonNullableType(config: Config) : Rule(
         val typeRef = expression.right ?: return
         val simpleType = bindingContext[BindingContext.TYPE, typeRef] ?: return
         simpleType.isNullable().ifTrue { return }
-        val compilerResourcesNonNull = compilerResources ?: return
         expression.left.isNullable(
             bindingContext,
-            compilerResourcesNonNull.languageVersionSettings,
-            compilerResourcesNonNull.dataFlowValueFactory,
+            compilerResources.languageVersionSettings,
+            compilerResources.dataFlowValueFactory,
             shouldConsiderPlatformTypeAsNullable = ignorePlatformTypes.not(),
         ).ifFalse { return }
 

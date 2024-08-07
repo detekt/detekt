@@ -58,7 +58,6 @@ class NullableToStringCall(config: Config) : Rule(
 
     private fun KtStringTemplateEntry.hasNullableExpression(): Boolean {
         val expression = this.expression ?: return false
-        val compilerResources = super.compilerResources ?: return false
         return expression.isNullable(
             bindingContext,
             compilerResources.languageVersionSettings,
