@@ -19,8 +19,9 @@ interface Issue {
 }
 
 interface RuleInstance {
-    val id: String
-    val name: Rule.Name
+    val id: Rule.Id
     val ruleSetId: RuleSet.Id
     val description: String
 }
+
+val RuleInstance.name: Rule.Name get() = id.ruleName

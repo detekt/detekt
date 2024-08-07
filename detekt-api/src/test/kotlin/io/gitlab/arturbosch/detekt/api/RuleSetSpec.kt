@@ -1,53 +1,43 @@
 package io.gitlab.arturbosch.detekt.api
 
 import org.assertj.core.api.Assertions.assertThatCode
-import org.assertj.core.api.Assertions.assertThatExceptionOfType
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.MethodSource
+import org.junit.jupiter.params.provider.ValueSource
 
 class RuleSetSpec {
-    @ParameterizedTest(name = "should allow RuleSet with name {0}")
-    @MethodSource("getValidNames")
-    fun shouldAllowValidNames(ruleSetId: String) {
-        assertThatCode { RuleSet(RuleSet.Id(ruleSetId), emptyList()) }.doesNotThrowAnyException()
-    }
-
-    @ParameterizedTest(name = "should not allow RuleSet with name {0}")
-    @MethodSource("getInvalidNames")
-    fun shouldNotAllowInvalidNames(ruleSetId: String) {
-        assertThatExceptionOfType(IllegalArgumentException::class.java).isThrownBy {
-            RuleSet(
-                RuleSet.Id(ruleSetId),
-                emptyList()
-            )
-        }.withMessageStartingWith("id '$ruleSetId' must match")
-    }
-
-    companion object {
-        @JvmStatic
-        fun getValidNames() = listOf(
-            "abc-def",
-            "abc-def",
-            "abc1-def",
-            "ab1c-def",
-            "abc1",
-            "abc-1",
-            "abc-def1",
-            "abc-de1f",
-            "abcDef",
-            "abcDef1",
+    @Nested
+    inner class Id {
+        @ParameterizedTest(name = "should allow RuleSet with id {0}")
+        @ValueSource(
+            strings = [
+                "abc-def",
+                "abc1-def",
+                "abc-1",
+                "abc-def1",
+                "abc-de1f",
+                "abcDef",
+                "abcDef1",
+            ]
         )
+        fun shouldAllowValidIds(ruleSetId: String) {
+            assertThatCode { RuleSet.Id(ruleSetId) }
+                .doesNotThrowAnyException()
+        }
 
-        @JvmStatic
-        fun getInvalidNames() = listOf(
-            "abc def",
-            "abc1 def",
-            "ab1c def",
-            "abc 1",
-            "abc-",
-            "abc-def-",
-            "-abcDef",
-            "1abcDef",
+        @ParameterizedTest(name = "should not allow RuleSet with id {0}")
+        @ValueSource(
+            strings = [
+                "abc def",
+                "abc-",
+                "-abcDef",
+                "1abcDef",
+            ]
         )
+        fun shouldNotAllowInvalidIds(ruleSetId: String) {
+            assertThatCode { RuleSet.Id(ruleSetId) }
+                .hasMessageStartingWith("Id '$ruleSetId' must match")
+                .isInstanceOf(IllegalArgumentException::class.java)
+        }
     }
 }

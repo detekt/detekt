@@ -222,8 +222,8 @@ public final class io/github/detekt/tooling/api/spec/RulesSpec$RunPolicy$NoRestr
 }
 
 public final class io/github/detekt/tooling/api/spec/RulesSpec$RunPolicy$RestrictToSingleRule : io/github/detekt/tooling/api/spec/RulesSpec$RunPolicy {
-	public fun <init> (Lio/gitlab/arturbosch/detekt/api/RuleSet$Id;Ljava/lang/String;)V
-	public final fun getRuleId ()Ljava/lang/String;
+	public fun <init> (Lio/gitlab/arturbosch/detekt/api/RuleSet$Id;Lio/gitlab/arturbosch/detekt/api/Rule$Id;)V
+	public final fun getRuleId ()Lio/gitlab/arturbosch/detekt/api/Rule$Id;
 	public final fun getRuleSetId ()Lio/gitlab/arturbosch/detekt/api/RuleSet$Id;
 }
 

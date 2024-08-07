@@ -60,15 +60,11 @@ fun createRuleInstance(
     id: String = "TestSmell/id",
     ruleSetId: String = "RuleSet${id.split("/", limit = 2).first()}",
     description: String = "Description ${id.split("/", limit = 2).first()}",
-): RuleInstance {
-    val split = id.split("/", limit = 2)
-    return RuleInstanceImpl(
-        id = id,
-        name = Rule.Name(split.first()),
-        ruleSetId = RuleSet.Id(ruleSetId),
-        description = description
-    )
-}
+): RuleInstance = RuleInstanceImpl(
+    id = Rule.Id(id),
+    ruleSetId = RuleSet.Id(ruleSetId),
+    description = description
+)
 
 fun createIssueForRelativePath(
     ruleInstance: RuleInstance,
@@ -125,8 +121,7 @@ private data class IssueImpl(
 ) : Issue
 
 private data class RuleInstanceImpl(
-    override val id: String,
-    override val name: Rule.Name,
+    override val id: Rule.Id,
     override val ruleSetId: RuleSet.Id,
     override val description: String,
 ) : RuleInstance

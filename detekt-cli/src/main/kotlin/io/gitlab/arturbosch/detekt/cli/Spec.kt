@@ -5,6 +5,7 @@ import io.github.detekt.tooling.api.spec.RulesSpec
 import io.github.detekt.tooling.api.spec.RulesSpec.RunPolicy.DisableDefaultRuleSets
 import io.github.detekt.tooling.api.spec.RulesSpec.RunPolicy.NoRestrictions
 import io.github.detekt.utils.PathFilters
+import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import java.nio.file.Path
 import kotlin.io.path.ExperimentalPathApi
@@ -103,5 +104,5 @@ private fun CliArgs.toRunPolicy(): RulesSpec.RunPolicy {
     val parts = runRule?.split(":")
         ?: return if (disableDefaultRuleSets) DisableDefaultRuleSets else NoRestrictions
     require(parts.size == 2) { "Pattern 'RuleSetId:RuleName' expected." }
-    return RulesSpec.RunPolicy.RestrictToSingleRule(RuleSet.Id(parts[0]), parts[1])
+    return RulesSpec.RunPolicy.RestrictToSingleRule(RuleSet.Id(parts[0]), Rule.Id(parts[1]))
 }
