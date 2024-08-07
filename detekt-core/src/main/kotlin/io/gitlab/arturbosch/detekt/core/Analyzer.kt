@@ -26,7 +26,6 @@ import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactoryImpl
-import kotlin.reflect.full.hasAnnotation
 
 internal class Analyzer(
     private val settings: ProcessingSettings,
@@ -120,12 +119,15 @@ internal class Analyzer(
                 file.isSuppressedBy(ruleInstance.id, rule.aliases, ruleInstance.ruleSetId)
             }
             .filter { (_, rule) ->
-                bindingContext != BindingContext.EMPTY || !rule::class.hasAnnotation<RequiresTypeResolution>()
+                bindingContext != BindingContext.EMPTY || rule !is RequiresTypeResolution
+            }
+            .onEach { (_, rule) ->
+                if (rule is RequiresTypeResolution) with(rule) { rule.setBindingContext(bindingContext) }
             }
             .partition { (_, rule) -> rule.autoCorrect }
 
         return (correctableRules + otherRules).flatMap { (ruleInstance, rule) ->
-            rule.visitFile(file, bindingContext, compilerResources)
+            rule.visitFile(file, compilerResources)
                 .filterNot {
                     it.entity.ktElement.isSuppressedBy(ruleInstance.id, rule.aliases, ruleInstance.ruleSetId)
                 }
@@ -146,7 +148,7 @@ internal class Analyzer(
                     .filter { (_, config) -> config.isActiveOrDefault(false) }
                     .map { (ruleProvider, config) -> ruleProvider(config) }
             }
-            .filter { rule -> rule::class.hasAnnotation<RequiresTypeResolution>() }
+            .filter { rule -> rule is RequiresTypeResolution }
             .forEach { rule ->
                 settings.debug { "The rule '${rule.ruleName}' requires type resolution but it was run without it." }
             }

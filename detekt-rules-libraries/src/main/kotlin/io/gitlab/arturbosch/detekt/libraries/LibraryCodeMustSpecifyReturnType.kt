@@ -41,14 +41,14 @@ import org.jetbrains.kotlin.resolve.checkers.ExplicitApiDeclarationChecker
  * </compliant>
  *
  */
-@RequiresTypeResolution
 @ActiveByDefault(since = "1.2.0")
-class LibraryCodeMustSpecifyReturnType(config: Config) : Rule(
-    config,
-    "Library functions/properties should have an explicit return type. " +
-        "Inferred return types can easily be changed by mistake which may lead to breaking changes."
-) {
-
+class LibraryCodeMustSpecifyReturnType(config: Config) :
+    Rule(
+        config,
+        "Library functions/properties should have an explicit return type. " +
+            "Inferred return types can easily be changed by mistake which may lead to breaking changes."
+    ),
+    RequiresTypeResolution {
     @Configuration("if functions with `Unit` return type should be allowed without return type declaration")
     private val allowOmitUnit: Boolean by config(false)
 

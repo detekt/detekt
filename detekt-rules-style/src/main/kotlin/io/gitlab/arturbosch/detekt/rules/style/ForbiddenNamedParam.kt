@@ -36,12 +36,12 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.overriddenTreeUniqueAsSequenc
  * }
  * </compliant>
  */
-@RequiresTypeResolution
-class ForbiddenNamedParam(config: Config) : Rule(
-    config,
-    "Mark the methods/constructors where using named param is forbidden."
-) {
-
+class ForbiddenNamedParam(config: Config) :
+    Rule(
+        config,
+        "Mark the methods/constructors where using named param is forbidden."
+    ),
+    RequiresTypeResolution {
     @Configuration(
         "List of fully qualified method signatures for which are named param is forbidden. " +
             "Methods can be defined without full signature (i.e. `java.time.LocalDate.now`) which will report " +

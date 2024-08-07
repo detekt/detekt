@@ -60,12 +60,12 @@ import org.jetbrains.kotlin.psi.KtLambdaExpression
  * </compliant>
  *
  */
-@RequiresTypeResolution
-class MultilineLambdaItParameter(config: Config) : Rule(
-    config,
-    "Multiline lambdas should not use `it` as a parameter name."
-) {
-
+class MultilineLambdaItParameter(config: Config) :
+    Rule(
+        config,
+        "Multiline lambdas should not use `it` as a parameter name."
+    ),
+    RequiresTypeResolution {
     override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
         super.visitLambdaExpression(lambdaExpression)
 

@@ -26,12 +26,12 @@ import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
  * val hasProgressBar: Boolean = true
  * </compliant>
  */
-@RequiresTypeResolution
-class BooleanPropertyNaming(config: Config) : Rule(
-    config,
-    "Boolean property name should follow the naming convention set in the projects configuration."
-) {
-
+class BooleanPropertyNaming(config: Config) :
+    Rule(
+        config,
+        "Boolean property name should follow the naming convention set in the projects configuration."
+    ),
+    RequiresTypeResolution {
     @Configuration("naming pattern")
     private val allowedPattern: Regex by config("^(is|has|are)", String::toRegex)
 

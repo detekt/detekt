@@ -29,13 +29,14 @@ import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
  * }
  * </compliant>
  */
-@RequiresTypeResolution
 @ActiveByDefault(since = "1.16.0")
 @Alias("UNCHECKED_CAST")
-class UnsafeCast(config: Config) : Rule(
-    config,
-    "Cast operator throws an exception if the cast is not possible."
-) {
+class UnsafeCast(config: Config) :
+    Rule(
+        config,
+        "Cast operator throws an exception if the cast is not possible."
+    ),
+    RequiresTypeResolution {
     override fun visitBinaryWithTypeRHSExpression(expression: KtBinaryExpressionWithTypeRHS) {
         if (bindingContext.diagnostics.forElement(expression.operationReference)
                 .any { it.factory == Errors.CAST_NEVER_SUCCEEDS }

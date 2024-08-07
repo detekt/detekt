@@ -28,12 +28,12 @@ import org.jetbrains.kotlin.types.typeUtil.supertypes
  * </compliant>
  */
 
-@RequiresTypeResolution
-class CastToNullableType(config: Config) : Rule(
-    config,
-    "Use safe cast instead of unsafe cast to nullable types."
-) {
-
+class CastToNullableType(config: Config) :
+    Rule(
+        config,
+        "Use safe cast instead of unsafe cast to nullable types."
+    ),
+    RequiresTypeResolution {
     @Suppress("ReturnCount")
     override fun visitBinaryWithTypeRHSExpression(expression: KtBinaryExpressionWithTypeRHS) {
         super.visitBinaryWithTypeRHSExpression(expression)

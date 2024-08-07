@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
@@ -508,22 +507,6 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
                     } else null
                 """.trimIndent()
                 assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
-            }
-
-            @Test
-            fun `does not report when an object initializes a variable directly - without type solving`() {
-                val code = """
-                    interface I {
-                        var optionEnabled: Boolean
-                    }
-                    fun test(): I {
-                        val o = object: I {
-                            override var optionEnabled: Boolean = false
-                        }
-                        return o
-                    }
-                """.trimIndent()
-                assertThat(subject.compileAndLint(code)).isEmpty()
             }
         }
     }

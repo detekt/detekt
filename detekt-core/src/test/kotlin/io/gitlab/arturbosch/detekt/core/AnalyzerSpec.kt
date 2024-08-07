@@ -479,8 +479,7 @@ private open class MaxLineLength(config: Config) : Rule(config, "TestDescription
             .first { it.text.isNotBlank() }
 }
 
-@RequiresTypeResolution
-private class RequiresTypeResolutionMaxLineLength(config: Config) : MaxLineLength(config)
+private class RequiresTypeResolutionMaxLineLength(config: Config) : MaxLineLength(config), RequiresTypeResolution
 
 private class FaultyRule(config: Config) : Rule(config, "") {
     override fun visitKtFile(file: KtFile): Unit =

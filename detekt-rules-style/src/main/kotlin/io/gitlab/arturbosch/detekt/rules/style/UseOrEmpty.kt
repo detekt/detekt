@@ -40,13 +40,13 @@ import org.jetbrains.kotlin.types.typeUtil.makeNotNullable
  * </compliant>
  *
  */
-@RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
-class UseOrEmpty(config: Config) : Rule(
-    config,
-    "Use `orEmpty()` call instead of `?:` with empty collection factory methods",
-) {
-
+class UseOrEmpty(config: Config) :
+    Rule(
+        config,
+        "Use `orEmpty()` call instead of `?:` with empty collection factory methods",
+    ),
+    RequiresTypeResolution {
     @Suppress("ReturnCount")
     override fun visitBinaryExpression(expression: KtBinaryExpression) {
         super.visitBinaryExpression(expression)

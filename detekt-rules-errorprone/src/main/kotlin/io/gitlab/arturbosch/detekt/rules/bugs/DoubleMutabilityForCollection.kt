@@ -41,15 +41,15 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * var myMap = mapOf("answer" to 42)
  * </compliant>
  */
-@RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
 @Alias("DoubleMutability")
-class DoubleMutabilityForCollection(config: Config) : Rule(
-    config,
-    "Using var with mutable collections or values leads to double mutability. " +
-        "Consider using val or immutable collection or value types."
-) {
-
+class DoubleMutabilityForCollection(config: Config) :
+    Rule(
+        config,
+        "Using var with mutable collections or values leads to double mutability. " +
+            "Consider using val or immutable collection or value types."
+    ),
+    RequiresTypeResolution {
     @Configuration("Define a list of mutable types to trigger on when defined with `var`.")
     private val mutableTypes: Set<FqName> by config(defaultMutableTypes) { types ->
         types.map { FqName(it) }.toSet()

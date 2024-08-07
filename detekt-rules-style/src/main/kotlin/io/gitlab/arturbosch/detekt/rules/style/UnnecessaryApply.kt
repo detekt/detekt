@@ -39,13 +39,13 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  * }
  * </compliant>
  */
-@RequiresTypeResolution
 @ActiveByDefault(since = "1.16.0")
-class UnnecessaryApply(config: Config) : Rule(
-    config,
-    "The `apply` usage is unnecessary and can be removed."
-) {
-
+class UnnecessaryApply(config: Config) :
+    Rule(
+        config,
+        "The `apply` usage is unnecessary and can be removed."
+    ),
+    RequiresTypeResolution {
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 

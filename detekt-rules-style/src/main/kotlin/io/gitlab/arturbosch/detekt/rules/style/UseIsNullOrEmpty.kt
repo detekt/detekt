@@ -42,13 +42,13 @@ import org.jetbrains.kotlin.types.isNullable
  *
  */
 @Suppress("TooManyFunctions")
-@RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
-class UseIsNullOrEmpty(config: Config) : Rule(
-    config,
-    "Use `isNullOrEmpty()` call instead of `x == null || x.isEmpty()`."
-) {
-
+class UseIsNullOrEmpty(config: Config) :
+    Rule(
+        config,
+        "Use `isNullOrEmpty()` call instead of `x == null || x.isEmpty()`."
+    ),
+    RequiresTypeResolution {
     override fun visitBinaryExpression(expression: KtBinaryExpression) {
         super.visitBinaryExpression(expression)
 

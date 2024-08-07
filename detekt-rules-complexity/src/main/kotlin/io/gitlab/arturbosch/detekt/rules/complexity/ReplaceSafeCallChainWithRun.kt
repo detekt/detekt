@@ -35,12 +35,12 @@ import org.jetbrains.kotlin.types.isNullable
  * </compliant>
  *
  */
-@RequiresTypeResolution
-class ReplaceSafeCallChainWithRun(config: Config) : Rule(
-    config,
-    "Chains of safe calls on non-nullable types can be surrounded with `run {}`."
-) {
-
+class ReplaceSafeCallChainWithRun(config: Config) :
+    Rule(
+        config,
+        "Chains of safe calls on non-nullable types can be surrounded with `run {}`."
+    ),
+    RequiresTypeResolution {
     override fun visitSafeQualifiedExpression(expression: KtSafeQualifiedExpression) {
         super.visitSafeQualifiedExpression(expression)
 

@@ -43,13 +43,13 @@ import org.jetbrains.kotlin.types.typeUtil.supertypes
  * }
  * </compliant>
  */
-@RequiresTypeResolution
-class ErrorUsageWithThrowable(config: Config) : Rule(
-    config,
-    "Passing `Throwable` in `error` method is ambiguous. Use " +
-        "`error(throwable.message ?: \"No error message provided\")` instead."
-) {
-
+class ErrorUsageWithThrowable(config: Config) :
+    Rule(
+        config,
+        "Passing `Throwable` in `error` method is ambiguous. Use " +
+            "`error(throwable.message ?: \"No error message provided\")` instead."
+    ),
+    RequiresTypeResolution {
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
         val descriptor = expression.getResolvedCall(bindingContext)?.resultingDescriptor ?: return

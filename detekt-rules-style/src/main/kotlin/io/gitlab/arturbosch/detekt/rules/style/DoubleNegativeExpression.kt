@@ -27,12 +27,12 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
  * isValid
  * </compliant>
  */
-@RequiresTypeResolution
-class DoubleNegativeExpression(config: Config) : Rule(
-    config,
-    "Expression with two or more calls of operator `not` could be simplified.",
-) {
-
+class DoubleNegativeExpression(config: Config) :
+    Rule(
+        config,
+        "Expression with two or more calls of operator `not` could be simplified.",
+    ),
+    RequiresTypeResolution {
     override fun visitPrefixExpression(expression: KtPrefixExpression) {
         super.visitPrefixExpression(expression)
         check(expression)

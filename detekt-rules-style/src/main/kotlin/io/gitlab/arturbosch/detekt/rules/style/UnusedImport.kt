@@ -26,12 +26,12 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.getImportableDescriptor
  * Exempt from this rule are imports resulting from references to elements within KDoc and
  * from destructuring declarations (componentN imports).
  */
-@RequiresTypeResolution
-class UnusedImport(config: Config) : Rule(
-    config,
-    "Unused Imports are dead code and should be removed."
-) {
-
+class UnusedImport(config: Config) :
+    Rule(
+        config,
+        "Unused Imports are dead code and should be removed."
+    ),
+    RequiresTypeResolution {
     override fun visit(root: KtFile) {
         with(UnusedImportVisitor(bindingContext)) {
             root.accept(this)

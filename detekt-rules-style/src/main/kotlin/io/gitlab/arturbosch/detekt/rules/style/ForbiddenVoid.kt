@@ -34,13 +34,13 @@ import org.jetbrains.kotlin.resolve.bindingContextUtil.getAbbreviatedTypeOrType
  * Void::class
  * </compliant>
  */
-@RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
-class ForbiddenVoid(config: Config) : Rule(
-    config,
-    "`Unit` should be used instead of `Void`."
-) {
-
+class ForbiddenVoid(config: Config) :
+    Rule(
+        config,
+        "`Unit` should be used instead of `Void`."
+    ),
+    RequiresTypeResolution {
     @Configuration("ignores void types in signatures of overridden functions")
     private val ignoreOverridden: Boolean by config(false)
 

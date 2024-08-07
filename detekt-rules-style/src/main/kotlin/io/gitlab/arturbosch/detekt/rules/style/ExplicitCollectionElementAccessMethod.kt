@@ -35,12 +35,12 @@ import org.jetbrains.kotlin.types.typeUtil.supertypes
  *  val value = map["key"]
  * </compliant>
  */
-@RequiresTypeResolution
-class ExplicitCollectionElementAccessMethod(config: Config) : Rule(
-    config,
-    "Prefer usage of the indexed access operator [] for map element access or insert methods."
-) {
-
+class ExplicitCollectionElementAccessMethod(config: Config) :
+    Rule(
+        config,
+        "Prefer usage of the indexed access operator [] for map element access or insert methods."
+    ),
+    RequiresTypeResolution {
     override fun visitDotQualifiedExpression(expression: KtDotQualifiedExpression) {
         super.visitDotQualifiedExpression(expression)
         val call = expression.selectorExpression as? KtCallExpression ?: return

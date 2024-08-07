@@ -44,13 +44,14 @@ private const val ARRAY_GET_METHOD_NAME = "get"
  * If these private functions are unused they should be removed. Otherwise, this dead code
  * can lead to confusion and potential bugs.
  */
-@RequiresTypeResolution
 @ActiveByDefault(since = "1.16.0")
 @Alias("unused")
-class UnusedPrivateFunction(config: Config) : Rule(
-    config,
-    "Private function is unused and should be removed."
-) {
+class UnusedPrivateFunction(config: Config) :
+    Rule(
+        config,
+        "Private function is unused and should be removed."
+    ),
+    RequiresTypeResolution {
     @Configuration("unused private function names matching this regex are ignored")
     private val allowedNames: Regex by config("", String::toRegex)
 

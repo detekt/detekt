@@ -29,12 +29,12 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
  * sum(a = 1, b = 2, c = 3, d = 4)
  * </compliant>
  */
-@RequiresTypeResolution
-class NamedArguments(config: Config) : Rule(
-    config,
-    "Named arguments are required for function calls with many arguments."
-) {
-
+class NamedArguments(config: Config) :
+    Rule(
+        config,
+        "Named arguments are required for function calls with many arguments."
+    ),
+    RequiresTypeResolution {
     @Configuration("The allowed number of arguments for a function.")
     private val allowedArguments: Int by config(defaultValue = 3)
 

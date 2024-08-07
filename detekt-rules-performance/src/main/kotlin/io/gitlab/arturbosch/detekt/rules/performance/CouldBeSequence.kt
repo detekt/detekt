@@ -28,12 +28,12 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  * listOf(1, 2, 3, 4).map { it*2 }
  * </compliant>
  */
-@RequiresTypeResolution
-class CouldBeSequence(config: Config) : Rule(
-    config,
-    "Several chained collection operations that should be a sequence."
-) {
-
+class CouldBeSequence(config: Config) :
+    Rule(
+        config,
+        "Several chained collection operations that should be a sequence."
+    ),
+    RequiresTypeResolution {
     @Configuration("The maximum number of allowed chained collection operations.")
     private val allowedOperations: Int by config(defaultValue = 2)
 

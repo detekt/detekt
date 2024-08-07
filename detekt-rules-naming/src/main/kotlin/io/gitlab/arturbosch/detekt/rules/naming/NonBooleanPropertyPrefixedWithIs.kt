@@ -27,12 +27,12 @@ import org.jetbrains.kotlin.types.isError
  * val isEnabled: Boolean = false
  * </compliant>
  */
-@RequiresTypeResolution
-class NonBooleanPropertyPrefixedWithIs(config: Config) : Rule(
-    config,
-    "Only boolean property names can start with `is` prefix."
-) {
-
+class NonBooleanPropertyPrefixedWithIs(config: Config) :
+    Rule(
+        config,
+        "Only boolean property names can start with `is` prefix."
+    ),
+    RequiresTypeResolution {
     private val booleanTypes = listOf(
         "kotlin.Boolean",
         "java.lang.Boolean",

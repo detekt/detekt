@@ -730,8 +730,7 @@ class RuleCollectorSpec {
                 /**
                  * description
                  */
-                @RequiresTypeResolution
-                class SomeRandomClass : Rule
+                class SomeRandomClass : Rule, RequiresTypeResolution
             """.trimIndent()
             val items = subject.run(code)
             assertThat(items[0].requiresTypeResolution).isTrue()
@@ -743,8 +742,7 @@ class RuleCollectorSpec {
                 /**
                  * description
                  */
-                @io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
-                class SomeRandomClass : Rule
+                class SomeRandomClass : Rule(), io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
             """.trimIndent()
             val items = subject.run(code)
             assertThat(items[0].requiresTypeResolution).isTrue()

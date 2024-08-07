@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
@@ -14,19 +13,6 @@ import org.junit.jupiter.api.Test
 @KotlinCoreEnvironmentTest
 class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
     val subject = CanBeNonNullable(Config.empty)
-
-    @Test
-    fun `does not report when there is no context`() {
-        val code = """
-            class A {
-                private var a: Int? = 5
-                fun foo() {
-                    a = 6
-                }
-            }
-        """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
-    }
 
     @Nested
     inner class `evaluating private properties` {

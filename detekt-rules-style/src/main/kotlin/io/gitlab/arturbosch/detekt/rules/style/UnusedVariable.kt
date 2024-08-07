@@ -46,13 +46,14 @@ import org.jetbrains.kotlin.resolve.source.toSourceElement
  * }
  * </compliant>
  */
-@RequiresTypeResolution
 @ActiveByDefault(since = "2.0.0")
 @Alias("UNUSED_VARIABLE", "unused")
-class UnusedVariable(config: Config) : Rule(
-    config,
-    "Variable is unused and should be removed."
-) {
+class UnusedVariable(config: Config) :
+    Rule(
+        config,
+        "Variable is unused and should be removed."
+    ),
+    RequiresTypeResolution {
     @Configuration("unused variables names matching this regex are ignored")
     private val allowedNames: Regex by config(
         "ignored|_",

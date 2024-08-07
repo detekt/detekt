@@ -29,13 +29,13 @@ import org.jetbrains.kotlin.psi.KtExpression
  * }
  * </noncompliant>
  */
-@RequiresTypeResolution
 @ActiveByDefault(since = "1.0.0")
-class UnreachableCode(config: Config) : Rule(
-    config,
-    "Unreachable code detected. This code should be removed."
-) {
-
+class UnreachableCode(config: Config) :
+    Rule(
+        config,
+        "Unreachable code detected. This code should be removed."
+    ),
+    RequiresTypeResolution {
     override fun visitExpression(expression: KtExpression) {
         super.visitExpression(expression)
         if (bindingContext.diagnostics.forElement(expression)

@@ -48,13 +48,13 @@ import org.jetbrains.kotlin.types.typeUtil.isUnit
  * val x = returnsValue()
  * </compliant>
  */
-@RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
-class IgnoredReturnValue(config: Config) : Rule(
-    config,
-    "This call returns a value which is ignored"
-) {
-
+class IgnoredReturnValue(config: Config) :
+    Rule(
+        config,
+        "This call returns a value which is ignored"
+    ),
+    RequiresTypeResolution {
     @Configuration("if the rule should check only annotated methods")
     @Deprecated("Use `restrictToConfig` instead")
     private val restrictToAnnotatedMethods: Boolean by config(defaultValue = true)

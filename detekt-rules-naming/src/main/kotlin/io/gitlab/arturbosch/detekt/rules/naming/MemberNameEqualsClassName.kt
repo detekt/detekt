@@ -49,13 +49,13 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * }
  * </compliant>
  */
-@RequiresTypeResolution
 @ActiveByDefault(since = "1.2.0")
-class MemberNameEqualsClassName(config: Config) : Rule(
-    config,
-    "A member should not be given the same name as its parent class or object."
-) {
-
+class MemberNameEqualsClassName(config: Config) :
+    Rule(
+        config,
+        "A member should not be given the same name as its parent class or object."
+    ),
+    RequiresTypeResolution {
     private val classMessage = "A member is named after the class. This might result in confusion. " +
         "Either rename the member or change it to a constructor."
     private val objectMessage = "A member is named after the object. " +

@@ -35,13 +35,13 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  * }
  * </compliant>
  */
-@RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
-class UseCheckOrError(config: Config) : Rule(
-    config,
-    "Use check() or error() instead of throwing an IllegalStateException."
-) {
-
+class UseCheckOrError(config: Config) :
+    Rule(
+        config,
+        "Use check() or error() instead of throwing an IllegalStateException."
+    ),
+    RequiresTypeResolution {
     override fun visitThrowExpression(expression: KtThrowExpression) {
         if (expression.isOnlyExpressionInLambda()) return
 

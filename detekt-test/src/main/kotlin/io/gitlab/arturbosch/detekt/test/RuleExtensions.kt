@@ -5,6 +5,7 @@ import io.github.detekt.test.utils.compileContentForTest
 import io.gitlab.arturbosch.detekt.api.CompilerResources
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.core.suppressors.isSuppressedBy
@@ -31,11 +32,14 @@ fun Rule.lint(
     @Language("kotlin") content: String,
     compilerResources: CompilerResources = FakeCompilerResources()
 ): List<Finding> {
+    require(this !is RequiresTypeResolution) {
+        "${this::class.simpleName} needs type solving to work, you should use `compileAndLintWithContext`."
+    }
     val ktFile = compileContentForTest(content)
     return visitFile(ktFile, compilerResources = compilerResources).filterSuppressed(this)
 }
 
-fun Rule.lintWithContext(
+fun <T> T.lintWithContext(
     environment: KotlinCoreEnvironment,
     @Language("kotlin") content: String,
     @Language("kotlin") vararg additionalContents: String,
@@ -43,32 +47,36 @@ fun Rule.lintWithContext(
         environment.configuration.languageVersionSettings,
         DataFlowValueFactoryImpl(environment.configuration.languageVersionSettings)
     )
-): List<Finding> {
+): List<Finding> where T : Rule, T : RequiresTypeResolution {
     val ktFile = compileContentForTest(content)
     val additionalKtFiles = additionalContents.mapIndexed { index, additionalContent ->
         compileContentForTest(additionalContent, "AdditionalTest$index.kt")
     }
-    val bindingContext = environment.createBindingContext(listOf(ktFile) + additionalKtFiles)
+    setBindingContext(environment.createBindingContext(listOf(ktFile) + additionalKtFiles))
 
-    return visitFile(ktFile, bindingContext, compilerResources).filterSuppressed(this)
+    return visitFile(ktFile, compilerResources).filterSuppressed(this)
 }
 
-fun Rule.compileAndLintWithContext(
+fun <T> T.compileAndLintWithContext(
     environment: KotlinCoreEnvironment,
     @Language("kotlin") content: String,
     compilerResources: CompilerResources = CompilerResources(
         environment.configuration.languageVersionSettings,
         DataFlowValueFactoryImpl(environment.configuration.languageVersionSettings)
     )
-): List<Finding> {
+): List<Finding> where T : Rule, T : RequiresTypeResolution {
     if (shouldCompileTestSnippets) {
         KotlinScriptEngine.compile(content)
     }
     return lintWithContext(environment, content, compilerResources = compilerResources)
 }
 
-fun Rule.lint(ktFile: KtFile, compilerResources: CompilerResources = FakeCompilerResources()): List<Finding> =
-    visitFile(ktFile, compilerResources = compilerResources).filterSuppressed(this)
+fun Rule.lint(ktFile: KtFile, compilerResources: CompilerResources = FakeCompilerResources()): List<Finding> {
+    require(this !is RequiresTypeResolution) {
+        "${this::class.simpleName} needs type solving to work, you should use `compileAndLintWithContext`."
+    }
+    return visitFile(ktFile, compilerResources = compilerResources).filterSuppressed(this)
+}
 
 private fun List<Finding>.filterSuppressed(rule: Rule): List<Finding> =
     filterNot {

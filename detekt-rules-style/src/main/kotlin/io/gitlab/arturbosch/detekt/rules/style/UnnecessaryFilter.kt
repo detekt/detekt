@@ -46,13 +46,13 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  * </compliant>
  *
  */
-@RequiresTypeResolution
 @ActiveByDefault(since = "1.21.0")
-class UnnecessaryFilter(config: Config) : Rule(
-    config,
-    "`filter()` with other collection operations may be simplified."
-) {
-
+class UnnecessaryFilter(config: Config) :
+    Rule(
+        config,
+        "`filter()` with other collection operations may be simplified."
+    ),
+    RequiresTypeResolution {
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 

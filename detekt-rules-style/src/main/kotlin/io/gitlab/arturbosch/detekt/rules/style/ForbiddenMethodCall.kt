@@ -41,13 +41,13 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.overriddenTreeUniqueAsSequenc
  * </noncompliant>
  *
  */
-@RequiresTypeResolution
-class ForbiddenMethodCall(config: Config) : Rule(
-    config,
-    "Mark forbidden methods. A forbidden method could be an invocation of an unstable / experimental " +
-        "method and hence you might want to mark it as forbidden in order to get warned about the usage."
-) {
-
+class ForbiddenMethodCall(config: Config) :
+    Rule(
+        config,
+        "Mark forbidden methods. A forbidden method could be an invocation of an unstable / experimental " +
+            "method and hence you might want to mark it as forbidden in order to get warned about the usage."
+    ),
+    RequiresTypeResolution {
     @Configuration(
         "List of fully qualified method signatures which are forbidden. " +
             "Methods can be defined without full signature (i.e. `java.time.LocalDate.now`) which will report " +

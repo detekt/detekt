@@ -46,12 +46,12 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
  * }
  * </compliant>
  */
-@RequiresTypeResolution
-class MissingSuperCall(config: Config) : Rule(
-    config,
-    "Overriding method is missing a call to overridden super method.",
-) {
-
+class MissingSuperCall(config: Config) :
+    Rule(
+        config,
+        "Overriding method is missing a call to overridden super method.",
+    ),
+    RequiresTypeResolution {
     @Configuration("Annotations to require that overriding methods invoke the super method")
     private val mustInvokeSuperAnnotations: List<FqName> by config(
         listOf(

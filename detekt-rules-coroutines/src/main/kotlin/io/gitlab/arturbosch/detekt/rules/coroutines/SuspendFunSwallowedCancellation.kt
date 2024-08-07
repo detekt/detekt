@@ -88,12 +88,12 @@ import org.jetbrains.kotlin.name.Name as KotlinName
  * </compliant>
  *
  */
-@RequiresTypeResolution
-class SuspendFunSwallowedCancellation(config: Config) : Rule(
-    config,
-    "`runCatching` does not propagate `CancellationException`, don't use it with `suspend` lambda blocks."
-) {
-
+class SuspendFunSwallowedCancellation(config: Config) :
+    Rule(
+        config,
+        "`runCatching` does not propagate `CancellationException`, don't use it with `suspend` lambda blocks."
+    ),
+    RequiresTypeResolution {
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 
