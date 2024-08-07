@@ -11,12 +11,9 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.SetupContext
-import io.gitlab.arturbosch.detekt.api.getOrNull
 import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
-import java.nio.file.Path
 import kotlin.io.path.Path
-import kotlin.io.path.absolute
 import kotlin.io.path.invariantSeparatorsPathString
 
 const val SRCROOT = "%SRCROOT%"
@@ -26,16 +23,13 @@ class SarifOutputReport : BuiltInOutputReport, OutputReport() {
     override val ending: String = "sarif"
     override val id: String = "sarif"
 
-    private var basePath: String? = null
+    private lateinit var basePath: String
     private lateinit var config: Config
 
     override fun init(context: SetupContext) {
-        this.basePath = context.getOrNull<Path>(DETEKT_OUTPUT_REPORT_BASE_PATH_KEY)
-            ?.absolute()
-            ?.invariantSeparatorsPathString
-            ?.let {
-                if (!it.endsWith("/")) "$it/" else it
-            }
+        this.basePath = context.basePath
+            .invariantSeparatorsPathString
+            .let { if (!it.endsWith("/")) "$it/" else it }
 
         this.config = context.config
     }
@@ -61,10 +55,8 @@ class SarifOutputReport : BuiltInOutputReport, OutputReport() {
                             version = version
                         )
                     ),
-                    originalURIBaseIDS = basePath?.let {
-                        mapOf(SRCROOT to ArtifactLocation(uri = Path(it).toUri().toString()))
-                    },
-                    results = toResults(detektion, basePath)
+                    originalURIBaseIDS = mapOf(SRCROOT to ArtifactLocation(uri = Path(basePath).toUri().toString())),
+                    results = toResults(detektion)
                 )
             )
         )

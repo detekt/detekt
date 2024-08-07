@@ -1,5 +1,7 @@
 package io.gitlab.arturbosch.detekt.api
 
+import java.nio.file.Path
+
 /**
  * Represents a problem detected by detekt on the source code
  *
@@ -16,6 +18,19 @@ interface Issue {
 
     val location: Location
         get() = entity.location
+
+    interface Entity {
+        val name: String
+        val signature: String
+        val location: Location
+    }
+
+    interface Location {
+        val source: SourceLocation
+        val endSource: SourceLocation
+        val text: TextLocation
+        val path: Path
+    }
 }
 
 interface RuleInstance {

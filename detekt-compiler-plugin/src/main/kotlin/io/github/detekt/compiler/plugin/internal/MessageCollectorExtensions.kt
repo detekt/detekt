@@ -6,7 +6,6 @@ import org.jetbrains.kotlin.cli.common.messages.CompilerMessageLocation
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSourceLocation
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
-import org.jetbrains.kotlin.cli.common.messages.MessageUtil
 
 fun MessageCollector.info(msg: String) {
     this.report(CompilerMessageSeverity.INFO, msg)
@@ -28,16 +27,12 @@ fun MessageCollector.reportIssues(result: Detektion) {
 }
 
 fun Issue.renderAsCompilerWarningMessage(): Pair<String, CompilerMessageLocation?> {
-    val location = MessageUtil.psiElementToMessageLocation(entity.ktElement)
-
-    val sourceLocation = location?.let {
-        CompilerMessageLocation.create(
-            entity.location.path.toString(),
-            entity.location.source.line,
-            entity.location.source.column,
-            location.lineContent
-        )
-    }
+    val sourceLocation = CompilerMessageLocation.create(
+        entity.location.path.toString(),
+        entity.location.source.line,
+        entity.location.source.column,
+        null
+    )
 
     return "${ruleInstance.id}: $message" to sourceLocation
 }

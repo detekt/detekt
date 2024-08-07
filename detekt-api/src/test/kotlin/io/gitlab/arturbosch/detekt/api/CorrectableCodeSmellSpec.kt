@@ -1,16 +1,27 @@
 package io.gitlab.arturbosch.detekt.api
 
-import io.gitlab.arturbosch.detekt.test.createEntity
+import io.github.detekt.test.utils.internal.FakeKtElement
 import io.gitlab.arturbosch.detekt.test.location
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import kotlin.io.path.Path
 
 class CorrectableCodeSmellSpec {
 
     @Test
     fun `toString contains all information`() {
         val codeSmell: CorrectableCodeSmell = object : CorrectableCodeSmell(
-            entity = createEntity(),
+            entity = Entity(
+                name = "TestEntity",
+                signature = "TestEntitySignature",
+                location = Location(
+                    source = SourceLocation(1, 1),
+                    endSource = SourceLocation(1, 1),
+                    text = TextLocation(0, 0),
+                    path = Path(""),
+                ),
+                ktElement = FakeKtElement()
+            ),
             message = "TestMessage",
             autoCorrectEnabled = true
         ) {}
