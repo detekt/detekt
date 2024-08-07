@@ -9,10 +9,12 @@ import io.gitlab.arturbosch.detekt.test.createLocation
 import io.gitlab.arturbosch.detekt.test.createRuleInstance
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import kotlin.io.path.Path
+import kotlin.io.path.absolute
 
 class FileBasedIssuesReportSpec {
-
-    private val subject = FileBasedIssuesReport().apply { init(TestSetupContext()) }
+    private val basePath = Path("").absolute()
+    private val subject = FileBasedIssuesReport().apply { init(TestSetupContext(basePath = basePath)) }
 
     @Test
     fun `has the reference content`() {
@@ -28,11 +30,11 @@ class FileBasedIssuesReportSpec {
 
         assertThat(output).isEqualTo(
             """
-                ${location1.path}
-                	TestSmell/id - [TestMessage] at ${location1.path}:1:1
-                	TestSmell/id - [TestMessage] at ${location1.path}:1:1
-                ${location2.path}
-                	TestSmell/id - [TestMessage] at ${location2.path}:1:1
+                ${basePath.resolve(location1.path)}
+                	TestSmell/id - [TestMessage] at ${basePath.resolve(location1.path)}:1:1
+                	TestSmell/id - [TestMessage] at ${basePath.resolve(location1.path)}:1:1
+                ${basePath.resolve(location2.path)}
+                	TestSmell/id - [TestMessage] at ${basePath.resolve(location2.path)}:1:1
                 
             """.trimIndent()
         )

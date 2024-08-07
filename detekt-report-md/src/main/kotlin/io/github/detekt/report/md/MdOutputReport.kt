@@ -18,7 +18,6 @@ import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.api.RuleInstance
 import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.SourceLocation
-import io.gitlab.arturbosch.detekt.api.getOrNull
 import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import java.nio.file.Path
@@ -26,9 +25,7 @@ import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.util.Locale
-import kotlin.io.path.absolute
 import kotlin.io.path.invariantSeparatorsPathString
-import kotlin.io.path.relativeTo
 import kotlin.math.max
 import kotlin.math.min
 
@@ -41,14 +38,13 @@ private const val EXTRA_LINES_IN_SNIPPET = 3
  * [See](https://detekt.dev/docs/introduction/configurations/#output-reports)
  */
 class MdOutputReport : BuiltInOutputReport, OutputReport() {
-
     override val id: String = "MdOutputReport"
     override val ending: String = "md"
 
-    var basePath: Path? = null
-
+    private lateinit var basePath: Path
     override fun init(context: SetupContext) {
-        basePath = context.getOrNull<Path>(DETEKT_OUTPUT_REPORT_BASE_PATH_KEY)?.absolute()
+        super.init(context)
+        basePath = context.basePath
     }
 
     override fun render(detektion: Detektion) = markdown {
@@ -92,7 +88,7 @@ private fun MarkdownContent.renderComplexity(complexityReport: List<String>) {
     }
 }
 
-private fun MarkdownContent.renderGroup(issues: List<Issue>, basePath: Path?) {
+private fun MarkdownContent.renderGroup(issues: List<Issue>, basePath: Path) {
     issues
         .groupBy { it.ruleInstance }
         .toList()
@@ -102,7 +98,7 @@ private fun MarkdownContent.renderGroup(issues: List<Issue>, basePath: Path?) {
         }
 }
 
-private fun MarkdownContent.renderRule(ruleInstance: RuleInstance, issues: List<Issue>, basePath: Path?) {
+private fun MarkdownContent.renderRule(ruleInstance: RuleInstance, issues: List<Issue>, basePath: Path) {
     val ruleId = ruleInstance.id
     val ruleName = ruleInstance.name.value
     val ruleSetId = ruleInstance.ruleSetId.value
@@ -131,7 +127,7 @@ private fun MarkdownContent.renderRule(ruleInstance: RuleInstance, issues: List<
     }
 }
 
-private fun MarkdownContent.renderIssues(issues: List<Issue>, basePath: Path?) {
+private fun MarkdownContent.renderIssues(issues: List<Issue>, basePath: Path) {
     val total = issues.count()
 
     h2 { "Issues (%,d)".format(Locale.ROOT, total) }
@@ -145,8 +141,8 @@ private fun MarkdownContent.renderIssues(issues: List<Issue>, basePath: Path?) {
         }
 }
 
-private fun MarkdownContent.renderIssue(issue: Issue, basePath: Path?): String {
-    val filePath = basePath?.let { issue.location.path.relativeTo(it) } ?: issue.location.path
+private fun MarkdownContent.renderIssue(issue: Issue, basePath: Path): String {
+    val filePath = issue.location.path
     val location =
         "${filePath.invariantSeparatorsPathString}:${issue.location.source.line}:${issue.location.source.column}"
 
@@ -156,11 +152,14 @@ private fun MarkdownContent.renderIssue(issue: Issue, basePath: Path?): String {
         ""
     }
 
-    val psiFile = issue.entity.ktElement.containingFile
-    val lineSequence = psiFile.text.splitToSequence('\n')
-    val snippet = snippetCode(lineSequence, issue.location.source)
+    val absoluteFile = basePath.resolve(issue.location.path).toFile()
+    val snippet = if (absoluteFile.exists()) {
+        absoluteFile.useLines { snippetCode(it, issue.location.source) }
+    } else {
+        null
+    }
 
-    return "$location\n$message\n$snippet"
+    return listOfNotNull(location, message, snippet).joinToString("\n")
 }
 
 private fun MarkdownContent.snippetCode(lines: Sequence<String>, location: SourceLocation): String {

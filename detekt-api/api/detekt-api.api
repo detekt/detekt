@@ -167,8 +167,8 @@ public abstract interface class io/gitlab/arturbosch/detekt/api/Finding {
 
 public abstract interface class io/gitlab/arturbosch/detekt/api/Issue {
 	public abstract fun getAutoCorrectEnabled ()Z
-	public abstract fun getEntity ()Lio/gitlab/arturbosch/detekt/api/Entity;
-	public abstract fun getLocation ()Lio/gitlab/arturbosch/detekt/api/Location;
+	public abstract fun getEntity ()Lio/gitlab/arturbosch/detekt/api/Issue$Entity;
+	public abstract fun getLocation ()Lio/gitlab/arturbosch/detekt/api/Issue$Location;
 	public abstract fun getMessage ()Ljava/lang/String;
 	public abstract fun getReferences ()Ljava/util/List;
 	public abstract fun getRuleInstance ()Lio/gitlab/arturbosch/detekt/api/RuleInstance;
@@ -176,7 +176,21 @@ public abstract interface class io/gitlab/arturbosch/detekt/api/Issue {
 }
 
 public final class io/gitlab/arturbosch/detekt/api/Issue$DefaultImpls {
-	public static fun getLocation (Lio/gitlab/arturbosch/detekt/api/Issue;)Lio/gitlab/arturbosch/detekt/api/Location;
+	public static fun getLocation (Lio/gitlab/arturbosch/detekt/api/Issue;)Lio/gitlab/arturbosch/detekt/api/Issue$Location;
+}
+
+public abstract interface class io/gitlab/arturbosch/detekt/api/Issue$Entity {
+	public abstract fun getKtElement ()Lorg/jetbrains/kotlin/psi/KtElement;
+	public abstract fun getLocation ()Lio/gitlab/arturbosch/detekt/api/Issue$Location;
+	public abstract fun getName ()Ljava/lang/String;
+	public abstract fun getSignature ()Ljava/lang/String;
+}
+
+public abstract interface class io/gitlab/arturbosch/detekt/api/Issue$Location {
+	public abstract fun getEndSource ()Lio/gitlab/arturbosch/detekt/api/SourceLocation;
+	public abstract fun getPath ()Ljava/nio/file/Path;
+	public abstract fun getSource ()Lio/gitlab/arturbosch/detekt/api/SourceLocation;
+	public abstract fun getText ()Lio/gitlab/arturbosch/detekt/api/TextLocation;
 }
 
 public final class io/gitlab/arturbosch/detekt/api/Location {
@@ -214,17 +228,12 @@ public final class io/gitlab/arturbosch/detekt/api/Notification$Level : java/lan
 }
 
 public abstract class io/gitlab/arturbosch/detekt/api/OutputReport : io/gitlab/arturbosch/detekt/api/Extension {
-	public static final field Companion Lio/gitlab/arturbosch/detekt/api/OutputReport$Companion;
-	public static final field DETEKT_OUTPUT_REPORT_BASE_PATH_KEY Ljava/lang/String;
 	public fun <init> ()V
 	public abstract fun getEnding ()Ljava/lang/String;
 	public fun getPriority ()I
 	public fun init (Lio/gitlab/arturbosch/detekt/api/SetupContext;)V
 	public abstract fun render (Lio/gitlab/arturbosch/detekt/api/Detektion;)Ljava/lang/String;
 	public final fun write (Ljava/nio/file/Path;Lio/gitlab/arturbosch/detekt/api/Detektion;)V
-}
-
-public final class io/gitlab/arturbosch/detekt/api/OutputReport$Companion {
 }
 
 public class io/gitlab/arturbosch/detekt/api/ProjectMetric {
@@ -318,6 +327,7 @@ public abstract interface class io/gitlab/arturbosch/detekt/api/RuleSetProvider 
 }
 
 public abstract interface class io/gitlab/arturbosch/detekt/api/SetupContext : io/gitlab/arturbosch/detekt/api/PropertiesAware {
+	public abstract fun getBasePath ()Ljava/nio/file/Path;
 	public abstract fun getConfig ()Lio/gitlab/arturbosch/detekt/api/Config;
 	public abstract fun getConfigUris ()Ljava/util/Collection;
 	public abstract fun getErrorChannel ()Ljava/lang/Appendable;
