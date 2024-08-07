@@ -16,19 +16,14 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.api.RuleInstance
-import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.SourceLocation
-import io.gitlab.arturbosch.detekt.api.getOrNull
 import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
-import java.nio.file.Path
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.util.Locale
-import kotlin.io.path.absolute
 import kotlin.io.path.invariantSeparatorsPathString
-import kotlin.io.path.relativeTo
 import kotlin.math.max
 import kotlin.math.min
 
@@ -45,12 +40,6 @@ class MdOutputReport : BuiltInOutputReport, OutputReport() {
     override val id: String = "MdOutputReport"
     override val ending: String = "md"
 
-    var basePath: Path? = null
-
-    override fun init(context: SetupContext) {
-        basePath = context.getOrNull<Path>(DETEKT_OUTPUT_REPORT_BASE_PATH_KEY)?.absolute()
-    }
-
     override fun render(detektion: Detektion) = markdown {
         h1 { "detekt" }
 
@@ -60,7 +49,7 @@ class MdOutputReport : BuiltInOutputReport, OutputReport() {
         h2 { "Complexity Report" }
         renderComplexity(getComplexityMetrics(detektion))
 
-        renderIssues(detektion.issues, basePath)
+        renderIssues(detektion.issues)
         emptyLine()
 
         paragraph {
@@ -92,17 +81,17 @@ private fun MarkdownContent.renderComplexity(complexityReport: List<String>) {
     }
 }
 
-private fun MarkdownContent.renderGroup(issues: List<Issue>, basePath: Path?) {
+private fun MarkdownContent.renderGroup(issues: List<Issue>) {
     issues
         .groupBy { it.ruleInstance }
         .toList()
         .sortedBy { (ruleInstance, _) -> ruleInstance.id }
         .forEach { (ruleInstance, ruleIssues) ->
-            renderRule(ruleInstance, ruleIssues, basePath)
+            renderRule(ruleInstance, ruleIssues)
         }
 }
 
-private fun MarkdownContent.renderRule(ruleInstance: RuleInstance, issues: List<Issue>, basePath: Path?) {
+private fun MarkdownContent.renderRule(ruleInstance: RuleInstance, issues: List<Issue>) {
     val ruleId = ruleInstance.id
     val ruleName = ruleInstance.name.value
     val ruleSetId = ruleInstance.ruleSetId.value
@@ -126,12 +115,12 @@ private fun MarkdownContent.renderRule(ruleInstance: RuleInstance, issues: List<
                 )
             )
             .forEach {
-                item { renderIssue(it, basePath) }
+                item { renderIssue(it) }
             }
     }
 }
 
-private fun MarkdownContent.renderIssues(issues: List<Issue>, basePath: Path?) {
+private fun MarkdownContent.renderIssues(issues: List<Issue>) {
     val total = issues.count()
 
     h2 { "Issues (%,d)".format(Locale.ROOT, total) }
@@ -141,12 +130,12 @@ private fun MarkdownContent.renderIssues(issues: List<Issue>, basePath: Path?) {
         .toList()
         .sortedBy { (group, _) -> group.value }
         .forEach { (_, groupIssues) ->
-            renderGroup(groupIssues, basePath)
+            renderGroup(groupIssues)
         }
 }
 
-private fun MarkdownContent.renderIssue(issue: Issue, basePath: Path?): String {
-    val filePath = basePath?.let { issue.location.path.relativeTo(it) } ?: issue.location.path
+private fun MarkdownContent.renderIssue(issue: Issue): String {
+    val filePath = issue.location.path
     val location =
         "${filePath.invariantSeparatorsPathString}:${issue.location.source.line}:${issue.location.source.column}"
 
