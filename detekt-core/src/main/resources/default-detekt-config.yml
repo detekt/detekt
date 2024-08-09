@@ -781,6 +781,8 @@ style:
   UnnecessaryParentheses:
     active: false
     allowForUnclearPrecedence: false
+  UnnecessaryReversed:
+    active: false
   UnusedImport:
     active: false
   UnusedParameter:

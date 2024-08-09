@@ -115,6 +115,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             ::DoubleNegativeLambda,
             ::UseLet,
             ::DoubleNegativeExpression,
+            ::UnnecessaryReversed,
         )
     )
 }
