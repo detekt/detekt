@@ -25,8 +25,7 @@ class DetektPlugin : Plugin<Project> {
 
         extension.reportsDir = project.extensions.getByType(ReportingExtension::class.java).file("detekt")
 
-        val defaultConfigFile =
-            project.file("${project.rootProject.layout.projectDirectory.dir(CONFIG_DIR_NAME)}/$CONFIG_FILE")
+        val defaultConfigFile = project.rootDir.resolve("$CONFIG_DIR_NAME/$CONFIG_FILE")
         if (defaultConfigFile.exists()) {
             extension.config.setFrom(project.files(defaultConfigFile))
         }
@@ -36,10 +35,10 @@ class DetektPlugin : Plugin<Project> {
 
         project.registerDetektPlainTask(extension)
         project.registerDetektJvmTasks(extension)
-        if (project.findProperty(DETEKT_ANDROID_DISABLED_PROPERTY) != "true") {
+        if (project.providers.gradleProperty(DETEKT_ANDROID_DISABLED_PROPERTY).orNull != "true") {
             project.registerDetektAndroidTasks(extension)
         }
-        if (project.findProperty(DETEKT_MULTIPLATFORM_DISABLED_PROPERTY) != "true") {
+        if (project.providers.gradleProperty(DETEKT_MULTIPLATFORM_DISABLED_PROPERTY).orNull != "true") {
             project.registerDetektMultiplatformTasks(extension)
         }
         project.registerGenerateConfigTask(extension)
