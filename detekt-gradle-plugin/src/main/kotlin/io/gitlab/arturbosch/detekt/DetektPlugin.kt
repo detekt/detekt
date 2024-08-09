@@ -9,7 +9,10 @@ import org.gradle.api.Incubating
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.ReportingBasePlugin
+import org.gradle.api.provider.Provider
+import org.gradle.api.provider.ProviderFactory
 import org.gradle.api.reporting.ReportingExtension
+import org.gradle.util.GradleVersion
 import java.net.URL
 import java.util.jar.Manifest
 
@@ -35,10 +38,20 @@ class DetektPlugin : Plugin<Project> {
 
         project.registerDetektPlainTask(extension)
         project.registerDetektJvmTasks(extension)
-        if (project.providers.gradleProperty(DETEKT_ANDROID_DISABLED_PROPERTY).orNull != "true") {
+        val enableAndroidTasks =
+            !project.providers
+                .gradlePropertyAtConfigTimeCompat(DETEKT_ANDROID_DISABLED_PROPERTY)
+                .getOrElse("false")
+                .toBoolean()
+        if (enableAndroidTasks) {
             project.registerDetektAndroidTasks(extension)
         }
-        if (project.providers.gradleProperty(DETEKT_MULTIPLATFORM_DISABLED_PROPERTY).orNull != "true") {
+        val enableMppTasks =
+            !project.providers
+                .gradlePropertyAtConfigTimeCompat(DETEKT_MULTIPLATFORM_DISABLED_PROPERTY)
+                .getOrElse("false")
+                .toBoolean()
+        if (enableMppTasks) {
             project.registerDetektMultiplatformTasks(extension)
         }
         project.registerGenerateConfigTask(extension)
@@ -120,6 +133,14 @@ class DetektPlugin : Plugin<Project> {
             it.pluginClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT_PLUGINS))
         }
     }
+
+    private fun ProviderFactory.gradlePropertyAtConfigTimeCompat(propertyName: String): Provider<String> =
+        if (GradleVersion.current() >= GradleVersion.version("7.4")) {
+            gradleProperty(propertyName)
+        } else {
+            @Suppress("DEPRECATION")
+            gradleProperty(propertyName).forUseAtConfigurationTime()
+        }
 
     companion object {
         const val DETEKT_TASK_NAME = "detekt"
