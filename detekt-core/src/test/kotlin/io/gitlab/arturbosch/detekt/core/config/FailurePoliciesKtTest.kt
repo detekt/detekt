@@ -2,9 +2,7 @@ package io.gitlab.arturbosch.detekt.core.config
 
 import io.github.detekt.tooling.api.IssuesFound
 import io.github.detekt.tooling.api.spec.RulesSpec
-import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.createIssue
 import org.assertj.core.api.Assertions.assertThatThrownBy
@@ -25,7 +23,7 @@ class FailurePoliciesKtTest {
         fun `does not fail without an issue`() {
             val result = TestDetektion()
 
-            subject.check(result, Config.empty)
+            subject.check(result)
         }
 
         @ParameterizedTest
@@ -33,7 +31,7 @@ class FailurePoliciesKtTest {
         fun `does not fail on issue with any severity`(issueSeverity: Severity) {
             val result = TestDetektion(createIssue(severity = issueSeverity))
 
-            subject.check(result, Config.empty)
+            subject.check(result)
         }
     }
 
@@ -45,7 +43,7 @@ class FailurePoliciesKtTest {
         fun `does not fail without an issue`() {
             val result = TestDetektion()
 
-            subject.check(result, Config.empty)
+            subject.check(result)
         }
 
         @ParameterizedTest
@@ -53,7 +51,7 @@ class FailurePoliciesKtTest {
         fun `fails on at least one issue at or above threshold`(issueSeverity: Severity) {
             val result = TestDetektion(createIssue(severity = issueSeverity))
 
-            assertThatThrownBy { subject.check(result, Config.empty) }
+            assertThatThrownBy { subject.check(result) }
                 .isInstanceOf(IssuesFound::class.java)
         }
 
@@ -62,15 +60,14 @@ class FailurePoliciesKtTest {
         fun `does not fail on issue below threshold`(issueSeverity: Severity) {
             val result = TestDetektion(createIssue(severity = issueSeverity))
 
-            subject.check(result, Config.empty)
+            subject.check(result)
         }
 
         @Test
-        fun `does not fail on correctable issue if configured`() {
+        fun `does not fail on correctable issue`() {
             val result = TestDetektion(createIssue(severity = Severity.Error, autoCorrectEnabled = true))
-            val config = TestConfig("excludeCorrectable" to "true")
 
-            subject.check(result, config)
+            subject.check(result)
         }
     }
 }

@@ -17,11 +17,6 @@ interface RulesSpec {
     val failurePolicy: FailurePolicy
 
     /**
-     * Issues which were corrected should not be taken into account for calculating the max issue threshold.
-     */
-    val excludeCorrectable: Boolean
-
-    /**
      * Policy to decide if detekt throws an error.
      */
     sealed class FailurePolicy {

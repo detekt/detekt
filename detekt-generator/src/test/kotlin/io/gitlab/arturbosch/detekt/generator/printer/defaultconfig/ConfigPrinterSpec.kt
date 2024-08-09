@@ -42,11 +42,6 @@ class ConfigPrinterSpec {
     }
 
     @Test
-    fun `prints default build configuration`() {
-        assertThat(yamlString).contains("build:")
-    }
-
-    @Test
     fun `prints default config configuration`() {
         assertThat(yamlString).contains("config:")
     }

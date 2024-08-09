@@ -178,7 +178,6 @@ public abstract interface class io/github/detekt/tooling/api/spec/ReportsSpec$Re
 public abstract interface class io/github/detekt/tooling/api/spec/RulesSpec {
 	public abstract fun getActivateAllRules ()Z
 	public abstract fun getAutoCorrect ()Z
-	public abstract fun getExcludeCorrectable ()Z
 	public abstract fun getFailurePolicy ()Lio/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy;
 	public abstract fun getRunPolicy ()Lio/github/detekt/tooling/api/spec/RulesSpec$RunPolicy;
 }
@@ -353,12 +352,10 @@ public final class io/github/detekt/tooling/dsl/RulesSpecBuilder : io/github/det
 	public synthetic fun build ()Ljava/lang/Object;
 	public final fun getActivateAllRules ()Z
 	public final fun getAutoCorrect ()Z
-	public final fun getExcludeCorrectable ()Z
 	public final fun getFailurePolicy ()Lio/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy;
 	public final fun getRunPolicy ()Lio/github/detekt/tooling/api/spec/RulesSpec$RunPolicy;
 	public final fun setActivateAllRules (Z)V
 	public final fun setAutoCorrect (Z)V
-	public final fun setExcludeCorrectable (Z)V
 	public final fun setFailurePolicy (Lio/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy;)V
 	public final fun setRunPolicy (Lio/github/detekt/tooling/api/spec/RulesSpec$RunPolicy;)V
 }

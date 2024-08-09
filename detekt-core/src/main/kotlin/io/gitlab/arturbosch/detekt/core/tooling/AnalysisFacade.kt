@@ -8,7 +8,6 @@ import io.github.detekt.tooling.api.IssuesFound
 import io.github.detekt.tooling.api.UnexpectedError
 import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.github.detekt.tooling.internal.DefaultAnalysisResult
-import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.config.check
@@ -38,7 +37,7 @@ class AnalysisFacade(
         when (val error = result.exceptionOrNull()) {
             null -> {
                 val container = checkNotNull(result.getOrNull()) { "Result should not be null at this point." }
-                DefaultAnalysisResult(container, checkFailurePolicy(container, config))
+                DefaultAnalysisResult(container, checkFailurePolicy(container))
             }
 
             is InvalidConfig -> DefaultAnalysisResult(null, error)
@@ -46,13 +45,13 @@ class AnalysisFacade(
         }
     }
 
-    private fun checkFailurePolicy(result: Detektion, config: Config): DetektError? {
+    private fun checkFailurePolicy(result: Detektion): DetektError? {
         if (spec.baselineSpec.shouldCreateDuringAnalysis) {
             return null // never fail the build as on next run all current issues are suppressed via the baseline
         }
 
         val error = runCatching {
-            spec.rulesSpec.failurePolicy.check(result, config)
+            spec.rulesSpec.failurePolicy.check(result)
         }.exceptionOrNull()
 
         return when {

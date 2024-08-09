@@ -8,14 +8,12 @@ class RulesSpecBuilder : Builder<RulesSpec> {
 
     var activateAllRules: Boolean = false
     var failurePolicy: FailurePolicy = FailurePolicy.FailOnSeverity(Severity.Error)
-    var excludeCorrectable: Boolean = false
     var autoCorrect: Boolean = false
     var runPolicy: RulesSpec.RunPolicy = RulesSpec.RunPolicy.NoRestrictions
 
     override fun build(): RulesSpec = RulesModel(
         activateAllRules,
         failurePolicy,
-        excludeCorrectable,
         autoCorrect,
         runPolicy
     )
@@ -24,7 +22,6 @@ class RulesSpecBuilder : Builder<RulesSpec> {
 private data class RulesModel(
     override val activateAllRules: Boolean,
     override val failurePolicy: FailurePolicy,
-    override val excludeCorrectable: Boolean,
     override val autoCorrect: Boolean,
     override val runPolicy: RulesSpec.RunPolicy
 ) : RulesSpec

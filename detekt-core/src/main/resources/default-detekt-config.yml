@@ -1,6 +1,3 @@
-build:
-  excludeCorrectable: false
-
 config:
   validation: true
   warningsAsErrors: false

@@ -234,14 +234,9 @@ class RunnerSpec {
         fun `succeeds with --autocorrect with single autocorrectable fix`() {
             val inputPath = resourceAsPath("/autocorrect/SingleRule.kt")
 
-            assertThatThrownBy {
-                Runner(parseArguments(args + inputPath.toString()), outPrintStream, errPrintStream).execute()
-            }.isInstanceOf(IssuesFound::class.java)
+            Runner(parseArguments(args + inputPath.toString()), outPrintStream, errPrintStream).execute()
 
             assertThat(errPrintStream.toString()).isEmpty()
-            assertThat(outPrintStream.toString())
-                .contains("${inputPath.absolutePathString()}:3:1: Needless blank line(s) [NoConsecutiveBlankLines]")
-                .contains("$modificationMessagePrefix${inputPath.absolutePathString()}$modificationMessageSuffix")
             assertThat(inputPath).content().isEqualToNormalizingNewlines(
                 """
                     class Test {
@@ -256,19 +251,9 @@ class RunnerSpec {
         fun `succeeds with --autocorrect with multiple autocorrectable fixes`() {
             val inputPath = resourceAsPath("/autocorrect/MultipleRules.kt")
 
-            assertThatThrownBy {
-                Runner(parseArguments(args + inputPath.toString()), outPrintStream, errPrintStream).execute()
-            }.isInstanceOf(IssuesFound::class.java)
+            Runner(parseArguments(args + inputPath.toString()), outPrintStream, errPrintStream).execute()
 
             assertThat(errPrintStream.toString()).isEmpty()
-            assertThat(outPrintStream.toString())
-                .contains("${inputPath.absolutePathString()}:5:24: Line must not end with \".\" [ChainWrapping]")
-                .contains("${inputPath.absolutePathString()}:6:28: Line must not end with \".\" [ChainWrapping]")
-                .contains("${inputPath.absolutePathString()}:7:36: Line must not end with \"?.\" [ChainWrapping]")
-                .contains("${inputPath.absolutePathString()}:10:15: Line must not end with \"?:\" [ChainWrapping]")
-                .contains("${inputPath.absolutePathString()}:3:1: Needless blank line(s) [NoConsecutiveBlankLines]")
-                .contains("${inputPath.absolutePathString()}:12:1: Needless blank line(s) [NoConsecutiveBlankLines]")
-                .contains("$modificationMessagePrefix${inputPath.absolutePathString()}$modificationMessageSuffix")
             assertThat(inputPath).content().isEqualToNormalizingNewlines(
                 """
                     class Test {
@@ -292,14 +277,9 @@ class RunnerSpec {
         fun `keeps LF line endings after autocorrect`() {
             val inputPath = resourceAsPath("/autocorrect/SingleRuleLF.kt")
 
-            assertThatThrownBy {
-                Runner(parseArguments(args + inputPath.toString()), outPrintStream, errPrintStream).execute()
-            }.isInstanceOf(IssuesFound::class.java)
+            Runner(parseArguments(args + inputPath.toString()), outPrintStream, errPrintStream).execute()
 
             assertThat(errPrintStream.toString()).isEmpty()
-            assertThat(outPrintStream.toString())
-                .contains("${inputPath.absolutePathString()}:3:1: Needless blank line(s) [NoConsecutiveBlankLines]")
-                .contains("$modificationMessagePrefix${inputPath.absolutePathString()}$modificationMessageSuffix")
             assertThat(inputPath).content().isEqualTo("class Test {\n\n}\n")
         }
 
@@ -307,14 +287,9 @@ class RunnerSpec {
         fun `keeps CRLF line endings after autocorrect`() {
             val inputPath = resourceAsPath("/autocorrect/SingleRuleCRLF.kt")
 
-            assertThatThrownBy {
-                Runner(parseArguments(args + inputPath.toString()), outPrintStream, errPrintStream).execute()
-            }.isInstanceOf(IssuesFound::class.java)
+            Runner(parseArguments(args + inputPath.toString()), outPrintStream, errPrintStream).execute()
 
             assertThat(errPrintStream.toString()).isEmpty()
-            assertThat(outPrintStream.toString())
-                .contains("${inputPath.absolutePathString()}:3:1: Needless blank line(s) [NoConsecutiveBlankLines]")
-                .contains("$modificationMessagePrefix${inputPath.absolutePathString()}$modificationMessageSuffix")
             assertThat(inputPath).content().isEqualTo("class Test {\r\n\r\n}\r\n")
         }
     }

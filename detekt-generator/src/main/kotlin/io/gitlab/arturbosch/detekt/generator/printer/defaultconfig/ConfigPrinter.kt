@@ -8,8 +8,6 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
 
     override fun print(item: List<RuleSetPage>): String =
         yaml {
-            yaml { defaultBuildConfiguration() }
-            emptyLine()
             yaml { defaultConfigConfiguration() }
             emptyLine()
             yaml { defaultProcessorsConfiguration() }
@@ -28,11 +26,6 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
             item.sortedBy { it.ruleSet.name }
                 .forEach { printRuleSetPage(it) }
         }
-
-    private fun defaultBuildConfiguration(): String = """
-        build:
-          excludeCorrectable: false
-    """.trimIndent()
 
     private fun defaultConfigConfiguration(): String = """
         config:

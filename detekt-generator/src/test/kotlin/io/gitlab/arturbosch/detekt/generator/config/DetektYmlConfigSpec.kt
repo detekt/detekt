@@ -13,7 +13,6 @@ import kotlin.io.path.absolute
 class DetektYmlConfigSpec {
 
     private val generalConfigKeys = listOf(
-        "build",
         "config",
         "processors",
         "console-reports",
