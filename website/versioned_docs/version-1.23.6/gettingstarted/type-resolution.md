@@ -87,6 +87,16 @@ Therefore, we recommend using the `detekt<Variant>` tasks offered by the Gradle 
 In case of build related issues, you may try `detekt.android.disabled=true` in `gradle.properties` to prevent detekt
 Gradle plugins from configuring Android-specific gradle tasks.
 
+## Enabling on a KMP project
+
+The Detekt Gradle Plugin in a Kotlin Multiplatform project automatically generates platform-specific and common tasks for running analysis with type resolution. In general there will be a `detektMetadata<Platform>Main` task for each native platform target configured in the multiplatform plugin, specific tasks for JVM and Android modules as listed below, and a `detektMetadataCommonMain` for the `common` module.
+
+- `detekt` - Runs detekt WITHOUT type resolution
+- `detektMetadataCommonMain` - Runs detekt with type resolution on the `common` module in the `main` source set
+- `detektJvmMain` - Runs detekt with type resolution on the `jvm` module in the `main` source set
+- `detektMetadataIosMain` - Runs detekt with type resolution on the `ios` module in the `main` source set
+- `detektAndroid<Variant>` - Runs detekt with type resolution on the `android` module for the specific variant e.g. `detektAndroidRelease`
+
 ## Enabling on Detekt CLI
 
 If you're using [detekt via CLI](/docs/gettingstarted/cli), type resolution will be enabled only if you provide the `--classpath` and
