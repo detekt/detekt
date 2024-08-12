@@ -83,12 +83,13 @@ Gradle plugins from configuring Android-specific gradle tasks.
 
 ## Enabling on a KMP project
 
-When you apply the detekt Gradle plugin to a Kotlin Multiplatform project, it automatically generates platform-specific and common tasks for running code analysis. In general there will be a `detektMetadata<Platform>Main` task for each native platform target configured in the multiplatform plugin. The exception is JVM modules which will have a task `detektJvmMain`. Additionally, there will be a `detektMetadataCommonMain` task which runs detekt with type resolution on the `common` module.
+The Detekt Gradle Plugin in a Kotlin Multiplatform project automatically generates platform-specific and common tasks for running analysis with type resolution. In general there will be a `detektMetadata<Platform>Main` task for each native platform target configured in the multiplatform plugin, specific tasks for JVM and Android modules as listed below, and a `detektMetadataCommonMain` for the `common` module.
 
 - `detekt` - Runs detekt WITHOUT type resolution
 - `detektMetadataCommonMain` - Runs detekt with type resolution on the `common` module in the `main` source set
 - `detektJvmMain` - Runs detekt with type resolution on the `jvm` module in the `main` source set
 - `detektMetadataIosMain` - Runs detekt with type resolution on the `ios` module in the `main` source set
+- `detektAndroid<Variant>` - Runs detekt with type resolution on the `android` module for the specific variant e.g. `detektAndroidRelease`
 
 ## Enabling on Detekt CLI
 
