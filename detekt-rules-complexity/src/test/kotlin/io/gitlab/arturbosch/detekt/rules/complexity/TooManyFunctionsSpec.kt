@@ -13,6 +13,7 @@ private const val ALLOWED_FUNCTIONS_PER_OBJECT = "allowedFunctionsPerObject"
 private const val ALLOWED_FUNCTIONS_PER_ENUM = "allowedFunctionsPerEnum"
 private const val IGNORE_DEPRECATED = "ignoreDeprecated"
 private const val IGNORE_PRIVATE = "ignorePrivate"
+private const val IGNORE_INTERNAL = "ignoreInternal"
 private const val IGNORE_OVERRIDDEN = "ignoreOverridden"
 private const val IGNORE_ANNOTATED_FUNCTIONS = "ignoreAnnotatedFunctions"
 
@@ -188,6 +189,50 @@ class TooManyFunctionsSpec {
                 )
             )
             assertThat(configuredRule.compileAndLint(code)).isEmpty()
+        }
+    }
+
+    @Nested
+    inner class `internal functions` {
+
+        val code = """
+            class A {
+                internal fun f() {}
+                internal fun g() {}
+            }
+        """.trimIndent()
+
+        @Test
+        fun `finds the internal function per default`() {
+            assertThat(rule.compileAndLint(code)).hasSize(1)
+        }
+
+        @Test
+        fun `finds no internal functions`() {
+            val configuredRule = TooManyFunctions(
+                TestConfig(
+                    ALLOWED_FUNCTIONS_PER_CLASS to "1",
+                    IGNORE_INTERNAL to "true",
+                )
+            )
+            assertThat(configuredRule.compileAndLint(code)).isEmpty()
+        }
+
+        @Test
+        fun `finds private functions`() {
+            val configuredRule = TooManyFunctions(
+                TestConfig(
+                    ALLOWED_FUNCTIONS_PER_CLASS to "1",
+                    IGNORE_INTERNAL to "true",
+                )
+            )
+            val code = """
+                class A {
+                    private fun f() {}
+                    private fun g() {}
+                }
+            """.trimIndent()
+            assertThat(configuredRule.compileAndLint(code)).hasSize(1)
         }
     }
 
