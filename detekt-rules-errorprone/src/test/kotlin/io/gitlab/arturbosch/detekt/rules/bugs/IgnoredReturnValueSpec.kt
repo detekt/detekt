@@ -180,6 +180,21 @@ class IgnoredReturnValueSpec {
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
+
+        @Test
+        fun `does not report when a function's return value is assigned to set`() {
+            val code = """
+                fun returnsInt() = 42
+                
+                fun f() {
+                    val map = mutableMapOf<String, Int>()
+                    map["some-key"] = returnsInt()
+                    map.put("another-key", returnsInt())
+                }
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
     }
 
     @Nested
@@ -619,6 +634,24 @@ class IgnoredReturnValueSpec {
                         .listOfChecked()
                         .print()
                     return 42
+                }
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `does not report when a function's return value is assigned to set`() {
+            val code = """
+                annotation class CheckReturnValue
+
+                @CheckReturnValue
+                fun returnsInt() = 42
+                
+                fun f() {
+                    val map = mutableMapOf<String, Int>()
+                    map["some-key"] = returnsInt()
+                    map.put("another-key", returnsInt())
                 }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(env, code)
@@ -1121,6 +1154,21 @@ class IgnoredReturnValueSpec {
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(1)
+        }
+
+        @Test
+        fun `does not report when a function's return value is assigned to set`() {
+            val code = """
+                import com.example.ignore_return_value.Foo
+
+                fun test(foo: Foo) {
+                    val map = mutableMapOf<String, Any>()
+                    map["some_key"] = foo.foo()
+                    map.put("another-key", foo.foo())
+                }
+            """.trimIndent()
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings).isEmpty()
         }
     }
 }
