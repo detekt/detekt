@@ -30,6 +30,7 @@ private const val JDK_HOME_PARAMETER = "--jdk-home"
 private const val BASE_PATH_PARAMETER = "--base-path"
 private const val OPT_IN_PARAMETER = "-opt-in"
 private const val NO_JDK_PARAMETER = "-no-jdk"
+private const val MULTIPLATFORM_ENABLED_PARAMETER = "-Xmulti-platform"
 private const val EXPLICIT_API_MODE = "-Xexplicit-api"
 
 /* parameters passed with single hyphen prefix must be passed at end of command line argument list so they get passed
@@ -180,3 +181,6 @@ internal data class NoJdkArgument(override val value: Boolean) : BoolCliArgument
 internal data class ExplicitApiArgument(val mode: String?) : CliArgument() {
     override fun toArgument() = mode?.let { listOf("$EXPLICIT_API_MODE=$it") }.orEmpty()
 }
+
+internal data class MultiPlatformEnabledArgument(override val value: Boolean) :
+    BoolCliArgument(value, MULTIPLATFORM_ENABLED_PARAMETER)
