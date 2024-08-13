@@ -9,7 +9,7 @@
 
 
 <link rel="search" type="application/opensearchdescription+xml" title="detekt" href="/opensearch.xml"><link rel="stylesheet" href="/assets/css/styles.f49091ff.css">
-<script src="/assets/js/runtime~main.45513798.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.e0ab435a.js" defer="defer"></script>
 <script src="/assets/js/main.cc1a00ea.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -21,14 +21,6 @@ code style guidelines.</p>
 refactored into concrete classes.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.2.0</p>
 <p><strong>Requires Type Resolution</strong></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options">Configuration options:<a href="#configuration-options" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
-<ul>
-<li>
-<p><del><code>excludeAnnotatedClasses</code></del> (default: <code>[]</code>)</p>
-<p><strong>Deprecated</strong>: Use <code>ignoreAnnotated</code> instead</p>
-<p>Allows you to provide a list of annotations that disable this check.</p>
-</li>
-</ul>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="noncompliant-code">Noncompliant Code:<a href="#noncompliant-code" class="hash-link" aria-label="Direct link to Noncompliant Code:" title="Direct link to Noncompliant Code:">​</a></h4>
 <div class="language-kotlin codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-kotlin codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token keyword" style="color:#00009f">abstract</span><span class="token plain"> </span><span class="token keyword" style="color:#00009f">class</span><span class="token plain"> OnlyConcreteMembersInAbstractClass </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"> </span><span class="token comment" style="color:#999988;font-style:italic">// violation: no abstract members</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">val</span><span class="token plain"> i</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> Int </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">0</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">fun</span><span class="token plain"> </span><span class="token function" style="color:#d73a49">f</span><span class="token punctuation" style="color:#393A34">(</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token punctuation" style="color:#393A34">}</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="compliant-code">Compliant Code:<a href="#compliant-code" class="hash-link" aria-label="Direct link to Compliant Code:" title="Direct link to Compliant Code:">​</a></h4>
@@ -68,7 +60,7 @@ except where necessary for multi-statement branches.</li>
 <p>Multi-line if-statement has at least one line break (\n):</p>
 <div class="language-kotlin codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-kotlin codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token keyword" style="color:#00009f">if</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">a</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> b</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">else</span><span class="token plain"> c</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
 <p><strong>Active by default</strong>: No</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-1">Configuration options:<a href="#configuration-options-1" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options">Configuration options:<a href="#configuration-options" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>singleLine</code> (default: <code>&#x27;never&#x27;</code>)</p>
@@ -101,7 +93,7 @@ If there are braces on one of the branches, all branches should have it.</li>
 <li><code>always</code>: forces braces on all branches.</li>
 </ul>
 <p><strong>Active by default</strong>: No</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-2">Configuration options:<a href="#configuration-options-2" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-1">Configuration options:<a href="#configuration-options-1" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>singleLine</code> (default: <code>&#x27;necessary&#x27;</code>)</p>
@@ -134,7 +126,7 @@ instead of having it inside the function.</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="cascadingcallwrapping">CascadingCallWrapping<a href="#cascadingcallwrapping" class="hash-link" aria-label="Direct link to CascadingCallWrapping" title="Direct link to CascadingCallWrapping">​</a></h3>
 <p>Requires that all chained calls are placed on a new line if a preceding one is.</p>
 <p><strong>Active by default</strong>: No</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-3">Configuration options:<a href="#configuration-options-3" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-2">Configuration options:<a href="#configuration-options-2" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>includeElvis</code> (default: <code>true</code>)</p>
@@ -174,7 +166,7 @@ statements may hide some edge cases from the reader.</p>
 aside functions that help with converting objects from/to one another.
 Data classes will automatically have a generated <code>equals</code>, <code>toString</code> and <code>hashCode</code> function by the compiler.</p>
 <p><strong>Active by default</strong>: No</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-4">Configuration options:<a href="#configuration-options-4" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-3">Configuration options:<a href="#configuration-options-3" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>conversionFunctionPrefix</code> (default: <code>[&#x27;to&#x27;]</code>)</p>
@@ -201,7 +193,7 @@ mutable properties.</p>
 To increase readability they should be refactored to reduce the number of entries or avoid using a destructuring
 declaration.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.21.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-5">Configuration options:<a href="#configuration-options-5" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-4">Configuration options:<a href="#configuration-options-4" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>maxDestructuringEntries</code> (default: <code>3</code>)</p>
@@ -226,7 +218,7 @@ A double negative is harder to read than a positive. In particular, if there are
 the lambda, then the reader may need to unpack these using DeMorgan&#x27;s laws. Consider rewriting the lambda to use a positive version
 of the function (like <code>takeIf</code>).</p>
 <p><strong>Active by default</strong>: No</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-6">Configuration options:<a href="#configuration-options-6" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-5">Configuration options:<a href="#configuration-options-5" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>negativeFunctions</code> (default: <code>[&#x27;takeUnless&#x27;, &#x27;none&#x27;]</code>)</p>
@@ -282,7 +274,7 @@ makes your code misleading, especially when dealing with nested functions.</p>
 <p>Functions which only contain a <code>return</code> statement can be collapsed to an expression body. This shortens and
 cleans up the code.</p>
 <p><strong>Active by default</strong>: No</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-7">Configuration options:<a href="#configuration-options-7" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-6">Configuration options:<a href="#configuration-options-6" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>includeLineWrapping</code> (default: <code>false</code>)</p>
@@ -298,7 +290,7 @@ cleans up the code.</p>
 of language annotations which do not require explicit import.</p>
 <p><strong>Active by default</strong>: No</p>
 <p><strong>Requires Type Resolution</strong></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-8">Configuration options:<a href="#configuration-options-8" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-7">Configuration options:<a href="#configuration-options-7" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>annotations</code> (default: <code>[&#x27;java.lang.SuppressWarnings&#x27;, &#x27;java.lang.Deprecated&#x27;, &#x27;java.lang.annotation.Documented&#x27;, &#x27;java.lang.annotation.Target&#x27;, &#x27;java.lang.annotation.Retention&#x27;, &#x27;java.lang.annotation.Repeatable&#x27;, &#x27;java.lang.annotation.Inherited&#x27;]</code>)</p>
@@ -339,13 +331,8 @@ In practice this means there&#x27;s no need to start and end the regex with <cod
 <div class="language-yaml codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-yaml codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token key atrule" style="color:#00a4db">ForbiddenComment</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  </span><span class="token key atrule" style="color:#00a4db">comments</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token comment" style="color:#999988;font-style:italic"># Repeat the default configuration if it&#x27;s still needed.</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token key atrule" style="color:#00a4db">reason</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&#x27;Forbidden FIXME todo marker in comment, please fix the problem.&#x27;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token key atrule" style="color:#00a4db">value</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&#x27;FIXME:&#x27;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token key atrule" style="color:#00a4db">reason</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&#x27;Forbidden STOPSHIP todo marker in comment, please address the problem before shipping the code.&#x27;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token key atrule" style="color:#00a4db">value</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&#x27;STOPSHIP:&#x27;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token key atrule" style="color:#00a4db">reason</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&#x27;Forbidden TODO todo marker in comment, please do the changes.&#x27;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token key atrule" style="color:#00a4db">value</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&#x27;TODO:&#x27;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token comment" style="color:#999988;font-style:italic"># Add additional patterns to the list.</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token key atrule" style="color:#00a4db">reason</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&#x27;Authors are not recorded in KDoc.&#x27;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token key atrule" style="color:#00a4db">value</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&#x27;@author&#x27;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token key atrule" style="color:#00a4db">reason</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&#x27;REVIEW markers are not allowed in production code, only use before PR is merged.&#x27;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token key atrule" style="color:#00a4db">value</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&#x27;^\s*(?i)REVIEW\b&#x27;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token comment" style="color:#999988;font-style:italic"># Non-compliant: // REVIEW this code before merging.</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token comment" style="color:#999988;font-style:italic"># Compliant: // Preview will show up here.</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token key atrule" style="color:#00a4db">reason</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&#x27;Use @androidx.annotation.VisibleForTesting(otherwise = VisibleForTesting.PRIVATE) instead.&#x27;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token key atrule" style="color:#00a4db">value</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&#x27;^private$&#x27;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token comment" style="color:#999988;font-style:italic"># Non-compliant: /*private*/fun f() { }</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token key atrule" style="color:#00a4db">reason</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&#x27;KDoc tag should have a value.&#x27;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token key atrule" style="color:#00a4db">value</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&#x27;^\s*@(?!suppress|hide)\w+\s*$&#x27;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token comment" style="color:#999988;font-style:italic"># Non-compliant: /** ... @see */</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token comment" style="color:#999988;font-style:italic"># Compliant: /** ... @throws IOException when there&#x27;s a network problem */</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token punctuation" style="color:#393A34">-</span><span class="token plain"> </span><span class="token key atrule" style="color:#00a4db">reason</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&#x27;include an issue link at the beginning preceded by a space&#x27;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token key atrule" style="color:#00a4db">value</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&#x27;BUG:(?! https://github\.com/company/repo/issues/\d+).*&#x27;</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
 <p>By default the commonly used todo markers are forbidden: <code>TODO:</code>, <code>FIXME:</code> and <code>STOPSHIP:</code>.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-9">Configuration options:<a href="#configuration-options-9" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-8">Configuration options:<a href="#configuration-options-8" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
-<li>
-<p><del><code>values</code></del> (default: <code>[]</code>)</p>
-<p><strong>Deprecated</strong>: Use <code>comments</code> instead, make sure you escape your text for Regular Expressions.</p>
-<p>forbidden comment strings</p>
-</li>
 <li>
 <p><code>comments</code> (default: <code>[&#x27;FIXME:&#x27;, &#x27;STOPSHIP:&#x27;, &#x27;TODO:&#x27;]</code>)</p>
 <p>forbidden comment string patterns</p>
@@ -353,11 +340,6 @@ In practice this means there&#x27;s no need to start and end the regex with <cod
 <li>
 <p><code>allowedPatterns</code> (default: <code>&#x27;&#x27;</code>)</p>
 <p>ignores comments which match the specified regular expression. For example <code>Ticket|Task</code>.</p>
-</li>
-<li>
-<p><del><code>customMessage</code></del> (default: <code>&#x27;&#x27;</code>)</p>
-<p><strong>Deprecated</strong>: Use <code>comments</code> and provide <code>reason</code> against each <code>value</code>.</p>
-<p>error message which overrides the default one</p>
 </li>
 </ul>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="noncompliant-code-20">Noncompliant Code:<a href="#noncompliant-code-20" class="hash-link" aria-label="Direct link to Noncompliant Code:" title="Direct link to Noncompliant Code:">​</a></h4>
@@ -367,7 +349,7 @@ In practice this means there&#x27;s no need to start and end the regex with <cod
 <p>This rule allows to set a list of forbidden [imports].
 This can be used to discourage the use of unstable, experimental or deprecated APIs.</p>
 <p><strong>Active by default</strong>: No</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-10">Configuration options:<a href="#configuration-options-10" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-9">Configuration options:<a href="#configuration-options-9" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>imports</code> (default: <code>[]</code>)</p>
@@ -386,7 +368,7 @@ This can be used to discourage the use of unstable, experimental or deprecated A
 of unstable, experimental or deprecated methods, especially for methods imported from external libraries.</p>
 <p><strong>Active by default</strong>: No</p>
 <p><strong>Requires Type Resolution</strong></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-11">Configuration options:<a href="#configuration-options-11" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-10">Configuration options:<a href="#configuration-options-10" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>methods</code> (default: <code>[&#x27;kotlin.io.print&#x27;, &#x27;kotlin.io.println&#x27;, &#x27;java.math.BigDecimal.&lt;init&gt;(kotlin.Double)&#x27;, &#x27;java.math.BigDecimal.&lt;init&gt;(kotlin.String)&#x27;]</code>)</p>
@@ -403,7 +385,7 @@ name doesn&#x27;t give add any value to it and only makes the code more verbose<
 discourage the use named parameters.</p>
 <p><strong>Active by default</strong>: No</p>
 <p><strong>Requires Type Resolution</strong></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-12">Configuration options:<a href="#configuration-options-12" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-11">Configuration options:<a href="#configuration-options-11" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>methods</code> (default: <code>[]</code>)</p>
@@ -420,7 +402,7 @@ discourage the use named parameters.</p>
 This can be used to discourage the abuse of the <code>Suppress</code> and <code>SuppressWarnings</code> annotations.</p>
 <p>This rule is not capable of reporting suppression of itself, as that&#x27;s a language feature with precedence.</p>
 <p><strong>Active by default</strong>: No</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-13">Configuration options:<a href="#configuration-options-13" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-12">Configuration options:<a href="#configuration-options-12" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>rules</code> (default: <code>[]</code>)</p>
@@ -437,7 +419,7 @@ The Kotlin type <code>Unit</code> should be used instead. This type corresponds 
 and has only one value - the <code>Unit</code> object.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.21.0</p>
 <p><strong>Requires Type Resolution</strong></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-14">Configuration options:<a href="#configuration-options-14" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-13">Configuration options:<a href="#configuration-options-13" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>ignoreOverridden</code> (default: <code>false</code>)</p>
@@ -456,7 +438,7 @@ and has only one value - the <code>Unit</code> object.</p>
 <p>A function that only returns a single constant can be misleading. Instead, prefer declaring the constant
 as a <code>const val</code>.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.2.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-15">Configuration options:<a href="#configuration-options-15" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-14">Configuration options:<a href="#configuration-options-14" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>ignoreOverridableFunction</code> (default: <code>true</code>)</p>
@@ -479,7 +461,7 @@ as a <code>const val</code>.</p>
 <p>Loops which contain multiple <code>break</code> or <code>continue</code> statements are hard to read and understand.
 To increase readability they should be refactored into simpler loops.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.2.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-16">Configuration options:<a href="#configuration-options-16" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-15">Configuration options:<a href="#configuration-options-15" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>maxJumpCount</code> (default: <code>1</code>)</p>
@@ -492,7 +474,7 @@ To increase readability they should be refactored into simpler loops.</p>
 <p>This rule detects and reports usages of magic numbers in the code. Prefer defining constants with clear names
 describing what the magic number means.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-17">Configuration options:<a href="#configuration-options-17" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-16">Configuration options:<a href="#configuration-options-16" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>ignoreNumbers</code> (default: <code>[&#x27;-1&#x27;, &#x27;0&#x27;, &#x27;1&#x27;, &#x27;2&#x27;]</code>)</p>
@@ -555,7 +537,7 @@ Adding braces would improve readability and avoid possible errors.</p>
 <p>Limits the number of chained calls which can be placed on a single line.</p>
 <p><strong>Active by default</strong>: No</p>
 <p><strong>Requires Type Resolution</strong></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-18">Configuration options:<a href="#configuration-options-18" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-17">Configuration options:<a href="#configuration-options-17" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>maxChainedCalls</code> (default: <code>5</code>)</p>
@@ -571,7 +553,7 @@ Adding braces would improve readability and avoid possible errors.</p>
 <p>Long lines might be hard to read on smaller screens or printouts. Additionally, having a maximum line length
 in the codebase will help make the code more uniform.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-19">Configuration options:<a href="#configuration-options-19" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-18">Configuration options:<a href="#configuration-options-18" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>maxLineLength</code> (default: <code>120</code>)</p>
@@ -629,7 +611,7 @@ explicitly.</p>
 configured indentSize. The closing triple-quotes (<code>&quot;&quot;&quot;</code>)  must have the same indentation as the enclosing expression.</p>
 <p>Warning: Rule <code>MultilineRawStringIndentation</code> overlaps with <code>StringTemplateIndent</code> from the formatting rule set.</p>
 <p><strong>Active by default</strong>: No</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-20">Configuration options:<a href="#configuration-options-20" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-19">Configuration options:<a href="#configuration-options-19" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>indentSize</code> (default: <code>4</code>)</p>
@@ -772,7 +754,7 @@ Hence, the rule ignores the visibility modifiers in explicit API mode.</p>
 <p>Having many exit points in a function can be confusing and impacts readability of the
 code.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-21">Configuration options:<a href="#configuration-options-21" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-20">Configuration options:<a href="#configuration-options-20" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>max</code> (default: <code>2</code>)</p>
@@ -830,7 +812,7 @@ Raw string also allows us to represent multiline string without the need of \n.
 Also, see <a href="https://kotlinlang.org/docs/coding-conventions.html#strings" target="_blank" rel="noopener noreferrer">Kotlin coding convention</a>  for
 recommendation on using multiline strings</p>
 <p><strong>Active by default</strong>: No</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-22">Configuration options:<a href="#configuration-options-22" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-21">Configuration options:<a href="#configuration-options-21" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>maxEscapedCharacterCount</code> (default: <code>2</code>)</p>
@@ -849,7 +831,7 @@ recommendation on using multiline strings</p>
 <p>Functions should have clear <code>throw</code> statements. Functions with many <code>throw</code> statements can be harder to read and lead
 to confusion. Instead, prefer limiting the number of <code>throw</code> statements in a function.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-23">Configuration options:<a href="#configuration-options-23" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-22">Configuration options:<a href="#configuration-options-22" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>max</code> (default: <code>2</code>)</p>
@@ -875,7 +857,7 @@ which means Markdown line-breaks in KDoc are really only trailing whitespace for
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="trimmultilinerawstring">TrimMultilineRawString<a href="#trimmultilinerawstring" class="hash-link" aria-label="Direct link to TrimMultilineRawString" title="Direct link to TrimMultilineRawString">​</a></h3>
 <p>All the Raw strings that have more than one line should be followed by <code>trimMargin()</code> or <code>trimIndent()</code>.</p>
 <p><strong>Active by default</strong>: No</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-24">Configuration options:<a href="#configuration-options-24" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-23">Configuration options:<a href="#configuration-options-23" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>trimmingMethods</code> (default: <code>[&#x27;trimIndent&#x27;, &#x27;trimMargin&#x27;]</code>)</p>
@@ -891,13 +873,8 @@ which means Markdown line-breaks in KDoc are really only trailing whitespace for
 for readability. For <code>Serializable</code> classes or objects, the field <code>serialVersionUID</code> is
 explicitly ignored. For floats and doubles, anything to the right of the decimal point is ignored.</p>
 <p><strong>Active by default</strong>: No</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-25">Configuration options:<a href="#configuration-options-25" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-24">Configuration options:<a href="#configuration-options-24" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
-<li>
-<p><del><code>acceptableDecimalLength</code></del> (default: <code>5</code>)</p>
-<p><strong>Deprecated</strong>: Use <code>acceptableLength</code> instead</p>
-<p>Length under which base 10 numbers are not required to have underscores</p>
-</li>
 <li>
 <p><code>acceptableLength</code> (default: <code>4</code>)</p>
 <p>Maximum number of consecutive digits that a numeric literal can have without using an underscore</p>
@@ -992,7 +969,7 @@ to reduce visual complexity.</p>
 These unnecessary parentheses can safely be removed.</p>
 <p>Added in v1.0.0.RC4</p>
 <p><strong>Active by default</strong>: No</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-26">Configuration options:<a href="#configuration-options-26" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-25">Configuration options:<a href="#configuration-options-25" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>allowForUnclearPrecedence</code> (default: <code>false</code>)</p>
@@ -1013,7 +990,7 @@ from destructuring declarations (componentN imports).</p>
 <p>An unused parameter can be removed to simplify the signature of the function.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.23.0</p>
 <p><strong>Aliases</strong>: UNUSED_PARAMETER, unused</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-27">Configuration options:<a href="#configuration-options-27" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-26">Configuration options:<a href="#configuration-options-26" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>allowedNames</code> (default: <code>&#x27;ignored|expected&#x27;</code>)</p>
@@ -1036,7 +1013,7 @@ can lead to confusion and potential bugs.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.16.0</p>
 <p><strong>Requires Type Resolution</strong></p>
 <p><strong>Aliases</strong>: unused</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-28">Configuration options:<a href="#configuration-options-28" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-27">Configuration options:<a href="#configuration-options-27" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>allowedNames</code> (default: <code>&#x27;&#x27;</code>)</p>
@@ -1050,7 +1027,7 @@ properties of the class when they are declared with <code>val</code> or <code>va
 <p><strong>Active by default</strong>: Yes - Since v1.23.0</p>
 <p><strong>Requires Type Resolution</strong></p>
 <p><strong>Aliases</strong>: unused</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-29">Configuration options:<a href="#configuration-options-29" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-28">Configuration options:<a href="#configuration-options-28" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>allowedNames</code> (default: <code>&#x27;ignored|expected|serialVersionUID&#x27;</code>)</p>
@@ -1066,7 +1043,7 @@ properties of the class when they are declared with <code>val</code> or <code>va
 <p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
 <p><strong>Requires Type Resolution</strong></p>
 <p><strong>Aliases</strong>: UNUSED_VARIABLE, unused</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-30">Configuration options:<a href="#configuration-options-30" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-29">Configuration options:<a href="#configuration-options-29" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>allowedNames</code> (default: <code>&#x27;ignored|_&#x27;</code>)</p>
@@ -1116,13 +1093,8 @@ and generate <code>hashCode</code>, <code>equals</code> and <code>toString</code
 <p>Read more about <a href="https://kotlinlang.org/docs/data-classes.html" target="_blank" rel="noopener noreferrer">data classes</a></p>
 <p><strong>Active by default</strong>: No</p>
 <p><strong>Requires Type Resolution</strong></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-31">Configuration options:<a href="#configuration-options-31" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-30">Configuration options:<a href="#configuration-options-30" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
-<li>
-<p><del><code>excludeAnnotatedClasses</code></del> (default: <code>[]</code>)</p>
-<p><strong>Deprecated</strong>: Use <code>ignoreAnnotated</code> instead</p>
-<p>allows to provide a list of annotations that disable this check</p>
-</li>
 <li>
 <p><code>allowVars</code> (default: <code>false</code>)</p>
 <p>allows to relax this rule in order to exclude classes that contains one (or more) vars</p>
@@ -1153,7 +1125,7 @@ and generate <code>hashCode</code>, <code>equals</code> and <code>toString</code
 <p>Binary expressions are better expressed using an <code>if</code> expression than a <code>when</code> expression.</p>
 <p>See <a href="https://kotlinlang.org/docs/coding-conventions.html#if-versus-when" target="_blank" rel="noopener noreferrer">if versus when</a></p>
 <p><strong>Active by default</strong>: No</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-32">Configuration options:<a href="#configuration-options-32" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-31">Configuration options:<a href="#configuration-options-31" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>ignoreWhenContainingVariableDeclaration</code> (default: <code>false</code>)</p>
@@ -1240,7 +1212,7 @@ the current state easier.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.16.0</p>
 <p><strong>Requires Type Resolution</strong></p>
 <p><strong>Aliases</strong>: CanBeVal</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-33">Configuration options:<a href="#configuration-options-33" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-32">Configuration options:<a href="#configuration-options-32" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>ignoreLateinitVar</code> (default: <code>false</code>)</p>
@@ -1258,7 +1230,7 @@ which classes are imported and helps prevent naming conflicts.</p>
 <p><strong>NOTE</strong>: This rule has a twin implementation NoWildcardImports in the formatting rule set (a wrapped KtLint rule).
 When suppressing an issue of WildcardImport in the baseline file, make sure to suppress the corresponding NoWildcardImports issue.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-34">Configuration options:<a href="#configuration-options-34" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-33">Configuration options:<a href="#configuration-options-33" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>excludeImports</code> (default: <code>[&#x27;java.util.*&#x27;]</code>)</p>
