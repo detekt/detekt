@@ -12,7 +12,6 @@ class PotentialBugProvider : DefaultRuleSetProvider {
 
     override val ruleSetId = RuleSet.Id("potential-bugs")
 
-    @Suppress("DEPRECATION")
     override fun instance(): RuleSet = RuleSet(
         ruleSetId,
         listOf(
@@ -20,7 +19,6 @@ class PotentialBugProvider : DefaultRuleSetProvider {
             ::Deprecation,
             ::DontDowncastCollectionTypes,
             ::DoubleMutabilityForCollection,
-            ::DuplicateCaseInWhenExpression,
             ::ElseCaseInsteadOfExhaustiveWhen,
             ::EqualsAlwaysReturnsTrueOrFalse,
             ::EqualsWithHashCodeExist,
@@ -35,9 +33,7 @@ class PotentialBugProvider : DefaultRuleSetProvider {
             ::MapGetWithNotNullAssertionOperator,
             ::MissingPackageDeclaration,
             ::MissingUseCall,
-            ::MissingWhenCase,
             ::NullCheckOnMutableProperty,
-            ::RedundantElseInWhen,
             ::UnconditionalJumpStatementInLoop,
             ::UnnamedParameterUse,
             ::UnnecessaryNotNullOperator,

@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.api.configWithFallback
 import io.gitlab.arturbosch.detekt.rules.isOpen
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtClass
@@ -21,14 +20,8 @@ import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
  */
 @ActiveByDefault(since = "1.0.0")
 class EmptyFunctionBlock(config: Config) : EmptyRule(config) {
-
     @Configuration("Excludes all the overridden functions")
-    @Deprecated("Use `ignoreOverridden` instead")
-    private val ignoreOverriddenFunctions: Boolean by config(false)
-
-    @Suppress("DEPRECATION")
-    @Configuration("Excludes all the overridden functions")
-    private val ignoreOverridden: Boolean by configWithFallback(::ignoreOverriddenFunctions, false)
+    private val ignoreOverridden: Boolean by config(false)
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)

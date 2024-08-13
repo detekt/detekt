@@ -8,7 +8,6 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.api.configWithFallback
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtClass
@@ -33,18 +32,12 @@ class LongParameterList(config: Config) : Rule(
         "Prefer functions with short parameter lists."
 ) {
 
-    @Deprecated("Use `allowedFunctionParameters` and `allowedConstructorParameters` instead")
-    @Configuration("number of parameters required to trigger the rule")
-    private val threshold: Int by config(DEFAULT_ALLOWED_FUNCTION_PARAMETERS)
-
-    @Suppress("DEPRECATION")
     @Configuration("number of function parameters required to trigger the rule")
-    private val allowedFunctionParameters: Int by configWithFallback(::threshold, DEFAULT_ALLOWED_FUNCTION_PARAMETERS)
+    private val allowedFunctionParameters: Int by config(DEFAULT_ALLOWED_FUNCTION_PARAMETERS)
 
-    @Suppress("DEPRECATION")
     @Configuration("number of constructor parameters required to trigger the rule")
     private val allowedConstructorParameters: Int
-        by configWithFallback(::threshold, DEFAULT_ALLOWED_CONSTRUCTOR_PARAMETERS)
+        by config(DEFAULT_ALLOWED_CONSTRUCTOR_PARAMETERS)
 
     @Configuration("ignore parameters that have a default value")
     private val ignoreDefaultParameters: Boolean by config(false)

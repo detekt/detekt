@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.github.detekt.psi.AnnotationExcluder
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
@@ -48,34 +47,21 @@ class UseDataClass(config: Config) : Rule(
     config,
     "Classes that do nothing but hold data should be replaced with a data class."
 ) {
-
-    @Configuration("allows to provide a list of annotations that disable this check")
-    @Deprecated("Use `ignoreAnnotated` instead")
-    private val excludeAnnotatedClasses: List<Regex> by config(emptyList<String>()) { list ->
-        list.map { it.replace(".", "\\.").replace("*", ".*").toRegex() }
-    }
-
     @Configuration("allows to relax this rule in order to exclude classes that contains one (or more) vars")
     private val allowVars: Boolean by config(false)
 
     override fun visit(root: KtFile) {
         super.visit(root)
-        val annotationExcluder = AnnotationExcluder(
-            root,
-            @Suppress("DEPRECATION") excludeAnnotatedClasses,
-            bindingContext,
-        )
-        root.forEachDescendantOfType<KtClass> { visitKlass(it, annotationExcluder) }
+        root.forEachDescendantOfType<KtClass> { visitKlass(it) }
     }
 
     @Suppress("ComplexMethod")
-    private fun visitKlass(klass: KtClass, annotationExcluder: AnnotationExcluder) {
+    private fun visitKlass(klass: KtClass) {
         if (isIncorrectClassType(klass) || hasOnlyPrivateConstructors(klass)) {
             return
         }
         if (klass.isClosedForExtension() &&
-            klass.onlyExtendsSimpleInterfaces() &&
-            !annotationExcluder.shouldExclude(klass.annotationEntries)
+            klass.onlyExtendsSimpleInterfaces()
         ) {
             val declarations = klass.body?.declarations.orEmpty()
             val properties = declarations.filterIsInstance<KtProperty>()
