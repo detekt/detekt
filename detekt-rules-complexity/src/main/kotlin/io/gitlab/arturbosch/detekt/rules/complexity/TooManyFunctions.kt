@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.hasAnnotation
+import io.gitlab.arturbosch.detekt.rules.isInternal
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -50,6 +51,9 @@ class TooManyFunctions(config: Config) : Rule(
 
     @Configuration("ignore private functions")
     private val ignorePrivate: Boolean by config(false)
+
+    @Configuration("ignore internal functions")
+    private val ignoreInternal: Boolean by config(false)
 
     @Configuration("ignore overridden functions")
     private val ignoreOverridden: Boolean by config(false)
@@ -153,6 +157,7 @@ class TooManyFunctions(config: Config) : Rule(
     private fun isIgnoredFunction(function: KtNamedFunction): Boolean = when {
         ignoreDeprecated && function.hasAnnotation(DEPRECATED) -> true
         ignorePrivate && function.isPrivate() -> true
+        ignoreInternal && function.isInternal() -> true
         ignoreOverridden && function.isOverride() -> true
         ignoreAnnotatedFunctions.any { function.hasAnnotation(it) } -> true
         else -> false

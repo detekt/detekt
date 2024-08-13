@@ -169,6 +169,7 @@ complexity:
     allowedFunctionsPerEnum: 11
     ignoreDeprecated: false
     ignorePrivate: false
+    ignoreInternal: false
     ignoreOverridden: false
     ignoreAnnotatedFunctions: []
 
