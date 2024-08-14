@@ -5,6 +5,8 @@ import io.gitlab.arturbosch.detekt.internal.DetektAndroid
 import io.gitlab.arturbosch.detekt.internal.DetektJvm
 import io.gitlab.arturbosch.detekt.internal.DetektMultiplatform
 import io.gitlab.arturbosch.detekt.internal.DetektPlain
+import io.gitlab.arturbosch.detekt.internal.gradlePropertyAtConfigTimeCompat
+import io.gitlab.arturbosch.detekt.internal.rootProjectDirectoryCompat
 import org.gradle.api.Incubating
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -26,7 +28,7 @@ class DetektPlugin : Plugin<Project> {
         extension.reportsDir = project.extensions.getByType(ReportingExtension::class.java).file("detekt")
 
         val defaultConfigFile =
-            project.file("${project.rootProject.layout.projectDirectory.dir(CONFIG_DIR_NAME)}/$CONFIG_FILE")
+            project.file("${project.rootProjectDirectoryCompat().dir(CONFIG_DIR_NAME)}/$CONFIG_FILE")
         if (defaultConfigFile.exists()) {
             extension.config.setFrom(project.files(defaultConfigFile))
         }
@@ -36,10 +38,20 @@ class DetektPlugin : Plugin<Project> {
 
         project.registerDetektPlainTask(extension)
         project.registerDetektJvmTasks(extension)
-        if (project.findProperty(DETEKT_ANDROID_DISABLED_PROPERTY) != "true") {
+        val enableAndroidTasks =
+            !project.providers
+                .gradlePropertyAtConfigTimeCompat(DETEKT_ANDROID_DISABLED_PROPERTY)
+                .getOrElse("false")
+                .toBoolean()
+        if (enableAndroidTasks) {
             project.registerDetektAndroidTasks(extension)
         }
-        if (project.findProperty(DETEKT_MULTIPLATFORM_DISABLED_PROPERTY) != "true") {
+        val enableMppTasks =
+            !project.providers
+                .gradlePropertyAtConfigTimeCompat(DETEKT_MULTIPLATFORM_DISABLED_PROPERTY)
+                .getOrElse("false")
+                .toBoolean()
+        if (enableMppTasks) {
             project.registerDetektMultiplatformTasks(extension)
         }
         project.registerGenerateConfigTask(extension)
