@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.dokka)
     id("java-test-fixtures")
     alias(libs.plugins.binaryCompatibilityValidator)
-    id("dev.drewhamilton.poko") version "0.16.0-beta01"
+    id("dev.drewhamilton.poko") version "0.16.0"
 }
 
 dependencies {
@@ -15,6 +15,8 @@ dependencies {
 
     testImplementation(projects.detektTest)
     testImplementation(libs.assertj)
+    testFixturesImplementation(projects.detektTestUtils)
+    testFixturesImplementation(libs.poko.annotations)
 }
 
 val javaComponent = components["java"] as AdhocComponentWithVariants
