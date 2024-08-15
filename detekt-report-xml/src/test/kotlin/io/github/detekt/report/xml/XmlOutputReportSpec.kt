@@ -4,19 +4,15 @@ import io.github.detekt.test.utils.internal.FakeKtElement
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.test.TestDetektion
+import io.gitlab.arturbosch.detekt.test.TestSetupContext
 import io.gitlab.arturbosch.detekt.test.createIssue
-import io.gitlab.arturbosch.detekt.test.createIssueForRelativePath
 import io.gitlab.arturbosch.detekt.test.createLocation
-import io.gitlab.arturbosch.detekt.test.createRuleInstance
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 import java.util.Locale
-import kotlin.io.path.Path
-import kotlin.io.path.absolute
-import kotlin.io.path.invariantSeparatorsPathString
 
 private const val TAB = "\t"
 
@@ -40,7 +36,7 @@ class XmlOutputReportSpec {
         ),
         FakeKtElement()
     )
-    private val outputReport = XmlOutputReport()
+    private val outputReport = XmlOutputReport().apply { init(TestSetupContext()) }
 
     @Test
     fun `renders empty report`() {
@@ -65,7 +61,7 @@ class XmlOutputReportSpec {
             """
                 <?xml version="1.0" encoding="UTF-8"?>
                 <checkstyle version="4.3">
-                <file name="${entity1.location.path.invariantSeparatorsPathString}">
+                <file name="src/main/com/sample/Sample1.kt">
                 $TAB<error line="11" column="1" severity="error" message="TestMessage" source="detekt.rule_a/id" />
                 </file>
                 </checkstyle>
@@ -84,7 +80,7 @@ class XmlOutputReportSpec {
             """
                 <?xml version="1.0" encoding="UTF-8"?>
                 <checkstyle version="4.3">
-                <file name="${entity1.location.path.invariantSeparatorsPathString}">
+                <file name="src/main/com/sample/Sample1.kt">
                 $TAB<error line="11" column="1" severity="error" message="TestMessage" source="detekt.rule_a/id" />
                 $TAB<error line="11" column="1" severity="error" message="TestMessage" source="detekt.rule_b" />
                 </file>
@@ -104,44 +100,11 @@ class XmlOutputReportSpec {
             """
                 <?xml version="1.0" encoding="UTF-8"?>
                 <checkstyle version="4.3">
-                <file name="${entity1.location.path.invariantSeparatorsPathString}">
+                <file name="src/main/com/sample/Sample1.kt">
                 $TAB<error line="11" column="1" severity="error" message="TestMessage" source="detekt.rule_a/id" />
                 </file>
-                <file name="${entity2.location.path.invariantSeparatorsPathString}">
+                <file name="src/main/com/sample/Sample2.kt">
                 $TAB<error line="22" column="2" severity="error" message="TestMessage" source="detekt.rule_a/id" />
-                </file>
-                </checkstyle>
-            """.trimIndent()
-        )
-    }
-
-    @Test
-    fun `renders issues with relative path`() {
-        val issueA = createIssueForRelativePath(
-            ruleInstance = createRuleInstance("rule_a/id"),
-            basePath = "${System.getProperty("user.dir")}/Users/tester/detekt/",
-            relativePath = "Sample1.kt"
-        )
-        val issueB = createIssueForRelativePath(
-            ruleInstance = createRuleInstance("rule_b"),
-            basePath = "${System.getProperty("user.dir")}/Users/tester/detekt/",
-            relativePath = "Sample2.kt"
-        )
-
-        val outputReport = XmlOutputReport()
-        outputReport.basePath = Path("Users/tester/detekt/").absolute()
-
-        val result = outputReport.render(TestDetektion(issueA, issueB))
-
-        assertThat(result).isEqualTo(
-            """
-                <?xml version="1.0" encoding="UTF-8"?>
-                <checkstyle version="4.3">
-                <file name="Sample1.kt">
-                $TAB<error line="1" column="1" severity="error" message="TestMessage" source="detekt.rule_a/id" />
-                </file>
-                <file name="Sample2.kt">
-                $TAB<error line="1" column="1" severity="error" message="TestMessage" source="detekt.rule_b" />
                 </file>
                 </checkstyle>
             """.trimIndent()
@@ -168,11 +131,11 @@ class XmlOutputReportSpec {
             """
                 <?xml version="1.0" encoding="UTF-8"?>
                 <checkstyle version="4.3">
-                <file name="${entity1.location.path.invariantSeparatorsPathString}">
+                <file name="src/main/com/sample/Sample1.kt">
                 $TAB<error line="11" column="1" severity="error" message="TestMessage" source="detekt.rule_a/id" />
                 $TAB<error line="11" column="1" severity="error" message="TestMessage" source="detekt.rule_b" />
                 </file>
-                <file name="${entity2.location.path.invariantSeparatorsPathString}">
+                <file name="src/main/com/sample/Sample2.kt">
                 $TAB<error line="22" column="2" severity="error" message="TestMessage" source="detekt.rule_a/id" />
                 $TAB<error line="22" column="2" severity="error" message="TestMessage" source="detekt.rule_b" />
                 </file>
@@ -198,7 +161,7 @@ class XmlOutputReportSpec {
             val expected = """
                 <?xml version="1.0" encoding="UTF-8"?>
                 <checkstyle version="4.3">
-                <file name="${entity1.location.path.invariantSeparatorsPathString}">
+                <file name="src/main/com/sample/Sample1.kt">
                 $TAB<error line="${issue.location.source.line}" column="${issue.location.source.column}" severity="$xmlSeverity" message="${issue.message}" source="detekt.${issue.ruleInstance.id}" />
                 </file>
                 </checkstyle>
