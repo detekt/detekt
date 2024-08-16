@@ -6,6 +6,7 @@ import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.modifiedText
 import io.gitlab.arturbosch.detekt.test.assertThat
+import io.gitlab.arturbosch.detekt.test.lint
 import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtFile
@@ -80,7 +81,7 @@ private fun runRule(config: Config): Pair<KtFile, List<Finding>> {
     val rules = ruleSet.rules
         .map { (ruleName, provider) -> provider(config.subConfig(ruleSet.id.value).subConfig(ruleName.value)) }
         .filter { it.config.valueOrDefault("active", false) }
-    return testFile to rules.flatMap { it.visitFile(testFile) }
+    return testFile to rules.flatMap { it.lint(testFile) }
 }
 
 private fun wasFormatted(file: KtFile) = file.modifiedText == contentAfterChainWrapping

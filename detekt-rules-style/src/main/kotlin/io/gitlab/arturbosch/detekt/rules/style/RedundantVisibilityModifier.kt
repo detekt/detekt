@@ -58,8 +58,7 @@ class RedundantVisibilityModifier(config: Config) : Rule(
      * See: https://kotlinlang.org/docs/whatsnew14.html#explicit-api-mode-for-library-authors
      */
     private fun isExplicitApiModeActive(): Boolean {
-        val resources = compilerResources ?: return false
-        val flag = resources.languageVersionSettings.getFlag(AnalysisFlags.explicitApiMode)
+        val flag = compilerResources.languageVersionSettings.getFlag(AnalysisFlags.explicitApiMode)
         return flag != ExplicitApiMode.DISABLED
     }
 

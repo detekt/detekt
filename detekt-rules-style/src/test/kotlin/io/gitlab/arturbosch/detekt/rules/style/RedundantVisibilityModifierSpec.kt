@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.github.detekt.test.utils.compileContentForTest
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.FakeCompilerResources
 import io.gitlab.arturbosch.detekt.test.assertThat
@@ -185,12 +184,6 @@ class RedundantVisibilityModifierSpec {
         @Test
         fun `reports public function in class if explicit API mode is disabled`() {
             val findings = subject.compileAndLint(code, FakeCompilerResources(ExplicitApiMode.DISABLED))
-            assertThat(findings).hasSize(1)
-        }
-
-        @Test
-        fun `reports public function in class if compiler resources are not available`() {
-            val findings = subject.visitFile(compileContentForTest(code), compilerResources = null)
             assertThat(findings).hasSize(1)
         }
     }
