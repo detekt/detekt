@@ -25,4 +25,4 @@ class TxtOutputReport : BuiltInOutputReport, OutputReport() {
 private fun Issue.compactWithSignature(): String =
     "${ruleInstance.id} - ${entity.compact()} - Signature=${entity.signature}"
 
-private fun Entity.compact(): String = "[$name] at ${location.path}:${location.source}"
+private fun Issue.Entity.compact(): String = "[$name] at ${location.path}:${location.source}"
