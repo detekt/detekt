@@ -1,5 +1,5 @@
 plugins {
-    id("io.github.goooler.shadow") version "8.1.8"
+    id("com.gradleup.shadow") version "8.3.0"
     id("module")
     id("application")
 }

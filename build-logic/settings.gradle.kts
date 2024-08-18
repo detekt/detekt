@@ -23,7 +23,6 @@ buildCache {
     remote(develocity.buildCache) {
         server = "https://ge.detekt.dev"
         isEnabled = true
-        val accessKey = System.getenv("DEVELOCITY_ACCESS_KEY")
-        isPush = isCiBuild && !accessKey.isNullOrEmpty()
+        isPush = isCiBuild
     }
 }

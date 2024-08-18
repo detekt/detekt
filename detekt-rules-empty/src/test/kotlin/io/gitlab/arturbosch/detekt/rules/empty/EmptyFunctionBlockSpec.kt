@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-private const val IGNORE_OVERRIDDEN_FUNCTIONS = "ignoreOverriddenFunctions"
 private const val IGNORE_OVERRIDDEN = "ignoreOverridden"
 
 class EmptyFunctionBlockSpec {
@@ -88,7 +87,7 @@ class EmptyFunctionBlockSpec {
 
         @Test
         fun `should not flag overridden functions`() {
-            val config = TestConfig(IGNORE_OVERRIDDEN_FUNCTIONS to "true")
+            val config = TestConfig(IGNORE_OVERRIDDEN to "true")
             assertThat(EmptyFunctionBlock(config).compileAndLint(code)).hasStartSourceLocation(1, 13)
         }
     }

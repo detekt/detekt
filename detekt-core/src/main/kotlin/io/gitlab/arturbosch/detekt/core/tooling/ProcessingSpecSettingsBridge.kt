@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.core.tooling
 import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.github.detekt.utils.openSafeStream
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.OutputReport.Companion.DETEKT_OUTPUT_REPORT_BASE_PATH_KEY
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.baseline.DETEKT_BASELINE_CREATION_KEY
 import io.gitlab.arturbosch.detekt.core.baseline.DETEKT_BASELINE_PATH_KEY
@@ -29,7 +28,6 @@ internal fun <R> ProcessingSpec.withSettings(execute: ProcessingSettings.() -> R
             register(DETEKT_BASELINE_CREATION_KEY, baselineSpec.shouldCreateDuringAnalysis)
             register(MONITOR_PROPERTY_KEY, monitor)
             register(DETEKT_OUTPUT_REPORT_PATHS_KEY, reportsSpec.reports)
-            register(DETEKT_OUTPUT_REPORT_BASE_PATH_KEY, projectSpec.basePath)
         }
     }
     val result = settings.use { execute(it) }

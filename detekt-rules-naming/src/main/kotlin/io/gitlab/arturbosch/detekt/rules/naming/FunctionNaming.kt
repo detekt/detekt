@@ -31,11 +31,6 @@ class FunctionNaming(config: Config) : Rule(
     @Configuration("ignores functions in classes which match this regex")
     private val excludeClassPattern: Regex by config("$^", String::toRegex)
 
-    @Configuration("ignores functions that have the override modifier")
-    @Deprecated("This configuration is ignored and will be removed in the future")
-    @Suppress("unused")
-    private val ignoreOverridden: Boolean by config(true)
-
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
 

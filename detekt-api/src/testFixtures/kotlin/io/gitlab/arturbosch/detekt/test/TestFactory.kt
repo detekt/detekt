@@ -69,24 +69,6 @@ fun createRuleInstance(
     )
 }
 
-fun createIssueForRelativePath(
-    ruleInstance: RuleInstance,
-    basePath: String = "Users/tester/detekt/",
-    relativePath: String = "TestFile.kt"
-): Issue =
-    IssueImpl(
-        ruleInstance = ruleInstance,
-        entity = createEntity(
-            location = IssueImpl.Location(
-                source = SourceLocation(1, 1),
-                endSource = SourceLocation(1, 1),
-                text = TextLocation(0, 0),
-                path = Path("/").absolute().resolve(basePath).resolve(relativePath)
-            ),
-        ),
-        message = "TestMessage"
-    )
-
 fun createEntity(
     signature: String = "TestEntitySignature",
     location: Issue.Location = createLocation(),

@@ -4,11 +4,9 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.SetupContext
-import io.gitlab.arturbosch.detekt.api.getOrNull
 import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
 import java.nio.file.Path
 import java.util.Locale
-import kotlin.io.path.absolute
 import kotlin.io.path.invariantSeparatorsPathString
 import kotlin.io.path.relativeTo
 
@@ -24,10 +22,10 @@ class XmlOutputReport : BuiltInOutputReport, OutputReport() {
     private val Issue.severityLabel: String
         get() = severity.name.lowercase(Locale.US)
 
-    var basePath: Path? = null
+    private lateinit var basePath: Path
 
     override fun init(context: SetupContext) {
-        basePath = context.getOrNull<Path>(DETEKT_OUTPUT_REPORT_BASE_PATH_KEY)?.absolute()
+        basePath = context.basePath
     }
 
     override fun render(detektion: Detektion): String {
@@ -36,7 +34,7 @@ class XmlOutputReport : BuiltInOutputReport, OutputReport() {
         lines += "<checkstyle version=\"4.3\">"
 
         detektion.issues
-            .groupBy { basePath?.let { path -> it.location.path.relativeTo(path) } ?: it.location.path }
+            .groupBy { it.location.path.relativeTo(basePath) }
             .forEach { (filePath, issues) ->
                 lines += "<file name=\"${filePath.invariantSeparatorsPathString.toXmlString()}\">"
                 issues.forEach {

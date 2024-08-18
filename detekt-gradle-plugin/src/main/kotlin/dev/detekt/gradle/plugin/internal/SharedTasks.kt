@@ -35,6 +35,7 @@ internal fun Project.registerJvmCompilationDetektTask(
         detektTask.freeCompilerArgs.convention(siblingTask.compilerOptions.freeCompilerArgs)
         detektTask.optIn.convention(siblingTask.compilerOptions.optIn)
         detektTask.noJdk.convention(siblingTask.compilerOptions.noJdk)
+        detektTask.multiPlatformEnabled.convention(siblingTask.multiPlatformEnabled)
         if (compilation.name == "main") {
             detektTask.explicitApi.convention(mapExplicitArgMode())
         }
@@ -78,6 +79,7 @@ internal fun Project.registerJvmCompilationCreateBaselineTask(
         createBaselineTask.freeCompilerArgs.convention(siblingTask.compilerOptions.freeCompilerArgs)
         createBaselineTask.optIn.convention(siblingTask.compilerOptions.optIn)
         createBaselineTask.noJdk.convention(siblingTask.compilerOptions.noJdk)
+        createBaselineTask.multiPlatformEnabled.convention(siblingTask.multiPlatformEnabled)
         if (compilation.name == "main") {
             createBaselineTask.explicitApi.convention(mapExplicitArgMode())
         }

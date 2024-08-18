@@ -31,7 +31,7 @@ Choose _either_ of the following options:
 
 See [TopLevelPropertyNaming](/docs/rules/naming#toplevelpropertynaming).
 
-Compose guidelines prescribe `CamelCase` for top-level constants.
+Compose guidelines prescribe `PascalCase` for top-level constants.
 
 ##### Default Style:
 
