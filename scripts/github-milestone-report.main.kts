@@ -8,7 +8,7 @@
  */
 
 @file:Suppress("detekt.CommentSpacing") // For the polyglot exec command in line 2.
-@file:DependsOn("org.kohsuke:github-api:1.323")
+@file:DependsOn("org.kohsuke:github-api:1.324")
 @file:DependsOn("com.github.ajalt:clikt:2.8.0")
 
 import com.github.ajalt.clikt.core.CliktCommand
