@@ -107,9 +107,9 @@ class CliArgs {
         converter = ReportPathConverter::class,
         description = "Generates a report for given 'report-id' and stores it on given 'path'. " +
             "Entry should consist of: [report-id:path]. " +
-            "Available 'report-id' values: 'txt', 'xml', 'html', 'md', 'sarif'. " +
+            "Available 'report-id' values: 'xml', 'html', 'md', 'sarif'. " +
             "These can also be used in combination with each other " +
-            "e.g. '-r txt:reports/detekt.txt -r xml:reports/detekt.xml'"
+            "e.g. '-r html:reports/detekt.html -r xml:reports/detekt.xml'"
     )
     var reportPaths: List<ReportPath> = emptyList()
 
@@ -126,7 +126,7 @@ class CliArgs {
         names = ["--base-path", "-bp"],
         description = "Specifies a directory as the base path." +
             "Currently it impacts all file paths in the formatted reports. " +
-            "File paths in console output and txt report are not affected and remain as absolute paths.",
+            "File paths in console output are not affected and remain as absolute paths.",
         validateValueWith = [DirectoryValidator::class],
         converter = PathConverter::class
     )

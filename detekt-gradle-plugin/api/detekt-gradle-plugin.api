@@ -35,7 +35,6 @@ public class io/github/detekt/gradle/extensions/KotlinCompileTaskDetektExtension
 	public final fun getParallel ()Lorg/gradle/api/provider/Property;
 	public final fun getReports ()Lorg/gradle/api/NamedDomainObjectContainer;
 	public final fun getSarif ()Lio/github/detekt/gradle/extensions/DetektReport;
-	public final fun getTxt ()Lio/github/detekt/gradle/extensions/DetektReport;
 	public final fun getXml ()Lio/github/detekt/gradle/extensions/DetektReport;
 	public final fun isEnabled ()Lorg/gradle/api/provider/Property;
 }
@@ -158,7 +157,6 @@ public final class io/gitlab/arturbosch/detekt/extensions/DetektReportType : jav
 	public static final field HTML Lio/gitlab/arturbosch/detekt/extensions/DetektReportType;
 	public static final field MD Lio/gitlab/arturbosch/detekt/extensions/DetektReportType;
 	public static final field SARIF Lio/gitlab/arturbosch/detekt/extensions/DetektReportType;
-	public static final field TXT Lio/gitlab/arturbosch/detekt/extensions/DetektReportType;
 	public static final field XML Lio/gitlab/arturbosch/detekt/extensions/DetektReportType;
 	public final fun getExtension ()Ljava/lang/String;
 	public final fun getReportId ()Ljava/lang/String;
@@ -174,12 +172,10 @@ public class io/gitlab/arturbosch/detekt/extensions/DetektReports {
 	public fun getMd ()Lio/gitlab/arturbosch/detekt/extensions/DetektReport;
 	public final fun getObjects ()Lorg/gradle/api/model/ObjectFactory;
 	public fun getSarif ()Lio/gitlab/arturbosch/detekt/extensions/DetektReport;
-	public fun getTxt ()Lio/gitlab/arturbosch/detekt/extensions/DetektReport;
 	public fun getXml ()Lio/gitlab/arturbosch/detekt/extensions/DetektReport;
 	public final fun html (Lorg/gradle/api/Action;)V
 	public final fun md (Lorg/gradle/api/Action;)V
 	public final fun sarif (Lorg/gradle/api/Action;)V
-	public final fun txt (Lorg/gradle/api/Action;)V
 	public final fun xml (Lorg/gradle/api/Action;)V
 }
 

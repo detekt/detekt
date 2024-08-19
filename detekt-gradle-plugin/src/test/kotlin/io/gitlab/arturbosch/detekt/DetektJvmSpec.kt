@@ -22,7 +22,7 @@ class DetektJvmSpec {
             }
             tasks.withType(Detekt::class.java).configureEach {
                 it.reports { reports ->
-                    reports.txt.required.set(false)
+                    reports.md.required.set(false)
                 }
             }
             tasks.named("detektTest", Detekt::class.java) {
@@ -43,7 +43,7 @@ class DetektJvmSpec {
         assertThat(argumentString).containsPattern("""--baseline \S*[/\\]detekt-baseline-main.xml """)
         assertThat(argumentString).contains("--report xml:")
         assertThat(argumentString).contains("--report sarif:")
-        assertThat(argumentString).doesNotContain("--report txt:")
+        assertThat(argumentString).doesNotContain("--report md:")
         assertThat(argumentString).contains("--classpath")
         assertThat(argumentString).contains("--analysis-mode full")
         assertThat(argumentString).doesNotContain("--api-version")
@@ -61,7 +61,7 @@ class DetektJvmSpec {
         assertThat(argumentString).containsPattern("""--baseline \S*[/\\]detekt-baseline-test.xml """)
         assertThat(argumentString).contains("--report xml:")
         assertThat(argumentString).contains("--report sarif:")
-        assertThat(argumentString).doesNotContain("--report txt:")
+        assertThat(argumentString).doesNotContain("--report md:")
         assertThat(argumentString).contains("--classpath")
         assertThat(argumentString).contains("--analysis-mode full")
         assertThat(argumentString).contains("--jvm-target 1.8")

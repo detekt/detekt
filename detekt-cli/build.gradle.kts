@@ -33,7 +33,6 @@ dependencies {
     runtimeOnly(projects.detektReportHtml)
     runtimeOnly(projects.detektReportMd)
     runtimeOnly(projects.detektReportSarif)
-    runtimeOnly(projects.detektReportTxt)
     runtimeOnly(projects.detektReportXml)
 
     testImplementation(projects.detektTestUtils)

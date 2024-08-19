@@ -78,7 +78,6 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
         output-reports:
           active: true
           exclude:
-          # - 'TxtOutputReport'
           # - 'XmlOutputReport'
           # - 'HtmlOutputReport'
           # - 'MdOutputReport'

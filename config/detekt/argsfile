@@ -12,8 +12,6 @@ html:./build/detekt-report.html
 -r
 xml:./build/detekt-report.xml
 -r
-txt:./build/detekt-report.txt
--r
 sarif:./build/detekt-report.sarif
 -bp
 .

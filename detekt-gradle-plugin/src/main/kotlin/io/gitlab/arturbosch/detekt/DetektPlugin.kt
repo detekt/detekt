@@ -124,10 +124,6 @@ class DetektPlugin : Plugin<Project> {
                 report.required.convention(DEFAULT_REPORT_ENABLED_VALUE)
                 report.outputLocation.convention(extension.reportsDir.file("$reportName.sarif"))
             }
-            task.reports.txt { report ->
-                report.required.convention(DEFAULT_REPORT_ENABLED_VALUE)
-                report.outputLocation.convention(extension.reportsDir.file("$reportName.txt"))
-            }
             task.reports.xml { report ->
                 report.required.convention(DEFAULT_REPORT_ENABLED_VALUE)
                 report.outputLocation.convention(extension.reportsDir.file("$reportName.xml"))

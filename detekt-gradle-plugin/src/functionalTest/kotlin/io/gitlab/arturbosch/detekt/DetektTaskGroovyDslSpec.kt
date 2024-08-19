@@ -67,8 +67,6 @@ class DetektTaskGroovyDslSpec {
                     }
                     html.required.set(true)
                     html.outputLocation.set(file("build/reports/mydetekt.html"))
-                    txt.required.set(true)
-                    txt.outputLocation.set(file("build/reports/mydetekt.txt"))
                     sarif {
                         required.set(true)
                         outputLocation.set(file("build/reports/mydetekt.sarif"))

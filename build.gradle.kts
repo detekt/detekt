@@ -44,7 +44,6 @@ allprojects {
         reports {
             xml.required = true
             html.required = true
-            txt.required = true
             sarif.required = true
             md.required = true
         }
