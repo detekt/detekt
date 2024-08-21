@@ -75,6 +75,22 @@ class ExplicitCollectionElementAccessMethodSpec {
             }
 
             @Test
+            fun `does not report map put method usage with three arguments`() {
+                val code = """
+                    class MyMap : java.util.HashMap<String, Int>() {
+                        fun put(key: String, key2: String, value: Int): Int {
+                            return value
+                        }
+                    }
+                    fun main() {
+                        val map = MyMap()
+                        map.put("a", "b", 1)
+                    }
+                """.trimIndent()
+                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
             fun `does not report map put method with used return value`() {
                 val code = """
                     fun f(): Boolean {
