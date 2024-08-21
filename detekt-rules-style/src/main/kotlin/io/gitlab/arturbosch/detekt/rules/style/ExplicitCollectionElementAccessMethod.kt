@@ -105,6 +105,7 @@ class ExplicitCollectionElementAccessMethod(config: Config) : Rule(
     }
 
     private fun isCallerMap(expression: KtCallExpression): Boolean {
+        if (expression.valueArguments.size != 2) return false
         val caller = expression.getQualifiedExpressionForSelector()?.receiverExpression
         val type = caller.getResolvedCall(bindingContext)?.resultingDescriptor?.returnType
         if (type == null || type is ErrorType) return false // There is no caller or it can't be resolved.
