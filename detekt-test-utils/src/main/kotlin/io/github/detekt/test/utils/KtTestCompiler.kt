@@ -3,7 +3,6 @@ package io.github.detekt.test.utils
 import io.github.detekt.parser.KtCompiler
 import kotlinx.coroutines.CoroutineScope
 import org.intellij.lang.annotations.Language
-import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
@@ -39,7 +38,7 @@ internal object KtTestCompiler : KtCompiler() {
     ): KotlinCoreEnvironmentWrapper {
         val configuration = CompilerConfiguration()
         configuration.put(CommonConfigurationKeys.MODULE_NAME, "test_module")
-        configuration.put(CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY, MessageCollector.NONE)
+        configuration.put(CommonConfigurationKeys.MESSAGE_COLLECTOR_KEY, MessageCollector.NONE)
 
         // Get the runtime locations of both the stdlib and kotlinx coroutines core jars and pass
         // to the compiler so it's available to generate the BindingContext for rules under test.
