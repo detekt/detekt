@@ -15,7 +15,3 @@ consumeGeneratedConfig(
     fromConfiguration = "generatedRuleauthorsConfig",
     forTask = tasks.processResources
 )
-
-kotlin {
-    compilerOptions.freeCompilerArgs.add("-Xcontext-receivers")
-}
