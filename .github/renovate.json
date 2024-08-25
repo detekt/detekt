@@ -5,5 +5,14 @@
   "extends": [
     "config:base",
     "helpers:pinGitHubActionDigests"
+  ],
+  "packageRules" : [
+    {
+      "groupName": "Kotlin",
+      "matchPackageNames": [
+        "org.jetbrains.kotlin:**",
+        "dev.drewhamilton.poko**"
+      ]
+    }
   ]
 }
