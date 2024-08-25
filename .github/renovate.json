@@ -1,0 +1,18 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "labels": ["dependencies"],
+  "ignoreDeps": ["com.android.tools.build:gradle-api"],
+  "extends": [
+    "config:base",
+    "helpers:pinGitHubActionDigests"
+  ],
+  "packageRules" : [
+    {
+      "groupName": "Kotlin",
+      "matchPackageNames": [
+        "org.jetbrains.kotlin:**",
+        "dev.drewhamilton.poko**"
+      ]
+    }
+  ]
+}
