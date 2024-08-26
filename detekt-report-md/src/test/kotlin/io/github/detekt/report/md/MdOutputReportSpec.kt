@@ -13,7 +13,6 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import io.gitlab.arturbosch.detekt.test.TestDetektion
-import io.gitlab.arturbosch.detekt.test.TestSetupContext
 import io.gitlab.arturbosch.detekt.test.createEntity
 import io.gitlab.arturbosch.detekt.test.createIssue
 import io.gitlab.arturbosch.detekt.test.createLocation
@@ -24,7 +23,7 @@ import org.jetbrains.kotlin.psi.KtElement
 import org.junit.jupiter.api.Test
 
 class MdOutputReportSpec {
-    private val mdReport = MdOutputReport().apply { init(TestSetupContext()) }
+    private val mdReport = MdOutputReport()
     private val detektion = createTestDetektionWithMultipleSmells()
     private val result = mdReport.render(detektion)
 
@@ -138,7 +137,6 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
     val entity1 = createEntity(
         location = createLocation(
             path = "src/main/com/sample/Sample1.kt",
-            basePath = "Users/tester/detekt/",
             position = 9 to 17,
             text = 17..20,
         ),
@@ -147,7 +145,6 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
     val entity2 = createEntity(
         location = createLocation(
             path = "src/main/com/sample/Sample2.kt",
-            basePath = "Users/tester/detekt/",
             position = 13 to 17,
         ),
         ktElement = fakeKtElement(),
@@ -155,7 +152,6 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
     val entity3 = createEntity(
         location = createLocation(
             path = "src/main/com/sample/Sample3.kt",
-            basePath = "Users/tester/detekt/",
             position = 14 to 16,
         ),
         ktElement = fakeKtElement(),

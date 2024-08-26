@@ -3,7 +3,6 @@ package io.github.detekt.report.xml
 import io.github.detekt.test.utils.internal.FakeKtElement
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.test.TestDetektion
-import io.gitlab.arturbosch.detekt.test.TestSetupContext
 import io.gitlab.arturbosch.detekt.test.createEntity
 import io.gitlab.arturbosch.detekt.test.createIssue
 import io.gitlab.arturbosch.detekt.test.createLocation
@@ -34,7 +33,7 @@ class XmlOutputReportSpec {
         ),
         FakeKtElement()
     )
-    private val outputReport = XmlOutputReport().apply { init(TestSetupContext()) }
+    private val outputReport = XmlOutputReport()
 
     @Test
     fun `renders empty report`() {

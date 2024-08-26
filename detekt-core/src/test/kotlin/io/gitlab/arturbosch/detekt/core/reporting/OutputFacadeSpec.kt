@@ -27,7 +27,7 @@ class OutputFacadeSpec {
             listOf(
                 createIssue(
                     createRuleInstance(ruleSetId = "Key"),
-                    createEntity(location = createLocation("TestFile.kt", System.getProperty("user.dir")))
+                    createEntity(location = createLocation("TestFile.kt"))
                 )
             )
         )
