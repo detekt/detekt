@@ -43,7 +43,6 @@ internal fun CliArgs.createSpec(output: Appendable, error: Appendable): Processi
             autoCorrect = args.autoCorrect
             activateAllRules = args.allRules
             failurePolicy = args.failurePolicy
-            excludeCorrectable = false // not yet supported; loaded from config
             runPolicy = args.toRunPolicy()
         }
 

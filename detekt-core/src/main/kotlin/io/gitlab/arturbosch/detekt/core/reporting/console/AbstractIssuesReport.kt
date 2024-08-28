@@ -5,7 +5,7 @@ import io.gitlab.arturbosch.detekt.api.ConsoleReport
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.SetupContext
-import io.gitlab.arturbosch.detekt.core.reporting.filterEmptyIssues
+import io.gitlab.arturbosch.detekt.core.reporting.filterAutoCorrectedIssues
 
 abstract class AbstractIssuesReport : ConsoleReport {
 
@@ -18,7 +18,7 @@ abstract class AbstractIssuesReport : ConsoleReport {
     }
 
     override fun render(detektion: Detektion): String? {
-        val issues = detektion.filterEmptyIssues(config)
+        val issues = detektion.filterAutoCorrectedIssues()
         if (issues.isEmpty()) {
             return null
         }
