@@ -1,6 +1,8 @@
 package io.gitlab.arturbosch.detekt.core.suppressors
 
 import io.github.detekt.test.utils.compileContentForTest
+import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtClass
@@ -17,7 +19,7 @@ import org.junit.jupiter.params.provider.ValueSource
 class SuppressionsSpec {
 
     private fun KtElement.isSuppressedBy(): Boolean =
-        isSuppressedBy("RuleName", setOf("alias1", "alias2"), RuleSet.Id("RuleSetId"))
+        isSuppressedBy(SuppressionTestRule(),"RuleName", setOf("alias1", "alias2"), RuleSet.Id("RuleSetId"))
 
     @Nested
     inner class DifferentSuppressLocation {
@@ -296,3 +298,5 @@ private fun KtFile.getMethodParameter(): KtElement =
         .findDescendantOfType<KtParameter>()!!
 
 private fun KtFile.getFunction(): KtElement = findChildByClass(KtFunction::class.java)!!
+
+private class SuppressionTestRule: Rule(Config.empty,"")
