@@ -9,7 +9,6 @@ import com.pinterest.ktlint.ruleset.standard.StandardRule
 import io.github.detekt.psi.absolutePath
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.CorrectableCodeSmell
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -101,8 +100,8 @@ abstract class FormattingRule(config: Config, description: String) : Rule(config
         )
         val entity = Entity.from(node.psi, location)
 
-        if (canBeAutoCorrected) {
-            report(CorrectableCodeSmell(entity, message, autoCorrectEnabled = autoCorrect))
+        if (canBeAutoCorrected && autoCorrect) {
+            report(CodeSmell(entity, message, suppressReasons = listOf("Auto correct")))
         } else {
             report(CodeSmell(entity, message))
         }

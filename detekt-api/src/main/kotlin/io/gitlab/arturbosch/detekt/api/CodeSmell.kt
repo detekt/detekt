@@ -10,7 +10,8 @@ package io.gitlab.arturbosch.detekt.api
 open class CodeSmell(
     final override val entity: Entity,
     final override val message: String,
-    final override val references: List<Entity> = emptyList()
+    final override val references: List<Entity> = emptyList(),
+    final override val suppressReasons: List<String> = emptyList(),
 ) : Finding {
     init {
         require(message.isNotBlank()) { "The message should not be empty" }
@@ -19,28 +20,6 @@ open class CodeSmell(
     override fun toString(): String =
         "CodeSmell(entity=$entity, " +
             "message=$message, " +
-            "references=$references)"
-}
-
-/**
- * Represents a code smell that can be auto-corrected.
- *
- * @see CodeSmell
- */
-open class CorrectableCodeSmell(
-    entity: Entity,
-    message: String,
-    references: List<Entity> = emptyList(),
-    val autoCorrectEnabled: Boolean
-) : CodeSmell(
-    entity,
-    message,
-    references
-) {
-    override fun toString(): String =
-        "CorrectableCodeSmell(" +
-            "autoCorrectEnabled=$autoCorrectEnabled, " +
-            "entity=$entity, " +
-            "message=$message, " +
-            "references=$references)"
+            "references=$references, " +
+            "suppressReasons=$suppressReasons)"
 }

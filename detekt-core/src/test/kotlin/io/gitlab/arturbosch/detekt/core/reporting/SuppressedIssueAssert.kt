@@ -6,11 +6,11 @@ import io.gitlab.arturbosch.detekt.test.TestSetupContext
 import io.gitlab.arturbosch.detekt.test.createIssue
 import org.assertj.core.api.Assertions.assertThat
 
-internal object AutoCorrectableIssueAssert {
+internal object SuppressedIssueAssert {
 
     fun isReportNull(report: ConsoleReport) {
         report.init(TestSetupContext())
-        val correctableCodeSmell = createIssue(autoCorrectEnabled = true)
+        val correctableCodeSmell = createIssue(suppressReasons = listOf("suppressed"))
         val detektionWithCorrectableSmell = TestDetektion(correctableCodeSmell)
         val result = report.render(detektionWithCorrectableSmell)
         assertThat(result).isNull()

@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.reporting.console
 
-import io.gitlab.arturbosch.detekt.core.reporting.AutoCorrectableIssueAssert
+import io.gitlab.arturbosch.detekt.core.reporting.SuppressedIssueAssert
 import io.gitlab.arturbosch.detekt.core.reporting.decolorized
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.TestSetupContext
@@ -49,6 +49,6 @@ class FileBasedIssuesReportSpec {
     @Test
     fun `should not add auto corrected issues to report`() {
         val report = FileBasedIssuesReport()
-        AutoCorrectableIssueAssert.isReportNull(report)
+        SuppressedIssueAssert.isReportNull(report)
     }
 }
