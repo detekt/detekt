@@ -19,7 +19,8 @@ internal class ComplexityReportGeneratorSpec {
 
     @BeforeEach
     fun setupMocks() {
-        detektion = TestDetektion(createIssue("test")).withTestData()
+        detektion = TestDetektion(createIssue("test"), createIssue("test2", suppressReasons = listOf("suppress")))
+            .withTestData()
     }
 
     @Nested

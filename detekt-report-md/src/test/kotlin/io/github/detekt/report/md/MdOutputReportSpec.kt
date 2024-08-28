@@ -226,6 +226,12 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
         createIssue(createRuleInstance("rule_a/id", "Section-1"), entity1, "Issue message 1"),
         createIssue(createRuleInstance("rule_a/id", "Section-1"), entity2, "Issue message 2"),
         createIssue(createRuleInstance("rule_b", "Section-2"), entity3, "Issue message 3"),
+        createIssue(
+            createRuleInstance("rule_c", "Section-2"),
+            entity3,
+            "Issue message 3",
+            suppressReasons = listOf("suppress")
+        ),
     ).also {
         it.putUserData(complexityKey, 10)
         it.putUserData(CognitiveComplexity.KEY, 10)

@@ -20,6 +20,7 @@ import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
+import io.gitlab.arturbosch.detekt.api.suppressed
 import java.nio.file.Path
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
@@ -56,7 +57,7 @@ class MdOutputReport : BuiltInOutputReport, OutputReport() {
         h2 { "Complexity Report" }
         renderComplexity(getComplexityMetrics(detektion))
 
-        renderIssues(detektion.issues, basePath)
+        renderIssues(detektion.issues.filterNot { it.suppressed }, basePath)
         emptyLine()
 
         paragraph {
