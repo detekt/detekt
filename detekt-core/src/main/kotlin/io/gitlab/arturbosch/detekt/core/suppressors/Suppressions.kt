@@ -39,7 +39,6 @@ fun KtElement.isSuppressedBy(rule: Rule, id: String, aliases: Set<String>, ruleS
     }
 
     return r
-
 }
 
 private fun KtElement.allAnnotationEntries(): Sequence<KtAnnotationEntry> {

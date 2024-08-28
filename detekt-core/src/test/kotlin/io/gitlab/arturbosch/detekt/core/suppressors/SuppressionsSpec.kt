@@ -19,7 +19,7 @@ import org.junit.jupiter.params.provider.ValueSource
 class SuppressionsSpec {
 
     private fun KtElement.isSuppressedBy(): Boolean =
-        isSuppressedBy(SuppressionTestRule(),"RuleName", setOf("alias1", "alias2"), RuleSet.Id("RuleSetId"))
+        isSuppressedBy(SuppressionTestRule(), "RuleName", setOf("alias1", "alias2"), RuleSet.Id("RuleSetId"))
 
     @Nested
     inner class DifferentSuppressLocation {
@@ -299,4 +299,4 @@ private fun KtFile.getMethodParameter(): KtElement =
 
 private fun KtFile.getFunction(): KtElement = findChildByClass(KtFunction::class.java)!!
 
-private class SuppressionTestRule: Rule(Config.empty,"")
+private class SuppressionTestRule : Rule(Config.empty, "")

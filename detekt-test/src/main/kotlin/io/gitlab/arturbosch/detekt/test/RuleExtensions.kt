@@ -72,7 +72,7 @@ fun Rule.lint(ktFile: KtFile, compilerResources: CompilerResources = FakeCompile
 
 private fun List<Finding>.filterSuppressed(rule: Rule): List<Finding> =
     filterNot {
-        it.entity.ktElement.isSuppressedBy(rule,rule.ruleName.value, rule.aliases, RuleSet.Id("NoARuleSetId"))
+        it.entity.ktElement.isSuppressedBy(rule, rule.ruleName.value, rule.aliases, RuleSet.Id("NoARuleSetId"))
     }
 
 private val Rule.aliases: Set<String> get() = config.valueOrDefault(Config.ALIASES_KEY, emptyList<String>()).toSet()
