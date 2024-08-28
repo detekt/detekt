@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
+import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
@@ -52,9 +53,8 @@ class MethodOverloading(config: Config) : Rule(
         fun reportIfAllowedNumberExceeded(entity: Entity) {
             for ((name, value) in methods.filterValues { it > allowedOverloads }) {
                 report(
-                    ThresholdedCodeSmell(
+                    CodeSmell(
                         entity,
-                        Metric(value, allowedOverloads),
                         message = "The method '$name' is overloaded $value times."
                     )
                 )

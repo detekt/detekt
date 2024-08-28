@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
+import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
@@ -59,12 +60,11 @@ class StringLiteralDuplication(config: Config) : Rule(
     override fun visitKtFile(file: KtFile) {
         val visitor = StringLiteralVisitor()
         file.accept(visitor)
-        for ((name, value) in visitor.getLiteralsOverThreshold()) {
+        for ((name, _) in visitor.getLiteralsOverThreshold()) {
             val (main, references) = visitor.entitiesForLiteral(name)
             report(
-                ThresholdedCodeSmell(
+                CodeSmell(
                     main,
-                    Metric(value, allowedDuplications),
                     description,
                     references
                 )

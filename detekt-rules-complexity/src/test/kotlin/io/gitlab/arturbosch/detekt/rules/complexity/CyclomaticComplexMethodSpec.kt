@@ -30,7 +30,7 @@ class CyclomaticComplexMethodSpec {
                 """.trimIndent()
             )
 
-            assertThat(findings.first()).isThresholded().withValue(defaultComplexity + 4)
+            assertThat(findings).singleElement()
         }
 
         @Test
@@ -43,7 +43,7 @@ class CyclomaticComplexMethodSpec {
                 """.trimIndent()
             )
 
-            assertThat(findings.first()).isThresholded().withValue(defaultComplexity + 2)
+            assertThat(findings).singleElement()
         }
 
         @Test
@@ -67,7 +67,7 @@ class CyclomaticComplexMethodSpec {
                 """.trimIndent()
             )
 
-            assertThat(findings.first()).isThresholded().withValue(defaultComplexity + 4)
+            assertThat(findings).singleElement()
         }
     }
 
@@ -84,25 +84,25 @@ class CyclomaticComplexMethodSpec {
         @Test
         fun `counts three with nesting function 'forEach'`() {
             val config = TestConfig(defaultAllowedComplexity, "ignoreNestingFunctions" to "false")
-            assertExpectedComplexityValue(code, config, expectedValue = 3)
+            assertExpectedComplexityValue(code, config)
         }
 
         @Test
         fun `can ignore nesting functions like 'forEach'`() {
             val config = TestConfig(defaultAllowedComplexity, "ignoreNestingFunctions" to "true")
-            assertExpectedComplexityValue(code, config, expectedValue = 2)
+            assertExpectedComplexityValue(code, config)
         }
 
         @Test
         fun `skips all if if the nested functions is empty`() {
             val config = TestConfig(defaultAllowedComplexity, "nestingFunctions" to emptyList<String>())
-            assertExpectedComplexityValue(code, config, expectedValue = 2)
+            assertExpectedComplexityValue(code, config)
         }
 
         @Test
         fun `skips 'forEach' as it is not specified`() {
             val config = TestConfig(defaultAllowedComplexity, "nestingFunctions" to listOf("let", "apply", "also"))
-            assertExpectedComplexityValue(code, config, expectedValue = 2)
+            assertExpectedComplexityValue(code, config)
         }
     }
 
@@ -297,13 +297,10 @@ class CyclomaticComplexMethodSpec {
     }
 }
 
-private fun assertExpectedComplexityValue(code: String, config: TestConfig, expectedValue: Int) {
+private fun assertExpectedComplexityValue(code: String, config: TestConfig) {
     val findings = CyclomaticComplexMethod(config).compileAndLint(code)
 
     assertThat(findings).hasStartSourceLocations(SourceLocation(1, 5))
 
-    assertThat(findings.first())
-        .isThresholded()
-        .withValue(expectedValue)
-        .withThreshold(1)
+    assertThat(findings).singleElement()
 }

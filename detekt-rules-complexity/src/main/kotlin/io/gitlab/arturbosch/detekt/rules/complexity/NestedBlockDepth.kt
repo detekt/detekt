@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
@@ -38,9 +39,8 @@ class NestedBlockDepth(config: Config) : Rule(
         if (visitor.isTooDeep) {
             @Suppress("UnsafeCallOnNullableType")
             report(
-                ThresholdedCodeSmell(
+                CodeSmell(
                     Entity.atName(function),
-                    Metric(visitor.maxDepth, allowedDepth),
                     "Function ${function.name} is nested too deeply."
                 )
             )

@@ -55,8 +55,6 @@ class NestedBlockDepthSpec {
         """.trimIndent()
         val findings = subject.compileAndLint(code)
         assertThat(findings).singleElement()
-            .isThresholded()
-            .hasValue(5)
     }
 
     @Test

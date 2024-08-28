@@ -30,7 +30,6 @@ class CognitiveComplexMethodSpec {
         val findings = CognitiveComplexMethod(testConfig).compileAndLint(code)
         assertThat(findings).hasSize(1)
         assertThat(findings).hasStartSourceLocations(SourceLocation(1, 5))
-        assertThat(findings.first()).isThresholded().withValue(7)
     }
 
     @Test
