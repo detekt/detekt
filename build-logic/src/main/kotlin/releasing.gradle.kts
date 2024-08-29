@@ -43,6 +43,7 @@ githubRelease {
         cliBuildDir.resolve("distributions/detekt-cli-$version.zip"),
         project(":detekt-formatting").buildDir.resolve("libs/detekt-formatting-$version.jar"),
         project(":detekt-generator").buildDir.resolve("libs/detekt-generator-$version-all.jar"),
+        project(":detekt-compiler-plugin").buildDir.resolve("libs/detekt-compiler-plugin-$version-all.jar"),
         project(":detekt-rules-libraries").buildDir
             .resolve("libs/detekt-rules-libraries-$version.jar"),
         project(":detekt-rules-ruleauthors").buildDir

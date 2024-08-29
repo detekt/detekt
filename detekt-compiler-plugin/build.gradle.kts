@@ -42,6 +42,12 @@ javaComponent.withVariantsFromConfiguration(configurations["shadowRuntimeElement
     skip()
 }
 
+publishing {
+    publications.named<MavenPublication>(DETEKT_PUBLICATION) {
+        artifact(tasks.shadowJar)
+    }
+}
+
 tasks.test {
     // https://github.com/detekt/detekt/issues/5646
     enabled = false
