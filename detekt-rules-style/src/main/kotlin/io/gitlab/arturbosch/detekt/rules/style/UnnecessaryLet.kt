@@ -54,7 +54,7 @@ class UnnecessaryLet(config: Config) : Rule(config) {
         "The `let` usage is unnecessary.",
         Debt.FIVE_MINS
     )
-    
+
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 
