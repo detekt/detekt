@@ -31,6 +31,7 @@ fun valuesWithReason(values: List<ValueWithReason>): ValuesWithReason {
  * [ValuesWithReason] is essentially the same as [List] of [ValueWithReason]. Due to type erasure we cannot use the
  * list directly. Instances of this type should always created using the [valuesWithReason] factory method.
  */
+@ConsistentCopyVisibility
 data class ValuesWithReason internal constructor(private val values: List<ValueWithReason>) :
     Iterable<ValueWithReason> by values
 

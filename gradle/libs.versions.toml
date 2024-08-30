@@ -1,7 +1,7 @@
 [versions]
 dokka = "1.9.20"
 jacoco = "0.8.12"
-kotlin = "2.0.10"
+kotlin = "2.0.20"
 ktlint = "0.50.0"
 junit = "5.10.2"
 contester = "0.2.0"
@@ -47,7 +47,7 @@ contester-breakpoint = { module = "io.github.davidburstrom.contester:contester-b
 contester-driver = { module = "io.github.davidburstrom.contester:contester-driver", version.ref = "contester" }
 kotlinCompileTesting = { module = "dev.zacsweers.kctfork:core", version = "0.5.0-alpha07" }
 jetbrains-annotations = "org.jetbrains:annotations:24.1.0"
-poko-annotations = { module = "dev.drewhamilton.poko:poko-annotations", version = "0.16.0" }
+poko-annotations = { module = "dev.drewhamilton.poko:poko-annotations", version = "0.17.0" }
 
 [plugins]
 binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.16.3" }
