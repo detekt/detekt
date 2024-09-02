@@ -5,7 +5,8 @@
   },
   "git": {
     "deploymentEnabled": {
-      "gh-pages": false
+      "gh-pages": false,
+      "release/1.x": false
     }
   }
 }
