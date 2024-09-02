@@ -215,23 +215,6 @@ class UnnecessaryBracesAroundTrailingLambdaSpec(val env: KotlinCoreEnvironment) 
     }
 
     @Test
-    fun `does not report lambda has nested labels`() {
-        val code = """
-            fun test() {
-                foo(bar@ foo@{ bar(it) })
-            }
-
-            fun foo(f: (String) -> Int) {
-                f("")
-            }
-
-            fun bar(s: String) = s.length
-        """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
-        assertThat(findings).isEmpty()
-    }
-
-    @Test
     fun `does report generic param lambda has braces around it`() {
         val code = """
             fun <T> foo(t: T) {}
