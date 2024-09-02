@@ -25,7 +25,6 @@ internal fun functionSuppressorFactory(rule: Rule, bindingContext: BindingContex
         .map(FunctionMatcher::fromFunctionSignature)
     return if (functionMatchers.isNotEmpty()) {
         if (rule.isForbiddenSuppress()) {
-            warnForbiddenSuppressCannotBeSuppressed()
             return null
         }
         Suppressor { finding ->

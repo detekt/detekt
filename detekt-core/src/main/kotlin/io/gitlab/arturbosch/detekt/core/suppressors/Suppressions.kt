@@ -10,9 +10,6 @@ import kotlin.text.RegexOption.IGNORE_CASE
 
 internal fun Rule.isForbiddenSuppress() = this::class.qualifiedName == FORBIDDEN_SUPPRESS_QNAME
 private const val FORBIDDEN_SUPPRESS_QNAME = "io.gitlab.arturbosch.detekt.rules.style.ForbiddenSuppress"
-internal fun warnForbiddenSuppressCannotBeSuppressed() {
-    println("Warning: ForbiddenSuppress cannot be suppressed")
-}
 
 /**
  * Checks if this psi element is suppressed by @Suppress or @SuppressWarnings annotations.
@@ -34,7 +31,6 @@ fun KtElement.isSuppressedBy(rule: Rule, id: String, aliases: Set<String>, ruleS
         .any { it in acceptedSuppressionIds }
 
     if (r && rule.isForbiddenSuppress()) {
-        warnForbiddenSuppressCannotBeSuppressed()
         return false
     }
 

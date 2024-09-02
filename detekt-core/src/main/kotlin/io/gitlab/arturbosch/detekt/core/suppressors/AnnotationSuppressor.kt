@@ -20,7 +20,6 @@ internal fun annotationSuppressorFactory(rule: Rule, bindingContext: BindingCont
     }
     return if (annotations.isNotEmpty()) {
         if (rule.isForbiddenSuppress()) {
-            warnForbiddenSuppressCannotBeSuppressed()
             return null
         }
         Suppressor { finding ->
