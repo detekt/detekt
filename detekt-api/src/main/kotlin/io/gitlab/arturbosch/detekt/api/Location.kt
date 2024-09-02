@@ -27,7 +27,7 @@ constructor(
         )
     )
     val file: String,
-    val filePath: FilePath = FilePath.fromAbsolute(Path(file))
+    @Suppress("DEPRECATION") val filePath: FilePath = FilePath.fromAbsolute(Path(file))
 ) : Compactable {
     var endSource: SourceLocation = source
         private set
