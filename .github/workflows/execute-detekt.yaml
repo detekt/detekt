@@ -1,4 +1,4 @@
-name: detekt with type resolution
+name: Execute detekt
 
 on:
   push:
@@ -13,7 +13,7 @@ permissions:
   contents: read
 
 jobs:
-  plain:
+  cli:
     permissions:
       contents: read  # for actions/checkout to fetch code
       security-events: write  # for github/codeql-action/upload-sarif to upload SARIF results
@@ -35,12 +35,6 @@ jobs:
 
       - name: Run detekt-cli with argsfile
         run: ./gradlew :detekt-cli:runWithArgsFile
-
-      - name: Upload SARIF to GitHub using the upload-sarif action
-        uses: github/codeql-action/upload-sarif@4dd16135b69a43b6c8efb853346f8437d92d3c93 # v3
-        if: success() || failure()
-        with:
-          sarif_file: build/detekt-report.sarif
 
 
   gradle:
