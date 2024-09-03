@@ -12,8 +12,6 @@ private val defaultAllowedComplexity = "allowedComplexity" to "1"
 
 class CyclomaticComplexMethodSpec {
 
-    val defaultComplexity = 1
-
     @Nested
     inner class `different complex constructs` {
 
@@ -30,7 +28,7 @@ class CyclomaticComplexMethodSpec {
                 """.trimIndent()
             )
 
-            assertThat(findings).singleElement()
+            assertThat(findings).hasSize(1)
         }
 
         @Test
@@ -43,7 +41,7 @@ class CyclomaticComplexMethodSpec {
                 """.trimIndent()
             )
 
-            assertThat(findings).singleElement()
+            assertThat(findings).hasSize(1)
         }
 
         @Test
@@ -67,7 +65,7 @@ class CyclomaticComplexMethodSpec {
                 """.trimIndent()
             )
 
-            assertThat(findings).singleElement()
+            assertThat(findings).hasSize(1)
         }
     }
 
@@ -300,7 +298,7 @@ class CyclomaticComplexMethodSpec {
 private fun assertExpectedComplexityValue(code: String, config: TestConfig) {
     val findings = CyclomaticComplexMethod(config).compileAndLint(code)
 
-    assertThat(findings).hasStartSourceLocations(SourceLocation(1, 5))
-
-    assertThat(findings).singleElement()
+    assertThat(findings)
+        .hasSize(1)
+        .hasStartSourceLocations(SourceLocation(1, 5))
 }

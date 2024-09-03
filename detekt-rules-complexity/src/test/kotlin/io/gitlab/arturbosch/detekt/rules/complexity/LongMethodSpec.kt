@@ -76,7 +76,7 @@ class LongMethodSpec {
 
         val findings = subject.compileAndLint(code)
 
-        assertThat(findings).singleElement()
+        assertThat(findings).hasSize(1)
     }
 
     @Test
@@ -99,7 +99,7 @@ class LongMethodSpec {
 
         val findings = subject.compileAndLint(code)
 
-        assertThat(findings).singleElement()
+        assertThat(findings).hasSize(1)
     }
 
     @Test
@@ -126,8 +126,9 @@ class LongMethodSpec {
 
         val findings = subject.compileAndLint(code)
 
-        assertThat(findings).hasSize(2)
-        assertThat(findings).hasTextLocations("longMethod", "nestedLongMethod")
+        assertThat(findings)
+            .hasSize(2)
+            .hasTextLocations("longMethod", "nestedLongMethod")
     }
 
     @Test
@@ -153,7 +154,8 @@ class LongMethodSpec {
 
         val findings = subject.compileAndLint(code)
 
-        assertThat(findings).singleElement()
-        assertThat(findings).hasTextLocations("nestedLongMethod")
+        assertThat(findings)
+            .hasSize(1)
+            .hasTextLocations("nestedLongMethod")
     }
 }
