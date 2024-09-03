@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -82,25 +83,25 @@ class CyclomaticComplexMethodSpec {
         @Test
         fun `counts three with nesting function 'forEach'`() {
             val config = TestConfig(defaultAllowedComplexity, "ignoreNestingFunctions" to "false")
-            assertExpectedComplexityValue(code, config)
+            assertExpectedComplexityValue(code, config, expectedValue = 3)
         }
 
         @Test
         fun `can ignore nesting functions like 'forEach'`() {
             val config = TestConfig(defaultAllowedComplexity, "ignoreNestingFunctions" to "true")
-            assertExpectedComplexityValue(code, config)
+            assertExpectedComplexityValue(code, config, expectedValue = 2)
         }
 
         @Test
         fun `skips all if if the nested functions is empty`() {
             val config = TestConfig(defaultAllowedComplexity, "nestingFunctions" to emptyList<String>())
-            assertExpectedComplexityValue(code, config)
+            assertExpectedComplexityValue(code, config, expectedValue = 2)
         }
 
         @Test
         fun `skips 'forEach' as it is not specified`() {
             val config = TestConfig(defaultAllowedComplexity, "nestingFunctions" to listOf("let", "apply", "also"))
-            assertExpectedComplexityValue(code, config)
+            assertExpectedComplexityValue(code, config, expectedValue = 2)
         }
     }
 
@@ -295,10 +296,10 @@ class CyclomaticComplexMethodSpec {
     }
 }
 
-private fun assertExpectedComplexityValue(code: String, config: TestConfig) {
+private fun assertExpectedComplexityValue(code: String, config: TestConfig, expectedValue: Int) {
     val findings = CyclomaticComplexMethod(config).compileAndLint(code)
 
-    assertThat(findings)
-        .hasSize(1)
-        .hasStartSourceLocations(SourceLocation(1, 5))
+    assertThat(findings).hasStartSourceLocations(SourceLocation(1, 5))
+
+    assertThat(findings[0].message).contains("(complexity: $expectedValue)")
 }
