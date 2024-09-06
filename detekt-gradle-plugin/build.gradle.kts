@@ -12,7 +12,7 @@ plugins {
     idea
     alias(libs.plugins.pluginPublishing)
     // We use this published version of the detekt plugin to self analyse this project.
-    id("io.gitlab.arturbosch.detekt") version "1.22.0"
+    id("io.gitlab.arturbosch.detekt") version "1.23.6"
 }
 
 repositories {
@@ -76,7 +76,7 @@ dependencies {
     testKitJava17RuntimeOnly(libs.android.gradle.maxSupported)
 
     // We use this published version of the detekt-formatting to self analyse this project.
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.3")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.6")
 }
 
 gradlePlugin {
