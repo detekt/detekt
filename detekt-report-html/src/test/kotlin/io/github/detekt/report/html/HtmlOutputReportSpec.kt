@@ -185,6 +185,12 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
         createIssue(createRuleInstance("rule_a/id", "RuleSet1"), entity1, "Issue message 1"),
         createIssue(createRuleInstance("rule_a/id", "RuleSet1"), entity2, "Issue message 2"),
         createIssue(createRuleInstance("rule_b", "RuleSet2"), entity3, "Issue message 3"),
+        createIssue(
+            createRuleInstance("rule_c", "RuleSet2"),
+            entity3,
+            "Issue message 3",
+            suppressReasons = listOf("suppressed")
+        ),
     )
 }
 

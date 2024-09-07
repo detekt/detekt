@@ -10,4 +10,5 @@ interface Finding {
     val entity: Entity
     val references: List<Entity>
     val message: String
+    val suppressReasons: List<String>
 }

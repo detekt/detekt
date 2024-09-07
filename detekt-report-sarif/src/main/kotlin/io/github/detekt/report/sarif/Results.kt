@@ -8,10 +8,11 @@ import io.github.detekt.sarif4k.Region
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.suppressed
 import kotlin.io.path.invariantSeparatorsPathString
 
 internal fun toResults(detektion: Detektion): List<io.github.detekt.sarif4k.Result> =
-    detektion.issues.map { it.toResult() }
+    detektion.issues.filterNot { it.suppressed }.map { it.toResult() }
 
 internal fun Severity.toResultLevel() = when (this) {
     Severity.Error -> Level.Error
