@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.github.detekt.metrics.CognitiveComplexity
+import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
@@ -37,9 +38,8 @@ class CognitiveComplexMethod(config: Config) : Rule(
 
         if (complexity > allowedComplexity) {
             report(
-                ThresholdedCodeSmell(
+                CodeSmell(
                     Entity.atName(function),
-                    Metric(complexity, allowedComplexity),
                     "The function ${function.nameAsSafeName} appears to be too complex " +
                         "based on Cognitive Complexity (complexity: $complexity). " +
                         "Defined maximum allowed complexity for methods is set to '$allowedComplexity'"

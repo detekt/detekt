@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.github.detekt.psi.AnnotationExcluder
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
@@ -94,9 +95,8 @@ class LongParameterList(config: Config) : Rule(
             }
 
             report(
-                ThresholdedCodeSmell(
+                CodeSmell(
                     Entity.from(parameterList),
-                    Metric(parameterNumber, maximumAllowedParameter),
                     "The $identifier($parameterPrint) has too many parameters. " +
                         "The current maximum allowed parameters are $maximumAllowedParameter."
                 )
