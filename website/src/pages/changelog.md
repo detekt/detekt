@@ -6,6 +6,43 @@ keywords: [changelog, release-notes, migration]
 
 # Changelog and Migration Guide
 
+#### 1.23.7 - 2024-09-08
+
+This is a point release for Detekt `1.23.0`, built against Kotlin `2.0.10`, with fixes for several bugs that got reported by the community.
+
+##### Notable Changes
+
+- fix(deps): update kotlin monorepo to v2.0.10 - [#7517](https://github.com/detekt/detekt/pull/7517)
+- Update to Kotlin 2.0.0 [#6640](https://github.com/detekt/detekt/pull/6640)
+- fix(deps): update kotlin monorepo to v1.9.24 - [#7264](https://github.com/detekt/detekt/pull/7264)
+- fix(deps): update dependency com.android.tools.build:gradle to v8.5.2 - [#7525](https://github.com/detekt/detekt/pull/7525)
+- chore(deps): update dependency gradle to v8.10 - [#7546](https://github.com/detekt/detekt/pull/7546)
+
+##### Changelog
+
+- Add basic support for isolated projects to 1.x - [#7526](https://github.com/detekt/detekt/pull/7526)
+- ExplicitCollectionElementAccessMethod: fix false positive when Map put has 3 arguments - [#7563](https://github.com/detekt/detekt/pull/7563)
+- BracesOnIfStatements: fix false-positive when chained - [#7444](https://github.com/detekt/detekt/pull/7444)
+- Add enum entry check in `UndocumentedPublicProperty` - [#7426](https://github.com/detekt/detekt/pull/7426)
+- Use the anchor which is already present before - [#7423](https://github.com/detekt/detekt/pull/7423)
+- Fix small corner-case in "SerialVersionUIDInSerializableClass" rule, … - [#7346](https://github.com/detekt/detekt/pull/7346)
+- SwallowedException: fix false positive when exception is used as a receiver - [#7288](https://github.com/detekt/detekt/pull/7288)
+- NamedArguments: fix false positive on spread varargs - [#7283](https://github.com/detekt/detekt/pull/7283)
+- MultilineLambdaItParameter: fix false negative with single statement on multiple lines - [#7221](https://github.com/detekt/detekt/pull/7221)
+- Check for root of receiver in selector expression - [#7220](https://github.com/detekt/detekt/pull/7220)
+- Check for `public companion` object for `UndocumentedPublicClass` - [#7219](https://github.com/detekt/detekt/pull/7219)
+- fix: TopLevelPropertyNaming also detecting extension property name - [#7212](https://github.com/detekt/detekt/pull/7212)
+- Publish detekt-compiler-plugin-all to Maven and GH Releases - [#7179](https://github.com/detekt/detekt/pull/7179)
+- versioned default detekt config file link - [#7161](https://github.com/detekt/detekt/pull/7161)
+- Support rangeUntil operator for UnusedImport rule - [#7104](https://github.com/detekt/detekt/pull/7104)
+- Fix false positive on it usages when type parameter is specified - [#6850](https://github.com/detekt/detekt/pull/6850) 
+
+##### Housekeeping/Docs
+
+- [bugfix] AnnotationOnSeparateLine in snippets - [#6526](https://github.com/detekt/detekt/pull/6526)
+-  Add docs about using the Compiler Plugin with the Kotlin CLI compiler - [#7184](https://github.com/detekt/detekt/pull/7184)
+
+
 #### 1.23.6 - 2024-03-23
 
 This is a point release for Detekt `1.23.0`, where we added support for Kotlin `1.9.23` and fixed several bugs that got reported by the community.
