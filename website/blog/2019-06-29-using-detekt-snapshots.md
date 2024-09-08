@@ -7,6 +7,9 @@ tags: [guides]
 ---
 
 detekt uses [bintray](https://bintray.com/arturbosch/code-analysis/detekt) for releases and [artifactory](https://oss.jfrog.org/artifactory/webapp/#/artifacts/browse/tree/General/oss-snapshot-local/io/gitlab/arturbosch/detekt/detekt-cli/) for snapshots.
+
+<!-- truncate -->
+
 To configure snapshot usage in your gradle plugin apply the following changes to your build file:
 
 ```kotlin

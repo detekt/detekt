@@ -160,7 +160,7 @@ We would like to thank the following contributors that made this release possibl
 
 ##### Notable Changes
 
--   This is the first version of Detekt that ships with the `detekt-compiler-plugin`. The [Detekt Compiler plugin](/docs/gettingstarted/compilerplugin) is still experimental, but we're moving it closer to Detekt to make it easier to integrate. From now on the compiler plugin will follow the same versioning schema as Detekt. We invite you to try it and provide feedback till we stabilize it. You can read more about it in the [official documentation page](/docs/gettingstarted/compilerplugin) - [#5492](https://github.com/detekt/detekt/pull/5492)
+- This is the first version of Detekt that ships with the `detekt-compiler-plugin`. The [Detekt Compiler plugin](/docs/next/gettingstarted/compilerplugin) is still experimental, but we're moving it closer to Detekt to make it easier to integrate. From now on the compiler plugin will follow the same versioning schema as Detekt. We invite you to try it and provide feedback till we stabilize it. You can read more about it in the [official documentation page](/docs/next/gettingstarted/compilerplugin) - [#5492](https://github.com/detekt/detekt/pull/5492)
 -   We added **25** new Rules to detekt
     -   `BracesOnIfStatements` - [#5700](https://github.com/detekt/detekt/pull/5700)
     -   `BracesOnWhenStatements` - [#5838](https://github.com/detekt/detekt/pull/5838)

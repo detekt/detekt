@@ -8,6 +8,8 @@ tags: [guides]
 detekt's reporting mechanism relies on implementations of [ConsoleReport](https://detekt.dev/kdoc/detekt-api/io.gitlab.arturbosch.detekt.api/-console-report/index.html)'s.
 The cli module and therefore the Gradle plugin implement a bunch of this reports.
 
+<!-- truncate -->
+
 A typical detekt report will look like following:
 
 ![report](/img/blog/howto-silent-run/typical_console_report.png)
