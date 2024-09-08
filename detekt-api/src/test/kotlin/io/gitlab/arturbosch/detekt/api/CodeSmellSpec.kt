@@ -23,13 +23,14 @@ class CodeSmellSpec {
                 ),
                 ktElement = FakeKtElement()
             ),
-            message = "TestMessage"
+            message = "TestMessage",
+            suppressReasons = listOf("Baseline"),
         )
 
         assertThat(codeSmell.toString()).isEqualTo(
             "CodeSmell(entity=Entity(name=TestEntity, signature=TestEntitySignature, " +
                 "location=Location(source=1:1, endSource=1:1, text=0:0, path=${codeSmell.location.path}), " +
-                "ktElement=FakeKtElement), message=TestMessage, references=[])"
+                "ktElement=FakeKtElement), message=TestMessage, references=[], suppressReasons=[Baseline])"
         )
     }
 }

@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.github.detekt.metrics.linesOfCode
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
+import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
@@ -41,9 +42,8 @@ class LargeClass(config: Config) : Rule(
         for ((clazz, lines) in classToLinesCache) {
             if (lines > allowedLines) {
                 report(
-                    ThresholdedCodeSmell(
+                    CodeSmell(
                         Entity.atName(clazz),
-                        Metric(lines, allowedLines),
                         "Class ${clazz.name} is too large. Consider splitting it into smaller pieces."
                     )
                 )

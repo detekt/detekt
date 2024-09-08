@@ -15,7 +15,7 @@ interface Issue {
     val references: List<Entity>
     val message: String
     val severity: Severity
-    val autoCorrectEnabled: Boolean
+    val suppressReasons: List<String>
 
     val location: Location
         get() = entity.location
@@ -34,6 +34,9 @@ interface Issue {
         val path: Path
     }
 }
+
+val Issue.suppressed: Boolean
+    get() = suppressReasons.isNotEmpty()
 
 interface RuleInstance {
     val id: String

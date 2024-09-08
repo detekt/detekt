@@ -2,6 +2,7 @@ package io.github.detekt.compiler.plugin.internal
 
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.suppressed
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageLocation
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSourceLocation
@@ -21,10 +22,12 @@ fun MessageCollector.error(msg: String) {
 }
 
 fun MessageCollector.reportIssues(result: Detektion) {
-    result.issues.forEach { issue ->
-        val (message, location) = issue.renderAsCompilerWarningMessage()
-        warn(message, location)
-    }
+    result.issues
+        .filterNot { it.suppressed }
+        .forEach { issue ->
+            val (message, location) = issue.renderAsCompilerWarningMessage()
+            warn(message, location)
+        }
 }
 
 fun Issue.renderAsCompilerWarningMessage(): Pair<String, CompilerMessageLocation?> {

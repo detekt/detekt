@@ -54,9 +54,8 @@ class NestedBlockDepthSpec {
             }
         """.trimIndent()
         val findings = subject.compileAndLint(code)
-        assertThat(findings).singleElement()
-            .isThresholded()
-            .hasValue(5)
+
+        assertThat(findings).hasSize(1)
     }
 
     @Test
@@ -75,8 +74,9 @@ class NestedBlockDepthSpec {
         """.trimIndent()
         val findings = subject.compileAndLint(code)
 
-        assertThat(findings).hasSize(1)
-        assertThat(findings).hasTextLocations(4 to 5)
+        assertThat(findings)
+            .hasSize(1)
+            .hasTextLocations(4 to 5)
     }
 
     @Test

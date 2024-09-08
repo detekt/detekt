@@ -5,14 +5,13 @@ import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 private val defaultAllowedComplexity = "allowedComplexity" to "1"
 
 class CyclomaticComplexMethodSpec {
-
-    val defaultComplexity = 1
 
     @Nested
     inner class `different complex constructs` {
@@ -30,7 +29,7 @@ class CyclomaticComplexMethodSpec {
                 """.trimIndent()
             )
 
-            assertThat(findings.first()).isThresholded().withValue(defaultComplexity + 4)
+            assertThat(findings).hasSize(1)
         }
 
         @Test
@@ -43,7 +42,7 @@ class CyclomaticComplexMethodSpec {
                 """.trimIndent()
             )
 
-            assertThat(findings.first()).isThresholded().withValue(defaultComplexity + 2)
+            assertThat(findings).hasSize(1)
         }
 
         @Test
@@ -67,7 +66,7 @@ class CyclomaticComplexMethodSpec {
                 """.trimIndent()
             )
 
-            assertThat(findings.first()).isThresholded().withValue(defaultComplexity + 4)
+            assertThat(findings).hasSize(1)
         }
     }
 
@@ -302,8 +301,5 @@ private fun assertExpectedComplexityValue(code: String, config: TestConfig, expe
 
     assertThat(findings).hasStartSourceLocations(SourceLocation(1, 5))
 
-    assertThat(findings.first())
-        .isThresholded()
-        .withValue(expectedValue)
-        .withThreshold(1)
+    assertThat(findings[0].message).contains("(complexity: $expectedValue)")
 }

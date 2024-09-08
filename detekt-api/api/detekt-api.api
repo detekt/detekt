@@ -12,11 +12,12 @@ public final class io/gitlab/arturbosch/detekt/api/AutocorrectKt {
 }
 
 public class io/gitlab/arturbosch/detekt/api/CodeSmell : io/gitlab/arturbosch/detekt/api/Finding {
-	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Entity;Ljava/lang/String;Ljava/util/List;)V
-	public synthetic fun <init> (Lio/gitlab/arturbosch/detekt/api/Entity;Ljava/lang/String;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Entity;Ljava/lang/String;Ljava/util/List;Ljava/util/List;)V
+	public synthetic fun <init> (Lio/gitlab/arturbosch/detekt/api/Entity;Ljava/lang/String;Ljava/util/List;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun getEntity ()Lio/gitlab/arturbosch/detekt/api/Entity;
 	public final fun getMessage ()Ljava/lang/String;
 	public final fun getReferences ()Ljava/util/List;
+	public final fun getSuppressReasons ()Ljava/util/List;
 	public fun toString ()Ljava/lang/String;
 }
 
@@ -95,13 +96,6 @@ public final class io/gitlab/arturbosch/detekt/api/ConsoleReport$DefaultImpls {
 	public static fun init (Lio/gitlab/arturbosch/detekt/api/ConsoleReport;Lio/gitlab/arturbosch/detekt/api/SetupContext;)V
 }
 
-public class io/gitlab/arturbosch/detekt/api/CorrectableCodeSmell : io/gitlab/arturbosch/detekt/api/CodeSmell {
-	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Entity;Ljava/lang/String;Ljava/util/List;Z)V
-	public synthetic fun <init> (Lio/gitlab/arturbosch/detekt/api/Entity;Ljava/lang/String;Ljava/util/List;ZILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun getAutoCorrectEnabled ()Z
-	public fun toString ()Ljava/lang/String;
-}
-
 public class io/gitlab/arturbosch/detekt/api/DetektVisitor : org/jetbrains/kotlin/psi/KtTreeVisitorVoid {
 	public fun <init> ()V
 }
@@ -163,16 +157,17 @@ public abstract interface class io/gitlab/arturbosch/detekt/api/Finding {
 	public abstract fun getEntity ()Lio/gitlab/arturbosch/detekt/api/Entity;
 	public abstract fun getMessage ()Ljava/lang/String;
 	public abstract fun getReferences ()Ljava/util/List;
+	public abstract fun getSuppressReasons ()Ljava/util/List;
 }
 
 public abstract interface class io/gitlab/arturbosch/detekt/api/Issue {
-	public abstract fun getAutoCorrectEnabled ()Z
 	public abstract fun getEntity ()Lio/gitlab/arturbosch/detekt/api/Issue$Entity;
 	public abstract fun getLocation ()Lio/gitlab/arturbosch/detekt/api/Issue$Location;
 	public abstract fun getMessage ()Ljava/lang/String;
 	public abstract fun getReferences ()Ljava/util/List;
 	public abstract fun getRuleInstance ()Lio/gitlab/arturbosch/detekt/api/RuleInstance;
 	public abstract fun getSeverity ()Lio/gitlab/arturbosch/detekt/api/Severity;
+	public abstract fun getSuppressReasons ()Ljava/util/List;
 }
 
 public final class io/gitlab/arturbosch/detekt/api/Issue$DefaultImpls {
@@ -191,6 +186,10 @@ public abstract interface class io/gitlab/arturbosch/detekt/api/Issue$Location {
 	public abstract fun getPath ()Ljava/nio/file/Path;
 	public abstract fun getSource ()Lio/gitlab/arturbosch/detekt/api/SourceLocation;
 	public abstract fun getText ()Lio/gitlab/arturbosch/detekt/api/TextLocation;
+}
+
+public final class io/gitlab/arturbosch/detekt/api/IssueKt {
+	public static final fun getSuppressed (Lio/gitlab/arturbosch/detekt/api/Issue;)Z
 }
 
 public final class io/gitlab/arturbosch/detekt/api/Location {

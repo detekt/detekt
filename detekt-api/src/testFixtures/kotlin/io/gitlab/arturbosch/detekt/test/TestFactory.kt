@@ -17,13 +17,13 @@ fun createIssue(
     entity: Issue.Entity = createEntity(),
     message: String = "TestMessage",
     severity: Severity = Severity.Error,
-    autoCorrectEnabled: Boolean = false,
+    suppressReasons: List<String> = emptyList(),
 ): Issue = createIssue(
     ruleInstance = createRuleInstance(ruleId),
     entity = entity,
     message = message,
     severity = severity,
-    autoCorrectEnabled = autoCorrectEnabled,
+    suppressReasons = suppressReasons,
 )
 
 fun createIssue(
@@ -31,13 +31,13 @@ fun createIssue(
     entity: Issue.Entity = createEntity(),
     message: String = "TestMessage",
     severity: Severity = Severity.Error,
-    autoCorrectEnabled: Boolean = false,
+    suppressReasons: List<String> = emptyList(),
 ): Issue = IssueImpl(
     ruleInstance = ruleInstance,
     entity = entity,
     message = message,
     severity = severity,
-    autoCorrectEnabled = autoCorrectEnabled,
+    suppressReasons = suppressReasons,
 )
 
 fun createIssue(
@@ -45,13 +45,13 @@ fun createIssue(
     location: Issue.Location,
     message: String = "TestMessage",
     severity: Severity = Severity.Error,
-    autoCorrectEnabled: Boolean = false,
+    suppressReasons: List<String> = emptyList(),
 ): Issue = IssueImpl(
     ruleInstance = ruleInstance,
     entity = createEntity(location = location),
     message = message,
     severity = severity,
-    autoCorrectEnabled = autoCorrectEnabled,
+    suppressReasons = suppressReasons,
 )
 
 fun createRuleInstance(
@@ -99,8 +99,8 @@ private data class IssueImpl(
     override val entity: Issue.Entity,
     override val message: String,
     override val severity: Severity = Severity.Error,
-    override val autoCorrectEnabled: Boolean = false,
     override val references: List<Issue.Entity> = emptyList(),
+    override val suppressReasons: List<String>
 ) : Issue {
     data class Entity(
         override val name: String,

@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
+import io.gitlab.arturbosch.detekt.api.suppressed
 import java.util.Locale
 import kotlin.io.path.invariantSeparatorsPathString
 
@@ -25,6 +26,7 @@ class XmlOutputReport : BuiltInOutputReport, OutputReport() {
         lines += "<checkstyle version=\"4.3\">"
 
         detektion.issues
+            .filterNot { it.suppressed }
             .groupBy { it.location.path }
             .forEach { (filePath, issues) ->
                 lines += "<file name=\"${filePath.invariantSeparatorsPathString.toXmlString()}\">"

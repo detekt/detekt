@@ -64,8 +64,10 @@ class FailurePoliciesKtTest {
         }
 
         @Test
-        fun `does not fail on correctable issue`() {
-            val result = TestDetektion(createIssue(severity = Severity.Error, autoCorrectEnabled = true))
+        fun `does not fail on suppressed issues`() {
+            val result = TestDetektion(
+                createIssue(severity = Severity.Error, suppressReasons = listOf("Because reasons"))
+            )
 
             subject.check(result)
         }

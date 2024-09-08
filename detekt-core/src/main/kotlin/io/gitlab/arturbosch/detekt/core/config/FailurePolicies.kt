@@ -4,7 +4,7 @@ import io.github.detekt.tooling.api.IssuesFound
 import io.github.detekt.tooling.api.spec.RulesSpec
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.core.reporting.filterAutoCorrectedIssues
+import io.gitlab.arturbosch.detekt.api.suppressed
 
 internal fun RulesSpec.FailurePolicy.check(result: Detektion) {
     when (this) {
@@ -21,7 +21,6 @@ private fun Detektion.checkForIssuesWithSeverity(minSeverity: Severity) {
 }
 
 private fun Detektion.computeIssueCount(minSeverity: Severity): Int =
-    filterAutoCorrectedIssues()
-        .count { it.severity.isAtLeast(minSeverity) }
+    issues.count { it.severity.isAtLeast(minSeverity) && !it.suppressed }
 
 private fun Severity.isAtLeast(severity: Severity): Boolean = this.ordinal <= severity.ordinal

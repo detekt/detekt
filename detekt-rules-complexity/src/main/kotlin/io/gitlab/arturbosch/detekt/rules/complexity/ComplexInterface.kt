@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
+import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
@@ -53,9 +54,8 @@ class ComplexInterface(config: Config) : Rule(
             }
             if (size > allowedDefinitions) {
                 report(
-                    ThresholdedCodeSmell(
+                    CodeSmell(
                         Entity.atName(klass),
-                        Metric(size, allowedDefinitions),
                         "The interface ${klass.name} is too complex. Consider splitting it up."
                     )
                 )

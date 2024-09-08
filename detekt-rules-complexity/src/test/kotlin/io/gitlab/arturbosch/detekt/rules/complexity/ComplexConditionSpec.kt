@@ -22,9 +22,7 @@ class ComplexConditionSpec {
 
         val actual = ComplexCondition(testConfig).compileAndLint(code)
 
-        assertThat(actual).singleElement()
-            .isThresholded()
-            .withValue(5)
+        assertThat(actual).hasSize(1)
     }
 
     @Test

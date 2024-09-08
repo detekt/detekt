@@ -114,13 +114,15 @@ class XmlOutputReportSpec {
         val smell2 = createIssue("rule_b", entity1, "TestMessage")
         val smell3 = createIssue("rule_a/id", entity2, "TestMessage")
         val smell4 = createIssue("rule_b", entity2, "TestMessage")
+        val smell5 = createIssue("rule_c", entity2, "TestMessage", suppressReasons = listOf("suppress"))
 
         val result = outputReport.render(
             TestDetektion(
                 smell1,
                 smell2,
                 smell3,
-                smell4
+                smell4,
+                smell5,
             )
         )
 

@@ -12,6 +12,7 @@ import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
+import io.gitlab.arturbosch.detekt.api.suppressed
 import kotlinx.html.CommonAttributeGroupFacadeFlowInteractiveContent
 import kotlinx.html.FlowContent
 import kotlinx.html.FlowOrInteractiveContent
@@ -69,7 +70,7 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
             .replace(PLACEHOLDER_DATE, renderDate())
             .replace(PLACEHOLDER_METRICS, renderMetrics(detektion.metrics))
             .replace(PLACEHOLDER_COMPLEXITY_REPORT, renderComplexity(getComplexityMetrics(detektion)))
-            .replace(PLACEHOLDER_ISSUES, renderIssues(detektion.issues))
+            .replace(PLACEHOLDER_ISSUES, renderIssues(detektion.issues.filterNot { it.suppressed }))
 
     private fun renderVersion(): String = whichDetekt()
 

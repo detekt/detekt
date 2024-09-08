@@ -4,7 +4,6 @@ import io.github.detekt.psi.absolutePath
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.CompilerResources
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.CorrectableCodeSmell
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Finding
@@ -185,21 +184,13 @@ private fun throwIllegalStateException(file: KtFile, error: Throwable): Nothing 
 
 private fun Finding.toIssue(rule: RuleInstance, severity: Severity, basePath: Path): Issue =
     when (this) {
-        is CorrectableCodeSmell -> IssueImpl(
-            rule,
-            entity.toIssue(basePath),
-            message,
-            references.map { it.toIssue(basePath) },
-            severity,
-            autoCorrectEnabled
-        )
-
         is CodeSmell -> IssueImpl(
             rule,
             entity.toIssue(basePath),
             message,
             references.map { it.toIssue(basePath) },
             severity,
+            suppressReasons,
         )
 
         else -> error("wtf?")
@@ -220,7 +211,7 @@ private data class IssueImpl(
     override val message: String,
     override val references: List<Issue.Entity>,
     override val severity: Severity,
-    override val autoCorrectEnabled: Boolean = false,
+    override val suppressReasons: List<String>,
 ) : Issue {
     data class Entity(
         override val name: String,
