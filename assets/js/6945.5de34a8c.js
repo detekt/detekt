@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunk_detekt_website=self.webpackChunk_detekt_website||[]).push([[6945],{6945:(e,t,s)=>{s.r(t)}}]);
