@@ -10,6 +10,8 @@ Today we are announcing the **1.0** release of detekt, a static code analysis to
 It operates on the abstract syntax tree provided by the Kotlin compiler and finds common
 programming flaws like unused or too complex constructs. Think of it as *pmd* or *checkstyle* but for Kotlin.
 
+<!-- truncate -->
+
 **1.0** offers the following features:
 
 - Code smell analysis for your Kotlin projects

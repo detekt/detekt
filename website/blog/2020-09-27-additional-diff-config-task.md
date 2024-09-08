@@ -9,6 +9,8 @@ tags: [guides]
 detekt's `./gradlew detektGenerateConfig` task copies the default configuration file to the location
 specified by the `config` property.
 
+<!-- truncate -->
+
 ```kt
 detekt {
   ...

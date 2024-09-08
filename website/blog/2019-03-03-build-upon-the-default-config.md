@@ -8,6 +8,9 @@ tags: [guides]
 
 A common use case of _detekt_ users was to build upon the default config file and use a second config file to override
 some defaults.
+
+<!-- truncate -->
+
 Speaking in _Gradle_ terms, this could look like following:
 ```gradle
 detekt {

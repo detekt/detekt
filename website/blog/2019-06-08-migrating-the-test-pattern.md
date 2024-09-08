@@ -8,6 +8,8 @@ tags: [guides]
 
 Starting with RC15 the test-pattern is obsolete. This post shows how to leverage rule path excludes to achieve the same functionality.
 
+<!-- truncate -->
+
 With version < RC15 the configuration file allowed to specify
 which paths should be mapped to test files so detekt would not run
 specific rule sets and rules on these test files:
