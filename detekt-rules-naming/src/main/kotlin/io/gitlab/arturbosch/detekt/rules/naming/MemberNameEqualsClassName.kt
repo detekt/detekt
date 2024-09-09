@@ -19,7 +19,7 @@ import org.jetbrains.kotlin.psi.KtUserType
 import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
- * This rule reports a member that has the same as the containing class or object.
+ * This rule reports a member that has the same name as the containing class or object.
  * This might result in confusion.
  * The member should either be renamed or changed to a constructor.
  * Factory functions that create an instance of the class are exempt from this rule.
