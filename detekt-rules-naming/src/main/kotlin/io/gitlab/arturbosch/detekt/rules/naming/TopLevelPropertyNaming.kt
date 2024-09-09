@@ -13,12 +13,12 @@ import org.jetbrains.kotlin.psi.psiUtil.isExtensionDeclaration
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 
 /**
- * Reports top level constant that which do not follow the specified naming convention.
+ * Reports top level property names that do not follow the specified naming convention.
  */
 @ActiveByDefault(since = "1.0.0")
 class TopLevelPropertyNaming(config: Config) : Rule(
     config,
-    "Top level property names should follow the naming convention set in the projects configuration."
+    "Top level property names should follow the naming convention set in the project's configuration."
 ) {
 
     @Configuration("naming pattern")

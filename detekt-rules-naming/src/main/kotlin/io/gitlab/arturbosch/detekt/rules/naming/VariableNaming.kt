@@ -23,7 +23,7 @@ import org.jetbrains.kotlin.resolve.calls.util.isSingleUnderscore
 @Alias("PropertyName")
 class VariableNaming(config: Config) : Rule(
     config,
-    "Variable names should follow the naming convention set in the projects configuration."
+    "Variable names should follow the naming convention set in the project's configuration."
 ) {
 
     @Configuration("naming pattern")

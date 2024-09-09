@@ -17,7 +17,7 @@ import org.jetbrains.kotlin.types.isError
 
 /**
  * Reports when property with 'is' prefix doesn't have a boolean type.
- * Please check the [chapter 8.3.2 at Java Language Specification](https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.3.2)
+ * Please check [chapter 8.3.2 on the Java Language Specification](https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.3.2)
  *
  * <noncompliant>
  * val isEnabled: Int = 500

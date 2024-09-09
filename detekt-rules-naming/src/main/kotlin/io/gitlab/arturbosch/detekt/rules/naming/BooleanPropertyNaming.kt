@@ -16,7 +16,7 @@ import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
 
 /**
- * Reports when a boolean property doesn't match a pattern
+ * Reports boolean property names that do not follow the specified naming convention.
  *
  * <noncompliant>
  * val progressBar: Boolean = true
@@ -29,7 +29,7 @@ import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
 @RequiresTypeResolution
 class BooleanPropertyNaming(config: Config) : Rule(
     config,
-    "Boolean property name should follow the naming convention set in the projects configuration."
+    "Boolean property name should follow the naming convention set in the project's configuration."
 ) {
 
     @Configuration("naming pattern")

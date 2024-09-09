@@ -15,7 +15,7 @@ import org.jetbrains.kotlin.resolve.calls.util.isSingleUnderscore
  */
 class VariableMinLength(config: Config) : Rule(
     config,
-    "Variable names should not be shorter than the minimum defined in the configuration."
+    "Variable names should not be shorter than the minimum set in the project's configuration."
 ) {
 
     @Configuration("minimum name length")

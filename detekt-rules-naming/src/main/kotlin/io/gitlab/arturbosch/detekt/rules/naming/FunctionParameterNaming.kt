@@ -18,7 +18,7 @@ import org.jetbrains.kotlin.psi.KtParameter
 @ActiveByDefault(since = "1.0.0")
 class FunctionParameterNaming(config: Config) : Rule(
     config,
-    "Function parameter names should follow the naming convention set in the projects configuration."
+    "Function parameter names should follow the naming convention set in the project's configuration."
 ) {
 
     @Configuration("naming pattern")
