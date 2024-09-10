@@ -1,5 +1,4 @@
 {
-  "installCommand": "dnf install -y java-21-amazon-corretto-devel && yarn install",
   "github": {
     "silent": true
   },
