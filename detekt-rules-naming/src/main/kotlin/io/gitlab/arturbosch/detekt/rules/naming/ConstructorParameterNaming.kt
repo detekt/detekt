@@ -19,7 +19,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 @ActiveByDefault(since = "1.0.0")
 class ConstructorParameterNaming(config: Config) : Rule(
     config,
-    "Constructor parameter names should follow the naming convention set in the project's configuration."
+    "Constructor parameter names should follow the naming convention set in detekt's configuration."
 ) {
 
     @Configuration("naming pattern")

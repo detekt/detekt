@@ -29,7 +29,7 @@ import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
 @RequiresTypeResolution
 class BooleanPropertyNaming(config: Config) : Rule(
     config,
-    "Boolean property name should follow the naming convention set in the project's configuration."
+    "Boolean property name should follow the naming convention set in detekt's configuration."
 ) {
 
     @Configuration("naming pattern")

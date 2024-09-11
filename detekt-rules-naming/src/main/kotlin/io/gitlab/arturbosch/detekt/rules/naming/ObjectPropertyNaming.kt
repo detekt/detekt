@@ -22,7 +22,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 @Alias("ObjectPropertyName")
 class ObjectPropertyNaming(config: Config) : Rule(
     config,
-    "Property names inside objects should follow the naming convention set in the project's configuration."
+    "Property names inside objects should follow the naming convention set in detekt's configuration."
 ) {
 
     @Configuration("naming pattern")

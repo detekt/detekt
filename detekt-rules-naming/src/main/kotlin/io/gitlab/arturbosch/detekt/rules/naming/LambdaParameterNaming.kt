@@ -15,7 +15,7 @@ import org.jetbrains.kotlin.psi.KtParameter
  */
 class LambdaParameterNaming(config: Config) : Rule(
     config,
-    "Lambda parameter names should follow the naming convention set in the project's configuration."
+    "Lambda parameter names should follow the naming convention set in detekt's configuration."
 ) {
 
     @Configuration("naming pattern")

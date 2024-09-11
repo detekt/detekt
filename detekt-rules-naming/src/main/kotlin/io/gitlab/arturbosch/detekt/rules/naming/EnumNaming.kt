@@ -17,7 +17,7 @@ import org.jetbrains.kotlin.psi.KtEnumEntry
 @Alias("EnumEntryName")
 class EnumNaming(config: Config) : Rule(
     config,
-    "Enum names should follow the naming convention set in the project's configuration."
+    "Enum names should follow the naming convention set in detekt's configuration."
 ) {
 
     @Configuration("naming pattern")

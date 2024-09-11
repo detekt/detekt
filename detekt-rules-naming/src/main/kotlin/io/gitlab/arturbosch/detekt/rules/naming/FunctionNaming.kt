@@ -22,7 +22,7 @@ import org.jetbrains.kotlin.psi.KtUserType
 @Alias("FunctionName")
 class FunctionNaming(config: Config) : Rule(
     config,
-    "Function names should follow the naming convention set in the project's configuration."
+    "Function names should follow the naming convention set in detekt's configuration."
 ) {
 
     @Configuration("naming pattern")

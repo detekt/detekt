@@ -17,7 +17,7 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
 @Alias("ClassName")
 class ClassNaming(config: Config) : Rule(
     config,
-    "A class or object name should follow the naming convention set in the project's configuration."
+    "A class or object name should follow the naming convention set in detekt's configuration."
 ) {
 
     @Configuration("naming pattern")

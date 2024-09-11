@@ -18,7 +18,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 @ActiveByDefault(since = "1.0.0")
 class TopLevelPropertyNaming(config: Config) : Rule(
     config,
-    "Top level property names should follow the naming convention set in the project's configuration."
+    "Top level property names should follow the naming convention set in detekt's configuration."
 ) {
 
     @Configuration("naming pattern")
