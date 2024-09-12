@@ -10,6 +10,7 @@ class UnnecessaryBackticksSpec {
     val subject = UnnecessaryBackticks(Config.empty)
 
     @Nested
+    @Suppress("UnnecessaryInnerClass")
     inner class `Reports UnnecessaryInnerClass Rule` {
         @Test
         fun `class`() {
@@ -64,6 +65,7 @@ class UnnecessaryBackticksSpec {
     }
 
     @Nested
+    @Suppress("UnnecessaryInnerClass")
     inner class `Does not report UnnecessaryInnerClass Rule` {
         @Test
         fun `class with spaces`() {
