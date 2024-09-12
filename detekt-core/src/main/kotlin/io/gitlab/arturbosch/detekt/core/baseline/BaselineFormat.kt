@@ -54,7 +54,9 @@ internal class BaselineFormat : BaselineProvider {
     private fun XMLStreamWriter.save(baseline: Baseline) {
         document {
             tag(SMELL_BASELINE) {
-                if (baseline.manuallySuppressedIssues.isNotEmpty()) {
+                if (baseline.manuallySuppressedIssues.isEmpty()) {
+                    writeEmptyElement(MANUALLY_SUPPRESSED_ISSUES)
+                } else {
                     tag(MANUALLY_SUPPRESSED_ISSUES) {
                         baseline.manuallySuppressedIssues.forEach { tag(ID, it) }
                     }
