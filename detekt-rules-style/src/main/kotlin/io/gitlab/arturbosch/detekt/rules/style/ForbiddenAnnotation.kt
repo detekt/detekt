@@ -5,7 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Location
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.api.ValueWithReason
@@ -35,7 +35,7 @@ import org.jetbrains.kotlin.types.KotlinType
  * class SomeClass()
  * </compliant>
  */
-@RequiresTypeResolution
+@RequiresFullAnalysis
 class ForbiddenAnnotation(config: Config) : Rule(
     config,
     "Avoid using this annotation."

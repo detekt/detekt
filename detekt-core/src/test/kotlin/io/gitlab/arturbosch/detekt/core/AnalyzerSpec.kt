@@ -7,7 +7,7 @@ import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
@@ -479,7 +479,7 @@ private open class MaxLineLength(config: Config) : Rule(config, "TestDescription
             .first { it.text.isNotBlank() }
 }
 
-@RequiresTypeResolution
+@RequiresFullAnalysis
 private class RequiresTypeResolutionMaxLineLength(config: Config) : MaxLineLength(config)
 
 private class FaultyRule(config: Config) : Rule(config, "") {

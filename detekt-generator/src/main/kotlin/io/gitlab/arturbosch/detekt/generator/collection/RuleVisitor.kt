@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.generator.collection
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.Alias
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
 import org.jetbrains.kotlin.psi.KtClass
@@ -94,7 +94,7 @@ internal class RuleVisitor(textReplacements: Map<String, String>) : DetektVisito
         }
 
         autoCorrect = classOrObject.isAnnotatedWith(AutoCorrectable::class)
-        requiresTypeResolution = classOrObject.isAnnotatedWith(RequiresTypeResolution::class)
+        requiresTypeResolution = classOrObject.isAnnotatedWith(RequiresFullAnalysis::class)
         deprecationMessage = classOrObject.firstAnnotationParameterOrNull(Deprecated::class)
 
         documentationCollector.setClass(classOrObject)

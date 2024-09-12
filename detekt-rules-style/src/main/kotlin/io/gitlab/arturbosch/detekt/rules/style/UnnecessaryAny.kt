@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.firstParameter
 import io.gitlab.arturbosch.detekt.rules.isCalling
@@ -41,7 +41,7 @@ import org.jetbrains.kotlin.types.typeUtil.isSubtypeOf
  * list.contains(a)
  * </compliant>
  */
-@RequiresTypeResolution
+@RequiresFullAnalysis
 class UnnecessaryAny(config: Config) : Rule(
     config,
     "The `any {  }` usage is unnecessary."

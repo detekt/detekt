@@ -5,7 +5,7 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.isOverride
@@ -48,7 +48,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * }
  * </compliant>
  */
-@RequiresTypeResolution
+@RequiresFullAnalysis
 @ActiveByDefault(since = "1.2.0")
 class MemberNameEqualsClassName(config: Config) : Rule(
     config,

@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
@@ -49,7 +49,7 @@ import org.jetbrains.kotlin.types.typeUtil.isBooleanOrNullableBoolean
  * }
  * </compliant>
  */
-@RequiresTypeResolution
+@RequiresFullAnalysis
 class ElseCaseInsteadOfExhaustiveWhen(config: Config) : Rule(
     config,
     "A `when` expression that has an exhaustive set of cases should not contain an `else` case."

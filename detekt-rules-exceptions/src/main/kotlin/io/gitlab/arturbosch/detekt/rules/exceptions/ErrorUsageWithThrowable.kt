@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.exceptions
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.builtins.StandardNames
@@ -43,7 +43,7 @@ import org.jetbrains.kotlin.types.typeUtil.supertypes
  * }
  * </compliant>
  */
-@RequiresTypeResolution
+@RequiresFullAnalysis
 class ErrorUsageWithThrowable(config: Config) : Rule(
     config,
     "Passing `Throwable` in `error` method is ambiguous. Use " +

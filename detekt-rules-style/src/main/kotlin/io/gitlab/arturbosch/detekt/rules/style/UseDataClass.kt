@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.isOpen
@@ -42,7 +42,7 @@ import org.jetbrains.kotlin.types.KotlinType
  * class A(val b: B) : I by b
  * </compliant>
  */
-@RequiresTypeResolution
+@RequiresFullAnalysis
 class UseDataClass(config: Config) : Rule(
     config,
     "Classes that do nothing but hold data should be replaced with a data class."

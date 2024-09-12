@@ -8,4 +8,4 @@ package io.gitlab.arturbosch.detekt.api
  */
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class RequiresTypeResolution
+annotation class RequiresFullAnalysis

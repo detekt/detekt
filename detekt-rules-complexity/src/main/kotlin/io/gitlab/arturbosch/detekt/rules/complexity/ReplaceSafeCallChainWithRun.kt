@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.complexity
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
@@ -35,7 +35,7 @@ import org.jetbrains.kotlin.types.isNullable
  * </compliant>
  *
  */
-@RequiresTypeResolution
+@RequiresFullAnalysis
 class ReplaceSafeCallChainWithRun(config: Config) : Rule(
     config,
     "Chains of safe calls on non-nullable types can be surrounded with `run {}`."

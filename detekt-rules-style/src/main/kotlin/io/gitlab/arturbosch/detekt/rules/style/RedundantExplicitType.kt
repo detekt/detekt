@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns
@@ -42,7 +42,7 @@ import org.jetbrains.kotlin.types.typeUtil.isLong
  * }
  * </compliant>
  */
-@RequiresTypeResolution
+@RequiresFullAnalysis
 class RedundantExplicitType(config: Config) : Rule(
     config,
     "Type does not need to be stated explicitly and can be removed."

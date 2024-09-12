@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.psi.KtClass
@@ -21,7 +21,7 @@ import kotlin.reflect.KClass
  * And if the rule doesn't use that property it shouldn't be annotated with it.
  */
 @ActiveByDefault("1.22.0")
-@RequiresTypeResolution
+@RequiresFullAnalysis
 class ViolatesTypeResolutionRequirements(config: Config) : Rule(
     config,
     "`@RequiresTypeResolution` should be used if and only if the property `bindingContext` is used."
@@ -33,15 +33,15 @@ class ViolatesTypeResolutionRequirements(config: Config) : Rule(
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)
         klasses.forEach { klass ->
-            val isAnnotatedWithRequiresTypeResolution = klass.isAnnotatedWith(RequiresTypeResolution::class)
-            if (usesBindingContext && !isAnnotatedWithRequiresTypeResolution) {
+            val isAnnotatedWithRequiresFullAnalysis = klass.isAnnotatedWith(RequiresFullAnalysis::class)
+            if (usesBindingContext && !isAnnotatedWithRequiresFullAnalysis) {
                 report(
                     CodeSmell(
                         Entity.atName(klass),
                         "`${klass.name}` uses `bindingContext` but is not annotated with `@RequiresTypeResolution`"
                     )
                 )
-            } else if (!usesBindingContext && isAnnotatedWithRequiresTypeResolution) {
+            } else if (!usesBindingContext && isAnnotatedWithRequiresFullAnalysis) {
                 report(
                     CodeSmell(
                         Entity.atName(klass),

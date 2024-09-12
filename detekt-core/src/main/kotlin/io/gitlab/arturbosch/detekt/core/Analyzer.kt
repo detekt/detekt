@@ -9,7 +9,7 @@ import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleInstance
 import io.gitlab.arturbosch.detekt.api.RuleSet
@@ -124,7 +124,7 @@ internal class Analyzer(
                 file.isSuppressedBy(ruleInstance.id, rule.aliases, ruleInstance.ruleSetId)
             }
             .filter { (_, rule) ->
-                bindingContext != BindingContext.EMPTY || !rule::class.hasAnnotation<RequiresTypeResolution>()
+                bindingContext != BindingContext.EMPTY || !rule::class.hasAnnotation<RequiresFullAnalysis>()
             }
             .partition { (_, rule) -> rule.autoCorrect }
 
@@ -150,7 +150,7 @@ internal class Analyzer(
                     .filter { (_, config) -> config.isActiveOrDefault(false) }
                     .map { (ruleProvider, config) -> ruleProvider(config) }
             }
-            .filter { rule -> rule::class.hasAnnotation<RequiresTypeResolution>() }
+            .filter { rule -> rule::class.hasAnnotation<RequiresFullAnalysis>() }
             .forEach { rule ->
                 settings.debug { "The rule '${rule.ruleName}' requires type resolution but it was run without it." }
             }
