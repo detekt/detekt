@@ -279,8 +279,10 @@ class UndocumentedPublicClassSpec {
             }
         """.trimIndent()
         assertThat(
-            UndocumentedPublicClass(TestConfig(FLAG_COMPANION_WITHOUT_NAME to "false")
-        ).compileAndLint(code)).isEmpty()
+            UndocumentedPublicClass(
+                TestConfig(FLAG_COMPANION_WITHOUT_NAME to "false")
+            ).compileAndLint(code)
+        ).isEmpty()
     }
 
     @Test
