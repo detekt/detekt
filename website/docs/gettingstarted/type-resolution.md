@@ -41,7 +41,7 @@ With type resolution, detekt has access to all the symbols and types of your cod
 
 If you're running detekt **without** type resolution, all the rules that require type resolution **will not run**.
 
-All the rules that require type resolution are annotated with [`@RequiresTypeResolution`](https://github.com/detekt/detekt/search?q=%40RequiresTypeResolution). 
+All the rules that require type resolution are annotated with [`@RequiresFullAnalysis`](https://github.com/detekt/detekt/search?q=%40RequiresFullAnalysis). 
 
 Moreover, their official documentation in the detekt website will mention _Requires Type Resolution_ ([like here](/docs/rules/potential-bugs#unnecessarysafecall)).
 
@@ -105,9 +105,9 @@ from the `Rule` class ([source](https://github.com/detekt/detekt/blob/main/detek
 
 By default, the `bindingContext` is initialized as `BindingContext.EMPTY`. This is the **default value** that the rule receives if type resolution is **not enabled**.
 
-Therefore, is generally advised to annotate your `Rule` with `@RequiresTypeResolution` to ensure that your rule doesn't run if you don't have a proper `BindingContext`.
+Therefore, is generally advised to annotate your `Rule` with `@RequiresFullAnalysis` to ensure that your rule doesn't run if you don't have a proper `BindingContext`.
 
-If your rule is annotated with `@RequiresTypeResolution` you are free to use it to resolve types and get access to all the information needed for your rules. As a rule of thumb, we recommend to get inspiration from other rules on how they're using the `bindingContext`.
+If your rule is annotated with `@RequiresFullAnalysis` you are free to use it to resolve types and get access to all the information needed for your rules. As a rule of thumb, we recommend to get inspiration from other rules on how they're using the `bindingContext`.
 
 ## Testing a rule that uses type resolution
 

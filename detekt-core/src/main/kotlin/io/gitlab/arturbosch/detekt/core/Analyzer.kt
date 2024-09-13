@@ -46,7 +46,7 @@ internal class Analyzer(
         val dataFlowValueFactory = DataFlowValueFactoryImpl(languageVersionSettings)
         val compilerResources = CompilerResources(languageVersionSettings, dataFlowValueFactory)
         if (bindingContext == BindingContext.EMPTY) {
-            warnAboutEnabledRequiresTypeResolutionRules()
+            warnAboutEnabledRequiresFullAnalysisRules()
         }
         return if (settings.spec.executionSpec.parallelAnalysis) {
             runAsync(ktFiles, bindingContext, compilerResources)
@@ -138,7 +138,7 @@ internal class Analyzer(
         }
     }
 
-    private fun warnAboutEnabledRequiresTypeResolutionRules() {
+    private fun warnAboutEnabledRequiresFullAnalysisRules() {
         providers.asSequence()
             .map { it to settings.config.subConfig(it.ruleSetId.value) }
             .filter { (_, ruleSetConfig) -> ruleSetConfig.isActiveOrDefault(true) }

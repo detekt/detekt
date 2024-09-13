@@ -17,14 +17,14 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.getAllSuperclassesWithoutAny
 import kotlin.reflect.KClass
 
 /**
- * If a rule uses the property [Rule.bindingContext] should be annotated with `@RequiresTypeResolution`.
+ * If a rule uses the property [Rule.bindingContext] should be annotated with `@RequiresFullAnalysis`.
  * And if the rule doesn't use that property it shouldn't be annotated with it.
  */
 @ActiveByDefault("1.22.0")
 @RequiresFullAnalysis
 class ViolatesTypeResolutionRequirements(config: Config) : Rule(
     config,
-    "`@RequiresTypeResolution` should be used if and only if the property `bindingContext` is used."
+    "`@RequiresFullAnalysis` should be used if and only if the property `bindingContext` is used."
 ) {
 
     private val klasses: MutableList<KtClass> = mutableListOf()
@@ -38,14 +38,14 @@ class ViolatesTypeResolutionRequirements(config: Config) : Rule(
                 report(
                     CodeSmell(
                         Entity.atName(klass),
-                        "`${klass.name}` uses `bindingContext` but is not annotated with `@RequiresTypeResolution`"
+                        "`${klass.name}` uses `bindingContext` but is not annotated with `@RequiresFullAnalysis`"
                     )
                 )
             } else if (!usesBindingContext && isAnnotatedWithRequiresFullAnalysis) {
                 report(
                     CodeSmell(
                         Entity.atName(klass),
-                        "`${klass.name}` is annotated with `@RequiresTypeResolution` but doesn't use `bindingContext`"
+                        "`${klass.name}` is annotated with `@RequiresFullAnalysis` but doesn't use `bindingContext`"
                     )
                 )
             }

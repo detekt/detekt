@@ -10,7 +10,7 @@ data class Rule(
     val parent: String,
     val configurations: List<Configuration> = emptyList(),
     val autoCorrect: Boolean = false,
-    val requiresTypeResolution: Boolean = false,
+    val requiresFullAnalysis: Boolean = false,
     val deprecationMessage: String? = null
 ) {
     fun isDeprecated() = deprecationMessage != null

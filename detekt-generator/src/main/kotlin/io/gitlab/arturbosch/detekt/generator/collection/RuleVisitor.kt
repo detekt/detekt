@@ -21,7 +21,7 @@ internal class RuleVisitor(textReplacements: Map<String, String>) : DetektVisito
     private val documentationCollector = DocumentationCollector(textReplacements)
     private var defaultActivationStatus: DefaultActivationStatus = Inactive
     private var autoCorrect = false
-    private var requiresTypeResolution = false
+    private var requiresFullAnalysis = false
     private var aliases: List<String> = emptyList()
     private var parent = ""
     private val configurationCollector = ConfigurationCollector()
@@ -46,7 +46,7 @@ internal class RuleVisitor(textReplacements: Map<String, String>) : DetektVisito
             configurations = configurationsByAnnotation,
             autoCorrect = autoCorrect,
             deprecationMessage = deprecationMessage,
-            requiresTypeResolution = requiresTypeResolution
+            requiresFullAnalysis = requiresFullAnalysis
         )
     }
 
@@ -94,7 +94,7 @@ internal class RuleVisitor(textReplacements: Map<String, String>) : DetektVisito
         }
 
         autoCorrect = classOrObject.isAnnotatedWith(AutoCorrectable::class)
-        requiresTypeResolution = classOrObject.isAnnotatedWith(RequiresFullAnalysis::class)
+        requiresFullAnalysis = classOrObject.isAnnotatedWith(RequiresFullAnalysis::class)
         deprecationMessage = classOrObject.firstAnnotationParameterOrNull(Deprecated::class)
 
         documentationCollector.setClass(classOrObject)

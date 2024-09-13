@@ -397,7 +397,7 @@ See all issues at: [1.23.0](https://github.com/detekt/detekt/milestone/88)
 -   We added a new ruleset called `detekt-rules-libraries` containing rules mostly useful for Library Authors - We moved the following rules inside `ForbiddenPublicDataClass`, `LibraryCodeMustSpecifyReturnType`, `LibraryEntitiesShouldNotBePublic` this new ruleset - See Migration below on how to migrate [#5360](https://github.com/detekt/detekt/pull/5360)
 -   We added support for JVM toolchain. This means that detekt will now respect the JDK toolchain you specify on your Gradle configuration. You will also be able to specify a custom JDK home with the `--jdk-home` CLI parameter - [#5269](https://github.com/detekt/detekt/pull/5269)
 -   Improvement for Type Resolution
-    -   We will now skip rules annotated with `@RequiresTypeResolution` when without Type Resolution - [#5176](https://github.com/detekt/detekt/pull/5176)
+    -   We will now skip rules annotated with `@RequiresFullAnalysis` when without Type Resolution - [#5176](https://github.com/detekt/detekt/pull/5176)
     -   We will warn users if they run rules requiring Type Resolution when Type Resolution is disabled, so they're not silently skipped - [#5226](https://github.com/detekt/detekt/pull/5226)
 -   Improvement for Config Management
     -   We added exhaustiveness check during config validation. You can enable it `checkExhaustiveness: true` in your config file. This is disabled by default. - [#5089](https://github.com/detekt/detekt/pull/5089)
@@ -596,7 +596,7 @@ formatting:
 -   Allow parentheses for unclear precedence with range operator - [#5143](https://github.com/detekt/detekt/pull/5143)
 -   Mark apiDump task as incompatible with configuration cache - [#5134](https://github.com/detekt/detekt/pull/5134)
 -   Improve binding context management - [#5130](https://github.com/detekt/detekt/pull/5130)
--   `RedundantExplicitType` add annotation `@RequiresTypeResolution` - [#5128](https://github.com/detekt/detekt/pull/5128)
+-   `RedundantExplicitType` add annotation `@RequiresFullAnalysis` - [#5128](https://github.com/detekt/detekt/pull/5128)
 -   Disable `ExitOutsideMain` if `contextBinding` is empty - [#5127](https://github.com/detekt/detekt/pull/5127)
 -   Use list config for `DataClassContainsFunctions>conversionFunctionPrefix` - [#5119](https://github.com/detekt/detekt/pull/5119)
 -   Support proper globbing in `ReturnCount` - [#5118](https://github.com/detekt/detekt/pull/5118)
@@ -1415,7 +1415,7 @@ Moreover we included a couple of false positive fixes for `NoNameShadowing` and 
 -   We now introduced the `src/test/java` and `src/test/kotlin` by default for the plain `detekt` Gradle task. If you use that task, you might notice rule reports in your test sourceset. See [#3649](https://github.com/detekt/detekt/pull/3649)
 -   We now default the baseline file to `detekt-baseline.xml` so you don't have to specify it manually. You can revert the previous behavior by setting the baseline to `null` - See [#3619](https://github.com/detekt/detekt/pull/3619) and [#3745](https://github.com/detekt/detekt/pull/3745)
 -   We enabled the SARIF output format by default - See [#3543](https://github.com/detekt/detekt/pull/3543)
--   We're introducing annotations to provide metadata to rules, such as `@ActiveByDefault`, `@Configuration` and `@RequiresTypeResolution` - See [#3637](https://github.com/detekt/detekt/pull/3637) [#3592](https://github.com/detekt/detekt/pull/3592) and [#3579](https://github.com/detekt/detekt/pull/3579)
+-   We're introducing annotations to provide metadata to rules, such as `@ActiveByDefault`, `@Configuration` and `@RequiresFullAnalysis` - See [#3637](https://github.com/detekt/detekt/pull/3637) [#3592](https://github.com/detekt/detekt/pull/3592) and [#3579](https://github.com/detekt/detekt/pull/3579)
 
 ##### Changelog
 
@@ -1503,7 +1503,7 @@ Moreover we included a couple of false positive fixes for `NoNameShadowing` and 
 -   Improve generator test coverage - [#3622](https://github.com/detekt/detekt/pull/3622)
 -   Improve tests - [#3618](https://github.com/detekt/detekt/pull/3618)
 -   Apply more formatting rules to our code - [#3615](https://github.com/detekt/detekt/pull/3615)
--   Add negative test case for `requiresTypeResolution` - [#3614](https://github.com/detekt/detekt/pull/3614)
+-   Add negative test case for `requiresFullAnalysis` - [#3614](https://github.com/detekt/detekt/pull/3614)
 -   Simplify Gradle config - [#3612](https://github.com/detekt/detekt/pull/3612)
 -   Decouple Gradle projects - [#3611](https://github.com/detekt/detekt/pull/3611)
 -   Add --stacktrace to help triage CI flakiness - [#3604](https://github.com/detekt/detekt/pull/3604)
@@ -1680,7 +1680,7 @@ In addition to many rule improvements, there are also new ones:
 -   UseIfEmptyOrIfBlank
 
 We added documentation on how to configure [type resolution](/docs/gettingstarted/type-resolution).  
-Only the rules marked with `Requires Type Resolution` (on the website documentation or `@requiresTypeResolution` in code) are executed (see [here for example](/docs/rules/style#forbiddenmethodcall)).
+Only the rules marked with `Requires Type Resolution` (on the website documentation or `@requiresFullAnalysis` in code) are executed (see [here for example](/docs/rules/style#forbiddenmethodcall)).
 
 detekt now supports [SARIF](https://sarifweb.azurewebsites.net/) as an output format. In the future you will be able to
 upload this format to GitHub and see detekt issues right in your pull requests.
@@ -1972,7 +1972,7 @@ We will include test sources by default in detekt `1.15.0` or later.
 
 -   Consolidate working for Type Resolution - [#3011](https://github.com/detekt/detekt/pull/3011)
 -   ArrayPrimitive rule: report variable/receiver types and factory methods - [#3009](https://github.com/detekt/detekt/pull/3009)
--   Add requiresTypeResolution annotation to UseCheckNotNull/UseRequireNotNull - [#3008](https://github.com/detekt/detekt/pull/3008)
+-   Add requiresFullAnalysis annotation to UseCheckNotNull/UseRequireNotNull - [#3008](https://github.com/detekt/detekt/pull/3008)
 -   Update kotlinx.html dependencies - [#3007](https://github.com/detekt/detekt/pull/3007)
 -   Do not overwrite bintray publication - [#3006](https://github.com/detekt/detekt/pull/3006)
 -   Update Ktlint to 0.38.0 - [#3004](https://github.com/detekt/detekt/pull/3004)
@@ -1981,7 +1981,7 @@ We will include test sources by default in detekt `1.15.0` or later.
 -   Replace `require(x != null)` with `requireNotNull(x)` - [#2998](https://github.com/detekt/detekt/issues/2998)
 -   Minor Gradle plugin cleanup - [#2997](https://github.com/detekt/detekt/pull/2997)
 -   detekt-gradle-plugin has two publishing configuration - [#2996](https://github.com/detekt/detekt/issues/2996)
--   Introduce @requiresTypeResolution to KDoc for rules - [#2993](https://github.com/detekt/detekt/pull/2993)
+-   Introduce @requiresFullAnalysis to KDoc for rules - [#2993](https://github.com/detekt/detekt/pull/2993)
 -   Fix support for Gradle configuration cache - [#2992](https://github.com/detekt/detekt/pull/2992)
 -   Fix false positive for UnnecessaryLet with disabled type resolution - [#2991](https://github.com/detekt/detekt/pull/2991)
 -   Deprecation: False positive with Kotlin 1.4.0 - [#2990](https://github.com/detekt/detekt/issues/2990)
