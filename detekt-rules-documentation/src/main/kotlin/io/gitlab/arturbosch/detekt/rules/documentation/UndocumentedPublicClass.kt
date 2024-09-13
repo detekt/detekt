@@ -41,6 +41,9 @@ class UndocumentedPublicClass(config: Config) : Rule(
     @Configuration("if protected classes should be searched")
     private val searchInProtectedClass: Boolean by config(false)
 
+    @Configuration("if companion object without names should be flagged")
+    private val flagCompanionWithoutName: Boolean by config(true)
+
     override fun visitClass(klass: KtClass) {
         if (requiresDocumentation(klass)) {
             reportIfUndocumented(klass)
@@ -54,10 +57,12 @@ class UndocumentedPublicClass(config: Config) : Rule(
     ) =
         klass.isTopLevel() || klass.isInnerClass() || klass.isNestedClass() || klass.isInnerInterface()
 
-    @Suppress("ComplexCondition")
     override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
+        val isNonPublicCompanionWithoutNameOrDisabled = declaration.isCompanionWithoutName() &&
+            (!declaration.isPublic || !flagCompanionWithoutName)
+
         if (
-            (declaration.isCompanionWithoutName() && !declaration.isPublic) ||
+            isNonPublicCompanionWithoutNameOrDisabled ||
             declaration.isLocal ||
             !searchInInnerObject
         ) {
