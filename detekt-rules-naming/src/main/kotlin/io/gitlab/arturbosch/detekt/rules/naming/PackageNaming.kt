@@ -17,7 +17,7 @@ import org.jetbrains.kotlin.psi.KtPackageDirective
 @Alias("PackageName")
 class PackageNaming(config: Config) : Rule(
     config,
-    "Package names should match the naming convention set in the configuration."
+    "Package names should follow the naming convention set in detekt's configuration."
 ) {
 
     @Configuration("naming pattern")

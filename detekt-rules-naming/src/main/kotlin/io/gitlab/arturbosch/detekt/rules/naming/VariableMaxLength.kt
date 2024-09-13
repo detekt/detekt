@@ -14,7 +14,7 @@ import org.jetbrains.kotlin.psi.KtProperty
  */
 class VariableMaxLength(config: Config) : Rule(
     config,
-    "Variable names should not be longer than the maximum set in the configuration."
+    "Variable names should not be longer than the maximum set in detekt's configuration."
 ) {
 
     @Configuration("maximum name length")
