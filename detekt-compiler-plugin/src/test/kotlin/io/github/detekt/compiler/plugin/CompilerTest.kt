@@ -12,8 +12,10 @@ class CompilerTest {
             """
                 class KClass {
                     fun foo() {
-                        val x = 3
+                        var x = 3
                         println(x)
+                        var y = 4
+                        println(y)
                     }
                 }
             """.trimIndent()
@@ -22,8 +24,16 @@ class CompilerTest {
         assertThat(result)
             .passCompilation(true)
             .passDetekt(false)
-            .withViolations(2)
-            .withRuleViolation("MagicNumber", "NewLineAtEndOfFile")
+            .withViolations(5)
+            .withRuleViolationInOrder(
+                listOf(
+                    "VarCouldBeVal",
+                    "MagicNumber",
+                    "VarCouldBeVal",
+                    "MagicNumber",
+                    "NewLineAtEndOfFile"
+                )
+            )
     }
 
     @Test
