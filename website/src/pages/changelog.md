@@ -397,7 +397,7 @@ See all issues at: [1.23.0](https://github.com/detekt/detekt/milestone/88)
 -   We added a new ruleset called `detekt-rules-libraries` containing rules mostly useful for Library Authors - We moved the following rules inside `ForbiddenPublicDataClass`, `LibraryCodeMustSpecifyReturnType`, `LibraryEntitiesShouldNotBePublic` this new ruleset - See Migration below on how to migrate [#5360](https://github.com/detekt/detekt/pull/5360)
 -   We added support for JVM toolchain. This means that detekt will now respect the JDK toolchain you specify on your Gradle configuration. You will also be able to specify a custom JDK home with the `--jdk-home` CLI parameter - [#5269](https://github.com/detekt/detekt/pull/5269)
 -   Improvement for Type Resolution
-    -   We will now skip rules annotated with `@RequiresFullAnalysis` when without Type Resolution - [#5176](https://github.com/detekt/detekt/pull/5176)
+    -   We will now skip rules annotated with `@RequiresTypeResolution` when without Type Resolution - [#5176](https://github.com/detekt/detekt/pull/5176)
     -   We will warn users if they run rules requiring Type Resolution when Type Resolution is disabled, so they're not silently skipped - [#5226](https://github.com/detekt/detekt/pull/5226)
 -   Improvement for Config Management
     -   We added exhaustiveness check during config validation. You can enable it `checkExhaustiveness: true` in your config file. This is disabled by default. - [#5089](https://github.com/detekt/detekt/pull/5089)
