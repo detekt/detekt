@@ -10,7 +10,7 @@ fun assertThat(result: JvmCompilationResult) = CompilationAssert(result)
 class CompilationAssert(private val result: JvmCompilationResult) :
     AbstractObjectAssert<CompilationAssert, JvmCompilationResult>(result, CompilationAssert::class.java) {
 
-    private val detektMessages = result.messages.split("\n").dropWhile { !(it.contains("KClass.kt")) }
+    private val detektMessages = result.messages.split("\n").dropWhile { !(it.contains(Regex("KClass\\d.kt"))) }
 
     private val regex = "\\w+\\.kt:\\d+:\\d+ (\\w+): .*".toRegex()
     private val detektViolations = detektMessages.mapNotNull { line -> regex.find(line)?.groupValues?.get(1) }

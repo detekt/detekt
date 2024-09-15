@@ -27,11 +27,13 @@ interface Issue {
         val ktElement: KtElement
     }
 
-    interface Location {
+    interface Location : Comparable<Location> {
         val source: SourceLocation
         val endSource: SourceLocation
         val text: TextLocation
         val path: Path
+
+        override fun compareTo(other: Location): Int = compareValuesBy(this, other, { it.path }, { it.source })
     }
 }
 
