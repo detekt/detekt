@@ -31,16 +31,12 @@ function MarketplaceHeader() {
       >
         🙏 Please add your ruleset
       </Link>
-      <Link
-        className={clsx(
-          "button",
-          "button--secondary",
-          styles.marketplaceHeaderButton
-        )}
+      <a
+        className={clsx("button", "button--secondary", styles.marketplaceHeaderButton)}
         href="#unpublished"
       >
         Find more on GitHub
-      </Link>
+      </a>
     </section>
   );
 }
