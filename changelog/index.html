@@ -9,7 +9,7 @@
 
 
 <link rel="search" type="application/opensearchdescription+xml" title="detekt" href="/opensearch.xml"><link rel="stylesheet" href="/assets/css/styles.f49091ff.css">
-<script src="/assets/js/runtime~main.9e151d98.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.6901f92c.js" defer="defer"></script>
 <script src="/assets/js/main.a1b4bb85.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -529,7 +529,7 @@ got reported by the community.</p>
 <li>Allow parentheses for unclear precedence with range operator - <a href="https://github.com/detekt/detekt/pull/5143" target="_blank" rel="noopener noreferrer">#5143</a></li>
 <li>Mark apiDump task as incompatible with configuration cache - <a href="https://github.com/detekt/detekt/pull/5134" target="_blank" rel="noopener noreferrer">#5134</a></li>
 <li>Improve binding context management - <a href="https://github.com/detekt/detekt/pull/5130" target="_blank" rel="noopener noreferrer">#5130</a></li>
-<li><code>RedundantExplicitType</code> add annotation <code>@RequiresTypeResolution</code> - <a href="https://github.com/detekt/detekt/pull/5128" target="_blank" rel="noopener noreferrer">#5128</a></li>
+<li><code>RedundantExplicitType</code> add annotation <code>@RequiresFullAnalysis</code> - <a href="https://github.com/detekt/detekt/pull/5128" target="_blank" rel="noopener noreferrer">#5128</a></li>
 <li>Disable <code>ExitOutsideMain</code> if <code>contextBinding</code> is empty - <a href="https://github.com/detekt/detekt/pull/5127" target="_blank" rel="noopener noreferrer">#5127</a></li>
 <li>Use list config for <code>DataClassContainsFunctions&gt;conversionFunctionPrefix</code> - <a href="https://github.com/detekt/detekt/pull/5119" target="_blank" rel="noopener noreferrer">#5119</a></li>
 <li>Support proper globbing in <code>ReturnCount</code> - <a href="https://github.com/detekt/detekt/pull/5118" target="_blank" rel="noopener noreferrer">#5118</a></li>
@@ -1234,7 +1234,7 @@ us release this new version of detekt.</p>
 <li>We now introduced the <code>src/test/java</code> and <code>src/test/kotlin</code> by default for the plain <code>detekt</code> Gradle task. If you use that task, you might notice rule reports in your test sourceset. See <a href="https://github.com/detekt/detekt/pull/3649" target="_blank" rel="noopener noreferrer">#3649</a></li>
 <li>We now default the baseline file to <code>detekt-baseline.xml</code> so you don&#x27;t have to specify it manually. You can revert the previous behavior by setting the baseline to <code>null</code> - See <a href="https://github.com/detekt/detekt/pull/3619" target="_blank" rel="noopener noreferrer">#3619</a> and <a href="https://github.com/detekt/detekt/pull/3745" target="_blank" rel="noopener noreferrer">#3745</a></li>
 <li>We enabled the SARIF output format by default - See <a href="https://github.com/detekt/detekt/pull/3543" target="_blank" rel="noopener noreferrer">#3543</a></li>
-<li>We&#x27;re introducing annotations to provide metadata to rules, such as <code>@ActiveByDefault</code>, <code>@Configuration</code> and <code>@RequiresTypeResolution</code> - See <a href="https://github.com/detekt/detekt/pull/3637" target="_blank" rel="noopener noreferrer">#3637</a> <a href="https://github.com/detekt/detekt/pull/3592" target="_blank" rel="noopener noreferrer">#3592</a> and <a href="https://github.com/detekt/detekt/pull/3579" target="_blank" rel="noopener noreferrer">#3579</a></li>
+<li>We&#x27;re introducing annotations to provide metadata to rules, such as <code>@ActiveByDefault</code>, <code>@Configuration</code> and <code>@RequiresFullAnalysis</code> - See <a href="https://github.com/detekt/detekt/pull/3637" target="_blank" rel="noopener noreferrer">#3637</a> <a href="https://github.com/detekt/detekt/pull/3592" target="_blank" rel="noopener noreferrer">#3592</a> and <a href="https://github.com/detekt/detekt/pull/3579" target="_blank" rel="noopener noreferrer">#3579</a></li>
 </ul>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="changelog-12">Changelog<a href="#changelog-12" class="hash-link" aria-label="Direct link to Changelog" title="Direct link to Changelog">​</a></h5>
 <ul>
@@ -1322,7 +1322,7 @@ us release this new version of detekt.</p>
 <li>Improve generator test coverage - <a href="https://github.com/detekt/detekt/pull/3622" target="_blank" rel="noopener noreferrer">#3622</a></li>
 <li>Improve tests - <a href="https://github.com/detekt/detekt/pull/3618" target="_blank" rel="noopener noreferrer">#3618</a></li>
 <li>Apply more formatting rules to our code - <a href="https://github.com/detekt/detekt/pull/3615" target="_blank" rel="noopener noreferrer">#3615</a></li>
-<li>Add negative test case for <code>requiresTypeResolution</code> - <a href="https://github.com/detekt/detekt/pull/3614" target="_blank" rel="noopener noreferrer">#3614</a></li>
+<li>Add negative test case for <code>requiresFullAnalysis</code> - <a href="https://github.com/detekt/detekt/pull/3614" target="_blank" rel="noopener noreferrer">#3614</a></li>
 <li>Simplify Gradle config - <a href="https://github.com/detekt/detekt/pull/3612" target="_blank" rel="noopener noreferrer">#3612</a></li>
 <li>Decouple Gradle projects - <a href="https://github.com/detekt/detekt/pull/3611" target="_blank" rel="noopener noreferrer">#3611</a></li>
 <li>Add --stacktrace to help triage CI flakiness - <a href="https://github.com/detekt/detekt/pull/3604" target="_blank" rel="noopener noreferrer">#3604</a></li>
@@ -1494,7 +1494,7 @@ us release this new version of detekt.</p>
 <li>UseIfEmptyOrIfBlank</li>
 </ul>
 <p>We added documentation on how to configure <a href="/docs/gettingstarted/type-resolution">type resolution</a>.<br>
-<!-- -->Only the rules marked with <code>Requires Type Resolution</code> (on the website documentation or <code>@requiresTypeResolution</code> in code) are executed (see <a href="/docs/rules/style#forbiddenmethodcall">here for example</a>).</p>
+<!-- -->Only the rules marked with <code>Requires Type Resolution</code> (on the website documentation or <code>@requiresFullAnalysis</code> in code) are executed (see <a href="/docs/rules/style#forbiddenmethodcall">here for example</a>).</p>
 <p>detekt now supports <a href="https://sarifweb.azurewebsites.net/" target="_blank" rel="noopener noreferrer">SARIF</a> as an output format. In the future you will be able to
 upload this format to GitHub and see detekt issues right in your pull requests.</p>
 <h5 class="anchor anchorWithStickyNavbar_LWe7" id="migration-4">Migration<a href="#migration-4" class="hash-link" aria-label="Direct link to Migration" title="Direct link to Migration">​</a></h5>
@@ -1757,7 +1757,7 @@ We encourage to also check test sources.<br>
 <ul>
 <li>Consolidate working for Type Resolution - <a href="https://github.com/detekt/detekt/pull/3011" target="_blank" rel="noopener noreferrer">#3011</a></li>
 <li>ArrayPrimitive rule: report variable/receiver types and factory methods - <a href="https://github.com/detekt/detekt/pull/3009" target="_blank" rel="noopener noreferrer">#3009</a></li>
-<li>Add requiresTypeResolution annotation to UseCheckNotNull/UseRequireNotNull - <a href="https://github.com/detekt/detekt/pull/3008" target="_blank" rel="noopener noreferrer">#3008</a></li>
+<li>Add requiresFullAnalysis annotation to UseCheckNotNull/UseRequireNotNull - <a href="https://github.com/detekt/detekt/pull/3008" target="_blank" rel="noopener noreferrer">#3008</a></li>
 <li>Update kotlinx.html dependencies - <a href="https://github.com/detekt/detekt/pull/3007" target="_blank" rel="noopener noreferrer">#3007</a></li>
 <li>Do not overwrite bintray publication - <a href="https://github.com/detekt/detekt/pull/3006" target="_blank" rel="noopener noreferrer">#3006</a></li>
 <li>Update Ktlint to 0.38.0 - <a href="https://github.com/detekt/detekt/pull/3004" target="_blank" rel="noopener noreferrer">#3004</a></li>
@@ -1766,7 +1766,7 @@ We encourage to also check test sources.<br>
 <li>Replace <code>require(x != null)</code> with <code>requireNotNull(x)</code> - <a href="https://github.com/detekt/detekt/issues/2998" target="_blank" rel="noopener noreferrer">#2998</a></li>
 <li>Minor Gradle plugin cleanup - <a href="https://github.com/detekt/detekt/pull/2997" target="_blank" rel="noopener noreferrer">#2997</a></li>
 <li>detekt-gradle-plugin has two publishing configuration - <a href="https://github.com/detekt/detekt/issues/2996" target="_blank" rel="noopener noreferrer">#2996</a></li>
-<li>Introduce @requiresTypeResolution to KDoc for rules - <a href="https://github.com/detekt/detekt/pull/2993" target="_blank" rel="noopener noreferrer">#2993</a></li>
+<li>Introduce @requiresFullAnalysis to KDoc for rules - <a href="https://github.com/detekt/detekt/pull/2993" target="_blank" rel="noopener noreferrer">#2993</a></li>
 <li>Fix support for Gradle configuration cache - <a href="https://github.com/detekt/detekt/pull/2992" target="_blank" rel="noopener noreferrer">#2992</a></li>
 <li>Fix false positive for UnnecessaryLet with disabled type resolution - <a href="https://github.com/detekt/detekt/pull/2991" target="_blank" rel="noopener noreferrer">#2991</a></li>
 <li>Deprecation: False positive with Kotlin 1.4.0 - <a href="https://github.com/detekt/detekt/issues/2990" target="_blank" rel="noopener noreferrer">#2990</a></li>
