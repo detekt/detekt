@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isPartOf
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocTag
@@ -26,7 +26,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.getImportableDescriptor
  * Exempt from this rule are imports resulting from references to elements within KDoc and
  * from destructuring declarations (componentN imports).
  */
-@RequiresTypeResolution
+@RequiresFullAnalysis
 class UnusedImport(config: Config) : Rule(
     config,
     "Unused Imports are dead code and should be removed."

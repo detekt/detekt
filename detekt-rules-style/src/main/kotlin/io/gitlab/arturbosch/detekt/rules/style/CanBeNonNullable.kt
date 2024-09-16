@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isAbstract
 import io.gitlab.arturbosch.detekt.rules.isNonNullCheck
@@ -125,7 +125,7 @@ import org.jetbrains.kotlin.types.isNullable
  * }
  * </compliant>
  */
-@RequiresTypeResolution
+@RequiresFullAnalysis
 class CanBeNonNullable(config: Config) : Rule(
     config,
     "Variable can be changed to non-nullable, as it is never set to null."

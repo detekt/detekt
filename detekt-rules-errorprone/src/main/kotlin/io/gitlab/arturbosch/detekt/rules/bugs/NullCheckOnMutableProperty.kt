@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isNonNullCheck
 import io.gitlab.arturbosch.detekt.rules.isNullCheck
@@ -45,7 +45,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  * }
  * </compliant>
  */
-@RequiresTypeResolution
+@RequiresFullAnalysis
 class NullCheckOnMutableProperty(config: Config) : Rule(
     config,
     "Checking nullability on a mutable property is not useful because the property may be set to null afterwards."

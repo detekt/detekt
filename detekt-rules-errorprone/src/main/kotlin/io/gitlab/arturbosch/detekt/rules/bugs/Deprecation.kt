@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Alias
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.diagnostics.Errors
@@ -14,7 +14,7 @@ import org.jetbrains.kotlin.psi.KtNamedDeclaration
  * Deprecated elements are expected to be removed in the future. Alternatives should be found if possible.
  *
  */
-@RequiresTypeResolution
+@RequiresFullAnalysis
 @Alias("DEPRECATION")
 class Deprecation(config: Config) : Rule(
     config,

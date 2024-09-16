@@ -7,7 +7,7 @@ import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
@@ -93,7 +93,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
                           MaxLineLength:
                             active: true
                             maxLineLength: 120
-                          RequiresTypeResolutionMaxLineLength:
+                          RequiresFullAnalysisMaxLineLength:
                             active: true
                             maxLineLength: 120
                     """.trimIndent()
@@ -104,7 +104,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
 
             assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) }).isEmpty()
             assertThat(output.toString()).isEqualTo(
-                "The rule 'RequiresTypeResolutionMaxLineLength' requires type resolution but it was run without it.\n"
+                "The rule 'RequiresFullAnalysisMaxLineLength' requires type resolution but it was run without it.\n"
             )
         }
 
@@ -120,7 +120,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
                           MaxLineLength:
                             active: true
                             maxLineLength: 30
-                          RequiresTypeResolutionMaxLineLength:
+                          RequiresFullAnalysisMaxLineLength:
                             active: true
                             maxLineLength: 30
                     """.trimIndent()
@@ -131,7 +131,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
 
             assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) }).hasSize(1)
             assertThat(output.toString()).isEqualTo(
-                "The rule 'RequiresTypeResolutionMaxLineLength' requires type resolution but it was run without it.\n"
+                "The rule 'RequiresFullAnalysisMaxLineLength' requires type resolution but it was run without it.\n"
             )
         }
 
@@ -171,7 +171,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
                           MaxLineLength:
                             active: true
                             maxLineLength: 30
-                          RequiresTypeResolutionMaxLineLength:
+                          RequiresFullAnalysisMaxLineLength:
                             active: true
                             maxLineLength: 30
                     """.trimIndent()
@@ -442,7 +442,7 @@ private class CustomRuleSetProvider : RuleSetProvider {
         listOf(
             ::NoEmptyFile,
             ::MaxLineLength,
-            ::RequiresTypeResolutionMaxLineLength,
+            ::RequiresFullAnalysisMaxLineLength,
             ::FaultyRule,
             ::FaultyRuleNoStackTrace,
         )
@@ -479,8 +479,8 @@ private open class MaxLineLength(config: Config) : Rule(config, "TestDescription
             .first { it.text.isNotBlank() }
 }
 
-@RequiresTypeResolution
-private class RequiresTypeResolutionMaxLineLength(config: Config) : MaxLineLength(config)
+@RequiresFullAnalysis
+private class RequiresFullAnalysisMaxLineLength(config: Config) : MaxLineLength(config)
 
 private class FaultyRule(config: Config) : Rule(config, "") {
     override fun visitKtFile(file: KtFile): Unit =

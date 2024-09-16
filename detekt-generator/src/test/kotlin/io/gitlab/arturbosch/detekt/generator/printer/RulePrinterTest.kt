@@ -89,14 +89,14 @@ internal class RulePrinterTest {
     inner class TypeResolution {
         @Test
         fun `no type resolution`() {
-            val rule = ruleTemplate.copy(requiresTypeResolution = false)
+            val rule = ruleTemplate.copy(requiresFullAnalysis = false)
             val actual = RulePrinter.print(rule)
             assertThat(actual).doesNotContainIgnoringCase("type resolution")
         }
 
         @Test
         fun `with type resolution`() {
-            val rule = ruleTemplate.copy(requiresTypeResolution = true)
+            val rule = ruleTemplate.copy(requiresFullAnalysis = true)
             val actual = RulePrinter.print(rule)
             assertThat(actual).contains("""**Requires Type Resolution**""")
         }

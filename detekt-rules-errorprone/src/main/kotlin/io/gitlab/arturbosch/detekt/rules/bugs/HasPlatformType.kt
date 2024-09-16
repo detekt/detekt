@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
@@ -36,7 +36,7 @@ import org.jetbrains.kotlin.types.isFlexible
  * </compliant>
  *
  */
-@RequiresTypeResolution
+@RequiresFullAnalysis
 @ActiveByDefault(since = "1.21.0")
 class HasPlatformType(config: Config) : Rule(
     config,

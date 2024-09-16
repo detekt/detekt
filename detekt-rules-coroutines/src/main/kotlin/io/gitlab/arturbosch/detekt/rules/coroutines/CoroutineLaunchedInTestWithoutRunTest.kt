@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.coroutines
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import io.gitlab.arturbosch.detekt.rules.hasAnnotation
@@ -45,7 +45,7 @@ import org.jetbrains.kotlin.resolve.source.getPsi
  * </compliant>
  *
  */
-@RequiresTypeResolution
+@RequiresFullAnalysis
 class CoroutineLaunchedInTestWithoutRunTest(config: Config) : Rule(
     config,
     "Launching coroutines in tests without a `runTest` block could swallow exceptions. " +

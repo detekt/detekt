@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
@@ -46,7 +46,7 @@ import org.jetbrains.kotlin.resolve.source.toSourceElement
  * }
  * </compliant>
  */
-@RequiresTypeResolution
+@RequiresFullAnalysis
 @ActiveByDefault(since = "2.0.0")
 @Alias("UNUSED_VARIABLE", "unused")
 class UnusedVariable(config: Config) : Rule(

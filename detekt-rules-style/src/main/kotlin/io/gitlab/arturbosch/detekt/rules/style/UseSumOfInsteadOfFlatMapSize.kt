@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isCalling
 import org.jetbrains.kotlin.builtins.DefaultBuiltIns
@@ -35,7 +35,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.isSubclassOf
  * listOf(listOf(1), listOf(2, 3)).sumOf { it.size }
  * </compliant>
  */
-@RequiresTypeResolution
+@RequiresFullAnalysis
 class UseSumOfInsteadOfFlatMapSize(config: Config) : Rule(
     config,
     "Use `sumOf` instead of `flatMap` and `size/count` calls"

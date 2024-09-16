@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.coroutines
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.builtins.StandardNames.COROUTINES_PACKAGE_FQ_NAME
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
@@ -88,7 +88,7 @@ import org.jetbrains.kotlin.name.Name as KotlinName
  * </compliant>
  *
  */
-@RequiresTypeResolution
+@RequiresFullAnalysis
 class SuspendFunSwallowedCancellation(config: Config) : Rule(
     config,
     "`runCatching` does not propagate `CancellationException`, don't use it with `suspend` lambda blocks."
