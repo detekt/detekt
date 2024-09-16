@@ -67,7 +67,7 @@ programming flaws like unused or too complex constructs. Think of it as <em>pmd<
 <li>Suppression of findings with Kotlin's <code>@Suppress</code> and Java's <code>@SuppressWarnings</code> annotations</li>
 <li>Specification of quality gates which will break your build</li>
 <li>Code Smell baseline for legacy projects</li>
-<li><a href="https://detekt.dev/blog/2019/08/04/calling-it-one-zero#with-gradle">Gradle plugin</a> for code analysis via Gradle builds</li>
+<li><a href="https://detekt.dev/docs/gettingstarted/gradle">Gradle plugin</a> for code analysis via Gradle builds</li>
 <li>Gradle tasks to use local <code>IntelliJ</code> distribution for formatting and inspecting Kotlin code</li>
 <li><a href="https://github.com/arturbosch/sonar-kotlin" target="_blank" rel="noopener noreferrer">SonarQube integration</a></li>
 <li>Extensibility by enabling incorporation of personal rule sets, <code>FileProcessListener's</code> and <code>OutputReport's</code></li>
