@@ -40,7 +40,7 @@ semver4j = { module = "org.semver4j:semver4j", version = "5.4.0" }
 slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 slf4j-nop = { module = "org.slf4j:slf4j-nop", version.ref = "slf4j" }
 slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j" }
-snakeyaml-engine = { module = "org.snakeyaml:snakeyaml-engine", version = "2.7" }
+snakeyaml-engine = { module = "org.snakeyaml:snakeyaml-engine", version = "2.8" }
 
 [plugins]
 # Do not declare plugins here - see https://github.com/detekt/detekt/pull/7088.
