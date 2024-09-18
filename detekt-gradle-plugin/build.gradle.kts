@@ -3,6 +3,8 @@
 @file:Suppress("StringLiteralDuplication")
 
 import org.jetbrains.dokka.gradle.DokkaTask
+import org.jetbrains.kotlin.buildtools.api.ExperimentalBuildToolsApi
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import java.net.URI
 
@@ -31,6 +33,11 @@ detekt {
     buildUponDefaultConfig = true
     baseline = file("config/gradle-plugin-baseline.xml")
     config.setFrom("config/gradle-plugin-detekt.yml")
+}
+
+kotlin {
+    @OptIn(ExperimentalBuildToolsApi::class, ExperimentalKotlinGradlePluginApi::class)
+    compilerVersion = "2.0.10"
 }
 
 testing {
