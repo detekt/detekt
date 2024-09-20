@@ -1,3 +1,3 @@
 libraries:
   ForbiddenPublicDataClass:
-    active: true
+    active: false
