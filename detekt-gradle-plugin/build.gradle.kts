@@ -90,7 +90,7 @@ dependencies {
     testKitRuntimeOnly(libs.kotlin.gradle.plugin)
     testKitGradleMinVersionRuntimeOnly(libs.kotlin.gradle.plugin) {
         attributes {
-            attribute(GradlePluginApiVersion.GRADLE_PLUGIN_API_VERSION_ATTRIBUTE, objects.named("6.8.3"))
+            attribute(GradlePluginApiVersion.GRADLE_PLUGIN_API_VERSION_ATTRIBUTE, objects.named("7.6.3"))
         }
     }
     testKitJava17RuntimeOnly(libs.android.gradle.plugin)
