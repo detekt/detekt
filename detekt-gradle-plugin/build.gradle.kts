@@ -99,6 +99,8 @@ dependencies {
         attributes {
             // Set this value to the minimum Gradle version tested in testKitGradleMinVersionRuntimeOnly source set
             attribute(GradlePluginApiVersion.GRADLE_PLUGIN_API_VERSION_ATTRIBUTE, objects.named("7.6.3"))
+            attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage.JAVA_RUNTIME))
+            attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category.LIBRARY))
         }
     }
     testKitJava17RuntimeOnly(libs.android.gradle.plugin)
