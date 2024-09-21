@@ -20,7 +20,6 @@ dependencies {
     jacocoAggregation(projects.detektCli)
     jacocoAggregation(projects.detektCompilerPlugin)
     jacocoAggregation(projects.detektCore)
-    jacocoAggregation(projects.detektFormatting)
     jacocoAggregation(projects.detektGenerator)
     jacocoAggregation(projects.detektMetrics)
     jacocoAggregation(projects.detektParser)
