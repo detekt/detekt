@@ -17,7 +17,6 @@ import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.gradle.workers.WorkerExecutor
-import java.nio.file.Files
 import javax.inject.Inject
 
 @CacheableTask
@@ -52,8 +51,6 @@ abstract class DetektGenerateConfigTask @Inject constructor(
             logger.warn("Skipping config file generation; file already exists at ${configFile.get().asFile}")
             return
         }
-
-        Files.createDirectories(configFile.get().asFile.parentFile.toPath())
 
         if (providers.isWorkerApiEnabled()) {
             logger.info("Executing $name using Worker API")
