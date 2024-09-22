@@ -43,7 +43,7 @@ class SuspendFunInFinallySectionSpec(private val env: KotlinCoreEnvironment) {
     fun `does not report wrapped suspend function in finally section`() {
         val code = """
             import kotlinx.coroutines.*
-
+            
             typealias NC = NonCancellable
             
             fun main(): Unit = runBlocking {
