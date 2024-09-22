@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.hasImplicitParameterReference
 import io.gitlab.arturbosch.detekt.rules.implicitParameter
@@ -60,7 +60,7 @@ import org.jetbrains.kotlin.psi.KtLambdaExpression
  * </compliant>
  *
  */
-@RequiresTypeResolution
+@RequiresFullAnalysis
 class MultilineLambdaItParameter(config: Config) : Rule(
     config,
     "Multiline lambdas should not use `it` as a parameter name."

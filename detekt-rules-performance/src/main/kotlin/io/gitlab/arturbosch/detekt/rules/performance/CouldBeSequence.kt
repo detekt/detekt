@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import org.jetbrains.kotlin.name.FqName
@@ -28,7 +28,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  * listOf(1, 2, 3, 4).map { it*2 }
  * </compliant>
  */
-@RequiresTypeResolution
+@RequiresFullAnalysis
 class CouldBeSequence(config: Config) : Rule(
     config,
     "Several chained collection operations that should be a sequence."

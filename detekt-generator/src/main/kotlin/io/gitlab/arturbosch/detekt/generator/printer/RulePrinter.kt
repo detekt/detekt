@@ -33,7 +33,7 @@ internal object RulePrinter : DocumentationPrinter<Rule> {
                     ((item.defaultActivationStatus as? Active)?.let { " - Since v${it.since}" }.orEmpty())
             }
 
-            if (item.requiresTypeResolution) {
+            if (item.requiresFullAnalysis) {
                 paragraph {
                     bold { "Requires Type Resolution" }
                 }

@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.naming
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.builtins.isFunctionOrKFunctionTypeWithAnySuspendability
@@ -17,7 +17,7 @@ import org.jetbrains.kotlin.types.isError
 
 /**
  * Reports when property with 'is' prefix doesn't have a boolean type.
- * Please check the [chapter 8.3.2 at Java Language Specification](https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.3.2)
+ * Please check [chapter 8.3.2 on the Java Language Specification](https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.3.2)
  *
  * <noncompliant>
  * val isEnabled: Int = 500
@@ -27,7 +27,7 @@ import org.jetbrains.kotlin.types.isError
  * val isEnabled: Boolean = false
  * </compliant>
  */
-@RequiresTypeResolution
+@RequiresFullAnalysis
 class NonBooleanPropertyPrefixedWithIs(config: Config) : Rule(
     config,
     "Only boolean property names can start with `is` prefix."

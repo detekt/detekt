@@ -5,7 +5,7 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.isOverride
@@ -19,7 +19,7 @@ import org.jetbrains.kotlin.psi.KtUserType
 import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
- * This rule reports a member that has the same as the containing class or object.
+ * This rule reports a member that has the same name as the containing class or object.
  * This might result in confusion.
  * The member should either be renamed or changed to a constructor.
  * Factory functions that create an instance of the class are exempt from this rule.
@@ -48,7 +48,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * }
  * </compliant>
  */
-@RequiresTypeResolution
+@RequiresFullAnalysis
 @ActiveByDefault(since = "1.2.0")
 class MemberNameEqualsClassName(config: Config) : Rule(
     config,

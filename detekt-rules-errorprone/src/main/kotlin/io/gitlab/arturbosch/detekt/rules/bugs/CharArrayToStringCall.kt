@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import io.gitlab.arturbosch.detekt.rules.isCalling
@@ -33,7 +33,7 @@ import org.jetbrains.kotlin.resolve.calls.util.getType
  * println(s + charArray.concatToString()) // hello😅
  * </compliant>
  */
-@RequiresTypeResolution
+@RequiresFullAnalysis
 class CharArrayToStringCall(config: Config) : Rule(
     config,
     "`CharArray.toString()` call does not return expected result."

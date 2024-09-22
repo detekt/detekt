@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
@@ -16,7 +16,7 @@ import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
 
 /**
- * Reports when a boolean property doesn't match a pattern
+ * Reports boolean property names that do not follow the specified naming convention.
  *
  * <noncompliant>
  * val progressBar: Boolean = true
@@ -26,10 +26,10 @@ import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
  * val hasProgressBar: Boolean = true
  * </compliant>
  */
-@RequiresTypeResolution
+@RequiresFullAnalysis
 class BooleanPropertyNaming(config: Config) : Rule(
     config,
-    "Boolean property name should follow the naming convention set in the projects configuration."
+    "Boolean property name should follow the naming convention set in detekt's configuration."
 ) {
 
     @Configuration("naming pattern")

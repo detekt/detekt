@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isAbstract
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
@@ -42,7 +42,7 @@ import org.jetbrains.kotlin.types.typeUtil.isInterface
  * </compliant>
  */
 @ActiveByDefault(since = "1.2.0")
-@RequiresTypeResolution
+@RequiresFullAnalysis
 class AbstractClassCanBeConcreteClass(config: Config) : Rule(
     config,
     "An abstract class is unnecessary. May be refactored to a concrete class."
