@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class SuspendFunInFinallySectionSpec(private val env: KotlinCoreEnvironment) {
-
     private val subject = SuspendFunInFinallySection(Config.empty)
 
     @Test

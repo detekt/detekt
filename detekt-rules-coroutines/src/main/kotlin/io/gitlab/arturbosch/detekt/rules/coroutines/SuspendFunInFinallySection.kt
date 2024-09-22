@@ -79,11 +79,11 @@ class SuspendFunInFinallySection(config: Config) : Rule(
             .filter { it is KtCallExpression }
             .map { it as KtCallExpression }
 
-    private fun Sequence<KtCallExpression>.findFunction(fqName: String) = filter {
+    private fun Sequence<KtCallExpression>.findFunction(fqName: String) = firstOrNull {
         it.getResolvedCall(bindingContext)
             ?.resultingDescriptor
             ?.fqNameOrNull() == FqName(fqName)
-    }.firstOrNull()
+    }
 
     private fun isNonCancellableArgument(arg: KtValueArgument, context: BindingContext) =
         arg.getArgumentExpression()
