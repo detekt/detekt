@@ -75,7 +75,6 @@ class SuspendFunInFinallySection(config: Config) : Rule(
     private fun KtCallExpression.parentCallsUpTo(topParent: PsiElement) =
         generateSequence(this as PsiElement) { it.parent }
             .takeWhile { it != topParent }
-            // .takeIf { !it.any { element -> element is KtLambdaExpression } }
             .filter { it is KtCallExpression }
             .map { it as KtCallExpression }
 

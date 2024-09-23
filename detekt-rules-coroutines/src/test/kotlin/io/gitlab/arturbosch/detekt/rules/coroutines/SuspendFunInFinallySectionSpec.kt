@@ -33,8 +33,8 @@ class SuspendFunInFinallySectionSpec(private val env: KotlinCoreEnvironment) {
 
         assertFindingsForSuspendCall(
             findings = subject.compileAndLintWithContext(env, code),
-            "test"(1)(code),
-            "test"(2)(code)
+            "test".find(1)(code),
+            "test".find(2)(code)
         )
     }
 
@@ -119,16 +119,16 @@ class SuspendFunInFinallySectionSpec(private val env: KotlinCoreEnvironment) {
 
         assertFindingsForSuspendCall(
             findings = subject.compileAndLintWithContext(env, code),
-            "wrapper"(2)(code),
-            "test"(1)(code),
-            "block"(2)(code),
+            "wrapper".find(2)(code),
+            "test".find(1)(code),
+            "block".find(2)(code),
         )
     }
 
     companion object {
         private val NOTHING: Array<Pair<Int, Int>> = emptyArray()
 
-        operator fun String.invoke(ordinal: Int): (String) -> Pair<Int, Int> =
+        private fun String.find(ordinal: Int): (String) -> Pair<Int, Int> =
             { code ->
                 fun String.next(string: String, start: Int): Int? = indexOf(string, start).takeIf { it != -1 }
 
