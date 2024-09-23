@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
-import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtFinallySection
 import org.jetbrains.kotlin.psi.KtValueArgument
@@ -70,7 +69,7 @@ class SuspendFunInFinallySection(config: Config) : Rule(
     }
 
     private fun KtCallExpression.isSuspendCall() =
-        (getResolvedCall(bindingContext)?.resultingDescriptor as? FunctionDescriptor)?.isSuspend == true
+        (getResolvedCall(bindingContext)?.resultingDescriptor as FunctionDescriptor).isSuspend
 
     private fun KtCallExpression.parentCallsUpTo(topParent: PsiElement) =
         generateSequence(this as PsiElement) { it.parent }
@@ -81,7 +80,8 @@ class SuspendFunInFinallySection(config: Config) : Rule(
     private fun Sequence<KtCallExpression>.findFunction(fqName: String) = firstOrNull {
         it.getResolvedCall(bindingContext)
             ?.resultingDescriptor
-            ?.fqNameOrNull() == FqName(fqName)
+            ?.fqNameOrNull()
+            ?.asString() == fqName
     }
 
     private fun isNonCancellableArgument(arg: KtValueArgument, context: BindingContext) =

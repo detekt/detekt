@@ -67,6 +67,31 @@ class SuspendFunInFinallySectionSpec(private val env: KotlinCoreEnvironment) {
     }
 
     @Test
+    fun `report wrapped suspend function in finally section with different context`() {
+        val code = """
+            import kotlinx.coroutines.*
+            
+            fun main(): Unit = runBlocking {
+                launch {
+                    try {
+                        yield()
+                    } finally {
+                        withContext(Dispatchers.Default) { test() }
+                    }
+                }
+            }
+            
+            suspend fun test() { yield() }
+        """.trimIndent()
+
+        assertFindingsForSuspendCall(
+            findings = subject.compileAndLintWithContext(env, code),
+            "test".find(1)(code),
+            "withContext".find(1)(code),
+        )
+    }
+
+    @Test
     fun `does not report ordinary function in finally section`() {
         val code = """
             import kotlinx.coroutines.*
