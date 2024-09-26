@@ -3,11 +3,6 @@
   "version": "2.1.0",
   "runs": [
     {
-      "originalUriBaseIds": {
-        "%SRCROOT%": {
-          "uri": "<BASE-PATH>"
-        }
-      },
       "results": [
         {
           "level": "error",

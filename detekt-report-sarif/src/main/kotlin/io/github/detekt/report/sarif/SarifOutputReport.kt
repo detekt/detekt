@@ -1,6 +1,5 @@
 package io.github.detekt.report.sarif
 
-import io.github.detekt.sarif4k.ArtifactLocation
 import io.github.detekt.sarif4k.Run
 import io.github.detekt.sarif4k.SarifSchema210
 import io.github.detekt.sarif4k.SarifSerializer
@@ -13,8 +12,6 @@ import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
-import kotlin.io.path.Path
-import kotlin.io.path.invariantSeparatorsPathString
 
 const val SRCROOT = "%SRCROOT%"
 
@@ -23,14 +20,9 @@ class SarifOutputReport : BuiltInOutputReport, OutputReport() {
     override val ending: String = "sarif"
     override val id: String = "sarif"
 
-    private lateinit var basePath: String
     private lateinit var config: Config
 
     override fun init(context: SetupContext) {
-        this.basePath = context.basePath
-            .invariantSeparatorsPathString
-            .let { if (!it.endsWith("/")) "$it/" else it }
-
         this.config = context.config
     }
 
@@ -55,7 +47,6 @@ class SarifOutputReport : BuiltInOutputReport, OutputReport() {
                             version = version
                         )
                     ),
-                    originalURIBaseIDS = mapOf(SRCROOT to ArtifactLocation(uri = Path(basePath).toUri().toString())),
                     results = toResults(detektion)
                 )
             )
