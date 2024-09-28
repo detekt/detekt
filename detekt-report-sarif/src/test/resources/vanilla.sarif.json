@@ -85,9 +85,6 @@
           "organization": "detekt",
           "rules": [
             {
-              "defaultConfiguration": {
-                "level": "error"
-              },
               "id": "detekt.RuleSet1.TestSmellA",
               "name": "TestSmellA",
               "shortDescription": {
@@ -95,9 +92,6 @@
               }
             },
             {
-              "defaultConfiguration": {
-                "level": "error"
-              },
               "id": "detekt.RuleSet2.TestSmellB",
               "name": "TestSmellB",
               "shortDescription": {
@@ -105,9 +99,6 @@
               }
             },
             {
-              "defaultConfiguration": {
-                "level": "error"
-              },
               "id": "detekt.RuleSet2.TestSmellC",
               "name": "TestSmellC",
               "shortDescription": {
@@ -115,9 +106,6 @@
               }
             },
             {
-              "defaultConfiguration": {
-                "level": "error"
-              },
               "id": "detekt.RuleSet2.TestSmellD",
               "name": "TestSmellD",
               "shortDescription": {
