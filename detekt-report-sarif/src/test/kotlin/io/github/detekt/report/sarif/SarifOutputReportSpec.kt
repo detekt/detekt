@@ -77,11 +77,34 @@ class SarifOutputReportSpec {
 }
 
 class TestProvider : RuleSetProvider {
-    override val ruleSetId = RuleSet.Id("test")
-    override fun instance(): RuleSet = RuleSet(ruleSetId, listOf(::TestRule))
+    override val ruleSetId = RuleSet.Id("RuleSet1")
+    override fun instance(): RuleSet = RuleSet(ruleSetId, listOf(::TestSmellA))
 }
 
-class TestRule(config: Config = Config.empty) : Rule(config, "") {
+class TestProvider2 : RuleSetProvider {
+    override val ruleSetId = RuleSet.Id("RuleSet2")
+    override fun instance(): RuleSet = RuleSet(ruleSetId, listOf(::TestSmellB, ::TestSmellC, ::TestSmellD))
+}
+
+class TestSmellA(config: Config = Config.empty) : Rule(config, "") {
+    override fun visitClassOrObject(classOrObject: KtClassOrObject) {
+        report(CodeSmell(Entity.atName(classOrObject), message = "Error"))
+    }
+}
+
+class TestSmellB(config: Config = Config.empty) : Rule(config, "") {
+    override fun visitClassOrObject(classOrObject: KtClassOrObject) {
+        report(CodeSmell(Entity.atName(classOrObject), message = "Error"))
+    }
+}
+
+class TestSmellC(config: Config = Config.empty) : Rule(config, "") {
+    override fun visitClassOrObject(classOrObject: KtClassOrObject) {
+        report(CodeSmell(Entity.atName(classOrObject), message = "Error"))
+    }
+}
+
+class TestSmellD(config: Config = Config.empty) : Rule(config, "") {
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
         report(CodeSmell(Entity.atName(classOrObject), message = "Error"))
     }
