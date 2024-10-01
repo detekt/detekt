@@ -88,7 +88,6 @@
               "defaultConfiguration": {
                 "level": "error"
               },
-              "helpUri": "https://detekt.dev/ruleset1.html#testsmella",
               "id": "detekt.RuleSet1.TestSmellA",
               "name": "TestSmellA",
               "shortDescription": {
@@ -99,7 +98,6 @@
               "defaultConfiguration": {
                 "level": "error"
               },
-              "helpUri": "https://detekt.dev/ruleset2.html#testsmellb",
               "id": "detekt.RuleSet2.TestSmellB",
               "name": "TestSmellB",
               "shortDescription": {
@@ -110,7 +108,6 @@
               "defaultConfiguration": {
                 "level": "error"
               },
-              "helpUri": "https://detekt.dev/ruleset2.html#testsmellc",
               "id": "detekt.RuleSet2.TestSmellC",
               "name": "TestSmellC",
               "shortDescription": {
@@ -121,7 +118,6 @@
               "defaultConfiguration": {
                 "level": "error"
               },
-              "helpUri": "https://detekt.dev/ruleset2.html#testsmelld",
               "id": "detekt.RuleSet2.TestSmellD",
               "name": "TestSmellD",
               "shortDescription": {
