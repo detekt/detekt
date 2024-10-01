@@ -29,15 +29,17 @@ private fun Rule.toDescriptor(ruleSetId: RuleSet.Id): ReportingDescriptor =
         id = "detekt.$ruleSetId.$ruleName",
         name = ruleName.value,
         shortDescription = MultiformatMessageString(text = description),
-        defaultConfiguration = ReportingConfiguration(
-            level = computeSeverity().toResultLevel()
-        )
+        defaultConfiguration = computeSeverity()?.let {
+            ReportingConfiguration(
+                level = it.toResultLevel()
+            )
+        }
     )
 
-private fun Rule.computeSeverity(): Severity {
+private fun Rule.computeSeverity(): Severity? {
     val configValue: String = config.valueOrNull(Config.SEVERITY_KEY)
         ?: config.parent?.valueOrNull(Config.SEVERITY_KEY)
-        ?: return Severity.Error
+        ?: return null
     return parseToSeverity(configValue)
 }
 
