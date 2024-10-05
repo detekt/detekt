@@ -41,7 +41,7 @@ class UndocumentedPublicClass(config: Config) : Rule(
     @Configuration("if protected classes should be searched")
     private val searchInProtectedClass: Boolean by config(false)
 
-    @Configuration("if companion object without names should be flagged")
+    @Configuration("if companion object without a name should be flagged")
     private val flagCompanionWithoutName: Boolean by config(true)
 
     override fun visitClass(klass: KtClass) {
