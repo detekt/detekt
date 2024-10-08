@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.api
 
-import org.jetbrains.kotlin.psi.KtElement
 import java.nio.file.Path
 
 /**
@@ -24,7 +23,6 @@ interface Issue {
         val name: String
         val signature: String
         val location: Location
-        val ktElement: KtElement
     }
 
     interface Location {
