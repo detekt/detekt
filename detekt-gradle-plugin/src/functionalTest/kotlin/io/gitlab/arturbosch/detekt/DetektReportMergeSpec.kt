@@ -48,25 +48,25 @@ class DetektReportMergeSpec {
         val gradleRunner = DslGradleRunner(projectLayout, builder.gradleBuildName, buildFileContent)
         gradleRunner.setupProject()
         gradleRunner.runTasksAndExpectFailure("detekt", "sarifReportMerge", "--continue") { result ->
-            assertThat(result.output).contains("FAILURE: Build completed with 2 failures.")
+            assertThat(result.output).contains("FAILURE: Build completed with 4 failures.")
             assertThat(result.output).containsIgnoringWhitespaces(
                 """
-                    Execution failed for task ':child1:detekt'.
+                    Execution failed for task ':child1:detektMainSourceSet'.
                     > Analysis failed with 2 issues.
                 """.trimIndent()
             )
             assertThat(result.output).containsIgnoringWhitespaces(
                 """
-                    Execution failed for task ':child2:detekt'.
+                    Execution failed for task ':child2:detektMainSourceSet'.
                     > Analysis failed with 4 issues.
                 """.trimIndent()
             )
-            assertThat(projectFile("build/reports/detekt/detekt.sarif")).doesNotExist()
+            assertThat(projectFile("build/reports/detekt/mainSourceSet.sarif")).doesNotExist()
             assertThat(projectFile("build/reports/detekt/merge.sarif")).exists()
             assertThat(projectFile("build/reports/detekt/merge.sarif").readText())
                 .contains("\"ruleId\": \"detekt.style.MagicNumber\"")
             projectLayout.submodules.forEach {
-                assertThat(projectFile("${it.name}/build/reports/detekt/detekt.sarif")).exists()
+                assertThat(projectFile("${it.name}/build/reports/detekt/mainSourceSet.sarif")).exists()
             }
         }
     }
@@ -111,25 +111,25 @@ class DetektReportMergeSpec {
         val gradleRunner = DslGradleRunner(projectLayout, builder.gradleBuildName, buildFileContent)
         gradleRunner.setupProject()
         gradleRunner.runTasksAndExpectFailure("detekt", "xmlReportMerge", "--continue") { result ->
-            assertThat(result.output).contains("FAILURE: Build completed with 2 failures.")
+            assertThat(result.output).contains("FAILURE: Build completed with 4 failures.")
             assertThat(result.output).containsIgnoringWhitespaces(
                 """
-                    Execution failed for task ':child1:detekt'.
+                    Execution failed for task ':child1:detektMainSourceSet'.
                     > Analysis failed with 2 issues.
                 """.trimIndent()
             )
             assertThat(result.output).containsIgnoringWhitespaces(
                 """
-                    Execution failed for task ':child2:detekt'.
+                    Execution failed for task ':child2:detektMainSourceSet'.
                     > Analysis failed with 4 issues.
                 """.trimIndent()
             )
-            assertThat(projectFile("build/reports/detekt/detekt.xml")).doesNotExist()
+            assertThat(projectFile("build/reports/detekt/mainSourceSet.xml")).doesNotExist()
             assertThat(projectFile("build/reports/detekt/merge.xml")).exists()
             assertThat(projectFile("build/reports/detekt/merge.xml").readText())
                 .contains("<error column=\"31\" line=\"4\"")
             projectLayout.submodules.forEach {
-                assertThat(projectFile("${it.name}/build/reports/detekt/detekt.xml")).exists()
+                assertThat(projectFile("${it.name}/build/reports/detekt/mainSourceSet.xml")).exists()
             }
         }
     }

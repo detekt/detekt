@@ -14,8 +14,10 @@ import io.gitlab.arturbosch.detekt.internal.setCreateBaselineTaskDefaults
 import io.gitlab.arturbosch.detekt.internal.setDetektTaskDefaults
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.plugins.BasePlugin
 import org.gradle.api.plugins.ReportingBasePlugin
 import org.gradle.api.reporting.ReportingExtension
+import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.jetbrains.kotlin.gradle.plugin.KotlinBasePlugin
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetContainer
 
@@ -29,12 +31,6 @@ class DetektBasePlugin : Plugin<Project> {
             toolVersion.convention(loadDetektVersion(DetektExtension::class.java.classLoader))
             ignoreFailures.convention(DEFAULT_IGNORE_FAILURES)
             failOnSeverity.convention(DEFAULT_FAIL_ON_SEVERITY)
-            source.setFrom(
-                DEFAULT_SRC_DIR_JAVA,
-                DEFAULT_TEST_SRC_DIR_JAVA,
-                DEFAULT_SRC_DIR_KOTLIN,
-                DEFAULT_TEST_SRC_DIR_KOTLIN,
-            )
             baseline.convention(project.layout.projectDirectory.file("detekt-baseline.xml"))
             enableCompilerPlugin.convention(DEFAULT_COMPILER_PLUGIN_ENABLED)
             debug.convention(DEFAULT_DEBUG_VALUE)
@@ -63,8 +59,22 @@ class DetektBasePlugin : Plugin<Project> {
             configuration.isCanBeConsumed = false
         }
 
+        val detektTask = project.tasks.register(DetektPlugin.DETEKT_TASK_NAME) {
+            it.group = "verification"
+            it.description = "Run detekt analysis on all Kotlin source sets"
+        }
+        project.plugins.withType(BasePlugin::class.java) { _ ->
+            project.tasks.named(LifecycleBasePlugin.CHECK_TASK_NAME).configure {
+                it.dependsOn(detektTask)
+            }
+        }
+
         project.setTaskDefaults(extension)
         project.registerSourceSetTasks(extension)
+
+        project.tasks.named(DetektPlugin.DETEKT_TASK_NAME) {
+            it.dependsOn(project.tasks.withType(Detekt::class.java))
+        }
     }
 
     private fun Project.setTaskDefaults(extension: DetektExtension) {
@@ -121,10 +131,6 @@ class DetektBasePlugin : Plugin<Project> {
         internal const val CONFIG_DIR_NAME = "config/detekt"
         internal const val CONFIG_FILE = "detekt.yml"
 
-        private const val DEFAULT_SRC_DIR_JAVA = "src/main/java"
-        private const val DEFAULT_TEST_SRC_DIR_JAVA = "src/test/java"
-        private const val DEFAULT_SRC_DIR_KOTLIN = "src/main/kotlin"
-        private const val DEFAULT_TEST_SRC_DIR_KOTLIN = "src/test/kotlin"
         private const val DEFAULT_DEBUG_VALUE = false
         private const val DEFAULT_IGNORE_FAILURES = false
         private val DEFAULT_FAIL_ON_SEVERITY = FailOnSeverity.Error
