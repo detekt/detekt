@@ -24,6 +24,7 @@ fun MessageCollector.error(msg: String) {
 fun MessageCollector.reportIssues(result: Detektion) {
     result.issues
         .filterNot { it.suppressed }
+        .sortedBy { it.location }
         .forEach { issue ->
             val (message, location) = issue.renderAsCompilerWarningMessage()
             warn(message, location)

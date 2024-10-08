@@ -181,11 +181,16 @@ public abstract interface class io/gitlab/arturbosch/detekt/api/Issue$Entity {
 	public abstract fun getSignature ()Ljava/lang/String;
 }
 
-public abstract interface class io/gitlab/arturbosch/detekt/api/Issue$Location {
+public abstract interface class io/gitlab/arturbosch/detekt/api/Issue$Location : java/lang/Comparable {
+	public abstract fun compareTo (Lio/gitlab/arturbosch/detekt/api/Issue$Location;)I
 	public abstract fun getEndSource ()Lio/gitlab/arturbosch/detekt/api/SourceLocation;
 	public abstract fun getPath ()Ljava/nio/file/Path;
 	public abstract fun getSource ()Lio/gitlab/arturbosch/detekt/api/SourceLocation;
 	public abstract fun getText ()Lio/gitlab/arturbosch/detekt/api/TextLocation;
+}
+
+public final class io/gitlab/arturbosch/detekt/api/Issue$Location$DefaultImpls {
+	public static fun compareTo (Lio/gitlab/arturbosch/detekt/api/Issue$Location;Lio/gitlab/arturbosch/detekt/api/Issue$Location;)I
 }
 
 public final class io/gitlab/arturbosch/detekt/api/IssueKt {
@@ -343,8 +348,10 @@ public final class io/gitlab/arturbosch/detekt/api/Severity : java/lang/Enum {
 	public static fun values ()[Lio/gitlab/arturbosch/detekt/api/Severity;
 }
 
-public final class io/gitlab/arturbosch/detekt/api/SourceLocation {
+public final class io/gitlab/arturbosch/detekt/api/SourceLocation : java/lang/Comparable {
 	public fun <init> (II)V
+	public fun compareTo (Lio/gitlab/arturbosch/detekt/api/SourceLocation;)I
+	public synthetic fun compareTo (Ljava/lang/Object;)I
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getColumn ()I
 	public final fun getLine ()I

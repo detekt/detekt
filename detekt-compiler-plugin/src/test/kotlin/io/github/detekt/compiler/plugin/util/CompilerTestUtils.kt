@@ -15,8 +15,8 @@ object CompilerTestUtils {
         @Language("kotlin") vararg kotlinSources: String,
         useDefaultConfig: Boolean = true,
     ): JvmCompilationResult {
-        val sourceFiles = kotlinSources.map {
-            SourceFile.kotlin("KClass.kt", it, trimIndent = true)
+        val sourceFiles = kotlinSources.mapIndexed { index, sources ->
+            SourceFile.kotlin("KClass$index.kt", sources, trimIndent = true)
         }
         return KotlinCompilation().apply {
             messageOutputStream = object : OutputStream() {

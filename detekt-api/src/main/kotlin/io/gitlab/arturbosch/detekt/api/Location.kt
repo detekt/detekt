@@ -73,13 +73,15 @@ class Location(
  * Stores line and column information of a location.
  */
 @Poko
-class SourceLocation(val line: Int, val column: Int) {
+class SourceLocation(val line: Int, val column: Int) : Comparable<SourceLocation> {
     init {
         require(line > 0) { "The source location line must be greater than 0" }
         require(column > 0) { "The source location column must be greater than 0" }
     }
 
     override fun toString(): String = "$line:$column"
+
+    override fun compareTo(other: SourceLocation): Int = compareValuesBy(this, other, { it.line }, { it.column })
 }
 
 /**
