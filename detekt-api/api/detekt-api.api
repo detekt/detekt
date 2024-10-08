@@ -192,6 +192,10 @@ public final class io/gitlab/arturbosch/detekt/api/IssueKt {
 	public static final fun getSuppressed (Lio/gitlab/arturbosch/detekt/api/Issue;)Z
 }
 
+public final class io/gitlab/arturbosch/detekt/api/IssueKt {
+	public static final fun getName (Lio/gitlab/arturbosch/detekt/api/RuleInstance;)Lio/gitlab/arturbosch/detekt/api/Rule$Name;
+}
+
 public final class io/gitlab/arturbosch/detekt/api/Location {
 	public static final field Companion Lio/gitlab/arturbosch/detekt/api/Location$Companion;
 	public fun <init> (Lio/gitlab/arturbosch/detekt/api/SourceLocation;Lio/gitlab/arturbosch/detekt/api/SourceLocation;Lio/gitlab/arturbosch/detekt/api/TextLocation;Ljava/nio/file/Path;)V
@@ -287,6 +291,15 @@ public class io/gitlab/arturbosch/detekt/api/Rule : io/gitlab/arturbosch/detekt/
 	public static synthetic fun visitFile$default (Lio/gitlab/arturbosch/detekt/api/Rule;Lorg/jetbrains/kotlin/psi/KtFile;Lorg/jetbrains/kotlin/resolve/BindingContext;Lio/gitlab/arturbosch/detekt/api/CompilerResources;ILjava/lang/Object;)Ljava/util/List;
 }
 
+public final class io/gitlab/arturbosch/detekt/api/Rule$Id {
+	public fun <init> (Ljava/lang/String;)V
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getRuleName ()Lio/gitlab/arturbosch/detekt/api/Rule$Name;
+	public final fun getValue ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class io/gitlab/arturbosch/detekt/api/Rule$Name {
 	public fun <init> (Ljava/lang/String;)V
 	public fun equals (Ljava/lang/Object;)Z
@@ -297,8 +310,7 @@ public final class io/gitlab/arturbosch/detekt/api/Rule$Name {
 
 public abstract interface class io/gitlab/arturbosch/detekt/api/RuleInstance {
 	public abstract fun getDescription ()Ljava/lang/String;
-	public abstract fun getId ()Ljava/lang/String;
-	public abstract fun getName ()Lio/gitlab/arturbosch/detekt/api/Rule$Name;
+	public abstract fun getId ()Lio/gitlab/arturbosch/detekt/api/Rule$Id;
 	public abstract fun getRuleSetId ()Lio/gitlab/arturbosch/detekt/api/RuleSet$Id;
 }
 
