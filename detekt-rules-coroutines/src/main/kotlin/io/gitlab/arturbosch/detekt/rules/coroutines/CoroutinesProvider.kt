@@ -23,6 +23,7 @@ class CoroutinesProvider : DefaultRuleSetProvider {
             ::SuspendFunWithFlowReturnType,
             ::SuspendFunWithCoroutineScopeReceiver,
             ::SuspendFunSwallowedCancellation,
+            ::SuspendFunInFinallySection
         )
     )
 }
