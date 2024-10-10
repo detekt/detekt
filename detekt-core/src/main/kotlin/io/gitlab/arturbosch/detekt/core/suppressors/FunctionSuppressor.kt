@@ -24,6 +24,9 @@ internal fun functionSuppressorFactory(rule: Rule, bindingContext: BindingContex
     val functionMatchers = rule.config.valueOrDefault("ignoreFunction", emptyList<String>())
         .map(FunctionMatcher::fromFunctionSignature)
     return if (functionMatchers.isNotEmpty()) {
+        if (rule.isForbiddenSuppress()) {
+            return null
+        }
         Suppressor { finding ->
             functionSuppressor(finding.entity.ktElement, bindingContext, functionMatchers)
         }

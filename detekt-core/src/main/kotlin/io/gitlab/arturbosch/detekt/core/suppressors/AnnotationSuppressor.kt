@@ -19,6 +19,9 @@ internal fun annotationSuppressorFactory(rule: Rule, bindingContext: BindingCont
         it.qualifiedNameGlobToRegex()
     }
     return if (annotations.isNotEmpty()) {
+        if (rule.isForbiddenSuppress()) {
+            return null
+        }
         Suppressor { finding ->
             val element = finding.entity.ktElement
             element.isAnnotatedWith(AnnotationExcluder(element.containingKtFile, annotations, bindingContext))

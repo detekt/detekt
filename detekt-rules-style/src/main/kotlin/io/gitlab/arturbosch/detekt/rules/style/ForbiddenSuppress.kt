@@ -18,7 +18,7 @@ import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
  * This rule allows to set a list of [rules] whose suppression is forbidden.
  * This can be used to discourage the abuse of the `Suppress` and `SuppressWarnings` annotations.
  *
- * This rule is not capable of reporting suppression of itself, as that's a language feature with precedence.
+ * This rule is special in that it itself cannot be suppressed. This ensures that all rules can be enforced strictly with this rule. This rule is not capable of reporting suppression of itself, as that's a language feature with precedence. However, attempting to suppress this rule by any means will have no effect besides producing a warning.
  *
  * <noncompliant>
  * package foo
@@ -74,7 +74,13 @@ class ForbiddenSuppress(config: Config) : Rule(
 
     private fun List<KtValueArgument>.filterForbiddenRules(): List<String> = mapNotNull { argument ->
         val text = argument.findDescendantOfType<KtLiteralStringTemplateEntry>()?.text
-        if (rules.contains(text)) text else null
+        if (text == "ForbiddenSuppress") {
+            null
+        } else if (rules.contains(text)) {
+            text
+        } else {
+            null
+        }
     }
 
     private companion object {
