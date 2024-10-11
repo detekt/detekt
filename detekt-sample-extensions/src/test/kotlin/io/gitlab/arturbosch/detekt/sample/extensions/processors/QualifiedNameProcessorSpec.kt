@@ -42,13 +42,9 @@ private val result = object : Detektion {
         userData = userData.plus(key, requireNotNull(value))
     }
 
-    override fun add(notification: Notification) {
-        throw UnsupportedOperationException("not implemented")
-    }
+    override fun add(notification: Notification): Unit = throw UnsupportedOperationException("not implemented")
 
-    override fun add(projectMetric: ProjectMetric) {
-        throw UnsupportedOperationException("not implemented")
-    }
+    override fun add(projectMetric: ProjectMetric): Unit = throw UnsupportedOperationException("not implemented")
 }
 
 private val code = """

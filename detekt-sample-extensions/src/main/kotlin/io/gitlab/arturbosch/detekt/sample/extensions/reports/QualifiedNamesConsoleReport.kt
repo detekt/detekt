@@ -5,7 +5,5 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 
 class QualifiedNamesConsoleReport : ConsoleReport() {
 
-    override fun render(detektion: Detektion): String? {
-        return qualifiedNamesReport(detektion)
-    }
+    override fun render(detektion: Detektion): String? = qualifiedNamesReport(detektion)
 }
