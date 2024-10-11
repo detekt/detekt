@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.dokka)
     id("java-test-fixtures")
     alias(libs.plugins.binaryCompatibilityValidator)
-    id("dev.drewhamilton.poko") version "0.16.0"
+    id("dev.drewhamilton.poko") version "0.17.1"
 }
 
 dependencies {

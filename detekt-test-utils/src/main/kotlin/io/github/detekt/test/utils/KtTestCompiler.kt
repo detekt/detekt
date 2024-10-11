@@ -3,7 +3,6 @@ package io.github.detekt.test.utils
 import io.github.detekt.parser.KtCompiler
 import kotlinx.coroutines.CoroutineScope
 import org.intellij.lang.annotations.Language
-import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
@@ -51,7 +50,7 @@ internal object KtTestCompiler : KtCompiler() {
     ): KotlinCoreEnvironmentWrapper {
         val configuration = CompilerConfiguration()
         configuration.put(CommonConfigurationKeys.MODULE_NAME, "test_module")
-        configuration.put(CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY, MessageCollector.NONE)
+        configuration.put(CommonConfigurationKeys.MESSAGE_COLLECTOR_KEY, MessageCollector.NONE)
 
         if (System.getenv("JAVA_HOME") != null) {
             configuration.put(JVMConfigurationKeys.JDK_HOME, File(System.getenv("JAVA_HOME")))

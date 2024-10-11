@@ -1,6 +1,5 @@
 package io.github.detekt.parser
 
-import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
 import org.jetbrains.kotlin.cli.common.config.addKotlinSourceRoots
 import org.jetbrains.kotlin.cli.common.environment.setIdeaIoUseFallback
 import org.jetbrains.kotlin.cli.common.messages.MessageRenderer
@@ -54,7 +53,7 @@ fun createKotlinCoreEnvironment(
     // https://github.com/JetBrains/kotlin/commit/2568804eaa2c8f6b10b735777218c81af62919c1
     setIdeaIoUseFallback()
     configuration.put(
-        CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY,
+        CommonConfigurationKeys.MESSAGE_COLLECTOR_KEY,
         PrintingMessageCollector(printStream, MessageRenderer.PLAIN_FULL_PATHS, false)
     )
     configuration.put(CommonConfigurationKeys.MODULE_NAME, "detekt")

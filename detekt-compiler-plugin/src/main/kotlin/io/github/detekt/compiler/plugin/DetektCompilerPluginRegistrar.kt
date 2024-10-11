@@ -1,9 +1,9 @@
 package io.github.detekt.compiler.plugin
 
 import io.github.detekt.compiler.plugin.internal.toSpec
-import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.compiler.plugin.CompilerPluginRegistrar
+import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.resolve.jvm.extensions.AnalysisHandlerExtension
 import kotlin.io.path.Path
@@ -17,7 +17,7 @@ class DetektCompilerPluginRegistrar : CompilerPluginRegistrar() {
             return
         }
 
-        val messageCollector = configuration.get(CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY, MessageCollector.NONE)
+        val messageCollector = configuration.get(CommonConfigurationKeys.MESSAGE_COLLECTOR_KEY, MessageCollector.NONE)
 
         AnalysisHandlerExtension.registerExtension(
             DetektAnalysisExtension(
