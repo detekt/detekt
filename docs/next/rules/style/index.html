@@ -9,7 +9,7 @@
 
 
 <link rel="search" type="application/opensearchdescription+xml" title="detekt" href="/opensearch.xml"><link rel="stylesheet" href="/assets/css/styles.f49091ff.css">
-<script src="/assets/js/runtime~main.9ad39664.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.d8d1ad06.js" defer="defer"></script>
 <script src="/assets/js/main.a1b4bb85.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -400,7 +400,7 @@ discourage the use named parameters.</p>
 <p>Report suppressions of all forbidden rules.</p>
 <p>This rule allows to set a list of [rules] whose suppression is forbidden.
 This can be used to discourage the abuse of the <code>Suppress</code> and <code>SuppressWarnings</code> annotations.</p>
-<p>This rule is not capable of reporting suppression of itself, as that&#x27;s a language feature with precedence.</p>
+<p>This rule is special in that it itself cannot be suppressed. This ensures that all rules can be enforced strictly with this rule. This rule is not capable of reporting suppression of itself, as that&#x27;s a language feature with precedence. However, attempting to suppress this rule by any means will have no effect besides producing a warning.</p>
 <p><strong>Active by default</strong>: No</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-12">Configuration options:<a href="#configuration-options-12" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
