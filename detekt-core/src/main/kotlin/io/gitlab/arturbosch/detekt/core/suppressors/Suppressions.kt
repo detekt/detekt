@@ -8,6 +8,9 @@ import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import kotlin.text.RegexOption.IGNORE_CASE
 
+internal fun isForbiddenSuppressById(id: Rule.Id) = id.ruleName == FORBIDDEN_SUPPRESS_NAME
+private val FORBIDDEN_SUPPRESS_NAME = Rule.Name("ForbiddenSuppress")
+
 /**
  * Checks if this psi element is suppressed by @Suppress or @SuppressWarnings annotations.
  * If this element cannot have annotations, the first annotative parent is searched.
@@ -18,6 +21,8 @@ fun KtElement.isSuppressedBy(id: Rule.Id, aliases: Set<String>, ruleSetId: RuleS
         acceptedSuppressionIds.addAll(listOf(ruleSetId.value, "$ruleSetId.$id", "$ruleSetId:$id"))
     }
     acceptedSuppressionIds.addAll(aliases)
+
+    if (isForbiddenSuppressById(id)) return false
 
     return allAnnotationEntries()
         .filter { it.typeReference?.text in suppressionAnnotations }

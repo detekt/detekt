@@ -176,7 +176,7 @@ internal class ForbiddenSuppressSpec {
         }
 
         @Test
-        fun `does not catch suppression of any forbidden rule when one of them`() {
+        fun `cannot be suppressed`() {
             val code = """
                 package config
 
@@ -184,7 +184,7 @@ internal class ForbiddenSuppressSpec {
                 class Foo
             """.trimIndent()
             val findings = subject.compileAndLint(code)
-            assertThat(findings).isEmpty()
+            assertThat(findings).hasSize(1)
         }
     }
 
