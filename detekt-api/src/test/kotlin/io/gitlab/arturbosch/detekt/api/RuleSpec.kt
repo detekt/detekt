@@ -59,7 +59,7 @@ class RuleSpec {
         )
         fun shouldNotAllowInvalidIds(ruleName: String) {
             assertThatCode { Rule.Id(ruleName) }
-                .hasMessageStartingWith("Id '$ruleName' must match")
+                .hasMessage("Id '$ruleName' must match [aA-zZ]+(?:[aA-zZ0-9-]+)*[aA-zZ0-9](/[aA-zZ]+(?:[aA-zZ0-9-]+)*[aA-zZ0-9])?")
                 .isInstanceOf(IllegalArgumentException::class.java)
         }
     }
@@ -94,7 +94,7 @@ class RuleSpec {
         )
         fun shouldNotAllowInvalidNames(ruleName: String) {
             assertThatCode { Rule.Name(ruleName) }
-                .hasMessageStartingWith("Name '$ruleName' must match")
+                .hasMessage("Name '$ruleName' must match [aA-zZ]+(?:[aA-zZ0-9-]+)*[aA-zZ0-9]")
                 .isInstanceOf(IllegalArgumentException::class.java)
         }
     }

@@ -36,7 +36,7 @@ class RuleSetSpec {
         )
         fun shouldNotAllowInvalidIds(ruleSetId: String) {
             assertThatCode { RuleSet.Id(ruleSetId) }
-                .hasMessageStartingWith("Id '$ruleSetId' must match")
+                .hasMessage("Id '$ruleSetId' must match [aA-zZ]+(?:[aA-zZ0-9-]+)*[aA-zZ0-9]")
                 .isInstanceOf(IllegalArgumentException::class.java)
         }
     }
