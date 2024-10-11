@@ -75,8 +75,11 @@ Using the forEach method on ranges has a heavy performance cost. Prefer using si
 Benchmarks have shown that using forEach on a range can have a huge performance cost in comparison to
 simple for loops. Hence, in most contexts, a simple for loop should be used instead.
 See more details with this blog series:
+
 -https://bladecoder.medium.com/exploring-kotlins-hidden-costs-part-1-fbb9935d9b62
+
 -https://bladecoder.medium.com/exploring-kotlins-hidden-costs-part-2-324a4a50b70
+
 -https://bladecoder.medium.com/exploring-kotlins-hidden-costs-part-3-3bf6e0dbf0a4
 To solve this CodeSmell, the forEach usage should be replaced by a for loop.
 
