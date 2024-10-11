@@ -192,10 +192,6 @@ public final class io/gitlab/arturbosch/detekt/api/IssueKt {
 	public static final fun getSuppressed (Lio/gitlab/arturbosch/detekt/api/Issue;)Z
 }
 
-public final class io/gitlab/arturbosch/detekt/api/IssueKt {
-	public static final fun getName (Lio/gitlab/arturbosch/detekt/api/RuleInstance;)Lio/gitlab/arturbosch/detekt/api/Rule$Name;
-}
-
 public final class io/gitlab/arturbosch/detekt/api/Location {
 	public static final field Companion Lio/gitlab/arturbosch/detekt/api/Location$Companion;
 	public fun <init> (Lio/gitlab/arturbosch/detekt/api/SourceLocation;Lio/gitlab/arturbosch/detekt/api/SourceLocation;Lio/gitlab/arturbosch/detekt/api/TextLocation;Ljava/nio/file/Path;)V

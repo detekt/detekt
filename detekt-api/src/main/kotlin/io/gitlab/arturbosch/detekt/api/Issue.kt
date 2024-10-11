@@ -43,5 +43,3 @@ interface RuleInstance {
     val ruleSetId: RuleSet.Id
     val description: String
 }
-
-val RuleInstance.name: Rule.Name get() = id.ruleName

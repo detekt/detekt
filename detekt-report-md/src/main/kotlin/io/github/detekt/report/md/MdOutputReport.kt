@@ -20,7 +20,6 @@ import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
-import io.gitlab.arturbosch.detekt.api.name
 import io.gitlab.arturbosch.detekt.api.suppressed
 import java.nio.file.Path
 import java.time.OffsetDateTime
@@ -102,7 +101,7 @@ private fun MarkdownContent.renderGroup(issues: List<Issue>, basePath: Path) {
 
 private fun MarkdownContent.renderRule(ruleInstance: RuleInstance, issues: List<Issue>, basePath: Path) {
     val ruleId = ruleInstance.id
-    val ruleName = ruleInstance.name.value
+    val ruleName = ruleInstance.id.ruleName.value
     val ruleSetId = ruleInstance.ruleSetId.value
     h3 { "$ruleSetId, $ruleId (%,d)".format(Locale.ROOT, issues.size) }
     paragraph { ruleInstance.description }
