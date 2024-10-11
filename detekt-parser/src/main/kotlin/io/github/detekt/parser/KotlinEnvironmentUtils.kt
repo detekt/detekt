@@ -1,6 +1,5 @@
 package io.github.detekt.parser
 
-import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
 import org.jetbrains.kotlin.cli.common.arguments.K2JVMCompilerArguments
 import org.jetbrains.kotlin.cli.common.arguments.parseCommandLineArguments
 import org.jetbrains.kotlin.cli.common.arguments.validateArguments
@@ -36,7 +35,7 @@ fun createKotlinCoreEnvironment(
     printStream: PrintStream,
 ): KotlinCoreEnvironment {
     configuration.put(
-        CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY,
+        CommonConfigurationKeys.MESSAGE_COLLECTOR_KEY,
         PrintingMessageCollector(printStream, MessageRenderer.PLAIN_FULL_PATHS, false)
     )
     configuration.put(CommonConfigurationKeys.MODULE_NAME, "detekt")
@@ -113,7 +112,7 @@ fun createCompilerConfiguration(
         addKotlinSourceRoots(kotlinFiles)
         addJvmClasspathRoots(classpathFiles)
         put(
-            CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY,
+            CommonConfigurationKeys.MESSAGE_COLLECTOR_KEY,
             PrintingMessageCollector(printStream, MessageRenderer.PLAIN_FULL_PATHS, false)
         )
         setupLanguageVersionSettings(jvmCompilerArguments)
