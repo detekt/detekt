@@ -126,5 +126,4 @@ private data class RuleInstanceImpl(
     override val name: Rule.Name,
     override val ruleSetId: RuleSet.Id,
     override val description: String,
-    override val severity: Severity = Severity.Error,
 ) : RuleInstance

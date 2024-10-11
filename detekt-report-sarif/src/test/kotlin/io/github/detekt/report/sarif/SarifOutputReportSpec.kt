@@ -79,7 +79,8 @@ class SarifOutputReportSpec {
     fun `renders issue overriding rule severity`() {
         val severity = Severity.Info
         val result = TestDetektion(
-            createIssue(createRuleInstance("TestSmellA/id", "RuleSet1"), severity = severity),
+            // The `ruleId` of an issue must reference a rule within the rule set.
+            createIssue(createRuleInstance("TestRule", "test"), severity = severity),
         )
 
         val report = SarifOutputReport()
@@ -93,7 +94,8 @@ class SarifOutputReportSpec {
     fun `renders issue not overriding rule severity`() {
         val severity = Severity.Error
         val result = TestDetektion(
-            createIssue(createRuleInstance("TestSmellA/id", "RuleSet1"), severity = severity),
+            // The `ruleId` of an issue must reference a rule within the rule set.
+            createIssue(createRuleInstance("TestRule", "test"), severity = severity),
         )
 
         val report = SarifOutputReport()
