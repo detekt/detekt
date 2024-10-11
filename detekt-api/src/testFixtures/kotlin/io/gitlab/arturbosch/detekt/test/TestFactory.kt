@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.test
 
-import io.github.detekt.test.utils.internal.FakeKtElement
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleInstance
@@ -8,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
-import org.jetbrains.kotlin.psi.KtElement
 import java.nio.file.Path
 import kotlin.io.path.Path
 
@@ -71,12 +69,10 @@ fun createRuleInstance(
 fun createEntity(
     signature: String = "TestEntitySignature",
     location: Issue.Location = createLocation(),
-    ktElement: KtElement = FakeKtElement(),
 ): Issue.Entity = IssueImpl.Entity(
     name = "TestEntity",
     signature = signature,
     location = location,
-    ktElement = ktElement
 )
 
 fun createLocation(
@@ -106,7 +102,6 @@ private data class IssueImpl(
         override val name: String,
         override val signature: String,
         override val location: Issue.Location,
-        override val ktElement: KtElement
     ) : Issue.Entity
 
     data class Location(
