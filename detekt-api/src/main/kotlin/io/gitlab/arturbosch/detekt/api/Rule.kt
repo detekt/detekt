@@ -90,7 +90,7 @@ open class Rule(
     @Poko
     class Name(val value: String) {
         init {
-            require(value.matches(nameRegex)) { "Name '$value' must match ${nameRegex.pattern}}" }
+            require(value.matches(nameRegex)) { "Name '$value' must match $nameRegex" }
         }
 
         override fun toString(): String = value
@@ -99,7 +99,7 @@ open class Rule(
     @Poko
     class Id(val value: String) {
         init {
-            require(value.matches(idRegex)) { "Id '$value' must match ${idRegex.pattern}" }
+            require(value.matches(idRegex)) { "Id '$value' must match $idRegex" }
         }
 
         val ruleName: Name = Name(value.split("/", limit = 2).first())

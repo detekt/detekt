@@ -14,7 +14,7 @@ class RuleSet(val id: Id, val rules: Map<Rule.Name, (Config) -> Rule>) {
     @Poko
     class Id(val value: String) {
         init {
-            require(value.matches(idRegex)) { "Id '$value' must match ${idRegex.pattern}" }
+            require(value.matches(idRegex)) { "Id '$value' must match $idRegex" }
         }
 
         override fun toString(): String = value
