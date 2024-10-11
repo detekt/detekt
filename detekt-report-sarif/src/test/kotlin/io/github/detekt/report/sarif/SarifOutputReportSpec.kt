@@ -74,6 +74,34 @@ class SarifOutputReportSpec {
 
         assertThat(report).isEqualToIgnoringWhitespace(expectedReport)
     }
+
+    @Test
+    fun `renders issue overriding rule severity`() {
+        val severity = Severity.Info
+        val result = TestDetektion(
+            createIssue(createRuleInstance("TestSmellA/id", "RuleSet1"), severity = severity),
+        )
+
+        val report = SarifOutputReport()
+            .apply { init(TestSetupContext()) }
+            .render(result)
+
+        assertThat(report).contains("\"level\": \"${severity.toResultLevel().toString().lowercase()}\",")
+    }
+
+    @Test
+    fun `renders issue not overriding rule severity`() {
+        val severity = Severity.Error
+        val result = TestDetektion(
+            createIssue(createRuleInstance("TestSmellA/id", "RuleSet1"), severity = severity),
+        )
+
+        val report = SarifOutputReport()
+            .apply { init(TestSetupContext()) }
+            .render(result)
+
+        assertThat(report).doesNotContain("\"level\": \"${severity.toResultLevel().toString().lowercase()}\",")
+    }
 }
 
 class TestProvider : RuleSetProvider {

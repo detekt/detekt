@@ -43,4 +43,5 @@ interface RuleInstance {
     val name: Rule.Name
     val ruleSetId: RuleSet.Id
     val description: String
+    val severity: Severity
 }
