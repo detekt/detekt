@@ -81,6 +81,7 @@ See more details with this blog series:
 -https://bladecoder.medium.com/exploring-kotlins-hidden-costs-part-2-324a4a50b70
 
 -https://bladecoder.medium.com/exploring-kotlins-hidden-costs-part-3-3bf6e0dbf0a4
+
 To solve this CodeSmell, the forEach usage should be replaced by a for loop.
 
 **Active by default**: Yes - Since v1.0.0
