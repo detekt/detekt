@@ -19,7 +19,10 @@ import org.jetbrains.kotlin.psi2ir.deparenthesize
  * Benchmarks have shown that using forEach on a range can have a huge performance cost in comparison to
  * simple for loops. Hence, in most contexts, a simple for loop should be used instead.
  * See more details here:
- * https://web.archive.org/web/20230514162525/https://sites.google.com/a/athaydes.com/renato-athaydes/posts/kotlinshiddencosts-benchmarks
+ * [Exploring Kotlin Hidden Costs - Part 1](https://bladecoder.medium.com/exploring-kotlins-hidden-costs-part-1-fbb9935d9b62)
+ * [Exploring Kotlin Hidden Costs - Part 2](https://bladecoder.medium.com/exploring-kotlins-hidden-costs-part-2-324a4a50b70)
+ * [Exploring Kotlin Hidden Costs - Part 3](https://bladecoder.medium.com/exploring-kotlins-hidden-costs-part-3-3bf6e0dbf0a4)
+ *
  * To solve this CodeSmell, the forEach usage should be replaced by a for loop.
  *
  * <noncompliant>
