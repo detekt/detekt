@@ -6,6 +6,7 @@ import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
+import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -15,6 +16,229 @@ import io.gitlab.arturbosch.detekt.test.assertThat as assertThatFindings
 class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment) {
 
     private val subject = SuspendFunSwallowedCancellation(Config.empty)
+
+    @Test
+    fun `does report if swallowing generic exception in suspend fun`() {
+        val code = """
+            import kotlinx.coroutines.delay
+
+            suspend fun foo() {
+                try {
+                    delay(1000L)
+                } catch (e: Exception) {
+                    // Exception is a super class of CancellationException, so this counts as swallowing
+                }
+            }
+        """.trimIndent()
+        assertOneFindingAt(
+            code = code,
+            start = SourceLocation(line = 6, column = 7), // start of Exception block
+            end = SourceLocation(line = 8, column = 6), // end of Exception block
+        )
+    }
+
+    @Test
+    fun `doesnt report if CancellationException is caught and rethrown immediately`() {
+        val code = """
+            import kotlinx.coroutines.CancellationException
+            import kotlinx.coroutines.delay
+
+            suspend fun foo() {
+                try {
+                    delay(1000L)
+                } catch (e: CancellationException) {
+                    throw e
+                }
+            }
+        """.trimIndent()
+        val findings = subject.compileAndLintWithContext(env, code)
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `does report if CancellationException is caught but an exception with a shadowed name is rethrown`() {
+        val code = """
+            import kotlinx.coroutines.CancellationException
+            import kotlinx.coroutines.delay
+
+            suspend fun foo() {
+                try {
+                    delay(1000L)
+                } catch (e: CancellationException) {
+                    val e = Exception() // shadowed name, not propagating the right thing!
+                    throw e
+                }
+            }
+        """.trimIndent()
+        assertOneFindingAt(
+            code = code,
+            start = SourceLocation(line = 7, column = 7), // start of CancellationException block
+            end = SourceLocation(line = 10, column = 6), // end of CancellationException block
+        )
+    }
+
+    @Test
+    fun `does report if CancellationException is caught but only rethrown after a suspending call`() {
+        val code = """
+            import kotlinx.coroutines.CancellationException
+            import kotlinx.coroutines.delay
+            
+            suspend fun performLongRunningWork() = delay(1_000_000_000L)
+
+            suspend fun foo() {
+                try {
+                    delay(1000L)
+                } catch (e: CancellationException) {
+                    performLongRunningWork()
+                    throw e
+                }
+            }
+        """.trimIndent()
+        assertOneFindingAt(
+            code = code,
+            start = SourceLocation(line = 9, column = 7), // start of CancellationException block
+            end = SourceLocation(line = 12, column = 6), // end of CancellationException block
+        )
+    }
+
+    @Test
+    fun `does report if CancellationException is caught but only rethrown after a non-suspending call`() {
+        val code = """
+            import java.util.concurrent.TimeUnit
+            import kotlinx.coroutines.CancellationException
+            import kotlinx.coroutines.delay
+
+            suspend fun foo() {
+                try {
+                    delay(1000L)
+                } catch (e: CancellationException) {
+                    TimeUnit.SECONDS.sleep(1_000_000_000L)
+                    throw e
+                }
+            }
+        """.trimIndent()
+        assertOneFindingAt(
+            code = code,
+            start = SourceLocation(line = 8, column = 7), // start of CancellationException block
+            end = SourceLocation(line = 11, column = 6), // end of CancellationException block
+        )
+    }
+
+    @Test
+    fun `does report if CancellationException is caught but only rethrown after doing some other work`() {
+        val code = """
+            import kotlinx.coroutines.CancellationException
+            import kotlinx.coroutines.delay
+            
+            private fun longRunningCalculation(): Int = 1 + 2
+
+            suspend fun foo() {
+                try {
+                    delay(1000L)
+                } catch (e: CancellationException) {
+                    val result = longRunningCalculation() 
+                    println("Result = " + result)
+                    throw e
+                }
+            }
+        """.trimIndent()
+        assertOneFindingAt(
+            code = code,
+            start = SourceLocation(line = 9, column = 7), // start of CancellationException block
+            end = SourceLocation(line = 13, column = 6), // end of CancellationException block
+        )
+    }
+
+    @Test
+    fun `does report if CancellationException is caught but not rethrown`() {
+        val code = """
+            import kotlinx.coroutines.CancellationException
+            import kotlinx.coroutines.delay
+
+            suspend fun foo() {
+                try {
+                    delay(1000L)
+                } catch (e: CancellationException) {
+                    // Not re-thrown - this gets flagged
+                } catch (e: Exception) {
+                    // Other error handling
+                }
+            }
+        """.trimIndent()
+        assertOneFindingAt(
+            code = code,
+            start = SourceLocation(line = 7, column = 7), // start of CancellationException block
+            end = SourceLocation(line = 9, column = 6), // end of CancellationException block
+        )
+    }
+
+    @Test
+    fun `does report if CancellationException is caught after some other exception type`() {
+        val code = """
+            import kotlinx.coroutines.CancellationException
+            import kotlinx.coroutines.delay
+
+            class SomeOtherException : Exception()
+
+            suspend fun foo() {
+                try {
+                    delay(1000L)
+                } catch (e: SomeOtherException) {
+                    // Some error handling logic - CancellationException should be handled first
+                } catch (e: CancellationException) {
+                    throw e
+                }
+            }
+        """.trimIndent()
+        assertOneFindingAt(
+            code = code,
+            start = SourceLocation(line = 9, column = 7), // start of SomeOtherException block
+            end = SourceLocation(line = 11, column = 6), // end of SomeOtherException block
+        )
+    }
+
+    @Test
+    fun `does report if CancellationException is caught but a different exception is re-thrown`() {
+        val code = """
+            import kotlinx.coroutines.delay
+
+            class WrapperException(val e: CancellationException) : Exception()
+
+            suspend fun foo() {
+                try {
+                    delay(1000L)
+                } catch (e: CancellationException) {
+                    throw WrapperException(e)
+                }
+            }
+        """.trimIndent()
+        assertOneFindingAt(
+            code = code,
+            start = SourceLocation(line = 8, column = 7), // start of CancellationException block
+            end = SourceLocation(line = 10, column = 6), // end of CancellationException block
+        )
+    }
+
+    @Test
+    fun `does report if a CancellationException super-class is caught and re-thrown`() {
+        val code = """
+            import kotlinx.coroutines.delay
+
+            suspend fun foo() {
+                try {
+                    delay(1000L)
+                } catch (e: IllegalStateException) {
+                    // IllegalStateException is a superclass of CancellationException
+                    throw e
+                }
+            }
+        """.trimIndent()
+        assertOneFindingAt(
+            code = code,
+            start = SourceLocation(line = 6, column = 7), // start of IllegalStateException block
+            end = SourceLocation(line = 9, column = 6), // end of IllegalStateException block
+        )
+    }
 
     @Test
     fun `does report suspend function call in runCatching`() {
@@ -222,23 +446,6 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
             listOf(SourceLocation(3, 21)),
             listOf(SourceLocation(3, 32))
         )
-    }
-
-    @Test
-    fun `does not report when try catch is used`() {
-        val code = """
-            import kotlinx.coroutines.delay
-
-            suspend fun foo() {
-                try {
-                    delay(1000L)
-                } catch (e: IllegalStateException) {
-                    // handle error
-                }
-            }
-        """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
-        assertThat(findings).isEmpty()
     }
 
     @Nested
@@ -1277,5 +1484,14 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
         assertThatFindings(findings).hasSameSizeAs(listOfStartLocation)
         assertThatFindings(findings).hasStartSourceLocations(*listOfStartLocation.toTypedArray())
         assertThatFindings(findings).hasEndSourceLocations(*listOfEndLocation.toTypedArray())
+    }
+
+    private fun assertOneFindingAt(@Language("kotlin") code: String, start: SourceLocation, end: SourceLocation) {
+        val findings = subject.compileAndLintWithContext(env, code)
+        assertFindingsForSuspendCall(
+            findings = findings,
+            listOfStartLocation = listOf(start),
+            listOfEndLocation = listOf(end),
+        )
     }
 }
