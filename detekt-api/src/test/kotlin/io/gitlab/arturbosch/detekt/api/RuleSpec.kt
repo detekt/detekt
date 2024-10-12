@@ -59,7 +59,9 @@ class RuleSpec {
         )
         fun shouldNotAllowInvalidIds(ruleName: String) {
             assertThatCode { Rule.Id(ruleName) }
-                .hasMessage("Id '$ruleName' must match [aA-zZ]+(?:[aA-zZ0-9-]+)*[aA-zZ0-9](/[aA-zZ]+(?:[aA-zZ0-9-]+)*[aA-zZ0-9])?")
+                .hasMessage(
+                    "Id '$ruleName' must match [aA-zZ]+(?:[aA-zZ0-9-]+)*[aA-zZ0-9](/[aA-zZ]+(?:[aA-zZ0-9-]+)*[aA-zZ0-9])?"
+                )
                 .isInstanceOf(IllegalArgumentException::class.java)
         }
     }
