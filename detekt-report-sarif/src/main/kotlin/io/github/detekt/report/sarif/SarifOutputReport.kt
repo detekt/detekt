@@ -28,6 +28,7 @@ class SarifOutputReport : BuiltInOutputReport, OutputReport() {
 
     override fun render(detektion: Detektion): String {
         val version = whichDetekt()
+        val rules = toReportingDescriptors(config)
         val sarifSchema210 = SarifSchema210(
             schema = "https://docs.oasis-open.org/sarif/sarif/v2.1.0/errata01/os/schemas/sarif-schema-2.1.0.json",
             version = Version.The210,
@@ -41,13 +42,13 @@ class SarifOutputReport : BuiltInOutputReport, OutputReport() {
                             informationURI = "https://detekt.dev",
                             language = "en",
                             name = "detekt",
-                            rules = toReportingDescriptors(config),
+                            rules = rules,
                             organization = "detekt",
                             semanticVersion = version,
                             version = version
                         )
                     ),
-                    results = toResults(detektion)
+                    results = toResults(detektion, rules)
                 )
             )
         )
