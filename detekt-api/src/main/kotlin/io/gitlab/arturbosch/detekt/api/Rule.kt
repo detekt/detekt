@@ -102,7 +102,7 @@ open class Rule(
             require(value.matches(idRegex)) { "Id '$value' must match $idRegex" }
         }
 
-        val ruleName: Name = Name(value.split("/", limit = 2).first())
+        val ruleName: Name = Name(value.substringBefore("/"))
 
         override fun toString(): String = value
     }
