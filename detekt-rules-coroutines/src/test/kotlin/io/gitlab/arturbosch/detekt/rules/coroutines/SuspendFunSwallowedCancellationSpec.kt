@@ -45,7 +45,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
 
             fun foo() {
                 try {
-                    delay(1000L)
+                    Thread.sleep(1000L)
                 } catch (e: IllegalStateException) {
                     throw e
                 }
@@ -264,6 +264,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
     @Test
     fun `does report if CancellationException is caught but a different exception is re-thrown`() {
         val code = """
+            import kotlinx.coroutines.CancellationException
             import kotlinx.coroutines.delay
 
             class WrapperException(val e: CancellationException) : Exception()
@@ -278,8 +279,8 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
         """.trimIndent()
         assertOneFindingAt(
             code = code,
-            start = SourceLocation(line = 8, column = 7), // start of CancellationException block
-            end = SourceLocation(line = 10, column = 6), // end of CancellationException block
+            start = SourceLocation(line = 9, column = 7), // start of CancellationException block
+            end = SourceLocation(line = 11, column = 6), // end of CancellationException block
         )
     }
 
