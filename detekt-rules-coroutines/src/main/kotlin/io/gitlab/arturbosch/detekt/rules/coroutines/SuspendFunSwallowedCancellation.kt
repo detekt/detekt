@@ -152,13 +152,8 @@ class SuspendFunSwallowedCancellation(config: Config) : Rule(
         }
 
         // CancellationException should be the first case to catch - so we only want to check the first catch clause
-        val catchClause = expression.catchClauses.first()
-        val parameter = catchClause.catchParameter
-        if (parameter == null) {
-            // Not sure exactly what would cause this, but just in case?
-            report(catchClause)
-            return
-        }
+        val catchClause = expression.catchClauses.firstOrNull()
+        val parameter = catchClause?.catchParameter ?: return
 
         val parameterFqName = bindingContext[BindingContext.VALUE_PARAMETER, parameter]
             ?.type
