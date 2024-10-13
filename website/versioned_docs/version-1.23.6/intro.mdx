@@ -26,7 +26,7 @@ Apply the following configuration to your Gradle project build file:
 
 ```kotlin
 plugins {
-    id("io.gitlab.arturbosch.detekt") version("[detekt_version]")
+    id("io.gitlab.arturbosch.detekt") version("1.23.6")
 }
 
 repositories {
@@ -47,7 +47,7 @@ slim down the configuration file to only the changes from the default configurat
 
 ```kotlin
 detekt {
-    toolVersion = "[detekt_version]"
+    toolVersion = "1.23.6"
     config.setFrom(file("config/detekt/detekt.yml"))
     buildUponDefaultConfig = true
 }
@@ -90,6 +90,6 @@ which can be easily added to the Gradle configuration:
 
 ```gradle
 dependencies {
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:[detekt_version]")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.6")
 }
 ```
