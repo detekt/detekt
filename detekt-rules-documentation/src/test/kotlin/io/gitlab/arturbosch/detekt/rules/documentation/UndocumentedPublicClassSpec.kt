@@ -12,7 +12,7 @@ private const val SEARCH_IN_INNER_CLASS = "searchInInnerClass"
 private const val SEARCH_IN_INNER_OBJECT = "searchInInnerObject"
 private const val SEARCH_IN_INNER_INTERFACE = "searchInInnerInterface"
 private const val SEARCH_IN_PROTECTED_CLASS = "searchInProtectedClass"
-private const val FLAG_COMPANION_WITHOUT_NAME = "flagCompanionWithoutName"
+private const val IGNORE_UNNAMED_COMPANION_OBJECT = "ignoreUnnamedCompanionObject"
 
 class UndocumentedPublicClassSpec {
     val subject = UndocumentedPublicClass(Config.empty)
@@ -271,7 +271,24 @@ class UndocumentedPublicClassSpec {
     }
 
     @Test
-    fun `should not report in public companion class if disabled`() {
+    fun `should not report in public companion class with content if disabled`() {
+        val code = """
+            /** Some doc */
+            public class PublicClass {
+                public companion object {
+                    public val x: String = ""
+                }
+            }
+        """.trimIndent()
+        assertThat(
+            UndocumentedPublicClass(
+                TestConfig(IGNORE_UNNAMED_COMPANION_OBJECT to "true")
+            ).compileAndLint(code)
+        ).isEmpty()
+    }
+
+    @Test
+    fun `should not report in empty public companion class with content if disabled`() {
         val code = """
             /** Some doc */
             public class PublicClass {
@@ -280,7 +297,7 @@ class UndocumentedPublicClassSpec {
         """.trimIndent()
         assertThat(
             UndocumentedPublicClass(
-                TestConfig(FLAG_COMPANION_WITHOUT_NAME to "false")
+                TestConfig(IGNORE_UNNAMED_COMPANION_OBJECT to "true")
             ).compileAndLint(code)
         ).isEmpty()
     }

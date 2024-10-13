@@ -42,7 +42,7 @@ class UndocumentedPublicClass(config: Config) : Rule(
     private val searchInProtectedClass: Boolean by config(false)
 
     @Configuration("if companion object without a name should be flagged")
-    private val flagCompanionWithoutName: Boolean by config(true)
+    private val ignoreUnnamedCompanionObject: Boolean by config(false)
 
     override fun visitClass(klass: KtClass) {
         if (requiresDocumentation(klass)) {
@@ -52,14 +52,13 @@ class UndocumentedPublicClass(config: Config) : Rule(
         super.visitClass(klass)
     }
 
-    private fun requiresDocumentation(
-        klass: KtClass
-    ) =
-        klass.isTopLevel() || klass.isInnerClass() || klass.isNestedClass() || klass.isInnerInterface()
+    private fun requiresDocumentation(klass: KtClass): Boolean {
+        return klass.isTopLevel() || klass.isInnerClass() || klass.isNestedClass() || klass.isInnerInterface()
+    }
 
     override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
         val isNonPublicCompanionWithoutNameOrDisabled = declaration.isCompanionWithoutName() &&
-            (!declaration.isPublic || !flagCompanionWithoutName)
+            (!declaration.isPublic || ignoreUnnamedCompanionObject)
 
         if (
             isNonPublicCompanionWithoutNameOrDisabled ||
