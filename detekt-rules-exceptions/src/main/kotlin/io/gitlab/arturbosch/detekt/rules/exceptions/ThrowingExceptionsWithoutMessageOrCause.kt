@@ -60,9 +60,7 @@ class ThrowingExceptionsWithoutMessageOrCause(config: Config) : Rule(
         super.visitCallExpression(expression)
         val calleeExpressionText = expression.calleeExpression?.text ?: return
 
-        if (exceptions.any { calleeExpressionText.equals(it, ignoreCase = true) } &&
-            expression.valueArguments.isEmpty()
-        ) {
+        if (exceptions.any { calleeExpressionText == it } && expression.valueArguments.isEmpty()) {
             report(CodeSmell(Entity.from(expression), description))
         }
     }
