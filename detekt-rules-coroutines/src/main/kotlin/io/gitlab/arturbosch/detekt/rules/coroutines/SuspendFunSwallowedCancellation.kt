@@ -261,12 +261,10 @@ class SuspendFunSwallowedCancellation(config: Config) : Rule(
          * because we're throwing an exception, so it can be detected/handled by another rule.
          */
         val elements = catchBody?.collectDescendantsOfType<KtElement>().orEmpty()
-        if (elements.size < 2) {
-            return true
-        }
 
         // Don't need to check the contents of the KtNameReferenceExpression, that's done as part of
-        // exceptionWasRethrown()
+        // exceptionWasRethrown(). It also verifies that something was thrown, which means we'll have a minimum of
+        // two elements in the catch clause
         return elements[0] !is KtNameReferenceExpression || elements[1] !is KtThrowExpression
     }
 
