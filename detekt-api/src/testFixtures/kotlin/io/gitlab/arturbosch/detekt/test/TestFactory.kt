@@ -70,7 +70,6 @@ fun createEntity(
     signature: String = "TestEntitySignature",
     location: Issue.Location = createLocation(),
 ): Issue.Entity = IssueImpl.Entity(
-    name = "TestEntity",
     signature = signature,
     location = location,
 )
@@ -99,7 +98,6 @@ private data class IssueImpl(
     override val suppressReasons: List<String>
 ) : Issue {
     data class Entity(
-        override val name: String,
         override val signature: String,
         override val location: Issue.Location,
     ) : Issue.Entity

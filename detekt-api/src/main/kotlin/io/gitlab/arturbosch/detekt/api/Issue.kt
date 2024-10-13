@@ -20,7 +20,6 @@ interface Issue {
         get() = entity.location
 
     interface Entity {
-        val name: String
         val signature: String
         val location: Location
     }
