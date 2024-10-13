@@ -13,7 +13,6 @@ class CodeSmellSpec {
     fun `toString contains all information`() {
         val codeSmell = CodeSmell(
             entity = Entity(
-                name = "TestEntity",
                 signature = "TestEntitySignature",
                 location = Location(
                     source = SourceLocation(1, 1),
@@ -28,7 +27,7 @@ class CodeSmellSpec {
         )
 
         assertThat(codeSmell.toString()).isEqualTo(
-            "CodeSmell(entity=Entity(name=TestEntity, signature=TestEntitySignature, " +
+            "CodeSmell(entity=Entity(signature=TestEntitySignature, " +
                 "location=Location(source=1:1, endSource=1:1, text=0:0, path=${codeSmell.location.path}), " +
                 "ktElement=FakeKtElement), message=TestMessage, references=[], suppressReasons=[Baseline])"
         )

@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.api.internal
 
-import org.jetbrains.kotlin.asJava.namedUnwrappedElement
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
@@ -12,8 +11,6 @@ import org.jetbrains.kotlin.psi.psiUtil.startOffset
 import org.jetbrains.kotlin.psi.psiUtil.startOffsetSkippingComments
 
 private val multipleWhitespaces = Regex("\\s{2,}")
-
-internal fun PsiElement.searchName(): String = this.namedUnwrappedElement?.name ?: "<UnknownName>"
 
 /*
  * KtCompiler wrongly used Path.filename as the name for a KtFile instead of the whole path.
