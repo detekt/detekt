@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.psi.KtExpression
@@ -29,7 +29,7 @@ import org.jetbrains.kotlin.psi.KtExpression
  * }
  * </noncompliant>
  */
-@RequiresTypeResolution
+@RequiresFullAnalysis
 @ActiveByDefault(since = "1.0.0")
 class UnreachableCode(config: Config) : Rule(
     config,

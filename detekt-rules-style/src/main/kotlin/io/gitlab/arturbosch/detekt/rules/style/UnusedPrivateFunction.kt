@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.isOperator
@@ -44,7 +44,7 @@ private const val ARRAY_GET_METHOD_NAME = "get"
  * If these private functions are unused they should be removed. Otherwise, this dead code
  * can lead to confusion and potential bugs.
  */
-@RequiresTypeResolution
+@RequiresFullAnalysis
 @ActiveByDefault(since = "1.16.0")
 @Alias("unused")
 class UnusedPrivateFunction(config: Config) : Rule(

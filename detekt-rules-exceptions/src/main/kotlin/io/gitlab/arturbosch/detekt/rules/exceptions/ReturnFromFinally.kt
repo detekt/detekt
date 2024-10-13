@@ -5,7 +5,7 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import org.jetbrains.kotlin.psi.KtBlockExpression
@@ -37,7 +37,7 @@ import org.jetbrains.kotlin.types.KotlinType
  * val a: String = try { "s" } catch (e: Exception) { "e" } finally { "f" }
  * </noncompliant>
  */
-@RequiresTypeResolution
+@RequiresFullAnalysis
 @ActiveByDefault(since = "1.16.0")
 class ReturnFromFinally(config: Config) : Rule(
     config,

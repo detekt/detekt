@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.hasImplicitUnitReturnType
@@ -32,7 +32,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * </compliant>
  *
  */
-@RequiresTypeResolution
+@RequiresFullAnalysis
 class ImplicitUnitReturnType(config: Config) : Rule(
     config,
     "Functions using expression statements have an implicit return type. " +

@@ -9,7 +9,7 @@ import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleInstance
 import io.gitlab.arturbosch.detekt.api.RuleSet
@@ -25,7 +25,6 @@ import io.gitlab.arturbosch.detekt.core.suppressors.isSuppressedBy
 import io.gitlab.arturbosch.detekt.core.util.isActiveOrDefault
 import io.gitlab.arturbosch.detekt.core.util.shouldAnalyzeFile
 import org.jetbrains.kotlin.config.languageVersionSettings
-import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactoryImpl
@@ -46,7 +45,7 @@ internal class Analyzer(
         val dataFlowValueFactory = DataFlowValueFactoryImpl(languageVersionSettings)
         val compilerResources = CompilerResources(languageVersionSettings, dataFlowValueFactory)
         if (bindingContext == BindingContext.EMPTY) {
-            warnAboutEnabledRequiresTypeResolutionRules()
+            warnAboutEnabledRequiresFullAnalysisRules()
         }
         return if (settings.spec.executionSpec.parallelAnalysis) {
             runAsync(ktFiles, bindingContext, compilerResources)
@@ -124,7 +123,7 @@ internal class Analyzer(
                 file.isSuppressedBy(ruleInstance.id, rule.aliases, ruleInstance.ruleSetId)
             }
             .filter { (_, rule) ->
-                bindingContext != BindingContext.EMPTY || !rule::class.hasAnnotation<RequiresTypeResolution>()
+                bindingContext != BindingContext.EMPTY || !rule::class.hasAnnotation<RequiresFullAnalysis>()
             }
             .partition { (_, rule) -> rule.autoCorrect }
 
@@ -138,7 +137,7 @@ internal class Analyzer(
         }
     }
 
-    private fun warnAboutEnabledRequiresTypeResolutionRules() {
+    private fun warnAboutEnabledRequiresFullAnalysisRules() {
         providers.asSequence()
             .map { it to settings.config.subConfig(it.ruleSetId.value) }
             .filter { (_, ruleSetConfig) -> ruleSetConfig.isActiveOrDefault(true) }
@@ -150,7 +149,7 @@ internal class Analyzer(
                     .filter { (_, config) -> config.isActiveOrDefault(false) }
                     .map { (ruleProvider, config) -> ruleProvider(config) }
             }
-            .filter { rule -> rule::class.hasAnnotation<RequiresTypeResolution>() }
+            .filter { rule -> rule::class.hasAnnotation<RequiresFullAnalysis>() }
             .forEach { rule ->
                 settings.debug { "The rule '${rule.ruleName}' requires type resolution but it was run without it." }
             }
@@ -197,7 +196,7 @@ private fun Finding.toIssue(rule: RuleInstance, severity: Severity, basePath: Pa
     }
 
 private fun Entity.toIssue(basePath: Path): Issue.Entity =
-    IssueImpl.Entity(name, signature, location.toIssue(basePath), ktElement)
+    IssueImpl.Entity(name, signature, location.toIssue(basePath))
 
 private fun Location.toIssue(basePath: Path): Issue.Location =
     IssueImpl.Location(source, endSource, text, basePath.relativize(path))
@@ -217,7 +216,6 @@ private data class IssueImpl(
         override val name: String,
         override val signature: String,
         override val location: Issue.Location,
-        override val ktElement: KtElement
     ) : Issue.Entity
 
     data class Location(

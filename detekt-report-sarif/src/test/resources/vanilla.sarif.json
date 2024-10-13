@@ -1,13 +1,8 @@
 {
-  "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+  "$schema": "https://docs.oasis-open.org/sarif/sarif/v2.1.0/errata01/os/schemas/sarif-schema-2.1.0.json",
   "version": "2.1.0",
   "runs": [
     {
-      "originalUriBaseIds": {
-        "%SRCROOT%": {
-          "uri": "<BASE-URL>"
-        }
-      },
       "results": [
         {
           "level": "error",
@@ -90,12 +85,29 @@
           "organization": "detekt",
           "rules": [
             {
-              "defaultConfiguration": {
-                "level": "error"
-              },
-              "helpUri": "https://detekt.dev/test.html#testrule",
-              "id": "detekt.test.TestRule",
-              "name": "TestRule",
+              "id": "detekt.RuleSet1.TestSmellA",
+              "name": "TestSmellA",
+              "shortDescription": {
+                "text": ""
+              }
+            },
+            {
+              "id": "detekt.RuleSet2.TestSmellB",
+              "name": "TestSmellB",
+              "shortDescription": {
+                "text": ""
+              }
+            },
+            {
+              "id": "detekt.RuleSet2.TestSmellC",
+              "name": "TestSmellC",
+              "shortDescription": {
+                "text": ""
+              }
+            },
+            {
+              "id": "detekt.RuleSet2.TestSmellD",
+              "name": "TestSmellD",
               "shortDescription": {
                 "text": ""
               }

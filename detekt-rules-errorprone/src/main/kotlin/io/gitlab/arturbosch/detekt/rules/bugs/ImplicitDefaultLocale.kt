@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -35,7 +35,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
  * </compliant>
  */
 @ActiveByDefault(since = "1.16.0")
-@RequiresTypeResolution
+@RequiresFullAnalysis
 class ImplicitDefaultLocale(config: Config) : Rule(
     config,
     "Implicit default locale used for string processing. Consider using explicit locale."

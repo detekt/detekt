@@ -1,15 +1,15 @@
 [versions]
-coroutines = "1.8.1"
+coroutines = "1.9.0"
 jacoco = "0.8.12"
-junit = "5.11.0"
-kotlin = "2.0.10"
+junit = "5.11.2"
+kotlin = "2.0.21"
 ktlint = "1.3.1"
 slf4j = "2.0.16"
 
 [libraries]
 # This version of AGP is used for testing and should be updated when new AGP versions are released to ensure detekt's
 # Gradle plugin remains compatible.
-android-gradle-plugin = { module = "com.android.tools.build:gradle", version = "8.6.0" }
+android-gradle-plugin = { module = "com.android.tools.build:gradle", version = "8.7.0" }
 binaryCompatibilityValidator-plugin = { module = "org.jetbrains.kotlinx.binary-compatibility-validator:org.jetbrains.kotlinx.binary-compatibility-validator.gradle.plugin", version = "0.16.3" }
 breadmoirai-githubRelease-plugin = { module = "com.github.breadmoirai:github-release", version = "2.5.2" }
 dokka-plugin = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version = "1.9.20" }
@@ -18,11 +18,11 @@ kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 
 # This represents the oldest AGP version that is supported by detekt.
 # This should only be updated when updating the minimum version supported by detekt's Gradle plugin.
-android-gradleApi = { module = "com.android.tools.build:gradle-api", version = "7.1.3" }
+android-gradleApi = { module = "com.android.tools.build:gradle-api", version = "7.3.1" }
 assertj-core = { module = "org.assertj:assertj-core", version = "3.26.3" }
-classgraph = { module = "io.github.classgraph:classgraph", version = "4.8.175" }
+classgraph = { module = "io.github.classgraph:classgraph", version = "4.8.177" }
 jcommander = { module = "org.jcommander:jcommander", version = "1.85" }
-jetbrains-annotations = { module = "org.jetbrains:annotations", version = "24.1.0" }
+jetbrains-annotations = { module = "org.jetbrains:annotations", version = "26.0.0" }
 junit-jupiterApi = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 kctfork-core = { module = "dev.zacsweers.kctfork:core", version = "0.5.1" }
 kotlin-compilerEmbeddable = { module = "org.jetbrains.kotlin:kotlin-compiler-embeddable", version.ref = "kotlin" }
@@ -34,13 +34,13 @@ kotlinx-coroutinesCore = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-co
 kotlinx-coroutinesTest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 kotlinx-html = { module = "org.jetbrains.kotlinx:kotlinx-html-jvm", version = "0.11.0" }
 ktlint-rulesetStandard = { module = "com.pinterest.ktlint:ktlint-ruleset-standard", version = "1.3.1"  }
-poko-annotations = { module = "dev.drewhamilton.poko:poko-annotations", version = "0.17.0" }
+poko-annotations = { module = "dev.drewhamilton.poko:poko-annotations", version = "0.17.1" }
 sarif4k = { module = "io.github.detekt.sarif4k:sarif4k", version = "0.6.0" }
-semver4j = { module = "org.semver4j:semver4j", version = "5.3.0" }
+semver4j = { module = "org.semver4j:semver4j", version = "5.4.0" }
 slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 slf4j-nop = { module = "org.slf4j:slf4j-nop", version.ref = "slf4j" }
 slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j" }
-snakeyaml-engine = { module = "org.snakeyaml:snakeyaml-engine", version = "2.7" }
+snakeyaml-engine = { module = "org.snakeyaml:snakeyaml-engine", version = "2.8" }
 
 [plugins]
 # Do not declare plugins here - see https://github.com/detekt/detekt/pull/7088.

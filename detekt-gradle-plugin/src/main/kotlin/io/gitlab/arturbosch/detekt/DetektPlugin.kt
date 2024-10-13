@@ -8,7 +8,6 @@ import dev.detekt.gradle.plugin.internal.DetektAndroidCompilations
 import dev.detekt.gradle.plugin.internal.DetektJvmCompilations
 import dev.detekt.gradle.plugin.internal.DetektKmpJvmCompilations
 import dev.detekt.gradle.plugin.internal.conventionCompat
-import dev.detekt.gradle.plugin.internal.gradlePropertyAtConfigTimeCompat
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import io.gitlab.arturbosch.detekt.internal.DetektPlain
 import org.gradle.api.Incubating
@@ -32,7 +31,7 @@ class DetektPlugin : Plugin<Project> {
         project.registerDetektJvmTasks(extension)
         val enableAndroidTasks =
             !project.providers
-                .gradlePropertyAtConfigTimeCompat(DETEKT_ANDROID_DISABLED_PROPERTY)
+                .gradleProperty(DETEKT_ANDROID_DISABLED_PROPERTY)
                 .getOrElse("false")
                 .toBoolean()
         if (enableAndroidTasks) {
@@ -40,7 +39,7 @@ class DetektPlugin : Plugin<Project> {
         }
         val enableMppTasks =
             !project.providers
-                .gradlePropertyAtConfigTimeCompat(DETEKT_MULTIPLATFORM_DISABLED_PROPERTY)
+                .gradleProperty(DETEKT_MULTIPLATFORM_DISABLED_PROPERTY)
                 .getOrElse("false")
                 .toBoolean()
         if (enableMppTasks) {
@@ -105,8 +104,8 @@ class DetektPlugin : Plugin<Project> {
 
     private fun setTaskDefaults(project: Project, extension: DetektExtension) {
         project.tasks.withType(Detekt::class.java).configureEach { task ->
-            task.detektClasspath.conventionCompat(project.configurations.getAt(CONFIGURATION_DETEKT))
-            task.pluginClasspath.conventionCompat(project.configurations.getAt(CONFIGURATION_DETEKT_PLUGINS))
+            task.detektClasspath.conventionCompat(project.configurations.named(CONFIGURATION_DETEKT))
+            task.pluginClasspath.conventionCompat(project.configurations.named(CONFIGURATION_DETEKT_PLUGINS))
             val reportName = if (task.name.startsWith(DETEKT_TASK_NAME) && task.name != DETEKT_TASK_NAME) {
                 task.name.removePrefix(DETEKT_TASK_NAME).decapitalize()
             } else {
@@ -131,13 +130,13 @@ class DetektPlugin : Plugin<Project> {
         }
 
         project.tasks.withType(DetektCreateBaselineTask::class.java).configureEach { task ->
-            task.detektClasspath.conventionCompat(project.configurations.getAt(CONFIGURATION_DETEKT))
-            task.pluginClasspath.conventionCompat(project.configurations.getAt(CONFIGURATION_DETEKT_PLUGINS))
+            task.detektClasspath.conventionCompat(project.configurations.named(CONFIGURATION_DETEKT))
+            task.pluginClasspath.conventionCompat(project.configurations.named(CONFIGURATION_DETEKT_PLUGINS))
         }
 
         project.tasks.withType(DetektGenerateConfigTask::class.java).configureEach { task ->
-            task.detektClasspath.conventionCompat(project.configurations.getAt(CONFIGURATION_DETEKT))
-            task.pluginClasspath.conventionCompat(project.configurations.getAt(CONFIGURATION_DETEKT_PLUGINS))
+            task.detektClasspath.conventionCompat(project.configurations.named(CONFIGURATION_DETEKT))
+            task.pluginClasspath.conventionCompat(project.configurations.named(CONFIGURATION_DETEKT_PLUGINS))
         }
     }
 

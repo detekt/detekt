@@ -7,14 +7,14 @@ import org.gradle.testkit.runner.internal.PluginUnderTestMetadataReading
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.condition.EnabledForJreRange
-import org.junit.jupiter.api.condition.JRE.JAVA_15
+import org.junit.jupiter.api.condition.JRE.JAVA_19
 import java.nio.file.Paths
 
 class GradleVersionSpec {
 
     @Test
     @DisplayName("Runs on version $GRADLE_VERSION")
-    @EnabledForJreRange(max = JAVA_15, disabledReason = "Gradle $GRADLE_VERSION unsupported on this Java version")
+    @EnabledForJreRange(max = JAVA_19, disabledReason = "Gradle $GRADLE_VERSION unsupported on this Java version")
     fun runsOnOldestSupportedGradleVersion() {
         val builder = DslTestBuilder.kotlin()
         val metadataUrl =
@@ -32,7 +32,7 @@ class GradleVersionSpec {
 
     @Test
     @DisplayName("Runs on version $GRADLE_VERSION with worker API enabled")
-    @EnabledForJreRange(max = JAVA_15, disabledReason = "Gradle $GRADLE_VERSION unsupported on this Java version")
+    @EnabledForJreRange(max = JAVA_19, disabledReason = "Gradle $GRADLE_VERSION unsupported on this Java version")
     fun runsOnOldestSupportedGradleVersionWithWorkerApi() {
         val builder = DslTestBuilder.kotlin()
         val metadataUrl =
@@ -52,6 +52,6 @@ class GradleVersionSpec {
     }
 
     companion object {
-        const val GRADLE_VERSION = "6.8.3"
+        const val GRADLE_VERSION = "7.6.3"
     }
 }

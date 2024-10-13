@@ -175,7 +175,6 @@ public final class io/gitlab/arturbosch/detekt/api/Issue$DefaultImpls {
 }
 
 public abstract interface class io/gitlab/arturbosch/detekt/api/Issue$Entity {
-	public abstract fun getKtElement ()Lorg/jetbrains/kotlin/psi/KtElement;
 	public abstract fun getLocation ()Lio/gitlab/arturbosch/detekt/api/Issue$Location;
 	public abstract fun getName ()Ljava/lang/String;
 	public abstract fun getSignature ()Ljava/lang/String;
@@ -265,7 +264,7 @@ public final class io/gitlab/arturbosch/detekt/api/ReportingExtension$DefaultImp
 	public static fun transformIssues (Lio/gitlab/arturbosch/detekt/api/ReportingExtension;Ljava/util/List;)Ljava/util/List;
 }
 
-public abstract interface annotation class io/gitlab/arturbosch/detekt/api/RequiresTypeResolution : java/lang/annotation/Annotation {
+public abstract interface annotation class io/gitlab/arturbosch/detekt/api/RequiresFullAnalysis : java/lang/annotation/Annotation {
 }
 
 public class io/gitlab/arturbosch/detekt/api/Rule : io/gitlab/arturbosch/detekt/api/DetektVisitor {

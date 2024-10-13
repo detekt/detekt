@@ -54,7 +54,7 @@ complete compile classpath from the Android Gradle Plugin ([upstream ticket](htt
 and can safely be ignored.
 
 Use the Groovy or Kotlin DSL of Gradle to apply the Detekt Gradle Plugin. You can further configure the Plugin
-using the detekt closure as described [here](#closure).
+using the detekt closure as described [here](#options-for-detekt-configuration-closure).
 
 ### <a name="gradle">Configuration</a>
 
@@ -303,7 +303,7 @@ detekt {
     
     // Specify the base path for file paths in the formatted reports. 
     // If not set, all file paths reported will be absolute file path.
-    basePath = projectDir.absolutePath
+    basePath.set(projectDir)
 }
 ```
 

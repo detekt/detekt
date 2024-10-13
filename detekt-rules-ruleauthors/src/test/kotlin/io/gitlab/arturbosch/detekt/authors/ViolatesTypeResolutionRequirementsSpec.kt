@@ -56,10 +56,10 @@ internal class ViolatesTypeResolutionRequirementsSpec(private val env: KotlinCor
     fun `should not report Rules that use bindingContext and are annotated`() {
         val code = """
             import io.gitlab.arturbosch.detekt.api.Config
-            import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+            import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
             import io.gitlab.arturbosch.detekt.api.Rule
             
-            @RequiresTypeResolution
+            @RequiresFullAnalysis
             class A(config: Config) : Rule(config, "") {
                 private fun asdf() {
                     bindingContext
@@ -74,10 +74,10 @@ internal class ViolatesTypeResolutionRequirementsSpec(private val env: KotlinCor
     fun `should report Rules that don't use bindingContext and are annotated`() {
         val code = """
             import io.gitlab.arturbosch.detekt.api.Config
-            import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+            import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
             import io.gitlab.arturbosch.detekt.api.Rule
             
-            @RequiresTypeResolution
+            @RequiresFullAnalysis
             class A(config: Config) : Rule(config, "")
         """.trimIndent()
         val findings = rule.compileAndLintWithContext(env, code)

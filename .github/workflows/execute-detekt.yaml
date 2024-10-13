@@ -20,10 +20,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+        uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4
 
       - name: Setup Java
-        uses: actions/setup-java@2dfa2011c5b2a0f1489bf9e433881c92c1631f88 # v4
+        uses: actions/setup-java@b36c23c0d998641eff861008f374ee103c25ac73 # v4
         with:
           java-version: 21
           distribution: 'temurin'
@@ -44,10 +44,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+        uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4
 
       - name: Setup Java
-        uses: actions/setup-java@2dfa2011c5b2a0f1489bf9e433881c92c1631f88 # v4
+        uses: actions/setup-java@b36c23c0d998641eff861008f374ee103c25ac73 # v4
         with:
           java-version: 21
           distribution: 'temurin'
@@ -61,7 +61,7 @@ jobs:
         run: ./gradlew detektMain detektTest detektFunctionalTest detektTestFixtures detektFunctionalTestMinSupportedGradle detektReportMergeSarif --continue
 
       - name: Upload SARIF to GitHub using the upload-sarif action
-        uses: github/codeql-action/upload-sarif@4dd16135b69a43b6c8efb853346f8437d92d3c93 # v3
+        uses: github/codeql-action/upload-sarif@c36620d31ac7c881962c3d9dd939c40ec9434f2b # v3
         if: success() || failure()
         with:
-          sarif_file: build/reports/detekt/merge.sarif
+          sarif_file: build/reports/detekt/merge.sarif.json

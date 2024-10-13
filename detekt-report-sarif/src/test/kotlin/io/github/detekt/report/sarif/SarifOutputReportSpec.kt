@@ -18,8 +18,6 @@ import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.junit.jupiter.api.Test
-import kotlin.io.path.Path
-import kotlin.io.path.absolute
 
 class SarifOutputReportSpec {
 
@@ -49,13 +47,11 @@ class SarifOutputReportSpec {
             )
         )
 
-        val basePath = Path("").absolute()
         val report = SarifOutputReport()
-            .apply { init(TestSetupContext(basePath = basePath)) }
+            .apply { init(TestSetupContext()) }
             .render(result)
 
         val expectedReport = readResourceContent("vanilla.sarif.json")
-            .replace("<BASE-URL>", basePath.toUri().toString())
 
         assertThat(report).isEqualToIgnoringWhitespace(expectedReport)
     }
@@ -70,24 +66,45 @@ class SarifOutputReportSpec {
 
         val testConfig = yamlConfig("config_with_rule_set_to_warning.yml")
 
-        val basePath = Path("").absolute()
         val report = SarifOutputReport()
-            .apply { init(TestSetupContext(config = testConfig, basePath = basePath)) }
+            .apply { init(TestSetupContext(config = testConfig)) }
             .render(result)
 
         val expectedReport = readResourceContent("rule_warning.sarif.json")
-            .replace("<BASE-PATH>", basePath.toUri().toString())
 
         assertThat(report).isEqualToIgnoringWhitespace(expectedReport)
     }
 }
 
 class TestProvider : RuleSetProvider {
-    override val ruleSetId = RuleSet.Id("test")
-    override fun instance(): RuleSet = RuleSet(ruleSetId, listOf(::TestRule))
+    override val ruleSetId = RuleSet.Id("RuleSet1")
+    override fun instance(): RuleSet = RuleSet(ruleSetId, listOf(::TestSmellA))
 }
 
-class TestRule(config: Config = Config.empty) : Rule(config, "") {
+class TestProvider2 : RuleSetProvider {
+    override val ruleSetId = RuleSet.Id("RuleSet2")
+    override fun instance(): RuleSet = RuleSet(ruleSetId, listOf(::TestSmellB, ::TestSmellC, ::TestSmellD))
+}
+
+class TestSmellA(config: Config = Config.empty) : Rule(config, "") {
+    override fun visitClassOrObject(classOrObject: KtClassOrObject) {
+        report(CodeSmell(Entity.atName(classOrObject), message = "Error"))
+    }
+}
+
+class TestSmellB(config: Config = Config.empty) : Rule(config, "") {
+    override fun visitClassOrObject(classOrObject: KtClassOrObject) {
+        report(CodeSmell(Entity.atName(classOrObject), message = "Error"))
+    }
+}
+
+class TestSmellC(config: Config = Config.empty) : Rule(config, "") {
+    override fun visitClassOrObject(classOrObject: KtClassOrObject) {
+        report(CodeSmell(Entity.atName(classOrObject), message = "Error"))
+    }
+}
+
+class TestSmellD(config: Config = Config.empty) : Rule(config, "") {
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
         report(CodeSmell(Entity.atName(classOrObject), message = "Error"))
     }

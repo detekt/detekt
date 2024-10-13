@@ -94,7 +94,7 @@ internal fun createRules(): List<Rule> {
         parent = "",
         configurations = emptyList(),
         autoCorrect = true,
-        requiresTypeResolution = true
+        requiresFullAnalysis = true
     )
     val rule4 = Rule(
         name = "DuplicateCaseInWhenExpression",

@@ -6,7 +6,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
@@ -39,7 +39,7 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
  * second.c = first.b
  * </compliant>
  */
-@RequiresTypeResolution
+@RequiresFullAnalysis
 class NestedScopeFunctions(config: Config) : Rule(
     config,
     "Over-using scope functions makes code confusing, hard to read and bug prone."

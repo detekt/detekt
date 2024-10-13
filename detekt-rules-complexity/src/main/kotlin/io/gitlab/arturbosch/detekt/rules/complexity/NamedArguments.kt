@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresTypeResolution
+import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -29,7 +29,7 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
  * sum(a = 1, b = 2, c = 3, d = 4)
  * </compliant>
  */
-@RequiresTypeResolution
+@RequiresFullAnalysis
 class NamedArguments(config: Config) : Rule(
     config,
     "Named arguments are required for function calls with many arguments."
