@@ -52,9 +52,9 @@ class UndocumentedPublicClass(config: Config) : Rule(
         super.visitClass(klass)
     }
 
-    private fun requiresDocumentation(klass: KtClass): Boolean {
-        return klass.isTopLevel() || klass.isInnerClass() || klass.isNestedClass() || klass.isInnerInterface()
-    }
+    private fun requiresDocumentation(
+        klass: KtClass,
+    ) = klass.isTopLevel() || klass.isInnerClass() || klass.isNestedClass() || klass.isInnerInterface()
 
     override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
         val isNonPublicCompanionWithoutNameOrDisabled = declaration.isCompanionWithoutName() &&
