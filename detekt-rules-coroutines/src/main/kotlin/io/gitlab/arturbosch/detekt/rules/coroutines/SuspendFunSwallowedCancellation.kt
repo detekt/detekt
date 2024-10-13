@@ -151,31 +151,33 @@ class SuspendFunSwallowedCancellation(config: Config) : Rule(
             return
         }
 
-        for (catchClause in expression.catchClauses) {
-            val parameter = catchClause.catchParameter ?: continue
-            val parameterFqName = bindingContext[BindingContext.VALUE_PARAMETER, parameter]
-                ?.type
-                ?.constructor
-                ?.declarationDescriptor
-                ?.fqNameOrNull()
+        // CancellationException should be the first case to catch - so we only want to check the first catch clause
+        val catchClause = expression.catchClauses.first()
+        val parameter = catchClause.catchParameter
+        if (parameter == null) {
+            // Not sure exactly what would cause this, but just in case?
+            report(catchClause)
+            return
+        }
 
-            if (parameterFqName !in CANCELLATION_EXCEPTION_FQ_NAMES) {
-                // Should handle CancellationException first - this is a potential problem
+        val parameterFqName = bindingContext[BindingContext.VALUE_PARAMETER, parameter]
+            ?.type
+            ?.constructor
+            ?.declarationDescriptor
+            ?.fqNameOrNull()
+
+        if (parameterFqName !in CANCELLATION_EXCEPTION_FQ_NAMES) {
+            // Should handle CancellationException first - this is a potential problem
+            report(catchClause)
+        } else {
+            // This is a CancellationException - we should make sure that it gets explicitly
+            // re-thrown upwards immediately
+            if (!catchClause.exceptionWasRethrown(parameter)) {
                 report(catchClause)
-                return
-            } else if (parameterFqName in CANCELLATION_EXCEPTION_FQ_NAMES) {
-                // This is a CancellationException - we should make sure that it gets explicitly
-                // re-thrown upwards immediately
-                if (!catchClause.exceptionWasRethrown(parameter)) {
-                    report(catchClause)
-                } else if (catchClause.doesAnythingElseBeforeRethrowing()) {
-                    // it does re-throw, but a potentially long-lasting piece of code is called first. This is still a
-                    // problem!
-                    report(catchClause)
-                }
-
-                // We've found what we're looking for, so no more work to do
-                return
+            } else if (catchClause.doesAnythingElseBeforeRethrowing()) {
+                // it does re-throw, but a potentially long-lasting bit of logic is called first. This is still a
+                // problem!
+                report(catchClause)
             }
         }
     }
@@ -268,6 +270,8 @@ class SuspendFunSwallowedCancellation(config: Config) : Rule(
             return true
         }
 
+        // Don't need to check the contents of the KtNameReferenceExpression, that's done as part of
+        // exceptionWasRethrown()
         return elements[0] !is KtNameReferenceExpression || elements[1] !is KtThrowExpression
     }
 

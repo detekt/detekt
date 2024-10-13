@@ -38,6 +38,24 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
     }
 
     @Test
+    fun `doesnt report if the try-catch block is not in a suspending context`() {
+        val code = """
+            import kotlinx.coroutines.CancellationException
+            import kotlinx.coroutines.delay
+
+            fun foo() {
+                try {
+                    delay(1000L)
+                } catch (e: IllegalStateException) {
+                    throw e
+                }
+            }
+        """.trimIndent()
+        val findings = subject.compileAndLintWithContext(env, code)
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
     fun `doesnt report if CancellationException is caught and rethrown immediately`() {
         val code = """
             import kotlinx.coroutines.CancellationException
@@ -53,6 +71,27 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
         """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `does report if CancellationException is caught anonymously`() {
+        val code = """
+            import kotlinx.coroutines.CancellationException
+            import kotlinx.coroutines.delay
+
+            suspend fun foo() {
+                try {
+                    delay(1000L)
+                } catch (_: CancellationException) {
+                    // do nothing?
+                }
+            }
+        """.trimIndent()
+        assertOneFindingAt(
+            code = code,
+            start = SourceLocation(line = 7, column = 7), // start of CancellationException block
+            end = SourceLocation(line = 9, column = 6), // end of CancellationException block
+        )
     }
 
     @Test
@@ -169,6 +208,31 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
             code = code,
             start = SourceLocation(line = 7, column = 7), // start of CancellationException block
             end = SourceLocation(line = 9, column = 6), // end of CancellationException block
+        )
+    }
+
+    @Test
+    fun `does report if CancellationException is caught after some other exception class`() {
+        val code = """
+            import kotlinx.coroutines.CancellationException
+            import kotlinx.coroutines.delay
+
+            class SomeOtherException : Exception()
+
+            suspend fun foo() {
+                try {
+                    delay(1000L)
+                } catch (e: SomeOtherException) {
+                    // handle error case
+                } catch (e: CancellationException) {
+                    throw e
+                }
+            }
+        """.trimIndent()
+        assertOneFindingAt(
+            code = code,
+            start = SourceLocation(line = 9, column = 7), // start of SomeOtherException block
+            end = SourceLocation(line = 11, column = 6), // end of SomeOtherException block
         )
     }
 
