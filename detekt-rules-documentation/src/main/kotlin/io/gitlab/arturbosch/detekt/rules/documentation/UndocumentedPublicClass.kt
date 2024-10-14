@@ -96,9 +96,9 @@ class UndocumentedPublicClass(config: Config) : Rule(
     private fun KtObjectDeclaration.isDefaultCompanionObject() =
         isCompanion() &&
             nameAsSafeName.asString() == "Companion" &&
-            // For companions _named_ `Companion`, we want to check if the name is a duplicate occurance. If so, it's
-            // not a companion without name.
-            text.lowercase().countOccurrencesOf("companion") == 1
+            // For companions _named_ `Companion`, we treat this as a "non-default" companion object. It simplifies
+            // the expected logic and narrows an edge-case.
+            nameIdentifier?.text != "Companion"
 
     private fun KtClass.isNestedClass() =
         !isInterface() && !isTopLevel() && !isInner() && searchInNestedClass
