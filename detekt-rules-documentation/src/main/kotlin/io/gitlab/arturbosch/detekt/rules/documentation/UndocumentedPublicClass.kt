@@ -13,6 +13,7 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtEnumEntry
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.psiUtil.isPublic
+import org.jetbrains.kotlin.utils.addToStdlib.countOccurrencesOf
 
 /**
  * This rule reports public classes, objects and interfaces which do not have the required documentation.
@@ -41,8 +42,8 @@ class UndocumentedPublicClass(config: Config) : Rule(
     @Configuration("if protected classes should be searched")
     private val searchInProtectedClass: Boolean by config(false)
 
-    @Configuration("if companion object without a name should be flagged")
-    private val ignoreUnnamedCompanionObject: Boolean by config(false)
+    @Configuration("whether default companion objects should be exempted")
+    private val ignoreDefaultCompanionObject: Boolean by config(false)
 
     override fun visitClass(klass: KtClass) {
         if (requiresDocumentation(klass)) {
@@ -57,8 +58,8 @@ class UndocumentedPublicClass(config: Config) : Rule(
     ) = klass.isTopLevel() || klass.isInnerClass() || klass.isNestedClass() || klass.isInnerInterface()
 
     override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
-        val isNonPublicCompanionWithoutNameOrDisabled = declaration.isCompanionWithoutName() &&
-            (!declaration.isPublic || ignoreUnnamedCompanionObject)
+        val isNonPublicCompanionWithoutNameOrDisabled = declaration.isDefaultCompanionObject() &&
+            (!declaration.isPublic || ignoreDefaultCompanionObject)
 
         if (
             isNonPublicCompanionWithoutNameOrDisabled ||
@@ -92,8 +93,12 @@ class UndocumentedPublicClass(config: Config) : Rule(
                 searchInProtectedClass
             )
 
-    private fun KtObjectDeclaration.isCompanionWithoutName() =
-        isCompanion() && nameAsSafeName.asString() == "Companion"
+    private fun KtObjectDeclaration.isDefaultCompanionObject() =
+        isCompanion() &&
+            nameAsSafeName.asString() == "Companion" &&
+            // For companions _named_ `Companion`, we want to check if the name is a duplicate occurance. If so, it's
+            // not a companion without name.
+            text.lowercase().countOccurrencesOf("companion") == 1
 
     private fun KtClass.isNestedClass() =
         !isInterface() && !isTopLevel() && !isInner() && searchInNestedClass

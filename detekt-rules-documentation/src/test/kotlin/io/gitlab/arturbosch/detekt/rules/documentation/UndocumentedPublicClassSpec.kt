@@ -2,8 +2,8 @@ package io.gitlab.arturbosch.detekt.rules.documentation
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
+import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -12,7 +12,7 @@ private const val SEARCH_IN_INNER_CLASS = "searchInInnerClass"
 private const val SEARCH_IN_INNER_OBJECT = "searchInInnerObject"
 private const val SEARCH_IN_INNER_INTERFACE = "searchInInnerInterface"
 private const val SEARCH_IN_PROTECTED_CLASS = "searchInProtectedClass"
-private const val IGNORE_UNNAMED_COMPANION_OBJECT = "ignoreUnnamedCompanionObject"
+private const val IGNORE_DEFAULT_COMPANION_OBJECT = "ignoreDefaultCompanionObject"
 
 class UndocumentedPublicClassSpec {
     val subject = UndocumentedPublicClass(Config.empty)
@@ -271,35 +271,92 @@ class UndocumentedPublicClassSpec {
     }
 
     @Test
-    fun `should not report in public companion class with content if disabled`() {
+    fun `should not report in public default companion class with content if ignored`() {
         val code = """
             /** Some doc */
-            public class PublicClass {
+            public class PublicWithContent {
                 public companion object {
+                    public val x: String = ""
+                }
+            }
+
+            /** Some doc */
+            public class DefaultPublicWithContent {
+                companion object {
+                    public val x: String = ""
+                }
+            }
+
+            /** Some doc */
+            public class PublicEmpty {
+                public companion object
+            }
+
+            /** Some doc */
+            public class DefaultPublicEmpty {
+                companion object
+            }
+
+        """.trimIndent()
+        assertThat(
+            UndocumentedPublicClass(
+                TestConfig(IGNORE_DEFAULT_COMPANION_OBJECT to "true")
+            ).compileAndLint(code)
+        ).isEmpty()
+    }
+
+    // really strange edge-case, likely from generated code. Because it's "not default," it is reported
+    @Test
+    fun `should report in public default companion object named Companion if ignored`() {
+        val code = """
+            /** Some doc */
+            public class ContentClass {            
+                public companion object Companion {
+                    public val x: String = ""
+                }
+            }
+
+            /** Some doc */
+            public class EmptyPublic {
+                public companion object Companion
+            }
+
+            /** Some doc */
+            public class EmptyDefaultPublic {
+                companion object Companion
+            }
+
+            /** Some doc */
+            public class ContentDefaultPublic {
+                companion object Companion{
                     public val x: String = ""
                 }
             }
         """.trimIndent()
         assertThat(
             UndocumentedPublicClass(
-                TestConfig(IGNORE_UNNAMED_COMPANION_OBJECT to "true")
+                TestConfig(IGNORE_DEFAULT_COMPANION_OBJECT to "true")
             ).compileAndLint(code)
-        ).isEmpty()
+        ).hasSize(4)
     }
 
     @Test
-    fun `should not report in empty public companion class with content if disabled`() {
+    fun `should report for public named companion classes if ignore disabled`() {
         val code = """
             /** Some doc */
             public class PublicClass {
-                public companion object
+                public companion object Content {
+                    public val x: String = ""
+                }
+                public companion object Braces {}
+                public companion object Empty
             }
         """.trimIndent()
         assertThat(
             UndocumentedPublicClass(
-                TestConfig(IGNORE_UNNAMED_COMPANION_OBJECT to "true")
+                TestConfig(IGNORE_DEFAULT_COMPANION_OBJECT to "true")
             ).compileAndLint(code)
-        ).isEmpty()
+        ).hasSize(3)
     }
 
     @Test
@@ -329,7 +386,7 @@ class UndocumentedPublicClassSpec {
                     Bar,
                 }
             """.trimIndent()
-            io.gitlab.arturbosch.detekt.test.assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         @Test
@@ -340,7 +397,7 @@ class UndocumentedPublicClassSpec {
                     Bar,
                 }
             """.trimIndent()
-            io.gitlab.arturbosch.detekt.test.assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
         @Test
@@ -356,7 +413,7 @@ class UndocumentedPublicClassSpec {
                     Bar,
                 }
             """.trimIndent()
-            io.gitlab.arturbosch.detekt.test.assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
 }
