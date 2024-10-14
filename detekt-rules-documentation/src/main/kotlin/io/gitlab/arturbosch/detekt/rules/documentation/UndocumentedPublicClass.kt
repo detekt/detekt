@@ -13,7 +13,6 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtEnumEntry
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.psiUtil.isPublic
-import org.jetbrains.kotlin.utils.addToStdlib.countOccurrencesOf
 
 /**
  * This rule reports public classes, objects and interfaces which do not have the required documentation.
