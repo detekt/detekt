@@ -11,7 +11,6 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
-import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 
 const val SRCROOT = "%SRCROOT%"
 
@@ -27,7 +26,6 @@ class SarifOutputReport : BuiltInOutputReport, OutputReport() {
     }
 
     override fun render(detektion: Detektion): String {
-        val version = whichDetekt()
         val sarifSchema210 = SarifSchema210(
             schema = "https://docs.oasis-open.org/sarif/sarif/v2.1.0/errata01/os/schemas/sarif-schema-2.1.0.json",
             version = Version.The210,
@@ -35,16 +33,12 @@ class SarifOutputReport : BuiltInOutputReport, OutputReport() {
                 Run(
                     tool = Tool(
                         driver = ToolComponent(
-                            downloadURI = "https://github.com/detekt/detekt/releases/download/v$version/detekt",
-                            fullName = "detekt",
                             guid = "022ca8c2-f6a2-4c95-b107-bb72c43263f3",
                             informationURI = "https://detekt.dev",
                             language = "en",
                             name = "detekt",
                             rules = toReportingDescriptors(config),
                             organization = "detekt",
-                            semanticVersion = version,
-                            version = version
                         )
                     ),
                     results = toResults(detektion)
