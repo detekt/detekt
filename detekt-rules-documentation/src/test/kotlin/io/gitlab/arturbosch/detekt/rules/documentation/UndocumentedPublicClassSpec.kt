@@ -344,11 +344,19 @@ class UndocumentedPublicClassSpec {
     fun `should report for public named companion classes if ignore disabled`() {
         val code = """
             /** Some doc */
-            public class PublicClass {
+            public class ContentClass {
                 public companion object Content {
                     public val x: String = ""
                 }
+            }
+
+            /** Some doc */
+            public class BracesClass {
                 public companion object Braces {}
+            }
+
+            /** Some doc */
+            public class EmptyClass {
                 public companion object Empty
             }
         """.trimIndent()
