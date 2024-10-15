@@ -38,7 +38,7 @@ class DetektMultiplatformSpec {
                     srcDirs = listOf("src/commonMain/kotlin", "src/commonTest/kotlin"),
                     baselineFiles = listOf("detekt-baseline.xml", "detekt-baseline-metadataMain.xml")
                 )
-            }
+            }.apply { disableIP = true }
 
         @Test
         fun `configures baseline task`() {
@@ -122,7 +122,7 @@ class DetektMultiplatformSpec {
                     ),
                     baselineFiles = listOf("detekt-baseline.xml", "detekt-baseline-main.xml")
                 )
-            }
+            }.apply { disableIP = true }
 
         @Test
         fun `configures baseline task`() {
@@ -203,7 +203,7 @@ class DetektMultiplatformSpec {
                         "detekt-baseline-release.xml"
                     )
                 )
-            }
+            }.apply { disableIP = true }
 
         @Test
         fun `configures baseline task`() {
@@ -260,7 +260,7 @@ class DetektMultiplatformSpec {
                     ),
                     baselineFiles = listOf("detekt-baseline.xml")
                 )
-            }
+            }.apply { disableIP = true }
 
         @Test
         fun `configures baseline task`() {
@@ -316,7 +316,7 @@ class DetektMultiplatformSpec {
                     ),
                     baselineFiles = listOf("detekt-baseline.xml")
                 )
-            }
+            }.apply { disableIP = true }
 
         @Test
         fun `configures baseline task`() {
