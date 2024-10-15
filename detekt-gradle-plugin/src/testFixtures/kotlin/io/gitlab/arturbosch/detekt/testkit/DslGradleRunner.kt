@@ -22,6 +22,7 @@ constructor(
     val baselineFiles: List<String> = emptyList(),
     val gradleVersionOrNone: String? = null,
     val dryRun: Boolean = false,
+    var disableIP: Boolean = false,
     val jvmArgs: String = "-Xmx2g -XX:MaxMetaspaceSize=1g",
     val gradleProperties: Map<String, String> = emptyMap(),
     val customPluginClasspath: List<File> = emptyList(),
@@ -138,6 +139,9 @@ constructor(
             add("-Dorg.gradle.jvmargs=$jvmArgs")
             if (dryRun) {
                 add("-Pdetekt-dry-run=true")
+            }
+            if (!disableIP) {
+                add("-Dorg.gradle.unsafe.isolated-projects=true")
             }
             addAll(gradleProperties.toList().map { (key, value) -> "-P$key=$value" })
             addAll(tasks)
