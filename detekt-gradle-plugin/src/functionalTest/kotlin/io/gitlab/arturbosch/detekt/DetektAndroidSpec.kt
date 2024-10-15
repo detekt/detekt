@@ -769,8 +769,8 @@ private fun createGradleRunnerAndSetupProject(
 ) = DslGradleRunner(
     projectLayout = projectLayout,
     buildFileName = "build.gradle.kts",
-    mainBuildFileContent = """
-        subprojects {
+    settingsContent = """
+        dependencyResolutionManagement {
             repositories {
                 mavenLocal()
                 mavenCentral()

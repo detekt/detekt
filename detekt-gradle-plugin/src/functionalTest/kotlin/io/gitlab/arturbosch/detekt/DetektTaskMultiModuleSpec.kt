@@ -26,15 +26,23 @@ class DetektTaskMultiModuleSpec {
 
         val mainBuildFileContent: String = """
             ${builder.gradlePlugins.reIndent()}
-            allprojects {
-                ${builder.gradleRepositories.reIndent(1)}
-            }
             subprojects {
                 ${builder.gradleSubprojectsApplyPlugins.reIndent(1)}
             }
         """.trimIndent()
 
-        val gradleRunner = DslGradleRunner(projectLayout, builder.gradleBuildName, mainBuildFileContent)
+        val settingsFile = """
+            dependencyResolutionManagement {
+                ${builder.gradleRepositories.reIndent(1)}
+            }
+        """.trimIndent()
+
+        val gradleRunner = DslGradleRunner(
+            projectLayout,
+            builder.gradleBuildName,
+            mainBuildFileContent,
+            settingsFile,
+        )
 
         gradleRunner.setupProject()
         gradleRunner.runDetektTaskAndCheckResult { result ->
@@ -69,12 +77,22 @@ class DetektTaskMultiModuleSpec {
             ${builder.gradlePlugins.reIndent()}
             
             allprojects {
-                ${builder.gradleRepositories.reIndent(1)}
                 ${builder.gradleSubprojectsApplyPlugins.reIndent(1)}
             }
         """.trimIndent()
 
-        val gradleRunner = DslGradleRunner(projectLayout, builder.gradleBuildName, mainBuildFileContent)
+        val settingsFile = """
+            dependencyResolutionManagement {
+                ${builder.gradleRepositories.reIndent(1)}
+            }
+        """.trimIndent()
+
+        val gradleRunner = DslGradleRunner(
+            projectLayout,
+            builder.gradleBuildName,
+            mainBuildFileContent,
+            settingsFile,
+        )
 
         gradleRunner.setupProject()
         gradleRunner.runDetektTaskAndCheckResult { result ->
@@ -105,7 +123,6 @@ class DetektTaskMultiModuleSpec {
             ${builder.gradlePlugins.reIndent()}
             
             allprojects {
-                ${builder.gradleRepositories.reIndent(1)}
                 ${builder.gradleSubprojectsApplyPlugins.reIndent(1)}
             
                 detekt {
@@ -114,7 +131,19 @@ class DetektTaskMultiModuleSpec {
             }
         """.trimIndent()
 
-        val gradleRunner = DslGradleRunner(projectLayout, builder.gradleBuildName, mainBuildFileContent)
+        val settingsFile = """
+            dependencyResolutionManagement {
+                ${builder.gradleRepositories.reIndent(1)}
+            }
+        """.trimIndent()
+
+        val gradleRunner = DslGradleRunner(
+            projectLayout,
+            builder.gradleBuildName,
+            mainBuildFileContent,
+            settingsFile,
+        )
+
         gradleRunner.setupProject()
         gradleRunner.runDetektTaskAndCheckResult { result ->
             assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
@@ -151,7 +180,6 @@ class DetektTaskMultiModuleSpec {
             ${builder.gradlePlugins.reIndent()}
             
             allprojects {
-                ${builder.gradleRepositories.reIndent(1)}
                 ${builder.gradleSubprojectsApplyPlugins.reIndent(1)}
             
                 detekt {
@@ -160,7 +188,18 @@ class DetektTaskMultiModuleSpec {
             }
         """.trimIndent()
 
-        val gradleRunner = DslGradleRunner(projectLayout, builder.gradleBuildName, mainBuildFileContent)
+        val settingsFile = """
+            dependencyResolutionManagement {
+                ${builder.gradleRepositories.reIndent(1)}
+            }
+        """.trimIndent()
+
+        val gradleRunner = DslGradleRunner(
+            projectLayout,
+            builder.gradleBuildName,
+            mainBuildFileContent,
+            settingsFile,
+        )
 
         gradleRunner.setupProject()
         gradleRunner.runDetektTaskAndCheckResult { result ->
