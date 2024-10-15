@@ -78,7 +78,7 @@ class MatchingDeclarationName(config: Config) : Rule(
                 val entity = Entity.atName(declaration)
                 report(
                     CodeSmell(
-                        Entity(entity.name, entity.signature, entity.location, file),
+                        Entity(entity.signature, entity.location, file),
                         "The file name '$filename' " +
                             "does not match the name of the single top-level declaration '$declarationName'."
                     )

@@ -18,7 +18,6 @@ internal fun buildFinding(element: KtElement?): Finding = CodeSmell(
 )
 
 private fun buildEmptyEntity(): Entity = Entity(
-    name = "",
     signature = "",
     location = Location(
         source = SourceLocation(1, 1),

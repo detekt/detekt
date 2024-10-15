@@ -196,7 +196,7 @@ private fun Finding.toIssue(rule: RuleInstance, severity: Severity, basePath: Pa
     }
 
 private fun Entity.toIssue(basePath: Path): Issue.Entity =
-    IssueImpl.Entity(name, signature, location.toIssue(basePath))
+    IssueImpl.Entity(signature, location.toIssue(basePath))
 
 private fun Location.toIssue(basePath: Path): Issue.Location =
     IssueImpl.Location(source, endSource, text, basePath.relativize(path))
@@ -213,7 +213,6 @@ private data class IssueImpl(
     override val suppressReasons: List<String>,
 ) : Issue {
     data class Entity(
-        override val name: String,
         override val signature: String,
         override val location: Issue.Location,
     ) : Issue.Entity
