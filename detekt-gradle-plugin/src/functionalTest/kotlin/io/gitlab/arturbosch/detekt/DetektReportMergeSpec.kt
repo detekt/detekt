@@ -52,6 +52,7 @@ class DetektReportMergeSpec {
             builder.gradleBuildName,
             buildFileContent,
             settingsFile,
+            disableIP = true,
         )
         gradleRunner.setupProject()
         gradleRunner.runTasksAndExpectFailure("detekt", "sarifReportMerge", "--continue") { result ->
@@ -122,6 +123,7 @@ class DetektReportMergeSpec {
             builder.gradleBuildName,
             buildFileContent,
             settingsFile,
+            disableIP = true,
         )
         gradleRunner.setupProject()
         gradleRunner.runTasksAndExpectFailure("detekt", "xmlReportMerge", "--continue") { result ->

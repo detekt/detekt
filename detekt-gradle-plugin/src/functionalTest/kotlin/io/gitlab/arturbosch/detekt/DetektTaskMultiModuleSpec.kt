@@ -42,6 +42,7 @@ class DetektTaskMultiModuleSpec {
             builder.gradleBuildName,
             mainBuildFileContent,
             settingsFile,
+            disableIP = true,
         )
 
         gradleRunner.setupProject()
@@ -92,6 +93,7 @@ class DetektTaskMultiModuleSpec {
             builder.gradleBuildName,
             mainBuildFileContent,
             settingsFile,
+            disableIP = true,
         )
 
         gradleRunner.setupProject()
@@ -142,6 +144,7 @@ class DetektTaskMultiModuleSpec {
             builder.gradleBuildName,
             mainBuildFileContent,
             settingsFile,
+            disableIP = true,
         )
 
         gradleRunner.setupProject()
@@ -199,6 +202,7 @@ class DetektTaskMultiModuleSpec {
             builder.gradleBuildName,
             mainBuildFileContent,
             settingsFile,
+            disableIP = true,
         )
 
         gradleRunner.setupProject()

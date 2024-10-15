@@ -68,6 +68,7 @@ class ReportMergeSpec {
             buildFileName = builder.gradleBuildName,
             mainBuildFileContent = mainBuildFileContent,
             settingsContent = settingsFile,
+            disableIP = true,
         )
 
         gradleRunner.setupProject()
@@ -183,7 +184,8 @@ class ReportMergeSpec {
             buildFileName = builder.gradleBuildName,
             mainBuildFileContent = mainBuildFileContent,
             settingsContent = settingsFile,
-            jvmArgs = jvmArgs
+            jvmArgs = jvmArgs,
+            disableIP = true,
         )
 
         gradleRunner.setupProject()
