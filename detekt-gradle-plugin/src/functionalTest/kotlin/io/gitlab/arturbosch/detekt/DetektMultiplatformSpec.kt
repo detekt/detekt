@@ -356,8 +356,8 @@ private fun setupProject(projectLayoutAction: ProjectLayout.() -> Unit): DslGrad
     DslGradleRunner(
         projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 0).apply { projectLayoutAction() },
         buildFileName = "build.gradle.kts",
-        mainBuildFileContent = """
-            subprojects {
+        settingsContent = """
+            dependencyResolutionManagement {
                 repositories {
                     mavenLocal()
                     mavenCentral()
