@@ -128,7 +128,6 @@ constructor(
         .build()
         .apply(projectScript)
 
-    @OptIn(ExperimentalStdlibApi::class)
     private fun buildGradleRunner(tasks: List<String>): GradleRunner {
         val args = buildList {
             add("--stacktrace")
