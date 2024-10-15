@@ -32,9 +32,9 @@ detekt [options]
 ### Any OS:
 
 ```sh
-curl -sSLO https://github.com/detekt/detekt/releases/download/v[detekt_version]/detekt-cli-[detekt_version].zip
-unzip detekt-cli-[detekt_version].zip
-./detekt-cli-[detekt_version]/bin/detekt-cli --help
+curl -sSLO https://github.com/detekt/detekt/releases/download/v1.23.5/detekt-cli-1.23.5.zip
+unzip detekt-cli-1.23.5.zip
+./detekt-cli-1.23.5/bin/detekt-cli --help
 ```
 
 ### NixOS
@@ -65,5 +65,5 @@ The following parameters are shown when `--help` is entered.
 <CliGeneratorOptions />
 
 ```sh
-java -jar detekt-generator-[detekt_version]-all.jar -gcrc -i /path/to/rule1, /path/to/rule2
+java -jar detekt-generator-1.23.5-all.jar -gcrc -i /path/to/rule1, /path/to/rule2
 ```

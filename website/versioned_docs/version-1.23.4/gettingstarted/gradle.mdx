@@ -64,7 +64,7 @@ Using the plugins DSL:
 
 ```groovy
 plugins {
-    id "io.gitlab.arturbosch.detekt" version "[detekt_version]"
+    id "io.gitlab.arturbosch.detekt" version "1.23.4"
 }
 
 repositories {
@@ -76,7 +76,7 @@ repositories {
 
 ```kotlin
 plugins {
-    id("io.gitlab.arturbosch.detekt") version "[detekt_version]"
+    id("io.gitlab.arturbosch.detekt") version "1.23.4"
 }
 
 repositories {
@@ -94,7 +94,7 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:[detekt_version]"
+        classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.23.4"
     }
 }
 
@@ -113,7 +113,7 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:[detekt_version]")
+        classpath("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.23.4")
     }
 }
 
@@ -147,7 +147,7 @@ buildscript {
 plugins {
     id "com.android.application"
     id "org.jetbrains.kotlin.android" version "<kotlin_version>"
-    id "io.gitlab.arturbosch.detekt" version "[detekt_version]"
+    id "io.gitlab.arturbosch.detekt" version "1.23.4"
 }
 
 repositories {
@@ -172,7 +172,7 @@ buildscript {
 plugins {
     id("com.android.application")
     kotlin("android") version "<kotlin_version>"
-    id("io.gitlab.arturbosch.detekt") version "[detekt_version]"
+    id("io.gitlab.arturbosch.detekt") version "1.23.4"
 }
 
 repositories {
@@ -188,7 +188,7 @@ repositories {
 detekt {
     // Version of detekt that will be used. When unspecified the latest detekt
     // version found will be used. Override to stay on the same version.
-    toolVersion = "[detekt_version]"
+    toolVersion = "1.23.4"
     
     // The directories where detekt looks for source files. 
     // Defaults to `files("src/main/java", "src/test/java", "src/main/kotlin", "src/test/kotlin")`.
@@ -246,7 +246,7 @@ detekt {
 detekt {
     // Version of detekt that will be used. When unspecified the latest detekt
     // version found will be used. Override to stay on the same version.
-    toolVersion = "[detekt_version]"
+    toolVersion = "1.23.4"
     
     // The directories where detekt looks for source files. 
     // Defaults to `files("src/main/java", "src/test/java", "src/main/kotlin", "src/test/kotlin")`.

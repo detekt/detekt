@@ -1,5 +1,5 @@
 ```
-Usage: java -jar detekt-generator-[detekt_version]-all.jar [options]
+Usage: java -jar detekt-generator-1.22.0-all.jar [options]
   Options:
     --generate-custom-rule-config, -gcrc
       Generate custom rules configuration files. The files will be

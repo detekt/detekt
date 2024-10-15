@@ -232,7 +232,7 @@ To enable it, we add the published dependency to `detekt` via the `detektPlugins
 
 ```kotlin
 dependencies {
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:[detekt_version]")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.21.0")
 }
 ```
 
