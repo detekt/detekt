@@ -44,4 +44,18 @@ class ThrowingExceptionsWithoutMessageOrCauseSpec {
         """.trimIndent()
         assertThat(subject.compileAndLint(code)).isEmpty()
     }
+
+    @Test
+    fun `don't raise an issue when only matches ignoring cases`() {
+        val code = """
+            fun illegalArgumentException() {
+                // no-op
+            }
+
+            fun test() {
+                illegalArgumentException()
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLint(code)).isEmpty()
+    }
 }
