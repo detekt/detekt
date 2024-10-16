@@ -7,10 +7,9 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class ThrowingExceptionsWithoutMessageOrCauseSpec {
-    val subject =
-        ThrowingExceptionsWithoutMessageOrCause(
-            TestConfig("exceptions" to listOf("IllegalArgumentException"))
-        )
+    val subject = ThrowingExceptionsWithoutMessageOrCause(
+        TestConfig("exceptions" to listOf("IllegalArgumentException"))
+    )
 
     @Nested
     inner class `several exception calls` {
@@ -36,17 +35,13 @@ class ThrowingExceptionsWithoutMessageOrCauseSpec {
         }
     }
 
-    @Nested
-    inner class `a test code which asserts an exception` {
-
-        @Test
-        fun `does not report a call to this exception`() {
-            val code = """
-                fun test() {
-                    org.assertj.core.api.Assertions.assertThatIllegalArgumentException().isThrownBy { println() }
-                }
-            """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
-        }
+    @Test
+    fun `a test code which asserts an exception does not report a call to this exception`() {
+        val code = """
+            fun test() {
+                org.assertj.core.api.Assertions.assertThatIllegalArgumentException().isThrownBy { println() }
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLint(code)).isEmpty()
     }
 }
