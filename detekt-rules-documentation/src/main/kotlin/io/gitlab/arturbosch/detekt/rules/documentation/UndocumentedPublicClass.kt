@@ -41,6 +41,9 @@ class UndocumentedPublicClass(config: Config) : Rule(
     @Configuration("if protected classes should be searched")
     private val searchInProtectedClass: Boolean by config(false)
 
+    @Configuration("whether default companion objects should be exempted")
+    private val ignoreDefaultCompanionObject: Boolean by config(false)
+
     override fun visitClass(klass: KtClass) {
         if (requiresDocumentation(klass)) {
             reportIfUndocumented(klass)
@@ -50,14 +53,15 @@ class UndocumentedPublicClass(config: Config) : Rule(
     }
 
     private fun requiresDocumentation(
-        klass: KtClass
-    ) =
-        klass.isTopLevel() || klass.isInnerClass() || klass.isNestedClass() || klass.isInnerInterface()
+        klass: KtClass,
+    ) = klass.isTopLevel() || klass.isInnerClass() || klass.isNestedClass() || klass.isInnerInterface()
 
-    @Suppress("ComplexCondition")
     override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
+        val isNonPublicCompanionWithoutNameOrDisabled = declaration.isDefaultCompanionObject() &&
+            (!declaration.isPublic || ignoreDefaultCompanionObject)
+
         if (
-            (declaration.isCompanionWithoutName() && !declaration.isPublic) ||
+            isNonPublicCompanionWithoutNameOrDisabled ||
             declaration.isLocal ||
             !searchInInnerObject
         ) {
@@ -88,8 +92,12 @@ class UndocumentedPublicClass(config: Config) : Rule(
                 searchInProtectedClass
             )
 
-    private fun KtObjectDeclaration.isCompanionWithoutName() =
-        isCompanion() && nameAsSafeName.asString() == "Companion"
+    private fun KtObjectDeclaration.isDefaultCompanionObject() =
+        isCompanion() &&
+            nameAsSafeName.asString() == "Companion" &&
+            // For companions _named_ `Companion`, we treat this as a "non-default" companion object. It simplifies
+            // the expected logic and narrows an edge-case.
+            nameIdentifier?.text != "Companion"
 
     private fun KtClass.isNestedClass() =
         !isInterface() && !isTopLevel() && !isInner() && searchInNestedClass

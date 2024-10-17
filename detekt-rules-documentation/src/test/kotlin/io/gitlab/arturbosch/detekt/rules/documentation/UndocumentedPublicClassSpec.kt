@@ -2,8 +2,8 @@ package io.gitlab.arturbosch.detekt.rules.documentation
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
+import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -12,6 +12,7 @@ private const val SEARCH_IN_INNER_CLASS = "searchInInnerClass"
 private const val SEARCH_IN_INNER_OBJECT = "searchInInnerObject"
 private const val SEARCH_IN_INNER_INTERFACE = "searchInInnerInterface"
 private const val SEARCH_IN_PROTECTED_CLASS = "searchInProtectedClass"
+private const val IGNORE_DEFAULT_COMPANION_OBJECT = "ignoreDefaultCompanionObject"
 
 class UndocumentedPublicClassSpec {
     val subject = UndocumentedPublicClass(Config.empty)
@@ -270,6 +271,103 @@ class UndocumentedPublicClassSpec {
     }
 
     @Test
+    fun `should not report in public default companion class with content if ignored`() {
+        val code = """
+            /** Some doc */
+            public class PublicWithContent {
+                public companion object {
+                    public val x: String = ""
+                }
+            }
+
+            /** Some doc */
+            public class DefaultPublicWithContent {
+                companion object {
+                    public val x: String = ""
+                }
+            }
+
+            /** Some doc */
+            public class PublicEmpty {
+                public companion object
+            }
+
+            /** Some doc */
+            public class DefaultPublicEmpty {
+                companion object
+            }
+
+        """.trimIndent()
+        assertThat(
+            UndocumentedPublicClass(
+                TestConfig(IGNORE_DEFAULT_COMPANION_OBJECT to "true")
+            ).compileAndLint(code)
+        ).isEmpty()
+    }
+
+    // really strange edge-case, likely from generated code. Because it's "not default," it is reported
+    @Test
+    fun `should report in public default companion object named Companion if ignored`() {
+        val code = """
+            /** Some doc */
+            public class ContentClass {            
+                public companion object Companion {
+                    public val x: String = ""
+                }
+            }
+
+            /** Some doc */
+            public class EmptyPublic {
+                public companion object Companion
+            }
+
+            /** Some doc */
+            public class EmptyDefaultPublic {
+                companion object Companion
+            }
+
+            /** Some doc */
+            public class ContentDefaultPublic {
+                companion object Companion{
+                    public val x: String = ""
+                }
+            }
+        """.trimIndent()
+        assertThat(
+            UndocumentedPublicClass(
+                TestConfig(IGNORE_DEFAULT_COMPANION_OBJECT to "true")
+            ).compileAndLint(code)
+        ).hasSize(4)
+    }
+
+    @Test
+    fun `should report for public named companion classes if ignore disabled`() {
+        val code = """
+            /** Some doc */
+            public class ContentClass {
+                public companion object Content {
+                    public val x: String = ""
+                }
+            }
+
+            /** Some doc */
+            public class BracesClass {
+                public companion object Braces {}
+            }
+
+            /** Some doc */
+            public class EmptyClass {
+                public companion object Empty
+            }
+        """.trimIndent()
+        assertThat(
+            UndocumentedPublicClass(
+                TestConfig(IGNORE_DEFAULT_COMPANION_OBJECT to "true")
+            ).compileAndLint(code)
+        ).hasSize(3)
+    }
+
+    @Test
     fun `should not report in private or internal companion class - #7217`() {
         val code = """
             public class PublicObject {
@@ -296,7 +394,7 @@ class UndocumentedPublicClassSpec {
                     Bar,
                 }
             """.trimIndent()
-            io.gitlab.arturbosch.detekt.test.assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         @Test
@@ -307,7 +405,7 @@ class UndocumentedPublicClassSpec {
                     Bar,
                 }
             """.trimIndent()
-            io.gitlab.arturbosch.detekt.test.assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
         @Test
@@ -323,7 +421,7 @@ class UndocumentedPublicClassSpec {
                     Bar,
                 }
             """.trimIndent()
-            io.gitlab.arturbosch.detekt.test.assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
 }
