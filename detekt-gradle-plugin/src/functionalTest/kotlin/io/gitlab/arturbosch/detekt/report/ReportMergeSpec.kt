@@ -39,10 +39,6 @@ class ReportMergeSpec {
                 id("io.gitlab.arturbosch.detekt")
             }
             
-            allprojects {
-                ${builder.gradleRepositories.reIndent(1)}
-            }
-            
             val reportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.ReportMergeTask::class) {
                 output.set(project.layout.buildDirectory.file("reports/detekt/merge.xml"))
                 outputs.cacheIf { false }
@@ -61,10 +57,18 @@ class ReportMergeSpec {
             }
         """.trimIndent()
 
+        val settingsFile = """
+            dependencyResolutionManagement {
+                ${builder.gradleRepositories.reIndent(1)}
+            }
+        """.trimIndent()
+
         val gradleRunner = DslGradleRunner(
             projectLayout = projectLayout,
             buildFileName = builder.gradleBuildName,
-            mainBuildFileContent = mainBuildFileContent
+            mainBuildFileContent = mainBuildFileContent,
+            settingsContent = settingsFile,
+            disableIP = true,
         )
 
         gradleRunner.setupProject()
@@ -146,14 +150,6 @@ class ReportMergeSpec {
                 id("io.gitlab.arturbosch.detekt")
             }
             
-            allprojects {
-                repositories {
-                    mavenLocal()
-                    mavenCentral()
-                    google()
-                }
-            }
-            
             val reportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.ReportMergeTask::class) {
                 output.set(project.layout.buildDirectory.file("reports/detekt/merge.xml"))
                 outputs.cacheIf { false }
@@ -171,13 +167,25 @@ class ReportMergeSpec {
             }
         """.trimIndent()
 
+        val settingsFile = """
+            dependencyResolutionManagement {
+                repositories {
+                    mavenLocal()
+                    mavenCentral()
+                    google()
+                }
+            }
+        """.trimIndent()
+
         val jvmArgs = "-Xmx2g -XX:MaxMetaspaceSize=1g"
 
         val gradleRunner = DslGradleRunner(
             projectLayout = projectLayout,
             buildFileName = builder.gradleBuildName,
             mainBuildFileContent = mainBuildFileContent,
-            jvmArgs = jvmArgs
+            settingsContent = settingsFile,
+            jvmArgs = jvmArgs,
+            disableIP = true,
         )
 
         gradleRunner.setupProject()

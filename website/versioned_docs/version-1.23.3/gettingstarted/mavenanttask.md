@@ -48,7 +48,7 @@ sidebar_position: 4
                 <dependency>
                     <groupId>io.gitlab.arturbosch.detekt</groupId>
                     <artifactId>detekt-cli</artifactId>
-                    <version>[detekt_version]</version>
+                    <version>1.23.3</version>
                 </dependency>
             </dependencies>
         </plugin>

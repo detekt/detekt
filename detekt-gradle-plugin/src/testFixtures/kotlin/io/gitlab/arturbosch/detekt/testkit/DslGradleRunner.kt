@@ -17,10 +17,12 @@ constructor(
     val buildFileName: String,
     @Language("gradle.kts")
     val mainBuildFileContent: String = "",
+    val settingsContent: String = "",
     val configFileOrNone: String? = null,
     val baselineFiles: List<String> = emptyList(),
     val gradleVersionOrNone: String? = null,
     val dryRun: Boolean = false,
+    var disableIP: Boolean = false,
     val jvmArgs: String = "-Xmx2g -XX:MaxMetaspaceSize=1g",
     val gradleProperties: Map<String, String> = emptyMap(),
     val customPluginClasspath: List<File> = emptyList(),
@@ -29,12 +31,6 @@ constructor(
 
     private val rootDir: File = Files.createTempDirectory("applyPlugin").toFile().apply { deleteOnExit() }
     private val randomString = UUID.randomUUID().toString()
-
-    @Language("gradle.kts")
-    private val settingsContent = """
-        rootProject.name = "rootDir-project"
-        include(${projectLayout.submodules.joinToString(",") { "\"${it.name}\"" }})
-    """.trimIndent()
 
     @Language("xml")
     private val baselineContent = """
@@ -66,7 +62,13 @@ constructor(
 
     fun setupProject() {
         writeProjectFile(buildFileName, mainBuildFileContent)
-        writeProjectFile(SETTINGS_FILENAME, settingsContent)
+        val finalSettingsContent =
+            """
+                $settingsContent
+                rootProject.name = "rootDir-project"
+                include(${projectLayout.submodules.joinToString { "\"${it.name}\"" }})
+            """.trimIndent()
+        writeProjectFile(SETTINGS_FILENAME, finalSettingsContent)
         configFileOrNone?.let { writeProjectFile(it, configFileContent) }
         baselineFiles.forEach { file -> writeProjectFile(file, baselineContent) }
         projectLayout.srcDirs.forEachIndexed { srcDirIdx, sourceDir ->
@@ -137,6 +139,9 @@ constructor(
             add("-Dorg.gradle.jvmargs=$jvmArgs")
             if (dryRun) {
                 add("-Pdetekt-dry-run=true")
+            }
+            if (!disableIP) {
+                add("-Dorg.gradle.unsafe.isolated-projects=true")
             }
             addAll(gradleProperties.toList().map { (key, value) -> "-P$key=$value" })
             addAll(tasks)

@@ -18,7 +18,7 @@ tasks.wrapper {
 }
 
 val detektReportMergeSarif by tasks.registering(ReportMergeTask::class) {
-    output = layout.buildDirectory.file("reports/detekt/merge.sarif")
+    output = layout.buildDirectory.file("reports/detekt/merge.sarif.json")
 }
 
 allprojects {

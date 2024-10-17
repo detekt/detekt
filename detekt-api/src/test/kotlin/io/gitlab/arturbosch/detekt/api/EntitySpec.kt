@@ -43,7 +43,7 @@ class EntitySpec {
 
             assertThat(Entity.atName(memberFunction).toString())
                 .isEqualTo(
-                    "Entity(name=memberFun, signature=EntitySpecFixture.kt\$C\$private fun memberFun(): Int, " +
+                    "Entity(signature=EntitySpecFixture.kt\$C\$private fun memberFun(): Int, " +
                         "location=Location(source=5:17, endSource=5:26, text=49:58, " +
                         "path=$path), " +
                         "ktElement=FUN)"
@@ -65,7 +65,7 @@ class EntitySpec {
         fun `toString gives all details`() {
             assertThat(Entity.atName(clazz).toString())
                 .isEqualTo(
-                    "Entity(name=C, signature=EntitySpecFixture.kt\$C : Any, " +
+                    "Entity(signature=EntitySpecFixture.kt\$C : Any, " +
                         "location=Location(source=3:7, endSource=3:8, text=20:21, " +
                         "path=$path), " +
                         "ktElement=CLASS)"
@@ -88,7 +88,7 @@ class EntitySpec {
         fun `toString gives all details`() {
             assertThat(Entity.from(code).toString())
                 .isEqualTo(
-                    "Entity(name=EntitySpecFixture.kt, signature=EntitySpecFixture.kt\$test.EntitySpecFixture.kt, " +
+                    "Entity(signature=EntitySpecFixture.kt\$test.EntitySpecFixture.kt, " +
                         "location=Location(source=1:1, endSource=9:1, text=0:109, " +
                         "path=$path), " +
                         "ktElement=KtFile: EntitySpecFixture.kt)"

@@ -74,7 +74,12 @@ Using the forEach method on ranges has a heavy performance cost. Prefer using si
 
 Benchmarks have shown that using forEach on a range can have a huge performance cost in comparison to
 simple for loops. Hence, in most contexts, a simple for loop should be used instead.
-See more details here: https://sites.google.com/a/athaydes.com/renato-athaydes/posts/kotlinshiddencosts-benchmarks
+See more details here:
+
+ * [Exploring Kotlin Hidden Costs - Part 1](https://bladecoder.medium.com/exploring-kotlins-hidden-costs-part-1-fbb9935d9b62)
+ * [Exploring Kotlin Hidden Costs - Part 2](https://bladecoder.medium.com/exploring-kotlins-hidden-costs-part-2-324a4a50b70)
+ * [Exploring Kotlin Hidden Costs - Part 3](https://bladecoder.medium.com/exploring-kotlins-hidden-costs-part-3-3bf6e0dbf0a4)
+ 
 To solve this CodeSmell, the forEach usage should be replaced by a for loop.
 
 **Active by default**: Yes - Since v1.0.0
@@ -107,8 +112,11 @@ for (i in 1..10) {
 
 In most cases using a spread operator causes a full copy of the array to be created before calling a method.
 This has a very high performance penalty. Benchmarks showing this performance penalty can be seen here:
-https://sites.google.com/a/athaydes.com/renato-athaydes/posts/kotlinshiddencosts-benchmarks
 
+ * [Exploring Kotlin Hidden Costs - Part 1](https://bladecoder.medium.com/exploring-kotlins-hidden-costs-part-1-fbb9935d9b62)
+ * [Exploring Kotlin Hidden Costs - Part 2](https://bladecoder.medium.com/exploring-kotlins-hidden-costs-part-2-324a4a50b70)
+ * [Exploring Kotlin Hidden Costs - Part 3](https://bladecoder.medium.com/exploring-kotlins-hidden-costs-part-3-3bf6e0dbf0a4)
+ 
 The Kotlin compiler since v1.1.60 has an optimization that skips the array copy when an array constructor
 function is used to create the arguments that are passed to the vararg parameter. When type resolution is enabled in
 detekt this case will not be flagged by the rule since it doesn't suffer the performance penalty of an array copy.

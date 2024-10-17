@@ -15,10 +15,6 @@ class DetektReportMergeSpec {
         val buildFileContent = """
             ${builder.gradlePlugins.reIndent()}
             
-            allprojects {
-                ${builder.gradleRepositories.reIndent(1)}
-            }
-            
             val sarifReportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.ReportMergeTask::class) {
                 output.set(project.layout.buildDirectory.file("reports/detekt/merge.sarif"))
             }
@@ -29,6 +25,12 @@ class DetektReportMergeSpec {
                 sarifReportMerge {
                   input.from(tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().map { it.reports.sarif.outputLocation })
                 }
+            }
+        """.trimIndent()
+
+        val settingsFile = """
+            dependencyResolutionManagement {
+                ${builder.gradleRepositories.reIndent(1)}
             }
         """.trimIndent()
 
@@ -45,7 +47,13 @@ class DetektReportMergeSpec {
             )
         }
 
-        val gradleRunner = DslGradleRunner(projectLayout, builder.gradleBuildName, buildFileContent)
+        val gradleRunner = DslGradleRunner(
+            projectLayout,
+            builder.gradleBuildName,
+            buildFileContent,
+            settingsFile,
+            disableIP = true,
+        )
         gradleRunner.setupProject()
         gradleRunner.runTasksAndExpectFailure("detekt", "sarifReportMerge", "--continue") { result ->
             assertThat(result.output).contains("FAILURE: Build completed with 2 failures.")
@@ -78,10 +86,6 @@ class DetektReportMergeSpec {
         val buildFileContent = """
             ${builder.gradlePlugins.reIndent()}
             
-            allprojects {
-                ${builder.gradleRepositories.reIndent(1)}
-            }
-            
             val xmlReportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.ReportMergeTask::class) {
                 output.set(project.layout.buildDirectory.file("reports/detekt/merge.xml"))
             }
@@ -108,7 +112,19 @@ class DetektReportMergeSpec {
             )
         }
 
-        val gradleRunner = DslGradleRunner(projectLayout, builder.gradleBuildName, buildFileContent)
+        val settingsFile = """
+            dependencyResolutionManagement {
+                ${builder.gradleRepositories.reIndent(1)}
+            }
+        """.trimIndent()
+
+        val gradleRunner = DslGradleRunner(
+            projectLayout,
+            builder.gradleBuildName,
+            buildFileContent,
+            settingsFile,
+            disableIP = true,
+        )
         gradleRunner.setupProject()
         gradleRunner.runTasksAndExpectFailure("detekt", "xmlReportMerge", "--continue") { result ->
             assertThat(result.output).contains("FAILURE: Build completed with 2 failures.")
