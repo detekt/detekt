@@ -10,11 +10,20 @@ class CompilerTest {
     fun `with a source file that contains violations`() {
         val result = compile(
             """
-                class KClass {
+                class KClass0 {
                     fun foo() {
-                        val x = 3
+                        var x = 3
                         println(x)
+                        var y = 4
+                        println(y)
                     }
+                }
+            """.trimIndent(),
+            """
+                class KClass1 {
+                   fun foo() {
+                      val x = "test"
+                   }
                 }
             """.trimIndent()
         )
@@ -22,15 +31,25 @@ class CompilerTest {
         assertThat(result)
             .passCompilation(true)
             .passDetekt(false)
-            .withViolations(2)
-            .withRuleViolation("MagicNumber", "NewLineAtEndOfFile")
+            .withViolations(7)
+            .withRuleViolationInOrder(
+                listOf(
+                    "VarCouldBeVal",
+                    "MagicNumber",
+                    "VarCouldBeVal",
+                    "MagicNumber",
+                    "NewLineAtEndOfFile",
+                    "UnusedVariable",
+                    "NewLineAtEndOfFile"
+                )
+            )
     }
 
     @Test
     fun `with a source file that contains local suppression`() {
         val result = compile(
             """
-                class KClass {
+                class KClass0 {
                     fun foo() {
                         @Suppress("MagicNumber")
                         val x = 3
@@ -52,7 +71,7 @@ class CompilerTest {
     fun `with a source file that does not contain violations`() {
         val result = compile(
             """
-                class KClass {
+                class KClass0 {
                     fun foo() {
                         println("Hello world :)")
                     }
