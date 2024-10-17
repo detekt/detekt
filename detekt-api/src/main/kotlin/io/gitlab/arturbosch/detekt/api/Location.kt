@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.api
 
-import dev.drewhamilton.poko.Poko
 import org.jetbrains.kotlin.com.intellij.openapi.util.TextRange
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.diagnostics.DiagnosticUtils.getLineAndColumnInPsiFile
@@ -72,8 +71,7 @@ class Location(
 /**
  * Stores line and column information of a location.
  */
-@Poko
-class SourceLocation(val line: Int, val column: Int) {
+data class SourceLocation(val line: Int, val column: Int) {
     init {
         require(line > 0) { "The source location line must be greater than 0" }
         require(column > 0) { "The source location column must be greater than 0" }
@@ -85,7 +83,6 @@ class SourceLocation(val line: Int, val column: Int) {
 /**
  * Stores character start and end positions of a text file.
  */
-@Poko
-class TextLocation(val start: Int, val end: Int) {
+data class TextLocation(val start: Int, val end: Int) {
     override fun toString(): String = "$start:$end"
 }

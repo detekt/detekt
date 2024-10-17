@@ -3,6 +3,8 @@
 @file:Suppress("StringLiteralDuplication")
 
 import org.jetbrains.dokka.gradle.DokkaTask
+import org.jetbrains.kotlin.buildtools.api.ExperimentalBuildToolsApi
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import java.net.URI
 
@@ -31,6 +33,11 @@ detekt {
     buildUponDefaultConfig = true
     baseline = file("config/gradle-plugin-baseline.xml")
     config.setFrom("config/gradle-plugin-detekt.yml")
+}
+
+kotlin {
+    @OptIn(ExperimentalBuildToolsApi::class, ExperimentalKotlinGradlePluginApi::class)
+    compilerVersion = "2.0.10"
 }
 
 testing {
@@ -92,6 +99,8 @@ dependencies {
         attributes {
             // Set this value to the minimum Gradle version tested in testKitGradleMinVersionRuntimeOnly source set
             attribute(GradlePluginApiVersion.GRADLE_PLUGIN_API_VERSION_ATTRIBUTE, objects.named("7.6.3"))
+            attribute(Usage.USAGE_ATTRIBUTE, objects.named(Usage.JAVA_RUNTIME))
+            attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category.LIBRARY))
         }
     }
     testKitJava17RuntimeOnly(libs.android.gradle.plugin)
@@ -213,7 +222,7 @@ with(components["java"] as AdhocComponentWithVariants) {
 kotlin {
     compilerOptions {
         @Suppress("DEPRECATION")
-        apiVersion = KotlinVersion.KOTLIN_1_4
+        apiVersion = KotlinVersion.KOTLIN_1_6
         suppressWarnings = true
         // Note: Currently there are warnings for detekt-gradle-plugin that seemingly can't be fixed
         //       until Gradle releases an update (https://github.com/gradle/gradle/issues/16345)

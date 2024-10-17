@@ -41,11 +41,6 @@ class DetektPrinter(
                 DeprecatedPrinter.print(pages)
             }
         }
-        yamlWriter.write(Path("../detekt-formatting/src/main/resources/config"), "config") {
-            yaml {
-                printRuleSetPage(pages.first { it.ruleSet.name == "formatting" })
-            }
-        }
         yamlWriter.write(Path("../detekt-rules-libraries/src/main/resources/config"), "config") {
             yaml {
                 printRuleSetPage(pages.first { it.ruleSet.name == "libraries" })

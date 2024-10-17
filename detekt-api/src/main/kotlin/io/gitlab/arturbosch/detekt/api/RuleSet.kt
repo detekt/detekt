@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.api
 
-import dev.drewhamilton.poko.Poko
 import io.gitlab.arturbosch.detekt.api.internal.validateIdentifier
 
 /**
@@ -12,8 +11,7 @@ class RuleSet(val id: Id, val rules: Map<Rule.Name, (Config) -> Rule>) {
             RuleSet(id, rules.associateBy { it(Config.empty).ruleName })
     }
 
-    @Poko
-    class Id(val value: String) {
+    data class Id(val value: String) {
         init {
             validateIdentifier(value)
         }

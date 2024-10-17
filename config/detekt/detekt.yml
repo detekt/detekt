@@ -64,44 +64,6 @@ exceptions:
   ThrowingNewInstanceOfSameException:
     active: true
 
-formatting:
-  active: true
-  android: false
-  autoCorrect: true
-  BackingPropertyNaming:
-    active: true
-  BinaryExpressionWrapping:
-    active: true
-  BlankLineBeforeDeclaration:
-    active: false
-  ConditionWrapping:
-    active: true
-  EnumEntryNameCase:
-    active: false
-  Filename:
-    active: false
-  FunctionExpressionBody:
-    active: true
-  FunctionSignature:
-    active: false
-  Kdoc:
-    active: true
-    excludes: ['**/*.kts']
-  MaximumLineLength:
-    active: false
-  MultilineExpressionWrapping:
-    active: false
-  MultilineLoop:
-    active: true
-  NoEmptyFirstLineInClassBody:
-    active: false
-  SpacingAroundSquareBrackets:
-    active: true
-  StringTemplateIndent:
-    active: false
-  ValueArgumentComment:
-    active: false
-
 naming:
   ClassNaming:
     ignoreAnnotated: ['org.junit.jupiter.api.Nested']

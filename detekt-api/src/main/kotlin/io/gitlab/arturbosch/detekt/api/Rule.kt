@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.api
 
-import dev.drewhamilton.poko.Poko
 import io.gitlab.arturbosch.detekt.api.internal.validateIdentifier
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
@@ -88,8 +87,7 @@ open class Rule(
         findings.add(finding)
     }
 
-    @Poko
-    class Name(val value: String) {
+    data class Name(val value: String) {
         init {
             validateIdentifier(value)
         }
