@@ -26,14 +26,14 @@ internal fun CliArgs.createSpec(output: Appendable, error: Appendable): Processi
         project {
             basePath = args.basePath.absolute()
             val pathFilters = PathFilters.of(
-                args.excludes?.let(::asPatterns).orEmpty(),
-                args.includes?.let(::asPatterns).orEmpty(),
+                includes = args.includes?.let(::asPatterns).orEmpty(),
+                excludes = args.excludes?.let(::asPatterns).orEmpty(),
             )
             val absoluteBasePath = basePath.absolute()
             inputPaths = args.inputPaths.walk()
                 .filter { path -> path.isKotlinFile() }
                 .map { path -> path.absolute().relativeTo(absoluteBasePath) }
-                .filter { path -> pathFilters?.isIgnored(path) != false }
+                .filter { path -> pathFilters?.isIgnored(path) != true }
                 .map { path -> absoluteBasePath.resolve(path).normalize() }
                 .toSet()
             analysisMode = args.analysisMode

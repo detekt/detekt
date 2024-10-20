@@ -122,10 +122,7 @@ internal class CliArgsSpec {
                 val spec = parseArguments(input + arrayOf("--excludes", "**/test/**", "--includes", "**/test/**"))
                     .toSpec()
 
-                assertThat(spec.projectSpec.inputPaths).contains(pathBuildGradle)
-                assertThat(spec.projectSpec.inputPaths).contains(pathCliArgs)
-                assertThat(spec.projectSpec.inputPaths).contains(pathMain)
-                assertThat(spec.projectSpec.inputPaths).contains(pathAnalyzer)
+                assertThat(spec.projectSpec.inputPaths).isEmpty()
             }
 
             @Test
@@ -139,8 +136,64 @@ internal class CliArgsSpec {
             }
 
             @Test
+            fun `includes and excludes with overlapping patterns - include specific files`() {
+                val spec = parseArguments(input + arrayOf("--includes", "**/*.kt", "--excludes", "**/test/**")).toSpec()
+
+                assertThat(spec.projectSpec.inputPaths).contains(pathCliArgs)
+                assertThat(spec.projectSpec.inputPaths).contains(pathMain)
+                assertThat(spec.projectSpec.inputPaths).doesNotContain(pathAnalyzer)
+                assertThat(spec.projectSpec.inputPaths).doesNotContain(pathCliArgsSpec)
+                assertThat(spec.projectSpec.inputPaths).doesNotContain(pathBuildGradle)
+            }
+
+            @Test
+            fun `includes and excludes with overlapping patterns - path matches both`() {
+                val spec = parseArguments(
+                    input + arrayOf(
+                        "--includes",
+                        "**/*.kt",
+                        "--excludes",
+                        "**/main/**"
+                    )
+                ).toSpec()
+
+                assertThat(spec.projectSpec.inputPaths).doesNotContain(pathCliArgs)
+                assertThat(spec.projectSpec.inputPaths).doesNotContain(pathMain)
+                assertThat(spec.projectSpec.inputPaths).contains(pathAnalyzer)
+            }
+
+            @Test
+            fun `path does not match includes but matches excludes`() {
+                val spec = parseArguments(
+                    input + arrayOf(
+                        "--includes",
+                        "**/not_matching/**",
+                        "--excludes",
+                        "**/test/**"
+                    )
+                ).toSpec()
+
+                assertThat(spec.projectSpec.inputPaths).isEmpty()
+            }
+
+            @Test
+            fun `path does not match includes or excludes`() {
+                val spec = parseArguments(
+                    input + arrayOf(
+                        "--includes",
+                        "**/not_matching/**",
+                        "--excludes",
+                        "**/also_not_matching/**"
+                    )
+                ).toSpec()
+
+                assertThat(spec.projectSpec.inputPaths).isEmpty()
+            }
+
+            @Test
             fun `doesn't take into account absolute path`() {
-                val spec = parseArguments(input + arrayOf("--excludes", "/home/**,/Users/**")).toSpec()
+                val spec =
+                    parseArguments(input + arrayOf("--excludes", "/home/**,/Users/**")).toSpec()
 
                 assertThat(spec.projectSpec.inputPaths).contains(pathBuildGradle)
                 assertThat(spec.projectSpec.inputPaths).contains(pathCliArgs)
@@ -153,10 +206,7 @@ internal class CliArgsSpec {
                 val spec = parseArguments(input + arrayOf("--excludes", "**/main/**", "--includes", "**/CliArgs.kt"))
                     .toSpec()
 
-                assertThat(spec.projectSpec.inputPaths).contains(pathBuildGradle)
-                assertThat(spec.projectSpec.inputPaths).contains(pathCliArgs)
-                assertThat(spec.projectSpec.inputPaths).doesNotContain(pathMain)
-                assertThat(spec.projectSpec.inputPaths).contains(pathAnalyzer)
+                assertThat(spec.projectSpec.inputPaths).isEmpty()
             }
 
             @Test

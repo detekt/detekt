@@ -33,7 +33,7 @@ class PathFilters internal constructor(
             if (includes.isEmpty() && excludes.isEmpty()) {
                 return null
             }
-            return PathFilters(parse(includes), parse(excludes))
+            return PathFilters(includes = parse(includes), excludes = parse(excludes))
         }
 
         private fun parse(value: List<String>): Set<PathMatcher>? =
