@@ -20,13 +20,18 @@ internal fun Severity.toResultLevel() = when (this) {
     Severity.Info -> Level.Note
 }
 
-private fun Issue.toResult(): io.github.detekt.sarif4k.Result =
-    io.github.detekt.sarif4k.Result(
-        ruleID = "detekt.${ruleInstance.ruleSetId}.${ruleInstance.id}",
+private fun Issue.toResult(): io.github.detekt.sarif4k.Result {
+    val fullRuleId = "${ruleInstance.ruleSetId}.${ruleInstance.id}"
+    return io.github.detekt.sarif4k.Result(
+        ruleID = "detekt.$fullRuleId",
         level = severity.toResultLevel(),
         locations = (listOf(location) + references.map { it.location }).map { it.toLocation() }.distinct(),
-        message = Message(text = message)
+        message = Message(text = message),
+        partialFingerprints = mapOf(
+            "fullRuleId+signatureHash/v1" to "$fullRuleId+${entity.signature}".hashCode().toString(),
+        )
     )
+}
 
 private fun Issue.Location.toLocation(): io.github.detekt.sarif4k.Location =
     io.github.detekt.sarif4k.Location(
