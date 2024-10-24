@@ -10,13 +10,10 @@ fun assertThat(result: JvmCompilationResult) = CompilationAssert(result)
 class CompilationAssert(private val result: JvmCompilationResult) :
     AbstractObjectAssert<CompilationAssert, JvmCompilationResult>(result, CompilationAssert::class.java) {
 
-    private val detektMessages = result.messages.split("\n")
-        .dropWhile { "Running detekt" !in it }
-        .dropLastWhile { "Success?" !in it }
+    private val detektMessages = result.messages.split("\n").dropWhile { !(it.contains(Regex("KClass\\d.kt"))) }
 
-    private val regex = "\\w+\\.kt:\\d+:\\d+: .* \\[(\\w+)\\]".toRegex()
-    private val detektViolations = detektMessages
-        .mapNotNull { line -> regex.find(line)?.groupValues?.get(1) }
+    private val regex = "\\w+\\.kt:\\d+:\\d+ (\\w+): .*".toRegex()
+    private val detektViolations = detektMessages.mapNotNull { line -> regex.find(line)?.groupValues?.get(1) }
 
     fun passCompilation(expectedStatus: Boolean = true) = apply {
         val expectedErrorCode = if (expectedStatus) OK else COMPILATION_ERROR
@@ -62,10 +59,10 @@ class CompilationAssert(private val result: JvmCompilationResult) :
         }
     }
 
-    fun withRuleViolation(vararg expectedRuleName: String) = apply {
-        if (expectedRuleName.any { it !in detektViolations }) {
+    fun withRuleViolationInOrder(expectedRuleNames: List<String>) {
+        if (detektViolations != expectedRuleNames) {
             failWithMessage(
-                "Expected rules ${expectedRuleName.toList()} to raise a violation but not all were found. " +
+                "Expected rules $expectedRuleNames to raise a violation but not all were found. " +
                     "Found violations are instead $detektViolations.\n" +
                     actual.messages,
             )
