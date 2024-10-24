@@ -20,9 +20,7 @@ interface PropertiesAware {
  * Allows to retrieve stored properties in a type safe way.
  */
 inline fun <reified T : Any> PropertiesAware.getOrNull(key: String): T? {
-    val value = properties[key]
-    if (value != null) {
-        return value as? T ?: error("No value of type ''${T::class} for key '$key'.")
+    return properties[key]?.let {
+        it as? T ?: error("No value of type ''${T::class} for key '$key'.")
     }
-    return null
 }
