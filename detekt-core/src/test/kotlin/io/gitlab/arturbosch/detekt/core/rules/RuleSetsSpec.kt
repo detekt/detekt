@@ -51,7 +51,7 @@ class RuleSetsSpec {
     @ValueSource(strings = ["MagicNumber", "MagicNumber/id"])
     fun `only loads the provider with the selected rule`(ruleId: String) {
         val providers = createNullLoggingSpec {
-            rules { runPolicy = RestrictToSingleRule(RuleSet.Id("style"), ruleId) }
+            rules { runPolicy = RestrictToSingleRule(RuleSet.Id("style"), Rule.Id(ruleId)) }
         }
             .withSettings { createRuleProviders() }
 
@@ -66,7 +66,7 @@ class RuleSetsSpec {
     fun `throws when rule set doesn't exist`(ruleId: String) {
         assertThatThrownBy {
             createNullLoggingSpec {
-                rules { runPolicy = RestrictToSingleRule(RuleSet.Id("foo"), ruleId) }
+                rules { runPolicy = RestrictToSingleRule(RuleSet.Id("foo"), Rule.Id(ruleId)) }
             }
                 .withSettings { createRuleProviders() }
         }

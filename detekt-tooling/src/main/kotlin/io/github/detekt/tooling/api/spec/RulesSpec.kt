@@ -62,6 +62,6 @@ interface RulesSpec {
         /**
          * Run a single rule.
          */
-        class RestrictToSingleRule(val ruleSetId: RuleSet.Id, val ruleId: String) : RunPolicy()
+        class RestrictToSingleRule(val ruleSetId: RuleSet.Id, val ruleId: Rule.Id) : RunPolicy()
     }
 }

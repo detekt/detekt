@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.core.config.validation
 
 import io.gitlab.arturbosch.detekt.api.Notification
+import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.core.config.YamlConfig
-import io.gitlab.arturbosch.detekt.core.extractRuleName
 import io.gitlab.arturbosch.detekt.core.util.SimpleNotification
 
 internal class InvalidPropertiesConfigValidator(
@@ -55,7 +55,7 @@ internal class InvalidPropertiesConfigValidator(
         baseline: Map<String, Any>
     ): List<Notification> {
         if (!baseline.contains(propertyName)) {
-            val ruleName = extractRuleName(propertyName)
+            val ruleName = runCatching { Rule.Id(propertyName).ruleName }.getOrNull()
             if (ruleName == null || !baseline.contains(ruleName.value)) {
                 return listOf(propertyDoesNotExists(propertyPath))
             }
