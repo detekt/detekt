@@ -8,7 +8,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import kotlin.io.path.extension
 import kotlin.streams.asSequence
-import kotlin.system.measureTime
+import kotlin.time.measureTime
 
 class Generator(
     private val inputPaths: List<Path>,
