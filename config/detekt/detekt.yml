@@ -218,6 +218,7 @@ style:
       - 'java.net.URL.openStream'
       - 'java.lang.Class.getResourceAsStream'
       - 'java.lang.ClassLoader.getResourceAsStream'
+      - 'kotlin.system.measureTimeMillis'
   ForbiddenVoid:
     active: true
     ignoreOverridden: true
