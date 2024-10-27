@@ -301,7 +301,6 @@ class SuspendFunSwallowedCancellation(config: Config) : Rule(
             "kotlinx.coroutines.CancellationException", // typealias
             "kotlin.coroutines.cancellation.CancellationException", // native
             "java.util.concurrent.CancellationException", // JVM
-            "kotlin.coroutines.cancellation", // kotlin stdlib
         ).map(::FqName)
 
         // Based on code from Kotlin project:
