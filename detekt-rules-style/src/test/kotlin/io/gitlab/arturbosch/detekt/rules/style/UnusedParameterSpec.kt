@@ -184,7 +184,7 @@ class UnusedParameterSpec {
             val lint = subject.compileAndLint(code)
 
             assertThat(lint).hasSize(1)
-            assertThat(lint[0].entity.signature).isEqualTo("Test.kt\$unusedWithoutAnnotation: String")
+            assertThat(lint[0].message).isEqualTo("Function parameter `unusedWithoutAnnotation` is unused.")
         }
 
         @Test

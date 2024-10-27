@@ -229,7 +229,7 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
             val findings = subject.compileAndLintWithContext(env, code)
 
             assertThat(findings).hasSize(1)
-            assertThat(findings[0].entity.signature).isEqualTo("Test.kt\$var a = 1")
+            assertThat(findings[0].message).isEqualTo("Variable 'a' could be val.")
         }
 
         @Test
@@ -243,7 +243,7 @@ class VarCouldBeValSpec(val env: KotlinCoreEnvironment) {
             val findings = subject.compileAndLintWithContext(env, code)
 
             assertThat(findings).hasSize(1)
-            assertThat(findings[0].entity.signature).isEqualTo("Test.kt\$var a = 1")
+            assertThat(findings[0].message).isEqualTo("Variable 'a' could be val.")
         }
 
         @Test
