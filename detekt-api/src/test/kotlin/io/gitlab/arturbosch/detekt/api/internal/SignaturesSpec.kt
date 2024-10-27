@@ -18,6 +18,15 @@ class SignaturesSpec {
     }
 
     @Test
+    fun `function and parent`() {
+        val result = compileContentForTest("class A { fun data(): Int = 0 }")
+            .findDescendantOfType<KtNamedFunction>()!!
+            .buildFullSignature()
+
+        assertThat(result).isEqualTo("Test.kt\$A\$fun data(): Int")
+    }
+
+    @Test
     fun `function without type reference`() {
         val result = compileContentForTest("fun data() = 0")
             .findDescendantOfType<KtNamedFunction>()!!
