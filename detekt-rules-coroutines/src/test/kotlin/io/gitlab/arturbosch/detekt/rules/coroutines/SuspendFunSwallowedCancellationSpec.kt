@@ -212,27 +212,26 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
     }
 
     @Test
-    fun `does report if CancellationException is caught after some other exception class`() {
+    fun `does report if CancellationException is caught after a supertype exception`() {
         val code = """
             import kotlinx.coroutines.CancellationException
             import kotlinx.coroutines.delay
 
-            class SomeOtherException : Exception()
-
             suspend fun foo() {
                 try {
                     delay(1000L)
-                } catch (e: SomeOtherException) {
+                } catch (e: IllegalStateException) {
                     // handle error case
                 } catch (e: CancellationException) {
+                    // never reached!
                     throw e
                 }
             }
         """.trimIndent()
         assertOneFindingAt(
             code = code,
-            start = SourceLocation(line = 9, column = 7), // start of SomeOtherException block
-            end = SourceLocation(line = 11, column = 6), // end of SomeOtherException block
+            start = SourceLocation(line = 7, column = 7), // start of IllegalStateException block
+            end = SourceLocation(line = 9, column = 6), // end of IllegalStateException block
         )
     }
 
@@ -302,6 +301,30 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
             code = code,
             start = SourceLocation(line = 6, column = 7), // start of IllegalStateException block
             end = SourceLocation(line = 9, column = 6), // end of IllegalStateException block
+        )
+    }
+
+    @Test
+    fun `Does report if catching anonymously from inside launch block`() {
+        val code = """
+            import kotlinx.coroutines.GlobalScope
+            import kotlinx.coroutines.delay
+            import kotlinx.coroutines.launch
+            
+            fun foo() {
+              GlobalScope.launch {
+                try {
+                   delay(1_000)
+                } catch (_: Exception) {
+                    // general error handling
+                }
+              }
+            }
+        """.trimIndent()
+        assertOneFindingAt(
+            code = code,
+            start = SourceLocation(line = 9, column = 7), // start of Exception block
+            end = SourceLocation(line = 11, column = 6), // end of Exception block
         )
     }
 
