@@ -70,7 +70,7 @@ class ForbiddenMethodCall(config: Config) : Rule(
                 "`String.toBigDecimalOrNull()` instead.",
             "java.math.BigDecimal.<init>(kotlin.String)" to "using `BigDecimal(String)` can result in a " +
                 "`NumberFormatException`. Use `String.toBigDecimalOrNull()`",
-            "kotlin.system.measureTimeMillis" to "It is deprecated since 1.9.",
+            "kotlin.system.measureTimeMillis" to "It is marked as obsolete. Use `kotlin.time.measureTime` instead.",
         )
     ) { list ->
         list.map { ForbiddenMethod(fromFunctionSignature(it.value), it.reason) }
