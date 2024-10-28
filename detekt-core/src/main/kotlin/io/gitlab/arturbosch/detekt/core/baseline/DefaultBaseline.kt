@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import java.nio.file.Path
 import kotlin.io.path.exists
 import kotlin.io.path.isRegularFile
+import kotlin.io.path.name
 
 internal data class DefaultBaseline(
     override val manuallySuppressedIssues: FindingsIdList,
@@ -35,4 +36,4 @@ internal const val CURRENT_ISSUES = "CurrentIssues"
 internal const val ID = "ID"
 
 internal val Issue.baselineId: String
-    get() = "${ruleInstance.id}:${this.entity.signature}"
+    get() = "${ruleInstance.id}:${this.location.path.name}:${this.entity.signature}"

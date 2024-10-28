@@ -39,7 +39,7 @@ class MaximumLineLengthSpec {
                 "Test.kt"
             ).first()
 
-            assertThat(finding.entity.signature).isEqualTo("Test.kt\$}")
+            assertThat(finding.entity.signature).isEqualTo("}")
         }
 
         @Test

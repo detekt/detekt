@@ -12,16 +12,6 @@ import org.jetbrains.kotlin.psi.psiUtil.startOffsetSkippingComments
 
 private val multipleWhitespaces = Regex("\\s{2,}")
 
-/*
- * KtCompiler wrongly used Path.filename as the name for a KtFile instead of the whole path.
- * This resulted into the question "How do we get the absolute path from a KtFile?".
- * Fixing this problem, we do not need KtFile.absolutePath anymore.
- *
- * Fixing the filename will change all baseline signatures.
- * Therefore we patch the signature here to restore the old behavior.
- *
- * Fixing the baseline will need a new major release - #2680.
- */
 internal fun PsiElement.buildFullSignature(): String {
     var fullSignature = this.searchSignature()
     val parentSignatures = this.parents
@@ -33,11 +23,6 @@ internal fun PsiElement.buildFullSignature(): String {
 
     if (parentSignatures.isNotEmpty()) {
         fullSignature = "$parentSignatures\$$fullSignature"
-    }
-
-    val filename = this.containingFile.name
-    if (!fullSignature.startsWith(filename)) {
-        fullSignature = "$filename\$$fullSignature"
     }
 
     return fullSignature

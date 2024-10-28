@@ -14,7 +14,7 @@ class SignaturesSpec {
             .findDescendantOfType<KtNamedFunction>()!!
             .buildFullSignature()
 
-        assertThat(result).isEqualTo("Test.kt\$fun data(): Int")
+        assertThat(result).isEqualTo("fun data(): Int")
     }
 
     @Test
@@ -23,7 +23,7 @@ class SignaturesSpec {
             .findDescendantOfType<KtNamedFunction>()!!
             .buildFullSignature()
 
-        assertThat(result).isEqualTo("Test.kt\$A\$fun data(): Int")
+        assertThat(result).isEqualTo("A\$fun data(): Int")
     }
 
     @Test
@@ -32,7 +32,7 @@ class SignaturesSpec {
             .findDescendantOfType<KtNamedFunction>()!!
             .buildFullSignature()
 
-        assertThat(result).isEqualTo("Test.kt\$fun data()")
+        assertThat(result).isEqualTo("fun data()")
     }
 
     @Test
@@ -41,7 +41,7 @@ class SignaturesSpec {
             .findDescendantOfType<KtNamedFunction>()!!
             .buildFullSignature()
 
-        assertThat(result).isEqualTo("Test.kt\$fun data()")
+        assertThat(result).isEqualTo("fun data()")
     }
 
     @Test
