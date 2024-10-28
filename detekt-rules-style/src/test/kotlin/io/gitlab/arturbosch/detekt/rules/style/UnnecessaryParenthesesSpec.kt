@@ -153,7 +153,9 @@ class UnnecessaryParenthesesSpec {
 
     @ParameterizedTest
     @MethodSource("cases")
-    fun `should not report call to function with two lambda parameters with one as block body`(testCase: RuleTestCase) {
+    fun `should not report call to function with two lambda parameters with one as block body`(
+        testCase: RuleTestCase
+    ) {
         val code = """
             class Clazz {
                 fun test(first: (Int) -> Unit, second: (Int) -> Unit) {
@@ -453,7 +455,9 @@ class UnnecessaryParenthesesSpec {
 
     @ParameterizedTest
     @MethodSource("cases")
-    fun `does report unnecessary parens in case of constant literal when using inc operator`(testCase: RuleTestCase) {
+    fun `does report unnecessary parens in case of constant literal when using inc operator`(
+        testCase: RuleTestCase
+    ) {
         val code = """
             class Foo(var value: Int) {
                 operator fun inc() = Foo(value + 1)
@@ -490,7 +494,9 @@ class UnnecessaryParenthesesSpec {
             }
         """.trimIndent()
 
-        assertThat(RuleTestCase(allowForUnclearPrecedence = true).rule.compileAndLint(code)).hasSize(3)
+        assertThat(RuleTestCase(allowForUnclearPrecedence = true).rule.compileAndLint(code)).hasSize(
+            3
+        )
     }
 
     @Test
@@ -511,7 +517,9 @@ class UnnecessaryParenthesesSpec {
                 val violation3 = ++((a.value))
             }
         """.trimIndent()
-        assertThat(RuleTestCase(allowForUnclearPrecedence = false).rule.compileAndLint(code)).hasSize(5)
+        assertThat(RuleTestCase(allowForUnclearPrecedence = false).rule.compileAndLint(code)).hasSize(
+            5
+        )
     }
 
     @ParameterizedTest
@@ -571,6 +579,44 @@ class UnnecessaryParenthesesSpec {
         assertThat(testCase.rule.compileAndLint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 4 else 5)
     }
 
+    @ParameterizedTest
+    @MethodSource("cases")
+    fun `float closed range without integer part`(testCase: RuleTestCase) {
+        val code = """
+            val a = .1F..(.2F)
+        """.trimIndent()
+        assertThat(testCase.rule.compileAndLint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 0 else 1)
+    }
+
+    @ParameterizedTest
+    @MethodSource("cases")
+    fun `float open range without integer part`(testCase: RuleTestCase) {
+        val code = """
+            val a = .1F..<(.2F)
+        """.trimIndent()
+        assertThat(testCase.rule.compileAndLint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 1 else 1)
+    }
+
+    @ParameterizedTest
+    @MethodSource("cases")
+    fun `double closed range without integer part`(testCase: RuleTestCase) {
+        val code = """
+            val a = .1..(.2)
+        """.trimIndent()
+
+        assertThat(testCase.rule.compileAndLint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 0 else 1)
+    }
+
+    @ParameterizedTest
+    @MethodSource("cases")
+    fun `double open range without integer part`(testCase: RuleTestCase) {
+        val code = """
+            val a = .1..<(.2)
+        """.trimIndent()
+
+        assertThat(testCase.rule.compileAndLint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 1 else 1)
+    }
+
     companion object {
         class RuleTestCase(val allowForUnclearPrecedence: Boolean) {
             val rule = UnnecessaryParentheses(
@@ -582,10 +628,16 @@ class UnnecessaryParenthesesSpec {
         fun cases(): List<Arguments> =
             listOf(
                 Arguments.of(
-                    Named.of("Without allow for unclear precedence", RuleTestCase(allowForUnclearPrecedence = false))
+                    Named.of(
+                        "Without allow for unclear precedence",
+                        RuleTestCase(allowForUnclearPrecedence = false)
+                    )
                 ),
                 Arguments.of(
-                    Named.of("With allow for unclear precedence", RuleTestCase(allowForUnclearPrecedence = true))
+                    Named.of(
+                        "With allow for unclear precedence",
+                        RuleTestCase(allowForUnclearPrecedence = true)
+                    )
                 ),
             )
     }
