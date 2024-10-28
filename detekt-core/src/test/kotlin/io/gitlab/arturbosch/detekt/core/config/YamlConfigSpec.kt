@@ -153,6 +153,17 @@ class YamlConfigSpec {
                     "Value \"[1, 2]\" set for config parameter \"key\" contains non-string values."
             )
         }
+
+        @Test
+        fun `prints meaningful message when string is used instead of list of strings`() {
+            assertThatIllegalStateException().isThrownBy {
+                config.valueOrDefaultInternal(key = "key", result = "", default = emptyList<String>())
+            }.withMessage(
+                """
+                    Value "" set for config parameter "key" is not of required type List.
+                """.trimIndent()
+            )
+        }
     }
 
     @Nested
