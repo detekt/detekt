@@ -41,14 +41,20 @@ fun Config.valueOrDefaultInternal(
     } catch (_: ClassCastException) {
         error(
             "Value \"$result\" set for config parameter \"${keySequence(key)}\" is not of" +
-                " required type ${default::class.simpleName}."
+                " required type ${default::class.simpleName?.let { getDefaultName(it) }}."
         )
     } catch (_: NumberFormatException) {
         error(
             "Value \"$result\" set for config parameter \"${keySequence(key)}\" is not of" +
-                " required type ${default::class.simpleName}."
+                " required type ${default::class.simpleName?.let { getDefaultName(it) }}."
         )
     }
+
+private fun getDefaultName(className: String): String = if (className == "EmptyList") {
+    "List"
+} else {
+    className
+}
 
 fun tryParseBasedOnDefault(result: String, defaultResult: Any): Any = when (defaultResult) {
     is Int -> result.toInt()
