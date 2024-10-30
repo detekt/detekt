@@ -8,7 +8,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import kotlin.io.path.extension
 import kotlin.streams.asSequence
-import kotlin.system.measureTimeMillis
+import kotlin.time.measureTime
 
 class Generator(
     private val inputPaths: List<Path>,
@@ -22,7 +22,7 @@ class Generator(
 
     fun execute() {
         val parser = KtCompiler()
-        val time = measureTimeMillis {
+        val time = measureTime {
             val ktFiles = inputPaths
                 .flatMap { parseAll(parser, it) }
 
@@ -36,7 +36,7 @@ class Generator(
 
     fun executeCustomRuleConfig() {
         val parser = KtCompiler()
-        val time = measureTimeMillis {
+        val time = measureTime {
             inputPaths
                 .map { parseAll(parser, it.resolve("src/main/kotlin/")) to it }
                 .forEach { (list: Collection<KtFile>, folder: Path) ->
