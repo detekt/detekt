@@ -9,7 +9,7 @@
 
 
 <link rel="search" type="application/opensearchdescription+xml" title="detekt" href="/opensearch.xml"><link rel="stylesheet" href="/assets/css/styles.f49091ff.css">
-<script src="/assets/js/runtime~main.606fc97e.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.3f93b138.js" defer="defer"></script>
 <script src="/assets/js/main.a1b4bb85.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -371,7 +371,7 @@ of unstable, experimental or deprecated methods, especially for methods imported
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-10">Configuration options:<a href="#configuration-options-10" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
-<p><code>methods</code> (default: <code>[&#x27;kotlin.io.print&#x27;, &#x27;kotlin.io.println&#x27;, &#x27;java.math.BigDecimal.&lt;init&gt;(kotlin.Double)&#x27;, &#x27;java.math.BigDecimal.&lt;init&gt;(kotlin.String)&#x27;]</code>)</p>
+<p><code>methods</code> (default: <code>[&#x27;kotlin.io.print&#x27;, &#x27;kotlin.io.println&#x27;, &#x27;java.math.BigDecimal.&lt;init&gt;(kotlin.Double)&#x27;, &#x27;java.math.BigDecimal.&lt;init&gt;(kotlin.String)&#x27;, &#x27;kotlin.system.measureTimeMillis&#x27;]</code>)</p>
 <p>List of fully qualified method signatures which are forbidden. Methods can be defined without full signature (i.e. <code>java.time.LocalDate.now</code>) which will report calls of all methods with this name or with full signature (i.e. <code>java.time.LocalDate(java.time.Clock)</code>) which would report only call with this concrete signature. If you want to forbid an extension function like <code>fun String.hello(a: Int)</code> you should add the receiver parameter as the first parameter like this: <code>hello(kotlin.String, kotlin.Int)</code>. To forbid constructor calls you need to define them with <code>&lt;init&gt;</code>, for example <code>java.util.Date.&lt;init&gt;</code>. To forbid calls involving type parameters, omit them, for example <code>fun hello(args: Array&lt;Any&gt;)</code> is referred to as simply <code>hello(kotlin.Array)</code> (also the signature for vararg parameters). To forbid methods from the companion object reference the Companion class, for example as <code>TestClass.Companion.hello()</code> (even if it is marked <code>@JvmStatic</code>).</p>
 </li>
 </ul>
