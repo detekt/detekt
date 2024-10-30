@@ -90,7 +90,10 @@ class MaxLineLength(config: Config) : Rule(
     private fun containsIgnoredRawString(file: KtFile, offset: Int, line: String): Boolean {
         if (!excludeRawStrings) return false
 
-        return findKtElementInParents(file, offset, line).lastOrNull()?.isInsideRawString() == true
+        return findKtElementInParents(file, offset, line)
+            .sortedBy { it.textOffset }
+            .lastOrNull()
+            ?.isInsideRawString() == true
     }
 
     private fun containsIgnoredPackageStatement(line: String): Boolean {

@@ -113,6 +113,38 @@ class MaxLineLengthSpec {
             val locations = findings.map { it.entity.signature.substringAfterLast('$') }
             doAssert(locations).allSatisfy { doAssert(it).isNotBlank() }
         }
+
+        @Test
+        fun `should not report raw string with spaces - #7555`() {
+            val rule = MaxLineLength(TestConfig())
+            val code = """
+                class MaxLineLength {
+                    val longSingleLineRawString1 =
+                        ${TQ}This is first yet another very very very very very very very very very very very very very very very very very very very very very very very very very very very very$TQ
+
+                    val longSingleLineRawString2 =
+                        $TQ
+                            This is second yet another very very very very very very very very very very very very very very very very very very very very very very very very very very very very$TQ
+
+                    val longSingleLineRawString3 =
+
+                        $TQ
+                            This is third yet another very very very very very very very very very very very very very very very very very very very very very very very very very very very$TQ
+
+                    val longSingleLineRawString4 =
+
+                        $TQ
+
+                            This is third yet another very very very very very very very very very very very very very very very very very very very very very very very very very very very$TQ
+
+                    val longSingleLineRawString2WithTrimIndent =
+                        $TQ
+                            This is second yet another very very very very very very very very very very very very very very very very very very very very very very very very very very very very$TQ
+                        .trimIndent()
+                }
+            """.trimIndent()
+            assertThat(rule.compileAndLint(code)).isEmpty()
+        }
     }
 
     @Nested
