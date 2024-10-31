@@ -32,16 +32,19 @@ import org.jetbrains.kotlin.types.typeUtil.isSubtypeOf
  * }
  *
  * // allowAdjacentDifferentTypeParams = false
+ * fun logMsg(msg: String, shouldLog: Boolean) {
+ *    if(shouldLog) println(msg)
+ * }
  * fun test() {
- *     log("test", true)
+ *     logMsg("test", true)
  * }
  *
  * // allowSingleParamUse = false and allowAdjacentDifferentTypeParams = false
- * fun log(msg: String) {
+ * fun logMsg(msg: String) {
  *     println(msg)
  * }
  * fun test() {
- *     log("test")
+ *     logMsg("test")
  * }
  *
  * // ignoreArgumentsMatchingNames = false
@@ -64,16 +67,19 @@ import org.jetbrains.kotlin.types.typeUtil.isSubtypeOf
  * }
  *
  * // allowAdjacentDifferentTypeParams = true
+ * fun logMsg(msg: String, shouldLog: Boolean) {
+ *    if(shouldLog) println(msg)
+ * }
  * fun test() {
- *     log("test", true)
+ *     logMsg("test", true)
  * }
  *
  * // allowSingleParamUse = true
- * fun log(msg: String) {
+ * fun logMsg(msg: String) {
  *     println(msg)
  * }
  * fun test() {
- *     log("test")
+ *     logMsg("test")
  * }
  * </compliant>
  */
