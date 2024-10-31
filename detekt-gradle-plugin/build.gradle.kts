@@ -16,6 +16,7 @@ plugins {
     id("io.gitlab.arturbosch.detekt") version "1.23.7"
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.16.3"
     id("org.jetbrains.dokka") version "1.9.20"
+    id("signing")
 }
 
 repositories {
@@ -133,6 +134,22 @@ gradlePlugin {
         sourceSets["functionalTestMinSupportedGradle"],
     )
 }
+
+val signingKey = "SIGNING_KEY".byProperty
+val signingPwd = "SIGNING_PWD".byProperty
+if (signingKey.isNullOrBlank() || signingPwd.isNullOrBlank()) {
+    logger.info("Signing disabled as the GPG key was not found")
+} else {
+    logger.info("GPG Key found - Signing enabled")
+}
+
+signing {
+    useInMemoryPgpKeys(signingKey, signingPwd)
+    sign(publishing.publications)
+    isRequired = !(signingKey.isNullOrBlank() || signingPwd.isNullOrBlank())
+}
+
+val String.byProperty: String? get() = providers.gradleProperty(this).orNull
 
 // Some functional tests reference internal functions in the Gradle plugin. This should become unnecessary as further
 // updates are made to the functional test suite.
