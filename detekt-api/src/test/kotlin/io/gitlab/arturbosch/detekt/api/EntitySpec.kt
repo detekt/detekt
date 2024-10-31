@@ -26,7 +26,7 @@ class EntitySpec {
             val memberFunction = functions.first { it.name == "memberFun" }
 
             assertThat(Entity.atName(memberFunction).signature)
-                .isEqualTo("EntitySpecFixture.kt\$C\$private fun memberFun(): Int")
+                .isEqualTo("C\$private fun memberFun(): Int")
         }
 
         @Test
@@ -34,7 +34,7 @@ class EntitySpec {
             val topLevelFunction = functions.first { it.name == "topLevelFun" }
 
             assertThat(Entity.atName(topLevelFunction).signature)
-                .isEqualTo("EntitySpecFixture.kt\$fun topLevelFun(number: Int)")
+                .isEqualTo("fun topLevelFun(number: Int)")
         }
 
         @Test
@@ -43,7 +43,7 @@ class EntitySpec {
 
             assertThat(Entity.atName(memberFunction).toString())
                 .isEqualTo(
-                    "Entity(signature=EntitySpecFixture.kt\$C\$private fun memberFun(): Int, " +
+                    "Entity(signature=C\$private fun memberFun(): Int, " +
                         "location=Location(source=5:17, endSource=5:26, text=49:58, " +
                         "path=$path), " +
                         "ktElement=FUN)"
@@ -58,14 +58,14 @@ class EntitySpec {
 
         @Test
         fun `includes full class signature`() {
-            assertThat(Entity.atName(clazz).signature).isEqualTo("EntitySpecFixture.kt\$C : Any")
+            assertThat(Entity.atName(clazz).signature).isEqualTo("C : Any")
         }
 
         @Test
         fun `toString gives all details`() {
             assertThat(Entity.atName(clazz).toString())
                 .isEqualTo(
-                    "Entity(signature=EntitySpecFixture.kt\$C : Any, " +
+                    "Entity(signature=C : Any, " +
                         "location=Location(source=3:7, endSource=3:8, text=20:21, " +
                         "path=$path), " +
                         "ktElement=CLASS)"
@@ -78,7 +78,7 @@ class EntitySpec {
 
         @Test
         fun `includes package and file name in entity signature`() {
-            val expectedResult = "EntitySpecFixture.kt\$test.EntitySpecFixture.kt"
+            val expectedResult = "test.EntitySpecFixture.kt"
 
             assertThat(Entity.from(code).signature).isEqualTo(expectedResult)
             assertThat(Entity.atPackageOrFirstDecl(code).signature).isEqualTo(expectedResult)
@@ -88,7 +88,7 @@ class EntitySpec {
         fun `toString gives all details`() {
             assertThat(Entity.from(code).toString())
                 .isEqualTo(
-                    "Entity(signature=EntitySpecFixture.kt\$test.EntitySpecFixture.kt, " +
+                    "Entity(signature=test.EntitySpecFixture.kt, " +
                         "location=Location(source=1:1, endSource=9:1, text=0:109, " +
                         "path=$path), " +
                         "ktElement=KtFile: EntitySpecFixture.kt)"

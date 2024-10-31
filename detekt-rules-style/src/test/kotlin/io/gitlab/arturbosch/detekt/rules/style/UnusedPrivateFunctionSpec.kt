@@ -316,7 +316,7 @@ class UnusedPrivateFunctionSpec(val env: KotlinCoreEnvironment) {
             val findings = subject.compileAndLintWithContext(env, code)
 
             assertThat(findings).hasSize(1)
-            assertThat(findings[0].entity.signature).isEqualTo("Test.kt\$private fun foo(): String")
+            assertThat(findings[0].message).isEqualTo("Private function `foo` is unused.")
         }
 
         @Test

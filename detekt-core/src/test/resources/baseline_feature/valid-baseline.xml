@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <SmellBaseline>
     <ManuallySuppressedIssues>
-        <ID>LongParameterList:Signature</ID>
-        <ID>LongMethod:Signature</ID>
+        <ID>LongParameterList:TestFile.kt:Signature</ID>
+        <ID>LongMethod:TestFile.kt:Signature</ID>
     </ManuallySuppressedIssues>
     <CurrentIssues>
-        <ID>FeatureEnvy/id:Signature</ID>
+        <ID>FeatureEnvy/id:TestFile.kt:Signature</ID>
     </CurrentIssues>
 </SmellBaseline>

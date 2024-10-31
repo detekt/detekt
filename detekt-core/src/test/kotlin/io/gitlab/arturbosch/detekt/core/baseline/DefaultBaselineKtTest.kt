@@ -7,6 +7,6 @@ import org.junit.jupiter.api.Test
 class DefaultBaselineKtTest {
     @Test
     fun `baselineId Extension`() {
-        assertThat(createIssue().baselineId).isEqualTo("TestSmell/id:TestEntitySignature")
+        assertThat(createIssue().baselineId).isEqualTo("TestSmell/id:TestFile.kt:TestEntitySignature")
     }
 }

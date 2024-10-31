@@ -65,7 +65,7 @@ class BaselineResultMappingSpec {
         mapping.transformIssues(issues)
 
         val changed = DefaultBaseline.load(existingBaselineFile)
-        assertThat(existing).isEqualTo(changed)
+        assertThat(changed).isEqualTo(existing)
     }
 
     @Test
@@ -79,7 +79,7 @@ class BaselineResultMappingSpec {
         mapping.transformIssues(issues)
 
         val changed = DefaultBaseline.load(existingBaselineFile)
-        assertThat(existing).isEqualTo(changed)
+        assertThat(changed).isEqualTo(existing)
     }
 
     @Test
@@ -118,7 +118,7 @@ class BaselineResultMappingSpec {
         mapping.transformIssues(issues)
 
         val changed = DefaultBaseline.load(baselineFile)
-        assertThat(existing).isNotEqualTo(changed)
+        assertThat(changed).isNotEqualTo(existing)
     }
 
     @Test
@@ -132,7 +132,7 @@ class BaselineResultMappingSpec {
 
         val filtered = mapping.filterByBaseline(baselineFile, issues)
 
-        assertThat(issues).isNotEqualTo(filtered)
+        assertThat(filtered).isNotEqualTo(issues)
     }
 
     @Test
@@ -144,7 +144,7 @@ class BaselineResultMappingSpec {
 
         val filtered = mapping.filterByBaseline(baselineFile, issues)
 
-        assertThat(issues).isEqualTo(filtered)
+        assertThat(filtered).isEqualTo(issues)
     }
 
     @Test
@@ -174,8 +174,8 @@ class BaselineResultMappingSpec {
                 <?xml version="1.0" ?>
                 <SmellBaseline>
                   <ManuallySuppressedIssues>
-                    <ID>LongParameterList:Signature</ID>
-                    <ID>LongMethod:Signature</ID>
+                    <ID>LongParameterList:TestFile.kt:Signature</ID>
+                    <ID>LongMethod:TestFile.kt:Signature</ID>
                   </ManuallySuppressedIssues>
                   <CurrentIssues/>
                 </SmellBaseline>
@@ -198,11 +198,11 @@ class BaselineResultMappingSpec {
                 <?xml version="1.0" ?>
                 <SmellBaseline>
                   <ManuallySuppressedIssues>
-                    <ID>LongParameterList:Signature</ID>
-                    <ID>LongMethod:Signature</ID>
+                    <ID>LongParameterList:TestFile.kt:Signature</ID>
+                    <ID>LongMethod:TestFile.kt:Signature</ID>
                   </ManuallySuppressedIssues>
                   <CurrentIssues>
-                    <ID>TestSmell/id:TestEntitySignature</ID>
+                    <ID>TestSmell/id:TestFile.kt:TestEntitySignature</ID>
                   </CurrentIssues>
                 </SmellBaseline>
             """.trimIndent()

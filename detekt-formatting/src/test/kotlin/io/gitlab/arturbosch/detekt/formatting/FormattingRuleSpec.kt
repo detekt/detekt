@@ -52,7 +52,7 @@ class FormattingRuleSpec {
                 """.trimIndent()
             )
 
-            assertThat(findings.first().entity.signature).isEqualTo("Test.kt\$=")
+            assertThat(findings.first().entity.signature).isEqualTo("=")
         }
 
         @Test
@@ -65,7 +65,7 @@ class FormattingRuleSpec {
                 """.trimIndent()
             )
 
-            assertThat(findings.first().entity.signature).isEqualTo("Test.kt\$=")
+            assertThat(findings.first().entity.signature).isEqualTo("=")
         }
     }
 

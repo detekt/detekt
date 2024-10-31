@@ -486,7 +486,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
             val lint = subject.compileAndLintWithContext(env, code)
 
             assertThat(lint).hasSize(1)
-            assertThat(lint[0].entity.signature).isEqualTo("Test.kt\$Test\$private val bar: String")
+            assertThat(lint[0].message).isEqualTo("Private property `bar` is unused.")
         }
 
         @Test
@@ -542,7 +542,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
             val lint = subject.compileAndLintWithContext(env, code)
 
             assertThat(lint).hasSize(1)
-            assertThat(lint[0].entity.signature).isEqualTo("Test.kt\$Test\$private val bar: String = \"bar\"")
+            assertThat(lint[0].message).isEqualTo("Private property `bar` is unused.")
         }
 
         @Test
