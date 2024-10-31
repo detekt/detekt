@@ -51,7 +51,12 @@ class UnusedPrivateClass(config: Config) : Rule(
         root.accept(classVisitor)
 
         classVisitor.getUnusedClasses().forEach {
-            report(CodeSmell(Entity.from(it), "Private class ${it.nameAsSafeName.identifier} is unused."))
+            report(
+                CodeSmell(
+                    Entity.from(it),
+                    "Private class ${it.nameAsSafeName.identifier} is unused."
+                )
+            )
         }
     }
 
@@ -163,12 +168,10 @@ class UnusedPrivateClass(config: Config) : Rule(
 
         override fun visitDoubleColonExpression(expression: KtDoubleColonExpression) {
             checkReceiverForClassUsage(expression.receiverExpression)
-            if (expression.isEmptyLHS) {
-                (expression as? KtCallableReferenceExpression)
-                    ?.callableReference
-                    ?.takeIf { looksLikeAClassName(it.getReferencedName()) }
-                    ?.let { namedClasses.add(it.getReferencedName()) }
-            }
+            (expression as? KtCallableReferenceExpression)
+                ?.callableReference
+                ?.takeIf { looksLikeAClassName(it.getReferencedName()) }
+                ?.let { namedClasses.add(it.getReferencedName()) }
             super.visitDoubleColonExpression(expression)
         }
 

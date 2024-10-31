@@ -457,5 +457,71 @@ class UnusedPrivateClassSpec {
             assertThat(findings).hasSize(1)
             assertThat(findings).hasStartSourceLocation(10, 5)
         }
+
+        @Test
+        fun `should not report when callable ref for constructor is used`() {
+            val code = """
+                private class A
+
+                private val listOfConstructors = listOf(::A)
+            """.trimIndent()
+            val findings = UnusedPrivateClass(Config.empty).compileAndLint(code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `should not report when callable ref for inner private class constructor is used with parent name`() {
+            val code = """
+                class Parent {
+                    private class Foo
+
+                    private val list = listOf(Parent::Foo)
+                }
+            """.trimIndent()
+            val findings = UnusedPrivateClass(Config.empty).compileAndLint(code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `should not report callable ref for inner private child class constructor is used with parent private class name`() {
+            val code = """
+                class Parent {
+                    private class Foo {
+                        private class Bar
+                        private val list = listOf(Foo::Bar)
+                    }
+                }
+            """.trimIndent()
+            val findings = UnusedPrivateClass(Config.empty).compileAndLint(code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `should not report when callable ref for inner private class constructor is used without parent name`() {
+            val code = """
+                class Parent {
+                    private class Foo
+
+                    private val list = listOf(::Foo)
+                }
+            """.trimIndent()
+            val findings = UnusedPrivateClass(Config.empty).compileAndLint(code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `should not report when callable ref for inner private class secondary constructor is used`() {
+            val code = """
+                class Parent {
+                    private class Foo {
+                        constructor(a: Int)
+                    }
+
+                    private val list = listOf(1).map(::Foo)
+                }
+            """.trimIndent()
+            val findings = UnusedPrivateClass(Config.empty).compileAndLint(code)
+            assertThat(findings).isEmpty()
+        }
     }
 }
