@@ -38,6 +38,24 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
     }
 
     @Test
+    fun `doesnt report if only catching a non-superclass`() {
+        val code = """
+            import kotlinx.coroutines.delay
+
+            class SomeOtherException : Exception()
+
+            suspend fun foo() {
+                try {
+                  delay(1000L)
+                } catch (e: SomeOtherException) {
+                    // handle error
+                }
+            }
+        """.trimIndent()
+        assertNoFindings(code)
+    }
+
+    @Test
     fun `doesnt report if the try-catch block is not in a suspending context`() {
         val code = """
             import kotlinx.coroutines.CancellationException
@@ -47,12 +65,11 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 try {
                     Thread.sleep(1000L)
                 } catch (e: IllegalStateException) {
-                    throw e
+                    // this would be flagged if we were in a suspending context
                 }
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
-        assertThat(findings).isEmpty()
+        assertNoFindings(code)
     }
 
     @Test
@@ -69,8 +86,30 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 }
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
-        assertThat(findings).isEmpty()
+        assertNoFindings(code)
+    }
+
+    @Test
+    fun `doesnt report if superclass is caught and rethrown immediately`() {
+        val code = """
+            import kotlinx.coroutines.delay
+
+            class SomeOtherException : Exception()
+
+            suspend fun foo() {
+                try {
+                    delay(5_000)
+                } catch (e: SomeOtherException) {
+                    // handle error
+                } catch (e: IllegalStateException) {
+                    // superclass of CancellationException, so this is fine 
+                    throw e
+                } catch (e: Exception) {
+                    // handle other error cases
+                }
+            }
+        """.trimIndent()
+        assertNoFindings(code)
     }
 
     @Test
@@ -121,7 +160,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
         val code = """
             import kotlinx.coroutines.CancellationException
             import kotlinx.coroutines.delay
-            
+
             suspend fun performLongRunningWork() = delay(1_000_000_000L)
 
             suspend fun foo() {
@@ -168,7 +207,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
         val code = """
             import kotlinx.coroutines.CancellationException
             import kotlinx.coroutines.delay
-            
+
             private fun longRunningCalculation(): Int = 1 + 2
 
             suspend fun foo() {
@@ -236,7 +275,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
     }
 
     @Test
-    fun `does report if CancellationException is caught after some other exception type`() {
+    fun `doesnt report if CancellationException is caught after an unrelated exception type`() {
         val code = """
             import kotlinx.coroutines.CancellationException
             import kotlinx.coroutines.delay
@@ -247,17 +286,13 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 try {
                     delay(1000L)
                 } catch (e: SomeOtherException) {
-                    // Some error handling logic - CancellationException should be handled first
+                    // handle error case
                 } catch (e: CancellationException) {
                     throw e
                 }
             }
         """.trimIndent()
-        assertOneFindingAt(
-            code = code,
-            start = SourceLocation(line = 9, column = 7), // start of SomeOtherException block
-            end = SourceLocation(line = 11, column = 6), // end of SomeOtherException block
-        )
+        assertNoFindings(code)
     }
 
     @Test
@@ -284,7 +319,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
     }
 
     @Test
-    fun `does report if a CancellationException super-class is caught and re-thrown`() {
+    fun `doesn't report if a CancellationException super-class is caught and re-thrown`() {
         val code = """
             import kotlinx.coroutines.delay
 
@@ -297,11 +332,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 }
             }
         """.trimIndent()
-        assertOneFindingAt(
-            code = code,
-            start = SourceLocation(line = 6, column = 7), // start of IllegalStateException block
-            end = SourceLocation(line = 9, column = 6), // end of IllegalStateException block
-        )
+        assertNoFindings(code)
     }
 
     @Test
@@ -310,7 +341,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
             import kotlinx.coroutines.GlobalScope
             import kotlinx.coroutines.delay
             import kotlinx.coroutines.launch
-            
+
             fun foo() {
               GlobalScope.launch {
                 try {
@@ -1581,5 +1612,10 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
             listOfStartLocation = listOf(start),
             listOfEndLocation = listOf(end),
         )
+    }
+
+    private fun assertNoFindings(@Language("kotlin") code: String) {
+        val findings = subject.compileAndLintWithContext(env, code)
+        assertThat(findings).isEmpty()
     }
 }

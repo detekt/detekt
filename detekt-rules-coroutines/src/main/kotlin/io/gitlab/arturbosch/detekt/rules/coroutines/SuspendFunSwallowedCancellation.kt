@@ -140,7 +140,6 @@ class SuspendFunSwallowedCancellation(config: Config) : Rule(
         }.ifTrue { report(expression) }
     }
 
-    @Suppress("ReturnCount")
     override fun visitTryExpression(expression: KtTryExpression) {
         super.visitTryExpression(expression)
 
@@ -151,28 +150,20 @@ class SuspendFunSwallowedCancellation(config: Config) : Rule(
             return
         }
 
-        // CancellationException should be the first case to catch - so we only want to check the first catch clause
-        val catchClause = expression.catchClauses.firstOrNull()
-        val parameter = catchClause?.catchParameter ?: return
+        for (catchClause in expression.catchClauses) {
+            val parameter = catchClause?.catchParameter ?: continue
+            if (parameter.isCancellationExceptionOrSuperClass()) {
+                // This could be a CancellationException - we should make sure that it gets explicitly
+                // re-thrown upwards immediately
+                if (!catchClause.exceptionWasRethrown(parameter)) {
+                    report(catchClause)
+                } else if (catchClause.doesAnythingElseBeforeRethrowing()) {
+                    // it does re-throw, but a potentially long-lasting bit of logic is called first. This is still a
+                    // problem!
+                    report(catchClause)
+                }
 
-        val parameterFqName = bindingContext[BindingContext.VALUE_PARAMETER, parameter]
-            ?.type
-            ?.constructor
-            ?.declarationDescriptor
-            ?.fqNameOrNull()
-
-        if (parameterFqName !in CANCELLATION_EXCEPTION_FQ_NAMES) {
-            // Should handle CancellationException first - this is a potential problem
-            report(catchClause)
-        } else {
-            // This is a CancellationException - we should make sure that it gets explicitly
-            // re-thrown upwards immediately
-            if (!catchClause.exceptionWasRethrown(parameter)) {
-                report(catchClause)
-            } else if (catchClause.doesAnythingElseBeforeRethrowing()) {
-                // it does re-throw, but a potentially long-lasting bit of logic is called first. This is still a
-                // problem!
-                report(catchClause)
+                return // Only need to analyse the first CancellationException superclass instance
             }
         }
     }
@@ -230,6 +221,16 @@ class SuspendFunSwallowedCancellation(config: Config) : Rule(
         }
     }
 
+    private fun KtParameter.isCancellationExceptionOrSuperClass(): Boolean {
+        val parameterFqName = bindingContext[BindingContext.VALUE_PARAMETER, this]
+            ?.type
+            ?.constructor
+            ?.declarationDescriptor
+            ?.fqNameOrNull()
+            ?.asString()
+        return parameterFqName in CANCELLATION_EXCEPTION_FQ_NAMES
+    }
+
     /**
      * Checking for a [KtThrowExpression] which throws the same element as we received from the [KtCatchClause]. This
      * returns false if another exception with the same shadowed name as [cancellationException] is thrown.
@@ -247,7 +248,7 @@ class SuspendFunSwallowedCancellation(config: Config) : Rule(
             .toList()
 
         // Returns false if thrownElements is empty, i.e. nothing was thrown
-        return thrownElements.firstOrNull() == cancellationException
+        return thrownElements.firstOrNull()?.textRange == cancellationException.textRange
     }
 
     private fun KtCatchClause.doesAnythingElseBeforeRethrowing(): Boolean {
@@ -268,9 +269,7 @@ class SuspendFunSwallowedCancellation(config: Config) : Rule(
         return elements[0] !is KtNameReferenceExpression || elements[1] !is KtThrowExpression
     }
 
-    private fun report(
-        expression: KtCallExpression,
-    ) {
+    private fun report(expression: KtCallExpression) {
         report(
             CodeSmell(
                 Entity.from((expression.calleeExpression as? PsiElement) ?: expression),
@@ -287,8 +286,8 @@ class SuspendFunSwallowedCancellation(config: Config) : Rule(
                 entity = Entity.from(catchClause),
                 message = "You should always catch and re-throw CancellationExceptions in" +
                     " a try block from a suspending function. The exception should be re-thrown" +
-                    "immediately after catching it - it's intended to completely kill any" +
-                    "running jobs in your coroutine.",
+                    " immediately after catching it - it's intended to completely kill any" +
+                    " running jobs in your coroutine.",
             )
         )
     }
@@ -296,12 +295,16 @@ class SuspendFunSwallowedCancellation(config: Config) : Rule(
     companion object {
         private val RUN_CATCHING_FQ = FqName("kotlin.runCatching")
 
-        // Pulled from https://github.com/search?q=repo%3AKotlin%2Fkotlinx.coroutines+%22actual+typealias+CancellationException%22&type=code
+        // Pulled from https://github.com/search?q=repo%3AKotlin%2Fkotlinx.coroutines+%22actual+typealias+CancellationException%22&type=code,
+        // in descending order of priority.
         private val CANCELLATION_EXCEPTION_FQ_NAMES = listOf(
-            "kotlinx.coroutines.CancellationException", // typealias
+            "kotlinx.coroutines.CancellationException", // common typealias
             "kotlin.coroutines.cancellation.CancellationException", // native
             "java.util.concurrent.CancellationException", // JVM
-        ).map(::FqName)
+            "java.lang.IllegalStateException", // JVM
+            "java.lang.RuntimeException", // JVM
+            "java.lang.Exception", // JVM
+        )
 
         // Based on code from Kotlin project:
         // https://github.com/JetBrains/kotlin/commit/87bbac9d43e15557a2ff0dc3254fd41a9d5639e1
