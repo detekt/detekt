@@ -8,9 +8,9 @@ import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class SuspendFunWithFlowReturnTypeSpec(val env: KotlinCoreEnvironment) {
+class SuspendFunWithFlowReturnTypeSpec(private val env: KotlinCoreEnvironment) {
 
-    val subject = SuspendFunWithFlowReturnType(Config.empty)
+    private val subject = SuspendFunWithFlowReturnType(Config.empty)
 
     @Test
     fun `reports when top-level suspend function has explicit Flow return type`() {
