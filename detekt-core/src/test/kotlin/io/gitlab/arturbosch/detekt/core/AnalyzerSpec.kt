@@ -93,7 +93,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
                           MaxLineLength:
                             active: true
                             maxLineLength: 120
-                          RequiresFullAnalysisMaxLineLength:
+                          RequiresFullAnalysisMaxLineLength/foo:
                             active: true
                             maxLineLength: 120
                     """.trimIndent()
@@ -104,7 +104,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
 
             assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) }).isEmpty()
             assertThat(output.toString()).isEqualTo(
-                "The rule 'RequiresFullAnalysisMaxLineLength' requires type resolution but it was run without it.\n"
+                "The rule 'RequiresFullAnalysisMaxLineLength/foo' requires type resolution but it was run without it.\n"
             )
         }
 
