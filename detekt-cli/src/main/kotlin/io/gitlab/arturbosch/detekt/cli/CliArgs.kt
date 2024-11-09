@@ -111,10 +111,11 @@ class CliArgs {
         names = ["--report", "-r"],
         converter = ReportPathConverter::class,
         description = "Generates a report for given 'report-id' and stores it on given 'path'. " +
-            "Entry should consist of: [report-id:path]. " +
+            "Entry should consist of: [report-id path]. " +
             "Available 'report-id' values: 'xml', 'html', 'md', 'sarif'. " +
             "These can also be used in combination with each other " +
-            "e.g. '-r html:reports/detekt.html -r xml:reports/detekt.xml'"
+            "e.g. '-r html reports/detekt.html -r xml reports/detekt.xml'",
+        arity = 2,
     )
     var reportPaths: List<ReportPath> = emptyList()
 
