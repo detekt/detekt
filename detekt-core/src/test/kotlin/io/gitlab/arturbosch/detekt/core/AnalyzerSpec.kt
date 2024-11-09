@@ -7,10 +7,15 @@ import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.RuleInstance
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.SourceLocation
+import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.createBindingContext
 import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
@@ -26,6 +31,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
+import kotlin.io.path.Path
 
 @KotlinCoreEnvironmentTest
 class AnalyzerSpec(val env: KotlinCoreEnvironment) {
@@ -117,7 +123,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
                 yamlConfigFromContent(
                     """
                         custom:
-                          MaxLineLength:
+                          MaxLineLength/foo:
                             active: true
                             maxLineLength: 30
                           RequiresFullAnalysisMaxLineLength:
@@ -129,7 +135,31 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             )
             val analyzer = Analyzer(settings, listOf(CustomRuleSetProvider()), emptyList())
 
-            assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) }).hasSize(1)
+            assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) })
+                .singleElement()
+                .isEqualTo(
+                    Issue(
+                        ruleInstance = RuleInstance(
+                            id = "MaxLineLength/foo",
+                            name = Rule.Name("MaxLineLength"),
+                            ruleSetId = RuleSet.Id("custom"),
+                            description = "TestDescription"
+                        ),
+                        entity = Issue.Entity(
+                            "AnAnnotation$@Target(AnnotationTarget.FILE, AnnotationTarget.FUNCTION)",
+                            Issue.Location(
+                                source = SourceLocation(8, 1),
+                                endSource = SourceLocation(8, 58),
+                                text = TextLocation(67, 124),
+                                path = Path("build/resources/test/cases/Test.kt"),
+                            ),
+                        ),
+                        references = emptyList(),
+                        message = "TestDescription",
+                        severity = Severity.Error,
+                        suppressReasons = emptyList(),
+                    )
+                )
             assertThat(output.toString()).isEqualTo(
                 "The rule 'RequiresFullAnalysisMaxLineLength' requires type resolution but it was run without it.\n"
             )
