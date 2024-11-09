@@ -50,7 +50,7 @@ jobs:
         run: yarn build
 
       - name: Deploy GitHub Pages (only on main)
-        uses: JamesIves/github-pages-deploy-action@881db5376404c5c8d621010bcbec0310b58d5e29 # v4
+        uses: JamesIves/github-pages-deploy-action@62fec3add6773ec5dbbf18d2ee4260911aa35cf4 # v4
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         with:
           branch: gh-pages
