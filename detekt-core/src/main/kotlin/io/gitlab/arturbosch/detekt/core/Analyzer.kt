@@ -15,8 +15,6 @@ import io.gitlab.arturbosch.detekt.api.RuleInstance
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.SourceLocation
-import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import io.gitlab.arturbosch.detekt.api.internal.whichJava
 import io.gitlab.arturbosch.detekt.api.internal.whichOS
@@ -183,58 +181,26 @@ private fun throwIllegalStateException(file: KtFile, error: Throwable): Nothing 
 
 private fun Finding.toIssue(rule: RuleInstance, severity: Severity, basePath: Path): Issue =
     when (this) {
-        is CodeSmell -> IssueImpl(
-            rule,
-            entity.toIssue(basePath),
-            message,
-            references.map { it.toIssue(basePath) },
-            severity,
-            suppressReasons,
+        is CodeSmell -> Issue(
+            ruleInstance = rule,
+            entity = entity.toIssue(basePath),
+            references = references.map { it.toIssue(basePath) },
+            message = message,
+            severity = severity,
+            suppressReasons = suppressReasons,
         )
 
         else -> error("wtf?")
     }
 
 private fun Entity.toIssue(basePath: Path): Issue.Entity =
-    IssueImpl.Entity(signature, location.toIssue(basePath))
+    Issue.Entity(signature, location.toIssue(basePath))
 
 private fun Location.toIssue(basePath: Path): Issue.Location =
-    IssueImpl.Location(source, endSource, text, basePath.relativize(path))
+    Issue.Location(source, endSource, text, basePath.relativize(path))
 
 private fun Rule.toRuleInstance(id: String, ruleSetId: RuleSet.Id): RuleInstance =
-    RuleInstanceImpl(id, ruleName, ruleSetId, description)
-
-private data class IssueImpl(
-    override val ruleInstance: RuleInstance,
-    override val entity: Issue.Entity,
-    override val message: String,
-    override val references: List<Issue.Entity>,
-    override val severity: Severity,
-    override val suppressReasons: List<String>,
-) : Issue {
-    data class Entity(
-        override val signature: String,
-        override val location: Issue.Location,
-    ) : Issue.Entity
-
-    data class Location(
-        override val source: SourceLocation,
-        override val endSource: SourceLocation,
-        override val text: TextLocation,
-        override val path: Path
-    ) : Issue.Location {
-        init {
-            require(!path.isAbsolute) { "Path should be always relative" }
-        }
-    }
-}
-
-private data class RuleInstanceImpl(
-    override val id: String,
-    override val name: Rule.Name,
-    override val ruleSetId: RuleSet.Id,
-    override val description: String,
-) : RuleInstance
+    RuleInstance(id, ruleName, ruleSetId, description)
 
 /**
  * Compute severity in the priority order:

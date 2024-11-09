@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
-import java.nio.file.Path
 import kotlin.io.path.Path
 
 fun createIssue(
@@ -30,9 +29,10 @@ fun createIssue(
     message: String = "TestMessage",
     severity: Severity = Severity.Error,
     suppressReasons: List<String> = emptyList(),
-): Issue = IssueImpl(
+): Issue = Issue(
     ruleInstance = ruleInstance,
     entity = entity,
+    references = emptyList(),
     message = message,
     severity = severity,
     suppressReasons = suppressReasons,
@@ -44,9 +44,10 @@ fun createIssue(
     message: String = "TestMessage",
     severity: Severity = Severity.Error,
     suppressReasons: List<String> = emptyList(),
-): Issue = IssueImpl(
+): Issue = Issue(
     ruleInstance = ruleInstance,
     entity = createEntity(location = location),
+    references = emptyList(),
     message = message,
     severity = severity,
     suppressReasons = suppressReasons,
@@ -58,7 +59,7 @@ fun createRuleInstance(
     description: String = "Description ${id.split("/", limit = 2).first()}",
 ): RuleInstance {
     val split = id.split("/", limit = 2)
-    return RuleInstanceImpl(
+    return RuleInstance(
         id = id,
         name = Rule.Name(split.first()),
         ruleSetId = RuleSet.Id(ruleSetId),
@@ -69,7 +70,7 @@ fun createRuleInstance(
 fun createEntity(
     signature: String = "TestEntitySignature",
     location: Issue.Location = createLocation(),
-): Issue.Entity = IssueImpl.Entity(
+): Issue.Entity = Issue.Entity(
     signature = signature,
     location = location,
 )
@@ -81,42 +82,10 @@ fun createLocation(
     text: IntRange = 0..0,
 ): Issue.Location {
     require(!path.startsWith("/")) { "The path shouldn't start with '/'" }
-    return IssueImpl.Location(
+    return Issue.Location(
         source = SourceLocation(position.first, position.second),
         endSource = SourceLocation(endPosition.first, endPosition.second),
         text = TextLocation(text.first, text.last),
         path = Path(path),
     )
 }
-
-private data class IssueImpl(
-    override val ruleInstance: RuleInstance,
-    override val entity: Issue.Entity,
-    override val message: String,
-    override val severity: Severity = Severity.Error,
-    override val references: List<Issue.Entity> = emptyList(),
-    override val suppressReasons: List<String>
-) : Issue {
-    data class Entity(
-        override val signature: String,
-        override val location: Issue.Location,
-    ) : Issue.Entity
-
-    data class Location(
-        override val source: SourceLocation,
-        override val endSource: SourceLocation,
-        override val text: TextLocation,
-        override val path: Path
-    ) : Issue.Location {
-        init {
-            require(!path.isAbsolute) { "Path should be always relative" }
-        }
-    }
-}
-
-private data class RuleInstanceImpl(
-    override val id: String,
-    override val name: Rule.Name,
-    override val ruleSetId: RuleSet.Id,
-    override val description: String,
-) : RuleInstance
