@@ -303,12 +303,12 @@ public final class io/gitlab/arturbosch/detekt/api/Rule$Name {
 }
 
 public final class io/gitlab/arturbosch/detekt/api/RuleInstance {
-	public fun <init> (Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/Rule$Name;Lio/gitlab/arturbosch/detekt/api/RuleSet$Id;Ljava/lang/String;)V
+	public fun <init> (Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/RuleSet$Id;Ljava/lang/String;Ljava/lang/String;)V
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getDescription ()Ljava/lang/String;
 	public final fun getId ()Ljava/lang/String;
-	public final fun getName ()Lio/gitlab/arturbosch/detekt/api/Rule$Name;
 	public final fun getRuleSetId ()Lio/gitlab/arturbosch/detekt/api/RuleSet$Id;
+	public final fun getUrl ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }

@@ -44,8 +44,6 @@ private const val PLACEHOLDER_COMPLEXITY_REPORT = "@@@complexity@@@"
 private const val PLACEHOLDER_VERSION = "@@@version@@@"
 private const val PLACEHOLDER_DATE = "@@@date@@@"
 
-private const val DETEKT_WEBSITE_BASE_URL = "https://detekt.dev"
-
 /**
  * Contains rule violations and metrics formatted in a human friendly way, so that it can be inspected in a web browser.
  * See: https://detekt.dev/configurations.html#output-reports
@@ -123,8 +121,6 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
 
     private fun FlowContent.renderRule(ruleInstance: RuleInstance, issues: List<Issue>) {
         val ruleId = ruleInstance.id
-        val ruleName = ruleInstance.name.value
-        val ruleSetId = ruleInstance.ruleSetId.value
         details {
             id = ruleId
             open = true
@@ -134,8 +130,8 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
                 span("description") { text(ruleInstance.description) }
             }
 
-            a("$DETEKT_WEBSITE_BASE_URL/docs/rules/${ruleSetId.lowercase()}#${ruleName.lowercase()}") {
-                +"Documentation"
+            if (ruleInstance.url != null) {
+                a(ruleInstance.url) { +"Documentation" }
             }
 
             ul {
@@ -171,7 +167,7 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
         val absoluteFile = basePath.resolve(issue.location.path).toFile()
         if (absoluteFile.exists()) {
             absoluteFile.useLines {
-                snippetCode(issue.ruleInstance.name, it, issue.location.source, issue.location.text.length())
+                snippetCode(issue.ruleInstance.id, it, issue.location.source, issue.location.text.length())
             }
         }
     }
