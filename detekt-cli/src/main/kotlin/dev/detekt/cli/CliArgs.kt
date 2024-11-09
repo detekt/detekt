@@ -20,8 +20,9 @@ class CliArgs {
         converter = PathConverter::class,
         splitter = PathSplitter::class,
         validateValueWith = [PathValidator::class],
-        description = "Input paths to analyze. Multiple paths are separated by comma. If not specified the " +
-            "current working directory is used."
+        description = "Input paths to analyze. Multiple paths are separated by '$SEPARATOR'. If not specified the " +
+            "current working directory is used.",
+        variableArity = true,
     )
     var inputPaths: List<Path> = listOf(Path(System.getProperty("user.dir")))
 
@@ -52,7 +53,8 @@ class CliArgs {
         splitter = PathSplitter::class,
         validateValueWith = [PathValidator::class],
         description = "Path to the config file (path/to/config.yml). " +
-            "Multiple configuration files can be specified with ',' or ';' as separator."
+            "Multiple configuration files can be specified with '$SEPARATOR' as separator.",
+        variableArity = true,
     )
     var config: List<Path> = emptyList()
 
@@ -60,7 +62,9 @@ class CliArgs {
         names = ["--config-resource", "-cr"],
         converter = ClasspathResourceConverter::class,
         splitter = PathSplitter::class,
-        description = "Path to the config resource on detekt's classpath (path/to/config.yml)."
+        description = "Path to the config resource on detekt's classpath (path/to/config.yml). " +
+            "Multiple config resource files can be specified with '$SEPARATOR' as separator.",
+        variableArity = true,
     )
     var configResource: List<URL> = emptyList()
 
@@ -76,7 +80,8 @@ class CliArgs {
         converter = PathConverter::class,
         splitter = PathSplitter::class,
         validateValueWith = [PathValidator::class],
-        description = "Extra paths to plugin jars separated by ',' or ';'."
+        description = "Extra paths to plugin jars separated by '$SEPARATOR'.",
+        variableArity = true,
     )
     var plugins: List<Path> = emptyList()
 
@@ -244,4 +249,8 @@ class CliArgs {
                 -> FailOnSeverity(minSeverity.toSeverity())
             }
         }
+
+    internal companion object {
+        internal const val SEPARATOR = ";"
+    }
 }
