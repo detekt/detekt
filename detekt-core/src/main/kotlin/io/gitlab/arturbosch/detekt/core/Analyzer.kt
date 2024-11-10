@@ -107,14 +107,15 @@ internal class Analyzer(
                                 ruleProvider = ruleProvider,
                                 config = ruleSetConfig.subConfig(ruleId),
                                 ruleId = ruleId,
+                                ruleSetId = ruleSet.id,
                             )
                         }
                     }
-                    .filter { (_, config, _) -> config.isActiveOrDefault(false) }
-                    .filter { (_, config, _) -> config.shouldAnalyzeFile(file, settings.spec.projectSpec.basePath) }
-                    .map { (ruleProvider, config, ruleId) ->
+                    .filter { (_, config, _, _) -> config.isActiveOrDefault(false) }
+                    .filter { (_, config, _, _) -> config.shouldAnalyzeFile(file, settings.spec.projectSpec.basePath) }
+                    .map { (ruleProvider, config, ruleId, ruleSetId) ->
                         val rule = ruleProvider(config)
-                        rule.toRuleInstance(ruleId, ruleSet.id) to rule
+                        rule.toRuleInstance(ruleId, ruleSetId) to rule
                     }
             }
             .filterNot { (ruleInstance, rule) ->
@@ -150,13 +151,14 @@ internal class Analyzer(
                                 ruleProvider = ruleProvider,
                                 config = ruleSetConfig.subConfig(ruleId),
                                 ruleId = ruleId,
+                                ruleSetId = ruleSet.id,
                             )
                         }
                     }
-                    .filter { (_, config, _) -> config.isActiveOrDefault(false) }
-                    .map { (ruleProvider, config, ruleId) ->
+                    .filter { (_, config, _, _) -> config.isActiveOrDefault(false) }
+                    .map { (ruleProvider, config, ruleId, ruleSetId) ->
                         val rule = ruleProvider(config)
-                        rule.toRuleInstance(ruleId, ruleSet.id) to rule
+                        rule.toRuleInstance(ruleId, ruleSetId) to rule
                     }
             }
             .filter { (_, rule) -> rule::class.hasAnnotation<RequiresFullAnalysis>() }
@@ -169,7 +171,12 @@ internal class Analyzer(
 internal fun extractRuleName(key: String): Rule.Name? =
     runCatching { Rule.Name(key.split("/", limit = 2).first()) }.getOrNull()
 
-private data class RuleDescriptor(val ruleProvider: (Config) -> Rule, val config: Config, val ruleId: String)
+private data class RuleDescriptor(
+    val ruleProvider: (Config) -> Rule,
+    val config: Config,
+    val ruleId: String,
+    val ruleSetId: RuleSet.Id,
+)
 
 private fun List<Finding>.filterSuppressedFindings(rule: Rule, bindingContext: BindingContext): List<Finding> {
     val suppressors = buildSuppressors(rule, bindingContext)
