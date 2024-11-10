@@ -384,6 +384,66 @@ class UnnecessaryRunSpec(val env: KotlinCoreEnvironment) {
                 )
             ).isEmpty()
         }
+
+        @Test
+        fun `does not report when result is used in fun param`() {
+            assertThat(
+                subject.compileAndLintWithContext(
+                    env,
+                    """
+                        class C {
+                            var prop = 0
+                        }
+
+                        fun f(unitOrNull: Unit?) = "result is ${'$'}unitOrNull"
+                        
+                        fun foo() {
+                            val c = C()
+                            f(c.run { prop = 1 })
+                        }
+                    """.trimIndent()
+                )
+            ).isEmpty()
+        }
+
+        @Test
+        fun `does not report when result is used in arithmetic expression`() {
+            assertThat(
+                subject.compileAndLintWithContext(
+                    env,
+                    """
+                        class C {
+                            var prop = 0
+                        }
+
+                        fun foo() {
+                            val c = C()
+                            val d = ""
+                            val a = d + c.run { prop = 1 }
+                        }
+                    """.trimIndent()
+                )
+            ).isEmpty()
+        }
+
+        @Test
+        fun `does not report when result is used in string interpolation`() {
+            assertThat(
+                subject.compileAndLintWithContext(
+                    env,
+                    """
+                        class C {
+                            var prop = 0
+                        }
+
+                        fun foo() {
+                            val c = C()
+                            val a = "${'$'}{c.run { prop = 1 }}"
+                        }
+                    """.trimIndent()
+                )
+            ).isEmpty()
+        }
     }
 
     @Test
