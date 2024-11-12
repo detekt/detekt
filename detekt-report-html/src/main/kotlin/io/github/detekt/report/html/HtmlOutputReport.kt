@@ -115,7 +115,7 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
         issues
             .groupBy { it.ruleInstance }
             .toList()
-            .sortedBy { (ruleInstance, _) -> ruleInstance.id }
+            .sortedBy { (ruleInstance, _) -> ruleInstance.id.value }
             .forEach { (ruleInstance, ruleIssues) ->
                 renderRule(ruleInstance, ruleIssues)
             }
@@ -123,10 +123,10 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
 
     private fun FlowContent.renderRule(ruleInstance: RuleInstance, issues: List<Issue>) {
         val ruleId = ruleInstance.id
-        val ruleName = ruleInstance.name.value
+        val ruleName = ruleInstance.id.ruleName.value
         val ruleSetId = ruleInstance.ruleSetId.value
         details {
-            id = ruleId
+            id = ruleId.value
             open = true
 
             summary("rule-container") {
@@ -171,7 +171,7 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
         val absoluteFile = basePath.resolve(issue.location.path).toFile()
         if (absoluteFile.exists()) {
             absoluteFile.useLines {
-                snippetCode(issue.ruleInstance.name, it, issue.location.source, issue.location.text.length())
+                snippetCode(issue.ruleInstance.id.ruleName, it, issue.location.source, issue.location.text.length())
             }
         }
     }

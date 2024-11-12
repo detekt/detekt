@@ -38,8 +38,7 @@ val Issue.suppressed: Boolean
     get() = suppressReasons.isNotEmpty()
 
 interface RuleInstance {
-    val id: String
-    val name: Rule.Name
+    val id: Rule.Id
     val ruleSetId: RuleSet.Id
     val description: String
 }
