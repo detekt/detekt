@@ -130,6 +130,7 @@ formatting:
     active: true
     autoCorrect: true
     indentSize: 4
+    indentWhenArrowOnNewLine: false
   Kdoc:
     active: false
   KdocWrapping:
