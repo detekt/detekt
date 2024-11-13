@@ -159,6 +159,7 @@ formatting:
     active: true
     autoCorrect: true
     indentSize: 4
+    functionBodyExpressionWrapping: 'multiline'
   MultilineLoop:
     active: false
     autoCorrect: true

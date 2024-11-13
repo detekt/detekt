@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.formatting.wrappers
 
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfigProperty
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.INDENT_SIZE_PROPERTY
+import com.pinterest.ktlint.ruleset.standard.rules.FunctionSignatureRule.Companion.FUNCTION_BODY_EXPRESSION_WRAPPING_PROPERTY
 import com.pinterest.ktlint.ruleset.standard.rules.MultilineExpressionWrappingRule
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.Config
@@ -26,8 +27,12 @@ class MultilineExpressionWrapping(config: Config) : FormattingRule(
     @Configuration("indentation size")
     private val indentSize by config(4)
 
+    @Configuration("function body expression wrapping")
+    private val functionBodyExpressionWrapping by config("multiline")
+
     override fun overrideEditorConfigProperties(): Map<EditorConfigProperty<*>, String> =
         mapOf(
+            FUNCTION_BODY_EXPRESSION_WRAPPING_PROPERTY to functionBodyExpressionWrapping.toString(),
             INDENT_SIZE_PROPERTY to indentSize.toString(),
         )
 }
