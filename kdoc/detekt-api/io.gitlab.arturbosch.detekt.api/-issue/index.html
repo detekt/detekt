@@ -62,11 +62,30 @@
   <div class="breadcrumbs"><a href="../../index.html">detekt-api</a><span class="delimiter">/</span><a href="../index.html">io.gitlab.arturbosch.detekt.api</a><span class="delimiter">/</span><span class="current">Issue</span></div>
   <div class="cover ">
     <h1 class="cover"><span><span>Issue</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="index.html">Issue</a></div><p class="paragraph">Represents a problem detected by detekt on the source code</p><p class="paragraph">An Issue has information about the rule that detected the problem, a severity and an entity with information about the position. Entity references can also be considered for deeper characterization.</p></div></div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">Issue</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>ruleInstance<span class="token operator">: </span><a href="../-rule-instance/index.html">RuleInstance</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>entity<span class="token operator">: </span><a href="-entity/index.html">Issue.Entity</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>references<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-entity/index.html">Issue.Entity</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>message<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>severity<span class="token operator">: </span><a href="../-severity/index.html">Severity</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>suppressReasons<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><p class="paragraph">Represents a problem detected by detekt on the source code</p><p class="paragraph">An Issue has information about the rule that detected the problem, a severity and an entity with information about the position. Entity references can also be considered for deeper characterization.</p></div></div>
   </div>
   <div class="tabbedcontent">
     <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button><button class="section-tab" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION,EXTENSION_PROPERTY,EXTENSION_FUNCTION">Members &amp; Extensions</button></div>
     <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="">Constructors</h2>
+        <div class="table"><a data-name="-1196879123%2FConstructors%2F581599712" anchor-label="Issue" id="-1196879123%2FConstructors%2F581599712" data-filterable-set=":detekt-api:dokkaHtmlPartial/main"></a>
+          <div class="table-row" data-togglable="CONSTRUCTOR" data-filterable-current=":detekt-api:dokkaHtmlPartial/main" data-filterable-set=":detekt-api:dokkaHtmlPartial/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-issue.html"><span><span>Issue</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1196879123%2FConstructors%2F581599712"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">ruleInstance<span class="token operator">: </span><a href="../-rule-instance/index.html">RuleInstance</a><span class="token punctuation">, </span></span><span class="parameter ">entity<span class="token operator">: </span><a href="-entity/index.html">Issue.Entity</a><span class="token punctuation">, </span></span><span class="parameter ">references<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-entity/index.html">Issue.Entity</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">message<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">severity<span class="token operator">: </span><a href="../-severity/index.html">Severity</a><span class="token punctuation">, </span></span><span class="parameter ">suppressReasons<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div data-togglable="TYPE">
         <h2 class="">Types</h2>
         <div class="table"><a data-name="-1875837559%2FClasslikes%2F581599712" anchor-label="Entity" id="-1875837559%2FClasslikes%2F581599712" data-filterable-set=":detekt-api:dokkaHtmlPartial/main"></a>
@@ -79,7 +98,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-entity/index.html">Entity</a></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-entity/index.html">Entity</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>signature<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>location<span class="token operator">: </span><a href="-location/index.html">Issue.Location</a></span></span><span class="token punctuation">)</span></div></div></div>
                 </div>
               </div>
             </div>
@@ -94,7 +113,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-location/index.html">Location</a> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-comparable/index.html">Comparable</a><span class="token operator">&lt;</span><a href="-location/index.html">Issue.Location</a><span class="token operator">&gt; </span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-location/index.html">Location</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>source<span class="token operator">: </span><a href="../-source-location/index.html">SourceLocation</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>endSource<span class="token operator">: </span><a href="../-source-location/index.html">SourceLocation</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>text<span class="token operator">: </span><a href="../-text-location/index.html">TextLocation</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>path<span class="token operator">: </span><a href="https://docs.oracle.com/javase/8/docs/api/java/nio/file/Path.html">Path</a></span></span><span class="token punctuation">)</span> : <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-comparable/index.html">Comparable</a><span class="token operator">&lt;</span><a href="-location/index.html">Issue.Location</a><span class="token operator">&gt; </span></div></div></div>
                 </div>
               </div>
             </div>
@@ -113,7 +132,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="entity.html">entity</a><span class="token operator">: </span><a href="-entity/index.html">Issue.Entity</a></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="entity.html">entity</a><span class="token operator">: </span><a href="-entity/index.html">Issue.Entity</a></div></div></div>
                 </div>
               </div>
             </div>
@@ -128,7 +147,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">val </span><a href="location.html">location</a><span class="token operator">: </span><a href="-location/index.html">Issue.Location</a></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="location.html">location</a><span class="token operator">: </span><a href="-location/index.html">Issue.Location</a></div></div></div>
                 </div>
               </div>
             </div>
@@ -143,7 +162,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="message.html">message</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="message.html">message</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a></div></div></div>
                 </div>
               </div>
             </div>
@@ -158,7 +177,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="references.html">references</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-entity/index.html">Issue.Entity</a><span class="token operator">&gt;</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="references.html">references</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-entity/index.html">Issue.Entity</a><span class="token operator">&gt;</span></div></div></div>
                 </div>
               </div>
             </div>
@@ -173,7 +192,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="rule-instance.html">ruleInstance</a><span class="token operator">: </span><a href="../-rule-instance/index.html">RuleInstance</a></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="rule-instance.html">ruleInstance</a><span class="token operator">: </span><a href="../-rule-instance/index.html">RuleInstance</a></div></div></div>
                 </div>
               </div>
             </div>
@@ -188,7 +207,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="severity.html">severity</a><span class="token operator">: </span><a href="../-severity/index.html">Severity</a></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="severity.html">severity</a><span class="token operator">: </span><a href="../-severity/index.html">Severity</a></div></div></div>
                 </div>
               </div>
             </div>
@@ -218,7 +237,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="suppress-reasons.html">suppressReasons</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api:dokkaHtmlPartial/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="suppress-reasons.html">suppressReasons</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div></div></div>
                 </div>
               </div>
             </div>
