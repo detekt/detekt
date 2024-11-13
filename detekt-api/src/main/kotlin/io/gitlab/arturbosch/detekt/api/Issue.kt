@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.api
 
+import dev.drewhamilton.poko.Poko
 import java.nio.file.Path
 
 /**
@@ -8,28 +9,32 @@ import java.nio.file.Path
  * An Issue has information about the rule that detected the problem, a severity and an entity with information
  * about the position. Entity references can also be considered for deeper characterization.
  */
-interface Issue {
-    val ruleInstance: RuleInstance
-    val entity: Entity
-    val references: List<Entity>
-    val message: String
-    val severity: Severity
-    val suppressReasons: List<String>
+@Poko
+class Issue(
+    val ruleInstance: RuleInstance,
+    val entity: Entity,
+    val references: List<Entity>,
+    val message: String,
+    val severity: Severity,
+    val suppressReasons: List<String>,
+) {
 
     val location: Location
         get() = entity.location
 
-    interface Entity {
-        val signature: String
-        val location: Location
-    }
+    @Poko
+    class Entity(
+        val signature: String,
+        val location: Location,
+    )
 
-    interface Location : Comparable<Location> {
-        val source: SourceLocation
-        val endSource: SourceLocation
-        val text: TextLocation
-        val path: Path
-
+    @Poko
+    class Location(
+        val source: SourceLocation,
+        val endSource: SourceLocation,
+        val text: TextLocation,
+        val path: Path,
+    ) : Comparable<Location> {
         override fun compareTo(other: Location): Int = compareValuesBy(this, other, { it.path }, { it.source })
     }
 }
@@ -37,9 +42,10 @@ interface Issue {
 val Issue.suppressed: Boolean
     get() = suppressReasons.isNotEmpty()
 
-interface RuleInstance {
-    val id: String
-    val name: Rule.Name
-    val ruleSetId: RuleSet.Id
-    val description: String
-}
+@Poko
+class RuleInstance(
+    val id: String,
+    val name: Rule.Name,
+    val ruleSetId: RuleSet.Id,
+    val description: String,
+)

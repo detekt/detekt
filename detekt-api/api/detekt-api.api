@@ -159,35 +159,40 @@ public abstract interface class io/gitlab/arturbosch/detekt/api/Finding {
 	public abstract fun getSuppressReasons ()Ljava/util/List;
 }
 
-public abstract interface class io/gitlab/arturbosch/detekt/api/Issue {
-	public abstract fun getEntity ()Lio/gitlab/arturbosch/detekt/api/Issue$Entity;
-	public abstract fun getLocation ()Lio/gitlab/arturbosch/detekt/api/Issue$Location;
-	public abstract fun getMessage ()Ljava/lang/String;
-	public abstract fun getReferences ()Ljava/util/List;
-	public abstract fun getRuleInstance ()Lio/gitlab/arturbosch/detekt/api/RuleInstance;
-	public abstract fun getSeverity ()Lio/gitlab/arturbosch/detekt/api/Severity;
-	public abstract fun getSuppressReasons ()Ljava/util/List;
+public final class io/gitlab/arturbosch/detekt/api/Issue {
+	public fun <init> (Lio/gitlab/arturbosch/detekt/api/RuleInstance;Lio/gitlab/arturbosch/detekt/api/Issue$Entity;Ljava/util/List;Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/Severity;Ljava/util/List;)V
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getEntity ()Lio/gitlab/arturbosch/detekt/api/Issue$Entity;
+	public final fun getLocation ()Lio/gitlab/arturbosch/detekt/api/Issue$Location;
+	public final fun getMessage ()Ljava/lang/String;
+	public final fun getReferences ()Ljava/util/List;
+	public final fun getRuleInstance ()Lio/gitlab/arturbosch/detekt/api/RuleInstance;
+	public final fun getSeverity ()Lio/gitlab/arturbosch/detekt/api/Severity;
+	public final fun getSuppressReasons ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/gitlab/arturbosch/detekt/api/Issue$DefaultImpls {
-	public static fun getLocation (Lio/gitlab/arturbosch/detekt/api/Issue;)Lio/gitlab/arturbosch/detekt/api/Issue$Location;
+public final class io/gitlab/arturbosch/detekt/api/Issue$Entity {
+	public fun <init> (Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/Issue$Location;)V
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getLocation ()Lio/gitlab/arturbosch/detekt/api/Issue$Location;
+	public final fun getSignature ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
-public abstract interface class io/gitlab/arturbosch/detekt/api/Issue$Entity {
-	public abstract fun getLocation ()Lio/gitlab/arturbosch/detekt/api/Issue$Location;
-	public abstract fun getSignature ()Ljava/lang/String;
-}
-
-public abstract interface class io/gitlab/arturbosch/detekt/api/Issue$Location : java/lang/Comparable {
-	public abstract fun compareTo (Lio/gitlab/arturbosch/detekt/api/Issue$Location;)I
-	public abstract fun getEndSource ()Lio/gitlab/arturbosch/detekt/api/SourceLocation;
-	public abstract fun getPath ()Ljava/nio/file/Path;
-	public abstract fun getSource ()Lio/gitlab/arturbosch/detekt/api/SourceLocation;
-	public abstract fun getText ()Lio/gitlab/arturbosch/detekt/api/TextLocation;
-}
-
-public final class io/gitlab/arturbosch/detekt/api/Issue$Location$DefaultImpls {
-	public static fun compareTo (Lio/gitlab/arturbosch/detekt/api/Issue$Location;Lio/gitlab/arturbosch/detekt/api/Issue$Location;)I
+public final class io/gitlab/arturbosch/detekt/api/Issue$Location : java/lang/Comparable {
+	public fun <init> (Lio/gitlab/arturbosch/detekt/api/SourceLocation;Lio/gitlab/arturbosch/detekt/api/SourceLocation;Lio/gitlab/arturbosch/detekt/api/TextLocation;Ljava/nio/file/Path;)V
+	public fun compareTo (Lio/gitlab/arturbosch/detekt/api/Issue$Location;)I
+	public synthetic fun compareTo (Ljava/lang/Object;)I
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getEndSource ()Lio/gitlab/arturbosch/detekt/api/SourceLocation;
+	public final fun getPath ()Ljava/nio/file/Path;
+	public final fun getSource ()Lio/gitlab/arturbosch/detekt/api/SourceLocation;
+	public final fun getText ()Lio/gitlab/arturbosch/detekt/api/TextLocation;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
 public final class io/gitlab/arturbosch/detekt/api/IssueKt {
@@ -297,11 +302,15 @@ public final class io/gitlab/arturbosch/detekt/api/Rule$Name {
 	public fun toString ()Ljava/lang/String;
 }
 
-public abstract interface class io/gitlab/arturbosch/detekt/api/RuleInstance {
-	public abstract fun getDescription ()Ljava/lang/String;
-	public abstract fun getId ()Ljava/lang/String;
-	public abstract fun getName ()Lio/gitlab/arturbosch/detekt/api/Rule$Name;
-	public abstract fun getRuleSetId ()Lio/gitlab/arturbosch/detekt/api/RuleSet$Id;
+public final class io/gitlab/arturbosch/detekt/api/RuleInstance {
+	public fun <init> (Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/Rule$Name;Lio/gitlab/arturbosch/detekt/api/RuleSet$Id;Ljava/lang/String;)V
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDescription ()Ljava/lang/String;
+	public final fun getId ()Ljava/lang/String;
+	public final fun getName ()Lio/gitlab/arturbosch/detekt/api/Rule$Name;
+	public final fun getRuleSetId ()Lio/gitlab/arturbosch/detekt/api/RuleSet$Id;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
 public final class io/gitlab/arturbosch/detekt/api/RuleSet {
