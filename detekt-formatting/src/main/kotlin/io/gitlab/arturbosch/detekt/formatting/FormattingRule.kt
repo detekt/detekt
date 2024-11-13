@@ -80,7 +80,7 @@ abstract class FormattingRule(config: Config, description: String) : Rule(config
         val properties = buildMap {
             usesEditorConfigProperties.forEach { (editorConfigProperty, defaultValue) ->
                 put(
-                    key = editorConfigProperty.type.name,
+                    key = editorConfigProperty.name,
                     value = Property.builder()
                         .name(editorConfigProperty.type.name)
                         .type(editorConfigProperty.type)
