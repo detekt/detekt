@@ -69,6 +69,7 @@ formatting:
     active: true
     aliases: ['EnumEntryName']
     autoCorrect: true
+    enumEntryNameCasing: 'upper_or_camel_cases'
   EnumWrapping:
     active: true
     autoCorrect: true
