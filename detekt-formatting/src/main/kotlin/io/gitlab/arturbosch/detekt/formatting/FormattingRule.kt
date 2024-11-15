@@ -5,7 +5,9 @@ import com.pinterest.ktlint.rule.engine.core.api.editorconfig.CODE_STYLE_PROPERT
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfig
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfigProperty
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.INDENT_STYLE_PROPERTY
+import com.pinterest.ktlint.rule.engine.core.api.editorconfig.createRuleExecutionEditorConfigProperty
 import com.pinterest.ktlint.ruleset.standard.StandardRule
+import com.pinterest.ktlint.ruleset.standard.rules.MAX_LINE_LENGTH_RULE_ID
 import io.github.detekt.psi.absolutePath
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
@@ -63,6 +65,10 @@ abstract class FormattingRule(config: Config, description: String) : Rule(config
         val usesEditorConfigProperties = overrideEditorConfigProperties()?.toMutableMap()
             ?: mutableMapOf()
 
+        /* Notify ktlint that max line length rule is enabled so the max line length configuration for each rule is
+           respected: https://github.com/pinterest/ktlint/pull/2783 */
+        usesEditorConfigProperties[MAX_LINE_LENGTH_RULE_ID.createRuleExecutionEditorConfigProperty()] = "enabled"
+
         if (isAndroid) {
             usesEditorConfigProperties[CODE_STYLE_PROPERTY] = "android_studio"
         } else {
@@ -74,7 +80,7 @@ abstract class FormattingRule(config: Config, description: String) : Rule(config
         val properties = buildMap {
             usesEditorConfigProperties.forEach { (editorConfigProperty, defaultValue) ->
                 put(
-                    key = editorConfigProperty.type.name,
+                    key = editorConfigProperty.name,
                     value = Property.builder()
                         .name(editorConfigProperty.type.name)
                         .type(editorConfigProperty.type)
