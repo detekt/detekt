@@ -141,15 +141,27 @@ internal class Analyzer(
             .filter { (_, ruleSetConfig) -> ruleSetConfig.isActiveOrDefault(true) }
             .map { (provider, ruleSetConfig) -> provider.instance() to ruleSetConfig }
             .flatMap { (ruleSet, ruleSetConfig) ->
-                ruleSet.rules
+                ruleSetConfig.subConfigKeys()
                     .asSequence()
-                    .map { (ruleName, ruleProvider) -> ruleProvider to ruleSetConfig.subConfig(ruleName.value) }
-                    .filter { (_, config) -> config.isActiveOrDefault(false) }
-                    .map { (ruleProvider, config) -> ruleProvider(config) }
+                    .mapNotNull { ruleId -> extractRuleName(ruleId)?.let { ruleName -> ruleId to ruleName } }
+                    .mapNotNull { (ruleId, ruleName) ->
+                        ruleSet.rules[ruleName]?.let { ruleProvider ->
+                            RuleDescriptor(
+                                ruleProvider = ruleProvider,
+                                config = ruleSetConfig.subConfig(ruleId),
+                                ruleId = ruleId,
+                            )
+                        }
+                    }
+                    .filter { (_, config, _) -> config.isActiveOrDefault(false) }
+                    .map { (ruleProvider, config, ruleId) ->
+                        val rule = ruleProvider(config)
+                        rule.toRuleInstance(ruleId, ruleSet.id) to rule
+                    }
             }
-            .filter { rule -> rule::class.hasAnnotation<RequiresFullAnalysis>() }
-            .forEach { rule ->
-                settings.debug { "The rule '${rule.ruleName}' requires type resolution but it was run without it." }
+            .filter { (_, rule) -> rule::class.hasAnnotation<RequiresFullAnalysis>() }
+            .forEach { (ruleInstance, _) ->
+                settings.debug { "The rule '${ruleInstance.id}' requires type resolution but it was run without it." }
             }
     }
 }
