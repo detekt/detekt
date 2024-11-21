@@ -10,9 +10,14 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtConstructorDelegationCall
+import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtSimpleNameExpression
+import org.jetbrains.kotlin.psi.allConstructors
+import org.jetbrains.kotlin.psi.psiUtil.findPropertyByName
+import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.resolve.calls.util.getType
 import org.jetbrains.kotlin.types.typeUtil.supertypes
@@ -56,6 +61,7 @@ class InjectDispatcher(config: Config) : Rule(
         val isUsedAsParameter = expression.getStrictParentOfType<KtParameter>() != null ||
             expression.getStrictParentOfType<KtConstructorDelegationCall>() != null
         if (isCoroutineDispatcher && !isUsedAsParameter) {
+            if (expression.isReceiverNotInjected()) return
             report(
                 CodeSmell(
                     Entity.from(expression),
@@ -63,6 +69,49 @@ class InjectDispatcher(config: Config) : Rule(
                 )
             )
         }
+    }
+
+    private fun KtSimpleNameExpression.isReceiverNotInjected(): Boolean {
+        val receiver = getReceiverExpression()
+        if (receiver != null) {
+            val receiverTypeFqn = receiver.getType(bindingContext)?.fqNameOrNull()
+            if (receiverTypeFqn != null) {
+                return isAClassPropertyOrConstructorParameter(
+                    receiver = receiver.text,
+                    receiverTypeFqn = receiverTypeFqn.asString(),
+                ) ||
+                    isAFunctionParameter(
+                        receiver = receiver.text,
+                        receiverTypeFqn = receiverTypeFqn.asString(),
+                    )
+            }
+        }
+
+        return false
+    }
+
+    private fun KtSimpleNameExpression.isAClassPropertyOrConstructorParameter(
+        receiver: String,
+        receiverTypeFqn: String?,
+    ): Boolean {
+        val enclosingClass = getStrictParentOfType<KtClassOrObject>()
+        val property = enclosingClass?.findPropertyByName(receiver) as? KtParameter
+        if (property != null && property.typeReference?.getTypeText() == receiverTypeFqn) return true
+
+        val ctor = enclosingClass?.allConstructors?.firstNotNullOfOrNull { ctor ->
+            ctor.getValueParameters().find { it.name == receiver }
+        }
+
+        return ctor != null && ctor.typeReference?.getTypeText() == receiverTypeFqn
+    }
+
+    private fun KtSimpleNameExpression.isAFunctionParameter(
+        receiver: String,
+        receiverTypeFqn: String?,
+    ): Boolean {
+        val enclosingFunction = getStrictParentOfType<KtNamedFunction>()
+        val param = enclosingFunction?.valueParameters?.find { it.name == receiver } as? KtParameter
+        return param != null && param.typeReference?.getTypeText() == receiverTypeFqn
     }
 
     companion object {
