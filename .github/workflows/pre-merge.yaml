@@ -113,3 +113,14 @@ jobs:
 
       - name: Run with allWarningsAsErrors
         run: ./gradlew compileKotlin compileTestKotlin compileTestFixturesKotlin -PwarningsAsErrors=true
+
+  build-detekt-sample-extensions:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4
+
+      - name: Build sample extensions
+        run: ./gradlew build
+        working-directory: detekt-sample-extensions
