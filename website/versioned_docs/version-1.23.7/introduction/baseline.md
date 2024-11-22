@@ -41,7 +41,7 @@ a custom meta baseline task:
 subprojects {
     detekt {
         // ...
-        baseline = file("${rootProject.projectDir}/config/baseline.xml")
+        baseline = file("${rootProject.projectDir}/config/detekt/baseline.xml")
         // ...
     }
 }
@@ -66,7 +66,7 @@ task detektProjectBaseline(type: io.gitlab.arturbosch.detekt.DetektCreateBaselin
 subprojects {
     detekt {
         // ...
-        baseline = file("${rootProject.projectDir}/config/baseline.xml")
+        baseline = file("${rootProject.projectDir}/config/detekt/baseline.xml")
         // ...
     }
 }
