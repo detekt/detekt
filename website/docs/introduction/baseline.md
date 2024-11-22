@@ -75,7 +75,7 @@ task detektProjectBaseline(type: io.gitlab.arturbosch.detekt.DetektCreateBaselin
 subprojects {
     detekt {
         // ...
-        baseline.set(file("${rootProject.projectDir}/config/baseline.xml"))
+        baseline.set(file("${rootProject.projectDir}/config/detekt/baseline.xml"))
         // ...
     }
 }
