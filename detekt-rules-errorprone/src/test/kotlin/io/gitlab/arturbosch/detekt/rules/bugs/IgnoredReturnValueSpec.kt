@@ -279,7 +279,7 @@ class IgnoredReturnValueSpec {
                 
                 fun foo() : Int {
                     val hello = "world "
-                    hello.toUpperCase()
+                    hello.uppercase()
                         .trim()
                         .listOfChecked()
                         .isEmpty()
@@ -303,7 +303,7 @@ class IgnoredReturnValueSpec {
                 
                 fun foo() : Int {
                     val hello = "world "
-                    hello.toUpperCase()
+                    hello.uppercase()
                         .trim()
                         .listOfChecked()
                     return 42
@@ -629,7 +629,7 @@ class IgnoredReturnValueSpec {
                 
                 fun foo() : Int {
                     val hello = "world "
-                    hello.toUpperCase()
+                    hello.uppercase()
                         .trim()
                         .listOfChecked()
                         .print()
