@@ -25,6 +25,9 @@
           "message": {
             "text": "TestMessage"
           },
+          "partialFingerprints": {
+            "fullRuleId+signatureHash/v1": "1722233271"
+          },
           "ruleId": "detekt.RuleSet1.TestSmellA/id"
         },
         {
@@ -48,6 +51,9 @@
           "message": {
             "text": "TestMessage"
           },
+          "partialFingerprints": {
+            "fullRuleId+signatureHash/v1": "-914259881"
+          },
           "ruleId": "detekt.RuleSet2.TestSmellB/id"
         },
         {
@@ -70,6 +76,9 @@
           ],
           "message": {
             "text": "TestMessage"
+          },
+          "partialFingerprints": {
+            "fullRuleId+signatureHash/v1": "-981266634"
           },
           "ruleId": "detekt.RuleSet2.TestSmellC/id"
         }
