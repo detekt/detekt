@@ -102,20 +102,6 @@ class HtmlOutputReportSpec {
     }
 
     @Test
-    fun `renders the right documentation links for the rules`() {
-        val detektion = TestDetektion(
-            createIssue(createRuleInstance("ValCouldBeVar", "Style")),
-            createIssue(createRuleInstance("EmptyBody", "empty")),
-            createIssue(createRuleInstance("EmptyIf", "empty")),
-        )
-
-        val result = htmlReport.render(detektion)
-        assertThat(result).contains("<a href=\"https://detekt.dev/docs/rules/style#valcouldbevar\">Documentation</a>")
-        assertThat(result).contains("<a href=\"https://detekt.dev/docs/rules/empty#emptybody\">Documentation</a>")
-        assertThat(result).contains("<a href=\"https://detekt.dev/docs/rules/empty#emptyif\">Documentation</a>")
-    }
-
-    @Test
     fun `renders a metric report correctly`() {
         val detektion = TestDetektion(
             metrics = listOf(ProjectMetric("M1", 10_000), ProjectMetric("M2", 2))
@@ -182,9 +168,21 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
     )
 
     return TestDetektion(
-        createIssue(createRuleInstance("rule_a/id", "RuleSet1"), entity1, "Issue message 1"),
-        createIssue(createRuleInstance("rule_a/id", "RuleSet1"), entity2, "Issue message 2"),
-        createIssue(createRuleInstance("rule_b", "RuleSet2"), entity3, "Issue message 3"),
+        createIssue(
+            createRuleInstance("rule_a/id", "RuleSet1", url = "https://example.org/"),
+            entity1,
+            "Issue message 1"
+        ),
+        createIssue(
+            createRuleInstance("rule_a/id", "RuleSet1", url = "https://example.org/"),
+            entity2,
+            "Issue message 2"
+        ),
+        createIssue(
+            createRuleInstance("rule_b", "RuleSet2", url = null),
+            entity3,
+            "Issue message 3"
+        ),
         createIssue(
             createRuleInstance("rule_c", "RuleSet2"),
             entity3,
