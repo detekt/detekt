@@ -28,6 +28,7 @@ import org.jetbrains.kotlin.resolve.bindingContextUtil.getTargetFunctionDescript
 import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.types.KotlinType
+import org.jetbrains.kotlin.types.typeUtil.isNothing
 import org.jetbrains.kotlin.types.typeUtil.isUnit
 
 /**
@@ -107,6 +108,7 @@ class IgnoredReturnValue(config: Config) : Rule(
 
         val resultingDescriptor = expression.getResolvedCall(bindingContext)?.resultingDescriptor ?: return
         if (resultingDescriptor.returnType?.isUnit() == true) return
+        if (resultingDescriptor.returnType?.isNothing() == true) return
 
         if (ignoreFunctionCall.any { it.match(resultingDescriptor) }) return
 

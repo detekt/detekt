@@ -1056,6 +1056,28 @@ class IgnoredReturnValueSpec {
             val findings = rule.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
+
+        @Test
+        fun `does not report when a function returns Unit`() {
+            val code = """
+                fun foo() {
+                    println(42)
+                }
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `does not report when a function returns Nothing`() {
+            val code = """
+                fun foo() {
+                    TODO("tbd")
+                }
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
     }
 
     @Nested
