@@ -212,7 +212,12 @@ private fun Location.toIssue(basePath: Path): Issue.Location =
     Issue.Location(source, endSource, text, basePath.relativize(path))
 
 private fun Rule.toRuleInstance(id: String, ruleSetId: RuleSet.Id): RuleInstance =
-    RuleInstance(id, ruleName, ruleSetId, description)
+    RuleInstance(
+        id = id,
+        ruleSetId = ruleSetId,
+        url = "https://detekt.dev/docs/rules/${ruleSetId.value.lowercase()}#${ruleName.value.lowercase()}",
+        description = description,
+    )
 
 /**
  * Compute severity in the priority order:
