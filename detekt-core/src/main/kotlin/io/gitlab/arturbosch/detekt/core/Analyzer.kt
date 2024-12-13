@@ -113,9 +113,8 @@ internal class Analyzer(
                     }
                     .filter { (_, config, _, _) -> config.isActiveOrDefault(false) }
                     .filter { (_, config, _, _) -> config.shouldAnalyzeFile(file, settings.spec.projectSpec.basePath) }
-                    .map { (ruleProvider, config, ruleId, ruleSetId) ->
-                        val rule = ruleProvider(config)
-                        rule.toRuleInstance(ruleId, ruleSetId) to rule
+                    .map { ruleDescriptor ->
+                        ruleDescriptor.toRuleInstance() to ruleDescriptor.ruleProvider(ruleDescriptor.config)
                     }
             }
             .filterNot { (ruleInstance, rule) ->
@@ -156,9 +155,8 @@ internal class Analyzer(
                         }
                     }
                     .filter { (_, config, _, _) -> config.isActiveOrDefault(false) }
-                    .map { (ruleProvider, config, ruleId, ruleSetId) ->
-                        val rule = ruleProvider(config)
-                        rule.toRuleInstance(ruleId, ruleSetId) to rule
+                    .map { ruleDescriptor ->
+                        ruleDescriptor.toRuleInstance() to ruleDescriptor.ruleProvider(ruleDescriptor.config)
                     }
             }
             .filter { (_, rule) -> rule::class.hasAnnotation<RequiresFullAnalysis>() }
@@ -218,8 +216,15 @@ private fun Entity.toIssue(basePath: Path): Issue.Entity =
 private fun Location.toIssue(basePath: Path): Issue.Location =
     Issue.Location(source, endSource, text, basePath.relativize(path))
 
-private fun Rule.toRuleInstance(id: String, ruleSetId: RuleSet.Id): RuleInstance =
-    RuleInstance(id, ruleName, ruleSetId, description)
+private fun RuleDescriptor.toRuleInstance(): RuleInstance {
+    val rule = ruleProvider(Config.empty)
+    return RuleInstance(
+        id = ruleId,
+        name = rule.ruleName,
+        ruleSetId = ruleSetId,
+        description = rule.description,
+    )
+}
 
 /**
  * Compute severity in the priority order:
