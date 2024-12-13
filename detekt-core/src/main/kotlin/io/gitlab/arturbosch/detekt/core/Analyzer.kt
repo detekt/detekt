@@ -11,7 +11,6 @@ import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleInstance
-import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
@@ -96,7 +95,7 @@ internal class Analyzer(
                 ruleDescriptor.config.shouldAnalyzeFile(file, settings.spec.projectSpec.basePath)
             }
             .map { ruleDescriptor ->
-                ruleDescriptor.toRuleInstance() to ruleDescriptor.ruleProvider(ruleDescriptor.config)
+                ruleDescriptor.ruleInstance to ruleDescriptor.ruleProvider(ruleDescriptor.config)
             }
             .filterNot { (ruleInstance, rule) ->
                 file.isSuppressedBy(ruleInstance.id, rule.aliases, ruleInstance.ruleSetId)
@@ -132,11 +131,17 @@ private fun getActiveRules(
             .mapNotNull { ruleId -> extractRuleName(ruleId)?.let { ruleName -> ruleId to ruleName } }
             .mapNotNull { (ruleId, ruleName) ->
                 ruleSet.rules[ruleName]?.let { ruleProvider ->
+                    val rule = ruleProvider(Config.empty)
                     RuleDescriptor(
                         ruleProvider = ruleProvider,
                         config = ruleSetConfig.subConfig(ruleId),
-                        ruleId = ruleId,
-                        ruleSetId = ruleSet.id,
+                        ruleInstance = RuleInstance(
+                            id = ruleId,
+                            ruleSetId = ruleSet.id,
+                            url = URI("https://detekt.dev/docs/rules/${ruleSet.id.value.lowercase()}#${rule.ruleName.value.lowercase()}"),
+                            description = rule.description,
+                            severity = rule.computeSeverity(),
+                        )
                     )
                 }
             }
@@ -148,7 +153,7 @@ private fun getActiveRules(
         } else {
             val requiresFullAnalysis = ruleDescriptor.ruleProvider(Config.empty) is RequiresFullAnalysis
             if (requiresFullAnalysis) {
-                log { "The rule '${ruleDescriptor.ruleId}' requires type resolution but it was run without it." }
+                log { "The rule '${ruleDescriptor.ruleInstance.id}' requires type resolution but it was run without it." }
             }
             !requiresFullAnalysis
         }
@@ -161,8 +166,7 @@ internal fun extractRuleName(key: String): Rule.Name? =
 private data class RuleDescriptor(
     val ruleProvider: (Config) -> Rule,
     val config: Config,
-    val ruleId: String,
-    val ruleSetId: RuleSet.Id,
+    val ruleInstance: RuleInstance,
 )
 
 private fun List<Finding>.filterSuppressedFindings(rule: Rule, bindingContext: BindingContext): List<Finding> {
@@ -199,17 +203,6 @@ private fun Entity.toIssue(basePath: Path): Issue.Entity =
 
 private fun Location.toIssue(basePath: Path): Issue.Location =
     Issue.Location(source, endSource, text, basePath.relativize(path))
-
-private fun RuleDescriptor.toRuleInstance(): RuleInstance {
-    val rule = ruleProvider(Config.empty)
-    return RuleInstance(
-        id = ruleId,
-        ruleSetId = ruleSetId,
-        url = URI("https://detekt.dev/docs/rules/${ruleSetId.value.lowercase()}#${rule.ruleName.value.lowercase()}"),
-        description = rule.description,
-        severity = rule.computeSeverity(),
-    )
-}
 
 /**
  * Compute severity in the priority order:
