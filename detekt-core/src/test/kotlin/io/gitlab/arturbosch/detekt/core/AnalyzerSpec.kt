@@ -148,6 +148,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
                             url = URI("https://detekt.dev/docs/rules/custom#maxlinelength"),
                             description = "TestDescription",
                             severity = Severity.Error,
+                            active = true,
                         ),
                         entity = Issue.Entity(
                             "AnAnnotation$@Target(AnnotationTarget.FILE, AnnotationTarget.FUNCTION)",

@@ -38,12 +38,13 @@ internal class Analyzer(
 
         val dataFlowValueFactory = DataFlowValueFactoryImpl(languageVersionSettings)
         val compilerResources = CompilerResources(languageVersionSettings, dataFlowValueFactory)
-        val activeRules = getActiveRules(
+        val activeRules = getRules(
             fullAnalysis = bindingContext != BindingContext.EMPTY,
             providers = providers,
             config = settings.config,
-            log = settings::debug
+            log = settings::debug,
         )
+            .filter { it.ruleInstance.active }
         return if (settings.spec.executionSpec.parallelAnalysis) {
             runAsync(ktFiles, activeRules, compilerResources)
         } else {
@@ -116,14 +117,13 @@ internal class Analyzer(
     }
 }
 
-private fun getActiveRules(
+private fun getRules(
     fullAnalysis: Boolean,
     providers: List<RuleSetProvider>,
     config: Config,
-    log: (() -> String) -> Unit = {},
+    log: (() -> String) -> Unit,
 ): List<RuleDescriptor> = providers.asSequence()
     .map { it to config.subConfig(it.ruleSetId.value) }
-    .filter { (_, ruleSetConfig) -> ruleSetConfig.isActiveOrDefault(true) }
     .map { (provider, ruleSetConfig) -> provider.instance() to ruleSetConfig }
     .flatMap { (ruleSet, ruleSetConfig) ->
         ruleSetConfig.subConfigKeys()
@@ -132,31 +132,26 @@ private fun getActiveRules(
             .mapNotNull { (ruleId, ruleName) ->
                 ruleSet.rules[ruleName]?.let { ruleProvider ->
                     val rule = ruleProvider(Config.empty)
+                    val ruleConfig = ruleSetConfig.subConfig(ruleId)
+                    val active = config.isActiveOrDefault(true) && ruleConfig.isActiveOrDefault(false)
+                    val executable = fullAnalysis || rule !is RequiresFullAnalysis
+                    if (active && !executable) {
+                        log { "The rule '$ruleId' requires type resolution but it was run without it." }
+                    }
                     RuleDescriptor(
                         ruleProvider = ruleProvider,
-                        config = ruleSetConfig.subConfig(ruleId),
+                        config = ruleConfig,
                         ruleInstance = RuleInstance(
                             id = ruleId,
                             ruleSetId = ruleSet.id,
                             url = URI("https://detekt.dev/docs/rules/${ruleSet.id.value.lowercase()}#${rule.ruleName.value.lowercase()}"),
                             description = rule.description,
                             severity = rule.computeSeverity(),
+                            active = active && executable,
                         )
                     )
                 }
             }
-    }
-    .filter { ruleDescriptor -> ruleDescriptor.config.isActiveOrDefault(false) }
-    .filter { ruleDescriptor ->
-        if (fullAnalysis) {
-            true
-        } else {
-            val requiresFullAnalysis = ruleDescriptor.ruleProvider(Config.empty) is RequiresFullAnalysis
-            if (requiresFullAnalysis) {
-                log { "The rule '${ruleDescriptor.ruleInstance.id}' requires type resolution but it was run without it." }
-            }
-            !requiresFullAnalysis
-        }
     }
     .toList()
 

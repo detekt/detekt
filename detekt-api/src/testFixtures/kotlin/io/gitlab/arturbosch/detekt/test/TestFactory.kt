@@ -53,18 +53,21 @@ fun createIssue(
     suppressReasons = suppressReasons,
 )
 
+@Suppress("LongParameterList")
 fun createRuleInstance(
     id: String = "TestSmell/id",
-    ruleSetId: String = "RuleSet${id.split("/", limit = 2).first()}",
+    ruleSetId: String = "RuleSet${id.substringBefore("/")}",
     url: String? = null,
-    description: String = "Description ${id.split("/", limit = 2).first()}",
+    description: String = "Description ${id.substringBefore("/")}",
     severity: Severity = Severity.Error,
+    active: Boolean = true,
 ): RuleInstance = RuleInstance(
     id = id,
     ruleSetId = RuleSet.Id(ruleSetId),
     url = url?.let(::URI),
     description = description,
     severity = severity,
+    active = active,
 )
 
 fun createEntity(
