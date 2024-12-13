@@ -39,9 +39,9 @@ internal interface Lifecycle {
         }
 
         val result = measure(Phase.Analyzer) {
-            val analyzer = Analyzer(settings, ruleSets, processors)
+            val analyzer = Analyzer(settings, ruleSets, processors, bindingContext)
             processors.forEach { it.onStart(filesToAnalyze) }
-            val issues = analyzer.run(filesToAnalyze, bindingContext)
+            val issues = analyzer.run(filesToAnalyze)
             val result: Detektion = DetektResult(issues)
             processors.forEach { it.onFinish(filesToAnalyze, result) }
             result

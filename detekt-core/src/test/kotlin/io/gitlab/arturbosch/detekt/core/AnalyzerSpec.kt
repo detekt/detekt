@@ -23,6 +23,7 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.elementsInRange
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -179,11 +180,11 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
                 ),
                 outputChannel = output,
             )
-            val analyzer = Analyzer(settings, CustomRuleSetProvider())
             val ktFile = compileForTest(testFile)
             val bindingContext = env.createBindingContext(listOf(ktFile))
 
-            assertThat(settings.use { analyzer.run(listOf(ktFile), bindingContext) }).hasSize(2)
+            val analyzer = Analyzer(settings, CustomRuleSetProvider(), bindingContext = bindingContext)
+            assertThat(settings.use { analyzer.run(listOf(ktFile)) }).hasSize(2)
             assertThat(output.toString()).isEmpty()
         }
 
@@ -501,4 +502,5 @@ internal fun Analyzer(
     settings: ProcessingSettings,
     vararg processors: RuleSetProvider,
     providers: List<FileProcessListener> = emptyList(),
-): Analyzer = Analyzer(settings, processors.toList(), providers)
+    bindingContext: BindingContext = BindingContext.EMPTY,
+): Analyzer = Analyzer(settings, processors.toList(), providers, bindingContext)
