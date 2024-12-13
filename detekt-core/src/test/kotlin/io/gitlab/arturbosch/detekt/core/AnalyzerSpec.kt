@@ -143,7 +143,8 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
                             id = "MaxLineLength/foo",
                             name = Rule.Name("MaxLineLength"),
                             ruleSetId = RuleSet.Id("custom"),
-                            description = "TestDescription"
+                            description = "TestDescription",
+                            severity = Severity.Error,
                         ),
                         entity = Issue.Entity(
                             "AnAnnotation$@Target(AnnotationTarget.FILE, AnnotationTarget.FUNCTION)",

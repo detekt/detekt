@@ -57,13 +57,15 @@ fun createRuleInstance(
     id: String = "TestSmell/id",
     ruleSetId: String = "RuleSet${id.split("/", limit = 2).first()}",
     description: String = "Description ${id.split("/", limit = 2).first()}",
+    severity: Severity = Severity.Error,
 ): RuleInstance {
     val split = id.split("/", limit = 2)
     return RuleInstance(
         id = id,
         name = Rule.Name(split.first()),
         ruleSetId = RuleSet.Id(ruleSetId),
-        description = description
+        description = description,
+        severity = severity,
     )
 }
 
