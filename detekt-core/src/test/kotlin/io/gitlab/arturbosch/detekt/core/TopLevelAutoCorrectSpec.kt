@@ -50,10 +50,10 @@ class TopLevelAutoCorrectSpec {
             }
         }
 
-        AnalysisFacade(spec).runAnalysis {
+        AnalysisFacade(spec).runAnalysis { settings->
             DefaultLifecycle(
-                Config.empty,
-                it,
+                settings.config,
+                settings,
                 inputPathsToKtFiles,
                 processorsProvider = { listOf(contentChangedListener) },
                 ruleSetsProvider = { listOf(TopLevelAutoCorrectProvider()) }
