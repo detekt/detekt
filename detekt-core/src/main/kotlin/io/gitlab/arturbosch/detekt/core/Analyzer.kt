@@ -9,7 +9,6 @@ import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleInstance
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
@@ -19,15 +18,12 @@ import io.gitlab.arturbosch.detekt.api.internal.whichJava
 import io.gitlab.arturbosch.detekt.api.internal.whichOS
 import io.gitlab.arturbosch.detekt.core.suppressors.buildSuppressors
 import io.gitlab.arturbosch.detekt.core.suppressors.isSuppressedBy
-import io.gitlab.arturbosch.detekt.core.util.isActiveOrDefault
 import io.gitlab.arturbosch.detekt.core.util.shouldAnalyzeFile
 import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactoryImpl
-import java.net.URI
 import java.nio.file.Path
-import kotlin.reflect.full.hasAnnotation
 
 internal class Analyzer(
     private val settings: ProcessingSettings,
@@ -42,7 +38,7 @@ internal class Analyzer(
         val compilerResources = CompilerResources(languageVersionSettings, dataFlowValueFactory)
         val activeRules = getRules(
             fullAnalysis = bindingContext != BindingContext.EMPTY,
-            providers = providers,
+            ruleSetProviders = providers,
             config = settings.config,
             log = settings::debug,
         )
@@ -116,53 +112,6 @@ internal class Analyzer(
     }
 }
 
-private fun getRules(
-    fullAnalysis: Boolean,
-    providers: List<RuleSetProvider>,
-    config: Config,
-    log: (() -> String) -> Unit
-): List<RuleDescriptor> = providers.asSequence()
-    .map { it to config.subConfig(it.ruleSetId.value) }
-    .map { (provider, ruleSetConfig) -> provider.instance() to ruleSetConfig }
-    .flatMap { (ruleSet, ruleSetConfig) ->
-        ruleSetConfig.subConfigKeys()
-            .asSequence()
-            .mapNotNull { ruleId -> extractRuleName(ruleId)?.let { ruleName -> ruleId to ruleName } }
-            .mapNotNull { (ruleId, ruleName) ->
-                ruleSet.rules[ruleName]?.let { ruleProvider ->
-                    val rule = ruleProvider(Config.empty)
-                    val ruleConfig = ruleSetConfig.subConfig(ruleId)
-                    val active = config.isActiveOrDefault(true) && ruleConfig.isActiveOrDefault(false)
-                    val executable = fullAnalysis || !rule::class.hasAnnotation<RequiresFullAnalysis>()
-                    if (active && !executable) {
-                        log { "The rule '$ruleId' requires type resolution but it was run without it." }
-                    }
-                    RuleDescriptor(
-                        ruleProvider = ruleProvider,
-                        config = ruleConfig,
-                        ruleInstance = RuleInstance(
-                            id = ruleId,
-                            ruleSetId = ruleSet.id,
-                            url = URI("https://detekt.dev/docs/rules/${ruleSet.id.value.lowercase()}#${rule.ruleName.value.lowercase()}"),
-                            description = rule.description,
-                            severity = rule.computeSeverity(),
-                            active = active && executable,
-                        )
-                    )
-                }
-            }
-    }
-    .toList()
-
-internal fun extractRuleName(key: String): Rule.Name? =
-    runCatching { Rule.Name(key.split("/", limit = 2).first()) }.getOrNull()
-
-private data class RuleDescriptor(
-    val ruleProvider: (Config) -> Rule,
-    val config: Config,
-    val ruleInstance: RuleInstance,
-)
-
 private fun List<Finding>.filterSuppressedFindings(rule: Rule, bindingContext: BindingContext): List<Finding> {
     val suppressors = buildSuppressors(rule, bindingContext)
     return if (suppressors.isNotEmpty()) {
@@ -202,24 +151,5 @@ private fun Entity.toIssue(basePath: Path): Issue.Entity =
 
 private fun Location.toIssue(basePath: Path): Issue.Location =
     Issue.Location(source, endSource, text, basePath.relativize(path))
-
-/**
- * Compute severity in the priority order:
- * - Severity of the rule
- * - Severity of the parent ruleset
- * - Default severity
- */
-private fun Rule.computeSeverity(): Severity {
-    val configValue: String = config.valueOrNull(Config.SEVERITY_KEY)
-        ?: config.parent?.valueOrNull(Config.SEVERITY_KEY)
-        ?: return Severity.Error
-    return parseToSeverity(configValue)
-}
-
-internal fun parseToSeverity(severity: String): Severity {
-    val lowercase = severity.lowercase()
-    return Severity.entries.find { it.name.lowercase() == lowercase }
-        ?: error("$severity is not a valid Severity. Allowed values are ${Severity.entries}")
-}
 
 private val Rule.aliases: Set<String> get() = config.valueOrDefault(Config.ALIASES_KEY, emptyList<String>()).toSet()
