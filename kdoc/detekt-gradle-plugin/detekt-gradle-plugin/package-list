@@ -172,4 +172,3 @@ io.github.detekt.gradle.extensions
 io.gitlab.arturbosch.detekt
 io.gitlab.arturbosch.detekt.extensions
 io.gitlab.arturbosch.detekt.report
-
