@@ -9,7 +9,6 @@ import dev.detekt.gradle.plugin.internal.DetektJvmCompilations
 import dev.detekt.gradle.plugin.internal.DetektKmpJvmCompilations
 import dev.detekt.gradle.plugin.internal.conventionCompat
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
-import io.gitlab.arturbosch.detekt.internal.DetektPlain
 import org.gradle.api.Incubating
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -27,7 +26,6 @@ class DetektPlugin : Plugin<Project> {
         configurePluginDependencies(project, extension)
         setTaskDefaults(project, extension)
 
-        project.registerDetektPlainTask(extension)
         project.registerDetektJvmTasks(extension)
         val enableAndroidTasks =
             !project.providers
@@ -65,10 +63,6 @@ class DetektPlugin : Plugin<Project> {
             DetektAndroidCompilations.registerTasks(project, extension)
             DetektAndroidCompilations.linkTasks(project, extension)
         }
-    }
-
-    private fun Project.registerDetektPlainTask(extension: DetektExtension) {
-        DetektPlain(this).registerTasks(extension)
     }
 
     private fun Project.registerGenerateConfigTask(extension: DetektExtension) {
