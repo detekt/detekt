@@ -1,6 +1,5 @@
 package io.github.detekt.report.html
 
-import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import kotlinx.html.FlowContent
@@ -19,7 +18,7 @@ import kotlin.math.max
 import kotlin.math.min
 
 internal fun FlowContent.snippetCode(
-    ruleName: Rule.Name,
+    id: String,
     lines: Sequence<String>,
     location: SourceLocation,
     length: Int,
@@ -48,7 +47,7 @@ internal fun FlowContent.snippetCode(
             }
         }
     } catch (@Suppress("TooGenericExceptionCaught") ex: Throwable) {
-        showError(ruleName, ex)
+        showError(id, ex)
     }
 }
 
@@ -67,15 +66,15 @@ private fun FlowContent.writeErrorLine(line: String, errorStarts: Int, length: I
     return errorEnds - errorStarts
 }
 
-private fun FlowContent.showError(ruleName: Rule.Name, throwable: Throwable) {
+private fun FlowContent.showError(id: String, throwable: Throwable) {
     div("exception") {
         h4 {
             text("Error showing the code snippet")
         }
 
         p {
-            text("This seems to be an error in the rule $ruleName, please ")
-            a(createReportUrl(ruleName, throwable)) {
+            text("This seems to be an error in the rule $id, please ")
+            a(createReportUrl(id, throwable)) {
                 text("report this issue")
             }
             text(".")
@@ -83,15 +82,15 @@ private fun FlowContent.showError(ruleName: Rule.Name, throwable: Throwable) {
     }
 }
 
-private fun createReportUrl(ruleName: Rule.Name, throwable: Throwable): String {
-    val title = URLEncoder.encode("HtmlReport error in rule: $ruleName", "UTF8")
+private fun createReportUrl(ruleId: String, throwable: Throwable): String {
+    val title = URLEncoder.encode("HtmlReport error in rule: $ruleId", "UTF8")
     val stackTrace = throwable.printStackTraceString()
         .lineSequence()
         .take(STACK_TRACE_LINES_TO_SHOW)
         .joinToString("\n")
     val bodyMessage = """
         |I found an error in the html report:
-        |- Rule: $ruleName
+        |- Rule: $ruleId
         |- detekt version: ${whichDetekt()}"}
         |- Stacktrace:
         |```
