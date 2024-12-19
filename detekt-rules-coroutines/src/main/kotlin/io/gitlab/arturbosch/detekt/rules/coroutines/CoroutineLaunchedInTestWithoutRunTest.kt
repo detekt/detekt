@@ -5,7 +5,8 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
+import io.gitlab.arturbosch.detekt.rules.coroutines.utils.isCoroutineScope
+import io.gitlab.arturbosch.detekt.rules.coroutines.utils.isCoroutinesFlow
 import io.gitlab.arturbosch.detekt.rules.hasAnnotation
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
@@ -59,7 +60,11 @@ class CoroutineLaunchedInTestWithoutRunTest(config: Config) : Rule(
         if (initialFunction.runsInRunTestBlock()) return
 
         // By this point we know we're inside a test function that is not a `runTest` function.
-        if (funCoroutineLaunchesTraverseHelper.isFunctionLaunchingCoroutines(initialFunction, bindingContext)) {
+        if (funCoroutineLaunchesTraverseHelper.isFunctionLaunchingCoroutines(
+                initialFunction,
+                bindingContext
+            )
+        ) {
             report(CodeSmell(Entity.from(initialFunction), MESSAGE))
         }
     }
@@ -134,11 +139,11 @@ class FunCoroutineLaunchesTraverseHelper {
         anyDescendantOfType<KtDotQualifiedExpression> {
             it.receiverExpression
                 .getType(bindingContext)
-                ?.fqNameOrNull() == COROUTINE_SCOPE_FQ &&
-                it.getCalleeExpressionIfAny()?.text == "launch"
+                ?.isCoroutineScope() == true &&
+                it.getCalleeExpressionIfAny()?.text in listOf("launch", "async") ||
+                it.receiverExpression
+                    .getType(bindingContext)
+                    ?.isCoroutinesFlow() == true &&
+                it.getCalleeExpressionIfAny()?.text == "launchIn"
         }
-
-    companion object {
-        private val COROUTINE_SCOPE_FQ = FqName("kotlinx.coroutines.CoroutineScope")
-    }
 }
