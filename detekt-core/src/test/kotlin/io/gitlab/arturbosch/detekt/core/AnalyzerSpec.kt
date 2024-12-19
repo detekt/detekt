@@ -7,6 +7,7 @@ import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
@@ -22,6 +23,7 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.elementsInRange
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -46,7 +48,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
                     """.trimIndent()
                 ),
             )
-            val analyzer = Analyzer(settings, listOf(CustomRuleSetProvider()), emptyList())
+            val analyzer = Analyzer(settings, CustomRuleSetProvider())
 
             assertThatThrownBy { settings.use { analyzer.run(listOf(compileForTest(testFile))) } }
                 .isInstanceOf(IllegalStateException::class.java)
@@ -71,7 +73,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
                     parallelAnalysis = true
                 }
             }
-            val analyzer = Analyzer(settings, listOf(CustomRuleSetProvider()), emptyList())
+            val analyzer = Analyzer(settings, CustomRuleSetProvider())
 
             assertThatThrownBy { settings.use { analyzer.run(listOf(compileForTest(testFile))) } }
                 .isInstanceOf(IllegalStateException::class.java)
@@ -100,7 +102,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
                 ),
                 outputChannel = output,
             )
-            val analyzer = Analyzer(settings, listOf(CustomRuleSetProvider()), emptyList())
+            val analyzer = Analyzer(settings, CustomRuleSetProvider())
 
             assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) }).isEmpty()
             assertThat(output.toString()).isEqualTo(
@@ -127,7 +129,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
                 ),
                 outputChannel = output,
             )
-            val analyzer = Analyzer(settings, listOf(CustomRuleSetProvider()), emptyList())
+            val analyzer = Analyzer(settings, CustomRuleSetProvider())
 
             assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) }).hasSize(1)
             assertThat(output.toString()).isEqualTo(
@@ -154,7 +156,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
                 ),
                 outputChannel = output,
             )
-            val analyzer = Analyzer(settings, listOf(CustomRuleSetProvider()), emptyList())
+            val analyzer = Analyzer(settings, CustomRuleSetProvider())
 
             assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) }).hasSize(2)
         }
@@ -178,11 +180,11 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
                 ),
                 outputChannel = output,
             )
-            val analyzer = Analyzer(settings, listOf(CustomRuleSetProvider()), emptyList())
             val ktFile = compileForTest(testFile)
             val bindingContext = env.createBindingContext(listOf(ktFile))
 
-            assertThat(settings.use { analyzer.run(listOf(ktFile), bindingContext) }).hasSize(2)
+            val analyzer = Analyzer(settings, CustomRuleSetProvider(), bindingContext = bindingContext)
+            assertThat(settings.use { analyzer.run(listOf(ktFile)) }).hasSize(2)
             assertThat(output.toString()).isEmpty()
         }
 
@@ -204,7 +206,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
                 ),
                 outputChannel = output,
             )
-            val analyzer = Analyzer(settings, listOf(CustomRuleSetProvider()), emptyList())
+            val analyzer = Analyzer(settings, CustomRuleSetProvider())
 
             assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) }).isEmpty()
             assertThat(output.toString()).isEmpty()
@@ -225,7 +227,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
                 ),
                 outputChannel = output,
             )
-            val analyzer = Analyzer(settings, listOf(CustomRuleSetProvider()), emptyList())
+            val analyzer = Analyzer(settings, CustomRuleSetProvider())
 
             assertThatThrownBy { settings.use { analyzer.run(listOf(compileForTest(testFile))) } }
                 .hasCauseInstanceOf(IllegalStateException::class.java)
@@ -248,7 +250,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
                 ),
                 outputChannel = output,
             )
-            val analyzer = Analyzer(settings, listOf(CustomRuleSetProvider()), emptyList())
+            val analyzer = Analyzer(settings, CustomRuleSetProvider())
 
             assertThatThrownBy { settings.use { analyzer.run(listOf(compileForTest(testFile))) } }
                 .hasCauseInstanceOf(IllegalStateException::class.java)
@@ -377,7 +379,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
 
             return createProcessingSettings(config = config) { project { basePath = root } }
                 .use { settings ->
-                    Analyzer(settings, listOf(CustomRuleSetProvider()), emptyList())
+                    Analyzer(settings, CustomRuleSetProvider())
                         .run(listOf(compileForTest(pathToCheck)))
                         .isNotEmpty()
                 }
@@ -404,7 +406,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
                 fun foo() = Unit
             """.trimIndent()
             val findings = createProcessingSettings(config = config).use { settings ->
-                Analyzer(settings, listOf(CustomRuleSetProvider()), emptyList())
+                Analyzer(settings, CustomRuleSetProvider())
                     .run(listOf(compileContentForTest(code)))
             }
             assertThat(findings).isEmpty()
@@ -427,7 +429,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
                 fun foo() = Unit
             """.trimIndent()
             val findings = createProcessingSettings(config = config).use { settings ->
-                Analyzer(settings, listOf(CustomRuleSetProvider()), emptyList())
+                Analyzer(settings, CustomRuleSetProvider())
                     .run(listOf(compileContentForTest(code)))
             }
             assertThat(findings).isEmpty()
@@ -495,3 +497,10 @@ private class FaultyRuleNoStackTrace(config: Config) : Rule(config, "") {
             }
         }
 }
+
+internal fun Analyzer(
+    settings: ProcessingSettings,
+    vararg processors: RuleSetProvider,
+    providers: List<FileProcessListener> = emptyList(),
+    bindingContext: BindingContext = BindingContext.EMPTY,
+): Analyzer = Analyzer(settings, processors.toList(), providers, bindingContext)
