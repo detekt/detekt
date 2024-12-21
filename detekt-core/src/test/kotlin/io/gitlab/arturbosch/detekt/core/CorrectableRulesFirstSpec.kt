@@ -33,14 +33,13 @@ class CorrectableRulesFirstSpec {
         ) { rules { autoCorrect = true } }
         val detector = Analyzer(
             settings,
-            listOf(object : RuleSetProvider {
+            object : RuleSetProvider {
                 override val ruleSetId = RuleSet.Id("Test")
                 override fun instance() = RuleSet(
                     ruleSetId,
                     listOf(::NonCorrectable, ::Correctable).let { if (reverse) it.reversed() else it }
                 )
-            }),
-            emptyList()
+            },
         )
 
         settings.use { detector.run(listOf(compileForTest(testFile))) }
