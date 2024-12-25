@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -413,5 +414,15 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
             }
         """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
+    fun `does not report expected classes`() {
+        val code = """
+            expect class Foo() {
+                val bar: String
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 }
