@@ -10,6 +10,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import io.gitlab.arturbosch.detekt.rules.isExpect
 import io.gitlab.arturbosch.detekt.rules.isOpen
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtFile
@@ -132,7 +133,8 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
             klass.isSealed() ||
             klass.isInline() ||
             klass.isValue() ||
-            klass.isInner()
+            klass.isInner() ||
+            klass.isExpect()
 
     private fun hasOnlyPrivateConstructors(klass: KtClass): Boolean {
         val primaryConstructor = klass.primaryConstructor
