@@ -50,7 +50,7 @@ class TopLevelAutoCorrectSpec {
             }
         }
 
-        AnalysisFacade(spec).runAnalysis { settings->
+        AnalysisFacade(spec).runAnalysis { settings ->
             DefaultLifecycle(
                 settings.config,
                 settings,
