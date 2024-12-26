@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.createBindingContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import io.gitlab.arturbosch.detekt.test.location
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
@@ -31,6 +32,103 @@ class CoroutineLaunchedInTestWithoutRunTestSpec(private val env: KotlinCoreEnvir
                 fun `test that launches a coroutine`() {
                     val scope = CoroutineScope(Dispatchers.Unconfined)
                     scope.launch {
+                        throw Exception()
+                    }
+                }
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
+    fun `reports when two coroutine is launched in a test as one violation`() {
+        val code = """
+            import kotlinx.coroutines.CoroutineScope
+            import kotlinx.coroutines.Dispatchers
+            import kotlinx.coroutines.launch
+            import kotlinx.coroutines.async
+
+            class A {
+                annotation class Test
+
+                @Test
+                fun `test that launches a coroutine`() {
+                    val scope = CoroutineScope(Dispatchers.Unconfined)
+                    scope.launch {
+                        throw Exception()
+                    }
+
+                    scope.async {
+                        throw Exception()
+                    }
+                }
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
+    fun `reports when coroutine is deferred in test without a runTest block`() {
+        val code = """
+            import kotlinx.coroutines.CoroutineScope
+            import kotlinx.coroutines.Dispatchers
+            import kotlinx.coroutines.async
+
+            class A {
+                annotation class Test
+
+                @Test
+                fun `test that launches a coroutine in async`() {
+                    val scope = CoroutineScope(Dispatchers.Unconfined)
+                    scope.async {
+                        throw Exception()
+                    }
+                }
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
+    fun `reports when coroutine is launched using GlobalScope in test without a runTest block`() {
+        val code = """
+            import kotlinx.coroutines.GlobalScope
+            import kotlinx.coroutines.CoroutineScope
+            import kotlinx.coroutines.Dispatchers
+            import kotlinx.coroutines.launch
+
+            class A {
+                annotation class Test
+
+                @Test
+                fun `test that launches a coroutine`() {
+                    GlobalScope.launch {
+                        throw Exception()
+                    }
+                }
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
+    fun `reports when coroutine is launched using GlobalScope in test in another fun without a runTest block`() {
+        val code = """
+            import kotlinx.coroutines.GlobalScope
+            import kotlinx.coroutines.CoroutineScope
+            import kotlinx.coroutines.Dispatchers
+            import kotlinx.coroutines.launch
+
+            class A {
+                annotation class Test
+
+                @Test
+                fun `test that launches a coroutine`() {
+                    launchCoroutineInGlobalScope()
+                }
+
+                fun launchCoroutineInGlobalScope() {
+                    GlobalScope.launch {
                         throw Exception()
                     }
                 }
@@ -364,5 +462,161 @@ class CoroutineLaunchedInTestWithoutRunTestSpec(private val env: KotlinCoreEnvir
             }
         """.trimIndent()
         assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
+    }
+
+    @Test
+    fun `reports correctly scope is present in a class`() {
+        val code = """
+            import kotlinx.coroutines.CoroutineScope
+            import kotlinx.coroutines.Dispatchers
+            import kotlinx.coroutines.launch
+            import kotlinx.coroutines.runBlocking
+
+            class ScopeHolder {
+                val scope = CoroutineScope(Dispatchers.Unconfined)
+            }
+            
+            class A {
+                annotation class Test
+
+                @Test
+                fun `test that launches a coroutine using scope holder`() = runBlocking {
+                    val scopeHolder = ScopeHolder()
+                    scopeHolder.scope.launch {
+                        throw Exception()
+                    }
+                }
+
+                @Test
+                fun `test that launches a coroutine using scope holder in another function`() = runBlocking {
+                    launchCoroutineWithScopeHolder()
+                }
+                
+                fun launchCoroutineWithScopeHolder() {
+                    val scopeHolder = ScopeHolder()
+                    scopeHolder.scope.launch {
+                        throw Exception()
+                    }
+                }
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
+    }
+
+    @Test
+    fun `reports TC where flow is launched using launchIn- #7200`() {
+        val code = """
+            import kotlinx.coroutines.GlobalScope
+            import kotlinx.coroutines.flow.flowOf
+            import kotlinx.coroutines.flow.launchIn
+
+            annotation class Test
+
+            class TestCoroutineRunTest {
+                @Test
+                fun testFlowNoRunTest() {
+                    flowOf("foo", "bar").launchIn(GlobalScope)
+                }
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
+    fun `reports TC where flow is launched using launchIn in other function`() {
+        val code = """
+            import kotlinx.coroutines.GlobalScope
+            import kotlinx.coroutines.flow.flowOf
+            import kotlinx.coroutines.flow.launchIn
+
+            annotation class Test
+
+            class TestCoroutineRunTest {
+                @Test
+                fun testFlowNoRunTest() {
+                    launchFlow()
+                }
+
+                fun launchFlow() {
+                    flowOf("foo", "bar").launchIn(GlobalScope)
+                }
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
+    fun `reports TC where flow is collected inside GlobalScope`() {
+        val code = """
+            import kotlinx.coroutines.GlobalScope
+            import kotlinx.coroutines.flow.flowOf
+            import kotlinx.coroutines.launch
+
+            annotation class Test
+
+            class TestCoroutineRunTest {
+                @Test
+                fun testFlowNoRunTest() {
+                    GlobalScope.launch {
+                        flowOf("foo", "bar").collect { println(it) }
+                    }
+                }
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
+    fun `reports TC where flow is collected inside GlobalScope in other function`() {
+        val code = """
+            import kotlinx.coroutines.GlobalScope
+            import kotlinx.coroutines.flow.flowOf
+            import kotlinx.coroutines.launch
+
+            annotation class Test
+
+            class TestCoroutineRunTest {
+                @Test
+                fun testFlowNoRunTest() {
+                    launchFlow()
+                }
+
+                fun launchFlow() {
+                    GlobalScope.launch {
+                        flowOf("foo", "bar").collect { println(it) }
+                    }
+                }
+            }
+        """.trimIndent()
+        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
+    fun `reports TC where flow is collected in GlobalScope in other file - #7192`() {
+        val file = """
+            import kotlinx.coroutines.GlobalScope
+            import kotlinx.coroutines.launch
+
+            annotation class Test
+
+            class TestCoroutineRunTestDetekt {
+                fun testCoroutine() {
+                    GlobalScope.launch {
+                        val foo = "foo"
+                        println(foo)
+                    }
+                }
+            }
+        """.trimIndent()
+
+        val code = """
+            class TestCoroutineRunTest {
+                @Test
+                fun testNoRunTest() {
+                    TestCoroutineRunTestDetekt().testCoroutine()
+                }
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code, file)).hasSize(1)
     }
 }
