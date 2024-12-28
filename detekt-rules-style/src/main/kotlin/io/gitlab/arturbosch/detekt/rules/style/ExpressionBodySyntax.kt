@@ -14,6 +14,7 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtReturnExpression
+import org.jetbrains.kotlin.psi.KtWhenEntry
 import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 
 /**
@@ -59,7 +60,9 @@ class ExpressionBodySyntax(config: Config) : Rule(
     private fun KtDeclarationWithBody.checkForExpressionBodySyntax() {
         val stmt = bodyExpression
             ?.singleReturnStatement()
-            ?.takeUnless { it.containsReturnStmtsInNullableArguments() }
+            ?.takeUnless {
+                it.containsReturnStmtsInNullableArguments() || it.containsReturnInWhenExpressions()
+            }
 
         if (stmt != null && (includeLineWrapping || !isLineWrapped(stmt))) {
             report(CodeSmell(Entity.from(stmt), description))
@@ -68,6 +71,11 @@ class ExpressionBodySyntax(config: Config) : Rule(
 
     private fun KtExpression.singleReturnStatement(): KtReturnExpression? =
         (this as? KtBlockExpression)?.statements?.singleOrNull() as? KtReturnExpression
+
+    private fun KtReturnExpression.containsReturnInWhenExpressions(): Boolean =
+        anyDescendantOfType<KtReturnExpression> {
+            (it.parent as? KtWhenEntry) != null
+        }
 
     private fun KtReturnExpression.containsReturnStmtsInNullableArguments(): Boolean =
         anyDescendantOfType<KtReturnExpression> { (it.parent as? KtBinaryExpression)?.operationToken == KtTokens.ELVIS }
