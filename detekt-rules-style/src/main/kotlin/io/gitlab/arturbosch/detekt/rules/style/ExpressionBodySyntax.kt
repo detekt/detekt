@@ -74,7 +74,7 @@ class ExpressionBodySyntax(config: Config) : Rule(
 
     private fun KtReturnExpression.containsReturnInWhenExpressions(): Boolean =
         anyDescendantOfType<KtReturnExpression> {
-            (it.parent as? KtWhenEntry) != null
+            it.parent is KtWhenEntry
         }
 
     private fun KtReturnExpression.containsReturnStmtsInNullableArguments(): Boolean =
