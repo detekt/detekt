@@ -1,4 +1,4 @@
-import com.vdurmont.semver4j.Semver
+import org.semver4j.Semver
 
 plugins {
     id("com.github.breadmoirai.github-release")
@@ -6,28 +6,33 @@ plugins {
 }
 
 nexusPublishing {
-    packageGroup.set("io.gitlab.arturbosch")
+    packageGroup = "io.gitlab.arturbosch"
 
     repositories {
         create("sonatype") {
-            System.getenv("ORG_GRADLE_PROJECT_SONATYPE_USERNAME")?.let { username.set(it) }
-            System.getenv("ORG_GRADLE_PROJECT_SONATYPE_PASSWORD")?.let { password.set(it) }
+            username = providers.environmentVariable("ORG_GRADLE_PROJECT_SONATYPE_USERNAME")
+            password = providers.environmentVariable("ORG_GRADLE_PROJECT_SONATYPE_PASSWORD")
         }
     }
+}
+
+val releaseArtifacts: Configuration by configurations.dependencyScope("releaseArtifacts")
+val releaseAssetFiles by configurations.resolvable("releaseAssetFiles") {
+    extendsFrom(releaseArtifacts)
 }
 
 val version = Versions.currentOrSnapshot()
 
 githubRelease {
     token(providers.gradleProperty("github.token"))
-    owner.set("detekt")
-    repo.set("detekt")
-    overwrite.set(true)
-    dryRun.set(false)
-    draft.set(true)
-    prerelease.set(true)
-    targetCommitish.set("main")
-    body(
+    owner = "detekt"
+    repo = "detekt"
+    overwrite = true
+    dryRun = false
+    draft = true
+    prerelease = true
+    targetCommitish = "main"
+    body =
         provider {
             var changelog = project.file("website/src/pages/changelog.md").readText()
             val nextNonBetaVersion = version
@@ -36,19 +41,34 @@ githubRelease {
             changelog = changelog.substring(0, changelog.indexOf("#### 1.", changelog.indexOf(sectionStart) + 1))
             changelog.trim()
         }
-    )
-    val cliBuildDir = project(":detekt-cli").buildDir
-    releaseAssets.setFrom(
-        cliBuildDir.resolve("libs/detekt-cli-$version-all.jar"),
-        cliBuildDir.resolve("distributions/detekt-cli-$version.zip"),
-        project(":detekt-formatting").buildDir.resolve("libs/detekt-formatting-$version.jar"),
-        project(":detekt-generator").buildDir.resolve("libs/detekt-generator-$version-all.jar"),
-        project(":detekt-compiler-plugin").buildDir.resolve("libs/detekt-compiler-plugin-$version-all.jar"),
-        project(":detekt-rules-libraries").buildDir
-            .resolve("libs/detekt-rules-libraries-$version.jar"),
-        project(":detekt-rules-ruleauthors").buildDir
-            .resolve("libs/detekt-rules-ruleauthors-$version.jar")
-    )
+    releaseAssets.setFrom(releaseAssetFiles)
+}
+
+dependencies {
+    releaseArtifacts(project(":detekt-cli")) {
+        targetConfiguration = "shadow" // com.github.jengelman.gradle.plugins.shadow.ShadowBasePlugin.CONFIGURATION_NAME
+    }
+    releaseArtifacts(project(":detekt-cli")) {
+        targetConfiguration = "shadowDist"
+    }
+    releaseArtifacts(project(":detekt-generator")) {
+        targetConfiguration = "shadow" // com.github.jengelman.gradle.plugins.shadow.ShadowBasePlugin.CONFIGURATION_NAME
+    }
+    releaseArtifacts(project(":detekt-compiler-plugin")) {
+        targetConfiguration = "shadow" // com.github.jengelman.gradle.plugins.shadow.ShadowBasePlugin.CONFIGURATION_NAME
+    }
+    releaseArtifacts(project(":detekt-formatting")) {
+        targetConfiguration = Dependency.DEFAULT_CONFIGURATION
+        isTransitive = false
+    }
+    releaseArtifacts(project(":detekt-rules-libraries")) {
+        targetConfiguration = Dependency.DEFAULT_CONFIGURATION
+        isTransitive = false
+    }
+    releaseArtifacts(project(":detekt-rules-ruleauthors")) {
+        targetConfiguration = Dependency.DEFAULT_CONFIGURATION
+        isTransitive = false
+    }
 }
 
 fun updateVersion(increment: (Semver) -> Semver) {
@@ -68,14 +88,23 @@ fun updateVersion(increment: (Semver) -> Semver) {
 }
 
 tasks {
-    register("incrementPatch") { doLast { updateVersion { it.nextPatch() } } }
-    register("incrementMinor") { doLast { updateVersion { it.nextMinor() } } }
-    register("incrementMajor") { doLast { updateVersion { it.nextMajor() } } }
+    register("incrementPatch") {
+        notCompatibleWithConfigurationCache("cannot serialize Gradle script object references")
+        doLast { updateVersion { it.nextPatch() } }
+    }
+    register("incrementMinor") {
+        notCompatibleWithConfigurationCache("cannot serialize Gradle script object references")
+        doLast { updateVersion { it.nextMinor() } }
+    }
+    register("incrementMajor") {
+        notCompatibleWithConfigurationCache("cannot serialize Gradle script object references")
+        doLast { updateVersion { it.nextMajor() } }
+    }
 
     register<UpdateVersionInFileTask>("applyDocVersion") {
-        fileToUpdate.set(file("$rootDir/website/src/remark/detektVersionReplace.js"))
-        linePartToFind.set("const detektVersion = ")
-        lineTransformation.set("const detektVersion = \"${Versions.DETEKT}\";")
+        fileToUpdate = file("$rootDir/website/src/remark/detektVersionReplace.js")
+        linePartToFind = "const detektVersion = "
+        lineTransformation = "const detektVersion = \"${Versions.DETEKT}\";"
     }
 }
 

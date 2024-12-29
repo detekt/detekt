@@ -56,7 +56,7 @@ class BaselineFacadeSpec {
                     <ID>LongParameterList:Signature</ID>
                     <ID>LongMethod:Signature</ID>
                   </ManuallySuppressedIssues>
-                  <CurrentIssues></CurrentIssues>
+                  <CurrentIssues/>
                 </SmellBaseline>
             """.trimIndent()
         )

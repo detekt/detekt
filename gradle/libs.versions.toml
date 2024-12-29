@@ -45,6 +45,10 @@ kotlinCompileTesting = { module = "dev.zacsweers.kctfork:core", version = "0.5.0
 jetbrains-annotations = "org.jetbrains:annotations:24.1.0"
 poko-annotations = { module = "dev.drewhamilton.poko:poko-annotations", version = "0.16.0" }
 
+gradleNexus-publish-plugin = { module = "io.github.gradle-nexus:publish-plugin", version = "2.0.0" }
+semver4j = { module = "org.semver4j:semver4j", version = "5.4.1" }
+breadmoirai-githubRelease-plugin = { module = "com.github.breadmoirai:github-release", version = "2.5.2" }
+
 [plugins]
 binaryCompatibilityValidator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version = "0.16.3" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }

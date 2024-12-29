@@ -9,9 +9,9 @@ repositories {
 
 dependencies {
     implementation(libs.kotlin.gradle)
-    implementation(libs.githubRelease.gradle)
-    implementation(libs.semver4j.gradle)
-    implementation(libs.nexusPublish.gradle)
+    implementation(libs.gradleNexus.publish.plugin)
+    implementation(libs.semver4j)
+    implementation(libs.breadmoirai.githubRelease.plugin)
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
