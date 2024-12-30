@@ -125,7 +125,7 @@ internal class Analyzer(
                     it.entity.ktElement.isSuppressedBy(ruleInstance.id, rule.aliases, ruleInstance.ruleSetId)
                 }
                 .filterSuppressedFindings(rule, bindingContext)
-                .map { it.toIssue(ruleInstance, rule.computeSeverity(), settings.spec.projectSpec.basePath) }
+                .map { it.toIssue(ruleInstance, ruleInstance.severity, settings.spec.projectSpec.basePath) }
         }
     }
 
@@ -206,7 +206,13 @@ private fun Location.toIssue(basePath: Path): Issue.Location =
     Issue.Location(source, endSource, text, basePath.relativize(path))
 
 private fun Rule.toRuleInstance(id: String, ruleSetId: RuleSet.Id): RuleInstance =
-    RuleInstance(id, ruleName, ruleSetId, description)
+    RuleInstance(
+        id = id,
+        name = ruleName,
+        ruleSetId = ruleSetId,
+        description = description,
+        severity = computeSeverity(),
+    )
 
 /**
  * Compute severity in the priority order:
