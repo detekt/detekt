@@ -59,15 +59,13 @@ fun createRuleInstance(
     url: String? = null,
     description: String = "Description ${id.split("/", limit = 2).first()}",
     severity: Severity = Severity.Error,
-): RuleInstance {
-    return RuleInstance(
-        id = id,
-        ruleSetId = RuleSet.Id(ruleSetId),
-        url = url?.let(::URI),
-        description = description,
-        severity = severity,
-    )
-}
+): RuleInstance = RuleInstance(
+    id = id,
+    ruleSetId = RuleSet.Id(ruleSetId),
+    url = url?.let(::URI),
+    description = description,
+    severity = severity,
+)
 
 fun createEntity(
     signature: String = "TestEntitySignature",
