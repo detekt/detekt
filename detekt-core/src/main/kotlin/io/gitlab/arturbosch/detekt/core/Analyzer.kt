@@ -32,12 +32,10 @@ import kotlin.reflect.full.hasAnnotation
 internal class Analyzer(
     private val settings: ProcessingSettings,
     private val providers: List<RuleSetProvider>,
-    private val processors: List<FileProcessListener>
+    private val processors: List<FileProcessListener>,
+    private val bindingContext: BindingContext,
 ) {
-    fun run(
-        ktFiles: Collection<KtFile>,
-        bindingContext: BindingContext = BindingContext.EMPTY
-    ): List<Issue> {
+    fun run(ktFiles: Collection<KtFile>): List<Issue> {
         val languageVersionSettings = settings.environment.configuration.languageVersionSettings
 
         val dataFlowValueFactory = DataFlowValueFactoryImpl(languageVersionSettings)
@@ -49,21 +47,20 @@ internal class Analyzer(
             log = settings::debug
         )
         return if (settings.spec.executionSpec.parallelAnalysis) {
-            runAsync(ktFiles, activeRules, bindingContext, compilerResources)
+            runAsync(ktFiles, activeRules, compilerResources)
         } else {
-            runSync(ktFiles, activeRules, bindingContext, compilerResources)
+            runSync(ktFiles, activeRules, compilerResources)
         }
     }
 
     private fun runSync(
         ktFiles: Collection<KtFile>,
         rules: List<RuleDescriptor>,
-        bindingContext: BindingContext,
         compilerResources: CompilerResources
     ): List<Issue> =
         ktFiles.flatMap { file ->
             processors.forEach { it.onProcess(file) }
-            val issues = runCatching { analyze(file, rules, bindingContext, compilerResources) }
+            val issues = runCatching { analyze(file, rules, compilerResources) }
                 .onFailure { throwIllegalStateException(file, it) }
                 .getOrDefault(emptyList())
             processors.forEach { it.onProcessComplete(file, issues) }
@@ -73,14 +70,13 @@ internal class Analyzer(
     private fun runAsync(
         ktFiles: Collection<KtFile>,
         rules: List<RuleDescriptor>,
-        bindingContext: BindingContext,
         compilerResources: CompilerResources
     ): List<Issue> {
         val service = settings.taskPool
         val tasks: TaskList<List<Issue>?> = ktFiles.map { file ->
             service.task {
                 processors.forEach { it.onProcess(file) }
-                val issues = analyze(file, rules, bindingContext, compilerResources)
+                val issues = analyze(file, rules, compilerResources)
                 processors.forEach { it.onProcessComplete(file, issues) }
                 issues
             }.recover { throwIllegalStateException(file, it) }
@@ -91,7 +87,6 @@ internal class Analyzer(
     private fun analyze(
         file: KtFile,
         rules: List<RuleDescriptor>,
-        bindingContext: BindingContext,
         compilerResources: CompilerResources
     ): List<Issue> {
         val (correctableRules, otherRules) = rules.asSequence()
