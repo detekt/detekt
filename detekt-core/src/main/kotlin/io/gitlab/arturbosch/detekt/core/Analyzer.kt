@@ -36,42 +36,48 @@ internal class Analyzer(
     private val processors: List<FileProcessListener>,
     private val bindingContext: BindingContext,
 ) {
-    fun run(
-        ktFiles: Collection<KtFile>,
-    ): List<Issue> {
+    fun run(ktFiles: Collection<KtFile>): List<Issue> {
         val languageVersionSettings = settings.environment.configuration.languageVersionSettings
 
         val dataFlowValueFactory = DataFlowValueFactoryImpl(languageVersionSettings)
         val compilerResources = CompilerResources(languageVersionSettings, dataFlowValueFactory)
-        if (bindingContext == BindingContext.EMPTY) {
-            warnAboutEnabledRequiresFullAnalysisRules()
-        }
+        val activeRules = getActiveRules(
+            fullAnalysis = bindingContext != BindingContext.EMPTY,
+            providers = providers,
+            config = settings.config,
+            log = settings::debug
+        )
         return if (settings.spec.executionSpec.parallelAnalysis) {
-            runAsync(ktFiles, compilerResources)
+            runAsync(ktFiles, activeRules, compilerResources)
         } else {
-            runSync(ktFiles, compilerResources)
+            runSync(ktFiles, activeRules, compilerResources)
         }
     }
 
     private fun runSync(
         ktFiles: Collection<KtFile>,
+        rules: List<RuleDescriptor>,
         compilerResources: CompilerResources
     ): List<Issue> =
         ktFiles.flatMap { file ->
             processors.forEach { it.onProcess(file) }
-            val issues = runCatching { analyze(file, compilerResources) }
+            val issues = runCatching { analyze(file, rules, compilerResources) }
                 .onFailure { throwIllegalStateException(file, it) }
                 .getOrDefault(emptyList())
             processors.forEach { it.onProcessComplete(file, issues) }
             issues
         }
 
-    private fun runAsync(ktFiles: Collection<KtFile>, compilerResources: CompilerResources): List<Issue> {
+    private fun runAsync(
+        ktFiles: Collection<KtFile>,
+        rules: List<RuleDescriptor>,
+        compilerResources: CompilerResources
+    ): List<Issue> {
         val service = settings.taskPool
         val tasks: TaskList<List<Issue>?> = ktFiles.map { file ->
             service.task {
                 processors.forEach { it.onProcess(file) }
-                val issues = analyze(file, compilerResources)
+                val issues = analyze(file, rules, compilerResources)
                 processors.forEach { it.onProcessComplete(file, issues) }
                 issues
             }.recover { throwIllegalStateException(file, it) }
@@ -81,42 +87,21 @@ internal class Analyzer(
 
     private fun analyze(
         file: KtFile,
+        rules: List<RuleDescriptor>,
         compilerResources: CompilerResources
     ): List<Issue> {
-        val activeRuleSetsToRuleSetConfigs = providers.asSequence()
-            .map { it to settings.config.subConfig(it.ruleSetId.value) }
-            .filter { (_, ruleSetConfig) -> ruleSetConfig.isActiveOrDefault(true) }
-            .map { (provider, ruleSetConfig) -> provider.instance() to ruleSetConfig }
-            .filter { (_, ruleSetConfig) -> ruleSetConfig.shouldAnalyzeFile(file, settings.spec.projectSpec.basePath) }
-
-        val (correctableRules, otherRules) = activeRuleSetsToRuleSetConfigs
-            .flatMap { (ruleSet, ruleSetConfig) ->
-                ruleSetConfig.subConfigKeys()
-                    .asSequence()
-                    .mapNotNull { ruleId ->
-                        extractRuleName(ruleId)?.let { ruleName -> ruleId to ruleName }
-                    }
-                    .mapNotNull { (ruleId, ruleName) ->
-                        ruleSet.rules[ruleName]?.let { ruleProvider ->
-                            RuleDescriptor(
-                                ruleProvider = ruleProvider,
-                                config = ruleSetConfig.subConfig(ruleId),
-                                ruleId = ruleId,
-                            )
-                        }
-                    }
-                    .filter { (_, config, _) -> config.isActiveOrDefault(false) }
-                    .filter { (_, config, _) -> config.shouldAnalyzeFile(file, settings.spec.projectSpec.basePath) }
-                    .map { (ruleProvider, config, ruleId) ->
-                        val rule = ruleProvider(config)
-                        rule.toRuleInstance(ruleId, ruleSet.id) to rule
-                    }
+        val (correctableRules, otherRules) = rules.asSequence()
+            .filter { ruleDescriptor ->
+                ruleDescriptor.config.parent?.shouldAnalyzeFile(file, settings.spec.projectSpec.basePath) != false
+            }
+            .filter { ruleDescriptor ->
+                ruleDescriptor.config.shouldAnalyzeFile(file, settings.spec.projectSpec.basePath)
+            }
+            .map { ruleDescriptor ->
+                ruleDescriptor.toRuleInstance() to ruleDescriptor.ruleProvider(ruleDescriptor.config)
             }
             .filterNot { (ruleInstance, rule) ->
                 file.isSuppressedBy(ruleInstance.id, rule.aliases, ruleInstance.ruleSetId)
-            }
-            .filter { (_, rule) ->
-                bindingContext != BindingContext.EMPTY || !rule::class.hasAnnotation<RequiresFullAnalysis>()
             }
             .partition { (_, rule) -> rule.autoCorrect }
 
@@ -129,42 +114,56 @@ internal class Analyzer(
                 .map { it.toIssue(ruleInstance, ruleInstance.severity, settings.spec.projectSpec.basePath) }
         }
     }
+}
 
-    private fun warnAboutEnabledRequiresFullAnalysisRules() {
-        providers.asSequence()
-            .map { it to settings.config.subConfig(it.ruleSetId.value) }
-            .filter { (_, ruleSetConfig) -> ruleSetConfig.isActiveOrDefault(true) }
-            .map { (provider, ruleSetConfig) -> provider.instance() to ruleSetConfig }
-            .flatMap { (ruleSet, ruleSetConfig) ->
-                ruleSetConfig.subConfigKeys()
-                    .asSequence()
-                    .mapNotNull { ruleId -> extractRuleName(ruleId)?.let { ruleName -> ruleId to ruleName } }
-                    .mapNotNull { (ruleId, ruleName) ->
-                        ruleSet.rules[ruleName]?.let { ruleProvider ->
-                            RuleDescriptor(
-                                ruleProvider = ruleProvider,
-                                config = ruleSetConfig.subConfig(ruleId),
-                                ruleId = ruleId,
-                            )
-                        }
-                    }
-                    .filter { (_, config, _) -> config.isActiveOrDefault(false) }
-                    .map { (ruleProvider, config, ruleId) ->
-                        val rule = ruleProvider(config)
-                        rule.toRuleInstance(ruleId, ruleSet.id) to rule
-                    }
-            }
-            .filter { (_, rule) -> rule::class.hasAnnotation<RequiresFullAnalysis>() }
-            .forEach { (ruleInstance, _) ->
-                settings.debug { "The rule '${ruleInstance.id}' requires type resolution but it was run without it." }
+private fun getActiveRules(
+    fullAnalysis: Boolean,
+    providers: List<RuleSetProvider>,
+    config: Config,
+    log: (() -> String) -> Unit = {},
+): List<RuleDescriptor> = providers.asSequence()
+    .map { it to config.subConfig(it.ruleSetId.value) }
+    .filter { (_, ruleSetConfig) -> ruleSetConfig.isActiveOrDefault(true) }
+    .map { (provider, ruleSetConfig) -> provider.instance() to ruleSetConfig }
+    .flatMap { (ruleSet, ruleSetConfig) ->
+        ruleSetConfig.subConfigKeys()
+            .asSequence()
+            .mapNotNull { ruleId -> extractRuleName(ruleId)?.let { ruleName -> ruleId to ruleName } }
+            .mapNotNull { (ruleId, ruleName) ->
+                ruleSet.rules[ruleName]?.let { ruleProvider ->
+                    RuleDescriptor(
+                        ruleProvider = ruleProvider,
+                        config = ruleSetConfig.subConfig(ruleId),
+                        ruleId = ruleId,
+                        ruleSetId = ruleSet.id,
+                    )
+                }
             }
     }
-}
+    .filter { ruleDescriptor -> ruleDescriptor.config.isActiveOrDefault(false) }
+    .filter { ruleDescriptor ->
+        if (fullAnalysis) {
+            true
+        } else {
+            val requiresFullAnalysis = ruleDescriptor.ruleProvider(Config.empty)::class
+                .hasAnnotation<RequiresFullAnalysis>()
+            if (requiresFullAnalysis) {
+                log { "The rule '${ruleDescriptor.ruleId}' requires type resolution but it was run without it." }
+            }
+            !requiresFullAnalysis
+        }
+    }
+    .toList()
 
 internal fun extractRuleName(key: String): Rule.Name? =
     runCatching { Rule.Name(key.split("/", limit = 2).first()) }.getOrNull()
 
-private data class RuleDescriptor(val ruleProvider: (Config) -> Rule, val config: Config, val ruleId: String)
+private data class RuleDescriptor(
+    val ruleProvider: (Config) -> Rule,
+    val config: Config,
+    val ruleId: String,
+    val ruleSetId: RuleSet.Id,
+)
 
 private fun List<Finding>.filterSuppressedFindings(rule: Rule, bindingContext: BindingContext): List<Finding> {
     val suppressors = buildSuppressors(rule, bindingContext)
@@ -206,14 +205,16 @@ private fun Entity.toIssue(basePath: Path): Issue.Entity =
 private fun Location.toIssue(basePath: Path): Issue.Location =
     Issue.Location(source, endSource, text, basePath.relativize(path))
 
-private fun Rule.toRuleInstance(id: String, ruleSetId: RuleSet.Id): RuleInstance =
-    RuleInstance(
-        id = id,
+private fun RuleDescriptor.toRuleInstance(): RuleInstance {
+    val rule = ruleProvider(Config.empty)
+    return RuleInstance(
+        id = ruleId,
         ruleSetId = ruleSetId,
-        url = URI("https://detekt.dev/docs/rules/${ruleSetId.value.lowercase()}#${ruleName.value.lowercase()}"),
-        description = description,
-        severity = computeSeverity(),
+        url = URI("https://detekt.dev/docs/rules/${ruleSetId.value.lowercase()}#${rule.ruleName.value.lowercase()}"),
+        description = rule.description,
+        severity = rule.computeSeverity(),
     )
+}
 
 /**
  * Compute severity in the priority order:
