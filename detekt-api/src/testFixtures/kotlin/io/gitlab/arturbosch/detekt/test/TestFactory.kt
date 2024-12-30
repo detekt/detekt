@@ -6,6 +6,7 @@ import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
+import java.net.URI
 import kotlin.io.path.Path
 
 fun createIssue(
@@ -62,7 +63,7 @@ fun createRuleInstance(
     return RuleInstance(
         id = id,
         ruleSetId = RuleSet.Id(ruleSetId),
-        url = url,
+        url = url?.let(::URI),
         description = description,
         severity = severity,
     )

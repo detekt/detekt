@@ -105,7 +105,7 @@ private fun MarkdownContent.renderRule(ruleInstance: RuleInstance, issues: List<
     h3 { "$ruleSetId, $ruleId (%,d)".format(Locale.ROOT, issues.size) }
     paragraph { ruleInstance.description }
 
-    ruleInstance.url?.let { paragraph { link("Documentation", it) } }
+    ruleInstance.url?.let { paragraph { link("Documentation", it.toString()) } }
 
     list {
         issues

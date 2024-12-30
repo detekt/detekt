@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.api
 
 import dev.drewhamilton.poko.Poko
+import java.net.URI
 import java.nio.file.Path
 
 /**
@@ -46,7 +47,7 @@ val Issue.suppressed: Boolean
 class RuleInstance(
     val id: String,
     val ruleSetId: RuleSet.Id,
-    val url: String?,
+    val url: URI?,
     val description: String,
     val severity: Severity,
 )

@@ -131,7 +131,7 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
             }
 
             if (ruleInstance.url != null) {
-                a(ruleInstance.url) { +"Documentation" }
+                a(ruleInstance.url.toString()) { +"Documentation" }
             }
 
             ul {

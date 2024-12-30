@@ -31,6 +31,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
+import java.net.URI
 import kotlin.io.path.Path
 
 @KotlinCoreEnvironmentTest
@@ -142,7 +143,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
                         ruleInstance = RuleInstance(
                             id = "MaxLineLength/foo",
                             ruleSetId = RuleSet.Id("custom"),
-                            url = "https://detekt.dev/docs/rules/custom#maxlinelength",
+                            url = URI("https://detekt.dev/docs/rules/custom#maxlinelength"),
                             description = "TestDescription",
                             severity = Severity.Error,
                         ),
