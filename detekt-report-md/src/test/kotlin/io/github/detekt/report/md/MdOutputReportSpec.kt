@@ -69,7 +69,7 @@ class MdOutputReportSpec {
                 
                 Description rule_a
                 
-                [Documentation](https://detekt.dev/docs/rules/section-1#rule_a)
+                [Documentation](https://example.org/)
                 
                 * src/main/com/sample/Sample1.kt:9:17
                 ```
@@ -106,8 +106,6 @@ class MdOutputReportSpec {
                 ### Section-2, rule_b (1)
                 
                 Description rule_b
-                
-                [Documentation](https://detekt.dev/docs/rules/section-2#rule_b)
                 
                 * src/main/com/sample/Sample3.kt:14:16
                 ```
@@ -182,20 +180,6 @@ class MdOutputReportSpec {
     }
 
     @Test
-    fun `renders the right documentation links for the rules`() {
-        val detektion = TestDetektion(
-            createIssue(createRuleInstance("ValCouldBeVar", "Style")),
-            createIssue(createRuleInstance("EmptyBody", "empty")),
-            createIssue(createRuleInstance("EmptyIf", "empty")),
-        )
-
-        val result = mdReport.render(detektion)
-        assertThat(result).contains("[Documentation](https://detekt.dev/docs/rules/style#valcouldbevar)")
-        assertThat(result).contains("[Documentation](https://detekt.dev/docs/rules/empty#emptybody)")
-        assertThat(result).contains("[Documentation](https://detekt.dev/docs/rules/empty#emptyif)")
-    }
-
-    @Test
     fun `asserts that the generated md is the same even if we change the order of the issues`() {
         val issues = issues()
         val reversedIssues = issues.reversedArray()
@@ -222,9 +206,21 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
     )
 
     return createMdDetektion(
-        createIssue(createRuleInstance("rule_a/id", "Section-1"), entity1, "Issue message 1"),
-        createIssue(createRuleInstance("rule_a/id", "Section-1"), entity2, "Issue message 2"),
-        createIssue(createRuleInstance("rule_b", "Section-2"), entity3, "Issue message 3"),
+        createIssue(
+            createRuleInstance("rule_a/id", "Section-1", url = "https://example.org/"),
+            entity1,
+            "Issue message 1"
+        ),
+        createIssue(
+            createRuleInstance("rule_a/id", "Section-1", url = "https://example.org/"),
+            entity2,
+            "Issue message 2"
+        ),
+        createIssue(
+            createRuleInstance("rule_b", "Section-2", url = null),
+            entity3,
+            "Issue message 3"
+        ),
         createIssue(
             createRuleInstance("rule_c", "Section-2"),
             entity3,

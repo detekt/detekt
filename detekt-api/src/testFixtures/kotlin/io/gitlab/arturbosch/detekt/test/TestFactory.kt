@@ -1,12 +1,12 @@
 package io.gitlab.arturbosch.detekt.test
 
 import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleInstance
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
+import java.net.URI
 import kotlin.io.path.Path
 
 fun createIssue(
@@ -56,18 +56,16 @@ fun createIssue(
 fun createRuleInstance(
     id: String = "TestSmell/id",
     ruleSetId: String = "RuleSet${id.split("/", limit = 2).first()}",
+    url: String? = null,
     description: String = "Description ${id.split("/", limit = 2).first()}",
     severity: Severity = Severity.Error,
-): RuleInstance {
-    val split = id.split("/", limit = 2)
-    return RuleInstance(
-        id = id,
-        name = Rule.Name(split.first()),
-        ruleSetId = RuleSet.Id(ruleSetId),
-        description = description,
-        severity = severity,
-    )
-}
+): RuleInstance = RuleInstance(
+    id = id,
+    ruleSetId = RuleSet.Id(ruleSetId),
+    url = url?.let(::URI),
+    description = description,
+    severity = severity,
+)
 
 fun createEntity(
     signature: String = "TestEntitySignature",

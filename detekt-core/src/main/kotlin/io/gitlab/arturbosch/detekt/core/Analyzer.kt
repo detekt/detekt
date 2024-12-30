@@ -26,6 +26,7 @@ import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactoryImpl
+import java.net.URI
 import java.nio.file.Path
 import kotlin.reflect.full.hasAnnotation
 
@@ -208,8 +209,8 @@ private fun RuleDescriptor.toRuleInstance(): RuleInstance {
     val rule = ruleProvider(Config.empty)
     return RuleInstance(
         id = ruleId,
-        name = rule.ruleName,
         ruleSetId = ruleSetId,
+        url = URI("https://detekt.dev/docs/rules/${ruleSetId.value.lowercase()}#${rule.ruleName.value.lowercase()}"),
         description = rule.description,
         severity = rule.computeSeverity(),
     )
