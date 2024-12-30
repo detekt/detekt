@@ -164,6 +164,32 @@ class ExpressionBodySyntaxSpec {
     }
 
     @Nested
+    inner class `multiple return in when expression` {
+        val code = """
+            fun stuff(): Pair<String, String>? {
+                return Pair(
+                    first = "",
+                    second = when {
+                        true -> ""
+                        else -> return null 
+                    }
+                )
+            }
+        """.trimIndent()
+
+        @Test
+        fun `does not report with the default configuration`() {
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report with includeLineWrapping = true configuration`() {
+            val config = TestConfig(INCLUDE_LINE_WRAPPING to "true")
+            assertThat(ExpressionBodySyntax(config).compileAndLint(code)).isEmpty()
+        }
+    }
+
+    @Nested
     inner class `several return statements with multiline if expression` {
 
         val code = """

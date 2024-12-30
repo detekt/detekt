@@ -5,5 +5,13 @@
   "extends": [
     "config:base",
     "helpers:pinGitHubActionDigests"
+  ],
+  "packageRules" : [
+    {
+      "groupName": "Dokka",
+      "matchPackageNames": [
+        "org.jetbrains.dokka:**"
+      ]
+    }
   ]
 }

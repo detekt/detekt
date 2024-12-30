@@ -6,12 +6,10 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
+import io.gitlab.arturbosch.detekt.rules.coroutines.utils.isCoroutineScope
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.types.KotlinType
-import org.jetbrains.kotlin.types.typeUtil.supertypes
 
 /**
  * Suspend functions that use `CoroutineScope` as receiver should not be marked as `suspend`.
@@ -72,11 +70,4 @@ class SuspendFunWithCoroutineScopeReceiver(config: Config) : Rule(
             )
         }
     }
-
-    private fun KotlinType.isCoroutineScope() = sequence {
-        yield(this@isCoroutineScope)
-        yieldAll(this@isCoroutineScope.supertypes())
-    }
-        .mapNotNull { it.fqNameOrNull()?.asString() }
-        .contains("kotlinx.coroutines.CoroutineScope")
 }

@@ -115,7 +115,7 @@ internal class Analyzer(
                     it.entity.ktElement.isSuppressedBy(ruleInstance.id, rule.aliases, ruleInstance.ruleSetId)
                 }
                 .filterSuppressedFindings(rule, bindingContext)
-                .map { it.toIssue(ruleInstance, rule.computeSeverity(), settings.spec.projectSpec.basePath) }
+                .map { it.toIssue(ruleInstance, ruleInstance.severity, settings.spec.projectSpec.basePath) }
         }
     }
 }
@@ -216,6 +216,7 @@ private fun RuleDescriptor.toRuleInstance(): RuleInstance {
         name = rule.ruleName,
         ruleSetId = ruleSetId,
         description = rule.description,
+        severity = rule.computeSeverity(),
     )
 }
 
