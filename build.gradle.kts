@@ -6,7 +6,7 @@ import org.jetbrains.dokka.gradle.DokkaMultiModuleTask
 plugins {
     id("releasing")
     id("io.gitlab.arturbosch.detekt")
-    id("org.jetbrains.dokka") version "1.9.20"
+    id("org.jetbrains.dokka") version "2.0.0"
 }
 
 tasks.withType<DokkaMultiModuleTask>().configureEach {

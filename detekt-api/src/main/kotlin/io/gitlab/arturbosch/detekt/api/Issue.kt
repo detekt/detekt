@@ -48,4 +48,5 @@ class RuleInstance(
     val ruleSetId: RuleSet.Id,
     val url: String?,
     val description: String,
+    val severity: Severity,
 )

@@ -9,9 +9,9 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class SuspendFunWithCoroutineScopeReceiverSpec(val env: KotlinCoreEnvironment) {
+class SuspendFunWithCoroutineScopeReceiverSpec(private val env: KotlinCoreEnvironment) {
 
-    val subject = SuspendFunWithCoroutineScopeReceiver(Config.empty)
+    private val subject = SuspendFunWithCoroutineScopeReceiver(Config.empty)
 
     @Nested
     inner class `SuspendFunWithCoroutineScopeReceiver rule` {

@@ -143,7 +143,8 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
                             id = "MaxLineLength/foo",
                             ruleSetId = RuleSet.Id("custom"),
                             url = "https://detekt.dev/docs/rules/custom#maxlinelength",
-                            description = "TestDescription"
+                            description = "TestDescription",
+                            severity = Severity.Error,
                         ),
                         entity = Issue.Entity(
                             "AnAnnotation$@Target(AnnotationTarget.FILE, AnnotationTarget.FUNCTION)",

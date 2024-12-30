@@ -131,7 +131,7 @@ internal class Analyzer(
                     it.entity.ktElement.isSuppressedBy(ruleInstance.id, rule.aliases, ruleInstance.ruleSetId)
                 }
                 .filterSuppressedFindings(rule, bindingContext)
-                .map { it.toIssue(ruleInstance, rule.computeSeverity(), settings.spec.projectSpec.basePath) }
+                .map { it.toIssue(ruleInstance, ruleInstance.severity, settings.spec.projectSpec.basePath) }
         }
     }
 
@@ -217,6 +217,7 @@ private fun Rule.toRuleInstance(id: String, ruleSetId: RuleSet.Id): RuleInstance
         ruleSetId = ruleSetId,
         url = "https://detekt.dev/docs/rules/${ruleSetId.value.lowercase()}#${ruleName.value.lowercase()}",
         description = description,
+        severity = computeSeverity(),
     )
 
 /**
