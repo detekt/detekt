@@ -101,17 +101,11 @@ private fun MarkdownContent.renderGroup(issues: List<Issue>, basePath: Path) {
 
 private fun MarkdownContent.renderRule(ruleInstance: RuleInstance, issues: List<Issue>, basePath: Path) {
     val ruleId = ruleInstance.id
-    val ruleName = ruleInstance.name.value
     val ruleSetId = ruleInstance.ruleSetId.value
     h3 { "$ruleSetId, $ruleId (%,d)".format(Locale.ROOT, issues.size) }
     paragraph { ruleInstance.description }
 
-    paragraph {
-        link(
-            "Documentation",
-            "$DETEKT_WEBSITE_BASE_URL/docs/rules/${ruleSetId.lowercase()}#${ruleName.lowercase()}"
-        )
-    }
+    ruleInstance.url?.let { paragraph { link("Documentation", it.toString()) } }
 
     list {
         issues
