@@ -31,7 +31,7 @@ class Generator(
             printer.print(collector.items)
         }
 
-        outPrinter.println("\nGenerated all detekt documentation in $time ms.")
+        outPrinter.println("\nGenerated all detekt documentation in $time.")
     }
 
     fun executeCustomRuleConfig() {
@@ -51,7 +51,7 @@ class Generator(
                 }
         }
 
-        outPrinter.println("\nGenerated custom rules config in $time ms.")
+        outPrinter.println("\nGenerated custom rules config in $time.")
     }
 }
 
