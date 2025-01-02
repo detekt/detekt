@@ -11,7 +11,6 @@ import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleInstance
-import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import io.gitlab.arturbosch.detekt.api.internal.whichJava
@@ -27,7 +26,7 @@ import java.nio.file.Path
 
 internal class Analyzer(
     private val settings: ProcessingSettings,
-    private val providers: List<RuleSetProvider>,
+    private val rules: List<RuleDescriptor>,
     private val processors: List<FileProcessListener>,
     private val bindingContext: BindingContext,
 ) {
@@ -36,28 +35,20 @@ internal class Analyzer(
 
         val dataFlowValueFactory = DataFlowValueFactoryImpl(languageVersionSettings)
         val compilerResources = CompilerResources(languageVersionSettings, dataFlowValueFactory)
-        val activeRules = getRules(
-            fullAnalysis = bindingContext != BindingContext.EMPTY,
-            ruleSetProviders = providers,
-            config = settings.config,
-            log = settings::debug,
-        )
-            .filter { it.ruleInstance.active }
         return if (settings.spec.executionSpec.parallelAnalysis) {
-            runAsync(ktFiles, activeRules, compilerResources)
+            runAsync(ktFiles, compilerResources)
         } else {
-            runSync(ktFiles, activeRules, compilerResources)
+            runSync(ktFiles, compilerResources)
         }
     }
 
     private fun runSync(
         ktFiles: Collection<KtFile>,
-        rules: List<RuleDescriptor>,
         compilerResources: CompilerResources,
     ): List<Issue> =
         ktFiles.flatMap { file ->
             processors.forEach { it.onProcess(file) }
-            val issues = runCatching { analyze(file, rules, compilerResources) }
+            val issues = runCatching { analyze(file, compilerResources) }
                 .onFailure { throwIllegalStateException(file, it) }
                 .getOrDefault(emptyList())
             processors.forEach { it.onProcessComplete(file, issues) }
@@ -66,14 +57,13 @@ internal class Analyzer(
 
     private fun runAsync(
         ktFiles: Collection<KtFile>,
-        rules: List<RuleDescriptor>,
         compilerResources: CompilerResources,
     ): List<Issue> {
         val service = settings.taskPool
         val tasks: TaskList<List<Issue>?> = ktFiles.map { file ->
             service.task {
                 processors.forEach { it.onProcess(file) }
-                val issues = analyze(file, rules, compilerResources)
+                val issues = analyze(file, compilerResources)
                 processors.forEach { it.onProcessComplete(file, issues) }
                 issues
             }.recover { throwIllegalStateException(file, it) }
@@ -83,7 +73,6 @@ internal class Analyzer(
 
     private fun analyze(
         file: KtFile,
-        rules: List<RuleDescriptor>,
         compilerResources: CompilerResources,
     ): List<Issue> {
         val (correctableRules, otherRules) = rules.asSequence()
