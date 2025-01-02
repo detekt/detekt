@@ -9,7 +9,7 @@
 
 
 <link rel="search" type="application/opensearchdescription+xml" title="detekt" href="/opensearch.xml"><link rel="stylesheet" href="/assets/css/styles.770f5e0a.css">
-<script src="/assets/js/runtime~main.6b5b4ee4.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.d99bc647.js" defer="defer"></script>
 <script src="/assets/js/main.a962fbae.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -91,6 +91,7 @@ after your extension sub project is built.</li>
 you created a pure kotlin module which has no Android dependencies. <code>apply plugin: &quot;kotlin&quot;</code> is enough to make it work.</li>
 <li>Sometimes when you run detekt task, you may not see the violations detected by your custom rules. In this case open a terminal and run
 <code>./gradlew --stop</code> to stop gradle daemons and run the task again.</li>
+<li>If you are configuring a custom detekt task at the root project level, you will need to apply the detektPlugins at the root project as well (not subprojects). See <a href="https://github.com/detekt/detekt/issues/3989#issuecomment-890331512" target="_blank" rel="noopener noreferrer">this issue</a> for more.</li>
 </ul>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="autocorrect-property">autoCorrect property<a href="#autocorrect-property" class="hash-link" aria-label="Direct link to autoCorrect property" title="Direct link to autoCorrect property">​</a></h4>
 <p>In detekt you can write custom rules which can manipulate your code base.
