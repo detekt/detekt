@@ -18,8 +18,7 @@ class CorrectableRulesFirstSpec {
     fun `runs the correctable rules first, the registration order doesn't matter`(reverse: Boolean) {
         val testFile = path.resolve("Test.kt")
         val settings = createProcessingSettings(
-            testFile,
-            yamlConfigFromContent(
+            config = yamlConfigFromContent(
                 """
                     Test:
                       NonCorrectable:
