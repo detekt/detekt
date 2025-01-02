@@ -8,6 +8,7 @@ import org.jetbrains.kotlin.com.intellij.openapi.util.UserDataHolder
  */
 interface Detektion : UserDataHolder {
     val issues: List<Issue>
+    val rules: List<RuleInstance>
     val notifications: Collection<Notification>
     val metrics: Collection<ProjectMetric>
 

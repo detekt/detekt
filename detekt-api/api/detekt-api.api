@@ -106,6 +106,7 @@ public abstract interface class io/gitlab/arturbosch/detekt/api/Detektion : org/
 	public abstract fun getIssues ()Ljava/util/List;
 	public abstract fun getMetrics ()Ljava/util/Collection;
 	public abstract fun getNotifications ()Ljava/util/Collection;
+	public abstract fun getRules ()Ljava/util/List;
 }
 
 public final class io/gitlab/arturbosch/detekt/api/Entity {
