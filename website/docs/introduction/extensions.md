@@ -239,3 +239,4 @@ after your extension sub project is built.
 you created a pure kotlin module which has no Android dependencies. `apply plugin: "kotlin"` is enough to make it work.
 - Sometimes when you run detekt task, you may not see the violations detected by your custom rules. In this case open a terminal and run
 `./gradlew --stop` to stop gradle daemons and run the task again.
+- If you are configuring a custom detekt task at the root project level, you will need to apply the detektPlugins at the root project as well (not subprojects). See [this issue](https://github.com/detekt/detekt/issues/3989#issuecomment-890331512) for more.
