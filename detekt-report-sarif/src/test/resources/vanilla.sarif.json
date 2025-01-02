@@ -92,31 +92,47 @@
           "organization": "detekt",
           "rules": [
             {
+              "defaultConfiguration": {
+                "enabled": true,
+                "level": "error"
+              },
               "id": "detekt.RuleSet1.TestSmellA",
               "name": "TestSmellA",
               "shortDescription": {
-                "text": ""
+                "text": "Description A"
               }
             },
             {
+              "defaultConfiguration": {
+                "enabled": true,
+                "level": "warning"
+              },
               "id": "detekt.RuleSet2.TestSmellB",
               "name": "TestSmellB",
               "shortDescription": {
-                "text": ""
+                "text": "Description B"
               }
             },
             {
+              "defaultConfiguration": {
+                "enabled": false,
+                "level": "note"
+              },
               "id": "detekt.RuleSet2.TestSmellC",
               "name": "TestSmellC",
               "shortDescription": {
-                "text": ""
+                "text": "Description C"
               }
             },
             {
+              "defaultConfiguration": {
+                "enabled": false,
+                "level": "error"
+              },
               "id": "detekt.RuleSet2.TestSmellD",
               "name": "TestSmellD",
               "shortDescription": {
-                "text": ""
+                "text": "Description D"
               }
             }
           ]
