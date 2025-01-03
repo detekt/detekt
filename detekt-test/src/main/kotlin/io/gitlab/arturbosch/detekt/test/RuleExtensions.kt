@@ -17,7 +17,7 @@ import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactoryImpl
 private val shouldCompileTestSnippets: Boolean =
     System.getProperty("compile-test-snippets", "false")!!.toBoolean()
 
-fun Rule.compileAndLint(
+fun Rule.lint(
     @Language("kotlin") content: String,
     compilerResources: CompilerResources = FakeCompilerResources(),
     compile: Boolean = true,
@@ -28,15 +28,6 @@ fun Rule.compileAndLint(
     val ktFile = compileContentForTest(content)
     return visitFile(ktFile, compilerResources = compilerResources).filterSuppressed(this)
 }
-
-@Deprecated(
-    "Use compileAndLint with compile = false",
-    ReplaceWith("compileAndLint(content, compilerResources, false)"),
-)
-fun Rule.lint(
-    @Language("kotlin") content: String,
-    compilerResources: CompilerResources = FakeCompilerResources()
-): List<Finding> = compileAndLint(content, compilerResources, false)
 
 fun Rule.lintWithContext(
     environment: KotlinCoreEnvironment,

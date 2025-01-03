@@ -4,8 +4,8 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lint
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -343,7 +343,7 @@ class BooleanPropertyNamingSpec(val env: KotlinCoreEnvironment) {
             """.trimIndent()
 
             val config = TestConfig(ALLOWED_PATTERN to "^(is|has|are|need)")
-            assertThat(BooleanPropertyNaming(config).compileAndLint(code))
+            assertThat(BooleanPropertyNaming(config).lint(code))
                 .isEmpty()
         }
 

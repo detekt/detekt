@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
@@ -57,26 +56,26 @@ class FunctionOnlyReturningConstantSpec {
 
         @Test
         fun `reports functions which return constants`() {
-            assertThat(subject.compileAndLint(code)).hasSize(6)
+            assertThat(subject.lint(code)).hasSize(6)
         }
 
         @Test
         fun `reports overridden functions which return constants`() {
             val config = TestConfig(IGNORE_OVERRIDABLE_FUNCTION to "false")
             val rule = FunctionOnlyReturningConstant(config)
-            assertThat(rule.compileAndLint(code)).hasSize(9)
+            assertThat(rule.lint(code)).hasSize(9)
         }
 
         @Test
         fun `does not report actual functions which return constants`() {
-            assertThat(subject.lint(actualFunctionCode)).isEmpty()
+            assertThat(subject.lint(actualFunctionCode, compile = false)).isEmpty()
         }
 
         @Test
         fun `reports actual functions which return constants`() {
             val config = TestConfig(IGNORE_ACTUAL_FUNCTION to "false")
             val rule = FunctionOnlyReturningConstant(config)
-            assertThat(rule.lint(actualFunctionCode)).hasSize(1)
+            assertThat(rule.lint(actualFunctionCode, compile = false)).hasSize(1)
         }
 
         @Test
@@ -84,7 +83,7 @@ class FunctionOnlyReturningConstantSpec {
             val code = "fun f() = 1"
             val config = TestConfig(EXCLUDED_FUNCTIONS to listOf("f"))
             val rule = FunctionOnlyReturningConstant(config)
-            assertThat(rule.compileAndLint(code)).isEmpty()
+            assertThat(rule.lint(code)).isEmpty()
         }
 
         @Test
@@ -92,7 +91,7 @@ class FunctionOnlyReturningConstantSpec {
             val code = "fun function() = 1"
             val config = TestConfig(EXCLUDED_FUNCTIONS to listOf("f*ion"))
             val rule = FunctionOnlyReturningConstant(config)
-            assertThat(rule.compileAndLint(code)).isEmpty()
+            assertThat(rule.lint(code)).isEmpty()
         }
     }
 
@@ -110,7 +109,7 @@ class FunctionOnlyReturningConstantSpec {
                 
                 fun functionNotReturningConstantString1(str: String) = "str: ${'$'}str"
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
     }
 }

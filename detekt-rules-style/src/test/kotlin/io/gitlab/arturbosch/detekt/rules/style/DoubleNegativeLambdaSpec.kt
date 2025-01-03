@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.ValueWithReason
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import io.gitlab.arturbosch.detekt.test.toConfig
 import org.junit.jupiter.api.Test
 
@@ -20,7 +20,7 @@ class DoubleNegativeLambdaSpec {
             val rand = Random.Default.nextInt().takeUnless { !it.isEven() }
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -31,7 +31,7 @@ class DoubleNegativeLambdaSpec {
             val rand = Random.Default.nextInt().takeUnless { it > 0 && !it.isEven() }
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -42,7 +42,7 @@ class DoubleNegativeLambdaSpec {
             val rand = Random.Default.nextInt().takeUnless { !(it == 0 || it.isEven()) }
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -53,7 +53,7 @@ class DoubleNegativeLambdaSpec {
             val rand = Random.Default.nextInt().takeUnless { it.isEven().takeIf { i -> !i } ?: false }
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -64,7 +64,7 @@ class DoubleNegativeLambdaSpec {
             val rand = Random.Default.nextInt().takeUnless { it.isEven().takeUnless { i -> !i } ?: false }
         """.trimIndent()
 
-        val findings = subject.compileAndLint(code)
+        val findings = subject.lint(code)
         assertThat(findings).hasSize(2)
         assertThat(findings[0]).hasSourceLocation(3, 62) // second takeUnless
         assertThat(findings[1]).hasSourceLocation(3, 37) // first takeUnless
@@ -78,7 +78,7 @@ class DoubleNegativeLambdaSpec {
             val rand = Random.Default.nextInt().takeUnless { it.isNotZero() }
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -89,7 +89,7 @@ class DoubleNegativeLambdaSpec {
             val rand = Random.Default.nextInt().takeUnless { it.isNonNegative() }
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -100,7 +100,7 @@ class DoubleNegativeLambdaSpec {
             val rand = Random.Default.nextInt().takeUnless { it.isNotGreaterThan(0) }
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -110,7 +110,7 @@ class DoubleNegativeLambdaSpec {
             val rand = Random.Default.nextInt().takeUnless { it != 0 }
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -120,7 +120,7 @@ class DoubleNegativeLambdaSpec {
             val rand = Random.Default.nextInt().takeUnless { it !== 0 }
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -130,7 +130,7 @@ class DoubleNegativeLambdaSpec {
             val rand = Random.Default.nextInt().takeUnless { it !in 1..3 }
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -139,7 +139,7 @@ class DoubleNegativeLambdaSpec {
             val list = listOf(3, "a", true)
             val maybeBoolean = list.firstOrNull().takeUnless { it !is Boolean }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -149,7 +149,7 @@ class DoubleNegativeLambdaSpec {
             val rand = Random.Default.nextInt().takeUnless { (it > 0).not() }
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -159,7 +159,7 @@ class DoubleNegativeLambdaSpec {
             val nonAnnotated = "".takeUnless { it.hasAnnotations() }
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -168,7 +168,7 @@ class DoubleNegativeLambdaSpec {
             val x = "".takeUnless { it!!.isEmpty() }
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -177,7 +177,7 @@ class DoubleNegativeLambdaSpec {
             val isAllEven = listOf(1, 2, 3).none { it % 2 != 0 }
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -193,7 +193,7 @@ class DoubleNegativeLambdaSpec {
             val isValid = listOf(1, 2, 3).filterNot { !it.isEven() }
         """.trimIndent()
 
-        assertThat(DoubleNegativeLambda(config).compileAndLint(code)).hasSize(1)
+        assertThat(DoubleNegativeLambda(config).lint(code)).hasSize(1)
     }
 
     @Test
@@ -205,7 +205,7 @@ class DoubleNegativeLambdaSpec {
             val rand = Random.Default.nextInt().takeUnless { it.isntOdd() }
         """.trimIndent()
 
-        assertThat(DoubleNegativeLambda(config).compileAndLint(code)).hasSize(1)
+        assertThat(DoubleNegativeLambda(config).lint(code)).hasSize(1)
     }
 
     @Test
@@ -216,7 +216,7 @@ class DoubleNegativeLambdaSpec {
             val rand = Random.Default.nextInt().takeUnless { it !in list && it != 0 }
         """.trimIndent()
 
-        val findings = subject.compileAndLint(code)
+        val findings = subject.lint(code)
         assertThat(findings).singleElement().hasMessage(
             "Double negative through using `!in`, `!=` inside a `takeUnless` lambda. Use `takeIf` instead."
         )
@@ -238,7 +238,7 @@ class DoubleNegativeLambdaSpec {
             val result = list.never { it != 0 }
         """.trimIndent()
 
-        val findings = DoubleNegativeLambda(config).compileAndLint(code)
+        val findings = DoubleNegativeLambda(config).lint(code)
         assertThat(findings).singleElement().hasMessage(
             "Double negative through using `!=` inside a `never` lambda. Rewrite in the positive."
         )

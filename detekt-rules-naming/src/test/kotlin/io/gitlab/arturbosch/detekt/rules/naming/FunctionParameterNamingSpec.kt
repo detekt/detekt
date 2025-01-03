@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.naming
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -21,7 +21,7 @@ class FunctionParameterNamingSpec {
                     fun someStuff(param: String) {}
                 }
             """.trimIndent()
-            assertThat(FunctionParameterNaming(Config.empty).compileAndLint(code)).isEmpty()
+            assertThat(FunctionParameterNaming(Config.empty).lint(code)).isEmpty()
         }
 
         @Test
@@ -32,7 +32,7 @@ class FunctionParameterNamingSpec {
                 }
                 interface I { fun someStuff(@Suppress("FunctionParameterNaming") `object`: String) }
             """.trimIndent()
-            assertThat(FunctionParameterNaming(Config.empty).compileAndLint(code)).isEmpty()
+            assertThat(FunctionParameterNaming(Config.empty).lint(code)).isEmpty()
         }
 
         @Test
@@ -42,7 +42,7 @@ class FunctionParameterNamingSpec {
                     fun someStuff(PARAM: String) {}
                 }
             """.trimIndent()
-            assertThat(FunctionParameterNaming(Config.empty).compileAndLint(code)).hasSize(1)
+            assertThat(FunctionParameterNaming(Config.empty).lint(code)).hasSize(1)
         }
     }
 
@@ -58,13 +58,13 @@ class FunctionParameterNamingSpec {
                     fun f(PARAM: Int) {}
                 }
             """.trimIndent()
-            assertThat(FunctionParameterNaming(config).compileAndLint(code)).isEmpty()
+            assertThat(FunctionParameterNaming(config).lint(code)).isEmpty()
         }
 
         @Test
         fun `should not detect constructor parameter`() {
             val code = "class Excluded(val PARAM: Int) {}"
-            assertThat(FunctionParameterNaming(config).compileAndLint(code)).isEmpty()
+            assertThat(FunctionParameterNaming(config).lint(code)).isEmpty()
         }
     }
 }

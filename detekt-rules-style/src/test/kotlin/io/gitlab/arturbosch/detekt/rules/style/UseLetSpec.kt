@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
@@ -37,7 +37,7 @@ class UseLetSpec {
                     DynamicTest.dynamicTest("($condition) $left else $right") {
                         val expr = "fun test() = if ($condition) $left else $right"
                         val shouldFail = (isNonNullCheck && rightIsNull) || (isNullCheck && leftIsNull)
-                        val findings = subject.compileAndLint(expr)
+                        val findings = subject.lint(expr)
                         if (shouldFail) {
                             assertThat(findings).singleElement().hasMessage(subject.description)
                         } else {
@@ -51,7 +51,7 @@ class UseLetSpec {
 
     @Test
     fun `do not capture blocks that have multiple expressions`() {
-        val findings = subject.compileAndLint(
+        val findings = subject.lint(
             """
                 fun testCallToCreateTempFile(s: String?) {
                     val x = if (s == null) {
@@ -69,7 +69,7 @@ class UseLetSpec {
 
     @Test
     fun `it allows the following expressions (currently)`() {
-        val findings = subject.compileAndLint(
+        val findings = subject.lint(
             """
                 fun testCallToCreateTempFile() {
                     val x: String? = "abc"

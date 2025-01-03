@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Test
 
 class SafeCastSpec {
@@ -19,7 +19,7 @@ class SafeCastSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -33,7 +33,7 @@ class SafeCastSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -43,7 +43,7 @@ class SafeCastSpec {
                 val cast = if (element !is Number) null else element
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -53,7 +53,7 @@ class SafeCastSpec {
                 val cast = if (element is Number) element else null
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -68,7 +68,7 @@ class SafeCastSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -82,6 +82,6 @@ class SafeCastSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 }

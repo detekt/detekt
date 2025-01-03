@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.naming
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Test
 
 class EnumNamingSpec {
@@ -12,7 +12,7 @@ class EnumNamingSpec {
     fun `should use custom name for enum`() {
         val rule = EnumNaming(TestConfig(EnumNaming.ENUM_PATTERN to "^(enum1)|(enum2)$"))
         assertThat(
-            rule.compileAndLint(
+            rule.lint(
                 """
                     enum class aBbD {
                         enum1, enum2
@@ -24,7 +24,7 @@ class EnumNamingSpec {
 
     @Test
     fun `should detect no violation`() {
-        val findings = EnumNaming(Config.empty).compileAndLint(
+        val findings = EnumNaming(Config.empty).lint(
             """
                 enum class WorkFlow {
                     ACTIVE, NOT_ACTIVE, Unknown, Number1
@@ -41,7 +41,7 @@ class EnumNamingSpec {
                 default
             }
         """.trimIndent()
-        assertThat(EnumNaming(Config.empty).compileAndLint(code)).hasSize(1)
+        assertThat(EnumNaming(Config.empty).lint(code)).hasSize(1)
     }
 
     @Test
@@ -51,7 +51,7 @@ class EnumNamingSpec {
                 _Default
             }
         """.trimIndent()
-        assertThat(EnumNaming(Config.empty).compileAndLint(code)).hasSize(1)
+        assertThat(EnumNaming(Config.empty).lint(code)).hasSize(1)
     }
 
     @Test
@@ -61,7 +61,7 @@ class EnumNamingSpec {
                 @Suppress("EnumNaming") _Default
             }
         """.trimIndent()
-        assertThat(EnumNaming(Config.empty).compileAndLint(code)).isEmpty()
+        assertThat(EnumNaming(Config.empty).lint(code)).isEmpty()
     }
 
     @Test
@@ -71,7 +71,7 @@ class EnumNamingSpec {
                 _Default,
             }
         """.trimIndent()
-        val findings = EnumNaming(Config.empty).compileAndLint(code)
+        val findings = EnumNaming(Config.empty).lint(code)
         assertThat(findings).hasTextLocations(26 to 34)
     }
 }

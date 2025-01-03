@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.rules.style.BracesOnIfStatementsSpec.Companio
 import io.gitlab.arturbosch.detekt.rules.style.BracesOnIfStatementsSpec.Companion.test
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode
@@ -2194,7 +2193,7 @@ class BracesOnIfStatementsSpec {
             val codeLocation = locations.map { it(code) }.toTypedArray()
             // Separately compile the code because otherwise all the combinations would compile them again and again.
             val compileTest = dynamicTest("Compiles: $code") {
-                BracesOnIfStatements(Config.empty).compileAndLint(code)
+                BracesOnIfStatements(Config.empty).lint(code)
             }
             val validationTests = createBraceTests(singleLine, multiLine) { rule ->
                 rule.test(code, *codeLocation)
@@ -2210,7 +2209,7 @@ class BracesOnIfStatementsSpec {
         private fun BracesOnIfStatements.test(code: String, vararg locations: Pair<Int, Int>) {
             // This creates a 10 character prefix (signature/9, space/1) for every code example.
             // Note: not compileAndLint for performance reasons, compilation is in a separate test.
-            val findings = lint("fun f() { $code }")
+            val findings = lint("fun f() { $code }", compile = false)
             // Offset text locations by the above prefix, it results in 0-indexed locations.
             val offset = 10
             assertThat(findings)

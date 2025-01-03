@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.exceptions
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -47,7 +47,7 @@ class ExceptionRaisedInUnexpectedLocationSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(5)
+        assertThat(subject.lint(code)).hasSize(5)
     }
 
     @Test
@@ -86,13 +86,13 @@ class ExceptionRaisedInUnexpectedLocationSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
     fun `reports the configured method`() {
         val config = TestConfig("methodNames" to listOf("toDo", "todo2"))
-        val findings = ExceptionRaisedInUnexpectedLocation(config).compileAndLint(
+        val findings = ExceptionRaisedInUnexpectedLocation(config).lint(
             """
                 fun toDo() {
                     throw IllegalStateException()

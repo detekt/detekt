@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -18,7 +18,7 @@ class ExpressionBodySyntaxSpec {
         @Test
         fun `reports constant return`() {
             assertThat(
-                subject.compileAndLint(
+                subject.lint(
                     """
                         fun stuff(): Int {
                             return 5
@@ -41,7 +41,7 @@ class ExpressionBodySyntaxSpec {
                         }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(2)
+            assertThat(subject.lint(code)).hasSize(2)
         }
 
         @Test
@@ -54,13 +54,13 @@ class ExpressionBodySyntaxSpec {
                     var b2: Boolean = false
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
         fun `reports return statement with method chain`() {
             assertThat(
-                subject.compileAndLint(
+                subject.lint(
                     """
                         fun stuff(): String {
                             return StringBuilder().append(0).toString()
@@ -73,7 +73,7 @@ class ExpressionBodySyntaxSpec {
         @Test
         fun `reports return statements with conditionals`() {
             assertThat(
-                subject.compileAndLint(
+                subject.lint(
                     """
                         fun stuff(): Int {
                             return if (true) return 5 else return 3
@@ -89,7 +89,7 @@ class ExpressionBodySyntaxSpec {
         @Test
         fun `does not report multiple if statements`() {
             assertThat(
-                subject.compileAndLint(
+                subject.lint(
                     """
                         fun stuff(): Boolean {
                             if (true) return true
@@ -103,7 +103,7 @@ class ExpressionBodySyntaxSpec {
         @Test
         fun `does not report when using shortcut return`() {
             assertThat(
-                subject.compileAndLint(
+                subject.lint(
                     """
                         fun caller(): String {
                             return callee("" as String? ?: return "")
@@ -129,13 +129,13 @@ class ExpressionBodySyntaxSpec {
 
         @Test
         fun `does not report with the default configuration`() {
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
         fun `reports with includeLineWrapping = true configuration`() {
             val config = TestConfig(INCLUDE_LINE_WRAPPING to "true")
-            assertThat(ExpressionBodySyntax(config).compileAndLint(code)).hasSize(1)
+            assertThat(ExpressionBodySyntax(config).lint(code)).hasSize(1)
         }
     }
 
@@ -153,13 +153,13 @@ class ExpressionBodySyntaxSpec {
 
         @Test
         fun `does not report with the default configuration`() {
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
         fun `reports with includeLineWrapping = true configuration`() {
             val config = TestConfig(INCLUDE_LINE_WRAPPING to "true")
-            assertThat(ExpressionBodySyntax(config).compileAndLint(code)).hasSize(1)
+            assertThat(ExpressionBodySyntax(config).lint(code)).hasSize(1)
         }
     }
 
@@ -179,13 +179,13 @@ class ExpressionBodySyntaxSpec {
 
         @Test
         fun `does not report with the default configuration`() {
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
         fun `does not report with includeLineWrapping = true configuration`() {
             val config = TestConfig(INCLUDE_LINE_WRAPPING to "true")
-            assertThat(ExpressionBodySyntax(config).compileAndLint(code)).isEmpty()
+            assertThat(ExpressionBodySyntax(config).lint(code)).isEmpty()
         }
     }
 
@@ -201,13 +201,13 @@ class ExpressionBodySyntaxSpec {
 
         @Test
         fun `does not report with the default configuration`() {
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
         fun `reports with includeLineWrapping = true configuration`() {
             val config = TestConfig(INCLUDE_LINE_WRAPPING to "true")
-            assertThat(ExpressionBodySyntax(config).compileAndLint(code)).hasSize(1)
+            assertThat(ExpressionBodySyntax(config).lint(code)).hasSize(1)
         }
     }
 }
