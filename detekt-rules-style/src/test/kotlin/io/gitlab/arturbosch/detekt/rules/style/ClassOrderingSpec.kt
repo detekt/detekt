@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -28,7 +28,7 @@ class ClassOrderingSpec {
             }
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -51,7 +51,7 @@ class ClassOrderingSpec {
             }
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -62,7 +62,7 @@ class ClassOrderingSpec {
             }
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -71,7 +71,7 @@ class ClassOrderingSpec {
             class InOrder
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -84,7 +84,7 @@ class ClassOrderingSpec {
             }
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -107,7 +107,7 @@ class ClassOrderingSpec {
             }
         """.trimIndent()
 
-        val findings = subject.compileAndLint(code)
+        val findings = subject.lint(code)
         assertThat(findings).hasSize(1)
         assertThat(findings[0].message).isEqualTo(
             "initializer blocks should be declared before secondary constructors."
@@ -134,7 +134,7 @@ class ClassOrderingSpec {
             }
         """.trimIndent()
 
-        val findings = subject.compileAndLint(code)
+        val findings = subject.lint(code)
         assertThat(findings).hasSize(1)
         assertThat(findings[0].message).isEqualTo(
             "secondary constructor should be declared after property declarations and initializer blocks."
@@ -161,7 +161,7 @@ class ClassOrderingSpec {
             }
         """.trimIndent()
 
-        val findings = subject.compileAndLint(code)
+        val findings = subject.lint(code)
         assertThat(findings).hasSize(1)
         assertThat(findings[0].message)
             .isEqualTo("method `returnX()` should be declared after secondary constructors.")
@@ -187,7 +187,7 @@ class ClassOrderingSpec {
             }
         """.trimIndent()
 
-        val findings = subject.compileAndLint(code)
+        val findings = subject.lint(code)
         assertThat(findings).hasSize(1)
         assertThat(findings[0].message).isEqualTo("method `returnX()` should be declared before companion object.")
     }
@@ -212,7 +212,7 @@ class ClassOrderingSpec {
             }
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -235,7 +235,7 @@ class ClassOrderingSpec {
             }
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -260,7 +260,7 @@ class ClassOrderingSpec {
             }
         """.trimIndent()
 
-        val findings = subject.compileAndLint(code)
+        val findings = subject.lint(code)
         assertThat(findings).hasSize(3)
         assertThat(findings[0].message)
             .isEqualTo("method `returnX()` should be declared before companion object.")
@@ -286,7 +286,7 @@ class ClassOrderingSpec {
             }
         """.trimIndent()
 
-        val findings = subject.compileAndLint(code)
+        val findings = subject.lint(code)
         assertThat(findings).hasSize(3)
         assertThat(findings[0].message)
             .isEqualTo("method `returnX()` should be declared before companion object.")
@@ -317,7 +317,7 @@ class ClassOrderingSpec {
             }
         """.trimIndent()
 
-        val findings = subject.compileAndLint(code)
+        val findings = subject.lint(code)
         assertThat(findings).hasSize(1)
         assertThat(findings[0].message)
             .isEqualTo("companion object should be declared after method declarations.")
@@ -347,7 +347,7 @@ class ClassOrderingSpec {
 
         """.trimIndent()
 
-        val findings = subject.compileAndLint(code)
+        val findings = subject.lint(code)
         assertThat(findings).hasSize(1)
         assertThat(findings[0].message)
             .isEqualTo("method `bar()` should be declared after property declarations and initializer blocks.")

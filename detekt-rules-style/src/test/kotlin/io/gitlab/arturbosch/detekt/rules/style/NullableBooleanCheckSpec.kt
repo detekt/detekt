@@ -2,8 +2,8 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Test
@@ -32,7 +32,7 @@ class NullableBooleanCheckSpec(val env: KotlinCoreEnvironment) {
             }
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @ParameterizedTest

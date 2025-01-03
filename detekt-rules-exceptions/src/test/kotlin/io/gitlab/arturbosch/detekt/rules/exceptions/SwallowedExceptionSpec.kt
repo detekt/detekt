@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.exceptions
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -22,7 +22,7 @@ class SwallowedExceptionSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -37,7 +37,7 @@ class SwallowedExceptionSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(2)
+        assertThat(subject.lint(code)).hasSize(2)
     }
 
     @Test
@@ -54,7 +54,7 @@ class SwallowedExceptionSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(2)
+        assertThat(subject.lint(code)).hasSize(2)
     }
 
     @Test
@@ -75,7 +75,7 @@ class SwallowedExceptionSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(2)
+        assertThat(subject.lint(code)).hasSize(2)
     }
 
     @Test
@@ -92,7 +92,7 @@ class SwallowedExceptionSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -109,7 +109,7 @@ class SwallowedExceptionSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -127,7 +127,7 @@ class SwallowedExceptionSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -140,7 +140,7 @@ class SwallowedExceptionSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Nested
@@ -161,7 +161,7 @@ class SwallowedExceptionSpec {
                     }
                 }
             """.trimIndent()
-            assertThat(rule.compileAndLint(code)).isEmpty()
+            assertThat(rule.lint(code)).isEmpty()
         }
 
         @Test
@@ -173,7 +173,7 @@ class SwallowedExceptionSpec {
                     }
                 }
             """.trimIndent()
-            assertThat(rule.compileAndLint(code)).hasSize(1)
+            assertThat(rule.lint(code)).hasSize(1)
         }
     }
 
@@ -190,7 +190,7 @@ class SwallowedExceptionSpec {
                     }
                 }
             """.trimIndent()
-            assertThat(rule.compileAndLint(code)).isEmpty()
+            assertThat(rule.lint(code)).isEmpty()
         }
 
         @Test
@@ -202,7 +202,7 @@ class SwallowedExceptionSpec {
                     }
                 }
             """.trimIndent()
-            assertThat(rule.compileAndLint(code)).hasSize(1)
+            assertThat(rule.lint(code)).hasSize(1)
         }
     }
 
@@ -220,7 +220,7 @@ class SwallowedExceptionSpec {
                     }
                 }
             """.trimIndent()
-            assertThat(rule.compileAndLint(code)).isEmpty()
+            assertThat(rule.lint(code)).isEmpty()
         }
 
         @Test
@@ -232,7 +232,7 @@ class SwallowedExceptionSpec {
                     }
                 }
             """.trimIndent()
-            assertThat(rule.compileAndLint(code)).hasSize(1)
+            assertThat(rule.lint(code)).hasSize(1)
         }
     }
 
@@ -248,7 +248,7 @@ class SwallowedExceptionSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -263,7 +263,7 @@ class SwallowedExceptionSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -280,7 +280,7 @@ class SwallowedExceptionSpec {
                }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @ParameterizedTest(name = "ignores {0} in the catch clause by default")
@@ -297,7 +297,7 @@ class SwallowedExceptionSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @ParameterizedTest(name = "ignores {0} in the catch body by default")
@@ -320,6 +320,6 @@ class SwallowedExceptionSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 }

@@ -17,20 +17,14 @@ import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactoryImpl
 private val shouldCompileTestSnippets: Boolean =
     System.getProperty("compile-test-snippets", "false")!!.toBoolean()
 
-fun Rule.compileAndLint(
-    @Language("kotlin") content: String,
-    compilerResources: CompilerResources = FakeCompilerResources(),
-): List<Finding> {
-    if (shouldCompileTestSnippets) {
-        KotlinScriptEngine.compile(content)
-    }
-    return lint(content, compilerResources)
-}
-
 fun Rule.lint(
     @Language("kotlin") content: String,
-    compilerResources: CompilerResources = FakeCompilerResources()
+    compilerResources: CompilerResources = FakeCompilerResources(),
+    compile: Boolean = true,
 ): List<Finding> {
+    if (compile && shouldCompileTestSnippets) {
+        KotlinScriptEngine.compile(content)
+    }
     val ktFile = compileContentForTest(content)
     return visitFile(ktFile, compilerResources = compilerResources).filterSuppressed(this)
 }

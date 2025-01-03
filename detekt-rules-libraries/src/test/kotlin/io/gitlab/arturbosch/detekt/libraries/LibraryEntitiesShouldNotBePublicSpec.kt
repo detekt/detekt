@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.libraries
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -15,7 +15,7 @@ class LibraryEntitiesShouldNotBePublicSpec {
         @Test
         fun `should report a class`() {
             assertThat(
-                subject.compileAndLint(
+                subject.lint(
                     """
                         class A
                     """.trimIndent()
@@ -26,7 +26,7 @@ class LibraryEntitiesShouldNotBePublicSpec {
         @Test
         fun `should report a class with function`() {
             assertThat(
-                subject.compileAndLint(
+                subject.lint(
                     """
                         class A {
                             fun foo(): Int{
@@ -41,7 +41,7 @@ class LibraryEntitiesShouldNotBePublicSpec {
         @Test
         fun `should report a typealias`() {
             assertThat(
-                subject.compileAndLint(
+                subject.lint(
                     """
                         typealias A = List<String>
                     """.trimIndent()
@@ -52,7 +52,7 @@ class LibraryEntitiesShouldNotBePublicSpec {
         @Test
         fun `should report a typealias and a function`() {
             assertThat(
-                subject.compileAndLint(
+                subject.lint(
                     """
                         typealias A = List<String>
                         fun foo() = Unit
@@ -64,7 +64,7 @@ class LibraryEntitiesShouldNotBePublicSpec {
         @Test
         fun `should report a function`() {
             assertThat(
-                subject.compileAndLint(
+                subject.lint(
                     """
                         fun foo() = Unit
                     """.trimIndent()
@@ -80,7 +80,7 @@ class LibraryEntitiesShouldNotBePublicSpec {
         @Test
         fun `should not report a class`() {
             assertThat(
-                subject.compileAndLint(
+                subject.lint(
                     """
                         internal class A {
                             fun foo(): Int{
@@ -95,7 +95,7 @@ class LibraryEntitiesShouldNotBePublicSpec {
         @Test
         fun `should not report a class with function`() {
             assertThat(
-                subject.compileAndLint(
+                subject.lint(
                     """
                         internal class A
                     """.trimIndent()
@@ -106,7 +106,7 @@ class LibraryEntitiesShouldNotBePublicSpec {
         @Test
         fun `should not report a typealias`() {
             assertThat(
-                subject.compileAndLint(
+                subject.lint(
                     """
                         internal typealias A = List<String>
                     """.trimIndent()
