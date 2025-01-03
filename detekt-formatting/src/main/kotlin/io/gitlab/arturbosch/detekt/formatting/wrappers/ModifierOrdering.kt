@@ -16,8 +16,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @AutoCorrectable(since = "1.0.0")
 class ModifierOrdering(config: Config) : FormattingRule(
     config,
-    "Detects modifiers in non default order",
-    Name("ModifierOrdering"),
+    "Detects modifiers in non default order"
 ) {
 
     override val wrapping = ModifierOrderRule()

@@ -13,8 +13,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @AutoCorrectable(since = "1.0.0")
 class SpacingAroundColon(config: Config) : FormattingRule(
     config,
-    "Reports spaces around colons",
-    Name("SpacingAroundColon"),
+    "Reports spaces around colons"
 ) {
 
     override val wrapping = SpacingAroundColonRule()

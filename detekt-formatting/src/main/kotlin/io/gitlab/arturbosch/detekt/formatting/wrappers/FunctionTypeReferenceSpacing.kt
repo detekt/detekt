@@ -14,8 +14,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @AutoCorrectable(since = "1.20.0")
 class FunctionTypeReferenceSpacing(config: Config) : FormattingRule(
     config,
-    "Checks the spacing before and after the angle brackets of a type argument list.",
-    Name("FunctionTypeReferenceSpacing"),
+    "Checks the spacing before and after the angle brackets of a type argument list."
 ) {
 
     override val wrapping = FunctionTypeReferenceSpacingRule()

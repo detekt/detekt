@@ -13,8 +13,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @AutoCorrectable(since = "1.0.0")
 class SpacingAroundComma(config: Config) : FormattingRule(
     config,
-    "Reports spaces around commas",
-    Name("SpacingAroundComma"),
+    "Reports spaces around commas"
 ) {
 
     override val wrapping = SpacingAroundCommaRule()

@@ -11,8 +11,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @ActiveByDefault(since = "2.0.0")
 class NoConsecutiveComments(config: Config) : FormattingRule(
     config,
-    "Disallow consecutive comments in most cases.",
-    Name("NoConsecutiveComments"),
+    "Disallow consecutive comments in most cases."
 ) {
 
     override val wrapping = NoConsecutiveCommentsRule()

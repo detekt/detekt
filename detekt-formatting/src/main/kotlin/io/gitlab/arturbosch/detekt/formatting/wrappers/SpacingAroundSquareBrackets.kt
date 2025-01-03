@@ -12,8 +12,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @AutoCorrectable(since = "2.0.0")
 class SpacingAroundSquareBrackets(config: Config) : FormattingRule(
     config,
-    "Reports spaces around square brackets",
-    Name("SpacingAroundSquareBrackets"),
+    "Reports spaces around square brackets"
 ) {
 
     override val wrapping = SpacingAroundSquareBracketsRule()

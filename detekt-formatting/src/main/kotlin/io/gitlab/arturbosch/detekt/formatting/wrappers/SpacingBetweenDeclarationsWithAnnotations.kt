@@ -14,8 +14,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @ActiveByDefault(since = "1.22.0")
 class SpacingBetweenDeclarationsWithAnnotations(config: Config) : FormattingRule(
     config,
-    "Declarations and declarations with annotations should have an empty space between.",
-    Name("SpacingBetweenDeclarationsWithAnnotations"),
+    "Declarations and declarations with annotations should have an empty space between."
 ) {
 
     override val wrapping = SpacingBetweenDeclarationsWithAnnotationsRule()

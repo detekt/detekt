@@ -1,10 +1,8 @@
 package io.gitlab.arturbosch.detekt.libraries
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import java.net.URI
 
 /**
  * Rules in this rule set report issues related to libraries API exposure.
@@ -18,7 +16,7 @@ import java.net.URI
 @ActiveByDefault("1.16.0")
 class RuleLibrariesProvider : RuleSetProvider {
 
-    override val ruleSetId = RuleSet.Id(RULE_SET_ID)
+    override val ruleSetId = RuleSet.Id("libraries")
 
     override fun instance() = RuleSet(
         ruleSetId,
@@ -29,8 +27,3 @@ class RuleLibrariesProvider : RuleSetProvider {
         )
     )
 }
-
-internal fun generateRuleUrl(ruleName: String) =
-    URI("https://detekt.dev/docs/rules/$RULE_SET_ID#${ruleName.lowercase()}")
-
-private const val RULE_SET_ID = "libraries"

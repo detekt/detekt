@@ -20,8 +20,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @AutoCorrectable(since = "1.22.0")
 class FunctionSignature(config: Config) : FormattingRule(
     config,
-    "Format signature to be single when possible, multiple lines otherwise.",
-    Name("FunctionSignature"),
+    "Format signature to be single when possible, multiple lines otherwise."
 ) {
 
     override val wrapping = FunctionSignatureRule()

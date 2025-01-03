@@ -13,8 +13,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @AutoCorrectable(since = "1.0.0")
 class NoMultipleSpaces(config: Config) : FormattingRule(
     config,
-    "Reports multiple space usages",
-    Name("NoMultipleSpaces"),
+    "Reports multiple space usages"
 ) {
 
     override val wrapping = NoMultipleSpacesRule()

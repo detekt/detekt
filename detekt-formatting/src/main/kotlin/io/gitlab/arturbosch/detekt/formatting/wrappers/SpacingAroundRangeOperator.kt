@@ -13,8 +13,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @AutoCorrectable(since = "1.0.0")
 class SpacingAroundRangeOperator(config: Config) : FormattingRule(
     config,
-    "Reports spaces around range operator",
-    Name("SpacingAroundRangeOperator"),
+    "Reports spaces around range operator"
 ) {
 
     override val wrapping = SpacingAroundRangeOperatorRule()

@@ -13,8 +13,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @AutoCorrectable(since = "1.0.0")
 class NoBlankLineBeforeRbrace(config: Config) : FormattingRule(
     config,
-    "Detects blank lines before rbraces",
-    Name("NoBlankLineBeforeRbrace"),
+    "Detects blank lines before rbraces"
 ) {
 
     override val wrapping = NoBlankLineBeforeRbraceRule()

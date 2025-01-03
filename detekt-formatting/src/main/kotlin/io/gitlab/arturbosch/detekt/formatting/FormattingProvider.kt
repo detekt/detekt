@@ -104,7 +104,6 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.UnnecessaryParenthesesBef
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ValueArgumentComment
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ValueParameterComment
 import io.gitlab.arturbosch.detekt.formatting.wrappers.Wrapping
-import java.net.URI
 
 /**
  * This rule set provides wrappers for rules implemented by ktlint - https://ktlint.github.io/.
@@ -120,7 +119,7 @@ import java.net.URI
 @ActiveByDefault(since = "1.0.0")
 class FormattingProvider : RuleSetProvider {
 
-    override val ruleSetId = RuleSet.Id(RULE_SET_ID)
+    override val ruleSetId = RuleSet.Id("formatting")
 
     @Suppress("LongMethod")
     override fun instance() = RuleSet(
@@ -303,8 +302,3 @@ private fun FormattingRule.runAfterRules() =
 
 private fun FormattingRule.hasNoRunAfterRules() =
     visitorModifiers.filterIsInstance<Rule.VisitorModifier.RunAfterRule>().isEmpty()
-
-internal fun generateRuleUrl(ruleName: io.gitlab.arturbosch.detekt.api.Rule.Name) =
-    URI("https://detekt.dev/docs/rules/$RULE_SET_ID#${ruleName.value.lowercase()}")
-
-private const val RULE_SET_ID = "formatting"

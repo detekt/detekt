@@ -17,8 +17,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @AutoCorrectable(since = "1.23.0")
 class EnumWrapping(config: Config) : FormattingRule(
     config,
-    "An enum should be a single line, or each enum entry has to be placed on a separate line.",
-    Name("EnumWrapping"),
+    "An enum should be a single line, or each enum entry has to be placed on a separate line."
 ) {
 
     override val wrapping = EnumWrappingRule()

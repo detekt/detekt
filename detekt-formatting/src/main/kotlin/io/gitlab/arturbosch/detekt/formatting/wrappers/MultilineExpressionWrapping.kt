@@ -19,8 +19,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @AutoCorrectable(since = "1.23.0")
 class MultilineExpressionWrapping(config: Config) : FormattingRule(
     config,
-    "Multiline expression on the right hand side of an expression must start on a separate line.",
-    Name("MultilineExpressionWrapping"),
+    "Multiline expression on the right hand side of an expression must start on a separate line."
 ) {
 
     override val wrapping = MultilineExpressionWrappingRule()

@@ -13,8 +13,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @ActiveByDefault(since = "1.22.0")
 class SpacingAroundAngleBrackets(config: Config) : FormattingRule(
     config,
-    "Reports spaces around angle brackets",
-    Name("SpacingAroundAngleBrackets"),
+    "Reports spaces around angle brackets"
 ) {
 
     override val wrapping = SpacingAroundAngleBracketsRule()

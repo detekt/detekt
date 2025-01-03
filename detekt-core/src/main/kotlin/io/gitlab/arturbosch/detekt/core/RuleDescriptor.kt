@@ -26,11 +26,12 @@ internal fun getRules(
 ): List<RuleDescriptor> = ruleSetProviders
     .flatMap { ruleSetProvider ->
         val ruleSetConfig = config.subConfig(ruleSetProvider.ruleSetId.value)
-        val urlGenerator: (Rule) -> URI? = if (ruleSetProvider is DefaultRuleSetProvider) {
-            { rule -> rule.url ?: generateDefaultUrl(ruleSetProvider.ruleSetId, rule.ruleName) }
-        } else {
-            { rule -> rule.url }
-        }
+        val urlGenerator: (Rule) -> URI? =
+            if (ruleSetProvider is DefaultRuleSetProvider || ruleSetProvider.ruleSetId.value in firstPartyRuleSets) {
+                { rule -> rule.url ?: generateDefaultUrl(ruleSetProvider.ruleSetId, rule.ruleName) }
+            } else {
+                { rule -> rule.url }
+            }
         ruleSetProvider.instance().getRules(ruleSetConfig, fullAnalysis, urlGenerator, log)
     }
 
@@ -68,6 +69,12 @@ private fun RuleSet.getRules(
 
 private fun generateDefaultUrl(ruleSetId: RuleSet.Id, ruleName: Rule.Name) =
     URI("https://detekt.dev/docs/rules/${ruleSetId.value.lowercase()}#${ruleName.value.lowercase()}")
+
+private val firstPartyRuleSets = setOf(
+    "formatting",
+    "ruleauthors",
+    "libraries",
+)
 
 /**
  * Compute severity in the priority order:

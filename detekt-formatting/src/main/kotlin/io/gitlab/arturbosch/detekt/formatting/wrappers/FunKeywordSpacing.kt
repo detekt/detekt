@@ -13,8 +13,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @AutoCorrectable(since = "1.20.0")
 class FunKeywordSpacing(config: Config) : FormattingRule(
     config,
-    "Checks the spacing after the fun keyword.",
-    Name("FunKeywordSpacing"),
+    "Checks the spacing after the fun keyword."
 ) {
 
     override val wrapping = FunKeywordSpacingRule()

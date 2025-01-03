@@ -13,8 +13,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @AutoCorrectable(since = "1.23.0")
 class NoBlankLineInList(config: Config) : FormattingRule(
     config,
-    "Disallow blank lines in lists before, between or after any list element.",
-    Name("NoBlankLineInList"),
+    "Disallow blank lines in lists before, between or after any list element."
 ) {
 
     override val wrapping = NoBlankLineInListRule()

@@ -17,8 +17,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @AutoCorrectable(since = "1.20.0")
 class KdocWrapping(config: Config) : FormattingRule(
     config,
-    "Reports mis-indented code",
-    Name("KdocWrapping"),
+    "Reports mis-indented code"
 ) {
 
     override val wrapping = KdocWrappingRule()

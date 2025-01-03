@@ -28,11 +28,7 @@ import java.nio.file.Path
 /**
  * Rule to detect formatting violations.
  */
-abstract class FormattingRule(
-    config: Config,
-    description: String,
-    override val ruleName: Name
-) : Rule(config, description, generateRuleUrl(ruleName)) {
+abstract class FormattingRule(config: Config, description: String) : Rule(config, description) {
 
     abstract val wrapping: StandardRule
 

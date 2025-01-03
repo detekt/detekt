@@ -14,8 +14,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @AutoCorrectable(since = "1.22.0")
 class NoBlankLinesInChainedMethodCalls(config: Config) : FormattingRule(
     config,
-    "Detects blank lines in chained method rules.",
-    Name("NoBlankLinesInChainedMethodCalls"),
+    "Detects blank lines in chained method rules."
 ) {
 
     override val wrapping = NoBlankLinesInChainedMethodCallsRule()

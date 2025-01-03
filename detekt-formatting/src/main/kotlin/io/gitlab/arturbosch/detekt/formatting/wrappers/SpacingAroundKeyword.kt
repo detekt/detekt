@@ -13,8 +13,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @AutoCorrectable(since = "1.0.0")
 class SpacingAroundKeyword(config: Config) : FormattingRule(
     config,
-    "Reports spaces around keywords",
-    Name("SpacingAroundKeyword"),
+    "Reports spaces around keywords"
 ) {
 
     override val wrapping = SpacingAroundKeywordRule()

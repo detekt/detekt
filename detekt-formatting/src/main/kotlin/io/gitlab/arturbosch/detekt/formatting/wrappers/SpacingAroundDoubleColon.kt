@@ -13,8 +13,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @ActiveByDefault(since = "1.22.0")
 class SpacingAroundDoubleColon(config: Config) : FormattingRule(
     config,
-    "Reports spaces around double colons",
-    Name("SpacingAroundDoubleColon"),
+    "Reports spaces around double colons"
 ) {
 
     override val wrapping = SpacingAroundDoubleColonRule()

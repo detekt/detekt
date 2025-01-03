@@ -14,8 +14,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @AutoCorrectable(since = "1.22.0")
 class NullableTypeSpacing(config: Config) : FormattingRule(
     config,
-    "Ensure no spaces in nullable type.",
-    Name("NullableTypeSpacing"),
+    "Ensure no spaces in nullable type."
 ) {
 
     override val wrapping = NullableTypeSpacingRule()

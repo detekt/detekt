@@ -24,8 +24,7 @@ import kotlin.reflect.KClass
 @RequiresFullAnalysis
 class ViolatesTypeResolutionRequirements(config: Config) : Rule(
     config,
-    "`@RequiresFullAnalysis` should be used if and only if the property `bindingContext` is used.",
-    generateRuleUrl("ViolatesTypeResolutionRequirements"),
+    "`@RequiresFullAnalysis` should be used if and only if the property `bindingContext` is used."
 ) {
 
     private val klasses: MutableList<KtClass> = mutableListOf()

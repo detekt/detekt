@@ -10,8 +10,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 class ClassName(config: Config) : FormattingRule(
     config,
-    "Class or object name should start with an uppercase letter and use camel case.",
-    Name("ClassName"),
+    "Class or object name should start with an uppercase letter and use camel case."
 ) {
     override val wrapping = ClassNamingRule()
 }

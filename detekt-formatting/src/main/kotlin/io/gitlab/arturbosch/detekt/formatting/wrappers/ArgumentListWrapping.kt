@@ -20,8 +20,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @ActiveByDefault(since = "1.22.0")
 class ArgumentListWrapping(config: Config) : FormattingRule(
     config,
-    "Reports incorrect argument list wrapping",
-    Name("ArgumentListWrapping"),
+    "Reports incorrect argument list wrapping"
 ) {
 
     override val wrapping = ArgumentListWrappingRule()

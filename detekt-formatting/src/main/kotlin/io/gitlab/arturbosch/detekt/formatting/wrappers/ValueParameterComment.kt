@@ -12,8 +12,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @ActiveByDefault(since = "2.0.0")
 class ValueParameterComment(config: Config) : FormattingRule(
     config,
-    "Detect discouraged value parameter comment locations.",
-    Name("ValueParameterComment"),
+    "Detect discouraged value parameter comment locations."
 ) {
 
     override val wrapping = ValueParameterCommentRule()

@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.formatting.wrappers
 import com.pinterest.ktlint.ruleset.standard.rules.SpacingAroundOperatorsRule
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 
@@ -14,8 +13,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @AutoCorrectable(since = "1.0.0")
 class SpacingAroundOperators(config: Config) : FormattingRule(
     config,
-    "Reports spaces around operators",
-    Name("SpacingAroundOperators"),
+    "Reports spaces around operators"
 ) {
 
     override val wrapping = SpacingAroundOperatorsRule()

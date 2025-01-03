@@ -14,8 +14,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @AutoCorrectable(since = "1.0.0")
 class NoLineBreakBeforeAssignment(config: Config) : FormattingRule(
     config,
-    "Reports line breaks before assignment",
-    Name("NoLineBreakBeforeAssignment"),
+    "Reports line breaks before assignment"
 ) {
 
     override val wrapping = NoLineBreakBeforeAssignmentRule()
