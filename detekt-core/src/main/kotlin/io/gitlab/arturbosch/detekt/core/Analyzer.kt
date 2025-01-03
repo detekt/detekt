@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.core
 
 import io.github.detekt.psi.absolutePath
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.CompilerResources
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
@@ -185,19 +184,14 @@ private fun throwIllegalStateException(file: KtFile, error: Throwable): Nothing 
     throw IllegalStateException(message, error)
 }
 
-private fun Finding.toIssue(rule: RuleInstance, severity: Severity, basePath: Path): Issue =
-    when (this) {
-        is CodeSmell -> Issue(
-            ruleInstance = rule,
-            entity = entity.toIssue(basePath),
-            references = references.map { it.toIssue(basePath) },
-            message = message,
-            severity = severity,
-            suppressReasons = suppressReasons,
-        )
-
-        else -> error("wtf?")
-    }
+private fun Finding.toIssue(rule: RuleInstance, severity: Severity, basePath: Path): Issue = Issue(
+    ruleInstance = rule,
+    entity = entity.toIssue(basePath),
+    references = references.map { it.toIssue(basePath) },
+    message = message,
+    severity = severity,
+    suppressReasons = suppressReasons,
+)
 
 private fun Entity.toIssue(basePath: Path): Issue.Entity =
     Issue.Entity(signature, location.toIssue(basePath))
