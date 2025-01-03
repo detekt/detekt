@@ -47,16 +47,15 @@ class DetektTaskMultiModuleSpec {
 
         gradleRunner.setupProject()
         gradleRunner.runDetektTaskAndCheckResult { result ->
-            assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.NO_SOURCE)
             projectLayout.submodules.forEach { submodule ->
                 assertThat(result.task(":${submodule.name}:detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
             }
 
-            assertThat(projectFile("build/reports/detekt/detekt.xml")).doesNotExist()
-            assertThat(projectFile("build/reports/detekt/detekt.html")).doesNotExist()
+            assertThat(projectFile("build/reports/detekt/mainSourceSet.xml")).doesNotExist()
+            assertThat(projectFile("build/reports/detekt/mainSourceSet.html")).doesNotExist()
             projectLayout.submodules.forEach {
-                assertThat(projectFile("${it.name}/build/reports/detekt/detekt.xml")).exists()
-                assertThat(projectFile("${it.name}/build/reports/detekt/detekt.html")).exists()
+                assertThat(projectFile("${it.name}/build/reports/detekt/mainSourceSet.xml")).exists()
+                assertThat(projectFile("${it.name}/build/reports/detekt/mainSourceSet.html")).exists()
             }
         }
     }
@@ -103,11 +102,11 @@ class DetektTaskMultiModuleSpec {
                 assertThat(result.task(":${submodule.name}:detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
             }
 
-            assertThat(projectFile("build/reports/detekt/detekt.xml")).exists()
-            assertThat(projectFile("build/reports/detekt/detekt.html")).exists()
+            assertThat(projectFile("build/reports/detekt/mainSourceSet.xml")).exists()
+            assertThat(projectFile("build/reports/detekt/mainSourceSet.html")).exists()
             projectLayout.submodules.forEach {
-                assertThat(projectFile("${it.name}/build/reports/detekt/detekt.xml")).exists()
-                assertThat(projectFile("${it.name}/build/reports/detekt/detekt.html")).exists()
+                assertThat(projectFile("${it.name}/build/reports/detekt/mainSourceSet.xml")).exists()
+                assertThat(projectFile("${it.name}/build/reports/detekt/mainSourceSet.html")).exists()
             }
         }
     }
@@ -154,11 +153,11 @@ class DetektTaskMultiModuleSpec {
                 assertThat(result.task(":${submodule.name}:detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
             }
 
-            assertThat(projectFile("build/detekt-reports/detekt.xml")).exists()
-            assertThat(projectFile("build/detekt-reports/detekt.html")).exists()
+            assertThat(projectFile("build/detekt-reports/mainSourceSet.xml")).exists()
+            assertThat(projectFile("build/detekt-reports/mainSourceSet.html")).exists()
             projectLayout.submodules.forEach {
-                assertThat(projectFile("${it.name}/build/detekt-reports/detekt.xml")).exists()
-                assertThat(projectFile("${it.name}/build/detekt-reports/detekt.html")).exists()
+                assertThat(projectFile("${it.name}/build/detekt-reports/mainSourceSet.xml")).exists()
+                assertThat(projectFile("${it.name}/build/detekt-reports/mainSourceSet.html")).exists()
             }
         }
     }
@@ -167,6 +166,9 @@ class DetektTaskMultiModuleSpec {
     @DisplayName("it allows changing defaults in allprojects block that can be overwritten in subprojects")
     fun allowsChangingDefaultsInAllProjectsThatAreOverwrittenInSubprojects() {
         val child2DetektConfig = """
+            plugins {
+                kotlin("jvm")
+            }
             detekt {
                reportsDir = file("build/custom")
             }
@@ -212,12 +214,12 @@ class DetektTaskMultiModuleSpec {
                 assertThat(result.task(":${submodule.name}:detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
             }
 
-            assertThat(projectFile("build/detekt-reports/detekt.xml")).exists()
-            assertThat(projectFile("build/detekt-reports/detekt.html")).exists()
-            assertThat(projectFile("child1/build/detekt-reports/detekt.xml")).exists()
-            assertThat(projectFile("child1/build/detekt-reports/detekt.html")).exists()
-            assertThat(projectFile("child2/build/custom/detekt.xml")).exists()
-            assertThat(projectFile("child2/build/custom/detekt.html")).exists()
+            assertThat(projectFile("build/detekt-reports/mainSourceSet.xml")).exists()
+            assertThat(projectFile("build/detekt-reports/mainSourceSet.html")).exists()
+            assertThat(projectFile("child1/build/detekt-reports/mainSourceSet.xml")).exists()
+            assertThat(projectFile("child1/build/detekt-reports/mainSourceSet.html")).exists()
+            assertThat(projectFile("child2/build/custom/mainSourceSet.xml")).exists()
+            assertThat(projectFile("child2/build/custom/mainSourceSet.html")).exists()
         }
     }
 
@@ -228,18 +230,8 @@ class DetektTaskMultiModuleSpec {
             addSubmodule("child2", 4)
         }
 
-        val detektConfig: String = """
-            detekt {
-                source.setFrom(
-                   "${"$"}projectDir/src",
-                   "${"$"}projectDir/child1/src",
-                   "${"$"}projectDir/child2/src"
-                )
-            }
-        """.trimIndent()
         val gradleRunner = DslTestBuilder.kotlin()
             .withProjectLayout(projectLayout)
-            .withDetektConfig(detektConfig)
             .build()
 
         gradleRunner.runDetektTaskAndCheckResult { result ->
@@ -248,11 +240,11 @@ class DetektTaskMultiModuleSpec {
                 assertThat(result.task(":${submodule.name}:detekt")).isNull()
             }
 
-            assertThat(projectFile("build/reports/detekt/detekt.xml")).exists()
-            assertThat(projectFile("build/reports/detekt/detekt.html")).exists()
+            assertThat(projectFile("build/reports/detekt/mainSourceSet.xml")).exists()
+            assertThat(projectFile("build/reports/detekt/mainSourceSet.html")).exists()
             projectLayout.submodules.forEach { submodule ->
-                assertThat(projectFile("${submodule.name}/build/reports/detekt/detekt.xml")).doesNotExist()
-                assertThat(projectFile("${submodule.name}/build/reports/detekt/detekt.html")).doesNotExist()
+                assertThat(projectFile("${submodule.name}/build/reports/detekt/mainSourceSet.xml")).doesNotExist()
+                assertThat(projectFile("${submodule.name}/build/reports/detekt/mainSourceSet.html")).doesNotExist()
             }
         }
     }
