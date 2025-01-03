@@ -20,20 +20,23 @@ private val shouldCompileTestSnippets: Boolean =
 fun Rule.compileAndLint(
     @Language("kotlin") content: String,
     compilerResources: CompilerResources = FakeCompilerResources(),
+    compile: Boolean = true,
 ): List<Finding> {
-    if (shouldCompileTestSnippets) {
+    if (compile && shouldCompileTestSnippets) {
         KotlinScriptEngine.compile(content)
     }
-    return lint(content, compilerResources)
-}
-
-fun Rule.lint(
-    @Language("kotlin") content: String,
-    compilerResources: CompilerResources = FakeCompilerResources()
-): List<Finding> {
     val ktFile = compileContentForTest(content)
     return visitFile(ktFile, compilerResources = compilerResources).filterSuppressed(this)
 }
+
+@Deprecated(
+    "Use compileAndLint with compile = false",
+    ReplaceWith("compileAndLint(content, compilerResources, false)"),
+)
+fun Rule.lint(
+    @Language("kotlin") content: String,
+    compilerResources: CompilerResources = FakeCompilerResources()
+): List<Finding> = compileAndLint(content, compilerResources, false)
 
 fun Rule.lintWithContext(
     environment: KotlinCoreEnvironment,
