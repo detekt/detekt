@@ -51,4 +51,7 @@ class ComplexityReportSpec {
     }
 }
 
-private fun createDetektion(): Detektion = DetektResult(listOf(createIssue(createRuleInstance(ruleSetId = "Key"))))
+private fun createDetektion(): Detektion = DetektResult(
+    issues = listOf(createIssue(createRuleInstance(ruleSetId = "Key"))),
+    rules = emptyList(),
+)
