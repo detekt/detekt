@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.empty
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
@@ -39,7 +38,7 @@ class EmptyCodeSpec {
                 }
             }
         """.trimIndent()
-        assertThat(EmptyCatchBlock(Config.empty).compileAndLint(code)).hasSize(1)
+        assertThat(EmptyCatchBlock(Config.empty).lint(code)).hasSize(1)
     }
 
     @Test
@@ -52,7 +51,7 @@ class EmptyCodeSpec {
                 }
             }
         """.trimIndent()
-        assertThat(EmptyCatchBlock(Config.empty).compileAndLint(code)).isEmpty()
+        assertThat(EmptyCatchBlock(Config.empty).lint(code)).isEmpty()
     }
 
     @Test
@@ -65,7 +64,7 @@ class EmptyCodeSpec {
             }
         """.trimIndent()
         val config = TestConfig(ALLOWED_EXCEPTION_NAME_REGEX to "foo")
-        assertThat(EmptyCatchBlock(config).compileAndLint(code)).isEmpty()
+        assertThat(EmptyCatchBlock(config).lint(code)).isEmpty()
     }
 
     @Test
@@ -131,14 +130,14 @@ class EmptyCodeSpec {
     @Test
     fun `reports an empty kotlin file`() {
         val rule = EmptyKotlinFile(Config.empty)
-        assertThat(rule.compileAndLint("")).hasSize(1)
+        assertThat(rule.lint("")).hasSize(1)
     }
 
     @Test
     fun doesFailWithInvalidRegex() {
         val config = TestConfig(ALLOWED_EXCEPTION_NAME_REGEX to "*foo")
         assertThatExceptionOfType(PatternSyntaxException::class.java).isThrownBy {
-            EmptyCatchBlock(config).compileAndLint(regexTestingCode)
+            EmptyCatchBlock(config).lint(regexTestingCode)
         }
     }
 }
@@ -146,63 +145,62 @@ class EmptyCodeSpec {
 // Each Empty* Rule is tested on the same code to make sure they're all detecting distinct problems.
 @Suppress("LongMethod")
 private fun test(block: () -> Rule) {
-    val rule = block()
-    val findings = rule.lint(
-        """
-            class Empty : Runnable {
-            
-                init {
-            
-                }
-            
-                constructor() {
-            
-                }
-            
-                override fun run() {
-            
-                }
-            
-                fun stuff() {
-                    try {
-            
-                    } catch (e: Exception) {
-            
-                    } catch (e: Exception) {
-                        //no-op
-                    } catch (e: Exception) {
-                        println()
-                    } catch (ignored: Exception) {
-            
-                    } catch (expected: Exception) {
-            
-                    } catch (_: Exception) {
-            
-                    } finally {
-            
-                    }
-                    if (true) {
-            
-                    } else {
-            
-                    }
-                    when (true) {
-            
-                    }
-                    for (i in 1..10) {
-            
-                    }
-                    while (true) {
-            
-                    }
-                    do {
-            
-                    } while (true)
-                }
+    val code = """
+        class Empty : Runnable {
+        
+            init {
+        
             }
-            
-            class EmptyClass() {}
-        """.trimIndent()
-    )
+        
+            constructor() {
+        
+            }
+        
+            override fun run() {
+        
+            }
+        
+            fun stuff() {
+                try {
+        
+                } catch (e: Exception) {
+        
+                } catch (e: Exception) {
+                    //no-op
+                } catch (e: Exception) {
+                    println()
+                } catch (ignored: Exception) {
+        
+                } catch (expected: Exception) {
+        
+                } catch (_: Exception) {
+        
+                } finally {
+        
+                }
+                if (true) {
+        
+                } else {
+        
+                }
+                when (true) {
+        
+                }
+                for (i in 1..10) {
+        
+                }
+                while (true) {
+        
+                }
+                do {
+        
+                } while (true)
+            }
+        }
+        
+        class EmptyClass() {}
+    """.trimIndent()
+    val rule = block()
+    val findings = rule.lint(code, compile = false)
     assertThat(findings).hasSize(1)
 }

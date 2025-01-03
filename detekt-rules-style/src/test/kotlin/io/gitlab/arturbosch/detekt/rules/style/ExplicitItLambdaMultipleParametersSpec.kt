@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -14,7 +14,7 @@ class ExplicitItLambdaMultipleParametersSpec {
         @Test
         fun `reports when parameter types are not declared`() {
             val findings =
-                subject.compileAndLint(
+                subject.lint(
                     """
                     fun f() {
                         val flat = listOf(listOf(1), listOf(2)).mapIndexed { index, it -> it + index }
@@ -27,7 +27,7 @@ class ExplicitItLambdaMultipleParametersSpec {
         @Test
         fun `reports when parameter types are declared explicitly`() {
             val findings =
-                subject.compileAndLint(
+                subject.lint(
                     """
                     fun f() {
                         val lambda = { it: Int, that: String -> it.toString() + that }
@@ -40,7 +40,7 @@ class ExplicitItLambdaMultipleParametersSpec {
         @Test
         fun `does not report when parameter type with is declared explicitly for multi params un-inferrable lambda`() {
             val findings =
-                subject.compileAndLint(
+                subject.lint(
                     """
                     fun f(): (Int, Int) -> Int {
                         return { value: Int, a: Int -> (value + a).inc() }::invoke
@@ -53,7 +53,7 @@ class ExplicitItLambdaMultipleParametersSpec {
         @Test
         fun `reports when parameter type with name it when declared explicitly for multi params un-inferrable lambda`() {
             val findings =
-                subject.compileAndLint(
+                subject.lint(
                     """
                     fun f(): (Int, Int) -> Int {
                         return { it: Int, a: Int -> (it + a).inc() }::invoke
@@ -70,7 +70,7 @@ class ExplicitItLambdaMultipleParametersSpec {
         @Test
         fun `does not report implicit 'it' parameter usage`() {
             val findings =
-                subject.compileAndLint(
+                subject.lint(
                     """
                     fun f() {
                         val lambda = { i: Int -> i.toString() }
@@ -88,7 +88,7 @@ class ExplicitItLambdaMultipleParametersSpec {
         @Test
         fun `does not report explicit 'it' parameter usage in one parameter`() {
             val findings =
-                subject.compileAndLint(
+                subject.lint(
                     """
                     fun f() {
                         val digits = 1234.let { it -> listOf(it) }

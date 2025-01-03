@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -14,7 +14,7 @@ class ExplicitItLambdaParameterSpec {
         @Test
         fun `reports when parameter type is not declared`() {
             val findings =
-                subject.compileAndLint(
+                subject.lint(
                     """
                     fun f() {
                         val digits = 1234.let { it -> listOf(it) }
@@ -30,7 +30,7 @@ class ExplicitItLambdaParameterSpec {
         @Test
         fun `reports when parameter type is declared explicitly`() {
             val findings =
-                subject.compileAndLint(
+                subject.lint(
                     """
                     fun f() {
                         val lambda = { it: Int -> it.toString() }
@@ -43,7 +43,7 @@ class ExplicitItLambdaParameterSpec {
         @Test
         fun `does not report when parameter type is declared explicitly when variable name is not it`() {
             val findings =
-                subject.compileAndLint(
+                subject.lint(
                     """
                     fun f() {
                         val lambda = { value: Int -> value.toString() }
@@ -56,7 +56,7 @@ class ExplicitItLambdaParameterSpec {
         @Test
         fun `does not report when parameter type is declared explicitly for un-inferrable lambda`() {
             val findings =
-                subject.compileAndLint(
+                subject.lint(
                     """
                     fun f1(): (Int) -> Int {
                         return { value: Int -> value.inc() }::invoke
@@ -77,7 +77,7 @@ class ExplicitItLambdaParameterSpec {
         @Test
         fun `does not report when parameter type is declared explicitly for un-inferrable lambda wrapped in paren`() {
             val findings =
-                subject.compileAndLint(
+                subject.lint(
                     """
                     fun f(): (Int) -> Int {
                         return ({ value: Int -> value.inc() })::invoke
@@ -93,7 +93,7 @@ class ExplicitItLambdaParameterSpec {
         @Test
         fun `does not report implicit 'it' parameter usage`() {
             val findings =
-                subject.compileAndLint(
+                subject.lint(
                     """
                     fun f() {
                         val lambda = { i: Int -> i.toString() }
@@ -110,14 +110,13 @@ class ExplicitItLambdaParameterSpec {
     inner class `multiple parameters one of which with name 'it' declared explicitly` {
         @Test
         fun `does not report explicit 'it' parameter usage in multiple parameters`() {
-            val findings =
-                subject.compileAndLint(
-                    """
-                    fun f() {
-                        val lambda = { it: Int, that: String -> it.toString() + that }
-                    }
-                    """.trimIndent(),
-                )
+            val findings = subject.lint(
+                """
+                fun f() {
+                    val lambda = { it: Int, that: String -> it.toString() + that }
+                }
+                """.trimIndent(),
+            )
             assertThat(findings).isEmpty()
         }
     }

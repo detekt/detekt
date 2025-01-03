@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.exceptions
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.junit.jupiter.api.Nested
@@ -36,7 +36,7 @@ class TooGenericExceptionCaughtSpec {
             }
         """.trimIndent()
 
-        assertThat(rule.compileAndLint(code)).hasSameSizeAs(TooGenericExceptionCaught.caughtExceptionDefaults)
+        assertThat(rule.lint(code)).hasSameSizeAs(TooGenericExceptionCaught.caughtExceptionDefaults)
     }
 
     @Nested
@@ -57,7 +57,7 @@ class TooGenericExceptionCaughtSpec {
             val config = TestConfig(ALLOWED_EXCEPTION_NAME_REGEX to "myIgnore")
             val rule = TooGenericExceptionCaught(config)
 
-            val findings = rule.compileAndLint(code)
+            val findings = rule.lint(code)
 
             assertThat(findings).isEmpty()
         }
@@ -67,7 +67,7 @@ class TooGenericExceptionCaughtSpec {
             val config = TestConfig(CAUGHT_EXCEPTIONS_PROPERTY to "[MyException]")
             val rule = TooGenericExceptionCaught(config)
 
-            val findings = rule.compileAndLint(code)
+            val findings = rule.lint(code)
 
             assertThat(findings).isEmpty()
         }
@@ -100,7 +100,7 @@ class TooGenericExceptionCaughtSpec {
             val config = TestConfig(ALLOWED_EXCEPTION_NAME_REGEX to "*Foo")
             val rule = TooGenericExceptionCaught(config)
             assertThatExceptionOfType(PatternSyntaxException::class.java).isThrownBy {
-                rule.compileAndLint(code)
+                rule.lint(code)
             }
         }
     }
@@ -128,7 +128,7 @@ class TooGenericExceptionCaughtSpec {
                 }
             }
         """.trimIndent()
-        val findings = rule.compileAndLint(code)
+        val findings = rule.lint(code)
 
         assertThat(findings).isEmpty()
     }

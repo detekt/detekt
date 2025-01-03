@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.authors
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Test
 
 internal class UseEntityAtNameSpec {
@@ -21,7 +21,7 @@ internal class UseEntityAtNameSpec {
                 report(CodeSmell(Entity.from(element), "message"))
             }
         """.trimIndent()
-        val findings = rule.compileAndLint(code)
+        val findings = rule.lint(code)
         assertThat(findings).isEmpty()
     }
 
@@ -37,7 +37,7 @@ internal class UseEntityAtNameSpec {
                 report(CodeSmell(Entity.atName(element), "message"))
             }
         """.trimIndent()
-        val findings = rule.compileAndLint(code)
+        val findings = rule.lint(code)
         assertThat(findings).isEmpty()
     }
 
@@ -53,7 +53,7 @@ internal class UseEntityAtNameSpec {
                 report(CodeSmell(Entity.from(element.nameIdentifier!!), "message"))
             }
         """.trimIndent()
-        val findings = rule.compileAndLint(code)
+        val findings = rule.lint(code)
         assertThat(findings).singleElement().hasMessage("Recommended to use Entity.atName(element) instead.")
         assertThat(findings).hasTextLocations("from")
     }
@@ -70,7 +70,7 @@ internal class UseEntityAtNameSpec {
                 report(CodeSmell(Entity.from(element.nameIdentifier!!!!), "message"))
             }
         """.trimIndent()
-        val findings = rule.compileAndLint(code)
+        val findings = rule.lint(code)
         assertThat(findings).singleElement().hasMessage("Recommended to use Entity.atName(element) instead.")
         assertThat(findings).hasTextLocations("from")
     }
@@ -87,7 +87,7 @@ internal class UseEntityAtNameSpec {
                 report(CodeSmell(Entity.from(element.nameIdentifier ?: element), "message"))
             }
         """.trimIndent()
-        val findings = rule.compileAndLint(code)
+        val findings = rule.lint(code)
         assertThat(findings).singleElement().hasMessage("Recommended to use Entity.atName(element) instead.")
         assertThat(findings).hasTextLocations("from")
     }
@@ -107,7 +107,7 @@ internal class UseEntityAtNameSpec {
                 report(CodeSmell(Entity.from(element.getStrictParentOfType<KtClass>()?.nameIdentifier ?: element), "message"))
             }
         """.trimIndent()
-        val findings = rule.compileAndLint(code)
+        val findings = rule.lint(code)
         assertThat(findings).singleElement()
             .hasMessage("Recommended to use Entity.atName(element.getStrictParentOfType<KtClass>()) instead.")
         assertThat(findings).hasTextLocations("from")
@@ -126,7 +126,7 @@ internal class UseEntityAtNameSpec {
                 report(CodeSmell(Entity.from(element.nameIdentifier ?: element2), "message"))
             }
         """.trimIndent()
-        val findings = rule.compileAndLint(code)
+        val findings = rule.lint(code)
         assertThat(findings).singleElement().hasMessage("Recommended to use Entity.atName(element) instead.")
         assertThat(findings).hasTextLocations("from")
     }
@@ -144,7 +144,7 @@ internal class UseEntityAtNameSpec {
                 report(CodeSmell(Entity.from(element.nameIdentifier ?: element2, 0), "message"))
             }
         """.trimIndent()
-        val findings = rule.compileAndLint(code)
+        val findings = rule.lint(code)
         assertThat(findings).isEmpty()
     }
 }

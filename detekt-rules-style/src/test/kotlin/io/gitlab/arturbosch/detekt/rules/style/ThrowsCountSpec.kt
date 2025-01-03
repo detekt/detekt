@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
@@ -21,7 +20,7 @@ class ThrowsCountSpec {
 
         @Test
         fun `does not report violation by default`() {
-            assertThat(ThrowsCount(Config.empty).compileAndLint(code)).isEmpty()
+            assertThat(ThrowsCount(Config.empty).lint(code)).isEmpty()
         }
     }
 
@@ -33,7 +32,7 @@ class ThrowsCountSpec {
 
         @Test
         fun `does not report violation by default`() {
-            assertThat(ThrowsCount(Config.empty).compileAndLint(code)).isEmpty()
+            assertThat(ThrowsCount(Config.empty).lint(code)).isEmpty()
         }
     }
 
@@ -53,7 +52,7 @@ class ThrowsCountSpec {
 
         @Test
         fun `does not report violation`() {
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
     }
 
@@ -74,7 +73,7 @@ class ThrowsCountSpec {
 
         @Test
         fun `reports violation by default`() {
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
     }
 
@@ -95,7 +94,7 @@ class ThrowsCountSpec {
 
         @Test
         fun `reports violation by default`() {
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.lint(code, compile = false)).hasSize(1)
         }
     }
 
@@ -119,7 +118,7 @@ class ThrowsCountSpec {
 
         @Test
         fun `reports violation by default`() {
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings).hasSize(1)
             assertThat(findings[0].entity.location.source.line).isEqualTo(4)
         }
@@ -141,14 +140,14 @@ class ThrowsCountSpec {
         fun `does not report when max parameter is 3`() {
             val config = TestConfig(MAX to "3")
             val subject = ThrowsCount(config)
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
         fun `reports violation when max parameter is 2`() {
             val config = TestConfig(MAX to "2")
             val subject = ThrowsCount(config)
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
     }
 
@@ -169,14 +168,14 @@ class ThrowsCountSpec {
         fun `should not report violation with EXCLUDE_GUARD_CLAUSES as true`() {
             val config = TestConfig(EXCLUDE_GUARD_CLAUSES to "true")
             val subject = ThrowsCount(config)
-            assertThat(subject.compileAndLint(codeWithGuardClause)).isEmpty()
+            assertThat(subject.lint(codeWithGuardClause)).isEmpty()
         }
 
         @Test
         fun `should report violation with EXCLUDE_GUARD_CLAUSES as false`() {
             val config = TestConfig(EXCLUDE_GUARD_CLAUSES to "false")
             val subject = ThrowsCount(config)
-            assertThat(subject.compileAndLint(codeWithGuardClause)).hasSize(1)
+            assertThat(subject.lint(codeWithGuardClause)).hasSize(1)
         }
     }
 
@@ -197,14 +196,14 @@ class ThrowsCountSpec {
         fun `should not report violation with EXCLUDE_GUARD_CLAUSES as true`() {
             val config = TestConfig(EXCLUDE_GUARD_CLAUSES to "true")
             val subject = ThrowsCount(config)
-            assertThat(subject.compileAndLint(codeWithGuardClause)).isEmpty()
+            assertThat(subject.lint(codeWithGuardClause)).isEmpty()
         }
 
         @Test
         fun `should report violation with EXCLUDE_GUARD_CLAUSES as false`() {
             val config = TestConfig(EXCLUDE_GUARD_CLAUSES to "false")
             val subject = ThrowsCount(config)
-            assertThat(subject.compileAndLint(codeWithGuardClause)).hasSize(1)
+            assertThat(subject.lint(codeWithGuardClause)).hasSize(1)
         }
     }
 
@@ -232,7 +231,7 @@ class ThrowsCountSpec {
         fun `should report violation even with EXCLUDE_GUARD_CLAUSES as true`() {
             val config = TestConfig(EXCLUDE_GUARD_CLAUSES to "true")
             val subject = ThrowsCount(config)
-            assertThat(subject.compileAndLint(codeWithIfCondition)).hasSize(1)
+            assertThat(subject.lint(codeWithIfCondition)).hasSize(1)
         }
     }
 
@@ -253,7 +252,7 @@ class ThrowsCountSpec {
         fun `should report the violation even with EXCLUDE_GUARD_CLAUSES as true`() {
             val config = TestConfig(EXCLUDE_GUARD_CLAUSES to "true")
             val subject = ThrowsCount(config)
-            assertThat(subject.compileAndLint(codeWithIfCondition)).hasSize(1)
+            assertThat(subject.lint(codeWithIfCondition)).hasSize(1)
         }
     }
 
@@ -274,7 +273,7 @@ class ThrowsCountSpec {
         fun `should report the violation even with EXCLUDE_GUARD_CLAUSES as true`() {
             val config = TestConfig(EXCLUDE_GUARD_CLAUSES to "true")
             val subject = ThrowsCount(config)
-            assertThat(subject.compileAndLint(codeWithIfCondition)).hasSize(1)
+            assertThat(subject.lint(codeWithIfCondition)).hasSize(1)
         }
     }
 
@@ -298,14 +297,14 @@ class ThrowsCountSpec {
         fun `should not report violation with EXCLUDE_GUARD_CLAUSES as true`() {
             val config = TestConfig(EXCLUDE_GUARD_CLAUSES to "true")
             val subject = ThrowsCount(config)
-            assertThat(subject.compileAndLint(codeWithMultipleGuardClauses)).isEmpty()
+            assertThat(subject.lint(codeWithMultipleGuardClauses)).isEmpty()
         }
 
         @Test
         fun `should report violation with EXCLUDE_GUARD_CLAUSES as false`() {
             val config = TestConfig(EXCLUDE_GUARD_CLAUSES to "false")
             val subject = ThrowsCount(config)
-            assertThat(subject.compileAndLint(codeWithMultipleGuardClauses)).hasSize(1)
+            assertThat(subject.lint(codeWithMultipleGuardClauses)).hasSize(1)
         }
     }
 }

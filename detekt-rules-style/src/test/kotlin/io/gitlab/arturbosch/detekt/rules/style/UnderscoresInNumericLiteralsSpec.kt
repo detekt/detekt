@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -20,7 +19,7 @@ class UnderscoresInNumericLiteralsSpec {
 
         @Test
         fun `should not be reported by default`() {
-            val findings = UnderscoresInNumericLiterals(Config.empty).compileAndLint(code)
+            val findings = UnderscoresInNumericLiterals(Config.empty).lint(code)
             assertThat(findings).isEmpty()
         }
 
@@ -28,7 +27,7 @@ class UnderscoresInNumericLiteralsSpec {
         fun `should be reported if acceptableLength is 3`() {
             val findings = UnderscoresInNumericLiterals(
                 TestConfig(ACCEPTABLE_LENGTH to "3")
-            ).compileAndLint(code)
+            ).lint(code)
             assertThat(findings).isNotEmpty
         }
     }
@@ -39,7 +38,7 @@ class UnderscoresInNumericLiteralsSpec {
 
         @Test
         fun `should not be reported`() {
-            val findings = UnderscoresInNumericLiterals(Config.empty).compileAndLint(code)
+            val findings = UnderscoresInNumericLiterals(Config.empty).lint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -50,7 +49,7 @@ class UnderscoresInNumericLiteralsSpec {
 
         @Test
         fun `should be reported by default`() {
-            val findings = UnderscoresInNumericLiterals(Config.empty).compileAndLint(code)
+            val findings = UnderscoresInNumericLiterals(Config.empty).lint(code)
             assertThat(findings).isNotEmpty
         }
 
@@ -58,7 +57,7 @@ class UnderscoresInNumericLiteralsSpec {
         fun `should not be reported if acceptableLength is 7`() {
             val findings = UnderscoresInNumericLiterals(
                 TestConfig(ACCEPTABLE_LENGTH to "7")
-            ).compileAndLint(code)
+            ).lint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -69,7 +68,7 @@ class UnderscoresInNumericLiteralsSpec {
 
         @Test
         fun `should not be reported by default`() {
-            val findings = UnderscoresInNumericLiterals(Config.empty).compileAndLint(code)
+            val findings = UnderscoresInNumericLiterals(Config.empty).lint(code)
             assertThat(findings).isEmpty()
         }
 
@@ -77,7 +76,7 @@ class UnderscoresInNumericLiteralsSpec {
         fun `should be reported if acceptableLength is 3`() {
             val findings = UnderscoresInNumericLiterals(
                 TestConfig(ACCEPTABLE_LENGTH to "3")
-            ).compileAndLint(code)
+            ).lint(code)
             assertThat(findings).isNotEmpty
         }
     }
@@ -88,7 +87,7 @@ class UnderscoresInNumericLiteralsSpec {
 
         @Test
         fun `should not be reported by default`() {
-            val findings = UnderscoresInNumericLiterals(Config.empty).compileAndLint(code)
+            val findings = UnderscoresInNumericLiterals(Config.empty).lint(code)
             assertThat(findings).isEmpty()
         }
 
@@ -96,7 +95,7 @@ class UnderscoresInNumericLiteralsSpec {
         fun `should be reported if acceptableLength is 3`() {
             val findings = UnderscoresInNumericLiterals(
                 TestConfig(ACCEPTABLE_LENGTH to "3")
-            ).compileAndLint(code)
+            ).lint(code)
             assertThat(findings).isNotEmpty
         }
     }
@@ -107,7 +106,7 @@ class UnderscoresInNumericLiteralsSpec {
 
         @Test
         fun `should not be reported`() {
-            val findings = UnderscoresInNumericLiterals(Config.empty).compileAndLint(code)
+            val findings = UnderscoresInNumericLiterals(Config.empty).lint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -118,7 +117,7 @@ class UnderscoresInNumericLiteralsSpec {
 
         @Test
         fun `should be reported by default`() {
-            val findings = UnderscoresInNumericLiterals(Config.empty).compileAndLint(code)
+            val findings = UnderscoresInNumericLiterals(Config.empty).lint(code)
             assertThat(findings).isNotEmpty
         }
 
@@ -126,7 +125,7 @@ class UnderscoresInNumericLiteralsSpec {
         fun `should not be reported if ignored acceptableLength is 7`() {
             val findings = UnderscoresInNumericLiterals(
                 TestConfig(ACCEPTABLE_LENGTH to "7")
-            ).compileAndLint(code)
+            ).lint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -138,7 +137,7 @@ class UnderscoresInNumericLiteralsSpec {
 
         @Test
         fun `should not be reported`() {
-            val findings = UnderscoresInNumericLiterals(Config.empty).compileAndLint(code)
+            val findings = UnderscoresInNumericLiterals(Config.empty).lint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -149,7 +148,7 @@ class UnderscoresInNumericLiteralsSpec {
 
         @Test
         fun `should not be reported by default`() {
-            val findings = UnderscoresInNumericLiterals(Config.empty).compileAndLint(code)
+            val findings = UnderscoresInNumericLiterals(Config.empty).lint(code)
             assertThat(findings).isEmpty()
         }
 
@@ -157,7 +156,7 @@ class UnderscoresInNumericLiteralsSpec {
         fun `should be reported if acceptableLength is 3`() {
             val findings = UnderscoresInNumericLiterals(
                 TestConfig(ACCEPTABLE_LENGTH to "3")
-            ).compileAndLint(code)
+            ).lint(code)
             assertThat(findings).isNotEmpty
         }
     }
@@ -168,7 +167,8 @@ class UnderscoresInNumericLiteralsSpec {
 
         @Test
         fun `should not be reported`() {
-            val findings = UnderscoresInNumericLiterals(Config.empty).lint(code)
+            val findings =
+                UnderscoresInNumericLiterals(Config.empty).lint(code, compile = false)
             assertThat(findings).isEmpty()
         }
     }
@@ -179,7 +179,8 @@ class UnderscoresInNumericLiteralsSpec {
 
         @Test
         fun `should be reported by default`() {
-            val findings = UnderscoresInNumericLiterals(Config.empty).lint(code)
+            val findings =
+                UnderscoresInNumericLiterals(Config.empty).lint(code, compile = false)
             assertThat(findings).isNotEmpty
         }
     }
@@ -190,7 +191,7 @@ class UnderscoresInNumericLiteralsSpec {
 
         @Test
         fun `should be reported by default`() {
-            val findings = UnderscoresInNumericLiterals(Config.empty).compileAndLint(code)
+            val findings = UnderscoresInNumericLiterals(Config.empty).lint(code)
             assertThat(findings).isNotEmpty
         }
 
@@ -198,7 +199,7 @@ class UnderscoresInNumericLiteralsSpec {
         fun `should still be reported even if acceptableLength is 99`() {
             val findings = UnderscoresInNumericLiterals(
                 TestConfig(ACCEPTABLE_LENGTH to "99")
-            ).compileAndLint(code)
+            ).lint(code)
             assertThat(findings).isNotEmpty
         }
 
@@ -206,7 +207,7 @@ class UnderscoresInNumericLiteralsSpec {
         fun `should not be reported if allowNonStandardGrouping is true`() {
             val findings = UnderscoresInNumericLiterals(
                 TestConfig(ALLOW_NON_STANDARD_GROUPING to true)
-            ).compileAndLint(code)
+            ).lint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -217,7 +218,7 @@ class UnderscoresInNumericLiteralsSpec {
 
         @Test
         fun `should not be reported`() {
-            val findings = UnderscoresInNumericLiterals(Config.empty).compileAndLint(code)
+            val findings = UnderscoresInNumericLiterals(Config.empty).lint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -228,7 +229,7 @@ class UnderscoresInNumericLiteralsSpec {
 
         @Test
         fun `should not be reported`() {
-            val findings = UnderscoresInNumericLiterals(Config.empty).compileAndLint(code)
+            val findings = UnderscoresInNumericLiterals(Config.empty).lint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -239,7 +240,7 @@ class UnderscoresInNumericLiteralsSpec {
 
         @Test
         fun `should not be reported`() {
-            val findings = UnderscoresInNumericLiterals(Config.empty).compileAndLint(code)
+            val findings = UnderscoresInNumericLiterals(Config.empty).lint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -256,7 +257,7 @@ class UnderscoresInNumericLiteralsSpec {
 
         @Test
         fun `should not be reported`() {
-            val findings = UnderscoresInNumericLiterals(Config.empty).compileAndLint(code)
+            val findings = UnderscoresInNumericLiterals(Config.empty).lint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -271,7 +272,7 @@ class UnderscoresInNumericLiteralsSpec {
 
         @Test
         fun `should be reported by default`() {
-            val findings = UnderscoresInNumericLiterals(Config.empty).compileAndLint(code)
+            val findings = UnderscoresInNumericLiterals(Config.empty).lint(code)
             assertThat(findings).isNotEmpty
         }
     }
@@ -286,7 +287,7 @@ class UnderscoresInNumericLiteralsSpec {
 
         @Test
         fun `should not be reported`() {
-            val findings = UnderscoresInNumericLiterals(Config.empty).compileAndLint(code)
+            val findings = UnderscoresInNumericLiterals(Config.empty).lint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -305,7 +306,7 @@ class UnderscoresInNumericLiteralsSpec {
                     }
                 }
             """.trimIndent()
-            val findings = UnderscoresInNumericLiterals(Config.empty).compileAndLint(code)
+            val findings = UnderscoresInNumericLiterals(Config.empty).lint(code)
             assertThat(findings).isEmpty()
         }
 
@@ -320,7 +321,7 @@ class UnderscoresInNumericLiteralsSpec {
                     }
                 }
             """.trimIndent()
-            val findings = UnderscoresInNumericLiterals(Config.empty).compileAndLint(code)
+            val findings = UnderscoresInNumericLiterals(Config.empty).lint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -337,7 +338,7 @@ class UnderscoresInNumericLiteralsSpec {
                     private val serialVersionUID = -43857148126114372L
                 }
             """.trimIndent()
-            val findings = UnderscoresInNumericLiterals(Config.empty).compileAndLint(code)
+            val findings = UnderscoresInNumericLiterals(Config.empty).lint(code)
             assertThat(findings).isEmpty()
         }
 
@@ -350,7 +351,7 @@ class UnderscoresInNumericLiteralsSpec {
                     private val serialVersionUID = 43857148126114372L
                 }
             """.trimIndent()
-            val findings = UnderscoresInNumericLiterals(Config.empty).compileAndLint(code)
+            val findings = UnderscoresInNumericLiterals(Config.empty).lint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -361,7 +362,7 @@ class UnderscoresInNumericLiteralsSpec {
 
         @Test
         fun `should be reported by default`() {
-            val findings = UnderscoresInNumericLiterals(Config.empty).compileAndLint(code)
+            val findings = UnderscoresInNumericLiterals(Config.empty).lint(code)
             assertThat(findings).isNotEmpty
         }
 
@@ -369,7 +370,7 @@ class UnderscoresInNumericLiteralsSpec {
         fun `should not be reported if acceptableLength is 5`() {
             val findings = UnderscoresInNumericLiterals(
                 TestConfig(ACCEPTABLE_LENGTH to "5")
-            ).compileAndLint(code)
+            ).lint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -381,7 +382,7 @@ class UnderscoresInNumericLiteralsSpec {
 
         @Test
         fun `should not be reported`() {
-            val findings = UnderscoresInNumericLiterals(Config.empty).compileAndLint(code)
+            val findings = UnderscoresInNumericLiterals(Config.empty).lint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -393,7 +394,7 @@ class UnderscoresInNumericLiteralsSpec {
 
         @Test
         fun `should not be reported`() {
-            val findings = UnderscoresInNumericLiterals(Config.empty).compileAndLint(code)
+            val findings = UnderscoresInNumericLiterals(Config.empty).lint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -407,7 +408,7 @@ class UnderscoresInNumericLiteralsSpec {
         fun `should be reported if acceptableLength is 3`() {
             val findings = UnderscoresInNumericLiterals(
                 TestConfig(ACCEPTABLE_LENGTH to "3")
-            ).compileAndLint(code)
+            ).lint(code)
             assertThat(findings).isNotEmpty
         }
     }
@@ -419,7 +420,7 @@ class UnderscoresInNumericLiteralsSpec {
 
         @Test
         fun `should be reported by default`() {
-            val findings = UnderscoresInNumericLiterals(Config.empty).compileAndLint(code)
+            val findings = UnderscoresInNumericLiterals(Config.empty).lint(code)
             assertThat(findings).isNotEmpty
         }
 
@@ -427,7 +428,7 @@ class UnderscoresInNumericLiteralsSpec {
         fun `should not be reported if acceptableLength is 7`() {
             val findings = UnderscoresInNumericLiterals(
                 TestConfig(ACCEPTABLE_LENGTH to "7")
-            ).compileAndLint(code)
+            ).lint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -439,7 +440,7 @@ class UnderscoresInNumericLiteralsSpec {
 
         @Test
         fun `should not be reported by default`() {
-            val findings = UnderscoresInNumericLiterals(Config.empty).compileAndLint(code)
+            val findings = UnderscoresInNumericLiterals(Config.empty).lint(code)
             assertThat(findings).isEmpty()
         }
     }

@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -19,7 +19,7 @@ class UnnecessaryBackticksSpec {
                     val y = ::`Foo`
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(4)
+            assertThat(subject.lint(code)).hasSize(4)
         }
 
         @Test
@@ -29,7 +29,7 @@ class UnnecessaryBackticksSpec {
                 val x = `foo`()
                 val y = ::`foo`
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(3)
+            assertThat(subject.lint(code)).hasSize(3)
         }
 
         @Test
@@ -40,7 +40,7 @@ class UnnecessaryBackticksSpec {
                 val y = ::`foo`
                 val z = `foo`.length
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(4)
+            assertThat(subject.lint(code)).hasSize(4)
         }
 
         @Test
@@ -48,7 +48,7 @@ class UnnecessaryBackticksSpec {
             val code = """
                 import kotlin.`let`
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
 
         @Test
@@ -59,7 +59,7 @@ class UnnecessaryBackticksSpec {
                 val y = "${'$'}`foo` bar"
                 val z = "${'$'}{`foo`}bar"
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(3)
+            assertThat(subject.lint(code)).hasSize(3)
         }
     }
 
@@ -72,7 +72,7 @@ class UnnecessaryBackticksSpec {
                 val x: `Foo Bar` = `Foo Bar`()
                 val y = ::`Foo Bar`
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -82,7 +82,7 @@ class UnnecessaryBackticksSpec {
                 val x = `foo bar`()
                 val y = ::`foo bar`
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -93,7 +93,7 @@ class UnnecessaryBackticksSpec {
                 val y = ::`foo bar`
                 val z = `foo bar`.length
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -102,7 +102,7 @@ class UnnecessaryBackticksSpec {
                 val `is` = 1
                 val `fun` = 2
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -111,7 +111,7 @@ class UnnecessaryBackticksSpec {
                 val `_` = 1
                 val `__` = 2
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -121,7 +121,7 @@ class UnnecessaryBackticksSpec {
                 import test.`Foo Bar`
                 class `Foo Bar`
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -132,7 +132,7 @@ class UnnecessaryBackticksSpec {
                 val `bar baz` = ""
                 val y = "${'$'}`bar baz`"
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
     }
 }

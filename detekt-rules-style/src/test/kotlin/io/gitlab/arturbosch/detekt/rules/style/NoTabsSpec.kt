@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Test
 
 class NoTabsSpec {
@@ -21,7 +21,7 @@ class NoTabsSpec {
               val multiStr = $TQ${'$'}{${TAB}methodOk()}$TQ // reports 1
             }
         """.trimIndent()
-        val findings = subject.compileAndLint(code)
+        val findings = subject.lint(code)
         assertThat(findings).hasSize(5)
     }
 
@@ -38,7 +38,7 @@ class NoTabsSpec {
                 val multiStr = ""${'"'}A \t tab	""${'"'}
             }
         """.trimIndent()
-        val findings = subject.compileAndLint(code)
+        val findings = subject.lint(code)
         assertThat(findings).isEmpty()
     }
 }

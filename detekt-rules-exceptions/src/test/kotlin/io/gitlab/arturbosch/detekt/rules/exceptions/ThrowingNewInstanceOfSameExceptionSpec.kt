@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.exceptions
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -23,7 +23,7 @@ class ThrowingNewInstanceOfSameExceptionSpec {
 
         @Test
         fun `should report`() {
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings).hasSize(1)
         }
     }
@@ -41,7 +41,7 @@ class ThrowingNewInstanceOfSameExceptionSpec {
 
         @Test
         fun `should not report`() {
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -62,7 +62,7 @@ class ThrowingNewInstanceOfSameExceptionSpec {
 
         @Test
         fun `should not report`() {
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings).isEmpty()
         }
     }
