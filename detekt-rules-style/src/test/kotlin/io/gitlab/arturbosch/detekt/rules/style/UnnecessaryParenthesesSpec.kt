@@ -153,7 +153,9 @@ class UnnecessaryParenthesesSpec {
 
     @ParameterizedTest
     @MethodSource("cases")
-    fun `should not report call to function with two lambda parameters with one as block body`(testCase: RuleTestCase) {
+    fun `should not report call to function with two lambda parameters with one as block body`(
+        testCase: RuleTestCase
+    ) {
         val code = """
             class Clazz {
                 fun test(first: (Int) -> Unit, second: (Int) -> Unit) {
@@ -366,6 +368,16 @@ class UnnecessaryParenthesesSpec {
 
     @ParameterizedTest
     @MethodSource("cases")
+    fun `integer literal range operator`(testCase: RuleTestCase) {
+        val code = """
+            val a = (1)..(2)
+            val b = (1)..<(2)
+        """.trimIndent()
+        assertThat(testCase.rule.compileAndLint(code)).hasSize(4)
+    }
+
+    @ParameterizedTest
+    @MethodSource("cases")
     fun `does not report unary operator with value when precedence is clear`(testCase: RuleTestCase) {
         val code = """
             class Foo(val value: Int) {
@@ -453,7 +465,9 @@ class UnnecessaryParenthesesSpec {
 
     @ParameterizedTest
     @MethodSource("cases")
-    fun `does report unnecessary parens in case of constant literal when using inc operator`(testCase: RuleTestCase) {
+    fun `does report unnecessary parens in case of constant literal when using inc operator`(
+        testCase: RuleTestCase
+    ) {
         val code = """
             class Foo(var value: Int) {
                 operator fun inc() = Foo(value + 1)
@@ -490,7 +504,9 @@ class UnnecessaryParenthesesSpec {
             }
         """.trimIndent()
 
-        assertThat(RuleTestCase(allowForUnclearPrecedence = true).rule.compileAndLint(code)).hasSize(3)
+        assertThat(RuleTestCase(allowForUnclearPrecedence = true).rule.compileAndLint(code)).hasSize(
+            3
+        )
     }
 
     @Test
@@ -511,7 +527,9 @@ class UnnecessaryParenthesesSpec {
                 val violation3 = ++((a.value))
             }
         """.trimIndent()
-        assertThat(RuleTestCase(allowForUnclearPrecedence = false).rule.compileAndLint(code)).hasSize(5)
+        assertThat(RuleTestCase(allowForUnclearPrecedence = false).rule.compileAndLint(code)).hasSize(
+            5
+        )
     }
 
     @ParameterizedTest
@@ -571,6 +589,72 @@ class UnnecessaryParenthesesSpec {
         assertThat(testCase.rule.compileAndLint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 4 else 5)
     }
 
+    @ParameterizedTest
+    @MethodSource("cases")
+    fun `float literals closed range without integer part with braces on the right side - #7640`(
+        testCase: RuleTestCase
+    ) {
+        val code = """
+            val a = .1F..(.2F)
+        """.trimIndent()
+        assertThat(testCase.rule.compileAndLint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 0 else 1)
+    }
+
+    @ParameterizedTest
+    @MethodSource("cases")
+    fun `float literals closed range without integer part with braces on the left side`(testCase: RuleTestCase) {
+        val code = """
+            val a = (.1F)..0.2F
+        """.trimIndent()
+        assertThat(testCase.rule.compileAndLint(code)).hasSize(1)
+    }
+
+    @ParameterizedTest
+    @MethodSource("cases")
+    fun `float literals open range`(testCase: RuleTestCase) {
+        val code = """
+            val a = .1F..<(.2F)
+            val b = .1F..<(0.2F)
+            val c = (.1F)..<.2F
+            val d = (.1F)..<.2F
+        """.trimIndent()
+        assertThat(testCase.rule.compileAndLint(code)).hasSize(4)
+    }
+
+    @ParameterizedTest
+    @MethodSource("cases")
+    fun `double literals closed range without integer part`(testCase: RuleTestCase) {
+        val code = """
+            val a = .1..(.2)
+        """.trimIndent()
+
+        assertThat(testCase.rule.compileAndLint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 0 else 1)
+    }
+
+    @ParameterizedTest
+    @MethodSource("cases")
+    fun `double literals open range`(testCase: RuleTestCase) {
+        val code = """
+            val a = .1..<(.2)
+            val b = .1..<(0.2)
+            val c = (.1)..<0.2
+            val d = (0.1)..<0.2
+        """.trimIndent()
+
+        assertThat(testCase.rule.compileAndLint(code)).hasSize(4)
+    }
+
+    @ParameterizedTest
+    @MethodSource("cases")
+    fun `double variable open range `(testCase: RuleTestCase) {
+        val code = """
+            val a = 0.2
+            val b = 0.3
+            val range = (a)..(b)
+        """.trimIndent()
+        assertThat(testCase.rule.compileAndLint(code)).hasSize(2)
+    }
+
     companion object {
         class RuleTestCase(val allowForUnclearPrecedence: Boolean) {
             val rule = UnnecessaryParentheses(
@@ -582,10 +666,16 @@ class UnnecessaryParenthesesSpec {
         fun cases(): List<Arguments> =
             listOf(
                 Arguments.of(
-                    Named.of("Without allow for unclear precedence", RuleTestCase(allowForUnclearPrecedence = false))
+                    Named.of(
+                        "Without allow for unclear precedence",
+                        RuleTestCase(allowForUnclearPrecedence = false)
+                    )
                 ),
                 Arguments.of(
-                    Named.of("With allow for unclear precedence", RuleTestCase(allowForUnclearPrecedence = true))
+                    Named.of(
+                        "With allow for unclear precedence",
+                        RuleTestCase(allowForUnclearPrecedence = true)
+                    )
                 ),
             )
     }
