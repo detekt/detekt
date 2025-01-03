@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -31,13 +31,13 @@ class ComplexInterfaceSpec {
 
             @Test
             fun `reports complex interface`() {
-                assertThat(subject.compileAndLint(code)).hasSize(1)
+                assertThat(subject.lint(code)).hasSize(1)
             }
 
             @Test
             fun `reports complex interface with includeStaticDeclarations config`() {
                 val rule = ComplexInterface(staticDeclarationsConfig)
-                assertThat(rule.compileAndLint(code)).hasSize(1)
+                assertThat(rule.lint(code)).hasSize(1)
             }
         }
 
@@ -56,13 +56,13 @@ class ComplexInterfaceSpec {
 
             @Test
             fun `reports complex interface`() {
-                assertThat(subject.compileAndLint(code)).hasSize(1)
+                assertThat(subject.lint(code)).hasSize(1)
             }
 
             @Test
             fun `reports complex interface with includeStaticDeclarations config`() {
                 val rule = ComplexInterface(staticDeclarationsConfig)
-                assertThat(rule.compileAndLint(code)).hasSize(1)
+                assertThat(rule.lint(code)).hasSize(1)
             }
         }
 
@@ -81,13 +81,13 @@ class ComplexInterfaceSpec {
 
             @Test
             fun `does not report static declarations per default`() {
-                assertThat(subject.compileAndLint(code)).isEmpty()
+                assertThat(subject.lint(code)).isEmpty()
             }
 
             @Test
             fun `reports complex interface with includeStaticDeclarations config`() {
                 val rule = ComplexInterface(staticDeclarationsConfig)
-                assertThat(rule.compileAndLint(code)).hasSize(1)
+                assertThat(rule.lint(code)).hasSize(1)
             }
         }
 
@@ -104,13 +104,13 @@ class ComplexInterfaceSpec {
 
             @Test
             fun `does not report complex interface`() {
-                assertThat(subject.compileAndLint(code)).isEmpty()
+                assertThat(subject.lint(code)).isEmpty()
             }
 
             @Test
             fun `does report complex interface with includePrivateDeclarations config`() {
                 val rule = ComplexInterface(privateDeclarationsConfig)
-                assertThat(rule.compileAndLint(code)).hasSize(1)
+                assertThat(rule.lint(code)).hasSize(1)
             }
         }
 
@@ -128,13 +128,13 @@ class ComplexInterfaceSpec {
 
             @Test
             fun `does not report complex interface`() {
-                assertThat(subject.compileAndLint(code)).isEmpty()
+                assertThat(subject.lint(code)).isEmpty()
             }
 
             @Test
             fun `does report complex interface with includePrivateDeclarations config`() {
                 val rule = ComplexInterface(privateDeclarationsConfig)
-                assertThat(rule.compileAndLint(code)).hasSize(1)
+                assertThat(rule.lint(code)).hasSize(1)
             }
         }
 
@@ -151,13 +151,13 @@ class ComplexInterfaceSpec {
 
             @Test
             fun `reports complex interface with overloaded methods`() {
-                assertThat(subject.compileAndLint(code)).hasSize(1)
+                assertThat(subject.lint(code)).hasSize(1)
             }
 
             @Test
             fun `does not report simple interface with ignoreOverloaded`() {
                 val rule = ComplexInterface(ignoreOverloadedConfig)
-                assertThat(rule.compileAndLint(code)).isEmpty()
+                assertThat(rule.lint(code)).isEmpty()
             }
 
             @Test
@@ -171,7 +171,7 @@ class ComplexInterfaceSpec {
                     }
                 """.trimIndent()
                 val rule = ComplexInterface(ignoreOverloadedConfig)
-                assertThat(rule.compileAndLint(interfaceWithExtension)).hasSize(1)
+                assertThat(rule.lint(interfaceWithExtension)).hasSize(1)
             }
 
             @Test
@@ -185,7 +185,7 @@ class ComplexInterfaceSpec {
                     }
                 """.trimIndent()
                 val rule = ComplexInterface(ignoreOverloadedConfig)
-                assertThat(rule.compileAndLint(interfaceWithOverloadedExtensions)).isEmpty()
+                assertThat(rule.lint(interfaceWithOverloadedExtensions)).isEmpty()
             }
         }
     }
@@ -206,7 +206,7 @@ class ComplexInterfaceSpec {
                     // a comment shouldn't be detected
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -221,13 +221,13 @@ class ComplexInterfaceSpec {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
         fun `does not report an empty interface`() {
             val code = "interface Empty"
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -239,7 +239,7 @@ class ComplexInterfaceSpec {
                     fun func3()
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
     }
 }

@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.github.detekt.test.utils.compileContentForTest
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
@@ -14,42 +13,42 @@ class SpacingAfterPackageDeclarationSpec {
     @Test
     fun `has no blank lines violation`() {
         val code = "package test\n\nimport a.b\n\nclass A {}"
-        assertThat(subject.lint(code)).isEmpty()
+        assertThat(subject.lint(code, compile = false)).isEmpty()
     }
 
     @Test
     fun `has a package and import declaration`() {
         val code = "package test\n\nimport a.b"
-        assertThat(subject.lint(code)).isEmpty()
+        assertThat(subject.lint(code, compile = false)).isEmpty()
     }
 
     @Test
     fun `has no import declaration`() {
         val code = "package test\n\nclass A {}"
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
     fun `has no package declaration`() {
         val code = "import a.b\n\nclass A {}"
-        assertThat(subject.lint(code)).isEmpty()
+        assertThat(subject.lint(code, compile = false)).isEmpty()
     }
 
     @Test
     fun `has no package and import declaration`() {
         val code = "class A {}"
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
     fun `has a comment declaration`() {
         val code = "import a.b\n\n// a comment"
-        assertThat(subject.lint(code)).isEmpty()
+        assertThat(subject.lint(code, compile = false)).isEmpty()
     }
 
     @Test
     fun `is an empty kt file`() {
-        assertThat(subject.compileAndLint("")).isEmpty()
+        assertThat(subject.lint("")).isEmpty()
     }
 
     @Nested
@@ -80,25 +79,25 @@ class SpacingAfterPackageDeclarationSpec {
     @Test
     fun `has code on new line`() {
         val code = "package test\nimport a.b\nclass A {}"
-        assertThat(subject.lint(code)).hasSize(2)
+        assertThat(subject.lint(code, compile = false)).hasSize(2)
     }
 
     @Test
     fun `has code with spaces`() {
         val code = "package test; import a.b; class A {}"
-        assertThat(subject.lint(code)).hasSize(2)
+        assertThat(subject.lint(code, compile = false)).hasSize(2)
     }
 
     @Test
     fun `has too many blank lines`() {
         val code = "package test\n\n\nimport a.b\n\n\nclass A {}"
-        assertThat(subject.lint(code)).hasSize(2)
+        assertThat(subject.lint(code, compile = false)).hasSize(2)
     }
 
     @Test
     fun `has package declarations in same line`() {
         val code = "package test;import a.b;class A {}"
-        assertThat(subject.lint(code)).hasSize(2)
+        assertThat(subject.lint(code, compile = false)).hasSize(2)
     }
 
     @Test
@@ -111,7 +110,7 @@ class SpacingAfterPackageDeclarationSpec {
             
             class A { }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -122,6 +121,6 @@ class SpacingAfterPackageDeclarationSpec {
             import kotlin.collections.List
             import kotlin.collections.Set
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 }
