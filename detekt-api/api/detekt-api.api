@@ -11,13 +11,13 @@ public final class io/gitlab/arturbosch/detekt/api/AutocorrectKt {
 	public static final fun setModifiedText (Lorg/jetbrains/kotlin/psi/KtFile;Ljava/lang/String;)V
 }
 
-public class io/gitlab/arturbosch/detekt/api/CodeSmell : io/gitlab/arturbosch/detekt/api/Finding {
+public final class io/gitlab/arturbosch/detekt/api/CodeSmell : io/gitlab/arturbosch/detekt/api/Finding {
 	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Entity;Ljava/lang/String;Ljava/util/List;Ljava/util/List;)V
 	public synthetic fun <init> (Lio/gitlab/arturbosch/detekt/api/Entity;Ljava/lang/String;Ljava/util/List;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun getEntity ()Lio/gitlab/arturbosch/detekt/api/Entity;
-	public final fun getMessage ()Ljava/lang/String;
-	public final fun getReferences ()Ljava/util/List;
-	public final fun getSuppressReasons ()Ljava/util/List;
+	public fun getEntity ()Lio/gitlab/arturbosch/detekt/api/Entity;
+	public fun getMessage ()Ljava/lang/String;
+	public fun getReferences ()Ljava/util/List;
+	public fun getSuppressReasons ()Ljava/util/List;
 	public fun toString ()Ljava/lang/String;
 }
 
