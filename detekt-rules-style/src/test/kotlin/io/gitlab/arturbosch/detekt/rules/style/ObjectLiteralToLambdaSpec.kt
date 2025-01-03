@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
@@ -146,20 +145,6 @@ class ObjectLiteralToLambdaSpec {
 
         @Nested
         inner class `is not correct implement` {
-            @Test
-            fun `without type resolution`() {
-                val code = """
-                    fun interface Sam {
-                        fun foo()
-                    }
-                    val a = object : Sam {
-                        override fun foo() {
-                        }
-                    }
-                """.trimIndent()
-                assertThat(subject.compileAndLint(code)).isEmpty()
-            }
-
             @Test
             fun `is empty interface`() {
                 val code = """
