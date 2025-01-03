@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
@@ -18,22 +17,6 @@ class NullableBooleanCheckSpec(val env: KotlinCoreEnvironment) {
      * The recommended replacement string for `?: [fallback]`.
      */
     private fun replacementForElvis(fallback: Boolean): String = if (fallback) "!= false" else "== true"
-
-    @ParameterizedTest
-    @ValueSource(booleans = [true, false])
-    fun `does not report when there is no context`(bool: Boolean) {
-        val code = """
-            import kotlin.random.Random
-            
-            fun nullableBoolean(): Boolean? = true.takeIf { Random.nextBoolean() }
-            
-            fun foo(): Boolean {
-                return nullableBoolean() ?: $bool
-            }
-        """.trimIndent()
-
-        assertThat(subject.compileAndLint(code)).isEmpty()
-    }
 
     @ParameterizedTest
     @ValueSource(booleans = [true, false])
