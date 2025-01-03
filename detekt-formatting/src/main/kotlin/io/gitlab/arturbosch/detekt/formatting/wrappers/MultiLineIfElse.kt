@@ -17,7 +17,8 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @ActiveByDefault(since = "1.22.0")
 class MultiLineIfElse(config: Config) : FormattingRule(
     config,
-    "Detects multiline if-else statements without braces"
+    "Detects multiline if-else statements without braces",
+    Name("MultiLineIfElse"),
 ) {
 
     override val wrapping = MultiLineIfElseRule()

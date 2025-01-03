@@ -9,7 +9,8 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 class MixedConditionOperators(config: Config) : FormattingRule(
     config,
-    "Conditions should not use a both '&&' and '||' operators between operators at the same level"
+    "Conditions should not use a both '&&' and '||' operators between operators at the same level",
+    Name("MixedConditionOperators"),
 ) {
 
     override val wrapping = MixedConditionOperatorsRule()

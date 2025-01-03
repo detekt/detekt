@@ -14,7 +14,8 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @AutoCorrectable(since = "1.20.0")
 class UnnecessaryParenthesesBeforeTrailingLambda(config: Config) : FormattingRule(
     config,
-    "Ensures there are no unnecessary parentheses before a trailing lambda"
+    "Ensures there are no unnecessary parentheses before a trailing lambda",
+    Name("UnnecessaryParenthesesBeforeTrailingLambda"),
 ) {
 
     override val wrapping = UnnecessaryParenthesesBeforeTrailingLambdaRule()

@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.RuleInstance
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 import io.gitlab.arturbosch.detekt.core.util.isActiveOrDefault
 import java.net.URI
 import kotlin.reflect.full.hasAnnotation
@@ -25,12 +26,18 @@ internal fun getRules(
 ): List<RuleDescriptor> = ruleSetProviders
     .flatMap { ruleSetProvider ->
         val ruleSetConfig = config.subConfig(ruleSetProvider.ruleSetId.value)
-        ruleSetProvider.instance().getRules(ruleSetConfig, fullAnalysis, log)
+        val urlGenerator: (Rule) -> URI? = if (ruleSetProvider is DefaultRuleSetProvider) {
+            { rule -> rule.url ?: generateDefaultUrl(ruleSetProvider.ruleSetId, rule.ruleName) }
+        } else {
+            { rule -> rule.url }
+        }
+        ruleSetProvider.instance().getRules(ruleSetConfig, fullAnalysis, urlGenerator, log)
     }
 
 private fun RuleSet.getRules(
     config: Config,
     fullAnalysis: Boolean,
+    urlGenerator: (Rule) -> URI?,
     log: (() -> String) -> Unit,
 ): Sequence<RuleDescriptor> = config.subConfigKeys()
     .asSequence()
@@ -50,7 +57,7 @@ private fun RuleSet.getRules(
                 ruleInstance = RuleInstance(
                     id = ruleId,
                     ruleSetId = id,
-                    url = generateUrl(id, rule.ruleName),
+                    url = urlGenerator(rule),
                     description = rule.description,
                     severity = ruleConfig.computeSeverity(),
                     active = active && executable,
@@ -59,7 +66,7 @@ private fun RuleSet.getRules(
         }
     }
 
-private fun generateUrl(ruleSetId: RuleSet.Id, ruleName: Rule.Name) =
+private fun generateDefaultUrl(ruleSetId: RuleSet.Id, ruleName: Rule.Name) =
     URI("https://detekt.dev/docs/rules/${ruleSetId.value.lowercase()}#${ruleName.value.lowercase()}")
 
 /**

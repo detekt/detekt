@@ -21,7 +21,8 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @Alias("MaxLineLength")
 class MaximumLineLength(config: Config) : FormattingRule(
     config,
-    "Reports lines with exceeded length"
+    "Reports lines with exceeded length",
+    Name("MaximumLineLength"),
 ) {
 
     override val wrapping = MaxLineLengthRule()

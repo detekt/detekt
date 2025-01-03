@@ -16,7 +16,8 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @AutoCorrectable(since = "2.0.0")
 class BlankLineBetweenWhenConditions(config: Config) : FormattingRule(
     config,
-    "Consistently add or remove blank lines between when-conditions in a when-statement"
+    "Consistently add or remove blank lines between when-conditions in a when-statement",
+    Name("BlankLineBetweenWhenConditions"),
 ) {
 
     override val wrapping = BlankLineBetweenWhenConditions()

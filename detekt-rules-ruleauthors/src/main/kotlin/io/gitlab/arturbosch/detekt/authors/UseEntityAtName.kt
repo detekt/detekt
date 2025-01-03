@@ -22,7 +22,8 @@ import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
 @ActiveByDefault("1.22.0")
 class UseEntityAtName(config: Config) : Rule(
     config,
-    "Prefer Entity.atName to Entity.from(....nameIdentifier)."
+    "Prefer Entity.atName to Entity.from(....nameIdentifier).",
+    generateRuleUrl("UseEntityAtName"),
 ) {
 
     override fun visitCallExpression(expression: KtCallExpression) {

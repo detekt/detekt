@@ -13,7 +13,8 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @ActiveByDefault(since = "1.22.0")
 class SpacingAroundUnaryOperator(config: Config) : FormattingRule(
     config,
-    "Reports spaces around unary operator"
+    "Reports spaces around unary operator",
+    Name("SpacingAroundUnaryOperator"),
 ) {
 
     override val wrapping = SpacingAroundUnaryOperatorRule()

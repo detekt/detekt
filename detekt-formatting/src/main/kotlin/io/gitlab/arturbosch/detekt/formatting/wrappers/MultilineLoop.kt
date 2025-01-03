@@ -15,7 +15,8 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @AutoCorrectable(since = "2.0.0")
 class MultilineLoop(config: Config) : FormattingRule(
     config,
-    "Detects multiline loop statements without braces"
+    "Detects multiline loop statements without braces",
+    Name("MultilineLoop"),
 ) {
 
     override val wrapping = MultilineLoopRule()

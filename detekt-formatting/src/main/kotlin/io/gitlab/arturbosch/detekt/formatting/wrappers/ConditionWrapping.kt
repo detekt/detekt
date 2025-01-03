@@ -15,7 +15,8 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @AutoCorrectable(since = "2.0.0")
 class ConditionWrapping(config: Config) : FormattingRule(
     config,
-    "Conditions should be wrapped when expression doesn't fit on one line"
+    "Conditions should be wrapped when expression doesn't fit on one line",
+    Name("ConditionWrapping"),
 ) {
 
     override val wrapping = ConditionWrappingRule()

@@ -13,7 +13,8 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @AutoCorrectable(since = "1.0.0")
 class NoTrailingSpaces(config: Config) : FormattingRule(
     config,
-    "Detects trailing spaces"
+    "Detects trailing spaces",
+    Name("NoTrailingSpaces"),
 ) {
 
     override val wrapping = NoTrailingSpacesRule()

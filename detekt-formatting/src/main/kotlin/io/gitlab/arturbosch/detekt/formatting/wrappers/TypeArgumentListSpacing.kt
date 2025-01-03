@@ -18,7 +18,8 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @AutoCorrectable(since = "1.20.0")
 class TypeArgumentListSpacing(config: Config) : FormattingRule(
     config,
-    "Reports spaces in the type reference before a function."
+    "Reports spaces in the type reference before a function.",
+    Name("TypeArgumentListSpacing"),
 ) {
 
     override val wrapping = TypeArgumentListSpacingRule()

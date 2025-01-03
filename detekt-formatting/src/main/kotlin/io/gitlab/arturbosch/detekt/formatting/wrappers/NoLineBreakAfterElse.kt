@@ -13,7 +13,8 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @AutoCorrectable(since = "1.0.0")
 class NoLineBreakAfterElse(config: Config) : FormattingRule(
     config,
-    "Reports line breaks after else"
+    "Reports line breaks after else",
+    Name("NoLineBreakAfterElse"),
 ) {
 
     override val wrapping = NoLineBreakAfterElseRule()

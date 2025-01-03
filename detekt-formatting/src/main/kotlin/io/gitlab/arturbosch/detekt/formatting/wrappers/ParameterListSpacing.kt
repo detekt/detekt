@@ -18,7 +18,8 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @AutoCorrectable(since = "1.22.0")
 class ParameterListSpacing(config: Config) : FormattingRule(
     config,
-    "Ensure consistent spacing inside the parameter list."
+    "Ensure consistent spacing inside the parameter list.",
+    Name("ParameterListSpacing"),
 ) {
 
     override val wrapping = ParameterListSpacingRule()

@@ -18,7 +18,8 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @AutoCorrectable(since = "1.23.0")
 class NoEmptyFirstLineInClassBody(config: Config) : FormattingRule(
     config,
-    "Disallow blank lines at start of a class body."
+    "Disallow blank lines at start of a class body.",
+    Name("NoEmptyFirstLineInClassBody"),
 ) {
 
     override val wrapping = NoEmptyFirstLineInClassBodyRule()

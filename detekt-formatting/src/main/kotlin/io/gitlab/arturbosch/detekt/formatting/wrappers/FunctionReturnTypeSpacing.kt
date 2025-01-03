@@ -18,7 +18,8 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @AutoCorrectable(since = "1.22.0")
 class FunctionReturnTypeSpacing(config: Config) : FormattingRule(
     config,
-    "Checks the spacing between colon and return type."
+    "Checks the spacing between colon and return type.",
+    Name("FunctionReturnTypeSpacing"),
 ) {
 
     override val wrapping = FunctionReturnTypeSpacingRule()

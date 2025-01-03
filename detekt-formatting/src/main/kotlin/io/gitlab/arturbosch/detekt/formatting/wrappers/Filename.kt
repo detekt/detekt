@@ -14,7 +14,8 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @ActiveByDefault(since = "1.0.0")
 class Filename(config: Config) : FormattingRule(
     config,
-    "Checks if top level class matches the filename"
+    "Checks if top level class matches the filename",
+    Name("Filename"),
 ) {
 
     override val wrapping = FilenameRule()

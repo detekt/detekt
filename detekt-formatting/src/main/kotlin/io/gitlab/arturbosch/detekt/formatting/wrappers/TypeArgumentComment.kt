@@ -12,7 +12,8 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @ActiveByDefault(since = "2.0.0")
 class TypeArgumentComment(config: Config) : FormattingRule(
     config,
-    "Detect discouraged type argument comment locations."
+    "Detect discouraged type argument comment locations.",
+    Name("TypeArgumentComment"),
 ) {
 
     override val wrapping = TypeArgumentCommentRule()

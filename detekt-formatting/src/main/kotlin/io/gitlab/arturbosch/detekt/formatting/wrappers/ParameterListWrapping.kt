@@ -19,7 +19,8 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @AutoCorrectable(since = "1.0.0")
 class ParameterListWrapping(config: Config) : FormattingRule(
     config,
-    "Detects mis-aligned parameter lists"
+    "Detects mis-aligned parameter lists",
+    Name("ParameterListWrapping"),
 ) {
 
     override val wrapping = ParameterListWrappingRule()

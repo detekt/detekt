@@ -13,7 +13,8 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @AutoCorrectable(since = "1.0.0")
 class NoConsecutiveBlankLines(config: Config) : FormattingRule(
     config,
-    "Reports consecutive blank lines"
+    "Reports consecutive blank lines",
+    Name("NoConsecutiveBlankLines"),
 ) {
 
     override val wrapping = NoConsecutiveBlankLinesRule()

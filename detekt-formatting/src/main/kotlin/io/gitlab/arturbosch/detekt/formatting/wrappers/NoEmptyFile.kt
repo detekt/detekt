@@ -11,7 +11,8 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @ActiveByDefault(since = "2.0.0")
 class NoEmptyFile(config: Config) : FormattingRule(
     config,
-    "Kotlin files must contain at least one declaration"
+    "Kotlin files must contain at least one declaration",
+    Name("NoEmptyFile"),
 ) {
 
     override val wrapping = NoEmptyFileRule()

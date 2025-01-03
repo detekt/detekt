@@ -12,7 +12,8 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @ActiveByDefault(since = "2.0.0")
 class PropertyName(config: Config) : FormattingRule(
     config,
-    "Reports incorrect property name."
+    "Reports incorrect property name.",
+    Name("PropertyName"),
 ) {
     override val wrapping = PropertyNamingRule()
 }

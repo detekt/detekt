@@ -14,7 +14,8 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @AutoCorrectable(since = "1.20.0")
 class BlockCommentInitialStarAlignment(config: Config) : FormattingRule(
     config,
-    "Detect the alignment of the initial star in a block comment."
+    "Detect the alignment of the initial star in a block comment.",
+    Name("BlockCommentInitialStarAlignment"),
 ) {
 
     override val wrapping = BlockCommentInitialStarAlignmentRule()

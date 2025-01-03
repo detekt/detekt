@@ -13,7 +13,8 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @AutoCorrectable(since = "1.0.0")
 class StringTemplate(config: Config) : FormattingRule(
     config,
-    "Detects simplifications in template strings"
+    "Detects simplifications in template strings",
+    Name("StringTemplate"),
 ) {
 
     override val wrapping = StringTemplateRule()

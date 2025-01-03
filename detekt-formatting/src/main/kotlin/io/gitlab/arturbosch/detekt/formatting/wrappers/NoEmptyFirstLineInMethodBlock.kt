@@ -14,7 +14,8 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @ActiveByDefault(since = "1.22.0")
 class NoEmptyFirstLineInMethodBlock(config: Config) : FormattingRule(
     config,
-    "Reports methods that have an empty first line."
+    "Reports methods that have an empty first line.",
+    Name("NoEmptyFirstLineInMethodBlock"),
 ) {
 
     override val wrapping = NoEmptyFirstLineInMethodBlockRule()

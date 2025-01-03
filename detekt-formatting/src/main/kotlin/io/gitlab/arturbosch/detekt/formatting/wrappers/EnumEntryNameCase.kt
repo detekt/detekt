@@ -19,7 +19,8 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @Alias("EnumEntryName")
 class EnumEntryNameCase(config: Config) : FormattingRule(
     config,
-    "Reports enum entries with names that don't meet standard conventions."
+    "Reports enum entries with names that don't meet standard conventions.",
+    Name("EnumEntryNameCase"),
 ) {
 
     override val wrapping = EnumEntryNameCaseRule()

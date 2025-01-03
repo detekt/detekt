@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
+import io.gitlab.arturbosch.detekt.formatting.generateRuleUrl
 
 /**
  * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#annotation-formatting) for documentation.
@@ -17,7 +18,8 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @ActiveByDefault(since = "1.22.0")
 class AnnotationOnSeparateLine(config: Config) : FormattingRule(
     config,
-    "Multiple annotations should be placed on separate lines. "
+    "Multiple annotations should be placed on separate lines.",
+    Name("AnnotationOnSeparateLine"),
 ) {
 
     override val wrapping = AnnotationRule()

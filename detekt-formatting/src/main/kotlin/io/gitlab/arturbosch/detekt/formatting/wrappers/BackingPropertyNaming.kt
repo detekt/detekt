@@ -10,7 +10,8 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 class BackingPropertyNaming(config: Config) : FormattingRule(
     config,
-    "Reports incorrect property name."
+    "Reports incorrect property name.",
+    Name("BackingPropertyNaming"),
 ) {
     override val wrapping = BackingPropertyNamingRule()
 }

@@ -30,7 +30,8 @@ import org.jetbrains.kotlin.psi.psiUtil.visibilityModifierTypeOrDefault
 @ActiveByDefault(since = "1.16.0")
 class ForbiddenPublicDataClass(config: Config) : Rule(
     config,
-    "The data classes are bad for the binary compatibility in public APIs. Avoid to use it."
+    "The data classes are bad for the binary compatibility in public APIs. Avoid to use it.",
+    generateRuleUrl("ForbiddenPublicDataClass"),
 ) {
 
     @Configuration("ignores classes in the specified packages.")

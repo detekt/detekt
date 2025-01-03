@@ -13,7 +13,8 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @AutoCorrectable(since = "1.0.0")
 class SpacingAroundDot(config: Config) : FormattingRule(
     config,
-    "Reports spaces around member invocation operator (dot)."
+    "Reports spaces around member invocation operator (dot).",
+    Name("SpacingAroundDot"),
 ) {
 
     override val wrapping = SpacingAroundDotRule()

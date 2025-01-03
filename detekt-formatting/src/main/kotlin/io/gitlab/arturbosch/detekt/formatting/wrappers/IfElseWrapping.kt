@@ -17,7 +17,8 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @AutoCorrectable(since = "1.23.0")
 class IfElseWrapping(config: Config) : FormattingRule(
     config,
-    "A single line if-statement may contain no more than one else-branch."
+    "A single line if-statement may contain no more than one else-branch.",
+    Name("IfElseWrapping"),
 ) {
 
     override val wrapping = IfElseWrappingRule()

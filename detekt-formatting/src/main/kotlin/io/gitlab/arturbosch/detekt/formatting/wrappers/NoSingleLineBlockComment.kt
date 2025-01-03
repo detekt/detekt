@@ -17,7 +17,8 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @AutoCorrectable(since = "1.23.0")
 class NoSingleLineBlockComment(config: Config) : FormattingRule(
     config,
-    "Reports single block line comments"
+    "Reports single block line comments",
+    Name("NoSingleLineBlockComment"),
 ) {
 
     override val wrapping = NoSingleLineBlockCommentRule()

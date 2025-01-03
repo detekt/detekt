@@ -13,7 +13,8 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @AutoCorrectable(since = "1.20.0")
 class ModifierListSpacing(config: Config) : FormattingRule(
     config,
-    "Checks the spacing between the modifiers in and after the last modifier in a modifier list."
+    "Checks the spacing between the modifiers in and after the last modifier in a modifier list.",
+    Name("ModifierListSpacing"),
 ) {
 
     override val wrapping = ModifierListSpacingRule()

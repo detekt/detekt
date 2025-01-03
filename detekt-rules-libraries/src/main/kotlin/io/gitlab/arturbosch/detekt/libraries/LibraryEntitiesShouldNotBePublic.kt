@@ -26,7 +26,8 @@ import org.jetbrains.kotlin.psi.psiUtil.isPublic
 @ActiveByDefault(since = "1.16.0")
 class LibraryEntitiesShouldNotBePublic(config: Config) : Rule(
     config,
-    "Library classes should not be public."
+    "Library classes should not be public.",
+    generateRuleUrl("LibraryEntitiesShouldNotBePublic"),
 ) {
 
     override fun visitClass(klass: KtClass) {

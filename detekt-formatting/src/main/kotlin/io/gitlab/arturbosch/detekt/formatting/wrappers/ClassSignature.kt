@@ -19,7 +19,8 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @AutoCorrectable(since = "2.0.0")
 class ClassSignature(config: Config) : FormattingRule(
     config,
-    "Ensure class signatures have a consistent format."
+    "Ensure class signatures have a consistent format.",
+    Name("ClassSignature"),
 ) {
 
     override val wrapping = ClassSignatureRule()

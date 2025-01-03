@@ -12,7 +12,8 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @ActiveByDefault(since = "2.0.0")
 class ValueArgumentComment(config: Config) : FormattingRule(
     config,
-    "Detect discouraged value argument comment locations."
+    "Detect discouraged value argument comment locations.",
+    Name("ValueArgumentComment"),
 ) {
 
     override val wrapping = ValueArgumentCommentRule()

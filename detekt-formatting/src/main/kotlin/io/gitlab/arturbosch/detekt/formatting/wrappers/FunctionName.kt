@@ -12,7 +12,8 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 class FunctionName(config: Config) : FormattingRule(
     config,
-    "Function name should start with a lowercase letter (except factory methods) and use camel case."
+    "Function name should start with a lowercase letter (except factory methods) and use camel case.",
+    Name("FunctionName"),
 ) {
     override val wrapping = FunctionNamingRule()
 

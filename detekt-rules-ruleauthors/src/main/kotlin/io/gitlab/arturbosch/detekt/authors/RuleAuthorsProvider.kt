@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.authors
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import java.net.URI
 
 /**
  * The rule authors ruleset provides rules that ensures good practices when writing detekt rules.
@@ -16,7 +17,7 @@ import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 @ActiveByDefault("1.22.0")
 class RuleAuthorsProvider : RuleSetProvider {
 
-    override val ruleSetId = RuleSet.Id("ruleauthors")
+    override val ruleSetId = RuleSet.Id(RULE_SET_ID)
 
     override fun instance() = RuleSet(
         ruleSetId,
@@ -26,3 +27,8 @@ class RuleAuthorsProvider : RuleSetProvider {
         )
     )
 }
+
+internal fun generateRuleUrl(ruleName: String) =
+    URI("https://detekt.dev/docs/rules/$RULE_SET_ID#${ruleName.lowercase()}")
+
+private const val RULE_SET_ID = "ruleauthors"

@@ -13,7 +13,8 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @AutoCorrectable(since = "1.0.0")
 class NoUnusedImports(config: Config) : FormattingRule(
     config,
-    "Detects unused imports"
+    "Detects unused imports",
+    Name("NoUnusedImports"),
 ) {
 
     override val wrapping = NoUnusedImportsRule()

@@ -21,7 +21,8 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @AutoCorrectable(since = "1.22.0")
 class TrailingCommaOnCallSite(config: Config) : FormattingRule(
     config,
-    "Rule to mandate/forbid trailing commas at call sites"
+    "Rule to mandate/forbid trailing commas at call sites",
+    Name("TrailingCommaOnCallSite"),
 ) {
 
     override val wrapping = TrailingCommaOnCallSiteRule()

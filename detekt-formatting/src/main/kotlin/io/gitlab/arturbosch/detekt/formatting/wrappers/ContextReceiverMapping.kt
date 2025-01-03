@@ -19,7 +19,8 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 @AutoCorrectable(since = "1.23.0")
 class ContextReceiverMapping(config: Config) : FormattingRule(
     config,
-    "Reports mis-indented code"
+    "Reports mis-indented code",
+    Name("ContextReceiverMapping"),
 ) {
 
     override val wrapping = ContextReceiverWrappingRule()

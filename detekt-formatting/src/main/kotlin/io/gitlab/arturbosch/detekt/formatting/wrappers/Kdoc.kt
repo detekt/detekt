@@ -9,7 +9,8 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 class Kdoc(config: Config) : FormattingRule(
     config,
-    "Only allow KDoc when comments are in a location that can be converted to public documentation"
+    "Only allow KDoc when comments are in a location that can be converted to public documentation",
+    Name("Kdoc"),
 ) {
 
     override val wrapping = KdocRule()
