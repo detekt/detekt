@@ -21,16 +21,22 @@ private val shouldCompileTestSnippets: Boolean =
 fun Rule.compileAndLint(
     @Language("kotlin") content: String,
     compilerResources: CompilerResources = FakeCompilerResources(),
+    compile: Boolean = true,
 ): List<Finding> {
     require(this !is RequiresFullAnalysis) {
         "${this.ruleName} requires full analysis so you should use compileAndLintWithContext instead of compileAndLint"
     }
-    if (shouldCompileTestSnippets) {
+    if (compile && shouldCompileTestSnippets) {
         KotlinScriptEngine.compile(content)
     }
-    return lint(content, compilerResources)
+    val ktFile = compileContentForTest(content)
+    return visitFile(ktFile, compilerResources = compilerResources).filterSuppressed(this)
 }
 
+@Deprecated(
+    "Use compileAndLint with compile = false",
+    ReplaceWith("compileAndLint(content, compilerResources, false)"),
+)
 fun Rule.lint(
     @Language("kotlin") content: String,
     compilerResources: CompilerResources = FakeCompilerResources(),
@@ -38,8 +44,7 @@ fun Rule.lint(
     require(this !is RequiresFullAnalysis) {
         "${this.ruleName} requires full analysis so you should use lintWithContext instead of lint"
     }
-    val ktFile = compileContentForTest(content)
-    return visitFile(ktFile, compilerResources = compilerResources).filterSuppressed(this)
+    return compileAndLint(content, compilerResources, false)
 }
 
 fun Rule.lintWithContext(
