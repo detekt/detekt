@@ -386,6 +386,22 @@ class UnnecessaryRunSpec(val env: KotlinCoreEnvironment) {
         }
 
         @Test
+        fun `does not report when result is as fun return type`() {
+            assertThat(
+                subject.compileAndLintWithContext(
+                    env,
+                    """
+                        class C {
+                            var prop = 0
+                        }
+                        val c = C()
+                        fun f(): Unit = c.run { prop += 1 }
+                    """.trimIndent()
+                )
+            ).isEmpty()
+        }
+
+        @Test
         fun `does not report when result is used in fun param`() {
             assertThat(
                 subject.compileAndLintWithContext(
