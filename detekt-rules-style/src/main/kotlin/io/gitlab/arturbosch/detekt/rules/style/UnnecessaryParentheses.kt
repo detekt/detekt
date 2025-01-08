@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.internal.Configuration
+import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.com.intellij.psi.tree.IElementType
 import org.jetbrains.kotlin.lexer.KtTokens
@@ -76,6 +77,8 @@ class UnnecessaryParentheses(config: Config = Config.empty) : Rule(config) {
         if (allowForUnclearPrecedence && inner.isBinaryOperationPrecedenceUnclearWithParent()) return
 
         if (allowForUnclearPrecedence && expression.isUnaryOperationPrecedenceUnclear()) return
+
+        if (allowForUnclearPrecedence && expression.isFloatWithOutIntegerPartAroundRange()) return
 
         val message = "Parentheses in ${expression.text} are unnecessary and can be replaced with: " +
             KtPsiUtil.deparenthesize(expression)?.text
@@ -186,6 +189,25 @@ class UnnecessaryParentheses(config: Config = Config.empty) : Rule(config) {
                 KtTokens.PLUSPLUS,
                 KtTokens.MINUSMINUS,
             )
+        }
+
+        /**
+         * Determines whether this is decimal without integer part present in ranges
+         */
+        @Suppress("ReturnCount")
+        private fun KtParenthesizedExpression.isFloatWithOutIntegerPartAroundRange(): Boolean {
+            val parentExpression = this.parent
+            if (parentExpression !is KtBinaryExpression) return false
+
+            if (
+                parentExpression.operationToken != KtTokens.RANGE ||
+                (this.expression as? KtConstantExpression)?.elementType != KtNodeTypes.FLOAT_CONSTANT ||
+                parentExpression.right != this
+            ) {
+                return false
+            }
+
+            return this.expression?.run { text.startsWith(".") } == true
         }
     }
 }
