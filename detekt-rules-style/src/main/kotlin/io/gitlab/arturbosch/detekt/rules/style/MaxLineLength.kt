@@ -55,7 +55,7 @@ class MaxLineLength(config: Config) : Rule(
 
         val sourceFileLinesMapping = KtPsiSourceFileLinesMapping(file)
 
-        file.text.lines().withIndex()
+        file.text.lineSequence().withIndex()
             .filterNot { (index, line) -> isValidLine(file, sourceFileLinesMapping.getLineStartOffset(index), line) }
             .forEach { (index, line) ->
                 val offset = sourceFileLinesMapping.getLineStartOffset(index)
@@ -72,13 +72,12 @@ class MaxLineLength(config: Config) : Rule(
             }
     }
 
-    private fun isValidLine(file: KtFile, offset: Int, line: String): Boolean {
-        val isUrl = line.lastArgumentMatchesUrl()
-        val isMarkdownOrRefUrl =
+    private fun isValidLine(file: KtFile, offset: Int, line: String) =
+        line.length <= maxLineLength ||
+            isIgnoredStatement(file, offset, line) ||
+            line.lastArgumentMatchesUrl() ||
             line.lastArgumentMatchesMarkdownUrlSyntax() ||
-                line.lastArgumentMatchesKotlinReferenceUrlSyntax()
-        return line.length <= maxLineLength || isIgnoredStatement(file, offset, line) || isUrl || isMarkdownOrRefUrl
-    }
+            line.lastArgumentMatchesKotlinReferenceUrlSyntax()
 
     private fun isIgnoredStatement(file: KtFile, offset: Int, line: String): Boolean =
         containsIgnoredPackageStatement(line) ||
