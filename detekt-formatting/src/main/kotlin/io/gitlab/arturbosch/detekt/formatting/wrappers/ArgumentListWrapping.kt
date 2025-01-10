@@ -31,7 +31,7 @@ class ArgumentListWrapping(config: Config) : FormattingRule(
     @Configuration("maximum line length")
     private val maxLineLength by configWithAndroidVariants(120, 100)
 
-    @Configuration("paremeter threshold to ignore rule")
+    @Configuration("parameter threshold to ignore rule")
     private val ignoreRuleParameterThreshold by config(8)
 
     override fun overrideEditorConfigProperties(): Map<EditorConfigProperty<*>, String> =
