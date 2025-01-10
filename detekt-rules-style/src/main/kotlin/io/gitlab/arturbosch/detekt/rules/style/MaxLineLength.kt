@@ -56,7 +56,9 @@ class MaxLineLength(config: Config) : Rule(
         val sourceFileLinesMapping = KtPsiSourceFileLinesMapping(file)
 
         file.text.lineSequence().withIndex()
-            .filterNot { (index, line) -> isValidLine(file, sourceFileLinesMapping.getLineStartOffset(index), line) }
+            .filterNot { (index, line) ->
+                isValidLine(file, { sourceFileLinesMapping.getLineStartOffset(index) }, line)
+            }
             .forEach { (index, line) ->
                 val offset = sourceFileLinesMapping.getLineStartOffset(index)
                 val ktElement = findFirstMeaningfulKtElementInParents(file, offset, line) ?: file
@@ -72,23 +74,23 @@ class MaxLineLength(config: Config) : Rule(
             }
     }
 
-    private fun isValidLine(file: KtFile, offset: Int, line: String) =
+    private fun isValidLine(file: KtFile, offset: () -> Int, line: String) =
         line.length <= maxLineLength ||
             isIgnoredStatement(file, offset, line) ||
             line.lastArgumentMatchesUrl() ||
             line.lastArgumentMatchesMarkdownUrlSyntax() ||
             line.lastArgumentMatchesKotlinReferenceUrlSyntax()
 
-    private fun isIgnoredStatement(file: KtFile, offset: Int, line: String): Boolean =
+    private fun isIgnoredStatement(file: KtFile, offset: () -> Int, line: String): Boolean =
         containsIgnoredPackageStatement(line) ||
             containsIgnoredImportStatement(line) ||
             containsIgnoredCommentStatement(line) ||
             containsIgnoredRawString(file, offset, line)
 
-    private fun containsIgnoredRawString(file: KtFile, offset: Int, line: String): Boolean {
+    private fun containsIgnoredRawString(file: KtFile, offset: () -> Int, line: String): Boolean {
         if (!excludeRawStrings) return false
 
-        return findKtElementInParents(file, offset, line)
+        return findKtElementInParents(file, offset(), line)
             .sortedBy { it.textOffset }
             .lastOrNull()
             ?.isInsideRawString() == true
