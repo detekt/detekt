@@ -62,13 +62,12 @@ class MaxLineLength(config: Config) : Rule(
                 val ktElement = findFirstMeaningfulKtElementInParents(file, offset, line) ?: file
                 val textRange = TextRange(offset, offset + line.length)
                 val lineAndColumnRange = getLineAndColumnRangeInPsiFile(file, textRange)
-                val location =
-                    Location(
-                        source = SourceLocation(lineAndColumnRange.start.line, lineAndColumnRange.start.column),
-                        endSource = SourceLocation(lineAndColumnRange.end.line, lineAndColumnRange.end.column),
-                        text = TextLocation(offset, offset + line.length),
-                        path = file.absolutePath(),
-                    )
+                val location = Location(
+                    source = SourceLocation(lineAndColumnRange.start.line, lineAndColumnRange.start.column),
+                    endSource = SourceLocation(lineAndColumnRange.end.line, lineAndColumnRange.end.column),
+                    text = TextLocation(offset, offset + line.length),
+                    path = file.absolutePath(),
+                )
                 report(CodeSmell(Entity.from(ktElement, location), description))
             }
     }
