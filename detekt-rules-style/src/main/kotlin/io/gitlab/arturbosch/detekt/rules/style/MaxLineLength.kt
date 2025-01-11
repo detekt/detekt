@@ -55,42 +55,42 @@ class MaxLineLength(config: Config) : Rule(
 
         val sourceFileLinesMapping = KtPsiSourceFileLinesMapping(file)
 
-        file.text.lines().withIndex()
-            .filterNot { (index, line) -> isValidLine(file, sourceFileLinesMapping.getLineStartOffset(index), line) }
+        file.text.lineSequence().withIndex()
+            .filterNot { (index, line) ->
+                isValidLine(file, { sourceFileLinesMapping.getLineStartOffset(index) }, line)
+            }
             .forEach { (index, line) ->
                 val offset = sourceFileLinesMapping.getLineStartOffset(index)
                 val ktElement = findFirstMeaningfulKtElementInParents(file, offset, line) ?: file
                 val textRange = TextRange(offset, offset + line.length)
                 val lineAndColumnRange = getLineAndColumnRangeInPsiFile(file, textRange)
-                val location =
-                    Location(
-                        source = SourceLocation(lineAndColumnRange.start.line, lineAndColumnRange.start.column),
-                        endSource = SourceLocation(lineAndColumnRange.end.line, lineAndColumnRange.end.column),
-                        text = TextLocation(offset, offset + line.length),
-                        path = file.absolutePath(),
-                    )
+                val location = Location(
+                    source = SourceLocation(lineAndColumnRange.start.line, lineAndColumnRange.start.column),
+                    endSource = SourceLocation(lineAndColumnRange.end.line, lineAndColumnRange.end.column),
+                    text = TextLocation(offset, offset + line.length),
+                    path = file.absolutePath(),
+                )
                 report(CodeSmell(Entity.from(ktElement, location), description))
             }
     }
 
-    private fun isValidLine(file: KtFile, offset: Int, line: String): Boolean {
-        val isUrl = line.lastArgumentMatchesUrl()
-        val isMarkdownOrRefUrl =
+    private fun isValidLine(file: KtFile, offset: () -> Int, line: String) =
+        line.length <= maxLineLength ||
+            isIgnoredStatement(file, offset, line) ||
+            line.lastArgumentMatchesUrl() ||
             line.lastArgumentMatchesMarkdownUrlSyntax() ||
-                line.lastArgumentMatchesKotlinReferenceUrlSyntax()
-        return line.length <= maxLineLength || isIgnoredStatement(file, offset, line) || isUrl || isMarkdownOrRefUrl
-    }
+            line.lastArgumentMatchesKotlinReferenceUrlSyntax()
 
-    private fun isIgnoredStatement(file: KtFile, offset: Int, line: String): Boolean =
+    private fun isIgnoredStatement(file: KtFile, offset: () -> Int, line: String): Boolean =
         containsIgnoredPackageStatement(line) ||
             containsIgnoredImportStatement(line) ||
             containsIgnoredCommentStatement(line) ||
             containsIgnoredRawString(file, offset, line)
 
-    private fun containsIgnoredRawString(file: KtFile, offset: Int, line: String): Boolean {
+    private fun containsIgnoredRawString(file: KtFile, offset: () -> Int, line: String): Boolean {
         if (!excludeRawStrings) return false
 
-        return findKtElementInParents(file, offset, line)
+        return findKtElementInParents(file, offset(), line)
             .sortedBy { it.textOffset }
             .lastOrNull()
             ?.isInsideRawString() == true
