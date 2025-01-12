@@ -37,11 +37,11 @@ class SarifOutputReport : BuiltInOutputReport, OutputReport() {
                             informationURI = "https://detekt.dev",
                             language = "en",
                             name = "detekt",
-                            rules = toReportingDescriptors(config),
+                            rules = detektion.rules.map { it.toDescriptor() },
                             organization = "detekt",
                         )
                     ),
-                    results = toResults(detektion)
+                    results = toResults(detektion.issues),
                 )
             )
         )
