@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.empty
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Test
 
 class EmptyKotlinFileSpec {
@@ -11,7 +11,7 @@ class EmptyKotlinFileSpec {
     @Test
     fun `reports empty if file is blank`() {
         val code = ""
-        assertThat(subject.compileAndLint(code))
+        assertThat(subject.lint(code))
             .singleElement()
             .hasSourceLocation(1, 1)
     }
@@ -21,7 +21,7 @@ class EmptyKotlinFileSpec {
         val codeWithPackageStatement = """
             package my.packagee
         """.trimIndent()
-        assertThat(subject.compileAndLint(codeWithPackageStatement))
+        assertThat(subject.lint(codeWithPackageStatement))
             .singleElement()
             .hasSourceLocation(1, 1)
     }
@@ -33,6 +33,6 @@ class EmptyKotlinFileSpec {
 
             fun myFunction() {}
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 }

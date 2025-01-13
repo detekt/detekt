@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.naming
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -18,7 +17,7 @@ class TopLevelPropertyNamingSpec {
             const val lowerCaseConst = ""
         """.trimIndent()
         val subject = TopLevelPropertyNaming(TestConfig(TopLevelPropertyNaming.CONSTANT_PATTERN to "^lowerCaseConst$"))
-        assertThat(subject.lint(code)).isEmpty()
+        assertThat(subject.lint(code, compile = false)).isEmpty()
     }
 
     @Nested
@@ -30,7 +29,7 @@ class TopLevelPropertyNamingSpec {
                 const val MY_NAME_8 = "Artur"
                 const val MYNAME = "Artur"
             """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lint(code, compile = false)).isEmpty()
         }
 
         @Test
@@ -42,7 +41,7 @@ class TopLevelPropertyNamingSpec {
                 private const val _nAme = "Artur"
                 const val serialVersionUID = 42L
             """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(5)
+            assertThat(subject.lint(code, compile = false)).hasSize(5)
         }
     }
 
@@ -52,7 +51,7 @@ class TopLevelPropertyNamingSpec {
             val String._foo = "foo"
         """.trimIndent()
 
-        assertThat(subject.lint(code)).isEmpty()
+        assertThat(subject.lint(code, compile = false)).isEmpty()
     }
 
     @Nested
@@ -72,7 +71,7 @@ class TopLevelPropertyNamingSpec {
                 val s_d_d_1 = listOf("")
                 private val INTERNAL_VERSION = "1.0.0"
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -80,7 +79,7 @@ class TopLevelPropertyNamingSpec {
             val code = """
                 val _nAme = "Artur"
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
 
         @Test
@@ -88,7 +87,7 @@ class TopLevelPropertyNamingSpec {
             val code = """
                 private val __NAME = "Artur"
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
     }
 
@@ -104,6 +103,6 @@ class TopLevelPropertyNamingSpec {
             }
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 }
