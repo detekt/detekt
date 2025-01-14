@@ -2,10 +2,12 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.isPartOf
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocTag
 import org.jetbrains.kotlin.name.FqName
@@ -31,9 +33,11 @@ class UnusedImport(config: Config) : Rule(
     config,
     "Unused Imports are dead code and should be removed."
 ) {
+    @Configuration("Additional operators from libraries or tools, such as 'assign'(e.g. compiler plugins for Gradle).")
+    private val additionalOperatorSet: List<String> by config(emptyList())
 
     override fun visit(root: KtFile) {
-        with(UnusedImportVisitor(bindingContext)) {
+        with(UnusedImportVisitor(bindingContext, additionalOperatorSet)) {
             root.accept(this)
             unusedImports().forEach {
                 report(CodeSmell(Entity.from(it), "The import '${it.importedFqName}' is unused."))
@@ -42,7 +46,10 @@ class UnusedImport(config: Config) : Rule(
         super.visit(root)
     }
 
-    private class UnusedImportVisitor(private val bindingContext: BindingContext) : DetektVisitor() {
+    private class UnusedImportVisitor(
+        private val bindingContext: BindingContext,
+        private val additionalOperatorSet: List<String>,
+    ) : DetektVisitor() {
         private var currentPackage: FqName? = null
         private var imports: List<KtImportDirective>? = null
         private val namedReferences = mutableSetOf<KtReferenceExpression>()
@@ -163,11 +170,6 @@ class UnusedImport(config: Config) : Rule(
             "mod", "rangeTo", "rangeUntil", "contains", "get", "set", "invoke",
             "plusAssign", "minusAssign", "timesAssign", "divAssign", "modAssign",
             "equals", "compareTo", "iterator", "getValue", "setValue", "provideDelegate",
-        )
-
-        // Additional operators from libraries or tools, e.g. compiler plugins for Gradle
-        private val additionalOperatorSet = setOf(
-            "assign"
         )
 
         private val kotlinDocReferencesRegExp = Regex("\\[([^]]+)](?!\\[)")
