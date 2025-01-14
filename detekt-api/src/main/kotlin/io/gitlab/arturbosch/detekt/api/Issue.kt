@@ -50,4 +50,5 @@ class RuleInstance(
     val url: URI?,
     val description: String,
     val severity: Severity,
+    val active: Boolean,
 )
