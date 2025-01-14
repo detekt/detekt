@@ -29,9 +29,11 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.getImportableDescriptor
  * from destructuring declarations (componentN imports).
  */
 @RequiresFullAnalysis
-class UnusedImport(config: Config) : Rule(
+class UnusedImport(
+    config: Config,
+) : Rule(
     config,
-    "Unused Imports are dead code and should be removed."
+    "Unused Imports are dead code and should be removed.",
 ) {
     @Configuration("Additional operators from libraries or tools, such as 'assign'(e.g. compiler plugins for Gradle).")
     private val additionalOperatorSet: List<String> by config(emptyList())
@@ -79,8 +81,7 @@ class UnusedImport(config: Config) : Rule(
         }
 
         fun unusedImports(): List<KtImportDirective> {
-            fun KtImportDirective.isFromSamePackage() =
-                importedFqName?.parent() == currentPackage && alias == null
+            fun KtImportDirective.isFromSamePackage() = importedFqName?.parent() == currentPackage && alias == null
 
             fun KtImportDirective.isNotUsed(): Boolean {
                 if (aliasName in (namedReferencesInKDoc + namedReferencesAsString)) return false
@@ -101,16 +102,18 @@ class UnusedImport(config: Config) : Rule(
         }
 
         override fun visitImportList(importList: KtImportList) {
-            imports = importList.imports.asSequence()
-                .filter { it.isValidImport }
-                .filter {
-                    val identifier = it.identifier()
-                    identifier?.contains("*")?.not() == true &&
-                        !operatorSet.contains(identifier) &&
-                        !additionalOperatorSet.contains(identifier) &&
-                        !componentNRegex.matches(identifier)
-                }
-                .toList()
+            imports =
+                importList.imports
+                    .asSequence()
+                    .filter { it.isValidImport }
+                    .filter {
+                        val identifier = it.identifier()
+                        identifier?.contains("*")?.not() == true &&
+                            !operatorSet.contains(identifier) &&
+                            !additionalOperatorSet.contains(identifier) &&
+                            !componentNRegex.matches(identifier)
+                    }
+                    .toList()
             super.visitImportList(importList)
         }
 
@@ -132,7 +135,8 @@ class UnusedImport(config: Config) : Rule(
             val kdoc = dcl.docComment?.getAllSections()
 
             kdoc?.forEach { kdocSection ->
-                kdocSection.getChildrenOfType<KDocTag>()
+                kdocSection
+                    .getChildrenOfType<KDocTag>()
                     .map { it.text }
                     .forEach { handleKDoc(it) }
 
@@ -143,7 +147,8 @@ class UnusedImport(config: Config) : Rule(
         }
 
         private fun handleKDoc(content: String) {
-            kotlinDocReferencesRegExp.findAll(content, 0)
+            kotlinDocReferencesRegExp
+                .findAll(content, 0)
                 .map { it.groupValues[1] }
                 .forEach {
                     val referenceNames = it.split(".")
@@ -157,20 +162,45 @@ class UnusedImport(config: Config) : Rule(
         }
 
         private fun KtReferenceExpression.fqNameOrNull(): FqName? {
-            val descriptor = bindingContext[BindingContext.SHORT_REFERENCE_TO_COMPANION_OBJECT, this]
-                ?: bindingContext[BindingContext.REFERENCE_TARGET, this]
+            val descriptor =
+                bindingContext[BindingContext.SHORT_REFERENCE_TO_COMPANION_OBJECT, this]
+                    ?: bindingContext[BindingContext.REFERENCE_TARGET, this]
             return descriptor?.getImportableDescriptor()?.fqNameOrNull()
         }
     }
 
     companion object {
         // Kotlin language default operators
-        private val operatorSet = setOf(
-            "unaryPlus", "unaryMinus", "not", "inc", "dec", "plus", "minus", "times", "div",
-            "mod", "rangeTo", "rangeUntil", "contains", "get", "set", "invoke",
-            "plusAssign", "minusAssign", "timesAssign", "divAssign", "modAssign",
-            "equals", "compareTo", "iterator", "getValue", "setValue", "provideDelegate",
-        )
+        private val operatorSet =
+            setOf(
+                "unaryPlus",
+                "unaryMinus",
+                "not",
+                "inc",
+                "dec",
+                "plus",
+                "minus",
+                "times",
+                "div",
+                "mod",
+                "rangeTo",
+                "rangeUntil",
+                "contains",
+                "get",
+                "set",
+                "invoke",
+                "plusAssign",
+                "minusAssign",
+                "timesAssign",
+                "divAssign",
+                "modAssign",
+                "equals",
+                "compareTo",
+                "iterator",
+                "getValue",
+                "setValue",
+                "provideDelegate",
+            )
 
         private val kotlinDocReferencesRegExp = Regex("\\[([^]]+)](?!\\[)")
         private val kotlinDocBlockTagReferenceRegExp = Regex("^@(see|throws|exception) (.+)")
