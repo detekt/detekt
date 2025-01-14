@@ -2,11 +2,14 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Test
+
+private const val ADDITIONAL_OPERATOR_SET = "additionalOperatorSet"
 
 @KotlinCoreEnvironmentTest
 class UnusedImportSpec(val env: KotlinCoreEnvironment) {
@@ -71,7 +74,33 @@ class UnusedImportSpec(val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        assertThat(subject.lintWithContext(env, main)).isEmpty()
+        val configuredSubject = UnusedImport(TestConfig(ADDITIONAL_OPERATOR_SET to listOf("assign")))
+        assertThat(configuredSubject.lintWithContext(env, main)).isEmpty()
+    }
+
+    @Test
+    fun `report equals operators in kotlin dsl`() {
+        val main =
+            """
+            import org.gradle.api.Project
+            import org.gradle.kotlin.dsl.assign
+            import org.gradle.kotlin.dsl.configure
+            import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+            import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
+
+            fun Project.configureKotlinJvm() {
+                this.extensions.configure<KotlinJvmProjectExtension> {
+                    compilerOptions {
+                        jvmTarget = JvmTarget.JVM_17
+                    }
+                }
+            }
+            """.trimIndent()
+        val lint = subject.lintWithContext(env, main)
+        with(lint) {
+            assertThat(this).hasSize(1)
+            assertThat(this[0].entity.signature).endsWith("import org.gradle.kotlin.dsl.assign")
+        }
     }
 
     @Test
