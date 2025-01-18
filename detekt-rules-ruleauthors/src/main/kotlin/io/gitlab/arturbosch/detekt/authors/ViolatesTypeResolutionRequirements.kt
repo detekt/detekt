@@ -78,21 +78,17 @@ class ViolatesTypeResolutionRequirements(config: Config = Config.empty) : Rule(c
         usesBindingContext = usesBindingContext ||
             (expression is KtNameReferenceExpression && expression.text == "bindingContext")
     }
-}
 
-context(BaseRule)
-private inline fun <reified T : Any> KtClass.extendsFrom(kClass: KClass<T>): Boolean {
-    return bindingContext[BindingContext.CLASS, this]
-        ?.getAllSuperclassesWithoutAny()
-        .orEmpty()
-        .any { it.fqNameOrNull()?.toString() == checkNotNull(kClass.qualifiedName) }
-}
+    private inline fun <reified T : Any> KtClass.extendsFrom(kClass: KClass<T>): Boolean =
+        bindingContext[BindingContext.CLASS, this]
+            ?.getAllSuperclassesWithoutAny()
+            .orEmpty()
+            .any { it.fqNameOrNull()?.toString() == checkNotNull(kClass.qualifiedName) }
 
-context(BaseRule)
-private inline fun <reified T : Any> KtClass.isAnnotatedWith(kClass: KClass<T>): Boolean {
-    return annotationEntries
-        .asSequence()
-        .mapNotNull { it.typeReference }
-        .mapNotNull { bindingContext[BindingContext.TYPE, it] }
-        .any { it.fqNameOrNull()?.toString() == checkNotNull(kClass.qualifiedName) }
+    private inline fun <reified T : Any> KtClass.isAnnotatedWith(kClass: KClass<T>): Boolean =
+        annotationEntries
+            .asSequence()
+            .mapNotNull { it.typeReference }
+            .mapNotNull { bindingContext[BindingContext.TYPE, it] }
+            .any { it.fqNameOrNull()?.toString() == checkNotNull(kClass.qualifiedName) }
 }
