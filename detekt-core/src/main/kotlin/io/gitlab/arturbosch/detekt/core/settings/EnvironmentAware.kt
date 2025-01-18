@@ -33,12 +33,14 @@ internal class EnvironmentFacade(
     override val classpath: List<String> = compilerSpec.classpathEntries()
 
     override val environment: KotlinCoreEnvironment by lazy {
+        val printStream = if (loggingSpec.debug) loggingSpec.errorChannel.asPrintStream() else NullPrintStream
         val compilerConfiguration = createCompilerConfiguration(
             projectSpec.inputPaths.toList(),
             classpath,
             compilerSpec.parseLanguageVersion(),
             compilerSpec.parseJvmTarget(),
             compilerSpec.jdkHome,
+            printStream
         )
         createKotlinCoreEnvironment(
             compilerConfiguration,

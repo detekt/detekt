@@ -79,12 +79,14 @@ fun createKotlinCoreEnvironment(
  * Creates a compiler configuration for the kotlin compiler with all known sources and classpath jars.
  * Be aware that if any path of [pathsToAnalyze] is a directory it is scanned for java and kotlin files.
  */
+@Suppress("LongParameterList")
 fun createCompilerConfiguration(
     pathsToAnalyze: List<Path>,
     classpath: List<String>,
     languageVersion: LanguageVersion?,
     jvmTarget: JvmTarget,
     jdkHome: Path?,
+    printStream: PrintStream,
 ): CompilerConfiguration {
     val javaFiles = pathsToAnalyze.flatMap { path ->
         path.toFile().walk()
@@ -116,6 +118,10 @@ fun createCompilerConfiguration(
         addJavaSourceRoots(javaFiles)
         addKotlinSourceRoots(kotlinFiles)
         addJvmClasspathRoots(classpathFiles)
+        put(
+            CommonConfigurationKeys.MESSAGE_COLLECTOR_KEY,
+            PrintingMessageCollector(printStream, MessageRenderer.PLAIN_FULL_PATHS, false)
+        )
 
         jdkHome?.let { put(JVMConfigurationKeys.JDK_HOME, it.toFile()) }
         configureJdkClasspathRoots()
