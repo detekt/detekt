@@ -21,7 +21,6 @@ import org.jetbrains.kotlin.psi.KtLambdaExpression
  * listOfPairs.map(::second).forEach { it ->
  *     it.execute()
  * }
- * collection.zipWithNext { it, next -> Pair(it, next) }
  * </noncompliant>
  *
  * <compliant>
@@ -32,11 +31,6 @@ import org.jetbrains.kotlin.psi.KtLambdaExpression
  * // For multiline blocks it is usually better come up with a clear and more meaningful name
  * listOfPairs.map(::second).forEach { apiRequest ->
  *     apiRequest.execute()
- * }
- *
- * // Lambdas with multiple parameter should be named clearly, using it for one of them can be confusing
- * collection.zipWithNext { prev, next ->
- *     Pair(prev, next)
  * }
  * </compliant>
  */
@@ -50,12 +44,9 @@ class ExplicitItLambdaParameter(
     override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
         super.visitLambdaExpression(lambdaExpression)
         val parameterNames = lambdaExpression.valueParameters.map { it.nameAsName }
-        if (IMPLICIT_LAMBDA_PARAMETER_NAME in parameterNames) {
+        if (IMPLICIT_LAMBDA_PARAMETER_NAME in parameterNames && parameterNames.size == 1) {
             val message =
-                if (
-                    parameterNames.size == 1 &&
-                    lambdaExpression.valueParameters[0].typeReference == null
-                ) {
+                if (lambdaExpression.valueParameters[0].typeReference == null) {
                     "This explicit usage of `it` as the lambda parameter name can be omitted."
                 } else {
                     "`it` should not be used as name for a lambda parameter."
