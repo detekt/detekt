@@ -41,11 +41,12 @@ import org.jetbrains.kotlin.psi.KtLambdaExpression
  * </compliant>
  */
 @ActiveByDefault(since = "1.21.0")
-class ExplicitItLambdaParameter(config: Config) : Rule(
+class ExplicitItLambdaParameter(
+    config: Config,
+) : Rule(
     config,
-    "Declaring lambda parameters as `it` is redundant."
+    "Declaring lambda parameters as `it` is redundant.",
 ) {
-
     override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
         super.visitLambdaExpression(lambdaExpression)
         val parameterNames = lambdaExpression.valueParameters.map { it.nameAsName }
@@ -62,8 +63,8 @@ class ExplicitItLambdaParameter(config: Config) : Rule(
             report(
                 CodeSmell(
                     Entity.from(lambdaExpression),
-                    message
-                )
+                    message,
+                ),
             )
         }
     }
