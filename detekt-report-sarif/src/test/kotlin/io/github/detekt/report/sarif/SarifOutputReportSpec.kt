@@ -26,23 +26,35 @@ class SarifOutputReportSpec {
         val result = TestDetektion(
             createIssue(
                 ruleInstance = createRuleInstance("TestSmellA/id", "RuleSet1"),
-                entity = createEntity(location = createLocation(position = 1 to 1, endPosition = 2 to 3)),
+                entity = createEntity(
+                    signature = "one",
+                    location = createLocation(position = 1 to 1, endPosition = 2 to 3),
+                ),
                 severity = Severity.Error
             ),
             createIssue(
                 ruleInstance = createRuleInstance("TestSmellD/id", "RuleSet1"),
-                entity = createEntity(location = createLocation(position = 1 to 1, endPosition = 2 to 3)),
+                entity = createEntity(
+                    signature = "two",
+                    location = createLocation(position = 1 to 1, endPosition = 2 to 3),
+                ),
                 severity = Severity.Error,
                 suppressReasons = listOf("suppress")
             ),
             createIssue(
                 ruleInstance = createRuleInstance("TestSmellB/id", "RuleSet2"),
-                entity = createEntity(location = createLocation(position = 3 to 5, endPosition = 3 to 5)),
+                entity = createEntity(
+                    signature = "three",
+                    location = createLocation(position = 3 to 5, endPosition = 3 to 5),
+                ),
                 severity = Severity.Warning
             ),
             createIssue(
                 ruleInstance = createRuleInstance("TestSmellC/id", "RuleSet2"),
-                entity = createEntity(location = createLocation(position = 2 to 1, endPosition = 3 to 1)),
+                entity = createEntity(
+                    signature = "four",
+                    location = createLocation(position = 2 to 1, endPosition = 3 to 1),
+                ),
                 severity = Severity.Info
             )
         )
