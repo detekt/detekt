@@ -105,4 +105,20 @@ class ExplicitItLambdaParameterSpec {
             assertThat(findings).isEmpty()
         }
     }
+
+    @Nested
+    inner class `multiple parameters one of which with name 'it' declared explicitly` {
+        @Test
+        fun `does not report explicit 'it' parameter usage in multiple parameters`() {
+            val findings =
+                subject.compileAndLint(
+                    """
+                    fun f() {
+                        val lambda = { it: Int, that: String -> it.toString() + that }
+                    }
+                    """.trimIndent(),
+                )
+            assertThat(findings).isEmpty()
+        }
+    }
 }

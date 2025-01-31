@@ -64,4 +64,38 @@ class ExplicitItLambdaMultipleParametersSpec {
             assertThat(findings[0]).hasMessage("`it` should not be used as name for a lambda parameter.")
         }
     }
+
+    @Nested
+    inner class `no parameter declared explicitly` {
+        @Test
+        fun `does not report implicit 'it' parameter usage`() {
+            val findings =
+                subject.compileAndLint(
+                    """
+                    fun f() {
+                        val lambda = { i: Int -> i.toString() }
+                        val digits = 1234.let { lambda(it) }.toList()
+                        val flat = listOf(listOf(1), listOf(2)).flatMap { it }
+                    }
+                    """.trimIndent(),
+                )
+            assertThat(findings).isEmpty()
+        }
+    }
+
+    @Nested
+    inner class `single parameter lambda with name 'it' declared explicitly` {
+        @Test
+        fun `does not report explicit 'it' parameter usage in one parameter`() {
+            val findings =
+                subject.compileAndLint(
+                    """
+                    fun f() {
+                        val digits = 1234.let { it -> listOf(it) }
+                    }
+                    """.trimIndent(),
+                )
+            assertThat(findings).isEmpty()
+        }
+    }
 }
