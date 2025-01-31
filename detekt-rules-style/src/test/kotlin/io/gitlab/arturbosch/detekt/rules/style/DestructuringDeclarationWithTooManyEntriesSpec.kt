@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -29,7 +29,7 @@ class DestructuringDeclarationWithTooManyEntriesSpec {
                     println(c)
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -45,7 +45,7 @@ class DestructuringDeclarationWithTooManyEntriesSpec {
                     println(d)
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
 
         @Test
@@ -60,7 +60,7 @@ class DestructuringDeclarationWithTooManyEntriesSpec {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -78,7 +78,7 @@ class DestructuringDeclarationWithTooManyEntriesSpec {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
     }
 
@@ -99,7 +99,7 @@ class DestructuringDeclarationWithTooManyEntriesSpec {
                     println(y)
                 }
             """.trimIndent()
-            assertThat(configuredRule.compileAndLint(code)).isEmpty()
+            assertThat(configuredRule.lint(code)).isEmpty()
         }
 
         @Test
@@ -112,7 +112,7 @@ class DestructuringDeclarationWithTooManyEntriesSpec {
                     println(c)
                 }
             """.trimIndent()
-            assertThat(configuredRule.compileAndLint(code)).hasSize(1)
+            assertThat(configuredRule.lint(code)).hasSize(1)
         }
     }
 }

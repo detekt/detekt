@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.documentation
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -64,62 +64,62 @@ class UndocumentedPublicClassSpec {
 
     @Test
     fun `should report inner classes by default`() {
-        assertThat(subject.compileAndLint(inner)).hasSize(1)
+        assertThat(subject.lint(inner)).hasSize(1)
     }
 
     @Test
     fun `should report inner object by default`() {
-        assertThat(subject.compileAndLint(innerObject)).hasSize(1)
+        assertThat(subject.lint(innerObject)).hasSize(1)
     }
 
     @Test
     fun `should report inner interfaces by default`() {
-        assertThat(subject.compileAndLint(innerInterface)).hasSize(1)
+        assertThat(subject.lint(innerInterface)).hasSize(1)
     }
 
     @Test
     fun `should report nested classes by default`() {
-        assertThat(subject.compileAndLint(nested)).hasSize(1)
+        assertThat(subject.lint(nested)).hasSize(1)
     }
 
     @Test
     fun `should report explicit public nested classes by default`() {
-        assertThat(subject.compileAndLint(nestedPublic)).hasSize(1)
+        assertThat(subject.lint(nestedPublic)).hasSize(1)
     }
 
     @Test
     fun `should not report internal classes`() {
-        assertThat(subject.compileAndLint(internalClass)).isEmpty()
+        assertThat(subject.lint(internalClass)).isEmpty()
     }
 
     @Test
     fun `should not report private classes`() {
-        assertThat(subject.compileAndLint(privateClass)).isEmpty()
+        assertThat(subject.lint(privateClass)).isEmpty()
     }
 
     @Test
     fun `should not report nested private classes`() {
-        assertThat(subject.compileAndLint(nestedPrivate)).isEmpty()
+        assertThat(subject.lint(nestedPrivate)).isEmpty()
     }
 
     @Test
     fun `should not report inner classes when turned off`() {
         val findings =
-            UndocumentedPublicClass(TestConfig(SEARCH_IN_INNER_CLASS to "false")).compileAndLint(inner)
+            UndocumentedPublicClass(TestConfig(SEARCH_IN_INNER_CLASS to "false")).lint(inner)
         assertThat(findings).isEmpty()
     }
 
     @Test
     fun `should not report inner objects when turned off`() {
         val findings =
-            UndocumentedPublicClass(TestConfig(SEARCH_IN_INNER_OBJECT to "false")).compileAndLint(innerObject)
+            UndocumentedPublicClass(TestConfig(SEARCH_IN_INNER_OBJECT to "false")).lint(innerObject)
         assertThat(findings).isEmpty()
     }
 
     @Test
     fun `should not report inner interfaces when turned off`() {
         val findings =
-            UndocumentedPublicClass(TestConfig(SEARCH_IN_INNER_INTERFACE to "false")).compileAndLint(
+            UndocumentedPublicClass(TestConfig(SEARCH_IN_INNER_INTERFACE to "false")).lint(
                 innerInterface
             )
         assertThat(findings).isEmpty()
@@ -128,13 +128,13 @@ class UndocumentedPublicClassSpec {
     @Test
     fun `should not report nested classes when turned off`() {
         val findings =
-            UndocumentedPublicClass(TestConfig(SEARCH_IN_NESTED_CLASS to "false")).compileAndLint(nested)
+            UndocumentedPublicClass(TestConfig(SEARCH_IN_NESTED_CLASS to "false")).lint(nested)
         assertThat(findings).isEmpty()
     }
 
     @Test
     fun `should report missing doc over object declaration`() {
-        assertThat(subject.compileAndLint("object o")).hasSize(1)
+        assertThat(subject.lint("object o")).hasSize(1)
     }
 
     @Test
@@ -145,7 +145,7 @@ class UndocumentedPublicClassSpec {
                 inner class Inner
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -155,7 +155,7 @@ class UndocumentedPublicClassSpec {
                 interface Inner
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -165,7 +165,7 @@ class UndocumentedPublicClassSpec {
                 object Inner
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -185,7 +185,7 @@ class UndocumentedPublicClassSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -198,7 +198,7 @@ class UndocumentedPublicClassSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -214,7 +214,7 @@ class UndocumentedPublicClassSpec {
                 fun onComplete()
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -228,7 +228,7 @@ class UndocumentedPublicClassSpec {
                 fun abstractMethod()
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -241,7 +241,7 @@ class UndocumentedPublicClassSpec {
                 protected class ProtectedClass
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -255,7 +255,7 @@ class UndocumentedPublicClassSpec {
             }
         """.trimIndent()
         val subject = UndocumentedPublicClass(TestConfig(SEARCH_IN_PROTECTED_CLASS to "true"))
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -267,7 +267,7 @@ class UndocumentedPublicClassSpec {
                 public companion object
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(3)
+        assertThat(subject.lint(code)).hasSize(3)
     }
 
     @Test
@@ -301,7 +301,7 @@ class UndocumentedPublicClassSpec {
         assertThat(
             UndocumentedPublicClass(
                 TestConfig(IGNORE_DEFAULT_COMPANION_OBJECT to "true")
-            ).compileAndLint(code)
+            ).lint(code)
         ).isEmpty()
     }
 
@@ -336,7 +336,7 @@ class UndocumentedPublicClassSpec {
         assertThat(
             UndocumentedPublicClass(
                 TestConfig(IGNORE_DEFAULT_COMPANION_OBJECT to "true")
-            ).compileAndLint(code)
+            ).lint(code)
         ).hasSize(4)
     }
 
@@ -363,7 +363,7 @@ class UndocumentedPublicClassSpec {
         assertThat(
             UndocumentedPublicClass(
                 TestConfig(IGNORE_DEFAULT_COMPANION_OBJECT to "true")
-            ).compileAndLint(code)
+            ).lint(code)
         ).hasSize(3)
     }
 
@@ -378,7 +378,7 @@ class UndocumentedPublicClassSpec {
                 private companion object
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(2)
+        assertThat(subject.lint(code)).hasSize(2)
     }
 
     @Nested
@@ -394,7 +394,7 @@ class UndocumentedPublicClassSpec {
                     Bar,
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -405,7 +405,7 @@ class UndocumentedPublicClassSpec {
                     Bar,
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
 
         @Test
@@ -421,7 +421,7 @@ class UndocumentedPublicClassSpec {
                     Bar,
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
     }
 }

@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Test
 
 class AlsoCouldBeApplySpec {
@@ -18,7 +18,7 @@ class AlsoCouldBeApplySpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -30,7 +30,7 @@ class AlsoCouldBeApplySpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -43,7 +43,7 @@ class AlsoCouldBeApplySpec {
             }
         """.trimIndent()
 
-        val findings = subject.compileAndLint(code)
+        val findings = subject.lint(code)
 
         assertThat(findings).hasSize(1)
         assertThat(findings).hasStartSourceLocation(2, 7)
@@ -59,7 +59,7 @@ class AlsoCouldBeApplySpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -71,7 +71,7 @@ class AlsoCouldBeApplySpec {
                 })
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -83,7 +83,7 @@ class AlsoCouldBeApplySpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -96,7 +96,7 @@ class AlsoCouldBeApplySpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -106,7 +106,7 @@ class AlsoCouldBeApplySpec {
                 a.also { it.plus(5); it.minus(10) }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -116,7 +116,7 @@ class AlsoCouldBeApplySpec {
                 a.also { x -> x.also { it.plus(10) } }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -135,7 +135,7 @@ class AlsoCouldBeApplySpec {
                 fun baz() {}
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -148,6 +148,6 @@ class AlsoCouldBeApplySpec {
             
             class Foo
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 }

@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.rules.style.BracesOnWhenStatementsSpec.Compan
 import io.gitlab.arturbosch.detekt.rules.style.BracesOnWhenStatementsSpec.Companion.test
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode
@@ -1216,7 +1215,7 @@ class BracesOnWhenStatementsSpec {
             val codeLocation = locations.map { it(code) }.toTypedArray()
             // Separately compile the code because otherwise all the combinations would compile them again and again.
             val compileTest = dynamicTest("Compiles: $code") {
-                BracesOnWhenStatements(Config.empty).compileAndLint(code)
+                BracesOnWhenStatements(Config.empty).lint(code)
             }
             val validationTests = createBraceTests(singleLine, multiLine) { rule ->
                 rule.test(code, *codeLocation)
@@ -1232,7 +1231,7 @@ class BracesOnWhenStatementsSpec {
         private fun BracesOnWhenStatements.test(code: String, vararg locations: Pair<Int, Int>) {
             // This creates a 10 character prefix (signature/9, space/1) for every code example.
             // Note: not compileAndLint for performance reasons, compilation is in a separate test.
-            val findings = lint("fun f() { $code }")
+            val findings = lint("fun f() { $code }", compile = false)
             // Offset text locations by the above prefix, it results in 0-indexed locations.
             val offset = 10
             assertThat(findings)

@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.formatting.wrappers.MaximumLineLength
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -57,7 +57,7 @@ class MaximumLineLengthSpec {
 
     @Test
     fun `reports correct line numbers`() {
-        val findings = subject.compileAndLint(longLines)
+        val findings = subject.lint(longLines)
 
         // Note that KtLint's MaximumLineLength rule, in contrast to detekt's MaxLineLength rule, does not report
         // exceeded lines in block comments.
