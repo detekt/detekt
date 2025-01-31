@@ -41,7 +41,7 @@ class ExplicitItLambdaParameterSpec {
         }
 
         @Test
-        fun `does not reports when parameter type is declared explicitly when variable name is not it`() {
+        fun `does not report when parameter type is declared explicitly when variable name is not it`() {
             val findings =
                 subject.compileAndLint(
                     """

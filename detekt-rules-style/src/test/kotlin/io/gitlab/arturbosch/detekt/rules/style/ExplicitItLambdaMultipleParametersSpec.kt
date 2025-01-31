@@ -51,7 +51,7 @@ class ExplicitItLambdaMultipleParametersSpec {
         }
 
         @Test
-        fun `does report when parameter type with name it when declared explicitly for multi params un-inferrable lambda`() {
+        fun `reports when parameter type with name it when declared explicitly for multi params un-inferrable lambda`() {
             val findings =
                 subject.compileAndLint(
                     """
