@@ -87,6 +87,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             ::NullableBooleanCheck,
             ::VarCouldBeVal,
             ::ForbiddenVoid,
+            ::ExplicitItLambdaMultipleParameters,
             ::ExplicitItLambdaParameter,
             ::ExplicitCollectionElementAccessMethod,
             ::UselessCallOnNotNull,

@@ -173,6 +173,8 @@ style:
     active: true
   ExplicitCollectionElementAccessMethod:
     active: true
+  ExplicitItLambdaMultipleParameters:
+    active: true
   ExplicitItLambdaParameter:
     active: true
   ForbiddenComment:

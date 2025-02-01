@@ -16,45 +16,31 @@ import org.jetbrains.kotlin.psi.KtLambdaExpression
  * makes your code misleading, especially when dealing with nested functions.
  *
  * <noncompliant>
- * a?.let { it -> it.plus(1) }
- * foo.flatMapObservable { it -> Observable.fromIterable(it) }
- * listOfPairs.map(::second).forEach { it ->
- *     it.execute()
- * }
+ * collection.zipWithNext { it, next -> Pair(it, next) }
  * </noncompliant>
  *
  * <compliant>
- * a?.let { it.plus(1) } // Much better to use implicit it
- * a?.let { value: Int -> value.plus(1) } // Better as states the type more clearly
- * foo.flatMapObservable(Observable::fromIterable) // Here we can have a method reference
- *
- * // For multiline blocks it is usually better come up with a clear and more meaningful name
- * listOfPairs.map(::second).forEach { apiRequest ->
- *     apiRequest.execute()
+ * // Lambdas with multiple parameter should be named clearly, using it for one of them can be confusing
+ * collection.zipWithNext { prev, next ->
+ *     Pair(prev, next)
  * }
  * </compliant>
  */
 @ActiveByDefault(since = "1.21.0")
-class ExplicitItLambdaParameter(
+class ExplicitItLambdaMultipleParameters(
     config: Config,
 ) : Rule(
     config,
-    "Declaring lambda parameters as `it` is redundant.",
+    "Declaring lambda parameters as `it` is inappropriate.",
 ) {
     override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
         super.visitLambdaExpression(lambdaExpression)
         val parameterNames = lambdaExpression.valueParameters.map { it.nameAsName }
-        if (IMPLICIT_LAMBDA_PARAMETER_NAME in parameterNames && parameterNames.size == 1) {
-            val message =
-                if (lambdaExpression.valueParameters[0].typeReference == null) {
-                    "This explicit usage of `it` as the lambda parameter name can be omitted."
-                } else {
-                    "`it` should not be used as name for a lambda parameter."
-                }
+        if (IMPLICIT_LAMBDA_PARAMETER_NAME in parameterNames && parameterNames.size > 1) {
             report(
                 CodeSmell(
                     Entity.from(lambdaExpression),
-                    message,
+                    "`it` should not be used as name for a lambda parameter.",
                 ),
             )
         }
