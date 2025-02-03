@@ -12,6 +12,12 @@
       "matchPackageNames": [
         "org.jetbrains.dokka:**"
       ]
+    },
+    {
+      "groupName": "Poko",
+      "matchPackageNames": [
+        "dev.drewhamilton.poko:**"
+      ]
     }
   ]
 }
