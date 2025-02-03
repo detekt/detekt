@@ -1,13 +1,17 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "configMigration": true,
-  "labels": ["dependencies"],
-  "ignoreDeps": ["com.android.tools.build:gradle-api"],
+  "labels": [
+    "dependencies"
+  ],
+  "ignoreDeps": [
+    "com.android.tools.build:gradle-api"
+  ],
   "extends": [
-    "config:base",
+    "config:recommended",
     "helpers:pinGitHubActionDigests"
   ],
-  "packageRules" : [
+  "packageRules": [
     {
       "groupName": "Dokka",
       "matchPackageNames": [
