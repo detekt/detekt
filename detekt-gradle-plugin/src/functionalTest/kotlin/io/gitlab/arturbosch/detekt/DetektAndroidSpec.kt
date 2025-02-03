@@ -111,7 +111,7 @@ class DetektAndroidSpec {
     }
 
     @Nested
-    inner class `does not configures android tasks if user opts out` {
+    inner class `does not configure Android tasks if user opts out` {
         val projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 0).apply {
             addSubmodule(
                 name = "app",
@@ -137,7 +137,7 @@ class DetektAndroidSpec {
         }
 
         @Test
-        @DisplayName("task :app:detektMain")
+        @DisplayName("Task :app:detektMain was not registered")
         fun appDetektMain() {
             gradleRunner.runTasksAndExpectFailure(":app:detektMain") { result ->
                 assertThat(result.output).containsIgnoringCase("Task 'detektMain' not found in project")
@@ -145,7 +145,7 @@ class DetektAndroidSpec {
         }
 
         @Test
-        @DisplayName("task :app:detektTest")
+        @DisplayName("Task :app:detektTest was not registered")
         fun appDetektTest() {
             gradleRunner.runTasksAndExpectFailure(":app:detektTest") { result ->
                 assertThat(result.output).containsIgnoringCase("Task 'detektTest' not found in project")
