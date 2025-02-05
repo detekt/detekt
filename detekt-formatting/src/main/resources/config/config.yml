@@ -239,6 +239,7 @@ formatting:
     maxLineLength: 120
   PropertyName:
     active: true
+    constantNamingStyle: 'screaming_snake_case'
   PropertyWrapping:
     active: true
     autoCorrect: true
