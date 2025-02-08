@@ -35,12 +35,12 @@ class ConfigurationCacheSpec {
                 .build()
 
             // First run primes the cache
-            val storeCacheResult = gradleRunner.runTasks("--configuration-cache", "detektBaseline")
+            val storeCacheResult = gradleRunner.runTasks("--configuration-cache", "detektBaselineMainSourceSet")
 
             assertThat(storeCacheResult.output).contains("Configuration cache entry stored.")
 
             // Second run reuses the cache
-            val reuseCacheResult = gradleRunner.runTasks("--configuration-cache", "detektBaseline")
+            val reuseCacheResult = gradleRunner.runTasks("--configuration-cache", "detektBaselineMainSourceSet")
 
             assertThat(reuseCacheResult.output).contains("Reusing configuration cache.")
         }

@@ -48,25 +48,25 @@ class PluginTaskBehaviorSpec {
     @Test
     fun `should pick up build artifacts from the build cache on a 2nd run after deleting the build dir`() {
         gradleRunner.runDetektTaskAndCheckResult { result ->
-            assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+            assertThat(result.task(":detektMainSourceSet")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
         }
 
         gradleRunner.projectFile("build").deleteRecursively()
 
         // Running detekt again should pick up artifacts from Build Cache
         gradleRunner.runDetektTaskAndCheckResult { result ->
-            assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.FROM_CACHE)
+            assertThat(result.task(":detektMainSourceSet")?.outcome).isEqualTo(TaskOutcome.FROM_CACHE)
         }
     }
 
     @Test
     fun `should pick up build artifacts from the build cache on a 2nd run after running 'clean'`() {
         gradleRunner.runDetektTaskAndCheckResult { result ->
-            assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+            assertThat(result.task(":detektMainSourceSet")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
         }
-        gradleRunner.runTasksAndCheckResult("clean", "detekt") { result ->
+        gradleRunner.runTasksAndCheckResult("clean", "detektMainSourceSet") { result ->
             assertThat(result.task(":clean")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-            assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.FROM_CACHE)
+            assertThat(result.task(":detektMainSourceSet")?.outcome).isEqualTo(TaskOutcome.FROM_CACHE)
         }
     }
 

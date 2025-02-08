@@ -18,7 +18,11 @@ class ProjectLayout(
         numberOfSourceFilesPerSourceDir: Int,
         numberOfCodeSmells: Int = 0,
         @Language("gradle.kts")
-        buildFileContent: String? = null,
+        buildFileContent: String? = """
+            plugins {
+                kotlin("jvm")
+            }
+        """.trimIndent(),
         srcDirs: List<String> = this.srcDirs,
         baselineFiles: List<String> = emptyList(),
     ) {
