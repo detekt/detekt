@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.documentation
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -17,7 +17,7 @@ class UndocumentedPublicFunctionSpec {
         val code = """
             fun noComment1() {}
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -27,7 +27,7 @@ class UndocumentedPublicFunctionSpec {
                 fun noComment1() {}
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -39,7 +39,7 @@ class UndocumentedPublicFunctionSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -52,7 +52,7 @@ class UndocumentedPublicFunctionSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(2)
+        assertThat(subject.lint(code)).hasSize(2)
     }
 
     @Test
@@ -62,7 +62,7 @@ class UndocumentedPublicFunctionSpec {
                 fun noComment1()
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -73,7 +73,7 @@ class UndocumentedPublicFunctionSpec {
              */
             fun commented1() {}
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -86,7 +86,7 @@ class UndocumentedPublicFunctionSpec {
                 fun commented() {}
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -97,7 +97,7 @@ class UndocumentedPublicFunctionSpec {
                 private fun no2(){}
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -110,7 +110,7 @@ class UndocumentedPublicFunctionSpec {
                 fun iDontNeedDoc() {}
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -121,7 +121,7 @@ class UndocumentedPublicFunctionSpec {
                 public fun nope2() {}
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -132,7 +132,7 @@ class UndocumentedPublicFunctionSpec {
                 public fun nope2() {}
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -142,7 +142,7 @@ class UndocumentedPublicFunctionSpec {
                 fun noComment1() {}
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -152,7 +152,7 @@ class UndocumentedPublicFunctionSpec {
                 protected fun noComment1() {}
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -163,7 +163,7 @@ class UndocumentedPublicFunctionSpec {
             }
         """.trimIndent()
         val subject = UndocumentedPublicFunction(TestConfig(SEARCH_PROTECTED_FUN to "true"))
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Nested
@@ -178,7 +178,7 @@ class UndocumentedPublicFunctionSpec {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -193,7 +193,7 @@ class UndocumentedPublicFunctionSpec {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -206,7 +206,7 @@ class UndocumentedPublicFunctionSpec {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
     }
 }

@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -25,7 +25,7 @@ class WildcardImportSpec {
         fun `should report all wildcard imports`() {
             val rule = WildcardImport(Config.empty)
 
-            val findings = rule.compileAndLint(code)
+            val findings = rule.lint(code)
             assertThat(findings).hasSize(2)
         }
 
@@ -33,7 +33,7 @@ class WildcardImportSpec {
         fun `should not report excluded wildcard imports`() {
             val rule = WildcardImport(TestConfig(EXCLUDED_IMPORTS to listOf("org.assertj.core.api.Assertions.*")))
 
-            val findings = rule.compileAndLint(code)
+            val findings = rule.lint(code)
             assertThat(findings).hasSize(1)
         }
 
@@ -48,7 +48,7 @@ class WildcardImportSpec {
                 )
             )
 
-            val findings = rule.compileAndLint(code)
+            val findings = rule.lint(code)
             assertThat(findings).isEmpty()
         }
 
@@ -56,7 +56,7 @@ class WildcardImportSpec {
         fun `ignores excludes that are not matching`() {
             val rule = WildcardImport(TestConfig(EXCLUDED_IMPORTS to listOf("other.test.*")))
 
-            val findings = rule.compileAndLint(code)
+            val findings = rule.lint(code)
             assertThat(findings).hasSize(2)
         }
 
@@ -66,7 +66,7 @@ class WildcardImportSpec {
                 import java.util.*
             """.trimIndent()
 
-            val findings = WildcardImport(Config.empty).compileAndLint(code2)
+            val findings = WildcardImport(Config.empty).lint(code2)
             assertThat(findings).isEmpty()
         }
     }
@@ -84,7 +84,7 @@ class WildcardImportSpec {
 
         @Test
         fun `should not report any issues`() {
-            val findings = WildcardImport(Config.empty).compileAndLint(code)
+            val findings = WildcardImport(Config.empty).lint(code)
             assertThat(findings).isEmpty()
         }
     }

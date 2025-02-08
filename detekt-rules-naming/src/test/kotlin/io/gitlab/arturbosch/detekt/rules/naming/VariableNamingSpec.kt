@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -29,7 +29,7 @@ class VariableNamingSpec {
         fun shouldFailWithInvalidRegexVariableNaming() {
             val config = TestConfig(VariableNaming.EXCLUDE_CLASS_PATTERN to "*Foo")
             assertThatExceptionOfType(PatternSyntaxException::class.java).isThrownBy {
-                VariableNaming(config).compileAndLint(excludeClassPatternVariableRegexCode)
+                VariableNaming(config).lint(excludeClassPatternVariableRegexCode)
             }
         }
     }
@@ -46,7 +46,7 @@ class VariableNamingSpec {
             }
         """.trimIndent()
         val config = TestConfig(VariableNaming.EXCLUDE_CLASS_PATTERN to "Foo|Bar")
-        assertThat(VariableNaming(config).compileAndLint(code)).isEmpty()
+        assertThat(VariableNaming(config).lint(code)).isEmpty()
     }
 
     @Test
@@ -58,7 +58,7 @@ class VariableNamingSpec {
                 val camel_Case_Property = 5
             }
         """.trimIndent()
-        assertThat(VariableNaming(Config.empty).compileAndLint(code))
+        assertThat(VariableNaming(Config.empty).lint(code))
             .hasStartSourceLocations(
                 SourceLocation(2, 17),
                 SourceLocation(3, 9),
@@ -75,7 +75,7 @@ class VariableNamingSpec {
                 val camelCaseProperty = 5
             }
         """.trimIndent()
-        assertThat(VariableNaming(Config.empty).compileAndLint(code)).isEmpty()
+        assertThat(VariableNaming(Config.empty).lint(code)).isEmpty()
     }
 
     @Test
@@ -91,7 +91,7 @@ class VariableNamingSpec {
                 @Suppress("VariableNaming") val SHOULD_NOT_BE_FLAGGED: String
             }
         """.trimIndent()
-        assertThat(VariableNaming(Config.empty).compileAndLint(code)).isEmpty()
+        assertThat(VariableNaming(Config.empty).lint(code)).isEmpty()
     }
 
     @Test
@@ -104,7 +104,7 @@ class VariableNamingSpec {
                 listOf<Pair<Int, Int>>().flatMap { (right, _) -> listOf(right) }
             }
         """.trimIndent()
-        assertThat(VariableNaming(Config.empty).compileAndLint(code)).isEmpty()
+        assertThat(VariableNaming(Config.empty).lint(code)).isEmpty()
     }
 
     @Test
@@ -115,6 +115,6 @@ class VariableNamingSpec {
                 val (_, HOLY_GRAIL) = D(5, 4)
             }
         """.trimIndent()
-        assertThat(VariableNaming(Config.empty).compileAndLint(code)).isEmpty()
+        assertThat(VariableNaming(Config.empty).lint(code)).isEmpty()
     }
 }

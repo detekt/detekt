@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -20,7 +19,7 @@ class UtilityClassWithPublicConstructorSpec {
 
         @BeforeEach
         fun beforeEachTest() {
-            findings = subject.compileAndLint(
+            findings = subject.lint(
                 """
                     class UtilityClassWithDefaultConstructor { // violation
                         companion object {
@@ -98,7 +97,7 @@ class UtilityClassWithPublicConstructorSpec {
         @Suppress("LongMethod") // TODO split this up into multiple test case functions.
         @Test
         fun `does not report given classes`() {
-            val findings = subject.compileAndLint(
+            val findings = subject.lint(
                 """
                     class UtilityClassWithPrimaryPrivateConstructorOk private constructor() {
                         companion object {
@@ -227,7 +226,7 @@ class UtilityClassWithPublicConstructorSpec {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lint(code, compile = false)).isEmpty()
         }
     }
 }

@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -17,6 +17,6 @@ class ExplicitGarbageCollectionCallSpec {
                 System.runFinalization()
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(3)
+        assertThat(subject.lint(code)).hasSize(3)
     }
 }
