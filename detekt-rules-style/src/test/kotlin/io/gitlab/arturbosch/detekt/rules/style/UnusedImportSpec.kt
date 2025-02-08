@@ -2,19 +2,25 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Test
 
+private const val ADDITIONAL_OPERATOR_SET = "additionalOperatorSet"
+
 @KotlinCoreEnvironmentTest
-class UnusedImportSpec(val env: KotlinCoreEnvironment) {
+class UnusedImportSpec(
+    val env: KotlinCoreEnvironment,
+) {
     val subject = UnusedImport(Config.empty)
 
     @Test
     fun `does not report infix operators`() {
-        val main = """
+        val main =
+            """
             import tasks.success
             
             fun task(f: () -> Unit) = 1
@@ -24,18 +30,20 @@ class UnusedImportSpec(val env: KotlinCoreEnvironment) {
                 } success {
                 }
             }
-        """.trimIndent()
-        val additional = """
+            """.trimIndent()
+        val additional =
+            """
             package tasks
             
             infix fun Int.success(f: () -> Unit) {}
-        """.trimIndent()
+            """.trimIndent()
         assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
     }
 
     @Test
     fun `does not report range operators`() {
-        val main = """
+        val main =
+            """
             import java.time.Month
             import ranges.rangeTo
             import ranges.rangeUntil
@@ -44,19 +52,21 @@ class UnusedImportSpec(val env: KotlinCoreEnvironment) {
                 LocalDate.of(2024, Month.MARCH, 27)..LocalDate.of(2024, Month.MARCH, 27)
                 LocalDate.of(2024, Month.MARCH, 27)..<LocalDate.of(2024, Month.MARCH, 27)
             }
-        """.trimIndent()
-        val additional = """
+            """.trimIndent()
+        val additional =
+            """
             package ranges
             
             operator fun LocalDate.rangeTo(that: LocalDate) = TODO()
             operator fun LocalDate.rangeUntil(that: LocalDate) = TODO()
-        """.trimIndent()
+            """.trimIndent()
         assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
     }
 
     @Test
     fun `does not report equals operators in kotlin dsl`() {
-        val main = """
+        val main =
+            """
             import org.gradle.api.Project
             import org.gradle.kotlin.dsl.assign
             import org.gradle.kotlin.dsl.configure
@@ -70,13 +80,40 @@ class UnusedImportSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             }
-        """.trimIndent()
-        assertThat(subject.lintWithContext(env, main)).isEmpty()
+            """.trimIndent()
+        val configuredSubject = UnusedImport(TestConfig(ADDITIONAL_OPERATOR_SET to listOf("assign")))
+        assertThat(configuredSubject.lintWithContext(env, main)).isEmpty()
+    }
+
+    @Test
+    fun `report equals operators in kotlin dsl`() {
+        val main =
+            """
+            import org.gradle.api.Project
+            import org.gradle.kotlin.dsl.assign
+            import org.gradle.kotlin.dsl.configure
+            import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+            import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
+
+            fun Project.configureKotlinJvm() {
+                this.extensions.configure<KotlinJvmProjectExtension> {
+                    compilerOptions {
+                        jvmTarget = JvmTarget.JVM_17
+                    }
+                }
+            }
+            """.trimIndent()
+        val lint = subject.lintWithContext(env, main)
+        with(lint) {
+            assertThat(this).hasSize(1)
+            assertThat(this[0].entity.signature).endsWith("import org.gradle.kotlin.dsl.assign")
+        }
     }
 
     @Test
     fun `does not report imports in documentation`() {
-        val main = """
+        val main =
+            """
             import tasks.success
             import tasks.failure
             import tasks.undefined
@@ -94,20 +131,22 @@ class UnusedImportSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             }
-        """.trimIndent()
-        val additional = """
+            """.trimIndent()
+        val additional =
+            """
             package tasks
             
             infix fun Int.success(f: () -> Unit) {}
             infix fun Int.failure(f: () -> Unit) {}
             infix fun Int.undefined(f: () -> Unit) {}
-        """.trimIndent()
+            """.trimIndent()
         assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
     }
 
     @Test
     fun `should ignore import for link`() {
-        val main = """
+        val main =
+            """
             import tasks.success
             import tasks.failure
             import tasks.undefined
@@ -122,14 +161,15 @@ class UnusedImportSpec(val env: KotlinCoreEnvironment) {
                 } success {
                 }
             }
-        """.trimIndent()
-        val additional = """
+            """.trimIndent()
+        val additional =
+            """
             package tasks
             
             infix fun Int.success(f: () -> Unit) {}
             infix fun Int.failure(f: () -> Unit) {}
             infix fun Int.undefined(f: () -> Unit) {}
-        """.trimIndent()
+            """.trimIndent()
         val lint = subject.lintWithContext(env, main, additional)
         with(lint) {
             assertThat(this).hasSize(1)
@@ -139,17 +179,19 @@ class UnusedImportSpec(val env: KotlinCoreEnvironment) {
 
     @Test
     fun `reports imports from the current package`() {
-        val main = """
+        val main =
+            """
             package test
             import test.SomeClass
             
             val a: SomeClass? = null
-        """.trimIndent()
-        val additional = """
+            """.trimIndent()
+        val additional =
+            """
             package test
             
             class SomeClass
-        """.trimIndent()
+            """.trimIndent()
         val lint = subject.lintWithContext(env, main, additional)
         with(lint) {
             assertThat(this).hasSize(1)
@@ -159,7 +201,8 @@ class UnusedImportSpec(val env: KotlinCoreEnvironment) {
 
     @Test
     fun `does not report KDoc references with method calls`() {
-        val main = """
+        val main =
+            """
             package com.example
             
             import android.text.TextWatcher
@@ -172,20 +215,22 @@ class UnusedImportSpec(val env: KotlinCoreEnvironment) {
                     TODO()
                 }
             }
-        """.trimIndent()
-        val additional = """
+            """.trimIndent()
+        val additional =
+            """
             package android.text
             
             class TextWatcher {
                 fun beforeTextChanged() {}
             }
-        """.trimIndent()
+            """.trimIndent()
         assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
     }
 
     @Test
     fun `does not report KDoc references with companion method calls`() {
-        val main = """
+        val main =
+            """
             package com.example
 
             import android.text.TextWatcher.beforeTextChanged
@@ -198,20 +243,22 @@ class UnusedImportSpec(val env: KotlinCoreEnvironment) {
                     TODO()
                 }
             }
-        """.trimIndent()
-        val additional = """
+            """.trimIndent()
+        val additional =
+            """
             package android.text
 
             object TextWatcher {
                 fun beforeTextChanged() {}
             }
-        """.trimIndent()
+            """.trimIndent()
         assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
     }
 
     @Test
     fun `does not report KDoc references with extension method calls`() {
-        val main = """
+        val main =
+            """
             package com.example
 
             import android.text.TextWatcher
@@ -225,23 +272,26 @@ class UnusedImportSpec(val env: KotlinCoreEnvironment) {
                     TODO()
                 }
             }
-        """.trimIndent()
-        val additional1 = """
+            """.trimIndent()
+        val additional1 =
+            """
             package android.text
 
             class TextWatcher
-        """.trimIndent()
-        val additional2 = """
+            """.trimIndent()
+        val additional2 =
+            """
             package android.text
 
             fun TextWatcher.beforeTextChanged() {}
-        """.trimIndent()
+            """.trimIndent()
         assertThat(subject.lintWithContext(env, main, additional1, additional2)).isEmpty()
     }
 
     @Test
     fun `does report imported extension method which is not used`() {
-        val main = """
+        val main =
+            """
             package com.example
 
             import android.text.TextWatcher
@@ -256,24 +306,27 @@ class UnusedImportSpec(val env: KotlinCoreEnvironment) {
                     TODO()
                 }
             }
-        """.trimIndent()
-        val additional1 = """
+            """.trimIndent()
+        val additional1 =
+            """
             package android.text
 
             class TextWatcher
-        """.trimIndent()
-        val additional2 = """
+            """.trimIndent()
+        val additional2 =
+            """
             package android.text
 
             fun TextWatcher.beforeTextChanged() {}
             fun TextWatcher.afterTextChanged() {}
-        """.trimIndent()
+            """.trimIndent()
         assertThat(subject.lintWithContext(env, main, additional1, additional2)).hasSize(1)
     }
 
     @Test
     fun `reports imports with different cases`() {
-        val main = """
+        val main =
+            """
             import p.a
             import p.B6 // positive
             import p.B as B12 // positive
@@ -292,8 +345,9 @@ class UnusedImportSpec(val env: KotlinCoreEnvironment) {
             }
             
             fun fn(s: String) {}
-        """.trimIndent()
-        val p = """
+            """.trimIndent()
+        val p =
+            """
             package p
             
             fun a() {}
@@ -303,20 +357,22 @@ class UnusedImportSpec(val env: KotlinCoreEnvironment) {
                 fun call() {}
             }
             class D
-        """.trimIndent()
-        val p2 = """
+            """.trimIndent()
+        val p2 =
+            """
             package p2
             
             object B {
                 const val NAME = ""
             }
-        """.trimIndent()
-        val escaped = """
+            """.trimIndent()
+        val escaped =
+            """
             package escaped
             
             fun `when`() {}
             fun `foo`() {}
-        """.trimIndent()
+            """.trimIndent()
         val lint = subject.lintWithContext(env, main, p, p2, escaped)
         with(lint) {
             assertThat(this).hasSize(3)
@@ -328,7 +384,8 @@ class UnusedImportSpec(val env: KotlinCoreEnvironment) {
 
     @Test
     fun `does not report imports in same package when inner`() {
-        val main = """
+        val main =
+            """
             package test
             
             import test.Outer.Inner
@@ -336,14 +393,15 @@ class UnusedImportSpec(val env: KotlinCoreEnvironment) {
             open class Something<T>
             
             class Foo : Something<Inner>()
-        """.trimIndent()
-        val additional = """
+            """.trimIndent()
+        val additional =
+            """
             package test
             
             class Outer {
                 class Inner
             }
-        """.trimIndent()
+            """.trimIndent()
         val lint = subject.lintWithContext(env, main, additional)
         with(lint) {
             assertThat(this).isEmpty()
@@ -352,7 +410,8 @@ class UnusedImportSpec(val env: KotlinCoreEnvironment) {
 
     @Test
     fun `does not report KDoc @see annotation linking to class`() {
-        val main = """
+        val main =
+            """
             import tasks.success
             
             /**
@@ -360,18 +419,20 @@ class UnusedImportSpec(val env: KotlinCoreEnvironment) {
              * @see success
              */
             fun doSomething()
-        """.trimIndent()
-        val additional = """
+            """.trimIndent()
+        val additional =
+            """
             package tasks
             
             fun success() {}
-        """.trimIndent()
+            """.trimIndent()
         assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
     }
 
     @Test
     fun `does not report KDoc @see annotation linking to class with description`() {
-        val main = """
+        val main =
+            """
             import tasks.success
             
             /**
@@ -379,18 +440,20 @@ class UnusedImportSpec(val env: KotlinCoreEnvironment) {
              * @see success something
              */
             fun doSomething() {}
-        """.trimIndent()
-        val additional = """
+            """.trimIndent()
+        val additional =
+            """
             package tasks
             
             fun success() {}
-        """.trimIndent()
+            """.trimIndent()
         assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
     }
 
     @Test
     fun `reports KDoc @see annotation that does not link to class`() {
-        val main = """
+        val main =
+            """
             import tasks.success
             
             /**
@@ -398,18 +461,20 @@ class UnusedImportSpec(val env: KotlinCoreEnvironment) {
              * @see something
              */
             fun doSomething() {}
-        """.trimIndent()
-        val additional = """
+            """.trimIndent()
+        val additional =
+            """
             package tasks
             
             fun success() {}
-        """.trimIndent()
+            """.trimIndent()
         assertThat(subject.lintWithContext(env, main, additional)).hasSize(1)
     }
 
     @Test
     fun `reports KDoc @see annotation that links after description`() {
-        val main = """
+        val main =
+            """
             import tasks.success
             
             /**
@@ -417,18 +482,20 @@ class UnusedImportSpec(val env: KotlinCoreEnvironment) {
              * @see something success
              */
             fun doSomething() {}
-        """.trimIndent()
-        val additional = """
+            """.trimIndent()
+        val additional =
+            """
             package tasks
             
             fun success() {}
-        """.trimIndent()
+            """.trimIndent()
         assertThat(subject.lintWithContext(env, main, additional)).hasSize(1)
     }
 
     @Test
     fun `does not report imports in KDoc`() {
-        val main = """
+        val main =
+            """
             import tasks.success   // here
             import tasks.undefined // and here
             
@@ -440,32 +507,36 @@ class UnusedImportSpec(val env: KotlinCoreEnvironment) {
              * @sample success when ...
              */
             fun doSomething() {}
-        """.trimIndent()
-        val additional = """
+            """.trimIndent()
+        val additional =
+            """
             package tasks
             
             fun success() {}
             fun undefined() {}
-        """.trimIndent()
+            """.trimIndent()
         assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
     }
 
     @Test
     fun `should not report import alias as unused when the alias is used`() {
-        val main = """
+        val main =
+            """
             import test.forEach as foreach
             fun foo() = listOf().iterator().foreach {}
-        """.trimIndent()
-        val additional = """
+            """.trimIndent()
+        val additional =
+            """
             package test
             fun Iterator<Int>.forEach(f: () -> Unit) {}
-        """.trimIndent()
+            """.trimIndent()
         assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
     }
 
     @Test
     fun `should not report used alias even when import is from same package`() {
-        val main = """
+        val main =
+            """
             package com.example
             
             import com.example.foo as myFoo // from same package but with alias, check alias usage
@@ -474,29 +545,33 @@ class UnusedImportSpec(val env: KotlinCoreEnvironment) {
             fun f(): Boolean {
                 return myFoo() == otherFoo()
             }
-        """.trimIndent()
-        val additional1 = """
+            """.trimIndent()
+        val additional1 =
+            """
             package com.example
             fun foo() = 1
-        """.trimIndent()
-        val additional2 = """
+            """.trimIndent()
+        val additional2 =
+            """
             package com.example.other
             fun foo() = 1
-        """.trimIndent()
+            """.trimIndent()
         assertThat(subject.lintWithContext(env, main, additional1, additional2)).isEmpty()
     }
 
     @Test
     fun `should not report import of provideDelegate operator overload - #1608`() {
-        val main = """
+        val main =
+            """
             import org.gradle.kotlin.dsl.Foo
             import org.gradle.kotlin.dsl.provideDelegate // this line specifically should not be reported
             
             class DumpVersionProperties {
                 private val dumpVersionProperties by Foo()
             }
-        """.trimIndent()
-        val additional = """
+            """.trimIndent()
+        val additional =
+            """
             package org.gradle.kotlin.dsl
             
             import kotlin.reflect.KProperty
@@ -507,13 +582,14 @@ class UnusedImportSpec(val env: KotlinCoreEnvironment) {
                 thisRef: T,
                 prop: KProperty<*>
             ) = lazy { "" }
-        """.trimIndent()
+            """.trimIndent()
         assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
     }
 
     @Test
     fun `should not report import of componentN operator`() {
-        val main = """
+        val main =
+            """
             import com.example.MyClass.component1
             import com.example.MyClass.component2
             import com.example.MyClass.component543
@@ -521,18 +597,20 @@ class UnusedImportSpec(val env: KotlinCoreEnvironment) {
             fun test() {
                 val (a, b) = MyClass(1, 2)
             }
-        """.trimIndent()
-        val additional = """
+            """.trimIndent()
+        val additional =
+            """
             package com.example
             data class MyClass(val a: Int, val b: Int)
-        """.trimIndent()
+            """.trimIndent()
 
         assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
     }
 
     @Test
     fun `should report import of identifiers with component in the name`() {
-        val main = """
+        val main =
+            """
             import com.example.TestComponent
             import com.example.component1.Unused
             import com.example.components
@@ -541,17 +619,19 @@ class UnusedImportSpec(val env: KotlinCoreEnvironment) {
             fun test() {
                 println("Testing")
             }
-        """.trimIndent()
-        val additional1 = """
+            """.trimIndent()
+        val additional1 =
+            """
             package com.example
             class TestComponent
             fun components() {}
             fun component1AndSomethingElse() {}
-        """.trimIndent()
-        val additional2 = """
+            """.trimIndent()
+        val additional2 =
+            """
             package com.example.component1
             class Unused
-        """.trimIndent()
+            """.trimIndent()
         val lint = subject.lintWithContext(env, main, additional1, additional2)
 
         with(lint) {
@@ -565,21 +645,24 @@ class UnusedImportSpec(val env: KotlinCoreEnvironment) {
 
     @Test
     fun `reports when same name identifiers are imported and used`() {
-        val mainFile = """
+        val mainFile =
+            """
             import foo.test
             import bar.test
             fun main() {
                 test(1)
             }
-        """.trimIndent()
-        val additionalFile1 = """
+            """.trimIndent()
+        val additionalFile1 =
+            """
             package foo
             fun test(i: Int) {}
-        """.trimIndent()
-        val additionalFile2 = """
+            """.trimIndent()
+        val additionalFile2 =
+            """
             package bar
             fun test(s: String) {}
-        """.trimIndent()
+            """.trimIndent()
         val findings = subject.lintWithContext(env, mainFile, additionalFile1, additionalFile2)
         assertThat(findings).hasSize(1)
         assertThat(findings[0].entity.signature).endsWith("import bar.test")
@@ -587,19 +670,21 @@ class UnusedImportSpec(val env: KotlinCoreEnvironment) {
 
     @Test
     fun `does not report when used as a type`() {
-        val code = """
+        val code =
+            """
             import java.util.HashMap
             
             fun doesNothing(thing: HashMap<String, String>) {
             }
-        """.trimIndent()
+            """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
     @Test
     fun `does not report when used in a class literal expression`() {
-        val code = """
+        val code =
+            """
             import java.util.HashMap
             import kotlin.reflect.KClass
             
@@ -607,70 +692,78 @@ class UnusedImportSpec(val env: KotlinCoreEnvironment) {
             
             @Ann(HashMap::class)
             fun foo() {}
-        """.trimIndent()
+            """.trimIndent()
         val findings = subject.compileAndLintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
     @Test
     fun `does not report when used as a constructor call`() {
-        val mainFile = """
+        val mainFile =
+            """
             import x.y.z.Foo
             
             val foo = Foo()
-        """.trimIndent()
-        val additionalFile = """
+            """.trimIndent()
+        val additionalFile =
+            """
             package x.y.z
             
             class Foo
-        """.trimIndent()
+            """.trimIndent()
         val findings = subject.lintWithContext(env, mainFile, additionalFile)
         assertThat(findings).isEmpty()
     }
 
     @Test
     fun `does not report when used as a annotation`() {
-        val mainFile = """
+        val mainFile =
+            """
             import x.y.z.Ann
             
             @Ann
             fun foo() {}
-        """.trimIndent()
-        val additionalFile = """
+            """.trimIndent()
+        val additionalFile =
+            """
             package x.y.z
             
             annotation class Ann
-        """.trimIndent()
+            """.trimIndent()
         val findings = subject.lintWithContext(env, mainFile, additionalFile)
         assertThat(findings).isEmpty()
     }
 
     @Test
     fun `does not report companion object`() {
-        val mainFile = """
+        val mainFile =
+            """
             import x.y.z.Foo
             
             val x = Foo
-        """.trimIndent()
-        val additionalFile = """
+            """.trimIndent()
+        val additionalFile =
+            """
             package x.y.z
             
             class Foo {
                 companion object
             }
-        """.trimIndent()
+            """.trimIndent()
         val findings = subject.lintWithContext(env, mainFile, additionalFile)
         assertThat(findings).isEmpty()
     }
 
     @Test
     fun `does not report companion object that calls function`() {
-        val mainFile = """
+        val mainFile =
+            """
             import x.y.z.Foo
             
             val x = Foo.create()
-        """.trimIndent()
-        val additionalFile = """
+            """.trimIndent()
+        val additionalFile =
+            """
             package x.y.z
             
             class Foo {
@@ -678,19 +771,21 @@ class UnusedImportSpec(val env: KotlinCoreEnvironment) {
                     fun create(): Foo = Foo()
                 }
             }
-        """.trimIndent()
+            """.trimIndent()
         val findings = subject.lintWithContext(env, mainFile, additionalFile)
         assertThat(findings).isEmpty()
     }
 
     @Test
     fun `does not report companion object that references variable`() {
-        val mainFile = """
+        val mainFile =
+            """
             import x.y.z.Foo
             
             val x = Foo.BAR
-        """.trimIndent()
-        val additionalFile = """
+            """.trimIndent()
+        val additionalFile =
+            """
             package x.y.z
             
             class Foo {
@@ -698,31 +793,34 @@ class UnusedImportSpec(val env: KotlinCoreEnvironment) {
                     const val BAR = 1
                 }
             }
-        """.trimIndent()
+            """.trimIndent()
         val findings = subject.lintWithContext(env, mainFile, additionalFile)
         assertThat(findings).isEmpty()
     }
 
     @Test
     fun `does not report static import`() {
-        val mainFile = """
+        val mainFile =
+            """
             import x.y.z.FetchType
             
             val x = FetchType.LAZY
-        """.trimIndent()
-        val additionalFile = """
+            """.trimIndent()
+        val additionalFile =
+            """
             package x.y.z
             
             enum class FetchType {
                 LAZY
             }
-        """.trimIndent()
+            """.trimIndent()
         assertThat(subject.lintWithContext(env, mainFile, additionalFile)).isEmpty()
     }
 
     @Test
     fun `does not report annotations used as attributes - #3246`() {
-        val mainFile = """
+        val mainFile =
+            """
             import x.y.z.AnnotationA
             import x.y.z.AnnotationB
             
@@ -730,19 +828,21 @@ class UnusedImportSpec(val env: KotlinCoreEnvironment) {
                 @AnnotationB(attribute = AnnotationA())
                 val someProp: Int = 42
             }
-        """.trimIndent()
-        val additionalFile = """
+            """.trimIndent()
+        val additionalFile =
+            """
             package x.y.z
             
             annotation class AnnotationA
             annotation class AnnotationB(val attribute: AnnotationA)
-        """.trimIndent()
+            """.trimIndent()
         assertThat(subject.lintWithContext(env, mainFile, additionalFile)).isEmpty()
     }
 
     @Test
     fun `does not report unused import for import used in kdoc - #4815`() {
-        val mainFile = """
+        val mainFile =
+            """
             import x.y.z.SomeClass
             
             class MyView
@@ -754,20 +854,22 @@ class UnusedImportSpec(val env: KotlinCoreEnvironment) {
              * @property someVal Someval for [SomeClass]
              */
              data class StyleClass(val someVal: String)
-        """.trimIndent()
+            """.trimIndent()
 
-        val additionalFile = """
+        val additionalFile =
+            """
             package x.y.z
             
             class SomeClass
-        """.trimIndent()
+            """.trimIndent()
 
         assertThat(subject.lintWithContext(env, mainFile, additionalFile)).isEmpty()
     }
 
     @Test
     fun `does not report imports which detekt cannot resolve but have string matches`() {
-        val mainFile = """
+        val mainFile =
+            """
             import x.y.z.foo
             import x.y.z.Bar
             
@@ -778,21 +880,22 @@ class UnusedImportSpec(val env: KotlinCoreEnvironment) {
             
                 Bar().baz()
             }
-        """.trimIndent()
+            """.trimIndent()
 
         assertThat(subject.lintWithContext(env, mainFile)).isEmpty()
     }
 
     @Test
     fun `reports imports which detekt cannot resolve and do not have string matches`() {
-        val mainFile = """
+        val mainFile =
+            """
             import x.y.z.foo
             import x.y.z.Bar
             
             fun test() {
                 2 + 3
             }
-        """.trimIndent()
+            """.trimIndent()
 
         assertThat(subject.lintWithContext(env, mainFile)).hasSize(2)
     }

@@ -787,6 +787,7 @@ style:
     active: false
   UnusedImport:
     active: false
+    additionalOperatorSet: []
   UnusedParameter:
     active: true
     aliases: ['UNUSED_PARAMETER', 'unused']
