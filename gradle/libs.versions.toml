@@ -22,7 +22,7 @@ android-gradleApi = { module = "com.android.tools.build:gradle-api", version = "
 assertj-core = { module = "org.assertj:assertj-core", version = "3.27.3" }
 classgraph = { module = "io.github.classgraph:classgraph", version = "4.8.179" }
 jcommander = { module = "org.jcommander:jcommander", version = "1.85" }
-jetbrains-annotations = { module = "org.jetbrains:annotations", version = "26.0.1" }
+jetbrains-annotations = { module = "org.jetbrains:annotations", version = "26.0.2" }
 junit-jupiterApi = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 kctfork-core = { module = "dev.zacsweers.kctfork:core", version = "0.7.0" }
 kotlin-compilerEmbeddable = { module = "org.jetbrains.kotlin:kotlin-compiler-embeddable", version.ref = "kotlin" }
@@ -33,8 +33,8 @@ kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.re
 kotlinx-coroutinesCore = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlinx-coroutinesTest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 kotlinx-html = { module = "org.jetbrains.kotlinx:kotlinx-html-jvm", version = "0.12.0" }
-ktlint-rulesetStandard = { module = "com.pinterest.ktlint:ktlint-ruleset-standard", version = "1.4.1"  }
-poko-annotations = { module = "dev.drewhamilton.poko:poko-annotations", version = "0.17.2" }
+ktlint-rulesetStandard = { module = "com.pinterest.ktlint:ktlint-ruleset-standard", version = "1.5.0"  }
+poko-annotations = { module = "dev.drewhamilton.poko:poko-annotations", version = "0.18.2" }
 sarif4k = { module = "io.github.detekt.sarif4k:sarif4k", version = "0.6.0" }
 semver4j = { module = "org.semver4j:semver4j", version = "5.6.0" }
 slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }

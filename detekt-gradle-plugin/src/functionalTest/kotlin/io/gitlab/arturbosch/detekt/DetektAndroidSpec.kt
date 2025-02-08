@@ -114,7 +114,7 @@ class DetektAndroidSpec {
     }
 
     @Nested
-    inner class `does not configures android tasks if user opts out` {
+    inner class `does not configure Android tasks if user opts out` {
         val projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 0).apply {
             addSubmodule(
                 name = "app",
@@ -140,16 +140,16 @@ class DetektAndroidSpec {
         }
 
         @Test
-        @DisplayName("task :app:detektMain")
+        @DisplayName("Task :app:detektMain was not registered")
         fun appDetektMain() {
-            gradleRunner.runTasksAndExpectFailure(":app:detektMain") { result ->
+            gradleRunner.runTasksAndCheckResult(":app:detektMain") { result ->
                 assertThat(result.output)
-                    .contains("Cannot locate tasks that match ':app:detektMain' as task 'detektMain' is ambiguous")
+                    .contains("Abbreviated task name 'detektMain' matched 'detektMainSourceSet'")
             }
         }
 
         @Test
-        @DisplayName("task :app:detektTest")
+        @DisplayName("Task :app:detektTest was not registered")
         fun appDetektTest() {
             gradleRunner.runTasksAndExpectFailure(":app:detektTest") { result ->
                 assertThat(result.output)
