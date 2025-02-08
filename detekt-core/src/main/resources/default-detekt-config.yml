@@ -785,6 +785,8 @@ style:
     allowForUnclearPrecedence: false
   UnnecessaryReversed:
     active: false
+  UnnecessaryRun:
+    active: false
   UnusedImport:
     active: false
   UnusedParameter:
