@@ -10,7 +10,7 @@
 
 
 <link rel="search" type="application/opensearchdescription+xml" title="detekt" href="/opensearch.xml"><link rel="stylesheet" href="/assets/css/styles.80918a2e.css">
-<script src="/assets/js/runtime~main.1f20e3a9.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.580c0153.js" defer="defer"></script>
 <script src="/assets/js/main.d9619f8e.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -996,11 +996,18 @@ Exempt from this rule are imports resulting from references to elements within K
 from destructuring declarations (componentN imports).</p>
 <p><strong>Active by default</strong>: No</p>
 <p><strong>Requires Type Resolution</strong></p>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-26">Configuration options:<a href="#configuration-options-26" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<ul>
+<li>
+<p><code>additionalOperatorSet</code> (default: <code>[]</code>)</p>
+<p>Additional operators from libraries or tools, such as &#x27;assign&#x27;(e.g. compiler plugins for Gradle).</p>
+</li>
+</ul>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="unusedparameter">UnusedParameter<a href="#unusedparameter" class="hash-link" aria-label="Direct link to UnusedParameter" title="Direct link to UnusedParameter">​</a></h3>
 <p>An unused parameter can be removed to simplify the signature of the function.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.23.0</p>
 <p><strong>Aliases</strong>: UNUSED_PARAMETER, unused</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-26">Configuration options:<a href="#configuration-options-26" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-27">Configuration options:<a href="#configuration-options-27" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>allowedNames</code> (default: <code>&#x27;ignored|expected&#x27;</code>)</p>
@@ -1023,7 +1030,7 @@ can lead to confusion and potential bugs.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.16.0</p>
 <p><strong>Requires Type Resolution</strong></p>
 <p><strong>Aliases</strong>: unused</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-27">Configuration options:<a href="#configuration-options-27" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-28">Configuration options:<a href="#configuration-options-28" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>allowedNames</code> (default: <code>&#x27;&#x27;</code>)</p>
@@ -1037,7 +1044,7 @@ properties of the class when they are declared with <code>val</code> or <code>va
 <p><strong>Active by default</strong>: Yes - Since v1.23.0</p>
 <p><strong>Requires Type Resolution</strong></p>
 <p><strong>Aliases</strong>: unused</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-28">Configuration options:<a href="#configuration-options-28" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-29">Configuration options:<a href="#configuration-options-29" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>allowedNames</code> (default: <code>&#x27;ignored|expected|serialVersionUID&#x27;</code>)</p>
@@ -1053,7 +1060,7 @@ properties of the class when they are declared with <code>val</code> or <code>va
 <p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
 <p><strong>Requires Type Resolution</strong></p>
 <p><strong>Aliases</strong>: UNUSED_VARIABLE, unused</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-29">Configuration options:<a href="#configuration-options-29" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-30">Configuration options:<a href="#configuration-options-30" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>allowedNames</code> (default: <code>&#x27;ignored|_&#x27;</code>)</p>
@@ -1103,7 +1110,7 @@ and generate <code>hashCode</code>, <code>equals</code> and <code>toString</code
 <p>Read more about <a href="https://kotlinlang.org/docs/data-classes.html" target="_blank" rel="noopener noreferrer">data classes</a></p>
 <p><strong>Active by default</strong>: No</p>
 <p><strong>Requires Type Resolution</strong></p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-30">Configuration options:<a href="#configuration-options-30" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-31">Configuration options:<a href="#configuration-options-31" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>allowVars</code> (default: <code>false</code>)</p>
@@ -1135,7 +1142,7 @@ and generate <code>hashCode</code>, <code>equals</code> and <code>toString</code
 <p>Binary expressions are better expressed using an <code>if</code> expression than a <code>when</code> expression.</p>
 <p>See <a href="https://kotlinlang.org/docs/coding-conventions.html#if-versus-when" target="_blank" rel="noopener noreferrer">if versus when</a></p>
 <p><strong>Active by default</strong>: No</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-31">Configuration options:<a href="#configuration-options-31" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-32">Configuration options:<a href="#configuration-options-32" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>ignoreWhenContainingVariableDeclaration</code> (default: <code>false</code>)</p>
@@ -1222,7 +1229,7 @@ the current state easier.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.16.0</p>
 <p><strong>Requires Type Resolution</strong></p>
 <p><strong>Aliases</strong>: CanBeVal</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-32">Configuration options:<a href="#configuration-options-32" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-33">Configuration options:<a href="#configuration-options-33" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>ignoreLateinitVar</code> (default: <code>false</code>)</p>
@@ -1240,7 +1247,7 @@ which classes are imported and helps prevent naming conflicts.</p>
 <p><strong>NOTE</strong>: This rule has a twin implementation NoWildcardImports in the formatting rule set (a wrapped KtLint rule).
 When suppressing an issue of WildcardImport in the baseline file, make sure to suppress the corresponding NoWildcardImports issue.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-33">Configuration options:<a href="#configuration-options-33" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-34">Configuration options:<a href="#configuration-options-34" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>excludeImports</code> (default: <code>[&#x27;java.util.*&#x27;]</code>)</p>
