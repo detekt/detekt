@@ -71,7 +71,6 @@ subprojects {
 }
 
 setOf(
-    "build",
     "detektMain",
     "detektTest",
     "detektFunctionalTest",
@@ -82,3 +81,5 @@ setOf(
         dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":$taskName"))
     }
 }
+
+tasks.build { dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":build")) }
