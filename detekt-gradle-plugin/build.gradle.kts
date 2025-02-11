@@ -37,7 +37,7 @@ detekt {
 
 kotlin {
     @OptIn(ExperimentalBuildToolsApi::class, ExperimentalKotlinGradlePluginApi::class)
-    compilerVersion = "2.0.10"
+    compilerVersion = "2.0.21"
 }
 
 testing {
