@@ -2,6 +2,7 @@ package io.github.detekt.parser
 
 import org.jetbrains.kotlin.com.intellij.openapi.util.UserDataHolderBase
 import org.jetbrains.kotlin.com.intellij.pom.PomModel
+import org.jetbrains.kotlin.com.intellij.pom.PomModelAspect
 import org.jetbrains.kotlin.com.intellij.pom.PomTransaction
 import org.jetbrains.kotlin.com.intellij.pom.impl.PomTransactionBase
 
@@ -19,5 +20,9 @@ object DetektPomModel : UserDataHolderBase(), PomModel {
         }
 
         pomTransaction.run()
+    }
+
+    override fun <T : PomModelAspect?> getModelAspect(aspect: Class<T>): T? {
+        return null
     }
 }
