@@ -54,13 +54,13 @@ kotlin {
     compilerOptions {
         progressiveMode = true
         allWarningsAsErrors = providers.gradleProperty("warningsAsErrors").orNull.toBoolean()
-        freeCompilerArgs.add("-Xjdk-release=1.8")
     }
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>().configureEach {
     compilerOptions {
         jvmTarget = Versions.JVM_TARGET
+        freeCompilerArgs.add("-Xjdk-release=1.8")
     }
 }
 
