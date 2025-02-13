@@ -48,6 +48,12 @@ kotlin {
         // https://youtrack.jetbrains.com/issue/KT-72247/KGP-Cannot-use-unsupported-API-version-with-compilerVersion-that-supports-it#focus=Comments-27-11050897.0-0
         freeCompilerArgs.addAll("-api-version", "1.4")
     }
+
+    // Some functional tests reference internal functions in the Gradle plugin. This should become unnecessary as further
+    // updates are made to the functional test suite.
+    target.compilations.getByName("functionalTest") {
+        associateWith(target.compilations.getByName("main"))
+    }
 }
 
 testing {
@@ -166,12 +172,6 @@ signing {
 }
 
 val String.byProperty: String? get() = providers.gradleProperty(this).orNull
-
-// Some functional tests reference internal functions in the Gradle plugin. This should become unnecessary as further
-// updates are made to the functional test suite.
-kotlin.target.compilations.getByName("functionalTest") {
-    associateWith(target.compilations.getByName("main"))
-}
 
 // Manually inject dependency to gradle-testkit since the default injected plugin classpath is from `main.runtime`.
 tasks.pluginUnderTestMetadata {
