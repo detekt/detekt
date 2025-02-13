@@ -38,6 +38,16 @@ detekt {
 kotlin {
     @OptIn(ExperimentalBuildToolsApi::class, ExperimentalKotlinGradlePluginApi::class)
     compilerVersion = "2.0.21"
+
+    compilerOptions {
+        suppressWarnings = true
+        // Note: Currently there are warnings for detekt-gradle-plugin that seemingly can't be fixed
+        //       until Gradle releases an update (https://github.com/gradle/gradle/issues/16345)
+        allWarningsAsErrors = false
+        // The apiVersion Gradle property cannot be used here, so set api version using free compiler args.
+        // https://youtrack.jetbrains.com/issue/KT-72247/KGP-Cannot-use-unsupported-API-version-with-compilerVersion-that-supports-it#focus=Comments-27-11050897.0-0
+        freeCompilerArgs.addAll("-api-version", "1.4")
+    }
 }
 
 testing {
@@ -231,18 +241,6 @@ tasks {
 with(components["java"] as AdhocComponentWithVariants) {
     withVariantsFromConfiguration(configurations["testFixturesApiElements"]) { skip() }
     withVariantsFromConfiguration(configurations["testFixturesRuntimeElements"]) { skip() }
-}
-
-kotlin {
-    compilerOptions {
-        suppressWarnings = true
-        // Note: Currently there are warnings for detekt-gradle-plugin that seemingly can't be fixed
-        //       until Gradle releases an update (https://github.com/gradle/gradle/issues/16345)
-        allWarningsAsErrors = false
-        // The apiVersion Gradle property cannot be used here, so set api version using free compiler args.
-        // https://youtrack.jetbrains.com/issue/KT-72247/KGP-Cannot-use-unsupported-API-version-with-compilerVersion-that-supports-it#focus=Comments-27-11050897.0-0
-        freeCompilerArgs.addAll("-api-version", "1.4")
-    }
 }
 
 tasks.withType<Test>().configureEach {
