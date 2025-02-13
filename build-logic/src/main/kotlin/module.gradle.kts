@@ -55,9 +55,14 @@ val jvmTargetVersion = versionCatalog.findVersion("jvm-target").get().requiredVe
 
 kotlin {
     compilerOptions {
-        jvmTarget = JvmTarget.fromTarget(jvmTargetVersion)
         progressiveMode = true
         allWarningsAsErrors = providers.gradleProperty("warningsAsErrors").orNull.toBoolean()
+    }
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>().configureEach {
+    compilerOptions {
+        jvmTarget = JvmTarget.fromTarget(jvmTargetVersion)
     }
 }
 
