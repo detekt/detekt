@@ -58,12 +58,12 @@ kotlin {
     }
 }
 
-val java8Launcher = javaToolchains.launcherFor {
-    languageVersion = JavaLanguageVersion.of(8)
+val java21Launcher = javaToolchains.launcherFor {
+    languageVersion = JavaLanguageVersion.of(21)
 }
 
 project.tasks.withType<UsesKotlinJavaToolchain>().configureEach {
-    kotlinJavaToolchain.toolchain.use(java8Launcher)
+    kotlinJavaToolchain.toolchain.use(java21Launcher)
 }
 
 testing {
