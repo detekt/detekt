@@ -173,22 +173,9 @@ signing {
 
 val String.byProperty: String? get() = providers.gradleProperty(this).orNull
 
-// Manually inject dependency to gradle-testkit since the default injected plugin classpath is from `main.runtime`.
-tasks.pluginUnderTestMetadata {
-    pluginClasspath.from(testKitRuntimeOnly)
-
-    if (tasks.named<Test>("functionalTest").get().javaVersion.isCompatibleWith(JavaVersion.VERSION_17)) {
-        pluginClasspath.from(testKitJava17RuntimeOnly)
-    }
-}
-
 val gradleMinVersionPluginUnderTestMetadata by tasks.registering(PluginUnderTestMetadata::class) {
     pluginClasspath.setFrom(sourceSets.main.get().runtimeClasspath, testKitGradleMinVersionRuntimeOnly)
     outputDirectory = layout.buildDirectory.dir(name)
-}
-
-tasks.validatePlugins {
-    enableStricterValidation = true
 }
 
 tasks {
@@ -206,6 +193,31 @@ tasks {
 
     processTestResources {
         from(writeDetektVersionProperties)
+    }
+
+    // Manually inject dependency to gradle-testkit since the default injected plugin classpath is from `main.runtime`.
+    pluginUnderTestMetadata {
+        pluginClasspath.from(testKitRuntimeOnly)
+    
+        if (named<Test>("functionalTest").get().javaVersion.isCompatibleWith(JavaVersion.VERSION_17)) {
+            pluginClasspath.from(testKitJava17RuntimeOnly)
+        }
+    }
+
+    validatePlugins {
+        enableStricterValidation = true
+    }
+
+    withType<Test>().configureEach {
+        develocity {
+            testRetry {
+                @Suppress("MagicNumber")
+                if (providers.environmentVariable("CI").isPresent) {
+                    maxRetries = 2
+                    maxFailures = 20
+                }
+            }
+        }
     }
 
     withType<DokkaTask>().configureEach {
@@ -241,16 +253,4 @@ tasks {
 with(components["java"] as AdhocComponentWithVariants) {
     withVariantsFromConfiguration(configurations["testFixturesApiElements"]) { skip() }
     withVariantsFromConfiguration(configurations["testFixturesRuntimeElements"]) { skip() }
-}
-
-tasks.withType<Test>().configureEach {
-    develocity {
-        testRetry {
-            @Suppress("MagicNumber")
-            if (providers.environmentVariable("CI").isPresent) {
-                maxRetries = 2
-                maxFailures = 20
-            }
-        }
-    }
 }
