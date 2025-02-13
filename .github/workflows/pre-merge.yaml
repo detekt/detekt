@@ -42,6 +42,9 @@ jobs:
         with:
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
+      - name: Print list of detected toolchains
+        run: ./gradlew -q javaToolchains
+
       - name: Assemble and publish artifacts to Maven Local
         run: ./gradlew publishToMavenLocal
 

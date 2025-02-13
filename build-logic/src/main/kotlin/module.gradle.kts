@@ -52,18 +52,24 @@ tasks.withType<Test>().configureEach {
 
 kotlin {
     compilerOptions {
-        jvmTarget = Versions.JVM_TARGET
         progressiveMode = true
         allWarningsAsErrors = providers.gradleProperty("warningsAsErrors").orNull.toBoolean()
     }
 }
 
-val java8Launcher = javaToolchains.launcherFor {
-    languageVersion = JavaLanguageVersion.of(8)
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>().configureEach {
+    compilerOptions {
+        jvmTarget = Versions.JVM_TARGET
+        freeCompilerArgs.add("-Xjdk-release=1.8")
+    }
+}
+
+val java21Launcher = javaToolchains.launcherFor {
+    languageVersion = JavaLanguageVersion.of(21)
 }
 
 project.tasks.withType<UsesKotlinJavaToolchain>().configureEach {
-    kotlinJavaToolchain.toolchain.use(java8Launcher)
+    kotlinJavaToolchain.toolchain.use(java21Launcher)
 }
 
 testing {
