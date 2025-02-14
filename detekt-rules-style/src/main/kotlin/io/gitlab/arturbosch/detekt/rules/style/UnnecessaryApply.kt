@@ -46,7 +46,6 @@ class UnnecessaryApply(config: Config) :
         "The `apply` usage is unnecessary and can be removed."
     ),
     RequiresFullAnalysis {
-    override lateinit var bindingContext: BindingContext
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

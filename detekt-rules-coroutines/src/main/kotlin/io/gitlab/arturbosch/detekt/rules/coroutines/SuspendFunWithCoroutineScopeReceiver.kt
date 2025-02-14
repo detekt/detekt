@@ -51,7 +51,6 @@ class SuspendFunWithCoroutineScopeReceiver(config: Config) :
             "use suspend functions without the receiver or use plain functions and use coroutineScope { } instead."
     ),
     RequiresFullAnalysis {
-    override lateinit var bindingContext: BindingContext
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         checkReceiver(function)

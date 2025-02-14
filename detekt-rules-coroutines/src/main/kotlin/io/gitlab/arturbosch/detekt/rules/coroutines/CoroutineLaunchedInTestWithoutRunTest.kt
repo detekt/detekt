@@ -53,7 +53,6 @@ class CoroutineLaunchedInTestWithoutRunTest(config: Config) :
             "You should use `runTest` to avoid altering test results."
     ),
     RequiresFullAnalysis {
-    override lateinit var bindingContext: BindingContext
 
     private val funCoroutineLaunchesTraverseHelper = FunCoroutineLaunchesTraverseHelper()
 

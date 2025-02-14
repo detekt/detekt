@@ -48,7 +48,6 @@ class AbstractClassCanBeConcreteClass(config: Config) :
         "An abstract class is unnecessary. May be refactored to a concrete class."
     ),
     RequiresFullAnalysis {
-    override lateinit var bindingContext: BindingContext
 
     private val noAbstractMember = "An abstract class without an abstract member can be refactored to a concrete class."
 

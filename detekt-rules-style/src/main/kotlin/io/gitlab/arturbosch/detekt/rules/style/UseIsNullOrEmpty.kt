@@ -16,7 +16,6 @@ import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtSimpleNameExpression
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.util.getType
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
@@ -50,7 +49,6 @@ class UseIsNullOrEmpty(config: Config) :
         "Use `isNullOrEmpty()` call instead of `x == null || x.isEmpty()`."
     ),
     RequiresFullAnalysis {
-    override lateinit var bindingContext: BindingContext
 
     override fun visitBinaryExpression(expression: KtBinaryExpression) {
         super.visitBinaryExpression(expression)

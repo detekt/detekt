@@ -50,7 +50,6 @@ class ErrorUsageWithThrowable(config: Config) :
             "`error(throwable.message ?: \"No error message provided\")` instead."
     ),
     RequiresFullAnalysis {
-    override lateinit var bindingContext: BindingContext
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

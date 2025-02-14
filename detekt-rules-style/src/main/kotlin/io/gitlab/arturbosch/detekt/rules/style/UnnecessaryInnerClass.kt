@@ -40,7 +40,6 @@ class UnnecessaryInnerClass(config: Config) :
         "The 'inner' qualifier is unnecessary."
     ),
     RequiresFullAnalysis {
-    override lateinit var bindingContext: BindingContext
 
     private val candidateClassToParentClasses = mutableMapOf<KtClass, List<KtClass>>()
     private val classChain = ArrayDeque<KtClass>()

@@ -41,7 +41,6 @@ class ForbiddenAnnotation(config: Config) :
         "Avoid using this annotation."
     ),
     RequiresFullAnalysis {
-    override lateinit var bindingContext: BindingContext
 
     @Configuration(
         "List of fully qualified annotation classes which are forbidden."

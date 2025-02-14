@@ -68,7 +68,6 @@ class UnusedPrivateProperty(config: Config) :
         "Property is unused and should be removed."
     ),
     RequiresFullAnalysis {
-    override lateinit var bindingContext: BindingContext
 
     @Configuration("unused property names matching this regex are ignored")
     private val allowedNames: Regex by config(

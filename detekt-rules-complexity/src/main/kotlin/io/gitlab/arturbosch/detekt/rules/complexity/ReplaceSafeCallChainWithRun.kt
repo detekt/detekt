@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.types.isNullable
 
@@ -42,7 +41,6 @@ class ReplaceSafeCallChainWithRun(config: Config) :
         "Chains of safe calls on non-nullable types can be surrounded with `run {}`."
     ),
     RequiresFullAnalysis {
-    override lateinit var bindingContext: BindingContext
 
     override fun visitSafeQualifiedExpression(expression: KtSafeQualifiedExpression) {
         super.visitSafeQualifiedExpression(expression)

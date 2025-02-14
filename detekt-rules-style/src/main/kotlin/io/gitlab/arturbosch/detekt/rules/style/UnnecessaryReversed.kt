@@ -10,7 +10,6 @@ import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 
@@ -36,7 +35,6 @@ class UnnecessaryReversed(config: Config) :
             "eg. use `.sortedByDescending { .. }` instead of `.sortedBy { }.asReversed()`",
     ),
     RequiresFullAnalysis {
-    override lateinit var bindingContext: BindingContext
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

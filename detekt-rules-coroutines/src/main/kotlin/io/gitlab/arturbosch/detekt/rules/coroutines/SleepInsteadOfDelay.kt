@@ -50,7 +50,6 @@ class SleepInsteadOfDelay(config: Config) :
         "Usage of `Thread.sleep()` in coroutines can potentially halt multiple coroutines at once."
     ),
     RequiresFullAnalysis {
-    override lateinit var bindingContext: BindingContext
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

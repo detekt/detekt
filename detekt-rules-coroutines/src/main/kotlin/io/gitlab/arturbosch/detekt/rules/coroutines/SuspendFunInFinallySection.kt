@@ -47,7 +47,6 @@ class SuspendFunInFinallySection(config: Config) :
             "context as they won't execute if parent coroutine scope is cancelled."
     ),
     RequiresFullAnalysis {
-    override lateinit var bindingContext: BindingContext
 
     override fun visitFinallySection(finallySection: KtFinallySection) {
         finallySection.forEachDescendantOfType<KtCallExpression> { expression ->
