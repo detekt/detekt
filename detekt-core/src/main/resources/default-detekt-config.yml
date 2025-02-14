@@ -516,6 +516,8 @@ potential-bugs:
     active: false
     allowAdjacentDifferentTypeParams: true
     allowSingleParamUse: true
+    ignoreArgumentsMatchingNames: true
+    ignoreFunctionCall: []
   UnnecessaryNotNullCheck:
     active: false
   UnnecessaryNotNullOperator:
