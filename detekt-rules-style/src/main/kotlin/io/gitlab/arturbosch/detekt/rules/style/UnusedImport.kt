@@ -31,7 +31,6 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.getImportableDescriptor
 class UnusedImport(config: Config) :
     Rule(config, "Unused Imports are dead code and should be removed."),
     RequiresFullAnalysis {
-    override lateinit var bindingContext: BindingContext
 
     @Configuration("Additional operators from libraries or tools, such as 'assign'(e.g. compiler plugins for Gradle).")
     private val additionalOperatorSet: List<String> by config(emptyList())

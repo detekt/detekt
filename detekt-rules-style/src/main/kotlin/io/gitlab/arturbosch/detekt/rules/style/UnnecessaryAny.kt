@@ -47,7 +47,6 @@ class UnnecessaryAny(config: Config) :
         "The `any {  }` usage is unnecessary."
     ),
     RequiresFullAnalysis {
-    override lateinit var bindingContext: BindingContext
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

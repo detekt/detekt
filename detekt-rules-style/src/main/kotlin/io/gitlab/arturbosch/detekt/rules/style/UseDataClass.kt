@@ -49,7 +49,6 @@ class UseDataClass(config: Config) :
         "Classes that do nothing but hold data should be replaced with a data class."
     ),
     RequiresFullAnalysis {
-    override lateinit var bindingContext: BindingContext
 
     @Configuration("allows to relax this rule in order to exclude classes that contains one (or more) vars")
     private val allowVars: Boolean by config(false)

@@ -125,7 +125,6 @@ class SuspendFunSwallowedCancellation(config: Config) :
             "in a suspending context. This includes `runCatching` as well as regular try-catch blocks."
     ),
     RequiresFullAnalysis {
-    override lateinit var bindingContext: BindingContext
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

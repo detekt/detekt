@@ -7,6 +7,4 @@ import org.jetbrains.kotlin.resolve.BindingContext
  *
  * The core will only run your [Rule] if it is running in FullAnalysis mode.
  */
-interface RequiresFullAnalysis {
-    var bindingContext: BindingContext
-}
+interface RequiresFullAnalysis

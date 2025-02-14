@@ -59,7 +59,6 @@ class RedundantSuspendModifier(config: Config) :
         "The `suspend` modifier is only needed for functions that contain suspending calls."
     ),
     RequiresFullAnalysis {
-    override lateinit var bindingContext: BindingContext
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         val suspendModifier = function.modifierList?.getModifier(KtTokens.SUSPEND_KEYWORD) ?: return

@@ -23,7 +23,6 @@ import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelectorOrThis
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.BindingContext.FUNCTION
 import org.jetbrains.kotlin.resolve.bindingContextUtil.getTargetFunctionDescriptor
 import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
@@ -56,7 +55,6 @@ class IgnoredReturnValue(config: Config) :
         "This call returns a value which is ignored"
     ),
     RequiresFullAnalysis {
-    override lateinit var bindingContext: BindingContext
 
     @Configuration("If the rule should check only methods matching to configuration, or all methods")
     private val restrictToConfig: Boolean by config(defaultValue = true)

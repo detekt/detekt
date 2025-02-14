@@ -55,7 +55,6 @@ class MemberNameEqualsClassName(config: Config) :
         "A member should not be given the same name as its parent class or object."
     ),
     RequiresFullAnalysis {
-    override lateinit var bindingContext: BindingContext
 
     private val classMessage = "A member is named after the class. This might result in confusion. " +
         "Either rename the member or change it to a constructor."

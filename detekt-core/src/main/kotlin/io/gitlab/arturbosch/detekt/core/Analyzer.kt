@@ -102,9 +102,7 @@ internal class Analyzer(
                 file.isSuppressedBy(ruleInstance.id, rule.aliases, ruleInstance.ruleSetId)
             }
             .onEach { (_, rule) ->
-                if (rule is RequiresFullAnalysis) {
-                    rule.bindingContext = bindingContext
-                }
+                if (rule is RequiresFullAnalysis) rule.setBindingContext(bindingContext)
             }
             .partition { (_, rule) -> rule.autoCorrect }
 

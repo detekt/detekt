@@ -43,7 +43,6 @@ class HasPlatformType(config: Config) :
         "Platform types must be declared explicitly in public APIs."
     ),
     RequiresFullAnalysis {
-    override lateinit var bindingContext: BindingContext
 
     override fun visitKtElement(element: KtElement) {
         super.visitKtElement(element)

@@ -511,9 +511,7 @@ private open class MaxLineLength(config: Config) : Rule(config, "TestDescription
             .first { it.text.isNotBlank() }
 }
 
-private class RequiresFullAnalysisMaxLineLength(config: Config) : MaxLineLength(config), RequiresFullAnalysis {
-    override lateinit var bindingContext: BindingContext
-}
+private class RequiresFullAnalysisMaxLineLength(config: Config) : MaxLineLength(config), RequiresFullAnalysis
 
 private class FaultyRule(config: Config) : Rule(config, "") {
     override fun visitKtFile(file: KtFile): Unit =

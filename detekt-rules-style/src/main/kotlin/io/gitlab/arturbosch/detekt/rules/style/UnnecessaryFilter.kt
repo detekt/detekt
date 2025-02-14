@@ -53,7 +53,6 @@ class UnnecessaryFilter(config: Config) :
         "`filter()` with other collection operations may be simplified."
     ),
     RequiresFullAnalysis {
-    override lateinit var bindingContext: BindingContext
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

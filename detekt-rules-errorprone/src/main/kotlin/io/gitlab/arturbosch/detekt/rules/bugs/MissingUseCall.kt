@@ -75,7 +75,6 @@ class MissingUseCall(config: Config = Config.empty) :
             "can be problematic as closing `Closeable` may throw exception.",
     ),
     RequiresFullAnalysis {
-    override lateinit var bindingContext: BindingContext
 
     private val traversedParentExpression: MutableSet<PsiElement> = mutableSetOf()
     private val usedReferences: MutableSet<CallableDescriptor> = mutableSetOf()

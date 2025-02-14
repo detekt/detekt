@@ -19,7 +19,6 @@ import org.jetbrains.kotlin.psi.allConstructors
 import org.jetbrains.kotlin.psi.psiUtil.findPropertyByName
 import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getType
 import org.jetbrains.kotlin.types.typeUtil.supertypes
 
@@ -50,7 +49,6 @@ class InjectDispatcher(config: Config) :
             "Use dependency injection for dispatchers to make testing easier."
     ),
     RequiresFullAnalysis {
-    override lateinit var bindingContext: BindingContext
 
     @Configuration("The names of dispatchers to detect by this rule")
     private val dispatcherNames: Set<String> by config(listOf("IO", "Default", "Unconfined")) { it.toSet() }

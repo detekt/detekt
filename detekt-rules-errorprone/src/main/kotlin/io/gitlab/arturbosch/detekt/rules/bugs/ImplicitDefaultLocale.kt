@@ -41,7 +41,6 @@ class ImplicitDefaultLocale(config: Config) :
         "Implicit default locale used for string processing. Consider using explicit locale."
     ),
     RequiresFullAnalysis {
-    override lateinit var bindingContext: BindingContext
 
     private val formatCalls = listOf(
         FqName("kotlin.text.format")

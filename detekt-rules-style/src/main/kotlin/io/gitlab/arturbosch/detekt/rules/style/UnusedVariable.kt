@@ -54,7 +54,6 @@ class UnusedVariable(config: Config) :
         "Variable is unused and should be removed."
     ),
     RequiresFullAnalysis {
-    override lateinit var bindingContext: BindingContext
 
     @Configuration("unused variables names matching this regex are ignored")
     private val allowedNames: Regex by config(

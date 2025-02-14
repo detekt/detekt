@@ -48,7 +48,6 @@ class RedundantExplicitType(config: Config) :
         "Type does not need to be stated explicitly and can be removed."
     ),
     RequiresFullAnalysis {
-    override lateinit var bindingContext: BindingContext
 
     @Suppress("ReturnCount", "ComplexMethod")
     override fun visitProperty(property: KtProperty) {

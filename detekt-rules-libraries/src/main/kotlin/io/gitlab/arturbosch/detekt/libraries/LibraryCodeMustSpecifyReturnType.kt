@@ -49,7 +49,6 @@ class LibraryCodeMustSpecifyReturnType(config: Config) :
             "Inferred return types can easily be changed by mistake which may lead to breaking changes."
     ),
     RequiresFullAnalysis {
-    override lateinit var bindingContext: BindingContext
 
     @Configuration("if functions with `Unit` return type should be allowed without return type declaration")
     private val allowOmitUnit: Boolean by config(false)
