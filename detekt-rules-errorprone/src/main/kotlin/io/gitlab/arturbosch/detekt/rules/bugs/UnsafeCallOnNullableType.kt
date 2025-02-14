@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtPostfixExpression
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getType
 import org.jetbrains.kotlin.types.typeUtil.TypeNullability
 import org.jetbrains.kotlin.types.typeUtil.nullability
@@ -29,13 +30,15 @@ import org.jetbrains.kotlin.types.typeUtil.nullability
  * }
  * </compliant>
  */
-@RequiresFullAnalysis
 @ActiveByDefault(since = "1.2.0")
-class UnsafeCallOnNullableType(config: Config) : Rule(
-    config,
-    "Unsafe calls on nullable types detected. These calls will throw a NullPointerException in case " +
-        "the nullable value is null."
-) {
+class UnsafeCallOnNullableType(config: Config) :
+    Rule(
+        config,
+        "Unsafe calls on nullable types detected. These calls will throw a NullPointerException in case " +
+            "the nullable value is null."
+    ),
+    RequiresFullAnalysis {
+    override lateinit var bindingContext: BindingContext
 
     override fun visitPostfixExpression(expression: KtPostfixExpression) {
         super.visitPostfixExpression(expression)

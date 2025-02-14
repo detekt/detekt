@@ -42,11 +42,13 @@ import org.jetbrains.kotlin.types.typeUtil.isLong
  * }
  * </compliant>
  */
-@RequiresFullAnalysis
-class RedundantExplicitType(config: Config) : Rule(
-    config,
-    "Type does not need to be stated explicitly and can be removed."
-) {
+class RedundantExplicitType(config: Config) :
+    Rule(
+        config,
+        "Type does not need to be stated explicitly and can be removed."
+    ),
+    RequiresFullAnalysis {
+    override lateinit var bindingContext: BindingContext
 
     @Suppress("ReturnCount", "ComplexMethod")
     override fun visitProperty(property: KtProperty) {

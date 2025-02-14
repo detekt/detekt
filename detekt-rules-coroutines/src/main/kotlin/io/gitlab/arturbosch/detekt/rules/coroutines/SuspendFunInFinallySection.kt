@@ -40,12 +40,15 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  * </compliant>
  *
  */
-@RequiresFullAnalysis
-class SuspendFunInFinallySection(config: Config) : Rule(
-    config,
-    "Suspend functions should not be called from a 'finally' section without using 'NonCancellable' " +
-        "context as they won't execute if parent coroutine scope is cancelled."
-) {
+class SuspendFunInFinallySection(config: Config) :
+    Rule(
+        config,
+        "Suspend functions should not be called from a 'finally' section without using 'NonCancellable' " +
+            "context as they won't execute if parent coroutine scope is cancelled."
+    ),
+    RequiresFullAnalysis {
+    override lateinit var bindingContext: BindingContext
+
     override fun visitFinallySection(finallySection: KtFinallySection) {
         finallySection.forEachDescendantOfType<KtCallExpression> { expression ->
             if (shouldReport(expression, finallySection)) {

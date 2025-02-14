@@ -13,6 +13,7 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtSimpleNameExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateEntry
 import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelector
+import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * Reports `toString()` calls with a nullable receiver that may return the string "null".
@@ -37,11 +38,13 @@ import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelector
  * }
  * </compliant>
  */
-@RequiresFullAnalysis
-class NullableToStringCall(config: Config) : Rule(
-    config,
-    "`toString()` on nullable receiver may return the string \"null\""
-) {
+class NullableToStringCall(config: Config) :
+    Rule(
+        config,
+        "`toString()` on nullable receiver may return the string \"null\""
+    ),
+    RequiresFullAnalysis {
+    override lateinit var bindingContext: BindingContext
 
     override fun visitSimpleNameExpression(expression: KtSimpleNameExpression) {
         super.visitSimpleNameExpression(expression)

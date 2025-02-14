@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * Reports unreachable code.
@@ -29,12 +30,14 @@ import org.jetbrains.kotlin.psi.KtExpression
  * }
  * </noncompliant>
  */
-@RequiresFullAnalysis
 @ActiveByDefault(since = "1.0.0")
-class UnreachableCode(config: Config) : Rule(
-    config,
-    "Unreachable code detected. This code should be removed."
-) {
+class UnreachableCode(config: Config) :
+    Rule(
+        config,
+        "Unreachable code detected. This code should be removed."
+    ),
+    RequiresFullAnalysis {
+    override lateinit var bindingContext: BindingContext
 
     override fun visitExpression(expression: KtExpression) {
         super.visitExpression(expression)

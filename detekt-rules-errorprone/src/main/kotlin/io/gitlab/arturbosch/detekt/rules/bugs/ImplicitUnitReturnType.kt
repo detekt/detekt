@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.hasImplicitUnitReturnType
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * Functions using expression statements have an implicit return type.
@@ -32,14 +33,16 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * </compliant>
  *
  */
-@RequiresFullAnalysis
-class ImplicitUnitReturnType(config: Config) : Rule(
-    config,
-    "Functions using expression statements have an implicit return type. " +
-        "Changing the type of the expression accidentally, changes the function return type. " +
-        "This may lead to backward incompatibility. " +
-        "Use a block statement to make clear this function will never return a value."
-) {
+class ImplicitUnitReturnType(config: Config) :
+    Rule(
+        config,
+        "Functions using expression statements have an implicit return type. " +
+            "Changing the type of the expression accidentally, changes the function return type. " +
+            "This may lead to backward incompatibility. " +
+            "Use a block statement to make clear this function will never return a value."
+    ),
+    RequiresFullAnalysis {
+    override lateinit var bindingContext: BindingContext
 
     @Configuration("if functions with explicit `Unit` return type should be allowed")
     private val allowExplicitReturnType: Boolean by config(true)

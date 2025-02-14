@@ -34,11 +34,13 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.classId
  * </noncompliant>
  */
 @Suppress("TooManyFunctions")
-@RequiresFullAnalysis
-class UnnecessaryInnerClass(config: Config) : Rule(
-    config,
-    "The 'inner' qualifier is unnecessary."
-) {
+class UnnecessaryInnerClass(config: Config) :
+    Rule(
+        config,
+        "The 'inner' qualifier is unnecessary."
+    ),
+    RequiresFullAnalysis {
+    override lateinit var bindingContext: BindingContext
 
     private val candidateClassToParentClasses = mutableMapOf<KtClass, List<KtClass>>()
     private val classChain = ArrayDeque<KtClass>()

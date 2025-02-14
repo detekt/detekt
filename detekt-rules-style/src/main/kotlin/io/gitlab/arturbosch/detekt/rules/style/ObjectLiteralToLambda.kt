@@ -40,12 +40,14 @@ import org.jetbrains.kotlin.types.KotlinType
  * }
  * </compliant>
  */
-@RequiresFullAnalysis
 @ActiveByDefault(since = "1.21.0")
-class ObjectLiteralToLambda(config: Config) : Rule(
-    config,
-    "Report object literals that can be changed to lambdas."
-) {
+class ObjectLiteralToLambda(config: Config) :
+    Rule(
+        config,
+        "Report object literals that can be changed to lambdas."
+    ),
+    RequiresFullAnalysis {
+    override lateinit var bindingContext: BindingContext
 
     private val KotlinType.couldBeSamInterface
         get() = JavaSingleAbstractMethodUtils.isSamType(this)

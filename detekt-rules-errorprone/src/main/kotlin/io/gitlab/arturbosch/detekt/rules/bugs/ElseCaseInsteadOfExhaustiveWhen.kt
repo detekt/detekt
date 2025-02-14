@@ -10,6 +10,7 @@ import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.cfg.WhenChecker
 import org.jetbrains.kotlin.psi.KtWhenExpression
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getType
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.typeUtil.isBooleanOrNullableBoolean
@@ -49,11 +50,13 @@ import org.jetbrains.kotlin.types.typeUtil.isBooleanOrNullableBoolean
  * }
  * </compliant>
  */
-@RequiresFullAnalysis
-class ElseCaseInsteadOfExhaustiveWhen(config: Config) : Rule(
-    config,
-    "A `when` expression that has an exhaustive set of cases should not contain an `else` case."
-) {
+class ElseCaseInsteadOfExhaustiveWhen(config: Config) :
+    Rule(
+        config,
+        "A `when` expression that has an exhaustive set of cases should not contain an `else` case."
+    ),
+    RequiresFullAnalysis {
+    override lateinit var bindingContext: BindingContext
 
     @Configuration(
         "List of fully qualified types which should be ignored for when expressions with a subject. " +

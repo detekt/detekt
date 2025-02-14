@@ -14,6 +14,7 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForReceiver
 import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelectorOrThis
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getType
 import org.jetbrains.kotlin.resolve.descriptorUtil.isSubclassOf
 
@@ -35,11 +36,13 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.isSubclassOf
  * listOf(listOf(1), listOf(2, 3)).sumOf { it.size }
  * </compliant>
  */
-@RequiresFullAnalysis
-class UseSumOfInsteadOfFlatMapSize(config: Config) : Rule(
-    config,
-    "Use `sumOf` instead of `flatMap` and `size/count` calls"
-) {
+class UseSumOfInsteadOfFlatMapSize(config: Config) :
+    Rule(
+        config,
+        "Use `sumOf` instead of `flatMap` and `size/count` calls"
+    ),
+    RequiresFullAnalysis {
+    override lateinit var bindingContext: BindingContext
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

@@ -17,6 +17,7 @@ import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtReferenceExpression
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 
@@ -45,11 +46,13 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  * }
  * </compliant>
  */
-@RequiresFullAnalysis
-class NullCheckOnMutableProperty(config: Config) : Rule(
-    config,
-    "Checking nullability on a mutable property is not useful because the property may be set to null afterwards."
-) {
+class NullCheckOnMutableProperty(config: Config) :
+    Rule(
+        config,
+        "Checking nullability on a mutable property is not useful because the property may be set to null afterwards."
+    ),
+    RequiresFullAnalysis {
+    override lateinit var bindingContext: BindingContext
 
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)

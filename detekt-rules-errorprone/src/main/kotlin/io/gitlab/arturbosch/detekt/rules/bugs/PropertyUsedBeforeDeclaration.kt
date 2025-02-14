@@ -47,11 +47,13 @@ import org.jetbrains.kotlin.utils.addIfNotNull
  * }
  * </compliant>
  */
-@RequiresFullAnalysis
-class PropertyUsedBeforeDeclaration(config: Config) : Rule(
-    config,
-    "Properties before declaration should not be used."
-) {
+class PropertyUsedBeforeDeclaration(config: Config) :
+    Rule(
+        config,
+        "Properties before declaration should not be used."
+    ),
+    RequiresFullAnalysis {
+    override lateinit var bindingContext: BindingContext
 
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
         super.visitClassOrObject(classOrObject)

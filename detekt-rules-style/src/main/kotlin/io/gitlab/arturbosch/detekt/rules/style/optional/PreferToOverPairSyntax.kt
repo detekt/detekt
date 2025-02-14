@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.descriptors.ClassConstructorDescriptor
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 
@@ -25,11 +26,13 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  * </compliant>
  *
  */
-@RequiresFullAnalysis
-class PreferToOverPairSyntax(config: Config) : Rule(
-    config,
-    "Pair was created using the Pair constructor, using the to syntax is preferred."
-) {
+class PreferToOverPairSyntax(config: Config) :
+    Rule(
+        config,
+        "Pair was created using the Pair constructor, using the to syntax is preferred."
+    ),
+    RequiresFullAnalysis {
+    override lateinit var bindingContext: BindingContext
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

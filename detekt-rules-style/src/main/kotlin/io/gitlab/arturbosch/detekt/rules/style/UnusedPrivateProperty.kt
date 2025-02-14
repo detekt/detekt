@@ -60,13 +60,15 @@ import org.jetbrains.kotlin.resolve.source.getPsi
  * }
  * </compliant>
  */
-@RequiresFullAnalysis
 @ActiveByDefault(since = "1.23.0")
 @Alias("unused")
-class UnusedPrivateProperty(config: Config) : Rule(
-    config,
-    "Property is unused and should be removed."
-) {
+class UnusedPrivateProperty(config: Config) :
+    Rule(
+        config,
+        "Property is unused and should be removed."
+    ),
+    RequiresFullAnalysis {
+    override lateinit var bindingContext: BindingContext
 
     @Configuration("unused property names matching this regex are ignored")
     private val allowedNames: Regex by config(

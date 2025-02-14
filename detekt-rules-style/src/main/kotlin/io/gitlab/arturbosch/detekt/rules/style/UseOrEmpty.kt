@@ -15,6 +15,7 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi2ir.deparenthesize
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.calls.util.getType
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
@@ -40,12 +41,14 @@ import org.jetbrains.kotlin.types.typeUtil.makeNotNullable
  * </compliant>
  *
  */
-@RequiresFullAnalysis
 @ActiveByDefault(since = "1.21.0")
-class UseOrEmpty(config: Config) : Rule(
-    config,
-    "Use `orEmpty()` call instead of `?:` with empty collection factory methods",
-) {
+class UseOrEmpty(config: Config) :
+    Rule(
+        config,
+        "Use `orEmpty()` call instead of `?:` with empty collection factory methods",
+    ),
+    RequiresFullAnalysis {
+    override lateinit var bindingContext: BindingContext
 
     @Suppress("ReturnCount")
     override fun visitBinaryExpression(expression: KtBinaryExpression) {

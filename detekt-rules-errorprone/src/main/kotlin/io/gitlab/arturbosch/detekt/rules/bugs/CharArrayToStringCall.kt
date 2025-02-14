@@ -13,6 +13,7 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateEntry
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getType
 
 /**
@@ -33,11 +34,13 @@ import org.jetbrains.kotlin.resolve.calls.util.getType
  * println(s + charArray.concatToString()) // hello😅
  * </compliant>
  */
-@RequiresFullAnalysis
-class CharArrayToStringCall(config: Config) : Rule(
-    config,
-    "`CharArray.toString()` call does not return expected result."
-) {
+class CharArrayToStringCall(config: Config) :
+    Rule(
+        config,
+        "`CharArray.toString()` call does not return expected result."
+    ),
+    RequiresFullAnalysis {
+    override lateinit var bindingContext: BindingContext
 
     override fun visitQualifiedExpression(expression: KtQualifiedExpression) {
         super.visitQualifiedExpression(expression)

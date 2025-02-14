@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtPostfixExpression
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 
@@ -41,13 +42,15 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
  * map.getOrElse("key", { "" })
  * </compliant>
  */
-@RequiresFullAnalysis
 @ActiveByDefault(since = "1.21.0")
-class MapGetWithNotNullAssertionOperator(config: Config) : Rule(
-    config,
-    "map.get() with not-null assertion operator (!!) can result in a NullPointerException. " +
-        "Consider usage of map.getValue(), map.getOrDefault() or map.getOrElse() instead."
-) {
+class MapGetWithNotNullAssertionOperator(config: Config) :
+    Rule(
+        config,
+        "map.get() with not-null assertion operator (!!) can result in a NullPointerException. " +
+            "Consider usage of map.getValue(), map.getOrDefault() or map.getOrElse() instead."
+    ),
+    RequiresFullAnalysis {
+    override lateinit var bindingContext: BindingContext
 
     override fun visitPostfixExpression(expression: KtPostfixExpression) {
         if (expression.operationToken == KtTokens.EXCLEXCL && expression.isMapGet()) {

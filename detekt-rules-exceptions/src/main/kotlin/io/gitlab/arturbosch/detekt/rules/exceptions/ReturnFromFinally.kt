@@ -15,6 +15,7 @@ import org.jetbrains.kotlin.psi.KtTryExpression
 import org.jetbrains.kotlin.psi.psiUtil.blockExpressionsOrSingle
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.isInsideOf
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.getTargetFunction
 import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
 import org.jetbrains.kotlin.resolve.calls.util.getType
@@ -37,12 +38,14 @@ import org.jetbrains.kotlin.types.KotlinType
  * val a: String = try { "s" } catch (e: Exception) { "e" } finally { "f" }
  * </noncompliant>
  */
-@RequiresFullAnalysis
 @ActiveByDefault(since = "1.16.0")
-class ReturnFromFinally(config: Config) : Rule(
-    config,
-    "Do not return within a finally statement. This can discard exceptions."
-) {
+class ReturnFromFinally(config: Config) :
+    Rule(
+        config,
+        "Do not return within a finally statement. This can discard exceptions."
+    ),
+    RequiresFullAnalysis {
+    override lateinit var bindingContext: BindingContext
 
     @Configuration("ignores labeled return statements")
     private val ignoreLabeled: Boolean by config(false)
