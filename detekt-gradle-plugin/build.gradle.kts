@@ -157,21 +157,19 @@ gradlePlugin {
     )
 }
 
-val signingKey = "SIGNING_KEY".byProperty
-val signingPwd = "SIGNING_PWD".byProperty
-if (signingKey.isNullOrBlank() || signingPwd.isNullOrBlank()) {
-    logger.info("Signing disabled as the GPG key was not found")
-} else {
-    logger.info("GPG Key found - Signing enabled")
-}
-
 signing {
+    val signingKey = providers.gradleProperty("SIGNING_KEY").orNull
+    val signingPwd = providers.gradleProperty("SIGNING_PWD").orNull
+    if (signingKey.isNullOrBlank() || signingPwd.isNullOrBlank()) {
+        logger.info("Signing disabled as the GPG key was not found")
+    } else {
+        logger.info("GPG Key found - Signing enabled")
+    }
+
     useInMemoryPgpKeys(signingKey, signingPwd)
     sign(publishing.publications)
     isRequired = !(signingKey.isNullOrBlank() || signingPwd.isNullOrBlank())
 }
-
-val String.byProperty: String? get() = providers.gradleProperty(this).orNull
 
 val gradleMinVersionPluginUnderTestMetadata by tasks.registering(PluginUnderTestMetadata::class) {
     pluginClasspath.setFrom(sourceSets.main.get().runtimeClasspath, testKitGradleMinVersionRuntimeOnly)
