@@ -33,7 +33,7 @@ formatting:
     active: true
     autoCorrect: true
   ChainMethodContinuation:
-    active: false
+    active: true
     autoCorrect: true
     indentSize: 4
     maxLineLength: 120
