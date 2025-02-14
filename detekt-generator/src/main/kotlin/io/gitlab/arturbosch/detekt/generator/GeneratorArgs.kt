@@ -61,7 +61,7 @@ class GeneratorArgs {
     var textReplacements: Map<String, String> = mutableMapOf()
 
     class PathSplitter : IParameterSplitter {
-        override fun split(value: String): List<String> = value.split(',', ';')
+        override fun split(value: String): List<String> = value.split(';')
     }
 
     class PathValidator : IValueValidator<List<Path>> {
