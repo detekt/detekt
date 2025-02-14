@@ -4,6 +4,7 @@ import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfigProper
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.INDENT_SIZE_PROPERTY
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.MAX_LINE_LENGTH_PROPERTY
 import com.pinterest.ktlint.ruleset.standard.rules.BinaryExpressionWrappingRule
+import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.config
@@ -15,6 +16,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/experimental/#binary-expression-wrapping) for
  * documentation.
  */
+@ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "2.0.0")
 class BinaryExpressionWrapping(config: Config) : FormattingRule(
     config,

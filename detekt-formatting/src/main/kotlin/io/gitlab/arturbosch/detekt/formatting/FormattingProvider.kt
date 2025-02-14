@@ -130,6 +130,7 @@ class FormattingProvider : RuleSetProvider {
             ::AnnotationSpacing,
             ::ArgumentListWrapping,
             ::BackingPropertyNaming,
+            ::BinaryExpressionWrapping,
             ::BlankLineBeforeDeclaration,
             ::BlockCommentInitialStarAlignment,
             ::ChainWrapping,
@@ -211,7 +212,6 @@ class FormattingProvider : RuleSetProvider {
             ::ValueParameterComment,
             ::Wrapping,
             // Wrappers for experimental rules. Disabled by default.
-            ::BinaryExpressionWrapping,
             ::BlankLineBetweenWhenConditions,
             ::ChainMethodContinuation,
             ::ClassSignature,
