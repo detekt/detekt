@@ -18,7 +18,7 @@ formatting:
   BackingPropertyNaming:
     active: true
   BinaryExpressionWrapping:
-    active: false
+    active: true
     autoCorrect: true
     maxLineLength: 120
     indentSize: 4
