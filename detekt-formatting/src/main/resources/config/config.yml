@@ -161,7 +161,7 @@ formatting:
     indentSize: 4
     functionBodyExpressionWrapping: 'multiline'
   MultilineLoop:
-    active: false
+    active: true
     autoCorrect: true
     indentSize: 4
   NoBlankLineBeforeRbrace:
