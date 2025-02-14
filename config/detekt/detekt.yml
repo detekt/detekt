@@ -246,8 +246,6 @@ style:
     active: true
   ObjectLiteralToLambda:
     active: true
-  PreferToOverPairSyntax:
-    active: true
   RangeUntilInsteadOfRangeTo:
     active: true
   RedundantConstructorKeyword:
