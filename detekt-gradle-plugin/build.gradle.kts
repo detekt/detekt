@@ -69,7 +69,7 @@ testing {
             targets {
                 all {
                     testTask {
-                        dependsOn(gradleMinVersionPluginUnderTestMetadata)
+                        dependsOn("gradleMinVersionPluginUnderTestMetadata")
                     }
                 }
             }
@@ -171,11 +171,6 @@ signing {
     isRequired = !(signingKey.isNullOrBlank() || signingPwd.isNullOrBlank())
 }
 
-val gradleMinVersionPluginUnderTestMetadata by tasks.registering(PluginUnderTestMetadata::class) {
-    pluginClasspath.setFrom(sourceSets.main.get().runtimeClasspath, testKitGradleMinVersionRuntimeOnly)
-    outputDirectory = layout.buildDirectory.dir(name)
-}
-
 tasks {
     val writeDetektVersionProperties by registering(WriteProperties::class) {
         description = "Write the properties file with the detekt version to be used by the plugin."
@@ -204,6 +199,11 @@ tasks {
 
     validatePlugins {
         enableStricterValidation = true
+    }
+
+    register<PluginUnderTestMetadata>("gradleMinVersionPluginUnderTestMetadata") {
+        pluginClasspath.setFrom(sourceSets.main.get().runtimeClasspath, testKitGradleMinVersionRuntimeOnly)
+        outputDirectory = layout.buildDirectory.dir(name)
     }
 
     withType<Test>().configureEach {
