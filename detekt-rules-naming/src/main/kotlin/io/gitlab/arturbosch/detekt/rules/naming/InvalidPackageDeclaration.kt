@@ -11,7 +11,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtElement
-import org.jetbrains.kotlin.psi.KtPackageDirective
+import org.jetbrains.kotlin.psi.KtFile
 
 /**
  * Reports when the file location does not match the declared package.
@@ -29,8 +29,8 @@ class InvalidPackageDeclaration(config: Config) : Rule(
     @Configuration("requires the declaration to start with the specified rootPackage")
     private val requireRootInDeclaration: Boolean by config(false)
 
-    override fun visitPackageDirective(directive: KtPackageDirective) {
-        super.visitPackageDirective(directive)
+    override fun visit(root: KtFile) {
+        val directive = root.packageDirective ?: return
         val packageName = directive.fqName
         if (!packageName.isRoot) {
             val rootPackageName = FqName(rootPackage)
