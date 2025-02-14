@@ -33,11 +33,12 @@ import org.jetbrains.kotlin.resolve.calls.util.getType
  * </compliant>
  *
  */
-@RequiresFullAnalysis
-class DontDowncastCollectionTypes(config: Config) : Rule(
-    config,
-    "Down-casting immutable collection types is breaking the collection contract."
-) {
+class DontDowncastCollectionTypes(config: Config) :
+    Rule(
+        config,
+        "Down-casting immutable collection types is breaking the collection contract."
+    ),
+    RequiresFullAnalysis {
 
     override fun visitIsExpression(expression: KtIsExpression) {
         super.visitIsExpression(expression)

@@ -25,12 +25,13 @@ import org.jetbrains.kotlin.psi.psiUtil.getChildOfType
  * val b = a?.length
  * </compliant>
  */
-@RequiresFullAnalysis
 @ActiveByDefault(since = "1.16.0")
-class UnnecessarySafeCall(config: Config) : Rule(
-    config,
-    "Unnecessary safe call operator detected."
-) {
+class UnnecessarySafeCall(config: Config) :
+    Rule(
+        config,
+        "Unnecessary safe call operator detected."
+    ),
+    RequiresFullAnalysis {
 
     override fun visitSafeQualifiedExpression(expression: KtSafeQualifiedExpression) {
         super.visitSafeQualifiedExpression(expression)

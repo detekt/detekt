@@ -33,11 +33,12 @@ import org.jetbrains.kotlin.resolve.BindingContext
  *   .d().e().f()
  * </compliant>
  */
-@RequiresFullAnalysis
-class MaxChainedCallsOnSameLine(config: Config) : Rule(
-    config,
-    "Chained calls beyond the maximum should be wrapped to a new line."
-) {
+class MaxChainedCallsOnSameLine(config: Config) :
+    Rule(
+        config,
+        "Chained calls beyond the maximum should be wrapped to a new line."
+    ),
+    RequiresFullAnalysis {
 
     @Configuration("maximum chained calls allowed on a single line")
     private val maxChainedCalls: Int by config(defaultValue = 5)

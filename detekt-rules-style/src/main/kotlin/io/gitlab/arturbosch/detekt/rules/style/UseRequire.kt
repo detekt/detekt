@@ -27,12 +27,13 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  * require(value >= 0) { "value is $value but should be at least 0" }
  * </compliant>
  */
-@RequiresFullAnalysis
 @ActiveByDefault(since = "1.21.0")
-class UseRequire(config: Config) : Rule(
-    config,
-    "Use require() instead of throwing an IllegalArgumentException."
-) {
+class UseRequire(config: Config) :
+    Rule(
+        config,
+        "Use require() instead of throwing an IllegalArgumentException."
+    ),
+    RequiresFullAnalysis {
 
     override fun visitThrowExpression(expression: KtThrowExpression) {
         if (!expression.isIllegalArgumentException()) return

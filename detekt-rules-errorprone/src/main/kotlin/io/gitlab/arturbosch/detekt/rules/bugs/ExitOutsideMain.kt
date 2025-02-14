@@ -41,11 +41,12 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  * </compliant>
  *
  */
-@RequiresFullAnalysis
-class ExitOutsideMain(config: Config) : Rule(
-    config,
-    "Do not directly exit the process outside the `main` function. Throw an exception instead."
-) {
+class ExitOutsideMain(config: Config) :
+    Rule(
+        config,
+        "Do not directly exit the process outside the `main` function. Throw an exception instead."
+    ),
+    RequiresFullAnalysis {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

@@ -43,11 +43,13 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * </compliant>
  *
  */
-@RequiresFullAnalysis
-class UnnecessaryLet(config: Config) : Rule(
-    config,
-    "The `let` usage is unnecessary."
-) {
+class UnnecessaryLet(config: Config) :
+    Rule(
+        config,
+        "The `let` usage is unnecessary."
+    ),
+    RequiresFullAnalysis {
+
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 
