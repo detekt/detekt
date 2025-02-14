@@ -14,6 +14,7 @@ import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
+import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * Turn on this rule to flag `find` calls for null check that can be replaced with a `any` or `none` call.
@@ -28,12 +29,14 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  * listOf(1, 2, 3).none { it == 4 }
  * </compliant>
  */
-@RequiresFullAnalysis
 @ActiveByDefault(since = "1.21.0")
-class UseAnyOrNoneInsteadOfFind(config: Config) : Rule(
-    config,
-    "Use `any` or `none` instead of `find` and `null` checks."
-) {
+class UseAnyOrNoneInsteadOfFind(config: Config) :
+    Rule(
+        config,
+        "Use `any` or `none` instead of `find` and `null` checks."
+    ),
+    RequiresFullAnalysis {
+    override lateinit var bindingContext: BindingContext
 
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {

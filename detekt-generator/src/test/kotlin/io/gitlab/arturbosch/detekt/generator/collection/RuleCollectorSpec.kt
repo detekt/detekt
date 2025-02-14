@@ -730,8 +730,7 @@ class RuleCollectorSpec {
                 /**
                  * description
                  */
-                @RequiresFullAnalysis
-                class SomeRandomClass : Rule
+                class SomeRandomClass : Rule, RequiresFullAnalysis
             """.trimIndent()
             val items = subject.run(code)
             assertThat(items[0].requiresFullAnalysis).isTrue()
@@ -743,8 +742,8 @@ class RuleCollectorSpec {
                 /**
                  * description
                  */
-                @io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
-                class SomeRandomClass : Rule
+
+                class SomeRandomClass : Rule(), io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
             """.trimIndent()
             val items = subject.run(code)
             assertThat(items[0].requiresFullAnalysis).isTrue()

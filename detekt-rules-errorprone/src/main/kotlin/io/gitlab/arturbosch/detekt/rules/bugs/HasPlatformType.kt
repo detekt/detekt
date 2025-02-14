@@ -36,12 +36,14 @@ import org.jetbrains.kotlin.types.isFlexible
  * </compliant>
  *
  */
-@RequiresFullAnalysis
 @ActiveByDefault(since = "1.21.0")
-class HasPlatformType(config: Config) : Rule(
-    config,
-    "Platform types must be declared explicitly in public APIs."
-) {
+class HasPlatformType(config: Config) :
+    Rule(
+        config,
+        "Platform types must be declared explicitly in public APIs."
+    ),
+    RequiresFullAnalysis {
+    override lateinit var bindingContext: BindingContext
 
     override fun visitKtElement(element: KtElement) {
         super.visitKtElement(element)

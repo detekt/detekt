@@ -11,6 +11,7 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtPrefixExpression
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 
@@ -27,11 +28,13 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
  * isValid
  * </compliant>
  */
-@RequiresFullAnalysis
-class DoubleNegativeExpression(config: Config) : Rule(
-    config,
-    "Expression with two or more calls of operator `not` could be simplified.",
-) {
+class DoubleNegativeExpression(config: Config) :
+    Rule(
+        config,
+        "Expression with two or more calls of operator `not` could be simplified.",
+    ),
+    RequiresFullAnalysis {
+    override lateinit var bindingContext: BindingContext
 
     override fun visitPrefixExpression(expression: KtPrefixExpression) {
         super.visitPrefixExpression(expression)

@@ -16,6 +16,7 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtPrefixExpression
 import org.jetbrains.kotlin.psi.psiUtil.leaves
 import org.jetbrains.kotlin.psi.psiUtil.parents
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 
@@ -34,12 +35,14 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
  * </compliant>
  *
  */
-@RequiresFullAnalysis
 @ActiveByDefault(since = "1.21.0")
-class UnusedUnaryOperator(config: Config) : Rule(
-    config,
-    "This unary operator is unused."
-) {
+class UnusedUnaryOperator(config: Config) :
+    Rule(
+        config,
+        "This unary operator is unused."
+    ),
+    RequiresFullAnalysis {
+    override lateinit var bindingContext: BindingContext
 
     @Suppress("ReturnCount")
     override fun visitPrefixExpression(expression: KtPrefixExpression) {

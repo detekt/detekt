@@ -19,6 +19,7 @@ import org.jetbrains.kotlin.psi.allConstructors
 import org.jetbrains.kotlin.psi.psiUtil.findPropertyByName
 import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getType
 import org.jetbrains.kotlin.types.typeUtil.supertypes
 
@@ -41,13 +42,15 @@ import org.jetbrains.kotlin.types.typeUtil.supertypes
  * class MyRepository(dispatchers: CoroutineDispatcher = Dispatchers.IO)
  * </compliant>
  */
-@RequiresFullAnalysis
 @ActiveByDefault(since = "1.21.0")
-class InjectDispatcher(config: Config) : Rule(
-    config,
-    "Don't hardcode dispatchers when creating new coroutines or calling `withContext`. " +
-        "Use dependency injection for dispatchers to make testing easier."
-) {
+class InjectDispatcher(config: Config) :
+    Rule(
+        config,
+        "Don't hardcode dispatchers when creating new coroutines or calling `withContext`. " +
+            "Use dependency injection for dispatchers to make testing easier."
+    ),
+    RequiresFullAnalysis {
+    override lateinit var bindingContext: BindingContext
 
     @Configuration("The names of dispatchers to detect by this rule")
     private val dispatcherNames: Set<String> by config(listOf("IO", "Default", "Unconfined")) { it.toSet() }

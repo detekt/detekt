@@ -11,6 +11,7 @@ import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.isError
@@ -27,11 +28,13 @@ import org.jetbrains.kotlin.types.isError
  * val isEnabled: Boolean = false
  * </compliant>
  */
-@RequiresFullAnalysis
-class NonBooleanPropertyPrefixedWithIs(config: Config) : Rule(
-    config,
-    "Only boolean property names can start with `is` prefix."
-) {
+class NonBooleanPropertyPrefixedWithIs(config: Config) :
+    Rule(
+        config,
+        "Only boolean property names can start with `is` prefix."
+    ),
+    RequiresFullAnalysis {
+    override lateinit var bindingContext: BindingContext
 
     private val booleanTypes = listOf(
         "kotlin.Boolean",

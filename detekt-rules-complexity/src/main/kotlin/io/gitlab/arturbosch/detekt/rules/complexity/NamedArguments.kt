@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtLambdaArgument
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.components.isVararg
 import org.jetbrains.kotlin.resolve.calls.util.getParameterForArgument
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
@@ -29,11 +30,13 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
  * sum(a = 1, b = 2, c = 3, d = 4)
  * </compliant>
  */
-@RequiresFullAnalysis
-class NamedArguments(config: Config) : Rule(
-    config,
-    "Named arguments are required for function calls with many arguments."
-) {
+class NamedArguments(config: Config) :
+    Rule(
+        config,
+        "Named arguments are required for function calls with many arguments."
+    ),
+    RequiresFullAnalysis {
+    override lateinit var bindingContext: BindingContext
 
     @Configuration("The allowed number of arguments for a function.")
     private val allowedArguments: Int by config(defaultValue = 3)

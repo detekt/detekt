@@ -22,6 +22,7 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtPostfixExpression
 import org.jetbrains.kotlin.psi.KtPrefixExpression
 import org.jetbrains.kotlin.psi.psiUtil.isDotSelector
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getCalleeExpressionIfAny
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.overriddenTreeUniqueAsSequence
@@ -41,12 +42,14 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.overriddenTreeUniqueAsSequenc
  * </noncompliant>
  *
  */
-@RequiresFullAnalysis
-class ForbiddenMethodCall(config: Config) : Rule(
-    config,
-    "Mark forbidden methods. A forbidden method could be an invocation of an unstable / experimental " +
-        "method and hence you might want to mark it as forbidden in order to get warned about the usage."
-) {
+class ForbiddenMethodCall(config: Config) :
+    Rule(
+        config,
+        "Mark forbidden methods. A forbidden method could be an invocation of an unstable / experimental " +
+            "method and hence you might want to mark it as forbidden in order to get warned about the usage."
+    ),
+    RequiresFullAnalysis {
+    override lateinit var bindingContext: BindingContext
 
     @Configuration(
         "List of fully qualified method signatures which are forbidden. " +

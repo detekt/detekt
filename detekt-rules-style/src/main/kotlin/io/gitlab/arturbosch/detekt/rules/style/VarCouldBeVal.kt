@@ -56,13 +56,15 @@ import org.jetbrains.kotlin.util.containingNonLocalDeclaration
  * }
  * </compliant>
  */
-@RequiresFullAnalysis
 @ActiveByDefault(since = "1.16.0")
 @Alias("CanBeVal")
-class VarCouldBeVal(config: Config) : Rule(
-    config,
-    "Var declaration could be val."
-) {
+class VarCouldBeVal(config: Config) :
+    Rule(
+        config,
+        "Var declaration could be val."
+    ),
+    RequiresFullAnalysis {
+    override lateinit var bindingContext: BindingContext
 
     @Configuration("Whether to ignore uninitialized lateinit vars")
     private val ignoreLateinitVar: Boolean by config(defaultValue = false)

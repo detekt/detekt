@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
+import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * Reports casts that will never succeed.
@@ -29,13 +30,16 @@ import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
  * }
  * </compliant>
  */
-@RequiresFullAnalysis
 @ActiveByDefault(since = "1.16.0")
 @Alias("UNCHECKED_CAST")
-class UnsafeCast(config: Config) : Rule(
-    config,
-    "Cast operator throws an exception if the cast is not possible."
-) {
+class UnsafeCast(config: Config) :
+    Rule(
+        config,
+        "Cast operator throws an exception if the cast is not possible."
+    ),
+    RequiresFullAnalysis {
+    override lateinit var bindingContext: BindingContext
+
     override fun visitBinaryWithTypeRHSExpression(expression: KtBinaryExpressionWithTypeRHS) {
         if (bindingContext.diagnostics.forElement(expression.operationReference)
                 .any { it.factory == Errors.CAST_NEVER_SUCCEEDS }

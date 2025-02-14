@@ -13,6 +13,7 @@ import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.lexer.KtTokens.EQEQEQ
 import org.jetbrains.kotlin.lexer.KtTokens.EXCLEQEQEQ
 import org.jetbrains.kotlin.psi.KtBinaryExpression
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getType
 
 /**
@@ -30,12 +31,14 @@ import org.jetbrains.kotlin.resolve.calls.util.getType
  *     val areNotEqual = "aString" != otherString
  * </compliant>
  */
-@RequiresFullAnalysis
 @ActiveByDefault(since = "1.21.0")
-class AvoidReferentialEquality(config: Config) : Rule(
-    config,
-    "Avoid using referential equality and prefer to use referential equality checks instead."
-) {
+class AvoidReferentialEquality(config: Config) :
+    Rule(
+        config,
+        "Avoid using referential equality and prefer to use referential equality checks instead."
+    ),
+    RequiresFullAnalysis {
+    override lateinit var bindingContext: BindingContext
 
     @Configuration(
         "Specifies those types for which referential equality checks are considered a rule violation. " +

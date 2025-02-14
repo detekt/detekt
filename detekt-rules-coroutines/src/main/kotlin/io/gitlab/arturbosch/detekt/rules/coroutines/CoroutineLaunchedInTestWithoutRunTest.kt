@@ -46,12 +46,15 @@ import org.jetbrains.kotlin.resolve.source.getPsi
  * </compliant>
  *
  */
-@RequiresFullAnalysis
-class CoroutineLaunchedInTestWithoutRunTest(config: Config) : Rule(
-    config,
-    "Launching coroutines in tests without a `runTest` block could swallow exceptions. " +
-        "You should use `runTest` to avoid altering test results."
-) {
+class CoroutineLaunchedInTestWithoutRunTest(config: Config) :
+    Rule(
+        config,
+        "Launching coroutines in tests without a `runTest` block could swallow exceptions. " +
+            "You should use `runTest` to avoid altering test results."
+    ),
+    RequiresFullAnalysis {
+    override lateinit var bindingContext: BindingContext
+
     private val funCoroutineLaunchesTraverseHelper = FunCoroutineLaunchesTraverseHelper()
 
     override fun visitNamedFunction(initialFunction: KtNamedFunction) {

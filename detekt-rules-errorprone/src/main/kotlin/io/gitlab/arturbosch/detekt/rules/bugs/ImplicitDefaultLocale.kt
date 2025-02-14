@@ -35,11 +35,13 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
  * </compliant>
  */
 @ActiveByDefault(since = "1.16.0")
-@RequiresFullAnalysis
-class ImplicitDefaultLocale(config: Config) : Rule(
-    config,
-    "Implicit default locale used for string processing. Consider using explicit locale."
-) {
+class ImplicitDefaultLocale(config: Config) :
+    Rule(
+        config,
+        "Implicit default locale used for string processing. Consider using explicit locale."
+    ),
+    RequiresFullAnalysis {
+    override lateinit var bindingContext: BindingContext
 
     private val formatCalls = listOf(
         FqName("kotlin.text.format")

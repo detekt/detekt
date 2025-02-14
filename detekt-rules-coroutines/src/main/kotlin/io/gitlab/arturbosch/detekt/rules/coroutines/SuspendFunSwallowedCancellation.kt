@@ -118,12 +118,14 @@ import org.jetbrains.kotlin.name.Name as KotlinName
  * </compliant>
  *
  */
-@RequiresFullAnalysis
-class SuspendFunSwallowedCancellation(config: Config) : Rule(
-    config,
-    description = "`CancellationException` must be specially handled and re-thrown when working with exceptions in a" +
-        " suspending context. This includes `runCatching` as well as regular try-catch blocks."
-) {
+class SuspendFunSwallowedCancellation(config: Config) :
+    Rule(
+        config,
+        description = "`CancellationException` must be specially handled and re-thrown when working with exceptions " +
+            "in a suspending context. This includes `runCatching` as well as regular try-catch blocks."
+    ),
+    RequiresFullAnalysis {
+    override lateinit var bindingContext: BindingContext
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

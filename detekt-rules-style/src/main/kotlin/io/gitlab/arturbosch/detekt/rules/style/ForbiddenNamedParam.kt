@@ -12,6 +12,7 @@ import io.gitlab.arturbosch.detekt.api.valuesWithReason
 import io.gitlab.arturbosch.detekt.rules.style.ForbiddenMethodCall.ForbiddenMethod
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.resolve.descriptorUtil.overriddenTreeUniqueAsSequence
 
@@ -36,11 +37,13 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.overriddenTreeUniqueAsSequenc
  * }
  * </compliant>
  */
-@RequiresFullAnalysis
-class ForbiddenNamedParam(config: Config) : Rule(
-    config,
-    "Mark the methods/constructors where using named param is forbidden."
-) {
+class ForbiddenNamedParam(config: Config) :
+    Rule(
+        config,
+        "Mark the methods/constructors where using named param is forbidden."
+    ),
+    RequiresFullAnalysis {
+    override lateinit var bindingContext: BindingContext
 
     @Configuration(
         "List of fully qualified method signatures for which are named param is forbidden. " +

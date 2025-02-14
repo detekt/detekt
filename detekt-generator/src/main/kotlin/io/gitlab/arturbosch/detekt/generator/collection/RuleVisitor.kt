@@ -94,7 +94,8 @@ internal class RuleVisitor(textReplacements: Map<String, String>) : DetektVisito
         }
 
         autoCorrect = classOrObject.isAnnotatedWith(AutoCorrectable::class)
-        requiresFullAnalysis = classOrObject.isAnnotatedWith(RequiresFullAnalysis::class)
+        requiresFullAnalysis = classOrObject.superTypeListEntries
+            .any { it.text.substringAfterLast(".") == RequiresFullAnalysis::class.simpleName }
         deprecationMessage = classOrObject.firstAnnotationParameterOrNull(Deprecated::class)
 
         documentationCollector.setClass(classOrObject)

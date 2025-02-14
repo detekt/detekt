@@ -11,6 +11,7 @@ import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.psi.psiUtil.getChildOfType
+import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * Reports unnecessary safe call operators (`?.`) that can be removed by the user.
@@ -25,12 +26,14 @@ import org.jetbrains.kotlin.psi.psiUtil.getChildOfType
  * val b = a?.length
  * </compliant>
  */
-@RequiresFullAnalysis
 @ActiveByDefault(since = "1.16.0")
-class UnnecessarySafeCall(config: Config) : Rule(
-    config,
-    "Unnecessary safe call operator detected."
-) {
+class UnnecessarySafeCall(config: Config) :
+    Rule(
+        config,
+        "Unnecessary safe call operator detected."
+    ),
+    RequiresFullAnalysis {
+    override lateinit var bindingContext: BindingContext
 
     override fun visitSafeQualifiedExpression(expression: KtSafeQualifiedExpression) {
         super.visitSafeQualifiedExpression(expression)

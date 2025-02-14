@@ -12,6 +12,7 @@ import io.gitlab.arturbosch.detekt.rules.isEnclosedByConditionalStatement
 import io.gitlab.arturbosch.detekt.rules.isIllegalArgumentException
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtThrowExpression
+import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * Kotlin provides a much more concise way to check preconditions than to manually throw an
@@ -27,12 +28,14 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  * require(value >= 0) { "value is $value but should be at least 0" }
  * </compliant>
  */
-@RequiresFullAnalysis
 @ActiveByDefault(since = "1.21.0")
-class UseRequire(config: Config) : Rule(
-    config,
-    "Use require() instead of throwing an IllegalArgumentException."
-) {
+class UseRequire(config: Config) :
+    Rule(
+        config,
+        "Use require() instead of throwing an IllegalArgumentException."
+    ),
+    RequiresFullAnalysis {
+    override lateinit var bindingContext: BindingContext
 
     override fun visitThrowExpression(expression: KtThrowExpression) {
         if (!expression.isIllegalArgumentException()) return

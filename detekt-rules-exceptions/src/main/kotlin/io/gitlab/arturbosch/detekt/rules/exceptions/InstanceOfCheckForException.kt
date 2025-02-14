@@ -42,13 +42,15 @@ import org.jetbrains.kotlin.types.typeUtil.isSubtypeOf
  * }
  * </compliant>
  */
-@RequiresFullAnalysis
 @ActiveByDefault(since = "1.21.0")
-class InstanceOfCheckForException(config: Config) : Rule(
-    config,
-    "Instead of catching for a general exception type and checking for a specific exception type, " +
-        "use multiple catch blocks."
-) {
+class InstanceOfCheckForException(config: Config) :
+    Rule(
+        config,
+        "Instead of catching for a general exception type and checking for a specific exception type, " +
+            "use multiple catch blocks."
+    ),
+    RequiresFullAnalysis {
+    override lateinit var bindingContext: BindingContext
 
     override fun visitCatchSection(catchClause: KtCatchClause) {
         val catchParameter = catchClause.catchParameter ?: return
