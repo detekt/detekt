@@ -333,6 +333,10 @@ formatting:
     active: true
   ValueParameterComment:
     active: true
+  WhenEntryBracing:
+    active: false
+    autoCorrect: true
+    indentSize: 4
   Wrapping:
     active: true
     autoCorrect: true
