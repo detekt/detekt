@@ -45,12 +45,13 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  * </compliant>
  *
  */
-@RequiresFullAnalysis
 @ActiveByDefault(since = "1.21.0")
-class NoNameShadowing(config: Config) : Rule(
-    config,
-    "Disallow shadowing variable declarations."
-) {
+class NoNameShadowing(config: Config) :
+    Rule(
+        config,
+        "Disallow shadowing variable declarations."
+    ),
+    RequiresFullAnalysis {
 
     override fun visitProperty(property: KtProperty) {
         super.visitProperty(property)

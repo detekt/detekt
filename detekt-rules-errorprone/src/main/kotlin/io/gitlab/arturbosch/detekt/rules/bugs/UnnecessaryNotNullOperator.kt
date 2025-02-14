@@ -22,12 +22,13 @@ import org.jetbrains.kotlin.psi.KtUnaryExpression
  * val b = a
  * </compliant>
  */
-@RequiresFullAnalysis
 @ActiveByDefault(since = "1.16.0")
-class UnnecessaryNotNullOperator(config: Config) : Rule(
-    config,
-    "Unnecessary not-null unary operator (!!) detected."
-) {
+class UnnecessaryNotNullOperator(config: Config) :
+    Rule(
+        config,
+        "Unnecessary not-null unary operator (!!) detected."
+    ),
+    RequiresFullAnalysis {
 
     override fun visitUnaryExpression(expression: KtUnaryExpression) {
         super.visitUnaryExpression(expression)

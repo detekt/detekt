@@ -52,12 +52,13 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
  * </compliant>
  *
  */
-@RequiresFullAnalysis
 @ActiveByDefault(since = "1.21.0")
-class RedundantSuspendModifier(config: Config) : Rule(
-    config,
-    "The `suspend` modifier is only needed for functions that contain suspending calls."
-) {
+class RedundantSuspendModifier(config: Config) :
+    Rule(
+        config,
+        "The `suspend` modifier is only needed for functions that contain suspending calls."
+    ),
+    RequiresFullAnalysis {
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         val suspendModifier = function.modifierList?.getModifier(KtTokens.SUSPEND_KEYWORD) ?: return

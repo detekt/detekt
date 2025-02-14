@@ -36,11 +36,12 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.overriddenTreeUniqueAsSequenc
  * }
  * </compliant>
  */
-@RequiresFullAnalysis
-class ForbiddenNamedParam(config: Config) : Rule(
-    config,
-    "Mark the methods/constructors where using named param is forbidden."
-) {
+class ForbiddenNamedParam(config: Config) :
+    Rule(
+        config,
+        "Mark the methods/constructors where using named param is forbidden."
+    ),
+    RequiresFullAnalysis {
 
     @Configuration(
         "List of fully qualified method signatures for which are named param is forbidden. " +

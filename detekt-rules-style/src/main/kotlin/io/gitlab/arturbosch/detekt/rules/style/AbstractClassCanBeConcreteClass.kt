@@ -42,11 +42,12 @@ import org.jetbrains.kotlin.types.typeUtil.isInterface
  * </compliant>
  */
 @ActiveByDefault(since = "1.2.0")
-@RequiresFullAnalysis
-class AbstractClassCanBeConcreteClass(config: Config) : Rule(
-    config,
-    "An abstract class is unnecessary. May be refactored to a concrete class."
-) {
+class AbstractClassCanBeConcreteClass(config: Config) :
+    Rule(
+        config,
+        "An abstract class is unnecessary. May be refactored to a concrete class."
+    ),
+    RequiresFullAnalysis {
 
     private val noAbstractMember = "An abstract class without an abstract member can be refactored to a concrete class."
 
