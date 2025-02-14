@@ -103,6 +103,7 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.TypeParameterListSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.UnnecessaryParenthesesBeforeTrailingLambda
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ValueArgumentComment
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ValueParameterComment
+import io.gitlab.arturbosch.detekt.formatting.wrappers.WhenEntryBracing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.Wrapping
 
 /**
@@ -223,6 +224,7 @@ class FormattingProvider : RuleSetProvider {
             ::MixedConditionOperators,
             ::MultilineLoop,
             ::SpacingAroundSquareBrackets,
+            ::WhenEntryBracing,
         ).sorted()
     )
 
