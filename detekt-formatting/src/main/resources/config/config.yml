@@ -45,7 +45,7 @@ formatting:
   ClassName:
     active: false
   ClassSignature:
-    active: false
+    active: true
     autoCorrect: true
     indentSize: 4
     maxLineLength: 120

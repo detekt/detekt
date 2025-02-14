@@ -135,6 +135,7 @@ class FormattingProvider : RuleSetProvider {
             ::BlockCommentInitialStarAlignment,
             ::ChainWrapping,
             ::ClassName,
+            ::ClassSignature,
             ::CommentSpacing,
             ::CommentWrapping,
             ::ContextReceiverMapping,
@@ -214,7 +215,6 @@ class FormattingProvider : RuleSetProvider {
             // Wrappers for experimental rules. Disabled by default.
             ::BlankLineBetweenWhenConditions,
             ::ChainMethodContinuation,
-            ::ClassSignature,
             ::ConditionWrapping,
             ::FunctionExpressionBody,
             ::FunctionLiteral,
