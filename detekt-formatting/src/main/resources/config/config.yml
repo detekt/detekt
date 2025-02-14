@@ -16,7 +16,7 @@ formatting:
     maxLineLength: 120
     ignoreRuleParameterThreshold: 8
   BackingPropertyNaming:
-    active: false
+    active: true
   BinaryExpressionWrapping:
     active: false
     autoCorrect: true
