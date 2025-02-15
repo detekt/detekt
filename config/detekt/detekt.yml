@@ -70,8 +70,6 @@ formatting:
   autoCorrect: true
   BlankLineBeforeDeclaration:
     active: false
-  ConditionWrapping:
-    active: true
   EnumEntryNameCase:
     active: false
   Filename:

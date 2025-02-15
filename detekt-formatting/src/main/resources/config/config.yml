@@ -57,7 +57,7 @@ formatting:
     autoCorrect: true
     indentSize: 4
   ConditionWrapping:
-    active: false
+    active: true
     autoCorrect: true
     indentSize: 4
   ContextReceiverMapping:
