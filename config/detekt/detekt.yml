@@ -95,6 +95,8 @@ formatting:
     active: true
   StringTemplateIndent:
     active: false
+  TrailingCommaOnDeclarationSite:
+    active: false
   ValueArgumentComment:
     active: false
 
