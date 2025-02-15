@@ -1,14 +1,16 @@
 package io.gitlab.arturbosch.detekt.formatting.wrappers
 
 import com.pinterest.ktlint.ruleset.standard.rules.FunctionTypeModifierSpacingRule
+import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/experimental/#function-type-modifier-spacing)
+ * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#function-type-modifier-spacing)
  * for documentation.
  */
+@ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "2.0.0")
 class FunctionTypeModifierSpacing(config: Config) : FormattingRule(
     config,

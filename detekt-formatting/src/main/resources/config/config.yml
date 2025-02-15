@@ -110,7 +110,7 @@ formatting:
     active: true
     autoCorrect: true
   FunctionTypeModifierSpacing:
-    active: false
+    active: true
     autoCorrect: true
   FunctionTypeReferenceSpacing:
     active: true
