@@ -7,6 +7,7 @@ ktlint = "1.3.1"
 slf4j = "2.0.16"
 
 jvm-target = "1.8"
+java-compile-toolchain = "8"
 
 [libraries]
 # This version of AGP is used for testing and should be updated when new AGP versions are released to ensure detekt's
