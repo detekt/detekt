@@ -70,6 +70,8 @@ formatting:
   autoCorrect: true
   BlankLineBeforeDeclaration:
     active: false
+  ClassSignature:
+    active: false
   ConditionWrapping:
     active: true
   EnumEntryNameCase:
