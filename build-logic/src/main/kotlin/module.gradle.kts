@@ -1,5 +1,6 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.UsesKotlinJavaToolchain
 
 plugins {
@@ -50,9 +51,11 @@ tasks.withType<Test>().configureEach {
     }
 }
 
+val jvmTargetVersion = versionCatalog.findVersion("jvm-target").get().requiredVersion
+
 kotlin {
     compilerOptions {
-        jvmTarget = Versions.JVM_TARGET
+        jvmTarget = JvmTarget.fromTarget(jvmTargetVersion)
         progressiveMode = true
         allWarningsAsErrors = providers.gradleProperty("warningsAsErrors").orNull.toBoolean()
     }
@@ -77,8 +80,8 @@ testing {
 java {
     withSourcesJar()
     withJavadocJar()
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.toVersion(jvmTargetVersion)
+    targetCompatibility = JavaVersion.toVersion(jvmTargetVersion)
     consistentResolution {
         useCompileClasspathVersions()
     }
