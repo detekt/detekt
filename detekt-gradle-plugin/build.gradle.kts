@@ -187,7 +187,7 @@ tasks {
     // Manually inject dependency to gradle-testkit since the default injected plugin classpath is from `main.runtime`.
     pluginUnderTestMetadata {
         pluginClasspath.from(testKitRuntimeOnly)
-    
+
         if (named<Test>("functionalTest").get().javaVersion.isCompatibleWith(JavaVersion.VERSION_17)) {
             pluginClasspath.from(testKitJava17RuntimeOnly)
         }
