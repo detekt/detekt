@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.formatting.wrappers
 
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfigProperty
 import com.pinterest.ktlint.ruleset.standard.rules.TrailingCommaOnCallSiteRule
+import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.configWithAndroidVariants
@@ -18,6 +19,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  * - [Android Kotlin style guide](https://developer.android.com/kotlin/style-guide) does not include
  * trailing comma usage yet.
  */
+@ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "1.22.0")
 class TrailingCommaOnCallSite(config: Config) : FormattingRule(
     config,
