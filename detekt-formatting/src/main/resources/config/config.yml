@@ -84,7 +84,7 @@ formatting:
     active: true
     autoCorrect: true
   FunctionExpressionBody:
-    active: false
+    active: true
     autoCorrect: true
     indentSize: 4
     maxLineLength: 120
