@@ -670,7 +670,7 @@ class ReturnCountSpec {
                 }
                 
                 class B: A() {
-                    override fun getData(): ByteArray? {
+                    fun test(): ByteArray? {
                         val data = data
                         if (data.isEmpty()) return null
                         if (data.contains(-1)) return null
@@ -700,7 +700,7 @@ class ReturnCountSpec {
                 }
                 
                 class B: A() {
-                    override fun getData(): ByteArray? {
+                    fun test(): ByteArray? {
                         val data = data
                         if (data.isEmpty()) return null
                         if (data.contains(-1)) return null
@@ -738,7 +738,7 @@ class ReturnCountSpec {
                 }
                 
                 class B: A() {
-                    override fun getData(): ByteArray? {
+                    fun test(): ByteArray? {
                         val data1 = data
                         if (data1.isEmpty()) return null
                         if (data1.contains(-1)) return null
