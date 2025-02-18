@@ -15,7 +15,7 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 
 class AnalysisFacade(
-    private val spec: ProcessingSpec
+    private val spec: ProcessingSpec,
 ) : Detekt {
 
     override fun run(): AnalysisResult = runAnalysis {

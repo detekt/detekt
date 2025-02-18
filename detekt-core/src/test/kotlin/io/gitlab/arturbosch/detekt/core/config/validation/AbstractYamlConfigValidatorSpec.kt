@@ -44,7 +44,7 @@ internal class AbstractYamlConfigValidatorSpec {
 
         override fun validate(
             configToValidate: YamlConfig,
-            settings: ValidationSettings
+            settings: ValidationSettings,
         ): Collection<Notification> {
             validationSettings = settings
             return emptyList()

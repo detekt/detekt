@@ -95,7 +95,7 @@ class UnnecessaryAny(config: Config) : Rule(
     }
 
     private fun KtBlockExpression.shouldBlockExpressionBeReported(
-        descriptor: VariableDescriptor
+        descriptor: VariableDescriptor,
     ): String? {
         if (this.statements.isEmpty()) return null
         if (descriptor is WithDestructuringDeclaration) {
@@ -141,7 +141,7 @@ class UnnecessaryAny(config: Config) : Rule(
     private fun isUsageOfValueAndItEligible(
         descriptor: VariableDescriptor,
         leftExpression: KtExpression?,
-        rightExpression: KtExpression?
+        rightExpression: KtExpression?,
     ): String? {
         leftExpression ?: return null
         rightExpression ?: return null

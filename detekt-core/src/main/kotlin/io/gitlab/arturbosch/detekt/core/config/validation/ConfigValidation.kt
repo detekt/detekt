@@ -57,7 +57,7 @@ internal fun checkConfiguration(settings: ProcessingSettings, baseline: Config) 
 internal fun validateConfig(
     config: Config,
     baseline: Config,
-    excludePatterns: Set<Regex>
+    excludePatterns: Set<Regex>,
 ): List<Notification> {
     require(baseline != Config.empty) { "Cannot validate configuration based on an empty baseline config." }
     require(baseline is YamlConfig) {
@@ -81,7 +81,7 @@ internal fun validateConfig(
 private fun validateYamlConfig(
     configToValidate: YamlConfig,
     baseline: YamlConfig,
-    excludePatterns: Set<Regex>
+    excludePatterns: Set<Regex>,
 ): List<Notification> {
     val deprecatedProperties = loadDeprecations().filterIsInstance<DeprecatedProperty>().toSet()
     val warningsAsErrors = configToValidate

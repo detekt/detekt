@@ -59,5 +59,5 @@ private data class ProcessingModel(
     override val rulesSpec: RulesSpec,
     override val loggingSpec: LoggingSpec,
     override val projectSpec: ProjectSpec,
-    override val reportsSpec: ReportsSpec
+    override val reportsSpec: ReportsSpec,
 ) : ProcessingSpec

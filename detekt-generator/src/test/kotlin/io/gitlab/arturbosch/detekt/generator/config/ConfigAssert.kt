@@ -13,7 +13,7 @@ import java.lang.reflect.Modifier
 class ConfigAssert(
     private val config: Config,
     private val name: String,
-    private val packageName: String
+    private val packageName: String,
 ) {
     private val allowedOptions = setOf(
         Config.ACTIVE_KEY,

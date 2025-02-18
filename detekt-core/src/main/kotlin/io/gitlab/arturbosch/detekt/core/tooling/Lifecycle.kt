@@ -70,5 +70,5 @@ internal class DefaultLifecycle(
     override val processorsProvider: () -> List<FileProcessListener> =
         { FileProcessorLocator(settings).load() },
     override val ruleSetsProvider: () -> List<RuleSetProvider> =
-        { settings.createRuleProviders() }
+        { settings.createRuleProviders() },
 ) : Lifecycle

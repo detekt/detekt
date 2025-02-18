@@ -324,7 +324,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             private fun isPathChecked(
                 path: String,
                 excludes: List<String>? = null,
-                includes: List<String>? = null
+                includes: List<String>? = null,
             ): Boolean {
                 fun List<String>.toYaml() = joinToString(", ", "[", "]") { "\"$it\"" }
 
@@ -378,7 +378,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             private fun isPathChecked(
                 path: String,
                 excludes: List<String>? = null,
-                includes: List<String>? = null
+                includes: List<String>? = null,
             ): Boolean {
                 fun List<String>.toYaml() = joinToString(", ", "[", "]") { "\"$it\"" }
 

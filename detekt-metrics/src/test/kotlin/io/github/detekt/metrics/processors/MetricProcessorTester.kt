@@ -10,7 +10,7 @@ import org.jetbrains.kotlin.psi.KtFile
 
 class MetricProcessorTester(
     private val file: KtFile,
-    private val result: Detektion = MetricResults()
+    private val result: Detektion = MetricResults(),
 ) {
 
     fun <T : Any> test(processor: AbstractProcessor, key: Key<T>): T {

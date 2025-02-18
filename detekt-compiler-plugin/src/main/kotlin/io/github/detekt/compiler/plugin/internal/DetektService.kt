@@ -11,7 +11,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
 
 internal class DetektService(
     private val log: MessageCollector,
-    private val spec: ProcessingSpec
+    private val spec: ProcessingSpec,
 ) {
 
     @Suppress("ForbiddenComment")
