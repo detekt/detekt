@@ -9,7 +9,7 @@ import java.io.PrintStream
 fun buildRunner(
     args: Array<String>,
     outputPrinter: PrintStream,
-    errorPrinter: PrintStream
+    errorPrinter: PrintStream,
 ) = object {
     fun execute(): Unit = throw ClassCastException("testing reflection wrapper...")
 }
