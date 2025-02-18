@@ -118,7 +118,7 @@ internal class ThrowExtensionsSpec {
 
     private fun verifyThrowExpression(
         @Language("kotlin") code: String,
-        throwingAssertions: KtThrowExpression.() -> Unit
+        throwingAssertions: KtThrowExpression.() -> Unit,
     ) {
         val ktFile = compileContentForTest(code)
         val ktThrowExpression = ktFile.findDescendantOfType<KtThrowExpression>()

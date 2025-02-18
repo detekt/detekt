@@ -240,7 +240,8 @@ class CliArgs {
 
                 FailureSeverity.Error,
                 FailureSeverity.Warning,
-                FailureSeverity.Info -> FailOnSeverity(minSeverity.toSeverity())
+                FailureSeverity.Info,
+                -> FailOnSeverity(minSeverity.toSeverity())
             }
         }
 }

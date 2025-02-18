@@ -249,7 +249,7 @@ class ConfigurationCollector {
 
         private fun KtProperty.getValueArgument(
             name: String,
-            actionForPositionalMatch: (List<KtValueArgument>) -> KtValueArgument?
+            actionForPositionalMatch: (List<KtValueArgument>) -> KtValueArgument?,
         ): KtValueArgument? {
             val callExpression = delegate?.expression as? KtCallExpression ?: return null
             val arguments = callExpression.valueArguments
