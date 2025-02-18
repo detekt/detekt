@@ -98,7 +98,7 @@ formatting:
   TrailingCommaOnCallSite:
     active: false
   TrailingCommaOnDeclarationSite:
-    active: false
+    active: true
   ValueArgumentComment:
     active: false
 
