@@ -32,13 +32,6 @@ abstract class FormattingRule(config: Config, description: String) : Rule(config
 
     abstract val wrapping: StandardRule
 
-    /**
-     * Should the android style guide be enforced?
-     * This property is read from the ruleSet config.
-     */
-    protected val isAndroid: Boolean
-        get() = config.parent?.let { FormattingProvider.android.value(it) } == true
-
     protected val codeStyle: String
         get() = config.valueOrNull("code_style")
             ?: config.parent?.let { FormattingProvider.code_style.value(it) }
