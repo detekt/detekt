@@ -33,6 +33,8 @@ formatting:
   active: true
   MaximumLineLength:
     active: false
+  TrailingCommaOnDeclarationSite:
+    active: true
 
 potential-bugs:
   DoubleMutabilityForCollection:
