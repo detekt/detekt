@@ -179,12 +179,12 @@ class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
 @HtmlTagMarker
 private fun FlowOrInteractiveContent.summary(
     classes: String,
-    block: SUMMARY.() -> Unit = {}
+    block: SUMMARY.() -> Unit = {},
 ): Unit = SUMMARY(attributesMapOf("class", classes), consumer).visit(block)
 
 private class SUMMARY(
     initialAttributes: Map<String, String>,
-    override val consumer: TagConsumer<*>
+    override val consumer: TagConsumer<*>,
 ) : HTMLTag("summary", consumer, initialAttributes, null, false, false),
     CommonAttributeGroupFacadeFlowInteractiveContent
 

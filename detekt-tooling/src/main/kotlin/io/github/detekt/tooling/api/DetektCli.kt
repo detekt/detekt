@@ -11,7 +11,7 @@ interface DetektCli {
     companion object {
 
         fun load(
-            classLoader: ClassLoader = DetektCli::class.java.classLoader
+            classLoader: ClassLoader = DetektCli::class.java.classLoader,
         ): DetektCli =
             ServiceLoader.load(DetektCli::class.java, classLoader).first()
     }

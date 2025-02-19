@@ -12,7 +12,7 @@ internal class DeprecatedPropertiesConfigValidator(
 
     override fun validate(
         configToValidate: YamlConfig,
-        settings: ValidationSettings
+        settings: ValidationSettings,
     ): Collection<Notification> {
         val configAsMap = configToValidate.properties
         return deprecatedProperties
@@ -28,7 +28,7 @@ internal class DeprecatedPropertiesConfigValidator(
     }
 
     private fun createNotification(
-        foundProperty: DeprecatedProperty
+        foundProperty: DeprecatedProperty,
     ): Notification {
         val propertyPath = foundProperty.asPath()
         return SimpleNotification(

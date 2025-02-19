@@ -103,6 +103,7 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.TypeParameterListSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.UnnecessaryParenthesesBeforeTrailingLambda
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ValueArgumentComment
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ValueParameterComment
+import io.gitlab.arturbosch.detekt.formatting.wrappers.WhenEntryBracing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.Wrapping
 
 /**
@@ -133,10 +134,13 @@ class FormattingProvider : RuleSetProvider {
             ::BinaryExpressionWrapping,
             ::BlankLineBeforeDeclaration,
             ::BlockCommentInitialStarAlignment,
+            ::ChainMethodContinuation,
             ::ChainWrapping,
             ::ClassName,
+            ::ClassSignature,
             ::CommentSpacing,
             ::CommentWrapping,
+            ::ConditionWrapping,
             ::ContextReceiverMapping,
             ::EnumEntryNameCase,
             ::EnumWrapping,
@@ -144,6 +148,7 @@ class FormattingProvider : RuleSetProvider {
             ::FinalNewline,
             ::FunctionName,
             ::FunKeywordSpacing,
+            ::FunctionExpressionBody,
             ::FunctionReturnTypeSpacing,
             ::FunctionSignature,
             ::FunctionStartOfBodySpacing,
@@ -159,6 +164,7 @@ class FormattingProvider : RuleSetProvider {
             ::ModifierOrdering,
             ::MultiLineIfElse,
             ::MultilineExpressionWrapping,
+            ::MultilineLoop,
             ::NoBlankLineBeforeRbrace,
             ::NoBlankLineInList,
             ::NoBlankLinesInChainedMethodCalls,
@@ -214,15 +220,11 @@ class FormattingProvider : RuleSetProvider {
             ::Wrapping,
             // Wrappers for experimental rules. Disabled by default.
             ::BlankLineBetweenWhenConditions,
-            ::ChainMethodContinuation,
-            ::ClassSignature,
-            ::ConditionWrapping,
-            ::FunctionExpressionBody,
             ::FunctionLiteral,
             ::Kdoc,
             ::MixedConditionOperators,
-            ::MultilineLoop,
             ::SpacingAroundSquareBrackets,
+            ::WhenEntryBracing,
         ).sorted()
     )
 

@@ -17,7 +17,7 @@ fun KtCallExpression.isCalling(fqNames: List<FqName>, bindingContext: BindingCon
 
 fun KtCallExpression.isCallingWithNonNullCheckArgument(
     fqName: FqName,
-    bindingContext: BindingContext
+    bindingContext: BindingContext,
 ): Boolean {
     val argument = valueArguments.firstOrNull()?.getArgumentExpression() as? KtBinaryExpression ?: return false
     return argument.isNonNullCheck() && isCalling(fqName, bindingContext)

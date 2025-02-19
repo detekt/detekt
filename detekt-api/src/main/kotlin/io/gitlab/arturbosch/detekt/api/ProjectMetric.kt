@@ -8,7 +8,7 @@ open class ProjectMetric(
     val value: Int,
     val priority: Int = -1,
     val isDouble: Boolean = false,
-    val conversionFactor: Int = DEFAULT_FLOAT_CONVERSION_FACTOR
+    val conversionFactor: Int = DEFAULT_FLOAT_CONVERSION_FACTOR,
 ) {
 
     override fun toString(): String {
