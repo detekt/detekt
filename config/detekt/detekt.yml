@@ -72,6 +72,8 @@ formatting:
     active: false
   ChainMethodContinuation:
     active: false
+  ClassSignature:
+    active: false
   EnumEntryNameCase:
     active: false
   Filename:

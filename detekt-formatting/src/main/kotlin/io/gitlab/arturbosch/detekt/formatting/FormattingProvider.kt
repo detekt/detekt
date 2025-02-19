@@ -137,6 +137,7 @@ class FormattingProvider : RuleSetProvider {
             ::ChainMethodContinuation,
             ::ChainWrapping,
             ::ClassName,
+            ::ClassSignature,
             ::CommentSpacing,
             ::CommentWrapping,
             ::ConditionWrapping,
@@ -218,7 +219,6 @@ class FormattingProvider : RuleSetProvider {
             ::Wrapping,
             // Wrappers for experimental rules. Disabled by default.
             ::BlankLineBetweenWhenConditions,
-            ::ClassSignature,
             ::FunctionLiteral,
             ::FunctionTypeModifierSpacing,
             ::Kdoc,
