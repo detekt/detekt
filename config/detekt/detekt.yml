@@ -76,8 +76,6 @@ formatting:
     active: false
   Filename:
     active: false
-  FunctionExpressionBody:
-    active: true
   FunctionSignature:
     active: false
   Kdoc:
