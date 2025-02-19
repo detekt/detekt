@@ -159,6 +159,7 @@ class FormattingProvider : RuleSetProvider {
             ::ModifierOrdering,
             ::MultiLineIfElse,
             ::MultilineExpressionWrapping,
+            ::MultilineLoop,
             ::NoBlankLineBeforeRbrace,
             ::NoBlankLineInList,
             ::NoBlankLinesInChainedMethodCalls,
@@ -222,7 +223,6 @@ class FormattingProvider : RuleSetProvider {
             ::FunctionTypeModifierSpacing,
             ::Kdoc,
             ::MixedConditionOperators,
-            ::MultilineLoop,
             ::SpacingAroundSquareBrackets,
             ::WhenEntryBracing,
         ).sorted()
