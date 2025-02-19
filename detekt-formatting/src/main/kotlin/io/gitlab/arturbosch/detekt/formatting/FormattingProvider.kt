@@ -148,6 +148,7 @@ class FormattingProvider : RuleSetProvider {
             ::FinalNewline,
             ::FunctionName,
             ::FunKeywordSpacing,
+            ::FunctionLiteral,
             ::FunctionExpressionBody,
             ::FunctionReturnTypeSpacing,
             ::FunctionSignature,
@@ -220,7 +221,6 @@ class FormattingProvider : RuleSetProvider {
             ::Wrapping,
             // Wrappers for experimental rules. Disabled by default.
             ::BlankLineBetweenWhenConditions,
-            ::FunctionLiteral,
             ::Kdoc,
             ::MixedConditionOperators,
             ::SpacingAroundSquareBrackets,
