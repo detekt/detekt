@@ -195,7 +195,7 @@ class FakePsiFile(private val text: String = "", private val name: String = "") 
         p0: PsiScopeProcessor,
         p1: ResolveState,
         p2: PsiElement?,
-        p3: PsiElement
+        p3: PsiElement,
     ): Boolean = false
 
     override fun getContext(): PsiElement? = null

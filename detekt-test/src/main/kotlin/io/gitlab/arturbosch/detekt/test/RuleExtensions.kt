@@ -34,7 +34,7 @@ fun Rule.compileAndLint(
 
 fun Rule.lint(
     @Language("kotlin") content: String,
-    compilerResources: CompilerResources = FakeCompilerResources()
+    compilerResources: CompilerResources = FakeCompilerResources(),
 ): List<Finding> {
     require(!this::class.hasAnnotation<RequiresFullAnalysis>()) {
         "${this.ruleName} requires full analysis so you should use lintWithContext instead of lint"
@@ -50,7 +50,7 @@ fun Rule.lintWithContext(
     compilerResources: CompilerResources = CompilerResources(
         environment.configuration.languageVersionSettings,
         DataFlowValueFactoryImpl(environment.configuration.languageVersionSettings)
-    )
+    ),
 ): List<Finding> {
     require(this::class.hasAnnotation<RequiresFullAnalysis>()) {
         "${this.ruleName} doesn't require full analysis so you should use lint instead of lintWithContext"
@@ -70,7 +70,7 @@ fun Rule.compileAndLintWithContext(
     compilerResources: CompilerResources = CompilerResources(
         environment.configuration.languageVersionSettings,
         DataFlowValueFactoryImpl(environment.configuration.languageVersionSettings)
-    )
+    ),
 ): List<Finding> {
     require(this::class.hasAnnotation<RequiresFullAnalysis>()) {
         "${this.ruleName} doesn't require full analysis so you should use compileAndLintWithContext instead of " +

@@ -6,7 +6,8 @@ enum class FailureSeverity {
     Error,
     Warning,
     Info,
-    Never;
+    Never,
+    ;
 
     internal fun toSeverity(): Severity =
         when (this) {

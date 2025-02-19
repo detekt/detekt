@@ -185,7 +185,7 @@ class UnnamedParameterUse(config: Config) : Rule(
     @Suppress("ReturnCount")
     private fun typeCanBeAssigned(
         firstParam: KtValueArgument,
-        secondParam: KtValueArgument
+        secondParam: KtValueArgument,
     ): Boolean {
         val param1Type =
             bindingContext[BindingContext.EXPRESSION_TYPE_INFO, firstParam.getArgumentExpression()]?.type
