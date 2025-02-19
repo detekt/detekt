@@ -103,6 +103,7 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.TypeParameterListSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.UnnecessaryParenthesesBeforeTrailingLambda
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ValueArgumentComment
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ValueParameterComment
+import io.gitlab.arturbosch.detekt.formatting.wrappers.WhenEntryBracing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.Wrapping
 
 /**
@@ -145,6 +146,7 @@ class FormattingProvider : RuleSetProvider {
             ::FinalNewline,
             ::FunctionName,
             ::FunKeywordSpacing,
+            ::FunctionExpressionBody,
             ::FunctionReturnTypeSpacing,
             ::FunctionSignature,
             ::FunctionStartOfBodySpacing,
@@ -159,6 +161,7 @@ class FormattingProvider : RuleSetProvider {
             ::ModifierOrdering,
             ::MultiLineIfElse,
             ::MultilineExpressionWrapping,
+            ::MultilineLoop,
             ::NoBlankLineBeforeRbrace,
             ::NoBlankLineInList,
             ::NoBlankLinesInChainedMethodCalls,
@@ -216,13 +219,12 @@ class FormattingProvider : RuleSetProvider {
             ::BlankLineBetweenWhenConditions,
             ::ChainMethodContinuation,
             ::ClassSignature,
-            ::FunctionExpressionBody,
             ::FunctionLiteral,
             ::FunctionTypeModifierSpacing,
             ::Kdoc,
             ::MixedConditionOperators,
-            ::MultilineLoop,
             ::SpacingAroundSquareBrackets,
+            ::WhenEntryBracing,
         ).sorted()
     )
 

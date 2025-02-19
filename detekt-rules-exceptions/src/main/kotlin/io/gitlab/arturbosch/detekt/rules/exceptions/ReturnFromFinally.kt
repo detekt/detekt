@@ -74,7 +74,7 @@ class ReturnFromFinally(config: Config) : Rule(
 
     private fun isReturnFromTargetFunction(
         blockExpression: KtBlockExpression,
-        returnStmts: KtReturnExpression
+        returnStmts: KtReturnExpression,
     ): Boolean {
         val targetFunction = returnStmts.getTargetFunction(bindingContext)
             ?: return false
@@ -87,7 +87,7 @@ class ReturnFromFinally(config: Config) : Rule(
     }
 
     private fun canFilterLabeledExpression(
-        returnStmt: KtReturnExpression
+        returnStmt: KtReturnExpression,
     ): Boolean = !ignoreLabeled || returnStmt.labeledExpression == null
 
     private fun KtFinallySection.typeEqualsTo(type: KotlinType?): Boolean {

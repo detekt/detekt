@@ -72,6 +72,6 @@ class UnnecessaryAnnotationUseSiteTarget(config: Config) : Rule(
         PROPERTY(
             "property",
             "An annotation over a property, that it's not a parameter, doesn't need the use-site target @property."
-        )
+        ),
     }
 }

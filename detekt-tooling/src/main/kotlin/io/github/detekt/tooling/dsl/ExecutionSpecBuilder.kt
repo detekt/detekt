@@ -15,5 +15,5 @@ class ExecutionSpecBuilder : Builder<ExecutionSpec> {
 private data class ExecutionModel(
     override val executorService: ExecutorService?,
     override val parallelParsing: Boolean,
-    override val parallelAnalysis: Boolean
+    override val parallelAnalysis: Boolean,
 ) : ExecutionSpec

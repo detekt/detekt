@@ -19,13 +19,13 @@ internal class InvalidPropertiesConfigValidator(
 
     override fun validate(
         configToValidate: YamlConfig,
-        settings: ValidationSettings
+        settings: ValidationSettings,
     ): Collection<Notification> = testKeys(configToValidate.properties, baseline.properties)
 
     private fun testKeys(
         configToValidate: Map<String, Any>,
         baseline: Map<String, Any>,
-        parentPath: String? = null
+        parentPath: String? = null,
     ): List<Notification> {
         val notifications = mutableListOf<Notification>()
         for (prop in configToValidate.keys) {
@@ -52,7 +52,7 @@ internal class InvalidPropertiesConfigValidator(
         propertyName: String,
         propertyPath: String,
         configToValidate: Map<String, Any>,
-        baseline: Map<String, Any>
+        baseline: Map<String, Any>,
     ): List<Notification> {
         if (!baseline.contains(propertyName)) {
             val ruleName = extractRuleName(propertyName)

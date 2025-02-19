@@ -233,6 +233,6 @@ class OutdatedDocumentation(config: Config) : Rule(
     enum class DeclarationType {
         PARAM,
         PROPERTY,
-        ANY
+        ANY,
     }
 }

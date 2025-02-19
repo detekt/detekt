@@ -13,7 +13,7 @@ fun Config.valueOrDefaultInternal(
     key: String,
     result: Any?,
     default: Any,
-    parser: (result: String, default: Any) -> Any = ::tryParseBasedOnDefault
+    parser: (result: String, default: Any) -> Any = ::tryParseBasedOnDefault,
 ): Any =
     try {
         if (result != null) {

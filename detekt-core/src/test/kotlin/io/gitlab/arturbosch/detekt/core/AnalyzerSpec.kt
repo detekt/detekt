@@ -6,6 +6,7 @@ import io.github.detekt.test.utils.compileForTest
 import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Issue
@@ -17,6 +18,7 @@ import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
+import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.createBindingContext
 import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
@@ -46,7 +48,6 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
         fun `throw error explicitly when config has wrong value type in config`() {
             val testFile = path.resolve("Test.kt")
             val settings = createProcessingSettings(
-                inputPath = testFile,
                 config = yamlConfigFromContent(
                     """
                         custom:
@@ -66,7 +67,6 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
         fun `throw error explicitly in parallel when config has wrong value in config`() {
             val testFile = path.resolve("Test.kt")
             val settings = createProcessingSettings(
-                inputPath = testFile,
                 config = yamlConfigFromContent(
                     """
                         custom:
@@ -97,8 +97,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             val testFile = path.resolve("Test.kt")
             val output = StringPrintStream()
             val settings = createProcessingSettings(
-                testFile,
-                yamlConfigFromContent(
+                config = yamlConfigFromContent(
                     """
                         custom:
                           MaxLineLength:
@@ -124,8 +123,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             val testFile = path.resolve("Test.kt")
             val output = StringPrintStream()
             val settings = createProcessingSettings(
-                testFile,
-                yamlConfigFromContent(
+                config = yamlConfigFromContent(
                     """
                         custom:
                           MaxLineLength/foo:
@@ -176,8 +174,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             val testFile = path.resolve("Test.kt")
             val output = StringPrintStream()
             val settings = createProcessingSettings(
-                testFile,
-                yamlConfigFromContent(
+                config = yamlConfigFromContent(
                     """
                         custom:
                           MaxLineLength/foo:
@@ -200,8 +197,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             val testFile = path.resolve("Test.kt")
             val output = StringPrintStream()
             val settings = createProcessingSettings(
-                testFile,
-                yamlConfigFromContent(
+                config = yamlConfigFromContent(
                     """
                         custom:
                           MaxLineLength:
@@ -227,8 +223,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             val testFile = path.resolve("Test.kt")
             val output = StringPrintStream()
             val settings = createProcessingSettings(
-                testFile,
-                yamlConfigFromContent(
+                config = yamlConfigFromContent(
                     """
                         custom:
                           MaxLineLength:
@@ -251,8 +246,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             val testFile = path.resolve("Test.kt")
             val output = StringPrintStream()
             val settings = createProcessingSettings(
-                testFile,
-                yamlConfigFromContent(
+                config = yamlConfigFromContent(
                     """
                       custom:
                         FaultyRule:
@@ -274,8 +268,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             val testFile = path.resolve("Test.kt")
             val output = StringPrintStream()
             val settings = createProcessingSettings(
-                testFile,
-                yamlConfigFromContent(
+                config = yamlConfigFromContent(
                     """
                         custom:
                           FaultyRuleNoStackTrace:
@@ -331,7 +324,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             private fun isPathChecked(
                 path: String,
                 excludes: List<String>? = null,
-                includes: List<String>? = null
+                includes: List<String>? = null,
             ): Boolean {
                 fun List<String>.toYaml() = joinToString(", ", "[", "]") { "\"$it\"" }
 
@@ -385,7 +378,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             private fun isPathChecked(
                 path: String,
                 excludes: List<String>? = null,
-                includes: List<String>? = null
+                includes: List<String>? = null,
             ): Boolean {
                 fun List<String>.toYaml() = joinToString(", ", "[", "]") { "\"$it\"" }
 
@@ -493,13 +486,16 @@ private class NoEmptyFile(config: Config) : Rule(config, "TestDescription") {
     }
 }
 
+@Suppress("MemberNameEqualsClassName")
 private open class MaxLineLength(config: Config) : Rule(config, "TestDescription") {
-    private val lengthThreshold: Int = config.valueOrDefault("maxLineLength", 10)
+    @Configuration("lengthThreshold")
+    private val maxLineLength by config(10)
+
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)
         var offset = 0
         for (line in file.text.lineSequence()) {
-            if (line.length > lengthThreshold) {
+            if (line.length > maxLineLength) {
                 val ktElement = file.findFirstMeaningfulKtElementInParents(offset..(offset + line.length))
                 report(CodeSmell(Entity.from(ktElement), description))
             }
@@ -534,7 +530,7 @@ private class FaultyRuleNoStackTrace(config: Config) : Rule(config, "") {
 
 internal fun Analyzer(
     settings: ProcessingSettings,
-    vararg processors: RuleSetProvider,
-    providers: List<FileProcessListener> = emptyList(),
+    vararg ruleSetProviders: RuleSetProvider,
+    processors: List<FileProcessListener> = emptyList(),
     bindingContext: BindingContext = BindingContext.EMPTY,
-): Analyzer = Analyzer(settings, processors.toList(), providers, bindingContext)
+): Analyzer = Analyzer(settings, ruleSetProviders.toList(), processors, bindingContext)
