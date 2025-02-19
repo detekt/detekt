@@ -10,7 +10,7 @@ import java.io.File
  */
 class KotlinCoreEnvironmentWrapper(
     private var environment: KotlinCoreEnvironment?,
-    private val disposable: Disposable
+    private val disposable: Disposable,
 ) {
 
     val env: KotlinCoreEnvironment
@@ -29,5 +29,5 @@ class KotlinCoreEnvironmentWrapper(
  */
 fun createEnvironment(
     additionalRootPaths: List<File> = emptyList(),
-    additionalJavaSourceRootPaths: List<File> = emptyList()
+    additionalJavaSourceRootPaths: List<File> = emptyList(),
 ): KotlinCoreEnvironmentWrapper = KtTestCompiler.createEnvironment(additionalRootPaths, additionalJavaSourceRootPaths)

@@ -676,7 +676,7 @@ class UnnamedParameterUseSpec(private val env: KotlinCoreEnvironment) {
         ignoreSingleParamUse: Boolean = true,
         allowAdjacentDifferentTypeParams: Boolean = true,
         ignoreArgumentsMatchingNames: Boolean = true,
-        ignoredFunctionCalls: List<String> = emptyList()
+        ignoredFunctionCalls: List<String> = emptyList(),
     ): UnnamedParameterUse =
         UnnamedParameterUse(
             TestConfig(

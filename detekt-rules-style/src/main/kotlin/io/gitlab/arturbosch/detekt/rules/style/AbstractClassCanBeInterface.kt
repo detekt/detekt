@@ -72,7 +72,7 @@ class AbstractClassCanBeInterface(config: Config) : Rule(
 
     private fun KtClass.checkMembers(
         members: List<KtCallableDeclaration>,
-        nameIdentifier: PsiElement
+        nameIdentifier: PsiElement,
     ) {
         val (abstractMembers, concreteMembers) = members.partition { it.isAbstract() }
         when {

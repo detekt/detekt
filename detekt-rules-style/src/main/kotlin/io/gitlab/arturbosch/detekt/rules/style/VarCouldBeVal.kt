@@ -85,7 +85,7 @@ class VarCouldBeVal(config: Config) : Rule(
     @Suppress("TooManyFunctions")
     private class AssignmentVisitor(
         private val bindingContext: BindingContext,
-        private val ignoreLateinitVar: Boolean
+        private val ignoreLateinitVar: Boolean,
     ) : DetektVisitor() {
 
         private val declarationCandidates = mutableSetOf<KtNamedDeclaration>()

@@ -103,7 +103,7 @@ class UseIfEmptyOrIfBlank(config: Config) : Rule(
     private data class Replacement(
         val conditionFunctionFqName: FqName,
         val replacementFunctionName: String,
-        val negativeCondition: Boolean = false
+        val negativeCondition: Boolean = false,
     )
 
     companion object {

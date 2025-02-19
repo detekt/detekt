@@ -20,7 +20,7 @@ fun <T> awaitAll(tasks: TaskList<T>) = tasks.map { it.join() }
  */
 class TaskPool private constructor(
     private val service: ExecutorService,
-    private val shouldClose: Boolean
+    private val shouldClose: Boolean,
 ) : ExecutorService by service, AutoCloseable, Closeable {
 
     constructor(executorService: ExecutorService?) : this(

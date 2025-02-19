@@ -16,7 +16,7 @@ class Runner(private val spec: ProcessingSpec) : Executable, Callable<AnalysisRe
     constructor(
         arguments: CliArgs,
         outputPrinter: Appendable,
-        errorPrinter: Appendable
+        errorPrinter: Appendable,
     ) : this(arguments.createSpec(outputPrinter, errorPrinter))
 
     override fun execute() {
