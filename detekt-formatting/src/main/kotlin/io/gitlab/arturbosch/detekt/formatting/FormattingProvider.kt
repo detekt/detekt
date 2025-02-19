@@ -134,6 +134,7 @@ class FormattingProvider : RuleSetProvider {
             ::BinaryExpressionWrapping,
             ::BlankLineBeforeDeclaration,
             ::BlockCommentInitialStarAlignment,
+            ::ChainMethodContinuation,
             ::ChainWrapping,
             ::ClassName,
             ::CommentSpacing,
@@ -217,7 +218,6 @@ class FormattingProvider : RuleSetProvider {
             ::Wrapping,
             // Wrappers for experimental rules. Disabled by default.
             ::BlankLineBetweenWhenConditions,
-            ::ChainMethodContinuation,
             ::ClassSignature,
             ::FunctionLiteral,
             ::FunctionTypeModifierSpacing,

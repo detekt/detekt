@@ -70,6 +70,8 @@ formatting:
   autoCorrect: true
   BlankLineBeforeDeclaration:
     active: false
+  ChainMethodContinuation:
+    active: false
   EnumEntryNameCase:
     active: false
   Filename:
