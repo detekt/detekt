@@ -8,5 +8,5 @@ import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactory
  */
 class CompilerResources(
     val languageVersionSettings: LanguageVersionSettings,
-    val dataFlowValueFactory: DataFlowValueFactory
+    val dataFlowValueFactory: DataFlowValueFactory,
 )

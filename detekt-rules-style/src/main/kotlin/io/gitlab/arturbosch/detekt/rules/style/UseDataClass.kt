@@ -136,7 +136,7 @@ class UseDataClass(config: Config) : Rule(
 
     private fun KtNamedFunction.isDefaultFunction(
         classType: KotlinType?,
-        primaryConstructorParameterTypes: List<KotlinType>
+        primaryConstructorParameterTypes: List<KotlinType>,
     ): Boolean =
         when (name) {
             !in DEFAULT_FUNCTION_NAMES -> false

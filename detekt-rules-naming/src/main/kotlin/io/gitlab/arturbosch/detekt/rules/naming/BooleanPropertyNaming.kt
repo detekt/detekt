@@ -63,7 +63,7 @@ class BooleanPropertyNaming(config: Config) : Rule(
 
     private fun reportCodeSmell(
         declaration: KtCallableDeclaration,
-        name: String
+        name: String,
     ): CodeSmell {
         val description = "Boolean property name should match a $allowedPattern pattern."
         return CodeSmell(

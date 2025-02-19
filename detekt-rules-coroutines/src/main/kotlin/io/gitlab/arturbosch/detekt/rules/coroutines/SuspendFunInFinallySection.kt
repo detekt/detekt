@@ -56,7 +56,7 @@ class SuspendFunInFinallySection(config: Config) : Rule(
 
     private fun shouldReport(
         expression: KtCallExpression,
-        topParent: KtFinallySection
+        topParent: KtFinallySection,
     ): Boolean {
         if (!expression.isSuspendCall()) {
             return false
