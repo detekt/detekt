@@ -34,12 +34,13 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
  * </compliant>
  *
  */
-@RequiresFullAnalysis
 @ActiveByDefault(since = "1.21.0")
-class UnusedUnaryOperator(config: Config) : Rule(
-    config,
-    "This unary operator is unused."
-) {
+class UnusedUnaryOperator(config: Config) :
+    Rule(
+        config,
+        "This unary operator is unused."
+    ),
+    RequiresFullAnalysis {
 
     @Suppress("ReturnCount")
     override fun visitPrefixExpression(expression: KtPrefixExpression) {

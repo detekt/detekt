@@ -26,8 +26,12 @@ open class Rule(
      */
     open val ruleName: Name get() = Name(javaClass.simpleName)
 
-    var bindingContext: BindingContext = BindingContext.EMPTY
     protected lateinit var compilerResources: CompilerResources
+    private lateinit var _bindingContext: BindingContext
+
+    @Suppress("UnusedReceiverParameter")
+    val RequiresFullAnalysis.bindingContext: BindingContext
+        get() = _bindingContext
 
     val autoCorrect: Boolean
         get() = config.valueOrDefault(Config.AUTO_CORRECT_KEY, false) &&
@@ -45,11 +49,9 @@ open class Rule(
      */
     fun visitFile(
         root: KtFile,
-        bindingContext: BindingContext = BindingContext.EMPTY,
         compilerResources: CompilerResources,
     ): List<Finding> {
         findings.clear()
-        this.bindingContext = bindingContext
         this.compilerResources = compilerResources
         preVisit(root)
         visit(root)
@@ -86,6 +88,10 @@ open class Rule(
      */
     fun report(finding: Finding) {
         findings.add(finding)
+    }
+
+    fun setBindingContext(bindingContext: BindingContext) {
+        _bindingContext = bindingContext
     }
 
     @Poko

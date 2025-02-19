@@ -21,12 +21,13 @@ import org.jetbrains.kotlin.psi.KtCallExpression
  * checkNotNull(x)
  * </compliant>
  */
-@RequiresFullAnalysis
 @ActiveByDefault(since = "1.21.0")
-class UseCheckNotNull(config: Config) : Rule(
-    config,
-    "Use checkNotNull() instead of check() for checking not-null."
-) {
+class UseCheckNotNull(config: Config) :
+    Rule(
+        config,
+        "Use checkNotNull() instead of check() for checking not-null."
+    ),
+    RequiresFullAnalysis {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

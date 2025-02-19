@@ -36,14 +36,15 @@ import org.jetbrains.kotlin.types.typeUtil.supertypes
  * </compliant>
  *
  */
-@RequiresFullAnalysis
-class ObjectExtendsThrowable(config: Config) : Rule(
-    config,
-    "An `object` should not extend and type of Throwable. Throwables are stateful and should be instantiated " +
-        "only when needed for when a specific error occurs. An `object`, being a singleton, that extends any " +
-        "type of Throwable consequently introduces a global singleton exception whose instance may be " +
-        "inadvertently reused from multiple places, thus introducing shared mutable state."
-) {
+class ObjectExtendsThrowable(config: Config) :
+    Rule(
+        config,
+        "An `object` should not extend and type of Throwable. Throwables are stateful and should be instantiated " +
+            "only when needed for when a specific error occurs. An `object`, being a singleton, that extends any " +
+            "type of Throwable consequently introduces a global singleton exception whose instance may be " +
+            "inadvertently reused from multiple places, thus introducing shared mutable state."
+    ),
+    RequiresFullAnalysis {
 
     override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
         super.visitObjectDeclaration(declaration)

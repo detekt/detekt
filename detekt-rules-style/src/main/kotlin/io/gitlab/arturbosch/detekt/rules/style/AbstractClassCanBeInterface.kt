@@ -45,11 +45,12 @@ import org.jetbrains.kotlin.types.typeUtil.isInterface
  * </compliant>
  */
 @ActiveByDefault(since = "1.23.0")
-@RequiresFullAnalysis
-class AbstractClassCanBeInterface(config: Config) : Rule(
-    config,
-    "An abstract class is unnecessary. May be refactored to an interface."
-) {
+class AbstractClassCanBeInterface(config: Config) :
+    Rule(
+        config,
+        "An abstract class is unnecessary. May be refactored to an interface."
+    ),
+    RequiresFullAnalysis {
 
     private val noConcreteMember = "An abstract class without a concrete member can be refactored to an interface."
 

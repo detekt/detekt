@@ -43,13 +43,15 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * </compliant>
  *
  */
-@RequiresFullAnalysis
 @Alias("SuspendFunctionOnCoroutineScope")
-class SuspendFunWithCoroutineScopeReceiver(config: Config) : Rule(
-    config,
-    "The `suspend` modifier should not be used for functions that use a CoroutinesScope as receiver. You should " +
-        "use suspend functions without the receiver or use plain functions and use coroutineScope { } instead."
-) {
+class SuspendFunWithCoroutineScopeReceiver(config: Config) :
+    Rule(
+        config,
+        "The `suspend` modifier should not be used for functions that use a CoroutinesScope as receiver. You should " +
+            "use suspend functions without the receiver or use plain functions and use coroutineScope { } instead."
+    ),
+    RequiresFullAnalysis {
+
     override fun visitNamedFunction(function: KtNamedFunction) {
         checkReceiver(function)
     }

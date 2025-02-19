@@ -67,13 +67,14 @@ import org.jetbrains.kotlin.types.typeUtil.supertypes
  * functionThatReturnsClosable().use { it.doStuff() }
  * </compliant>
  */
-@RequiresFullAnalysis
 @Suppress("TooManyFunctions")
-class MissingUseCall(config: Config = Config.empty) : Rule(
-    config,
-    "Usage of `Closeable` detected without `use` call. Using `Closeable` without `use` " +
-        "can be problematic as closing `Closeable` may throw exception.",
-) {
+class MissingUseCall(config: Config = Config.empty) :
+    Rule(
+        config,
+        "Usage of `Closeable` detected without `use` call. Using `Closeable` without `use` " +
+            "can be problematic as closing `Closeable` may throw exception.",
+    ),
+    RequiresFullAnalysis {
 
     private val traversedParentExpression: MutableSet<PsiElement> = mutableSetOf()
     private val usedReferences: MutableSet<CallableDescriptor> = mutableSetOf()

@@ -125,11 +125,12 @@ import org.jetbrains.kotlin.types.isNullable
  * }
  * </compliant>
  */
-@RequiresFullAnalysis
-class CanBeNonNullable(config: Config) : Rule(
-    config,
-    "Variable can be changed to non-nullable, as it is never set to null."
-) {
+class CanBeNonNullable(config: Config) :
+    Rule(
+        config,
+        "Variable can be changed to non-nullable, as it is never set to null."
+    ),
+    RequiresFullAnalysis {
 
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)

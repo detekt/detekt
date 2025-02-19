@@ -37,11 +37,12 @@ import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelector
  * }
  * </compliant>
  */
-@RequiresFullAnalysis
-class NullableToStringCall(config: Config) : Rule(
-    config,
-    "`toString()` on nullable receiver may return the string \"null\""
-) {
+class NullableToStringCall(config: Config) :
+    Rule(
+        config,
+        "`toString()` on nullable receiver may return the string \"null\""
+    ),
+    RequiresFullAnalysis {
 
     override fun visitSimpleNameExpression(expression: KtSimpleNameExpression) {
         super.visitSimpleNameExpression(expression)

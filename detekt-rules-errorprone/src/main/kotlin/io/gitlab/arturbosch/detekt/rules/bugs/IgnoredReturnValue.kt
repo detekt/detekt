@@ -48,12 +48,13 @@ import org.jetbrains.kotlin.types.typeUtil.isUnit
  * val x = returnsValue()
  * </compliant>
  */
-@RequiresFullAnalysis
 @ActiveByDefault(since = "1.21.0")
-class IgnoredReturnValue(config: Config) : Rule(
-    config,
-    "This call returns a value which is ignored"
-) {
+class IgnoredReturnValue(config: Config) :
+    Rule(
+        config,
+        "This call returns a value which is ignored"
+    ),
+    RequiresFullAnalysis {
 
     @Configuration("If the rule should check only methods matching to configuration, or all methods")
     private val restrictToConfig: Boolean by config(defaultValue = true)

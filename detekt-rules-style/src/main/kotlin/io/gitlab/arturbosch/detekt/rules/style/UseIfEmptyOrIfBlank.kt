@@ -43,11 +43,12 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  * </compliant>
  *
  */
-@RequiresFullAnalysis
-class UseIfEmptyOrIfBlank(config: Config) : Rule(
-    config,
-    "Use `ifEmpty` or `ifBlank` instead of `isEmpty` or `isBlank` to assign a default value."
-) {
+class UseIfEmptyOrIfBlank(config: Config) :
+    Rule(
+        config,
+        "Use `ifEmpty` or `ifBlank` instead of `isEmpty` or `isBlank` to assign a default value."
+    ),
+    RequiresFullAnalysis {
 
     @Suppress("ReturnCount", "CyclomaticComplexMethod")
     override fun visitIfExpression(expression: KtIfExpression) {

@@ -43,11 +43,13 @@ import org.jetbrains.kotlin.types.KotlinType
  * class A(val b: B) : I by b
  * </compliant>
  */
-@RequiresFullAnalysis
-class UseDataClass(config: Config) : Rule(
-    config,
-    "Classes that do nothing but hold data should be replaced with a data class."
-) {
+class UseDataClass(config: Config) :
+    Rule(
+        config,
+        "Classes that do nothing but hold data should be replaced with a data class."
+    ),
+    RequiresFullAnalysis {
+
     @Configuration("allows to relax this rule in order to exclude classes that contains one (or more) vars")
     private val allowVars: Boolean by config(false)
 

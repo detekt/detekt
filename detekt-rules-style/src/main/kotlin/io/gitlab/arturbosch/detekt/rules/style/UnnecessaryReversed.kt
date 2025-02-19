@@ -28,14 +28,14 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  *  .sortedDescending()
  * </compliant>
  */
-@RequiresFullAnalysis
-class UnnecessaryReversed(
-    config: Config,
-) : Rule(
-    config,
-    "Use single sort operation instead of sorting followed by a reverse operation or vise-versa, " +
-        "eg. use `.sortedByDescending { .. }` instead of `.sortedBy { }.asReversed()`",
-) {
+class UnnecessaryReversed(config: Config) :
+    Rule(
+        config,
+        "Use single sort operation instead of sorting followed by a reverse operation or vise-versa, " +
+            "eg. use `.sortedByDescending { .. }` instead of `.sortedBy { }.asReversed()`",
+    ),
+    RequiresFullAnalysis {
+
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 

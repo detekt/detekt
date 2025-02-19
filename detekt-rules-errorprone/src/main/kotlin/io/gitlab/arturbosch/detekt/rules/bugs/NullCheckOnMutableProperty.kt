@@ -45,11 +45,12 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  * }
  * </compliant>
  */
-@RequiresFullAnalysis
-class NullCheckOnMutableProperty(config: Config) : Rule(
-    config,
-    "Checking nullability on a mutable property is not useful because the property may be set to null afterwards."
-) {
+class NullCheckOnMutableProperty(config: Config) :
+    Rule(
+        config,
+        "Checking nullability on a mutable property is not useful because the property may be set to null afterwards."
+    ),
+    RequiresFullAnalysis {
 
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)

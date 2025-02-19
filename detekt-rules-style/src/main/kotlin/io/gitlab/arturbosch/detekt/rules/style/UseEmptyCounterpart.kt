@@ -30,11 +30,12 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  * </compliant>
  *
  */
-@RequiresFullAnalysis
-class UseEmptyCounterpart(config: Config) : Rule(
-    config,
-    """Instantiation of an object's "empty" state should use the object's "empty" initializer."""
-) {
+class UseEmptyCounterpart(config: Config) :
+    Rule(
+        config,
+        """Instantiation of an object's "empty" state should use the object's "empty" initializer."""
+    ),
+    RequiresFullAnalysis {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

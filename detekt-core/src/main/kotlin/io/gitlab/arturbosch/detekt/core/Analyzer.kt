@@ -27,7 +27,6 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactoryImpl
 import java.net.URI
 import java.nio.file.Path
-import kotlin.reflect.full.hasAnnotation
 
 internal class Analyzer(
     private val settings: ProcessingSettings,
@@ -102,10 +101,13 @@ internal class Analyzer(
             .filterNot { (ruleInstance, rule) ->
                 file.isSuppressedBy(ruleInstance.id, rule.aliases, ruleInstance.ruleSetId)
             }
+            .onEach { (_, rule) ->
+                if (rule is RequiresFullAnalysis) rule.setBindingContext(bindingContext)
+            }
             .partition { (_, rule) -> rule.autoCorrect }
 
         return (correctableRules + otherRules).flatMap { (ruleInstance, rule) ->
-            rule.visitFile(file, bindingContext, compilerResources)
+            rule.visitFile(file, compilerResources)
                 .filterNot {
                     it.entity.ktElement.isSuppressedBy(ruleInstance.id, rule.aliases, ruleInstance.ruleSetId)
                 }
@@ -144,8 +146,7 @@ private fun getActiveRules(
         if (fullAnalysis) {
             true
         } else {
-            val requiresFullAnalysis = ruleDescriptor.ruleProvider(Config.empty)::class
-                .hasAnnotation<RequiresFullAnalysis>()
+            val requiresFullAnalysis = ruleDescriptor.ruleProvider(Config.empty) is RequiresFullAnalysis
             if (requiresFullAnalysis) {
                 log { "The rule '${ruleDescriptor.ruleId}' requires type resolution but it was run without it." }
             }

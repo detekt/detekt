@@ -37,12 +37,13 @@ import org.jetbrains.kotlin.types.KotlinType
  * val a: String = try { "s" } catch (e: Exception) { "e" } finally { "f" }
  * </noncompliant>
  */
-@RequiresFullAnalysis
 @ActiveByDefault(since = "1.16.0")
-class ReturnFromFinally(config: Config) : Rule(
-    config,
-    "Do not return within a finally statement. This can discard exceptions."
-) {
+class ReturnFromFinally(config: Config) :
+    Rule(
+        config,
+        "Do not return within a finally statement. This can discard exceptions."
+    ),
+    RequiresFullAnalysis {
 
     @Configuration("ignores labeled return statements")
     private val ignoreLabeled: Boolean by config(false)

@@ -24,11 +24,12 @@ import org.jetbrains.kotlin.types.isNullable
  * println(requireNotNull(string))
  * </compliant>
  */
-@RequiresFullAnalysis
-class UnnecessaryNotNullCheck(config: Config) : Rule(
-    config,
-    "Remove unnecessary not-null checks on non-null types."
-) {
+class UnnecessaryNotNullCheck(config: Config) :
+    Rule(
+        config,
+        "Remove unnecessary not-null checks on non-null types."
+    ),
+    RequiresFullAnalysis {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

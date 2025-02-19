@@ -272,14 +272,14 @@ public final class io/gitlab/arturbosch/detekt/api/ReportingExtension$DefaultImp
 	public static fun transformIssues (Lio/gitlab/arturbosch/detekt/api/ReportingExtension;Ljava/util/List;)Ljava/util/List;
 }
 
-public abstract interface annotation class io/gitlab/arturbosch/detekt/api/RequiresFullAnalysis : java/lang/annotation/Annotation {
+public abstract interface class io/gitlab/arturbosch/detekt/api/RequiresFullAnalysis {
 }
 
 public class io/gitlab/arturbosch/detekt/api/Rule : io/gitlab/arturbosch/detekt/api/DetektVisitor {
 	protected field compilerResources Lio/gitlab/arturbosch/detekt/api/CompilerResources;
 	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Config;Ljava/lang/String;)V
 	public final fun getAutoCorrect ()Z
-	public final fun getBindingContext ()Lorg/jetbrains/kotlin/resolve/BindingContext;
+	public final fun getBindingContext (Lio/gitlab/arturbosch/detekt/api/RequiresFullAnalysis;)Lorg/jetbrains/kotlin/resolve/BindingContext;
 	protected final fun getCompilerResources ()Lio/gitlab/arturbosch/detekt/api/CompilerResources;
 	public final fun getConfig ()Lio/gitlab/arturbosch/detekt/api/Config;
 	public final fun getDescription ()Ljava/lang/String;
@@ -290,8 +290,7 @@ public class io/gitlab/arturbosch/detekt/api/Rule : io/gitlab/arturbosch/detekt/
 	public final fun setBindingContext (Lorg/jetbrains/kotlin/resolve/BindingContext;)V
 	protected final fun setCompilerResources (Lio/gitlab/arturbosch/detekt/api/CompilerResources;)V
 	public fun visit (Lorg/jetbrains/kotlin/psi/KtFile;)V
-	public final fun visitFile (Lorg/jetbrains/kotlin/psi/KtFile;Lorg/jetbrains/kotlin/resolve/BindingContext;Lio/gitlab/arturbosch/detekt/api/CompilerResources;)Ljava/util/List;
-	public static synthetic fun visitFile$default (Lio/gitlab/arturbosch/detekt/api/Rule;Lorg/jetbrains/kotlin/psi/KtFile;Lorg/jetbrains/kotlin/resolve/BindingContext;Lio/gitlab/arturbosch/detekt/api/CompilerResources;ILjava/lang/Object;)Ljava/util/List;
+	public final fun visitFile (Lorg/jetbrains/kotlin/psi/KtFile;Lio/gitlab/arturbosch/detekt/api/CompilerResources;)Ljava/util/List;
 }
 
 public final class io/gitlab/arturbosch/detekt/api/Rule$Name {

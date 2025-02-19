@@ -37,11 +37,12 @@ import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
  * }
  * </compliant>
  */
-@RequiresFullAnalysis
-class CastNullableToNonNullableType(config: Config) : Rule(
-    config,
-    "Nullable type to non-null type cast is found. Consider using two assertions, `null` assertions and type cast"
-) {
+class CastNullableToNonNullableType(config: Config) :
+    Rule(
+        config,
+        "Nullable type to non-null type cast is found. Consider using two assertions, `null` assertions and type cast"
+    ),
+    RequiresFullAnalysis {
 
     @Configuration("Whether platform types should be considered as non-nullable and ignored by this rule")
     private val ignorePlatformTypes: Boolean by config(true)
