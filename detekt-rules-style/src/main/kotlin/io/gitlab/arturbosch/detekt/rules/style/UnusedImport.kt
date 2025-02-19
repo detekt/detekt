@@ -35,7 +35,7 @@ class UnusedImport(
     config,
     "Unused Imports are dead code and should be removed.",
 ) {
-    @Configuration("Additional operators from libraries or tools, such as 'assign'(e.g. compiler plugins for Gradle).")
+    @Configuration("Additional operators from libraries or tools, such as 'assign' (e.g. compiler plugins for Gradle).")
     private val additionalOperatorSet: List<String> by config(emptyList())
 
     override fun visit(root: KtFile) {
