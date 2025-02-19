@@ -221,7 +221,7 @@ class FakeKtElement(private val psiFile: PsiFile = FakePsiFile("")) : KtElement 
         p0: PsiScopeProcessor,
         p1: ResolveState,
         p2: PsiElement?,
-        p3: PsiElement
+        p3: PsiElement,
     ): Boolean = false
 
     override fun <T : Any?> putCopyableUserData(p0: Key<T>, p1: T?) {

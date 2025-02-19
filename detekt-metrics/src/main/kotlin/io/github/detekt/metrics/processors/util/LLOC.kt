@@ -8,13 +8,13 @@ object LLOC {
     fun analyze(
         lines: List<String>,
         isCommentMode: Boolean = false,
-        isFullMode: Boolean = false
+        isFullMode: Boolean = false,
     ): Int = LLOCCounter(lines, isCommentMode, isFullMode).run()
 
     private class LLOCCounter(
         private val lines: List<String>,
         private val isCommentMode: Boolean = false,
-        private val isFullMode: Boolean = false
+        private val isFullMode: Boolean = false,
     ) {
 
         private var counter = 0

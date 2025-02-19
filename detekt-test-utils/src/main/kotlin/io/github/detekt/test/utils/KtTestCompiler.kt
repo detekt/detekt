@@ -34,7 +34,7 @@ internal object KtTestCompiler : KtCompiler() {
      */
     fun createEnvironment(
         additionalRootPaths: List<File> = emptyList(),
-        additionalJavaSourceRootPaths: List<File> = emptyList()
+        additionalJavaSourceRootPaths: List<File> = emptyList(),
     ): KotlinCoreEnvironmentWrapper {
         val configuration = CompilerConfiguration()
         configuration.put(CommonConfigurationKeys.MODULE_NAME, "test_module")

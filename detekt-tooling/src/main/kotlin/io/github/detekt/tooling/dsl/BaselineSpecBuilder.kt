@@ -14,5 +14,5 @@ class BaselineSpecBuilder : Builder<BaselineSpec> {
 
 private data class BaselineModel(
     override val path: Path?,
-    override val shouldCreateDuringAnalysis: Boolean
+    override val shouldCreateDuringAnalysis: Boolean,
 ) : BaselineSpec

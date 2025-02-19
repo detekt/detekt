@@ -23,5 +23,5 @@ private data class RulesModel(
     override val activateAllRules: Boolean,
     override val failurePolicy: FailurePolicy,
     override val autoCorrect: Boolean,
-    override val runPolicy: RulesSpec.RunPolicy
+    override val runPolicy: RulesSpec.RunPolicy,
 ) : RulesSpec

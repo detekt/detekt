@@ -154,7 +154,7 @@ class UnnecessaryParenthesesSpec {
     @ParameterizedTest
     @MethodSource("cases")
     fun `should not report call to function with two lambda parameters with one as block body`(
-        testCase: RuleTestCase
+        testCase: RuleTestCase,
     ) {
         val code = """
             class Clazz {
@@ -466,7 +466,7 @@ class UnnecessaryParenthesesSpec {
     @ParameterizedTest
     @MethodSource("cases")
     fun `does report unnecessary parens in case of constant literal when using inc operator`(
-        testCase: RuleTestCase
+        testCase: RuleTestCase,
     ) {
         val code = """
             class Foo(var value: Int) {
@@ -592,7 +592,7 @@ class UnnecessaryParenthesesSpec {
     @ParameterizedTest
     @MethodSource("cases")
     fun `float literals closed range without integer part with braces on the right side - #7640`(
-        testCase: RuleTestCase
+        testCase: RuleTestCase,
     ) {
         val code = """
             val a = .1F..(.2F)

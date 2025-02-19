@@ -28,7 +28,7 @@ class CyclomaticComplexity(private val config: Config) : DetektVisitor() {
         var ignoreSimpleWhenEntries: Boolean = false,
         var ignoreNestingFunctions: Boolean = false,
         var ignoreLocalFunctions: Boolean = false,
-        var nestingFunctions: Set<String> = DEFAULT_NESTING_FUNCTIONS
+        var nestingFunctions: Set<String> = DEFAULT_NESTING_FUNCTIONS,
     )
 
     var complexity: Int = 0

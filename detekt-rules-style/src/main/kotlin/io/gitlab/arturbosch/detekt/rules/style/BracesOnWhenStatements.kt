@@ -228,7 +228,8 @@ class BracesOnWhenStatements(config: Config) : Rule(
             BracePolicy.Consistent -> (violator.parent as KtWhenExpression).whenKeyword
             BracePolicy.Always,
             BracePolicy.Necessary,
-            BracePolicy.Never -> requireNotNull(violator.arrow) { "When branch ${violator.text} has no arrow!" }
+            BracePolicy.Never,
+            -> requireNotNull(violator.arrow) { "When branch ${violator.text} has no arrow!" }
         }
         report(CodeSmell(Entity.from(reported), policy.message))
     }
@@ -237,7 +238,8 @@ class BracesOnWhenStatements(config: Config) : Rule(
         Always("always", "Missing braces on this branch, add them."),
         Consistent("consistent", "Inconsistent braces, make sure all branches either have or don't have braces."),
         Necessary("necessary", "Extra braces exist on this branch, remove them."),
-        Never("never", "Extra braces exist on this branch, remove them.");
+        Never("never", "Extra braces exist on this branch, remove them."),
+        ;
 
         companion object {
             fun getValue(arg: String): BracePolicy =

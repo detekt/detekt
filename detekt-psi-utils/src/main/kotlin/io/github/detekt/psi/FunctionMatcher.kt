@@ -15,7 +15,7 @@ sealed class FunctionMatcher {
     abstract fun match(function: KtNamedFunction, bindingContext: BindingContext): Boolean
 
     internal data class NameOnly(
-        private val fullyQualifiedName: String
+        private val fullyQualifiedName: String,
     ) : FunctionMatcher() {
         override fun match(callableDescriptor: CallableDescriptor): Boolean =
             callableDescriptor.fqNameSafe.asString() == fullyQualifiedName
@@ -29,7 +29,7 @@ sealed class FunctionMatcher {
 
     internal data class WithParameters(
         private val fullyQualifiedName: String,
-        private val parameters: List<String>
+        private val parameters: List<String>,
     ) : FunctionMatcher() {
         override fun match(callableDescriptor: CallableDescriptor): Boolean {
             val descriptor = callableDescriptor.original

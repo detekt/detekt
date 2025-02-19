@@ -50,7 +50,7 @@ fun main(args: Array<String>) {
 fun buildRunner(
     args: Array<String>,
     outputPrinter: PrintStream,
-    errorPrinter: PrintStream
+    errorPrinter: PrintStream,
 ): Executable {
     check(KotlinCompilerVersion.VERSION == whichKotlin()) {
         """

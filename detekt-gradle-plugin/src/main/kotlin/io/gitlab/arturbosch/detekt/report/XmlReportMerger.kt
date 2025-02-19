@@ -122,14 +122,14 @@ internal object XmlReportMerger {
         private class CheckstyleErrorNodeWithFileData(
             val errorID: Any,
             val fileName: String,
-            val errorNode: Node
+            val errorNode: Node,
         )
 
         private data class ErrorID(
             val fileName: String,
             val line: String,
             val column: String,
-            val source: String
+            val source: String,
         )
     }
 

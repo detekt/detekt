@@ -11,7 +11,7 @@ data class Rule(
     val configurations: List<Configuration> = emptyList(),
     val autoCorrect: Boolean = false,
     val requiresFullAnalysis: Boolean = false,
-    val deprecationMessage: String? = null
+    val deprecationMessage: String? = null,
 ) {
     fun isDeprecated() = deprecationMessage != null
 }

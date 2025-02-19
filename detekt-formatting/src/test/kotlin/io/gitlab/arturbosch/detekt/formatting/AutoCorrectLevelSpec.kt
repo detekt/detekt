@@ -30,7 +30,7 @@ class AutoCorrectLevelSpec {
     fun autoCorrect(
         ruleSet: AutoCorrectConfig,
         rule: AutoCorrectConfig,
-        wasFormatted: Boolean
+        wasFormatted: Boolean,
     ) {
         val config = yamlConfigFromContent(createConfig(ruleSet, rule))
 
@@ -48,7 +48,8 @@ class AutoCorrectLevelSpec {
 enum class AutoCorrectConfig {
     True,
     False,
-    Undefined;
+    Undefined,
+    ;
 
     override fun toString(): String =
         when (this) {

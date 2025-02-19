@@ -34,5 +34,5 @@ class ExtensionsSpecBuilder : Builder<ExtensionsSpec> {
 
 private data class ExtensionsModel(
     override val plugins: ExtensionsSpec.Plugins?,
-    override val disabledExtensions: Set<ExtensionId>
+    override val disabledExtensions: Set<ExtensionId>,
 ) : ExtensionsSpec

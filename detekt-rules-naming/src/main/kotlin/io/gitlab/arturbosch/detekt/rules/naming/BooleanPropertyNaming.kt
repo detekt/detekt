@@ -26,11 +26,12 @@ import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
  * val hasProgressBar: Boolean = true
  * </compliant>
  */
-@RequiresFullAnalysis
-class BooleanPropertyNaming(config: Config) : Rule(
-    config,
-    "Boolean property name should follow the naming convention set in detekt's configuration."
-) {
+class BooleanPropertyNaming(config: Config) :
+    Rule(
+        config,
+        "Boolean property name should follow the naming convention set in detekt's configuration."
+    ),
+    RequiresFullAnalysis {
 
     @Configuration("naming pattern")
     private val allowedPattern: Regex by config("^(is|has|are)", String::toRegex)
@@ -63,7 +64,7 @@ class BooleanPropertyNaming(config: Config) : Rule(
 
     private fun reportCodeSmell(
         declaration: KtCallableDeclaration,
-        name: String
+        name: String,
     ): CodeSmell {
         val description = "Boolean property name should match a $allowedPattern pattern."
         return CodeSmell(

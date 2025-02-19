@@ -260,7 +260,8 @@ class BracesOnIfStatements(config: Config) : Rule(
         Always("always"),
         Consistent("consistent"),
         Necessary("necessary"),
-        Never("never");
+        Never("never"),
+        ;
 
         companion object {
             fun getValue(arg: String): BracePolicy =

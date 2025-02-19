@@ -103,6 +103,7 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.TypeParameterListSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.UnnecessaryParenthesesBeforeTrailingLambda
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ValueArgumentComment
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ValueParameterComment
+import io.gitlab.arturbosch.detekt.formatting.wrappers.WhenEntryBracing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.Wrapping
 
 /**
@@ -129,12 +130,17 @@ class FormattingProvider : RuleSetProvider {
             ::AnnotationOnSeparateLine,
             ::AnnotationSpacing,
             ::ArgumentListWrapping,
+            ::BackingPropertyNaming,
+            ::BinaryExpressionWrapping,
             ::BlankLineBeforeDeclaration,
             ::BlockCommentInitialStarAlignment,
+            ::ChainMethodContinuation,
             ::ChainWrapping,
             ::ClassName,
+            ::ClassSignature,
             ::CommentSpacing,
             ::CommentWrapping,
+            ::ConditionWrapping,
             ::ContextReceiverMapping,
             ::EnumEntryNameCase,
             ::EnumWrapping,
@@ -142,9 +148,12 @@ class FormattingProvider : RuleSetProvider {
             ::FinalNewline,
             ::FunctionName,
             ::FunKeywordSpacing,
+            ::FunctionLiteral,
+            ::FunctionExpressionBody,
             ::FunctionReturnTypeSpacing,
             ::FunctionSignature,
             ::FunctionStartOfBodySpacing,
+            ::FunctionTypeModifierSpacing,
             ::FunctionTypeReferenceSpacing,
             ::IfElseBracing,
             ::IfElseWrapping,
@@ -156,6 +165,7 @@ class FormattingProvider : RuleSetProvider {
             ::ModifierOrdering,
             ::MultiLineIfElse,
             ::MultilineExpressionWrapping,
+            ::MultilineLoop,
             ::NoBlankLineBeforeRbrace,
             ::NoBlankLineInList,
             ::NoBlankLinesInChainedMethodCalls,
@@ -210,19 +220,11 @@ class FormattingProvider : RuleSetProvider {
             ::ValueParameterComment,
             ::Wrapping,
             // Wrappers for experimental rules. Disabled by default.
-            ::BackingPropertyNaming,
-            ::BinaryExpressionWrapping,
             ::BlankLineBetweenWhenConditions,
-            ::ChainMethodContinuation,
-            ::ClassSignature,
-            ::ConditionWrapping,
-            ::FunctionExpressionBody,
-            ::FunctionLiteral,
-            ::FunctionTypeModifierSpacing,
             ::Kdoc,
             ::MixedConditionOperators,
-            ::MultilineLoop,
             ::SpacingAroundSquareBrackets,
+            ::WhenEntryBracing,
         ).sorted()
     )
 

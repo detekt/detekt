@@ -1,5 +1,6 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.UsesKotlinJavaToolchain
 
 plugins {
@@ -50,20 +51,27 @@ tasks.withType<Test>().configureEach {
     }
 }
 
+val jvmTargetVersion = versionCatalog.findVersion("jvm-target").get().requiredVersion
+
 kotlin {
     compilerOptions {
-        jvmTarget = Versions.JVM_TARGET
         progressiveMode = true
         allWarningsAsErrors = providers.gradleProperty("warningsAsErrors").orNull.toBoolean()
     }
 }
 
-val java8Launcher = javaToolchains.launcherFor {
-    languageVersion = JavaLanguageVersion.of(8)
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>().configureEach {
+    compilerOptions {
+        jvmTarget = JvmTarget.fromTarget(jvmTargetVersion)
+    }
+}
+
+val javaLauncher = javaToolchains.launcherFor {
+    languageVersion = JavaLanguageVersion.of(versionCatalog.findVersion("java-compile-toolchain").get().requiredVersion)
 }
 
 project.tasks.withType<UsesKotlinJavaToolchain>().configureEach {
-    kotlinJavaToolchain.toolchain.use(java8Launcher)
+    kotlinJavaToolchain.toolchain.use(javaLauncher)
 }
 
 testing {
@@ -77,8 +85,8 @@ testing {
 java {
     withSourcesJar()
     withJavadocJar()
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.toVersion(jvmTargetVersion)
+    targetCompatibility = JavaVersion.toVersion(jvmTargetVersion)
     consistentResolution {
         useCompileClasspathVersions()
     }

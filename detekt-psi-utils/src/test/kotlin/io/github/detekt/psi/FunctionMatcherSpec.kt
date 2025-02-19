@@ -317,7 +317,7 @@ class FunctionMatcherSpec(private val env: KotlinCoreEnvironment) {
             functionSignature: String,
             classSignature: String,
             pattern: String,
-            result: Boolean
+            result: Boolean,
         ) {
             val ktFile = compileContentForTest(
                 """
@@ -347,7 +347,7 @@ private class TestCase(
 private fun buildKtFunction(
     environment: KotlinCoreEnvironment,
     code: String,
-    includePackage: Boolean = true
+    includePackage: Boolean = true,
 ): Pair<KtNamedFunction, BindingContext> {
     val ktFile = compileContentForTest(
         """

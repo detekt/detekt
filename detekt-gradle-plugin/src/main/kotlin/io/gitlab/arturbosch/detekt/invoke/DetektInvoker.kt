@@ -19,7 +19,7 @@ internal interface DetektInvoker {
         arguments: List<String>,
         classpath: Set<File>,
         taskName: String,
-        ignoreFailures: Boolean = false
+        ignoreFailures: Boolean = false,
     )
 
     companion object {
@@ -64,14 +64,14 @@ internal abstract class DetektWorkAction : WorkAction<DetektWorkParameters> {
 }
 
 internal class DefaultCliInvoker(
-    private val classLoaderCache: ClassLoaderCache = GlobalClassLoaderCache
+    private val classLoaderCache: ClassLoaderCache = GlobalClassLoaderCache,
 ) : DetektInvoker {
 
     override fun invokeCli(
         arguments: List<String>,
         classpath: Set<File>,
         taskName: String,
-        ignoreFailures: Boolean
+        ignoreFailures: Boolean,
     ) {
         try {
             val loader = classLoaderCache.getOrCreate(classpath)
@@ -106,7 +106,7 @@ private class DryRunInvoker : DetektInvoker {
         arguments: List<String>,
         classpath: Set<File>,
         taskName: String,
-        ignoreFailures: Boolean
+        ignoreFailures: Boolean,
     ) {
         println("Invoking detekt with dry-run.")
         println("Task: $taskName")

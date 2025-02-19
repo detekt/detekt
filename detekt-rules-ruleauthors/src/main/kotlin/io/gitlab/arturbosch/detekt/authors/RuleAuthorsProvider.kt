@@ -21,7 +21,6 @@ class RuleAuthorsProvider : RuleSetProvider {
     override fun instance() = RuleSet(
         ruleSetId,
         listOf(
-            ::ViolatesTypeResolutionRequirements,
             ::UseEntityAtName,
         )
     )

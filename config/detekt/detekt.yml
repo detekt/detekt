@@ -68,20 +68,16 @@ formatting:
   active: true
   android: false
   autoCorrect: true
-  BackingPropertyNaming:
-    active: true
-  BinaryExpressionWrapping:
-    active: true
   BlankLineBeforeDeclaration:
     active: false
-  ConditionWrapping:
-    active: true
+  ChainMethodContinuation:
+    active: false
+  ClassSignature:
+    active: false
   EnumEntryNameCase:
     active: false
   Filename:
     active: false
-  FunctionExpressionBody:
-    active: true
   FunctionSignature:
     active: false
   Kdoc:
@@ -91,14 +87,16 @@ formatting:
     active: false
   MultilineExpressionWrapping:
     active: false
-  MultilineLoop:
-    active: true
   NoEmptyFirstLineInClassBody:
     active: false
   SpacingAroundSquareBrackets:
     active: true
   StringTemplateIndent:
     active: false
+  TrailingCommaOnCallSite:
+    active: false
+  TrailingCommaOnDeclarationSite:
+    active: true
   ValueArgumentComment:
     active: false
 

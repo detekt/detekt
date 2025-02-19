@@ -35,11 +35,12 @@ import org.jetbrains.kotlin.types.KotlinType
  * class SomeClass()
  * </compliant>
  */
-@RequiresFullAnalysis
-class ForbiddenAnnotation(config: Config) : Rule(
-    config,
-    "Avoid using this annotation."
-) {
+class ForbiddenAnnotation(config: Config) :
+    Rule(
+        config,
+        "Avoid using this annotation."
+    ),
+    RequiresFullAnalysis {
 
     @Configuration(
         "List of fully qualified annotation classes which are forbidden."

@@ -7,14 +7,14 @@ internal sealed class Deprecation
 internal data class DeprecatedRule(
     val ruleSetId: String,
     val ruleName: String,
-    val description: String
+    val description: String,
 ) : Deprecation()
 
 internal data class DeprecatedProperty(
     val ruleSetId: String,
     val ruleName: String,
     val propertyName: String,
-    val description: String
+    val description: String,
 ) : Deprecation()
 
 internal fun loadDeprecations(): Set<Deprecation> =

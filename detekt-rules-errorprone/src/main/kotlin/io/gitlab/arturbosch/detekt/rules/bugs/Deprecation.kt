@@ -14,12 +14,13 @@ import org.jetbrains.kotlin.psi.KtNamedDeclaration
  * Deprecated elements are expected to be removed in the future. Alternatives should be found if possible.
  *
  */
-@RequiresFullAnalysis
 @Alias("DEPRECATION")
-class Deprecation(config: Config) : Rule(
-    config,
-    "Deprecated elements should not be used."
-) {
+class Deprecation(config: Config) :
+    Rule(
+        config,
+        "Deprecated elements should not be used."
+    ),
+    RequiresFullAnalysis {
 
     override fun visitElement(element: PsiElement) {
         val diagnostic = hasDeprecationCompilerWarnings(element)

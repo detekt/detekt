@@ -1211,7 +1211,7 @@ class BracesOnWhenStatementsSpec {
             singleLine: String,
             multiLine: String,
             code: String,
-            vararg locations: (String) -> Pair<Int, Int>
+            vararg locations: (String) -> Pair<Int, Int>,
         ): DynamicNode {
             val codeLocation = locations.map { it(code) }.toTypedArray()
             // Separately compile the code because otherwise all the combinations would compile them again and again.
@@ -1250,7 +1250,7 @@ class BracesOnWhenStatementsSpec {
         private fun createBraceTests(
             singleLine: String,
             multiLine: String,
-            test: (BracesOnWhenStatements) -> Unit
+            test: (BracesOnWhenStatements) -> Unit,
         ): List<DynamicNode> {
             val singleOptions = options(singleLine)
             val multiOptions = options(multiLine)

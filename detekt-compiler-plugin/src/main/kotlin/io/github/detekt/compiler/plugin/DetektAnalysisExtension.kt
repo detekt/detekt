@@ -18,14 +18,14 @@ class DetektAnalysisExtension(
     private val log: MessageCollector,
     private val spec: ProcessingSpec,
     private val rootPath: Path,
-    private val excludes: Collection<String>
+    private val excludes: Collection<String>,
 ) : AnalysisHandlerExtension {
 
     override fun analysisCompleted(
         project: Project,
         module: ModuleDescriptor,
         bindingTrace: BindingTrace,
-        files: Collection<KtFile>
+        files: Collection<KtFile>,
     ): AnalysisResult? {
         if (spec.loggingSpec.debug) {
             log.info("$spec")

@@ -19,7 +19,7 @@ object KtLintLineColCalculator {
             .replaceFirst(UTF8_BOM, "")
 
     private fun buildPositionInTextLocator(
-        text: String
+        text: String,
     ): (offset: Int) -> Pair<Int, Int> {
         val textLength = text.length
         val arr = ArrayList<Int>()
@@ -46,7 +46,7 @@ object KtLintLineColCalculator {
     }
 
     private class SegmentTree(
-        sortedArray: IntArray
+        sortedArray: IntArray,
     ) {
 
         init {
@@ -69,7 +69,7 @@ object KtLintLineColCalculator {
         private fun binarySearch(
             v: Int,
             l: Int,
-            r: Int
+            r: Int,
         ): Int = when {
             l > r -> -1
             else -> {
@@ -86,6 +86,6 @@ object KtLintLineColCalculator {
 
     private data class Segment(
         val left: Int,
-        val right: Int
+        val right: Int,
     )
 }

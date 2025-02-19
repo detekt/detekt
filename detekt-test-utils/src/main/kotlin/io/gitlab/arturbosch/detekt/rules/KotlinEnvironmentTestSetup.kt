@@ -15,7 +15,7 @@ import kotlin.script.experimental.jvm.util.classpathFromClassloader
 @Target(AnnotationTarget.CLASS)
 @ExtendWith(KotlinEnvironmentResolver::class)
 annotation class KotlinCoreEnvironmentTest(
-    val additionalJavaSourcePaths: Array<String> = []
+    val additionalJavaSourcePaths: Array<String> = [],
 )
 
 internal class KotlinEnvironmentResolver : ParameterResolver {

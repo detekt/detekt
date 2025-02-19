@@ -27,7 +27,6 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactoryImpl
 import java.net.URI
 import java.nio.file.Path
-import kotlin.reflect.full.hasAnnotation
 
 internal class Analyzer(
     private val settings: ProcessingSettings,
@@ -56,7 +55,7 @@ internal class Analyzer(
     private fun runSync(
         ktFiles: Collection<KtFile>,
         rules: List<RuleDescriptor>,
-        compilerResources: CompilerResources
+        compilerResources: CompilerResources,
     ): List<Issue> =
         ktFiles.flatMap { file ->
             processors.forEach { it.onProcess(file) }
@@ -70,7 +69,7 @@ internal class Analyzer(
     private fun runAsync(
         ktFiles: Collection<KtFile>,
         rules: List<RuleDescriptor>,
-        compilerResources: CompilerResources
+        compilerResources: CompilerResources,
     ): List<Issue> {
         val service = settings.taskPool
         val tasks: TaskList<List<Issue>?> = ktFiles.map { file ->
@@ -87,7 +86,7 @@ internal class Analyzer(
     private fun analyze(
         file: KtFile,
         rules: List<RuleDescriptor>,
-        compilerResources: CompilerResources
+        compilerResources: CompilerResources,
     ): List<Issue> {
         val (correctableRules, otherRules) = rules.asSequence()
             .filter { ruleDescriptor ->
@@ -102,10 +101,13 @@ internal class Analyzer(
             .filterNot { (ruleInstance, rule) ->
                 file.isSuppressedBy(ruleInstance.id, rule.aliases, ruleInstance.ruleSetId)
             }
+            .onEach { (_, rule) ->
+                if (rule is RequiresFullAnalysis) rule.setBindingContext(bindingContext)
+            }
             .partition { (_, rule) -> rule.autoCorrect }
 
         return (correctableRules + otherRules).flatMap { (ruleInstance, rule) ->
-            rule.visitFile(file, bindingContext, compilerResources)
+            rule.visitFile(file, compilerResources)
                 .filterNot {
                     it.entity.ktElement.isSuppressedBy(ruleInstance.id, rule.aliases, ruleInstance.ruleSetId)
                 }
@@ -144,8 +146,7 @@ private fun getActiveRules(
         if (fullAnalysis) {
             true
         } else {
-            val requiresFullAnalysis = ruleDescriptor.ruleProvider(Config.empty)::class
-                .hasAnnotation<RequiresFullAnalysis>()
+            val requiresFullAnalysis = ruleDescriptor.ruleProvider(Config.empty) is RequiresFullAnalysis
             if (requiresFullAnalysis) {
                 log { "The rule '${ruleDescriptor.ruleId}' requires type resolution but it was run without it." }
             }

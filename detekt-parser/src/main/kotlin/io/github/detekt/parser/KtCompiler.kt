@@ -7,7 +7,7 @@ import java.nio.file.Path
 import kotlin.io.path.isRegularFile
 
 open class KtCompiler(
-    protected val environment: KotlinCoreEnvironment = createKotlinCoreEnvironment(printStream = System.err)
+    protected val environment: KotlinCoreEnvironment = createKotlinCoreEnvironment(printStream = System.err),
 ) {
 
     fun compile(path: Path): KtFile {

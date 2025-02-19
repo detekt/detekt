@@ -26,7 +26,7 @@ constructor(
     val jvmArgs: String = "-Xmx2g -XX:MaxMetaspaceSize=1g",
     val gradleProperties: Map<String, String> = emptyMap(),
     val customPluginClasspath: List<File> = emptyList(),
-    val projectScript: Project.() -> Unit = {}
+    val projectScript: Project.() -> Unit = {},
 ) {
 
     private val rootDir: File = Files.createTempDirectory("applyPlugin").toFile().apply { deleteOnExit() }

@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.util.SimpleNotification
 
 class OutputFacade(
-    private val settings: ProcessingSettings
+    private val settings: ProcessingSettings,
 ) {
 
     private val reports: Map<String, ReportsSpec.Report> =

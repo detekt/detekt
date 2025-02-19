@@ -1,11 +1,10 @@
 package io.gitlab.arturbosch.detekt.api
 
+import org.jetbrains.kotlin.resolve.BindingContext
+
 /**
- * Annotated [Rule] requires type resolution to work.
+ * Interface to let the core know that this [Rule] needs a [BindingContext] instance
  *
- * The detekt core will honor this annotation and it will not run any rule with this annotation if the bindingContext
- * is empty.
+ * The core will only run your [Rule] if it is running in FullAnalysis mode.
  */
-@Target(AnnotationTarget.CLASS)
-@Retention(AnnotationRetention.RUNTIME)
-annotation class RequiresFullAnalysis
+interface RequiresFullAnalysis

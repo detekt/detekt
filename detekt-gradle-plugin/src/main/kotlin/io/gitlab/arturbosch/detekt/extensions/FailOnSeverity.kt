@@ -4,5 +4,5 @@ enum class FailOnSeverity {
     Error,
     Warning,
     Info,
-    Never
+    Never,
 }

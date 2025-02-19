@@ -10,5 +10,5 @@ annotation class ActiveByDefault(
     /**
      *  The version the rule was activated by default.
      */
-    val since: String
+    val since: String,
 )

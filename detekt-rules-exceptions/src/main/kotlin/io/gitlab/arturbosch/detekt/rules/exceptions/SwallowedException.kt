@@ -114,7 +114,7 @@ class SwallowedException(config: Config) : Rule(
 
     private fun KtThrowExpression.parameterReferences(
         parameterName: String?,
-        catchBody: KtExpression
+        catchBody: KtExpression,
     ): List<KtExpression> {
         val parameterReferencesInVariables = mutableMapOf<String, KtExpression>()
         return thrownExpression
@@ -136,7 +136,7 @@ class SwallowedException(config: Config) : Rule(
     private fun KtExpression.findReferenceInVariable(
         referenceName: String?,
         variableName: String,
-        catchBody: KtExpression
+        catchBody: KtExpression,
     ): KtExpression? {
         val block = getStrictParentOfType<KtBlockExpression>() ?: return null
         fun find(block: KtBlockExpression): KtExpression? {

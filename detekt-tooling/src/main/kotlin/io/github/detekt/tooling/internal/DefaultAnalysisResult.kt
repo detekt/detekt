@@ -6,7 +6,7 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 
 class DefaultAnalysisResult(
     override val container: Detektion?,
-    override val error: DetektError? = null
+    override val error: DetektError? = null,
 ) : AnalysisResult {
 
     init {
