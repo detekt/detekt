@@ -152,6 +152,7 @@ class FormattingProvider : RuleSetProvider {
             ::FunctionReturnTypeSpacing,
             ::FunctionSignature,
             ::FunctionStartOfBodySpacing,
+            ::FunctionTypeModifierSpacing,
             ::FunctionTypeReferenceSpacing,
             ::IfElseBracing,
             ::IfElseWrapping,
@@ -220,7 +221,6 @@ class FormattingProvider : RuleSetProvider {
             // Wrappers for experimental rules. Disabled by default.
             ::BlankLineBetweenWhenConditions,
             ::FunctionLiteral,
-            ::FunctionTypeModifierSpacing,
             ::Kdoc,
             ::MixedConditionOperators,
             ::SpacingAroundSquareBrackets,
