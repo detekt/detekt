@@ -26,7 +26,9 @@ internal fun getRules(
     .flatMap { ruleSetProvider ->
         val ruleSetConfig = config.subConfig(ruleSetProvider.ruleSetId.value)
         val urlGenerator: (Rule) -> URI? =
-            if (ruleSetProvider is DefaultRuleSetProvider || ruleSetProvider.ruleSetId.value in firstPartyRuleSets) {
+            if (ruleSetProvider is DefaultRuleSetProvider ||
+                ruleSetProvider.ruleSetId.value in externalFirstPartyRuleSets
+            ) {
                 { rule -> rule.url ?: generateDefaultUrl(ruleSetProvider.ruleSetId, rule.ruleName) }
             } else {
                 { rule -> rule.url }
@@ -69,7 +71,7 @@ private fun RuleSet.getRules(
 private fun generateDefaultUrl(ruleSetId: RuleSet.Id, ruleName: Rule.Name) =
     URI("https://detekt.dev/docs/rules/${ruleSetId.value.lowercase()}#${ruleName.value.lowercase()}")
 
-private val firstPartyRuleSets = setOf(
+private val externalFirstPartyRuleSets = setOf(
     "formatting",
     "ruleauthors",
     "libraries",
