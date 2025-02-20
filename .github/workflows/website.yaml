@@ -15,7 +15,7 @@ permissions:
 jobs:
   build-detekt-docs:
     if: github.repository == 'detekt/detekt'
-    runs-on: macos-latest
+    runs-on: macos-15
     steps:
       - name: Checkout Repo
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4

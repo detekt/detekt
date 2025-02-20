@@ -5,7 +5,7 @@ on:
 
 jobs:
   stale:
-    runs-on: macos-latest
+    runs-on: macos-15
     if: github.repository == 'detekt/detekt'
     permissions:
       issues: write
