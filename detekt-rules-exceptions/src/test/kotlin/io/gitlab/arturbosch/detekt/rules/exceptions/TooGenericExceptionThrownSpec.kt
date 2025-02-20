@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.exceptions
 
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -35,7 +35,7 @@ class TooGenericExceptionThrownSpec {
             }
         """.trimIndent()
 
-        assertThat(rule.compileAndLint(code)).hasSize(1)
+        assertThat(rule.lint(code)).hasSize(1)
     }
 
     @Test
@@ -61,7 +61,7 @@ class TooGenericExceptionThrownSpec {
             }
         """.trimIndent()
 
-        assertThat(rule.compileAndLint(code)).isEmpty()
+        assertThat(rule.lint(code)).isEmpty()
     }
 
     @Test
@@ -77,7 +77,7 @@ class TooGenericExceptionThrownSpec {
             }
         """.trimIndent()
 
-        assertThat(rule.compileAndLint(code)).isEmpty()
+        assertThat(rule.lint(code)).isEmpty()
     }
 
     @Test
@@ -85,7 +85,7 @@ class TooGenericExceptionThrownSpec {
         val rule = TooGenericExceptionThrown(TestConfig(EXCEPTION_NAMES to "['Exception']"))
         val code = """fun f() { val ex = Exception() }"""
 
-        assertThat(rule.compileAndLint(code)).isEmpty()
+        assertThat(rule.lint(code)).isEmpty()
     }
 
     @Test
@@ -111,7 +111,7 @@ class TooGenericExceptionThrownSpec {
                 }
             }
         """.trimIndent()
-        val findings = rule.compileAndLint(code)
+        val findings = rule.lint(code)
 
         assertThat(findings).isEmpty()
     }

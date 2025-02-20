@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.style.optional
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.SourceLocation
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import io.gitlab.arturbosch.detekt.test.location
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
@@ -24,7 +24,7 @@ class MandatoryBracesLoopsSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -35,7 +35,7 @@ class MandatoryBracesLoopsSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -46,7 +46,7 @@ class MandatoryBracesLoopsSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -58,7 +58,7 @@ class MandatoryBracesLoopsSpec {
                 }
             """.trimIndent()
 
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
 
             assertThat(findings).hasSize(1)
             assertThat(findings[0].entity.ktElement.text).isEqualTo("println(i)")
@@ -74,7 +74,7 @@ class MandatoryBracesLoopsSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -89,7 +89,7 @@ class MandatoryBracesLoopsSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -100,7 +100,7 @@ class MandatoryBracesLoopsSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -114,7 +114,7 @@ class MandatoryBracesLoopsSpec {
                 }
             """.trimIndent()
 
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
 
             assertThat(findings).hasSize(1)
             assertThat(findings[0].location.source).isEqualTo(SourceLocation(line = 3, column = 9))
@@ -131,7 +131,7 @@ class MandatoryBracesLoopsSpec {
                 }
             """.trimIndent()
 
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
 
             assertThat(findings).hasSize(1)
         }
@@ -146,7 +146,7 @@ class MandatoryBracesLoopsSpec {
                 }
             """.trimIndent()
 
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
 
             assertThat(findings).hasSize(2)
 
@@ -167,7 +167,7 @@ class MandatoryBracesLoopsSpec {
                 }
             """.trimIndent()
 
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
 
             assertThat(findings).hasSize(1)
             assertThat(findings[0].location.source).isEqualTo(SourceLocation(line = 4, column = 9))
@@ -188,7 +188,7 @@ class MandatoryBracesLoopsSpec {
                 }
             """.trimIndent()
 
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
 
             assertThat(findings).hasSize(1)
             assertThat(findings[0].location.source).isEqualTo(SourceLocation(line = 6, column = 13))
@@ -208,7 +208,7 @@ class MandatoryBracesLoopsSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -219,7 +219,7 @@ class MandatoryBracesLoopsSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -231,7 +231,7 @@ class MandatoryBracesLoopsSpec {
                 }
             """.trimIndent()
 
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
 
             assertThat(findings).hasSize(1)
             assertThat(findings[0].entity.ktElement.text).isEqualTo("println()")
@@ -247,7 +247,7 @@ class MandatoryBracesLoopsSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -261,7 +261,7 @@ class MandatoryBracesLoopsSpec {
                 }
             """.trimIndent()
 
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
 
             assertThat(findings).hasSize(1)
         }
@@ -280,7 +280,7 @@ class MandatoryBracesLoopsSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -291,7 +291,7 @@ class MandatoryBracesLoopsSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -304,7 +304,7 @@ class MandatoryBracesLoopsSpec {
                 }
             """.trimIndent()
 
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
 
             assertThat(findings).hasSize(1)
             assertThat(findings[0].entity.ktElement.text).isEqualTo("println()")
@@ -321,7 +321,7 @@ class MandatoryBracesLoopsSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -336,7 +336,7 @@ class MandatoryBracesLoopsSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -348,7 +348,7 @@ class MandatoryBracesLoopsSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -363,7 +363,7 @@ class MandatoryBracesLoopsSpec {
                 }
             """.trimIndent()
 
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
 
             assertThat(findings).hasSize(1)
             assertThat(findings[0].location.source).isEqualTo(SourceLocation(line = 3, column = 9))
@@ -381,7 +381,7 @@ class MandatoryBracesLoopsSpec {
                 }
             """.trimIndent()
 
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
 
             assertThat(findings).hasSize(1)
         }

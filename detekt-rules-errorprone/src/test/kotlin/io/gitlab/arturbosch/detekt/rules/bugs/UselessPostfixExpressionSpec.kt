@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -22,7 +22,7 @@ class UselessPostfixExpressionSpec {
                     i = i++ + 1 // invalid
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(3)
+            assertThat(subject.lint(code)).hasSize(3)
         }
 
         @Test
@@ -34,7 +34,7 @@ class UselessPostfixExpressionSpec {
                     j = i++
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -47,7 +47,7 @@ class UselessPostfixExpressionSpec {
                     return i++
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(2)
+            assertThat(subject.lint(code)).hasSize(2)
         }
 
         @Test
@@ -58,7 +58,7 @@ class UselessPostfixExpressionSpec {
                     return id++.toString()
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
 
         @Test
@@ -87,7 +87,7 @@ class UselessPostfixExpressionSpec {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -109,7 +109,7 @@ class UselessPostfixExpressionSpec {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(2)
+            assertThat(subject.lint(code)).hasSize(2)
         }
     }
 
@@ -129,7 +129,7 @@ class UselessPostfixExpressionSpec {
                     return str!!.count()
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -140,7 +140,7 @@ class UselessPostfixExpressionSpec {
                     str!!
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
     }
 }

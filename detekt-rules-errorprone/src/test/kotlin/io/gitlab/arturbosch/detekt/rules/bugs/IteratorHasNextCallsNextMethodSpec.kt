@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -63,7 +63,7 @@ class IteratorHasNextCallsNextMethodSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(4)
+        assertThat(subject.lint(code)).hasSize(4)
     }
 
     @Test
@@ -91,6 +91,6 @@ class IteratorHasNextCallsNextMethodSpec {
             
             abstract class AbstractIteratorNotOverridden : Iterator<String>
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 }

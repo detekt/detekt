@@ -4,7 +4,6 @@ import io.github.detekt.test.utils.compileForTest
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ChainWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoLineBreakBeforeAssignment
-import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import io.gitlab.arturbosch.detekt.test.location
 import org.assertj.core.api.Assertions.assertThat
@@ -28,7 +27,7 @@ class FormattingRuleSpec {
 
         @Test
         fun `support suppression on node level`() {
-            val findings = subject.compileAndLint(
+            val findings = subject.lint(
                 """
                     @Suppress("NoLineBreakBeforeAssignment")
                     fun main()
@@ -45,7 +44,7 @@ class FormattingRuleSpec {
 
         @Test
         fun `in a file without package name`() {
-            val findings = subject.compileAndLint(
+            val findings = subject.lint(
                 """
                     fun main()
                     = Unit
@@ -57,7 +56,7 @@ class FormattingRuleSpec {
 
         @Test
         fun `with a file with package name`() {
-            val findings = subject.compileAndLint(
+            val findings = subject.lint(
                 """
                     package test.test.test
                     fun main()

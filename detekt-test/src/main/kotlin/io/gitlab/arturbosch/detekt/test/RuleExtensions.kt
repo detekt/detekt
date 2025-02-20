@@ -18,25 +18,20 @@ import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactoryImpl
 private val shouldCompileTestSnippets: Boolean =
     System.getProperty("compile-test-snippets", "false")!!.toBoolean()
 
-fun Rule.compileAndLint(
-    @Language("kotlin") content: String,
-    compilerResources: CompilerResources = FakeCompilerResources(),
-): List<Finding> {
-    require(this !is RequiresFullAnalysis) {
-        "${this.ruleName} requires full analysis so you should use compileAndLintWithContext instead of compileAndLint"
-    }
-    if (shouldCompileTestSnippets) {
-        KotlinScriptEngine.compile(content)
-    }
-    return lint(content, compilerResources)
-}
-
 fun Rule.lint(
     @Language("kotlin") content: String,
     compilerResources: CompilerResources = FakeCompilerResources(),
+    compile: Boolean = true,
 ): List<Finding> {
     require(this !is RequiresFullAnalysis) {
-        "${this.ruleName} requires full analysis so you should use lintWithContext instead of lint"
+        if (compile) {
+            "${this.ruleName} requires full analysis so you should use compileAndLintWithContext instead of lint"
+        } else {
+            "${this.ruleName} requires full analysis so you should use lintWithContext instead of lint"
+        }
+    }
+    if (compile && shouldCompileTestSnippets) {
+        KotlinScriptEngine.compile(content)
     }
     val ktFile = compileContentForTest(content)
     return visitFile(ktFile, compilerResources = compilerResources).filterSuppressed(this)
@@ -52,7 +47,7 @@ fun Rule.lintWithContext(
     ),
 ): List<Finding> {
     require(this is RequiresFullAnalysis) {
-        "${this.ruleName} doesn't require full analysis so you should use lint instead of lintWithContext"
+        "${this.ruleName} doesn't require full analysis so you should use lint instead of lint"
     }
     val ktFile = compileContentForTest(content)
     val additionalKtFiles = additionalContents.mapIndexed { index, additionalContent ->
@@ -72,7 +67,7 @@ fun Rule.compileAndLintWithContext(
     ),
 ): List<Finding> {
     require(this is RequiresFullAnalysis) {
-        "${this.ruleName} doesn't require full analysis so you should use compileAndLintWithContext instead of " +
+        "${this.ruleName} doesn't require full analysis so you should use lint with compile = true instead of " +
             "compileAndLint"
     }
     if (shouldCompileTestSnippets) {

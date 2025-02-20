@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Test
 
 class LongMethodSpec {
@@ -26,7 +26,7 @@ class LongMethodSpec {
                 }
             }
         """.trimIndent()
-        val findings = subject.compileAndLint(code)
+        val findings = subject.lint(code)
 
         assertThat(findings).hasSize(2)
         assertThat(findings).hasTextLocations("longMethod", "nestedLongMethod")
@@ -44,7 +44,7 @@ class LongMethodSpec {
             }
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -58,7 +58,7 @@ class LongMethodSpec {
             }
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -74,7 +74,7 @@ class LongMethodSpec {
             }
         """.trimIndent()
 
-        val findings = subject.compileAndLint(code)
+        val findings = subject.lint(code)
 
         assertThat(findings).hasSize(1)
     }
@@ -97,7 +97,7 @@ class LongMethodSpec {
             }
         """.trimIndent()
 
-        val findings = subject.compileAndLint(code)
+        val findings = subject.lint(code)
 
         assertThat(findings).hasSize(1)
     }
@@ -124,7 +124,7 @@ class LongMethodSpec {
             }
         """.trimIndent()
 
-        val findings = subject.compileAndLint(code)
+        val findings = subject.lint(code)
 
         assertThat(findings)
             .hasSize(2)
@@ -152,7 +152,7 @@ class LongMethodSpec {
             }
         """.trimIndent()
 
-        val findings = subject.compileAndLint(code)
+        val findings = subject.lint(code)
 
         assertThat(findings)
             .hasSize(1)

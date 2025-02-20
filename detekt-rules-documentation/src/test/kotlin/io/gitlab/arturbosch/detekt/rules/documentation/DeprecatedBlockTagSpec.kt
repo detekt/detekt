@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.documentation
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -19,7 +19,7 @@ class DeprecatedBlockTagSpec {
              */
             val v = 2
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Nested
@@ -35,7 +35,7 @@ class DeprecatedBlockTagSpec {
 
         @Test
         fun `correct message`() {
-            assertThat(subject.compileAndLint(code)).singleElement().hasMessage(
+            assertThat(subject.lint(code)).singleElement().hasMessage(
                 "@deprecated tag block does not properly report " +
                     "deprecation in Kotlin, use @Deprecated annotation instead"
             )
@@ -55,7 +55,7 @@ class DeprecatedBlockTagSpec {
                  */
                 class Thing { }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
 
         @Test
@@ -70,7 +70,7 @@ class DeprecatedBlockTagSpec {
                     val doNotUseMe = 0
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
 
         @Test
@@ -83,7 +83,7 @@ class DeprecatedBlockTagSpec {
                  */
                 annotation class Thing()
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
 
         @Test
@@ -98,7 +98,7 @@ class DeprecatedBlockTagSpec {
                     constructor(something: String)
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
 
         @Test
@@ -115,7 +115,7 @@ class DeprecatedBlockTagSpec {
                         set(value) { println(value) }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
 
         @Test
@@ -132,7 +132,7 @@ class DeprecatedBlockTagSpec {
                         set(value) { println(value) }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
 
         @Test
@@ -145,7 +145,7 @@ class DeprecatedBlockTagSpec {
                  */
                 typealias VeryString = String
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
     }
 }

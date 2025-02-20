@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.naming
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Test
 
 class FunctionNameMaxLengthSpec {
@@ -12,7 +12,7 @@ class FunctionNameMaxLengthSpec {
     fun `should report a function name that is too long base on config`() {
         val code = "fun thisFunctionLongName() = 3"
         assertThat(
-            FunctionNameMaxLength(TestConfig("maximumFunctionNameLength" to 10)).compileAndLint(code)
+            FunctionNameMaxLength(TestConfig("maximumFunctionNameLength" to 10)).lint(code)
         ).hasSize(1)
     }
 
@@ -25,20 +25,20 @@ class FunctionNameMaxLengthSpec {
             interface I { @Suppress("FunctionNameMaxLength") fun thisFunctionIsWayTooLongButStillShouldNotBeReportedByDefault() }
         """.trimIndent()
         assertThat(
-            FunctionNameMaxLength(TestConfig("maximumFunctionNameLength" to 10)).compileAndLint(code)
+            FunctionNameMaxLength(TestConfig("maximumFunctionNameLength" to 10)).lint(code)
         ).isEmpty()
     }
 
     @Test
     fun `should report a function name that is too long`() {
         val code = "fun thisFunctionIsDefinitelyWayTooLongAndShouldBeMuchShorter() = 3"
-        assertThat(FunctionNameMaxLength(Config.empty).compileAndLint(code)).hasSize(1)
+        assertThat(FunctionNameMaxLength(Config.empty).lint(code)).hasSize(1)
     }
 
     @Test
     fun `should not report a function name that is okay`() {
         val code = "fun three() = 3"
-        assertThat(FunctionNameMaxLength(Config.empty).compileAndLint(code)).isEmpty()
+        assertThat(FunctionNameMaxLength(Config.empty).lint(code)).isEmpty()
     }
 
     @Test
@@ -52,7 +52,7 @@ class FunctionNameMaxLengthSpec {
             }
         """.trimIndent()
         assertThat(
-            FunctionNameMaxLength(TestConfig("maximumFunctionNameLength" to 5)).compileAndLint(code)
+            FunctionNameMaxLength(TestConfig("maximumFunctionNameLength" to 5)).lint(code)
         ).isEmpty()
     }
 }

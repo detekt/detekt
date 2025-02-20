@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -13,7 +13,7 @@ class EqualsOnSignatureLineSpec {
     inner class `with expression syntax and without a return type` {
         @Test
         fun `reports when the equals is on a new line`() {
-            val findings = subject.compileAndLint(
+            val findings = subject.lint(
                 """
                     fun foo()
                         = 1
@@ -24,7 +24,7 @@ class EqualsOnSignatureLineSpec {
 
         @Test
         fun `does not report when the equals is on the same line`() {
-            val findings = subject.compileAndLint(
+            val findings = subject.lint(
                 """
                     fun foo() = 1
                     
@@ -40,7 +40,7 @@ class EqualsOnSignatureLineSpec {
     inner class `with expression syntax and with a return type` {
         @Test
         fun `reports when the equals is on a new line`() {
-            val findings = subject.compileAndLint(
+            val findings = subject.lint(
                 """
                     fun one(): Int
                         = 1
@@ -61,7 +61,7 @@ class EqualsOnSignatureLineSpec {
 
         @Test
         fun `does not report when the equals is on the same line`() {
-            val findings = subject.compileAndLint(
+            val findings = subject.lint(
                 """
                     fun one(): Int =
                         1
@@ -101,7 +101,7 @@ class EqualsOnSignatureLineSpec {
     inner class `with expression syntax and with a where clause` {
         @Test
         fun `reports when the equals is on a new line`() {
-            val findings = subject.compileAndLint(
+            val findings = subject.lint(
                 """
                     fun <V> one(): Int where V : Number
                         = 1
@@ -123,7 +123,7 @@ class EqualsOnSignatureLineSpec {
 
         @Test
         fun `does not report when the equals is on the same line`() {
-            val findings = subject.compileAndLint(
+            val findings = subject.lint(
                 """
                     fun <V> one(): Int where V : Number =
                         1
@@ -139,7 +139,7 @@ class EqualsOnSignatureLineSpec {
 
     @Test
     fun `does not report non-expression functions`() {
-        val findings = subject.compileAndLint(
+        val findings = subject.lint(
             """
                 fun foo() {
                 }

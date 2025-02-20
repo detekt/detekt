@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Test
 
 class OptionalAbstractKeywordSpec {
@@ -11,19 +11,19 @@ class OptionalAbstractKeywordSpec {
     @Test
     fun `does not report abstract keywords on an interface`() {
         val code = "interface A {}"
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
     fun `reports abstract interface with abstract property`() {
         val code = "abstract interface A { abstract var x: Int }"
-        assertThat(subject.compileAndLint(code)).hasSize(2)
+        assertThat(subject.lint(code)).hasSize(2)
     }
 
     @Test
     fun `reports abstract interface with abstract function`() {
         val code = "abstract interface A { abstract fun x() }"
-        val findings = subject.compileAndLint(code)
+        val findings = subject.lint(code)
 
         assertThat(findings).hasSize(2)
         assertThat(findings).hasTextLocations(0 to 8, 23 to 31)
@@ -38,13 +38,13 @@ class OptionalAbstractKeywordSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(2)
+        assertThat(subject.lint(code)).hasSize(2)
     }
 
     @Test
     fun `does not report an abstract class`() {
         val code = "abstract class A { abstract fun x() }"
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -56,6 +56,6 @@ class OptionalAbstractKeywordSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 }

@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.documentation
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -17,7 +17,7 @@ class OutdatedDocumentationSpec {
             val withoutDoc = """
                 class MyClass(someParam: String, val someProp: String)
             """.trimIndent()
-            assertThat(subject.compileAndLint(withoutDoc)).isEmpty()
+            assertThat(subject.lint(withoutDoc)).isEmpty()
         }
 
         @Test
@@ -28,7 +28,7 @@ class OutdatedDocumentationSpec {
                  */
                 class MyClass(someParam: String, val someProp: String)
             """.trimIndent()
-            assertThat(subject.compileAndLint(docWithoutParamAndPropertyTags)).isEmpty()
+            assertThat(subject.lint(docWithoutParamAndPropertyTags)).isEmpty()
         }
     }
 
@@ -42,7 +42,7 @@ class OutdatedDocumentationSpec {
                  */
                 class MyClass(someParam: String)
             """.trimIndent()
-            assertThat(subject.compileAndLint(correctParam)).isEmpty()
+            assertThat(subject.lint(correctParam)).isEmpty()
         }
 
         @Test
@@ -53,7 +53,7 @@ class OutdatedDocumentationSpec {
                  */
                 class MyClass(otherParam: String)
             """.trimIndent()
-            assertThat(subject.compileAndLint(incorrectParamName)).hasSize(1)
+            assertThat(subject.lint(incorrectParamName)).hasSize(1)
         }
 
         @Test
@@ -65,7 +65,7 @@ class OutdatedDocumentationSpec {
                  */
                 class MyClass(someParam: String)
             """.trimIndent()
-            assertThat(subject.compileAndLint(incorrectListOfParams)).hasSize(1)
+            assertThat(subject.lint(incorrectListOfParams)).hasSize(1)
         }
 
         @Test
@@ -77,7 +77,7 @@ class OutdatedDocumentationSpec {
                  */
                 class MyClass(otherParam: String, someParam: String)
             """.trimIndent()
-            assertThat(subject.compileAndLint(incorrectParamOrder)).hasSize(1)
+            assertThat(subject.lint(incorrectParamOrder)).hasSize(1)
         }
 
         @Test
@@ -89,7 +89,7 @@ class OutdatedDocumentationSpec {
                  */
                 class MyClass(someParam: String, val someProp: String)
             """.trimIndent()
-            assertThat(subject.compileAndLint(correctParamAndProp)).isEmpty()
+            assertThat(subject.lint(correctParamAndProp)).isEmpty()
         }
 
         @Test
@@ -101,7 +101,7 @@ class OutdatedDocumentationSpec {
                  */
                 class MyClass(someParam: String, val otherProp: String)
             """.trimIndent()
-            assertThat(subject.compileAndLint(correctParamIncorrectProp)).hasSize(1)
+            assertThat(subject.lint(correctParamIncorrectProp)).hasSize(1)
         }
 
         @Test
@@ -113,7 +113,7 @@ class OutdatedDocumentationSpec {
                  */
                 class MyClass(otherParam: String, val someProp: String)
             """.trimIndent()
-            assertThat(subject.compileAndLint(incorrectParamCorrectProp)).hasSize(1)
+            assertThat(subject.lint(incorrectParamCorrectProp)).hasSize(1)
         }
 
         @Test
@@ -126,7 +126,7 @@ class OutdatedDocumentationSpec {
                     constructor(otherParam: String)
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(incorrectConstructorDoc)).hasSize(1)
+            assertThat(subject.lint(incorrectConstructorDoc)).hasSize(1)
         }
 
         @Test
@@ -138,7 +138,7 @@ class OutdatedDocumentationSpec {
                  */
                 class MyClass(someParam: String, val someProp: String)
             """.trimIndent()
-            assertThat(subject.compileAndLint(propertyAsParam)).hasSize(1)
+            assertThat(subject.lint(propertyAsParam)).hasSize(1)
         }
 
         @Test
@@ -150,7 +150,7 @@ class OutdatedDocumentationSpec {
                  */
                 class MyClass(someParam: String, val someProp: String)
             """.trimIndent()
-            assertThat(subject.compileAndLint(incorrectDeclarationsOrder)).hasSize(1)
+            assertThat(subject.lint(incorrectDeclarationsOrder)).hasSize(1)
         }
 
         @Test
@@ -162,7 +162,7 @@ class OutdatedDocumentationSpec {
                  */
                 class A internal constructor(val b: String)
             """.trimIndent()
-            assertThat(subject.compileAndLint(incorrectDeclarationsOrder)).isEmpty()
+            assertThat(subject.lint(incorrectDeclarationsOrder)).isEmpty()
         }
 
         @Test
@@ -174,7 +174,7 @@ class OutdatedDocumentationSpec {
                  */
                 class A private constructor(val b: String)
             """.trimIndent()
-            assertThat(subject.compileAndLint(incorrectDeclarationsOrder)).isEmpty()
+            assertThat(subject.lint(incorrectDeclarationsOrder)).isEmpty()
         }
 
         @Test
@@ -189,7 +189,7 @@ class OutdatedDocumentationSpec {
             assertThat(
                 OutdatedDocumentation(
                     TestConfig("allowParamOnConstructorProperties" to "true")
-                ).compileAndLint(incorrectDeclarationsOrder)
+                ).lint(incorrectDeclarationsOrder)
             ).isEmpty()
         }
 
@@ -202,7 +202,7 @@ class OutdatedDocumentationSpec {
                  */
                 class A internal constructor(val a: String, val b: String)
             """.trimIndent()
-            assertThat(subject.compileAndLint(incorrectDeclarationsOrder)).hasSize(1)
+            assertThat(subject.lint(incorrectDeclarationsOrder)).hasSize(1)
         }
 
         @Test
@@ -215,7 +215,7 @@ class OutdatedDocumentationSpec {
                  */
                 class A internal constructor(val a: String, val b: String)
             """.trimIndent()
-            assertThat(subject.compileAndLint(incorrectDeclarationsOrder)).hasSize(1)
+            assertThat(subject.lint(incorrectDeclarationsOrder)).hasSize(1)
         }
 
         @Test
@@ -232,7 +232,7 @@ class OutdatedDocumentationSpec {
                     c: Int,
                 )
             """.trimIndent()
-            assertThat(subject.compileAndLint(incorrectDeclarationsOrder)).hasSize(1)
+            assertThat(subject.lint(incorrectDeclarationsOrder)).hasSize(1)
         }
 
         @Test
@@ -248,7 +248,7 @@ class OutdatedDocumentationSpec {
                     c: Int,
                 )
             """.trimIndent()
-            assertThat(subject.compileAndLint(incorrectDeclarationsOrder)).hasSize(1)
+            assertThat(subject.lint(incorrectDeclarationsOrder)).hasSize(1)
         }
 
         @Test
@@ -262,7 +262,7 @@ class OutdatedDocumentationSpec {
                     private val a: String,
                 )
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
 
         @Test
@@ -278,7 +278,7 @@ class OutdatedDocumentationSpec {
                     protected val b: String,
                 )
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -292,7 +292,7 @@ class OutdatedDocumentationSpec {
                     private val a: String,
                 )
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
     }
 
@@ -308,7 +308,7 @@ class OutdatedDocumentationSpec {
                  */
                 class MyClass<T>(someParam: String)
             """.trimIndent()
-            assertThat(subject.compileAndLint(correctTypeParam)).isEmpty()
+            assertThat(subject.lint(correctTypeParam)).isEmpty()
         }
 
         @Test
@@ -320,7 +320,7 @@ class OutdatedDocumentationSpec {
                  */
                 class MyClass<T>
             """.trimIndent()
-            assertThat(subject.compileAndLint(correctTypeParam)).isEmpty()
+            assertThat(subject.lint(correctTypeParam)).isEmpty()
         }
 
         @Test
@@ -331,7 +331,7 @@ class OutdatedDocumentationSpec {
                  */
                 class MyClass<T>(someParam: String)
             """.trimIndent()
-            assertThat(subject.compileAndLint(missingTypeParam)).hasSize(1)
+            assertThat(subject.lint(missingTypeParam)).hasSize(1)
         }
 
         @Test
@@ -343,7 +343,7 @@ class OutdatedDocumentationSpec {
                  */
                 class MyClass<T>(someParam: String)
             """.trimIndent()
-            assertThat(subject.compileAndLint(incorrectTypeParamName)).hasSize(1)
+            assertThat(subject.lint(incorrectTypeParamName)).hasSize(1)
         }
 
         @Test
@@ -355,7 +355,7 @@ class OutdatedDocumentationSpec {
                  */
                 class MyClass<T, S>(someParam: String)
             """.trimIndent()
-            assertThat(subject.compileAndLint(incorrectTypeParamList)).hasSize(1)
+            assertThat(subject.lint(incorrectTypeParamList)).hasSize(1)
         }
     }
 
@@ -370,7 +370,7 @@ class OutdatedDocumentationSpec {
                  */
                 fun myFun(someParam: String) {}
             """.trimIndent()
-            assertThat(subject.compileAndLint(correctDoc)).isEmpty()
+            assertThat(subject.lint(correctDoc)).isEmpty()
         }
 
         @Test
@@ -381,7 +381,7 @@ class OutdatedDocumentationSpec {
                  */
                 fun myFun(otherParam: String) {}
             """.trimIndent()
-            assertThat(subject.compileAndLint(incorrectParamName)).hasSize(1)
+            assertThat(subject.lint(incorrectParamName)).hasSize(1)
         }
     }
 
@@ -397,7 +397,7 @@ class OutdatedDocumentationSpec {
                  */
                 fun <T> myFun(someParam: String) {}
             """.trimIndent()
-            assertThat(subject.compileAndLint(correctTypeParam)).isEmpty()
+            assertThat(subject.lint(correctTypeParam)).isEmpty()
         }
 
         @Test
@@ -408,7 +408,7 @@ class OutdatedDocumentationSpec {
                  */
                 fun <T> myFun(someParam: String) {}
             """.trimIndent()
-            assertThat(subject.compileAndLint(missingTypeParam)).hasSize(1)
+            assertThat(subject.lint(missingTypeParam)).hasSize(1)
         }
 
         @Test
@@ -420,7 +420,7 @@ class OutdatedDocumentationSpec {
                  */
                 fun <T> myFun(someParam: String) {}
             """.trimIndent()
-            assertThat(subject.compileAndLint(incorrectTypeParamName)).hasSize(1)
+            assertThat(subject.lint(incorrectTypeParamName)).hasSize(1)
         }
 
         @Test
@@ -432,7 +432,7 @@ class OutdatedDocumentationSpec {
                  */
                 fun <T, S> myFun(someParam: String) {}
             """.trimIndent()
-            assertThat(subject.compileAndLint(incorrectTypeParamList)).hasSize(1)
+            assertThat(subject.lint(incorrectTypeParamList)).hasSize(1)
         }
 
         @Test
@@ -445,7 +445,7 @@ class OutdatedDocumentationSpec {
                  */
                 fun <T, S> myFun(someParam: String) {}
             """.trimIndent()
-            assertThat(subject.compileAndLint(incorrectTypeParamsOrder)).hasSize(1)
+            assertThat(subject.lint(incorrectTypeParamsOrder)).hasSize(1)
         }
     }
 
@@ -465,7 +465,7 @@ class OutdatedDocumentationSpec {
                     fun myFun(someParam: String) {}
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(correctClassWithFunction)).isEmpty()
+            assertThat(subject.lint(correctClassWithFunction)).isEmpty()
         }
 
         @Test
@@ -489,7 +489,7 @@ class OutdatedDocumentationSpec {
                     class MyNestedClass(otherParam: String)
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(incorrectClassWithTwoIncorrectFunctions)).hasSize(4)
+            assertThat(subject.lint(incorrectClassWithTwoIncorrectFunctions)).hasSize(4)
         }
     }
 
@@ -506,7 +506,7 @@ class OutdatedDocumentationSpec {
                  */
                 class MyClass<T, S>(someParam: String)
             """.trimIndent()
-            assertThat(configuredSubject.compileAndLint(incorrectClassTypeParams)).isEmpty()
+            assertThat(configuredSubject.lint(incorrectClassTypeParams)).isEmpty()
         }
 
         @Test
@@ -517,7 +517,7 @@ class OutdatedDocumentationSpec {
                  */
                 fun <T, S> myFun(someParam: String) {}
             """.trimIndent()
-            assertThat(configuredSubject.compileAndLint(incorrectFunctionTypeParams)).isEmpty()
+            assertThat(configuredSubject.lint(incorrectFunctionTypeParams)).isEmpty()
         }
     }
 
@@ -535,7 +535,7 @@ class OutdatedDocumentationSpec {
                  */
                 class MyClass(otherParam: String, someParam: String)
             """.trimIndent()
-            assertThat(configuredSubject.compileAndLint(incorrectDeclarationsOrder)).isEmpty()
+            assertThat(configuredSubject.lint(incorrectDeclarationsOrder)).isEmpty()
         }
 
         @Test
@@ -549,7 +549,7 @@ class OutdatedDocumentationSpec {
                  */
                 fun <T, S> myFun(otherParam: String, someParam: String) {}
             """.trimIndent()
-            assertThat(configuredSubject.compileAndLint(incorrectDeclarationsOrderWithType)).isEmpty()
+            assertThat(configuredSubject.lint(incorrectDeclarationsOrderWithType)).isEmpty()
         }
     }
 
@@ -568,7 +568,7 @@ class OutdatedDocumentationSpec {
                  */
                 class MyClass(someParam: String, val someProp: String)
             """.trimIndent()
-            assertThat(configuredSubject.compileAndLint(propertyAsParam)).isEmpty()
+            assertThat(configuredSubject.lint(propertyAsParam)).isEmpty()
         }
 
         @Test
@@ -580,7 +580,7 @@ class OutdatedDocumentationSpec {
                  */
                 open class MyClass(internal val a: String, protected val b: String)
             """.trimIndent()
-            assertThat(configuredSubject.compileAndLint(propertyAsParam)).isEmpty()
+            assertThat(configuredSubject.lint(propertyAsParam)).isEmpty()
         }
 
         @Test
@@ -592,7 +592,7 @@ class OutdatedDocumentationSpec {
                  */
                 class MyClass(someParam: String, val someProp: String)
             """.trimIndent()
-            assertThat(configuredSubject.compileAndLint(propertyAsParam)).isEmpty()
+            assertThat(configuredSubject.lint(propertyAsParam)).isEmpty()
         }
     }
 
@@ -614,7 +614,7 @@ class OutdatedDocumentationSpec {
                  */
                 class MyClass(someParam: String, val someProp: String)
             """.trimIndent()
-            assertThat(configuredSubject.compileAndLint(propertyAsParam)).isEmpty()
+            assertThat(configuredSubject.lint(propertyAsParam)).isEmpty()
         }
 
         @Test
@@ -626,7 +626,7 @@ class OutdatedDocumentationSpec {
                  */
                 class MyClass(someParam: String, val someProp: String)
             """.trimIndent()
-            assertThat(configuredSubject.compileAndLint(propertyAsParam)).isEmpty()
+            assertThat(configuredSubject.lint(propertyAsParam)).isEmpty()
         }
 
         @Test
@@ -640,7 +640,7 @@ class OutdatedDocumentationSpec {
                     private val a: String,
                 )
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
     }
 }

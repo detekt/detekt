@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
@@ -21,7 +20,7 @@ class UnusedParameterSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
 
         @Test
@@ -32,7 +31,7 @@ class UnusedParameterSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -43,7 +42,7 @@ class UnusedParameterSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -54,7 +53,7 @@ class UnusedParameterSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
 
         @Test
@@ -65,7 +64,7 @@ class UnusedParameterSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
 
         @Test
@@ -80,7 +79,7 @@ class UnusedParameterSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
 
         @Test
@@ -100,7 +99,7 @@ class UnusedParameterSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLint(code)).hasSize(2)
+            assertThat(subject.lint(code)).hasSize(2)
         }
 
         @Test
@@ -115,7 +114,7 @@ class UnusedParameterSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -130,7 +129,7 @@ class UnusedParameterSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -145,7 +144,7 @@ class UnusedParameterSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
 
         @Test
@@ -160,7 +159,7 @@ class UnusedParameterSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
     }
 
@@ -172,7 +171,7 @@ class UnusedParameterSpec {
                 fun foo(@Suppress("UnusedParameter") unused: String){}
             """.trimIndent()
 
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -181,7 +180,7 @@ class UnusedParameterSpec {
                 fun foo(@Suppress("UnusedParameter") unused: String, unusedWithoutAnnotation: String){}
             """.trimIndent()
 
-            val lint = subject.compileAndLint(code)
+            val lint = subject.lint(code)
 
             assertThat(lint).hasSize(1)
             assertThat(lint[0].message).isEqualTo("Function parameter `unusedWithoutAnnotation` is unused.")
@@ -194,7 +193,7 @@ class UnusedParameterSpec {
                 fun foo(unused: String, otherUnused: String){}
             """.trimIndent()
 
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -207,7 +206,7 @@ class UnusedParameterSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -219,7 +218,7 @@ class UnusedParameterSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -235,7 +234,7 @@ class UnusedParameterSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
     }
 
@@ -247,7 +246,7 @@ class UnusedParameterSpec {
                 fun foo(unused: Int){}
             """.trimIndent()
 
-            val lint = subject.compileAndLint(code)
+            val lint = subject.lint(code)
 
             assertThat(lint.first().message).startsWith("Function parameter")
         }
@@ -267,7 +266,7 @@ class UnusedParameterSpec {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -277,7 +276,7 @@ class UnusedParameterSpec {
                     println("b")
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
     }
 
@@ -288,7 +287,7 @@ class UnusedParameterSpec {
             val code = """
                 fun test(`foo bar`: Int) = `foo bar`
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
     }
 
@@ -307,7 +306,7 @@ class UnusedParameterSpec {
                     ) = 1
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1).hasStartSourceLocation(6, 9)
+            assertThat(subject.lint(code)).hasSize(1).hasStartSourceLocation(6, 9)
         }
     }
 
@@ -324,7 +323,7 @@ class UnusedParameterSpec {
                     println(modifier)
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1).hasStartSourceLocation(1, 9)
+            assertThat(subject.lint(code)).hasSize(1).hasStartSourceLocation(1, 9)
         }
 
         @Test
@@ -338,7 +337,7 @@ class UnusedParameterSpec {
                     println(modifier)
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
     }
 
@@ -353,7 +352,7 @@ class UnusedParameterSpec {
                     actual fun baz(i: Int, s: String) {}
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lint(code, compile = false)).isEmpty()
         }
 
         @Test
@@ -361,7 +360,7 @@ class UnusedParameterSpec {
             val code = """
                 actual class Foo actual constructor(bar: String) {}
             """.trimIndent()
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lint(code, compile = false)).isEmpty()
         }
     }
 }

@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -19,7 +19,7 @@ class MultilineRawStringIndentationSpec {
                 Hello world!
                 $TQ.trimIndent()
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings)
                 .hasSize(1)
                 .hasStartSourceLocation(2, 1)
@@ -35,7 +35,7 @@ class MultilineRawStringIndentationSpec {
                 How are you?
                 $TQ.trimIndent()
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings)
                 .hasSize(2)
                 .hasTextLocations("Hello world!", "How are you?")
@@ -49,7 +49,7 @@ class MultilineRawStringIndentationSpec {
                     How are you?
                 $TQ.trimIndent()
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings)
                 .hasSize(1)
                 .hasStartSourceLocation(2, 2)
@@ -65,7 +65,7 @@ class MultilineRawStringIndentationSpec {
                      How are you?
                 $TQ.trimIndent()
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings)
                 .hasSize(1)
                 .hasStartSourceLocation(2, 5)
@@ -81,7 +81,7 @@ class MultilineRawStringIndentationSpec {
                     How are you?
                 $TQ.trimIndent()
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings)
                 .isEmpty()
         }
@@ -95,7 +95,7 @@ class MultilineRawStringIndentationSpec {
                     How are you?
                 $TQ.trimIndent()
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings)
                 .isEmpty()
         }
@@ -109,7 +109,7 @@ class MultilineRawStringIndentationSpec {
                     How are you?
                 $TQ.trimIndent()
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings)
                 .isEmpty()
         }
@@ -122,7 +122,7 @@ class MultilineRawStringIndentationSpec {
                   
                 $TQ.trimIndent()
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings)
                 .hasSize(1)
                 .hasStartSourceLocation(3, 1)
@@ -137,7 +137,7 @@ class MultilineRawStringIndentationSpec {
                     How are you?
                     $TQ.trimIndent()
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings)
                 .hasSize(1)
                 .hasStartSourceLocation(4, 1)
@@ -155,7 +155,7 @@ class MultilineRawStringIndentationSpec {
                     Hello world!
                     $TQ.trimIndent()
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings)
                 .hasSize(1)
                 .hasStartSourceLocation(3, 5)
@@ -171,7 +171,7 @@ class MultilineRawStringIndentationSpec {
                     How are you?
                     $TQ.trimIndent()
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings)
                 .hasSize(2)
         }
@@ -185,7 +185,7 @@ class MultilineRawStringIndentationSpec {
                         How are you?
                     $TQ.trimIndent()
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings)
                 .hasSize(1)
                 .hasStartSourceLocation(3, 6)
@@ -201,7 +201,7 @@ class MultilineRawStringIndentationSpec {
                          How are you?
                     $TQ.trimIndent()
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings)
                 .hasSize(1)
                 .hasStartSourceLocation(3, 9)
@@ -218,7 +218,7 @@ class MultilineRawStringIndentationSpec {
                         How are you?
                     $TQ.trimIndent()
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings)
                 .isEmpty()
         }
@@ -232,7 +232,7 @@ class MultilineRawStringIndentationSpec {
                         How are you?
                     $TQ.trimIndent()
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings)
                 .isEmpty()
         }
@@ -246,7 +246,7 @@ class MultilineRawStringIndentationSpec {
                         How are you?
                         $TQ.trimIndent()
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings)
                 .hasSize(1)
                 .hasStartSourceLocation(5, 5)
@@ -262,7 +262,7 @@ class MultilineRawStringIndentationSpec {
                         How are you?
                   $TQ.trimIndent()
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings)
                 .hasSize(1)
                 .hasStartSourceLocation(5, 3)
@@ -279,7 +279,7 @@ class MultilineRawStringIndentationSpec {
                 Hello world!
                 $TQ
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings).isEmpty()
         }
 
@@ -288,7 +288,7 @@ class MultilineRawStringIndentationSpec {
             val code = """
                 val a = ${TQ}Hello world!$TQ
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings).isEmpty()
         }
 
@@ -297,7 +297,7 @@ class MultilineRawStringIndentationSpec {
             val code = """
                 val a = "Hello world!"
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings).isEmpty()
         }
 
@@ -307,7 +307,7 @@ class MultilineRawStringIndentationSpec {
                 val a = $TQ
                 $TQ.trimIndent()
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings)
                 .isEmpty()
         }
@@ -317,7 +317,7 @@ class MultilineRawStringIndentationSpec {
             val code = """
                 val a = ${TQ}Hello world!$TQ.trimIndent()
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings)
                 .isEmpty()
         }
@@ -341,7 +341,7 @@ class MultilineRawStringIndentationSpec {
                 }
             """.trimIndent()
             val subject = MultilineRawStringIndentation(TestConfig("indentSize" to 1))
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -356,7 +356,7 @@ class MultilineRawStringIndentationSpec {
                     Hola mundo!
                 $TQ.trimIndent()
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings)
                 .hasSize(1)
         }
@@ -368,7 +368,7 @@ class MultilineRawStringIndentationSpec {
                     Hello world!
                     Hola mundo!$TQ.trimIndent()
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings)
                 .hasSize(1)
         }
@@ -379,7 +379,7 @@ class MultilineRawStringIndentationSpec {
                 val a = ${TQ}Hello world!
                     Hola mundo!$TQ.trimIndent()
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings)
                 .hasSize(1)
         }
@@ -392,7 +392,7 @@ class MultilineRawStringIndentationSpec {
                     Hola mundo!
                 $TQ.trimIndent()
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings)
                 .isEmpty()
         }

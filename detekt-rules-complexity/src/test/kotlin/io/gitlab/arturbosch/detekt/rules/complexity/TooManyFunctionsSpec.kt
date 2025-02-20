@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -37,7 +37,7 @@ class TooManyFunctionsSpec {
             }
         """.trimIndent()
 
-        val findings = rule.compileAndLint(code)
+        val findings = rule.lint(code)
         assertThat(findings).hasSize(1)
         assertThat(findings).hasTextLocations(6 to 7)
     }
@@ -51,7 +51,7 @@ class TooManyFunctionsSpec {
             }
         """.trimIndent()
 
-        val findings = rule.compileAndLint(code)
+        val findings = rule.lint(code)
         assertThat(findings).hasSize(1)
         assertThat(findings).hasTextLocations(7 to 8)
     }
@@ -65,7 +65,7 @@ class TooManyFunctionsSpec {
             }
         """.trimIndent()
 
-        val findings = rule.compileAndLint(code)
+        val findings = rule.lint(code)
         assertThat(findings).hasSize(1)
         assertThat(findings).hasTextLocations(10 to 11)
     }
@@ -80,7 +80,7 @@ class TooManyFunctionsSpec {
             }
         """.trimIndent()
 
-        val findings = rule.compileAndLint(code)
+        val findings = rule.lint(code)
         assertThat(findings).hasSize(1)
         assertThat(findings).hasTextLocations(11 to 12)
     }
@@ -92,7 +92,7 @@ class TooManyFunctionsSpec {
             fun g() = Unit
         """.trimIndent()
 
-        assertThat(rule.compileAndLint(code)).hasSize(1)
+        assertThat(rule.lint(code)).hasSize(1)
     }
 
     @Test
@@ -107,7 +107,7 @@ class TooManyFunctionsSpec {
             fun f3() = Unit
         """.trimIndent()
 
-        assertThat(rule.compileAndLint(code)).hasSize(1)
+        assertThat(rule.lint(code)).hasSize(1)
     }
 
     @Test
@@ -121,7 +121,7 @@ class TooManyFunctionsSpec {
             }
         """.trimIndent()
 
-        val findings = rule.compileAndLint(code)
+        val findings = rule.lint(code)
         assertThat(findings).hasSize(1)
         assertThat(findings).hasTextLocations(20 to 21)
     }
@@ -148,7 +148,7 @@ class TooManyFunctionsSpec {
 
         @Test
         fun `finds all deprecated functions per default`() {
-            assertThat(rule.compileAndLint(code)).hasSize(2)
+            assertThat(rule.lint(code)).hasSize(2)
         }
 
         @Test
@@ -160,7 +160,7 @@ class TooManyFunctionsSpec {
                     IGNORE_DEPRECATED to "true",
                 )
             )
-            assertThat(configuredRule.compileAndLint(code)).isEmpty()
+            assertThat(configuredRule.lint(code)).isEmpty()
         }
     }
 
@@ -176,7 +176,7 @@ class TooManyFunctionsSpec {
 
         @Test
         fun `finds the private function per default`() {
-            assertThat(rule.compileAndLint(code)).hasSize(1)
+            assertThat(rule.lint(code)).hasSize(1)
         }
 
         @Test
@@ -188,7 +188,7 @@ class TooManyFunctionsSpec {
                     IGNORE_PRIVATE to "true",
                 )
             )
-            assertThat(configuredRule.compileAndLint(code)).isEmpty()
+            assertThat(configuredRule.lint(code)).isEmpty()
         }
     }
 
@@ -204,7 +204,7 @@ class TooManyFunctionsSpec {
 
         @Test
         fun `finds the internal function per default`() {
-            assertThat(rule.compileAndLint(code)).hasSize(1)
+            assertThat(rule.lint(code)).hasSize(1)
         }
 
         @Test
@@ -215,7 +215,7 @@ class TooManyFunctionsSpec {
                     IGNORE_INTERNAL to "true",
                 )
             )
-            assertThat(configuredRule.compileAndLint(code)).isEmpty()
+            assertThat(configuredRule.lint(code)).isEmpty()
         }
 
         @Test
@@ -232,7 +232,7 @@ class TooManyFunctionsSpec {
                     private fun g() {}
                 }
             """.trimIndent()
-            assertThat(configuredRule.compileAndLint(code)).hasSize(1)
+            assertThat(configuredRule.lint(code)).hasSize(1)
         }
     }
 
@@ -268,7 +268,7 @@ class TooManyFunctionsSpec {
                     IGNORE_OVERRIDDEN to "true",
                 )
             )
-            assertThat(configuredRule.compileAndLint(code)).isEmpty()
+            assertThat(configuredRule.lint(code)).isEmpty()
         }
     }
 
@@ -296,7 +296,7 @@ class TooManyFunctionsSpec {
                     IGNORE_OVERRIDDEN to "true",
                 )
             )
-            assertThat(configuredRule.compileAndLint(code)).isEmpty()
+            assertThat(configuredRule.lint(code)).isEmpty()
         }
 
         @Test
@@ -308,7 +308,7 @@ class TooManyFunctionsSpec {
                     IGNORE_OVERRIDDEN to "false",
                 )
             )
-            assertThat(configuredRule.compileAndLint(code)).hasSize(1)
+            assertThat(configuredRule.lint(code)).hasSize(1)
         }
     }
 
@@ -337,7 +337,7 @@ class TooManyFunctionsSpec {
                 }
         """.trimIndent()
 
-        val findings = rule.compileAndLint(code)
+        val findings = rule.lint(code)
         assertThat(findings).isEmpty()
     }
 
@@ -367,7 +367,7 @@ class TooManyFunctionsSpec {
                 }
         """.trimIndent()
 
-        val findings = rule.compileAndLint(code)
+        val findings = rule.lint(code)
         assertThat(findings).hasSize(1)
     }
 
@@ -381,7 +381,7 @@ class TooManyFunctionsSpec {
             }
         """.trimIndent()
 
-        val findings = rule.compileAndLint(code)
+        val findings = rule.lint(code)
 
         assertThat(findings).isEmpty()
     }
