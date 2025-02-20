@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   gradle:
-    runs-on: macos-15
+    runs-on: macos-latest
     if: github.repository == 'detekt/detekt'
     steps:
       - name: Checkout Repo
