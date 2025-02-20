@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.suppressed
+import java.security.MessageDigest
 import kotlin.io.path.invariantSeparatorsPathString
 
 internal fun toResults(detektion: Detektion): List<io.github.detekt.sarif4k.Result> =
@@ -25,7 +26,10 @@ private fun Issue.toResult(): io.github.detekt.sarif4k.Result =
         ruleID = "detekt.${ruleInstance.ruleSetId}.${ruleInstance.id}",
         level = severity.toResultLevel(),
         locations = (listOf(location) + references.map { it.location }).map { it.toLocation() }.distinct(),
-        message = Message(text = message)
+        message = Message(text = message),
+        partialFingerprints = mapOf(
+            "signature/v1" to entity.signature.sha1(),
+        )
     )
 
 private fun Issue.Location.toLocation(): io.github.detekt.sarif4k.Location =
@@ -43,3 +47,8 @@ private fun Issue.Location.toLocation(): io.github.detekt.sarif4k.Location =
             )
         )
     )
+
+private fun String.sha1(): String = MessageDigest
+    .getInstance("SHA-1")
+    .digest(toByteArray())
+    .joinToString("") { it.toUByte().toString(radix = 16).padStart(2, '0') }
