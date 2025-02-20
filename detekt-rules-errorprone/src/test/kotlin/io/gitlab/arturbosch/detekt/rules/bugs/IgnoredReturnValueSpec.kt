@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -23,7 +23,7 @@ class IgnoredReturnValueSpec {
                     listOf("hello")
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -35,7 +35,7 @@ class IgnoredReturnValueSpec {
                     return 42
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -46,7 +46,7 @@ class IgnoredReturnValueSpec {
                     listOf("hello").isEmpty().not()
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -57,7 +57,7 @@ class IgnoredReturnValueSpec {
                     listOf("hello");println("foo")
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -68,7 +68,7 @@ class IgnoredReturnValueSpec {
                     println("foo");listOf("hello")
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -79,7 +79,7 @@ class IgnoredReturnValueSpec {
                     listOf("hello")//foo
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -91,7 +91,7 @@ class IgnoredReturnValueSpec {
                     input.isTheAnswer()
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -111,7 +111,7 @@ class IgnoredReturnValueSpec {
                     x = listA()
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -124,7 +124,7 @@ class IgnoredReturnValueSpec {
                     noReturnValue()
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -137,7 +137,7 @@ class IgnoredReturnValueSpec {
                     if (returnsBoolean()) {}
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -150,7 +150,7 @@ class IgnoredReturnValueSpec {
                     if (42 == returnsInt()) {}
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -163,7 +163,7 @@ class IgnoredReturnValueSpec {
                     println(returnsInt())
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -176,7 +176,7 @@ class IgnoredReturnValueSpec {
                     println(message = returnsInt())
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -191,7 +191,7 @@ class IgnoredReturnValueSpec {
                     map.put("another-key", returnsInt())
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
     }
@@ -220,7 +220,7 @@ class IgnoredReturnValueSpec {
                 annotation class CheckReturnValue
             """.trimIndent()
 
-            val findings = subject.compileAndLintWithContext(env, code, annotationClass, compile = false)
+            val findings = subject.lintWithContext(env, code, annotationClass, compile = false)
             assertThat(findings).singleElement()
                 .hasMessage("The call listOfChecked is returning a value that is ignored.")
             assertThat(findings).hasStartSourceLocation(7, 5)
@@ -241,7 +241,7 @@ class IgnoredReturnValueSpec {
                     return 42
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).singleElement()
                 .hasMessage("The call listOfChecked is returning a value that is ignored.")
             assertThat(findings).hasStartSourceLocation(9, 5)
@@ -262,7 +262,7 @@ class IgnoredReturnValueSpec {
                     return 42
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -286,7 +286,7 @@ class IgnoredReturnValueSpec {
                     return 42
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -308,7 +308,7 @@ class IgnoredReturnValueSpec {
                     return 42
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).singleElement()
                 .hasMessage("The call listOfChecked is returning a value that is ignored.")
             assertThat(findings).hasStartSourceLocation(12, 10)
@@ -328,7 +328,7 @@ class IgnoredReturnValueSpec {
                     listOfChecked("hello");println("foo")
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).singleElement()
                 .hasMessage("The call listOfChecked is returning a value that is ignored.")
             assertThat(findings).hasStartSourceLocation(9, 5)
@@ -349,7 +349,7 @@ class IgnoredReturnValueSpec {
                     return 42
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).singleElement()
                 .hasMessage("The call listOfChecked is returning a value that is ignored.")
             assertThat(findings).hasStartSourceLocation(9, 20)
@@ -370,7 +370,7 @@ class IgnoredReturnValueSpec {
                     return 42
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).singleElement()
                 .hasMessage("The call listOfChecked is returning a value that is ignored.")
             assertThat(findings).hasStartSourceLocation(9, 14)
@@ -390,7 +390,7 @@ class IgnoredReturnValueSpec {
                     return 42
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).singleElement()
                 .hasMessage("The call isTheAnswer is returning a value that is ignored.")
             assertThat(findings).hasStartSourceLocation(8, 11)
@@ -412,7 +412,7 @@ class IgnoredReturnValueSpec {
                     return 42
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -431,7 +431,7 @@ class IgnoredReturnValueSpec {
                     return 42
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -449,7 +449,7 @@ class IgnoredReturnValueSpec {
                     if (returnsBoolean()) {}
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -467,7 +467,7 @@ class IgnoredReturnValueSpec {
                     if (42 == returnsInt()) {}
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -485,7 +485,7 @@ class IgnoredReturnValueSpec {
                     println(returnsInt())
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -503,7 +503,7 @@ class IgnoredReturnValueSpec {
                     println(message = returnsInt())
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -523,7 +523,7 @@ class IgnoredReturnValueSpec {
                     returnsInt()
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -544,7 +544,7 @@ class IgnoredReturnValueSpec {
                     2
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
 
@@ -566,7 +566,7 @@ class IgnoredReturnValueSpec {
                     }.plus(1)
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -589,7 +589,7 @@ class IgnoredReturnValueSpec {
                     }.plus(1)
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
 
@@ -611,7 +611,7 @@ class IgnoredReturnValueSpec {
                     }
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
 
@@ -635,7 +635,7 @@ class IgnoredReturnValueSpec {
                     return 42
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -653,7 +653,7 @@ class IgnoredReturnValueSpec {
                     map.put("another-key", returnsInt())
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -673,7 +673,7 @@ class IgnoredReturnValueSpec {
                     Assertions().listOfChecked("hello")
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
 
@@ -693,7 +693,7 @@ class IgnoredReturnValueSpec {
                     Assertions.listOfChecked("hello")
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
 
@@ -715,7 +715,7 @@ class IgnoredReturnValueSpec {
                     Assertions().listOfChecked("hello")
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -737,7 +737,7 @@ class IgnoredReturnValueSpec {
                     Parent.Child().listOfChecked("hello")
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -771,7 +771,7 @@ class IgnoredReturnValueSpec {
 
                 fun foo(insert: Insert) {}
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(2)
         }
 
@@ -795,7 +795,7 @@ class IgnoredReturnValueSpec {
                     fun execute(): Int = TODO()
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
 
@@ -819,7 +819,7 @@ class IgnoredReturnValueSpec {
                      fun execute(): Int = TODO()
                  }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
     }
@@ -845,7 +845,7 @@ class IgnoredReturnValueSpec {
                     return 42
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).singleElement()
                 .hasMessage("The call listOfChecked is returning a value that is ignored.")
             assertThat(findings).hasStartSourceLocation(8, 5)
@@ -866,7 +866,7 @@ class IgnoredReturnValueSpec {
                     return 42
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -882,7 +882,7 @@ class IgnoredReturnValueSpec {
                     return 42
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
     }
@@ -907,7 +907,7 @@ class IgnoredReturnValueSpec {
                     return 42
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).singleElement()
                 .hasMessage("The call listOfChecked is returning a value that is ignored.")
             assertThat(findings).hasStartSourceLocation(9, 5)
@@ -923,7 +923,7 @@ class IgnoredReturnValueSpec {
                     return 42
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).singleElement()
                 .hasMessage("The call listOfChecked is returning a value that is ignored.")
             assertThat(findings).hasStartSourceLocation(4, 5)
@@ -938,7 +938,7 @@ class IgnoredReturnValueSpec {
                 
                 fun ignoredReturn(): String = "asd"
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).singleElement()
                 .hasMessage("The call ignoredReturn is returning a value that is ignored.")
             assertThat(findings).hasStartSourceLocation(2, 5)
@@ -956,7 +956,7 @@ class IgnoredReturnValueSpec {
                     return 42
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings)
                 .singleElement()
                 .hasSourceLocation(6, 5)
@@ -978,7 +978,7 @@ class IgnoredReturnValueSpec {
                     return 42
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -1003,7 +1003,7 @@ class IgnoredReturnValueSpec {
                     "restrictToConfig" to false,
                 )
             )
-            val findings = rule.compileAndLintWithContext(env, code)
+            val findings = rule.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -1030,7 +1030,7 @@ class IgnoredReturnValueSpec {
                     "restrictToConfig" to false,
                 )
             )
-            val findings = rule.compileAndLintWithContext(env, code)
+            val findings = rule.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -1052,7 +1052,7 @@ class IgnoredReturnValueSpec {
                     "restrictToConfig" to false,
                 )
             )
-            val findings = rule.compileAndLintWithContext(env, code)
+            val findings = rule.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -1063,7 +1063,7 @@ class IgnoredReturnValueSpec {
                     println(42)
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -1074,7 +1074,7 @@ class IgnoredReturnValueSpec {
                     TODO("tbd")
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
     }
@@ -1093,7 +1093,7 @@ class IgnoredReturnValueSpec {
                     flowOf(1, 2, 3)
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
 
             assertThat(findings)
                 .singleElement()
@@ -1111,7 +1111,7 @@ class IgnoredReturnValueSpec {
                         .onEach { println(it) }
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
 
             assertThat(findings)
                 .singleElement()
@@ -1126,7 +1126,7 @@ class IgnoredReturnValueSpec {
                 
                 fun foo() = flowOf(1, 2, 3)
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -1141,7 +1141,7 @@ class IgnoredReturnValueSpec {
                         .collect()
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
     }
@@ -1160,7 +1160,7 @@ class IgnoredReturnValueSpec {
                     foo.foo()
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code, compile = false)
+            val findings = subject.lintWithContext(env, code, compile = false)
             assertThat(findings).hasSize(1)
         }
 
@@ -1173,7 +1173,7 @@ class IgnoredReturnValueSpec {
                     bar.bar()
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code, compile = false)
+            val findings = subject.lintWithContext(env, code, compile = false)
             assertThat(findings).hasSize(1)
         }
 
@@ -1188,7 +1188,7 @@ class IgnoredReturnValueSpec {
                     map.put("another-key", foo.foo())
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code, compile = false)
+            val findings = subject.lintWithContext(env, code, compile = false)
             assertThat(findings).isEmpty()
         }
     }

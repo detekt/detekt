@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.FakeCompilerResources
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.config.ExplicitApiMode
@@ -22,7 +22,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
         val code = """
             fun foo(): Unit { }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).hasSize(1)
     }
 
@@ -31,7 +31,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
         val code = """
             fun foo() = String
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
@@ -52,7 +52,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
 
         @BeforeEach
         fun beforeEachTest() {
-            findings = subject.compileAndLintWithContext(env, code)
+            findings = subject.lintWithContext(env, code)
         }
 
         @Test
@@ -83,7 +83,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
                     override fun returnsUnit() = Unit
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
     }
@@ -110,7 +110,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
 
         @BeforeEach
         fun beforeEachTest() {
-            findings = subject.compileAndLintWithContext(env, code)
+            findings = subject.lintWithContext(env, code)
         }
 
         @Test
@@ -140,7 +140,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
                     val i: (Int) -> Unit = { _ -> }
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
     }
@@ -154,7 +154,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
                     fun method(i: Int) = Unit
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
     }
@@ -176,7 +176,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
 
@@ -197,7 +197,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
                     }.foo()
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -224,7 +224,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
                     }.foo()
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -249,7 +249,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
                     }.foo()
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -278,7 +278,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
                     }.foo()
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
 
@@ -304,7 +304,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
                     }.foo()
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
 
@@ -330,7 +330,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
                     }.foo()
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
 
@@ -341,7 +341,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
                     String
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
     }
@@ -353,7 +353,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 fun test(): Unit = throw UnsupportedOperationException()
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -368,7 +368,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
                 
                 fun doFoo(): Unit = foo {}
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -383,7 +383,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
                 
                 fun doFoo(): Unit = foo<Nothing> {}
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
 
@@ -394,7 +394,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
                 
                 fun doFoo(): Unit = foo()
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
     }
@@ -407,7 +407,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 fun foo(): Unit { }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(
+            val findings = subject.lintWithContext(
                 env,
                 code,
                 compilerResources = FakeCompilerResources(ExplicitApiMode.STRICT)
@@ -420,7 +420,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 fun foo(): Unit { }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(
+            val findings = subject.lintWithContext(
                 env,
                 code,
                 compilerResources = FakeCompilerResources(ExplicitApiMode.WARNING)
@@ -433,7 +433,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 fun foo(): Unit { }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(
+            val findings = subject.lintWithContext(
                 env,
                 code,
                 compilerResources = FakeCompilerResources(ExplicitApiMode.DISABLED)
@@ -446,7 +446,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 fun foo(): Unit = println("")
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(
+            val findings = subject.lintWithContext(
                 env,
                 code,
                 compilerResources = FakeCompilerResources(ExplicitApiMode.STRICT)
@@ -459,7 +459,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 fun foo(): Unit = println("")
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(
+            val findings = subject.lintWithContext(
                 env,
                 code,
                 compilerResources = FakeCompilerResources(ExplicitApiMode.WARNING)
@@ -473,7 +473,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
                 private fun foo(): Unit = println("")
             """.trimIndent()
             val findingsWithPrivate =
-                subject.compileAndLintWithContext(
+                subject.lintWithContext(
                     env,
                     code,
                     compilerResources = FakeCompilerResources(ExplicitApiMode.STRICT)
@@ -484,7 +484,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
                 internal fun foo(): Unit = println("")
             """.trimIndent()
             val findingsWithInternal =
-                subject.compileAndLintWithContext(
+                subject.lintWithContext(
                     env,
                     code2,
                     compilerResources = FakeCompilerResources(ExplicitApiMode.STRICT)
@@ -498,7 +498,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
                 private fun foo(): Unit = println("")
             """.trimIndent()
             val findingsWithPrivate =
-                subject.compileAndLintWithContext(
+                subject.lintWithContext(
                     env,
                     code,
                     compilerResources = FakeCompilerResources(ExplicitApiMode.WARNING)
@@ -509,7 +509,7 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
                 internal fun foo(): Unit = println("")
             """.trimIndent()
             val findingsWithInternal =
-                subject.compileAndLintWithContext(
+                subject.lintWithContext(
                     env,
                     code2,
                     compilerResources = FakeCompilerResources(ExplicitApiMode.WARNING)

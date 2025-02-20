@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -26,7 +26,7 @@ class ReturnFromFinallySpec(val env: KotlinCoreEnvironment) {
 
         @Test
         fun `should report`() {
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
     }
@@ -43,7 +43,7 @@ class ReturnFromFinallySpec(val env: KotlinCoreEnvironment) {
 
         @Test
         fun `should not report`() {
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
     }
@@ -63,7 +63,7 @@ class ReturnFromFinallySpec(val env: KotlinCoreEnvironment) {
 
         @Test
         fun `should report`() {
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
     }
@@ -84,7 +84,7 @@ class ReturnFromFinallySpec(val env: KotlinCoreEnvironment) {
 
         @Test
         fun `should not report`() {
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
     }
@@ -104,14 +104,14 @@ class ReturnFromFinallySpec(val env: KotlinCoreEnvironment) {
 
         @Test
         fun `should report when ignoreLabeled is false`() {
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
 
         @Test
         fun `should not report when ignoreLabeled is true`() {
             val config = TestConfig("ignoreLabeled" to "true")
-            val findings = ReturnFromFinally(config).compileAndLintWithContext(env, code)
+            val findings = ReturnFromFinally(config).lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
     }
@@ -130,7 +130,7 @@ class ReturnFromFinallySpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            val finding = subject.compileAndLintWithContext(env, code)
+            val finding = subject.lintWithContext(env, code)
 
             assertThat(finding).hasSize(1)
         }
@@ -150,7 +150,7 @@ class ReturnFromFinallySpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            val finding = subject.compileAndLintWithContext(env, code)
+            val finding = subject.lintWithContext(env, code)
 
             assertThat(finding).hasSize(1)
         }
@@ -172,7 +172,7 @@ class ReturnFromFinallySpec(val env: KotlinCoreEnvironment) {
                 fun compute(): String = "value"
             """.trimIndent()
 
-            val finding = subject.compileAndLintWithContext(env, code)
+            val finding = subject.lintWithContext(env, code)
 
             assertThat(finding).hasSize(1)
         }
@@ -190,7 +190,7 @@ class ReturnFromFinallySpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            val finding = subject.compileAndLintWithContext(env, code)
+            val finding = subject.lintWithContext(env, code)
 
             assertThat(finding).isEmpty()
         }
@@ -209,7 +209,7 @@ class ReturnFromFinallySpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            val finding = subject.compileAndLintWithContext(env, code)
+            val finding = subject.lintWithContext(env, code)
 
             assertThat(finding).isEmpty()
         }
@@ -231,7 +231,7 @@ class ReturnFromFinallySpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            val finding = subject.compileAndLintWithContext(env, code)
+            val finding = subject.lintWithContext(env, code)
 
             assertThat(finding).isEmpty()
         }
@@ -251,7 +251,7 @@ class ReturnFromFinallySpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            val finding = subject.compileAndLintWithContext(env, code)
+            val finding = subject.lintWithContext(env, code)
 
             assertThat(finding).isEmpty()
         }
@@ -273,7 +273,7 @@ class ReturnFromFinallySpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            val finding = subject.compileAndLintWithContext(env, code)
+            val finding = subject.lintWithContext(env, code)
 
             assertThat(finding).hasSize(1)
         }

@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -23,7 +23,7 @@ class UnnecessarySafeCallSpec(private val env: KotlinCoreEnvironment) {
                     val b = a?.toString()
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasTextLocations(48 to 61)
         }
@@ -36,7 +36,7 @@ class UnnecessarySafeCallSpec(private val env: KotlinCoreEnvironment) {
                     val b = a?.plus(42)
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasTextLocations(48 to 59)
         }
@@ -49,7 +49,7 @@ class UnnecessarySafeCallSpec(private val env: KotlinCoreEnvironment) {
                     val b = a?.plus(42)?.minus(24)
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasTextLocations(48 to 59)
         }
@@ -66,7 +66,7 @@ class UnnecessarySafeCallSpec(private val env: KotlinCoreEnvironment) {
                     val b = a?.plus(42)
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
     }
@@ -84,7 +84,7 @@ class UnnecessarySafeCallSpec(private val env: KotlinCoreEnvironment) {
                     val b = a?.plus(42)
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code, compile = false)
+            val findings = subject.lintWithContext(env, code, compile = false)
             assertThat(findings).isEmpty()
         }
 
@@ -98,7 +98,7 @@ class UnnecessarySafeCallSpec(private val env: KotlinCoreEnvironment) {
                     val b = a?.plus(42)
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code, compile = false)
+            val findings = subject.lintWithContext(env, code, compile = false)
             assertThat(findings).isEmpty()
         }
 
@@ -112,7 +112,7 @@ class UnnecessarySafeCallSpec(private val env: KotlinCoreEnvironment) {
                     val b = a?.plus(42)
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code, compile = false)
+            val findings = subject.lintWithContext(env, code, compile = false)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasTextLocations(103 to 114)
         }

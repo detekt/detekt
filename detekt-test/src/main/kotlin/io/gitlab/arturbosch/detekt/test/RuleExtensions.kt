@@ -37,7 +37,7 @@ fun Rule.lint(
     return visitFile(ktFile, compilerResources = compilerResources).filterSuppressed(this)
 }
 
-fun Rule.compileAndLintWithContext(
+fun Rule.lintWithContext(
     environment: KotlinCoreEnvironment,
     @Language("kotlin") content: String,
     @Language("kotlin") vararg additionalContents: String,

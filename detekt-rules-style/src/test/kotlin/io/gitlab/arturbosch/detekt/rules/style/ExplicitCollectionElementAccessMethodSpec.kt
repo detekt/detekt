@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.DisplayName
@@ -26,7 +26,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val value = map.get("key")
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
             }
 
             @Test
@@ -37,7 +37,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val value = map?.get("key")
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
 
             @Test
@@ -48,7 +48,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         map.set("key", "value")
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
             }
 
             @Test
@@ -59,7 +59,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         map.put("key", "val")
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
             }
 
             @Test
@@ -70,7 +70,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val oldValue = map.put("key", "val")
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
 
             @Test
@@ -86,7 +86,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         map.put("a", "b", 1)
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
 
             @Test
@@ -97,7 +97,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         return map.put("key", "val") == null
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
 
             @Test
@@ -108,7 +108,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val value = map.get("key")
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
             }
 
             @Test
@@ -119,7 +119,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         map.put("key", "value")
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
             }
 
             @Test
@@ -131,7 +131,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val value = map["key"]
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
 
             @Test
@@ -143,7 +143,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         map["key"] = "value"
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
 
             @Test
@@ -154,7 +154,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val value = listOf("1", "2").associateBy { it }.get("1")
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
             }
 
             @Test
@@ -165,7 +165,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val value = map.get("key")
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
             }
 
             @Test
@@ -176,7 +176,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         with(map) { get("a") }
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
         }
 
@@ -190,7 +190,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val value = list.get(0)
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
             }
 
             @Test
@@ -201,7 +201,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val value = list.get(0)
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
             }
 
             @Test
@@ -213,7 +213,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val value = list[0]
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
 
             @Test
@@ -224,7 +224,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val value = list.get(0)
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
             }
 
             @Test
@@ -235,7 +235,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val value = with(list) { get(0) }
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
         }
 
@@ -250,7 +250,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val value = map.get("key")
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
             }
 
             @Test
@@ -261,7 +261,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         map.set("key", "val")
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
             }
 
             @Test
@@ -272,7 +272,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         map.put("key", "val")
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
             }
 
             @Test
@@ -284,7 +284,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val value = map["key"]
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
 
             @Test
@@ -296,7 +296,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         map["key"] = "value"
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
 
             @Test
@@ -307,7 +307,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val value = listOf("1", "2").associateBy { it }.get("1")
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
             }
         }
 
@@ -321,7 +321,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         buffer.get(byteArrayOf(0x42))
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code, compile = false)).isEmpty()
+                assertThat(subject.lintWithContext(env, code, compile = false)).isEmpty()
             }
 
             @Test
@@ -331,7 +331,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val value = field.get(null) // access static field
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
         }
 
@@ -347,7 +347,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val value = custom.get(0)
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
             }
 
             @Test
@@ -359,7 +359,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val value = custom.get(0)
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
 
             @Test
@@ -371,7 +371,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         custom.set("key", "value")
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
             }
 
             @Test
@@ -383,7 +383,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         custom.set("key", "value")
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
 
             @Test
@@ -396,7 +396,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         c.get<Int>("key")
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
 
             @Nested
@@ -412,7 +412,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                             c.get("key", *objects)
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    assertThat(subject.lintWithContext(env, code)).isEmpty()
                 }
 
                 @Test
@@ -426,7 +426,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                             c.get("key", 1, *objects)
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    assertThat(subject.lintWithContext(env, code)).isEmpty()
                 }
 
                 @Test
@@ -440,7 +440,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                             c.get(*objects)
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    assertThat(subject.lintWithContext(env, code)).isEmpty()
                 }
 
                 @Test
@@ -454,7 +454,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                             c.get("key", *objects, 1)
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    assertThat(subject.lintWithContext(env, code)).isEmpty()
                 }
 
                 @Test
@@ -467,7 +467,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                             c.get("key")
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                    assertThat(subject.lintWithContext(env, code)).hasSize(1)
                 }
 
                 @Test
@@ -480,7 +480,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                             c.get("key", 1)
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                    assertThat(subject.lintWithContext(env, code)).hasSize(1)
                 }
 
                 @Test
@@ -493,7 +493,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                             c.get(0)
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                    assertThat(subject.lintWithContext(env, code)).hasSize(1)
                 }
             }
         }
@@ -509,7 +509,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val value = list.get(0)
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
             }
 
             @Test
@@ -521,7 +521,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val value = list[0]
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
         }
 
@@ -536,7 +536,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         val c: Char? get() = "".first() ?: throw IllegalArgumentException("getter")
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
 
             @Test
@@ -545,7 +545,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                     val string = ""
                         .toString()
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
 
             @Test
@@ -556,7 +556,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                        val value = unknownType.put("answer", 42)
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code, compile = false)).isEmpty()
+                assertThat(subject.lintWithContext(env, code, compile = false)).isEmpty()
             }
 
             @Test
@@ -567,7 +567,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         put()
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
         }
     }
@@ -586,7 +586,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                     rect.set(0, 1, 2)
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code, compile = false)).isEmpty()
+            assertThat(subject.lintWithContext(env, code, compile = false)).isEmpty()
         }
     }
 }

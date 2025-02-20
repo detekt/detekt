@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Test
 
@@ -104,7 +104,7 @@ class NestedScopeFunctionsSpec(private val env: KotlinCoreEnvironment) {
     }
 
     private fun whenLintRuns() {
-        actual = subject.compileAndLintWithContext(env, givenCode)
+        actual = subject.lintWithContext(env, givenCode)
     }
 
     private fun expectSourceLocation(location: Pair<Int, Int>) {

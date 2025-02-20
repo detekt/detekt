@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Test
 
@@ -21,7 +21,7 @@ class UseEmptyCounterpartSpec(val env: KotlinCoreEnvironment) {
             val sequence = sequenceOf<Any>()
             val set = setOf<Any>()
         """.trimIndent()
-        assertThat(rule.compileAndLintWithContext(env, code)).hasSize(6)
+        assertThat(rule.lintWithContext(env, code)).hasSize(6)
     }
 
     @Test
@@ -34,7 +34,7 @@ class UseEmptyCounterpartSpec(val env: KotlinCoreEnvironment) {
             val sequence: Sequence<Any> = sequenceOf()
             val set: Set<Any> = setOf()
         """.trimIndent()
-        assertThat(rule.compileAndLintWithContext(env, code)).hasSize(6)
+        assertThat(rule.lintWithContext(env, code)).hasSize(6)
     }
 
     @Test
@@ -46,7 +46,7 @@ class UseEmptyCounterpartSpec(val env: KotlinCoreEnvironment) {
             val sequence = emptySequence<Any>()
             val set = emptySet<Any>()
         """.trimIndent()
-        assertThat(rule.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(rule.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -59,7 +59,7 @@ class UseEmptyCounterpartSpec(val env: KotlinCoreEnvironment) {
             val sequence = sequenceOf(0)
             val set = setOf(0)
         """.trimIndent()
-        assertThat(rule.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(rule.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -79,6 +79,6 @@ class UseEmptyCounterpartSpec(val env: KotlinCoreEnvironment) {
             val sequence = sequenceOf<Any>()
             val set = setOf<Any>()
         """.trimIndent()
-        assertThat(rule.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(rule.lintWithContext(env, code)).isEmpty()
     }
 }
