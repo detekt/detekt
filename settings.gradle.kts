@@ -66,7 +66,7 @@ buildCache {
     }
     remote(develocity.buildCache) {
         server = "https://ge.detekt.dev"
-        isEnabled = true
+        isEnabled = false
         isPush = isCiBuild
     }
 }
