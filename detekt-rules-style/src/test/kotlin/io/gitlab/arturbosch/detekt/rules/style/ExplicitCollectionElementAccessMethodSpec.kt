@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.DisplayName
@@ -322,7 +321,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                         buffer.get(byteArrayOf(0x42))
                     }
                 """.trimIndent()
-                assertThat(subject.lintWithContext(env, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(env, code, compile = false)).isEmpty()
             }
 
             @Test
@@ -557,7 +556,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                        val value = unknownType.put("answer", 42)
                     }
                 """.trimIndent()
-                assertThat(subject.lintWithContext(env, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(env, code, compile = false)).isEmpty()
             }
 
             @Test
@@ -587,7 +586,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                     rect.set(0, 1, 2)
                 }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code, compile = false)).isEmpty()
         }
     }
 }

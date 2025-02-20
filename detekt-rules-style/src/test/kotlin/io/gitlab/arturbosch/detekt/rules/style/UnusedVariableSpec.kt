@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -28,7 +27,7 @@ class UnusedVariableSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code))
+            assertThat(subject.compileAndLintWithContext(env, code, compile = false))
                 .hasSize(1)
         }
     }
@@ -145,7 +144,7 @@ class UnusedVariableSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code))
+            assertThat(subject.compileAndLintWithContext(env, code, compile = false))
                 .isEmpty()
         }
     }
@@ -298,7 +297,7 @@ class UnusedVariableSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            val results = subject.lintWithContext(env, code)
+            val results = subject.compileAndLintWithContext(env, code, compile = false)
             assertThat(results).hasSize(2)
             assertThat(results).anyMatch { it.message == "Variable `org` is unused." }
             assertThat(results).anyMatch { it.message == "Variable `detekt` is unused." }
@@ -318,7 +317,7 @@ class UnusedVariableSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code))
+            assertThat(subject.compileAndLintWithContext(env, code, compile = false))
                 .hasSize(1)
                 .hasStartSourceLocations(SourceLocation(3, 9))
         }
@@ -333,7 +332,7 @@ class UnusedVariableSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code))
+            assertThat(subject.compileAndLintWithContext(env, code, compile = false))
                 .hasSize(1)
                 .hasStartSourceLocations(SourceLocation(3, 9))
         }

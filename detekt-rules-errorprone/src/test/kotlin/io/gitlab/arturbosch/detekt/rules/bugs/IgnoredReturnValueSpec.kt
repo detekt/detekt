@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -221,7 +220,7 @@ class IgnoredReturnValueSpec {
                 annotation class CheckReturnValue
             """.trimIndent()
 
-            val findings = subject.lintWithContext(env, code, annotationClass)
+            val findings = subject.compileAndLintWithContext(env, code, annotationClass, compile = false)
             assertThat(findings).singleElement()
                 .hasMessage("The call listOfChecked is returning a value that is ignored.")
             assertThat(findings).hasStartSourceLocation(7, 5)
@@ -1161,7 +1160,7 @@ class IgnoredReturnValueSpec {
                     foo.foo()
                 }
             """.trimIndent()
-            val findings = subject.lintWithContext(env, code)
+            val findings = subject.compileAndLintWithContext(env, code, compile = false)
             assertThat(findings).hasSize(1)
         }
 
@@ -1174,7 +1173,7 @@ class IgnoredReturnValueSpec {
                     bar.bar()
                 }
             """.trimIndent()
-            val findings = subject.lintWithContext(env, code)
+            val findings = subject.compileAndLintWithContext(env, code, compile = false)
             assertThat(findings).hasSize(1)
         }
 
@@ -1189,7 +1188,7 @@ class IgnoredReturnValueSpec {
                     map.put("another-key", foo.foo())
                 }
             """.trimIndent()
-            val findings = subject.lintWithContext(env, code)
+            val findings = subject.compileAndLintWithContext(env, code, compile = false)
             assertThat(findings).isEmpty()
         }
     }

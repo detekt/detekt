@@ -37,25 +37,6 @@ fun Rule.lint(
     return visitFile(ktFile, compilerResources = compilerResources).filterSuppressed(this)
 }
 
-@Deprecated(
-    "Use compileAndLintWithContext with compile = false",
-    replaceWith = ReplaceWith("compileAndLintWithContext(environment, content, *additionalContents, compilerResources = compilerResources, compile = false)")
-)
-fun Rule.lintWithContext(
-    environment: KotlinCoreEnvironment,
-    @Language("kotlin") content: String,
-    @Language("kotlin") vararg additionalContents: String,
-    compilerResources: CompilerResources = CompilerResources(
-        environment.configuration.languageVersionSettings,
-        DataFlowValueFactoryImpl(environment.configuration.languageVersionSettings)
-    ),
-): List<Finding> {
-    require(this is RequiresFullAnalysis) {
-        "${this.ruleName} doesn't require full analysis so you should use lint instead of lintWithContext"
-    }
-    return compileAndLintWithContext(environment, content, *additionalContents, compilerResources = compilerResources, compile = false)
-}
-
 fun Rule.compileAndLintWithContext(
     environment: KotlinCoreEnvironment,
     @Language("kotlin") content: String,

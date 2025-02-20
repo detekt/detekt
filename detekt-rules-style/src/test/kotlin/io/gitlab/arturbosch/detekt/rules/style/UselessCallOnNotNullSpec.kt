@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Test
@@ -243,7 +242,7 @@ class UselessCallOnNotNullSpec(val env: KotlinCoreEnvironment) {
             }
         """.trimIndent()
 
-        val findings = subject.lintWithContext(env, code)
+        val findings = subject.compileAndLintWithContext(env, code, compile = false)
         assertThat(findings).isEmpty()
     }
 
@@ -257,7 +256,7 @@ class UselessCallOnNotNullSpec(val env: KotlinCoreEnvironment) {
             }
         """.trimIndent()
 
-        val findings = subject.lintWithContext(env, code)
+        val findings = subject.compileAndLintWithContext(env, code, compile = false)
         assertThat(findings).isEmpty()
     }
 

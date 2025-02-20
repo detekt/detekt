@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
@@ -204,7 +203,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                     val params = tooltip_guide.layoutParams as LayoutParams
                 }
             """.trimIndent()
-            val result = subject.lintWithContext(env, code)
+            val result = subject.compileAndLintWithContext(env, code, compile = false)
             assertThat(result).isEmpty()
         }
     }

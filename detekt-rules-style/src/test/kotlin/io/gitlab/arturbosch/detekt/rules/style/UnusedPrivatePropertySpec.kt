@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
@@ -332,7 +331,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                 private const val unusedTopLevelConst = 1
                 private val unusedTopLevelVal = usedTopLevelVal
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code))
+            assertThat(subject.compileAndLintWithContext(env, code, compile = false))
                 .hasSize(2)
                 .hasStartSourceLocations(
                     SourceLocation(2, 19),
@@ -601,7 +600,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
             val code = """
                 actual class Foo actual constructor(actual val bar: String) {}
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code, compile = false)).isEmpty()
         }
 
         @Test
@@ -609,7 +608,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
             val code = """
                 actual class Foo actual constructor(private val bar: String) {}
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code, compile = false)).hasSize(1)
         }
     }
 
@@ -656,7 +655,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code))
+            assertThat(subject.compileAndLintWithContext(env, code, compile = false))
                 .hasSize(0)
         }
 

@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -531,7 +530,7 @@ class ObjectLiteralToLambdaSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(env, code, compile = false)).hasSize(1)
         }
 
         @Test
@@ -544,7 +543,7 @@ class ObjectLiteralToLambdaSpec {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code, compile = false)).isEmpty()
         }
 
         @Test
@@ -560,7 +559,7 @@ class ObjectLiteralToLambdaSpec {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(env, code, compile = false)).isEmpty()
         }
     }
 }

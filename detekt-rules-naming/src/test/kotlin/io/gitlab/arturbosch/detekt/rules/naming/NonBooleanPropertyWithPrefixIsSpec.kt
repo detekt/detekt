@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -312,7 +311,7 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinCoreEnvironment) {
             """.trimIndent()
 
             // BuildConfig is missing in this test so we can't compile it
-            val findings = subject.lintWithContext(env, code)
+            val findings = subject.compileAndLintWithContext(env, code, compile = false)
 
             assertThat(findings).isEmpty()
         }
