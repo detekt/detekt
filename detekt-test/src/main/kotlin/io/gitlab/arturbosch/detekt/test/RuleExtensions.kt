@@ -37,6 +37,10 @@ fun Rule.lint(
     return visitFile(ktFile, compilerResources = compilerResources).filterSuppressed(this)
 }
 
+@Deprecated(
+    "Use compileAndLintWithContext with compile = false",
+    replaceWith = ReplaceWith("compileAndLintWithContext(environment, content, *additionalContents, compilerResources = compilerResources, compile = false)")
+)
 fun Rule.lintWithContext(
     environment: KotlinCoreEnvironment,
     @Language("kotlin") content: String,
@@ -47,7 +51,26 @@ fun Rule.lintWithContext(
     ),
 ): List<Finding> {
     require(this is RequiresFullAnalysis) {
-        "${this.ruleName} doesn't require full analysis so you should use lint instead of lint"
+        "${this.ruleName} doesn't require full analysis so you should use lint instead of lintWithContext"
+    }
+    return compileAndLintWithContext(environment, content, *additionalContents, compilerResources = compilerResources, compile = false)
+}
+
+fun Rule.compileAndLintWithContext(
+    environment: KotlinCoreEnvironment,
+    @Language("kotlin") content: String,
+    @Language("kotlin") vararg additionalContents: String,
+    compilerResources: CompilerResources = CompilerResources(
+        environment.configuration.languageVersionSettings,
+        DataFlowValueFactoryImpl(environment.configuration.languageVersionSettings)
+    ),
+    compile: Boolean = true,
+): List<Finding> {
+    require(this is RequiresFullAnalysis) {
+        "${this.ruleName} doesn't require full analysis so you should use lint compileAndLintWithContext"
+    }
+    if (compile && shouldCompileTestSnippets) {
+        KotlinScriptEngine.compile(content)
     }
     val ktFile = compileContentForTest(content)
     val additionalKtFiles = additionalContents.mapIndexed { index, additionalContent ->
@@ -56,24 +79,6 @@ fun Rule.lintWithContext(
     setBindingContext(environment.createBindingContext(listOf(ktFile) + additionalKtFiles))
 
     return visitFile(ktFile, compilerResources).filterSuppressed(this)
-}
-
-fun Rule.compileAndLintWithContext(
-    environment: KotlinCoreEnvironment,
-    @Language("kotlin") content: String,
-    compilerResources: CompilerResources = CompilerResources(
-        environment.configuration.languageVersionSettings,
-        DataFlowValueFactoryImpl(environment.configuration.languageVersionSettings)
-    ),
-): List<Finding> {
-    require(this is RequiresFullAnalysis) {
-        "${this.ruleName} doesn't require full analysis so you should use lint with compile = true instead of " +
-            "compileAndLint"
-    }
-    if (shouldCompileTestSnippets) {
-        KotlinScriptEngine.compile(content)
-    }
-    return lintWithContext(environment, content, compilerResources = compilerResources)
 }
 
 fun Rule.lint(ktFile: KtFile, compilerResources: CompilerResources = FakeCompilerResources()): List<Finding> {

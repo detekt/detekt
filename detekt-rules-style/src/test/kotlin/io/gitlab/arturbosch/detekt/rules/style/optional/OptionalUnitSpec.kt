@@ -407,7 +407,11 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 fun foo(): Unit { }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code, FakeCompilerResources(ExplicitApiMode.STRICT))
+            val findings = subject.compileAndLintWithContext(
+                env,
+                code,
+                compilerResources = FakeCompilerResources(ExplicitApiMode.STRICT)
+            )
             assertThat(findings).hasSize(1)
         }
 
@@ -416,7 +420,11 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 fun foo(): Unit { }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code, FakeCompilerResources(ExplicitApiMode.WARNING))
+            val findings = subject.compileAndLintWithContext(
+                env,
+                code,
+                compilerResources = FakeCompilerResources(ExplicitApiMode.WARNING)
+            )
             assertThat(findings).hasSize(1)
         }
 
@@ -425,7 +433,11 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 fun foo(): Unit { }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code, FakeCompilerResources(ExplicitApiMode.DISABLED))
+            val findings = subject.compileAndLintWithContext(
+                env,
+                code,
+                compilerResources = FakeCompilerResources(ExplicitApiMode.DISABLED)
+            )
             assertThat(findings).hasSize(1)
         }
 
@@ -434,7 +446,11 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 fun foo(): Unit = println("")
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code, FakeCompilerResources(ExplicitApiMode.STRICT))
+            val findings = subject.compileAndLintWithContext(
+                env,
+                code,
+                compilerResources = FakeCompilerResources(ExplicitApiMode.STRICT)
+            )
             assertThat(findings).isEmpty()
         }
 
@@ -443,7 +459,11 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 fun foo(): Unit = println("")
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code, FakeCompilerResources(ExplicitApiMode.WARNING))
+            val findings = subject.compileAndLintWithContext(
+                env,
+                code,
+                compilerResources = FakeCompilerResources(ExplicitApiMode.WARNING)
+            )
             assertThat(findings).isEmpty()
         }
 
@@ -453,14 +473,22 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
                 private fun foo(): Unit = println("")
             """.trimIndent()
             val findingsWithPrivate =
-                subject.compileAndLintWithContext(env, code, FakeCompilerResources(ExplicitApiMode.STRICT))
+                subject.compileAndLintWithContext(
+                    env,
+                    code,
+                    compilerResources = FakeCompilerResources(ExplicitApiMode.STRICT)
+                )
             assertThat(findingsWithPrivate).hasSize(1)
 
             val code2 = """
                 internal fun foo(): Unit = println("")
             """.trimIndent()
             val findingsWithInternal =
-                subject.compileAndLintWithContext(env, code2, FakeCompilerResources(ExplicitApiMode.STRICT))
+                subject.compileAndLintWithContext(
+                    env,
+                    code2,
+                    compilerResources = FakeCompilerResources(ExplicitApiMode.STRICT)
+                )
             assertThat(findingsWithInternal).hasSize(1)
         }
 
@@ -470,14 +498,22 @@ class OptionalUnitSpec(val env: KotlinCoreEnvironment) {
                 private fun foo(): Unit = println("")
             """.trimIndent()
             val findingsWithPrivate =
-                subject.compileAndLintWithContext(env, code, FakeCompilerResources(ExplicitApiMode.WARNING))
+                subject.compileAndLintWithContext(
+                    env,
+                    code,
+                    compilerResources = FakeCompilerResources(ExplicitApiMode.WARNING)
+                )
             assertThat(findingsWithPrivate).hasSize(1)
 
             val code2 = """
                 internal fun foo(): Unit = println("")
             """.trimIndent()
             val findingsWithInternal =
-                subject.compileAndLintWithContext(env, code2, FakeCompilerResources(ExplicitApiMode.WARNING))
+                subject.compileAndLintWithContext(
+                    env,
+                    code2,
+                    compilerResources = FakeCompilerResources(ExplicitApiMode.WARNING)
+                )
             assertThat(findingsWithInternal).hasSize(1)
         }
     }

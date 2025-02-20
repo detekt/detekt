@@ -41,8 +41,8 @@ public final class io/gitlab/arturbosch/detekt/test/ResourcesKt {
 }
 
 public final class io/gitlab/arturbosch/detekt/test/RuleExtensionsKt {
-	public static final fun compileAndLintWithContext (Lio/gitlab/arturbosch/detekt/api/Rule;Lorg/jetbrains/kotlin/cli/jvm/compiler/KotlinCoreEnvironment;Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/CompilerResources;)Ljava/util/List;
-	public static synthetic fun compileAndLintWithContext$default (Lio/gitlab/arturbosch/detekt/api/Rule;Lorg/jetbrains/kotlin/cli/jvm/compiler/KotlinCoreEnvironment;Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/CompilerResources;ILjava/lang/Object;)Ljava/util/List;
+	public static final fun compileAndLintWithContext (Lio/gitlab/arturbosch/detekt/api/Rule;Lorg/jetbrains/kotlin/cli/jvm/compiler/KotlinCoreEnvironment;Ljava/lang/String;[Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/CompilerResources;Z)Ljava/util/List;
+	public static synthetic fun compileAndLintWithContext$default (Lio/gitlab/arturbosch/detekt/api/Rule;Lorg/jetbrains/kotlin/cli/jvm/compiler/KotlinCoreEnvironment;Ljava/lang/String;[Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/CompilerResources;ZILjava/lang/Object;)Ljava/util/List;
 	public static final fun lint (Lio/gitlab/arturbosch/detekt/api/Rule;Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/CompilerResources;Z)Ljava/util/List;
 	public static final fun lint (Lio/gitlab/arturbosch/detekt/api/Rule;Lorg/jetbrains/kotlin/psi/KtFile;Lio/gitlab/arturbosch/detekt/api/CompilerResources;)Ljava/util/List;
 	public static synthetic fun lint$default (Lio/gitlab/arturbosch/detekt/api/Rule;Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/CompilerResources;ZILjava/lang/Object;)Ljava/util/List;
