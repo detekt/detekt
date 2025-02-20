@@ -29,6 +29,7 @@ jobs:
         uses: gradle/actions/setup-gradle@94baf225fe0a508e581a564467443d0e2379123b # v4
         with:
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+          cache-disabled: true
 
       - name: Generate Coverage Report
         run: ./gradlew jacocoMergedReport

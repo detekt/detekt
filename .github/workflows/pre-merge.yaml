@@ -41,6 +41,7 @@ jobs:
         uses: gradle/actions/setup-gradle@94baf225fe0a508e581a564467443d0e2379123b # v4
         with:
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+          cache-disabled: true
 
       - name: Assemble and publish artifacts to Maven Local
         run: ./gradlew publishToMavenLocal
@@ -70,6 +71,7 @@ jobs:
         uses: gradle/actions/setup-gradle@94baf225fe0a508e581a564467443d0e2379123b # v4
         with:
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+          cache-disabled: true
 
       - name: Verify Generated Detekt Config File
         run: ./gradlew verifyGeneratorOutput
@@ -90,6 +92,7 @@ jobs:
         uses: gradle/actions/setup-gradle@94baf225fe0a508e581a564467443d0e2379123b # v4
         with:
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+          cache-disabled: true
 
       - name: Build and compile test snippets
         run: ./gradlew test -Pcompile-test-snippets=true
@@ -110,6 +113,7 @@ jobs:
         uses: gradle/actions/setup-gradle@94baf225fe0a508e581a564467443d0e2379123b # v4
         with:
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+          cache-disabled: true
 
       - name: Run with allWarningsAsErrors
         run: ./gradlew compileKotlin compileTestKotlin compileTestFixturesKotlin -PwarningsAsErrors=true
