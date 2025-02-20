@@ -1145,6 +1145,60 @@ class IgnoredReturnValueSpec {
             val findings = subject.compileAndLintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
+
+        @Test
+        fun `reports when result of function returning lambda is ignored`() {
+            val code = """
+                fun returnsALambda(): () -> Int = {
+                    42
+                }
+                
+                fun foo() : Int {
+                    returnsALambda()
+                    return 42
+                }
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings)
+                .singleElement()
+                .hasSourceLocation(6, 5)
+                .hasMessage("The call returnsALambda is returning a value that is ignored.")
+        }
+
+        @Test
+        fun `reports when result of function returning lambda with arguments is ignored`() {
+            val code = """
+                fun returnsALambda(): (Boolean, String) -> Int = { _, _ ->
+                    42
+                }
+                
+                fun foo() : Int {
+                    returnsALambda()
+                    return 42
+                }
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings)
+                .singleElement()
+                .hasSourceLocation(6, 5)
+                .hasMessage("The call returnsALambda is returning a value that is ignored.")
+        }
+
+        @Test
+        fun `doesn't report when result of function returning lambda is ignored`() {
+            val code = """
+                fun returnsALambda(): () -> Int = {
+                    42
+                }
+                
+                fun foo() : Int {
+                    returnsALambda().invoke()
+                    return 42
+                }
+            """.trimIndent()
+            val findings = subject.compileAndLintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
     }
 
     @Nested
