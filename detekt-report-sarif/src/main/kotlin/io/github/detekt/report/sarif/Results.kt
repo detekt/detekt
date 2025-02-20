@@ -10,7 +10,6 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.suppressed
 import java.security.MessageDigest
-import java.util.Locale
 import kotlin.io.path.invariantSeparatorsPathString
 
 internal fun toResults(detektion: Detektion): List<io.github.detekt.sarif4k.Result> =
@@ -52,4 +51,4 @@ private fun Issue.Location.toLocation(): io.github.detekt.sarif4k.Location =
 private fun String.sha1(): String = MessageDigest
     .getInstance("SHA-1")
     .digest(toByteArray())
-    .joinToString(separator = "", transform = { "%02x".format(Locale.ROOT, it) })
+    .joinToString("") { it.toUByte().toString(radix = 16).padStart(2, '0') }
