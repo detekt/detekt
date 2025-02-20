@@ -24,11 +24,7 @@ fun Rule.lint(
     compile: Boolean = true,
 ): List<Finding> {
     require(this !is RequiresFullAnalysis) {
-        if (compile) {
-            "${this.ruleName} requires full analysis so you should use compileAndLintWithContext instead of lint"
-        } else {
-            "${this.ruleName} requires full analysis so you should use lintWithContext instead of lint"
-        }
+        "${this.ruleName} requires full analysis so you should use lintWithContext instead of lint"
     }
     if (compile && shouldCompileTestSnippets) {
         KotlinScriptEngine.compile(content)
@@ -37,7 +33,7 @@ fun Rule.lint(
     return visitFile(ktFile, compilerResources = compilerResources).filterSuppressed(this)
 }
 
-fun Rule.lintWithContext(
+fun <T> T.lintWithContext(
     environment: KotlinCoreEnvironment,
     @Language("kotlin") content: String,
     @Language("kotlin") vararg additionalContents: String,
@@ -46,10 +42,7 @@ fun Rule.lintWithContext(
         DataFlowValueFactoryImpl(environment.configuration.languageVersionSettings)
     ),
     compile: Boolean = true,
-): List<Finding> {
-    require(this is RequiresFullAnalysis) {
-        "${this.ruleName} doesn't require full analysis so you should use lint compileAndLintWithContext"
-    }
+): List<Finding> where T : Rule, T : RequiresFullAnalysis {
     if (compile && shouldCompileTestSnippets) {
         KotlinScriptEngine.compile(content)
     }
@@ -64,7 +57,7 @@ fun Rule.lintWithContext(
 
 fun Rule.lint(ktFile: KtFile, compilerResources: CompilerResources = FakeCompilerResources()): List<Finding> {
     require(this !is RequiresFullAnalysis) {
-        "${this::class.simpleName} needs full analysis to work, you should use `compileAndLintWithContext`."
+        "${this.ruleName} requires full analysis so you should use lintWithContext instead of lint"
     }
     return visitFile(ktFile, compilerResources = compilerResources).filterSuppressed(this)
 }
