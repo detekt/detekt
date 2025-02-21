@@ -49,7 +49,7 @@ internal interface Lifecycle {
             val analyzer = Analyzer(settings, rules.filter { it.ruleInstance.active }, processors, bindingContext)
             processors.forEach { it.onStart(filesToAnalyze) }
             val issues = analyzer.run(filesToAnalyze)
-            val result: Detektion = DetektResult(issues)
+            val result: Detektion = DetektResult(issues, rules.map { it.ruleInstance })
             processors.forEach { it.onFinish(filesToAnalyze, result) }
             result
         }

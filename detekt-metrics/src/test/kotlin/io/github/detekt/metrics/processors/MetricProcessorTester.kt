@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
+import io.gitlab.arturbosch.detekt.api.RuleInstance
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.com.intellij.openapi.util.UserDataHolderBase
 import org.jetbrains.kotlin.psi.KtFile
@@ -26,6 +27,8 @@ class MetricProcessorTester(
 
 private class MetricResults : Detektion, UserDataHolderBase() {
     override val issues: List<Issue>
+        get() = throw UnsupportedOperationException()
+    override val rules: List<RuleInstance>
         get() = throw UnsupportedOperationException()
     override val notifications: Collection<Notification>
         get() = throw UnsupportedOperationException()
