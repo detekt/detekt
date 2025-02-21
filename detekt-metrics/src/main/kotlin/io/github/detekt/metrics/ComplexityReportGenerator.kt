@@ -5,8 +5,8 @@ import java.util.Locale
 
 class ComplexityReportGenerator(private val complexityMetric: ComplexityMetric) {
 
-    private var numberOfSmells = 0
-    private var smellPerThousandLines = 0
+    private var numberOfFindings = 0
+    private var findingPerThousandLines = 0
     private var mccPerThousandLines = 0
     private var commentSourceRatio = 0
 
@@ -19,10 +19,10 @@ class ComplexityReportGenerator(private val complexityMetric: ComplexityMetric) 
             "%,d comment lines of code (cloc)".format(Locale.US, complexityMetric.cloc),
             "%,d cyclomatic complexity (mcc)".format(Locale.US, complexityMetric.mcc),
             "%,d cognitive complexity".format(Locale.US, complexityMetric.cognitiveComplexity),
-            "%,d number of total code smells".format(Locale.US, numberOfSmells),
+            "%,d number of total findings".format(Locale.US, numberOfFindings),
             "%,d%% comment source ratio".format(Locale.US, commentSourceRatio),
             "%,d mcc per 1,000 lloc".format(Locale.US, mccPerThousandLines),
-            "%,d code smells per 1,000 lloc".format(Locale.US, smellPerThousandLines)
+            "%,d findings per 1,000 lloc".format(Locale.US, findingPerThousandLines)
         )
     }
 
@@ -36,8 +36,8 @@ class ComplexityReportGenerator(private val complexityMetric: ComplexityMetric) 
             complexityMetric.lloc == null || complexityMetric.lloc == 0 -> true
             complexityMetric.sloc == null || complexityMetric.sloc == 0 -> true
             else -> {
-                numberOfSmells = complexityMetric.issuesCount
-                smellPerThousandLines = numberOfSmells * 1000 / complexityMetric.lloc
+                numberOfFindings = complexityMetric.issuesCount
+                findingPerThousandLines = numberOfFindings * 1000 / complexityMetric.lloc
                 mccPerThousandLines = requireNotNull(complexityMetric.mcc) * 1000 / complexityMetric.lloc
                 commentSourceRatio = requireNotNull(complexityMetric.cloc) * 100 / complexityMetric.sloc
                 false

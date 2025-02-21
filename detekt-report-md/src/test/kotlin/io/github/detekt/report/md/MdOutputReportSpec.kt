@@ -55,13 +55,13 @@ class MdOutputReportSpec {
                 
                 * 10 cognitive complexity
                 
-                * 3 number of total code smells
+                * 3 number of total findings
                 
                 * 10% comment source ratio
                 
                 * 1,000 mcc per 1,000 lloc
                 
-                * 300 code smells per 1,000 lloc
+                * 300 findings per 1,000 lloc
                 
                 ## Issues (3)
                 
