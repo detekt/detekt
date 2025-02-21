@@ -6,6 +6,30 @@ keywords: [changelog, release-notes, migration]
 
 # Changelog and Migration Guide
 
+#### 1.23.8 - 2025-02-20
+
+This is a point release for Detekt `1.23.0`, built against Kotlin `2.0.21`, with fixes for several bugs that got reported by the community.
+
+##### Notable Changes
+
+- fix(deps): Update AGP to v8.8.0 - [#7879](https://github.com/detekt/detekt/pull/7879)
+- fix(deps): Update kotlin to 2.0.21 - [#7580](https://github.com/detekt/detekt/pull/7580)
+- fix(deps): update Gradle to v8.10.2 - [#7668](https://github.com/detekt/detekt/pull/7668)
+
+##### Changelog
+
+- UseDataClass: do not report on `expect` classes - [#7857](https://github.com/detekt/detekt/pull/7857)
+- Fix InjectDispatcher false positives - [#7797](https://github.com/detekt/detekt/pull/7797)
+- [UnnecessaryParentheses] Allow float/double without integer part - [#7751](https://github.com/detekt/detekt/pull/7751)
+- Fix `ThrowingExceptionsWithoutMessageOrCause` false positive - [#7715](https://github.com/detekt/detekt/pull/7715)
+- Issue #7634: Make `UndocumentedPublicClass` configurable to flag `com… - [#7635](https://github.com/detekt/detekt/pull/7635)
+- Fix redundant empty tags in baseline XML - [#7625](https://github.com/detekt/detekt/pull/7625)
+- MatchingDeclarationName now supports platofrm suffixes - [#6426](https://github.com/detekt/detekt/pull/6426)
+
+##### Contributors
+
+We would like to thank the following contributors that made this release possible: @BraisGabin, @JordanLongstaff, @Nava2, @atulgpt, @eygraber, @lexa-diky, @t-kameyama
+
 #### 1.23.7 - 2024-09-08
 
 This is a point release for Detekt `1.23.0`, built against Kotlin `2.0.10`, with fixes for several bugs that got reported by the community.
