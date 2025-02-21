@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.github.detekt.psi.absolutePath
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.SourceLocation
@@ -51,7 +51,7 @@ class TrailingWhitespace(config: Config) : Rule(
                             path = file.absolutePath(),
                         )
 
-                    report(CodeSmell(Entity.from(file, location), createMessage(index)))
+                    report(Finding(Entity.from(file, location), createMessage(index)))
                 }
             }
         }

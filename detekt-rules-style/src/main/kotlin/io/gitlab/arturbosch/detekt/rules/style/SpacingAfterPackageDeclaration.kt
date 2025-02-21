@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
@@ -82,7 +82,7 @@ class SpacingAfterPackageDeclaration(config: Config) : Rule(
         if (element is PsiWhiteSpace || element is KtElement) {
             val count = element.text.count { it == '\n' }
             if (count != 2) {
-                report(CodeSmell(Entity.from(element), message))
+                report(Finding(Entity.from(element), message))
             }
         }
     }

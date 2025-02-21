@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isEqualsFunction
 import org.jetbrains.kotlin.KtNodeTypes
@@ -45,7 +45,7 @@ class EqualsAlwaysReturnsTrueOrFalse(config: Config) : Rule(
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (function.isEqualsFunction() && function.returnsBooleanConstant()) {
             report(
-                CodeSmell(
+                Finding(
                     Entity.atName(function),
                     "This equals function always returns the same " +
                         "result regardless of the input parameters."

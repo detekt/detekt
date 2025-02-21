@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
@@ -67,7 +67,7 @@ class MemberNameEqualsClassName(config: Config) :
     override fun visitClass(klass: KtClass) {
         if (!klass.isInterface()) {
             (getMisnamedMembers(klass, klass.name) + getMisnamedCompanionObjectMembers(klass))
-                .forEach { report(CodeSmell(Entity.from(it), classMessage)) }
+                .forEach { report(Finding(Entity.from(it), classMessage)) }
         }
         super.visitClass(klass)
     }
@@ -75,7 +75,7 @@ class MemberNameEqualsClassName(config: Config) :
     override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
         if (!declaration.isCompanion()) {
             getMisnamedMembers(declaration, declaration.name)
-                .forEach { report(CodeSmell(Entity.from(it), objectMessage)) }
+                .forEach { report(Finding(Entity.from(it), objectMessage)) }
         }
         super.visitObjectDeclaration(declaration)
     }

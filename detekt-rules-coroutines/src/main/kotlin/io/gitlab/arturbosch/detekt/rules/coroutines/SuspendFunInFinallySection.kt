@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.coroutines
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
@@ -51,7 +51,7 @@ class SuspendFunInFinallySection(config: Config) :
     override fun visitFinallySection(finallySection: KtFinallySection) {
         finallySection.forEachDescendantOfType<KtCallExpression> { expression ->
             if (shouldReport(expression, finallySection)) {
-                report(CodeSmell(Entity.from(expression.calleeExpression as PsiElement), description))
+                report(Finding(Entity.from(expression.calleeExpression as PsiElement), description))
             }
         }
     }

@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isNonNullCheck
 import io.gitlab.arturbosch.detekt.rules.isNullCheck
@@ -47,9 +47,9 @@ class UseLet(config: Config) : Rule(
         val condition = expression.condition as? KtBinaryExpression ?: return
 
         if (condition.isNullCheck() && isExpressionNull(expression.then)) {
-            report(CodeSmell(Entity.from(expression), description))
+            report(Finding(Entity.from(expression), description))
         } else if (condition.isNonNullCheck() && isExpressionNull(expression.`else`)) {
-            report(CodeSmell(Entity.from(expression), description))
+            report(Finding(Entity.from(expression), description))
         }
     }
 }

@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.coroutines
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.builtins.isSuspendFunctionType
@@ -63,7 +63,7 @@ class SleepInsteadOfDelay(config: Config) :
 
     private fun checkAndReport(expression: KtExpression) {
         if (expression.isThreadSleepFunction() && shouldReport(expression)) {
-            report(CodeSmell(Entity.from(expression), SUSPEND_FUN_MESSAGE))
+            report(Finding(Entity.from(expression), SUSPEND_FUN_MESSAGE))
         }
     }
 

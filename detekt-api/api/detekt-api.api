@@ -11,16 +11,6 @@ public final class io/gitlab/arturbosch/detekt/api/AutocorrectKt {
 	public static final fun setModifiedText (Lorg/jetbrains/kotlin/psi/KtFile;Ljava/lang/String;)V
 }
 
-public final class io/gitlab/arturbosch/detekt/api/CodeSmell : io/gitlab/arturbosch/detekt/api/Finding {
-	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Entity;Ljava/lang/String;Ljava/util/List;Ljava/util/List;)V
-	public synthetic fun <init> (Lio/gitlab/arturbosch/detekt/api/Entity;Ljava/lang/String;Ljava/util/List;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public fun getEntity ()Lio/gitlab/arturbosch/detekt/api/Entity;
-	public fun getMessage ()Ljava/lang/String;
-	public fun getReferences ()Ljava/util/List;
-	public fun getSuppressReasons ()Ljava/util/List;
-	public fun toString ()Ljava/lang/String;
-}
-
 public final class io/gitlab/arturbosch/detekt/api/CompilerResources {
 	public fun <init> (Lorg/jetbrains/kotlin/config/LanguageVersionSettings;Lorg/jetbrains/kotlin/resolve/calls/smartcasts/DataFlowValueFactory;)V
 	public final fun getDataFlowValueFactory ()Lorg/jetbrains/kotlin/resolve/calls/smartcasts/DataFlowValueFactory;
@@ -153,11 +143,14 @@ public final class io/gitlab/arturbosch/detekt/api/FileProcessListener$DefaultIm
 	public static fun onStart (Lio/gitlab/arturbosch/detekt/api/FileProcessListener;Ljava/util/List;)V
 }
 
-public abstract interface class io/gitlab/arturbosch/detekt/api/Finding {
-	public abstract fun getEntity ()Lio/gitlab/arturbosch/detekt/api/Entity;
-	public abstract fun getMessage ()Ljava/lang/String;
-	public abstract fun getReferences ()Ljava/util/List;
-	public abstract fun getSuppressReasons ()Ljava/util/List;
+public final class io/gitlab/arturbosch/detekt/api/Finding {
+	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Entity;Ljava/lang/String;Ljava/util/List;Ljava/util/List;)V
+	public synthetic fun <init> (Lio/gitlab/arturbosch/detekt/api/Entity;Ljava/lang/String;Ljava/util/List;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getEntity ()Lio/gitlab/arturbosch/detekt/api/Entity;
+	public final fun getMessage ()Ljava/lang/String;
+	public final fun getReferences ()Ljava/util/List;
+	public final fun getSuppressReasons ()Ljava/util/List;
+	public fun toString ()Ljava/lang/String;
 }
 
 public final class io/gitlab/arturbosch/detekt/api/Issue {

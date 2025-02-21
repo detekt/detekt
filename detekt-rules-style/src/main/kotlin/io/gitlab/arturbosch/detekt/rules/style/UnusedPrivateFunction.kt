@@ -2,11 +2,11 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.Alias
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
@@ -75,7 +75,7 @@ private class UnusedFunctionVisitor(
     private val propertyDelegates = mutableListOf<KtPropertyDelegate>()
 
     @Suppress("CyclomaticComplexMethod", "LongMethod")
-    fun getUnusedReports(): List<CodeSmell> {
+    fun getUnusedReports(): List<Finding> {
         val propertyDelegateResultingDescriptors by lazy(LazyThreadSafetyMode.NONE) {
             propertyDelegates.flatMap { it.resultingDescriptors() }
         }
@@ -135,7 +135,7 @@ private class UnusedFunctionVisitor(
                     else -> emptyList()
                 }
                 unusedFunctions.map {
-                    CodeSmell(Entity.atName(it), "Private function `$functionName` is unused.")
+                    Finding(Entity.atName(it), "Private function `$functionName` is unused.")
                 }
             }
     }

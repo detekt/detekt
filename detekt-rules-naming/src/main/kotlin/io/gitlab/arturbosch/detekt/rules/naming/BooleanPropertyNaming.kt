@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
@@ -58,16 +58,16 @@ class BooleanPropertyNaming(config: Config) :
         val isNonConstantBooleanType = isBooleanType && !declaration.isConstant()
 
         if (isNonConstantBooleanType && !name.contains(allowedPattern) && !declaration.isOverride()) {
-            report(reportCodeSmell(declaration, name))
+            report(reportFinding(declaration, name))
         }
     }
 
-    private fun reportCodeSmell(
+    private fun reportFinding(
         declaration: KtCallableDeclaration,
         name: String,
-    ): CodeSmell {
+    ): Finding {
         val description = "Boolean property name should match a $allowedPattern pattern."
-        return CodeSmell(
+        return Finding(
             Entity.atName(declaration),
             message = "$description Actual name is $name"
         )

@@ -3,11 +3,11 @@ package io.gitlab.arturbosch.detekt.core
 import io.github.detekt.test.utils.compileContentForTest
 import io.github.detekt.test.utils.compileForTest
 import io.github.detekt.test.utils.resourceAsPath
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleInstance
@@ -418,7 +418,7 @@ class AnalyzerSpec {
 private class NoEmptyFile(config: Config) : Rule(config, "TestDescription") {
     override fun visitKtFile(file: KtFile) {
         if (file.text.isEmpty()) {
-            report(CodeSmell(Entity.from(file), "This file is empty"))
+            report(Finding(Entity.from(file), "This file is empty"))
         }
     }
 }
@@ -434,7 +434,7 @@ private open class MaxLineLength(config: Config) : Rule(config, "TestDescription
         for (line in file.text.lineSequence()) {
             if (line.length > maxLineLength) {
                 val ktElement = file.findFirstMeaningfulKtElementInParents(offset..(offset + line.length))
-                report(CodeSmell(Entity.from(ktElement), description))
+                report(Finding(Entity.from(ktElement), description))
             }
             offset += line.length + 1 // \n
         }

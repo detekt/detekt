@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.documentation
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.documentation.internal.isPublicInherited
@@ -78,7 +78,7 @@ class UndocumentedPublicClass(config: Config) : Rule(
             element.docComment == null
         ) {
             report(
-                CodeSmell(
+                Finding(
                     Entity.atName(element),
                     "${element.nameAsSafeName} is missing required documentation."
                 )

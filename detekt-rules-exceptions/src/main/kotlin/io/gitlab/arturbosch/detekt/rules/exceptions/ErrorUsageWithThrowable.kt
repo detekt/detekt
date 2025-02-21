@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.exceptions
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
@@ -61,7 +61,7 @@ class ErrorUsageWithThrowable(config: Config) :
             errorMsgValueArg.getArgumentExpression()
         ]?.type ?: return
         if (errorMsgTypeInfo.isThrowableSubtypeOfThrowable()) {
-            report(CodeSmell(Entity.from(errorMsgValueArg), description))
+            report(Finding(Entity.from(errorMsgValueArg), description))
         }
     }
 

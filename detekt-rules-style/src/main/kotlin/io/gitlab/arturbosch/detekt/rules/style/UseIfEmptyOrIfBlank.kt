@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.KtNodeTypes
@@ -76,7 +76,7 @@ class UseIfEmptyOrIfBlank(config: Config) :
 
         val message =
             "This '$conditionCalleeExpressionText' call can be replaced with '${replacement.replacementFunctionName}'"
-        report(CodeSmell(Entity.from(conditionCalleeExpression), message))
+        report(Finding(Entity.from(conditionCalleeExpression), message))
     }
 
     @Suppress("ReturnCount")

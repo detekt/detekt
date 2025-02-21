@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.coroutines
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.resolve.calls.util.getCalleeExpressionIfAny
@@ -45,7 +45,7 @@ class GlobalCoroutineUsage(config: Config) : Rule(
         if (expression.receiverExpression.text == "GlobalScope" &&
             expression.getCalleeExpressionIfAny()?.text in listOf("launch", "async")
         ) {
-            report(CodeSmell(Entity.from(expression), MESSAGE))
+            report(Finding(Entity.from(expression), MESSAGE))
         }
 
         super.visitDotQualifiedExpression(expression)

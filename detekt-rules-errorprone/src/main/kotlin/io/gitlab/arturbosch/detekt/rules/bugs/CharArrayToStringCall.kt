@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
@@ -74,10 +74,10 @@ class CharArrayToStringCall(config: Config) :
     private fun KtBinaryExpression.isString() = getType(bindingContext)?.fqNameOrNull() == FqName("kotlin.String")
 
     private fun report(expression: KtExpression) {
-        val codeSmell = CodeSmell(
+        val finding = Finding(
             Entity.from(expression),
             "Use `concatToString()` call instead of `toString()` call."
         )
-        report(codeSmell)
+        report(finding)
     }
 }

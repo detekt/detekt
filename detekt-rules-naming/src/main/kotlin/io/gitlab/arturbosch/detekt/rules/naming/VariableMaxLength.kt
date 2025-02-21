@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.isOverride
@@ -29,7 +29,7 @@ class VariableMaxLength(config: Config) : Rule(
 
         if (propertyName.length > maximumVariableNameLength) {
             report(
-                CodeSmell(
+                Finding(
                     Entity.atName(property),
                     message = "Variable names should be at most $maximumVariableNameLength characters long."
                 )
