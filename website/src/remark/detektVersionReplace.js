@@ -5,7 +5,7 @@ import { visit } from "unist-util-visit";
 // by the `applyDocVersion` task.
 const detektVersion = "1.23.7";
 
-const plugin = (options) => {
+const detektVersionReplacePlugin = (options) => {
   const transformer = async (ast) => {
     visit(ast, "code", (node) => {
       if (node.value.includes("[detekt_version]")) {
@@ -16,4 +16,7 @@ const plugin = (options) => {
   return transformer;
 };
 
-module.exports = plugin;
+module.exports = {
+  detektVersionReplacePlugin: detektVersionReplacePlugin,
+  detektVersion: detektVersion
+};
