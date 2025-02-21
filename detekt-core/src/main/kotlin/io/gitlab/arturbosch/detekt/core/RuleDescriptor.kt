@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
+import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import io.gitlab.arturbosch.detekt.core.util.isActiveOrDefault
 import java.net.URI
 
@@ -69,7 +70,7 @@ private fun RuleSet.getRules(
     }
 
 private fun generateDefaultUrl(ruleSetId: RuleSet.Id, ruleName: Rule.Name) =
-    URI("https://detekt.dev/docs/rules/${ruleSetId.value.lowercase()}#${ruleName.value.lowercase()}")
+    URI("https://detekt.dev/docs/${whichDetekt()}/rules/${ruleSetId.value.lowercase()}#${ruleName.value.lowercase()}")
 
 private val externalFirstPartyRuleSets = setOf(
     "formatting",

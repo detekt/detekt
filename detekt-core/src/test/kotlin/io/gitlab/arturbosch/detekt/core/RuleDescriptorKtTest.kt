@@ -393,7 +393,7 @@ private fun createRuleInstance(id: String, active: Boolean, url: String?, severi
         if (id.startsWith("AnotherRule")) {
             URI("https://example.org/")
         } else {
-            URI("https://detekt.dev/docs/rules/custom#${id.substringBefore("/").lowercase()}")
+            URI("https://detekt.dev/docs/1.6.0/rules/custom#${id.substringBefore("/").lowercase()}")
         }
     } else {
         url?.let(::URI)
