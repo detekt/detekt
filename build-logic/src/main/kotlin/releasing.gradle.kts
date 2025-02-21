@@ -48,9 +48,6 @@ dependencies {
     releaseArtifacts(project(":detekt-cli")) {
         targetConfiguration = "shadow" // com.github.jengelman.gradle.plugins.shadow.ShadowBasePlugin.CONFIGURATION_NAME
     }
-    releaseArtifacts(project(":detekt-cli")) {
-        targetConfiguration = "shadowDist"
-    }
     releaseArtifacts(project(":detekt-generator")) {
         targetConfiguration = "shadow" // com.github.jengelman.gradle.plugins.shadow.ShadowBasePlugin.CONFIGURATION_NAME
     }
