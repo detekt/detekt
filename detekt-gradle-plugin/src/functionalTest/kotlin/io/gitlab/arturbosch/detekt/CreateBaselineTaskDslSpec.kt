@@ -20,7 +20,7 @@ class CreateBaselineTaskDslSpec {
             .withProjectLayout(
                 ProjectLayout(
                     numberOfSourceFilesInRootPerSourceDir = 1,
-                    numberOfCodeSmellsInRootPerSourceDir = 1,
+                    numberOfFindingsInRootPerSourceDir = 1,
                 )
             )
             .withDetektConfig(detektConfig)
@@ -43,7 +43,7 @@ class CreateBaselineTaskDslSpec {
             .withProjectLayout(
                 ProjectLayout(
                     numberOfSourceFilesInRootPerSourceDir = 1,
-                    numberOfCodeSmellsInRootPerSourceDir = 1,
+                    numberOfFindingsInRootPerSourceDir = 1,
                 )
             )
             .withDetektConfig(detektConfig)
