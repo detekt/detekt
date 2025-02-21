@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Test
 
@@ -23,7 +23,7 @@ class PropertyUsedBeforeDeclarationSpec(private val env: KotlinCoreEnvironment) 
                 println(C().list) // [0]
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).hasSize(1)
         assertThat(findings).hasTextLocations(45 to 52)
         assertThat(findings.first()).hasMessage("'isValid' is used before declaration.")
@@ -44,7 +44,7 @@ class PropertyUsedBeforeDeclarationSpec(private val env: KotlinCoreEnvironment) 
                 C()
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).hasSize(1)
     }
 
@@ -56,7 +56,7 @@ class PropertyUsedBeforeDeclarationSpec(private val env: KotlinCoreEnvironment) 
                 private val isValid = true
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).hasSize(1)
     }
 
@@ -69,7 +69,7 @@ class PropertyUsedBeforeDeclarationSpec(private val env: KotlinCoreEnvironment) 
                 val list = listOf(number)
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
@@ -84,7 +84,7 @@ class PropertyUsedBeforeDeclarationSpec(private val env: KotlinCoreEnvironment) 
                 private val isValid = true
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
@@ -110,7 +110,7 @@ class PropertyUsedBeforeDeclarationSpec(private val env: KotlinCoreEnvironment) 
                 const val outer3 = "value3"
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
@@ -124,7 +124,7 @@ class PropertyUsedBeforeDeclarationSpec(private val env: KotlinCoreEnvironment) 
                 val outer = "value"
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 }

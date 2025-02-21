@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
@@ -23,7 +22,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                     val mutList = myList as MutableList<Int>
                 }
             """.trimIndent()
-            val result = subject.compileAndLintWithContext(env, code)
+            val result = subject.lintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
                 "Down-casting from type List to MutableList is risky. Use `toMutableList()` instead."
@@ -38,7 +37,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                     val mutList = myList as? MutableList<Int>
                 }
             """.trimIndent()
-            val result = subject.compileAndLintWithContext(env, code)
+            val result = subject.lintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
                 "Down-casting from type List to MutableList is risky. Use `toMutableList()` instead."
@@ -55,7 +54,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            val result = subject.compileAndLintWithContext(env, code)
+            val result = subject.lintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
                 "Down-casting from type List to MutableList is risky. Use `toMutableList()` instead."
@@ -70,7 +69,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                     val mutSet = mySet as MutableSet<Int>
                 }
             """.trimIndent()
-            val result = subject.compileAndLintWithContext(env, code)
+            val result = subject.lintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
                 "Down-casting from type Set to MutableSet is risky. Use `toMutableSet()` instead."
@@ -85,7 +84,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                     val mutSet = mySet as? MutableSet<Int>
                 }
             """.trimIndent()
-            val result = subject.compileAndLintWithContext(env, code)
+            val result = subject.lintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
                 "Down-casting from type Set to MutableSet is risky. Use `toMutableSet()` instead."
@@ -102,7 +101,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            val result = subject.compileAndLintWithContext(env, code)
+            val result = subject.lintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
                 "Down-casting from type Set to MutableSet is risky. Use `toMutableSet()` instead."
@@ -117,7 +116,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                     val mutMap = myMap as MutableMap<Int, Int>
                 }
             """.trimIndent()
-            val result = subject.compileAndLintWithContext(env, code)
+            val result = subject.lintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
                 "Down-casting from type Map to MutableMap is risky. Use `toMutableMap()` instead."
@@ -132,7 +131,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                     val mutMap = myMap as? MutableMap<Int, Int>
                 }
             """.trimIndent()
-            val result = subject.compileAndLintWithContext(env, code)
+            val result = subject.lintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
                 "Down-casting from type Map to MutableMap is risky. Use `toMutableMap()` instead."
@@ -149,7 +148,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            val result = subject.compileAndLintWithContext(env, code)
+            val result = subject.lintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
                 "Down-casting from type Map to MutableMap is risky. Use `toMutableMap()` instead."
@@ -168,7 +167,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                     val mutList = myList as MutableList<Int>
                 }
             """.trimIndent()
-            val result = subject.compileAndLintWithContext(env, code)
+            val result = subject.lintWithContext(env, code)
             assertThat(result).isEmpty()
         }
 
@@ -180,7 +179,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                     val mutSet = mySet as MutableSet<Int>
                 }
             """.trimIndent()
-            val result = subject.compileAndLintWithContext(env, code)
+            val result = subject.lintWithContext(env, code)
             assertThat(result).isEmpty()
         }
 
@@ -192,7 +191,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                     val mutMap = myMap as MutableMap<Int, Int>
                 }
             """.trimIndent()
-            val result = subject.compileAndLintWithContext(env, code)
+            val result = subject.lintWithContext(env, code)
             assertThat(result).isEmpty()
         }
 
@@ -204,7 +203,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                     val params = tooltip_guide.layoutParams as LayoutParams
                 }
             """.trimIndent()
-            val result = subject.lintWithContext(env, code)
+            val result = subject.lintWithContext(env, code, compile = false)
             assertThat(result).isEmpty()
         }
     }
@@ -220,7 +219,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                     val mutList = myList as ArrayList<Int>
                 }
             """.trimIndent()
-            val result = subject.compileAndLintWithContext(env, code)
+            val result = subject.lintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
                 "Down-casting from type List to ArrayList is risky."
@@ -235,7 +234,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                     val mutList = myList as? ArrayList<Int>
                 }
             """.trimIndent()
-            val result = subject.compileAndLintWithContext(env, code)
+            val result = subject.lintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
                 "Down-casting from type List to ArrayList is risky."
@@ -252,7 +251,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            val result = subject.compileAndLintWithContext(env, code)
+            val result = subject.lintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
                 "Down-casting from type List to ArrayList is risky."
@@ -267,7 +266,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                     val mutSet = mySet as LinkedHashSet<Int>
                 }
             """.trimIndent()
-            val result = subject.compileAndLintWithContext(env, code)
+            val result = subject.lintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
                 "Down-casting from type Set to LinkedHashSet is risky."
@@ -282,7 +281,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                     val mutSet = mySet as? LinkedHashSet<Int>
                 }
             """.trimIndent()
-            val result = subject.compileAndLintWithContext(env, code)
+            val result = subject.lintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
                 "Down-casting from type Set to LinkedHashSet is risky."
@@ -299,7 +298,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            val result = subject.compileAndLintWithContext(env, code)
+            val result = subject.lintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
                 "Down-casting from type Set to LinkedHashSet is risky."
@@ -314,7 +313,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                     val mutSet = mySet as HashSet<Int>
                 }
             """.trimIndent()
-            val result = subject.compileAndLintWithContext(env, code)
+            val result = subject.lintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
                 "Down-casting from type Set to HashSet is risky."
@@ -329,7 +328,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                     val mutSet = mySet as? HashSet<Int>
                 }
             """.trimIndent()
-            val result = subject.compileAndLintWithContext(env, code)
+            val result = subject.lintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
                 "Down-casting from type Set to HashSet is risky."
@@ -346,7 +345,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            val result = subject.compileAndLintWithContext(env, code)
+            val result = subject.lintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
                 "Down-casting from type Set to HashSet is risky."
@@ -361,7 +360,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                     val mutMap = myMap as HashMap<Int, Int>
                 }
             """.trimIndent()
-            val result = subject.compileAndLintWithContext(env, code)
+            val result = subject.lintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
                 "Down-casting from type Map to HashMap is risky."
@@ -376,7 +375,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                     val mutMap = myMap as? HashMap<Int, Int>
                 }
             """.trimIndent()
-            val result = subject.compileAndLintWithContext(env, code)
+            val result = subject.lintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
                 "Down-casting from type Map to HashMap is risky."
@@ -393,7 +392,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            val result = subject.compileAndLintWithContext(env, code)
+            val result = subject.lintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
                 "Down-casting from type Map to HashMap is risky."
@@ -408,7 +407,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                     val mutMap = myMap as LinkedHashMap<Int, Int>
                 }
             """.trimIndent()
-            val result = subject.compileAndLintWithContext(env, code)
+            val result = subject.lintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
                 "Down-casting from type Map to LinkedHashMap is risky."
@@ -423,7 +422,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                     val mutMap = myMap as? LinkedHashMap<Int, Int>
                 }
             """.trimIndent()
-            val result = subject.compileAndLintWithContext(env, code)
+            val result = subject.lintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
                 "Down-casting from type Map to LinkedHashMap is risky."
@@ -440,7 +439,7 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            val result = subject.compileAndLintWithContext(env, code)
+            val result = subject.lintWithContext(env, code)
             assertThat(result).hasSize(1)
             assertThat(result.first().message).isEqualTo(
                 "Down-casting from type Map to LinkedHashMap is risky."

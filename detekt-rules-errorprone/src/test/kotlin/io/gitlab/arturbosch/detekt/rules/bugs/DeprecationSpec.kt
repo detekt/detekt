@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Test
@@ -27,7 +27,7 @@ class DeprecationSpec(private val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).hasSize(1)
         assertThat(findings.first().message).isEqualTo("""Foo is deprecated with message "deprecation message"""")
     }
@@ -46,6 +46,6 @@ class DeprecationSpec(private val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 }

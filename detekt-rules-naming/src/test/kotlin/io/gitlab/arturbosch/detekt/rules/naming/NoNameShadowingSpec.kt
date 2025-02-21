@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.naming
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Test
 
@@ -18,7 +18,7 @@ class NoNameShadowingSpec(val env: KotlinCoreEnvironment) {
                 val i = 1
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).singleElement().hasMessage("Name shadowed: i")
         assertThat(findings).hasStartSourceLocation(2, 9)
     }
@@ -30,7 +30,7 @@ class NoNameShadowingSpec(val env: KotlinCoreEnvironment) {
                 val (j, _) = 1 to 2
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).singleElement().hasMessage("Name shadowed: j")
     }
 
@@ -42,7 +42,7 @@ class NoNameShadowingSpec(val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).singleElement().hasMessage("Name shadowed: k")
     }
 
@@ -56,7 +56,7 @@ class NoNameShadowingSpec(val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).singleElement().hasMessage("Name shadowed: it")
     }
 
@@ -70,7 +70,7 @@ class NoNameShadowingSpec(val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
@@ -81,7 +81,7 @@ class NoNameShadowingSpec(val env: KotlinCoreEnvironment) {
                 val j = i
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
@@ -104,7 +104,7 @@ class NoNameShadowingSpec(val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 }

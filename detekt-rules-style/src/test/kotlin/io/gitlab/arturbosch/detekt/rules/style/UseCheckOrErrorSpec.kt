@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Test
@@ -20,7 +19,7 @@ class UseCheckOrErrorSpec(val env: KotlinCoreEnvironment) {
                 if (a < 0) throw IllegalStateException()
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasStartSourceLocation(3, 16)
+        assertThat(subject.lintWithContext(env, code)).hasStartSourceLocation(3, 16)
     }
 
     @Test
@@ -33,7 +32,7 @@ class UseCheckOrErrorSpec(val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasStartSourceLocation(4, 9)
+        assertThat(subject.lintWithContext(env, code)).hasStartSourceLocation(4, 9)
     }
 
     @Test
@@ -44,7 +43,7 @@ class UseCheckOrErrorSpec(val env: KotlinCoreEnvironment) {
                 if (a < 0) throw IllegalStateException("More details")
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasStartSourceLocation(3, 16)
+        assertThat(subject.lintWithContext(env, code)).hasStartSourceLocation(3, 16)
     }
 
     @Test
@@ -56,7 +55,7 @@ class UseCheckOrErrorSpec(val env: KotlinCoreEnvironment) {
                     else -> throw IllegalStateException()
                 }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasStartSourceLocation(4, 17)
+        assertThat(subject.lintWithContext(env, code)).hasStartSourceLocation(4, 17)
     }
 
     @Test
@@ -67,7 +66,7 @@ class UseCheckOrErrorSpec(val env: KotlinCoreEnvironment) {
                 if (a < 0) throw java.lang.IllegalStateException()
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasStartSourceLocation(3, 16)
+        assertThat(subject.lintWithContext(env, code)).hasStartSourceLocation(3, 16)
     }
 
     @Test
@@ -78,7 +77,7 @@ class UseCheckOrErrorSpec(val env: KotlinCoreEnvironment) {
                 if (a < 0) throw kotlin.IllegalStateException()
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasStartSourceLocation(3, 16)
+        assertThat(subject.lintWithContext(env, code)).hasStartSourceLocation(3, 16)
     }
 
     @Test
@@ -91,7 +90,7 @@ class UseCheckOrErrorSpec(val env: KotlinCoreEnvironment) {
                 if (a < 0) throw SomeBusinessException()
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -104,7 +103,7 @@ class UseCheckOrErrorSpec(val env: KotlinCoreEnvironment) {
                 throw Exception()
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -114,19 +113,19 @@ class UseCheckOrErrorSpec(val env: KotlinCoreEnvironment) {
                 unsafeRunTimed(Duration.INFINITE)
                     .fold({ throw IllegalStateException("message") }, ::identity)
         """.trimIndent()
-        assertThat(subject.lintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code, compile = false)).isEmpty()
     }
 
     @Test
     fun `reports an issue if the exception thrown as the only action in a function`() {
         val code = """fun doThrow(): Nothing = throw IllegalStateException("message")"""
-        assertThat(subject.compileAndLintWithContext(env, code)).hasStartSourceLocation(1, 26)
+        assertThat(subject.lintWithContext(env, code)).hasStartSourceLocation(1, 26)
     }
 
     @Test
     fun `reports an issue if the exception thrown as the only action in a function block`() {
         val code = """fun doThrow(): Nothing { throw IllegalStateException("message") }"""
-        assertThat(subject.compileAndLintWithContext(env, code)).hasStartSourceLocation(1, 26)
+        assertThat(subject.lintWithContext(env, code)).hasStartSourceLocation(1, 26)
     }
 
     @Test
@@ -139,7 +138,7 @@ class UseCheckOrErrorSpec(val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -152,7 +151,7 @@ class UseCheckOrErrorSpec(val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -165,7 +164,7 @@ class UseCheckOrErrorSpec(val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
     }
 
     @Test
@@ -178,6 +177,6 @@ class UseCheckOrErrorSpec(val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
     }
 }

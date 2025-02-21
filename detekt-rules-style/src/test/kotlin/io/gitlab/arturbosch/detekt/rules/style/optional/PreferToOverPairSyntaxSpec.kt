@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.style.optional
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Test
@@ -19,7 +19,7 @@ class PreferToOverPairSyntaxSpec(val env: KotlinCoreEnvironment) {
             val pair3 = Pair(Pair(1, 2), Pair(3, 4))
         """.trimIndent()
 
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).hasSize(5)
         assertThat(findings[0].message).endsWith("`1 to 2`.")
     }
@@ -30,7 +30,7 @@ class PreferToOverPairSyntaxSpec(val env: KotlinCoreEnvironment) {
             val pair = createPair()
             fun createPair() = Pair(1, 2)
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).hasSize(1)
         assertThat(findings[0].message).endsWith("`1 to 2`.")
     }
@@ -38,7 +38,7 @@ class PreferToOverPairSyntaxSpec(val env: KotlinCoreEnvironment) {
     @Test
     fun `does not report if it is created using the to syntax`() {
         val code = "val pair = 1 to 2"
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -50,7 +50,7 @@ class PreferToOverPairSyntaxSpec(val env: KotlinCoreEnvironment) {
             
             data class Pair<T, Z>(val int1: T, val int2: Z)
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -59,6 +59,6 @@ class PreferToOverPairSyntaxSpec(val env: KotlinCoreEnvironment) {
             val pair = createPair()
             fun createPair() = 1 to 2
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 }
