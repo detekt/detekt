@@ -96,6 +96,7 @@
                 "enabled": true,
                 "level": "error"
               },
+              "helpUri": "http://example.org/TestSmellA",
               "id": "detekt.RuleSet1.TestSmellA",
               "name": "TestSmellA",
               "shortDescription": {
@@ -107,6 +108,7 @@
                 "enabled": true,
                 "level": "warning"
               },
+              "helpUri": "http://example.org/TestSmellB",
               "id": "detekt.RuleSet2.TestSmellB",
               "name": "TestSmellB",
               "shortDescription": {
@@ -118,6 +120,7 @@
                 "enabled": false,
                 "level": "note"
               },
+              "helpUri": "http://example.org/TestSmellC",
               "id": "detekt.RuleSet2.TestSmellC",
               "name": "TestSmellC",
               "shortDescription": {
