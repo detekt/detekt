@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.lexer.KtTokens
@@ -32,7 +32,7 @@ class UnnecessaryBackticks(config: Config) : Rule(
     override fun visitKtElement(element: KtElement) {
         element.allChildren
             .filter { it.node.elementType == KtTokens.IDENTIFIER && it.hasUnnecessaryBackticks() }
-            .forEach { report(CodeSmell(Entity.from(it), "Backticks are unnecessary.")) }
+            .forEach { report(Finding(Entity.from(it), "Backticks are unnecessary.")) }
         super.visitKtElement(element)
     }
 

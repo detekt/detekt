@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isCalling
@@ -52,7 +52,7 @@ class UseAnyOrNoneInsteadOfFind(config: Config) :
             else -> return
         }
         val message = "Use '$replacement' instead of '$functionName'"
-        report(CodeSmell(Entity.from(expression), message))
+        report(Finding(Entity.from(expression), message))
     }
 
     companion object {

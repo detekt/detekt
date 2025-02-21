@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns
@@ -65,7 +65,7 @@ class UnusedUnaryOperator(config: Config) :
         if (!KotlinBuiltIns.isUnderKotlinPackage(operatorDescriptor)) return
 
         val message = "This '${parentOrSelf.text}' is not used"
-        report(CodeSmell(Entity.from(expression), message))
+        report(Finding(Entity.from(expression), message))
     }
 
     private fun KtExpression.parentBinaryExpressionOrThis(): KtExpression =

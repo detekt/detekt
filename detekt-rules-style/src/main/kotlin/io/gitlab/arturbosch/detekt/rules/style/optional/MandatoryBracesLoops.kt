@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.style.optional
 
 import io.github.detekt.metrics.linesOfCode
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
 import org.jetbrains.kotlin.psi.KtBlockExpression
@@ -79,7 +79,7 @@ class MandatoryBracesLoops(config: Config) : Rule(
                 ?.any { it.textContains('\n') }
                 ?: false
             if (hasNoBraces) {
-                report(CodeSmell(Entity.from(expression.body ?: expression), description))
+                report(Finding(Entity.from(expression.body ?: expression), description))
             }
         }
     }
@@ -92,7 +92,7 @@ class MandatoryBracesLoops(config: Config) : Rule(
                 .filterIsInstance<PsiWhiteSpace>()
                 .any { it.textContains('\n') }
             if (hasNoBraces) {
-                report(CodeSmell(Entity.from(expression.body ?: expression), description))
+                report(Finding(Entity.from(expression.body ?: expression), description))
             }
         }
     }

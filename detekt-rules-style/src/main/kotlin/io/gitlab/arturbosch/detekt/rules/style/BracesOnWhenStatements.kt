@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import org.jetbrains.kotlin.psi.KtBlockExpression
@@ -231,7 +231,7 @@ class BracesOnWhenStatements(config: Config) : Rule(
             BracePolicy.Never,
             -> requireNotNull(violator.arrow) { "When branch ${violator.text} has no arrow!" }
         }
-        report(CodeSmell(Entity.from(reported), policy.message))
+        report(Finding(Entity.from(reported), policy.message))
     }
 
     enum class BracePolicy(val config: String, val message: String) {

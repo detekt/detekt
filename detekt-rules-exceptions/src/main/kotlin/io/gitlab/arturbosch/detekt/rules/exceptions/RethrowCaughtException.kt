@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.exceptions
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtCatchClause
 import org.jetbrains.kotlin.psi.KtThrowExpression
@@ -68,7 +68,7 @@ class RethrowCaughtException(config: Config) : Rule(
             .takeLastWhile { it != null }
             .forEach { violation ->
                 violation?.let {
-                    report(CodeSmell(Entity.from(it), description))
+                    report(Finding(Entity.from(it), description))
                 }
             }
         super.visitTryExpression(tryExpr)

@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.exceptions
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
@@ -50,7 +50,7 @@ class ObjectExtendsThrowable(config: Config) :
         super.visitObjectDeclaration(declaration)
         if (!declaration.isObjectLiteral() && declaration.isSubtypeOfThrowable()) {
             report(
-                CodeSmell(
+                Finding(
                     entity = Entity.from(element = declaration),
                     message = "${declaration.nameAsSafeName} should be a class instead of an " +
                         "object because it is a subtype of Throwable."

@@ -9,9 +9,9 @@ import com.pinterest.ktlint.rule.engine.core.api.editorconfig.createRuleExecutio
 import com.pinterest.ktlint.ruleset.standard.StandardRule
 import com.pinterest.ktlint.ruleset.standard.rules.MAX_LINE_LENGTH_RULE_ID
 import io.github.detekt.psi.absolutePath
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.SourceLocation
@@ -107,9 +107,9 @@ abstract class FormattingRule(config: Config, description: String) : Rule(config
         val entity = Entity.from(node.psi, location)
 
         if (canBeAutoCorrected && autoCorrect) {
-            report(CodeSmell(entity, message, suppressReasons = listOf("Auto correct")))
+            report(Finding(entity, message, suppressReasons = listOf("Auto correct")))
         } else {
-            report(CodeSmell(entity, message))
+            report(Finding(entity, message))
         }
     }
 

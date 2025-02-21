@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtClassOrObject
 
@@ -32,6 +32,6 @@ class UnnecessaryInheritance(config: Config) : Rule(
     }
 
     private fun report(classOrObject: KtClassOrObject, message: String) {
-        report(CodeSmell(Entity.atName(classOrObject), message))
+        report(Finding(Entity.atName(classOrObject), message))
     }
 }

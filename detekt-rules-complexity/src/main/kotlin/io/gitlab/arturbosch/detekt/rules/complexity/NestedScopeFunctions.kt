@@ -1,11 +1,11 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.github.detekt.psi.FunctionMatcher
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
@@ -62,7 +62,7 @@ class NestedScopeFunctions(config: Config) :
     }
 
     private fun report(element: KtCallExpression, depth: Int) {
-        val finding = CodeSmell(
+        val finding = Finding(
             Entity.from(element),
             "The scope function '${element.calleeExpression?.text}' is nested too deeply ('$depth'). " +
                 "The maximum allowed depth is set to '$allowedDepth'."

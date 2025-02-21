@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isAbstract
@@ -67,7 +67,7 @@ class AbstractClassCanBeInterface(config: Config) :
             members.isNotEmpty() -> checkMembers(members, nameIdentifier)
             hasInheritedMember(true) && isAnyParentAbstract() -> return
             !hasConstructorParameter() ->
-                report(CodeSmell(Entity.from(nameIdentifier), noConcreteMember))
+                report(Finding(Entity.from(nameIdentifier), noConcreteMember))
         }
     }
 
@@ -82,7 +82,7 @@ class AbstractClassCanBeInterface(config: Config) :
             abstractMembers.any { it.isInternal() || it.isProtected() } || hasConstructorParameter() ->
                 Unit
             concreteMembers.isEmpty() && !hasInheritedMember(false) ->
-                report(CodeSmell(Entity.from(nameIdentifier), noConcreteMember))
+                report(Finding(Entity.from(nameIdentifier), noConcreteMember))
         }
     }
 

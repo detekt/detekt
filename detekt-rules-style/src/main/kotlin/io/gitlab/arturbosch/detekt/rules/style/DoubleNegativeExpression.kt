@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.lexer.KtTokens
@@ -48,11 +48,11 @@ class DoubleNegativeExpression(config: Config) :
         val parent = expression.parent
         if (parent is KtPrefixExpression || parent is KtQualifiedExpression) return
         if (expression.isDoubleNegativeExpression()) {
-            val codeSmell = CodeSmell(
+            val finding = Finding(
                 Entity.from(expression),
                 "Expression with two or more calls of operator `not` could be simplified.",
             )
-            report(codeSmell)
+            report(finding)
         }
     }
 

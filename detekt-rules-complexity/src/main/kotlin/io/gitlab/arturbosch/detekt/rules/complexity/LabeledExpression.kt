@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import org.jetbrains.kotlin.psi.KtClass
@@ -72,7 +72,7 @@ class LabeledExpression(config: Config) : Rule(
             val label = expression.getTargetLabel()
             val labelName = label?.getReferencedName()
             if (labelName != null && ignoredLabels.none { labelName.contains(it, ignoreCase = true) }) {
-                report(CodeSmell(Entity.from(label), description))
+                report(Finding(Entity.from(label), description))
             }
         }
     }

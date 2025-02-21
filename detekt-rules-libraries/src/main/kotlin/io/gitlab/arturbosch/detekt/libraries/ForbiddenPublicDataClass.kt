@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.libraries
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.simplePatternToRegex
@@ -50,7 +50,7 @@ class ForbiddenPublicDataClass(config: Config) : Rule(
         }
         if (isPublicOrProtected) {
             if (klass.isData()) {
-                report(CodeSmell(Entity.atName(klass), "Don't use data class"))
+                report(Finding(Entity.atName(klass), "Don't use data class"))
             }
             super.visitClass(klass)
         }
