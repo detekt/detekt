@@ -30,15 +30,13 @@ class RulesWhichCantBeCorrectedSpec {
 
     @Test
     fun `ImportOrdering has a case with comments which is not correctable`() {
-        assertThat(
-            ImportOrdering(Config.empty).lint(
-                """
-                    import xyz.wrong_order
-                    /*comment in between*/
-                    import java.io.*
-                """.trimIndent()
-            )
-        ).isNotEmpty
+        val code = """
+            import xyz.wrong_order
+            /*comment in between*/
+            import java.io.*
+        """.trimIndent()
+        assertThat(ImportOrdering(Config.empty).lint(code))
+            .isNotEmpty
             .hasExactlyElementsOfTypes(CodeSmell::class.java)
     }
 
@@ -51,13 +49,10 @@ class RulesWhichCantBeCorrectedSpec {
 
     @Test
     fun `MaximumLineLength can't be corrected`() {
-        assertThat(
-            MaximumLineLength(Config.empty).lint(
-                """
-                    class MaximumLeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeth
-                """.trimIndent()
-            )
-        ).isNotEmpty
+        val code =
+            "class MaximumLeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeth"
+        assertThat(MaximumLineLength(Config.empty).lint(code))
+            .isNotEmpty
             .hasExactlyElementsOfTypes(CodeSmell::class.java)
     }
 
@@ -70,7 +65,7 @@ class RulesWhichCantBeCorrectedSpec {
 
     @Test
     fun `Indentation finding inside string templates can't be corrected`() {
-        val multilineQuote = "${'"'}${'"'}${'"'}"
+        val multilineQuote = "\"\"\""
         val code = """
             val foo = $multilineQuote
                   line1
