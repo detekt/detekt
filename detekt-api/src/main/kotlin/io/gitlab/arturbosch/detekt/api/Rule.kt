@@ -4,6 +4,7 @@ import dev.drewhamilton.poko.Poko
 import io.gitlab.arturbosch.detekt.api.internal.validateIdentifier
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
+import java.net.URI
 
 /**
  * A rule defines how one specific code structure should look like. If code is found
@@ -13,10 +14,13 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * A rule is implemented using the visitor pattern and should be started using the visit(KtFile)
  * function. If calculations must be done before or after the visiting process, here are
  * two predefined (preVisit/postVisit) functions which can be overridden to setup/teardown additional data.
+ *
+ * @property url An url pointing to the documentation of this rule
  */
 open class Rule(
     val config: Config,
     val description: String,
+    val url: URI? = null,
 ) : DetektVisitor() {
 
     /**
