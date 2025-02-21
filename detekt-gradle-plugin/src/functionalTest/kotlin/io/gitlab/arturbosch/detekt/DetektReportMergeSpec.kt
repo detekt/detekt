@@ -38,12 +38,12 @@ class DetektReportMergeSpec {
             addSubmodule(
                 name = "child1",
                 numberOfSourceFilesPerSourceDir = 2,
-                numberOfCodeSmells = 2
+                numberOfFindings = 2
             )
             addSubmodule(
                 name = "child2",
                 numberOfSourceFilesPerSourceDir = 4,
-                numberOfCodeSmells = 4
+                numberOfFindings = 4
             )
         }
 
@@ -103,12 +103,12 @@ class DetektReportMergeSpec {
             addSubmodule(
                 name = "child1",
                 numberOfSourceFilesPerSourceDir = 2,
-                numberOfCodeSmells = 2
+                numberOfFindings = 2
             )
             addSubmodule(
                 name = "child2",
                 numberOfSourceFilesPerSourceDir = 4,
-                numberOfCodeSmells = 4
+                numberOfFindings = 4
             )
         }
 
