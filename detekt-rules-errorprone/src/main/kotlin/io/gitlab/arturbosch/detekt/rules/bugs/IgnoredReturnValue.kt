@@ -84,6 +84,7 @@ class IgnoredReturnValue(config: Config) :
     @Configuration("List of return types that should not be ignored")
     private val returnValueTypes: List<Regex> by config(
         listOf(
+            "kotlin.Function*",
             "kotlin.sequences.Sequence",
             "kotlinx.coroutines.flow.*Flow",
             "java.util.stream.*Stream",
