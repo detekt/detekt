@@ -126,4 +126,12 @@ class FindingAssert(val actual: Finding?) : AbstractAssert<FindingAssert, Findin
             failWithMessage("Expected message <$expectedMessage> but actual message was <${actual?.message}>")
         }
     }
+
+    fun noSuppress() = apply {
+        if (actual == null) {
+            failWithMessage("Expect no null")
+        } else if (actual.suppressReasons.isNotEmpty()) {
+            failWithMessage("Expect no suppressions but ${actual.suppressReasons} was found")
+        }
+    }
 }
