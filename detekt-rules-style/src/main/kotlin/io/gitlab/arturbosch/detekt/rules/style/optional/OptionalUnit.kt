@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.style.optional
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isOverride
@@ -84,7 +84,7 @@ class OptionalUnit(config: Config) :
             }
             .onEach {
                 report(
-                    CodeSmell(
+                    Finding(
                         Entity.from(expression),
                         "A single Unit expression is unnecessary and can safely be removed."
                     )
@@ -119,14 +119,14 @@ class OptionalUnit(config: Config) :
             if (initializer?.isGenericOrNothingType() == true) return
             // case when explicit api is on so in case of expression body we need Unit
             if (initializer != null && isExplicitApiModeActive() && function.isPublic) return
-            report(CodeSmell(Entity.from(typeReference), createMessage(function)))
+            report(Finding(Entity.from(typeReference), createMessage(function)))
         }
     }
 
     private fun checkFunctionWithInferredReturnType(function: KtNamedFunction) {
         val referenceExpression = function.bodyExpression as? KtNameReferenceExpression
         if (referenceExpression != null && referenceExpression.text == UNIT) {
-            report(CodeSmell(Entity.from(referenceExpression), createMessage(function)))
+            report(Finding(Entity.from(referenceExpression), createMessage(function)))
         }
     }
 

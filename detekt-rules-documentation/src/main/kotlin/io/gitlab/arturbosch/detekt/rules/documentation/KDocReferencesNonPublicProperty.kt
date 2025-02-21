@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.documentation
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtDeclaration
@@ -123,7 +123,7 @@ class KDocReferencesNonPublicProperty(config: Config) : Rule(
 
     private fun report(property: KtNamedDeclaration) {
         report(
-            CodeSmell(
+            Finding(
                 Entity.atName(property),
                 "The property ${property.nameAsSafeName} " +
                     "is non-public and should not be referenced from KDoc comments."

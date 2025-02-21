@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isJvmFinalizeFunction
 import io.gitlab.arturbosch.detekt.rules.isOpen
@@ -65,7 +65,7 @@ class ProtectedMemberInFinalClass(config: Config) : Rule(
             val isJvmFinalizeFunction = dcl is KtNamedFunction && dcl.isJvmFinalizeFunction()
 
             if (dcl.isProtected() && !dcl.isOverride() && !isJvmFinalizeFunction) {
-                report(CodeSmell(Entity.from(dcl), description))
+                report(Finding(Entity.from(dcl), description))
             }
         }
     }

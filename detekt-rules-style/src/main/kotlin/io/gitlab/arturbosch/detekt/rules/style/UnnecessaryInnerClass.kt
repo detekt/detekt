@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.descriptors.ClassifierDescriptor
@@ -56,7 +56,7 @@ class UnnecessaryInnerClass(config: Config) :
 
         if (klass.isInner() && candidateClassToParentClasses.contains(klass)) {
             report(
-                CodeSmell(
+                Finding(
                     Entity.Companion.from(klass),
                     "Class '${klass.name}' does not require `inner` keyword."
                 )

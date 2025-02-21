@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.coroutines
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
@@ -69,7 +69,7 @@ class RedundantSuspendModifier(config: Config) :
         if (descriptor.modality == Modality.OPEN) return
 
         if (!function.anyDescendantOfType<KtExpression> { it.hasSuspendCalls() }) {
-            report(CodeSmell(Entity.from(suspendModifier), "Function has redundant `suspend` modifier."))
+            report(Finding(Entity.from(suspendModifier), "Function has redundant `suspend` modifier."))
         }
     }
 

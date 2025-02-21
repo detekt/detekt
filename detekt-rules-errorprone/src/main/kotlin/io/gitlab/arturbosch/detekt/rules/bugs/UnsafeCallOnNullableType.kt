@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.lexer.KtTokens
@@ -44,7 +44,7 @@ class UnsafeCallOnNullableType(config: Config) :
             expression.baseExpression?.getType(bindingContext)?.nullability() == TypeNullability.NULLABLE
         ) {
             report(
-                CodeSmell(
+                Finding(
                     Entity.from(expression),
                     "Calling !! on a nullable type will throw a " +
                         "NullPointerException at runtime in case the value is null. It should be avoided."

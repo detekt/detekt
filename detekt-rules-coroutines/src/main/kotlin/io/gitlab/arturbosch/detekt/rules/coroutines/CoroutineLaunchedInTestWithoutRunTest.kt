@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.coroutines
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.coroutines.utils.isCoroutineScope
@@ -67,7 +67,7 @@ class CoroutineLaunchedInTestWithoutRunTest(config: Config) :
                 bindingContext
             )
         ) {
-            report(CodeSmell(Entity.from(initialFunction), MESSAGE))
+            report(Finding(Entity.from(initialFunction), MESSAGE))
         }
     }
 

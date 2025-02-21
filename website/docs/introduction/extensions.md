@@ -47,7 +47,7 @@ class TooManyFunctions(config: Config) : Rule(
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)
         if (amount > threshold) {
-            report(CodeSmell(Entity.from(file), 
+            report(Finding(Entity.from(file),
                 "Too many functions can make the maintainability of a file costlier"))
         }
         amount = 0

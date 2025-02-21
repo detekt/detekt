@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isNonNullCheck
@@ -123,7 +123,7 @@ class NullCheckOnMutableProperty(config: Config) :
                         // mutable property is being referenced.
                         candidateProperties[fqName]?.lastOrNull()?.let { ifExpression ->
                             report(
-                                CodeSmell(
+                                Finding(
                                     Entity.from(ifExpression),
                                     "Null-check is being called on mutable property '$fqName'."
                                 )

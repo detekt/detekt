@@ -92,7 +92,7 @@ types of descriptions:
 3. **Finding messages**: A finding message is issued for every code
    smell (or *violation*) identified within the codebase. Implementation-wise,
    such a message is dynamically created during the construction of a
-   [`CodeSmell` instance][2]. In generated reports, these messages are listed
+   [`Finding` instance][2]. In generated reports, these messages are listed
    underneath the issue description. Built-in console reports such as
    `LiteFindingsReport` use these messages to display identified findings to
    the user.
@@ -319,7 +319,7 @@ You must follow the steps below:
 More information on this process could be found on the [official Gradle Enterprise documentation][8].
 
 [1]: https://github.com/detekt/detekt/blob/v1.19.0/detekt-api/src/main/kotlin/io/gitlab/arturbosch/detekt/api/Issue.kt
-[2]: https://github.com/detekt/detekt/blob/v1.19.0/detekt-api/src/main/kotlin/io/gitlab/arturbosch/detekt/api/CodeSmell.kt
+[2]: https://github.com/detekt/detekt/blob/v1.19.0/detekt-api/src/main/kotlin/io/gitlab/arturbosch/detekt/api/Finding.kt
 [3]: https://kotlinlang.org/docs/kotlin-doc.html
 [4]: https://daringfireball.net/projects/markdown/syntax
 [5]: https://kotlinlang.org/docs/functions.html#named-arguments

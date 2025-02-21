@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.github.detekt.psi.FunctionMatcher
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
@@ -158,7 +158,7 @@ class UnnamedParameterUse(config: Config) :
         ) {
             val target = expression.calleeExpression ?: expression
             report(
-                CodeSmell(
+                Finding(
                     Entity.from(target),
                     "Consider using named parameters in ${target.text} as they make usage of the function more safe."
                 )
