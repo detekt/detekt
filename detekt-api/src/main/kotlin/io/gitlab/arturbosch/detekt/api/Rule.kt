@@ -88,7 +88,7 @@ open class Rule(
     }
 
     /**
-     * Adds a code smell to the findings,
+     * Adds a new finding
      */
     fun report(finding: Finding) {
         findings.add(finding)

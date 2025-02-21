@@ -60,7 +60,7 @@ class TooManyFunctions(config: Config) : Rule(
 }
 ```
 
-Example of a much preciser rule in terms of more specific CodeSmell constructor and Rule attributes:
+Example of a much preciser rule in terms of more specific Finding constructor and Rule attributes:
 ```kotlin
 class TooManyFunctions2(config: Config) : Rule(
     config,
