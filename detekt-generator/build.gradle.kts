@@ -47,8 +47,8 @@ tasks.register("generateWebsite") {
     dependsOn(
         copyDetektCliUsage,
         generateDocumentation,
-        ":dokkaHtmlMultiModule",
-        gradle.includedBuild("detekt-gradle-plugin").task(":dokkaHtml"),
+        ":dokkaGenerate",
+        gradle.includedBuild("detekt-gradle-plugin").task(":dokkaGenerate"),
     )
 }
 
