@@ -27,7 +27,7 @@ class Deprecation(config: Config) :
     RequiresFullAnalysis {
 
     @Configuration("Ignore deprecation in import statements")
-    private val ignoreImport: Boolean by config(false)
+    private val excludeImportStatements: Boolean by config(false)
 
     override fun visitElement(element: PsiElement) {
         val diagnostic = hasDeprecationCompilerWarnings(element)
@@ -48,7 +48,7 @@ class Deprecation(config: Config) :
     }
 
     private fun shouldIgnoreThisElement(element: PsiElement) =
-        !(ignoreImport && element.getParentOfType<KtImportDirective>(true) != null)
+        !(excludeImportStatements && element.getParentOfType<KtImportDirective>(true) != null)
 
     private fun hasDeprecationCompilerWarnings(element: PsiElement) =
         bindingContext.diagnostics

@@ -181,6 +181,6 @@ class DeprecationSpec(private val env: KotlinCoreEnvironment) {
     }
 
     companion object {
-        private const val IGNORED_IMPORT = "ignoreImport"
+        private const val IGNORED_IMPORT = "excludeImportStatements"
     }
 }

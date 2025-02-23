@@ -434,7 +434,7 @@ potential-bugs:
   Deprecation:
     active: false
     aliases: ['DEPRECATION']
-    ignoreImport: false
+    excludeImportStatements: false
   DontDowncastCollectionTypes:
     active: false
   DoubleMutabilityForCollection:
