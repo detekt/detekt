@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
@@ -39,7 +39,7 @@ class UnusedImport(config: Config) :
         with(UnusedImportVisitor(bindingContext, additionalOperatorSet)) {
             root.accept(this)
             unusedImports().forEach {
-                report(CodeSmell(Entity.from(it), "The import '${it.importedFqName}' is unused."))
+                report(Finding(Entity.from(it), "The import '${it.importedFqName}' is unused."))
             }
         }
         super.visit(root)

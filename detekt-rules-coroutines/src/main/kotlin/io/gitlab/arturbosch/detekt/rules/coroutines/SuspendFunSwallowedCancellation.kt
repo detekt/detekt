@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.coroutines
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.builtins.StandardNames.COROUTINES_PACKAGE_FQ_NAME
@@ -272,7 +272,7 @@ class SuspendFunSwallowedCancellation(config: Config) :
 
     private fun report(expression: KtCallExpression) {
         report(
-            CodeSmell(
+            Finding(
                 Entity.from((expression.calleeExpression as? PsiElement) ?: expression),
                 "The `runCatching` has suspend call inside. You should either use specific `try-catch` " +
                     "only catching exception that you are expecting or rethrow the `CancellationException` if " +
@@ -283,7 +283,7 @@ class SuspendFunSwallowedCancellation(config: Config) :
 
     private fun report(catchClause: KtCatchClause) {
         report(
-            CodeSmell(
+            Finding(
                 entity = Entity.from(catchClause),
                 message = "You should always catch and re-throw CancellationExceptions in" +
                     " a try block from a suspending function. The exception should be re-thrown" +

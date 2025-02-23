@@ -2,10 +2,10 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.github.detekt.psi.FunctionMatcher
 import io.github.detekt.psi.FunctionMatcher.Companion.fromFunctionSignature
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
@@ -138,7 +138,7 @@ class ForbiddenMethodCall(config: Config) :
                 } else {
                     "The method `${forbidden.value}` has been forbidden in the detekt config."
                 }
-                report(CodeSmell(Entity.from(expression), message))
+                report(Finding(Entity.from(expression), message))
             }
         }
     }

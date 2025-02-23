@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.exceptions
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtThrowExpression
@@ -35,7 +35,7 @@ class NotImplementedDeclaration(config: Config) : Rule(
     override fun visitThrowExpression(expression: KtThrowExpression) {
         val calleeExpression = expression.thrownExpression?.getCalleeExpressionIfAny()
         if (calleeExpression?.text == "NotImplementedError") {
-            report(CodeSmell(Entity.from(expression), description))
+            report(Finding(Entity.from(expression), description))
         }
     }
 
@@ -43,7 +43,7 @@ class NotImplementedDeclaration(config: Config) : Rule(
         if (expression.calleeExpression?.text == "TODO") {
             val size = expression.valueArguments.size
             if (size == 0 || size == 1) {
-                report(CodeSmell(Entity.from(expression), description))
+                report(Finding(Entity.from(expression), description))
             }
         }
     }

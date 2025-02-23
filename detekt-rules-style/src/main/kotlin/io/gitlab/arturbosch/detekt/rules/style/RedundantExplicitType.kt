@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.KtNodeTypes
@@ -63,7 +63,7 @@ class RedundantExplicitType(config: Config) :
             is KtCallExpression -> if (typeReference.text != initializer.calleeExpression?.text) return
             else -> return
         }
-        report(CodeSmell(Entity.atName(property), description))
+        report(Finding(Entity.atName(property), description))
         super.visitProperty(property)
     }
 

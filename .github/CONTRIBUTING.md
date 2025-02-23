@@ -87,25 +87,25 @@ types of descriptions:
    smells that the respective rule is supposed to detect. From an implementation
    point of view, it is the string that `Rule` subclasses pass to the
    `description` parameter of the [`Issue` class][1]. In generated reports, the
-   issue description is often used to introduce a list of code smells that the
+   issue description is often used to introduce a list of findings that the
    respective rule has identified.
-3. **Code smell messages**: A code smell message is issued for every code
+3. **Finding messages**: A finding message is issued for every code
    smell (or *violation*) identified within the codebase. Implementation-wise,
    such a message is dynamically created during the construction of a
-   [`CodeSmell` instance][2]. In generated reports, these messages are listed
+   [`Finding` instance][2]. In generated reports, these messages are listed
    underneath the issue description. Built-in console reports such as
-   `LiteFindingsReport` use these messages to display identified code smells to
+   `LiteFindingsReport` use these messages to display identified findings to
    the user.
 
 It is important that you provide a documentation string, an issue description,
-and a message for each code smell that the new rule generates. When authoring
+and a message for each finding that the new rule generates. When authoring
 these descriptions, you should keep two different target audiences in mind:
 1. The **documentation string** is generally read by individuals who want to
    learn about the *rule itself*. They might need to compose a detekt
    configuration for their codebase, need to understand what the rule is
    currently checking for in order to extend it, or are just interested in the
    available detekt rule sets.
-2. The **issue description** as well as **code smell messages** are presented to
+2. The **issue description** as well as **finding messages** are presented to
    developers whose codebase violates one or more rules that detekt checked for.
    This audience is generally less interested in the rule itself. Instead,
    individuals reading these texts will usually expect specific references to
@@ -171,7 +171,7 @@ guidelines:
    - :heavy_check_mark:: ``Reports referential equality checks for types such as `String` and `List`.``
    - :x:: `Reports referential equality checks for types such as String and List.`
 
-#### General remarks on issue descriptions and code smell messages
+#### General remarks on issue descriptions and finding messages
 
 Adhere to the following guidelines when authoring an issue description or code
 smell messages:
@@ -197,7 +197,7 @@ smell messages:
 code, the prefix turns it into a conventional word.
 
 The above-mentioned guidelines tell you *how* to formulate issue descriptions
-and code smell messages. To learn *what to include* in each of the texts,
+and finding messages. To learn *what to include* in each of the texts,
 refer to the following two sections.
 
 #### Components of issue descriptions
@@ -248,9 +248,9 @@ description of the violation:
 - :heavy_check_mark:: ``The `next()` method of an `Iterator` implementation should throw a `NoSuchElementException` when there are no more elements to return.``
   &rarr; Recommendation and violation (given implicitly).
 
-#### Components of code smell messages
+#### Components of finding messages
 
-A code smell message should be dynamically created to describe a
+A finding message should be dynamically created to describe a
 *specific violation*. It should be regarded as an extension of the more generic
 violation part of the issue description. More specifically, it should explicitly
 reference identifiers or similar from the codebase. If it makes
@@ -258,9 +258,9 @@ sense in the specific context, it might be worthwhile to add a more detailed
 version of the recommendation as well. If this is the case, add this extension
 after the more specific description of the violation.
 
-:warning: Try to keep code smell messages even shorter than issue descriptions!
+:warning: Try to keep finding messages even shorter than issue descriptions!
 
-The following list contains compliant and non-compliant examples of code smell
+The following list contains compliant and non-compliant examples of finding
 messages:
 - :x:: ``Non-boolean property suggests a boolean type.``
   &rarr; Probably not more specific than the issue description.
@@ -319,7 +319,7 @@ You must follow the steps below:
 More information on this process could be found on the [official Gradle Enterprise documentation][8].
 
 [1]: https://github.com/detekt/detekt/blob/v1.19.0/detekt-api/src/main/kotlin/io/gitlab/arturbosch/detekt/api/Issue.kt
-[2]: https://github.com/detekt/detekt/blob/v1.19.0/detekt-api/src/main/kotlin/io/gitlab/arturbosch/detekt/api/CodeSmell.kt
+[2]: https://github.com/detekt/detekt/blob/v1.19.0/detekt-api/src/main/kotlin/io/gitlab/arturbosch/detekt/api/Finding.kt
 [3]: https://kotlinlang.org/docs/kotlin-doc.html
 [4]: https://daringfireball.net/projects/markdown/syntax
 [5]: https://kotlinlang.org/docs/functions.html#named-arguments

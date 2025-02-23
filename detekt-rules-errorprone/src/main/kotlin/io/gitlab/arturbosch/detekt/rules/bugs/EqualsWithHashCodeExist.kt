@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isEqualsFunction
 import io.gitlab.arturbosch.detekt.rules.isHashCodeFunction
@@ -68,7 +68,7 @@ class EqualsWithHashCodeExist(config: Config) : Rule(
         super.visitClassOrObject(classOrObject)
         if (queue.removeFirst().violation()) {
             report(
-                CodeSmell(
+                Finding(
                     Entity.atName(classOrObject),
                     "A class should always override hashCode " +
                         "when overriding equals and the other way around."

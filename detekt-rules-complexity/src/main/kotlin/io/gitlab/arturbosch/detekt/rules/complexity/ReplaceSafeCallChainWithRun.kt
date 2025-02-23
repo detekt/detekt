@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
@@ -58,6 +58,6 @@ class ReplaceSafeCallChainWithRun(config: Config) :
             receiver = receiver.receiverExpression
         }
 
-        if (counter >= 1) report(CodeSmell(Entity.from(expression), description))
+        if (counter >= 1) report(Finding(Entity.from(expression), description))
     }
 }

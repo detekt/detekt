@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
@@ -102,7 +102,7 @@ class RedundantHigherOrderMapUsage(config: Config) :
             receiverIsSet -> "This 'map' call can be replaced with 'toList'."
             else -> "This 'map' call can be removed."
         }
-        report(CodeSmell(Entity.from(calleeExpression), message))
+        report(Finding(Entity.from(calleeExpression), message))
     }
 
     private fun KtCallExpression.lambda(): KtLambdaExpression? {

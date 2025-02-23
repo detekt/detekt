@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.documentation
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtProperty
 
@@ -23,7 +23,7 @@ class CommentOverPrivateProperty(config: Config) : Rule(
 
     override fun visitProperty(property: KtProperty) {
         if (property.hasCommentInPrivateMember()) {
-            report(CodeSmell(Entity.atName(property), description))
+            report(Finding(Entity.atName(property), description))
         }
     }
 }

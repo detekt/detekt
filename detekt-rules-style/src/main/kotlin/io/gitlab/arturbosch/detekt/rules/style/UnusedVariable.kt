@@ -2,11 +2,11 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.Alias
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
@@ -78,7 +78,7 @@ private class UnusedVariableVisitor(
     private val variables = mutableMapOf<PsiElement, KtNamedDeclaration>()
     private val usedVariables = mutableSetOf<PsiElement>()
 
-    fun getUnusedReports(): List<CodeSmell> {
+    fun getUnusedReports(): List<Finding> {
         val unusedVariableNames = variables
             .filterKeys { it !in usedVariables }
 
@@ -86,7 +86,7 @@ private class UnusedVariableVisitor(
             .values
             .filter { !allowedNames.matches(it.nameAsSafeName.identifier) }
             .map {
-                CodeSmell(
+                Finding(
                     entity = Entity.atName(it),
                     message = "Variable `${it.nameAsSafeName.identifier}` is unused."
                 )

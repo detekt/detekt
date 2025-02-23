@@ -23,7 +23,7 @@ The Detekt Gradle Plugin will generate multiple tasks:
   - Please note that the `detekt` task is automatically run when executing `gradle check`.
   - You may specify Gradle task CLI option for auto correction, such as `gradle detekt --auto-correct`.
 - `detektGenerateConfig` - Generates a default detekt configuration file into your project directory.
-- `detektBaseline` - Similar to `detekt`, but creates a code smell baseline. Further detekt runs will only feature new smells not in this list.
+- `detektBaseline` - Similar to `detekt`, but creates a finding baseline. Further detekt runs will only feature new findings not in this list.
 
 In addition to these standard tasks, the plugin will also generate a set of tasks that have
 [type resolution](type-resolution.md) enabled. This happens for both, pure JVM projects and Android projects that have

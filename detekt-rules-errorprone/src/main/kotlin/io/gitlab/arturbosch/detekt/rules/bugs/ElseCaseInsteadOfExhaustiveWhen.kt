@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
@@ -88,7 +88,7 @@ class ElseCaseInsteadOfExhaustiveWhen(config: Config) :
                 else -> "boolean"
             }
             val message = "When expression with $subjectTypeName subject should not contain an `else` case."
-            report(CodeSmell(Entity.from(whenExpression), message))
+            report(Finding(Entity.from(whenExpression), message))
         }
     }
 

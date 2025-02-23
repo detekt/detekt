@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isAbstract
@@ -194,7 +194,7 @@ class CanBeNonNullable(config: Config) :
                 }
                 .forEach { nullableParam ->
                     report(
-                        CodeSmell(
+                        Finding(
                             Entity.from(nullableParam.param),
                             "The nullable parameter '${nullableParam.param.name}' can be made non-nullable."
                         )
@@ -467,7 +467,7 @@ class CanBeNonNullable(config: Config) :
             // thus they can be converted to non-nullable.
             candidateProps.forEach { (_, property) ->
                 report(
-                    CodeSmell(
+                    Finding(
                         Entity.from(property),
                         "The nullable variable '${property.name}' can be made non-nullable."
                     )

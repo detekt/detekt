@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.hasImplicitParameterReference
@@ -76,7 +76,7 @@ class MultilineLambdaItParameter(config: Config) :
         if (IMPLICIT_LAMBDA_PARAMETER_NAME in parameterNames) {
             // Explicit `it`
             report(
-                CodeSmell(
+                Finding(
                     Entity.from(lambdaExpression),
                     "The parameter name in a multiline lambda should not be an explicit `it`. " +
                         "Consider giving your parameter a readable and descriptive name."
@@ -85,7 +85,7 @@ class MultilineLambdaItParameter(config: Config) :
         } else if (parameterNames.isEmpty() && lambdaExpression.isUsingImplicitParameter()) {
             // Implicit `it`
             report(
-                CodeSmell(
+                Finding(
                     Entity.from(lambdaExpression),
                     "The implicit `it` should not be used in a multiline lambda. " +
                         "Consider giving your parameter a readable and descriptive name."

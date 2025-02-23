@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.cli.runners
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
@@ -24,7 +24,7 @@ class TestProvider : RuleSetProvider {
 internal class TestRule(config: Config) : Rule(config, "A failure") {
     override fun visitClass(klass: KtClass) {
         if (klass.name == "Poko") {
-            report(CodeSmell(Entity.from(klass), description))
+            report(Finding(Entity.from(klass), description))
         }
     }
 }

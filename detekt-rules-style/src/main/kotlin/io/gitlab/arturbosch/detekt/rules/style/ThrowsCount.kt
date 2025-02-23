@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -64,7 +64,7 @@ class ThrowsCount(config: Config) : Rule(
 
         if (countOfThrows > max) {
             report(
-                CodeSmell(
+                Finding(
                     Entity.atName(function),
                     "Too many throw statements in the function" +
                         " ${function.nameAsSafeName}. The maximum number of allowed throw statements is $max."

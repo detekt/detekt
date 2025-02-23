@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.empty
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import org.jetbrains.kotlin.lexer.KtModifierKeywordToken
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClass
@@ -23,7 +23,7 @@ class EmptyDefaultConstructor(config: Config) : EmptyRule(config = config) {
             isNotCalled(constructor) &&
             !isExpectedOrActualClass(constructor)
         ) {
-            report(CodeSmell(Entity.from(constructor), "An empty default constructor can be removed."))
+            report(Finding(Entity.from(constructor), "An empty default constructor can be removed."))
         }
     }
 

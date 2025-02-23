@@ -1,11 +1,11 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
@@ -47,7 +47,7 @@ class LoopWithTooManyJumpStatements(config: Config) : Rule(
 
     override fun visitLoopExpression(loopExpression: KtLoopExpression) {
         if (countBreakAndReturnStatements(loopExpression.body) > maxJumpCount) {
-            report(CodeSmell(Entity.from(loopExpression.keyword ?: loopExpression), description))
+            report(Finding(Entity.from(loopExpression.keyword ?: loopExpression), description))
         }
         super.visitLoopExpression(loopExpression)
     }

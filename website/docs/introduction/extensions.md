@@ -47,7 +47,7 @@ class TooManyFunctions(config: Config) : Rule(
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)
         if (amount > threshold) {
-            report(CodeSmell(Entity.from(file), 
+            report(Finding(Entity.from(file),
                 "Too many functions can make the maintainability of a file costlier"))
         }
         amount = 0
@@ -60,7 +60,7 @@ class TooManyFunctions(config: Config) : Rule(
 }
 ```
 
-Example of a much preciser rule in terms of more specific CodeSmell constructor and Rule attributes:
+Example of a much preciser rule in terms of more specific Finding constructor and Rule attributes:
 ```kotlin
 class TooManyFunctions2(config: Config) : Rule(
     config,

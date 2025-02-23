@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
@@ -58,7 +58,7 @@ class ForbiddenVoid(config: Config) :
             if (ignoreUsageInGenerics && typeReference.isGenericArgument()) {
                 return
             }
-            report(CodeSmell(Entity.from(typeReference), message = "'Void' should be replaced with 'Unit'."))
+            report(Finding(Entity.from(typeReference), message = "'Void' should be replaced with 'Unit'."))
         }
 
         super.visitTypeReference(typeReference)

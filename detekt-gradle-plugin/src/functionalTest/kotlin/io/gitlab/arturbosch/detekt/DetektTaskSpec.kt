@@ -10,7 +10,7 @@ class DetektTaskSpec {
 
     private val projectLayoutWithIssues = ProjectLayout(
         numberOfSourceFilesInRootPerSourceDir = 1,
-        numberOfCodeSmellsInRootPerSourceDir = 1
+        numberOfFindingsInRootPerSourceDir = 1
     )
 
     @Test
