@@ -1,1 +1,1 @@
-sourceset_dependencies = '{":detekt-test:dokkaHtmlPartial/main":[],":detekt-api:dokkaHtmlPartial/main":[],":detekt-test-utils:dokkaHtmlPartial/main":[],":detekt-psi-utils:dokkaHtmlPartial/main":[],":detekt-tooling:dokkaHtmlPartial/main":[]}'
+sourceset_dependencies = '{":detekt-test/main":[],":detekt-api/main":[],":detekt-test-utils/main":[],":detekt-psi-utils/main":[],":/main":[],":detekt-tooling/main":[]}'
