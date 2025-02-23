@@ -8,6 +8,15 @@ plugins {
     id("org.jetbrains.dokka") version "2.0.0"
 }
 
+dependencies {
+    dokka(projects.detektApi)
+    dokka(projects.detektPsiUtils)
+    dokka(projects.detektTest)
+    dokka(projects.detektTestUtils)
+    dokka(projects.detektTooling)
+    dokka("io.gitlab.arturbosch.detekt:detekt-gradle-plugin")
+}
+
 dokka {
     dokkaPublications.html {
         outputDirectory = layout.projectDirectory.dir("website/static/kdoc")

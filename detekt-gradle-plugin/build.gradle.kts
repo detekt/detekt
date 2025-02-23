@@ -40,6 +40,7 @@ dokka {
 
     dokkaSourceSets.configureEach {
         apiVersion = "1.4"
+        modulePath = "detekt-gradle-plugin"
 
         externalDocumentationLinks {
             create("gradle") {
@@ -51,7 +52,6 @@ dokka {
 
     dokkaPublications.html {
         suppressInheritedMembers = true
-        outputDirectory = layout.projectDirectory.dir("../website/static/kdoc/detekt-gradle-plugin")
     }
 }
 
