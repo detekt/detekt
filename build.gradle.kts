@@ -1,7 +1,6 @@
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import io.gitlab.arturbosch.detekt.report.ReportMergeTask
-import org.jetbrains.dokka.gradle.DokkaMultiModuleTask
 
 plugins {
     id("releasing")
@@ -9,8 +8,10 @@ plugins {
     id("org.jetbrains.dokka") version "2.0.0"
 }
 
-tasks.withType<DokkaMultiModuleTask>().configureEach {
-    outputDirectory = layout.projectDirectory.dir("website/static/kdoc")
+dokka {
+    dokkaPublications.html {
+        outputDirectory = layout.projectDirectory.dir("website/static/kdoc")
+    }
 }
 
 val detektReportMergeSarif by tasks.registering(ReportMergeTask::class) {

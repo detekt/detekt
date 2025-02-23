@@ -2,10 +2,8 @@
 // https://github.com/gradle/gradle/issues/21285
 @file:Suppress("StringLiteralDuplication")
 
-import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.buildtools.api.ExperimentalBuildToolsApi
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-import java.net.URI
 
 plugins {
     id("module")
@@ -33,6 +31,28 @@ detekt {
     buildUponDefaultConfig = true
     baseline = file("config/gradle-plugin-baseline.xml")
     config.setFrom("config/gradle-plugin-detekt.yml")
+}
+
+dokka {
+    dokkaPublications.configureEach {
+        failOnWarning = true
+    }
+
+    dokkaSourceSets.configureEach {
+        apiVersion = "1.4"
+
+        externalDocumentationLinks {
+            create("gradle") {
+                url("https://docs.gradle.org/current/javadoc/")
+                packageListUrl("https://docs.gradle.org/current/javadoc/element-list")
+            }
+        }
+    }
+
+    dokkaPublications.html {
+        suppressInheritedMembers = true
+        outputDirectory = layout.projectDirectory.dir("../website/static/kdoc/detekt-gradle-plugin")
+    }
 }
 
 testing {
@@ -210,19 +230,6 @@ tasks {
                     maxRetries = 2
                     maxFailures = 20
                 }
-            }
-        }
-    }
-
-    withType<DokkaTask>().configureEach {
-        suppressInheritedMembers = true
-        failOnWarning = true
-        outputDirectory = layout.projectDirectory.dir("../website/static/kdoc/detekt-gradle-plugin")
-
-        dokkaSourceSets.configureEach {
-            apiVersion = "1.4"
-            externalDocumentationLink {
-                url = URI("https://docs.gradle.org/current/javadoc/").toURL()
             }
         }
     }
