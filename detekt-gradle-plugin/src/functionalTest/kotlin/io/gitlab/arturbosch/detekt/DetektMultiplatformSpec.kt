@@ -243,7 +243,7 @@ class DetektMultiplatformSpec {
                     ),
                     baselineFiles = listOf("detekt-baseline.xml")
                 )
-            }.apply { disableIP = true }
+            }
 
         @Test
         fun `configures baseline task`() {
