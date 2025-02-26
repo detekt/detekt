@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClass
@@ -51,7 +51,7 @@ class OptionalAbstractKeyword(config: Config) : Rule(
 
     private fun handleAbstractKeyword(dcl: KtDeclaration) {
         dcl.modifierList?.getModifier(KtTokens.ABSTRACT_KEYWORD)?.let {
-            report(CodeSmell(Entity.from(it), "The abstract keyword on this declaration is unnecessary."))
+            report(Finding(Entity.from(it), "The abstract keyword on this declaration is unnecessary."))
         }
     }
 }

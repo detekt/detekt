@@ -5,7 +5,7 @@ plugins {
 reporting {
     reports {
         create("jacocoMergedReport", JacocoCoverageReport::class) {
-            testType = TestSuiteType.UNIT_TEST
+            testSuiteName = "test"
             reportTask {
                 dependsOn(":detekt-generator:generateDocumentation")
             }

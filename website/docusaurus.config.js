@@ -130,19 +130,9 @@ const config = {
             position: "left",
           },
           {
+            to: "https://detekt.dev/kdoc/",
             label: "APIs",
-            type: "dropdown",
             position: "left",
-            items: [
-              {
-                href: "https://detekt.dev/kdoc/",
-                label: "Core APIs",
-              },
-              {
-                href: "https://detekt.dev/kdoc/detekt-gradle-plugin/",
-                label: "Gradle Plugin APIs",
-              },
-            ],
           },
           {
             to: "/marketplace",

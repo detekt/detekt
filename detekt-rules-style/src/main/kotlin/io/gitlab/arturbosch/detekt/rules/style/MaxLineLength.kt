@@ -2,10 +2,10 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.github.detekt.psi.absolutePath
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.SourceLocation
@@ -70,7 +70,7 @@ class MaxLineLength(config: Config) : Rule(
                     text = TextLocation(offset, offset + line.length),
                     path = file.absolutePath(),
                 )
-                report(CodeSmell(Entity.from(ktElement, location), description))
+                report(Finding(Entity.from(ktElement, location), description))
             }
     }
 

@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import org.jetbrains.kotlin.psi.KtProperty
@@ -43,7 +43,7 @@ class UseIfInsteadOfWhen(config: Config) : Rule(
             expression.entries.none { it.conditions.size > 1 }
         ) {
             report(
-                CodeSmell(
+                Finding(
                     Entity.from(expression),
                     "Prefer using 'if' for binary conditions instead of 'when'."
                 )

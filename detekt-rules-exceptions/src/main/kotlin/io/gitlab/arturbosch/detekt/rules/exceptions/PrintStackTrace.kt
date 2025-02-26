@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.exceptions
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCatchClause
@@ -54,14 +54,14 @@ class PrintStackTrace(config: Config) : Rule(
         if (callNameExpression?.text == "dumpStack" &&
             callNameExpression.getReceiverExpression()?.text == "Thread"
         ) {
-            report(CodeSmell(Entity.from(expression), description))
+            report(Finding(Entity.from(expression), description))
         }
     }
 
     override fun visitCatchSection(catchClause: KtCatchClause) {
         catchClause.catchBody?.forEachDescendantOfType<KtNameReferenceExpression> {
             if (it.text == catchClause.catchParameter?.name && hasPrintStacktraceCallExpression(it)) {
-                report(CodeSmell(Entity.from(it), description))
+                report(Finding(Entity.from(it), description))
             }
         }
     }

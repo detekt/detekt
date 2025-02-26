@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.exceptions
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
@@ -57,7 +57,7 @@ class ReturnFromFinally(config: Config) :
             finallyBlock.typeEqualsTo(expression.getType(bindingContext))
         ) {
             report(
-                CodeSmell(
+                Finding(
                     entity = Entity.Companion.from(finallyBlock),
                     message = "Contents of the finally block do not affect " +
                         "the result of the expression."
@@ -70,7 +70,7 @@ class ReturnFromFinally(config: Config) :
                 isReturnFromTargetFunction(finallyBlock.finalExpression, returnExpression) &&
                     canFilterLabeledExpression(returnExpression)
             }
-            .forEach { report(CodeSmell(Entity.from(it), description)) }
+            .forEach { report(Finding(Entity.from(it), description)) }
     }
 
     private fun isReturnFromTargetFunction(

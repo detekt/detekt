@@ -2,9 +2,9 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.Alias
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.diagnostics.Errors
@@ -43,7 +43,7 @@ class UnsafeCast(config: Config) :
                 .any { it.factory == Errors.CAST_NEVER_SUCCEEDS }
         ) {
             report(
-                CodeSmell(
+                Finding(
                     Entity.from(expression),
                     "${expression.left.text} cast to ${expression.right?.text.orEmpty()} cannot succeed."
                 )

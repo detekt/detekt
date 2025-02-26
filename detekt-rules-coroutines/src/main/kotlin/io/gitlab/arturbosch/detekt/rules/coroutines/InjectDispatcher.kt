@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.coroutines
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
@@ -64,7 +64,7 @@ class InjectDispatcher(config: Config) :
         if (isCoroutineDispatcher && !isUsedAsParameter) {
             if (expression.isReceiverNotInjected()) return
             report(
-                CodeSmell(
+                Finding(
                     Entity.from(expression),
                     "Dispatcher ${expression.getReferencedName()} is used without dependency injection."
                 )

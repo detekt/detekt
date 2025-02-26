@@ -6,9 +6,19 @@ package io.gitlab.arturbosch.detekt.api
  * A finding has a source code position described as an entity and a message.
  * Entity references can also be considered for deeper characterization.
  */
-interface Finding {
-    val entity: Entity
-    val references: List<Entity>
-    val message: String
-    val suppressReasons: List<String>
+class Finding(
+    val entity: Entity,
+    val message: String,
+    val references: List<Entity> = emptyList(),
+    val suppressReasons: List<String> = emptyList(),
+) {
+    init {
+        require(message.isNotBlank()) { "The message should not be empty" }
+    }
+
+    override fun toString(): String =
+        "Finding(entity=$entity, " +
+            "message=$message, " +
+            "references=$references, " +
+            "suppressReasons=$suppressReasons)"
 }

@@ -7,11 +7,11 @@ import org.junit.jupiter.api.Test
 import kotlin.io.path.Path
 import kotlin.io.path.absolute
 
-class CodeSmellSpec {
+class FindingSpec {
 
     @Test
     fun `toString contains all information`() {
-        val codeSmell = CodeSmell(
+        val finding = Finding(
             entity = Entity(
                 signature = "TestEntitySignature",
                 location = Location(
@@ -26,9 +26,9 @@ class CodeSmellSpec {
             suppressReasons = listOf("Baseline"),
         )
 
-        assertThat(codeSmell.toString()).isEqualTo(
-            "CodeSmell(entity=Entity(signature=TestEntitySignature, " +
-                "location=Location(source=1:1, endSource=1:1, text=0:0, path=${codeSmell.location.path}), " +
+        assertThat(finding.toString()).isEqualTo(
+            "Finding(entity=Entity(signature=TestEntitySignature, " +
+                "location=Location(source=1:1, endSource=1:1, text=0:0, path=${finding.location.path}), " +
                 "ktElement=FakeKtElement), message=TestMessage, references=[], suppressReasons=[Baseline])"
         )
     }

@@ -889,13 +889,13 @@ class MagicNumberSpec {
 
         @ParameterizedTest
         @MethodSource("cases")
-        fun `reports a code smell by default`(code: String) {
+        fun `reports a finding by default`(code: String) {
             assertThat(MagicNumber(Config.empty).lint(code)).hasSize(1)
         }
 
         @ParameterizedTest
         @MethodSource("cases")
-        fun `reports a code smell if ranges are not ignored`(code: String) {
+        fun `reports a finding if ranges are not ignored`(code: String) {
             assertThat(MagicNumber(TestConfig(IGNORE_RANGES to "false")).lint(code))
                 .hasSize(1)
         }

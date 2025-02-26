@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.exceptions
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCatchClause
@@ -51,7 +51,7 @@ class ThrowingNewInstanceOfSameException(config: Config) : Rule(
                 hasSameExceptionParameter(thrownExpression.valueArguments, parameterName)
         }
         if (throwExpression != null) {
-            report(CodeSmell(Entity.from(throwExpression), description))
+            report(Finding(Entity.from(throwExpression), description))
         }
     }
 

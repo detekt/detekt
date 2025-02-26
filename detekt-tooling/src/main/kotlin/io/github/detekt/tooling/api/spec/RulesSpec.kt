@@ -1,6 +1,5 @@
 package io.github.detekt.tooling.api.spec
 
-import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.Severity
 

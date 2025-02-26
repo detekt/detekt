@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.Alias
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
@@ -26,7 +26,7 @@ class Deprecation(config: Config) :
         val diagnostic = hasDeprecationCompilerWarnings(element)
         if (diagnostic != null) {
             val entity = if (element is KtNamedDeclaration) Entity.atName(element) else Entity.from(element)
-            report(CodeSmell(entity, """${element.text} is deprecated with message "${diagnostic.b}""""))
+            report(Finding(entity, """${element.text} is deprecated with message "${diagnostic.b}""""))
         }
         super.visitElement(element)
     }

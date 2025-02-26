@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.coroutines
 
 import io.gitlab.arturbosch.detekt.api.Alias
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.coroutines.utils.isCoroutineScope
@@ -65,7 +65,7 @@ class SuspendFunWithCoroutineScopeReceiver(config: Config) :
             ?: return
         if (receiver.isCoroutineScope()) {
             report(
-                CodeSmell(
+                Finding(
                     entity = Entity.from(suspendModifier),
                     message = "`suspend` function uses CoroutineScope as receiver."
                 )
