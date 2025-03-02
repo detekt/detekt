@@ -71,11 +71,9 @@ class UnnecessaryTypeCastingSpec {
     @Test
     fun `does not report type casting when stored in variable`() {
         val code = """
-            fun foo() {
-                val objList: List<Any> = emptyList()
-                val castResult = it as? String
-                objList.any { castResult != null }
-
+            fun foo(any: Any) {
+                val castResult = any as? String
+                print(castResult)
             }
         """.trimIndent()
 
@@ -87,7 +85,7 @@ class UnnecessaryTypeCastingSpec {
         val code = """
             fun foo() {
                 val objList: List<Any> = emptyList()
-                objList.any { it as String }
+                objList.any { it as String != null }
             }
         """.trimIndent()
 
