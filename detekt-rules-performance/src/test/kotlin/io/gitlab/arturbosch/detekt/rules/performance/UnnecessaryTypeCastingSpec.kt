@@ -1,0 +1,60 @@
+package io.gitlab.arturbosch.detekt.rules.performance
+
+import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.test.lint
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
+
+class UnnecessaryTypeCastingSpec {
+    private val subject = UnnecessaryTypeCasting(Config.empty)
+
+    @Test
+    fun `reports unnecessary type casting instead of type checking`() {
+        val code = """
+            fun foo() {
+                val objList: List<Any> = emptyList()
+                objList.any { it as? String != null }
+            }
+        """.trimIndent()
+
+        assertThat(subject.lint(code)).hasSize(1)
+    }
+
+    @Test
+    fun `does not report type checking`() {
+        val code = """
+            fun foo() {
+                val objList: List<Any> = emptyList()
+                objList.any { it is String }
+            }
+        """.trimIndent()
+
+        assertThat(subject.lint(code)).isEmpty()
+    }
+
+    @Test
+    fun `does not report used type casting`() {
+        val code = """
+            fun foo() {
+                val objList: List<Any> = emptyList()
+                objList.any { it as? String != "foo" }
+            }
+        """.trimIndent()
+
+        assertThat(subject.lint(code)).isEmpty()
+    }
+
+    @Test
+    fun `does not report type casting when stored in variable`() {
+        val code = """
+            fun foo() {
+                val objList: List<Any> = emptyList()
+                val castResult = it as? String
+                objList.any { castResult != null }
+
+            }
+        """.trimIndent()
+
+        assertThat(subject.lint(code)).isEmpty()
+    }
+}
