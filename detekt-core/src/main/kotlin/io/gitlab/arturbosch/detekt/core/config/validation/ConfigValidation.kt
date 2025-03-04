@@ -28,6 +28,7 @@ internal val DEFAULT_PROPERTY_EXCLUDES = setOf(
     ".*>.*>active",
     ".*>.*>autoCorrect",
     ".*>severity",
+    ".*>.*>aliases",
     ".*>.*>severity",
     ".*>.*>ignoreAnnotated",
     ".*>.*>ignoreFunction",
