@@ -32,12 +32,10 @@ abstract class FormattingRule(config: Config, description: String) : Rule(config
 
     abstract val wrapping: StandardRule
 
-    /**
-     * Should the android style guide be enforced?
-     * This property is read from the ruleSet config.
-     */
-    protected val isAndroid: Boolean
-        get() = config.parent?.let { FormattingProvider.android.value(it) } == true
+    protected val codeStyle: String
+        get() = config.valueOrNull("code_style")
+            ?: config.parent?.let { FormattingProvider.code_style.value(it) }
+            ?: FormattingProvider.code_style.defaultValue
 
     private lateinit var positionByOffset: (offset: Int) -> Pair<Int, Int>
     private lateinit var root: KtFile
@@ -69,11 +67,7 @@ abstract class FormattingRule(config: Config, description: String) : Rule(config
            respected: https://github.com/pinterest/ktlint/pull/2783 */
         usesEditorConfigProperties[MAX_LINE_LENGTH_RULE_ID.createRuleExecutionEditorConfigProperty()] = "enabled"
 
-        if (isAndroid) {
-            usesEditorConfigProperties[CODE_STYLE_PROPERTY] = "android_studio"
-        } else {
-            usesEditorConfigProperties[CODE_STYLE_PROPERTY] = "intellij_idea"
-        }
+        usesEditorConfigProperties[CODE_STYLE_PROPERTY] = codeStyle
 
         usesEditorConfigProperties[INDENT_STYLE_PROPERTY] = "space"
 
