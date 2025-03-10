@@ -187,6 +187,18 @@ class UnusedParameterSpec {
         }
 
         @Test
+        fun `reports parameters with disallowed names`() {
+            val code = """
+                fun foo(ignored: Int, notIgnored: Int){}
+            """.trimIndent()
+
+            val lint = subject.lint(code)
+
+            assertThat(lint).hasSize(1)
+            assertThat(lint[0].message).isEqualTo("Function parameter `notIgnored` is unused.")
+        }
+
+        @Test
         fun `does not report functions with listed annotation`() {
             val code = """
                 annotation class IgnoredFunction
