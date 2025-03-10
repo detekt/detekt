@@ -173,7 +173,7 @@ class UnusedParameterSpec {
         }
     }
 
-    @nested
+    @Nested
     inner class `ignored by config` {
         @Test
         fun `does not report parameters with allowed names`() {
