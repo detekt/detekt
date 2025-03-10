@@ -52,15 +52,25 @@ class UnusedParameter(config: Config) : Rule(
     @Configuration("unused parameter names matching this regex are ignored")
     private val allowedNames: Regex by config("ignored|expected", String::toRegex)
 
+    @Configuration("ignore functions annotated with these annotations")
+    private val ignoreAnnotatedFunctions: List<String> by config(emptyList())
+
+    @Configuration("ignore parameters annotated with these annotations")
+    private val ignoreAnnotatedParameters: List<String> by config(emptyList())
+
     override fun visit(root: KtFile) {
         super.visit(root)
-        val visitor = UnusedParameterVisitor(allowedNames)
+        val visitor = UnusedParameterVisitor(allowedNames, ignoreAnnotatedFunctions, ignoreAnnotatedParameters)
         root.accept(visitor)
         visitor.getUnusedReports().forEach { report(it) }
     }
 }
 
-private class UnusedParameterVisitor(private val allowedNames: Regex) : DetektVisitor() {
+private class UnusedParameterVisitor(
+    private val allowedNames: Regex,
+    private val ignoreAnnotatedFunctions: List<String>,
+    private val ignoreAnnotatedParameters: List<String>,
+) : DetektVisitor() {
 
     private val unusedParameters: MutableSet<KtParameter> = mutableSetOf()
 
@@ -83,7 +93,7 @@ private class UnusedParameterVisitor(private val allowedNames: Regex) : DetektVi
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
-        if (!function.isRelevant()) {
+        if (!function.isRelevant() || ignoreAnnotatedFunctions.any { function.hasAnnotation(it) }) {
             return
         }
 
@@ -96,7 +106,7 @@ private class UnusedParameterVisitor(private val allowedNames: Regex) : DetektVi
         val parameters = mutableMapOf<String, KtParameter>()
         function.valueParameterList?.parameters?.forEach { parameter ->
             val name = parameter.nameAsSafeName.identifier
-            if (!allowedNames.matches(name)) {
+            if (!allowedNames.matches(name) && ignoreAnnotatedParameters.none { parameter.hasAnnotation(it) }) {
                 parameters[name] = parameter
             }
         }

@@ -797,6 +797,8 @@ style:
     active: true
     aliases: ['UNUSED_PARAMETER', 'unused']
     allowedNames: 'ignored|expected'
+    ignoreAnnotatedFunctions: []
+    ignoreAnnotatedParameters: []
   UnusedPrivateClass:
     active: true
     aliases: ['unused']

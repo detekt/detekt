@@ -3,12 +3,23 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lint
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
+private const val ALLOWED_NAMES = "allowedNames"
+private const val IGNORE_ANNOTATED_FUNCTIONS = "ignoreAnnotatedFunctions"
+private const val IGNORE_ANNOTATED_PARAMETERS = "ignoreAnnotatedParameters"
+
 class UnusedParameterSpec {
-    val subject = UnusedParameter(Config.empty)
+    val subject = UnusedParameter(
+        TestConfig(
+            ALLOWED_NAMES to "ignored|expected",
+            IGNORE_ANNOTATED_FUNCTIONS to listOf("IgnoredFunction"),
+            IGNORE_ANNOTATED_PARAMETERS to listOf("IgnoredParameter"),
+        )
+    )
 
     @Nested
     inner class `function parameters` {
@@ -160,6 +171,56 @@ class UnusedParameterSpec {
             """.trimIndent()
 
             assertThat(subject.lint(code)).hasSize(1)
+        }
+    }
+
+    @nested
+    inner class `ignored by config` {
+        @Test
+        fun `does not report parameters with allowed names`() {
+            val code = """
+                fun foo(ignored: String){}
+                fun bar(expected: Int){}
+            """.trimIndent()
+
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report functions with listed annotation`() {
+            val code = """
+                annotation class IgnoredFunction
+
+                @IgnoredFunction
+                fun foo(a: Int, b: Int, c: Int){}
+            """.trimIndent()
+
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report parameters with listed annotation`() {
+            val code = """
+                annotation class IgnoredParameter
+
+                fun foo(@IgnoredParameter unusedParameter: Int){}
+            """.trimIndent()
+
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `reports parameters without listed annotation`() {
+            val code = """
+                annotation class IgnoredParameter
+
+                fun foo(@IgnoredParameter unusedAndIgnored: Int, unusedAndNotIgnored: Int){}
+            """.trimIndent()
+
+            val lint = subject.lint(code)
+
+            assertThat(lint).hasSize(1)
+            assertThat(lint[0].message).isEqualTo("Function parameter `unusedAndNotIgnored` is unused.")
         }
     }
 
