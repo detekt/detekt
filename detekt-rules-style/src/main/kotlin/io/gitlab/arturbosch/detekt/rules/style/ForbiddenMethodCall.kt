@@ -72,8 +72,6 @@ class ForbiddenMethodCall(config: Config) :
             "java.math.BigDecimal.<init>(kotlin.String)" to "using `BigDecimal(String)` can result in a " +
                 "`NumberFormatException`. Use `String.toBigDecimalOrNull()`",
             "kotlin.system.measureTimeMillis" to "It is marked as obsolete. Use `kotlin.time.measureTime` instead.",
-            "kotlin.lazy(() -> kotlin.Any)" to "Must use `lazy(LazyThreadSafetyMode.PUBLICATION)` for performance " +
-                "and also compatibility with JVM virtual thread"
         )
     ) { list ->
         list.map { ForbiddenMethod(fromFunctionSignature(it.value), it.reason) }

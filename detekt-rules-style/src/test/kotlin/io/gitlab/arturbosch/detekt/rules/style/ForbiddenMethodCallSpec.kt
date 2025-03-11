@@ -684,31 +684,6 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
     }
 
     @Nested
-    inner class `configure LazyThreadSafetyMode #7823` {
-        @Test
-        fun `should detect forbidden lazy call`() {
-            val code = """
-                fun main() {
-                    val lazyValue = lazy { "Hello" } 
-                }
-            """.trimIndent()
-            val findings = ForbiddenMethodCall(TestConfig()).lintWithContext(env, code)
-            assertThat(findings).hasSize(1)
-        }
-
-        @Test
-        fun `recommended lazy call`() {
-            val code = """
-                fun main() {
-                    val lazyValue = lazy(LazyThreadSafetyMode.PUBLICATION) { "Hello" } 
-                }
-            """.trimIndent()
-            val findings = ForbiddenMethodCall(TestConfig()).lintWithContext(env, code)
-            assertThat(findings).hasSize(0)
-        }
-    }
-
-    @Nested
     inner class `Forbid constructors` {
         @Nested
         inner class NameOnly {
