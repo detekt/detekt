@@ -646,6 +646,8 @@ style:
         value: 'java.math.BigDecimal.<init>(kotlin.String)'
       - reason: 'It is marked as obsolete. Use `kotlin.time.measureTime` instead.'
         value: 'kotlin.system.measureTimeMillis'
+      - reason: 'Must use `lazy(LazyThreadSafetyMode.PUBLICATION)` for performance and also compatibility with JVM virtual thread'
+        value: 'kotlin.lazy(() -> kotlin.Any)'
   ForbiddenNamedParam:
     active: false
     methods: []

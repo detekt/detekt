@@ -219,6 +219,7 @@ style:
       - 'java.lang.Class.getResourceAsStream'
       - 'java.lang.ClassLoader.getResourceAsStream'
       - 'kotlin.system.measureTimeMillis'
+      - 'kotlin.lazy(() -> kotlin.Any)'
   ForbiddenVoid:
     active: true
     ignoreOverridden: true
