@@ -48,9 +48,10 @@ internal class Analyzer(
     ): List<Issue> =
         ktFiles.flatMap { file ->
             processors.forEach { it.onProcess(file) }
-            val issues = runCatching { analyze(file, compilerResources) }
-                .onFailure { throwIllegalStateException(file, it) }
-                .getOrDefault(emptyList())
+            val issues = runCatching { analyze(file, compilerResources) }.fold(
+                onSuccess = { it },
+                onFailure = { throwIllegalStateException(file, it) }
+            )
             processors.forEach { it.onProcessComplete(file, issues) }
             issues
         }

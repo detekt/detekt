@@ -1,5 +1,4 @@
 import org.apache.tools.ant.filters.ReplaceTokens
-import java.io.ByteArrayOutputStream
 
 plugins {
     id("com.gradleup.shadow") version "8.3.6"
@@ -55,8 +54,6 @@ publishing {
     }
 }
 
-val generatedCliUsage: Configuration by configurations.consumable("generatedCliUsage")
-
 tasks {
     shadowJar {
         mergeServiceFiles()
@@ -100,25 +97,6 @@ tasks {
     check {
         dependsOn(runWithHelpFlag, runWithArgsFile)
     }
-
-    val cliUsage by registering(JavaExec::class) {
-        val cliUsagesOutput = layout.buildDirectory.file("output/cli-usage.md")
-        outputs.file(cliUsagesOutput)
-        classpath = files(shadowJar)
-        args = listOf("--help")
-        doFirst {
-            standardOutput = ByteArrayOutputStream()
-        }
-        doLast {
-            cliUsagesOutput.get().asFile.apply {
-                writeText("```\n")
-                appendBytes((standardOutput as ByteArrayOutputStream).toByteArray())
-                appendText("```\n")
-            }
-        }
-    }
-
-    artifacts.add(generatedCliUsage.name, cliUsage)
 }
 
 val shadowDist: Configuration by configurations.consumable("shadowDist")
