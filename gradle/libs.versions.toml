@@ -45,5 +45,28 @@ slf4j-nop = { module = "org.slf4j:slf4j-nop", version.ref = "slf4j" }
 slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j" }
 snakeyaml-engine = { module = "org.snakeyaml:snakeyaml-engine", version = "2.9" }
 
+# Kotlin Analysis API artifacts
+kotlin-analysisApiPlatformInterface = { module = "org.jetbrains.kotlin:analysis-api-platform-interface-for-ide", version.ref = "kotlin" }
+kotlin-analysisApiK2 = { module = "org.jetbrains.kotlin:analysis-api-k2-for-ide", version.ref = "kotlin" }
+kotlin-analysisApi = { module = "org.jetbrains.kotlin:analysis-api-for-ide", version.ref = "kotlin" }
+kotlin-analysisApiStandalone = { module = "org.jetbrains.kotlin:analysis-api-standalone-for-ide", version.ref = "kotlin" }
+kotlin-lowLevelApiFir = { module = "org.jetbrains.kotlin:low-level-api-fir-for-ide", version.ref = "kotlin" }
+kotlin-symbolLightClasses = { module = "org.jetbrains.kotlin:symbol-light-classes-for-ide", version.ref = "kotlin" }
+kotlin-analysisApiImplBase = { module = "org.jetbrains.kotlin:analysis-api-impl-base-for-ide", version.ref = "kotlin" }
+# Can likely be removed in future - https://youtrack.jetbrains.com/issue/KT-73751/Analysis-API-Caffeine-dependency
+caffeine = { module = "com.github.ben-manes.caffeine:caffeine", version = "2.9.3" }
+
+[bundles]
+kotlin-analysisApi = [
+    "caffeine",
+    "kotlin-analysisApiPlatformInterface",
+    "kotlin-analysisApiK2",
+    "kotlin-analysisApi",
+    "kotlin-analysisApiStandalone",
+    "kotlin-lowLevelApiFir",
+    "kotlin-symbolLightClasses",
+    "kotlin-analysisApiImplBase",
+]
+
 [plugins]
 # Do not declare plugins here - see https://github.com/detekt/detekt/pull/7088.
