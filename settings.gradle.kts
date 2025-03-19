@@ -8,7 +8,7 @@ pluginManagement {
 include("code-coverage-report")
 include("detekt-api")
 include("detekt-cli")
-include("detekt-compiler-plugin")
+// include("detekt-compiler-plugin")
 include("detekt-core")
 include("detekt-formatting")
 include("detekt-formatting:ktlint-repackage")
