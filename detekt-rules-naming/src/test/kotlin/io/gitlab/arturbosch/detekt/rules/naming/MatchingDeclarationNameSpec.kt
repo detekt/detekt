@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.com.intellij.psi.PsiFile
+import com.intellij.psi.PsiFile
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 

@@ -12,7 +12,7 @@ import io.gitlab.arturbosch.detekt.core.settings.ExtensionFacade
 import io.gitlab.arturbosch.detekt.core.settings.LoggingAware
 import io.gitlab.arturbosch.detekt.core.settings.LoggingFacade
 import io.gitlab.arturbosch.detekt.core.settings.PropertiesFacade
-import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
+import com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.utils.closeQuietly
 import java.io.Closeable
 import java.net.URI

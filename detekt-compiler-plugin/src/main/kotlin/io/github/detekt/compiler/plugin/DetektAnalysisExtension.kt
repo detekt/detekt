@@ -5,7 +5,7 @@ import io.github.detekt.compiler.plugin.internal.info
 import io.github.detekt.tooling.api.spec.ProcessingSpec
 import org.jetbrains.kotlin.analyzer.AnalysisResult
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
-import org.jetbrains.kotlin.com.intellij.openapi.project.Project
+import com.intellij.openapi.project.Project
 import org.jetbrains.kotlin.descriptors.ModuleDescriptor
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingTrace

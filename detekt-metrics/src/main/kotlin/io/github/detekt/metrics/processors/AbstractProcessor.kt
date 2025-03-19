@@ -3,7 +3,7 @@ package io.github.detekt.metrics.processors
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
-import org.jetbrains.kotlin.com.intellij.openapi.util.Key
+import com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.psi.KtFile
 
 abstract class AbstractProcessor : FileProcessListener {

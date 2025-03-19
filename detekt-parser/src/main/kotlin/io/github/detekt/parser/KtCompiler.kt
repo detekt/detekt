@@ -1,7 +1,7 @@
 package io.github.detekt.parser
 
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.jetbrains.kotlin.com.intellij.psi.util.PsiUtilCore
+import com.intellij.psi.util.PsiUtilCore
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
 import kotlin.io.path.isRegularFile
