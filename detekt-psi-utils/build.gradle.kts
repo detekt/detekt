@@ -4,7 +4,7 @@ plugins {
 }
 
 dependencies {
-    api(libs.kotlin.compilerEmbeddable)
+    api(libs.kotlin.compiler)
 
     testImplementation(libs.assertj.core)
     testImplementation(projects.detektTest)

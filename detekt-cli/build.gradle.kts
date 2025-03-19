@@ -22,7 +22,7 @@ dependencies {
     implementation(libs.jcommander)
     implementation(projects.detektTooling)
     implementation(projects.detektUtils)
-    implementation(libs.kotlin.compilerEmbeddable) {
+    implementation(libs.kotlin.compiler) {
         version {
             strictly(libs.versions.kotlin.get())
         }
