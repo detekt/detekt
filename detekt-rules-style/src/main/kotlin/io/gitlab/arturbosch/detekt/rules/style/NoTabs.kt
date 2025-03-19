@@ -6,7 +6,7 @@ import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isPartOf
 import io.gitlab.arturbosch.detekt.rules.isPartOfString
-import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
+import com.intellij.psi.PsiWhiteSpace
 import org.jetbrains.kotlin.psi.KtStringTemplateEntryWithExpression
 
 /**

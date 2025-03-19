@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.api
 
-import org.jetbrains.kotlin.com.intellij.openapi.util.UserDataHolder
+import com.intellij.openapi.util.UserDataHolder
 
 /**
  * Storage for all kinds of findings and additional information

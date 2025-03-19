@@ -15,7 +15,7 @@ internal class UseEntityAtNameSpec {
             import io.gitlab.arturbosch.detekt.api.Finding
             import io.gitlab.arturbosch.detekt.api.Entity
             import io.gitlab.arturbosch.detekt.api.Rule
-            import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+            import com.intellij.psi.PsiElement
             
             fun Rule.f(element: PsiElement) {
                 report(Finding(Entity.from(element), "message"))
@@ -47,7 +47,7 @@ internal class UseEntityAtNameSpec {
             import io.gitlab.arturbosch.detekt.api.Finding
             import io.gitlab.arturbosch.detekt.api.Entity
             import io.gitlab.arturbosch.detekt.api.Rule
-            import org.jetbrains.kotlin.com.intellij.psi.PsiNameIdentifierOwner
+            import com.intellij.psi.PsiNameIdentifierOwner
             
             fun Rule.f(element: PsiNameIdentifierOwner) {
                 report(Finding(Entity.from(element.nameIdentifier!!), "message"))
@@ -64,7 +64,7 @@ internal class UseEntityAtNameSpec {
             import io.gitlab.arturbosch.detekt.api.Finding
             import io.gitlab.arturbosch.detekt.api.Entity
             import io.gitlab.arturbosch.detekt.api.Rule
-            import org.jetbrains.kotlin.com.intellij.psi.PsiNameIdentifierOwner
+            import com.intellij.psi.PsiNameIdentifierOwner
             
             fun Rule.f(element: PsiNameIdentifierOwner) {
                 report(Finding(Entity.from(element.nameIdentifier!!!!), "message"))
@@ -81,7 +81,7 @@ internal class UseEntityAtNameSpec {
             import io.gitlab.arturbosch.detekt.api.Finding
             import io.gitlab.arturbosch.detekt.api.Entity
             import io.gitlab.arturbosch.detekt.api.Rule
-            import org.jetbrains.kotlin.com.intellij.psi.PsiNameIdentifierOwner
+            import com.intellij.psi.PsiNameIdentifierOwner
             
             fun Rule.f(element: PsiNameIdentifierOwner) {
                 report(Finding(Entity.from(element.nameIdentifier ?: element), "message"))
@@ -98,8 +98,8 @@ internal class UseEntityAtNameSpec {
             import io.gitlab.arturbosch.detekt.api.Finding
             import io.gitlab.arturbosch.detekt.api.Entity
             import io.gitlab.arturbosch.detekt.api.Rule
-            import org.jetbrains.kotlin.com.intellij.psi.PsiExpression
-            import org.jetbrains.kotlin.com.intellij.psi.PsiNameIdentifierOwner
+            import com.intellij.psi.PsiExpression
+            import com.intellij.psi.PsiNameIdentifierOwner
             import org.jetbrains.kotlin.psi.KtClass
             import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
             
@@ -119,8 +119,8 @@ internal class UseEntityAtNameSpec {
             import io.gitlab.arturbosch.detekt.api.Finding
             import io.gitlab.arturbosch.detekt.api.Entity
             import io.gitlab.arturbosch.detekt.api.Rule
-            import org.jetbrains.kotlin.com.intellij.psi.PsiElement
-            import org.jetbrains.kotlin.com.intellij.psi.PsiNameIdentifierOwner
+            import com.intellij.psi.PsiElement
+            import com.intellij.psi.PsiNameIdentifierOwner
             
             fun Rule.f(element: PsiNameIdentifierOwner, element2: PsiElement) {
                 report(Finding(Entity.from(element.nameIdentifier ?: element2), "message"))
@@ -137,8 +137,8 @@ internal class UseEntityAtNameSpec {
             import io.gitlab.arturbosch.detekt.api.Finding
             import io.gitlab.arturbosch.detekt.api.Entity
             import io.gitlab.arturbosch.detekt.api.Rule
-            import org.jetbrains.kotlin.com.intellij.psi.PsiElement
-            import org.jetbrains.kotlin.com.intellij.psi.PsiNameIdentifierOwner
+            import com.intellij.psi.PsiElement
+            import com.intellij.psi.PsiNameIdentifierOwner
             
             fun Rule.f(element: PsiNameIdentifierOwner, element2: PsiElement) {
                 report(Finding(Entity.from(element.nameIdentifier ?: element2, 0), "message"))

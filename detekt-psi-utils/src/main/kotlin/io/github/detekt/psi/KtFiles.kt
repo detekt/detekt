@@ -1,6 +1,6 @@
 package io.github.detekt.psi
 
-import org.jetbrains.kotlin.com.intellij.psi.PsiFile
+import com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
 import kotlin.io.path.Path

@@ -5,8 +5,8 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.api.RuleInstance
-import org.jetbrains.kotlin.com.intellij.openapi.util.Key
-import org.jetbrains.kotlin.com.intellij.openapi.util.UserDataHolderBase
+import com.intellij.openapi.util.Key
+import com.intellij.openapi.util.UserDataHolderBase
 
 class TestDetektion(
     vararg issues: Issue,

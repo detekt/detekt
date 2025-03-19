@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.reporting
 
-import org.jetbrains.kotlin.com.intellij.openapi.util.SystemInfo
+import com.intellij.openapi.util.SystemInfo
 
 private const val ESC = "\u001B"
 private val RESET = Color(0)
