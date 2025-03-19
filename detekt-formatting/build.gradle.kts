@@ -7,7 +7,11 @@ val extraDepsToPackage: Configuration by configurations.creating
 dependencies {
     compileOnly(projects.detektApi)
     compileOnly(projects.detektPsiUtils)
-    implementation(projects.detektFormatting.ktlintRepackage)
+    implementation(projects.detektFormatting.ktlintRepackage) {
+        attributes {
+            attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.SHADOWED))
+        }
+    }
 
     runtimeOnly(libs.slf4j.api)
 
