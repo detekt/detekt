@@ -18,7 +18,7 @@ jacoco.toolVersion = libs.versions.jacoco.get()
 dependencies {
     jacocoAggregation(projects.detektApi)
     jacocoAggregation(projects.detektCli)
-    jacocoAggregation(projects.detektCompilerPlugin)
+    // jacocoAggregation(projects.detektCompilerPlugin)
     jacocoAggregation(projects.detektCore)
     jacocoAggregation(projects.detektFormatting)
     jacocoAggregation(projects.detektGenerator)
