@@ -1,3 +1,4 @@
+import com.gradle.develocity.agent.gradle.test.DevelocityTestConfiguration
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -48,6 +49,19 @@ tasks.withType<Test>().configureEach {
 
     configure<JacocoTaskExtension> {
         excludes = listOf("org.jetbrains.kotlin.fir.analysis.diagnostics.FirErrors")
+    }
+
+    configure<DevelocityTestConfiguration> {
+        testRetry {
+            @Suppress("MagicNumber")
+            if (providers.environmentVariable("CI").isPresent) {
+                maxRetries = 3
+                maxFailures = 20
+            }
+        }
+        predictiveTestSelection {
+            enabled = providers.gradleProperty("enablePTS").map(String::toBooleanStrict)
+        }
     }
 }
 
