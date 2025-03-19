@@ -1,5 +1,8 @@
 package io.gitlab.arturbosch.detekt.formatting
 
+import com.intellij.lang.ASTNode
+import com.intellij.psi.impl.source.JavaDummyElement
+import com.intellij.psi.impl.source.JavaDummyHolder
 import com.pinterest.ktlint.rule.engine.core.api.AutocorrectDecision
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.CODE_STYLE_PROPERTY
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfig
@@ -18,9 +21,6 @@ import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.api.modifiedText
 import org.ec4j.core.model.Property
-import com.intellij.lang.ASTNode
-import com.intellij.psi.impl.source.JavaDummyElement
-import com.intellij.psi.impl.source.JavaDummyHolder
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtPsiFactory
 import java.nio.file.Path

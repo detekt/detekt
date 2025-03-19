@@ -1,12 +1,12 @@
 package io.github.detekt.metrics.processors
 
+import com.intellij.openapi.util.Key
+import com.intellij.openapi.util.UserDataHolderBase
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.api.RuleInstance
-import com.intellij.openapi.util.Key
-import com.intellij.openapi.util.UserDataHolderBase
 import org.jetbrains.kotlin.psi.KtFile
 
 class MetricProcessorTester(
