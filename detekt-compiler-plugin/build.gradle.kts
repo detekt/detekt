@@ -19,7 +19,7 @@ kotlin {
 }
 
 dependencies {
-    compileOnly(libs.kotlin.compilerEmbeddable)
+    compileOnly(libs.kotlin.compiler)
 
     implementation(projects.detektApi)
     implementation(projects.detektTooling)
