@@ -147,7 +147,35 @@ class RedundantSuspendModifierSpec(val env: KotlinCoreEnvironment) {
             suspend fun String.bar() {
                 foo()
             }
-            suspend fun  String.baz() = foo()
+            suspend fun String.baz() = foo()
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
+    fun `does not report when using inline suspending functions`() {
+        val code = """
+            import kotlinx.coroutines.suspendCancellableCoroutine
+            import kotlin.coroutines.Continuation
+            
+            interface WebClient {
+                fun get(): RequestBodyUriSpec
+            }
+            
+            interface RequestBodyUriSpec {
+                fun retrieve(): ResponseSpec
+            }
+            
+            interface ResponseSpec {
+                suspend fun <T> awaitBody(): T
+            }
+            
+            suspend fun loadData(webClient: WebClient): String {
+                return webClient
+                    .get()
+                    .retrieve()
+                    .awaitBody()
+            }
         """.trimIndent()
         assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
