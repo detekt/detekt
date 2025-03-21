@@ -1,9 +1,9 @@
 package io.github.detekt.metrics.processors
 
+import com.intellij.openapi.util.Key
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
-import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.psi.KtFile
 
 abstract class AbstractProcessor : FileProcessListener {

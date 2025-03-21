@@ -1,12 +1,12 @@
 package io.gitlab.arturbosch.detekt.formatting
 
+import com.intellij.openapi.util.text.StringUtilRt
 import io.github.detekt.test.utils.compileContentForTest
 import io.github.detekt.test.utils.compileForTest
 import io.github.detekt.test.utils.resource
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.test.FakeCompilerResources
 import org.intellij.lang.annotations.Language
-import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
 import java.io.File
 import kotlin.io.path.toPath
 

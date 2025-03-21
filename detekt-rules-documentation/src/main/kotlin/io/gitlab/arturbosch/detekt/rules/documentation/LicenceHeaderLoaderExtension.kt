@@ -1,5 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.documentation
 
+import com.intellij.openapi.util.Key
+import com.intellij.openapi.util.text.StringUtilRt
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.SetupContext
@@ -8,8 +10,6 @@ import io.gitlab.arturbosch.detekt.rules.documentation.AbsentOrWrongFileLicense.
 import io.gitlab.arturbosch.detekt.rules.documentation.AbsentOrWrongFileLicense.Companion.PARAM_LICENSE_TEMPLATE_FILE
 import io.gitlab.arturbosch.detekt.rules.documentation.AbsentOrWrongFileLicense.Companion.PARAM_LICENSE_TEMPLATE_IS_REGEX
 import io.gitlab.arturbosch.detekt.rules.documentation.AbsentOrWrongFileLicense.Companion.RULE_NAME
-import org.jetbrains.kotlin.com.intellij.openapi.util.Key
-import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
 import kotlin.io.path.absolute

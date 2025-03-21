@@ -14,7 +14,7 @@ public final class io/github/detekt/psi/FunctionMatcher$Companion {
 }
 
 public final class io/github/detekt/psi/KtFilesKt {
-	public static final fun absolutePath (Lorg/jetbrains/kotlin/com/intellij/psi/PsiFile;)Ljava/nio/file/Path;
+	public static final fun absolutePath (Lcom/intellij/psi/PsiFile;)Ljava/nio/file/Path;
 	public static final fun absolutePath (Lorg/jetbrains/kotlin/psi/KtFile;)Ljava/nio/file/Path;
 }
 
@@ -23,7 +23,7 @@ public final class io/gitlab/arturbosch/detekt/rules/AllowedExceptionNamePattern
 }
 
 public final class io/gitlab/arturbosch/detekt/rules/IsPartOfUtilsKt {
-	public static final fun isPartOfString (Lorg/jetbrains/kotlin/com/intellij/psi/PsiElement;)Z
+	public static final fun isPartOfString (Lcom/intellij/psi/PsiElement;)Z
 }
 
 public final class io/gitlab/arturbosch/detekt/rules/JunkKt {

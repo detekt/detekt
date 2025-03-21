@@ -1,8 +1,8 @@
 package io.github.detekt.metrics.processors
 
+import com.intellij.openapi.util.Key
 import io.github.detekt.metrics.processors.util.LLOC
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
-import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.psi.KtFile
 
 class ProjectLLOCProcessor : AbstractProcessor() {

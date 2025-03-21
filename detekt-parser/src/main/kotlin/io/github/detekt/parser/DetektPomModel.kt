@@ -1,11 +1,11 @@
 package io.github.detekt.parser
 
-import org.jetbrains.kotlin.com.intellij.openapi.util.UserDataHolderBase
-import org.jetbrains.kotlin.com.intellij.pom.PomModel
-import org.jetbrains.kotlin.com.intellij.pom.PomModelAspect
-import org.jetbrains.kotlin.com.intellij.pom.PomTransaction
-import org.jetbrains.kotlin.com.intellij.pom.impl.PomTransactionBase
-import org.jetbrains.kotlin.com.intellij.pom.tree.TreeAspect
+import com.intellij.openapi.util.UserDataHolderBase
+import com.intellij.pom.PomModel
+import com.intellij.pom.PomModelAspect
+import com.intellij.pom.PomTransaction
+import com.intellij.pom.impl.PomTransactionBase
+import com.intellij.pom.tree.TreeAspect
 import sun.reflect.ReflectionFactory
 
 /**

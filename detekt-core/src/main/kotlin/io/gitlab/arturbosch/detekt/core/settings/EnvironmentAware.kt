@@ -1,13 +1,13 @@
 package io.gitlab.arturbosch.detekt.core.settings
 
+import com.intellij.openapi.Disposable
+import com.intellij.openapi.util.Disposer
 import io.github.detekt.parser.createCompilerConfiguration
 import io.github.detekt.parser.createKotlinCoreEnvironment
 import io.github.detekt.tooling.api.spec.CompilerSpec
 import io.github.detekt.tooling.api.spec.LoggingSpec
 import io.github.detekt.tooling.api.spec.ProjectSpec
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.jetbrains.kotlin.com.intellij.openapi.Disposable
-import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.config.JVMConfigurationKeys
 import org.jetbrains.kotlin.load.kotlin.ModuleVisibilityManager
 import java.io.Closeable

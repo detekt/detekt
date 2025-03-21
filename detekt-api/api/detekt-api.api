@@ -90,7 +90,7 @@ public class io/gitlab/arturbosch/detekt/api/DetektVisitor : org/jetbrains/kotli
 	public fun <init> ()V
 }
 
-public abstract interface class io/gitlab/arturbosch/detekt/api/Detektion : org/jetbrains/kotlin/com/intellij/openapi/util/UserDataHolder {
+public abstract interface class io/gitlab/arturbosch/detekt/api/Detektion : com/intellij/openapi/util/UserDataHolder {
 	public abstract fun add (Lio/gitlab/arturbosch/detekt/api/Notification;)V
 	public abstract fun add (Lio/gitlab/arturbosch/detekt/api/ProjectMetric;)V
 	public abstract fun getIssues ()Ljava/util/List;
@@ -111,9 +111,9 @@ public final class io/gitlab/arturbosch/detekt/api/Entity {
 public final class io/gitlab/arturbosch/detekt/api/Entity$Companion {
 	public final fun atName (Lorg/jetbrains/kotlin/psi/KtNamedDeclaration;)Lio/gitlab/arturbosch/detekt/api/Entity;
 	public final fun atPackageOrFirstDecl (Lorg/jetbrains/kotlin/psi/KtFile;)Lio/gitlab/arturbosch/detekt/api/Entity;
-	public final fun from (Lorg/jetbrains/kotlin/com/intellij/psi/PsiElement;I)Lio/gitlab/arturbosch/detekt/api/Entity;
-	public final fun from (Lorg/jetbrains/kotlin/com/intellij/psi/PsiElement;Lio/gitlab/arturbosch/detekt/api/Location;)Lio/gitlab/arturbosch/detekt/api/Entity;
-	public static synthetic fun from$default (Lio/gitlab/arturbosch/detekt/api/Entity$Companion;Lorg/jetbrains/kotlin/com/intellij/psi/PsiElement;IILjava/lang/Object;)Lio/gitlab/arturbosch/detekt/api/Entity;
+	public final fun from (Lcom/intellij/psi/PsiElement;I)Lio/gitlab/arturbosch/detekt/api/Entity;
+	public final fun from (Lcom/intellij/psi/PsiElement;Lio/gitlab/arturbosch/detekt/api/Location;)Lio/gitlab/arturbosch/detekt/api/Entity;
+	public static synthetic fun from$default (Lio/gitlab/arturbosch/detekt/api/Entity$Companion;Lcom/intellij/psi/PsiElement;IILjava/lang/Object;)Lio/gitlab/arturbosch/detekt/api/Entity;
 }
 
 public abstract interface class io/gitlab/arturbosch/detekt/api/Extension {
@@ -204,8 +204,8 @@ public final class io/gitlab/arturbosch/detekt/api/Location {
 }
 
 public final class io/gitlab/arturbosch/detekt/api/Location$Companion {
-	public final fun from (Lorg/jetbrains/kotlin/com/intellij/psi/PsiElement;I)Lio/gitlab/arturbosch/detekt/api/Location;
-	public static synthetic fun from$default (Lio/gitlab/arturbosch/detekt/api/Location$Companion;Lorg/jetbrains/kotlin/com/intellij/psi/PsiElement;IILjava/lang/Object;)Lio/gitlab/arturbosch/detekt/api/Location;
+	public final fun from (Lcom/intellij/psi/PsiElement;I)Lio/gitlab/arturbosch/detekt/api/Location;
+	public static synthetic fun from$default (Lio/gitlab/arturbosch/detekt/api/Location$Companion;Lcom/intellij/psi/PsiElement;IILjava/lang/Object;)Lio/gitlab/arturbosch/detekt/api/Location;
 }
 
 public abstract interface class io/gitlab/arturbosch/detekt/api/Notification {
