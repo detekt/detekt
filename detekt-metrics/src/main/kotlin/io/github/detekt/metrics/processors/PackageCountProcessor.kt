@@ -32,7 +32,7 @@ val numberOfPackagesKey = Key<String>("number of packages")
 class PackageCountVisitor : DetektVisitor() {
 
     override fun visitKtFile(file: KtFile) {
-        val packageName = file.packageFqNameByTree.toString()
+        val packageName = file.packageFqName.toString()
         file.putUserData(numberOfPackagesKey, packageName)
     }
 }
