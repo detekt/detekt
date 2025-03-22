@@ -10,6 +10,17 @@ public final class io/github/detekt/test/utils/FileExtensionKt {
 	public static final fun createTempFileForTest (Ljava/lang/String;Ljava/lang/String;)Ljava/nio/file/Path;
 }
 
+public final class io/github/detekt/test/utils/KotlinAnalysisAAEngine {
+	public static final field INSTANCE Lio/github/detekt/test/utils/KotlinAnalysisAAEngine;
+	public static field sourceModule Lorg/jetbrains/kotlin/analysis/api/projectStructure/KaModule;
+	public final fun compile (Ljava/lang/String;)V
+	public final fun getConfiguration ()Lorg/jetbrains/kotlin/config/CompilerConfiguration;
+	public final fun getFactory ()Lorg/jetbrains/kotlin/psi/KtPsiFactory;
+	public final fun getSourceModule ()Lorg/jetbrains/kotlin/analysis/api/projectStructure/KaModule;
+	public final fun getTarget ()Lorg/jetbrains/kotlin/analysis/api/components/KaCompilerTarget$Jvm;
+	public final fun setSourceModule (Lorg/jetbrains/kotlin/analysis/api/projectStructure/KaModule;)V
+}
+
 public final class io/github/detekt/test/utils/KotlinCoreEnvironmentWrapper {
 	public fun <init> (Lorg/jetbrains/kotlin/cli/jvm/compiler/KotlinCoreEnvironment;Lcom/intellij/openapi/Disposable;)V
 	public final fun dispose ()V
