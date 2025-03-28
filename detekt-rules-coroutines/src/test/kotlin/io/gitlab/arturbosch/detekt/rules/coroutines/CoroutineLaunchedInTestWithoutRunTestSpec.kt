@@ -243,7 +243,7 @@ class CoroutineLaunchedInTestWithoutRunTestSpec(private val env: KotlinEnvironme
                 }
             }
         """.trimIndent()
-        assertThat(subject.lintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code, compile = false)).isEmpty()
     }
 
     @Test
@@ -288,7 +288,7 @@ class CoroutineLaunchedInTestWithoutRunTestSpec(private val env: KotlinEnvironme
                 }
             }
         """.trimIndent()
-        assertThat(subject.lintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code, compile = false)).isEmpty()
     }
 
     @Test
