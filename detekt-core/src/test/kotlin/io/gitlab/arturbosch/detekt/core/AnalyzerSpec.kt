@@ -1,5 +1,7 @@
 package io.gitlab.arturbosch.detekt.core
 
+import com.intellij.openapi.util.TextRange
+import com.intellij.psi.PsiElement
 import io.github.detekt.test.utils.compileContentForTest
 import io.github.detekt.test.utils.compileForTest
 import io.github.detekt.test.utils.resourceAsPath
@@ -20,8 +22,6 @@ import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.intellij.lang.annotations.Language
-import org.jetbrains.kotlin.com.intellij.openapi.util.TextRange
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.elementsInRange
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType

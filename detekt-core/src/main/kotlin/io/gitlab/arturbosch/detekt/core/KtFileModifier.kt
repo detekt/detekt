@@ -1,11 +1,11 @@
 package io.gitlab.arturbosch.detekt.core
 
+import com.intellij.openapi.util.text.StringUtilRt
 import io.github.detekt.psi.absolutePath
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.modifiedText
-import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
 import kotlin.io.path.writeText

@@ -1,8 +1,8 @@
 package io.github.detekt.metrics.processors
 
+import com.intellij.openapi.util.Key
+import com.intellij.psi.PsiComment
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
-import org.jetbrains.kotlin.com.intellij.openapi.util.Key
-import org.jetbrains.kotlin.com.intellij.psi.PsiComment
 import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.KtFile
 

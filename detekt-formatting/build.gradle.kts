@@ -7,8 +7,10 @@ val extraDepsToPackage: Configuration by configurations.creating
 dependencies {
     compileOnly(projects.detektApi)
     compileOnly(projects.detektPsiUtils)
-    implementation(libs.ktlint.rulesetStandard) {
-        exclude(group = "org.jetbrains.kotlin")
+    implementation(projects.detektFormatting.ktlintRepackage) {
+        attributes {
+            attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.SHADOWED))
+        }
     }
 
     runtimeOnly(libs.slf4j.api)

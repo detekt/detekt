@@ -1,9 +1,9 @@
 package io.github.detekt.metrics
 
+import com.intellij.openapi.util.Key
+import com.intellij.psi.tree.IElementType
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import org.jetbrains.kotlin.KtNodeTypes
-import org.jetbrains.kotlin.com.intellij.openapi.util.Key
-import org.jetbrains.kotlin.com.intellij.psi.tree.IElementType
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBreakExpression

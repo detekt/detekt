@@ -2,8 +2,10 @@ package io.github.detekt.compiler.plugin
 
 import io.github.detekt.compiler.plugin.util.CompilerTestUtils.compile
 import io.github.detekt.compiler.plugin.util.assertThat
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
+@Disabled("https://github.com/tschuchortdev/kotlin-compile-testing/issues/234")
 class CompilerTest {
 
     @Test

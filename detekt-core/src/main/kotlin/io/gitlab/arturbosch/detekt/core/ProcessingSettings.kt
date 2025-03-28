@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.core
 
+import com.intellij.openapi.util.Disposer
 import io.github.detekt.tooling.api.spec.ConfigSpec
 import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.gitlab.arturbosch.detekt.api.Config
@@ -12,7 +13,6 @@ import io.gitlab.arturbosch.detekt.core.settings.ExtensionFacade
 import io.gitlab.arturbosch.detekt.core.settings.LoggingAware
 import io.gitlab.arturbosch.detekt.core.settings.LoggingFacade
 import io.gitlab.arturbosch.detekt.core.settings.PropertiesFacade
-import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.utils.closeQuietly
 import java.io.Closeable
 import java.net.URI

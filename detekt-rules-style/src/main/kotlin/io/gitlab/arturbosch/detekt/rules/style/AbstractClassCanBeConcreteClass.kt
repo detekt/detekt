@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import com.intellij.psi.PsiElement
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
@@ -7,7 +8,6 @@ import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isAbstract
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.descriptors.MemberDescriptor
 import org.jetbrains.kotlin.descriptors.Modality
 import org.jetbrains.kotlin.psi.KtCallableDeclaration

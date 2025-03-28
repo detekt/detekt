@@ -6,7 +6,7 @@ plugins {
 }
 
 dependencies {
-    api(libs.kotlin.compilerEmbeddable)
+    api(libs.kotlin.compiler)
     implementation(projects.detektUtils)
 
     testImplementation(projects.detektTest)
