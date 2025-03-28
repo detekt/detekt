@@ -21,7 +21,7 @@ class EmptyKotlinFileSpec {
         val codeWithPackageStatement = """
             package my.packagee
         """.trimIndent()
-        assertThat(subject.lint(codeWithPackageStatement))
+        assertThat(subject.lint(codeWithPackageStatement, compile = false))
             .singleElement()
             .hasSourceLocation(1, 1)
     }
