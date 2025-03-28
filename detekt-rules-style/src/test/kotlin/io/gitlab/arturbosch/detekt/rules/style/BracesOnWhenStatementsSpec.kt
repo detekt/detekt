@@ -65,10 +65,10 @@ class BracesOnWhenStatementsSpec {
 
         private fun flag(code: String, vararg locations: (String) -> Pair<Int, Int>): DynamicNode {
             val validTopLevelCode = """
-                    fun main() {
-                        $code
-                    }
-                """.trimIndent()
+                fun main() {
+                    $code
+                }
+            """.trimIndent()
             return testCombinations(BracePolicy.Never.config, BracePolicy.Always.config, validTopLevelCode, *locations)
         }
 
