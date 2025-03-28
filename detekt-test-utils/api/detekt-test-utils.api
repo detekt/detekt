@@ -12,13 +12,7 @@ public final class io/github/detekt/test/utils/FileExtensionKt {
 
 public final class io/github/detekt/test/utils/KotlinAnalysisApiEngine {
 	public static final field INSTANCE Lio/github/detekt/test/utils/KotlinAnalysisApiEngine;
-	public static field sourceModule Lorg/jetbrains/kotlin/analysis/api/projectStructure/KaModule;
 	public final fun compile (Ljava/lang/String;)V
-	public final fun getConfiguration ()Lorg/jetbrains/kotlin/config/CompilerConfiguration;
-	public final fun getFactory ()Lorg/jetbrains/kotlin/psi/KtPsiFactory;
-	public final fun getSourceModule ()Lorg/jetbrains/kotlin/analysis/api/projectStructure/KaModule;
-	public final fun getTarget ()Lorg/jetbrains/kotlin/analysis/api/components/KaCompilerTarget$Jvm;
-	public final fun setSourceModule (Lorg/jetbrains/kotlin/analysis/api/projectStructure/KaModule;)V
 }
 
 public final class io/github/detekt/test/utils/KotlinCoreEnvironmentWrapper {

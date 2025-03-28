@@ -29,7 +29,7 @@ import kotlin.io.path.Path
  */
 object KotlinAnalysisApiEngine {
 
-    lateinit var sourceModule: KaModule
+    private lateinit var sourceModule: KaModule
 
     @OptIn(KaImplementationDetail::class, KaPlatformInterface::class, KaExperimentalApi::class)
     private val session = buildStandaloneAnalysisAPISession(unitTestMode = false) {
@@ -73,12 +73,12 @@ object KotlinAnalysisApiEngine {
         }
     }
 
-    val factory = KtPsiFactory(session.project)
+    private val factory = KtPsiFactory(session.project)
 
-    val configuration = CompilerConfiguration()
+    private val configuration = CompilerConfiguration()
 
     @OptIn(KaExperimentalApi::class)
-    val target = KaCompilerTarget.Jvm(false)
+    private val target = KaCompilerTarget.Jvm(false)
 
     /**
      * Compiles a given code string using Kotlin's Analysis API.
