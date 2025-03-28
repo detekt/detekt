@@ -29,8 +29,6 @@ class EmptyKotlinFileSpec {
     @Test
     fun `does not report file with code`() {
         val code = """
-            package my.packagee
-
             fun myFunction() {}
         """.trimIndent()
         assertThat(subject.lint(code)).isEmpty()
