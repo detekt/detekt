@@ -3,11 +3,6 @@ plugins {
     id("public-api")
 }
 
-repositories {
-    mavenCentral()
-    maven("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-ide-plugin-dependencies")
-}
-
 dependencies {
     api(libs.kotlin.stdlib)
     api(libs.junit.jupiterApi)
