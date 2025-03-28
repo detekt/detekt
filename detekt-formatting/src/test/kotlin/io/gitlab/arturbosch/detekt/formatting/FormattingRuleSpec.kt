@@ -61,7 +61,8 @@ class FormattingRuleSpec {
                     package test.test.test
                     fun main()
                     = Unit
-                """.trimIndent()
+                """.trimIndent(),
+                compile = false
             )
 
             assertThat(findings.first().entity.signature).isEqualTo("=")

@@ -412,9 +412,7 @@ class UnusedPrivateClassSpec {
         @Test
         fun `does not report imported enum class - #2809`() {
             val code = """
-                package com.example
-                
-                import com.example.C.E.E1
+                import C.E.E1
                 
                 class C {
                     fun test() {
@@ -435,13 +433,9 @@ class UnusedPrivateClassSpec {
         @Test
         fun `should report not imported enum class - #2809, #2816`() {
             val code = """
-                package com.example
-                
-                import com.example.C.EFG.EFG1
-                
                 class C {
                     fun test() {
-                        println(EFG1)
+                        println(EFG.EFG1)
                     }
                 
                     private enum class E {
@@ -455,7 +449,7 @@ class UnusedPrivateClassSpec {
             """.trimIndent()
             val findings = UnusedPrivateClass(Config.empty).lint(code)
             assertThat(findings).hasSize(1)
-            assertThat(findings).hasStartSourceLocation(10, 5)
+            assertThat(findings).hasStartSourceLocation(6, 5)
         }
 
         @Test

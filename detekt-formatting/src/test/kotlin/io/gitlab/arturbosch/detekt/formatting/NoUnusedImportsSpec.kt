@@ -12,8 +12,6 @@ class NoUnusedImportsSpec {
     @Test
     fun `regression - findings are reported at the import not the file node`() {
         val code = """
-            package testData
-
             import java.util.HashMap
             import java.util.HashSet
             import java.util.ArrayList
@@ -33,9 +31,9 @@ class NoUnusedImportsSpec {
         assertThat(findings)
             .hasSize(3)
             .hasStartSourceLocations(
-                SourceLocation(3, 1),
-                SourceLocation(4, 1),
-                SourceLocation(5, 1)
+                SourceLocation(1, 1),
+                SourceLocation(2, 1),
+                SourceLocation(3, 1)
             )
     }
 }

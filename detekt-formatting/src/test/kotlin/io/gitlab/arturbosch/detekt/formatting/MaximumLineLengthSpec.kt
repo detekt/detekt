@@ -23,7 +23,6 @@ class MaximumLineLengthSpec {
     inner class `a single function` {
 
         val code = """
-            package home.test
             fun f() { /* 123456789012345678901234567890 */ }
         """.trimIndent()
 
@@ -69,7 +68,6 @@ class MaximumLineLengthSpec {
     @Test
     fun `does not report back ticked line which exceeds the threshold`() {
         val code = """
-            package home.test
             fun `this is a test method that has more than 30 characters inside the back ticks`() {
             }
         """.trimIndent()
