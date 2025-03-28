@@ -33,6 +33,8 @@ tasks.withType<Test>().configureEach {
     systemProperty("junit.jupiter.testinstance.lifecycle.default", "per_class")
     val compileTestSnippets = providers.gradleProperty("compile-test-snippets").orNull.toBoolean()
     systemProperty("compile-test-snippets", compileTestSnippets)
+    val compileTestSnippetsAa = providers.gradleProperty("compile-test-snippets-aa").orNull.toBoolean()
+    systemProperty("compile-test-snippets-aa", compileTestSnippetsAa)
     testLogging {
         // set options for log level LIFECYCLE
         events = setOf(
