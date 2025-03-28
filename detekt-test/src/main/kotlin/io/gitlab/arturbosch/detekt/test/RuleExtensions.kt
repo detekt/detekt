@@ -53,6 +53,9 @@ fun <T> T.lintWithContext(
     if (compile && shouldCompileTestSnippets) {
         KotlinScriptEngine.compile(content)
     }
+    if (compile && shouldCompileTestSnippetsAa) {
+        KotlinAnalysisApiEngine.compile(content)
+    }
     val ktFile = compileContentForTest(content)
     val additionalKtFiles = additionalContents.mapIndexed { index, additionalContent ->
         compileContentForTest(additionalContent, "AdditionalTest$index.kt")
