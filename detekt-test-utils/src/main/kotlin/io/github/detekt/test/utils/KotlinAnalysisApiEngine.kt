@@ -1,5 +1,6 @@
 package io.github.detekt.test.utils
 
+import kotlinx.coroutines.CoroutineScope
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaImplementationDetail
@@ -20,6 +21,7 @@ import org.jetbrains.kotlin.diagnostics.PsiDiagnosticUtils
 import org.jetbrains.kotlin.platform.jvm.JvmPlatforms
 import org.jetbrains.kotlin.psi.KtPsiFactory
 import java.io.File
+import java.nio.file.Path
 import kotlin.io.path.Path
 
 /**
@@ -51,10 +53,19 @@ object KotlinAnalysisApiEngine {
                 }
             )
 
+            val coroutinesCore = addModule(
+                buildKtLibraryModule {
+                    addBinaryRoot(kotlinxCoroutinesCorePath())
+                    platform = targetPlatform
+                    libraryName = "coroutines-core"
+                }
+            )
+
             sourceModule = addModule(
                 buildKtSourceModule {
                     addRegularDependency(jdk)
                     addRegularDependency(stdlib)
+                    addRegularDependency(coroutinesCore)
                     platform = targetPlatform
                     moduleName = "source"
                 }
@@ -103,4 +114,7 @@ object KotlinAnalysisApiEngine {
             }
         }
     }
+
+    private fun kotlinxCoroutinesCorePath(): Path =
+        File(CoroutineScope::class.java.protectionDomain.codeSource.location.path).toPath()
 }
