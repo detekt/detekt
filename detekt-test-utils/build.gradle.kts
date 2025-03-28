@@ -6,8 +6,7 @@ plugins {
 dependencies {
     api(libs.kotlin.stdlib)
     api(libs.junit.jupiterApi)
-    runtimeOnly(projects.detektKotlinAnalysisApi)
-    compileOnly(libs.bundles.kotlin.analysisApi) { isTransitive = false }
+    implementation(projects.detektKotlinAnalysisApi)
     implementation(projects.detektParser)
     implementation(libs.kotlin.mainKts) {
         isTransitive = false
