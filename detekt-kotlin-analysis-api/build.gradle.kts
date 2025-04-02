@@ -6,7 +6,7 @@ plugins {
 }
 
 dependencies {
-    implementation(libs.bundles.kotlin.analysisApi) {
+    api(libs.bundles.kotlin.analysisApi) {
         // https://youtrack.jetbrains.com/issue/KT-61639/Standalone-Analysis-API-cannot-find-transitive-dependencies
         isTransitive = false
     }
