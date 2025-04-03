@@ -13,6 +13,7 @@ import org.jetbrains.kotlin.descriptors.VariableDescriptorWithAccessors
 import org.jetbrains.kotlin.descriptors.accessors
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtForExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
@@ -114,12 +115,30 @@ class RedundantSuspendModifier(config: Config) :
             }
             else -> {
                 val resolvedCall = getResolvedCall(bindingContext)
-                if ((resolvedCall?.resultingDescriptor as? FunctionDescriptor)?.isSuspend == true) {
-                    true
-                } else {
-                    val propertyDescriptor = resolvedCall?.resultingDescriptor as? PropertyDescriptor
-                    val s = propertyDescriptor?.fqNameSafe?.asString()
-                    s?.startsWith("kotlin.coroutines.") == true && s.endsWith(".coroutineContext")
+                when {
+                    // Check if the call itself is to a suspend function
+                    (resolvedCall?.resultingDescriptor as? FunctionDescriptor)?.isSuspend == true -> true
+
+                    // Check if it's a call expression with suspending arguments
+                    this is KtCallExpression -> {
+                        val hasSupendingArguments = valueArguments.any {
+                            it.getArgumentExpression()?.hasSuspendCalls() == true
+                        }
+
+                        val hasSuspendingCallChain = (calleeExpression as? KtDotQualifiedExpression)
+                            ?.selectorExpression
+                            ?.hasSuspendCalls() == true
+
+                        hasSupendingArguments || hasSuspendingCallChain
+                    }
+
+                    // Check for coroutine context access
+                    else -> {
+                        val propertyDescriptor = resolvedCall?.resultingDescriptor as? PropertyDescriptor
+                        val fqName = propertyDescriptor?.fqNameSafe?.asString()
+                        fqName?.startsWith("kotlin.coroutines.") == true &&
+                            fqName.endsWith(".coroutineContext")
+                    }
                 }
             }
         }
