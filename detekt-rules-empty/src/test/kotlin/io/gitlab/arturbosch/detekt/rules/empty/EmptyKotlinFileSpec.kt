@@ -21,7 +21,7 @@ class EmptyKotlinFileSpec {
         val codeWithPackageStatement = """
             package my.packagee
         """.trimIndent()
-        assertThat(subject.lint(codeWithPackageStatement))
+        assertThat(subject.lint(codeWithPackageStatement, compile = false))
             .singleElement()
             .hasSourceLocation(1, 1)
     }
@@ -29,8 +29,6 @@ class EmptyKotlinFileSpec {
     @Test
     fun `does not report file with code`() {
         val code = """
-            package my.packagee
-
             fun myFunction() {}
         """.trimIndent()
         assertThat(subject.lint(code)).isEmpty()
