@@ -11,7 +11,3 @@ dependencies {
         isTransitive = false
     }
 }
-
-tasks.shadowJar {
-    archiveClassifier = ""
-}
