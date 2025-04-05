@@ -39,7 +39,7 @@ object KotlinAnalysisApiEngine {
 
             val jdk = addModule(
                 buildKtSdkModule {
-                    addBinaryRootsFromJdkHome(Path(System.getProperty("java.home")), false)
+                    addBinaryRootsFromJdkHome(Path(System.getProperty("java.home")), true)
                     platform = targetPlatform
                     libraryName = "sdk"
                 }
