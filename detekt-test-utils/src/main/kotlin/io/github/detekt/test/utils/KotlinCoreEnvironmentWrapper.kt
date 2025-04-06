@@ -15,7 +15,7 @@ class KotlinCoreEnvironmentWrapper(
     val project: Project,
     val configuration: CompilerConfiguration,
     private val disposable: Disposable,
-    val env: KotlinEnvironmentContainer = KotlinEnvironmentContainer(project, configuration)
+    val env: KotlinEnvironmentContainer = KotlinEnvironmentContainer(project, configuration),
 ) {
 
     fun dispose() {
