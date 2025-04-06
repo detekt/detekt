@@ -11,14 +11,23 @@ public final class io/github/detekt/test/utils/FileExtensionKt {
 }
 
 public final class io/github/detekt/test/utils/KotlinCoreEnvironmentWrapper {
-	public fun <init> (Lorg/jetbrains/kotlin/cli/jvm/compiler/KotlinCoreEnvironment;Lcom/intellij/openapi/Disposable;)V
+	public fun <init> (Lcom/intellij/openapi/project/Project;Lorg/jetbrains/kotlin/config/CompilerConfiguration;Lcom/intellij/openapi/Disposable;Lio/github/detekt/test/utils/KotlinEnvironmentContainer;)V
+	public synthetic fun <init> (Lcom/intellij/openapi/project/Project;Lorg/jetbrains/kotlin/config/CompilerConfiguration;Lcom/intellij/openapi/Disposable;Lio/github/detekt/test/utils/KotlinEnvironmentContainer;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun dispose ()V
-	public final fun getEnv ()Lorg/jetbrains/kotlin/cli/jvm/compiler/KotlinCoreEnvironment;
+	public final fun getConfiguration ()Lorg/jetbrains/kotlin/config/CompilerConfiguration;
+	public final fun getEnv ()Lio/github/detekt/test/utils/KotlinEnvironmentContainer;
+	public final fun getProject ()Lcom/intellij/openapi/project/Project;
 }
 
 public final class io/github/detekt/test/utils/KotlinCoreEnvironmentWrapperKt {
 	public static final fun createEnvironment (Ljava/util/List;Ljava/util/List;)Lio/github/detekt/test/utils/KotlinCoreEnvironmentWrapper;
 	public static synthetic fun createEnvironment$default (Ljava/util/List;Ljava/util/List;ILjava/lang/Object;)Lio/github/detekt/test/utils/KotlinCoreEnvironmentWrapper;
+}
+
+public final class io/github/detekt/test/utils/KotlinEnvironmentContainer {
+	public fun <init> (Lcom/intellij/openapi/project/Project;Lorg/jetbrains/kotlin/config/CompilerConfiguration;)V
+	public final fun getConfiguration ()Lorg/jetbrains/kotlin/config/CompilerConfiguration;
+	public final fun getProject ()Lcom/intellij/openapi/project/Project;
 }
 
 public final class io/github/detekt/test/utils/KotlinScriptEngine {
