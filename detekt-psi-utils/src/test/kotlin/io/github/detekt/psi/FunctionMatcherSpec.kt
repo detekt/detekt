@@ -328,7 +328,7 @@ class FunctionMatcherSpec(private val env: KotlinCoreEnvironment) {
                     }
                 """.trimIndent()
             )
-            val bindingContext = env.createBindingContext(listOf(ktFile))
+            val bindingContext = createBindingContext(listOf(ktFile), env.configuration, env.project)
             val function = ktFile.findChildByClass(KtClass::class.java)!!
                 .findFunctionByName("bar") as KtNamedFunction
 
@@ -355,6 +355,6 @@ private fun buildKtFunction(
             $code
         """.trimIndent()
     )
-    val bindingContext = environment.createBindingContext(listOf(ktFile))
+    val bindingContext = createBindingContext(listOf(ktFile), environment.configuration, environment.project)
     return ktFile.findChildByClass(KtNamedFunction::class.java)!! to bindingContext
 }

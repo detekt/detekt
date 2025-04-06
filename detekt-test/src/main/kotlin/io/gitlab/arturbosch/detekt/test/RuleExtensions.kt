@@ -50,7 +50,13 @@ fun <T> T.lintWithContext(
     val additionalKtFiles = additionalContents.mapIndexed { index, additionalContent ->
         compileContentForTest(additionalContent, "AdditionalTest$index.kt")
     }
-    setBindingContext(environment.createBindingContext(listOf(ktFile) + additionalKtFiles))
+    setBindingContext(
+        createBindingContext(
+            listOf(ktFile) + additionalKtFiles,
+            environment.configuration,
+            environment.project
+        )
+    )
 
     return visitFile(ktFile, compilerResources).filterSuppressed(this)
 }

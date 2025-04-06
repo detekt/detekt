@@ -345,7 +345,7 @@ class CoroutineLaunchedInTestWithoutRunTestSpec(private val env: KotlinCoreEnvir
         """.trimIndent()
 
         val ktFile = compileContentForTest(code)
-        val bindingContext = env.createBindingContext(listOf(ktFile))
+        val bindingContext = createBindingContext(listOf(ktFile), env.configuration, env.project)
 
         val namedFunctions = ktFile
             .collectDescendantsOfType<KtNamedFunction>()
