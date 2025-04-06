@@ -58,7 +58,7 @@ internal object KtTestCompiler : KtCompiler() {
                 configuration,
                 EnvironmentConfigFiles.JVM_CONFIG_FILES
             )
-        return KotlinCoreEnvironmentWrapper(kotlinCoreEnvironment, parentDisposable)
+        return KotlinCoreEnvironmentWrapper(kotlinCoreEnvironment.project, kotlinCoreEnvironment.configuration, parentDisposable)
     }
 
     fun createKtFile(@Language("kotlin") content: String, path: Path): KtFile =
