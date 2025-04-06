@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.test
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.github.detekt.test.utils.KotlinScriptEngine
 import io.github.detekt.test.utils.compileContentForTest
 import io.gitlab.arturbosch.detekt.api.CompilerResources
@@ -10,7 +11,6 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.core.suppressors.isSuppressedBy
 import org.intellij.lang.annotations.Language
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactoryImpl
@@ -34,7 +34,7 @@ fun Rule.lint(
 }
 
 fun <T> T.lintWithContext(
-    environment: KotlinCoreEnvironment,
+    environment: KotlinEnvironmentContainer,
     @Language("kotlin") content: String,
     @Language("kotlin") vararg additionalContents: String,
     compilerResources: CompilerResources = CompilerResources(
