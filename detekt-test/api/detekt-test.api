@@ -33,6 +33,7 @@ public final class io/gitlab/arturbosch/detekt/test/FindingsAssertionsKt {
 }
 
 public final class io/gitlab/arturbosch/detekt/test/KotlinCoreEnvironmentExtensionsKt {
+	public static final fun createBindingContext (Ljava/util/List;Lorg/jetbrains/kotlin/config/CompilerConfiguration;Lcom/intellij/openapi/project/Project;)Lorg/jetbrains/kotlin/resolve/BindingContext;
 	public static final fun createBindingContext (Lorg/jetbrains/kotlin/cli/jvm/compiler/KotlinCoreEnvironment;Ljava/util/List;)Lorg/jetbrains/kotlin/resolve/BindingContext;
 }
 
