@@ -1,13 +1,14 @@
 package io.github.detekt.test.utils
 
+import com.intellij.mock.MockProject
 import com.intellij.openapi.util.Disposer
 import com.intellij.openapi.util.text.StringUtilRt
 import io.github.detekt.parser.KtCompiler
 import kotlinx.coroutines.CoroutineScope
 import org.intellij.lang.annotations.Language
+import org.jetbrains.kotlin.analysis.api.standalone.buildStandaloneAnalysisAPISession
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
-import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
+import org.jetbrains.kotlin.cli.jvm.compiler.CliTraceHolder
 import org.jetbrains.kotlin.cli.jvm.config.addJavaSourceRoots
 import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoot
 import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoots
@@ -17,6 +18,7 @@ import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.config.JVMConfigurationKeys
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtPsiFactory
+import org.jetbrains.kotlin.resolve.CodeAnalyzerInitializer
 import java.io.File
 import java.nio.file.Path
 import kotlin.io.path.name
@@ -52,13 +54,17 @@ internal object KtTestCompiler : KtCompiler() {
         }
 
         val parentDisposable = Disposer.newDisposable()
-        val kotlinCoreEnvironment =
-            KotlinCoreEnvironment.createForTests(
-                parentDisposable,
-                configuration,
-                EnvironmentConfigFiles.JVM_CONFIG_FILES
-            )
-        return KotlinCoreEnvironmentWrapper(kotlinCoreEnvironment.project, kotlinCoreEnvironment.configuration, parentDisposable)
+
+        val analysisSession = buildStandaloneAnalysisAPISession(parentDisposable) {
+            @Suppress("DEPRECATION") // Required until fully transitioned to setting up Kotlin Analysis API session
+            buildKtModuleProviderByCompilerConfiguration(configuration)
+        }
+
+        // Required to set up BindingContext with TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration
+        val traceHolder = CliTraceHolder(analysisSession.project)
+        (analysisSession.project as MockProject).registerService(CodeAnalyzerInitializer::class.java, traceHolder)
+
+        return KotlinCoreEnvironmentWrapper(analysisSession.project, configuration, parentDisposable)
     }
 
     fun createKtFile(@Language("kotlin") content: String, path: Path): KtFile =
