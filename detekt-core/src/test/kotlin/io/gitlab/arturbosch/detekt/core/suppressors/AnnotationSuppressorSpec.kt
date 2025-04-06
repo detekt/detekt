@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.core.suppressors
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.github.detekt.test.utils.compileContentForTest
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.createBindingContext
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtParameter
@@ -18,7 +18,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
 @KotlinCoreEnvironmentTest
-class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
+class AnnotationSuppressorSpec(private val env: KotlinEnvironmentContainer) {
 
     @Nested
     inner class AnnotationSuppressorFactory {

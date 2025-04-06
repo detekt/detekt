@@ -1,17 +1,17 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.intellij.lang.annotations.Language
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
+class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
     val subject = CanBeNonNullable(Config.empty)
 
     @Nested
