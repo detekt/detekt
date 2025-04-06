@@ -1,17 +1,17 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lintWithContext
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 private const val METHODS = "methods"
 
 @KotlinCoreEnvironmentTest
-class ForbiddenNamedParamSpec(val env: KotlinCoreEnvironment) {
+class ForbiddenNamedParamSpec(val env: KotlinEnvironmentContainer) {
     @Test
     fun `should report nothing when methods are blank`() {
         val code = """

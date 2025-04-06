@@ -1,15 +1,15 @@
 package io.gitlab.arturbosch.detekt.rules.style.movelambdaout
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lintWithContext
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Test
 
 // Source https://github.com/JetBrains/intellij-community/tree/master/plugins/kotlin/idea/tests/testData/inspectionsLocal/moveLambdaOutsideParentheses
 @KotlinCoreEnvironmentTest
-class UnnecessaryBracesAroundTrailingLambdaSpec(val env: KotlinCoreEnvironment) {
+class UnnecessaryBracesAroundTrailingLambdaSpec(val env: KotlinEnvironmentContainer) {
     private val subject = UnnecessaryBracesAroundTrailingLambda(Config.empty)
 
     @Test
