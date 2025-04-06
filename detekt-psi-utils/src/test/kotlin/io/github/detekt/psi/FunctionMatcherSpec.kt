@@ -1,10 +1,10 @@
 package io.github.detekt.psi
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.github.detekt.test.utils.compileContentForTest
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.createBindingContext
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.findFunctionByName
@@ -18,7 +18,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 
 @KotlinCoreEnvironmentTest
-class FunctionMatcherSpec(private val env: KotlinCoreEnvironment) {
+class FunctionMatcherSpec(private val env: KotlinEnvironmentContainer) {
 
     @TestFactory
     @Suppress("LongMethod")
@@ -345,7 +345,7 @@ private class TestCase(
 )
 
 private fun buildKtFunction(
-    environment: KotlinCoreEnvironment,
+    environment: KotlinEnvironmentContainer,
     code: String,
     includePackage: Boolean = true,
 ): Pair<KtNamedFunction, BindingContext> {
