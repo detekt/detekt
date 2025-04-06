@@ -317,7 +317,7 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
             )
 
             val bindings = listOf(
-                env.createBindingContext(listOf(root, *composableFiles)),
+                createBindingContext(listOf(root, *composableFiles), env.configuration, env.project),
                 BindingContext.EMPTY,
             )
 
@@ -414,7 +414,7 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
 
             val suppressor = annotationSuppressorFactory(
                 buildRule("ignoreAnnotated" to listOf("androidx.compose.runtime.Composable")),
-                env.createBindingContext(listOf(root, *composableFiles)),
+                createBindingContext(listOf(root, *composableFiles), env.configuration, env.project),
             )!!
 
             val ktFunction = root.findChildByClass(KtFunction::class.java)!!
@@ -435,7 +435,7 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
 
             val suppressor = annotationSuppressorFactory(
                 buildRule("ignoreAnnotated" to listOf("androidx.compose.runtime.Composable")),
-                env.createBindingContext(listOf(root, *composableFiles)),
+                createBindingContext(listOf(root, *composableFiles), env.configuration, env.project),
             )!!
 
             val ktFunction = root.findChildByClass(KtFunction::class.java)!!
@@ -458,7 +458,7 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
 
             val suppressor = annotationSuppressorFactory(
                 buildRule("ignoreAnnotated" to listOf("androidx.compose.runtime.Composable")),
-                env.createBindingContext(listOf(root, *composableFiles)),
+                createBindingContext(listOf(root, *composableFiles), env.configuration, env.project),
             )!!
 
             val ktFunction = root.findChildByClass(KtFunction::class.java)!!
@@ -501,7 +501,7 @@ class AnnotationSuppressorSpec(private val env: KotlinCoreEnvironment) {
         fun `suppress if it has parameters with type solving`() {
             val suppressor = annotationSuppressorFactory(
                 buildRule("ignoreAnnotated" to listOf("Preview")),
-                env.createBindingContext(listOf(root, *composableFiles)),
+                createBindingContext(listOf(root, *composableFiles), env.configuration, env.project),
             )!!
 
             val ktFunction = root.findChildByClass(KtFunction::class.java)!!
