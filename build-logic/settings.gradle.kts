@@ -1,7 +1,7 @@
 rootProject.name = "build-logic"
 
 plugins {
-    id("com.gradle.develocity") version "3.19.2"
+    id("com.gradle.develocity") version "4.0"
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.10.0"
 }
 
