@@ -1,6 +1,5 @@
 package io.github.detekt.test.utils
 
-import com.intellij.mock.MockProject
 import com.intellij.openapi.util.Disposer
 import com.intellij.openapi.util.text.StringUtilRt
 import io.github.detekt.parser.KtCompiler
@@ -58,11 +57,10 @@ internal object KtTestCompiler : KtCompiler() {
         val analysisSession = buildStandaloneAnalysisAPISession(parentDisposable) {
             @Suppress("DEPRECATION") // Required until fully transitioned to setting up Kotlin Analysis API session
             buildKtModuleProviderByCompilerConfiguration(configuration)
-        }
 
-        // Required to set up BindingContext with TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration
-        val traceHolder = CliTraceHolder(analysisSession.project)
-        (analysisSession.project as MockProject).registerService(CodeAnalyzerInitializer::class.java, traceHolder)
+            // Required to set up BindingContext with TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration
+            registerProjectService(CodeAnalyzerInitializer::class.java, CliTraceHolder(project))
+        }
 
         return KotlinCoreEnvironmentWrapper(analysisSession.project, configuration, parentDisposable)
     }
