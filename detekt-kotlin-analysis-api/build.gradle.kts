@@ -10,6 +10,12 @@ dependencies {
         // https://youtrack.jetbrains.com/issue/KT-61639/Standalone-Analysis-API-cannot-find-transitive-dependencies
         isTransitive = false
     }
+    implementation(libs.caffeine) {
+        attributes {
+            // Remove if
+            attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
+        }
+    }
 }
 
 java {
