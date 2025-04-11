@@ -7,7 +7,7 @@ import org.jetbrains.kotlin.psi.KtFile
 typealias ParsingStrategy = (settings: ProcessingSettings) -> List<KtFile>
 
 val inputPathsToKtFiles: ParsingStrategy = { settings ->
-    val compiler = KtCompiler(settings.environment)
+    val compiler = KtCompiler(settings.environment.project)
     settings.spec.projectSpec.inputPaths.map { path ->
         compiler.compile(path)
     }

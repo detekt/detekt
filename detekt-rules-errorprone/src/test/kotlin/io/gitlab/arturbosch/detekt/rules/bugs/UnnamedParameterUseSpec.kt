@@ -1,16 +1,16 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lintWithContext
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class UnnamedParameterUseSpec(private val env: KotlinCoreEnvironment) {
+class UnnamedParameterUseSpec(private val env: KotlinEnvironmentContainer) {
     private val subject = UnnamedParameterUse(Config.empty)
 
     @Test
