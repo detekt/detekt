@@ -1,15 +1,11 @@
 package io.github.detekt.parser
 
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.util.Disposer
 import com.intellij.openapi.vfs.VirtualFileManager
 import com.intellij.pom.PomModel
 import com.intellij.psi.util.PsiUtilCore
-import org.jetbrains.kotlin.analysis.api.standalone.base.projectStructure.StandaloneProjectFactory
-import org.jetbrains.kotlin.cli.common.CliModuleVisibilityManagerImpl
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreApplicationEnvironmentMode
-import org.jetbrains.kotlin.cli.jvm.compiler.setupIdeaStandaloneExecution
-import org.jetbrains.kotlin.load.kotlin.ModuleVisibilityManager
+import org.jetbrains.kotlin.analysis.api.standalone.buildStandaloneAnalysisAPISession
+import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
 import kotlin.io.path.isRegularFile
@@ -31,16 +27,9 @@ open class KtCompiler(
     }
 }
 
-private fun createDefaultProject(): Project {
-    setupIdeaStandaloneExecution()
+private fun createDefaultProject(): Project = buildStandaloneAnalysisAPISession {
+    @Suppress("DEPRECATION") // Required until fully transitioned to setting up Kotlin Analysis API session
+    buildKtModuleProviderByCompilerConfiguration(CompilerConfiguration())
 
-    val project = StandaloneProjectFactory.createProjectEnvironment(
-        Disposer.newDisposable(),
-        KotlinCoreApplicationEnvironmentMode.fromUnitTestModeFlag(false)
-    ).project
-
-    project.registerService(PomModel::class.java, DetektPomModel)
-    project.registerService(ModuleVisibilityManager::class.java, CliModuleVisibilityManagerImpl(true))
-
-    return project
-}
+    registerProjectService(PomModel::class.java, DetektPomModel)
+}.project
