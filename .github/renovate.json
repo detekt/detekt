@@ -21,6 +21,12 @@
       ],
     },
     {
+      "groupName": "Develocity",
+      "matchPackageNames": [
+        "com.gradle.develocity:**"
+      ]
+    },
+    {
       "groupName": "Dokka",
       "matchPackageNames": [
         "org.jetbrains.dokka:**"
