@@ -11,3 +11,7 @@ dependencies {
         isTransitive = false
     }
 }
+
+java {
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
