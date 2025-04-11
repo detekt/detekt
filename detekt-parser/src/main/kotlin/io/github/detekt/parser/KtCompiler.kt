@@ -5,7 +5,9 @@ import com.intellij.openapi.vfs.VirtualFileManager
 import com.intellij.pom.PomModel
 import com.intellij.psi.util.PsiUtilCore
 import org.jetbrains.kotlin.analysis.api.standalone.buildStandaloneAnalysisAPISession
+import org.jetbrains.kotlin.cli.common.CliModuleVisibilityManagerImpl
 import org.jetbrains.kotlin.config.CompilerConfiguration
+import org.jetbrains.kotlin.load.kotlin.ModuleVisibilityManager
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
 import kotlin.io.path.isRegularFile
@@ -32,4 +34,5 @@ private fun createDefaultProject(): Project = buildStandaloneAnalysisAPISession 
     buildKtModuleProviderByCompilerConfiguration(CompilerConfiguration())
 
     registerProjectService(PomModel::class.java, DetektPomModel)
+    registerProjectService(ModuleVisibilityManager::class.java, CliModuleVisibilityManagerImpl(true))
 }.project
