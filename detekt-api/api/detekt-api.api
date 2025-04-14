@@ -266,6 +266,9 @@ public final class io/gitlab/arturbosch/detekt/api/ReportingExtension$DefaultImp
 	public static fun transformIssues (Lio/gitlab/arturbosch/detekt/api/ReportingExtension;Ljava/util/List;)Ljava/util/List;
 }
 
+public abstract interface class io/gitlab/arturbosch/detekt/api/RequiresAnalysisApi {
+}
+
 public abstract interface class io/gitlab/arturbosch/detekt/api/RequiresFullAnalysis {
 }
 
