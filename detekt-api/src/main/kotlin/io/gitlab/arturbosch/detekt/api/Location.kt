@@ -38,7 +38,7 @@ class Location(
                 sourceLocation,
                 endSourceLocation,
                 textLocation,
-                Path((element.containingFile as KtFile).virtualFilePath)
+                Path(element.containingFile.viewProvider.virtualFile.path)
             )
         }
 
