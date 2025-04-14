@@ -10,6 +10,13 @@ dependencies {
         // https://youtrack.jetbrains.com/issue/KT-61639/Standalone-Analysis-API-cannot-find-transitive-dependencies
         isTransitive = false
     }
+    implementation(libs.caffeine) {
+        attributes {
+            // https://github.com/ben-manes/caffeine/issues/716
+            // Remove on upgrade to Caffeine 3.x or if https://youtrack.jetbrains.com/issue/KT-73751 is fixed
+            attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
+        }
+    }
 }
 
 java {
