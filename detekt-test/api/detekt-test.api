@@ -32,6 +32,11 @@ public final class io/gitlab/arturbosch/detekt/test/FindingsAssertionsKt {
 	public static final fun assertThat (Ljava/util/List;)Lio/gitlab/arturbosch/detekt/test/FindingsAssert;
 }
 
+public final class io/gitlab/arturbosch/detekt/test/KotlinAnalysisApiEngine {
+	public static final field INSTANCE Lio/gitlab/arturbosch/detekt/test/KotlinAnalysisApiEngine;
+	public final fun compile (Ljava/lang/String;[Ljava/lang/String;)Lorg/jetbrains/kotlin/psi/KtFile;
+}
+
 public final class io/gitlab/arturbosch/detekt/test/KotlinCoreEnvironmentExtensionsKt {
 	public static final fun createBindingContext (Ljava/util/List;Lorg/jetbrains/kotlin/config/CompilerConfiguration;Lcom/intellij/openapi/project/Project;)Lorg/jetbrains/kotlin/resolve/BindingContext;
 }
@@ -47,7 +52,9 @@ public final class io/gitlab/arturbosch/detekt/test/RuleExtensionsKt {
 	public static synthetic fun lint$default (Lio/gitlab/arturbosch/detekt/api/Rule;Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/CompilerResources;ZILjava/lang/Object;)Ljava/util/List;
 	public static synthetic fun lint$default (Lio/gitlab/arturbosch/detekt/api/Rule;Lorg/jetbrains/kotlin/psi/KtFile;Lio/gitlab/arturbosch/detekt/api/CompilerResources;ILjava/lang/Object;)Ljava/util/List;
 	public static final fun lintWithContext (Lio/gitlab/arturbosch/detekt/api/Rule;Lio/github/detekt/test/utils/KotlinEnvironmentContainer;Ljava/lang/String;[Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/CompilerResources;Z)Ljava/util/List;
+	public static final fun lintWithContext (Lio/gitlab/arturbosch/detekt/api/Rule;Lio/github/detekt/test/utils/KotlinEnvironmentContainer;Ljava/lang/String;[Ljava/lang/String;Z)Ljava/util/List;
 	public static synthetic fun lintWithContext$default (Lio/gitlab/arturbosch/detekt/api/Rule;Lio/github/detekt/test/utils/KotlinEnvironmentContainer;Ljava/lang/String;[Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/CompilerResources;ZILjava/lang/Object;)Ljava/util/List;
+	public static synthetic fun lintWithContext$default (Lio/gitlab/arturbosch/detekt/api/Rule;Lio/github/detekt/test/utils/KotlinEnvironmentContainer;Ljava/lang/String;[Ljava/lang/String;ZILjava/lang/Object;)Ljava/util/List;
 }
 
 public final class io/gitlab/arturbosch/detekt/test/TestConfig : io/gitlab/arturbosch/detekt/api/Config {
