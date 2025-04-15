@@ -1,20 +1,43 @@
 package io.github.detekt.parser
 
-import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFileManager
 import com.intellij.pom.PomModel
 import com.intellij.psi.util.PsiUtilCore
 import org.jetbrains.kotlin.analysis.api.standalone.buildStandaloneAnalysisAPISession
+import org.jetbrains.kotlin.analysis.project.structure.builder.buildKtSourceModule
 import org.jetbrains.kotlin.cli.common.CliModuleVisibilityManagerImpl
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.load.kotlin.ModuleVisibilityManager
+import org.jetbrains.kotlin.platform.jvm.JvmPlatforms
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
 import kotlin.io.path.isRegularFile
 
 open class KtCompiler(
-    protected val project: Project = createDefaultProject(),
+    protected val paths: Collection<Path> = emptySet(),
 ) {
+    val analysisSession = buildStandaloneAnalysisAPISession {
+        @Suppress("DEPRECATION") // Required until fully transitioned to setting up Kotlin Analysis API session
+        buildKtModuleProviderByCompilerConfiguration(CompilerConfiguration())
+
+        buildKtModuleProvider {
+            val targetPlatform = JvmPlatforms.defaultJvmPlatform
+            platform = targetPlatform
+
+            addModule(
+                buildKtSourceModule {
+                    addSourceRoots(paths)
+                    platform = targetPlatform
+                    moduleName = "source"
+                }
+            )
+        }
+
+        registerProjectService(PomModel::class.java, DetektPomModel)
+        registerProjectService(ModuleVisibilityManager::class.java, CliModuleVisibilityManagerImpl(true))
+    }
+
+    protected val project = analysisSession.project
 
     fun compile(path: Path): KtFile {
         require(path.isRegularFile()) { "Given path '$path' should be a regular file!" }
@@ -28,11 +51,3 @@ open class KtCompiler(
         }
     }
 }
-
-private fun createDefaultProject(): Project = buildStandaloneAnalysisAPISession {
-    @Suppress("DEPRECATION") // Required until fully transitioned to setting up Kotlin Analysis API session
-    buildKtModuleProviderByCompilerConfiguration(CompilerConfiguration())
-
-    registerProjectService(PomModel::class.java, DetektPomModel)
-    registerProjectService(ModuleVisibilityManager::class.java, CliModuleVisibilityManagerImpl(true))
-}.project
