@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -14,7 +14,7 @@ class ExplicitCollectionElementAccessMethodSpec {
 
     @Nested
     @KotlinCoreEnvironmentTest
-    inner class WithDefaultSources(val env: KotlinCoreEnvironment) {
+    inner class WithDefaultSources(val env: KotlinEnvironmentContainer) {
         @Nested
         inner class `Kotlin map` {
 
@@ -574,7 +574,7 @@ class ExplicitCollectionElementAccessMethodSpec {
 
     @Nested
     @KotlinCoreEnvironmentTest(additionalJavaSourcePaths = ["java"])
-    inner class WithAdditionalJavaSources(val env: KotlinCoreEnvironment) {
+    inner class WithAdditionalJavaSources(val env: KotlinEnvironmentContainer) {
         @Test
         fun `does not report setters defined in java which are unlikely to be collection accessors`() {
             val code = """

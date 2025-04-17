@@ -1,18 +1,18 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lintWithContext
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 private const val EXCLUDE_ANNOTATED_CLASSES = "excludeAnnotatedClasses"
 
 @KotlinCoreEnvironmentTest
-class AbstractClassCanBeConcreteClassSpec(val env: KotlinCoreEnvironment) {
+class AbstractClassCanBeConcreteClassSpec(val env: KotlinEnvironmentContainer) {
     val subject = AbstractClassCanBeConcreteClass(TestConfig(EXCLUDE_ANNOTATED_CLASSES to listOf("Deprecated")))
 
     @Nested

@@ -1,11 +1,11 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lintWithContext
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -13,7 +13,7 @@ class IgnoredReturnValueSpec {
 
     @Nested
     @KotlinCoreEnvironmentTest
-    inner class `default config with non-annotated return values`(private val env: KotlinCoreEnvironment) {
+    inner class `default config with non-annotated return values`(private val env: KotlinEnvironmentContainer) {
         private val subject = IgnoredReturnValue(Config.empty)
 
         @Test
@@ -198,7 +198,7 @@ class IgnoredReturnValueSpec {
 
     @Nested
     @KotlinCoreEnvironmentTest
-    inner class `default config with annotated return values`(private val env: KotlinCoreEnvironment) {
+    inner class `default config with annotated return values`(private val env: KotlinEnvironmentContainer) {
         private val subject = IgnoredReturnValue(Config.empty)
 
         @Test
@@ -826,7 +826,7 @@ class IgnoredReturnValueSpec {
 
     @Nested
     @KotlinCoreEnvironmentTest
-    inner class `custom annotation config`(private val env: KotlinCoreEnvironment) {
+    inner class `custom annotation config`(private val env: KotlinEnvironmentContainer) {
         val subject = IgnoredReturnValue(
             TestConfig("returnValueAnnotations" to listOf("*.CustomReturn"))
         )
@@ -889,7 +889,7 @@ class IgnoredReturnValueSpec {
 
     @Nested
     @KotlinCoreEnvironmentTest
-    inner class `restrict to config`(private val env: KotlinCoreEnvironment) {
+    inner class `restrict to config`(private val env: KotlinEnvironmentContainer) {
         val subject = IgnoredReturnValue(TestConfig("restrictToConfig" to false))
 
         @Test
@@ -1081,7 +1081,7 @@ class IgnoredReturnValueSpec {
 
     @Nested
     @KotlinCoreEnvironmentTest
-    inner class `return value types default config`(private val env: KotlinCoreEnvironment) {
+    inner class `return value types default config`(private val env: KotlinEnvironmentContainer) {
         private val subject = IgnoredReturnValue(Config.empty)
 
         @Test
@@ -1202,7 +1202,7 @@ class IgnoredReturnValueSpec {
 
     @Nested
     @KotlinCoreEnvironmentTest(additionalJavaSourcePaths = ["java"])
-    inner class `Java sources`(val env: KotlinCoreEnvironment) {
+    inner class `Java sources`(val env: KotlinEnvironmentContainer) {
         private val subject = IgnoredReturnValue(Config.empty)
 
         @Test

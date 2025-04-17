@@ -163,6 +163,9 @@ class UnusedImport(config: Config) :
                 bindingContext[BindingContext.SHORT_REFERENCE_TO_COMPANION_OBJECT, this]
                     ?: bindingContext[BindingContext.REFERENCE_TARGET, this]
             return descriptor?.getImportableDescriptor()?.fqNameOrNull()
+//            analyze(this) {
+//                return this@fqNameOrNull.expressionType?.expandedSymbol?.classId?.asSingleFqName()
+//            }
         }
     }
 

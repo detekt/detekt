@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules
 
 import io.github.detekt.test.utils.KotlinCoreEnvironmentWrapper
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.github.detekt.test.utils.createEnvironment
 import io.github.detekt.test.utils.resourceAsPath
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.api.extension.ParameterContext
@@ -24,7 +24,7 @@ internal class KotlinEnvironmentResolver : ParameterResolver {
         set(value) = getStore(NAMESPACE).put(WRAPPER_KEY, value)
 
     override fun supportsParameter(parameterContext: ParameterContext, extensionContext: ExtensionContext): Boolean =
-        parameterContext.parameter.type == KotlinCoreEnvironment::class.java
+        parameterContext.parameter.type == KotlinEnvironmentContainer::class.java
 
     override fun resolveParameter(parameterContext: ParameterContext, extensionContext: ExtensionContext): Any {
         val closeableWrapper = extensionContext.wrapper

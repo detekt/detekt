@@ -1,15 +1,15 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lintWithContext
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class UseRequireSpec(val env: KotlinCoreEnvironment) {
+class UseRequireSpec(val env: KotlinEnvironmentContainer) {
     val subject = UseRequire(Config.empty)
 
     @Test

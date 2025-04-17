@@ -60,7 +60,6 @@ caffeine = { module = "com.github.ben-manes.caffeine:caffeine", version = "2.9.3
 
 [bundles]
 kotlin-analysisApi = [
-    "caffeine",
     "kotlin-analysisApiPlatformInterface",
     "kotlin-analysisApiK2",
     "kotlin-analysisApi",

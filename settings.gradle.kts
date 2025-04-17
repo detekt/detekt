@@ -77,5 +77,6 @@ buildCache {
 dependencyResolutionManagement {
     repositories {
         mavenCentral()
+        maven("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-ide-plugin-dependencies")
     }
 }

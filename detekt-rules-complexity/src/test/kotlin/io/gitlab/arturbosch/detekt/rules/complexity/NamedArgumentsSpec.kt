@@ -1,15 +1,15 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class NamedArgumentsSpec(val env: KotlinCoreEnvironment) {
+class NamedArgumentsSpec(val env: KotlinEnvironmentContainer) {
     private val defaultAllowedArguments = 2
     private val defaultConfig = TestConfig("allowedArguments" to defaultAllowedArguments)
     val subject = NamedArguments(defaultConfig)
