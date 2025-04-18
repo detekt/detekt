@@ -24,7 +24,7 @@ class SpacingAfterPackageDeclarationSpec {
 
     @Test
     fun `has no import declaration`() {
-        val code = "package test\n\nclass A {}"
+        val code = "class A {}"
         assertThat(subject.lint(code)).isEmpty()
     }
 
@@ -103,8 +103,6 @@ class SpacingAfterPackageDeclarationSpec {
     @Test
     fun `has multiple imports in file`() {
         val code = """
-            package com.my
-            
             import kotlin.collections.List
             import kotlin.collections.Set
             
@@ -116,8 +114,6 @@ class SpacingAfterPackageDeclarationSpec {
     @Test
     fun `has no class`() {
         val code = """
-            package com.my.has.no.clazz
-            
             import kotlin.collections.List
             import kotlin.collections.Set
         """.trimIndent()

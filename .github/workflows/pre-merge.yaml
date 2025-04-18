@@ -94,6 +94,26 @@ jobs:
       - name: Build and compile test snippets
         run: ./gradlew test -Pcompile-test-snippets=true
 
+  compile-test-snippets-aa:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+
+      - name: Setup Java
+        uses: actions/setup-java@3a4f6e1af504cf6a31855fa899c6aa5355ba6c12 # v4
+        with:
+          java-version: 21
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@06832c7b30a0129d7fb559bcc6e43d26f6374244 # v4
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+
+      - name: Build and compile test snippets
+        run: ./gradlew test -Pcompile-test-snippets-aa=true
+
   warnings-as-errors:
     runs-on: ubuntu-latest
     steps:
