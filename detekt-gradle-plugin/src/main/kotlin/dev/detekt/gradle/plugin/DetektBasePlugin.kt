@@ -42,7 +42,11 @@ class DetektBasePlugin : Plugin<Project> {
             allRules.convention(DEFAULT_ALL_RULES_VALUE)
             buildUponDefaultConfig.convention(DEFAULT_BUILD_UPON_DEFAULT_CONFIG_VALUE)
             disableDefaultRuleSets.convention(DEFAULT_DISABLE_RULESETS_VALUE)
-            autoCorrect.convention(DEFAULT_AUTO_CORRECT_VALUE)
+            autoCorrect.convention(
+                project.providers.gradleProperty(ENABLE_AUTOCORRECT)
+                    .map { it.toBoolean() }
+                    .orElse(DEFAULT_AUTO_CORRECT_VALUE)
+            )
             reportsDir.convention(
                 project.extensions.getByType(ReportingExtension::class.java).baseDirectory.dir("detekt")
             )
@@ -140,3 +144,4 @@ class DetektBasePlugin : Plugin<Project> {
 }
 
 internal const val CONFIGURATION_DETEKT_PLUGINS = "detektPlugins"
+internal const val ENABLE_AUTOCORRECT = "detekt.default.autocorrect"
