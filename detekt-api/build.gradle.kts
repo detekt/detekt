@@ -19,6 +19,10 @@ detekt {
     config.from("config/detekt.yml")
 }
 
+tasks.detektTest {
+    debug = true
+}
+
 val javaComponent = components["java"] as AdhocComponentWithVariants
 listOf(configurations.testFixturesApiElements, configurations.testFixturesRuntimeElements).forEach { config ->
     config.configure {
