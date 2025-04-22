@@ -14,7 +14,12 @@ dependencies {
     implementation(libs.kotlin.analysisApiPlatformInterface) { isTransitive = false }
     implementation(libs.kotlin.lowLevelApiFir) { isTransitive = false }
     implementation(libs.kotlin.symbolLightClasses) { isTransitive = false }
-    implementation(libs.caffeine)
+    implementation(libs.caffeine) {
+        attributes {
+            // https://github.com/ben-manes/caffeine/issues/716
+            // Remove on upgrade to Caffeine 3.x or if https://youtrack.jetbrains.com/issue/KT-73751 is fixed
+            attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
+        }
     }
 }
 
