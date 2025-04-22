@@ -23,10 +23,6 @@ dependencies {
     }
 }
 
-tasks.shadowJar {
-    archiveClassifier = ""
-}
-
 java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
