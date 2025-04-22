@@ -6,9 +6,15 @@ plugins {
 }
 
 dependencies {
-    implementation(libs.bundles.kotlin.analysisApi) {
-        // https://youtrack.jetbrains.com/issue/KT-61639/Standalone-Analysis-API-cannot-find-transitive-dependencies
-        isTransitive = false
+    // Exclude transitive dependencies due to https://youtrack.jetbrains.com/issue/KT-61639
+    implementation(libs.kotlin.analysisApi) { isTransitive = false }
+    implementation(libs.kotlin.analysisApiStandalone) { isTransitive = false }
+    implementation(libs.kotlin.analysisApiImplBase) { isTransitive = false }
+    implementation(libs.kotlin.analysisApiK2) { isTransitive = false }
+    implementation(libs.kotlin.analysisApiPlatformInterface) { isTransitive = false }
+    implementation(libs.kotlin.lowLevelApiFir) { isTransitive = false }
+    implementation(libs.kotlin.symbolLightClasses) { isTransitive = false }
+    implementation(libs.caffeine)
     }
 }
 
