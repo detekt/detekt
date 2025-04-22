@@ -37,3 +37,11 @@ configurations.shadowRuntimeElements {
         attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, JavaVersion.VERSION_1_8.majorVersion.toInt())
     }
 }
+
+val javaComponent = components["java"] as AdhocComponentWithVariants
+javaComponent.withVariantsFromConfiguration(configurations["apiElements"]) {
+    skip()
+}
+javaComponent.withVariantsFromConfiguration(configurations["runtimeElements"]) {
+    skip()
+}
