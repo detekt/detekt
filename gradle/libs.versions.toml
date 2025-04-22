@@ -58,17 +58,5 @@ kotlin-analysisApiImplBase = { module = "org.jetbrains.kotlin:analysis-api-impl-
 # Can likely be removed in future - https://youtrack.jetbrains.com/issue/KT-73751/Analysis-API-Caffeine-dependency
 caffeine = { module = "com.github.ben-manes.caffeine:caffeine", version = "2.9.3" }
 
-[bundles]
-kotlin-analysisApi = [
-    "caffeine",
-    "kotlin-analysisApiPlatformInterface",
-    "kotlin-analysisApiK2",
-    "kotlin-analysisApi",
-    "kotlin-analysisApiStandalone",
-    "kotlin-lowLevelApiFir",
-    "kotlin-symbolLightClasses",
-    "kotlin-analysisApiImplBase",
-]
-
 [plugins]
 # Do not declare plugins here - see https://github.com/detekt/detekt/pull/7088.
