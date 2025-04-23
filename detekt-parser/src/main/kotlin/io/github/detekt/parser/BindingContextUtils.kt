@@ -1,5 +1,6 @@
 package io.github.detekt.parser
 
+import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.impl.jar.CoreJarFileSystem
 import com.intellij.openapi.vfs.local.CoreLocalFileSystem
 import org.jetbrains.kotlin.analysis.api.standalone.base.projectStructure.StandaloneProjectFactory
@@ -8,17 +9,18 @@ import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSourceLocation
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.cli.common.messages.PlainTextMessageRenderer
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.cli.jvm.compiler.NoScopeRecordCliBindingTrace
 import org.jetbrains.kotlin.cli.jvm.compiler.TopDownAnalyzerFacadeForJVM
 import org.jetbrains.kotlin.cli.jvm.config.jvmClasspathRoots
 import org.jetbrains.kotlin.cli.jvm.index.JavaRoot
+import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 
 fun generateBindingContext(
-    environment: KotlinCoreEnvironment,
+    project: Project,
+    configuration: CompilerConfiguration,
     files: List<KtFile>,
     debugPrinter: (() -> String) -> Unit,
     warningPrinter: (String) -> Unit,
@@ -31,34 +33,34 @@ fun generateBindingContext(
 
     val analyzer = AnalyzerWithCompilerReport(
         messageCollector,
-        environment.configuration.languageVersionSettings,
+        configuration.languageVersionSettings,
         false,
     )
 
     val vfsFs = CoreJarFileSystem()
     val coreLocalFilesystem = CoreLocalFileSystem()
 
-    val jarJavaRoots = environment.configuration.jvmClasspathRoots
+    val jarJavaRoots = configuration.jvmClasspathRoots
         .filter { it.extension == "jar" }
         .mapNotNull { vfsFs.findFileByPath("${it.absolutePath}!/") }
         .map { JavaRoot(it, JavaRoot.RootType.BINARY) }
 
-    val dirJavaRoots = environment.configuration.jvmClasspathRoots
+    val dirJavaRoots = configuration.jvmClasspathRoots
         .filter { it.extension != "jar" }
         .mapNotNull { coreLocalFilesystem.findFileByPath("${it.absolutePath}") }
         .map { JavaRoot(it, JavaRoot.RootType.BINARY) }
 
     val packagePartProvider = StandaloneProjectFactory.createPackagePartsProvider(
         jarJavaRoots + dirJavaRoots,
-        environment.configuration.languageVersionSettings
+        configuration.languageVersionSettings
     )
 
     analyzer.analyzeAndReport(files) {
         TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration(
-            environment.project,
+            project,
             files,
-            NoScopeRecordCliBindingTrace(environment.project),
-            environment.configuration,
+            NoScopeRecordCliBindingTrace(project),
+            configuration,
             packagePartProvider
         )
     }
