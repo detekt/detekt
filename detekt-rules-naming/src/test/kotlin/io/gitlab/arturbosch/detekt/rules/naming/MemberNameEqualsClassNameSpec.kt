@@ -1,18 +1,18 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lintWithContext
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 private const val IGNORE_OVERRIDDEN = "ignoreOverridden"
 
 @KotlinCoreEnvironmentTest
-class MemberNameEqualsClassNameSpec(val env: KotlinCoreEnvironment) {
+class MemberNameEqualsClassNameSpec(val env: KotlinEnvironmentContainer) {
 
     @Nested
     inner class `some classes with methods which don't have the same name` {

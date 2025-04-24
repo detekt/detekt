@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.coroutines
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.SourceLocation
@@ -7,13 +8,12 @@ import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.intellij.lang.annotations.Language
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import io.gitlab.arturbosch.detekt.test.assertThat as assertThatFindings
 
 @KotlinCoreEnvironmentTest
-class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment) {
+class SuspendFunSwallowedCancellationSpec(private val env: KotlinEnvironmentContainer) {
 
     private val subject = SuspendFunSwallowedCancellation(Config.empty)
 

@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.coroutines
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.github.detekt.test.utils.compileContentForTest
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
@@ -7,13 +8,12 @@ import io.gitlab.arturbosch.detekt.test.createBindingContext
 import io.gitlab.arturbosch.detekt.test.lintWithContext
 import io.gitlab.arturbosch.detekt.test.location
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class CoroutineLaunchedInTestWithoutRunTestSpec(private val env: KotlinCoreEnvironment) {
+class CoroutineLaunchedInTestWithoutRunTestSpec(private val env: KotlinEnvironmentContainer) {
 
     private val subject = CoroutineLaunchedInTestWithoutRunTest(Config.empty)
 

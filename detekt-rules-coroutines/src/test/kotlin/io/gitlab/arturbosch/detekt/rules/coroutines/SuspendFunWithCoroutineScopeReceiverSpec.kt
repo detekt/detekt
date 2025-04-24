@@ -1,15 +1,15 @@
 package io.gitlab.arturbosch.detekt.rules.coroutines
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class SuspendFunWithCoroutineScopeReceiverSpec(private val env: KotlinCoreEnvironment) {
+class SuspendFunWithCoroutineScopeReceiverSpec(private val env: KotlinEnvironmentContainer) {
 
     private val subject = SuspendFunWithCoroutineScopeReceiver(Config.empty)
 
