@@ -47,7 +47,7 @@ fun generateBindingContext(
 
     val dirJavaRoots = configuration.jvmClasspathRoots
         .filter { it.extension != "jar" }
-        .mapNotNull { coreLocalFilesystem.findFileByPath("${it.absolutePath}") }
+        .mapNotNull { coreLocalFilesystem.findFileByPath(it.absolutePath) }
         .map { JavaRoot(it, JavaRoot.RootType.BINARY) }
 
     val packagePartProvider = StandaloneProjectFactory.createPackagePartsProvider(
