@@ -27,7 +27,7 @@ import kotlin.io.path.name
  */
 internal object KtTestCompiler : KtCompiler() {
 
-    private val psiFileFactory = KtPsiFactory(environment.project, markGenerated = false)
+    private val psiFileFactory = KtPsiFactory(project, markGenerated = false)
 
     /**
      * Not sure why but this function only works from this context.
