@@ -3,19 +3,20 @@ package io.github.detekt.test.utils
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Disposer
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
+import org.jetbrains.kotlin.analysis.api.standalone.StandaloneAnalysisAPISession
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import java.io.File
 
 class KotlinEnvironmentContainer(val project: Project, val configuration: CompilerConfiguration)
 
 /**
- * Make sure to always call [dispose] or use a [use] block when working with [KotlinCoreEnvironment]s.
+ * Make sure to always call [dispose] or use a [use] block when working with [StandaloneAnalysisAPISession]s.
  */
 class KotlinCoreEnvironmentWrapper(
-    private var environment: KotlinCoreEnvironment,
+    private val project: Project,
+    private val configuration: CompilerConfiguration,
     private val disposable: Disposable,
-    val env: KotlinEnvironmentContainer = KotlinEnvironmentContainer(environment.project, environment.configuration),
+    val env: KotlinEnvironmentContainer = KotlinEnvironmentContainer(project, configuration),
 ) {
 
     fun dispose() {

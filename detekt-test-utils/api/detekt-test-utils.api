@@ -11,8 +11,8 @@ public final class io/github/detekt/test/utils/FileExtensionKt {
 }
 
 public final class io/github/detekt/test/utils/KotlinCoreEnvironmentWrapper {
-	public fun <init> (Lorg/jetbrains/kotlin/cli/jvm/compiler/KotlinCoreEnvironment;Lcom/intellij/openapi/Disposable;Lio/github/detekt/test/utils/KotlinEnvironmentContainer;)V
-	public synthetic fun <init> (Lorg/jetbrains/kotlin/cli/jvm/compiler/KotlinCoreEnvironment;Lcom/intellij/openapi/Disposable;Lio/github/detekt/test/utils/KotlinEnvironmentContainer;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Lcom/intellij/openapi/project/Project;Lorg/jetbrains/kotlin/config/CompilerConfiguration;Lcom/intellij/openapi/Disposable;Lio/github/detekt/test/utils/KotlinEnvironmentContainer;)V
+	public synthetic fun <init> (Lcom/intellij/openapi/project/Project;Lorg/jetbrains/kotlin/config/CompilerConfiguration;Lcom/intellij/openapi/Disposable;Lio/github/detekt/test/utils/KotlinEnvironmentContainer;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun dispose ()V
 	public final fun getEnv ()Lio/github/detekt/test/utils/KotlinEnvironmentContainer;
 }
