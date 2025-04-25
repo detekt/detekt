@@ -13,7 +13,7 @@ import java.nio.file.Path
 import kotlin.io.path.isRegularFile
 
 open class KtCompiler(
-    protected val project: Project = createDefaultAnalysisAPISession.project,
+    protected val project: Project = createDefaultAnalysisAPISession().project,
 ) {
 
     fun compile(path: Path): KtFile {
@@ -29,7 +29,7 @@ open class KtCompiler(
     }
 }
 
-private val createDefaultAnalysisAPISession = buildStandaloneAnalysisAPISession {
+private fun createDefaultAnalysisAPISession() = buildStandaloneAnalysisAPISession {
     registerProjectService(PomModel::class.java, DetektPomModel)
 
     // Required until BindingContext usage is fully removed
