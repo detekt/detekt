@@ -70,8 +70,8 @@ internal class DefaultLifecycle(
         {
             if (settings.spec.projectSpec.analysisMode == AnalysisMode.full) {
                 generateBindingContext(
-                    settings.environment.project,
-                    settings.environment.configuration,
+                    settings.project,
+                    settings.configuration,
                     it,
                     settings::debug,
                     settings::info

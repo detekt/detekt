@@ -31,7 +31,7 @@ internal class Analyzer(
     private val bindingContext: BindingContext,
 ) {
     fun run(ktFiles: Collection<KtFile>): List<Issue> {
-        val languageVersionSettings = settings.environment.configuration.languageVersionSettings
+        val languageVersionSettings = settings.configuration.languageVersionSettings
 
         val dataFlowValueFactory = DataFlowValueFactoryImpl(languageVersionSettings)
         val compilerResources = CompilerResources(languageVersionSettings, dataFlowValueFactory)
