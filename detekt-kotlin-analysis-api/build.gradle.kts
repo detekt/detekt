@@ -1,6 +1,9 @@
 // This package can be retired once this is closed: https://youtrack.jetbrains.com/issue/KT-56203/AA-Publish-analysis-api-standalone-and-dependencies-to-Maven-Central
 
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
+    kotlin("jvm")
     id("packaging")
     id("com.gradleup.shadow") version "8.3.6"
 }
@@ -21,6 +24,11 @@ dependencies {
             attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
         }
     }
+    compileOnly(libs.kotlin.compiler)
+}
+
+kotlin {
+    compilerOptions.jvmTarget = JvmTarget.JVM_1_8
 }
 
 java {
