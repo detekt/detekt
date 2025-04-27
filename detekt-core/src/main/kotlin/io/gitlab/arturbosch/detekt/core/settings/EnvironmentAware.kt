@@ -12,6 +12,7 @@ import io.github.detekt.tooling.api.spec.ProjectSpec
 import org.jetbrains.kotlin.analysis.api.standalone.buildStandaloneAnalysisAPISession
 import org.jetbrains.kotlin.cli.common.CliModuleVisibilityManagerImpl
 import org.jetbrains.kotlin.cli.jvm.compiler.CliTraceHolder
+import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.config.friendPaths
 import org.jetbrains.kotlin.load.kotlin.ModuleVisibilityManager
@@ -57,6 +58,8 @@ internal class EnvironmentFacade(
         registerProjectService(ModuleVisibilityManager::class.java, CliModuleVisibilityManagerImpl(true))
         val moduleVisibilityManager = ModuleVisibilityManager.SERVICE.getInstance(project)
         configuration.friendPaths.forEach(moduleVisibilityManager::addFriendPath)
+
+        configuration.putIfAbsent(CommonConfigurationKeys.MODULE_NAME, "<no module name provided>")
 
         @Suppress("DEPRECATION") // Required until fully transitioned to setting up Kotlin Analysis API session
         buildKtModuleProviderByCompilerConfiguration(configuration)
