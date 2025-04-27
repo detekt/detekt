@@ -118,9 +118,9 @@ kotlin {
     }
 }
 
-val testKitRuntimeOnly: Configuration by configurations.creating
-val testKitJava17RuntimeOnly: Configuration by configurations.creating
-val testKitGradleMinVersionRuntimeOnly: Configuration by configurations.creating
+val testKitRuntimeOnly by configurations.registering
+val testKitJava17RuntimeOnly by configurations.registering
+val testKitGradleMinVersionRuntimeOnly by configurations.registering
 
 dependencies {
     compileOnly(libs.android.gradleApi)

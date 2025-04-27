@@ -2,7 +2,7 @@ plugins {
     id("module")
 }
 
-val extraDepsToPackage: Configuration by configurations.creating
+val extraDepsToPackage by configurations.registering
 
 dependencies {
     compileOnly(projects.detektApi)
@@ -47,6 +47,6 @@ tasks.jar {
         configurations.runtimeClasspath.get()
             .filter { dependency -> depsToPackage.any { it in dependency.toString() } }
             .map { if (it.isDirectory) it else zipTree(it) },
-        extraDepsToPackage.map { zipTree(it) },
+        extraDepsToPackage.get().map { zipTree(it) },
     )
 }

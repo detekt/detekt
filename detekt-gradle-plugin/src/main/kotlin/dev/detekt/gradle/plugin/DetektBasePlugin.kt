@@ -55,7 +55,7 @@ class DetektBasePlugin : Plugin<Project> {
             extension.config.setFrom(project.files(defaultConfigFile))
         }
 
-        project.configurations.create(CONFIGURATION_DETEKT_PLUGINS) { configuration ->
+        project.configurations.register(CONFIGURATION_DETEKT_PLUGINS) { configuration ->
             configuration.isVisible = false
             configuration.isTransitive = true
             configuration.description = "The $CONFIGURATION_DETEKT_PLUGINS libraries to be used for this project."
