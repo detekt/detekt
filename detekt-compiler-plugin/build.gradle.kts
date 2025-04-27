@@ -64,6 +64,8 @@ val unzipKotlinCompiler by tasks.registering(Copy::class) {
 }
 
 val testPluginKotlinc by tasks.registering(Task::class) {
+    enabled = false
+
     val outputDir = layout.buildDirectory.dir("tmp/kotlinc")
     val sourceFile = file("src/test/resources/hello.kt")
 

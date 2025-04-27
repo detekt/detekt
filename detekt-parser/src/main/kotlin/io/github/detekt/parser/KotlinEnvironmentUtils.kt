@@ -1,9 +1,5 @@
 package io.github.detekt.parser
 
-import com.intellij.mock.MockProject
-import com.intellij.openapi.Disposable
-import com.intellij.openapi.util.Disposer
-import com.intellij.pom.PomModel
 import org.jetbrains.kotlin.cli.common.arguments.K2JVMCompilerArguments
 import org.jetbrains.kotlin.cli.common.arguments.parseCommandLineArguments
 import org.jetbrains.kotlin.cli.common.arguments.validateArguments
@@ -11,8 +7,6 @@ import org.jetbrains.kotlin.cli.common.config.addKotlinSourceRoots
 import org.jetbrains.kotlin.cli.common.messages.MessageRenderer
 import org.jetbrains.kotlin.cli.common.messages.PrintingMessageCollector
 import org.jetbrains.kotlin.cli.common.setupLanguageVersionSettings
-import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.cli.jvm.config.addJavaSourceRoots
 import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoots
 import org.jetbrains.kotlin.cli.jvm.config.configureJdkClasspathRoots
@@ -24,38 +18,6 @@ import org.jetbrains.kotlin.config.JVMConfigurationKeys
 import java.io.File
 import java.io.PrintStream
 import java.nio.file.Path
-
-/**
- * Creates an environment instance which can be used to compile source code to KtFile's.
- * This environment also allows to modify the resulting AST files.
- */
-fun createKotlinCoreEnvironment(
-    configuration: CompilerConfiguration = CompilerConfiguration(),
-    disposable: Disposable = Disposer.newDisposable(),
-    printStream: PrintStream,
-): KotlinCoreEnvironment {
-    configuration.put(
-        CommonConfigurationKeys.MESSAGE_COLLECTOR_KEY,
-        PrintingMessageCollector(printStream, MessageRenderer.PLAIN_FULL_PATHS, false)
-    )
-    configuration.put(CommonConfigurationKeys.MODULE_NAME, "detekt")
-
-    val environment = KotlinCoreEnvironment.createForProduction(
-        disposable,
-        configuration,
-        EnvironmentConfigFiles.JVM_CONFIG_FILES
-    )
-
-    val projectCandidate = environment.project
-
-    val project = requireNotNull(projectCandidate as? MockProject) {
-        "MockProject type expected, actual - ${projectCandidate.javaClass.simpleName}"
-    }
-
-    project.registerService(PomModel::class.java, DetektPomModel)
-
-    return environment
-}
 
 /**
  * Creates a compiler configuration for the kotlin compiler with all known sources and classpath jars.
