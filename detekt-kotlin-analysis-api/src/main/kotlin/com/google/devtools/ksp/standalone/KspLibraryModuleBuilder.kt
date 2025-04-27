@@ -37,6 +37,9 @@ import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
+/* Copied from https://github.com/google/ksp/blob/5b2fd3c79b60f99ca643f362e564659176d900ac/kotlin-analysis-api/src/main/kotlin/com/google/devtools/ksp/standalone/KspLibraryModuleBuilder.kt
+ * Required as a workaround for KT-71706.
+ */
 @KtModuleBuilderDsl
 open class KspLibraryModuleBuilder(
     private val kotlinCoreProjectEnvironment: KotlinCoreProjectEnvironment
