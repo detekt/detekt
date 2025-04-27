@@ -16,6 +16,7 @@
  */
 
 @file:Suppress("INVISIBLE_REFERENCE", "INVISIBLE_MEMBER")
+
 package com.google.devtools.ksp.standalone
 
 import com.intellij.openapi.module.Module
@@ -42,10 +43,10 @@ import kotlin.contracts.contract
  */
 @KtModuleBuilderDsl
 open class KspLibraryModuleBuilder(
-    private val kotlinCoreProjectEnvironment: KotlinCoreProjectEnvironment
+    private val kotlinCoreProjectEnvironment: KotlinCoreProjectEnvironment,
 ) : KtBinaryModuleBuilder() {
-    public lateinit var libraryName: String
-    public var librarySources: KaLibrarySourceModule? = null
+    lateinit var libraryName: String
+    var librarySources: KaLibrarySourceModule? = null
 
     override fun build(): KaLibraryModule = build(isSdk = false)
 
@@ -92,18 +93,20 @@ internal class SimpleTrie(paths: List<String>) {
         paths.forEach { path ->
             var p = root
             for (d in path.trim('/').split('/')) {
-                p = getOrPut(Pair(p, d)) { TrieNode() }
+                p = getOrPut(p to d) { TrieNode() }
             }
             p.isTerminal = true
         }
     }
 
+    @Suppress("ReturnCount")
     fun contains(s: String): Boolean {
         var p = root
         for (d in s.trim('/').split('/')) {
-            p = m.get(Pair(p, d))?.also {
-                if (it.isTerminal)
+            p = m[p to d]?.also {
+                if (it.isTerminal) {
                     return true
+                }
             } ?: return false
         }
         return false
@@ -113,9 +116,7 @@ internal class SimpleTrie(paths: List<String>) {
 internal class LibraryRootsSearchScope(roots: List<VirtualFile>) : GlobalSearchScope() {
     val trie: SimpleTrie = SimpleTrie(roots.map { it.path })
 
-    override fun contains(file: VirtualFile): Boolean {
-        return trie.contains(file.path)
-    }
+    override fun contains(file: VirtualFile): Boolean = trie.contains(file.path)
 
     override fun isSearchInModuleContent(aModule: Module): Boolean = false
 
@@ -123,11 +124,11 @@ internal class LibraryRootsSearchScope(roots: List<VirtualFile>) : GlobalSearchS
 }
 
 @KtModuleBuilderDsl
-public class KspSdkModuleBuilder(
-    kotlinCoreProjectEnvironment: KotlinCoreProjectEnvironment
+class KspSdkModuleBuilder(
+    kotlinCoreProjectEnvironment: KotlinCoreProjectEnvironment,
 ) : KspLibraryModuleBuilder(kotlinCoreProjectEnvironment) {
     @OptIn(KaImplementationDetail::class)
-    public fun addBinaryRootsFromJdkHome(jdkHome: Path, isJre: Boolean) {
+    fun addBinaryRootsFromJdkHome(jdkHome: Path, isJre: Boolean) {
         val jdkRoots = LibraryUtils.findClassesFromJdkHome(jdkHome, isJre)
         addBinaryRoots(jdkRoots)
     }
@@ -136,7 +137,7 @@ public class KspSdkModuleBuilder(
 }
 
 @OptIn(ExperimentalContracts::class)
-public inline fun KtModuleProviderBuilder.buildKspSdkModule(init: KspSdkModuleBuilder.() -> Unit): KaLibraryModule {
+inline fun KtModuleProviderBuilder.buildKspSdkModule(init: KspSdkModuleBuilder.() -> Unit): KaLibraryModule {
     contract {
         callsInPlace(init, InvocationKind.EXACTLY_ONCE)
     }
