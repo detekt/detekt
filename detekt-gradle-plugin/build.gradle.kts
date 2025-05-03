@@ -39,7 +39,7 @@ dokka {
     }
 
     dokkaSourceSets.configureEach {
-        apiVersion = "1.4"
+        apiVersion.set("1.4")
         modulePath = "detekt-gradle-plugin"
 
         externalDocumentationLinks {
