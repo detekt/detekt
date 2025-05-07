@@ -49,25 +49,25 @@ class DetektKotlinCompilerPlugin : KotlinCompilerPluginSupportPlugin {
 
         val projectExtension = project.extensions.getByType(DetektExtension::class.java)
 
-        @Suppress("DEPRECATION")
-        val taskExtension =
-            kotlinCompilation.compileKotlinTask.extensions.getByType(KotlinCompileTaskDetektExtension::class.java)
+        val taskExtension = kotlinCompilation.compileTaskProvider.map {
+            it.extensions.getByType(KotlinCompileTaskDetektExtension::class.java)
+        }
 
         project.configurations.getByName("kotlinCompilerPluginClasspath")
             .extendsFrom(project.configurations.getAt(CONFIGURATION_DETEKT_PLUGINS))
 
         val options = project.objects.listProperty(SubpluginOption::class.java).apply {
-            add(SubpluginOption("debug", taskExtension.debug.get().toString()))
-            add(SubpluginOption("configDigest", taskExtension.config.toDigest()))
-            add(SubpluginOption("isEnabled", taskExtension.isEnabled.getOrElse(false).toString()))
-            add(SubpluginOption("useDefaultConfig", taskExtension.buildUponDefaultConfig.get().toString()))
-            add(SubpluginOption("allRules", taskExtension.allRules.get().toString()))
-            add(SubpluginOption("disableDefaultRuleSets", taskExtension.disableDefaultRuleSets.get().toString()))
-            add(SubpluginOption("parallel", taskExtension.parallel.get().toString()))
+            add(SubpluginOption("debug", taskExtension.get().debug.toString()))
+            add(SubpluginOption("configDigest", taskExtension.get().config.toDigest()))
+            add(SubpluginOption("isEnabled", taskExtension.get().isEnabled.getOrElse(false).toString()))
+            add(SubpluginOption("useDefaultConfig", taskExtension.get().buildUponDefaultConfig.get().toString()))
+            add(SubpluginOption("allRules", taskExtension.get().allRules.get().toString()))
+            add(SubpluginOption("disableDefaultRuleSets", taskExtension.get().disableDefaultRuleSets.get().toString()))
+            add(SubpluginOption("parallel", taskExtension.get().parallel.get().toString()))
             add(SubpluginOption("rootDir", project.rootDir.toString()))
-            add(SubpluginOption("excludes", taskExtension.excludes.get().encodeToBase64()))
+            add(SubpluginOption("excludes", taskExtension.get().excludes.get().encodeToBase64()))
 
-            taskExtension.reports.all { report ->
+            taskExtension.get().reports.all { report ->
                 report.enabled.convention(true)
                 report.destination.convention(
                     projectExtension.reportsDir.file("${kotlinCompilation.name}.${report.name}")
@@ -84,8 +84,8 @@ class DetektKotlinCompilerPlugin : KotlinCompilerPluginSupportPlugin {
             }
         }
 
-        taskExtension.baseline.getOrNull()?.let { options.add(SubpluginOption("baseline", it.toString())) }
-        taskExtension.config.forEach {
+        taskExtension.get().baseline.getOrNull()?.let { options.add(SubpluginOption("baseline", it.toString())) }
+        taskExtension.get().config.forEach {
             options.add(SubpluginOption("config", it.absolutePath))
         }
 
