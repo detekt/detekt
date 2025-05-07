@@ -35,9 +35,9 @@ class TrailingWhitespaceSpec {
 
         @Test
         fun `reports a print statement with a tab at the end`() {
-            val code = "\t\tprintln(\"A message\")\t"
+            val code = "fun test() {\n\t\tprintln(\"A message\")\t\n}"
             val findings = subject.lint(code)
-            assertThat(findings).hasTextLocations(22 to 23)
+            assertThat(findings).hasTextLocations(35 to 36)
         }
     }
 

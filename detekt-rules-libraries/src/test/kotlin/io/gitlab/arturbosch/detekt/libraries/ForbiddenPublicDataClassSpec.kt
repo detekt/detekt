@@ -97,7 +97,7 @@ class ForbiddenPublicDataClassSpec {
             data class C(val a: String)
         """.trimIndent()
 
-        assertThat(subject.lint(code)).isEmpty()
+        assertThat(subject.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -108,7 +108,7 @@ class ForbiddenPublicDataClassSpec {
             data class C(val a: String)
         """.trimIndent()
 
-        assertThat(subject.lint(code)).isEmpty()
+        assertThat(subject.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -119,7 +119,7 @@ class ForbiddenPublicDataClassSpec {
             data class C(val a: String)
         """.trimIndent()
 
-        assertThat(subject.lint(code)).hasSize(1)
+        assertThat(subject.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -130,7 +130,7 @@ class ForbiddenPublicDataClassSpec {
             data class C(val a: String)
         """.trimIndent()
 
-        assertThat(subject.lint(code)).hasSize(1)
+        assertThat(subject.lint(code, compile = false)).hasSize(1)
     }
 
     @Test
@@ -142,6 +142,6 @@ class ForbiddenPublicDataClassSpec {
         """.trimIndent()
 
         val config = TestConfig("ignorePackages" to listOf("*.hello", "com.example"))
-        assertThat(ForbiddenPublicDataClass(config).lint(code)).isEmpty()
+        assertThat(ForbiddenPublicDataClass(config).lint(code, compile = false)).isEmpty()
     }
 }

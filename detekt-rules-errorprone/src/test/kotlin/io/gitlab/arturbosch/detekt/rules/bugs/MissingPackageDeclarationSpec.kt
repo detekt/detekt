@@ -14,7 +14,7 @@ internal class MissingPackageDeclarationSpec {
             
             class C
         """.trimIndent()
-        val findings = MissingPackageDeclaration(Config.empty).lint(code)
+        val findings = MissingPackageDeclaration(Config.empty).lint(code, compile = false)
 
         assertThat(findings).isEmpty()
     }

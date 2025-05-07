@@ -10,6 +10,11 @@ public final class io/github/detekt/test/utils/FileExtensionKt {
 	public static final fun createTempFileForTest (Ljava/lang/String;Ljava/lang/String;)Ljava/nio/file/Path;
 }
 
+public final class io/github/detekt/test/utils/KotlinAnalysisApiEngine {
+	public static final field INSTANCE Lio/github/detekt/test/utils/KotlinAnalysisApiEngine;
+	public final fun compile (Ljava/lang/String;)V
+}
+
 public final class io/github/detekt/test/utils/KotlinCoreEnvironmentWrapper {
 	public fun <init> (Lcom/intellij/openapi/project/Project;Lorg/jetbrains/kotlin/config/CompilerConfiguration;Lcom/intellij/openapi/Disposable;Lio/github/detekt/test/utils/KotlinEnvironmentContainer;)V
 	public synthetic fun <init> (Lcom/intellij/openapi/project/Project;Lorg/jetbrains/kotlin/config/CompilerConfiguration;Lcom/intellij/openapi/Disposable;Lio/github/detekt/test/utils/KotlinEnvironmentContainer;ILkotlin/jvm/internal/DefaultConstructorMarker;)V

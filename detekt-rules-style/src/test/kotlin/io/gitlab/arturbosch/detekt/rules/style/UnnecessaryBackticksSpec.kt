@@ -117,8 +117,8 @@ class UnnecessaryBackticksSpec {
         @Test
         fun import() {
             val code = """
-                package test
-                import test.`Foo Bar`
+                import `Foo Bar`
+
                 class `Foo Bar`
             """.trimIndent()
             assertThat(subject.lint(code)).isEmpty()
