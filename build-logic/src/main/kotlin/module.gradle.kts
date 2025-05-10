@@ -35,6 +35,11 @@ tasks.withType<Test>().configureEach {
     systemProperty("compile-test-snippets", compileTestSnippets)
     val compileTestSnippetsAa = providers.gradleProperty("compile-test-snippets-aa").orNull.toBoolean()
     systemProperty("compile-test-snippets-aa", compileTestSnippetsAa)
+
+    if (compileTestSnippetsAa) {
+        maxHeapSize = "3g"
+    }
+
     testLogging {
         // set options for log level LIFECYCLE
         events = setOf(
