@@ -243,7 +243,7 @@ class MaxLineLengthSpec {
                 )
             )
 
-            val findings = rule.lint(code)
+            val findings = rule.lint(code, compile = false)
             assertThat(findings).isEmpty()
         }
 
@@ -257,7 +257,7 @@ class MaxLineLengthSpec {
                 )
             )
 
-            val findings = rule.lint(code)
+            val findings = rule.lint(code, compile = false)
             assertThat(findings).hasSize(2)
         }
 
@@ -271,7 +271,7 @@ class MaxLineLengthSpec {
                 )
             )
 
-            val findings = rule.lint(code)
+            val findings = rule.lint(code, compile = false)
             assertThat(findings).isEmpty()
         }
     }
@@ -370,7 +370,7 @@ class MaxLineLengthSpec {
                 )
             )
 
-            val findings = rule.lint(code)
+            val findings = rule.lint(code, compile = false)
             assertThat(findings).hasSize(1)
         }
 
@@ -384,7 +384,7 @@ class MaxLineLengthSpec {
                 )
             )
 
-            val findings = rule.lint(code)
+            val findings = rule.lint(code, compile = false)
             assertThat(findings).hasSize(3)
         }
 
@@ -398,7 +398,7 @@ class MaxLineLengthSpec {
                 )
             )
 
-            val findings = rule.lint(code)
+            val findings = rule.lint(code, compile = false)
             assertThat(findings)
                 .hasSize(1)
                 .hasStartSourceLocations(SourceLocation(6, 1))
