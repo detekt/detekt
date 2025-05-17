@@ -30,7 +30,7 @@ public abstract interface class io/gitlab/arturbosch/detekt/api/Config {
 	public abstract fun getParentPath ()Ljava/lang/String;
 	public abstract fun subConfig (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/Config;
 	public abstract fun subConfigKeys ()Ljava/util/Set;
-	public abstract fun valueOrDefault (Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/Object;
+	public fun valueOrDefault (Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/Object;
 	public abstract fun valueOrNull (Ljava/lang/String;)Ljava/lang/Object;
 }
 
@@ -118,8 +118,8 @@ public final class io/gitlab/arturbosch/detekt/api/Entity$Companion {
 
 public abstract interface class io/gitlab/arturbosch/detekt/api/Extension {
 	public abstract fun getId ()Ljava/lang/String;
-	public abstract fun getPriority ()I
-	public abstract fun init (Lio/gitlab/arturbosch/detekt/api/SetupContext;)V
+	public fun getPriority ()I
+	public fun init (Lio/gitlab/arturbosch/detekt/api/SetupContext;)V
 }
 
 public final class io/gitlab/arturbosch/detekt/api/Extension$DefaultImpls {
@@ -128,10 +128,10 @@ public final class io/gitlab/arturbosch/detekt/api/Extension$DefaultImpls {
 }
 
 public abstract interface class io/gitlab/arturbosch/detekt/api/FileProcessListener : io/gitlab/arturbosch/detekt/api/Extension {
-	public abstract fun onFinish (Ljava/util/List;Lio/gitlab/arturbosch/detekt/api/Detektion;)V
-	public abstract fun onProcess (Lorg/jetbrains/kotlin/psi/KtFile;)V
-	public abstract fun onProcessComplete (Lorg/jetbrains/kotlin/psi/KtFile;Ljava/util/List;)V
-	public abstract fun onStart (Ljava/util/List;)V
+	public fun onFinish (Ljava/util/List;Lio/gitlab/arturbosch/detekt/api/Detektion;)V
+	public fun onProcess (Lorg/jetbrains/kotlin/psi/KtFile;)V
+	public fun onProcessComplete (Lorg/jetbrains/kotlin/psi/KtFile;Ljava/util/List;)V
+	public fun onStart (Ljava/util/List;)V
 }
 
 public final class io/gitlab/arturbosch/detekt/api/FileProcessListener$DefaultImpls {
@@ -211,7 +211,7 @@ public final class io/gitlab/arturbosch/detekt/api/Location$Companion {
 public abstract interface class io/gitlab/arturbosch/detekt/api/Notification {
 	public abstract fun getLevel ()Lio/gitlab/arturbosch/detekt/api/Notification$Level;
 	public abstract fun getMessage ()Ljava/lang/String;
-	public abstract fun isError ()Z
+	public fun isError ()Z
 }
 
 public final class io/gitlab/arturbosch/detekt/api/Notification$DefaultImpls {
@@ -253,9 +253,9 @@ public abstract interface class io/gitlab/arturbosch/detekt/api/PropertiesAware 
 }
 
 public abstract interface class io/gitlab/arturbosch/detekt/api/ReportingExtension : io/gitlab/arturbosch/detekt/api/Extension {
-	public abstract fun onFinalResult (Lio/gitlab/arturbosch/detekt/api/Detektion;)V
-	public abstract fun onRawResult (Lio/gitlab/arturbosch/detekt/api/Detektion;)V
-	public abstract fun transformIssues (Ljava/util/List;)Ljava/util/List;
+	public fun onFinalResult (Lio/gitlab/arturbosch/detekt/api/Detektion;)V
+	public fun onRawResult (Lio/gitlab/arturbosch/detekt/api/Detektion;)V
+	public fun transformIssues (Ljava/util/List;)Ljava/util/List;
 }
 
 public final class io/gitlab/arturbosch/detekt/api/ReportingExtension$DefaultImpls {
