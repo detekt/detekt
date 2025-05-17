@@ -218,7 +218,7 @@ tasks {
     }
 
     register<PluginUnderTestMetadata>("gradleMinVersionPluginUnderTestMetadata") {
-        pluginClasspath.setFrom(sourceSets.main.get().runtimeClasspath, testKitGradleMinVersionRuntimeOnly)
+        pluginClasspath.setFrom(sourceSets.main.get().output, testKitGradleMinVersionRuntimeOnly)
         outputDirectory = layout.buildDirectory.dir(name)
     }
 
