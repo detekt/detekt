@@ -640,6 +640,11 @@ private val APP_PLUGIN_BLOCK = """
         kotlin("android")
         id("io.gitlab.arturbosch.detekt")
     }
+    kotlin {
+        compilerOptions {
+            jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8
+        }
+    }
 """.trimIndent()
 
 @Language("gradle.kts")
@@ -648,6 +653,11 @@ private val LIB_PLUGIN_BLOCK = """
         id("com.android.library")
         kotlin("android")
         id("io.gitlab.arturbosch.detekt")
+    }
+    kotlin {
+        compilerOptions {
+            jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8
+        }
     }
 """.trimIndent()
 
@@ -667,9 +677,6 @@ private val ANDROID_BLOCK = """
         compileOptions {
             sourceCompatibility = JavaVersion.VERSION_1_8
             targetCompatibility = JavaVersion.VERSION_1_8
-        }
-        kotlinOptions {
-            jvmTarget = "1.8"
         }
     }
 """.trimIndent()
@@ -695,9 +702,6 @@ private val ANDROID_BLOCK_WITH_FLAVOR = """
             sourceCompatibility = JavaVersion.VERSION_1_8
             targetCompatibility = JavaVersion.VERSION_1_8
         }
-        kotlinOptions {
-            jvmTarget = "1.8"
-        }
     }
 """.trimIndent()
 
@@ -716,9 +720,6 @@ private val ANDROID_BLOCK_WITH_VIEW_BINDING = """
         compileOptions {
             sourceCompatibility = JavaVersion.VERSION_1_8
             targetCompatibility = JavaVersion.VERSION_1_8
-        }
-        kotlinOptions {
-            jvmTarget = "1.8"
         }
     }
 """.trimIndent()
