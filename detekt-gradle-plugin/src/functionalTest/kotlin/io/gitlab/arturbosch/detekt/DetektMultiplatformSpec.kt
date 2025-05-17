@@ -283,7 +283,8 @@ class DetektMultiplatformSpec {
                         KMM_PLUGIN_BLOCK,
                         """
                             kotlin {
-                                ios()
+                                iosArm64()
+                                iosX64()
                             }
                         """.trimIndent(),
                         DETEKT_BLOCK,
