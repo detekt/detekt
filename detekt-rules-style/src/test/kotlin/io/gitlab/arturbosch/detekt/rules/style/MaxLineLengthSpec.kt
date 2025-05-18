@@ -232,7 +232,7 @@ class MaxLineLengthSpec {
         val code = """
             package anIncrediblyLongAndComplexPackageNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
             
-            import org.assertj.core.api.Assertions.assertThat
+            import java.nio.file.attribute.PosixFileAttributeView
         """.trimIndent()
 
         @Test
@@ -355,7 +355,7 @@ class MaxLineLengthSpec {
         val code = """
             package anIncrediblyLongAndComplexPackageNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
             
-            import org.assertj.core.api.Assertions.assertThat
+            import java.nio.file.attribute.PosixFileAttributeView
             
             class Test {
                 fun anIncrediblyLongAndComplexMethodNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot() {}
