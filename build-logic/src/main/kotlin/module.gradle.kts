@@ -71,6 +71,7 @@ kotlin {
     compilerOptions {
         progressiveMode = true
         allWarningsAsErrors = providers.gradleProperty("warningsAsErrors").orNull.toBoolean()
+        freeCompilerArgs.add("-Xjvm-default=all")
     }
 }
 

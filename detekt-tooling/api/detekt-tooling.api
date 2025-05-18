@@ -65,16 +65,12 @@ public abstract class io/github/detekt/tooling/api/DetektError : java/lang/Runti
 public abstract interface class io/github/detekt/tooling/api/DetektProvider {
 	public static final field Companion Lio/github/detekt/tooling/api/DetektProvider$Companion;
 	public abstract fun get (Lio/github/detekt/tooling/api/spec/ProcessingSpec;)Lio/github/detekt/tooling/api/Detekt;
-	public abstract fun getPriority ()I
+	public fun getPriority ()I
 }
 
 public final class io/github/detekt/tooling/api/DetektProvider$Companion {
 	public final fun load (Ljava/lang/ClassLoader;)Lio/github/detekt/tooling/api/DetektProvider;
 	public static synthetic fun load$default (Lio/github/detekt/tooling/api/DetektProvider$Companion;Ljava/lang/ClassLoader;ILjava/lang/Object;)Lio/github/detekt/tooling/api/DetektProvider;
-}
-
-public final class io/github/detekt/tooling/api/DetektProvider$DefaultImpls {
-	public static fun getPriority (Lio/github/detekt/tooling/api/DetektProvider;)I
 }
 
 public final class io/github/detekt/tooling/api/InvalidConfig : io/github/detekt/tooling/api/DetektError {
