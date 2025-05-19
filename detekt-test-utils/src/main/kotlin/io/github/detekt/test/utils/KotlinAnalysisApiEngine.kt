@@ -104,7 +104,6 @@ class KotlinAnalysisApiEngine(@Language("kotlin") code: String, disposable: Disp
                             it.psi.textOffset
                         )
                         "${it.severity.name} ${it.defaultMessage} (${it.psi.containingFile.name}:${lineAndColumn.line}:${lineAndColumn.column})"
-                        "${it.severity.name} ${it.defaultMessage} (${it.psi.containingFile.name}:${lineAndColumn.line}:${lineAndColumn.column})"
                     } else {
                         "${it.severity.name} ${it.defaultMessage}"
                     }
