@@ -33,7 +33,7 @@ class KotlinAnalysisApiEngine(@Language("kotlin") code: String, disposable: Disp
     private lateinit var sourceModule: KaModule
 
     @OptIn(KaImplementationDetail::class, KaPlatformInterface::class, KaExperimentalApi::class)
-    private val session = buildStandaloneAnalysisAPISession(disposable, true) {
+    private val session = buildStandaloneAnalysisAPISession(disposable, unitTestMode = true) {
         buildKtModuleProvider {
             val targetPlatform = JvmPlatforms.defaultJvmPlatform
             platform = targetPlatform
