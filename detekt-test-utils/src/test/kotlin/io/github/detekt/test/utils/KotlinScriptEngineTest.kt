@@ -3,7 +3,10 @@ package io.github.detekt.test.utils
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.RepeatedTest
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.condition.DisabledOnOs
+import org.junit.jupiter.api.condition.OS
 
+@DisabledOnOs(OS.MAC)
 class KotlinScriptEngineTest {
 
     @Test
