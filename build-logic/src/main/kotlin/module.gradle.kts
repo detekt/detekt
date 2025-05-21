@@ -37,7 +37,7 @@ tasks.withType<Test>().configureEach {
     systemProperty("compile-test-snippets-aa", compileTestSnippetsAa)
 
     if (compileTestSnippetsAa) {
-        maxHeapSize = "1g"
+        maxHeapSize = "4g"
     }
 
     testLogging {
