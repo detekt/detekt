@@ -37,7 +37,7 @@ jobs:
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
       - name: Generate Coverage Report
-        run: ./gradlew jacocoMergedReport
+        run: ./gradlew jacocoMergedReport --no-build-cache
         env:
           DEVELOCITY_ACCESS_KEY: ${{ secrets.GRADLE_ENTERPRISE_ACCESS_KEY }}
 
