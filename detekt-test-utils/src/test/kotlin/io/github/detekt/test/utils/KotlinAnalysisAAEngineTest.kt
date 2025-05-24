@@ -1,32 +1,26 @@
 package io.github.detekt.test.utils
 
+import com.intellij.openapi.util.Disposer
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.RepeatedTest
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.condition.DisabledOnOs
-import org.junit.jupiter.api.condition.OS
 
-@DisabledOnOs(OS.MAC)
-class KotlinScriptEngineTest {
+class KotlinAnalysisAAEngineTest {
 
     @Test
     fun `can compile a valid script`() {
         val code = """
-            package foo.a
-            
             class A
         """.trimIndent()
-        KotlinScriptEngine.compile(code)
+        KotlinAnalysisApiEngine(code, Disposer.newDisposable()).compile()
     }
 
     @Test
     fun `fails compiling an invalid script`() {
         val invalidCode = """
-            package foo.b
-            
             val unknownType: UnknownType
         """.trimIndent()
-        assertThatThrownBy { KotlinScriptEngine.compile(invalidCode) }
+        assertThatThrownBy { KotlinAnalysisApiEngine(invalidCode, Disposer.newDisposable()).compile() }
             .isInstanceOf(IllegalStateException::class.java)
     }
 
@@ -40,7 +34,7 @@ class KotlinScriptEngineTest {
             }
         """.trimIndent()
 
-        KotlinScriptEngine.compile(validCode)
+        KotlinAnalysisApiEngine(validCode, Disposer.newDisposable()).compile()
 
         val codeWithMissingImport = """
             fun useRandom() {
@@ -48,29 +42,25 @@ class KotlinScriptEngineTest {
             }
         """.trimIndent()
 
-        assertThatThrownBy { KotlinScriptEngine.compile(codeWithMissingImport) }
+        assertThatThrownBy { KotlinAnalysisApiEngine(codeWithMissingImport, Disposer.newDisposable()).compile() }
             .isInstanceOf(IllegalStateException::class.java)
-            .hasMessage("ERROR Unresolved reference 'Random'. (script.main.kts:2:5)")
+            .hasMessage("ERROR Unresolved reference 'Random'. (dummy.kt:2:5)")
     }
 
     @RepeatedTest(10)
     fun `can compile the same script repeatedly`() {
         val code = """
-            package foo.c
-            
             class A
         """.trimIndent()
-        KotlinScriptEngine.compile(code)
+        KotlinAnalysisApiEngine(code, Disposer.newDisposable()).compile()
     }
 
     @RepeatedTest(10)
     fun `fails repeatedly on invalid script`() {
         val invalidCode = """
-            package foo.d
-            
             val unknownType: UnknownType
         """.trimIndent()
-        assertThatThrownBy { KotlinScriptEngine.compile(invalidCode) }
+        assertThatThrownBy { KotlinAnalysisApiEngine(invalidCode, Disposer.newDisposable()).compile() }
             .isInstanceOf(IllegalStateException::class.java)
     }
 }

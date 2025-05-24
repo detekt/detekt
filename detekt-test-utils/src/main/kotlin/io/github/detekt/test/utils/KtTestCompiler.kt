@@ -53,7 +53,7 @@ internal object KtTestCompiler : KtCompiler() {
         }
 
         val parentDisposable = Disposer.newDisposable()
-        val analysisSession = buildStandaloneAnalysisAPISession(parentDisposable) {
+        val analysisSession = buildStandaloneAnalysisAPISession(parentDisposable, unitTestMode = true) {
             @Suppress("DEPRECATION") // Required until fully transitioned to setting up Kotlin Analysis API session
             buildKtModuleProviderByCompilerConfiguration(configuration)
 
