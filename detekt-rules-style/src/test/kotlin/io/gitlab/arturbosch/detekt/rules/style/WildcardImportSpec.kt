@@ -14,8 +14,8 @@ class WildcardImportSpec {
     @Nested
     inner class `a kt file with wildcard imports` {
         val code = """
-            import io.gitlab.arturbosch.detekt.*
-            import org.assertj.core.api.Assertions.*
+            import java.io.*
+            import java.time.*
             
             class Test {
             }
@@ -31,7 +31,7 @@ class WildcardImportSpec {
 
         @Test
         fun `should not report excluded wildcard imports`() {
-            val rule = WildcardImport(TestConfig(EXCLUDED_IMPORTS to listOf("org.assertj.core.api.Assertions.*")))
+            val rule = WildcardImport(TestConfig(EXCLUDED_IMPORTS to listOf("java.io.*")))
 
             val findings = rule.lint(code)
             assertThat(findings).hasSize(1)
@@ -42,8 +42,8 @@ class WildcardImportSpec {
             val rule = WildcardImport(
                 TestConfig(
                     EXCLUDED_IMPORTS to listOf(
-                        "org.assertj.core.api.Assertions.*",
-                        "io.gitlab.arturbosch.detekt"
+                        "java.io.*",
+                        "java.time"
                     )
                 )
             )
@@ -76,7 +76,7 @@ class WildcardImportSpec {
         val code = """
             package org
             
-            import org.assertj.core.api.Assertions.assertThat
+            import java.io.File
             
             class Test {
             }
