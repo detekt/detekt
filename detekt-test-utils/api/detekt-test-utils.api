@@ -12,7 +12,7 @@ public final class io/github/detekt/test/utils/FileExtensionKt {
 
 public final class io/github/detekt/test/utils/KotlinAnalysisApiEngine {
 	public static final field INSTANCE Lio/github/detekt/test/utils/KotlinAnalysisApiEngine;
-	public final fun compile (Ljava/lang/String;)V
+	public final fun compile (Ljava/lang/String;)Lorg/jetbrains/kotlin/psi/KtFile;
 }
 
 public final class io/github/detekt/test/utils/KotlinCoreEnvironmentWrapper {
