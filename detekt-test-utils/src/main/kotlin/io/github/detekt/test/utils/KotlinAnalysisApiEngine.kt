@@ -88,7 +88,7 @@ class KotlinAnalysisApiEngine(@Language("kotlin") code: String, disposable: Disp
      * @throws IllegalStateException if the given code snippet does not compile
      */
     @OptIn(KaExperimentalApi::class)
-    fun compile() {
+    fun compile(): KtFile {
         val file = session.modulesWithFiles.values.flatMap { it }.single() as KtFile
 
         analyze(file) {
@@ -112,6 +112,8 @@ class KotlinAnalysisApiEngine(@Language("kotlin") code: String, disposable: Disp
                 error(errors)
             }
         }
+
+        return file
     }
 
     private fun kotlinxCoroutinesCorePath(): Path =
