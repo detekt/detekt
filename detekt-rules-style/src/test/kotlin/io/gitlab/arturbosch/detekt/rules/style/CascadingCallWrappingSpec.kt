@@ -183,7 +183,7 @@ class CascadingCallWrappingSpec {
         fun `reports missing wrapping multiline call`() {
             val code = """
                 val a = 0
-                    .plus(0) ?: let {
+                    .plus(0) ?: run {
                   42
                 }
             """.trimIndent()
