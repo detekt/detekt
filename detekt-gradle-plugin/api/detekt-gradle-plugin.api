@@ -1,7 +1,41 @@
+public abstract interface class dev/detekt/gradle/plugin/CommonCompilationArgs {
+	public abstract fun getApiVersion ()Lorg/gradle/api/provider/Property;
+	public abstract fun getClasspath ()Lorg/gradle/api/file/ConfigurableFileCollection;
+	public abstract fun getFreeCompilerArgs ()Lorg/gradle/api/provider/ListProperty;
+	public abstract fun getFriendPaths ()Lorg/gradle/api/file/ConfigurableFileCollection;
+	public abstract fun getLanguageVersion ()Lorg/gradle/api/provider/Property;
+	public abstract fun getMultiPlatformEnabled ()Lorg/gradle/api/provider/Property;
+	public abstract fun getOptIn ()Lorg/gradle/api/provider/ListProperty;
+}
+
+public abstract interface class dev/detekt/gradle/plugin/DetektBase : dev/detekt/gradle/plugin/JvmCompilationArgs {
+	public abstract fun getAllRules ()Lorg/gradle/api/provider/Property;
+	public abstract fun getAutoCorrect ()Lorg/gradle/api/provider/Property;
+	public abstract fun getBasePath ()Lorg/gradle/api/provider/Property;
+	public abstract fun getBaseline ()Lorg/gradle/api/file/RegularFileProperty;
+	public abstract fun getBuildUponDefaultConfig ()Lorg/gradle/api/provider/Property;
+	public abstract fun getConfig ()Lorg/gradle/api/file/ConfigurableFileCollection;
+	public abstract fun getDebug ()Lorg/gradle/api/provider/Property;
+	public abstract fun getDisableDefaultRuleSets ()Lorg/gradle/api/provider/Property;
+	public abstract fun getIgnoreFailures ()Lorg/gradle/api/provider/Property;
+	public abstract fun getParallel ()Lorg/gradle/api/provider/Property;
+}
+
 public final class dev/detekt/gradle/plugin/DetektBasePlugin : org/gradle/api/Plugin {
 	public fun <init> ()V
 	public synthetic fun apply (Ljava/lang/Object;)V
 	public fun apply (Lorg/gradle/api/Project;)V
+}
+
+public abstract interface class dev/detekt/gradle/plugin/DetektCliTool : org/gradle/api/Task {
+	public abstract fun getDetektClasspath ()Lorg/gradle/api/file/ConfigurableFileCollection;
+	public abstract fun getPluginClasspath ()Lorg/gradle/api/file/ConfigurableFileCollection;
+}
+
+public abstract interface class dev/detekt/gradle/plugin/JvmCompilationArgs : dev/detekt/gradle/plugin/CommonCompilationArgs {
+	public abstract fun getJdkHome ()Lorg/gradle/api/file/DirectoryProperty;
+	public abstract fun getJvmTarget ()Lorg/gradle/api/provider/Property;
+	public abstract fun getNoJdk ()Lorg/gradle/api/provider/Property;
 }
 
 public final class io/github/detekt/gradle/DetektKotlinCompilerPlugin : org/jetbrains/kotlin/gradle/plugin/KotlinCompilerPluginSupportPlugin {
@@ -39,71 +73,27 @@ public class io/github/detekt/gradle/extensions/KotlinCompileTaskDetektExtension
 	public final fun isEnabled ()Lorg/gradle/api/provider/Property;
 }
 
-public abstract class io/gitlab/arturbosch/detekt/Detekt : org/gradle/api/tasks/SourceTask {
+public abstract class io/gitlab/arturbosch/detekt/Detekt : org/gradle/api/tasks/SourceTask, dev/detekt/gradle/plugin/DetektBase, dev/detekt/gradle/plugin/DetektCliTool {
 	public fun <init> (Lorg/gradle/api/model/ObjectFactory;Lorg/gradle/workers/WorkerExecutor;Lorg/gradle/api/provider/ProviderFactory;)V
 	public final fun check ()V
-	public abstract fun getAllRules ()Lorg/gradle/api/provider/Property;
-	public abstract fun getApiVersion ()Lorg/gradle/api/provider/Property;
-	public abstract fun getAutoCorrect ()Lorg/gradle/api/provider/Property;
-	public abstract fun getBasePath ()Lorg/gradle/api/provider/Property;
 	public abstract fun getBaseline ()Lorg/gradle/api/file/RegularFileProperty;
-	public abstract fun getBuildUponDefaultConfig ()Lorg/gradle/api/provider/Property;
-	public abstract fun getClasspath ()Lorg/gradle/api/file/ConfigurableFileCollection;
-	public abstract fun getConfig ()Lorg/gradle/api/file/ConfigurableFileCollection;
-	public abstract fun getDebug ()Lorg/gradle/api/provider/Property;
-	public abstract fun getDetektClasspath ()Lorg/gradle/api/file/ConfigurableFileCollection;
-	public abstract fun getDisableDefaultRuleSets ()Lorg/gradle/api/provider/Property;
 	public abstract fun getFailOnSeverity ()Lorg/gradle/api/provider/Property;
-	public abstract fun getFreeCompilerArgs ()Lorg/gradle/api/provider/ListProperty;
-	public abstract fun getFriendPaths ()Lorg/gradle/api/file/ConfigurableFileCollection;
-	public abstract fun getIgnoreFailures ()Lorg/gradle/api/provider/Property;
-	public abstract fun getJdkHome ()Lorg/gradle/api/file/DirectoryProperty;
-	public abstract fun getJvmTarget ()Lorg/gradle/api/provider/Property;
-	public abstract fun getLanguageVersion ()Lorg/gradle/api/provider/Property;
-	public abstract fun getMultiPlatformEnabled ()Lorg/gradle/api/provider/Property;
-	public abstract fun getNoJdk ()Lorg/gradle/api/provider/Property;
-	public abstract fun getOptIn ()Lorg/gradle/api/provider/ListProperty;
-	public abstract fun getParallel ()Lorg/gradle/api/provider/Property;
-	public abstract fun getPluginClasspath ()Lorg/gradle/api/file/ConfigurableFileCollection;
 	public fun getReports ()Lio/gitlab/arturbosch/detekt/extensions/DetektReports;
 	public fun getSource ()Lorg/gradle/api/file/FileTree;
 	public final fun reports (Lorg/gradle/api/Action;)V
 }
 
-public abstract class io/gitlab/arturbosch/detekt/DetektCreateBaselineTask : org/gradle/api/tasks/SourceTask {
+public abstract class io/gitlab/arturbosch/detekt/DetektCreateBaselineTask : org/gradle/api/tasks/SourceTask, dev/detekt/gradle/plugin/DetektBase, dev/detekt/gradle/plugin/DetektCliTool {
 	public fun <init> (Lorg/gradle/workers/WorkerExecutor;Lorg/gradle/api/provider/ProviderFactory;)V
 	public final fun baseline ()V
-	public abstract fun getAllRules ()Lorg/gradle/api/provider/Property;
-	public abstract fun getApiVersion ()Lorg/gradle/api/provider/Property;
-	public abstract fun getAutoCorrect ()Lorg/gradle/api/provider/Property;
-	public abstract fun getBasePath ()Lorg/gradle/api/provider/Property;
 	public abstract fun getBaseline ()Lorg/gradle/api/file/RegularFileProperty;
-	public abstract fun getBuildUponDefaultConfig ()Lorg/gradle/api/provider/Property;
-	public abstract fun getClasspath ()Lorg/gradle/api/file/ConfigurableFileCollection;
-	public abstract fun getConfig ()Lorg/gradle/api/file/ConfigurableFileCollection;
-	public abstract fun getDebug ()Lorg/gradle/api/provider/Property;
-	public abstract fun getDetektClasspath ()Lorg/gradle/api/file/ConfigurableFileCollection;
-	public abstract fun getDisableDefaultRuleSets ()Lorg/gradle/api/provider/Property;
-	public abstract fun getFreeCompilerArgs ()Lorg/gradle/api/provider/ListProperty;
-	public abstract fun getFriendPaths ()Lorg/gradle/api/file/ConfigurableFileCollection;
-	public abstract fun getIgnoreFailures ()Lorg/gradle/api/provider/Property;
-	public abstract fun getJdkHome ()Lorg/gradle/api/file/DirectoryProperty;
-	public abstract fun getJvmTarget ()Lorg/gradle/api/provider/Property;
-	public abstract fun getLanguageVersion ()Lorg/gradle/api/provider/Property;
-	public abstract fun getMultiPlatformEnabled ()Lorg/gradle/api/provider/Property;
-	public abstract fun getNoJdk ()Lorg/gradle/api/provider/Property;
-	public abstract fun getOptIn ()Lorg/gradle/api/provider/ListProperty;
-	public abstract fun getParallel ()Lorg/gradle/api/provider/Property;
-	public abstract fun getPluginClasspath ()Lorg/gradle/api/file/ConfigurableFileCollection;
 	public fun getSource ()Lorg/gradle/api/file/FileTree;
 }
 
-public abstract class io/gitlab/arturbosch/detekt/DetektGenerateConfigTask : org/gradle/api/DefaultTask {
+public abstract class io/gitlab/arturbosch/detekt/DetektGenerateConfigTask : org/gradle/api/DefaultTask, dev/detekt/gradle/plugin/DetektCliTool {
 	public fun <init> (Lorg/gradle/workers/WorkerExecutor;Lorg/gradle/api/provider/ProviderFactory;)V
 	public final fun generateConfig ()V
 	public abstract fun getConfigFile ()Lorg/gradle/api/file/RegularFileProperty;
-	public abstract fun getDetektClasspath ()Lorg/gradle/api/file/ConfigurableFileCollection;
-	public abstract fun getPluginClasspath ()Lorg/gradle/api/file/ConfigurableFileCollection;
 }
 
 public final class io/gitlab/arturbosch/detekt/DetektPlugin : org/gradle/api/Plugin {
