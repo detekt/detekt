@@ -20,7 +20,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
       - run: |
-          download_url="https://corretto.aws/nightly/2025/02/24/Corretto21/nightly/a8a9b05539fb46004df08c3f29edfac38e2050a1/release/generic_linux/x64/amazon-corretto-21.0.7.3.1-linux-x64.tar.gz"
+          download_url="https://corretto.aws/nightly/2025/02/24/Corretto21/nightly/a8a9b05539fb46004df08c3f29edfac38e2050a1/fastdebug/generic_linux/x64/amazon-corretto-21.0.7.3.1-linux-x64-fastdebug.tar.gz"
           wget -O $RUNNER_TEMP/java_package.tar.gz $download_url
 
       - name: Setup Java
