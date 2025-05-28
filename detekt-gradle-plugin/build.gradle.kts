@@ -39,7 +39,8 @@ dokka {
     }
 
     dokkaSourceSets.configureEach {
-        apiVersion = "1.4"
+        // Using `set` instead of simple property assignment due to https://github.com/Kotlin/dokka/issues/4096
+        apiVersion.set("1.4")
         modulePath = "detekt-gradle-plugin"
 
         externalDocumentationLinks {
