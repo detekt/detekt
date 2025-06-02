@@ -49,6 +49,7 @@ internal class KotlinEnvironmentResolver : ParameterResolver {
         }
     }
 
+    @Suppress("DEPRECATION")
     private class CloseableWrapper(val wrapper: KotlinCoreEnvironmentWrapper) :
         ExtensionContext.Store.CloseableResource {
         override fun close() {
