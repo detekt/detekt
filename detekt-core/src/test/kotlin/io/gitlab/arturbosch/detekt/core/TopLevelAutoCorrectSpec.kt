@@ -13,7 +13,6 @@ import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.core.tooling.AnalysisFacade
 import io.gitlab.arturbosch.detekt.core.tooling.DefaultLifecycle
-import io.gitlab.arturbosch.detekt.core.tooling.inputPathsToKtFiles
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtAnnotation
 import org.jetbrains.kotlin.psi.KtFile
@@ -54,7 +53,7 @@ class TopLevelAutoCorrectSpec {
             DefaultLifecycle(
                 settings.config,
                 settings,
-                inputPathsToKtFiles,
+                { settings.ktFiles },
                 processorsProvider = { listOf(contentChangedListener) },
                 ruleSetsProvider = { listOf(TopLevelAutoCorrectProvider()) }
             )
