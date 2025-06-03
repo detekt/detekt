@@ -31,7 +31,6 @@ internal interface Lifecycle {
 
     val baselineConfig: Config
     val settings: ProcessingSettings
-    val parsingStrategy: ParsingStrategy
     val bindingProvider: (files: List<KtFile>) -> BindingContext
     val processorsProvider: () -> List<FileProcessListener>
     val ruleSetsProvider: () -> List<RuleSetProvider>
@@ -40,7 +39,7 @@ internal interface Lifecycle {
 
     fun analyze(): Detektion {
         measure(Phase.ValidateConfig) { checkConfiguration(settings, baselineConfig) }
-        val filesToAnalyze = measure(Phase.Parsing) { parsingStrategy.invoke(settings) }
+        val filesToAnalyze = measure(Phase.Parsing) { settings.ktFiles }
         val bindingContext = measure(Phase.Binding) { bindingProvider.invoke(filesToAnalyze) }
         val (processors, rules) = measure(Phase.LoadingExtensions) {
             val rules = getRules(
@@ -72,7 +71,6 @@ internal interface Lifecycle {
 internal class DefaultLifecycle(
     override val baselineConfig: Config,
     override val settings: ProcessingSettings,
-    override val parsingStrategy: ParsingStrategy,
     override val bindingProvider: (files: List<KtFile>) -> BindingContext =
         {
             if (settings.spec.projectSpec.analysisMode == AnalysisMode.full) {
