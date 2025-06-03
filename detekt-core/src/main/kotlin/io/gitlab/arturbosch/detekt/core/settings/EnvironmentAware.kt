@@ -11,6 +11,8 @@ import io.github.detekt.parser.createCompilerConfiguration
 import io.github.detekt.tooling.api.spec.CompilerSpec
 import io.github.detekt.tooling.api.spec.LoggingSpec
 import io.github.detekt.tooling.api.spec.ProjectSpec
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
+import org.jetbrains.kotlin.analysis.api.projectStructure.KaSourceModule
 import org.jetbrains.kotlin.analysis.api.standalone.buildStandaloneAnalysisAPISession
 import org.jetbrains.kotlin.analysis.project.structure.builder.buildKtSourceModule
 import org.jetbrains.kotlin.cli.common.CliModuleVisibilityManagerImpl
@@ -26,6 +28,7 @@ import org.jetbrains.kotlin.config.jvmTarget
 import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.load.kotlin.ModuleVisibilityManager
 import org.jetbrains.kotlin.platform.jvm.JvmPlatforms
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.CodeAnalyzerInitializer
 import java.io.Closeable
 import java.io.File
@@ -37,6 +40,7 @@ import kotlin.io.path.Path
 interface EnvironmentAware {
     val project: Project
     val configuration: CompilerConfiguration
+    val ktFiles: List<KtFile>
     val disposable: Disposable
 }
 
@@ -60,6 +64,12 @@ internal class EnvironmentFacade(
         )
 
     override val disposable: Disposable = Disposer.newDisposable()
+
+    private lateinit var sourceModule: KaSourceModule
+
+    @OptIn(KaExperimentalApi::class)
+    override val ktFiles: List<KtFile>
+        get() = sourceModule.psiRoots.filterIsInstance<KtFile>()
 
     private val analysisSession = buildStandaloneAnalysisAPISession(disposable) {
         // Required for autocorrect support
@@ -102,7 +112,7 @@ internal class EnvironmentFacade(
                 }
             }
 
-            val sourceModule = buildKtSourceModule {
+            sourceModule = buildKtSourceModule {
                 addSourceRoots(configuration.kotlinSourceRoots.map { Path(it.path) })
                 platform = targetPlatform
                 moduleName = "source"
