@@ -36,7 +36,7 @@ class DetektMessageCollectorSpec {
 
         @Test
         fun `adds up to the message count`() {
-            subject.printIssuesCountIfAny()
+            subject.printIssuesCountIfAny(k2Mode = true)
 
             assertThat(warningPrinter.messages).contains(
                 """
@@ -61,7 +61,7 @@ class DetektMessageCollectorSpec {
 
         @Test
         fun `adds up to the message count`() {
-            subject.printIssuesCountIfAny()
+            subject.printIssuesCountIfAny(k2Mode = true)
 
             assertThat(warningPrinter.messages).contains(
                 """
