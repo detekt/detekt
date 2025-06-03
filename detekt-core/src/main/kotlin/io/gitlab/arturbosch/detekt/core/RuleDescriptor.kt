@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.core
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleInstance
@@ -50,7 +51,7 @@ private fun RuleSet.getRules(
             val rule = ruleProvider(Config.empty)
             val ruleConfig = config.subConfig(ruleId)
             val active = config.isActiveOrDefault(true) && ruleConfig.isActiveOrDefault(false)
-            val executable = fullAnalysis || rule !is RequiresFullAnalysis
+            val executable = fullAnalysis || (rule !is RequiresFullAnalysis && rule !is RequiresAnalysisApi)
             if (active && !executable) {
                 log { "The rule '$ruleId' requires type resolution but it was run without it." }
             }
