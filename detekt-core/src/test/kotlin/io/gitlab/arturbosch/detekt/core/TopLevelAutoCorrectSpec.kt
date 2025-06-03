@@ -53,7 +53,6 @@ class TopLevelAutoCorrectSpec {
             DefaultLifecycle(
                 settings.config,
                 settings,
-                { settings.ktFiles },
                 processorsProvider = { listOf(contentChangedListener) },
                 ruleSetsProvider = { listOf(TopLevelAutoCorrectProvider()) }
             )

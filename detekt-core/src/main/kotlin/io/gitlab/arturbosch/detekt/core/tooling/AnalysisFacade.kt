@@ -19,7 +19,7 @@ class AnalysisFacade(
 ) : Detekt {
 
     override fun run(): AnalysisResult = runAnalysis {
-        DefaultLifecycle(spec.getDefaultConfiguration(), it, { it.ktFiles })
+        DefaultLifecycle(spec.getDefaultConfiguration(), it)
     }
 
     override fun run(files: Collection<KtFile>, bindingContext: BindingContext): AnalysisResult =
@@ -27,7 +27,6 @@ class AnalysisFacade(
             DefaultLifecycle(
                 spec.getDefaultConfiguration(),
                 it,
-                parsingStrategy = { files.toList() },
                 bindingProvider = { bindingContext }
             )
         }
