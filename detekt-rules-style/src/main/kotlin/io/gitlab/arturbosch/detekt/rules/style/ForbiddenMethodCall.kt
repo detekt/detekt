@@ -32,6 +32,23 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.overriddenTreeUniqueAsSequenc
  * This rule allows to set a list of forbidden [methods] or constructors. This can be used to discourage the use
  * of unstable, experimental or deprecated methods, especially for methods imported from external libraries.
  *
+ * Some methods, such as `lazy { ... }`, take function type parameters.
+ * Consider the following method signature:
+ * ```kotlin
+ * fun <T> lazy(initializer: () -> T)
+ * ```
+ * If you need to specify a function type parameter when forbidding a method,
+ * You can write it as `() -> Any`, which Kotlin may translate to `kotlin.Function{N}`.
+ * Since Kotlin represents function types in this format, you may need to explicitly use `kotlin.Function{N}`
+ * for exact matching.
+ *
+ * To forbid the usage of `lazy { ... }`, configure the rule as follows:
+ * ```yaml
+ * ForbiddenMethodCall:
+ *   methods:
+ *     - 'kotlin.lazy(() -> Any)'
+ * ```
+ *
  * <noncompliant>
  * fun main() {
  *   println()
