@@ -9,6 +9,8 @@ class KotlinAnalysisAAEngineTest {
     @Test
     fun `can compile a valid script`() {
         val code = """
+            package foo.a
+            
             class A
         """.trimIndent()
         KotlinAnalysisApiEngine.compile(code)
@@ -17,6 +19,8 @@ class KotlinAnalysisAAEngineTest {
     @Test
     fun `fails compiling an invalid script`() {
         val invalidCode = """
+            package foo.b
+            
             val unknownType: UnknownType
         """.trimIndent()
         assertThatThrownBy { KotlinAnalysisApiEngine.compile(invalidCode) }
@@ -49,6 +53,8 @@ class KotlinAnalysisAAEngineTest {
     @RepeatedTest(10)
     fun `can compile the same script repeatedly`() {
         val code = """
+            package foo.c
+            
             class A
         """.trimIndent()
         KotlinAnalysisApiEngine.compile(code)
@@ -57,6 +63,8 @@ class KotlinAnalysisAAEngineTest {
     @RepeatedTest(10)
     fun `fails repeatedly on invalid script`() {
         val invalidCode = """
+            package foo.d
+            
             val unknownType: UnknownType
         """.trimIndent()
         assertThatThrownBy { KotlinAnalysisApiEngine.compile(invalidCode) }
