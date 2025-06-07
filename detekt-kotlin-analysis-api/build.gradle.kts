@@ -24,6 +24,7 @@ dependencies {
             attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
         }
     }
+    implementation(libs.kotlinx.serializationCore)
     compileOnly(libs.kotlin.compiler)
 }
 
