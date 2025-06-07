@@ -11,8 +11,8 @@ public final class io/github/detekt/test/utils/FileExtensionKt {
 }
 
 public final class io/github/detekt/test/utils/KotlinAnalysisApiEngine {
-	public fun <init> (Ljava/lang/String;Lcom/intellij/openapi/Disposable;)V
-	public final fun compile ()V
+	public static final field INSTANCE Lio/github/detekt/test/utils/KotlinAnalysisApiEngine;
+	public final fun compile (Ljava/lang/String;)V
 }
 
 public final class io/github/detekt/test/utils/KotlinCoreEnvironmentWrapper {

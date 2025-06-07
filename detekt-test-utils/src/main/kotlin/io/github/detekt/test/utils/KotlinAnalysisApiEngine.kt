@@ -2,7 +2,7 @@ package io.github.detekt.test.utils
 
 import com.google.devtools.ksp.standalone.buildKspLibraryModule
 import com.google.devtools.ksp.standalone.buildKspSdkModule
-import com.intellij.openapi.Disposable
+import com.intellij.openapi.util.Disposer
 import com.intellij.testFramework.LightVirtualFile
 import kotlinx.coroutines.CoroutineScope
 import org.intellij.lang.annotations.Language
@@ -28,59 +28,9 @@ import kotlin.io.path.Path
 /**
  * The object to use the Kotlin Analysis API for code compilation.
  */
-class KotlinAnalysisApiEngine(@Language("kotlin") code: String, disposable: Disposable) {
+object KotlinAnalysisApiEngine {
 
     private lateinit var sourceModule: KaModule
-
-    @OptIn(KaImplementationDetail::class, KaPlatformInterface::class, KaExperimentalApi::class)
-    private val session = buildStandaloneAnalysisAPISession(disposable, unitTestMode = true) {
-        buildKtModuleProvider {
-            val targetPlatform = JvmPlatforms.defaultJvmPlatform
-            platform = targetPlatform
-
-            val jdk = addModule(
-                buildKspSdkModule {
-                    addBinaryRootsFromJdkHome(Path(System.getProperty("java.home")), true)
-                    platform = targetPlatform
-                    libraryName = "sdk"
-                }
-            )
-
-            val stdlib = addModule(
-                buildKspLibraryModule {
-                    addBinaryRoot(File(CharRange::class.java.protectionDomain.codeSource.location.path).toPath())
-                    platform = targetPlatform
-                    libraryName = "stdlib"
-                }
-            )
-
-            val coroutinesCore = addModule(
-                buildKspLibraryModule {
-                    addBinaryRoot(kotlinxCoroutinesCorePath())
-                    platform = targetPlatform
-                    libraryName = "coroutines-core"
-                }
-            )
-
-            val vf = LightVirtualFile("dummy.kt", code)
-
-            sourceModule = addModule(
-                buildKtSourceModule {
-                    addRegularDependency(jdk)
-                    addRegularDependency(stdlib)
-                    addRegularDependency(coroutinesCore)
-                    addSourceVirtualFile(vf)
-                    platform = targetPlatform
-                    moduleName = "source"
-                }
-            )
-        }
-    }
-
-    private val configuration = CompilerConfiguration()
-
-    @OptIn(KaExperimentalApi::class)
-    private val target = KaCompilerTarget.Jvm(false)
 
     /**
      * Compiles a given code string using Kotlin's Analysis API.
@@ -88,29 +38,83 @@ class KotlinAnalysisApiEngine(@Language("kotlin") code: String, disposable: Disp
      * @throws IllegalStateException if the given code snippet does not compile
      */
     @OptIn(KaExperimentalApi::class)
-    fun compile() {
+    fun compile(@Language("kotlin") code: String) {
+
+        val disposable = Disposer.newDisposable()
+
+        @OptIn(KaImplementationDetail::class, KaPlatformInterface::class, KaExperimentalApi::class)
+        val session = buildStandaloneAnalysisAPISession(disposable, unitTestMode = true) {
+            buildKtModuleProvider {
+                val targetPlatform = JvmPlatforms.defaultJvmPlatform
+                platform = targetPlatform
+
+                val jdk = addModule(
+                    buildKspSdkModule {
+                        addBinaryRootsFromJdkHome(Path(System.getProperty("java.home")), true)
+                        platform = targetPlatform
+                        libraryName = "sdk"
+                    }
+                )
+
+                val stdlib = addModule(
+                    buildKspLibraryModule {
+                        addBinaryRoot(File(CharRange::class.java.protectionDomain.codeSource.location.path).toPath())
+                        platform = targetPlatform
+                        libraryName = "stdlib"
+                    }
+                )
+
+                val coroutinesCore = addModule(
+                    buildKspLibraryModule {
+                        addBinaryRoot(kotlinxCoroutinesCorePath())
+                        platform = targetPlatform
+                        libraryName = "coroutines-core"
+                    }
+                )
+
+                val vf = LightVirtualFile("dummy.kt", code)
+
+                sourceModule = addModule(
+                    buildKtSourceModule {
+                        addRegularDependency(jdk)
+                        addRegularDependency(stdlib)
+                        addRegularDependency(coroutinesCore)
+                        addSourceVirtualFile(vf)
+                        platform = targetPlatform
+                        moduleName = "source"
+                    }
+                )
+            }
+        }
+
+        val configuration = CompilerConfiguration()
+        val target = KaCompilerTarget.Jvm(false)
         val file = session.modulesWithFiles.values.flatMap { it }.single() as KtFile
 
-        analyze(file) {
-            val result = compile(file, configuration, target) {
-                it.severity != KaSeverity.ERROR
-            }
-
-            if (result is KaCompilationResult.Failure) {
-                val errors = result.errors.joinToString("\n") {
-                    if (it is KaDiagnosticWithPsi<*>) {
-                        val lineAndColumn = PsiDiagnosticUtils.offsetToLineAndColumn(
-                            it.psi.containingFile.viewProvider.document,
-                            it.psi.textOffset
-                        )
-                        "${it.severity.name} ${it.defaultMessage} (${it.psi.containingFile.name}:${lineAndColumn.line}:${lineAndColumn.column})"
-                    } else {
-                        "${it.severity.name} ${it.defaultMessage}"
-                    }
+        try {
+            analyze(file) {
+                val result = compile(file, configuration, target) {
+                    it.severity != KaSeverity.ERROR
                 }
 
-                error(errors)
+                if (result is KaCompilationResult.Failure) {
+                    val errors = result.errors.joinToString("\n") {
+                        if (it is KaDiagnosticWithPsi<*>) {
+                            val lineAndColumn = PsiDiagnosticUtils.offsetToLineAndColumn(
+                                it.psi.containingFile.viewProvider.document,
+                                it.psi.textOffset
+                            )
+                            "${it.severity.name} ${it.defaultMessage} (${it.psi.containingFile.name}:${lineAndColumn.line}:${lineAndColumn.column})"
+                        } else {
+                            "${it.severity.name} ${it.defaultMessage}"
+                        }
+                    }
+
+                    error(errors)
+                }
             }
+        } finally {
+            disposable.dispose()
         }
     }
 

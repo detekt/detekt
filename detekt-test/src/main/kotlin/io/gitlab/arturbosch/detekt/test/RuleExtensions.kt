@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.test
 
-import com.intellij.openapi.util.Disposer
 import io.github.detekt.test.utils.KotlinAnalysisApiEngine
 import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.github.detekt.test.utils.KotlinScriptEngine
@@ -35,10 +34,7 @@ fun Rule.lint(
         KotlinScriptEngine.compile(content)
     }
     if (compile && shouldCompileTestSnippetsAa) {
-        val disposable = Disposer.newDisposable()
-        val engine = KotlinAnalysisApiEngine(content, disposable)
-        engine.compile()
-        disposable.dispose()
+        KotlinAnalysisApiEngine.compile(content)
     }
     val ktFile = compileContentForTest(content)
     return visitFile(ktFile, compilerResources = compilerResources).filterSuppressed(this)
@@ -58,10 +54,7 @@ fun <T> T.lintWithContext(
         KotlinScriptEngine.compile(content)
     }
     if (compile && shouldCompileTestSnippetsAa) {
-        val disposable = Disposer.newDisposable()
-        val engine = KotlinAnalysisApiEngine(content, disposable)
-        engine.compile()
-        disposable.dispose()
+        KotlinAnalysisApiEngine.compile(content)
     }
     val ktFile = compileContentForTest(content)
     val additionalKtFiles = additionalContents.mapIndexed { index, additionalContent ->
