@@ -42,7 +42,7 @@ class ThrowingExceptionsWithoutMessageOrCauseSpec {
                 org.assertj.core.api.Assertions.assertThatIllegalArgumentException().isThrownBy { println() }
             }
         """.trimIndent()
-        assertThat(subject.lint(code)).isEmpty()
+        assertThat(subject.lint(code, compile = false)).isEmpty()
     }
 
     @Test

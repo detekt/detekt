@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.test
 
+import io.github.detekt.test.utils.KotlinAnalysisApiEngine
 import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.github.detekt.test.utils.KotlinScriptEngine
 import io.github.detekt.test.utils.compileContentForTest
@@ -18,6 +19,9 @@ import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactoryImpl
 private val shouldCompileTestSnippets: Boolean =
     System.getProperty("compile-test-snippets", "false")!!.toBoolean()
 
+private val shouldCompileTestSnippetsAa: Boolean =
+    System.getProperty("compile-test-snippets-aa", "false")!!.toBoolean()
+
 fun Rule.lint(
     @Language("kotlin") content: String,
     compilerResources: CompilerResources = FakeCompilerResources(),
@@ -28,6 +32,9 @@ fun Rule.lint(
     }
     if (compile && shouldCompileTestSnippets) {
         KotlinScriptEngine.compile(content)
+    }
+    if (compile && shouldCompileTestSnippetsAa) {
+        KotlinAnalysisApiEngine.compile(content)
     }
     val ktFile = compileContentForTest(content)
     return visitFile(ktFile, compilerResources = compilerResources).filterSuppressed(this)
@@ -45,6 +52,9 @@ fun <T> T.lintWithContext(
 ): List<Finding> where T : Rule, T : RequiresFullAnalysis {
     if (compile && shouldCompileTestSnippets) {
         KotlinScriptEngine.compile(content)
+    }
+    if (compile && shouldCompileTestSnippetsAa) {
+        KotlinAnalysisApiEngine.compile(content)
     }
     val ktFile = compileContentForTest(content)
     val additionalKtFiles = additionalContents.mapIndexed { index, additionalContent ->
