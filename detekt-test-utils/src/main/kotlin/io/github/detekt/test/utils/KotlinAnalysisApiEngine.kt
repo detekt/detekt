@@ -28,24 +28,26 @@ import kotlin.io.path.Path
 /**
  * The object to use the Kotlin Analysis API for code compilation.
  */
+@OptIn(KaExperimentalApi::class)
 object KotlinAnalysisApiEngine {
 
     private lateinit var sourceModule: KaModule
+    private val targetPlatform = JvmPlatforms.defaultJvmPlatform
+    private val configuration = CompilerConfiguration()
+    private val target = KaCompilerTarget.Jvm(false)
 
     /**
      * Compiles a given code string using Kotlin's Analysis API.
      *
      * @throws IllegalStateException if the given code snippet does not compile
      */
-    @OptIn(KaExperimentalApi::class)
+    @Suppress("LongMethod")
     fun compile(@Language("kotlin") code: String) {
-
         val disposable = Disposer.newDisposable()
 
-        @OptIn(KaImplementationDetail::class, KaPlatformInterface::class, KaExperimentalApi::class)
+        @OptIn(KaImplementationDetail::class, KaPlatformInterface::class)
         val session = buildStandaloneAnalysisAPISession(disposable, unitTestMode = true) {
             buildKtModuleProvider {
-                val targetPlatform = JvmPlatforms.defaultJvmPlatform
                 platform = targetPlatform
 
                 val jdk = addModule(
@@ -87,11 +89,9 @@ object KotlinAnalysisApiEngine {
             }
         }
 
-        val configuration = CompilerConfiguration()
-        val target = KaCompilerTarget.Jvm(false)
-        val file = session.modulesWithFiles.values.flatMap { it }.single() as KtFile
-
         try {
+            val file = session.modulesWithFiles.values.flatMap { it }.single() as KtFile
+
             analyze(file) {
                 val result = compile(file, configuration, target) {
                     it.severity != KaSeverity.ERROR
