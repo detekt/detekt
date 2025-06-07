@@ -224,6 +224,9 @@ public abstract interface class io/gitlab/arturbosch/detekt/api/ReportingExtensi
 	public fun transformIssues (Ljava/util/List;)Ljava/util/List;
 }
 
+public abstract interface class io/gitlab/arturbosch/detekt/api/RequiresAnalysisApi {
+}
+
 public abstract interface class io/gitlab/arturbosch/detekt/api/RequiresFullAnalysis {
 }
 

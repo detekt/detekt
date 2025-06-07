@@ -7,6 +7,7 @@ import io.github.detekt.test.utils.compileContentForTest
 import io.gitlab.arturbosch.detekt.api.CompilerResources
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
@@ -61,6 +62,20 @@ fun <T> T.lintWithContext(
         compileContentForTest(additionalContent, "AdditionalTest$index.kt")
     }
     setBindingContext(environment.createBindingContext(listOf(ktFile) + additionalKtFiles))
+
+    return visitFile(ktFile, compilerResources).filterSuppressed(this)
+}
+
+fun <T> T.lintWithContext(
+    environment: KotlinEnvironmentContainer,
+    @Language("kotlin") content: String,
+): List<Finding> where T : Rule, T : RequiresAnalysisApi {
+    val ktFile = KotlinAnalysisApiEngine.compile(content)
+
+    val compilerResources = CompilerResources(
+        environment.configuration.languageVersionSettings,
+        DataFlowValueFactoryImpl(environment.configuration.languageVersionSettings)
+    )
 
     return visitFile(ktFile, compilerResources).filterSuppressed(this)
 }
