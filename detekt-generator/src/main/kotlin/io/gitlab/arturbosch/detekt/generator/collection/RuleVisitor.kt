@@ -28,6 +28,8 @@ internal class RuleVisitor(textReplacements: Map<String, String>) : DetektVisito
     private val configurationCollector = ConfigurationCollector()
     private val classesMap = mutableMapOf<String, Boolean>()
     private var deprecationMessage: String? = null
+    private val fullAnalysisInterfaces =
+        setOf(RequiresFullAnalysis::class.simpleName, RequiresAnalysisApi::class.simpleName)
 
     fun getRule(): Rule {
         if (documentationCollector.description.isEmpty()) {
@@ -96,10 +98,7 @@ internal class RuleVisitor(textReplacements: Map<String, String>) : DetektVisito
 
         autoCorrect = classOrObject.isAnnotatedWith(AutoCorrectable::class)
         requiresFullAnalysis = classOrObject.superTypeListEntries
-            .any {
-                it.text.substringAfterLast(".") in
-                    setOf(RequiresFullAnalysis::class.simpleName, RequiresAnalysisApi::class.simpleName)
-            }
+            .any { it.text.substringAfterLast(".") in fullAnalysisInterfaces }
         deprecationMessage = classOrObject.firstAnnotationParameterOrNull(Deprecated::class)
 
         documentationCollector.setClass(classOrObject)
