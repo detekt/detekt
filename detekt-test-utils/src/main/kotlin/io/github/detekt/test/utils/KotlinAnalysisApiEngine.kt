@@ -42,7 +42,7 @@ object KotlinAnalysisApiEngine {
      * @throws IllegalStateException if the given code snippet does not compile
      */
     @Suppress("LongMethod")
-    fun compile(@Language("kotlin") code: String) {
+    fun compile(@Language("kotlin") code: String): KtFile {
         val disposable = Disposer.newDisposable()
 
         @OptIn(KaImplementationDetail::class, KaPlatformInterface::class)
@@ -113,6 +113,8 @@ object KotlinAnalysisApiEngine {
                     error(errors)
                 }
             }
+
+            return file
         } finally {
             disposable.dispose()
         }
