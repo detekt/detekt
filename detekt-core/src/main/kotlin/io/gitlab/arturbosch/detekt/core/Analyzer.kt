@@ -21,7 +21,6 @@ import io.gitlab.arturbosch.detekt.core.util.shouldAnalyzeFile
 import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactoryImpl
 import java.nio.file.Path
 
 internal class Analyzer(
@@ -33,7 +32,6 @@ internal class Analyzer(
     fun run(ktFiles: Collection<KtFile>): List<Issue> {
         val languageVersionSettings = settings.configuration.languageVersionSettings
 
-        val dataFlowValueFactory = DataFlowValueFactoryImpl(languageVersionSettings)
         val compilerResources = CompilerResources(languageVersionSettings)
         return if (settings.spec.executionSpec.parallelAnalysis) {
             runAsync(ktFiles, compilerResources)
