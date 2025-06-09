@@ -118,8 +118,7 @@ private fun KtExpression.descriptor(bindingContext: BindingContext): CallableDes
  */
 @OptIn(KaExperimentalApi::class)
 fun KtExpression.isNullable(shouldConsiderPlatformTypeAsNullable: Boolean): Boolean {
-    val safeAccessOperation = (this as? KtSafeQualifiedExpression)?.operationTokenNode as? PsiElement
-    if (safeAccessOperation != null) {
+    if (this is KtSafeQualifiedExpression) {
         analyze(this) {
             return diagnostics(KaDiagnosticCheckerFilter.ONLY_COMMON_CHECKERS)
                 .none { it is KaFirDiagnostic.UnnecessarySafeCall }
