@@ -15,7 +15,6 @@ import io.gitlab.arturbosch.detekt.core.suppressors.isSuppressedBy
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactoryImpl
 
 private val shouldCompileTestSnippets: Boolean =
     System.getProperty("compile-test-snippets", "false")!!.toBoolean()
@@ -46,8 +45,7 @@ fun <T> T.lintWithContext(
     @Language("kotlin") content: String,
     @Language("kotlin") vararg additionalContents: String,
     compilerResources: CompilerResources = CompilerResources(
-        environment.configuration.languageVersionSettings,
-        DataFlowValueFactoryImpl(environment.configuration.languageVersionSettings)
+        environment.configuration.languageVersionSettings
     ),
     compile: Boolean = true,
 ): List<Finding> where T : Rule, T : RequiresFullAnalysis {
@@ -73,8 +71,7 @@ fun <T> T.lintWithContext(
     val ktFile = KotlinAnalysisApiEngine.compile(content)
 
     val compilerResources = CompilerResources(
-        environment.configuration.languageVersionSettings,
-        DataFlowValueFactoryImpl(environment.configuration.languageVersionSettings)
+        environment.configuration.languageVersionSettings
     )
 
     return visitFile(ktFile, compilerResources).filterSuppressed(this)

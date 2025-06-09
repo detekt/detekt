@@ -34,7 +34,7 @@ internal class Analyzer(
         val languageVersionSettings = settings.configuration.languageVersionSettings
 
         val dataFlowValueFactory = DataFlowValueFactoryImpl(languageVersionSettings)
-        val compilerResources = CompilerResources(languageVersionSettings, dataFlowValueFactory)
+        val compilerResources = CompilerResources(languageVersionSettings)
         return if (settings.spec.executionSpec.parallelAnalysis) {
             runAsync(ktFiles, compilerResources)
         } else {
