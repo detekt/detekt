@@ -20,15 +20,12 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest ]
-        jdk: [
-          17,
-          21.0.4, # Specific version to work around https://github.com/detekt/detekt/issues/8009
-        ]
+        jdk: [ 17, 21 ]
         include:
           - os: windows-latest
-            jdk: 21.0.4 # Specific version to work around https://github.com/detekt/detekt/issues/8009
+            jdk: 21
           - os: macos-latest
-            jdk: 21.0.4 # Specific version to work around https://github.com/detekt/detekt/issues/8009
+            jdk: 21
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout Repo
