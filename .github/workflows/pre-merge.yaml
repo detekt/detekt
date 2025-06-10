@@ -9,7 +9,7 @@ on:
 
 env:
   DEVELOCITY_ACCESS_KEY: ${{ secrets.GRADLE_ENTERPRISE_ACCESS_KEY }}
-  ORG_GRADLE_PROJECT_enablePTS: ${{ github.ref_name != 'main' }}
+  ORG_GRADLE_PROJECT_enablePTS: false
 
 permissions:
   contents: read
