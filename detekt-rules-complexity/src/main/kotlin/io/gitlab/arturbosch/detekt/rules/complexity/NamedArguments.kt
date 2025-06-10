@@ -4,14 +4,14 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtLambdaArgument
-import org.jetbrains.kotlin.resolve.calls.components.isVararg
-import org.jetbrains.kotlin.resolve.calls.util.getParameterForArgument
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 
 /**
  * Reports function invocations which have more arguments than a certain threshold and are all not named. Calls with
@@ -34,7 +34,7 @@ class NamedArguments(config: Config) :
         config,
         "Named arguments are required for function calls with many arguments."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     @Configuration("The allowed number of arguments for a function.")
     private val allowedArguments: Int by config(defaultValue = 3)
@@ -53,21 +53,26 @@ class NamedArguments(config: Config) :
         }
     }
 
+    @Suppress("ReturnCount")
     private fun KtCallExpression.canNameArguments(): Boolean {
-        val resolvedCall = getResolvedCall(bindingContext) ?: return false
-        if (!resolvedCall.candidateDescriptor.hasStableParameterNames()) return false
+        analyze(this) {
+            val functionCall = resolveToCall()?.singleFunctionCallOrNull() ?: return false
+            if (!functionCall.symbol.hasStableParameterNames) return false
 
-        val unnamedArguments = valueArguments.mapNotNull { argument ->
-            if (argument.isNamed() || argument is KtLambdaArgument) return@mapNotNull null
-            val parameter = resolvedCall.getParameterForArgument(argument) ?: return@mapNotNull null
-            if (ignoreArgumentsMatchingNames && parameter.name.asString() == argument.getArgumentExpression()?.text) {
-                return@mapNotNull null
+            val unnamedArguments = valueArguments.mapNotNull { argument ->
+                if (argument.isNamed() || argument is KtLambdaArgument) return@mapNotNull null
+                val parameter = functionCall.argumentMapping[argument.getArgumentExpression()] ?: return@mapNotNull null
+                if (ignoreArgumentsMatchingNames &&
+                    parameter.name.asString() == argument.getArgumentExpression()?.text
+                ) {
+                    return@mapNotNull null
+                }
+                argument to parameter
             }
-            argument to parameter
-        }
 
-        return unnamedArguments.isNotEmpty() &&
-            unnamedArguments.count { (argument, _) -> argument.isSpread } <= 1 &&
-            unnamedArguments.all { (argument, parameter) -> argument.isSpread || !parameter.isVararg }
+            return unnamedArguments.isNotEmpty() &&
+                unnamedArguments.count { (argument, _) -> argument.isSpread } <= 1 &&
+                unnamedArguments.all { (argument, parameter) -> argument.isSpread || !parameter.symbol.isVararg }
+        }
     }
 }
