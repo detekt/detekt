@@ -6,6 +6,8 @@ plugins {
 dependencies {
     api(libs.kotlin.compiler)
 
+    implementation(projects.detektKotlinAnalysisApi)
+
     testImplementation(libs.assertj.core)
     testImplementation(projects.detektTest)
     testImplementation(projects.detektTestUtils)

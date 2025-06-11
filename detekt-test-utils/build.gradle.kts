@@ -7,6 +7,7 @@ dependencies {
     api(libs.kotlin.stdlib)
     api(libs.junit.jupiterApi)
     implementation(projects.detektKotlinAnalysisApi)
+    implementation(projects.detektKotlinAnalysisApiStandalone)
     implementation(projects.detektParser)
     implementation(libs.kotlin.mainKts) {
         isTransitive = false

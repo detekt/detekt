@@ -14,6 +14,7 @@ class ReturnFromFinallySpec(val env: KotlinEnvironmentContainer) {
 
     val subject = ReturnFromFinally(Config.empty)
 
+    @Nested
     inner class `a finally block with a return statement` {
         val code = """
             fun x() {

@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.generator.collection
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.Alias
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
@@ -27,6 +28,8 @@ internal class RuleVisitor(textReplacements: Map<String, String>) : DetektVisito
     private val configurationCollector = ConfigurationCollector()
     private val classesMap = mutableMapOf<String, Boolean>()
     private var deprecationMessage: String? = null
+    private val fullAnalysisInterfaces =
+        setOf(RequiresFullAnalysis::class.simpleName, RequiresAnalysisApi::class.simpleName)
 
     fun getRule(): Rule {
         if (documentationCollector.description.isEmpty()) {
@@ -95,7 +98,7 @@ internal class RuleVisitor(textReplacements: Map<String, String>) : DetektVisito
 
         autoCorrect = classOrObject.isAnnotatedWith(AutoCorrectable::class)
         requiresFullAnalysis = classOrObject.superTypeListEntries
-            .any { it.text.substringAfterLast(".") == RequiresFullAnalysis::class.simpleName }
+            .any { it.text.substringAfterLast(".") in fullAnalysisInterfaces }
         deprecationMessage = classOrObject.firstAnnotationParameterOrNull(Deprecated::class)
 
         documentationCollector.setClass(classOrObject)

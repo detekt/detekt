@@ -70,7 +70,7 @@ fun generateBindingContext(
     return analyzer.analysisResult.bindingContext
 }
 
-internal class DetektMessageCollector(
+class DetektMessageCollector(
     private val minSeverity: CompilerMessageSeverity,
     private val debugPrinter: (() -> String) -> Unit,
     private val warningPrinter: (String) -> Unit,
@@ -84,10 +84,11 @@ internal class DetektMessageCollector(
         }
     }
 
-    fun printIssuesCountIfAny() {
+    fun printIssuesCountIfAny(k2Mode: Boolean = false) {
         if (messages > 0) {
             warningPrinter(
-                "There were $messages compiler errors found during analysis. This affects accuracy of reporting.\n" +
+                "There were $messages compiler errors found during ${if (!k2Mode) "legacy compiler " else ""}" +
+                    "analysis. This affects accuracy of reporting.\n" +
                     "Run detekt CLI with --debug or set `detekt { debug = true }` in Gradle to see the error messages."
             )
         }

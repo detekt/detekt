@@ -7,6 +7,7 @@ plugins {
 
 dependencies {
     api(libs.kotlin.compiler)
+    api(projects.detektKotlinAnalysisApi)
     implementation(projects.detektUtils)
 
     testImplementation(projects.detektTest)
