@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.formatting.wrappers
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfigProperty
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.INDENT_SIZE_PROPERTY
 import com.pinterest.ktlint.ruleset.standard.rules.AnnotationRule
+import com.pinterest.ktlint.ruleset.standard.rules.AnnotationRule.Companion.ANNOTATIONS_WITH_PARAMETERS_NOT_TO_BE_WRAPPED_PROPERTY
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
@@ -28,5 +29,6 @@ class AnnotationOnSeparateLine(config: Config) : FormattingRule(
     override fun overrideEditorConfigProperties(): Map<EditorConfigProperty<*>, String> =
         mapOf(
             INDENT_SIZE_PROPERTY to indentSize.toString(),
+            ANNOTATIONS_WITH_PARAMETERS_NOT_TO_BE_WRAPPED_PROPERTY to "",
         )
 }
