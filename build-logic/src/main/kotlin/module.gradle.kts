@@ -39,6 +39,8 @@ tasks.withType<Test>().configureEach {
 
     if (compileTestSnippetsAa) {
         maxHeapSize = "3g"
+    } else {
+        maxHeapSize = "1g"
     }
 
     testLogging {
