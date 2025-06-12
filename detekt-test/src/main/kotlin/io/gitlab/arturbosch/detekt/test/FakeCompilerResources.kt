@@ -6,7 +6,6 @@ import org.jetbrains.kotlin.config.ApiVersion
 import org.jetbrains.kotlin.config.ExplicitApiMode
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.config.LanguageVersionSettingsImpl
-import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactoryImpl
 
 @Suppress("FunctionName")
 fun FakeCompilerResources(
@@ -19,7 +18,6 @@ fun FakeCompilerResources(
         specificFeatures = emptyMap(),
     )
     return CompilerResources(
-        languageVersionSettings,
-        DataFlowValueFactoryImpl(languageVersionSettings)
+        languageVersionSettings
     )
 }

@@ -12,8 +12,7 @@ public final class io/gitlab/arturbosch/detekt/api/AutocorrectKt {
 }
 
 public final class io/gitlab/arturbosch/detekt/api/CompilerResources {
-	public fun <init> (Lorg/jetbrains/kotlin/config/LanguageVersionSettings;Lorg/jetbrains/kotlin/resolve/calls/smartcasts/DataFlowValueFactory;)V
-	public final fun getDataFlowValueFactory ()Lorg/jetbrains/kotlin/resolve/calls/smartcasts/DataFlowValueFactory;
+	public fun <init> (Lorg/jetbrains/kotlin/config/LanguageVersionSettings;)V
 	public final fun getLanguageVersionSettings ()Lorg/jetbrains/kotlin/config/LanguageVersionSettings;
 }
 
