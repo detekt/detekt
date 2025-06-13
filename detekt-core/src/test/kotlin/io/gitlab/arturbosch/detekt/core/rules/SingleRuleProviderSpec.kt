@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.core.rules
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.RuleName
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import org.assertj.core.api.Assertions.assertThat
@@ -14,7 +15,7 @@ class SingleRuleProviderSpec {
     @ParameterizedTest
     @ValueSource(strings = ["CustomRule1", "CustomRule2"])
     fun `constructs the expected RuleSetProvider`(ruleNameString: String) {
-        val ruleName = Rule.Name(ruleNameString)
+        val ruleName = RuleName(ruleNameString)
         val wrappedRuleSet = CustomRuleSetProvider()
         val subject = SingleRuleProvider(ruleName, wrappedRuleSet)
         assertThat(subject.ruleSetId.value).isEqualTo("custom")
@@ -26,7 +27,7 @@ class SingleRuleProviderSpec {
     @Test
     fun `throws when the rule name doesn't exist`() {
         assertThatThrownBy {
-            SingleRuleProvider(Rule.Name("ARule"), CustomRuleSetProvider())
+            SingleRuleProvider(RuleName("ARule"), CustomRuleSetProvider())
         }
             .isInstanceOf(IllegalArgumentException::class.java)
             .hasMessage("There was not rule 'ARule' in rule set 'custom'.")

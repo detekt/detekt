@@ -28,7 +28,7 @@ open class Rule(
      *
      * By default, it is the name of the class name. Override to change it.
      */
-    open val ruleName: Name get() = Name(javaClass.simpleName)
+    open val ruleName: RuleName get() = RuleName(javaClass.simpleName)
 
     protected lateinit var compilerResources: CompilerResources
     private lateinit var _bindingContext: BindingContext
@@ -97,13 +97,13 @@ open class Rule(
     fun setBindingContext(bindingContext: BindingContext) {
         _bindingContext = bindingContext
     }
+}
 
-    @Poko
-    class Name(val value: String) {
-        init {
-            validateIdentifier(value)
-        }
-
-        override fun toString(): String = value
+@Poko
+class RuleName(val value: String) {
+    init {
+        validateIdentifier(value)
     }
+
+    override fun toString(): String = value
 }
