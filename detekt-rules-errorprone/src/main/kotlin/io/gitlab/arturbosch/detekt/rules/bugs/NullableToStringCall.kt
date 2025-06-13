@@ -11,6 +11,7 @@ import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.name.CallableId
+import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.name.StandardClassIds.BASE_KOTLIN_PACKAGE
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtSimpleNameExpression
@@ -80,6 +81,6 @@ class NullableToStringCall(config: Config) :
     }
 
     companion object {
-        val toString = CallableId(BASE_KOTLIN_PACKAGE, org.jetbrains.kotlin.name.Name.identifier("toString"))
+        val toString = CallableId(BASE_KOTLIN_PACKAGE, Name.identifier("toString"))
     }
 }
