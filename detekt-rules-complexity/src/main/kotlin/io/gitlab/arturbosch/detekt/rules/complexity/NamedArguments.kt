@@ -65,9 +65,10 @@ class NamedArguments(config: Config) :
                 if (ignoreArgumentsMatchingNames &&
                     parameter.name.asString() == argument.getArgumentExpression()?.text
                 ) {
-                    return@mapNotNull null
+                    null
+                } else {
+                    argument to parameter
                 }
-                argument to parameter
             }
 
             return unnamedArguments.isNotEmpty() &&
