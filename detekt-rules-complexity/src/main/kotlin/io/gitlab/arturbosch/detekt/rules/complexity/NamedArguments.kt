@@ -55,7 +55,7 @@ class NamedArguments(config: Config) :
 
     @Suppress("ReturnCount")
     private fun KtCallExpression.canNameArguments(): Boolean {
-        analyze(this) {
+        return analyze(this) {
             val functionCall = resolveToCall()?.singleFunctionCallOrNull() ?: return false
             if (!functionCall.symbol.hasStableParameterNames) return false
 
@@ -71,7 +71,7 @@ class NamedArguments(config: Config) :
                 }
             }
 
-            return unnamedArguments.isNotEmpty() &&
+            unnamedArguments.isNotEmpty() &&
                 unnamedArguments.count { (argument, _) -> argument.isSpread } <= 1 &&
                 unnamedArguments.all { (argument, parameter) -> argument.isSpread || !parameter.symbol.isVararg }
         }
