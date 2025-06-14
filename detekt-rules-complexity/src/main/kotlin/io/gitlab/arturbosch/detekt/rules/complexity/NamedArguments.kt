@@ -54,26 +54,24 @@ class NamedArguments(config: Config) :
     }
 
     @Suppress("ReturnCount")
-    private fun KtCallExpression.canNameArguments(): Boolean {
-        return analyze(this) {
-            val functionCall = resolveToCall()?.singleFunctionCallOrNull() ?: return false
-            if (!functionCall.symbol.hasStableParameterNames) return false
+    private fun KtCallExpression.canNameArguments(): Boolean = analyze(this) {
+        val functionCall = resolveToCall()?.singleFunctionCallOrNull() ?: return false
+        if (!functionCall.symbol.hasStableParameterNames) return false
 
-            val unnamedArguments = valueArguments.mapNotNull { argument ->
-                if (argument.isNamed() || argument is KtLambdaArgument) return@mapNotNull null
-                val parameter = functionCall.argumentMapping[argument.getArgumentExpression()] ?: return@mapNotNull null
-                if (ignoreArgumentsMatchingNames &&
-                    parameter.name.asString() == argument.getArgumentExpression()?.text
-                ) {
-                    null
-                } else {
-                    argument to parameter
-                }
+        val unnamedArguments = valueArguments.mapNotNull { argument ->
+            if (argument.isNamed() || argument is KtLambdaArgument) return@mapNotNull null
+            val parameter = functionCall.argumentMapping[argument.getArgumentExpression()] ?: return@mapNotNull null
+            if (ignoreArgumentsMatchingNames &&
+                parameter.name.asString() == argument.getArgumentExpression()?.text
+            ) {
+                null
+            } else {
+                argument to parameter
             }
-
-            unnamedArguments.isNotEmpty() &&
-                unnamedArguments.count { (argument, _) -> argument.isSpread } <= 1 &&
-                unnamedArguments.all { (argument, parameter) -> argument.isSpread || !parameter.symbol.isVararg }
         }
+
+        unnamedArguments.isNotEmpty() &&
+            unnamedArguments.count { (argument, _) -> argument.isSpread } <= 1 &&
+            unnamedArguments.all { (argument, parameter) -> argument.isSpread || !parameter.symbol.isVararg }
     }
 }
