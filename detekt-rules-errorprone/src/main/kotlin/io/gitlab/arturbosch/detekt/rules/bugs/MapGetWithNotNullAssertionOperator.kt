@@ -11,6 +11,7 @@ import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.CallableId
+import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.name.StandardClassIds
 import org.jetbrains.kotlin.psi.KtPostfixExpression
 
@@ -62,7 +63,7 @@ class MapGetWithNotNullAssertionOperator(config: Config) :
     private fun KtPostfixExpression.isMapGet(): Boolean {
         val postfixExpression = baseExpression ?: return false
 
-        val equalsCallableId = CallableId(StandardClassIds.Map, org.jetbrains.kotlin.name.Name.identifier("get"))
+        val equalsCallableId = CallableId(StandardClassIds.Map, Name.identifier("get"))
 
         analyze(postfixExpression) {
             return postfixExpression

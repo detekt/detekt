@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.rules
 
-import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.RuleName
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 
@@ -12,7 +12,7 @@ internal class SingleRuleProvider private constructor(
     override fun instance() = ruleSet
 
     companion object {
-        operator fun invoke(ruleName: Rule.Name, wrapped: RuleSetProvider): SingleRuleProvider {
+        operator fun invoke(ruleName: RuleName, wrapped: RuleSetProvider): SingleRuleProvider {
             val ruleProvider = requireNotNull(wrapped.instance().rules[ruleName]) {
                 "There was not rule '$ruleName' in rule set '${wrapped.ruleSetId}'."
             }

@@ -9,6 +9,7 @@ import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.name.CallableId
+import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.name.StandardClassIds.BASE_KOTLIN_PACKAGE
 import org.jetbrains.kotlin.psi.KtCallExpression
 
@@ -65,8 +66,8 @@ class UnnecessaryNotNullCheck(config: Config) :
 
     companion object {
         private val notNullCheckFunctionFqNames = listOf(
-            CallableId(BASE_KOTLIN_PACKAGE, org.jetbrains.kotlin.name.Name.identifier("requireNotNull")),
-            CallableId(BASE_KOTLIN_PACKAGE, org.jetbrains.kotlin.name.Name.identifier("checkNotNull")),
+            CallableId(BASE_KOTLIN_PACKAGE, Name.identifier("requireNotNull")),
+            CallableId(BASE_KOTLIN_PACKAGE, Name.identifier("checkNotNull")),
         )
     }
 }

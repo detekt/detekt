@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleInstance
+import io.gitlab.arturbosch.detekt.api.RuleName
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.Severity
@@ -70,7 +71,7 @@ private fun RuleSet.getRules(
         }
     }
 
-private fun generateDefaultUrl(ruleSetId: RuleSet.Id, ruleName: Rule.Name) =
+private fun generateDefaultUrl(ruleSetId: RuleSet.Id, ruleName: RuleName) =
     URI("https://detekt.dev/docs/${whichDetekt()}/rules/${ruleSetId.value.lowercase()}#${ruleName.value.lowercase()}")
 
 private val externalFirstPartyRuleSets = setOf(
@@ -98,5 +99,5 @@ private fun parseToSeverity(severity: String): Severity {
         ?: error("'$severity' is not a valid Severity. Allowed values are ${Severity.entries}")
 }
 
-internal fun extractRuleName(key: String): Rule.Name? =
-    runCatching { Rule.Name(key.substringBefore("/")) }.getOrNull()
+internal fun extractRuleName(key: String): RuleName? =
+    runCatching { RuleName(key.substringBefore("/")) }.getOrNull()

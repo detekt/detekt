@@ -11,6 +11,7 @@ import org.jetbrains.kotlin.descriptors.DeclarationDescriptorWithSource
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
 import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCatchClause
 import org.jetbrains.kotlin.psi.KtElement
@@ -34,7 +35,6 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.resolve.source.getPsi
 import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
-import org.jetbrains.kotlin.name.Name as KotlinName
 
 /**
  * `suspend` functions should not be called inside `runCatching`'s lambda block, because `runCatching` catches all the
@@ -310,6 +310,6 @@ class SuspendFunSwallowedCancellation(config: Config) :
         // Based on code from Kotlin project:
         // https://github.com/JetBrains/kotlin/commit/87bbac9d43e15557a2ff0dc3254fd41a9d5639e1
         private val COROUTINE_CONTEXT_FQ_NAME =
-            COROUTINES_PACKAGE_FQ_NAME.child(KotlinName.identifier("coroutineContext"))
+            COROUTINES_PACKAGE_FQ_NAME.child(Name.identifier("coroutineContext"))
     }
 }
