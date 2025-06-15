@@ -37,9 +37,7 @@ fun Rule.lint(
         KotlinAnalysisApiEngine.compile(content)
     }
     val ktFile = compileContentForTest(content)
-    return visitFile(ktFile, languageVersionSettings = languageVersionSettings).filterSuppressed(
-        this
-    )
+    return visitFile(ktFile, languageVersionSettings = languageVersionSettings).filterSuppressed(this)
 }
 
 fun <T> T.lintWithContext(
