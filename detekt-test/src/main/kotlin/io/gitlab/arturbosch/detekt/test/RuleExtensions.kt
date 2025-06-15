@@ -67,9 +67,7 @@ fun <T> T.lintWithContext(
     @Language("kotlin") content: String,
 ): List<Finding> where T : Rule, T : RequiresAnalysisApi {
     val ktFile = KotlinAnalysisApiEngine.compile(content)
-    return visitFile(ktFile, environment.configuration.languageVersionSettings).filterSuppressed(
-        this
-    )
+    return visitFile(ktFile, environment.configuration.languageVersionSettings).filterSuppressed(this)
 }
 
 fun Rule.lint(
@@ -79,22 +77,12 @@ fun Rule.lint(
     require(this !is RequiresFullAnalysis) {
         "${this.ruleName} requires full analysis so you should use lintWithContext instead of lint"
     }
-    return visitFile(ktFile, languageVersionSettings = languageVersionSettings).filterSuppressed(
-        this
-    )
+    return visitFile(ktFile, languageVersionSettings = languageVersionSettings).filterSuppressed(this)
 }
 
 private fun List<Finding>.filterSuppressed(rule: Rule): List<Finding> =
     filterNot {
-        it.entity.ktElement.isSuppressedBy(
-            rule.ruleName.value,
-            rule.aliases,
-            RuleSet.Id("NoARuleSetId")
-        )
+        it.entity.ktElement.isSuppressedBy(rule.ruleName.value, rule.aliases, RuleSet.Id("NoARuleSetId"))
     }
 
-private val Rule.aliases: Set<String>
-    get() = config.valueOrDefault(
-        Config.ALIASES_KEY,
-        emptyList<String>()
-    ).toSet()
+private val Rule.aliases: Set<String> get() = config.valueOrDefault(Config.ALIASES_KEY, emptyList<String>()).toSet()
