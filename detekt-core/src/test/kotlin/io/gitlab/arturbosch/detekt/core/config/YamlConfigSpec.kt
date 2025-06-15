@@ -221,6 +221,24 @@ class YamlConfigSpec {
                     .isNotNull
                     .isEmpty()
             }
+
+            @Test
+            fun `supports mixed string and dictionary`() {
+                val actualAsMap: List<Map<*, *>>? = config
+                    .subConfig("style")
+                    .subConfig("MixedWithStringAnsMaps")
+                    .valueOrNull("values")
+                assertThat(actualAsMap)
+                    .isNotNull
+                    .isNotEmpty
+                    .hasSize(6)
+                    .elements(0, 1)
+                    .hasOnlyElementsOfType(String::class.java)
+
+                assertThat(actualAsMap)
+                    .elements(2, 3, 4, 5)
+                    .hasOnlyElementsOfType(Map::class.java)
+            }
         }
 
         @Test

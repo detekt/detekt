@@ -13,3 +13,13 @@ style:
         reason: reason C
   EmptyListOfMaps:
     values: []
+  MixedWithStringAnsMaps:
+    values:
+      - a
+      - b
+      - value: c
+      - value: d
+      - value: e
+        reason: reason E
+      - value: f
+        reason: reason F
