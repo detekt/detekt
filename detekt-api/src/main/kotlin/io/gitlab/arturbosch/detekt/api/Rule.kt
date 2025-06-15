@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.api
 
 import dev.drewhamilton.poko.Poko
 import io.gitlab.arturbosch.detekt.api.internal.validateIdentifier
+import org.jetbrains.kotlin.config.LanguageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import java.net.URI
@@ -30,7 +31,7 @@ open class Rule(
      */
     open val ruleName: RuleName get() = RuleName(javaClass.simpleName)
 
-    protected lateinit var compilerResources: CompilerResources
+    protected lateinit var languageVersionSettings: LanguageVersionSettings
     private lateinit var _bindingContext: BindingContext
 
     @Suppress("UnusedReceiverParameter")
@@ -53,10 +54,10 @@ open class Rule(
      */
     fun visitFile(
         root: KtFile,
-        compilerResources: CompilerResources,
+        languageVersionSettings: LanguageVersionSettings,
     ): List<Finding> {
         findings.clear()
-        this.compilerResources = compilerResources
+        this.languageVersionSettings = languageVersionSettings
         preVisit(root)
         visit(root)
         postVisit(root)

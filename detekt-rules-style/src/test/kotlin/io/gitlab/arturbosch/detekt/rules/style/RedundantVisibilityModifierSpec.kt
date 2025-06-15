@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.FakeCompilerResources
+import io.gitlab.arturbosch.detekt.test.FakeLanguageVersionSettings
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lint
 import org.jetbrains.kotlin.config.ExplicitApiMode
@@ -171,19 +171,19 @@ class RedundantVisibilityModifierSpec {
 
         @Test
         fun `does not report public function in class if explicit API mode is set to strict`() {
-            val findings = subject.lint(code, FakeCompilerResources(ExplicitApiMode.STRICT))
+            val findings = subject.lint(code, FakeLanguageVersionSettings(ExplicitApiMode.STRICT))
             assertThat(findings).isEmpty()
         }
 
         @Test
         fun `does not report public function in class if explicit API mode is set to warning`() {
-            val findings = subject.lint(code, FakeCompilerResources(ExplicitApiMode.WARNING))
+            val findings = subject.lint(code, FakeLanguageVersionSettings(ExplicitApiMode.WARNING))
             assertThat(findings).isEmpty()
         }
 
         @Test
         fun `reports public function in class if explicit API mode is disabled`() {
-            val findings = subject.lint(code, FakeCompilerResources(ExplicitApiMode.DISABLED))
+            val findings = subject.lint(code, FakeLanguageVersionSettings(ExplicitApiMode.DISABLED))
             assertThat(findings).hasSize(1)
         }
     }
