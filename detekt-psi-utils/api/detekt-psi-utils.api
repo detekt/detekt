@@ -41,8 +41,11 @@ public final class io/gitlab/arturbosch/detekt/rules/KtBinaryExpressionKt {
 }
 
 public final class io/gitlab/arturbosch/detekt/rules/KtCallExpressionKt {
+	public static final fun isCalling (Lorg/jetbrains/kotlin/psi/KtCallExpression;Ljava/util/List;)Z
 	public static final fun isCalling (Lorg/jetbrains/kotlin/psi/KtCallExpression;Ljava/util/List;Lorg/jetbrains/kotlin/resolve/BindingContext;)Z
+	public static final fun isCalling (Lorg/jetbrains/kotlin/psi/KtCallExpression;Lorg/jetbrains/kotlin/name/CallableId;)Z
 	public static final fun isCalling (Lorg/jetbrains/kotlin/psi/KtCallExpression;Lorg/jetbrains/kotlin/name/FqName;Lorg/jetbrains/kotlin/resolve/BindingContext;)Z
+	public static final fun isCallingWithNonNullCheckArgument (Lorg/jetbrains/kotlin/psi/KtCallExpression;Lorg/jetbrains/kotlin/name/CallableId;)Z
 	public static final fun isCallingWithNonNullCheckArgument (Lorg/jetbrains/kotlin/psi/KtCallExpression;Lorg/jetbrains/kotlin/name/FqName;Lorg/jetbrains/kotlin/resolve/BindingContext;)Z
 }
 
