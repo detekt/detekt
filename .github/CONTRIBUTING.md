@@ -5,7 +5,7 @@
 - Use `./gradlew build -x dokkaGenerate` to build the source but exclude documentation JAR generation to save time.
 - Make sure that `./gradlew detekt detektMain detektTest` does not report any errors.
 - This repository follows the [Kotlin coding conventions](https://kotlinlang.org/docs/reference/coding-conventions.html),
-  which are enforced by ktlint when running the `detekt` gradle tasks on the project itself.
+  which are enforced by ktlint when running the `detekt` Gradle tasks on the project itself.
 - Make sure your IDE uses [ktlint](https://github.com/pinterest/ktlint) formatting rules as well
   as the settings in [.editorconfig](../.editorconfig).
 - We use [JUnit 5](https://junit.org/junit5/docs/current/user-guide/) for testing. Please use the `Spec.kt` suffix on
