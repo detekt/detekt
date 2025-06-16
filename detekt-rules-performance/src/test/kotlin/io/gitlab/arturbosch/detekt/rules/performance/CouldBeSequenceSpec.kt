@@ -27,6 +27,33 @@ class CouldBeSequenceSpec(val env: KotlinEnvironmentContainer) {
     }
 
     @Test
+    fun `long collection chain should not report multiple violations`() {
+        val code = """
+            val myCollection = listOf(1, 2, 3, 4, 5, 6, 7, 8)
+            val processed = myCollection.filter {
+                it % 2 == 0
+            }.map {
+                it*2
+            }.filter {
+                it > 5
+            }.filterNot {
+                it > 5
+            }.mapNotNull {
+                if (kotlin.random.Random.nextBoolean()) null else it
+            }.map {
+                if (kotlin.random.Random.nextBoolean()) null else it
+            }.filterIndexed { index, _ ->
+                index % 2 == 0
+            }.filterIsInstance<Int>()
+            .take(10)
+            .takeWhile { true }
+            .drop(1)
+            .toList()
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
     fun `does not report issue for amount of operations that are exactly the allowed number`() {
         val code = """
             val myCollection = listOf(1, 2, 3, 4, 5, 6, 7, 8)
@@ -76,6 +103,78 @@ class CouldBeSequenceSpec(val env: KotlinEnvironmentContainer) {
             }.filter {
                 it > 5
             }.toList()
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
+    fun `#8190 - all functions should be accounted for`() {
+        val code = """
+        val bar = listOf<String?>("bar")
+            .filterIsInstance<String>()
+            .filterNot { true }
+            .filterNotNull()
+            .take(1)
+            .drop(1)
+            .takeWhile { true }
+            .mapNotNull { it }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
+    fun `use of sequence then toList call preceded by the allowed count should not trigger rule`() {
+        val code = """
+            val bar = listOf<String?>("bar")
+                .asSequence()
+                .filterIsInstance<String>()
+                .filterNot { true }
+                .filterNotNull()
+                .take(1)
+                .drop(1)
+                .takeWhile { true }
+                .toList()
+                .takeLast(2)
+                .mapNotNull { it }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
+    fun `two long chains separated by methods not present in sequence package should trigger rule two times`() {
+        val code = """
+            val myCollection = listOf(1, 2, 3, 4, 5, 6, 7, 8)
+            val processed = myCollection
+                .filter {
+                    it % 2 == 0
+                }
+                .map {
+                    it * 2
+                }
+                .filter {
+                    it > 5
+                }
+                .takeLast(2)
+                .mapNotNull {
+                    if (kotlin.random.Random.nextBoolean()) null else it
+                }.map {
+                    if (kotlin.random.Random.nextBoolean()) null else it
+                }.filterIndexed { index, _ ->
+                    index % 2 == 0
+                }
+                .takeLast(10)
+                .toList()
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).hasSize(2)
+    }
+
+    @Test
+    fun `using method not allowed on sequence should not trigger rule`() {
+        val code = """
+            val bar = listOf<String?>("bar")
+                .takeLast(2)
+                .takeLastWhile { true }
+                .asReversed()
         """.trimIndent()
         assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
