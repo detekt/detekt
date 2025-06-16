@@ -9,7 +9,9 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.builtins.PrimitiveType
-import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.name.CallableId
+import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.name.StandardClassIds.BASE_KOTLIN_PACKAGE
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
@@ -78,7 +80,10 @@ class ArrayPrimitive(config: Config) :
 
     companion object {
         private val primitiveTypes = PrimitiveType.entries.map { it.typeName.asString() }
-        private val factoryMethodFqNames = listOf(FqName("kotlin.arrayOf"), FqName("kotlin.emptyArray"))
-        private val factoryMethodNames = factoryMethodFqNames.map { it.shortName().asString() }
+        private val factoryMethodFqNames = listOf(
+            CallableId(BASE_KOTLIN_PACKAGE, Name.identifier("arrayOf")),
+            CallableId(BASE_KOTLIN_PACKAGE, Name.identifier("emptyArray"))
+        )
+        private val factoryMethodNames = factoryMethodFqNames.map { it.callableName.asString() }
     }
 }
