@@ -11,11 +11,6 @@ public final class io/gitlab/arturbosch/detekt/api/AutocorrectKt {
 	public static final fun setModifiedText (Lorg/jetbrains/kotlin/psi/KtFile;Ljava/lang/String;)V
 }
 
-public final class io/gitlab/arturbosch/detekt/api/CompilerResources {
-	public fun <init> (Lorg/jetbrains/kotlin/config/LanguageVersionSettings;)V
-	public final fun getLanguageVersionSettings ()Lorg/jetbrains/kotlin/config/LanguageVersionSettings;
-}
-
 public abstract interface class io/gitlab/arturbosch/detekt/api/Config {
 	public static final field ACTIVE_KEY Ljava/lang/String;
 	public static final field ALIASES_KEY Ljava/lang/String;
@@ -230,23 +225,23 @@ public abstract interface class io/gitlab/arturbosch/detekt/api/RequiresFullAnal
 }
 
 public class io/gitlab/arturbosch/detekt/api/Rule : io/gitlab/arturbosch/detekt/api/DetektVisitor {
-	protected field compilerResources Lio/gitlab/arturbosch/detekt/api/CompilerResources;
+	protected field languageVersionSettings Lorg/jetbrains/kotlin/config/LanguageVersionSettings;
 	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Config;Ljava/lang/String;Ljava/net/URI;)V
 	public synthetic fun <init> (Lio/gitlab/arturbosch/detekt/api/Config;Ljava/lang/String;Ljava/net/URI;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun getAutoCorrect ()Z
 	public final fun getBindingContext (Lio/gitlab/arturbosch/detekt/api/RequiresFullAnalysis;)Lorg/jetbrains/kotlin/resolve/BindingContext;
-	protected final fun getCompilerResources ()Lio/gitlab/arturbosch/detekt/api/CompilerResources;
 	public final fun getConfig ()Lio/gitlab/arturbosch/detekt/api/Config;
 	public final fun getDescription ()Ljava/lang/String;
+	protected final fun getLanguageVersionSettings ()Lorg/jetbrains/kotlin/config/LanguageVersionSettings;
 	public fun getRuleName ()Lio/gitlab/arturbosch/detekt/api/RuleName;
 	public final fun getUrl ()Ljava/net/URI;
 	protected fun postVisit (Lorg/jetbrains/kotlin/psi/KtFile;)V
 	protected fun preVisit (Lorg/jetbrains/kotlin/psi/KtFile;)V
 	public final fun report (Lio/gitlab/arturbosch/detekt/api/Finding;)V
 	public final fun setBindingContext (Lorg/jetbrains/kotlin/resolve/BindingContext;)V
-	protected final fun setCompilerResources (Lio/gitlab/arturbosch/detekt/api/CompilerResources;)V
+	protected final fun setLanguageVersionSettings (Lorg/jetbrains/kotlin/config/LanguageVersionSettings;)V
 	public fun visit (Lorg/jetbrains/kotlin/psi/KtFile;)V
-	public final fun visitFile (Lorg/jetbrains/kotlin/psi/KtFile;Lio/gitlab/arturbosch/detekt/api/CompilerResources;)Ljava/util/List;
+	public final fun visitFile (Lorg/jetbrains/kotlin/psi/KtFile;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;)Ljava/util/List;
 }
 
 public final class io/gitlab/arturbosch/detekt/api/RuleInstance {

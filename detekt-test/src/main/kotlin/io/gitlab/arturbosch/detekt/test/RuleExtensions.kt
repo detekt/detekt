@@ -4,7 +4,6 @@ import io.github.detekt.test.utils.KotlinAnalysisApiEngine
 import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.github.detekt.test.utils.KotlinScriptEngine
 import io.github.detekt.test.utils.compileContentForTest
-import io.gitlab.arturbosch.detekt.api.CompilerResources
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
@@ -13,6 +12,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.core.suppressors.isSuppressedBy
 import org.intellij.lang.annotations.Language
+import org.jetbrains.kotlin.config.LanguageVersionSettings
 import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
 
@@ -24,7 +24,7 @@ private val shouldCompileTestSnippetsAa: Boolean =
 
 fun Rule.lint(
     @Language("kotlin") content: String,
-    compilerResources: CompilerResources = FakeCompilerResources(),
+    languageVersionSettings: LanguageVersionSettings = FakeLanguageVersionSettings(),
     compile: Boolean = true,
 ): List<Finding> {
     require(this !is RequiresFullAnalysis) {
@@ -37,16 +37,14 @@ fun Rule.lint(
         KotlinAnalysisApiEngine.compile(content)
     }
     val ktFile = compileContentForTest(content)
-    return visitFile(ktFile, compilerResources = compilerResources).filterSuppressed(this)
+    return visitFile(ktFile, languageVersionSettings = languageVersionSettings).filterSuppressed(this)
 }
 
 fun <T> T.lintWithContext(
     environment: KotlinEnvironmentContainer,
     @Language("kotlin") content: String,
     @Language("kotlin") vararg additionalContents: String,
-    compilerResources: CompilerResources = CompilerResources(
-        environment.configuration.languageVersionSettings
-    ),
+    languageVersionSettings: LanguageVersionSettings = environment.configuration.languageVersionSettings,
     compile: Boolean = true,
 ): List<Finding> where T : Rule, T : RequiresFullAnalysis {
     if (compile && shouldCompileTestSnippets) {
@@ -61,7 +59,7 @@ fun <T> T.lintWithContext(
     }
     setBindingContext(environment.createBindingContext(listOf(ktFile) + additionalKtFiles))
 
-    return visitFile(ktFile, compilerResources).filterSuppressed(this)
+    return visitFile(ktFile, languageVersionSettings).filterSuppressed(this)
 }
 
 fun <T> T.lintWithContext(
@@ -69,19 +67,17 @@ fun <T> T.lintWithContext(
     @Language("kotlin") content: String,
 ): List<Finding> where T : Rule, T : RequiresAnalysisApi {
     val ktFile = KotlinAnalysisApiEngine.compile(content)
-
-    val compilerResources = CompilerResources(
-        environment.configuration.languageVersionSettings
-    )
-
-    return visitFile(ktFile, compilerResources).filterSuppressed(this)
+    return visitFile(ktFile, environment.configuration.languageVersionSettings).filterSuppressed(this)
 }
 
-fun Rule.lint(ktFile: KtFile, compilerResources: CompilerResources = FakeCompilerResources()): List<Finding> {
+fun Rule.lint(
+    ktFile: KtFile,
+    languageVersionSettings: LanguageVersionSettings = FakeLanguageVersionSettings(),
+): List<Finding> {
     require(this !is RequiresFullAnalysis) {
         "${this.ruleName} requires full analysis so you should use lintWithContext instead of lint"
     }
-    return visitFile(ktFile, compilerResources = compilerResources).filterSuppressed(this)
+    return visitFile(ktFile, languageVersionSettings = languageVersionSettings).filterSuppressed(this)
 }
 
 private fun List<Finding>.filterSuppressed(rule: Rule): List<Finding> =
