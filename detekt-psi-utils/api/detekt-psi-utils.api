@@ -76,6 +76,7 @@ public final class io/gitlab/arturbosch/detekt/rules/KtValueArgumentKt {
 
 public final class io/gitlab/arturbosch/detekt/rules/MethodSignatureKt {
 	public static final fun hasCorrectEqualsParameter (Lorg/jetbrains/kotlin/psi/KtFunction;)Z
+	public static final fun hasImplicitUnitReturnType (Lorg/jetbrains/kotlin/psi/KtNamedFunction;)Z
 	public static final fun hasImplicitUnitReturnType (Lorg/jetbrains/kotlin/psi/KtNamedFunction;Lorg/jetbrains/kotlin/resolve/BindingContext;)Z
 	public static final fun isEqualsFunction (Lorg/jetbrains/kotlin/psi/KtFunction;)Z
 	public static final fun isHashCodeFunction (Lorg/jetbrains/kotlin/psi/KtFunction;)Z
