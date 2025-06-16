@@ -73,7 +73,9 @@ public final class io/gitlab/arturbosch/detekt/rules/KtModifierListKt {
 }
 
 public final class io/gitlab/arturbosch/detekt/rules/KtValueArgumentKt {
+	public static final fun isEmptyOrSingleStringArgument (Ljava/util/List;)Z
 	public static final fun isEmptyOrSingleStringArgument (Ljava/util/List;Lorg/jetbrains/kotlin/resolve/BindingContext;)Z
+	public static final fun isString (Lorg/jetbrains/kotlin/psi/KtValueArgument;)Z
 	public static final fun isString (Lorg/jetbrains/kotlin/psi/KtValueArgument;Lorg/jetbrains/kotlin/resolve/BindingContext;)Z
 }
 
