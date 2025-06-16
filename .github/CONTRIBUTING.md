@@ -2,10 +2,10 @@
 
 - Read [this article](https://chris.beams.io/posts/git-commit/) before writing commit messages.
 - Before running any tests, run `./gradlew publishToMavenLocal` to ensure that all tests are using the locally built artifact (c.f. issue [#6708](https://github.com/detekt/detekt/issues/6708) and PR [#6415](https://github.com/detekt/detekt/pull/6415)). Otherwise, the tests will pull a possibly outdated version of detekt from Maven Central or Sonatype.
-- Use `gradle build -x dokkaHtml` to build the source but exclude documentation JAR generation to save time.
-- Make sure that `gradle detekt` does not report any errors.
+- Use `./gradlew build -x dokkaGenerate` to build the source but exclude documentation JAR generation to save time.
+- Make sure that `./gradlew detektMain detektTest` does not report any errors.
 - This repository follows the [Kotlin coding conventions](https://kotlinlang.org/docs/reference/coding-conventions.html),
-  which are enforced by ktlint when running `gradle detekt`.
+  which are enforced by ktlint when running the `detekt` Gradle tasks on the project itself.
 - Make sure your IDE uses [ktlint](https://github.com/pinterest/ktlint) formatting rules as well
   as the settings in [.editorconfig](../.editorconfig).
 - We use [JUnit 5](https://junit.org/junit5/docs/current/user-guide/) for testing. Please use the `Spec.kt` suffix on
@@ -286,14 +286,14 @@ Check the [README.md inside website/](https://github.com/detekt/detekt/blob/main
 ## Working on the Gradle plugin
 
 - Make changes to the core modules (e.g. adding a new CLI flag)
-- Run `gradle publishToMavenLocal`
+- Run `./gradlew publishToMavenLocal`
 - Make changes to the Gradle plugin and add tests
-- Verify with `gradle detekt`
+- Verify with `./gradlew build detektMain detektTest`
 
 ## Releasing new detekt versions
 
 - `./scripts/github-milestone-report.main.kts` - creates changelog
-- `gradle increment<Patch|Minor|Major>` - update version
+- `./gradlew increment<Patch|Minor|Major>` - update version
 - `./scripts/release.sh` - publish all artifacts
 
 ## Gradle Enterprise Access
