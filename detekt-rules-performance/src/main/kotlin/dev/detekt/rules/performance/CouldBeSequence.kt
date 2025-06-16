@@ -15,6 +15,9 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForReceiver
 import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelectorOrThis
+import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
+import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
+import org.jetbrains.kotlin.resolve.descriptorUtil.module
 
 /**
  * Long chains of collection operations will have a performance penalty due to a new list being created for each call. Consider using sequences instead. Read more about this in the [documentation](https://kotlinlang.org/docs/sequences.html)
@@ -46,13 +49,13 @@ class CouldBeSequence(config: Config) :
 
         if (visitedCallExpressions.contains(expression)) return
 
-        if (!expression.isCallingAnyOf(operationsCallableIds)) return
+        if (!expression.isCallingKotlinCollectionFun()) return
 
         var counter = 1
         var nextCall = expression.nextChainedCall()
-        while (counter <= allowedOperations && nextCall != null) {
+        while (nextCall != null) {
             visitedCallExpressions += nextCall
-            if (!nextCall.isCallingAnyOf(operationsCallableIds)) {
+            if (!nextCall.isCallingKotlinCollectionFun()) {
                 break
             }
 
@@ -66,29 +69,36 @@ class CouldBeSequence(config: Config) :
         }
     }
 
+    @Suppress("ReturnCount")
+    private fun KtExpression.isCallingKotlinCollectionFun(): Boolean {
+        val operatorNameFqName = getResolvedCall(bindingContext)
+            ?.resultingDescriptor
+            ?.fqNameOrNull()
+            ?.asString()
+            ?: return false
+        val isExpressionPresentInKotlinCollections =
+            operatorNameFqName.startsWith("kotlin.collections.") == true
+        if (!isExpressionPresentInKotlinCollections) return false
+        val sequenceOperatorFqName =
+            FqName("kotlin.sequences." + operatorNameFqName.substringAfter("kotlin.collections."))
+
+        val moduleDescriptor =
+            getResolvedCall(bindingContext)?.resultingDescriptor?.module ?: return false
+
+        val sequencePackage = moduleDescriptor.getPackage(FqName("kotlin.sequences"))
+
+        val functionName = sequenceOperatorFqName.shortName()
+
+        val sequenceFunctions = sequencePackage.memberScope.getContributedFunctions(
+            functionName,
+            NoLookupLocation.FROM_BACKEND
+        )
+
+        return sequenceFunctions.isNotEmpty()
+    }
+
     private fun KtExpression.nextChainedCall(): KtExpression? {
         val expression = this.getQualifiedExpressionForSelectorOrThis()
         return expression.getQualifiedExpressionForReceiver()?.selectorExpression
-    }
-
-    private fun KtExpression.isCallingAnyOf(callableIds: List<CallableId>): Boolean {
-        val callExpression = this as? KtCallExpression ?: return false
-        val calleeText = callExpression.calleeExpression?.text
-        val candidates = callableIds.filter { it.callableName.asString() == calleeText }
-
-        return candidates.isNotEmpty() && callExpression.isCalling(candidates)
-    }
-
-    companion object {
-        private val operationsCallableIds = listOf(
-            CallableId(StandardClassIds.BASE_COLLECTIONS_PACKAGE, Name.identifier("filter")),
-            CallableId(StandardClassIds.BASE_COLLECTIONS_PACKAGE, Name.identifier("filterIndexed")),
-            CallableId(StandardClassIds.BASE_COLLECTIONS_PACKAGE, Name.identifier("map")),
-            CallableId(StandardClassIds.BASE_COLLECTIONS_PACKAGE, Name.identifier("mapIndexed")),
-            CallableId(StandardClassIds.BASE_COLLECTIONS_PACKAGE, Name.identifier("flatMap")),
-            CallableId(StandardClassIds.BASE_COLLECTIONS_PACKAGE, Name.identifier("flatMapIndexed")),
-            CallableId(StandardClassIds.BASE_COLLECTIONS_PACKAGE, Name.identifier("reduce")),
-            CallableId(StandardClassIds.BASE_COLLECTIONS_PACKAGE, Name.identifier("zip"))
-        )
     }
 }
