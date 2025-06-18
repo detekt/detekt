@@ -1,6 +1,6 @@
 plugins {
     id("java")
-    id("com.gradleup.shadow") version "8.3.6"
+    id("com.gradleup.shadow") version "9.0.0-beta17"
 }
 
 dependencies {
@@ -11,4 +11,8 @@ dependencies {
 
 tasks.shadowJar {
     relocate("org.jetbrains.kotlin.com.intellij", "com.intellij")
+}
+
+java {
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
