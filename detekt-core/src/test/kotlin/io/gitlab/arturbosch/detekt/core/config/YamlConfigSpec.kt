@@ -226,7 +226,7 @@ class YamlConfigSpec {
             fun `supports mixed string and dictionary`() {
                 val actualAsMap: List<Map<*, *>>? = config
                     .subConfig("style")
-                    .subConfig("MixedWithStringAnsMaps")
+                    .subConfig("MixedWithStringAndMaps")
                     .valueOrNull("values")
                 assertThat(actualAsMap)
                     .isNotNull

@@ -13,7 +13,7 @@ style:
         reason: reason C
   EmptyListOfMaps:
     values: []
-  MixedWithStringAnsMaps:
+  MixedWithStringAndMaps:
     values:
       - a
       - b
