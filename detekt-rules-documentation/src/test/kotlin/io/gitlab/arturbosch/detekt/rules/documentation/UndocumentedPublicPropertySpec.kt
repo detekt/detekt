@@ -462,9 +462,8 @@ class UndocumentedPublicPropertySpec {
                 }
             """.trimIndent()
             assertThat(
-                UndocumentedPublicProperty(TestConfig(IGNORE_ENUM_ENTRIES to true)).lint(
-                    code
-                )
+                UndocumentedPublicProperty(TestConfig(IGNORE_ENUM_ENTRIES to true))
+                    .lint(code)
             ).isEmpty()
         }
 
