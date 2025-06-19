@@ -213,12 +213,12 @@ style:
   ForbiddenMethodCall:
     active: true
     methods:
-      - value: 'kotlin.io.print'
-      - value: 'kotlin.io.println'
-      - value: 'java.net.URL.openStream'
-      - value: 'java.lang.Class.getResourceAsStream'
-      - value: 'java.lang.ClassLoader.getResourceAsStream'
-      - value: 'kotlin.system.measureTimeMillis'
+      - 'kotlin.io.print'
+      - 'kotlin.io.println'
+      - 'java.net.URL.openStream'
+      - 'java.lang.Class.getResourceAsStream'
+      - 'java.lang.ClassLoader.getResourceAsStream'
+      - 'kotlin.system.measureTimeMillis'
       - value: 'org.jetbrains.kotlin.analysis.project.structure.builder.buildKtLibraryModule'
         reason: 'Not performant due to KT-71706. Use buildKspLibraryModule instead.'
       - value: 'org.jetbrains.kotlin.analysis.project.structure.builder.buildKtSdkModule'
