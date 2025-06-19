@@ -417,6 +417,8 @@ performance:
     active: false
   UnnecessaryTemporaryInstantiation:
     active: true
+  UnnecessaryTypeCasting:
+    active: false
 
 potential-bugs:
   active: true
