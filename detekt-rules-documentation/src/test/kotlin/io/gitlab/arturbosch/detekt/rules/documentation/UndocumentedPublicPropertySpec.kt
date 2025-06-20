@@ -451,6 +451,23 @@ class UndocumentedPublicPropertySpec {
         }
 
         @Test
+        fun `does not report undocumented enum entries in public enum when config is false`() {
+            val code = """
+                /**
+                * This is PublicEnum but name is self explanatory
+                */
+                enum class YearType {
+                    NonLeapYear,
+                    LeapYear,
+                }
+            """.trimIndent()
+            assertThat(
+                UndocumentedPublicProperty(TestConfig(IGNORE_ENUM_ENTRIES to true))
+                    .lint(code)
+            ).isEmpty()
+        }
+
+        @Test
         fun `does not report documented enum entries in public enum`() {
             val code = """
                 /**
@@ -491,5 +508,9 @@ class UndocumentedPublicPropertySpec {
             """.trimIndent()
             assertThat(subject.lint(code)).isEmpty()
         }
+    }
+
+    companion object {
+        private const val IGNORE_ENUM_ENTRIES = "ignoreEnumEntries"
     }
 }
