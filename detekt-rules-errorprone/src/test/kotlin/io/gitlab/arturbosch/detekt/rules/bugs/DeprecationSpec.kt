@@ -83,7 +83,7 @@ class DeprecationSpec(private val env: KotlinEnvironmentContainer) {
     }
 
     @Test
-    fun `does not report import location`() {
+    fun `does report import location when excludeImportStatements has default value`() {
         val deprecatedFile = """
             package com.example.detekt.featureflag
 
