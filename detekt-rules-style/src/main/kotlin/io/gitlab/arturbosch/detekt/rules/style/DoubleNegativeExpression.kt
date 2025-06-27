@@ -3,16 +3,17 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.rules.isCalling
 import org.jetbrains.kotlin.lexer.KtTokens
-import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.name.CallableId
+import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.name.StandardClassIds
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtPrefixExpression
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
-import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 
 /**
  * Detects expressions with two or more calls of operator `not` could be simplified.
@@ -32,7 +33,7 @@ class DoubleNegativeExpression(config: Config) :
         config,
         "Expression with two or more calls of operator `not` could be simplified.",
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     override fun visitPrefixExpression(expression: KtPrefixExpression) {
         super.visitPrefixExpression(expression)
@@ -82,10 +83,9 @@ class DoubleNegativeExpression(config: Config) :
         return count == 2
     }
 
-    private fun KtExpression?.isBooleanNotCall(): Boolean =
-        this is KtCallExpression && getResolvedCall(bindingContext)?.resultingDescriptor?.fqNameSafe == booleanNotFqName
+    private fun KtExpression?.isBooleanNotCall(): Boolean = this is KtCallExpression && isCalling(booleanNotCallableId)
 
     companion object {
-        private val booleanNotFqName = FqName("kotlin.Boolean.not")
+        private val booleanNotCallableId = CallableId(StandardClassIds.Boolean, Name.identifier("not"))
     }
 }
