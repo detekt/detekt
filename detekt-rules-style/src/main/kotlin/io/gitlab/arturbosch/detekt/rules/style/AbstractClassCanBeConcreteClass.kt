@@ -14,8 +14,6 @@ import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.psiUtil.isAbstract
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.lazy.descriptors.LazyClassMemberScope
-import org.jetbrains.kotlin.types.typeUtil.isInterface
 
 /**
  * This rule inspects `abstract` classes. Abstract classes which do not define any `abstract` members should instead be
@@ -62,7 +60,6 @@ class AbstractClassCanBeConcreteClass(config: Config) :
         val members = members()
         when {
             members.isNotEmpty() -> checkMembers(members, nameIdentifier)
-            hasInheritedMember(true) && isAnyParentAbstract() -> return
             hasConstructorParameter() ->
                 report(Finding(Entity.from(nameIdentifier), noAbstractMember))
         }
@@ -73,7 +70,7 @@ class AbstractClassCanBeConcreteClass(config: Config) :
         nameIdentifier: PsiElement,
     ) {
         val (abstractMembers, _) = members.partition { it.isAbstract() }
-        if (abstractMembers.isEmpty() && !hasInheritedMember(true)) {
+        if (abstractMembers.isEmpty() && !hasInheritedMember()) {
             report(Finding(Entity.from(nameIdentifier), noAbstractMember))
         }
     }
@@ -83,20 +80,14 @@ class AbstractClassCanBeConcreteClass(config: Config) :
 
     private fun KtClass.hasConstructorParameter() = primaryConstructor?.valueParameters?.isNotEmpty() == true
 
-    private fun KtClass.hasInheritedMember(isAbstract: Boolean): Boolean =
+    private fun KtClass.hasInheritedMember(): Boolean =
         when {
             superTypeListEntries.isEmpty() -> false
-            bindingContext == BindingContext.EMPTY -> true
             else -> {
                 val descriptor = bindingContext[BindingContext.CLASS, this]
                 descriptor?.unsubstitutedMemberScope?.getContributedDescriptors().orEmpty().any {
-                    (it as? MemberDescriptor)?.modality == Modality.ABSTRACT == isAbstract
+                    (it as? MemberDescriptor)?.modality == Modality.ABSTRACT
                 }
             }
         }
-
-    private fun KtClass.isAnyParentAbstract() =
-        (bindingContext[BindingContext.CLASS, this]?.unsubstitutedMemberScope as? LazyClassMemberScope)
-            ?.supertypes
-            ?.all { it.isInterface() } == false
 }
