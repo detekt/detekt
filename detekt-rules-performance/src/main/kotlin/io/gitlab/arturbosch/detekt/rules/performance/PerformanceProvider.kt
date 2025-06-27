@@ -18,6 +18,7 @@ class PerformanceProvider : DefaultRuleSetProvider {
             ::ForEachOnRange,
             ::SpreadOperator,
             ::UnnecessaryTemporaryInstantiation,
+            ::UnnecessaryTypeCasting,
             ::ArrayPrimitive,
             ::CouldBeSequence,
             ::UnnecessaryPartOfBinaryExpression,
