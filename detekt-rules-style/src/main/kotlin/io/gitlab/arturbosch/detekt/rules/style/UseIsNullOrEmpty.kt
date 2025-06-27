@@ -4,22 +4,23 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
-import org.jetbrains.kotlin.builtins.StandardNames
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.lexer.KtTokens
-import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.name.CallableId
+import org.jetbrains.kotlin.name.ClassId
+import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.name.StandardClassIds
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtSimpleNameExpression
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
-import org.jetbrains.kotlin.resolve.calls.util.getType
-import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
-import org.jetbrains.kotlin.types.isNullable
 
 /**
  * This rule detects null or empty checks that can be replaced with `isNullOrEmpty()` call.
@@ -48,7 +49,7 @@ class UseIsNullOrEmpty(config: Config) :
         config,
         "Use `isNullOrEmpty()` call instead of `x == null || x.isEmpty()`."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     override fun visitBinaryExpression(expression: KtBinaryExpression) {
         super.visitBinaryExpression(expression)
@@ -75,7 +76,12 @@ class UseIsNullOrEmpty(config: Config) :
             right.isNullKeyword() -> left
             left.isNullKeyword() -> right
             else -> null
-        }?.takeIf { it.getType(bindingContext)?.isNullable() == true }
+        }?.takeIf {
+            analyze(it) {
+                val expressionType = it.expressionType
+                expressionType?.nullability?.isNullable == true || expressionType?.hasFlexibleNullability == true
+            }
+        }
     }
 
     private fun KtExpression.sizeCheckedExpression(): KtExpression? =
@@ -125,47 +131,65 @@ class UseIsNullOrEmpty(config: Config) :
 
     private fun KtExpression?.isEmptyString() = this?.text == "\"\""
 
-    private fun KtExpression?.isCalling(fqNames: List<FqName>): Boolean {
+    private fun KtExpression?.isCalling(callableIds: List<CallableId>): Boolean {
         val callExpression = this as? KtCallExpression
             ?: (this as? KtDotQualifiedExpression)?.selectorExpression as? KtCallExpression
             ?: return false
-        return callExpression.calleeExpression?.text in fqNames.map { it.shortName().asString() } &&
-            callExpression.getResolvedCall(bindingContext)?.resultingDescriptor?.fqNameOrNull() in fqNames
+        if (callExpression.calleeExpression?.text !in callableIds.map { it.asSingleFqName().shortName().asString() }) {
+            return false
+        }
+        return analyze(callExpression) {
+            callExpression.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId in callableIds
+        }
     }
 
-    private fun KtExpression.classFqName() = getType(bindingContext)?.fqNameOrNull()
+    private fun KtExpression.classId(): ClassId? {
+        val expression = this
+        return analyze(expression) {
+            val type = expression.expressionType
+            type?.symbol?.classId ?: type?.upperBoundIfFlexible()?.symbol?.classId
+        }
+    }
 
     private fun KtExpression.isCollectionOrArrayOrString(): Boolean {
-        val classFqName = classFqName() ?: return false
-        return classFqName() in collectionClasses || classFqName == arrayClass || classFqName == stringClass
+        val classFqName = classId() ?: return false
+        return classFqName in collectionClasses || classFqName == arrayClass || classFqName == stringClass
     }
 
     private fun KtExpression.isCollectionOrArray(): Boolean {
-        val classFqName = classFqName() ?: return false
-        return classFqName() in collectionClasses || classFqName == arrayClass
+        val classFqName = classId() ?: return false
+        return classFqName in collectionClasses || classFqName == arrayClass
     }
 
-    private fun KtExpression.isString() = classFqName() == stringClass
+    private fun KtExpression.isString() = classId() == stringClass
 
     companion object {
         private val collectionClasses = listOf(
-            StandardNames.FqNames.list,
-            StandardNames.FqNames.set,
-            StandardNames.FqNames.collection,
-            StandardNames.FqNames.map,
-            StandardNames.FqNames.mutableList,
-            StandardNames.FqNames.mutableSet,
-            StandardNames.FqNames.mutableCollection,
-            StandardNames.FqNames.mutableMap,
+            StandardClassIds.List,
+            StandardClassIds.Set,
+            StandardClassIds.Collection,
+            StandardClassIds.Map,
+            StandardClassIds.MutableList,
+            StandardClassIds.MutableSet,
+            StandardClassIds.MutableCollection,
+            StandardClassIds.MutableMap,
         )
 
-        private val arrayClass = StandardNames.FqNames.array.toSafe()
+        private val arrayClass = StandardClassIds.Array
 
-        private val stringClass = StandardNames.FqNames.string.toSafe()
+        private val stringClass = StandardClassIds.String
 
-        private val emptyCheckFunctions = collectionClasses.map { FqName("$it.isEmpty") } +
-            listOf("kotlin.collections.isEmpty", "kotlin.text.isEmpty").map(::FqName)
+        private val emptyCheckFunctions = buildList {
+            val callableName = Name.identifier("isEmpty")
+            addAll(collectionClasses.map { CallableId(it, callableName) })
+            add(CallableId(StandardClassIds.BASE_COLLECTIONS_PACKAGE, callableName))
+            add(CallableId(StandardClassIds.BASE_TEXT_PACKAGE, callableName))
+        }
 
-        private val countFunctions = listOf("kotlin.collections.count", "kotlin.text.count").map(::FqName)
+        private val countFunctions = buildList {
+            val callableName = Name.identifier("count")
+            add(CallableId(StandardClassIds.BASE_COLLECTIONS_PACKAGE, callableName))
+            add(CallableId(StandardClassIds.BASE_TEXT_PACKAGE, callableName))
+        }
     }
 }
