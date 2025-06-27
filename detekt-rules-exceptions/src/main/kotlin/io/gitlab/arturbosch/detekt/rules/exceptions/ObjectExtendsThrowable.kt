@@ -3,12 +3,11 @@ package io.gitlab.arturbosch.detekt.rules.exceptions
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.types.typeUtil.isNotNullThrowable
-import org.jetbrains.kotlin.types.typeUtil.supertypes
 
 /**
  * This rule reports all `objects` including `companion objects` that extend any type of
@@ -39,12 +38,12 @@ import org.jetbrains.kotlin.types.typeUtil.supertypes
 class ObjectExtendsThrowable(config: Config) :
     Rule(
         config,
-        "An `object` should not extend and type of Throwable. Throwables are stateful and should be instantiated " +
+        "An `object` should not extend any type of Throwable. Throwables are stateful and should be instantiated " +
             "only when needed for when a specific error occurs. An `object`, being a singleton, that extends any " +
             "type of Throwable consequently introduces a global singleton exception whose instance may be " +
             "inadvertently reused from multiple places, thus introducing shared mutable state."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
         super.visitObjectDeclaration(declaration)
@@ -59,10 +58,11 @@ class ObjectExtendsThrowable(config: Config) :
         }
     }
 
-    private fun KtObjectDeclaration.isSubtypeOfThrowable(): Boolean =
-        bindingContext[BindingContext.CLASS, this]
-            ?.defaultType
-            ?.supertypes()
-            .orEmpty()
-            .any { it.isNotNullThrowable() }
+    private fun KtObjectDeclaration.isSubtypeOfThrowable(): Boolean = analyze(this) {
+        symbol.superTypes.any { it.isSubtypeOf(throwable) }
+    }
+
+    private companion object {
+        val throwable = ClassId.fromString("kotlin/Throwable")
+    }
 }
