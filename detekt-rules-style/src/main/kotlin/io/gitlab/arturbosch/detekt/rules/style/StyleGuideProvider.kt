@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 import io.gitlab.arturbosch.detekt.rules.style.movelambdaout.UnnecessaryBracesAroundTrailingLambda
 import io.gitlab.arturbosch.detekt.rules.style.optional.MandatoryBracesLoops
 import io.gitlab.arturbosch.detekt.rules.style.optional.OptionalUnit
-import io.gitlab.arturbosch.detekt.rules.style.optional.PreferToOverPairSyntax
 
 /**
  * The Style ruleset provides rules that assert the style of the code.
@@ -80,7 +79,6 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             ::UnnecessaryFilter,
             ::UnnecessaryLet,
             ::MayBeConstant,
-            ::PreferToOverPairSyntax,
             ::BracesOnIfStatements,
             ::BracesOnWhenStatements,
             ::MandatoryBracesLoops,
