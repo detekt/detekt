@@ -43,8 +43,7 @@ of descriptions, respectively.
 
 ```kotlin
 @ActiveByDefault(since = "1.0.0")
-@RequiresFullAnalysis
-class SomeRule(config: Config = Config.empty) : Rule(config) {
+class SomeRule(config: Config = Config.empty) : Rule(config), RequiresFullAnalysis {
 
     @Configuration("This is the description for the configuration parameter below.")
     private val name: String by config(default = "whatever should be the default")
@@ -62,7 +61,7 @@ delegate (and vice versa).
 Rules annotated with `@ActiveByDefault` will be marked as active in the `default-detekt-config.yml`.
 Generally, this will not be the case for new rules.
 
-A rule that requires type resolution must be marked with `@RequiresFullAnalysis`.
+A rule that requires type resolution must implements `RequiresFullAnalysis`.
 See [the type resolution wiki page](../website/docs/gettingstarted/type-resolution.md) for
 more detail on this topic.
 
