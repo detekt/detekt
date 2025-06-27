@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.core
 
 import io.github.detekt.psi.absolutePath
-import io.gitlab.arturbosch.detekt.api.CompilerResources
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
@@ -18,10 +17,10 @@ import io.gitlab.arturbosch.detekt.api.internal.whichOS
 import io.gitlab.arturbosch.detekt.core.suppressors.buildSuppressors
 import io.gitlab.arturbosch.detekt.core.suppressors.isSuppressedBy
 import io.gitlab.arturbosch.detekt.core.util.shouldAnalyzeFile
+import org.jetbrains.kotlin.config.LanguageVersionSettings
 import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.smartcasts.DataFlowValueFactoryImpl
 import java.nio.file.Path
 
 internal class Analyzer(
@@ -33,22 +32,20 @@ internal class Analyzer(
     fun run(ktFiles: Collection<KtFile>): List<Issue> {
         val languageVersionSettings = settings.configuration.languageVersionSettings
 
-        val dataFlowValueFactory = DataFlowValueFactoryImpl(languageVersionSettings)
-        val compilerResources = CompilerResources(languageVersionSettings, dataFlowValueFactory)
         return if (settings.spec.executionSpec.parallelAnalysis) {
-            runAsync(ktFiles, compilerResources)
+            runAsync(ktFiles, languageVersionSettings)
         } else {
-            runSync(ktFiles, compilerResources)
+            runSync(ktFiles, languageVersionSettings)
         }
     }
 
     private fun runSync(
         ktFiles: Collection<KtFile>,
-        compilerResources: CompilerResources,
+        languageVersionSettings: LanguageVersionSettings,
     ): List<Issue> =
         ktFiles.flatMap { file ->
             processors.forEach { it.onProcess(file) }
-            val issues = runCatching { analyze(file, compilerResources) }.fold(
+            val issues = runCatching { analyze(file, languageVersionSettings) }.fold(
                 onSuccess = { it },
                 onFailure = { throwIllegalStateException(file, it) }
             )
@@ -58,13 +55,13 @@ internal class Analyzer(
 
     private fun runAsync(
         ktFiles: Collection<KtFile>,
-        compilerResources: CompilerResources,
+        languageVersionSettings: LanguageVersionSettings,
     ): List<Issue> {
         val service = settings.taskPool
         val tasks: TaskList<List<Issue>?> = ktFiles.map { file ->
             service.task {
                 processors.forEach { it.onProcess(file) }
-                val issues = analyze(file, compilerResources)
+                val issues = analyze(file, languageVersionSettings)
                 processors.forEach { it.onProcessComplete(file, issues) }
                 issues
             }.recover { throwIllegalStateException(file, it) }
@@ -74,7 +71,7 @@ internal class Analyzer(
 
     private fun analyze(
         file: KtFile,
-        compilerResources: CompilerResources,
+        languageVersionSettings: LanguageVersionSettings,
     ): List<Issue> {
         val (correctableRules, otherRules) = rules.asSequence()
             .filter { ruleDescriptor ->
@@ -93,7 +90,7 @@ internal class Analyzer(
             .partition { (_, rule) -> rule.autoCorrect }
 
         return (correctableRules + otherRules).flatMap { (ruleInstance, rule) ->
-            rule.visitFile(file, compilerResources)
+            rule.visitFile(file, languageVersionSettings)
                 .filterNot {
                     it.entity.ktElement.isSuppressedBy(ruleInstance.id, rule.aliases, ruleInstance.ruleSetId)
                 }

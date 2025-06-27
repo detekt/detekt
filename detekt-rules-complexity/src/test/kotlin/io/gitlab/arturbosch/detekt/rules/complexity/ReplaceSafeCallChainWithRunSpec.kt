@@ -71,4 +71,16 @@ class ReplaceSafeCallChainWithRunSpec(val env: KotlinEnvironmentContainer) {
 
         assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
+
+    @Test
+    fun `#7849 - does not report a safe call chain on platform type`() {
+        val code = """
+            fun test() = System.getProperty("propertyName")
+                ?.codePoints()
+                ?.filter { true }
+                ?.map { it }
+                ?.allMatch { false }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
 }

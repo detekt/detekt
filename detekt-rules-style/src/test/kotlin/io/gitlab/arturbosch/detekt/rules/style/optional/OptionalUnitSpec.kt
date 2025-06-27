@@ -4,7 +4,7 @@ import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.FakeCompilerResources
+import io.gitlab.arturbosch.detekt.test.FakeLanguageVersionSettings
 import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.config.ExplicitApiMode
@@ -410,7 +410,7 @@ class OptionalUnitSpec(val env: KotlinEnvironmentContainer) {
             val findings = subject.lintWithContext(
                 env,
                 code,
-                compilerResources = FakeCompilerResources(ExplicitApiMode.STRICT)
+                languageVersionSettings = FakeLanguageVersionSettings(ExplicitApiMode.STRICT)
             )
             assertThat(findings).hasSize(1)
         }
@@ -423,7 +423,7 @@ class OptionalUnitSpec(val env: KotlinEnvironmentContainer) {
             val findings = subject.lintWithContext(
                 env,
                 code,
-                compilerResources = FakeCompilerResources(ExplicitApiMode.WARNING)
+                languageVersionSettings = FakeLanguageVersionSettings(ExplicitApiMode.WARNING)
             )
             assertThat(findings).hasSize(1)
         }
@@ -436,7 +436,7 @@ class OptionalUnitSpec(val env: KotlinEnvironmentContainer) {
             val findings = subject.lintWithContext(
                 env,
                 code,
-                compilerResources = FakeCompilerResources(ExplicitApiMode.DISABLED)
+                languageVersionSettings = FakeLanguageVersionSettings(ExplicitApiMode.DISABLED)
             )
             assertThat(findings).hasSize(1)
         }
@@ -449,7 +449,7 @@ class OptionalUnitSpec(val env: KotlinEnvironmentContainer) {
             val findings = subject.lintWithContext(
                 env,
                 code,
-                compilerResources = FakeCompilerResources(ExplicitApiMode.STRICT)
+                languageVersionSettings = FakeLanguageVersionSettings(ExplicitApiMode.STRICT)
             )
             assertThat(findings).isEmpty()
         }
@@ -462,7 +462,7 @@ class OptionalUnitSpec(val env: KotlinEnvironmentContainer) {
             val findings = subject.lintWithContext(
                 env,
                 code,
-                compilerResources = FakeCompilerResources(ExplicitApiMode.WARNING)
+                languageVersionSettings = FakeLanguageVersionSettings(ExplicitApiMode.WARNING)
             )
             assertThat(findings).isEmpty()
         }
@@ -476,7 +476,7 @@ class OptionalUnitSpec(val env: KotlinEnvironmentContainer) {
                 subject.lintWithContext(
                     env,
                     code,
-                    compilerResources = FakeCompilerResources(ExplicitApiMode.STRICT)
+                    languageVersionSettings = FakeLanguageVersionSettings(ExplicitApiMode.STRICT)
                 )
             assertThat(findingsWithPrivate).hasSize(1)
 
@@ -487,7 +487,7 @@ class OptionalUnitSpec(val env: KotlinEnvironmentContainer) {
                 subject.lintWithContext(
                     env,
                     code2,
-                    compilerResources = FakeCompilerResources(ExplicitApiMode.STRICT)
+                    languageVersionSettings = FakeLanguageVersionSettings(ExplicitApiMode.STRICT)
                 )
             assertThat(findingsWithInternal).hasSize(1)
         }
@@ -501,7 +501,7 @@ class OptionalUnitSpec(val env: KotlinEnvironmentContainer) {
                 subject.lintWithContext(
                     env,
                     code,
-                    compilerResources = FakeCompilerResources(ExplicitApiMode.WARNING)
+                    languageVersionSettings = FakeLanguageVersionSettings(ExplicitApiMode.WARNING)
                 )
             assertThat(findingsWithPrivate).hasSize(1)
 
@@ -512,7 +512,7 @@ class OptionalUnitSpec(val env: KotlinEnvironmentContainer) {
                 subject.lintWithContext(
                     env,
                     code2,
-                    compilerResources = FakeCompilerResources(ExplicitApiMode.WARNING)
+                    languageVersionSettings = FakeLanguageVersionSettings(ExplicitApiMode.WARNING)
                 )
             assertThat(findingsWithInternal).hasSize(1)
         }

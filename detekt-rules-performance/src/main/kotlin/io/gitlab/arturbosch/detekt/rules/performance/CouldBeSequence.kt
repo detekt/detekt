@@ -4,16 +4,17 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
-import org.jetbrains.kotlin.name.FqName
+import io.gitlab.arturbosch.detekt.rules.isCalling
+import org.jetbrains.kotlin.name.CallableId
+import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.name.StandardClassIds
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForReceiver
 import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelectorOrThis
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
-import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 
 /**
  * Long chains of collection operations will have a performance penalty due to a new list being created for each call. Consider using sequences instead. Read more about this in the [documentation](https://kotlinlang.org/docs/sequences.html)
@@ -33,7 +34,7 @@ class CouldBeSequence(config: Config) :
         config,
         "Several chained collection operations that should be a sequence."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     @Configuration("The maximum number of allowed chained collection operations.")
     private val allowedOperations: Int by config(defaultValue = 2)
@@ -45,13 +46,13 @@ class CouldBeSequence(config: Config) :
 
         if (visitedCallExpressions.contains(expression)) return
 
-        if (!expression.isCalling(operationsFqNames)) return
+        if (!expression.isCallingAnyOf(operationsCallableIds)) return
 
         var counter = 1
         var nextCall = expression.nextChainedCall()
         while (counter <= allowedOperations && nextCall != null) {
             visitedCallExpressions += nextCall
-            if (!nextCall.isCalling(operationsFqNames)) {
+            if (!nextCall.isCallingAnyOf(operationsCallableIds)) {
                 break
             }
 
@@ -70,23 +71,24 @@ class CouldBeSequence(config: Config) :
         return expression.getQualifiedExpressionForReceiver()?.selectorExpression
     }
 
-    private fun KtExpression.isCalling(fqNames: List<FqName>): Boolean {
-        val calleeText = (this as? KtCallExpression)?.calleeExpression?.text ?: this.text
-        val targetFqNames = fqNames.filter { it.shortName().asString() == calleeText }
-        if (targetFqNames.isEmpty()) return false
-        return getResolvedCall(bindingContext)?.resultingDescriptor?.fqNameOrNull() in targetFqNames
+    private fun KtExpression.isCallingAnyOf(callableIds: List<CallableId>): Boolean {
+        val callExpression = this as? KtCallExpression ?: return false
+        val calleeText = callExpression.calleeExpression?.text
+        val candidates = callableIds.filter { it.callableName.asString() == calleeText }
+
+        return candidates.isNotEmpty() && callExpression.isCalling(candidates)
     }
 
     companion object {
-        private val operationsFqNames = listOf(
-            FqName("kotlin.collections.filter"),
-            FqName("kotlin.collections.filterIndexed"),
-            FqName("kotlin.collections.map"),
-            FqName("kotlin.collections.mapIndexed"),
-            FqName("kotlin.collections.flatMap"),
-            FqName("kotlin.collections.flatMapIndexed"),
-            FqName("kotlin.collections.reduce"),
-            FqName("kotlin.collections.zip")
+        private val operationsCallableIds = listOf(
+            CallableId(StandardClassIds.BASE_COLLECTIONS_PACKAGE, Name.identifier("filter")),
+            CallableId(StandardClassIds.BASE_COLLECTIONS_PACKAGE, Name.identifier("filterIndexed")),
+            CallableId(StandardClassIds.BASE_COLLECTIONS_PACKAGE, Name.identifier("map")),
+            CallableId(StandardClassIds.BASE_COLLECTIONS_PACKAGE, Name.identifier("mapIndexed")),
+            CallableId(StandardClassIds.BASE_COLLECTIONS_PACKAGE, Name.identifier("flatMap")),
+            CallableId(StandardClassIds.BASE_COLLECTIONS_PACKAGE, Name.identifier("flatMapIndexed")),
+            CallableId(StandardClassIds.BASE_COLLECTIONS_PACKAGE, Name.identifier("reduce")),
+            CallableId(StandardClassIds.BASE_COLLECTIONS_PACKAGE, Name.identifier("zip"))
         )
     }
 }

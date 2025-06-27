@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.arguments
 import io.gitlab.arturbosch.detekt.rules.isEmptyOrSingleStringArgument
@@ -33,14 +33,14 @@ class UseRequire(config: Config) :
         config,
         "Use require() instead of throwing an IllegalArgumentException."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     override fun visitThrowExpression(expression: KtThrowExpression) {
         if (!expression.isIllegalArgumentException()) return
         if (expression.hasMoreExpressionsInBlock()) return
 
         if (expression.isEnclosedByConditionalStatement() &&
-            expression.arguments.isEmptyOrSingleStringArgument(bindingContext)
+            expression.arguments.isEmptyOrSingleStringArgument()
         ) {
             report(Finding(Entity.from(expression), description))
         }

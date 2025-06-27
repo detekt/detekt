@@ -136,28 +136,31 @@ private fun Config.getValuesWithReasonOrDefault(
     defaultValue: ValuesWithReason,
 ): ValuesWithReason {
     val valuesAsList: List<*> = valueOrNull(propertyName) ?: return defaultValue
-    if (valuesAsList.all { it is String }) {
-        return ValuesWithReason(values = valuesAsList.map { ValueWithReason(it as String) })
-    }
-    if (valuesAsList.all { it is Map<*, *> }) {
-        return ValuesWithReason(
-            valuesAsList
-                .map { it as Map<*, *> }
-                .map { dict ->
-                    try {
-                        ValueWithReason(
-                            value = dict["value"] as String,
-                            reason = dict["reason"] as String?
-                        )
-                    } catch (e: ClassCastException) {
-                        throw Config.InvalidConfigurationError(e)
-                    } catch (@Suppress("TooGenericExceptionCaught") e: NullPointerException) {
-                        throw Config.InvalidConfigurationError(e)
-                    }
-                }
+    if (!valuesAsList.all { it is String || it is Map<*, *> }) {
+        error(
+            "Only lists of strings and/or maps with keys 'value' and 'reason' are supported. " +
+                "'$propertyName' is invalid."
         )
     }
-    error("Only lists of strings or maps with keys 'value' and 'reason' are supported. '$propertyName' is invalid.")
+    return ValuesWithReason(
+        valuesAsList.map {
+            if (it is String) {
+                ValueWithReason(it)
+            } else {
+                val mapValue = it as Map<*, *>
+                try {
+                    ValueWithReason(
+                        value = mapValue["value"] as String,
+                        reason = mapValue["reason"] as String?
+                    )
+                } catch (e: ClassCastException) {
+                    throw Config.InvalidConfigurationError(e)
+                } catch (@Suppress("TooGenericExceptionCaught") e: NullPointerException) {
+                    throw Config.InvalidConfigurationError(e)
+                }
+            }
+        }
+    )
 }
 
 private abstract class MemoizedConfigProperty<U : Any> : ReadOnlyProperty<Rule, U> {

@@ -31,8 +31,18 @@ jacoco.toolVersion = versionCatalog.findVersion("jacoco").get().requiredVersion
 tasks.withType<Test>().configureEach {
     maxParallelForks = (Runtime.getRuntime().availableProcessors() / 2).coerceAtLeast(1)
     systemProperty("junit.jupiter.testinstance.lifecycle.default", "per_class")
+    systemProperty("junit.platform.discovery.issue.severity.critical", "INFO")
     val compileTestSnippets = providers.gradleProperty("compile-test-snippets").orNull.toBoolean()
     systemProperty("compile-test-snippets", compileTestSnippets)
+    val compileTestSnippetsAa = providers.gradleProperty("compile-test-snippets-aa").orNull.toBoolean()
+    systemProperty("compile-test-snippets-aa", compileTestSnippetsAa)
+
+    if (compileTestSnippetsAa) {
+        maxHeapSize = "3g"
+    } else {
+        maxHeapSize = "1g"
+    }
+
     testLogging {
         // set options for log level LIFECYCLE
         events = setOf(

@@ -175,10 +175,10 @@ class UnnecessaryNotNullCheckSpec(private val env: KotlinEnvironmentContainer) {
         fun shouldIgnoreWhenCallingObjectJavaMethod() {
             val code = """
                 fun foo() {
-                    requireNotNull(System.getLogger())
+                    requireNotNull(System.getLogger(""))
                 }
             """.trimIndent()
-            val findings = subject.lintWithContext(env, code, compile = false)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
     }

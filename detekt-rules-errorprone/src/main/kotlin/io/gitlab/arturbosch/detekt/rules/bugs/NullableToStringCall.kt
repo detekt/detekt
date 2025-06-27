@@ -4,11 +4,15 @@ import com.intellij.psi.PsiElement
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.rules.isCalling
 import io.gitlab.arturbosch.detekt.rules.isNullable
-import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.name.CallableId
+import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.name.StandardClassIds.BASE_KOTLIN_PACKAGE
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtSimpleNameExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateEntry
@@ -42,7 +46,7 @@ class NullableToStringCall(config: Config) :
         config,
         "`toString()` on nullable receiver may return the string \"null\""
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     override fun visitSimpleNameExpression(expression: KtSimpleNameExpression) {
         super.visitSimpleNameExpression(expression)
@@ -52,19 +56,20 @@ class NullableToStringCall(config: Config) :
         val stringTemplateEntry = (qualifiedExpression ?: callExpression ?: expression).parent as? KtStringTemplateEntry
 
         when {
-            callExpression?.isCalling(toString, bindingContext) == true -> report(qualifiedExpression ?: callExpression)
+            callExpression?.calls(toString) == true -> report(qualifiedExpression ?: callExpression)
             stringTemplateEntry?.hasNullableExpression() == true -> report(stringTemplateEntry)
+        }
+    }
+
+    private fun KtCallExpression.calls(callableId: CallableId): Boolean {
+        analyze(this) {
+            return resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId == callableId
         }
     }
 
     private fun KtStringTemplateEntry.hasNullableExpression(): Boolean {
         val expression = this.expression ?: return false
-        return expression.isNullable(
-            bindingContext,
-            compilerResources.languageVersionSettings,
-            compilerResources.dataFlowValueFactory,
-            shouldConsiderPlatformTypeAsNullable = false,
-        )
+        return expression.isNullable(shouldConsiderPlatformTypeAsNullable = false)
     }
 
     private fun report(element: PsiElement) {
@@ -76,6 +81,6 @@ class NullableToStringCall(config: Config) :
     }
 
     companion object {
-        val toString = FqName("kotlin.toString")
+        val toString = CallableId(BASE_KOTLIN_PACKAGE, Name.identifier("toString"))
     }
 }

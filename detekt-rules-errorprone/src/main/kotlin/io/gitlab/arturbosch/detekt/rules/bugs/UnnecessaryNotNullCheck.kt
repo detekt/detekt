@@ -3,13 +3,15 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.rules.getDataFlowAwareTypes
-import io.gitlab.arturbosch.detekt.rules.isCalling
-import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.name.CallableId
+import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.name.StandardClassIds.BASE_KOTLIN_PACKAGE
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.types.isNullable
 
 /**
  * Reports unnecessary not-null checks with `requireNotNull` or `checkNotNull` that can be removed by the user.
@@ -29,22 +31,30 @@ class UnnecessaryNotNullCheck(config: Config) :
         config,
         "Remove unnecessary not-null checks on non-null types."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
+    @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 
         val callee = expression.calleeExpression ?: return
         val argument = expression.valueArguments.firstOrNull()?.getArgumentExpression() ?: return
 
-        if (!expression.isCalling(notNullCheckFunctionFqNames, bindingContext)) return
+        analyze(expression) {
+            if (expression
+                    .resolveToCall()
+                    ?.successfulFunctionCallOrNull()
+                    ?.symbol
+                    ?.callableId !in notNullCheckFunctionFqNames
+            ) {
+                return
+            }
+            if (expression.expressionType?.canBeNull == true) return
+        }
 
-        val dataFlowAwareTypes = argument.getDataFlowAwareTypes(
-            bindingContext,
-            compilerResources.languageVersionSettings,
-            compilerResources.dataFlowValueFactory
-        )
-        if (dataFlowAwareTypes.all { it.isNullable() }) return
+        analyze(argument) {
+            if (argument.expressionType?.canBeNull == true) return
+        }
 
         report(
             Finding(
@@ -56,8 +66,8 @@ class UnnecessaryNotNullCheck(config: Config) :
 
     companion object {
         private val notNullCheckFunctionFqNames = listOf(
-            FqName("kotlin.requireNotNull"),
-            FqName("kotlin.checkNotNull"),
+            CallableId(BASE_KOTLIN_PACKAGE, Name.identifier("requireNotNull")),
+            CallableId(BASE_KOTLIN_PACKAGE, Name.identifier("checkNotNull")),
         )
     }
 }

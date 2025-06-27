@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class IsActiveOrDefaultSpec {
@@ -31,7 +30,6 @@ class IsActiveOrDefaultSpec {
     }
 }
 
-@Nested
 class ShouldAnalyzeFileSpec {
 
     private val basePath = resourceAsPath("cases")

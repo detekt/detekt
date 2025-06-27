@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.suppressors
 
-import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.RuleName
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.core.extractRuleName
 import org.jetbrains.kotlin.psi.KtAnnotated
@@ -10,7 +10,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import kotlin.text.RegexOption.IGNORE_CASE
 
 internal fun isForbiddenSuppressById(id: String) = extractRuleName(id) == FORBIDDEN_SUPPRESS_NAME
-private val FORBIDDEN_SUPPRESS_NAME = Rule.Name("ForbiddenSuppress")
+private val FORBIDDEN_SUPPRESS_NAME = RuleName("ForbiddenSuppress")
 
 /**
  * Checks if this psi element is suppressed by @Suppress or @SuppressWarnings annotations.

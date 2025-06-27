@@ -122,6 +122,33 @@ class ConfigPropertySpec {
                 }
 
                 @Nested
+                inner class `value defined as list of string and map` {
+                    private val subject = object : TestRule(
+                        "present" to listOf(
+                            "a",
+                            mapOf("value" to "b", "reason" to "reasonB"),
+                            mapOf("value" to "c", "reason" to null),
+                            mapOf("value" to "d"),
+                        )
+                    ) {
+                        val present: ValuesWithReason by config(defaultValue)
+                    }
+
+                    @Test
+                    fun `uses the value provided in config if present`() {
+                        assertThat(subject.present)
+                            .hasSize(4)
+                            .extracting(ValueWithReason::value, ValueWithReason::reason)
+                            .containsExactly(
+                                tuple("a", null),
+                                tuple("b", "reasonB"),
+                                tuple("c", null),
+                                tuple("d", null),
+                            )
+                    }
+                }
+
+                @Nested
                 inner class `value defined as list of maps with invalid data` {
 
                     @Test
