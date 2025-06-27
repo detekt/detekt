@@ -79,6 +79,6 @@ dependencyResolutionManagement {
     repositories {
         mavenCentral()
         // Remove when this is closed: https://youtrack.jetbrains.com/issue/KT-56203/AA-Publish-analysis-api-standalone-and-dependencies-to-Maven-Central
-        maven("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-ide-plugin-dependencies")
+        maven("https://redirector.kotlinlang.org/maven/intellij-dependencies")
     }
 }
