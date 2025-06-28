@@ -4,25 +4,27 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
-import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
-import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.analysis.api.KaSession
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaValueParameterSymbol
+import org.jetbrains.kotlin.idea.references.mainReference
+import org.jetbrains.kotlin.name.CallableId
+import org.jetbrains.kotlin.name.ClassId
+import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.name.StandardClassIds
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtExpressionWithLabel
 import org.jetbrains.kotlin.psi.KtFunctionLiteral
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.unpackFunctionLiteral
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.bindingContextUtil.getTargetFunctionDescriptor
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
-import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
-import org.jetbrains.kotlin.types.KotlinType
-import org.jetbrains.kotlin.types.typeUtil.immediateSupertypes
 
 /**
  * Redundant maps add complexity to the code and accomplish nothing. They should be removed or replaced with the proper
@@ -75,7 +77,7 @@ class RedundantHigherOrderMapUsage(config: Config) :
         config,
         "Checks for redundant 'map' calls, which can be removed."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
@@ -86,23 +88,28 @@ class RedundantHigherOrderMapUsage(config: Config) :
         val functionLiteral = expression.lambda()?.functionLiteral
         val lambdaStatements = functionLiteral?.bodyExpression?.statements ?: return
 
-        val resolvedCall = expression.getResolvedCall(bindingContext) ?: return
-        if (resolvedCall.resultingDescriptor.fqNameOrNull() !in mapFqNames) return
+        analyze(functionLiteral) {
+            val partiallyAppliedSymbol =
+                expression.resolveToCall()?.singleFunctionCallOrNull()?.partiallyAppliedSymbol ?: return
+            val symbol = partiallyAppliedSymbol.symbol
+            if (symbol.callableId !in mapCallableIds) return
 
-        val receiverType = resolvedCall.extensionReceiver?.type ?: return
-        val receiverIsList = receiverType.isInheritorOf(listFqName)
-        val receiverIsSet = receiverType.isInheritorOf(setFqName)
-        val receiverIsSequence = receiverType.isInheritorOf(sequenceFqName)
-        if (!receiverIsList && !receiverIsSet && !receiverIsSequence) return
+            val receiver = partiallyAppliedSymbol.dispatchReceiver ?: partiallyAppliedSymbol.extensionReceiver
+            val receiverType = receiver?.type ?: return
+            val receiverIsList = receiverType.isSubtypeOf(listClassId)
+            val receiverIsSet = receiverType.isSubtypeOf(setClassId)
+            val receiverIsSequence = receiverType.isSubtypeOf(sequenceClassId)
+            if (!receiverIsList && !receiverIsSet && !receiverIsSequence) return
 
-        if (!functionLiteral.isRedundant(lambdaStatements)) return
+            if (!isRedundant(functionLiteral, lambdaStatements)) return
 
-        val message = when {
-            lambdaStatements.size != 1 -> "This 'map' call can be replaced with 'onEach' or 'forEach'."
-            receiverIsSet -> "This 'map' call can be replaced with 'toList'."
-            else -> "This 'map' call can be removed."
+            val message = when {
+                lambdaStatements.size != 1 -> "This 'map' call can be replaced with 'onEach' or 'forEach'."
+                receiverIsSet -> "This 'map' call can be replaced with 'toList'."
+                else -> "This 'map' call can be removed."
+            }
+            report(Finding(Entity.from(calleeExpression), message))
         }
-        report(Finding(Entity.from(calleeExpression), message))
     }
 
     private fun KtCallExpression.lambda(): KtLambdaExpression? {
@@ -112,33 +119,39 @@ class RedundantHigherOrderMapUsage(config: Config) :
         return lambda
     }
 
-    private fun KotlinType.isInheritorOf(fqName: FqName): Boolean =
-        fqNameOrNull() == fqName || immediateSupertypes().any { it.fqNameOrNull() == fqName }
-
-    private fun KtFunctionLiteral.isRedundant(lambdaStatements: List<KtExpression>): Boolean {
-        val lambdaDescriptor = bindingContext[BindingContext.FUNCTION, this] ?: return false
-        val lambdaParameter = lambdaDescriptor.valueParameters.singleOrNull() ?: return false
+    @Suppress("ReturnCount")
+    private fun KaSession.isRedundant(
+        functionLiteral: KtFunctionLiteral,
+        lambdaStatements: List<KtExpression>,
+    ): Boolean {
+        val symbol = functionLiteral.symbol
+        val lambdaParameter = symbol.valueParameters.singleOrNull() ?: return false
         val lastStatement = lambdaStatements.lastOrNull() ?: return false
-        if (!lastStatement.isReferenceTo(lambdaParameter)) return false
-        val returnExpressions = collectDescendantsOfType<KtReturnExpression> {
-            it != lastStatement && it.getTargetFunctionDescriptor(bindingContext) == lambdaDescriptor
+        if (!isReferenceTo(lastStatement, lambdaParameter)) return false
+        val labeledReturnExpressions = functionLiteral.collectDescendantsOfType<KtReturnExpression> {
+            if (it == lastStatement) return@collectDescendantsOfType false
+            val label = (it as? KtExpressionWithLabel)?.getTargetLabel() ?: return@collectDescendantsOfType false
+            label.mainReference.resolveToSymbol() == symbol
         }
-        return returnExpressions.all { it.isReferenceTo(lambdaParameter) }
+        return labeledReturnExpressions.all { isReferenceTo(it, lambdaParameter) }
     }
 
-    private fun KtExpression.isReferenceTo(descriptor: ValueParameterDescriptor): Boolean {
-        val nameReference = if (this is KtReturnExpression) {
-            this.returnedExpression
-        } else {
-            this
-        } as? KtNameReferenceExpression
-        return nameReference?.getResolvedCall(bindingContext)?.resultingDescriptor == descriptor
+    private fun KaSession.isReferenceTo(expression: KtExpression, symbol: KaValueParameterSymbol): Boolean {
+        val nameReference = when (expression) {
+            is KtReturnExpression -> expression.returnedExpression
+            else -> expression
+        } as? KtNameReferenceExpression ?: return false
+        return nameReference.mainReference.resolveToSymbol() == symbol
     }
 
     companion object {
-        private val mapFqNames = listOf(FqName("kotlin.collections.map"), FqName("kotlin.sequences.map"))
-        private val listFqName = FqName("kotlin.collections.List")
-        private val setFqName = FqName("kotlin.collections.Set")
-        private val sequenceFqName = FqName("kotlin.sequences.Sequence")
+        private val mapCallableIds = buildList {
+            val map = Name.identifier("map")
+            add(CallableId(StandardClassIds.BASE_COLLECTIONS_PACKAGE, map))
+            add(CallableId(StandardClassIds.BASE_SEQUENCES_PACKAGE, map))
+        }
+        private val listClassId = StandardClassIds.List
+        private val setClassId = StandardClassIds.Set
+        private val sequenceClassId = ClassId(StandardClassIds.BASE_SEQUENCES_PACKAGE, Name.identifier("Sequence"))
     }
 }
