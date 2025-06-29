@@ -86,7 +86,7 @@ class DontDowncastCollectionTypes(config: Config) :
                 ClassId.fromString("java/util/LinkedHashSet"),
                 ClassId.fromString("java/util/HashSet"),
             ),
-            StandardClassIds.Map  to listOf(
+            StandardClassIds.Map to listOf(
                 StandardClassIds.MutableMap,
                 ClassId.fromString("java/util/LinkedHashMap"),
                 ClassId.fromString("java/util/HashMap"),
