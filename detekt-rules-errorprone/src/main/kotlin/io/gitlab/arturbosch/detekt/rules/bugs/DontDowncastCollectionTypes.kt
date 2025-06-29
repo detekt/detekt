@@ -81,7 +81,7 @@ class DontDowncastCollectionTypes(config: Config) :
                 StandardClassIds.MutableList,
                 ClassId.fromString("java/util/ArrayList"),
             ),
-            StandardClassIds.Set  to listOf(
+            StandardClassIds.Set to listOf(
                 StandardClassIds.MutableSet,
                 ClassId.fromString("java/util/LinkedHashSet"),
                 ClassId.fromString("java/util/HashSet"),
