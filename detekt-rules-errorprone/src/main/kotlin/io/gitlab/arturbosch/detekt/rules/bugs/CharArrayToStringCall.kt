@@ -3,17 +3,22 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
-import io.gitlab.arturbosch.detekt.rules.isCalling
-import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.analysis.api.KaSession
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.types.symbol
+import org.jetbrains.kotlin.name.CallableId
+import org.jetbrains.kotlin.name.ClassId
+import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.name.StandardClassIds
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateEntry
-import org.jetbrains.kotlin.resolve.calls.util.getType
 
 /**
  * Reports `CharArray.toString()` calls that do not return the expected result.
@@ -38,14 +43,16 @@ class CharArrayToStringCall(config: Config) :
         config,
         "`CharArray.toString()` call does not return expected result."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     override fun visitQualifiedExpression(expression: KtQualifiedExpression) {
         super.visitQualifiedExpression(expression)
 
         val selector = expression.selectorExpression as? KtCallExpression ?: return
-        if (selector.isCharArrayToString()) {
-            report(expression)
+        analyze(expression) {
+            if (isCharArray(expression.receiverExpression) && isToStringCall(selector)) {
+                report(expression)
+            }
         }
     }
 
@@ -53,8 +60,10 @@ class CharArrayToStringCall(config: Config) :
         super.visitBinaryExpression(expression)
 
         val right = expression.right ?: return
-        if (right.isCharArray() && expression.isString()) {
-            report(right)
+        analyze(expression) {
+            if (isCharArray(right) && isString(expression)) {
+                report(right)
+            }
         }
     }
 
@@ -62,16 +71,21 @@ class CharArrayToStringCall(config: Config) :
         super.visitStringTemplateEntry(entry)
 
         val expression = entry.expression ?: return
-        if (expression.isCharArray()) {
-            report(expression)
+        analyze(expression) {
+            if (isCharArray(expression)) {
+                report(expression)
+            }
         }
     }
 
-    private fun KtCallExpression.isCharArrayToString() = isCalling(FqName("kotlin.CharArray.toString"), bindingContext)
+    private fun KaSession.isToStringCall(expression: KtExpression) =
+        expression.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId == toStringCallableId
 
-    private fun KtExpression.isCharArray() = getType(bindingContext)?.fqNameOrNull() == FqName("kotlin.CharArray")
+    private fun KaSession.isCharArray(expression: KtExpression) = classId(expression) == charArrayClassId
 
-    private fun KtBinaryExpression.isString() = getType(bindingContext)?.fqNameOrNull() == FqName("kotlin.String")
+    private fun KaSession.isString(expression: KtExpression) = classId(expression) == stringClassId
+
+    private fun KaSession.classId(expression: KtExpression) = expression.expressionType?.symbol?.classId
 
     private fun report(expression: KtExpression) {
         val finding = Finding(
@@ -79,5 +93,11 @@ class CharArrayToStringCall(config: Config) :
             "Use `concatToString()` call instead of `toString()` call."
         )
         report(finding)
+    }
+
+    companion object {
+        private val toStringCallableId = CallableId(StandardClassIds.Any, Name.identifier("toString"))
+        private val stringClassId = StandardClassIds.String
+        private val charArrayClassId = ClassId(StandardClassIds.BASE_KOTLIN_PACKAGE, Name.identifier("CharArray"))
     }
 }
