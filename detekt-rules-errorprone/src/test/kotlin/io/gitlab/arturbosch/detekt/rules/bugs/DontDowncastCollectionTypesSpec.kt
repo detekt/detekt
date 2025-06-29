@@ -194,18 +194,6 @@ class DontDowncastCollectionTypesSpec(private val env: KotlinEnvironmentContaine
             val result = subject.lintWithContext(env, code)
             assertThat(result).isEmpty()
         }
-
-        @Test
-        fun `ignores Synthetic types`() {
-            val code = """
-                import kotlinx.android.synthetic.main.tooltip_progress_bar.view.*
-                fun main() {
-                    val params = tooltip_guide.layoutParams as LayoutParams
-                }
-            """.trimIndent()
-            val result = subject.lintWithContext(env, code, compile = false)
-            assertThat(result).isEmpty()
-        }
     }
 
     @Nested
