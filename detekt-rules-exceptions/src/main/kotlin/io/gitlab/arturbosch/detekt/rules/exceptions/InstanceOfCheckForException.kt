@@ -4,8 +4,9 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
+import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
 import org.jetbrains.kotlin.psi.KtCatchClause
 import org.jetbrains.kotlin.psi.KtExpression
@@ -14,8 +15,6 @@ import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtPsiUtil
 import org.jetbrains.kotlin.psi.psiUtil.forEachDescendantOfType
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.types.typeUtil.isSubtypeOf
 
 /**
  * This rule reports `catch` blocks which check for the type of exception via `is` checks or casts.
@@ -49,7 +48,7 @@ class InstanceOfCheckForException(config: Config) :
         "Instead of catching for a general exception type and checking for a specific exception type, " +
             "use multiple catch blocks."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     override fun visitCatchSection(catchClause: KtCatchClause) {
         val catchParameter = catchClause.catchParameter ?: return
@@ -69,9 +68,11 @@ class InstanceOfCheckForException(config: Config) :
 
         val leftText = (left as? KtNameReferenceExpression)?.text
         return if (leftText == catchParameter.name) {
-            val rightType = bindingContext[BindingContext.TYPE, right]
-            val catchType = bindingContext[BindingContext.TYPE, catchParameter.typeReference]
-            if (rightType != null && catchType != null) rightType.isSubtypeOf(catchType) else true
+            analyze(this) {
+                val rightType = right?.type
+                val catchType = catchParameter.typeReference?.type
+                if (rightType != null && catchType != null) rightType.isSubtypeOf(catchType) else true
+            }
         } else {
             false
         }
