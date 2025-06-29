@@ -3,19 +3,18 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isCalling
-import org.jetbrains.kotlin.builtins.DefaultBuiltIns
-import org.jetbrains.kotlin.descriptors.ClassDescriptor
-import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.name.CallableId
+import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.name.StandardClassIds
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForReceiver
 import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelectorOrThis
-import org.jetbrains.kotlin.resolve.calls.util.getType
-import org.jetbrains.kotlin.resolve.descriptorUtil.isSubclassOf
 
 /**
  * Turn on this rule to flag `flatMap` and `size/count` calls that can be replaced with a `sumOf` call.
@@ -40,7 +39,7 @@ class UseSumOfInsteadOfFlatMapSize(config: Config) :
         config,
         "Use `sumOf` instead of `flatMap` and `size/count` calls"
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
@@ -57,23 +56,21 @@ class UseSumOfInsteadOfFlatMapSize(config: Config) :
         report(Finding(Entity.from(expression), message))
     }
 
-    private fun KtCallExpression.isFlatMapOrFlatten(): Boolean = isCalling(flatMapAndFlattenFqName, bindingContext)
+    private fun KtCallExpression.isFlatMapOrFlatten(): Boolean = isCalling(flatMapAndFlattenCallableId)
 
-    private fun KtExpression.isSizeOrCount(receiver: KtExpression): Boolean {
+    private fun KtExpression.isSizeOrCount(receiver: KtExpression) =
         if ((this as? KtNameReferenceExpression)?.text == "size") {
-            val receiverType = receiver.getType(bindingContext) ?: return false
-            val descriptor = receiverType.constructor.declarationDescriptor as? ClassDescriptor ?: return false
-            return descriptor.isSubclassOf(DefaultBuiltIns.Instance.list)
+            analyze(receiver) { receiver.expressionType?.isSubtypeOf(StandardClassIds.List) == true }
+        } else {
+            (this as? KtCallExpression)?.isCalling(countCallableId) == true
         }
-        return (this as? KtCallExpression)?.isCalling(countFqName, bindingContext) == true
-    }
 
     companion object {
-        private val flatMapAndFlattenFqName = listOf(
-            FqName("kotlin.collections.flatMap"),
-            FqName("kotlin.collections.flatten"),
+        private val flatMapAndFlattenCallableId = listOf(
+            CallableId(StandardClassIds.BASE_COLLECTIONS_PACKAGE, Name.identifier("flatMap")),
+            CallableId(StandardClassIds.BASE_COLLECTIONS_PACKAGE, Name.identifier("flatten")),
         )
 
-        private val countFqName = FqName("kotlin.collections.count")
+        private val countCallableId = CallableId(StandardClassIds.BASE_COLLECTIONS_PACKAGE, Name.identifier("count"))
     }
 }
