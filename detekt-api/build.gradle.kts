@@ -2,7 +2,7 @@ plugins {
     id("module")
     id("public-api")
     id("java-test-fixtures")
-    id("dev.drewhamilton.poko") version "0.18.7"
+    id("dev.drewhamilton.poko") version "0.19.0"
 }
 
 dependencies {
