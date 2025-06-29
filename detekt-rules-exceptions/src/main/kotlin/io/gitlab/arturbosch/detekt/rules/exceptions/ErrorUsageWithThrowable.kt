@@ -3,17 +3,16 @@ package io.gitlab.arturbosch.detekt.rules.exceptions
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
-import org.jetbrains.kotlin.builtins.StandardNames
-import org.jetbrains.kotlin.name.FqName
+import io.gitlab.arturbosch.detekt.rules.isCalling
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.name.CallableId
+import org.jetbrains.kotlin.name.ClassId
+import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.name.StandardClassIds
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
-import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
-import org.jetbrains.kotlin.types.KotlinType
-import org.jetbrains.kotlin.types.typeUtil.supertypes
+import org.jetbrains.kotlin.psi.KtExpression
 
 /**
  * This rule reports usage of `error` method with [Throwable] parameter, i.e, `error(throwable)`.
@@ -49,32 +48,31 @@ class ErrorUsageWithThrowable(config: Config) :
         "Passing `Throwable` in `error` method is ambiguous. Use " +
             "`error(throwable.message ?: \"No error message provided\")` instead."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
-        val descriptor = expression.getResolvedCall(bindingContext)?.resultingDescriptor ?: return
-        if (descriptor.fqNameOrNull()?.toString() != ERROR_FQ_NAME) return
-        val errorMsgValueArg = expression.valueArguments.getOrNull(0) ?: return
-        val errorMsgTypeInfo = bindingContext[
-            BindingContext.EXPRESSION_TYPE_INFO,
-            errorMsgValueArg.getArgumentExpression()
-        ]?.type ?: return
-        if (errorMsgTypeInfo.isThrowableSubtypeOfThrowable()) {
+        if (!expression.isCalling(ERROR_CALLABLE_ID)) return
+        val errorMsgValueArg = expression.valueArguments.getOrNull(0)?.getArgumentExpression() ?: return
+        if (errorMsgValueArg.isThrowableSubtypeOfThrowable()) {
             report(Finding(Entity.from(errorMsgValueArg), description))
         }
     }
 
-    private fun KotlinType.isThrowableSubtypeOfThrowable(): Boolean =
-        this.fqNameOrNull() in throwableTypes ||
-            this.supertypes()
-                .any { it.fqNameOrNull() in throwableTypes }
+    private fun KtExpression.isThrowableSubtypeOfThrowable(): Boolean = analyze(this) {
+        val expressionType = expressionType ?: return false
+        sequence {
+            yield(expressionType)
+            yieldAll(expressionType.allSupertypes)
+        }
+            .any { type -> throwableTypes.any { type.isClassType(it) } }
+    }
 
     companion object {
-        private const val ERROR_FQ_NAME = "kotlin.error"
+        private val ERROR_CALLABLE_ID = CallableId(StandardClassIds.BASE_KOTLIN_PACKAGE, Name.identifier("error"))
         private val throwableTypes = setOf(
-            StandardNames.FqNames.throwable,
-            FqName("java.lang.Throwable")
+            ClassId.fromString("kotlin/Throwable"),
+            ClassId.fromString("java/lang/Throwable")
         )
     }
 }
