@@ -73,7 +73,7 @@ class DeprecationSpec(private val env: KotlinEnvironmentContainer) {
                 val d by state
             }
         """.trimIndent()
-        assertThat(subject.lintWithContext(env, code, stateFile, compile = false))
+        assertThat(subject.lintWithContext(env, code, stateFile))
             .hasSize(1)
             .first()
             .extracting {
@@ -109,7 +109,7 @@ class DeprecationSpec(private val env: KotlinEnvironmentContainer) {
                 }
             }
         """.trimIndent()
-        assertThat(subject.lintWithContext(env, code, deprecatedFile, compile = false))
+        assertThat(subject.lintWithContext(env, code, deprecatedFile))
             .hasSize(1)
             .first()
             .extracting { it.location.source.line }
@@ -153,7 +153,6 @@ class DeprecationSpec(private val env: KotlinEnvironmentContainer) {
                     env,
                     code,
                     deprecatedFile,
-                    compile = false
                 )
             )
                 .isEmpty()
@@ -177,7 +176,7 @@ class DeprecationSpec(private val env: KotlinEnvironmentContainer) {
                     val d by state
                 }
             """.trimIndent()
-            assertThat(ignoredImportSubject.lintWithContext(env, code, stateFile, compile = false))
+            assertThat(ignoredImportSubject.lintWithContext(env, code, stateFile))
                 .hasSize(1)
                 .first()
                 .extracting {
