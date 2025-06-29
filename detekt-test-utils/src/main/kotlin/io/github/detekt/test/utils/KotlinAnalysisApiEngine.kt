@@ -95,7 +95,7 @@ object KotlinAnalysisApiEngine {
         }
 
         try {
-            val file = session.modulesWithFiles.values.flatten().first { it.name == "dummy.kt" } as KtFile
+            val file = session.modulesWithFiles.values.flatten().single { it.name == "dummy.kt" } as KtFile
 
             analyze(file) {
                 val result = compile(file, configuration, target) {
