@@ -42,7 +42,7 @@ object KotlinAnalysisApiEngine {
      * @throws IllegalStateException if the given code snippet does not compile
      */
     @Suppress("LongMethod")
-    fun compile(@Language("kotlin") code: String): KtFile {
+    fun compile(@Language("kotlin") code: String, dependencyCodes: List<String> = emptyList()): KtFile {
         val disposable = Disposer.newDisposable()
 
         @OptIn(KaImplementationDetail::class, KaPlatformInterface::class)
@@ -76,12 +76,17 @@ object KotlinAnalysisApiEngine {
 
                 val vf = LightVirtualFile("dummy.kt", code)
 
+                val depVfs = dependencyCodes.mapIndexed { index, depCode ->
+                    LightVirtualFile("dependency_${index + 1}.kt", depCode)
+                }
+
                 sourceModule = addModule(
                     buildKtSourceModule {
                         addRegularDependency(jdk)
                         addRegularDependency(stdlib)
                         addRegularDependency(coroutinesCore)
                         addSourceVirtualFile(vf)
+                        addSourceVirtualFiles(depVfs)
                         platform = targetPlatform
                         moduleName = "source"
                     }
@@ -90,7 +95,7 @@ object KotlinAnalysisApiEngine {
         }
 
         try {
-            val file = session.modulesWithFiles.values.flatMap { it }.single() as KtFile
+            val file = session.modulesWithFiles.values.flatten().first { it.name == "dummy.kt" } as KtFile
 
             analyze(file) {
                 val result = compile(file, configuration, target) {
