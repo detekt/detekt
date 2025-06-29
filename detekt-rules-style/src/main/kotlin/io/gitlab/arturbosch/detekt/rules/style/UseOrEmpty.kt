@@ -4,23 +4,23 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
-import org.jetbrains.kotlin.descriptors.FunctionDescriptor
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
+import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.lexer.KtTokens
-import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.name.CallableId
+import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.name.StandardClassIds
 import org.jetbrains.kotlin.psi.KtArrayAccessExpression
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi2ir.deparenthesize
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
-import org.jetbrains.kotlin.resolve.calls.util.getType
-import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
-import org.jetbrains.kotlin.types.isNullable
-import org.jetbrains.kotlin.types.typeUtil.isSubtypeOf
-import org.jetbrains.kotlin.types.typeUtil.makeNotNullable
 
 /**
  * This rule detects `?: emptyList()` that can be replaced with `orEmpty()` call.
@@ -46,7 +46,7 @@ class UseOrEmpty(config: Config) :
         config,
         "Use `orEmpty()` call instead of `?:` with empty collection factory methods",
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     @Suppress("ReturnCount")
     override fun visitBinaryExpression(expression: KtBinaryExpression) {
@@ -57,20 +57,22 @@ class UseOrEmpty(config: Config) :
         val right = expression.right ?: return
         if (!right.isEmptyElement()) return
 
-        val leftType = left.getType(bindingContext) ?: return
-        if (!leftType.isNullable()) return
-        if (left.deparenthesize() is KtArrayAccessExpression) {
-            val functionDescriptor = left.getResolvedCall(bindingContext)?.resultingDescriptor as? FunctionDescriptor
-            if (functionDescriptor != null &&
-                functionDescriptor.isOperator &&
-                functionDescriptor.typeParameters.isNotEmpty()
-            ) {
-                return
+        val leftType = analyze(left) {
+            val leftType = left.expressionType ?: return
+            if (!leftType.nullability.isNullable) return
+            left.deparenthesize().let {
+                if (it is KtArrayAccessExpression) {
+                    val called = it.resolveToCall()?.singleFunctionCallOrNull()?.symbol as? KaNamedFunctionSymbol
+                    if (called?.isOperator == true && called.typeParameters.isNotEmpty()) return
+                }
             }
+            leftType
         }
 
-        val rightType = right.getType(bindingContext) ?: return
-        if (!leftType.makeNotNullable().isSubtypeOf(rightType)) return
+        analyze(right) {
+            val rightClassId = right.expressionType?.symbol?.classId ?: return
+            if (!leftType.isSubtypeOf(rightClassId)) return
+        }
 
         val message = "This '${KtTokens.ELVIS.value} ${right.text}' can be replaced with 'orEmpty()' call"
         report(Finding(Entity.from(expression), message))
@@ -83,8 +85,10 @@ class UseOrEmpty(config: Config) :
                 val emptyFunction = emptyFunctions[calleeText]
                 val factoryFunction = factoryFunctions[calleeText]
                 if (emptyFunction == null && factoryFunction == null) return false
-                val fqName = getResolvedCall(bindingContext)?.resultingDescriptor?.fqNameOrNull() ?: return false
-                return fqName == emptyFunction || fqName == factoryFunction && valueArguments.isEmpty()
+                analyze(this) {
+                    val callableId = resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId ?: return false
+                    return callableId == emptyFunction || callableId == factoryFunction && valueArguments.isEmpty()
+                }
             }
             is KtStringTemplateExpression -> return entries.isEmpty()
             else -> return false
@@ -93,25 +97,23 @@ class UseOrEmpty(config: Config) :
 
     companion object {
         private val emptyFunctions = listOf(
-            "kotlin.collections.emptyList",
-            "kotlin.collections.emptySet",
-            "kotlin.collections.emptyMap",
-            "kotlin.sequences.emptySequence",
-            "kotlin.emptyArray",
-        ).associate {
-            val fqName = FqName(it)
-            fqName.shortName().asString() to fqName
+            StandardClassIds.BASE_COLLECTIONS_PACKAGE to "emptyList",
+            StandardClassIds.BASE_COLLECTIONS_PACKAGE to "emptySet",
+            StandardClassIds.BASE_COLLECTIONS_PACKAGE to "emptyMap",
+            StandardClassIds.BASE_SEQUENCES_PACKAGE to "emptySequence",
+            StandardClassIds.BASE_KOTLIN_PACKAGE to "emptyArray",
+        ).associate { (pkg, functionName) ->
+            functionName to CallableId(pkg, Name.identifier(functionName))
         }
 
         private val factoryFunctions = listOf(
-            "kotlin.collections.listOf",
-            "kotlin.collections.setOf",
-            "kotlin.collections.mapOf",
-            "kotlin.sequences.sequenceOf",
-            "kotlin.arrayOf",
-        ).associate {
-            val fqName = FqName(it)
-            fqName.shortName().asString() to fqName
+            StandardClassIds.BASE_COLLECTIONS_PACKAGE to "listOf",
+            StandardClassIds.BASE_COLLECTIONS_PACKAGE to "setOf",
+            StandardClassIds.BASE_COLLECTIONS_PACKAGE to "mapOf",
+            StandardClassIds.BASE_SEQUENCES_PACKAGE to "sequenceOf",
+            StandardClassIds.BASE_KOTLIN_PACKAGE to "arrayOf",
+        ).associate { (pkg, functionName) ->
+            functionName to CallableId(pkg, Name.identifier(functionName))
         }
     }
 }
