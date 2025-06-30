@@ -3,12 +3,13 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
-import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 
 /**
  * Instantiation of an object's "empty" state should use the object's "empty" initializer for clarity purposes.
@@ -35,27 +36,35 @@ class UseEmptyCounterpart(config: Config) :
         config,
         """Instantiation of an object's "empty" state should use the object's "empty" initializer."""
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 
-        val resolvedCall = expression.getResolvedCall(bindingContext) ?: return
-        val fqName = resolvedCall.resultingDescriptor.fqNameOrNull() ?: return
-        val emptyCounterpart = exprsWithEmptyCounterparts[fqName] ?: return
+        if (emptyCounterPartsByShortName[expression.calleeExpression?.text] == null) return
+
+        val fqName = analyze(expression) {
+            expression.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId?.asSingleFqName()
+        } ?: return
+
+        val emptyCounterpart = emptyCounterParts[fqName] ?: return
 
         if (expression.valueArguments.isEmpty()) {
             val message = "${fqName.shortName()} can be replaced with $emptyCounterpart"
             report(Finding(Entity.from(expression), message))
         }
     }
-}
 
-private val exprsWithEmptyCounterparts = mapOf(
-    FqName("kotlin.arrayOf") to "emptyArray",
-    FqName("kotlin.collections.listOf") to "emptyList",
-    FqName("kotlin.collections.listOfNotNull") to "emptyList",
-    FqName("kotlin.collections.mapOf") to "emptyMap",
-    FqName("kotlin.sequences.sequenceOf") to "emptySequence",
-    FqName("kotlin.collections.setOf") to "emptySet"
-)
+    companion object {
+        private val emptyCounterParts = mapOf(
+            FqName("kotlin.arrayOf") to "emptyArray",
+            FqName("kotlin.collections.listOf") to "emptyList",
+            FqName("kotlin.collections.listOfNotNull") to "emptyList",
+            FqName("kotlin.collections.mapOf") to "emptyMap",
+            FqName("kotlin.sequences.sequenceOf") to "emptySequence",
+            FqName("kotlin.collections.setOf") to "emptySet"
+        )
+
+        private val emptyCounterPartsByShortName = emptyCounterParts.mapKeys { it.key.shortName().asString() }
+    }
+}
