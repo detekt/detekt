@@ -4,14 +4,18 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.types.symbol
+import org.jetbrains.kotlin.name.CallableId
+import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.FqName
-import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
-import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
+import org.jetbrains.kotlin.resolve.calls.util.getCalleeExpressionIfAny
 
 /**
  * Prefer passing [java.util.Locale] explicitly than using implicit default value when formatting
@@ -40,21 +44,21 @@ class ImplicitDefaultLocale(config: Config) :
         config,
         "Implicit default locale used for string processing. Consider using explicit locale."
     ),
-    RequiresFullAnalysis {
-
-    private val formatCalls = listOf(
-        FqName("kotlin.text.format")
-    )
+    RequiresAnalysisApi {
 
     override fun visitQualifiedExpression(expression: KtQualifiedExpression) {
         super.visitQualifiedExpression(expression)
         checkStringFormatting(expression)
     }
 
+    @Suppress("ReturnCount")
     private fun checkStringFormatting(expression: KtQualifiedExpression) {
-        if (expression.getResolvedCall(bindingContext)?.resultingDescriptor?.fqNameSafe in formatCalls &&
-            expression.containsLocaleObject(bindingContext).not()
-        ) {
+        val formatCallId = formatCallIds[expression.getCalleeExpressionIfAny()?.text] ?: return
+
+        analyze(expression) {
+            val symbol = expression.resolveToCall()?.singleFunctionCallOrNull()?.symbol ?: return
+            if (symbol.callableId != formatCallId) return
+            if (symbol.valueParameters.firstOrNull()?.returnType?.symbol?.classId == localeClassId) return
             report(
                 Finding(
                     Entity.from(expression),
@@ -63,21 +67,12 @@ class ImplicitDefaultLocale(config: Config) :
             )
         }
     }
-}
 
-private fun KtQualifiedExpression.containsLocaleObject(bindingContext: BindingContext): Boolean {
-    val lastCallExpression = lastChild as? KtCallExpression
-    val firstArgument = lastCallExpression
-        ?.valueArguments
-        ?.firstOrNull()
-        ?: return false
-    return firstArgument.getArgumentExpression()
-        .getResolvedCall(bindingContext)
-        ?.resultingDescriptor
-        ?.fqNameSafe
-        ?.startsWith(
-            FqName(
-                "java.util.Locale"
-            )
-        ) == true
+    companion object {
+        private val formatCallIds = listOf(
+            CallableId(FqName("kotlin.text"), Name.identifier("format")),
+        ).associateBy { it.callableName.asString() }
+
+        private val localeClassId = ClassId(FqName("java.util"), Name.identifier("Locale"))
+    }
 }
