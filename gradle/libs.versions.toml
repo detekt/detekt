@@ -25,7 +25,7 @@ kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 android-gradleApi = { module = "com.android.tools.build:gradle-api", version = "7.3.1" }
 assertj-core = { module = "org.assertj:assertj-core", version = "3.27.3" }
 classgraph = { module = "io.github.classgraph:classgraph", version = "4.8.180" }
-jcommander = { module = "org.jcommander:jcommander", version = "1.85" }
+jcommander = { module = "org.jcommander:jcommander", version = "2.0" }
 jetbrains-annotations = { module = "org.jetbrains:annotations", version = "26.0.2" }
 junit-jupiterApi = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 kctfork-core = { module = "dev.zacsweers.kctfork:core", version = "0.7.1" }
