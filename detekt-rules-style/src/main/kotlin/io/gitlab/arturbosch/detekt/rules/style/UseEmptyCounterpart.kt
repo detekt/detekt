@@ -41,7 +41,7 @@ class UseEmptyCounterpart(config: Config) :
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 
-        if (emptyCounterPartsByShortName[expression.calleeExpression?.text] == null) return
+        if (expression.calleeExpression?.text !in emptyCounterPartsShortName) return
 
         val fqName = analyze(expression) {
             expression.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId?.asSingleFqName()
@@ -65,6 +65,6 @@ class UseEmptyCounterpart(config: Config) :
             FqName("kotlin.collections.setOf") to "emptySet"
         )
 
-        private val emptyCounterPartsByShortName = emptyCounterParts.mapKeys { it.key.shortName().asString() }
+        private val emptyCounterPartsShortName = emptyCounterParts.map { it.key.shortName().asString() }.toSet()
     }
 }
