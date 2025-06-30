@@ -12,8 +12,8 @@ public final class io/github/detekt/test/utils/FileExtensionKt {
 
 public final class io/github/detekt/test/utils/KotlinAnalysisApiEngine {
 	public static final field INSTANCE Lio/github/detekt/test/utils/KotlinAnalysisApiEngine;
-	public final fun compile (Ljava/lang/String;Ljava/util/List;)Lorg/jetbrains/kotlin/psi/KtFile;
-	public static synthetic fun compile$default (Lio/github/detekt/test/utils/KotlinAnalysisApiEngine;Ljava/lang/String;Ljava/util/List;ILjava/lang/Object;)Lorg/jetbrains/kotlin/psi/KtFile;
+	public final fun compile (Ljava/lang/String;Ljava/util/List;Z)Lorg/jetbrains/kotlin/psi/KtFile;
+	public static synthetic fun compile$default (Lio/github/detekt/test/utils/KotlinAnalysisApiEngine;Ljava/lang/String;Ljava/util/List;ZILjava/lang/Object;)Lorg/jetbrains/kotlin/psi/KtFile;
 }
 
 public final class io/github/detekt/test/utils/KotlinCoreEnvironmentWrapper {
