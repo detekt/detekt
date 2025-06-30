@@ -4,16 +4,16 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
-import org.jetbrains.kotlin.descriptors.CallableDescriptor
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolVisibility
+import org.jetbrains.kotlin.analysis.api.types.KaFlexibleType
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.types.isFlexible
 
 /*
  * Based on code from Kotlin project:
@@ -42,7 +42,7 @@ class HasPlatformType(config: Config) :
         config,
         "Platform types must be declared explicitly in public APIs."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     override fun visitKtElement(element: KtElement) {
         super.visitKtElement(element)
@@ -60,12 +60,9 @@ class HasPlatformType(config: Config) :
     private fun KtCallableDeclaration.hasImplicitPlatformType(): Boolean {
         fun isPlatFormType(): Boolean {
             if (containingClassOrObject?.isLocal == true) return false
-            val callable =
-                bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, this] as? CallableDescriptor ?: return false
-
-            val isPublicApi = callable.visibility.isPublicAPI
-            val isReturnTypeFlexible = callable.returnType?.isFlexible()
-            return isPublicApi && isReturnTypeFlexible == true
+            return analyze(this) {
+                symbol.visibility == KaSymbolVisibility.PUBLIC && returnType is KaFlexibleType
+            }
         }
 
         return when (this) {
