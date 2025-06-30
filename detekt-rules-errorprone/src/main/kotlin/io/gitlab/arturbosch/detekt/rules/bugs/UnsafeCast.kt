@@ -5,10 +5,15 @@ import io.gitlab.arturbosch.detekt.api.Alias
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
-import org.jetbrains.kotlin.diagnostics.Errors
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.components.KaDiagnosticCheckerFilter
+import org.jetbrains.kotlin.analysis.api.fir.diagnostics.KaFirDiagnostic
+import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
+import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
 
 /**
  * Reports casts that will never succeed.
@@ -36,12 +41,20 @@ class UnsafeCast(config: Config) :
         config,
         "Cast operator throws an exception if the cast is not possible."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
+    @OptIn(KaExperimentalApi::class)
     override fun visitBinaryWithTypeRHSExpression(expression: KtBinaryExpressionWithTypeRHS) {
-        if (bindingContext.diagnostics.forElement(expression.operationReference)
-                .any { it.factory == Errors.CAST_NEVER_SUCCEEDS }
-        ) {
+        val operationToken = (expression.operationReference as? KtOperationReferenceExpression)?.operationSignTokenType
+        if (operationToken != KtTokens.AS_KEYWORD && operationToken != KtTokens.AS_SAFE) return
+
+        val isCastNeverSucceeds = analyze(expression) {
+            expression
+                .diagnostics(KaDiagnosticCheckerFilter.ONLY_COMMON_CHECKERS)
+                .any { it is KaFirDiagnostic.CastNeverSucceeds }
+        }
+
+        if (isCastNeverSucceeds) {
             report(
                 Finding(
                     Entity.from(expression),
