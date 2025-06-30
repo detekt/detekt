@@ -4,9 +4,12 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
-import org.jetbrains.kotlin.diagnostics.Errors
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.components.KaDiagnosticCheckerFilter
+import org.jetbrains.kotlin.analysis.api.fir.diagnostics.KaFirDiagnostic
 import org.jetbrains.kotlin.psi.KtExpression
 
 /**
@@ -35,13 +38,19 @@ class UnreachableCode(config: Config) :
         config,
         "Unreachable code detected. This code should be removed."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
+    @OptIn(KaExperimentalApi::class)
     override fun visitExpression(expression: KtExpression) {
         super.visitExpression(expression)
-        if (bindingContext.diagnostics.forElement(expression)
-                .any { it.factory == Errors.UNREACHABLE_CODE || it.factory == Errors.USELESS_ELVIS }
-        ) {
+
+        val isUnreachableCode = analyze(expression) {
+            expression
+                .diagnostics(KaDiagnosticCheckerFilter.EXTENDED_AND_COMMON_CHECKERS)
+                .any { it is KaFirDiagnostic.UnreachableCode || it is KaFirDiagnostic.UselessElvis }
+        }
+
+        if (isUnreachableCode) {
             report(
                 Finding(
                     Entity.from(expression),
