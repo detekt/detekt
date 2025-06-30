@@ -56,7 +56,7 @@ kotlin-lowLevelApiFir = { module = "org.jetbrains.kotlin:low-level-api-fir-for-i
 kotlin-symbolLightClasses = { module = "org.jetbrains.kotlin:symbol-light-classes-for-ide", version.ref = "kotlin" }
 kotlin-analysisApiImplBase = { module = "org.jetbrains.kotlin:analysis-api-impl-base-for-ide", version.ref = "kotlin" }
 # Can likely be removed in future - https://youtrack.jetbrains.com/issue/KT-73751/Analysis-API-Caffeine-dependency
-caffeine = { module = "com.github.ben-manes.caffeine:caffeine", version = "2.9.3" }
+caffeine = { module = "com.github.ben-manes.caffeine:caffeine", version = "3.2.1" }
 
 [plugins]
 # Do not declare plugins here - see https://github.com/detekt/detekt/pull/7088.
