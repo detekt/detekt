@@ -1,18 +1,19 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
-import io.github.detekt.psi.FunctionMatcher
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
-import org.jetbrains.kotlin.descriptors.CallableDescriptor
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 
 /**
  * Although the scope functions are a way of making the code more concise, avoid overusing them: it can decrease
@@ -44,7 +45,7 @@ class NestedScopeFunctions(config: Config) :
         config,
         "Over-using scope functions makes code confusing, hard to read and bug prone."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     @Configuration("The maximum allowed depth for nested scope functions.")
     private val allowedDepth: Int by config(defaultValue = 1)
@@ -53,9 +54,11 @@ class NestedScopeFunctions(config: Config) :
         "Set of scope function names which add complexity. " +
             "Function names have to be fully qualified. For example 'kotlin.apply'."
     )
-    private val functions: List<FunctionMatcher> by config(DEFAULT_FUNCTIONS) {
-        it.toSet().map(FunctionMatcher::fromFunctionSignature)
+    private val functions: Set<FqName> by config(DEFAULT_FUNCTIONS) {
+        it.map(::FqName).toSet()
     }
+
+    private val functionNames = functions.map { it.shortName().asString() }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         function.accept(FunctionDepthVisitor())
@@ -109,15 +112,12 @@ class NestedScopeFunctions(config: Config) :
         }
 
         private fun KtCallExpression.isScopeFunction(): Boolean {
-            val descriptors = resolveDescriptors() ?: return false
-            return descriptors.any { it.matchesScopeFunction() }
+            if (calleeExpression?.text !in functionNames) return false
+            return analyze(this) {
+                val symbol = resolveToCall()?.singleFunctionCallOrNull()?.symbol
+                val symbols = listOfNotNull(symbol) + symbol?.allOverriddenSymbols.orEmpty()
+                symbols.any { it.callableId?.asSingleFqName() in functions }
+            }
         }
-
-        private fun KtCallExpression.resolveDescriptors(): List<CallableDescriptor>? =
-            getResolvedCall(bindingContext)?.resultingDescriptor
-                ?.let { listOf(it) + it.overriddenDescriptors }
-
-        private fun CallableDescriptor.matchesScopeFunction(): Boolean =
-            functions.any { it.match(this) }
     }
 }
