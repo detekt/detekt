@@ -1,12 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.coroutines
 
 import com.intellij.psi.PsiElement
-import io.gitlab.arturbosch.detekt.api.Rule
-import org.jetbrains.kotlin.descriptors.FunctionDescriptor
-import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.KtFinallySection
-import org.jetbrains.kotlin.psi.KtValueArgument
-import org.jetbrains.kotlin.psi.KtValueArgument
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
@@ -16,8 +10,9 @@ import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.calls.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.calls.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaFunctionSymbol
-import org.jetbrains.kotlin.analysis.api.types.KaType
-import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtFinallySection
+import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.forEachDescendantOfType
 
 /**
@@ -121,4 +116,5 @@ class SuspendFunInFinallySection(config: Config) :
             val symbol = call?.symbol
             symbol?.callableId?.asSingleFqName()?.asString() == "kotlinx.coroutines.NonCancellable"
         }
+    }
     }
