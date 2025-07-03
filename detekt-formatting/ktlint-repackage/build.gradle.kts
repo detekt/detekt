@@ -12,3 +12,7 @@ dependencies {
 tasks.shadowJar {
     relocate("org.jetbrains.kotlin.com.intellij", "com.intellij")
 }
+
+java {
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
