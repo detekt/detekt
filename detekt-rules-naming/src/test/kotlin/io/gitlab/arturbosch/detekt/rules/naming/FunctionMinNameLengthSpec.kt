@@ -1,12 +1,15 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class FunctionMinNameLengthSpec {
+@KotlinCoreEnvironmentTest
+class FunctionMinNameLengthSpec(val env: KotlinEnvironmentContainer) {
 
     @Test
     fun `should report a function name that is too short`() {

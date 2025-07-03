@@ -1,12 +1,15 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Test
 
-class FunctionNameMaxLengthSpec {
+@KotlinCoreEnvironmentTest
+class FunctionNameMaxLengthSpec(val env: KotlinEnvironmentContainer) {
 
     @Test
     fun `should report a function name that is too long base on config`() {

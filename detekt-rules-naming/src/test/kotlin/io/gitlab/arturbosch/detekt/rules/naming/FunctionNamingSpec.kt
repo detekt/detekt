@@ -1,7 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.SourceLocation
+import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lint
@@ -10,7 +12,8 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.util.regex.PatternSyntaxException
 
-class FunctionNamingSpec {
+@KotlinCoreEnvironmentTest
+class FunctionNamingSpec(val env: KotlinEnvironmentContainer) {
 
     @Test
     fun `allows FunctionName for suppressing`() {
