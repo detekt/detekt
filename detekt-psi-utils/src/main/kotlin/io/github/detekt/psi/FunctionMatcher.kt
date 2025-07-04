@@ -65,6 +65,7 @@ sealed class FunctionMatcher {
                 val methodName = result.groups[1]!!.value.replace("`", "")
                 val params = result.groups[2]?.value?.splitParams()
                     ?.map { changeIfLambda(it) ?: it }
+                    ?.map { if (it.startsWith("vararg ")) "kotlin.Array" else it }
 
                 return if (params == null) {
                     NameOnly(methodName)
