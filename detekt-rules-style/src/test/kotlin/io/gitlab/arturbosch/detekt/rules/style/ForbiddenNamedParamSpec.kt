@@ -184,7 +184,7 @@ class ForbiddenNamedParamSpec(val env: KotlinEnvironmentContainer) {
                 val s = varargMethod(args = arrayOf("test"))
             }
         """.trimIndent()
-        val methodName = "com.example.varargMethod(kotlin.Array)"
+        val methodName = "com.example.varargMethod(vararg kotlin.Any)"
         val findings = ForbiddenNamedParam(TestConfig(METHODS to listOf(methodName)))
             .lintWithContext(env, code)
         assertThat(findings).hasSize(1).hasStartSourceLocation(6, 13)
