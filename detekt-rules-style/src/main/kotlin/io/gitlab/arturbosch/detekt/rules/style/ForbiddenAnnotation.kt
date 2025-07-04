@@ -5,21 +5,19 @@ import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Location
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.api.ValueWithReason
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.valuesWithReason
-import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
-import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.types.KaType
+import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtExpression
-import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.psiUtil.endOffset
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.types.KotlinType
 
 /**
  * This rule allows to set a list of forbidden annotations. This can be used to discourage the use
@@ -40,7 +38,7 @@ class ForbiddenAnnotation(config: Config) :
         config,
         "Avoid using this annotation."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     @Configuration(
         "List of fully qualified annotation classes which are forbidden."
@@ -63,21 +61,17 @@ class ForbiddenAnnotation(config: Config) :
 
     override fun visitAnnotationEntry(annotation: KtAnnotationEntry) {
         super.visitAnnotationEntry(annotation)
-
-        annotation.typeReference?.fqNameOrNull()?.let {
-            check(annotation, it)
-        }
+        val typeReference = annotation.typeReference ?: return
+        check(annotation, analyze(typeReference) { typeReference.type })
     }
 
     override fun visitExpression(expression: KtExpression) {
         super.visitExpression(expression)
-
-        expression.expressionTypeOrNull()?.fqNameOrNull()?.let {
-            check(expression, it)
-        }
+        check(expression, analyze(expression) { expression.expressionType } ?: return)
     }
 
-    private fun check(element: KtElement, fqName: FqName) {
+    private fun check(element: KtElement, type: KaType) {
+        val fqName = type.symbol?.classId?.asSingleFqName() ?: return
         val forbidden = annotations[fqName.asString()]
 
         if (forbidden != null) {
@@ -97,10 +91,4 @@ class ForbiddenAnnotation(config: Config) :
             report(Finding(Entity.from(element, location), message))
         }
     }
-
-    private fun KtTypeReference.fqNameOrNull(): FqName? =
-        bindingContext[BindingContext.TYPE, this]?.fqNameOrNull()
-
-    private fun KtExpression.expressionTypeOrNull(): KotlinType? =
-        bindingContext[BindingContext.EXPRESSION_TYPE_INFO, this]?.type
 }
