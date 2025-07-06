@@ -422,6 +422,6 @@ class UseDataClassSpec(val env: KotlinEnvironmentContainer) {
                 val bar: String
             }
         """.trimIndent()
-        assertThat(subject.lintWithContext(env, code, compile = false)).isEmpty()
+        assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true)).isEmpty()
     }
 }
