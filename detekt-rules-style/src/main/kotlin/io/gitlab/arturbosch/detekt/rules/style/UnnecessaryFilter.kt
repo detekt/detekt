@@ -120,11 +120,11 @@ class UnnecessaryFilter(config: Config) :
     private data class SecondCall(val fqName: FqName, val correctOperator: String = fqName.shortName().asString())
 
     companion object {
-        private val filterFqNames = listOf(
+        private val filterFqNames = setOf(
             FqName("kotlin.collections.filter"),
             FqName("kotlin.sequences.filter"),
             FqName("kotlin.text.filter"),
-        ).toSet()
+        )
 
         private val secondCalls = listOf(
             SecondCall(FqName("kotlin.collections.List.size"), "count"),
