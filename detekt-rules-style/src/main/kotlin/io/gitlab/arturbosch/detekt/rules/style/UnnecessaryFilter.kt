@@ -4,25 +4,26 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
-import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaCallableSymbol
+import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtProperty
-import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForReceiver
 import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelectorOrThis
 import org.jetbrains.kotlin.psi.psiUtil.siblings
 import org.jetbrains.kotlin.psi.unpackFunctionLiteral
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
-import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
+import org.jetbrains.kotlin.resolve.calls.util.getCalleeExpressionIfAny
 
 /**
  * Unnecessary filters add complexity to the code and accomplish nothing. They should be removed.
@@ -52,22 +53,24 @@ class UnnecessaryFilter(config: Config) :
         config,
         "`filter()` with other collection operations may be simplified."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 
-        if (!expression.isCalling(filterFqNames)) return
+        if (expression.matchingCall(filterFqNames) == null) return
         val lambdaArgumentText = expression.lambda()?.text ?: return
 
         val qualifiedOrCall = expression.getQualifiedExpressionForSelectorOrThis()
         val nextCall = qualifiedOrCall.nextCall() ?: return
-        if (nextCall is KtCallExpression && nextCall.valueArguments.size > 0) return
+        if (nextCall is KtCallExpression && nextCall.valueArguments.isNotEmpty()) return
 
-        secondCalls.firstOrNull { nextCall.isCalling(it.fqName) }?.let {
-            val message = "'${expression.text}' can be replaced by '${it.correctOperator} $lambdaArgumentText'"
-            report(Finding(Entity.from(expression), message))
-        }
+        nextCall.matchingCall(secondCalls.keys)
+            ?.let { secondCalls[it] }
+            ?.let {
+                val message = "'${expression.text}' can be replaced by '${it.correctOperator} $lambdaArgumentText'"
+                report(Finding(Entity.from(expression), message))
+            }
     }
 
     private fun KtCallExpression.lambda(): KtLambdaExpression? {
@@ -75,32 +78,36 @@ class UnnecessaryFilter(config: Config) :
         return argument?.getArgumentExpression()?.unpackFunctionLiteral()
     }
 
-    private fun KtExpression.isCalling(fqNames: List<FqName>): Boolean {
-        val calleeText = (this as? KtCallExpression)?.calleeExpression?.text ?: this.text
-        val targetFqNames = fqNames.filter { it.shortName().asString() == calleeText }
-        if (targetFqNames.isEmpty()) return false
-        return getResolvedCall(bindingContext)?.resultingDescriptor?.fqNameOrNull() in targetFqNames
+    private fun KtExpression.matchingCall(fqNames: Set<FqName>): FqName? {
+        val calleeText = getCalleeExpressionIfAny()?.text ?: return null
+        if (fqNames.none { it.shortName().asString() == calleeText }) return null
+        return analyze(this) {
+            val callableId = resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId
+                ?: (mainReference?.resolveToSymbol() as? KaCallableSymbol)?.callableId
+            callableId?.asSingleFqName()?.takeIf { it in fqNames }
+        }
     }
-
-    private fun KtExpression.isCalling(fqName: FqName) = isCalling(listOf(fqName))
 
     @Suppress("ReturnCount")
     private fun KtExpression.nextCall(): KtExpression? {
         getQualifiedExpressionForReceiver()?.selectorExpression?.let { return it }
 
         val property = parentProperty()
-        val propertyDescriptor = property?.descriptor()
-        if (propertyDescriptor != null) {
-            val singleReferrer = getReferrers(property, propertyDescriptor).singleOrNull()
-            val qualified = singleReferrer?.getQualifiedExpressionForReceiver()
-            if (qualified?.parentProperty() != null || qualified?.parentReturn() != null) {
-                val receiver = qualified.receiverExpression as? KtNameReferenceExpression
-                if (receiver != null && receiver.descriptor() == propertyDescriptor) {
+        if (property != null) {
+            analyze(property) {
+                val propertySymbol = property.symbol
+                val propertyName = propertySymbol.name.asString()
+                val singleReferrer = property.siblings(forward = true, withItself = false).flatMap { sibling ->
+                    sibling.collectDescendantsOfType<KtNameReferenceExpression> {
+                        it.text == propertyName && it.mainReference.resolveToSymbol() == propertySymbol
+                    }
+                }.singleOrNull()
+                val qualified = singleReferrer?.getQualifiedExpressionForReceiver()
+                if (qualified?.parentProperty() != null || qualified?.parentReturn() != null) {
                     return qualified.selectorExpression
                 }
             }
         }
-
         return null
     }
 
@@ -110,24 +117,10 @@ class UnnecessaryFilter(config: Config) :
     private fun KtExpression.parentReturn(): KtReturnExpression? =
         (parent as? KtReturnExpression)?.takeIf { it.returnedExpression == this }
 
-    private fun getReferrers(
-        property: KtProperty,
-        propertyDescriptor: DeclarationDescriptor,
-    ): Sequence<KtNameReferenceExpression> =
-        property.siblings(forward = true, withItself = false).flatMap { sibling ->
-            sibling.collectDescendantsOfType<KtNameReferenceExpression> { it.descriptor() == propertyDescriptor }
-        }
-
-    private fun KtProperty.descriptor(): DeclarationDescriptor? =
-        bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, this]
-
-    private fun KtReferenceExpression.descriptor(): DeclarationDescriptor? =
-        bindingContext[BindingContext.REFERENCE_TARGET, this]
-
     private data class SecondCall(val fqName: FqName, val correctOperator: String = fqName.shortName().asString())
 
     companion object {
-        private val filterFqNames = listOf(
+        private val filterFqNames = setOf(
             FqName("kotlin.collections.filter"),
             FqName("kotlin.sequences.filter"),
             FqName("kotlin.text.filter"),
@@ -166,6 +159,6 @@ class UnnecessaryFilter(config: Config) :
             SecondCall(FqName("kotlin.text.lastOrNull")),
             SecondCall(FqName("kotlin.text.single")),
             SecondCall(FqName("kotlin.text.singleOrNull")),
-        )
+        ).associateBy { it.fqName }
     }
 }
