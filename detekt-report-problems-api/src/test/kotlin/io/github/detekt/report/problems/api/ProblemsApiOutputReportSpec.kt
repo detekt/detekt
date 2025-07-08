@@ -72,7 +72,7 @@ class ProblemsApiOutputReportSpec {
     }
 
     private fun createTestFinding(
-        params: TestFindingParams
+        params: TestFindingParams,
     ): Finding {
         val issue = Issue(params.ruleName, mapSeverity(params.severityLevel), params.message, Debt.Companion.FIVE_MINS)
         val location = Location(
@@ -115,5 +115,5 @@ data class TestFindingParams(
     val severityLevel: SeverityLevel,
     val filePath: String,
     val line: Int,
-    val column: Int
+    val column: Int,
 )
