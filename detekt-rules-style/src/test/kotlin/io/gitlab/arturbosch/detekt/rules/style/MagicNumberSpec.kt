@@ -1060,9 +1060,12 @@ class MagicNumberSpec {
 
         @Test
         fun `should report unsigned literals in function calls`() {
-            val code = "fun test() { someFunction(65520U) }"
+            val code = """
+                fun someFunction(x: UInt) {}
+                fun test() { someFunction(65520U) }
+            """.trimIndent()
             val findings = MagicNumber(Config.empty).lint(code)
-            assertThat(findings).hasStartSourceLocation(1, 27)
+            assertThat(findings).hasStartSourceLocation(2, 27)
         }
 
         @Test
