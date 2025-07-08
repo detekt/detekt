@@ -52,7 +52,7 @@ allprojects {
             html.required = true
             sarif.required = true
             md.required = true
-            problemsAPI.required = true
+            problemsAPI.required = GradleVersion.current() > GradleVersion.version("8.14")
         }
         basePath = rootDir.absolutePath
     }
