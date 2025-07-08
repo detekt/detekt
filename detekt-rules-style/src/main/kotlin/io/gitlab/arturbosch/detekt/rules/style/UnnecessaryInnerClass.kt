@@ -3,17 +3,16 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
-import org.jetbrains.kotlin.descriptors.ClassifierDescriptor
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.types.symbol
+import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtThisExpression
 import org.jetbrains.kotlin.psi.psiUtil.containingClass
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
-import org.jetbrains.kotlin.resolve.descriptorUtil.classId
 
 /**
  * This rule reports unnecessary inner classes. Nested classes that do not access members from the outer class do
@@ -39,7 +38,7 @@ class UnnecessaryInnerClass(config: Config) :
         config,
         "The 'inner' qualifier is unnecessary."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     private val candidateClassToParentClasses = mutableMapOf<KtClass, List<KtClass>>()
     private val classChain = ArrayDeque<KtClass>()
@@ -101,15 +100,11 @@ class UnnecessaryInnerClass(config: Config) :
         }
     }
 
-    private fun findResolvedContainingClassId(expression: KtReferenceExpression): ClassId? =
-        (bindingContext[BindingContext.REFERENCE_TARGET, expression]?.containingDeclaration as? ClassifierDescriptor)
-            ?.classId
+    private fun findResolvedContainingClassId(expression: KtReferenceExpression): ClassId? = analyze(expression) {
+        (expression.mainReference.resolveToSymbol()?.containingDeclaration?.psi as? KtClass)?.getClassId()
+    }
 
-    private fun KtThisExpression.referenceClassId(): ClassId? =
-        getResolvedCall(bindingContext)
-            ?.resultingDescriptor
-            ?.returnType
-            ?.constructor
-            ?.declarationDescriptor
-            ?.classId
+    private fun KtThisExpression.referenceClassId(): ClassId? = analyze(this) {
+        (expressionType?.symbol?.psi as? KtClass)?.getClassId()
+    }
 }
