@@ -156,6 +156,7 @@ public abstract class io/gitlab/arturbosch/detekt/extensions/DetektReport {
 public final class io/gitlab/arturbosch/detekt/extensions/DetektReportType : java/lang/Enum {
 	public static final field HTML Lio/gitlab/arturbosch/detekt/extensions/DetektReportType;
 	public static final field MD Lio/gitlab/arturbosch/detekt/extensions/DetektReportType;
+	public static final field PROBLEMS_API Lio/gitlab/arturbosch/detekt/extensions/DetektReportType;
 	public static final field SARIF Lio/gitlab/arturbosch/detekt/extensions/DetektReportType;
 	public static final field XML Lio/gitlab/arturbosch/detekt/extensions/DetektReportType;
 	public final fun getExtension ()Ljava/lang/String;
@@ -171,10 +172,12 @@ public class io/gitlab/arturbosch/detekt/extensions/DetektReports {
 	public fun getHtml ()Lio/gitlab/arturbosch/detekt/extensions/DetektReport;
 	public fun getMd ()Lio/gitlab/arturbosch/detekt/extensions/DetektReport;
 	public final fun getObjects ()Lorg/gradle/api/model/ObjectFactory;
+	public fun getProblemsAPI ()Lio/gitlab/arturbosch/detekt/extensions/DetektReport;
 	public fun getSarif ()Lio/gitlab/arturbosch/detekt/extensions/DetektReport;
 	public fun getXml ()Lio/gitlab/arturbosch/detekt/extensions/DetektReport;
 	public final fun html (Lorg/gradle/api/Action;)V
 	public final fun md (Lorg/gradle/api/Action;)V
+	public final fun problemsAPI (Lorg/gradle/api/Action;)V
 	public final fun sarif (Lorg/gradle/api/Action;)V
 	public final fun xml (Lorg/gradle/api/Action;)V
 }
