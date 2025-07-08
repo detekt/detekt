@@ -1005,4 +1005,100 @@ class MagicNumberSpec {
             assertThat(rule.lint(code)).hasSize(1)
         }
     }
+
+    @Nested
+    inner class `unsigned integer literals` {
+
+        @Test
+        fun `should report unsigned integer literal`() {
+            val code = "val myUInt = 65520U"
+            val findings = MagicNumber(Config.empty).lint(code)
+            assertThat(findings).hasStartSourceLocation(1, 14)
+        }
+
+        @Test
+        fun `should not report unsigned integer literal when ignored`() {
+            val code = "val myUInt = 65520U"
+            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to listOf("65520U"))).lint(code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `should report unsigned long literal`() {
+            val code = "val myULong = 65520UL"
+            val findings = MagicNumber(Config.empty).lint(code)
+            assertThat(findings).hasStartSourceLocation(1, 15)
+        }
+
+        @Test
+        fun `should not report unsigned long literal when ignored`() {
+            val code = "val myULong = 65520UL"
+            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to listOf("65520UL"))).lint(code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `should report unsigned hex literal`() {
+            val code = "val myUHex = 0xFFF0U"
+            val findings = MagicNumber(Config.empty).lint(code)
+            assertThat(findings).hasStartSourceLocation(1, 14)
+        }
+
+        @Test
+        fun `should not report unsigned hex literal when ignored`() {
+            val code = "val myUHex = 0xFFF0U"
+            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to listOf("0xFFF0U"))).lint(code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `should report unsigned hex long literal`() {
+            val code = "val myUHexLong = 0xFFF0UL"
+            val findings = MagicNumber(Config.empty).lint(code)
+            assertThat(findings).hasStartSourceLocation(1, 18)
+        }
+
+        @Test
+        fun `should report unsigned literals in function calls`() {
+            val code = "fun test() { someFunction(65520U) }"
+            val findings = MagicNumber(Config.empty).lint(code)
+            assertThat(findings).hasStartSourceLocation(1, 27)
+        }
+
+        @Test
+        fun `should report unsigned literals in array initialization`() {
+            val code = "val array = arrayOf(1U, 2U, 65520U)"
+            val findings = MagicNumber(Config.empty).lint(code)
+            assertThat(findings).hasStartSourceLocation(1, 29)
+        }
+
+        @Test
+        fun `should not report unsigned literals in property declarations by default`() {
+            val code = "val myUInt = 65520U"
+            val findings = MagicNumber(Config.empty).lint(code)
+            assertThat(findings).hasStartSourceLocation(1, 14)
+        }
+
+        @Test
+        fun `should not report unsigned literals in property declarations when ignored`() {
+            val code = "val myUInt = 65520U"
+            val findings = MagicNumber(TestConfig(IGNORE_PROPERTY_DECLARATION to "true")).lint(code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `should report multiple unsigned literals`() {
+            val code = """
+                val a = 65520U
+                val b = 0xFFF0UL
+                val c = 12345U
+            """.trimIndent()
+            val findings = MagicNumber(Config.empty).lint(code)
+            assertThat(findings).hasStartSourceLocations(
+                SourceLocation(1, 9),
+                SourceLocation(2, 9),
+                SourceLocation(3, 9)
+            )
+        }
+    }
 }
