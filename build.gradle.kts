@@ -52,6 +52,7 @@ allprojects {
             html.required = true
             sarif.required = true
             md.required = true
+            problemsAPI.required = true
         }
         basePath = rootDir.absolutePath
     }

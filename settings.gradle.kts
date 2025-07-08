@@ -82,3 +82,5 @@ dependencyResolutionManagement {
         maven("https://redirector.kotlinlang.org/maven/intellij-dependencies")
     }
 }
+
+include("detekt-report-problems-api")
