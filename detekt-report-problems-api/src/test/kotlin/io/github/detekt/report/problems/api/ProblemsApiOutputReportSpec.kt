@@ -15,6 +15,7 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SeverityLevel
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
+import org.gradle.api.Incubating
 import org.gradle.api.problems.ProblemReporter
 import org.gradle.api.problems.Problems
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
@@ -28,12 +29,15 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import java.nio.file.Paths
 
+@Incubating
 class ProblemsApiOutputReportSpec {
 
     @Mock
+    @Suppress("CanBeVal")
     private lateinit var mockProblemsService: Problems
 
     @Mock
+    @Suppress("CanBeVal")
     private lateinit var mockProblemReporter: ProblemReporter
 
     private lateinit var report: ProblemsApiOutputReport
@@ -47,8 +51,12 @@ class ProblemsApiOutputReportSpec {
 
     @Test
     fun `render handles multiple findings`() {
-        val finding1 = createTestFinding("Rule1", "Message1", SeverityLevel.WARNING, "src/File1.kt", 1, 1)
-        val finding2 = createTestFinding("Rule2", "Message2", SeverityLevel.INFO, "src/File2.kt", 2, 2)
+        val finding1 = createTestFinding(
+            TestFindingParams("Rule1", "Message1", SeverityLevel.WARNING, "src/File1.kt", 1, 1)
+        )
+        val finding2 = createTestFinding(
+            TestFindingParams("Rule2", "Message2", SeverityLevel.INFO, "src/File2.kt", 2, 2)
+        )
 
         val detektion = TestDetektion(finding1, finding2)
         report.render(detektion)
@@ -64,20 +72,15 @@ class ProblemsApiOutputReportSpec {
     }
 
     private fun createTestFinding(
-        ruleName: String,
-        message: String,
-        severityLevel: SeverityLevel,
-        filePath: String,
-        line: Int,
-        column: Int,
+        params: TestFindingParams
     ): Finding {
-        val issue = Issue(ruleName, mapSeverity(severityLevel), message, Debt.Companion.FIVE_MINS)
+        val issue = Issue(params.ruleName, mapSeverity(params.severityLevel), params.message, Debt.Companion.FIVE_MINS)
         val location = Location(
-            source = SourceLocation(line, column),
+            source = SourceLocation(params.line, params.column),
             text = TextLocation(0, 0),
-            filePath = FilePath(Paths.get(filePath))
+            filePath = FilePath(Paths.get(params.filePath))
         )
-        return CodeSmell(issue, Entity(ruleName, "TestEntity", location), message)
+        return CodeSmell(issue, Entity(params.ruleName, "TestEntity", location), params.message)
     }
 
     private fun mapSeverity(level: SeverityLevel): Severity =
@@ -105,3 +108,12 @@ class ProblemsApiOutputReportSpec {
         override fun <V> getData(key: Key<V>): V? = null
     }
 }
+
+data class TestFindingParams(
+    val ruleName: String,
+    val message: String,
+    val severityLevel: SeverityLevel,
+    val filePath: String,
+    val line: Int,
+    val column: Int
+)
