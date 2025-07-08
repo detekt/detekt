@@ -23,7 +23,6 @@ class ProblemsApiOutputReport @Inject constructor(
         val reporter: ProblemReporter = problems.reporter
         detektion.findings.forEach { entry ->
             entry.value.forEach { finding ->
-                println("[Problems API] Reporting Detekt issue: ${finding.id}")
                 val group = ProblemGroup.create("detekt findings", "detekt findings")
                 val pid = ProblemId.create(finding.id, finding.message, group)
 
