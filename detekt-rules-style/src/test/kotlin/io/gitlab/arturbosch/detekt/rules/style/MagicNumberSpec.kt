@@ -1119,16 +1119,16 @@ class MagicNumberSpec {
         }
 
         @Test
-        fun `should report unsigned long literal with lowercase ul`() {
-            val code = "val myULong = 65520ul"
+        fun `should report unsigned long literal with lowercase uL`() {
+            val code = "val myULong = 65520uL"
             val findings = MagicNumber(Config.empty).lint(code)
             assertThat(findings).hasStartSourceLocation(1, 15)
         }
 
         @Test
-        fun `should not report unsigned long literal with lowercase ul when ignored`() {
-            val code = "val myULong = 65520ul"
-            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to listOf("65520ul"))).lint(code)
+        fun `should not report unsigned long literal with lowercase uL when ignored`() {
+            val code = "val myULong = 65520uL"
+            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to listOf("65520uL"))).lint(code)
             assertThat(findings).isEmpty()
         }
 
@@ -1147,16 +1147,16 @@ class MagicNumberSpec {
         }
 
         @Test
-        fun `should report unsigned hex long literal with lowercase ul`() {
-            val code = "val myUHexLong = 0xFFF0ul"
+        fun `should report unsigned hex long literal with lowercase uL`() {
+            val code = "val myUHexLong = 0xFFF0uL"
             val findings = MagicNumber(Config.empty).lint(code)
             assertThat(findings).hasStartSourceLocation(1, 18)
         }
 
         @Test
-        fun `should not report unsigned hex long literal with lowercase ul when ignored`() {
-            val code = "val myUHexLong = 0xFFF0ul"
-            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to listOf("0xFFF0ul"))).lint(code)
+        fun `should not report unsigned hex long literal with lowercase uL when ignored`() {
+            val code = "val myUHexLong = 0xFFF0uL"
+            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to listOf("0xFFF0uL"))).lint(code)
             assertThat(findings).isEmpty()
         }
 
@@ -1181,7 +1181,7 @@ class MagicNumberSpec {
         fun `should report mixed case unsigned literals`() {
             val code = """
                 val a = 65520u
-                val b = 0xFFF0ul
+                val b = 0xFFF0uL
                 val c = 12345U
                 val d = 0xABCDUL
             """.trimIndent()
@@ -1198,7 +1198,7 @@ class MagicNumberSpec {
         fun `should handle binary literals with lowercase unsigned suffixes`() {
             val code = """
                 val binary1 = 0b1010u
-                val binary2 = 0b1111ul
+                val binary2 = 0b1111uL
             """.trimIndent()
             val findings = MagicNumber(Config.empty).lint(code)
             assertThat(findings).hasStartSourceLocations(
@@ -1211,7 +1211,7 @@ class MagicNumberSpec {
         fun `should not report lowercase unsigned literals when ignoring property declarations`() {
             val code = """
                 val myUInt = 65520u
-                val myULong = 0xFFF0ul
+                val myULong = 0xFFF0uL
             """.trimIndent()
             val findings = MagicNumber(TestConfig(IGNORE_PROPERTY_DECLARATION to "true")).lint(code)
             assertThat(findings).isEmpty()
