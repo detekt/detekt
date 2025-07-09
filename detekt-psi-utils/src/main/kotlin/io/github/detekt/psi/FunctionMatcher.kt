@@ -2,6 +2,11 @@ package io.github.detekt.psi
 
 import com.intellij.util.containers.addIfNotNull
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
+import org.jetbrains.kotlin.analysis.api.symbols.KaCallableSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaConstructorSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaFunctionSymbol
+import org.jetbrains.kotlin.analysis.api.types.KaType
+import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtTypeReference
@@ -17,6 +22,8 @@ sealed class FunctionMatcher {
 
     abstract fun match(function: KtNamedFunction, bindingContext: BindingContext): Boolean
 
+    abstract fun match(symbol: KaCallableSymbol): Boolean
+
     internal data class NameOnly(
         private val fullyQualifiedName: String,
     ) : FunctionMatcher() {
@@ -26,6 +33,8 @@ sealed class FunctionMatcher {
         override fun match(function: KtNamedFunction, bindingContext: BindingContext): Boolean =
             function.name == fullyQualifiedName ||
                 function.fqName?.asString() == fullyQualifiedName
+
+        override fun match(symbol: KaCallableSymbol): Boolean = symbol.asFqNameString() == fullyQualifiedName
 
         override fun toString(): String = fullyQualifiedName
     }
@@ -75,6 +84,26 @@ sealed class FunctionMatcher {
             }
 
             return encounteredParameters == parameters
+        }
+
+        override fun match(symbol: KaCallableSymbol): Boolean {
+            if (symbol.asFqNameString() != fullyQualifiedName) return false
+
+            symbol as KaFunctionSymbol
+            val encounteredParamTypes = buildList {
+                addIfNotNull(symbol.receiverParameter?.returnType?.asFqNameString())
+                addAll(
+                    symbol.valueParameters.map { value ->
+                        if (value.isVararg) {
+                            "vararg ${value.returnType.asFqNameString()}"
+                        } else {
+                            value.returnType.asFqNameString()
+                        }
+                    }
+                )
+            }
+
+            return encounteredParamTypes == parameters
         }
 
         override fun toString(): String = "$fullyQualifiedName(${parameters.joinToString()})"
@@ -131,6 +160,16 @@ private fun String.splitParams(): List<String> {
     }
     return split
 }
+
+private fun KaCallableSymbol.asFqNameString() =
+    if (this is KaConstructorSymbol) {
+        returnType.asFqNameString().plus(".<init>")
+    } else {
+        callableId?.run { asSingleFqName().asString() } ?: returnType.asFqNameString()
+    }
+
+private fun KaType.asFqNameString() = symbol?.classId?.asFqNameString()
+    ?: toString().replace('/', '.').removeSuffix("!")
 
 private fun changeIfLambda(param: String): String? {
     val (paramsRaw, _) = splitLambda(param) ?: return null
