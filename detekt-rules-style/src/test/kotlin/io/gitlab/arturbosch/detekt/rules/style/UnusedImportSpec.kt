@@ -898,4 +898,25 @@ class UnusedImportSpec(
 
         assertThat(subject.lintWithContext(env, mainFile, compile = false)).hasSize(2)
     }
+
+
+    @Test
+    fun `does not report used inline val import`() {
+        val mainFile =
+            """
+            import additional.myVal
+            
+            fun main() {
+                println(myVal)
+            }
+            """.trimIndent()
+        val additionalFile =
+            """
+            package additional
+
+            inline val myVal get() = 1
+            """.trimIndent()
+
+        assertThat(subject.lintWithContext(env, mainFile, additionalFile, compile = true)).isEmpty()
+    }
 }
