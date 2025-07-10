@@ -899,7 +899,6 @@ class UnusedImportSpec(
         assertThat(subject.lintWithContext(env, mainFile, compile = false)).hasSize(2)
     }
 
-
     @Test
     fun `does not report used inline val import`() {
         val mainFile =
