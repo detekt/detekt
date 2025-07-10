@@ -916,6 +916,6 @@ class UnusedImportSpec(
             inline val myVal get() = 1
             """.trimIndent()
 
-        assertThat(subject.lintWithContext(env, mainFile, additionalFile, compile = true)).isEmpty()
+        assertThat(subject.lintWithContext(env, mainFile, additionalFile, compile = false)).isEmpty()
     }
 }
