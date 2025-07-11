@@ -1,7 +1,5 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
-import io.github.detekt.test.utils.KotlinEnvironmentContainer
-import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
@@ -9,8 +7,20 @@ import org.junit.jupiter.api.Test
 
 private const val FORBIDDEN_NAME = "forbiddenName"
 
-@KotlinCoreEnvironmentTest
-class ForbiddenClassNameSpec(val env: KotlinEnvironmentContainer) {
+class ForbiddenClassNameSpec {
+
+    @Test
+    fun `should report classes with forbidden names`() {
+        val code = """
+            class TestManager {} // violation
+            class TestProvider {} // violation
+            class TestHolder
+        """.trimIndent()
+        assertThat(
+            ForbiddenClassName(TestConfig(FORBIDDEN_NAME to listOf("Manager", "Provider")))
+                .lint(code)
+        ).hasSize(2)
+    }
 
     @Test
     fun `should report a class that starts with a forbidden name`() {
