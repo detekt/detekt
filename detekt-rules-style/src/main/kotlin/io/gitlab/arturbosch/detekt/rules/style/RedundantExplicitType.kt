@@ -3,24 +3,17 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.KtNodeTypes
-import org.jetbrains.kotlin.builtins.KotlinBuiltIns
+import org.jetbrains.kotlin.analysis.api.KaSession
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.types.KaType
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.types.AbbreviatedType
-import org.jetbrains.kotlin.types.KotlinType
-import org.jetbrains.kotlin.types.typeUtil.isBoolean
-import org.jetbrains.kotlin.types.typeUtil.isChar
-import org.jetbrains.kotlin.types.typeUtil.isDouble
-import org.jetbrains.kotlin.types.typeUtil.isFloat
-import org.jetbrains.kotlin.types.typeUtil.isInt
-import org.jetbrains.kotlin.types.typeUtil.isLong
 
 /*
  * Based on code from Kotlin compiler:
@@ -47,42 +40,44 @@ class RedundantExplicitType(config: Config) :
         config,
         "Type does not need to be stated explicitly and can be removed."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     @Suppress("ReturnCount", "ComplexMethod")
     override fun visitProperty(property: KtProperty) {
         if (!property.isLocal) return
         val typeReference = property.typeReference ?: return
-        val type = (bindingContext[BindingContext.VARIABLE, property])?.type ?: return
-        if (type is AbbreviatedType) return
+        analyze(typeReference) {
+            val type = typeReference.type
+            if (type.abbreviation != null) return
 
-        when (val initializer = property.initializer) {
-            is KtConstantExpression -> if (!initializer.typeIsSameAs(type)) return
-            is KtStringTemplateExpression -> if (!KotlinBuiltIns.isString(type)) return
-            is KtNameReferenceExpression -> if (typeReference.text != initializer.getReferencedName()) return
-            is KtCallExpression -> if (typeReference.text != initializer.calleeExpression?.text) return
-            else -> return
+            when (val initializer = property.initializer) {
+                is KtConstantExpression -> if (!typeIsSameAs(initializer, type)) return
+                is KtStringTemplateExpression -> if (!type.isStringType) return
+                is KtNameReferenceExpression -> if (typeReference.text != initializer.getReferencedName()) return
+                is KtCallExpression -> if (typeReference.text != initializer.calleeExpression?.text) return
+                else -> return
+            }
         }
         report(Finding(Entity.atName(property), description))
         super.visitProperty(property)
     }
 
-    private fun KtConstantExpression.typeIsSameAs(type: KotlinType) =
-        when (node.elementType) {
-            KtNodeTypes.BOOLEAN_CONSTANT -> type.isBoolean()
-            KtNodeTypes.CHARACTER_CONSTANT -> type.isChar()
+    private fun KaSession.typeIsSameAs(expression: KtConstantExpression, type: KaType) =
+        when (expression.node.elementType) {
+            KtNodeTypes.BOOLEAN_CONSTANT -> type.isBooleanType
+            KtNodeTypes.CHARACTER_CONSTANT -> type.isCharType
             KtNodeTypes.INTEGER_CONSTANT -> {
-                if (text.endsWith("L")) {
-                    type.isLong()
+                if (expression.text.endsWith("L")) {
+                    type.isLongType
                 } else {
-                    type.isInt()
+                    type.isIntType
                 }
             }
             KtNodeTypes.FLOAT_CONSTANT -> {
-                if (text.endsWith("f") || text.endsWith("F")) {
-                    type.isFloat()
+                if (expression.text.endsWith("f") || expression.text.endsWith("F")) {
+                    type.isFloatType
                 } else {
-                    type.isDouble()
+                    type.isDoubleType
                 }
             }
             else -> false

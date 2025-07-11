@@ -1,16 +1,15 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import com.intellij.psi.PsiElement
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.KtNodeTypes
+import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
-import org.jetbrains.kotlin.resolve.calls.util.getType
-import org.jetbrains.kotlin.types.typeUtil.isBooleanOrNullableBoolean
+import org.jetbrains.kotlin.psi.KtExpression
 
 /**
  * Detects nullable boolean checks which use an elvis expression `?:` rather than equals `==`.
@@ -34,12 +33,12 @@ class NullableBooleanCheck(config: Config) :
         config,
         "Nullable boolean check should use `==` rather than `?:`"
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     override fun visitBinaryExpression(expression: KtBinaryExpression) {
         if (expression.operationToken == KtTokens.ELVIS &&
             expression.right?.isBooleanConstant() == true &&
-            expression.left?.getType(bindingContext)?.isBooleanOrNullableBoolean() == true
+            expression.left?.isNullableBoolean() == true
         ) {
             val messageSuffix =
                 if (expression.right?.text == "true") {
@@ -58,5 +57,10 @@ class NullableBooleanCheck(config: Config) :
         super.visitBinaryExpression(expression)
     }
 
-    private fun PsiElement.isBooleanConstant() = node.elementType == KtNodeTypes.BOOLEAN_CONSTANT
+    private fun KtExpression.isBooleanConstant() = node.elementType == KtNodeTypes.BOOLEAN_CONSTANT
+
+    private fun KtExpression.isNullableBoolean() = analyze(this) {
+        val type = expressionType
+        type?.isBooleanType == true && type.nullability.isNullable
+    }
 }

@@ -1,6 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules
 
+import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
+import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
@@ -34,3 +36,13 @@ private fun KtNameReferenceExpression.isImplicitParameterReference(
     text == "it" &&
         getStrictParentOfType<KtLambdaExpression>() == lambda &&
         getResolvedCall(bindingContext)?.resultingDescriptor == implicitParameter
+
+fun KtLambdaExpression.hasImplicitParameterReference(): Boolean {
+    if (valueParameters.isNotEmpty()) return false
+    analyze(this) {
+        val implicitParameter = functionLiteral.symbol.valueParameters.singleOrNull() ?: return false
+        return anyDescendantOfType<KtNameReferenceExpression> {
+            it.text == "it" && it.mainReference.resolveToSymbol() == implicitParameter
+        }
+    }
+}

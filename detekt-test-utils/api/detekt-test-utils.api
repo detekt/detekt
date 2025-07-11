@@ -16,10 +16,10 @@ public final class io/github/detekt/test/utils/KotlinAnalysisApiEngine {
 	public static synthetic fun compile$default (Lio/github/detekt/test/utils/KotlinAnalysisApiEngine;Ljava/lang/String;Ljava/util/List;ILjava/lang/Object;)Lorg/jetbrains/kotlin/psi/KtFile;
 }
 
-public final class io/github/detekt/test/utils/KotlinCoreEnvironmentWrapper {
+public final class io/github/detekt/test/utils/KotlinCoreEnvironmentWrapper : java/lang/AutoCloseable, org/junit/jupiter/api/extension/ExtensionContext$Store$CloseableResource {
 	public fun <init> (Lcom/intellij/openapi/project/Project;Lorg/jetbrains/kotlin/config/CompilerConfiguration;Lcom/intellij/openapi/Disposable;Lio/github/detekt/test/utils/KotlinEnvironmentContainer;)V
 	public synthetic fun <init> (Lcom/intellij/openapi/project/Project;Lorg/jetbrains/kotlin/config/CompilerConfiguration;Lcom/intellij/openapi/Disposable;Lio/github/detekt/test/utils/KotlinEnvironmentContainer;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public final fun dispose ()V
+	public fun close ()V
 	public final fun getEnv ()Lio/github/detekt/test/utils/KotlinEnvironmentContainer;
 }
 

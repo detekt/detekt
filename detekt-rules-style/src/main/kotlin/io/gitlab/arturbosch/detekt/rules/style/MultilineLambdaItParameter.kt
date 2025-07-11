@@ -3,10 +3,9 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.hasImplicitParameterReference
-import io.gitlab.arturbosch.detekt.rules.implicitParameter
 import org.jetbrains.kotlin.builtins.StandardNames.IMPLICIT_LAMBDA_PARAMETER_NAME
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 
@@ -65,7 +64,7 @@ class MultilineLambdaItParameter(config: Config) :
         config,
         "Multiline lambdas should not use `it` as a parameter name."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
         super.visitLambdaExpression(lambdaExpression)
@@ -82,7 +81,7 @@ class MultilineLambdaItParameter(config: Config) :
                         "Consider giving your parameter a readable and descriptive name."
                 )
             )
-        } else if (parameterNames.isEmpty() && lambdaExpression.isUsingImplicitParameter()) {
+        } else if (parameterNames.isEmpty() && lambdaExpression.hasImplicitParameterReference()) {
             // Implicit `it`
             report(
                 Finding(
@@ -101,10 +100,5 @@ class MultilineLambdaItParameter(config: Config) :
             1 -> statements.single().textContains('\n')
             else -> true
         }
-    }
-
-    private fun KtLambdaExpression.isUsingImplicitParameter(): Boolean {
-        val implicitParameter = implicitParameter(bindingContext) ?: return false
-        return hasImplicitParameterReference(implicitParameter, bindingContext)
     }
 }

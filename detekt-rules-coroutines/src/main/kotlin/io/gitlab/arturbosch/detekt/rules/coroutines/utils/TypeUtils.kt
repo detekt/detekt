@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.coroutines.utils
 
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
+import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.typeUtil.supertypes
 
@@ -19,3 +20,8 @@ internal fun KotlinType.isCoroutinesFlow(): Boolean =
     }
         .mapNotNull { it.fqNameOrNull()?.asString() }
         .contains("kotlinx.coroutines.flow.Flow")
+
+internal object CoroutineClassIds {
+    val Flow: ClassId = ClassId.fromString("kotlinx/coroutines/flow/Flow")
+    val CoroutineScope: ClassId = ClassId.fromString("kotlinx/coroutines/CoroutineScope")
+}

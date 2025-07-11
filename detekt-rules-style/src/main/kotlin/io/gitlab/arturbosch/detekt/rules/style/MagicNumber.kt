@@ -173,9 +173,11 @@ class MagicNumber(config: Config) : Rule(
         text.trim()
             .lowercase(Locale.US)
             .replace("_", "")
+            .removeSuffix("ul") // Handle UL suffix (unsigned long)
             .removeSuffix("l")
             .removeSuffix("d")
             .removeSuffix("f")
+            .removeSuffix("u")
 
     private fun KtConstantExpression.isNamedArgument(): Boolean {
         val valueArgument = this.getNonStrictParentOfType<KtValueArgument>()

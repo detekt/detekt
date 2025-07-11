@@ -295,16 +295,16 @@ Check the [README.md inside website/](https://github.com/detekt/detekt/blob/main
 - `./gradlew increment<Patch|Minor|Major>` - update version
 - `./scripts/release.sh` - publish all artifacts
 
-## Gradle Enterprise Access
+## Develocity Access
 
-We do have access to a managed [Gradle Enterprise instance][6] that is publishing
+We do have access to a managed [Develocity instance][6] that is publishing
 build scans for all the builds executed on CI (not from forks).
 
 This is extremely helpful to debug build failures and have access to remote build cache.
 Build scans are public so everyone can get insights on our build status.
 
 If you're a **maintainer** of a project under github.com/detekt/, you can request an access token
-to connect your local machine to the Gradle Enterprise instance, so you will also be publishing scans.
+to connect your local machine to the Develocity instance, so you will also be publishing scans.
 
 You must follow the steps below:
 
@@ -315,7 +315,7 @@ You must follow the steps below:
 5. Verify that the access key is correctly stored inside `~/.gradle/enterprise/keys.properties`
 6. Do a test run (say with `./gradlew tasks`) to verify that a scan is correctly published.
 
-More information on this process could be found on the [official Gradle Enterprise documentation][8].
+More information on this process could be found on the [official Develocity documentation][8].
 
 [1]: https://github.com/detekt/detekt/blob/v1.19.0/detekt-api/src/main/kotlin/io/gitlab/arturbosch/detekt/api/Issue.kt
 [2]: https://github.com/detekt/detekt/blob/v1.19.0/detekt-api/src/main/kotlin/io/gitlab/arturbosch/detekt/api/Finding.kt
@@ -324,4 +324,4 @@ More information on this process could be found on the [official Gradle Enterpri
 [5]: https://kotlinlang.org/docs/functions.html#named-arguments
 [6]: https://ge.detekt.dev/
 [7]: mailto:info@detekt.dev
-[8]: https://docs.gradle.com/enterprise/gradle-plugin/#automated_access_key_provisioning
+[8]: https://docs.gradle.com/develocity/gradle-plugin/current/#automated_access_key_provisioning

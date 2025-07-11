@@ -139,8 +139,9 @@ class MaxChainedCallsOnSameLineSpec(private val env: KotlinEnvironmentContainer)
     @Test
     fun `does not report long imports`() {
         val code = "import a.b.c.d.e"
+        val dependency = "package a.b.c.d val e = 1"
 
-        assertThat(rule.lintWithContext(env, code, compile = false)).isEmpty()
+        assertThat(rule.lintWithContext(env, code, dependency)).isEmpty()
     }
 
     @Test
