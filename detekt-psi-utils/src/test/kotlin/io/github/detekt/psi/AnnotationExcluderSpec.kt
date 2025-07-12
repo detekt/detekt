@@ -1,51 +1,37 @@
 package io.github.detekt.psi
 
-import io.github.detekt.test.utils.KotlinEnvironmentContainer
+import io.github.detekt.test.utils.KotlinAnalysisApiEngine
 import io.github.detekt.test.utils.compileContentForTest
-import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.createBindingContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtFunction
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvFileSource
 
-@KotlinCoreEnvironmentTest
-class AnnotationExcluderSpec(private val env: KotlinEnvironmentContainer) {
-    private val annotationsKtFile = compileContentForTest(
-        """
-            package dagger
-            
-            annotation class Component {
-                annotation class Factory
-            }
-        """.trimIndent()
-    )
+class AnnotationExcluderSpec {
 
     @ParameterizedTest(
-        name = "Given {0} is excluded when the {1} is found then the excluder returns {2} without type solving"
+        name = "Given {0} is excluded when the {1} is found then the excluder returns {2} without Analysis API"
     )
     @CsvFileSource(resources = ["/annotation_excluder.csv"])
     fun `all cases`(exclusion: String, annotation: String, shouldExclude: Boolean) {
-        val (file, ktAnnotation) = createKtFile(annotation)
-        val excluder = AnnotationExcluder(file, listOf(exclusion.toRegex()), BindingContext.EMPTY)
+        val (file, ktAnnotation) = createKtFile(annotation, false)
+        val excluder = AnnotationExcluder(file, listOf(exclusion.toRegex()))
 
         assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isEqualTo(shouldExclude)
     }
 
     @ParameterizedTest(
-        name = "Given {0} is excluded when the {1} is found then the excluder returns {2} with type solving"
+        name = "Given {0} is excluded when the {1} is found then the excluder returns {2} with Analysis API"
     )
     @CsvFileSource(resources = ["/annotation_excluder.csv"])
-    fun `all cases - Type Solving`(exclusion: String, annotation: String, shouldExclude: Boolean) {
-        val (file, ktAnnotation) = createKtFile(annotation)
-        val binding = env.createBindingContext(listOf(file, annotationsKtFile))
-        val excluder = AnnotationExcluder(file, listOf(exclusion.toRegex()), binding)
+    fun `all cases - AnalysisAPI`(exclusion: String, annotation: String, shouldExclude: Boolean) {
+        val (file, ktAnnotation) = createKtFile(annotation, true)
+        val excluder = AnnotationExcluder(file, listOf(exclusion.toRegex()))
 
         assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isEqualTo(shouldExclude)
     }
@@ -54,48 +40,47 @@ class AnnotationExcluderSpec(private val env: KotlinEnvironmentContainer) {
     inner class `special cases` {
         @Test
         fun `should not exclude when the annotation was not found`() {
-            val (file, ktAnnotation) = createKtFile("@Component")
-            val excluder = AnnotationExcluder(file, listOf("SinceKotlin".toRegex()), BindingContext.EMPTY)
+            val (file, ktAnnotation) = createKtFile("@Component", false)
+            val excluder = AnnotationExcluder(file, listOf("SinceKotlin".toRegex()))
 
             assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isFalse()
         }
 
         @Test
         fun `should not exclude when no annotations should be excluded`() {
-            val (file, ktAnnotation) = createKtFile("@Component")
-            val excluder = AnnotationExcluder(file, emptyList(), BindingContext.EMPTY)
+            val (file, ktAnnotation) = createKtFile("@Component", false)
+            val excluder = AnnotationExcluder(file, emptyList())
 
             assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isFalse()
         }
 
         @Test
         fun `should also exclude an annotation that is not imported`() {
-            val (file, ktAnnotation) = createKtFile("@SinceKotlin")
-            val excluder = AnnotationExcluder(file, listOf("SinceKotlin".toRegex()), BindingContext.EMPTY)
+            val (file, ktAnnotation) = createKtFile("@SinceKotlin", false)
+            val excluder = AnnotationExcluder(file, listOf("SinceKotlin".toRegex()))
 
             assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isTrue()
         }
     }
 
     @Nested
-    inner class `difference between type solving and no type solving` {
+    inner class `difference between analysis API and no analysis API` {
 
         @Nested
         inner class `Don't mix annotations with the same name` {
 
             @Test
-            fun `incorrect without type solving`() {
-                val (file, ktAnnotation) = createKtFile("@Deprecated")
-                val excluder = AnnotationExcluder(file, listOf("foo\\.Deprecated".toRegex()), BindingContext.EMPTY)
+            fun `incorrect without analysis API`() {
+                val (file, ktAnnotation) = createKtFile("@Deprecated", false)
+                val excluder = AnnotationExcluder(file, listOf("foo\\.Deprecated".toRegex()))
 
                 assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isTrue()
             }
 
             @Test
-            fun `correct without type solving`() {
-                val (file, ktAnnotation) = createKtFile("@Deprecated")
-                val binding = env.createBindingContext(listOf(file, annotationsKtFile))
-                val excluder = AnnotationExcluder(file, listOf("foo\\.Deprecated".toRegex()), binding)
+            fun `correct without analysis API`() {
+                val (file, ktAnnotation) = createKtFile("@Deprecated(\"\")", true)
+                val excluder = AnnotationExcluder(file, listOf("foo\\.Deprecated".toRegex()))
 
                 assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isFalse()
             }
@@ -103,37 +88,35 @@ class AnnotationExcluderSpec(private val env: KotlinEnvironmentContainer) {
 
         @Nested
         inner class `Know where a package ends` {
-            val helloWorldAnnotationsKtFile = compileContentForTest(
-                """
-                    package com.Hello
-                    
-                    annotation class World
-                """.trimIndent()
-            )
-            val file = compileContentForTest(
-                """
-                    package foo
-                    
-                    import com.Hello.World
-                    
-                    @World
-                    fun function() = Unit
-                """.trimIndent()
-            )
-            val ktAnnotation = file.findChildByClass(KtFunction::class.java)!!.annotationEntries.first()!!
+            val helloWorldAnnotationsCode = """
+                package com.Hello
+
+                annotation class World
+            """.trimIndent()
+            val code = """
+                package foo
+
+                import com.Hello.World
+
+                @World
+                fun function() = Unit
+            """.trimIndent()
 
             @Test
-            fun `incorrect without type solving`() {
-                val excluder = AnnotationExcluder(file, listOf("Hello\\.World".toRegex()), BindingContext.EMPTY)
+            fun `incorrect without analysis API`() {
+                val file = compileContentForTest(code)
+                val ktAnnotation = file.findChildByClass(KtFunction::class.java)!!.annotationEntries.first()!!
+                val excluder = AnnotationExcluder(file, listOf("Hello\\.World".toRegex()))
 
                 assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isTrue()
             }
 
             @Test
             @Disabled("This should be doable but it's not imlemented yet")
-            fun `correct with type solving`() {
-                val binding = env.createBindingContext(listOf(file, helloWorldAnnotationsKtFile))
-                val excluder = AnnotationExcluder(file, listOf("Hello\\.World".toRegex()), binding)
+            fun `correct with analysis API`() {
+                val file = KotlinAnalysisApiEngine.compile(code, listOf(helloWorldAnnotationsCode))
+                val ktAnnotation = file.findChildByClass(KtFunction::class.java)!!.annotationEntries.first()!!
+                val excluder = AnnotationExcluder(file, listOf("Hello\\.World".toRegex()))
 
                 assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isFalse()
             }
@@ -141,44 +124,42 @@ class AnnotationExcluderSpec(private val env: KotlinEnvironmentContainer) {
 
         @Nested
         inner class `Know how to work with star imports` {
-            val helloWorldAnnotationsKtFile = compileContentForTest(
-                """
-                    package com.hello
-                    
-                    annotation class World
-                """.trimIndent()
-            )
-            val file = compileContentForTest(
-                """
-                    package foo
-                    
-                    import com.hello.*
-                    
-                    @World
-                    fun function() = Unit
-                """.trimIndent()
-            )
-            val ktAnnotation = file.findChildByClass(KtFunction::class.java)!!.annotationEntries.first()!!
+            val helloWorldAnnotationsKtFile = """
+                package com.hello
+
+                annotation class World
+            """.trimIndent()
+            val file = """
+                package foo
+
+                import com.hello.*
+
+                @World
+                fun function() = Unit
+            """.trimIndent()
 
             @Test
-            fun `incorrect without type solving`() {
-                val excluder = AnnotationExcluder(file, listOf("foo\\.World".toRegex()), BindingContext.EMPTY)
+            fun `incorrect without analysis API`() {
+                val file = compileContentForTest(file)
+                val ktAnnotation = file.findChildByClass(KtFunction::class.java)!!.annotationEntries.first()!!
+                val excluder = AnnotationExcluder(file, listOf("foo\\.World".toRegex()))
 
                 assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isTrue()
 
-                val excluder2 = AnnotationExcluder(file, listOf("com\\.hello\\.World".toRegex()), BindingContext.EMPTY)
+                val excluder2 = AnnotationExcluder(file, listOf("com\\.hello\\.World".toRegex()))
 
                 assertThat(excluder2.shouldExclude(listOf(ktAnnotation))).isTrue()
             }
 
             @Test
-            fun `correct with type solving`() {
-                val binding = env.createBindingContext(listOf(file, helloWorldAnnotationsKtFile))
-                val excluder = AnnotationExcluder(file, listOf("foo\\.World".toRegex()), binding)
+            fun `correct with analysis API`() {
+                val file = KotlinAnalysisApiEngine.compile(file, listOf(helloWorldAnnotationsKtFile))
+                val ktAnnotation = file.findChildByClass(KtFunction::class.java)!!.annotationEntries.first()!!
+                val excluder = AnnotationExcluder(file, listOf("foo\\.World".toRegex()))
 
                 assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isFalse()
 
-                val excluder2 = AnnotationExcluder(file, listOf("com\\.hello\\.World".toRegex()), binding)
+                val excluder2 = AnnotationExcluder(file, listOf("com\\.hello\\.World".toRegex()))
 
                 assertThat(excluder2.shouldExclude(listOf(ktAnnotation))).isTrue()
             }
@@ -186,18 +167,32 @@ class AnnotationExcluderSpec(private val env: KotlinEnvironmentContainer) {
     }
 }
 
-private fun createKtFile(annotation: String): Pair<KtFile, KtAnnotationEntry> {
-    val file = compileContentForTest(
-        """
-            package foo
-            
-            import dagger.Component
-            import dagger.Component.Factory
-            
-            $annotation
-            fun function() = Unit
-        """.trimIndent()
-    )
+private fun createKtFile(annotation: String, analysisApi: Boolean): Pair<KtFile, KtAnnotationEntry> {
+    val code = """
+        package foo
+        
+        import dagger.Component
+        import dagger.Component.Factory
+        
+        $annotation
+        fun function() = Unit
+    """.trimIndent()
+    val file = if (analysisApi) {
+        KotlinAnalysisApiEngine.compile(
+            code,
+            listOf(
+                """
+                    package dagger
+                    
+                    annotation class Component {
+                        annotation class Factory
+                    }
+                """.trimIndent(),
+            ),
+        )
+    } else {
+        compileContentForTest(code)
+    }
 
     return file to file.findChildByClass(KtFunction::class.java)!!.annotationEntries.first()
 }
