@@ -13,6 +13,6 @@ fun interface Suppressor {
 
 internal fun buildSuppressors(rule: Rule, bindingContext: BindingContext): List<Suppressor> =
     listOfNotNull(
-        annotationSuppressorFactory(rule, bindingContext),
+        annotationSuppressorFactory(rule),
         functionSuppressorFactory(rule, bindingContext),
     )
