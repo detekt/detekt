@@ -1,9 +1,12 @@
 package io.github.detekt.psi
 
+import com.intellij.util.containers.addIfNotNull
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.calls.components.isVararg
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.typeUtil.isTypeParameter
@@ -35,9 +38,18 @@ sealed class FunctionMatcher {
             val descriptor = callableDescriptor.original
             if (descriptor.fqNameSafe.asString() != fullyQualifiedName) return false
 
-            val encounteredParamTypes =
-                (listOfNotNull(descriptor.extensionReceiverParameter) + descriptor.valueParameters)
-                    .map { it.type.getSignatureParameter() }
+            val encounteredParamTypes = buildList {
+                addIfNotNull(descriptor.extensionReceiverParameter?.run { type.getSignatureParameter() })
+                addAll(
+                    descriptor.valueParameters.map {
+                        if (it.isVararg) {
+                            "vararg ${requireNotNull(it.varargElementType).getSignatureParameter()}"
+                        } else {
+                            it.type.getSignatureParameter()
+                        }
+                    }
+                )
+            }
 
             return encounteredParamTypes == parameters
         }
@@ -46,9 +58,21 @@ sealed class FunctionMatcher {
             if (bindingContext == BindingContext.EMPTY) return false
             if (function.name != fullyQualifiedName && function.fqName?.asString() != fullyQualifiedName) return false
 
-            val encounteredParameters =
-                (listOfNotNull(function.receiverTypeReference) + function.valueParameters.map { it.typeReference })
-                    .map { bindingContext[BindingContext.TYPE, it]?.getSignatureParameter() }
+            val encounteredParameters = buildList {
+                fun KtTypeReference.getSignatureParameter() =
+                    bindingContext[BindingContext.TYPE, this]?.getSignatureParameter()
+
+                addIfNotNull(function.receiverTypeReference?.getSignatureParameter())
+                addAll(
+                    function.valueParameters.map {
+                        if (it.isVarArg) {
+                            "vararg ${it.typeReference?.getSignatureParameter()}"
+                        } else {
+                            it.typeReference?.getSignatureParameter()
+                        }
+                    }
+                )
+            }
 
             return encounteredParameters == parameters
         }

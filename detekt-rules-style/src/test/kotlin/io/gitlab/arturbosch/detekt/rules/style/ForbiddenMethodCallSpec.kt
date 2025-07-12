@@ -318,16 +318,18 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
         val code = """
             package io.gitlab.arturbosch.detekt.rules.style
             
-            fun varargMethod(vararg args: Any) = args.size
+            fun varargMethod(vararg args: Int) = args.size
+            fun varargMethod(vararg args: String) = args.size
             
             fun test() {
-                val s = varargMethod(arrayOf("test"))
+                val s = varargMethod(1, 2)
+                val r = varargMethod("test")
             }
         """.trimIndent()
-        val methodName = "io.gitlab.arturbosch.detekt.rules.style.varargMethod(kotlin.Array)"
+        val methodName = "io.gitlab.arturbosch.detekt.rules.style.varargMethod(vararg kotlin.String)"
         val findings = ForbiddenMethodCall(TestConfig(METHODS to listOf(methodName)))
             .lintWithContext(env, code)
-        assertThat(findings).hasSize(1).hasStartSourceLocation(6, 13)
+        assertThat(findings).hasSize(1).hasStartSourceLocation(8, 13)
     }
 
     @Test

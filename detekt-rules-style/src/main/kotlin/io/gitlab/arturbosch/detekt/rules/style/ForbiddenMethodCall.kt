@@ -58,8 +58,9 @@ class ForbiddenMethodCall(config: Config) :
             "`fun String.hello(a: Int)` you should add the receiver parameter as the first parameter like this: " +
             "`hello(kotlin.String, kotlin.Int)`. To forbid constructor calls you need to define them with `<init>`, " +
             "for example `java.util.Date.<init>`. To forbid calls involving type parameters, omit them, for example " +
-            "`fun hello(args: Array<Any>)` is referred to as simply `hello(kotlin.Array)` (also the signature for " +
-            "vararg parameters). To forbid methods from the companion object reference the Companion class, for " +
+            "`fun hello(args: Array<Any>)` is referred to as simply `hello(kotlin.Array)`. To forbid calls " +
+            "involving varargs for example `fun hello(vararg args: String)` you need to define it like " +
+            "`hello(vararg String)`. To forbid methods from the companion object reference the Companion class, for " +
             "example as `TestClass.Companion.hello()` (even if it is marked `@JvmStatic`)."
     )
     private val methods: List<ForbiddenMethod> by config(
