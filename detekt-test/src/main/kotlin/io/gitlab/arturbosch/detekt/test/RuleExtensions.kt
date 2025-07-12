@@ -34,7 +34,12 @@ fun Rule.lint(
         KotlinScriptEngine.compile(content)
     }
     if (compile && shouldCompileTestSnippetsAa) {
-        KotlinAnalysisApiEngine.compile(content)
+        try {
+            KotlinAnalysisApiEngine.compile(content)
+        } catch (ex: RuntimeException) {
+            val message = ex.message ?: throw ex
+            if ("Compilation produced no matching output files" !in message) throw ex
+        }
     }
     val ktFile = compileContentForTest(content)
     return visitFile(ktFile, languageVersionSettings = languageVersionSettings).filterSuppressed(this)
@@ -51,7 +56,12 @@ fun <T> T.lintWithContext(
         KotlinScriptEngine.compile(content)
     }
     if (compile && shouldCompileTestSnippetsAa) {
-        KotlinAnalysisApiEngine.compile(content)
+        try {
+            KotlinAnalysisApiEngine.compile(content)
+        } catch (ex: RuntimeException) {
+            val message = ex.message ?: throw ex
+            if ("Compilation produced no matching output files" !in message) throw ex
+        }
     }
     val ktFile = compileContentForTest(content)
     val additionalKtFiles = additionalContents.mapIndexed { index, additionalContent ->
