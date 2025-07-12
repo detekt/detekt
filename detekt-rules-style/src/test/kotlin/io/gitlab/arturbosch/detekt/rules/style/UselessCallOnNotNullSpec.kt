@@ -242,7 +242,7 @@ class UselessCallOnNotNullSpec(val env: KotlinEnvironmentContainer) {
             }
         """.trimIndent()
 
-        val findings = subject.lintWithContext(env, code, compile = false)
+        val findings = subject.lintWithContext(env, code, allowCompilationErrors = true)
         assertThat(findings).isEmpty()
     }
 
@@ -250,13 +250,13 @@ class UselessCallOnNotNullSpec(val env: KotlinEnvironmentContainer) {
     fun `does not report when calling listOfNotNull with values whose type is derived and unknown`() {
         val code = """
             import kotlin.random.Random
-            
+
             fun test() {
                 listOfNotNull(unknown.takeIf { Random.nextBoolean() })
             }
         """.trimIndent()
 
-        val findings = subject.lintWithContext(env, code, compile = false)
+        val findings = subject.lintWithContext(env, code, allowCompilationErrors = true)
         assertThat(findings).isEmpty()
     }
 
@@ -270,5 +270,15 @@ class UselessCallOnNotNullSpec(val env: KotlinEnvironmentContainer) {
         val findings = subject.lintWithContext(env, code)
         assertThat(findings).hasSize(1)
         assertThat(findings[0].message).isEqualTo("Replace isNullOrEmpty with isEmpty")
+    }
+
+    @Test
+    fun `reports when calling setOfNotNull on all non-nullable arguments`() {
+        val code = """
+            val strings = setOfNotNull("string")
+        """.trimIndent()
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).hasSize(1)
+        assertThat(findings[0].message).isEqualTo("Replace setOfNotNull with setOf")
     }
 }
