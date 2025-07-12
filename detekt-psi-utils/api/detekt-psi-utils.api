@@ -5,6 +5,7 @@ public final class io/github/detekt/psi/AnnotationExcluder {
 
 public abstract class io/github/detekt/psi/FunctionMatcher {
 	public static final field Companion Lio/github/detekt/psi/FunctionMatcher$Companion;
+	public abstract fun match (Lorg/jetbrains/kotlin/analysis/api/symbols/KaCallableSymbol;)Z
 	public abstract fun match (Lorg/jetbrains/kotlin/descriptors/CallableDescriptor;)Z
 	public abstract fun match (Lorg/jetbrains/kotlin/psi/KtNamedFunction;Lorg/jetbrains/kotlin/resolve/BindingContext;)Z
 }
