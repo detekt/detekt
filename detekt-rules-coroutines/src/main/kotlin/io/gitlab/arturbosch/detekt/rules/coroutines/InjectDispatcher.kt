@@ -5,11 +5,12 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
-import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.types.symbol
+import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtConstructorDelegationCall
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -19,8 +20,6 @@ import org.jetbrains.kotlin.psi.allConstructors
 import org.jetbrains.kotlin.psi.psiUtil.findPropertyByName
 import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
-import org.jetbrains.kotlin.resolve.calls.util.getType
-import org.jetbrains.kotlin.types.typeUtil.supertypes
 
 /**
  * Always use dependency injection to inject dispatchers for easier testing.
@@ -48,7 +47,7 @@ class InjectDispatcher(config: Config) :
         "Don't hardcode dispatchers when creating new coroutines or calling `withContext`. " +
             "Use dependency injection for dispatchers to make testing easier."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     @Configuration("The names of dispatchers to detect by this rule")
     private val dispatcherNames: Set<String> by config(listOf("IO", "Default", "Unconfined")) { it.toSet() }
@@ -56,12 +55,10 @@ class InjectDispatcher(config: Config) :
     override fun visitSimpleNameExpression(expression: KtSimpleNameExpression) {
         super.visitSimpleNameExpression(expression)
         if (expression.getReferencedName() !in dispatcherNames) return
-        val type = expression.getType(bindingContext) ?: return
-        val isCoroutineDispatcher = type.fqNameOrNull() == COROUTINE_DISPATCHER_FQCN ||
-            type.supertypes().any { it.fqNameOrNull() == COROUTINE_DISPATCHER_FQCN }
+        if (analyze(expression) { expression.expressionType?.isSubtypeOf(COROUTINE_DISPATCHER) } != true) return
         val isUsedAsParameter = expression.getStrictParentOfType<KtParameter>() != null ||
             expression.getStrictParentOfType<KtConstructorDelegationCall>() != null
-        if (isCoroutineDispatcher && !isUsedAsParameter) {
+        if (!isUsedAsParameter) {
             if (expression.isReceiverNotInjected()) return
             report(
                 Finding(
@@ -73,27 +70,16 @@ class InjectDispatcher(config: Config) :
     }
 
     private fun KtSimpleNameExpression.isReceiverNotInjected(): Boolean {
-        val receiver = getReceiverExpression()
-        if (receiver != null) {
-            val receiverTypeFqn = receiver.getType(bindingContext)?.fqNameOrNull()
-            if (receiverTypeFqn != null) {
-                return isAClassPropertyOrConstructorParameter(
-                    receiver = receiver.text,
-                    receiverTypeFqn = receiverTypeFqn.asString(),
-                ) ||
-                    isAFunctionParameter(
-                        receiver = receiver.text,
-                        receiverTypeFqn = receiverTypeFqn.asString(),
-                    )
-            }
-        }
-
-        return false
+        val receiver = getReceiverExpression() ?: return false
+        val receiverTypeFqn = analyze(receiver) { receiver.expressionType?.symbol?.classId }?.asFqNameString()
+            ?: return false
+        return isAClassPropertyOrConstructorParameter(receiver = receiver.text, receiverTypeFqn = receiverTypeFqn) ||
+            isAFunctionParameter(receiver = receiver.text, receiverTypeFqn = receiverTypeFqn)
     }
 
     private fun KtSimpleNameExpression.isAClassPropertyOrConstructorParameter(
         receiver: String,
-        receiverTypeFqn: String?,
+        receiverTypeFqn: String,
     ): Boolean {
         val enclosingClass = getStrictParentOfType<KtClassOrObject>()
         val property = enclosingClass?.findPropertyByName(receiver) as? KtParameter
@@ -108,14 +94,14 @@ class InjectDispatcher(config: Config) :
 
     private fun KtSimpleNameExpression.isAFunctionParameter(
         receiver: String,
-        receiverTypeFqn: String?,
+        receiverTypeFqn: String,
     ): Boolean {
         val enclosingFunction = getStrictParentOfType<KtNamedFunction>()
-        val param = enclosingFunction?.valueParameters?.find { it.name == receiver } as? KtParameter
+        val param = enclosingFunction?.valueParameters?.find { it.name == receiver }
         return param != null && param.typeReference?.getTypeText() == receiverTypeFqn
     }
 
     companion object {
-        private val COROUTINE_DISPATCHER_FQCN = FqName("kotlinx.coroutines.CoroutineDispatcher")
+        private val COROUTINE_DISPATCHER = ClassId.fromString("kotlinx/coroutines/CoroutineDispatcher")
     }
 }
