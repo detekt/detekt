@@ -46,7 +46,7 @@ object KotlinAnalysisApiEngine {
         val disposable = Disposer.newDisposable()
 
         @OptIn(KaImplementationDetail::class, KaPlatformInterface::class)
-        val session = buildStandaloneAnalysisAPISession(disposable, unitTestMode = true) {
+        val session = buildStandaloneAnalysisAPISession(disposable) {
             buildKtModuleProvider {
                 platform = targetPlatform
 
