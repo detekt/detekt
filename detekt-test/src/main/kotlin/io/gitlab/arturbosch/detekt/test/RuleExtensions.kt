@@ -30,6 +30,9 @@ fun Rule.lint(
     require(this !is RequiresFullAnalysis) {
         "${this.ruleName} requires full analysis so you should use lintWithContext instead of lint"
     }
+    require(this !is RequiresAnalysisApi) {
+        "${this.ruleName} requires Analysis APi so you should use lintWithContext instead of lint"
+    }
     if (compile && shouldCompileTestSnippets) {
         KotlinScriptEngine.compile(content)
     }
@@ -77,6 +80,9 @@ fun Rule.lint(
 ): List<Finding> {
     require(this !is RequiresFullAnalysis) {
         "${this.ruleName} requires full analysis so you should use lintWithContext instead of lint"
+    }
+    require(this !is RequiresAnalysisApi) {
+        "${this.ruleName} requires Analysis Api so you should use lintWithContext instead of lint"
     }
     return visitFile(ktFile, languageVersionSettings = languageVersionSettings).filterSuppressed(this)
 }
