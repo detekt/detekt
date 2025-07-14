@@ -77,8 +77,9 @@ fun <T> T.lintWithContext(
     environment: KotlinEnvironmentContainer,
     @Language("kotlin") content: String,
     @Language("kotlin") vararg dependencyContents: String,
+    allowCompilationErrors: Boolean = false,
 ): List<Finding> where T : Rule, T : RequiresAnalysisApi {
-    val ktFile = KotlinAnalysisApiEngine.compile(content, dependencyContents.toList())
+    val ktFile = KotlinAnalysisApiEngine.compile(content, dependencyContents.toList(), allowCompilationErrors)
     return visitFile(ktFile, environment.configuration.languageVersionSettings).filterSuppressed(this)
 }
 

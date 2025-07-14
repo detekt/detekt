@@ -1,16 +1,16 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
-import com.intellij.psi.impl.source.tree.LeafPsiElement
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
-import org.jetbrains.kotlin.diagnostics.Errors
-import org.jetbrains.kotlin.lexer.KtTokens
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.components.KaDiagnosticCheckerFilter
+import org.jetbrains.kotlin.analysis.api.fir.diagnostics.KaFirDiagnostic
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
-import org.jetbrains.kotlin.psi.psiUtil.getChildOfType
 
 /**
  * Reports unnecessary safe call operators (`?.`) that can be removed by the user.
@@ -31,22 +31,19 @@ class UnnecessarySafeCall(config: Config) :
         config,
         "Unnecessary safe call operator detected."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
+    @OptIn(KaExperimentalApi::class)
     override fun visitSafeQualifiedExpression(expression: KtSafeQualifiedExpression) {
         super.visitSafeQualifiedExpression(expression)
 
-        val safeAccessElement = expression.getChildOfType<LeafPsiElement>()
-        if (safeAccessElement == null || safeAccessElement.elementType != KtTokens.SAFE_ACCESS) {
-            return
+        val isUnnecessarySafeCall = analyze(expression) {
+            expression
+                .diagnostics(KaDiagnosticCheckerFilter.ONLY_COMMON_CHECKERS)
+                .any { it is KaFirDiagnostic.UnnecessarySafeCall }
         }
 
-        val compilerReport = bindingContext
-            .diagnostics
-            .forElement(safeAccessElement)
-            .firstOrNull { it.factory == Errors.UNNECESSARY_SAFE_CALL }
-
-        if (compilerReport != null) {
+        if (isUnnecessarySafeCall) {
             report(
                 Finding(
                     Entity.from(expression),
