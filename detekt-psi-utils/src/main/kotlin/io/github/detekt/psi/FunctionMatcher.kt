@@ -1,6 +1,5 @@
 package io.github.detekt.psi
 
-import com.intellij.util.containers.addIfNotNull
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
 import org.jetbrains.kotlin.analysis.api.symbols.KaCallableSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaConstructorSymbol
@@ -129,6 +128,10 @@ sealed class FunctionMatcher {
             }
         }
     }
+}
+
+private fun <T> MutableCollection<T>.addIfNotNull(t: T) {
+    if (t != null) add(t)
 }
 
 private fun KotlinType.getSignatureParameter(): String? =
