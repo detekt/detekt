@@ -192,7 +192,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinEnvironmentContainer) {
                         inner class B {
                             val fizz = "BUZZ"
                             fun printFoo() {
-                                if (fizz == "BUZZ" && foo) {
+                                if (fizz == "BUZZ" && foo == "BAR") {
                                     println("FOO")
                                 }
                             }
@@ -200,7 +200,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinEnvironmentContainer) {
                     }
                 """.trimIndent()
 
-                assertThat(subject.lintWithContext(env, code, compile = false)).isEmpty()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
         }
 
