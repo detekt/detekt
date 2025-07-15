@@ -60,6 +60,11 @@ formatting:
     active: true
     autoCorrect: true
     indentSize: 4
+  ContextReceiverListWrapping:
+    active: true
+    autoCorrect: true
+    maxLineLength: 120
+    indentSize: 4
   ContextReceiverMapping:
     active: true
     autoCorrect: true
