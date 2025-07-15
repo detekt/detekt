@@ -1,6 +1,6 @@
 formatting:
   active: true
-  android: false
+  code_style: 'intellij_idea'
   autoCorrect: true
   AnnotationOnSeparateLine:
     active: true

@@ -229,8 +229,8 @@ class FormattingProvider : RuleSetProvider {
     )
 
     companion object {
-        @Configuration("if android style guides should be preferred")
-        val android by ruleSetConfig(false)
+        @Configuration("ktlint code style for formatting rules (ktlint_official, intellij_idea or android_studio)")
+        val code_style by ruleSetConfig("intellij_idea")
 
         @Configuration("if rules should auto correct style violation")
         val autoCorrect by ruleSetConfig(true)
