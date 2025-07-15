@@ -23,6 +23,7 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.ClassSignature
 import io.gitlab.arturbosch.detekt.formatting.wrappers.CommentSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.CommentWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ConditionWrapping
+import io.gitlab.arturbosch.detekt.formatting.wrappers.ContextReceiverListWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ContextReceiverMapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.EnumEntryNameCase
 import io.gitlab.arturbosch.detekt.formatting.wrappers.EnumWrapping
@@ -142,6 +143,7 @@ class FormattingProvider : RuleSetProvider {
             ::CommentWrapping,
             ::ConditionWrapping,
             ::ContextReceiverMapping,
+            ::ContextReceiverListWrapping,
             ::EnumEntryNameCase,
             ::EnumWrapping,
             ::Filename,
