@@ -74,6 +74,10 @@ formatting:
     active: true
     autoCorrect: true
     indentSize: 4
+  ExpressionOperandWrapping:
+    active: false
+    autoCorrect: true
+    indentSize: 4
   Filename:
     active: true
   FinalNewline:
