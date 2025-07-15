@@ -27,6 +27,7 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.ContextReceiverListWrappi
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ContextReceiverMapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.EnumEntryNameCase
 import io.gitlab.arturbosch.detekt.formatting.wrappers.EnumWrapping
+import io.gitlab.arturbosch.detekt.formatting.wrappers.ExpressionOperandWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.Filename
 import io.gitlab.arturbosch.detekt.formatting.wrappers.FinalNewline
 import io.gitlab.arturbosch.detekt.formatting.wrappers.FunKeywordSpacing
@@ -223,6 +224,7 @@ class FormattingProvider : RuleSetProvider {
             ::Wrapping,
             // Wrappers for experimental rules. Disabled by default.
             ::BlankLineBetweenWhenConditions,
+            ::ExpressionOperandWrapping,
             ::Kdoc,
             ::MixedConditionOperators,
             ::SpacingAroundSquareBrackets,
