@@ -21,6 +21,7 @@ include("detekt-parser")
 include("detekt-psi-utils")
 include("detekt-report-html")
 include("detekt-report-md")
+include("detekt-report-problems-api")
 include("detekt-report-sarif")
 include("detekt-report-xml")
 include("detekt-rules")
@@ -82,5 +83,3 @@ dependencyResolutionManagement {
         maven("https://redirector.kotlinlang.org/maven/intellij-dependencies")
     }
 }
-
-include("detekt-report-problems-api")

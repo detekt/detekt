@@ -15,7 +15,6 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SeverityLevel
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
-import org.gradle.api.Incubating
 import org.gradle.api.problems.ProblemReporter
 import org.gradle.api.problems.Problems
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
@@ -29,7 +28,6 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import java.nio.file.Paths
 
-@Incubating
 class ProblemsApiOutputReportSpec {
 
     @Mock
