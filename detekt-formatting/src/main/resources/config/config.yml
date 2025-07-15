@@ -33,7 +33,7 @@ formatting:
     active: true
     autoCorrect: true
   ChainMethodContinuation:
-    active: false
+    active: true
     autoCorrect: true
     indentSize: 4
     maxLineLength: 120
@@ -45,7 +45,7 @@ formatting:
   ClassName:
     active: false
   ClassSignature:
-    active: false
+    active: true
     autoCorrect: true
     indentSize: 4
     maxLineLength: 120
@@ -57,7 +57,7 @@ formatting:
     autoCorrect: true
     indentSize: 4
   ConditionWrapping:
-    active: false
+    active: true
     autoCorrect: true
     indentSize: 4
   ContextReceiverMapping:
@@ -84,12 +84,12 @@ formatting:
     active: true
     autoCorrect: true
   FunctionExpressionBody:
-    active: false
+    active: true
     autoCorrect: true
     indentSize: 4
     maxLineLength: 120
   FunctionLiteral:
-    active: false
+    active: true
     autoCorrect: true
     indentSize: 4
     maxLineLength: 120
@@ -110,7 +110,7 @@ formatting:
     active: true
     autoCorrect: true
   FunctionTypeModifierSpacing:
-    active: false
+    active: true
     autoCorrect: true
   FunctionTypeReferenceSpacing:
     active: true
@@ -161,7 +161,7 @@ formatting:
     indentSize: 4
     functionBodyExpressionWrapping: 'multiline'
   MultilineLoop:
-    active: false
+    active: true
     autoCorrect: true
     indentSize: 4
   NoBlankLineBeforeRbrace:
@@ -333,6 +333,10 @@ formatting:
     active: true
   ValueParameterComment:
     active: true
+  WhenEntryBracing:
+    active: false
+    autoCorrect: true
+    indentSize: 4
   Wrapping:
     active: true
     autoCorrect: true

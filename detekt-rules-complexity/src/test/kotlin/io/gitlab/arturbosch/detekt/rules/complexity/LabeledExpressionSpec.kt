@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.complexity
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Test
 
 class LabeledExpressionSpec {
@@ -22,7 +22,7 @@ class LabeledExpressionSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(3)
+        assertThat(subject.lint(code)).hasSize(3)
     }
 
     @Test
@@ -36,7 +36,7 @@ class LabeledExpressionSpec {
             }
         """.trimIndent()
 
-        val findings = subject.compileAndLint(code)
+        val findings = subject.lint(code)
 
         assertThat(findings).hasSize(1)
         assertThat(findings).hasStartSourceLocation(3, 28)
@@ -52,7 +52,7 @@ class LabeledExpressionSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(2)
+        assertThat(subject.lint(code)).hasSize(2)
     }
 
     @Test
@@ -71,7 +71,7 @@ class LabeledExpressionSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(3)
+        assertThat(subject.lint(code)).hasSize(3)
     }
 
     @Test
@@ -85,7 +85,7 @@ class LabeledExpressionSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -100,7 +100,7 @@ class LabeledExpressionSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -114,7 +114,7 @@ class LabeledExpressionSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -135,7 +135,7 @@ class LabeledExpressionSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -146,7 +146,7 @@ class LabeledExpressionSpec {
             }
         """.trimIndent()
         val config = TestConfig("ignoredLabels" to listOf("loop"))
-        val findings = LabeledExpression(config).compileAndLint(code)
+        val findings = LabeledExpression(config).lint(code)
         assertThat(findings).isEmpty()
     }
 
@@ -158,7 +158,7 @@ class LabeledExpressionSpec {
             }
         """.trimIndent()
         val config = TestConfig("ignoredLabels" to listOf("*loop*", "other"))
-        val findings = LabeledExpression(config).compileAndLint(code)
+        val findings = LabeledExpression(config).lint(code)
         assertThat(findings).isEmpty()
     }
 }

@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -14,8 +14,8 @@ class WildcardImportSpec {
     @Nested
     inner class `a kt file with wildcard imports` {
         val code = """
-            import io.gitlab.arturbosch.detekt.*
-            import org.assertj.core.api.Assertions.*
+            import java.io.*
+            import java.time.*
             
             class Test {
             }
@@ -25,15 +25,15 @@ class WildcardImportSpec {
         fun `should report all wildcard imports`() {
             val rule = WildcardImport(Config.empty)
 
-            val findings = rule.compileAndLint(code)
+            val findings = rule.lint(code)
             assertThat(findings).hasSize(2)
         }
 
         @Test
         fun `should not report excluded wildcard imports`() {
-            val rule = WildcardImport(TestConfig(EXCLUDED_IMPORTS to listOf("org.assertj.core.api.Assertions.*")))
+            val rule = WildcardImport(TestConfig(EXCLUDED_IMPORTS to listOf("java.io.*")))
 
-            val findings = rule.compileAndLint(code)
+            val findings = rule.lint(code)
             assertThat(findings).hasSize(1)
         }
 
@@ -42,13 +42,13 @@ class WildcardImportSpec {
             val rule = WildcardImport(
                 TestConfig(
                     EXCLUDED_IMPORTS to listOf(
-                        "org.assertj.core.api.Assertions.*",
-                        "io.gitlab.arturbosch.detekt"
+                        "java.io.*",
+                        "java.time"
                     )
                 )
             )
 
-            val findings = rule.compileAndLint(code)
+            val findings = rule.lint(code)
             assertThat(findings).isEmpty()
         }
 
@@ -56,7 +56,7 @@ class WildcardImportSpec {
         fun `ignores excludes that are not matching`() {
             val rule = WildcardImport(TestConfig(EXCLUDED_IMPORTS to listOf("other.test.*")))
 
-            val findings = rule.compileAndLint(code)
+            val findings = rule.lint(code)
             assertThat(findings).hasSize(2)
         }
 
@@ -66,7 +66,7 @@ class WildcardImportSpec {
                 import java.util.*
             """.trimIndent()
 
-            val findings = WildcardImport(Config.empty).compileAndLint(code2)
+            val findings = WildcardImport(Config.empty).lint(code2)
             assertThat(findings).isEmpty()
         }
     }
@@ -76,7 +76,7 @@ class WildcardImportSpec {
         val code = """
             package org
             
-            import org.assertj.core.api.Assertions.assertThat
+            import java.io.File
             
             class Test {
             }
@@ -84,7 +84,7 @@ class WildcardImportSpec {
 
         @Test
         fun `should not report any issues`() {
-            val findings = WildcardImport(Config.empty).compileAndLint(code)
+            val findings = WildcardImport(Config.empty).lint(code)
             assertThat(findings).isEmpty()
         }
     }

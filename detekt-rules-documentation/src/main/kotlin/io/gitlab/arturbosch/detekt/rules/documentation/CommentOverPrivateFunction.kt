@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.documentation
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
@@ -26,7 +26,7 @@ class CommentOverPrivateFunction(config: Config) : Rule(
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (function.hasCommentInPrivateMember()) {
             report(
-                CodeSmell(
+                Finding(
                     Entity.atName(function),
                     "The function ${function.nameAsSafeName} " +
                         "has a comment. Prefer renaming the function giving it a more self-explanatory name."

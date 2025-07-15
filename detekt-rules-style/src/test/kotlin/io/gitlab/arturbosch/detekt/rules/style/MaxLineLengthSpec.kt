@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.assertj.core.api.Assertions.assertThat as doAssert
@@ -81,7 +81,7 @@ class MaxLineLengthSpec {
                 )
             )
 
-            val findings = rule.compileAndLint(code)
+            val findings = rule.lint(code)
             assertThat(findings).isEmpty()
         }
 
@@ -89,7 +89,7 @@ class MaxLineLengthSpec {
         fun `should report all errors with default maxLineLength`() {
             val rule = MaxLineLength(Config.empty)
 
-            val findings = rule.compileAndLint(code)
+            val findings = rule.lint(code)
             assertThat(findings).hasSize(3)
         }
 
@@ -101,7 +101,7 @@ class MaxLineLengthSpec {
                 )
             )
 
-            val findings = rule.compileAndLint(code)
+            val findings = rule.lint(code)
             assertThat(findings).hasSize(7)
         }
 
@@ -109,7 +109,7 @@ class MaxLineLengthSpec {
         fun `should report meaningful signature for all violations`() {
             val rule = MaxLineLength(Config.empty)
 
-            val findings = rule.compileAndLint(code)
+            val findings = rule.lint(code)
             val locations = findings.map { it.entity.signature.substringAfterLast('$') }
             doAssert(locations).allSatisfy { doAssert(it).isNotBlank() }
         }
@@ -143,7 +143,7 @@ class MaxLineLengthSpec {
                         .trimIndent()
                 }
             """.trimIndent()
-            assertThat(rule.compileAndLint(code)).isEmpty()
+            assertThat(rule.lint(code)).isEmpty()
         }
     }
 
@@ -222,7 +222,7 @@ class MaxLineLengthSpec {
         fun `should not report as lines are suppressed`() {
             val rule = MaxLineLength(Config.empty)
 
-            val findings = rule.compileAndLint(code)
+            val findings = rule.lint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -232,7 +232,7 @@ class MaxLineLengthSpec {
         val code = """
             package anIncrediblyLongAndComplexPackageNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
             
-            import org.assertj.core.api.Assertions.assertThat
+            import java.nio.file.attribute.PosixFileAttributeView
         """.trimIndent()
 
         @Test
@@ -243,7 +243,7 @@ class MaxLineLengthSpec {
                 )
             )
 
-            val findings = rule.compileAndLint(code)
+            val findings = rule.lint(code)
             assertThat(findings).isEmpty()
         }
 
@@ -257,7 +257,7 @@ class MaxLineLengthSpec {
                 )
             )
 
-            val findings = rule.compileAndLint(code)
+            val findings = rule.lint(code)
             assertThat(findings).hasSize(2)
         }
 
@@ -271,7 +271,7 @@ class MaxLineLengthSpec {
                 )
             )
 
-            val findings = rule.compileAndLint(code)
+            val findings = rule.lint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -317,7 +317,7 @@ class MaxLineLengthSpec {
                 )
             )
 
-            val findings = rule.compileAndLint(code)
+            val findings = rule.lint(code)
             assertThat(findings).hasSize(8)
         }
 
@@ -332,7 +332,7 @@ class MaxLineLengthSpec {
                 )
             )
 
-            val findings = rule.compileAndLint(code)
+            val findings = rule.lint(code)
             assertThat(findings).hasSize(8)
         }
 
@@ -345,7 +345,7 @@ class MaxLineLengthSpec {
                 )
             )
 
-            val findings = rule.compileAndLint(code)
+            val findings = rule.lint(code)
             assertThat(findings).hasSize(5)
         }
     }
@@ -355,7 +355,7 @@ class MaxLineLengthSpec {
         val code = """
             package anIncrediblyLongAndComplexPackageNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
             
-            import org.assertj.core.api.Assertions.assertThat
+            import java.nio.file.attribute.PosixFileAttributeView
             
             class Test {
                 fun anIncrediblyLongAndComplexMethodNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot() {}
@@ -370,7 +370,7 @@ class MaxLineLengthSpec {
                 )
             )
 
-            val findings = rule.compileAndLint(code)
+            val findings = rule.lint(code)
             assertThat(findings).hasSize(1)
         }
 
@@ -384,7 +384,7 @@ class MaxLineLengthSpec {
                 )
             )
 
-            val findings = rule.compileAndLint(code)
+            val findings = rule.lint(code)
             assertThat(findings).hasSize(3)
         }
 
@@ -398,7 +398,7 @@ class MaxLineLengthSpec {
                 )
             )
 
-            val findings = rule.compileAndLint(code)
+            val findings = rule.lint(code)
             assertThat(findings)
                 .hasSize(1)
                 .hasStartSourceLocations(SourceLocation(6, 1))
@@ -415,7 +415,7 @@ class MaxLineLengthSpec {
             )
         )
 
-        val findings = rule.compileAndLint(
+        val findings = rule.lint(
             """
                 // some other content
                 val x = Regex($TQ
@@ -438,7 +438,7 @@ class MaxLineLengthSpec {
             )
         )
 
-        val findings = rule.compileAndLint(
+        val findings = rule.lint(
             """
                 // some other content
                 val x = "Foo".matches($TQ...too long\(parens\) and some more$TQ.toRegex())
@@ -457,7 +457,7 @@ class MaxLineLengthSpec {
             )
         )
 
-        val findings = rule.compileAndLint(
+        val findings = rule.lint(
             """
                 interface TaskContainer {
                     fun register(name: String, block: Number.() -> Unit = {})
@@ -503,7 +503,7 @@ class MaxLineLengthSpec {
                 )
             )
 
-            assertThat(rule.compileAndLint(code)).isEmpty()
+            assertThat(rule.lint(code)).isEmpty()
         }
 
         @Test
@@ -520,7 +520,7 @@ class MaxLineLengthSpec {
                 )
             )
 
-            assertThat(rule.compileAndLint(code)).isEmpty()
+            assertThat(rule.lint(code)).isEmpty()
         }
 
         @Test
@@ -539,7 +539,7 @@ class MaxLineLengthSpec {
                 )
             )
 
-            assertThat(rule.compileAndLint(code)).hasSize(3)
+            assertThat(rule.lint(code)).hasSize(3)
         }
     }
 
@@ -565,7 +565,7 @@ class MaxLineLengthSpec {
                 )
             )
 
-            assertThat(rule.compileAndLint(code)).hasSize(1)
+            assertThat(rule.lint(code)).hasSize(1)
         }
 
         @Test
@@ -587,7 +587,7 @@ class MaxLineLengthSpec {
                 )
             )
 
-            assertThat(rule.compileAndLint(code)).hasSize(3)
+            assertThat(rule.lint(code)).hasSize(3)
         }
     }
 }

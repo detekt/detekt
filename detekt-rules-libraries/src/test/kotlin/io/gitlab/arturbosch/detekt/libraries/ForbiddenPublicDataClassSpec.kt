@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.libraries
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -15,7 +15,7 @@ class ForbiddenPublicDataClassSpec {
             data class C(val a: String)
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -24,7 +24,7 @@ class ForbiddenPublicDataClassSpec {
             private data class C(val a: String)
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -33,7 +33,7 @@ class ForbiddenPublicDataClassSpec {
             internal data class C(val a: String)
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -42,7 +42,7 @@ class ForbiddenPublicDataClassSpec {
             class C(val a: String)
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -53,7 +53,7 @@ class ForbiddenPublicDataClassSpec {
             }
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -64,7 +64,7 @@ class ForbiddenPublicDataClassSpec {
             }
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -75,7 +75,7 @@ class ForbiddenPublicDataClassSpec {
             }
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -86,7 +86,7 @@ class ForbiddenPublicDataClassSpec {
             }
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -97,7 +97,7 @@ class ForbiddenPublicDataClassSpec {
             data class C(val a: String)
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -108,7 +108,7 @@ class ForbiddenPublicDataClassSpec {
             data class C(val a: String)
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -119,7 +119,7 @@ class ForbiddenPublicDataClassSpec {
             data class C(val a: String)
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -130,7 +130,7 @@ class ForbiddenPublicDataClassSpec {
             data class C(val a: String)
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -142,6 +142,6 @@ class ForbiddenPublicDataClassSpec {
         """.trimIndent()
 
         val config = TestConfig("ignorePackages" to listOf("*.hello", "com.example"))
-        assertThat(ForbiddenPublicDataClass(config).compileAndLint(code)).isEmpty()
+        assertThat(ForbiddenPublicDataClass(config).lint(code)).isEmpty()
     }
 }

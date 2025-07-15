@@ -1,18 +1,18 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 private const val EXCLUDE_ANNOTATED_CLASSES = "excludeAnnotatedClasses"
 
 @KotlinCoreEnvironmentTest
-class AbstractClassCanBeConcreteClassSpec(val env: KotlinCoreEnvironment) {
+class AbstractClassCanBeConcreteClassSpec(val env: KotlinEnvironmentContainer) {
     val subject = AbstractClassCanBeConcreteClass(TestConfig(EXCLUDE_ANNOTATED_CLASSES to listOf("Deprecated")))
 
     @Nested
@@ -28,7 +28,7 @@ class AbstractClassCanBeConcreteClassSpec(val env: KotlinCoreEnvironment) {
                     public abstract fun f2()
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -37,28 +37,28 @@ class AbstractClassCanBeConcreteClassSpec(val env: KotlinCoreEnvironment) {
             @Test
             fun `case 1`() {
                 val code = "abstract class A"
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
 
             @Test
             fun `case 2`() {
                 val code = "abstract class A()"
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
 
             @Test
             fun `case 3`() {
                 val code = "abstract class A {}"
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
 
             @Test
             fun `case 4`() {
                 val code = "abstract class A() {}"
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
 
@@ -70,7 +70,7 @@ class AbstractClassCanBeConcreteClassSpec(val env: KotlinCoreEnvironment) {
                     }
                     abstract class B : A
                 """.trimIndent()
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
 
@@ -83,7 +83,7 @@ class AbstractClassCanBeConcreteClassSpec(val env: KotlinCoreEnvironment) {
                     }
                     abstract class B : A()
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
 
             @Test
@@ -97,7 +97,7 @@ class AbstractClassCanBeConcreteClassSpec(val env: KotlinCoreEnvironment) {
                     }
                     abstract class B: A(), I
                 """.trimIndent()
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
 
@@ -112,7 +112,7 @@ class AbstractClassCanBeConcreteClassSpec(val env: KotlinCoreEnvironment) {
                     }
                     abstract class B: I, A()
                 """.trimIndent()
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
         }
@@ -129,7 +129,7 @@ class AbstractClassCanBeConcreteClassSpec(val env: KotlinCoreEnvironment) {
                     abstract fun g()
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -139,7 +139,7 @@ class AbstractClassCanBeConcreteClassSpec(val env: KotlinCoreEnvironment) {
                     internal abstract fun f()
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -149,7 +149,7 @@ class AbstractClassCanBeConcreteClassSpec(val env: KotlinCoreEnvironment) {
                     protected abstract fun f()
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -166,7 +166,7 @@ class AbstractClassCanBeConcreteClassSpec(val env: KotlinCoreEnvironment) {
                     fun f() {}
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertFindingMessage(findings, message)
         }
 
@@ -179,7 +179,7 @@ class AbstractClassCanBeConcreteClassSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertFindingMessage(findings, message)
         }
 
@@ -192,14 +192,14 @@ class AbstractClassCanBeConcreteClassSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertFindingMessage(findings, message)
         }
 
         @Test
         fun `does not report no abstract members in an abstract class with just a constructor`() {
             val code = "abstract class A(val i: Int)"
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertFindingMessage(findings, message)
             assertThat(findings).hasStartSourceLocation(1, 16)
         }
@@ -207,14 +207,14 @@ class AbstractClassCanBeConcreteClassSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report no abstract members in an abstract class with a body and a constructor`() {
             val code = "abstract class A(val i: Int) {}"
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertFindingMessage(findings, message)
         }
 
         @Test
         fun `does not report no abstract members in an abstract class with just a constructor parameter`() {
             val code = "abstract class A(i: Int)"
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertFindingMessage(findings, message)
             assertThat(findings).hasStartSourceLocation(1, 16)
         }
@@ -237,7 +237,7 @@ class AbstractClassCanBeConcreteClassSpec(val env: KotlinCoreEnvironment) {
                     fun g() {}
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertFindingMessage(findings, message)
         }
     }
@@ -257,7 +257,7 @@ class AbstractClassCanBeConcreteClassSpec(val env: KotlinCoreEnvironment) {
                     fun g() {}
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -271,7 +271,7 @@ class AbstractClassCanBeConcreteClassSpec(val env: KotlinCoreEnvironment) {
                     fun g() {}
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -285,7 +285,7 @@ class AbstractClassCanBeConcreteClassSpec(val env: KotlinCoreEnvironment) {
                     fun f()
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -301,7 +301,7 @@ class AbstractClassCanBeConcreteClassSpec(val env: KotlinCoreEnvironment) {
                     abstract fun f()
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -312,7 +312,7 @@ class AbstractClassCanBeConcreteClassSpec(val env: KotlinCoreEnvironment) {
                 }
                 abstract class Test(val x: Int) : I
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 }

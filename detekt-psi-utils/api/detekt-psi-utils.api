@@ -5,6 +5,7 @@ public final class io/github/detekt/psi/AnnotationExcluder {
 
 public abstract class io/github/detekt/psi/FunctionMatcher {
 	public static final field Companion Lio/github/detekt/psi/FunctionMatcher$Companion;
+	public abstract fun match (Lorg/jetbrains/kotlin/analysis/api/symbols/KaCallableSymbol;)Z
 	public abstract fun match (Lorg/jetbrains/kotlin/descriptors/CallableDescriptor;)Z
 	public abstract fun match (Lorg/jetbrains/kotlin/psi/KtNamedFunction;Lorg/jetbrains/kotlin/resolve/BindingContext;)Z
 }
@@ -14,7 +15,7 @@ public final class io/github/detekt/psi/FunctionMatcher$Companion {
 }
 
 public final class io/github/detekt/psi/KtFilesKt {
-	public static final fun absolutePath (Lorg/jetbrains/kotlin/com/intellij/psi/PsiFile;)Ljava/nio/file/Path;
+	public static final fun absolutePath (Lcom/intellij/psi/PsiFile;)Ljava/nio/file/Path;
 	public static final fun absolutePath (Lorg/jetbrains/kotlin/psi/KtFile;)Ljava/nio/file/Path;
 }
 
@@ -23,7 +24,7 @@ public final class io/gitlab/arturbosch/detekt/rules/AllowedExceptionNamePattern
 }
 
 public final class io/gitlab/arturbosch/detekt/rules/IsPartOfUtilsKt {
-	public static final fun isPartOfString (Lorg/jetbrains/kotlin/com/intellij/psi/PsiElement;)Z
+	public static final fun isPartOfString (Lcom/intellij/psi/PsiElement;)Z
 }
 
 public final class io/gitlab/arturbosch/detekt/rules/JunkKt {
@@ -41,13 +42,16 @@ public final class io/gitlab/arturbosch/detekt/rules/KtBinaryExpressionKt {
 }
 
 public final class io/gitlab/arturbosch/detekt/rules/KtCallExpressionKt {
+	public static final fun isCalling (Lorg/jetbrains/kotlin/psi/KtCallExpression;Ljava/util/List;)Z
 	public static final fun isCalling (Lorg/jetbrains/kotlin/psi/KtCallExpression;Ljava/util/List;Lorg/jetbrains/kotlin/resolve/BindingContext;)Z
+	public static final fun isCalling (Lorg/jetbrains/kotlin/psi/KtCallExpression;Lorg/jetbrains/kotlin/name/CallableId;)Z
 	public static final fun isCalling (Lorg/jetbrains/kotlin/psi/KtCallExpression;Lorg/jetbrains/kotlin/name/FqName;Lorg/jetbrains/kotlin/resolve/BindingContext;)Z
-	public static final fun isCallingWithNonNullCheckArgument (Lorg/jetbrains/kotlin/psi/KtCallExpression;Lorg/jetbrains/kotlin/name/FqName;Lorg/jetbrains/kotlin/resolve/BindingContext;)Z
+	public static final fun isCallingWithNonNullCheckArgument (Lorg/jetbrains/kotlin/psi/KtCallExpression;Lorg/jetbrains/kotlin/name/CallableId;)Z
 }
 
 public final class io/gitlab/arturbosch/detekt/rules/KtLambdaExpressionKt {
 	public static final fun firstParameter (Lorg/jetbrains/kotlin/psi/KtLambdaExpression;Lorg/jetbrains/kotlin/resolve/BindingContext;)Lorg/jetbrains/kotlin/descriptors/ValueParameterDescriptor;
+	public static final fun hasImplicitParameterReference (Lorg/jetbrains/kotlin/psi/KtLambdaExpression;)Z
 	public static final fun hasImplicitParameterReference (Lorg/jetbrains/kotlin/psi/KtLambdaExpression;Lorg/jetbrains/kotlin/descriptors/ValueParameterDescriptor;Lorg/jetbrains/kotlin/resolve/BindingContext;)Z
 	public static final fun implicitParameter (Lorg/jetbrains/kotlin/psi/KtLambdaExpression;Lorg/jetbrains/kotlin/resolve/BindingContext;)Lorg/jetbrains/kotlin/descriptors/ValueParameterDescriptor;
 }
@@ -70,12 +74,15 @@ public final class io/gitlab/arturbosch/detekt/rules/KtModifierListKt {
 }
 
 public final class io/gitlab/arturbosch/detekt/rules/KtValueArgumentKt {
+	public static final fun isEmptyOrSingleStringArgument (Ljava/util/List;)Z
 	public static final fun isEmptyOrSingleStringArgument (Ljava/util/List;Lorg/jetbrains/kotlin/resolve/BindingContext;)Z
+	public static final fun isString (Lorg/jetbrains/kotlin/psi/KtValueArgument;)Z
 	public static final fun isString (Lorg/jetbrains/kotlin/psi/KtValueArgument;Lorg/jetbrains/kotlin/resolve/BindingContext;)Z
 }
 
 public final class io/gitlab/arturbosch/detekt/rules/MethodSignatureKt {
 	public static final fun hasCorrectEqualsParameter (Lorg/jetbrains/kotlin/psi/KtFunction;)Z
+	public static final fun hasImplicitUnitReturnType (Lorg/jetbrains/kotlin/psi/KtNamedFunction;)Z
 	public static final fun hasImplicitUnitReturnType (Lorg/jetbrains/kotlin/psi/KtNamedFunction;Lorg/jetbrains/kotlin/resolve/BindingContext;)Z
 	public static final fun isEqualsFunction (Lorg/jetbrains/kotlin/psi/KtFunction;)Z
 	public static final fun isHashCodeFunction (Lorg/jetbrains/kotlin/psi/KtFunction;)Z
@@ -98,8 +105,6 @@ public final class io/gitlab/arturbosch/detekt/rules/ThrowExtensionsKt {
 
 public final class io/gitlab/arturbosch/detekt/rules/TypeUtilsKt {
 	public static final fun fqNameOrNull (Lorg/jetbrains/kotlin/types/KotlinType;)Lorg/jetbrains/kotlin/name/FqName;
-	public static final fun getDataFlowAwareTypes (Lorg/jetbrains/kotlin/psi/KtExpression;Lorg/jetbrains/kotlin/resolve/BindingContext;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;Lorg/jetbrains/kotlin/resolve/calls/smartcasts/DataFlowValueFactory;Lorg/jetbrains/kotlin/types/KotlinType;)Ljava/util/Set;
-	public static synthetic fun getDataFlowAwareTypes$default (Lorg/jetbrains/kotlin/psi/KtExpression;Lorg/jetbrains/kotlin/resolve/BindingContext;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;Lorg/jetbrains/kotlin/resolve/calls/smartcasts/DataFlowValueFactory;Lorg/jetbrains/kotlin/types/KotlinType;ILjava/lang/Object;)Ljava/util/Set;
-	public static final fun isNullable (Lorg/jetbrains/kotlin/psi/KtExpression;Lorg/jetbrains/kotlin/resolve/BindingContext;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;Lorg/jetbrains/kotlin/resolve/calls/smartcasts/DataFlowValueFactory;Z)Z
+	public static final fun isNullable (Lorg/jetbrains/kotlin/psi/KtExpression;Z)Z
 }
 

@@ -1,5 +1,7 @@
+import java.io.ByteArrayOutputStream
+
 plugins {
-    id("com.gradleup.shadow") version "8.3.6"
+    id("com.gradleup.shadow") version "8.3.8"
     id("module")
     id("application")
 }
@@ -8,18 +10,16 @@ application {
     mainClass = "io.gitlab.arturbosch.detekt.generator.Main"
 }
 
-val generatedUsage by configurations.dependencyScope("generatedUsage")
-val generatedUsageOutput by configurations.resolvable("generatedUsageOutput") {
-    extendsFrom(generatedUsage)
+val detektCli by configurations.dependencyScope("detektCli")
+val detektCliClasspath by configurations.resolvable("detektCliClasspath") {
+    extendsFrom(detektCli)
 }
 
 dependencies {
     implementation(projects.detektParser)
     implementation(projects.detektApi)
     implementation(projects.detektPsiUtils)
-    generatedUsage(projects.detektCli) {
-        targetConfiguration = "generatedCliUsage"
-    }
+    detektCli(projects.detektCli)
     implementation(projects.detektUtils)
     implementation(libs.jcommander)
 
@@ -30,6 +30,25 @@ dependencies {
     testRuntimeOnly(projects.detektRules)
 }
 
+val generateCliOptions by tasks.registering(JavaExec::class) {
+    classpath = detektCliClasspath
+    mainClass = "io.gitlab.arturbosch.detekt.cli.Main"
+    args = listOf("--help")
+
+    val cliOptionsOutput = isolated.rootProject.projectDirectory.file("website/docs/gettingstarted/_cli-options.md")
+    outputs.file(cliOptionsOutput)
+    doFirst {
+        standardOutput = ByteArrayOutputStream()
+    }
+    doLast {
+        cliOptionsOutput.asFile.apply {
+            writeText("```\n")
+            appendBytes((standardOutput as ByteArrayOutputStream).toByteArray())
+            appendText("```\n")
+        }
+    }
+}
+
 val documentationDir = "$rootDir/website/docs/rules"
 val configDir = "$rootDir/detekt-core/src/main/resources"
 val defaultConfigFile = "$configDir/default-detekt-config.yml"
@@ -38,17 +57,12 @@ val formattingConfigFile = "$rootDir/detekt-formatting/src/main/resources/config
 val librariesConfigFile = "$rootDir/detekt-rules-libraries/src/main/resources/config/config.yml"
 val ruleauthorsConfigFile = "$rootDir/detekt-rules-ruleauthors/src/main/resources/config/config.yml"
 
-val copyDetektCliUsage by tasks.registering(Copy::class) {
-    from(generatedUsageOutput) { rename { "_cli-options.md" } }
-    destinationDir = rootDir.resolve("website/docs/gettingstarted")
-}
-
 tasks.register("generateWebsite") {
     dependsOn(
-        copyDetektCliUsage,
+        generateCliOptions,
         generateDocumentation,
-        ":dokkaHtmlMultiModule",
-        gradle.includedBuild("detekt-gradle-plugin").task(":dokkaHtml"),
+        ":dokkaGenerate",
+        gradle.includedBuild("detekt-gradle-plugin").task(":dokkaGenerate"),
     )
 }
 

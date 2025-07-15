@@ -1,15 +1,15 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class ImplicitUnitReturnTypeSpec(private val env: KotlinCoreEnvironment) {
+class ImplicitUnitReturnTypeSpec(private val env: KotlinEnvironmentContainer) {
     private val subject = ImplicitUnitReturnType(Config.empty)
 
     @Test
@@ -20,7 +20,7 @@ class ImplicitUnitReturnTypeSpec(private val env: KotlinCoreEnvironment) {
             fun String.errorProneUnitWithReceiver() = run { println(this) }
         """.trimIndent()
 
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
 
         assertThat(findings).hasSize(3)
     }
@@ -29,7 +29,7 @@ class ImplicitUnitReturnTypeSpec(private val env: KotlinCoreEnvironment) {
     fun `does not report explicit Unit return type by default`() {
         val code = """fun safeUnitReturn(): Unit = println("Hello Unit")"""
 
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
 
         assertThat(findings).isEmpty()
     }
@@ -39,7 +39,7 @@ class ImplicitUnitReturnTypeSpec(private val env: KotlinCoreEnvironment) {
         val code = """fun safeButStillReported(): Unit = println("Hello Unit")"""
 
         val findings = ImplicitUnitReturnType(TestConfig("allowExplicitReturnType" to "false"))
-            .compileAndLintWithContext(env, code)
+            .lintWithContext(env, code)
 
         assertThat(findings).hasSize(1)
     }
@@ -52,7 +52,7 @@ class ImplicitUnitReturnTypeSpec(private val env: KotlinCoreEnvironment) {
             }
         """.trimIndent()
 
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
 
         assertThat(findings).isEmpty()
     }
@@ -62,7 +62,7 @@ class ImplicitUnitReturnTypeSpec(private val env: KotlinCoreEnvironment) {
         val code = """
             fun foo() = Unit
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 }

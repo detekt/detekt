@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
     compileOnly(projects.detektApi)
+    compileOnly(projects.detektKotlinAnalysisApi)
     compileOnly(projects.detektPsiUtils)
     implementation(projects.detektTooling)
     testImplementation(projects.detektTest)

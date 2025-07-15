@@ -20,7 +20,7 @@ internal fun XMLStreamWriter.prettyPrinter(): XMLStreamWriter = IndentingXMLStre
 internal inline fun XMLStreamWriter.document(
     version: String? = null,
     encoding: String? = null,
-    init: XMLStreamWriter.() -> Unit
+    init: XMLStreamWriter.() -> Unit,
 ) = apply {
     when {
         encoding != null && version != null -> writeStartDocument(encoding, version)
@@ -33,7 +33,7 @@ internal inline fun XMLStreamWriter.document(
 
 internal inline fun XMLStreamWriter.tag(
     name: String,
-    init: XMLStreamWriter.() -> Unit
+    init: XMLStreamWriter.() -> Unit,
 ) = apply {
     writeStartElement(name)
     init()

@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
@@ -24,7 +23,7 @@ class ReturnCountSpec {
 
         @Test
         fun `does not report violation by default`() {
-            assertThat(ReturnCount(Config.empty).compileAndLint(code)).isEmpty()
+            assertThat(ReturnCount(Config.empty).lint(code)).isEmpty()
         }
     }
 
@@ -36,7 +35,7 @@ class ReturnCountSpec {
 
         @Test
         fun `does not report violation by default`() {
-            assertThat(ReturnCount(Config.empty).compileAndLint(code)).isEmpty()
+            assertThat(ReturnCount(Config.empty).lint(code)).isEmpty()
         }
     }
 
@@ -56,7 +55,7 @@ class ReturnCountSpec {
         @Test
         fun `should not get flagged for if condition guard clauses`() {
             val findings = ReturnCount(TestConfig(EXCLUDE_GUARD_CLAUSES to "true"))
-                .compileAndLint(code)
+                .lint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -80,14 +79,14 @@ class ReturnCountSpec {
         @Test
         fun `should not get flagged for if condition guard clauses`() {
             val findings = ReturnCount(TestConfig(EXCLUDE_GUARD_CLAUSES to "true"))
-                .compileAndLint(code)
+                .lint(code)
             assertThat(findings).isEmpty()
         }
 
         @Test
         fun `should get flagged without guard clauses`() {
             val findings = ReturnCount(TestConfig(EXCLUDE_GUARD_CLAUSES to "false"))
-                .compileAndLint(code)
+                .lint(code)
             assertThat(findings).hasSize(1)
         }
     }
@@ -115,7 +114,7 @@ class ReturnCountSpec {
         @Test
         fun `should report a too-complicated if statement for being a guard clause, with EXCLUDE_GUARD_CLAUSES on`() {
             val findings = ReturnCount(TestConfig(EXCLUDE_GUARD_CLAUSES to "true"))
-                .compileAndLint(code)
+                .lint(code)
             assertThat(findings).hasSize(1)
         }
     }
@@ -136,7 +135,7 @@ class ReturnCountSpec {
         @Test
         fun `should not get flagged for ELVIS operator guard clauses`() {
             val findings = ReturnCount(TestConfig(EXCLUDE_GUARD_CLAUSES to "true"))
-                .compileAndLint(code)
+                .lint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -157,7 +156,7 @@ class ReturnCountSpec {
         @Test
         fun `should get flagged for an if condition guard clause which is not the first statement`() {
             val findings = ReturnCount(TestConfig(EXCLUDE_GUARD_CLAUSES to "true"))
-                .compileAndLint(code)
+                .lint(code)
             assertThat(findings).hasSize(1)
         }
     }
@@ -178,7 +177,7 @@ class ReturnCountSpec {
         @Test
         fun `should get flagged for an ELVIS guard clause which is not the first statement`() {
             val findings = ReturnCount(TestConfig(EXCLUDE_GUARD_CLAUSES to "true"))
-                .compileAndLint(code)
+                .lint(code)
             assertThat(findings).hasSize(1)
         }
     }
@@ -207,7 +206,7 @@ class ReturnCountSpec {
                 TestConfig(
                     EXCLUDE_GUARD_CLAUSES to "true"
                 )
-            ).compileAndLint(code)
+            ).lint(code)
             assertThat(findings).isEmpty()
         }
 
@@ -217,7 +216,7 @@ class ReturnCountSpec {
                 TestConfig(
                     EXCLUDE_GUARD_CLAUSES to "false"
                 )
-            ).compileAndLint(code)
+            ).lint(code)
             assertThat(findings).hasSize(1)
         }
 
@@ -248,7 +247,7 @@ class ReturnCountSpec {
                         EXCLUDE_GUARD_CLAUSES to "true",
                         MAX to 0,
                     )
-                ).compileAndLint(code)
+                ).lint(code)
                 assertThat(findings).isEmpty()
             }
 
@@ -276,7 +275,7 @@ class ReturnCountSpec {
                         EXCLUDE_GUARD_CLAUSES to "true",
                         MAX to 0,
                     )
-                ).compileAndLint(code)
+                ).lint(code)
                 assertThat(findings).isEmpty()
             }
 
@@ -305,7 +304,7 @@ class ReturnCountSpec {
                         EXCLUDE_GUARD_CLAUSES to "true",
                         MAX to 0,
                     )
-                ).compileAndLint(code)
+                ).lint(code)
                 assertThat(findings).isEmpty()
             }
 
@@ -334,7 +333,7 @@ class ReturnCountSpec {
                         EXCLUDE_GUARD_CLAUSES to "false",
                         MAX to 3,
                     )
-                ).compileAndLint(code)
+                ).lint(code)
                 assertThat(findings).hasSize(1)
             }
         }
@@ -355,19 +354,19 @@ class ReturnCountSpec {
 
         @Test
         fun `should get flagged by default`() {
-            val findings = ReturnCount(Config.empty).compileAndLint(code)
+            val findings = ReturnCount(Config.empty).lint(code)
             assertThat(findings).hasSize(1)
         }
 
         @Test
         fun `should not get flagged when max value is 3`() {
-            val findings = ReturnCount(TestConfig(MAX to "3")).compileAndLint(code)
+            val findings = ReturnCount(TestConfig(MAX to "3")).lint(code)
             assertThat(findings).isEmpty()
         }
 
         @Test
         fun `should get flagged when max value is 1`() {
-            val findings = ReturnCount(TestConfig(MAX to "1")).compileAndLint(code)
+            val findings = ReturnCount(TestConfig(MAX to "1")).lint(code)
             assertThat(findings).hasSize(1)
         }
     }
@@ -386,19 +385,19 @@ class ReturnCountSpec {
 
         @Test
         fun `should not get flagged by default`() {
-            val findings = ReturnCount(Config.empty).compileAndLint(code)
+            val findings = ReturnCount(Config.empty).lint(code)
             assertThat(findings).isEmpty()
         }
 
         @Test
         fun `should not get flagged when max value is 2`() {
-            val findings = ReturnCount(TestConfig(MAX to "2")).compileAndLint(code)
+            val findings = ReturnCount(TestConfig(MAX to "2")).lint(code)
             assertThat(findings).isEmpty()
         }
 
         @Test
         fun `should get flagged when max value is 1`() {
-            val findings = ReturnCount(TestConfig(MAX to "1")).compileAndLint(code)
+            val findings = ReturnCount(TestConfig(MAX to "1")).lint(code)
             assertThat(findings).hasSize(1)
         }
     }
@@ -423,7 +422,7 @@ class ReturnCountSpec {
                     MAX to "2",
                     EXCLUDED_FUNCTIONS to listOf("test"),
                 )
-            ).compileAndLint(code)
+            ).lint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -466,7 +465,7 @@ class ReturnCountSpec {
                     MAX to "2",
                     EXCLUDED_FUNCTIONS to listOf("factorial", "fac"),
                 )
-            ).compileAndLint(code)
+            ).lint(code)
             assertThat(findings).hasSize(1)
         }
 
@@ -477,7 +476,7 @@ class ReturnCountSpec {
                     MAX to "2",
                     EXCLUDED_FUNCTIONS to listOf("fa*ctorial"),
                 )
-            ).compileAndLint(code)
+            ).lint(code)
             assertThat(findings).hasSize(1)
         }
     }
@@ -505,7 +504,7 @@ class ReturnCountSpec {
 
         @Test
         fun `should not get flag when returns is in inner object`() {
-            val findings = ReturnCount(TestConfig(MAX to "2")).compileAndLint(code)
+            val findings = ReturnCount(TestConfig(MAX to "2")).lint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -542,7 +541,7 @@ class ReturnCountSpec {
 
         @Test
         fun `should not get flag when returns is in inner object`() {
-            val findings = ReturnCount(TestConfig(MAX to "2")).compileAndLint(code)
+            val findings = ReturnCount(TestConfig(MAX to "2")).lint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -581,7 +580,7 @@ class ReturnCountSpec {
 
         @Test
         fun `should get flagged when returns is in inner object`() {
-            val findings = ReturnCount(TestConfig(MAX to "2")).compileAndLint(code)
+            val findings = ReturnCount(TestConfig(MAX to "2")).lint(code)
             assertThat(findings).hasSize(1)
         }
     }
@@ -600,26 +599,21 @@ class ReturnCountSpec {
 
         @Test
         fun `should not count labeled returns from lambda by default`() {
-            val findings = ReturnCount(Config.empty).lint(code)
+            val findings = ReturnCount(Config.empty).lint(code, compile = false)
             assertThat(findings).isEmpty()
         }
 
         @Test
         fun `should count labeled returns from lambda when activated`() {
-            val findings = ReturnCount(
-                TestConfig(EXCLUDE_RETURN_FROM_LAMBDA to "false")
-            ).lint(code)
+            val findings = ReturnCount(TestConfig(EXCLUDE_RETURN_FROM_LAMBDA to "false"))
+                .lint(code, compile = false)
             assertThat(findings).hasSize(1)
         }
 
         @Test
         fun `should be empty when labeled returns are de-activated`() {
-            val findings = ReturnCount(
-                TestConfig(
-                    EXCLUDE_LABELED to "true",
-                    EXCLUDE_RETURN_FROM_LAMBDA to "false",
-                )
-            ).lint(code)
+            val findings = ReturnCount(TestConfig(EXCLUDE_LABELED to "true", EXCLUDE_RETURN_FROM_LAMBDA to "false",))
+                .lint(code, compile = false)
             assertThat(findings).isEmpty()
         }
     }
@@ -638,13 +632,13 @@ class ReturnCountSpec {
 
         @Test
         fun `should count labeled return of lambda with explicit label`() {
-            val findings = ReturnCount(TestConfig(EXCLUDE_RETURN_FROM_LAMBDA to "false")).compileAndLint(code)
+            val findings = ReturnCount(TestConfig(EXCLUDE_RETURN_FROM_LAMBDA to "false")).lint(code)
             assertThat(findings).hasSize(1)
         }
 
         @Test
         fun `should not count labeled return of lambda with explicit label when deactivated by default`() {
-            val findings = ReturnCount(Config.empty).compileAndLint(code)
+            val findings = ReturnCount(Config.empty).lint(code)
             assertThat(findings).isEmpty()
         }
 
@@ -655,7 +649,7 @@ class ReturnCountSpec {
                     EXCLUDE_RETURN_FROM_LAMBDA to "true",
                     EXCLUDE_LABELED to "false",
                 )
-            ).compileAndLint(code)
+            ).lint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -686,7 +680,7 @@ class ReturnCountSpec {
                     EXCLUDE_GUARD_CLAUSES to "true",
                     MAX to 1,
                 )
-            ).compileAndLint(code)
+            ).lint(code)
             assertThat(findings).isEmpty()
         }
 
@@ -726,7 +720,7 @@ class ReturnCountSpec {
                     EXCLUDE_GUARD_CLAUSES to "true",
                     MAX to 1,
                 )
-            ).compileAndLint(code)
+            ).lint(code)
             assertThat(findings).isEmpty()
         }
 
@@ -754,7 +748,7 @@ class ReturnCountSpec {
                     EXCLUDE_GUARD_CLAUSES to "true",
                     MAX to 1,
                 )
-            ).compileAndLint(code)
+            ).lint(code)
             assertThat(findings).hasSize(1)
         }
     }

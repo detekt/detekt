@@ -80,6 +80,7 @@ comments:
     active: false
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
     searchProtectedProperty: false
+    ignoreEnumEntries: false
 
 complexity:
   active: true
@@ -417,6 +418,8 @@ performance:
     active: false
   UnnecessaryTemporaryInstantiation:
     active: true
+  UnnecessaryTypeCasting:
+    active: false
 
 potential-bugs:
   active: true
@@ -434,6 +437,7 @@ potential-bugs:
   Deprecation:
     active: false
     aliases: ['DEPRECATION']
+    excludeImportStatements: false
   DontDowncastCollectionTypes:
     active: false
   DoubleMutabilityForCollection:
@@ -473,6 +477,7 @@ potential-bugs:
       - 'CanIgnoreReturnValue'
       - '*.CanIgnoreReturnValue'
     returnValueTypes:
+      - 'kotlin.Function*'
       - 'kotlin.sequences.Sequence'
       - 'kotlinx.coroutines.flow.*Flow'
       - 'java.util.stream.*Stream'
@@ -718,8 +723,6 @@ style:
   OptionalAbstractKeyword:
     active: true
   OptionalUnit:
-    active: false
-  PreferToOverPairSyntax:
     active: false
   ProtectedMemberInFinalClass:
     active: true

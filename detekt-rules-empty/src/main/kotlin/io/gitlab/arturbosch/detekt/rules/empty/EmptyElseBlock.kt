@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.empty
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import org.jetbrains.kotlin.psi.KtIfExpression
 
 /**
@@ -15,7 +15,7 @@ class EmptyElseBlock(config: Config) : EmptyRule(config) {
         super.visitIfExpression(expression)
         expression.`else`?.addFindingIfBlockExprIsEmpty() ?: checkThenBodyForLoneSemicolon(expression) {
             report(
-                CodeSmell(
+                Finding(
                     Entity.from(it),
                     "This else block is empty and can be removed."
                 )

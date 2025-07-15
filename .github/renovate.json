@@ -13,6 +13,20 @@
   ],
   "packageRules": [
     {
+      "matchDatasources": ["maven"],
+      "registryUrls": [
+        "https://repo.maven.apache.org/maven2",
+        "https://plugins.gradle.org/m2/",
+        "https://dl.google.com/android/maven2/"
+      ],
+    },
+    {
+      "groupName": "Develocity",
+      "matchPackageNames": [
+        "com.gradle.develocity:**"
+      ]
+    },
+    {
       "groupName": "Dokka",
       "matchPackageNames": [
         "org.jetbrains.dokka:**"

@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.generator.config
 import io.github.classgraph.ClassGraph
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.RuleName
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 import io.gitlab.arturbosch.detekt.core.config.YamlConfig
@@ -13,7 +14,7 @@ import java.lang.reflect.Modifier
 class ConfigAssert(
     private val config: Config,
     private val name: String,
-    private val packageName: String
+    private val packageName: String,
 ) {
     private val allowedOptions = setOf(
         Config.ACTIVE_KEY,
@@ -54,7 +55,7 @@ class ConfigAssert(
         val clazz = rule::class.java
         assertThat(rule.ruleName)
             .withFailMessage { "rule $clazz declares the rule id ${rule.ruleName} instead of ${clazz.simpleName}" }
-            .isEqualTo(Rule.Name(clazz.simpleName))
+            .isEqualTo(RuleName(clazz.simpleName))
     }
 
     private fun getYmlRuleConfig() = config.subConfig(name) as? YamlConfig

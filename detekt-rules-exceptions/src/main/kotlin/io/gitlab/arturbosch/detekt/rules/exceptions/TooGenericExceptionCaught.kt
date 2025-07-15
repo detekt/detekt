@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.exceptions
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.isAllowedExceptionName
@@ -50,7 +50,7 @@ class TooGenericExceptionCaught(config: Config) : Rule(
             if (isTooGenericException(catchParameter.typeReference) &&
                 !catchClause.isAllowedExceptionName(allowedExceptionNameRegex)
             ) {
-                report(CodeSmell(Entity.from(catchParameter), description))
+                report(Finding(Entity.from(catchParameter), description))
             }
         }
         super.visitCatchSection(catchClause)

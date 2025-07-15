@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.receiverIsUsed
@@ -39,12 +39,13 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  * }
  * </compliant>
  */
-@RequiresFullAnalysis
 @ActiveByDefault(since = "1.16.0")
-class UnnecessaryApply(config: Config) : Rule(
-    config,
-    "The `apply` usage is unnecessary and can be removed."
-) {
+class UnnecessaryApply(config: Config) :
+    Rule(
+        config,
+        "The `apply` usage is unnecessary and can be removed."
+    ),
+    RequiresFullAnalysis {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
@@ -58,7 +59,7 @@ class UnnecessaryApply(config: Config) : Rule(
             } else {
                 "apply expression can be omitted"
             }
-            report(CodeSmell(Entity.from(expression), message))
+            report(Finding(Entity.from(expression), message))
         }
     }
 

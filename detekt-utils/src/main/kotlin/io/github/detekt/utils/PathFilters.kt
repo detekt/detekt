@@ -8,7 +8,7 @@ import java.nio.file.PathMatcher
  */
 class PathFilters internal constructor(
     private val includes: Set<PathMatcher>?,
-    private val excludes: Set<PathMatcher>?
+    private val excludes: Set<PathMatcher>?,
 ) {
 
     /**

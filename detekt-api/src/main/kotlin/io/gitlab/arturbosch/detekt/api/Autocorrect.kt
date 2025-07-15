@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.api
 
-import org.jetbrains.kotlin.com.intellij.openapi.util.Key
+import com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.UserDataProperty
 

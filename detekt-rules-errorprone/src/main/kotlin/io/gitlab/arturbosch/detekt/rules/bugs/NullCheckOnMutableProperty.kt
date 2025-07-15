@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isNonNullCheck
@@ -45,11 +45,12 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  * }
  * </compliant>
  */
-@RequiresFullAnalysis
-class NullCheckOnMutableProperty(config: Config) : Rule(
-    config,
-    "Checking nullability on a mutable property is not useful because the property may be set to null afterwards."
-) {
+class NullCheckOnMutableProperty(config: Config) :
+    Rule(
+        config,
+        "Checking nullability on a mutable property is not useful because the property may be set to null afterwards."
+    ),
+    RequiresFullAnalysis {
 
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)
@@ -122,7 +123,7 @@ class NullCheckOnMutableProperty(config: Config) : Rule(
                         // mutable property is being referenced.
                         candidateProperties[fqName]?.lastOrNull()?.let { ifExpression ->
                             report(
-                                CodeSmell(
+                                Finding(
                                     Entity.from(ifExpression),
                                     "Null-check is being called on mutable property '$fqName'."
                                 )

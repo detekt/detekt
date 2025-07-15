@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -18,7 +18,7 @@ class CyclomaticComplexMethodSpec {
 
         @Test
         fun `counts different loops`() {
-            val findings = CyclomaticComplexMethod(TestConfig(defaultAllowedComplexity)).compileAndLint(
+            val findings = CyclomaticComplexMethod(TestConfig(defaultAllowedComplexity)).lint(
                 """
                     fun test() {
                         for (i in 1..10) {}
@@ -34,7 +34,7 @@ class CyclomaticComplexMethodSpec {
 
         @Test
         fun `counts catch blocks`() {
-            val findings = CyclomaticComplexMethod(TestConfig(defaultAllowedComplexity)).compileAndLint(
+            val findings = CyclomaticComplexMethod(TestConfig(defaultAllowedComplexity)).lint(
                 """
                     fun test() {
                         try {} catch(e: IllegalArgumentException) {} catch(e: Exception) {} finally {}
@@ -47,7 +47,7 @@ class CyclomaticComplexMethodSpec {
 
         @Test
         fun `counts nested conditional statements`() {
-            val findings = CyclomaticComplexMethod(TestConfig(defaultAllowedComplexity)).compileAndLint(
+            val findings = CyclomaticComplexMethod(TestConfig(defaultAllowedComplexity)).lint(
                 """
                     fun test() {
                         try {
@@ -167,7 +167,7 @@ class CyclomaticComplexMethodSpec {
             )
             val subject = CyclomaticComplexMethod(config)
 
-            assertThat(subject.compileAndLint(code)).hasStartSourceLocations(SourceLocation(39, 5))
+            assertThat(subject.lint(code)).hasStartSourceLocations(SourceLocation(39, 5))
         }
 
         @Test
@@ -175,7 +175,7 @@ class CyclomaticComplexMethodSpec {
             val config = TestConfig("allowedComplexity" to "4")
             val subject = CyclomaticComplexMethod(config)
 
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
 
             assertThat(findings).hasSize(5)
             assertThat(findings).hasStartSourceLocations(
@@ -205,7 +205,7 @@ class CyclomaticComplexMethodSpec {
                 }
             """.trimIndent()
 
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
 
             assertThat(findings).isEmpty()
         }
@@ -233,7 +233,7 @@ class CyclomaticComplexMethodSpec {
                 }
             """.trimIndent()
 
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -291,13 +291,13 @@ class CyclomaticComplexMethodSpec {
 
         @Test
         fun `should not count these overridden functions to base functions complexity`() {
-            assertThat(CyclomaticComplexMethod(Config.empty).compileAndLint(code)).isEmpty()
+            assertThat(CyclomaticComplexMethod(Config.empty).lint(code)).isEmpty()
         }
     }
 }
 
 private fun assertExpectedComplexityValue(code: String, config: TestConfig, expectedValue: Int) {
-    val findings = CyclomaticComplexMethod(config).compileAndLint(code)
+    val findings = CyclomaticComplexMethod(config).lint(code)
 
     assertThat(findings).hasStartSourceLocations(SourceLocation(1, 5))
 

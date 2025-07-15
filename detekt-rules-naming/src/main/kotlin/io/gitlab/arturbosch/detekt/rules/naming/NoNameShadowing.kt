@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.hasImplicitParameterReference
@@ -45,12 +45,13 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  * </compliant>
  *
  */
-@RequiresFullAnalysis
 @ActiveByDefault(since = "1.21.0")
-class NoNameShadowing(config: Config) : Rule(
-    config,
-    "Disallow shadowing variable declarations."
-) {
+class NoNameShadowing(config: Config) :
+    Rule(
+        config,
+        "Disallow shadowing variable declarations."
+    ),
+    RequiresFullAnalysis {
 
     override fun visitProperty(property: KtProperty) {
         super.visitProperty(property)
@@ -70,7 +71,7 @@ class NoNameShadowing(config: Config) : Rule(
     private fun checkNameShadowing(declaration: KtNamedDeclaration) {
         val nameIdentifier = declaration.nameIdentifier ?: return
         if (bindingContext.diagnostics.forElement(declaration).any { it.factory == Errors.NAME_SHADOWING }) {
-            report(CodeSmell(Entity.from(nameIdentifier), "Name shadowed: ${nameIdentifier.text}"))
+            report(Finding(Entity.from(nameIdentifier), "Name shadowed: ${nameIdentifier.text}"))
         }
     }
 
@@ -81,7 +82,7 @@ class NoNameShadowing(config: Config) : Rule(
             lambdaExpression.hasParentImplicitParameterLambda()
         ) {
             report(
-                CodeSmell(
+                Finding(
                     Entity.from(lambdaExpression),
                     "Name shadowed: implicit lambda parameter 'it'"
                 )

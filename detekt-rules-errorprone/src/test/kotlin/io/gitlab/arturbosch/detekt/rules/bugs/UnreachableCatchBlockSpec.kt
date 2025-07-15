@@ -1,15 +1,15 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class UnreachableCatchBlockSpec(private val env: KotlinCoreEnvironment) {
+class UnreachableCatchBlockSpec(private val env: KotlinEnvironmentContainer) {
     private val subject = UnreachableCatchBlock(Config.empty)
 
     @Test
@@ -22,7 +22,7 @@ class UnreachableCatchBlockSpec(private val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).hasSize(1)
         assertThat(findings).hasStartSourceLocation(4, 7)
     }
@@ -37,7 +37,7 @@ class UnreachableCatchBlockSpec(private val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).hasSize(1)
         assertThat(findings).hasStartSourceLocation(4, 7)
     }
@@ -53,7 +53,7 @@ class UnreachableCatchBlockSpec(private val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).hasSize(2)
         assertThat(findings).hasStartSourceLocations(
             SourceLocation(4, 7),
@@ -72,7 +72,7 @@ class UnreachableCatchBlockSpec(private val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 }

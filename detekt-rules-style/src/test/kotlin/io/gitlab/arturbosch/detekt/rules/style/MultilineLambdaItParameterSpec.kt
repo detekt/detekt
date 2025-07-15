@@ -1,15 +1,15 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class MultilineLambdaItParameterSpec(val env: KotlinCoreEnvironment) {
+class MultilineLambdaItParameterSpec(val env: KotlinEnvironmentContainer) {
     val subject = MultilineLambdaItParameter(Config.empty)
 
     @Nested
@@ -24,7 +24,7 @@ class MultilineLambdaItParameterSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
 
@@ -38,7 +38,7 @@ class MultilineLambdaItParameterSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
 
@@ -52,7 +52,7 @@ class MultilineLambdaItParameterSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -69,7 +69,7 @@ class MultilineLambdaItParameterSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
     }
@@ -85,7 +85,7 @@ class MultilineLambdaItParameterSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -98,7 +98,7 @@ class MultilineLambdaItParameterSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -111,7 +111,7 @@ class MultilineLambdaItParameterSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -126,7 +126,7 @@ class MultilineLambdaItParameterSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
 
@@ -144,7 +144,7 @@ class MultilineLambdaItParameterSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
 
@@ -160,7 +160,7 @@ class MultilineLambdaItParameterSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
     }
@@ -174,7 +174,7 @@ class MultilineLambdaItParameterSpec(val env: KotlinCoreEnvironment) {
                     val digits = 1234.let { listOf(it) }
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -185,7 +185,7 @@ class MultilineLambdaItParameterSpec(val env: KotlinCoreEnvironment) {
                     val digits = 1234.let { listOf(it) }
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -196,7 +196,7 @@ class MultilineLambdaItParameterSpec(val env: KotlinCoreEnvironment) {
                     val digits = 1234.let { it -> listOf(it) }
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -207,7 +207,7 @@ class MultilineLambdaItParameterSpec(val env: KotlinCoreEnvironment) {
                     val digits = 1234.let { param -> listOf(param) }
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -220,7 +220,7 @@ class MultilineLambdaItParameterSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
     }
@@ -237,7 +237,7 @@ class MultilineLambdaItParameterSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
 
@@ -251,7 +251,7 @@ class MultilineLambdaItParameterSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
     }
@@ -268,7 +268,7 @@ class MultilineLambdaItParameterSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
     }

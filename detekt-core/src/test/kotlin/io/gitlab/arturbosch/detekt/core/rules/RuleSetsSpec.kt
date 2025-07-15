@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.core.rules
 import io.github.detekt.test.utils.resourceAsPath
 import io.github.detekt.tooling.api.spec.RulesSpec.RunPolicy.DisableDefaultRuleSets
 import io.github.detekt.tooling.api.spec.RulesSpec.RunPolicy.RestrictToSingleRule
-import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.RuleName
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.core.createNullLoggingSpec
 import io.gitlab.arturbosch.detekt.core.tooling.withSettings
@@ -58,7 +58,7 @@ class RuleSetsSpec {
         assertThat(providers.map { it.ruleSetId.value })
             .containsExactlyInAnyOrder("style")
         assertThat(providers.single().instance().rules)
-            .containsOnlyKeys(Rule.Name("MagicNumber"))
+            .containsOnlyKeys(RuleName("MagicNumber"))
     }
 
     @ParameterizedTest

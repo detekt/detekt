@@ -24,7 +24,7 @@ class DetektAndroidSpec {
             addSubmodule(
                 name = "app",
                 numberOfSourceFilesPerSourceDir = 1,
-                numberOfCodeSmells = 1,
+                numberOfFindings = 1,
                 buildFileContent = joinGradleBlocks(
                     APP_PLUGIN_BLOCK,
                     ANDROID_BLOCK,
@@ -119,7 +119,7 @@ class DetektAndroidSpec {
             addSubmodule(
                 name = "app",
                 numberOfSourceFilesPerSourceDir = 1,
-                numberOfCodeSmells = 1,
+                numberOfFindings = 1,
                 buildFileContent = joinGradleBlocks(
                     APP_PLUGIN_BLOCK,
                     ANDROID_BLOCK,
@@ -164,7 +164,7 @@ class DetektAndroidSpec {
             addSubmodule(
                 name = "lib",
                 numberOfSourceFilesPerSourceDir = 1,
-                numberOfCodeSmells = 1,
+                numberOfFindings = 1,
                 buildFileContent = joinGradleBlocks(
                     LIB_PLUGIN_BLOCK,
                     ANDROID_BLOCK,
@@ -238,7 +238,7 @@ class DetektAndroidSpec {
             addSubmodule(
                 name = "kotlin_only_lib",
                 numberOfSourceFilesPerSourceDir = 1,
-                numberOfCodeSmells = 1,
+                numberOfFindings = 1,
                 buildFileContent = joinGradleBlocks(
                     KOTLIN_ONLY_LIB_PLUGIN_BLOCK,
                     DETEKT_REPORTS_BLOCK,
@@ -256,7 +256,7 @@ class DetektAndroidSpec {
             addSubmodule(
                 name = "android_lib",
                 numberOfSourceFilesPerSourceDir = 1,
-                numberOfCodeSmells = 1,
+                numberOfFindings = 1,
                 buildFileContent = joinGradleBlocks(
                     LIB_PLUGIN_BLOCK,
                     ANDROID_BLOCK,
@@ -341,7 +341,7 @@ class DetektAndroidSpec {
             addSubmodule(
                 name = "lib",
                 numberOfSourceFilesPerSourceDir = 1,
-                numberOfCodeSmells = 1,
+                numberOfFindings = 1,
                 buildFileContent = joinGradleBlocks(
                     LIB_PLUGIN_BLOCK,
                     ANDROID_BLOCK_WITH_FLAVOR,
@@ -396,7 +396,7 @@ class DetektAndroidSpec {
             addSubmodule(
                 name = "lib",
                 numberOfSourceFilesPerSourceDir = 1,
-                numberOfCodeSmells = 1,
+                numberOfFindings = 1,
                 buildFileContent = joinGradleBlocks(
                     LIB_PLUGIN_BLOCK,
                     ANDROID_BLOCK_WITH_FLAVOR,
@@ -459,7 +459,7 @@ class DetektAndroidSpec {
             addSubmodule(
                 name = "lib",
                 numberOfSourceFilesPerSourceDir = 1,
-                numberOfCodeSmells = 1,
+                numberOfFindings = 1,
                 buildFileContent = joinGradleBlocks(
                     LIB_PLUGIN_BLOCK,
                     ANDROID_BLOCK_WITH_FLAVOR,
@@ -522,7 +522,7 @@ class DetektAndroidSpec {
             addSubmodule(
                 name = "lib",
                 numberOfSourceFilesPerSourceDir = 1,
-                numberOfCodeSmells = 1,
+                numberOfFindings = 1,
                 buildFileContent = joinGradleBlocks(
                     LIB_PLUGIN_BLOCK,
                     ANDROID_BLOCK_WITH_FLAVOR,
@@ -585,7 +585,7 @@ class DetektAndroidSpec {
                 addSubmodule(
                     name = "app",
                     numberOfSourceFilesPerSourceDir = 0,
-                    numberOfCodeSmells = 0,
+                    numberOfFindings = 0,
                     buildFileContent = joinGradleBlocks(
                         APP_PLUGIN_BLOCK,
                         ANDROID_BLOCK_WITH_VIEW_BINDING,
@@ -640,6 +640,11 @@ private val APP_PLUGIN_BLOCK = """
         kotlin("android")
         id("io.gitlab.arturbosch.detekt")
     }
+    kotlin {
+        compilerOptions {
+            jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8
+        }
+    }
 """.trimIndent()
 
 @Language("gradle.kts")
@@ -648,6 +653,11 @@ private val LIB_PLUGIN_BLOCK = """
         id("com.android.library")
         kotlin("android")
         id("io.gitlab.arturbosch.detekt")
+    }
+    kotlin {
+        compilerOptions {
+            jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8
+        }
     }
 """.trimIndent()
 
@@ -667,9 +677,6 @@ private val ANDROID_BLOCK = """
         compileOptions {
             sourceCompatibility = JavaVersion.VERSION_1_8
             targetCompatibility = JavaVersion.VERSION_1_8
-        }
-        kotlinOptions {
-            jvmTarget = "1.8"
         }
     }
 """.trimIndent()
@@ -695,9 +702,6 @@ private val ANDROID_BLOCK_WITH_FLAVOR = """
             sourceCompatibility = JavaVersion.VERSION_1_8
             targetCompatibility = JavaVersion.VERSION_1_8
         }
-        kotlinOptions {
-            jvmTarget = "1.8"
-        }
     }
 """.trimIndent()
 
@@ -716,9 +720,6 @@ private val ANDROID_BLOCK_WITH_VIEW_BINDING = """
         compileOptions {
             sourceCompatibility = JavaVersion.VERSION_1_8
             targetCompatibility = JavaVersion.VERSION_1_8
-        }
-        kotlinOptions {
-            jvmTarget = "1.8"
         }
     }
 """.trimIndent()

@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.style.optional
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isOverride
@@ -49,11 +49,12 @@ import org.jetbrains.kotlin.utils.addToStdlib.firstIsInstanceOrNull
  * override fun foo() = Unit
  * </compliant>
  */
-@RequiresFullAnalysis
-class OptionalUnit(config: Config) : Rule(
-    config,
-    "Return type of `Unit` is unnecessary and can be safely removed."
-) {
+class OptionalUnit(config: Config) :
+    Rule(
+        config,
+        "Return type of `Unit` is unnecessary and can be safely removed."
+    ),
+    RequiresFullAnalysis {
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         val typeReference = function.typeReference
@@ -83,7 +84,7 @@ class OptionalUnit(config: Config) : Rule(
             }
             .onEach {
                 report(
-                    CodeSmell(
+                    Finding(
                         Entity.from(expression),
                         "A single Unit expression is unnecessary and can safely be removed."
                     )
@@ -107,7 +108,7 @@ class OptionalUnit(config: Config) : Rule(
         }
 
     private fun isExplicitApiModeActive(): Boolean {
-        val flag = compilerResources.languageVersionSettings.getFlag(AnalysisFlags.explicitApiMode)
+        val flag = languageVersionSettings.getFlag(AnalysisFlags.explicitApiMode)
         return flag != ExplicitApiMode.DISABLED
     }
 
@@ -118,14 +119,14 @@ class OptionalUnit(config: Config) : Rule(
             if (initializer?.isGenericOrNothingType() == true) return
             // case when explicit api is on so in case of expression body we need Unit
             if (initializer != null && isExplicitApiModeActive() && function.isPublic) return
-            report(CodeSmell(Entity.from(typeReference), createMessage(function)))
+            report(Finding(Entity.from(typeReference), createMessage(function)))
         }
     }
 
     private fun checkFunctionWithInferredReturnType(function: KtNamedFunction) {
         val referenceExpression = function.bodyExpression as? KtNameReferenceExpression
         if (referenceExpression != null && referenceExpression.text == UNIT) {
-            report(CodeSmell(Entity.from(referenceExpression), createMessage(function)))
+            report(Finding(Entity.from(referenceExpression), createMessage(function)))
         }
     }
 

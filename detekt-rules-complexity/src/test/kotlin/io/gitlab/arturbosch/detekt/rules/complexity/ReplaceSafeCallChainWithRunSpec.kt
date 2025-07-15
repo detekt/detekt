@@ -1,14 +1,14 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class ReplaceSafeCallChainWithRunSpec(val env: KotlinCoreEnvironment) {
+class ReplaceSafeCallChainWithRunSpec(val env: KotlinEnvironmentContainer) {
 
     val subject = ReplaceSafeCallChainWithRun(Config.empty)
 
@@ -25,7 +25,7 @@ class ReplaceSafeCallChainWithRunSpec(val env: KotlinCoreEnvironment) {
                 ?.forEach(::println)
         """.trimIndent()
 
-        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
     }
 
     @Test
@@ -38,7 +38,7 @@ class ReplaceSafeCallChainWithRunSpec(val env: KotlinCoreEnvironment) {
                 ?.map { it }
         """.trimIndent()
 
-        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
     }
 
     @Test
@@ -50,7 +50,7 @@ class ReplaceSafeCallChainWithRunSpec(val env: KotlinCoreEnvironment) {
                 ?.asSequence()
         """.trimIndent()
 
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -69,6 +69,18 @@ class ReplaceSafeCallChainWithRunSpec(val env: KotlinCoreEnvironment) {
             }
         """.trimIndent()
 
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
+    fun `#7849 - does not report a safe call chain on platform type`() {
+        val code = """
+            fun test() = System.getProperty("propertyName")
+                ?.codePoints()
+                ?.filter { true }
+                ?.map { it }
+                ?.allMatch { false }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 }

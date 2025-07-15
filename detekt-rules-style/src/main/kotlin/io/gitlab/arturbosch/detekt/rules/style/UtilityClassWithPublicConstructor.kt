@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isOpen
 import org.jetbrains.kotlin.psi.KtClass
@@ -68,7 +68,7 @@ class UtilityClassWithPublicConstructor(config: Config) : Rule(
             if (hasOnlyUtilityClassMembers(declarations)) {
                 if (utilityClassConstructor.hasPublicConstructorWithoutParameters()) {
                     report(
-                        CodeSmell(
+                        Finding(
                             Entity.from(klass),
                             "The class ${klass.nameAsSafeName} only contains" +
                                 " utility functions. Consider defining it as an object."
@@ -76,7 +76,7 @@ class UtilityClassWithPublicConstructor(config: Config) : Rule(
                     )
                 } else if (klass.isOpen() && utilityClassConstructor.hasNonPublicConstructorWithoutParameters()) {
                     report(
-                        CodeSmell(
+                        Finding(
                             Entity.from(klass),
                             "The utility class ${klass.nameAsSafeName} should be final."
                         )

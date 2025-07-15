@@ -1,15 +1,14 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.util.regex.PatternSyntaxException
@@ -17,7 +16,7 @@ import java.util.regex.PatternSyntaxException
 private const val ALLOWED_NAMES_PATTERN = "allowedNames"
 
 @KotlinCoreEnvironmentTest
-class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
+class UnusedPrivatePropertySpec(val env: KotlinEnvironmentContainer) {
     val subject = UnusedPrivateProperty(Config.empty)
 
     val regexTestingCode = """
@@ -45,7 +44,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -59,7 +58,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -73,7 +72,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -88,14 +87,14 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
         fun `does fail when enabled with invalid regex`() {
             val config = TestConfig(ALLOWED_NAMES_PATTERN to "*foo")
             assertThatExceptionOfType(PatternSyntaxException::class.java)
-                .isThrownBy { UnusedPrivateProperty(config).compileAndLintWithContext(env, regexTestingCode) }
+                .isThrownBy { UnusedPrivateProperty(config).lintWithContext(env, regexTestingCode) }
         }
     }
 
@@ -114,7 +113,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code))
+            assertThat(subject.lintWithContext(env, code))
                 .hasSize(0)
         }
 
@@ -129,7 +128,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code))
+            assertThat(subject.lintWithContext(env, code))
                 .hasSize(1)
                 .hasStartSourceLocation(4, 21)
         }
@@ -146,7 +145,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
+            assertThat(subject.lintWithContext(env, code)).hasSize(2)
         }
 
         @Test
@@ -161,7 +160,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -176,7 +175,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -212,7 +211,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -237,7 +236,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     println(o("$\\{PC.Companion.OO.BLA.toString()}"))
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(0)
+            assertThat(subject.lintWithContext(env, code)).hasSize(0)
         }
     }
 
@@ -258,7 +257,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(4)
+            assertThat(subject.lintWithContext(env, code)).hasSize(4)
         }
 
         @Test
@@ -272,7 +271,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     const val TEXT = "text"
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -291,7 +290,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -305,7 +304,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -321,7 +320,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLintWithContext(env, code))
+            assertThat(subject.lintWithContext(env, code))
                 .isEmpty()
         }
 
@@ -332,7 +331,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                 private const val unusedTopLevelConst = 1
                 private val unusedTopLevelVal = usedTopLevelVal
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code))
+            assertThat(subject.lintWithContext(env, code, compile = false))
                 .hasSize(2)
                 .hasStartSourceLocations(
                     SourceLocation(2, 19),
@@ -349,7 +348,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLintWithContext(env, code))
+            assertThat(subject.lintWithContext(env, code))
                 .isEmpty()
         }
 
@@ -362,7 +361,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLintWithContext(env, code))
+            assertThat(subject.lintWithContext(env, code))
                 .hasSize(1)
                 .hasStartSourceLocations(SourceLocation(1, 13))
         }
@@ -374,7 +373,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                private val ignored = 3 // ignored   
             """.trimIndent()
 
-            assertThat(subject.compileAndLintWithContext(env, code))
+            assertThat(subject.lintWithContext(env, code))
                 .hasSize(1)
         }
     }
@@ -389,7 +388,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     private val ignored = ""
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -407,7 +406,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLintWithContext(env, code))
+            assertThat(subject.lintWithContext(env, code))
                 .hasSize(2)
                 .hasStartSourceLocations(
                     SourceLocation(2, 27),
@@ -429,7 +428,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code))
+            assertThat(subject.lintWithContext(env, code))
                 .hasSize(2)
                 .hasStartSourceLocations(
                     SourceLocation(2, 17),
@@ -446,7 +445,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -459,7 +458,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -471,7 +470,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                 class Test(@Suppress("UnusedPrivateProperty") private val foo: String) {}
             """.trimIndent()
 
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -483,7 +482,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                 ) {}
             """.trimIndent()
 
-            val lint = subject.compileAndLintWithContext(env, code)
+            val lint = subject.lintWithContext(env, code)
 
             assertThat(lint).hasSize(1)
             assertThat(lint[0].message).isEqualTo("Private property `bar` is unused.")
@@ -499,7 +498,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                 ) {}
             """.trimIndent()
 
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -516,7 +515,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -527,7 +526,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -539,7 +538,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            val lint = subject.compileAndLintWithContext(env, code)
+            val lint = subject.lintWithContext(env, code)
 
             assertThat(lint).hasSize(1)
             assertThat(lint[0].message).isEqualTo("Private property `bar` is unused.")
@@ -555,7 +554,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -573,7 +572,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -589,7 +588,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     private val foo = 1
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1).hasStartSourceLocation(5, 17)
+            assertThat(subject.lintWithContext(env, code)).hasSize(1).hasStartSourceLocation(5, 17)
         }
     }
 
@@ -601,7 +600,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
             val code = """
                 actual class Foo actual constructor(actual val bar: String) {}
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code, compile = false)).isEmpty()
         }
 
         @Test
@@ -609,7 +608,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
             val code = """
                 actual class Foo actual constructor(private val bar: String) {}
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code, compile = false)).hasSize(1)
         }
     }
 
@@ -622,7 +621,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                class Test(vararg unused: Any)
             """.trimIndent()
 
-            assertThat(subject.compileAndLintWithContext(env, code))
+            assertThat(subject.lintWithContext(env, code))
                 .hasSize(1)
         }
 
@@ -633,7 +632,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                 class Child(private vararg val used: Any) : Parent(used)
             """.trimIndent()
 
-            assertThat(subject.compileAndLintWithContext(env, code))
+            assertThat(subject.lintWithContext(env, code))
                 .hasSize(1)
         }
 
@@ -644,7 +643,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                 class Foo(private vararg val used: Any) : Super(used)
             """.trimIndent()
 
-            assertThat(subject.compileAndLintWithContext(env, code))
+            assertThat(subject.lintWithContext(env, code))
                 .isEmpty()
         }
 
@@ -656,7 +655,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code))
+            assertThat(subject.lintWithContext(env, code, compile = false))
                 .hasSize(0)
         }
 
@@ -665,7 +664,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class Test(private val unused: Any)
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -680,7 +679,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                }
             """.trimIndent()
 
-            assertThat(subject.compileAndLintWithContext(env, code)).isNotEmpty()
+            assertThat(subject.lintWithContext(env, code)).isNotEmpty()
         }
 
         @Test
@@ -688,7 +687,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class Test(val unused: Any)
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -698,7 +697,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     init { used.toString() }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -710,7 +709,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -721,7 +720,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     private val bar: String,
                 )
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -732,7 +731,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     private val bar: String,
                 )
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -741,7 +740,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                 @JvmInline value class Foo(private val value: String)
                 inline class Bar(private val value: String)
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -752,7 +751,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class Test(unused: Any)
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -761,7 +760,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                 open class Parent(val ignored: Any)
                 class Test(used: Any) : Parent(used)
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -773,7 +772,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -783,7 +782,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     val usedString = used.toString()
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -795,7 +794,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     val findings: Map<Any,Any>
                 ) : Detektion by result
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -812,7 +811,7 @@ class UnusedPrivatePropertySpec(val env: KotlinCoreEnvironment) {
                     constructor(used: Any)
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
+            assertThat(subject.lintWithContext(env, code)).hasSize(2)
         }
     }
 }

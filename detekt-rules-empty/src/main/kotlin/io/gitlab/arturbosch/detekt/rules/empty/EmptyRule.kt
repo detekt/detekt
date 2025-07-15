@@ -1,11 +1,11 @@
 package io.gitlab.arturbosch.detekt.rules.empty
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
+import com.intellij.psi.impl.source.tree.LeafPsiElement
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.empty.internal.hasCommentInside
-import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.LeafPsiElement
 import org.jetbrains.kotlin.lexer.KtSingleValueToken
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -18,7 +18,7 @@ import org.jetbrains.kotlin.psi.KtIfExpression
 abstract class EmptyRule(
     config: Config,
     description: String = "Empty block of code detected. As they serve no purpose they should be removed.",
-    private val codeSmellMessage: String = "This empty block of code can be removed."
+    private val findingMessage: String = "This empty block of code can be removed.",
 ) : Rule(
     config,
     description
@@ -46,7 +46,7 @@ abstract class EmptyRule(
             return
         }
         if (children.isEmpty() && !hasComment) {
-            report(CodeSmell(Entity.from(this), codeSmellMessage))
+            report(Finding(Entity.from(this), findingMessage))
         }
     }
 }

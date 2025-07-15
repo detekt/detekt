@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.builtins.StandardNames.IMPLICIT_LAMBDA_PARAMETER_NAME
 import org.jetbrains.kotlin.psi.KtLambdaExpression
@@ -38,7 +38,7 @@ class ExplicitItLambdaMultipleParameters(
         val parameterNames = lambdaExpression.valueParameters.map { it.nameAsName }
         if (IMPLICIT_LAMBDA_PARAMETER_NAME in parameterNames && parameterNames.size > 1) {
             report(
-                CodeSmell(
+                Finding(
                     Entity.from(lambdaExpression),
                     "`it` should not be used as name for a lambda parameter.",
                 ),

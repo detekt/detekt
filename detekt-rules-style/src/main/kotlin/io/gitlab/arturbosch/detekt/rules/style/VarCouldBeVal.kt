@@ -2,11 +2,11 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.Alias
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
@@ -56,13 +56,14 @@ import org.jetbrains.kotlin.util.containingNonLocalDeclaration
  * }
  * </compliant>
  */
-@RequiresFullAnalysis
 @ActiveByDefault(since = "1.16.0")
 @Alias("CanBeVal")
-class VarCouldBeVal(config: Config) : Rule(
-    config,
-    "Var declaration could be val."
-) {
+class VarCouldBeVal(config: Config) :
+    Rule(
+        config,
+        "Var declaration could be val."
+    ),
+    RequiresFullAnalysis {
 
     @Configuration("Whether to ignore uninitialized lateinit vars")
     private val ignoreLateinitVar: Boolean by config(defaultValue = false)
@@ -74,7 +75,7 @@ class VarCouldBeVal(config: Config) : Rule(
 
         assignmentVisitor.getNonReAssignedDeclarations().forEach {
             report(
-                CodeSmell(
+                Finding(
                     Entity.from(it),
                     "Variable '${it.nameAsSafeName.identifier}' could be val."
                 )
@@ -85,7 +86,7 @@ class VarCouldBeVal(config: Config) : Rule(
     @Suppress("TooManyFunctions")
     private class AssignmentVisitor(
         private val bindingContext: BindingContext,
-        private val ignoreLateinitVar: Boolean
+        private val ignoreLateinitVar: Boolean,
     ) : DetektVisitor() {
 
         private val declarationCandidates = mutableSetOf<KtNamedDeclaration>()

@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.documentation
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Test
 
 class KDocReferencesNonPublicPropertySpec {
@@ -22,7 +22,7 @@ class KDocReferencesNonPublicPropertySpec {
                 val prop2 = 0
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -39,7 +39,7 @@ class KDocReferencesNonPublicPropertySpec {
                 val prop2: Int = 0,
             )
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -56,7 +56,7 @@ class KDocReferencesNonPublicPropertySpec {
                 val prop2 = 0
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -85,7 +85,7 @@ class KDocReferencesNonPublicPropertySpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(4)
+        assertThat(subject.lint(code)).hasSize(4)
     }
 
     @Test
@@ -96,7 +96,7 @@ class KDocReferencesNonPublicPropertySpec {
                 val prop2 = 0
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -109,7 +109,7 @@ class KDocReferencesNonPublicPropertySpec {
                 val prop2 = 0
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -122,7 +122,7 @@ class KDocReferencesNonPublicPropertySpec {
             private val prop1 = 0
             val prop2 = 0
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -147,7 +147,7 @@ class KDocReferencesNonPublicPropertySpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -172,7 +172,7 @@ class KDocReferencesNonPublicPropertySpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -195,7 +195,7 @@ class KDocReferencesNonPublicPropertySpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -220,6 +220,6 @@ class KDocReferencesNonPublicPropertySpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 }

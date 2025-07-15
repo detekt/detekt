@@ -1,17 +1,17 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 private const val METHODS = "methods"
 
 @KotlinCoreEnvironmentTest
-class ForbiddenNamedParamSpec(val env: KotlinCoreEnvironment) {
+class ForbiddenNamedParamSpec(val env: KotlinEnvironmentContainer) {
     @Test
     fun `should report nothing when methods are blank`() {
         val code = """
@@ -23,7 +23,7 @@ class ForbiddenNamedParamSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val findings = ForbiddenNamedParam(
             TestConfig(METHODS to listOf("  "))
-        ).compileAndLintWithContext(env, code)
+        ).lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
@@ -36,7 +36,7 @@ class ForbiddenNamedParamSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val findings = ForbiddenNamedParam(
             TestConfig(METHODS to listOf("kotlin.io.println(kotlin.Double)"))
-        ).compileAndLintWithContext(env, code)
+        ).lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
@@ -51,7 +51,7 @@ class ForbiddenNamedParamSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val findings = ForbiddenNamedParam(
             TestConfig(METHODS to listOf("kotlin.io.println"))
-        ).compileAndLintWithContext(env, code)
+        ).lintWithContext(env, code)
         assertThat(findings).hasSize(3)
         assertThat(findings).hasTextLocations(17 to 38, 43 to 63, 68 to 90)
     }
@@ -74,7 +74,7 @@ class ForbiddenNamedParamSpec(val env: KotlinCoreEnvironment) {
                     )
                 )
             )
-        ).compileAndLintWithContext(env, code)
+        ).lintWithContext(env, code)
         assertThat(findings).hasSize(3)
         assertThat(findings).hasTextLocations(17 to 38, 43 to 63, 68 to 90)
         assertThat(findings[0]).hasMessage(
@@ -94,7 +94,7 @@ class ForbiddenNamedParamSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val findings = ForbiddenNamedParam(
             TestConfig(METHODS to listOf("kotlin.io.println"))
-        ).compileAndLintWithContext(env, code)
+        ).lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
@@ -108,7 +108,7 @@ class ForbiddenNamedParamSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val findings = ForbiddenNamedParam(
             TestConfig(METHODS to listOf("kotlin.io.println"))
-        ).compileAndLintWithContext(env, code)
+        ).lintWithContext(env, code)
         assertThat(findings).hasSize(1)
     }
 
@@ -122,7 +122,7 @@ class ForbiddenNamedParamSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val findings = ForbiddenNamedParam(
             TestConfig(METHODS to listOf("kotlin.math.atan2(kotlin.Double, kotlin.Double)"))
-        ).compileAndLintWithContext(env, code)
+        ).lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
@@ -136,7 +136,7 @@ class ForbiddenNamedParamSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val findings = ForbiddenNamedParam(
             TestConfig(METHODS to listOf("kotlin.math.atan2(kotlin.Double, kotlin.Double)"))
-        ).compileAndLintWithContext(env, code)
+        ).lintWithContext(env, code)
         assertThat(findings).hasSize(1)
         assertThat(findings[0]).hasSourceLocation(3, 16)
     }
@@ -152,7 +152,7 @@ class ForbiddenNamedParamSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val findings = ForbiddenNamedParam(
             TestConfig(METHODS to listOf("kotlin.math.atan2(kotlin.Double, kotlin.Double)"))
-        ).compileAndLintWithContext(env, code)
+        ).lintWithContext(env, code)
         assertThat(findings).hasSize(2)
     }
 
@@ -169,7 +169,7 @@ class ForbiddenNamedParamSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val methodName = "com.example.arrayMethod(kotlin.Array)"
         val findings = ForbiddenNamedParam(TestConfig(METHODS to listOf(methodName)))
-            .compileAndLintWithContext(env, code)
+            .lintWithContext(env, code)
         assertThat(findings).hasSize(1).hasStartSourceLocation(6, 13)
     }
 
@@ -184,9 +184,9 @@ class ForbiddenNamedParamSpec(val env: KotlinCoreEnvironment) {
                 val s = varargMethod(args = arrayOf("test"))
             }
         """.trimIndent()
-        val methodName = "com.example.varargMethod(kotlin.Array)"
+        val methodName = "com.example.varargMethod(vararg kotlin.Any)"
         val findings = ForbiddenNamedParam(TestConfig(METHODS to listOf(methodName)))
-            .compileAndLintWithContext(env, code)
+            .lintWithContext(env, code)
         assertThat(findings).hasSize(1).hasStartSourceLocation(6, 13)
     }
 
@@ -209,7 +209,7 @@ class ForbiddenNamedParamSpec(val env: KotlinCoreEnvironment) {
         val methodName =
             "com.example.TestClass.Companion.staticMethod(kotlin.Int)"
         val findings = ForbiddenNamedParam(TestConfig(METHODS to listOf(methodName)))
-            .compileAndLintWithContext(env, code)
+            .lintWithContext(env, code)
         assertThat(findings).hasSize(1).hasStartSourceLocation(11, 15)
     }
 
@@ -233,7 +233,7 @@ class ForbiddenNamedParamSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val findings = ForbiddenNamedParam(
             TestConfig(METHODS to listOf("org.example.com.I.f"))
-        ).compileAndLintWithContext(env, code)
+        ).lintWithContext(env, code)
         assertThat(findings).hasSize(2)
     }
 
@@ -250,7 +250,7 @@ class ForbiddenNamedParamSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val findings = ForbiddenNamedParam(
             TestConfig(METHODS to listOf("org.example.bar((kotlin.String) -> kotlin.String)"))
-        ).compileAndLintWithContext(env, code)
+        ).lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
@@ -267,7 +267,7 @@ class ForbiddenNamedParamSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val findings = ForbiddenNamedParam(
             TestConfig(METHODS to listOf("org.example.bar((kotlin.String) -> kotlin.String)"))
-        ).compileAndLintWithContext(env, code)
+        ).lintWithContext(env, code)
         assertThat(findings).hasSize(1)
     }
 
@@ -284,7 +284,7 @@ class ForbiddenNamedParamSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val findings = ForbiddenNamedParam(
             TestConfig(METHODS to listOf("org.example.bar(kotlin.String, kotlin.Int)"))
-        ).compileAndLintWithContext(env, code)
+        ).lintWithContext(env, code)
         assertThat(findings).hasSize(1)
     }
 
@@ -304,7 +304,7 @@ class ForbiddenNamedParamSpec(val env: KotlinCoreEnvironment) {
         fun `raise the issue`() {
             val findings = ForbiddenNamedParam(
                 TestConfig(METHODS to listOf("org.example.bar(T, U, kotlin.String)"))
-            ).compileAndLintWithContext(env, code)
+            ).lintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
 
@@ -312,7 +312,7 @@ class ForbiddenNamedParamSpec(val env: KotlinCoreEnvironment) {
         fun `doesn't raise any issue because the generics don't match`() {
             val findings = ForbiddenNamedParam(
                 TestConfig(METHODS to listOf("org.example.bar(U, T, kotlin.String)"))
-            ).compileAndLintWithContext(env, code)
+            ).lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
     }
@@ -333,7 +333,7 @@ class ForbiddenNamedParamSpec(val env: KotlinCoreEnvironment) {
         fun `raise the issue`() {
             val findings = ForbiddenNamedParam(
                 TestConfig(METHODS to listOf("org.example.bar(R, kotlin.String)"))
-            ).compileAndLintWithContext(env, code)
+            ).lintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
 
@@ -341,7 +341,7 @@ class ForbiddenNamedParamSpec(val env: KotlinCoreEnvironment) {
         fun `doesn't raise any issue because the type doesn't match`() {
             val findings = ForbiddenNamedParam(
                 TestConfig(METHODS to listOf("org.example.bar(kotlin.Int, kotlin.String)"))
-            ).compileAndLintWithContext(env, code)
+            ).lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
     }
@@ -368,7 +368,7 @@ class ForbiddenNamedParamSpec(val env: KotlinCoreEnvironment) {
                 """.trimIndent()
                 val findings = ForbiddenNamedParam(
                     TestConfig(METHODS to listOf("org.example.A.<init>"))
-                ).compileAndLintWithContext(env, code)
+                ).lintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
 
@@ -381,7 +381,7 @@ class ForbiddenNamedParamSpec(val env: KotlinCoreEnvironment) {
                 """.trimIndent()
                 val findings = ForbiddenNamedParam(
                     TestConfig(METHODS to listOf("org.example.A.<init>"))
-                ).compileAndLintWithContext(env, code)
+                ).lintWithContext(env, code)
                 assertThat(findings).hasSize(2)
             }
         }
@@ -396,7 +396,7 @@ class ForbiddenNamedParamSpec(val env: KotlinCoreEnvironment) {
                 """.trimIndent()
                 val findings = ForbiddenNamedParam(
                     TestConfig(METHODS to listOf("org.example.A.<init>()"))
-                ).compileAndLintWithContext(env, code)
+                ).lintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
 
@@ -408,7 +408,7 @@ class ForbiddenNamedParamSpec(val env: KotlinCoreEnvironment) {
                 """.trimIndent()
                 val findings = ForbiddenNamedParam(
                     TestConfig(METHODS to listOf("org.example.A.<init>(kotlin.Int, kotlin.Int)"))
-                ).compileAndLintWithContext(env, code)
+                ).lintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
 
@@ -420,7 +420,7 @@ class ForbiddenNamedParamSpec(val env: KotlinCoreEnvironment) {
                 """.trimIndent()
                 val findings = ForbiddenNamedParam(
                     TestConfig(METHODS to listOf("org.example.A.<init>(kotlin.Int, kotlin.Int)"))
-                ).compileAndLintWithContext(env, code)
+                ).lintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
 
@@ -432,7 +432,7 @@ class ForbiddenNamedParamSpec(val env: KotlinCoreEnvironment) {
                 """.trimIndent()
                 val findings = ForbiddenNamedParam(
                     TestConfig(METHODS to listOf("org.example.A.<init>(kotlin.Int, kotlin.Int)"))
-                ).compileAndLintWithContext(env, code)
+                ).lintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
         }

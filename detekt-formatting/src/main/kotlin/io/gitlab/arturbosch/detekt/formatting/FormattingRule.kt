@@ -1,5 +1,8 @@
 package io.gitlab.arturbosch.detekt.formatting
 
+import com.intellij.lang.ASTNode
+import com.intellij.psi.impl.source.JavaDummyElement
+import com.intellij.psi.impl.source.JavaDummyHolder
 import com.pinterest.ktlint.rule.engine.core.api.AutocorrectDecision
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.CODE_STYLE_PROPERTY
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfig
@@ -9,18 +12,15 @@ import com.pinterest.ktlint.rule.engine.core.api.editorconfig.createRuleExecutio
 import com.pinterest.ktlint.ruleset.standard.StandardRule
 import com.pinterest.ktlint.ruleset.standard.rules.MAX_LINE_LENGTH_RULE_ID
 import io.github.detekt.psi.absolutePath
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.api.modifiedText
 import org.ec4j.core.model.Property
-import org.jetbrains.kotlin.com.intellij.lang.ASTNode
-import org.jetbrains.kotlin.com.intellij.psi.impl.source.JavaDummyElement
-import org.jetbrains.kotlin.com.intellij.psi.impl.source.JavaDummyHolder
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtPsiFactory
 import java.nio.file.Path
@@ -101,9 +101,9 @@ abstract class FormattingRule(config: Config, description: String) : Rule(config
         val entity = Entity.from(node.psi, location)
 
         if (canBeAutoCorrected && autoCorrect) {
-            report(CodeSmell(entity, message, suppressReasons = listOf("Auto correct")))
+            report(Finding(entity, message, suppressReasons = listOf("Auto correct")))
         } else {
-            report(CodeSmell(entity, message))
+            report(Finding(entity, message))
         }
     }
 

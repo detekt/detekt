@@ -1,10 +1,10 @@
 package io.github.detekt.psi
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.github.detekt.test.utils.compileContentForTest
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.createBindingContext
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.findFunctionByName
@@ -18,7 +18,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 
 @KotlinCoreEnvironmentTest
-class FunctionMatcherSpec(private val env: KotlinCoreEnvironment) {
+class FunctionMatcherSpec(private val env: KotlinEnvironmentContainer) {
 
     @TestFactory
     @Suppress("LongMethod")
@@ -98,10 +98,12 @@ class FunctionMatcherSpec(private val env: KotlinCoreEnvironment) {
         @CsvSource(
             "fun toString() = Unit,                            true",
             "fun toString(hello: String) = Unit,               true",
+            "fun toString(vararg hello: String) = Unit,        true",
             "'fun toString(hello: String, world: Int) = Unit', true",
             "fun compare() = Unit,                             false",
             "fun compare(hello: String) = Unit,                false",
-            "'fun compare(hello: String, world: Int) = Unit',  false"
+            "fun compare(vararg hello: String) = Unit,         false",
+            "'fun compare(hello: String, world: Int) = Unit',  false",
         )
         fun `When toString`(code: String, result: Boolean) {
             val (function, bindingContext) = buildKtFunction(env, code)
@@ -114,10 +116,12 @@ class FunctionMatcherSpec(private val env: KotlinCoreEnvironment) {
         @CsvSource(
             "fun toString() = Unit,                            true",
             "fun toString(hello: String) = Unit,               true",
+            "fun toString(vararg hello: String) = Unit,        true",
             "'fun toString(hello: String, world: Int) = Unit', true",
             "fun compare() = Unit,                             false",
             "fun compare(hello: String) = Unit,                false",
-            "'fun compare(hello: String, world: Int) = Unit',  false"
+            "fun compare(vararg hello: String) = Unit,         false",
+            "'fun compare(hello: String, world: Int) = Unit',  false",
         )
         fun `When toString without package`(code: String, result: Boolean) {
             val (function, bindingContext) = buildKtFunction(env, code, false)
@@ -130,10 +134,12 @@ class FunctionMatcherSpec(private val env: KotlinCoreEnvironment) {
         @CsvSource(
             "fun toString() = Unit,                            true",
             "fun toString(hello: String) = Unit,               false",
+            "fun toString(vararg hello: String) = Unit,        false",
             "'fun toString(hello: String, world: Int) = Unit', false",
             "fun compare() = Unit,                             false",
             "fun compare(hello: String) = Unit,                false",
-            "'fun compare(hello: String, world: Int) = Unit',  false"
+            "fun compare(vararg hello: String) = Unit,         false",
+            "'fun compare(hello: String, world: Int) = Unit',  false",
         )
         fun `When toString()`(code: String, result: Boolean) {
             val (function, bindingContext) = buildKtFunction(env, code)
@@ -146,14 +152,34 @@ class FunctionMatcherSpec(private val env: KotlinCoreEnvironment) {
         @CsvSource(
             "fun toString() = Unit,                            false",
             "fun toString(hello: String) = Unit,               true",
+            "fun toString(vararg hello: String) = Unit,        false",
             "'fun toString(hello: String, world: Int) = Unit', false",
             "fun compare() = Unit,                             false",
             "fun compare(hello: String) = Unit,                false",
-            "'fun compare(hello: String, world: Int) = Unit',  false"
+            "fun compare(vararg hello: String) = Unit,         false",
+            "'fun compare(hello: String, world: Int) = Unit',  false",
         )
         fun `When toString(kotlin#String)`(code: String, result: Boolean) {
             val (function, bindingContext) = buildKtFunction(env, code)
             val methodSignature = FunctionMatcher.fromFunctionSignature("toString(kotlin.String)")
+            assertThat(methodSignature.match(function, bindingContext)).isEqualTo(result)
+        }
+
+        @DisplayName("When toString(vararg String)")
+        @ParameterizedTest(name = "in case {0} it return {1}")
+        @CsvSource(
+            "fun toString() = Unit,                            false",
+            "fun toString(hello: String) = Unit,               false",
+            "fun toString(vararg hello: String) = Unit,        true",
+            "'fun toString(hello: String, world: Int) = Unit', false",
+            "fun compare() = Unit,                             false",
+            "fun compare(hello: String) = Unit,                false",
+            "fun compare(vararg hello: String) = Unit,         false",
+            "'fun compare(hello: String, world: Int) = Unit',  false",
+        )
+        fun `When toString(vararg kotlin#String)`(code: String, result: Boolean) {
+            val (function, bindingContext) = buildKtFunction(env, code)
+            val methodSignature = FunctionMatcher.fromFunctionSignature("toString(vararg kotlin.String)")
             assertThat(methodSignature.match(function, bindingContext)).isEqualTo(result)
         }
 
@@ -162,10 +188,12 @@ class FunctionMatcherSpec(private val env: KotlinCoreEnvironment) {
         @CsvSource(
             "fun toString() = Unit,                            false",
             "fun toString(hello: String) = Unit,               false",
+            "fun toString(vararg hello: String) = Unit,        false",
             "'fun toString(hello: String, world: Int) = Unit', false",
             "fun compare() = Unit,                             false",
             "fun compare(hello: String) = Unit,                false",
-            "'fun compare(hello: String, world: Int) = Unit',  false"
+            "fun compare(vararg hello: String) = Unit,         false",
+            "'fun compare(hello: String, world: Int) = Unit',  false",
         )
         fun `When toString(kotlin#Int)`(code: String, result: Boolean) {
             val (function, bindingContext) = buildKtFunction(env, code)
@@ -178,10 +206,12 @@ class FunctionMatcherSpec(private val env: KotlinCoreEnvironment) {
         @CsvSource(
             "fun toString() = Unit,                            false",
             "fun toString(hello: String) = Unit,               false",
+            "fun toString(vararg hello: String) = Unit,        false",
             "'fun toString(hello: String, world: Int) = Unit', true",
             "fun compare() = Unit,                             false",
             "fun compare(hello: String) = Unit,                false",
-            "'fun compare(hello: String, world: Int) = Unit',  false"
+            "fun compare(vararg hello: String) = Unit,         false",
+            "'fun compare(hello: String, world: Int) = Unit',  false",
         )
         fun `When toString(kotlin#String, kotlin#Int)`(code: String, result: Boolean) {
             val (function, bindingContext) = buildKtFunction(env, code)
@@ -194,10 +224,12 @@ class FunctionMatcherSpec(private val env: KotlinCoreEnvironment) {
         @CsvSource(
             "fun toString() = Unit,                            false",
             "fun toString(hello: String) = Unit,               false",
+            "fun toString(vararg hello: String) = Unit,        false",
             "'fun toString(hello: String, world: Int) = Unit', false",
             "fun compare() = Unit,                             false",
             "fun compare(hello: String) = Unit,                false",
-            "'fun compare(hello: String, world: Int) = Unit',  false"
+            "fun compare(vararg hello: String) = Unit,         false",
+            "'fun compare(hello: String, world: Int) = Unit',  false",
         )
         fun `When toString(String)`(code: String, result: Boolean) {
             val (function, bindingContext) = buildKtFunction(env, code)
@@ -210,10 +242,12 @@ class FunctionMatcherSpec(private val env: KotlinCoreEnvironment) {
         @CsvSource(
             "fun toString() = Unit,                            false",
             "fun toString(hello: String) = Unit,               false",
+            "fun toString(vararg hello: String) = Unit,        false",
             "'fun toString(hello: String, world: Int) = Unit', false",
             "fun compare() = Unit,                             false",
             "fun compare(hello: String) = Unit,                false",
-            "'fun compare(hello: String, world: Int) = Unit',  false"
+            "fun compare(vararg hello: String) = Unit,         false",
+            "'fun compare(hello: String, world: Int) = Unit',  false",
         )
         fun `When toString(String) without package`(code: String, result: Boolean) {
             val (function, bindingContext) = buildKtFunction(env, code, false)
@@ -317,7 +351,7 @@ class FunctionMatcherSpec(private val env: KotlinCoreEnvironment) {
             functionSignature: String,
             classSignature: String,
             pattern: String,
-            result: Boolean
+            result: Boolean,
         ) {
             val ktFile = compileContentForTest(
                 """
@@ -345,9 +379,9 @@ private class TestCase(
 )
 
 private fun buildKtFunction(
-    environment: KotlinCoreEnvironment,
+    environment: KotlinEnvironmentContainer,
     code: String,
-    includePackage: Boolean = true
+    includePackage: Boolean = true,
 ): Pair<KtNamedFunction, BindingContext> {
     val ktFile = compileContentForTest(
         """

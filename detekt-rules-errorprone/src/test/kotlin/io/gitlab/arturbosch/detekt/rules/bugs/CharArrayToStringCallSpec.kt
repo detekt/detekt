@@ -1,14 +1,14 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class CharArrayToStringCallSpec(private val env: KotlinCoreEnvironment) {
+class CharArrayToStringCallSpec(private val env: KotlinEnvironmentContainer) {
     private val subject = CharArrayToStringCall(Config.empty)
 
     @Test
@@ -27,7 +27,7 @@ class CharArrayToStringCallSpec(private val env: KotlinCoreEnvironment) {
                 println(s + "hello".toCharArray())
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(6)
     }
 
@@ -39,7 +39,7 @@ class CharArrayToStringCallSpec(private val env: KotlinCoreEnvironment) {
                 println(charArray)
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).isEmpty()
     }
 
@@ -55,7 +55,7 @@ class CharArrayToStringCallSpec(private val env: KotlinCoreEnvironment) {
                 println(s + charArray.concatToString())
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).isEmpty()
     }
 }

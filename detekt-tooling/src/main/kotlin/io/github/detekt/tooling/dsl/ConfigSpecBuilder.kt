@@ -25,5 +25,5 @@ private data class ConfigModel(
     override val shouldValidateBeforeAnalysis: Boolean?,
     override val useDefaultConfig: Boolean,
     override val resources: Collection<URL>,
-    override val configPaths: Collection<Path>
+    override val configPaths: Collection<Path>,
 ) : ConfigSpec

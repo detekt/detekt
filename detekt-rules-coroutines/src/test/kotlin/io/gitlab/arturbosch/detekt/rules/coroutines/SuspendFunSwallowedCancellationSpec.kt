@@ -1,19 +1,19 @@
 package io.gitlab.arturbosch.detekt.rules.coroutines
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.intellij.lang.annotations.Language
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import io.gitlab.arturbosch.detekt.test.assertThat as assertThatFindings
 
 @KotlinCoreEnvironmentTest
-class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment) {
+class SuspendFunSwallowedCancellationSpec(private val env: KotlinEnvironmentContainer) {
 
     private val subject = SuspendFunSwallowedCancellation(Config.empty)
 
@@ -370,7 +370,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 }
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertFindingsForSuspendCall(
             findings,
             listOf(SourceLocation(4, 5)),
@@ -394,7 +394,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 }
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertFindingsForSuspendCall(
             findings,
             listOf(SourceLocation(6, 5), SourceLocation(8, 9)),
@@ -422,7 +422,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 }
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertFindingsForSuspendCall(
             findings,
             listOf(SourceLocation(11, 13)),
@@ -450,7 +450,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 }
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertFindingsForSuspendCall(
             findings,
             listOf(SourceLocation(8, 5)),
@@ -469,7 +469,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 }
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertFindingsForSuspendCall(
             findings,
             listOf(SourceLocation(4, 5)),
@@ -489,7 +489,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 }
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertFindingsForSuspendCall(
             findings,
             listOf(SourceLocation(5, 5)),
@@ -507,7 +507,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 }
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
@@ -525,7 +525,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 return result
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertFindingsForSuspendCall(
             findings,
             listOf(SourceLocation(4, 18)),
@@ -544,7 +544,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 }
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertFindingsForSuspendCall(
             findings,
             listOf(SourceLocation(4, 5)),
@@ -559,7 +559,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
             suspend fun bar() = delay(1000L)
             suspend fun foo() = runCatching { bar() }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertFindingsForSuspendCall(
             findings,
             listOf(SourceLocation(3, 21)),
@@ -583,7 +583,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 }
             """.trimIndent()
 
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertFindingsForSuspendCall(
                 findings,
                 listOf(SourceLocation(4, 5)),
@@ -610,7 +610,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 }
             """.trimIndent()
 
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -631,7 +631,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 }
             """.trimIndent()
 
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertFindingsForSuspendCall(
                 findings,
                 listOf(SourceLocation(7, 5)),
@@ -663,7 +663,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 }
             """.trimIndent()
 
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -687,7 +687,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 }
             """.trimIndent()
 
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertFindingsForSuspendCall(
                 findings,
                 listOf(SourceLocation(8, 5)),
@@ -721,7 +721,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 }
             """.trimIndent()
 
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -740,7 +740,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 }
             """.trimIndent()
 
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertFindingsForSuspendCall(
                 findings,
                 listOf(SourceLocation(5, 5)),
@@ -762,7 +762,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 }
             """.trimIndent()
 
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertFindingsForSuspendCall(
                 findings,
@@ -803,7 +803,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 }
             """.trimIndent()
 
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertFindingsForSuspendCall(
                 findings,
                 listOf(SourceLocation(17, 5)),
@@ -843,7 +843,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 }
             """.trimIndent()
 
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertFindingsForSuspendCall(
                 findings,
                 listOf(SourceLocation(17, 5)),
@@ -867,7 +867,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
             }
         """.trimIndent()
 
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertFindingsForSuspendCall(
             findings,
             listOf(SourceLocation(5, 5)),
@@ -891,7 +891,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
             }
         """.trimIndent()
 
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertFindingsForSuspendCall(
             findings,
             listOf(SourceLocation(6, 5)),
@@ -912,7 +912,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
             }
         """.trimIndent()
 
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertFindingsForSuspendCall(
             findings,
             listOf(SourceLocation(5, 5)),
@@ -933,7 +933,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
             }
         """.trimIndent()
 
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertFindingsForSuspendCall(
             findings,
             listOf(SourceLocation(5, 5)),
@@ -957,7 +957,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
             }
         """.trimIndent()
 
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
@@ -977,7 +977,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
             }
         """.trimIndent()
 
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertFindingsForSuspendCall(
             findings,
             listOf(SourceLocation(6, 5)),
@@ -1001,7 +1001,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
             }
         """.trimIndent()
 
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
@@ -1022,7 +1022,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
             }
         """.trimIndent()
 
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertFindingsForSuspendCall(
             findings,
             listOf(SourceLocation(6, 5)),
@@ -1045,7 +1045,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
             }
         """.trimIndent()
 
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
@@ -1061,7 +1061,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
             }
         """.trimIndent()
 
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertFindingsForSuspendCall(
             findings,
             listOf(SourceLocation(4, 5)),
@@ -1088,7 +1088,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 }
             """.trimIndent()
 
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertFindingsForSuspendCall(
                 findings,
                 listOf(SourceLocation(8, 5)),
@@ -1117,7 +1117,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 }
             """.trimIndent()
 
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertFindingsForSuspendCall(
                 findings,
                 listOf(SourceLocation(8, 5), SourceLocation(12, 5)),
@@ -1146,7 +1146,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 }
             """.trimIndent()
 
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertFindingsForSuspendCall(
                 findings,
                 listOf(SourceLocation(8, 5), SourceLocation(12, 5)),
@@ -1170,7 +1170,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 }
             """.trimIndent()
 
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertFindingsForSuspendCall(
                 findings,
                 listOf(SourceLocation(7, 5)),
@@ -1194,7 +1194,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 }
             """.trimIndent()
 
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertFindingsForSuspendCall(
                 findings,
                 listOf(SourceLocation(7, 5)),
@@ -1219,7 +1219,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 }
             """.trimIndent()
 
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertFindingsForSuspendCall(
                 findings,
                 listOf(SourceLocation(7, 5)),
@@ -1243,7 +1243,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 }
             """.trimIndent()
 
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertFindingsForSuspendCall(
                 findings,
                 listOf(SourceLocation(7, 5)),
@@ -1268,7 +1268,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 }
             """.trimIndent()
 
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertFindingsForSuspendCall(
                 findings,
                 listOf(SourceLocation(7, 5)),
@@ -1293,7 +1293,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 }
             """.trimIndent()
 
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertFindingsForSuspendCall(
                 findings,
                 listOf(SourceLocation(7, 5)),
@@ -1317,7 +1317,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 }
             """.trimIndent()
 
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertFindingsForSuspendCall(
                 findings,
                 listOf(SourceLocation(6, 5)),
@@ -1344,7 +1344,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 }
             """.trimIndent()
 
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertFindingsForSuspendCall(
                 findings,
                 listOf(SourceLocation(9, 5)),
@@ -1369,7 +1369,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 }
             """.trimIndent()
 
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertFindingsForSuspendCall(
                 findings,
                 listOf(SourceLocation(7, 5)),
@@ -1394,7 +1394,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                 }
             """.trimIndent()
 
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertFindingsForSuspendCall(
                 findings,
                 listOf(SourceLocation(7, 5)),
@@ -1423,7 +1423,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                     }
                 """.trimIndent()
 
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertFindingsForSuspendCall(
                     findings,
                     listOf(SourceLocation(8, 5)),
@@ -1451,7 +1451,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                     }
                 """.trimIndent()
 
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertFindingsForSuspendCall(
                     findings,
                     listOf(SourceLocation(8, 5)),
@@ -1479,7 +1479,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                     }
                 """.trimIndent()
 
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertFindingsForSuspendCall(
                     findings,
                     listOf(SourceLocation(8, 5)),
@@ -1513,7 +1513,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                     }
                 """.trimIndent()
 
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertFindingsForSuspendCall(
                     findings,
                     listOf(SourceLocation(14, 5)),
@@ -1543,7 +1543,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                     }
                 """.trimIndent()
 
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
 
@@ -1560,7 +1560,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                     }
                 """.trimIndent()
 
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertFindingsForSuspendCall(
                     findings,
                     listOf(SourceLocation(5, 5)),
@@ -1588,7 +1588,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
                     }
                 """.trimIndent()
 
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
         }
@@ -1606,7 +1606,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
     }
 
     private fun assertOneFindingAt(@Language("kotlin") code: String, start: SourceLocation, end: SourceLocation) {
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertFindingsForSuspendCall(
             findings = findings,
             listOfStartLocation = listOf(start),
@@ -1615,7 +1615,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinCoreEnvironment
     }
 
     private fun assertNoFindings(@Language("kotlin") code: String) {
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 }

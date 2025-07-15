@@ -1,14 +1,14 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class UseSumOfInsteadOfFlatMapSizeSpec(val env: KotlinCoreEnvironment) {
+class UseSumOfInsteadOfFlatMapSizeSpec(val env: KotlinEnvironmentContainer) {
     val subject = UseSumOfInsteadOfFlatMapSize(Config.empty)
 
     @Test
@@ -19,7 +19,7 @@ class UseSumOfInsteadOfFlatMapSizeSpec(val env: KotlinCoreEnvironment) {
             }
             class Foo(val foo: List<Int>)
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(1)
         assertThat(actual[0].message).isEqualTo("Use 'sumOf' instead of 'flatMap' and 'size'")
     }
@@ -32,7 +32,7 @@ class UseSumOfInsteadOfFlatMapSizeSpec(val env: KotlinCoreEnvironment) {
             }
             class Foo(val foo: List<Int>)
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(1)
         assertThat(actual[0].message).isEqualTo("Use 'sumOf' instead of 'flatMap' and 'count'")
     }
@@ -45,7 +45,7 @@ class UseSumOfInsteadOfFlatMapSizeSpec(val env: KotlinCoreEnvironment) {
             }
             class Foo(val foo: List<Int>)
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(1)
         assertThat(actual[0].message).isEqualTo("Use 'sumOf' instead of 'flatMap' and 'count'")
     }
@@ -58,7 +58,7 @@ class UseSumOfInsteadOfFlatMapSizeSpec(val env: KotlinCoreEnvironment) {
             }
             class Foo(val foo: List<Int>)
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(1)
         assertThat(actual[0].message).isEqualTo("Use 'sumOf' instead of 'flatten' and 'size'")
     }
@@ -71,7 +71,7 @@ class UseSumOfInsteadOfFlatMapSizeSpec(val env: KotlinCoreEnvironment) {
             }
             class Foo(val foo: List<Int>)
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(1)
     }
 
@@ -84,7 +84,7 @@ class UseSumOfInsteadOfFlatMapSizeSpec(val env: KotlinCoreEnvironment) {
             }
             class Foo(val foo: List<Int>)
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(1)
     }
 
@@ -96,7 +96,7 @@ class UseSumOfInsteadOfFlatMapSizeSpec(val env: KotlinCoreEnvironment) {
             }
             class Bar(val bar: Set<Int>)
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(1)
     }
 
@@ -108,7 +108,7 @@ class UseSumOfInsteadOfFlatMapSizeSpec(val env: KotlinCoreEnvironment) {
             }
             class Foo(val foo: List<Int>)
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).isEmpty()
     }
 
@@ -120,7 +120,7 @@ class UseSumOfInsteadOfFlatMapSizeSpec(val env: KotlinCoreEnvironment) {
             }
             class Foo(val foo: List<Int>)
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).isEmpty()
     }
 
@@ -132,7 +132,7 @@ class UseSumOfInsteadOfFlatMapSizeSpec(val env: KotlinCoreEnvironment) {
             }
             class Foo(val foo: List<Int>)
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).isEmpty()
     }
 
@@ -144,7 +144,7 @@ class UseSumOfInsteadOfFlatMapSizeSpec(val env: KotlinCoreEnvironment) {
             }
             class Foo(val foo: List<Int>)
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).isEmpty()
     }
 }

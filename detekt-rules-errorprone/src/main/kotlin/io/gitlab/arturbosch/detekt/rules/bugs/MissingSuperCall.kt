@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
@@ -46,11 +46,12 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
  * }
  * </compliant>
  */
-@RequiresFullAnalysis
-class MissingSuperCall(config: Config) : Rule(
-    config,
-    "Overriding method is missing a call to overridden super method.",
-) {
+class MissingSuperCall(config: Config) :
+    Rule(
+        config,
+        "Overriding method is missing a call to overridden super method.",
+    ),
+    RequiresFullAnalysis {
 
     @Configuration("Annotations to require that overriding methods invoke the super method")
     private val mustInvokeSuperAnnotations: List<FqName> by config(
@@ -68,7 +69,7 @@ class MissingSuperCall(config: Config) : Rule(
         val superFunctionDescriptor = functionDescriptor.superFunctionWithAnnotation() ?: return
         if (function.hasSuperCall(superFunctionDescriptor)) return
 
-        report(CodeSmell(Entity.from(function), "Overriding method is missing a call to overridden super method."))
+        report(Finding(Entity.from(function), "Overriding method is missing a call to overridden super method."))
     }
 
     private fun CallableDescriptor.superFunctionWithAnnotation(): CallableDescriptor? =

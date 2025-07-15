@@ -1,14 +1,14 @@
 package io.gitlab.arturbosch.detekt.rules.coroutines
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class SuspendFunWithFlowReturnTypeSpec(private val env: KotlinCoreEnvironment) {
+class SuspendFunWithFlowReturnTypeSpec(private val env: KotlinEnvironmentContainer) {
 
     private val subject = SuspendFunWithFlowReturnType(Config.empty)
 
@@ -36,7 +36,7 @@ class SuspendFunWithFlowReturnTypeSpec(private val env: KotlinCoreEnvironment) {
                 return MutableStateFlow(value = 1L)
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(3)
+        assertThat(subject.lintWithContext(env, code)).hasSize(3)
     }
 
     @Test
@@ -60,7 +60,7 @@ class SuspendFunWithFlowReturnTypeSpec(private val env: KotlinCoreEnvironment) {
                 return MutableStateFlow(value = 1L)
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(3)
+        assertThat(subject.lintWithContext(env, code)).hasSize(3)
     }
 
     @Test
@@ -83,7 +83,7 @@ class SuspendFunWithFlowReturnTypeSpec(private val env: KotlinCoreEnvironment) {
                 return kotlinx.coroutines.flow.MutableStateFlow(value = 1L)
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(3)
+        assertThat(subject.lintWithContext(env, code)).hasSize(3)
     }
 
     @Test
@@ -95,7 +95,7 @@ class SuspendFunWithFlowReturnTypeSpec(private val env: KotlinCoreEnvironment) {
             suspend fun flowValues() = flowOf(1L, 2L, 3L)
             suspend fun mutableStateFlowValues() = MutableStateFlow(value = 1L)
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
+        assertThat(subject.lintWithContext(env, code)).hasSize(2)
     }
 
     @Test
@@ -111,7 +111,7 @@ class SuspendFunWithFlowReturnTypeSpec(private val env: KotlinCoreEnvironment) {
                 suspend fun mutableStateFlowValues(): MutableStateFlow<Long>
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(3)
+        assertThat(subject.lintWithContext(env, code)).hasSize(3)
     }
 
     @Test
@@ -140,7 +140,7 @@ class SuspendFunWithFlowReturnTypeSpec(private val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(3)
+        assertThat(subject.lintWithContext(env, code)).hasSize(3)
     }
 
     @Test
@@ -154,7 +154,7 @@ class SuspendFunWithFlowReturnTypeSpec(private val env: KotlinCoreEnvironment) {
                 suspend fun mutableStateFlowValues() = MutableStateFlow(value = 1L)
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
+        assertThat(subject.lintWithContext(env, code)).hasSize(2)
     }
 
     @Test
@@ -181,7 +181,7 @@ class SuspendFunWithFlowReturnTypeSpec(private val env: KotlinCoreEnvironment) {
                 return MutableStateFlow(value = this)
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(3)
+        assertThat(subject.lintWithContext(env, code)).hasSize(3)
     }
 
     @Test
@@ -193,7 +193,7 @@ class SuspendFunWithFlowReturnTypeSpec(private val env: KotlinCoreEnvironment) {
             suspend fun Long.flowValues() = (0..this).asFlow()
             suspend fun Long.mutableStateFlowValues() = MutableStateFlow(value = this)
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
+        assertThat(subject.lintWithContext(env, code)).hasSize(2)
     }
 
     @Test
@@ -214,7 +214,7 @@ class SuspendFunWithFlowReturnTypeSpec(private val env: KotlinCoreEnvironment) {
                 TODO()
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -251,7 +251,7 @@ class SuspendFunWithFlowReturnTypeSpec(private val env: KotlinCoreEnvironment) {
                 suspend fun getValue() = 5L.apply { delay(1_000L) }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -274,6 +274,6 @@ class SuspendFunWithFlowReturnTypeSpec(private val env: KotlinCoreEnvironment) {
                 return MutableStateFlow(value = 1L)
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 }

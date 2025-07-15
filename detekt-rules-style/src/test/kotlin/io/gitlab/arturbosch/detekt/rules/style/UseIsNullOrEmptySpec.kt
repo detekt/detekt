@@ -1,15 +1,15 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
+class UseIsNullOrEmptySpec(val env: KotlinEnvironmentContainer) {
     val subject = UseIsNullOrEmpty(Config.empty)
 
     @Nested
@@ -23,7 +23,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
                         if (x == null || x.isEmpty()) return
                     }
                 """.trimIndent()
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertThat(findings).singleElement().hasMessage(
                     "This 'x == null || x.isEmpty()' can be replaced with 'isNullOrEmpty()' call"
                 )
@@ -37,7 +37,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
                         if (x == null || x.count() == 0) return
                     }
                 """.trimIndent()
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
 
@@ -48,7 +48,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
                         if (x == null || x.size == 0) return
                     }
                 """.trimIndent()
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
 
@@ -59,7 +59,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
                         if (null == x || x.isEmpty()) return
                     }
                 """.trimIndent()
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
 
@@ -70,7 +70,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
                         if (x == null || 0 == x.count()) return
                     }
                 """.trimIndent()
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
 
@@ -81,7 +81,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
                         if (x == null || 0 == x.size) return
                     }
                 """.trimIndent()
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
 
@@ -96,7 +96,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
                         if (a.t == null || a.t.length == 0) return
                     }
                 """.trimIndent()
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
 
@@ -107,7 +107,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
                         if (java.io.File.separator == null || java.io.File.separator.length == 0) return
                     }
                 """.trimIndent()
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
         }
@@ -121,7 +121,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
                         if (x == null || x.isEmpty()) return
                     }
                 """.trimIndent()
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
 
@@ -132,7 +132,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
                         if (x == null || x.count() == 0) return
                     }
                 """.trimIndent()
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
 
@@ -143,7 +143,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
                         if (x == null || x.size == 0) return
                     }
                 """.trimIndent()
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
         }
@@ -157,7 +157,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
                         if (x == null || x.isEmpty()) return
                     }
                 """.trimIndent()
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
 
@@ -168,7 +168,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
                         if (x == null || x.count() == 0) return
                     }
                 """.trimIndent()
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
 
@@ -179,7 +179,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
                         if (x == null || x.size == 0) return
                     }
                 """.trimIndent()
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
         }
@@ -193,7 +193,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
                         if (x == null || x.isEmpty()) return
                     }
                 """.trimIndent()
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
 
@@ -204,7 +204,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
                         if (x == null || x.count() == 0) return
                     }
                 """.trimIndent()
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
 
@@ -215,7 +215,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
                         if (x == null || x.size == 0) return
                     }
                 """.trimIndent()
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
         }
@@ -229,7 +229,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
                         if (x == null || x.isEmpty()) return
                     }
                 """.trimIndent()
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
 
@@ -240,7 +240,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
                         if (x == null || x.count() == 0) return
                     }
                 """.trimIndent()
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
 
@@ -251,7 +251,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
                         if (x == null || x.size == 0) return
                     }
                 """.trimIndent()
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
         }
@@ -265,7 +265,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
                         if (x == null || x.isEmpty()) return
                     }
                 """.trimIndent()
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
 
@@ -276,7 +276,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
                         if (x == null || x.count() == 0) return
                     }
                 """.trimIndent()
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
 
@@ -287,7 +287,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
                         if (x == null || x.length == 0) return
                     }
                 """.trimIndent()
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
 
@@ -298,7 +298,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
                         if (x == null || x == "") return
                     }
                 """.trimIndent()
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
         }
@@ -312,7 +312,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
                         if (x == null || x.isEmpty()) return
                     }
                 """.trimIndent()
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
         }
@@ -326,7 +326,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
                         if (x == null || x.isEmpty()) return
                     }
                 """.trimIndent()
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
         }
@@ -340,7 +340,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
                         if (x == null || x.isEmpty()) return
                     }
                 """.trimIndent()
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
         }
@@ -354,7 +354,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
                         if (x == null || x.isEmpty()) return
                     }
                 """.trimIndent()
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
         }
@@ -371,7 +371,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
                         if (x == null || x.isEmpty()) return
                     }
                 """.trimIndent()
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
 
@@ -382,7 +382,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
                         if (x == null || x.count() == 0) return
                     }
                 """.trimIndent()
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
 
@@ -393,7 +393,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
                         if (x == null || x.size == 0) return
                     }
                 """.trimIndent()
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
         }
@@ -407,7 +407,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
                         if (x == null || x.count() == 0) return
                     }
                 """.trimIndent()
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
         }
@@ -419,7 +419,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
                     if (x == null || y.isEmpty()) return
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -430,7 +430,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
                     if (x != null && x.isEmpty()) return
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -441,7 +441,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
                     if (x == null || x.count() == 1) return
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -452,7 +452,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
                     if (x == null || x.isEmpty()) return
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -467,7 +467,7 @@ class UseIsNullOrEmptySpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
     }

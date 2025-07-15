@@ -1,14 +1,18 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
+import com.intellij.psi.PsiElement
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.rules.isCalling
 import io.gitlab.arturbosch.detekt.rules.isNullable
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.name.CallableId
+import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.name.StandardClassIds.BASE_KOTLIN_PACKAGE
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtSimpleNameExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateEntry
@@ -37,11 +41,12 @@ import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelector
  * }
  * </compliant>
  */
-@RequiresFullAnalysis
-class NullableToStringCall(config: Config) : Rule(
-    config,
-    "`toString()` on nullable receiver may return the string \"null\""
-) {
+class NullableToStringCall(config: Config) :
+    Rule(
+        config,
+        "`toString()` on nullable receiver may return the string \"null\""
+    ),
+    RequiresAnalysisApi {
 
     override fun visitSimpleNameExpression(expression: KtSimpleNameExpression) {
         super.visitSimpleNameExpression(expression)
@@ -51,30 +56,31 @@ class NullableToStringCall(config: Config) : Rule(
         val stringTemplateEntry = (qualifiedExpression ?: callExpression ?: expression).parent as? KtStringTemplateEntry
 
         when {
-            callExpression?.isCalling(toString, bindingContext) == true -> report(qualifiedExpression ?: callExpression)
+            callExpression?.calls(toString) == true -> report(qualifiedExpression ?: callExpression)
             stringTemplateEntry?.hasNullableExpression() == true -> report(stringTemplateEntry)
+        }
+    }
+
+    private fun KtCallExpression.calls(callableId: CallableId): Boolean {
+        analyze(this) {
+            return resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId == callableId
         }
     }
 
     private fun KtStringTemplateEntry.hasNullableExpression(): Boolean {
         val expression = this.expression ?: return false
-        return expression.isNullable(
-            bindingContext,
-            compilerResources.languageVersionSettings,
-            compilerResources.dataFlowValueFactory,
-            shouldConsiderPlatformTypeAsNullable = false,
-        )
+        return expression.isNullable(shouldConsiderPlatformTypeAsNullable = false)
     }
 
     private fun report(element: PsiElement) {
-        val codeSmell = CodeSmell(
+        val finding = Finding(
             Entity.from(element),
             "This call '${element.text}' may return the string \"null\"."
         )
-        report(codeSmell)
+        report(finding)
     }
 
     companion object {
-        val toString = FqName("kotlin.toString")
+        val toString = CallableId(BASE_KOTLIN_PACKAGE, Name.identifier("toString"))
     }
 }

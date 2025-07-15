@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
@@ -28,13 +28,10 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.getImportableDescriptor
  * Exempt from this rule are imports resulting from references to elements within KDoc and
  * from destructuring declarations (componentN imports).
  */
-@RequiresFullAnalysis
-class UnusedImport(
-    config: Config,
-) : Rule(
-    config,
-    "Unused Imports are dead code and should be removed.",
-) {
+class UnusedImport(config: Config) :
+    Rule(config, "Unused Imports are dead code and should be removed."),
+    RequiresFullAnalysis {
+
     @Configuration("Additional operators from libraries or tools, such as 'assign'(e.g. compiler plugins for Gradle).")
     private val additionalOperatorSet: List<String> by config(emptyList())
 
@@ -42,7 +39,7 @@ class UnusedImport(
         with(UnusedImportVisitor(bindingContext, additionalOperatorSet)) {
             root.accept(this)
             unusedImports().forEach {
-                report(CodeSmell(Entity.from(it), "The import '${it.importedFqName}' is unused."))
+                report(Finding(Entity.from(it), "The import '${it.importedFqName}' is unused."))
             }
         }
         super.visit(root)

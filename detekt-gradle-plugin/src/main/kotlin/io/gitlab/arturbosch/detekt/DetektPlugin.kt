@@ -88,7 +88,7 @@ class DetektPlugin : Plugin<Project> {
     }
 
     private fun configurePluginDependencies(project: Project, extension: DetektExtension) {
-        project.configurations.create(CONFIGURATION_DETEKT) { configuration ->
+        project.configurations.register(CONFIGURATION_DETEKT) { configuration ->
             configuration.isVisible = false
             configuration.isTransitive = true
             configuration.description = "The $CONFIGURATION_DETEKT dependencies to be used for this project."

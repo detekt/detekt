@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.core.suppressors
 
 import io.github.detekt.test.utils.compileContentForTest
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import org.assertj.core.api.Assertions.assertThat
@@ -12,12 +12,12 @@ import org.junit.jupiter.api.Test
 
 class SuppressorsSpec {
 
-    val noIgnorableCodeSmell = CodeSmell(
+    val noIgnorableFinding = Finding(
         entity = Entity.from(compileContentForTest("""fun foo() = Unit""".trimIndent())),
         message = "TestMessage"
     )
 
-    val ignorableCodeSmell = CodeSmell(
+    val ignorableFinding = Finding(
         entity = Entity.from(
             compileContentForTest(
                 """
@@ -36,7 +36,7 @@ class SuppressorsSpec {
     fun `A finding that should be suppressed`() {
         val rule = ARule(TestConfig("ignoreAnnotated" to listOf("Composable")))
         val suppress = buildSuppressors(rule, BindingContext.EMPTY)
-            .fold(false) { acc, suppressor -> acc || suppressor.shouldSuppress(noIgnorableCodeSmell) }
+            .fold(false) { acc, suppressor -> acc || suppressor.shouldSuppress(noIgnorableFinding) }
 
         assertThat(suppress).isFalse()
     }
@@ -45,7 +45,7 @@ class SuppressorsSpec {
     fun `A finding that should not be suppressed`() {
         val rule = ARule(TestConfig("ignoreAnnotated" to listOf("Composable")))
         val suppress = buildSuppressors(rule, BindingContext.EMPTY)
-            .fold(false) { acc, suppressor -> acc || suppressor.shouldSuppress(ignorableCodeSmell) }
+            .fold(false) { acc, suppressor -> acc || suppressor.shouldSuppress(ignorableFinding) }
 
         assertThat(suppress).isTrue()
     }

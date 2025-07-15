@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -39,7 +39,7 @@ class IteratorHasNextCallsNextMethod(config: Config) : Rule(
             val hasNextMethod = classOrObject.findFunctionByName("hasNext")
             if (hasNextMethod != null && callsNextMethod(hasNextMethod)) {
                 report(
-                    CodeSmell(
+                    Finding(
                         Entity.atName(classOrObject),
                         "Calling hasNext() on an Iterator should " +
                             "have no side-effects. Calling next() is a side effect."

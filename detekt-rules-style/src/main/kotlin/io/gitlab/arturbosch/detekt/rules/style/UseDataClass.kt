@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
@@ -43,11 +43,13 @@ import org.jetbrains.kotlin.types.KotlinType
  * class A(val b: B) : I by b
  * </compliant>
  */
-@RequiresFullAnalysis
-class UseDataClass(config: Config) : Rule(
-    config,
-    "Classes that do nothing but hold data should be replaced with a data class."
-) {
+class UseDataClass(config: Config) :
+    Rule(
+        config,
+        "Classes that do nothing but hold data should be replaced with a data class."
+    ),
+    RequiresFullAnalysis {
+
     @Configuration("allows to relax this rule in order to exclude classes that contains one (or more) vars")
     private val allowVars: Boolean by config(false)
 
@@ -85,7 +87,7 @@ class UseDataClass(config: Config) : Rule(
                     return
                 }
                 report(
-                    CodeSmell(
+                    Finding(
                         Entity.atName(klass),
                         "The class ${klass.nameAsSafeName} defines no " +
                             "functionality and only holds data. Consider converting it to a data class."
@@ -136,7 +138,7 @@ class UseDataClass(config: Config) : Rule(
 
     private fun KtNamedFunction.isDefaultFunction(
         classType: KotlinType?,
-        primaryConstructorParameterTypes: List<KotlinType>
+        primaryConstructorParameterTypes: List<KotlinType>,
     ): Boolean =
         when (name) {
             !in DEFAULT_FUNCTION_NAMES -> false

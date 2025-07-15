@@ -1,15 +1,15 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class UnnecessaryNotNullOperatorSpec(private val env: KotlinCoreEnvironment) {
+class UnnecessaryNotNullOperatorSpec(private val env: KotlinEnvironmentContainer) {
     private val subject = UnnecessaryNotNullOperator(Config.empty)
 
     @Nested
@@ -21,7 +21,7 @@ class UnnecessaryNotNullOperatorSpec(private val env: KotlinCoreEnvironment) {
                 val a = 1
                 val b = a!!
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasTextLocations(18 to 21)
         }
@@ -32,7 +32,7 @@ class UnnecessaryNotNullOperatorSpec(private val env: KotlinCoreEnvironment) {
                 val a = 1
                 val b = a!!.plus(42)
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasTextLocations(18 to 21)
         }
@@ -43,7 +43,7 @@ class UnnecessaryNotNullOperatorSpec(private val env: KotlinCoreEnvironment) {
                 val a = 1
                 val b = a!!.plus(42)!!
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(2)
             assertThat(findings).hasTextLocations(18 to 21, 18 to 32)
         }
@@ -58,7 +58,7 @@ class UnnecessaryNotNullOperatorSpec(private val env: KotlinCoreEnvironment) {
                 val a : Int? = 1
                 val b = a!!
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
     }

@@ -1,32 +1,27 @@
 package io.gitlab.arturbosch.detekt.core
 
-import io.github.detekt.test.utils.StringPrintStream
+import com.intellij.openapi.util.TextRange
+import com.intellij.psi.PsiElement
 import io.github.detekt.test.utils.compileContentForTest
 import io.github.detekt.test.utils.compileForTest
 import io.github.detekt.test.utils.resourceAsPath
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleInstance
 import io.gitlab.arturbosch.detekt.api.RuleSet
-import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.createBindingContext
 import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.jetbrains.kotlin.com.intellij.openapi.util.TextRange
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.elementsInRange
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
@@ -39,25 +34,27 @@ import java.net.URI
 import java.util.concurrent.CompletionException
 import kotlin.io.path.Path
 
-@KotlinCoreEnvironmentTest
-class AnalyzerSpec(val env: KotlinCoreEnvironment) {
+class AnalyzerSpec {
 
     @Nested
     inner class `exceptions during analyze()` {
         @Test
         fun `throw error explicitly when config has wrong value type in config`() {
             val testFile = path.resolve("Test.kt")
-            val settings = createProcessingSettings(
-                config = yamlConfigFromContent(
+            val settings = createProcessingSettings()
+            val analyzer = Analyzer(
+                settings,
+                createRuleDescriptor(
+                    ::MaxLineLength,
                     """
                         custom:
                           MaxLineLength:
                             active: true
                             maxLineLength: 'abc'
                     """.trimIndent()
-                ),
+                        .toConfig("custom", "MaxLineLength"),
+                )
             )
-            val analyzer = Analyzer(settings, CustomRuleSetProvider())
 
             assertThatThrownBy { settings.use { analyzer.run(listOf(compileForTest(testFile))) } }
                 .isInstanceOf(IllegalStateException::class.java)
@@ -66,22 +63,25 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `throw error explicitly in parallel when config has wrong value in config`() {
             val testFile = path.resolve("Test.kt")
-            val settings = createProcessingSettings(
-                config = yamlConfigFromContent(
+            val settings = createProcessingSettings {
+                execution {
+                    parallelParsing = true
+                    parallelAnalysis = true
+                }
+            }
+            val analyzer = Analyzer(
+                settings,
+                createRuleDescriptor(
+                    ::MaxLineLength,
                     """
                         custom:
                           MaxLineLength:
                             active: true
                             maxLineLength: 'abc'
                     """.trimIndent()
-                ),
-            ) {
-                execution {
-                    parallelParsing = true
-                    parallelAnalysis = true
-                }
-            }
-            val analyzer = Analyzer(settings, CustomRuleSetProvider())
+                        .toConfig("custom", "MaxLineLength"),
+                )
+            )
 
             assertThatThrownBy { settings.use { analyzer.run(listOf(compileForTest(testFile))) } }
                 .isInstanceOf(CompletionException::class.java)
@@ -95,59 +95,54 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `no findings`() {
             val testFile = path.resolve("Test.kt")
-            val output = StringPrintStream()
-            val settings = createProcessingSettings(
-                config = yamlConfigFromContent(
+            val settings = createProcessingSettings()
+            val analyzer = Analyzer(
+                settings,
+                createRuleDescriptor(
+                    ::MaxLineLength,
                     """
                         custom:
                           MaxLineLength:
                             active: true
                             maxLineLength: 120
-                          RequiresFullAnalysisMaxLineLength/foo:
-                            active: true
-                            maxLineLength: 120
                     """.trimIndent()
+                        .toConfig("custom", "MaxLineLength"),
                 ),
-                outputChannel = output,
             )
-            val analyzer = Analyzer(settings, CustomRuleSetProvider())
 
-            assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) }).isEmpty()
-            assertThat(output.toString()).isEqualTo(
-                "The rule 'RequiresFullAnalysisMaxLineLength/foo' requires type resolution but it was run without it.\n"
-            )
+            assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) })
+                .isEmpty()
         }
 
         @Test
         fun `with findings`() {
             val testFile = path.resolve("Test.kt")
-            val output = StringPrintStream()
-            val settings = createProcessingSettings(
-                config = yamlConfigFromContent(
+            val settings = createProcessingSettings()
+            val analyzer = Analyzer(
+                settings,
+                createRuleDescriptor(
+                    ::MaxLineLength,
                     """
                         custom:
-                          MaxLineLength/foo:
-                            active: true
-                            maxLineLength: 30
-                          RequiresFullAnalysisMaxLineLength:
+                          MaxLineLength:
                             active: true
                             maxLineLength: 30
                     """.trimIndent()
+                        .toConfig("custom", "MaxLineLength"),
                 ),
-                outputChannel = output,
             )
-            val analyzer = Analyzer(settings, CustomRuleSetProvider())
 
             assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) })
                 .singleElement()
                 .isEqualTo(
                     Issue(
                         ruleInstance = RuleInstance(
-                            id = "MaxLineLength/foo",
+                            id = "MaxLineLength",
                             ruleSetId = RuleSet.Id("custom"),
-                            url = URI("https://detekt.dev/docs/rules/custom#maxlinelength"),
+                            url = URI("https://example.org/"),
                             description = "TestDescription",
                             severity = Severity.Error,
+                            active = true,
                         ),
                         entity = Issue.Entity(
                             "AnAnnotation$@Target(AnnotationTarget.FILE, AnnotationTarget.FUNCTION)",
@@ -164,66 +159,16 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
                         suppressReasons = emptyList(),
                     )
                 )
-            assertThat(output.toString()).isEqualTo(
-                "The rule 'RequiresFullAnalysisMaxLineLength' requires type resolution but it was run without it.\n"
-            )
-        }
-
-        @Test
-        fun `with multiple instances of same rule`() {
-            val testFile = path.resolve("Test.kt")
-            val output = StringPrintStream()
-            val settings = createProcessingSettings(
-                config = yamlConfigFromContent(
-                    """
-                        custom:
-                          MaxLineLength/foo:
-                            active: true
-                            maxLineLength: 30
-                          MaxLineLength/bar:
-                            active: true
-                            maxLineLength: 30
-                    """.trimIndent()
-                ),
-                outputChannel = output,
-            )
-            val analyzer = Analyzer(settings, CustomRuleSetProvider())
-
-            assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) }).hasSize(2)
-        }
-
-        @Test
-        fun `with findings and context binding`() {
-            val testFile = path.resolve("Test.kt")
-            val output = StringPrintStream()
-            val settings = createProcessingSettings(
-                config = yamlConfigFromContent(
-                    """
-                        custom:
-                          MaxLineLength:
-                            active: true
-                            maxLineLength: 30
-                          RequiresFullAnalysisMaxLineLength:
-                            active: true
-                            maxLineLength: 30
-                    """.trimIndent()
-                ),
-                outputChannel = output,
-            )
-            val ktFile = compileForTest(testFile)
-            val bindingContext = env.createBindingContext(listOf(ktFile))
-
-            val analyzer = Analyzer(settings, CustomRuleSetProvider(), bindingContext = bindingContext)
-            assertThat(settings.use { analyzer.run(listOf(ktFile)) }).hasSize(2)
-            assertThat(output.toString()).isEmpty()
         }
 
         @Test
         fun `with findings but ignored`() {
             val testFile = path.resolve("Test.kt")
-            val output = StringPrintStream()
-            val settings = createProcessingSettings(
-                config = yamlConfigFromContent(
+            val settings = createProcessingSettings()
+            val analyzer = Analyzer(
+                settings,
+                createRuleDescriptor(
+                    ::MaxLineLength,
                     """
                         custom:
                           MaxLineLength:
@@ -232,57 +177,55 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
                             ignoreAnnotated:
                               - "AnAnnotation"
                     """.trimIndent()
+                        .toConfig("custom", "MaxLineLength"),
                 ),
-                outputChannel = output,
             )
-            val analyzer = Analyzer(settings, CustomRuleSetProvider())
 
             assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) }).isEmpty()
-            assertThat(output.toString()).isEmpty()
         }
 
         @Test
         fun `with faulty rule`() {
             val testFile = path.resolve("Test.kt")
-            val output = StringPrintStream()
-            val settings = createProcessingSettings(
-                config = yamlConfigFromContent(
+            val settings = createProcessingSettings()
+            val analyzer = Analyzer(
+                settings,
+                createRuleDescriptor(
+                    ::FaultyRule,
                     """
-                      custom:
-                        FaultyRule:
-                          active: true
+                        custom:
+                          FaultyRule:
+                            active: true
                     """.trimIndent()
-                ),
-                outputChannel = output,
+                        .toConfig("custom", "FaultyRule")
+                )
             )
-            val analyzer = Analyzer(settings, CustomRuleSetProvider())
 
             assertThatThrownBy { settings.use { analyzer.run(listOf(compileForTest(testFile))) } }
                 .hasCauseInstanceOf(IllegalStateException::class.java)
                 .hasMessageContaining("Location: ${FaultyRule::class.java.name}")
-            assertThat(output.toString()).isEmpty()
         }
 
         @Test
         fun `with faulty rule without stack trace`() {
             val testFile = path.resolve("Test.kt")
-            val output = StringPrintStream()
-            val settings = createProcessingSettings(
-                config = yamlConfigFromContent(
+            val settings = createProcessingSettings()
+            val analyzer = Analyzer(
+                settings,
+                createRuleDescriptor(
+                    ::FaultyRuleNoStackTrace,
                     """
                         custom:
                           FaultyRuleNoStackTrace:
                             active: true
                     """.trimIndent()
-                ),
-                outputChannel = output,
+                        .toConfig("custom", "FaultyRuleNoStackTrace")
+                )
             )
-            val analyzer = Analyzer(settings, CustomRuleSetProvider())
 
             assertThatThrownBy { settings.use { analyzer.run(listOf(compileForTest(testFile))) } }
                 .hasCauseInstanceOf(IllegalStateException::class.java)
                 .hasMessageContaining("Location: ${null}")
-            assertThat(output.toString()).isEmpty()
         }
     }
 
@@ -324,21 +267,20 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             private fun isPathChecked(
                 path: String,
                 excludes: List<String>? = null,
-                includes: List<String>? = null
+                includes: List<String>? = null,
             ): Boolean {
                 fun List<String>.toYaml() = joinToString(", ", "[", "]") { "\"$it\"" }
 
                 return isPathChecked(
                     path,
-                    yamlConfigFromContent(
-                        """
-                            custom:
-                              NoEmptyFile:
-                                active: true
-                                ${if (excludes != null) "excludes: ${excludes.toYaml()}" else ""}
-                                ${if (includes != null) "includes: ${includes.toYaml()}" else ""}
-                        """.trimIndent()
-                    ),
+                    """
+                        custom:
+                          NoEmptyFile:
+                            active: true
+                            ${if (excludes != null) "excludes: ${excludes.toYaml()}" else ""}
+                            ${if (includes != null) "includes: ${includes.toYaml()}" else ""}
+                    """.trimIndent()
+                        .toConfig("custom", "NoEmptyFile"),
                 )
             }
         }
@@ -378,21 +320,20 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
             private fun isPathChecked(
                 path: String,
                 excludes: List<String>? = null,
-                includes: List<String>? = null
+                includes: List<String>? = null,
             ): Boolean {
                 fun List<String>.toYaml() = joinToString(", ", "[", "]") { "\"$it\"" }
 
                 return isPathChecked(
                     path,
-                    yamlConfigFromContent(
-                        """
-                            custom:
-                              ${if (excludes != null) "excludes: ${excludes.toYaml()}" else ""}
-                              ${if (includes != null) "includes: ${includes.toYaml()}" else ""}
-                              NoEmptyFile:
-                                active: true
-                        """.trimIndent()
-                    ),
+                    """
+                        custom:
+                          ${if (excludes != null) "excludes: ${excludes.toYaml()}" else ""}
+                          ${if (includes != null) "includes: ${includes.toYaml()}" else ""}
+                          NoEmptyFile:
+                            active: true
+                    """.trimIndent()
+                        .toConfig("custom", "NoEmptyFile"),
                 )
             }
         }
@@ -406,7 +347,7 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
 
             return createProcessingSettings(config = config) { project { basePath = root } }
                 .use { settings ->
-                    Analyzer(settings, CustomRuleSetProvider())
+                    Analyzer(settings, createRuleDescriptor(::NoEmptyFile, config))
                         .run(listOf(compileForTest(pathToCheck)))
                         .isNotEmpty()
                 }
@@ -418,22 +359,27 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
         @ParameterizedTest
         @ValueSource(strings = ["MaxLineLength", "detekt.MaxLineLength", "MLL", "custom", "all"])
         fun `if suppressed the rule is not executed`(suppress: String) {
-            val config = yamlConfigFromContent(
-                """
-                    custom:
-                      MaxLineLength:
-                        active: true
-                        maxLineLength: 10
-                        aliases: ["MLL"]
-                """.trimIndent()
-            )
             val code = """
                 @file:Suppress("$suppress")
                 
                 fun foo() = Unit
             """.trimIndent()
-            val findings = createProcessingSettings(config = config).use { settings ->
-                Analyzer(settings, CustomRuleSetProvider())
+
+            val findings = createProcessingSettings().use { settings ->
+                Analyzer(
+                    settings,
+                    createRuleDescriptor(
+                        ::MaxLineLength,
+                        """
+                            custom:
+                              MaxLineLength:
+                                active: true
+                                maxLineLength: 10
+                                aliases: ["MLL"]
+                        """.trimIndent()
+                            .toConfig("custom", "MaxLineLength")
+                    )
+                )
                     .run(listOf(compileContentForTest(code)))
             }
             assertThat(findings).isEmpty()
@@ -442,21 +388,26 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
         @ParameterizedTest
         @ValueSource(strings = ["MaxLineLength", "detekt.MaxLineLength", "MLL", "custom", "all"])
         fun `when the ktElement is suppressed the issue is not raised`(suppress: String) {
-            val config = yamlConfigFromContent(
-                """
-                    custom:
-                      MaxLineLength:
-                        active: true
-                        maxLineLength: 10
-                        aliases: ["MLL"]
-                """.trimIndent()
-            )
             val code = """
                 @Suppress("$suppress")
                 fun foo() = Unit
             """.trimIndent()
-            val findings = createProcessingSettings(config = config).use { settings ->
-                Analyzer(settings, CustomRuleSetProvider())
+
+            val findings = createProcessingSettings().use { settings ->
+                Analyzer(
+                    settings,
+                    createRuleDescriptor(
+                        ::MaxLineLength,
+                        """
+                            custom:
+                              MaxLineLength:
+                                active: true
+                                maxLineLength: 10
+                                aliases: ["MLL"]
+                        """.trimIndent()
+                            .toConfig("custom", "MaxLineLength")
+                    )
+                )
                     .run(listOf(compileContentForTest(code)))
             }
             assertThat(findings).isEmpty()
@@ -464,24 +415,10 @@ class AnalyzerSpec(val env: KotlinCoreEnvironment) {
     }
 }
 
-private class CustomRuleSetProvider : RuleSetProvider {
-    override val ruleSetId = RuleSet.Id("custom")
-    override fun instance() = RuleSet(
-        ruleSetId,
-        listOf(
-            ::NoEmptyFile,
-            ::MaxLineLength,
-            ::RequiresFullAnalysisMaxLineLength,
-            ::FaultyRule,
-            ::FaultyRuleNoStackTrace,
-        )
-    )
-}
-
 private class NoEmptyFile(config: Config) : Rule(config, "TestDescription") {
     override fun visitKtFile(file: KtFile) {
         if (file.text.isEmpty()) {
-            report(CodeSmell(Entity.from(file), "This file is empty"))
+            report(Finding(Entity.from(file), "This file is empty"))
         }
     }
 }
@@ -497,7 +434,7 @@ private open class MaxLineLength(config: Config) : Rule(config, "TestDescription
         for (line in file.text.lineSequence()) {
             if (line.length > maxLineLength) {
                 val ktElement = file.findFirstMeaningfulKtElementInParents(offset..(offset + line.length))
-                report(CodeSmell(Entity.from(ktElement), description))
+                report(Finding(Entity.from(ktElement), description))
             }
             offset += line.length + 1 // \n
         }
@@ -510,9 +447,6 @@ private open class MaxLineLength(config: Config) : Rule(config, "TestDescription
             .mapNotNull { it?.getNonStrictParentOfType() }
             .first { it.text.isNotBlank() }
 }
-
-@RequiresFullAnalysis
-private class RequiresFullAnalysisMaxLineLength(config: Config) : MaxLineLength(config)
 
 private class FaultyRule(config: Config) : Rule(config, "") {
     override fun visitKtFile(file: KtFile): Unit =
@@ -530,7 +464,33 @@ private class FaultyRuleNoStackTrace(config: Config) : Rule(config, "") {
 
 internal fun Analyzer(
     settings: ProcessingSettings,
-    vararg ruleSetProviders: RuleSetProvider,
+    vararg ruleDescriptors: RuleDescriptor,
     processors: List<FileProcessListener> = emptyList(),
     bindingContext: BindingContext = BindingContext.EMPTY,
-): Analyzer = Analyzer(settings, ruleSetProviders.toList(), processors, bindingContext)
+): Analyzer = Analyzer(
+    settings,
+    ruleDescriptors.toList(),
+    processors,
+    bindingContext
+)
+
+internal fun createRuleDescriptor(
+    provider: (Config) -> Rule,
+    config: Config,
+) = RuleDescriptor(
+    provider,
+    config,
+    RuleInstance(
+        id = provider(Config.empty).javaClass.simpleName,
+        ruleSetId = RuleSet.Id("custom"),
+        url = URI("https://example.org/"),
+        description = "TestDescription",
+        severity = Severity.Error,
+        active = true,
+    ),
+)
+
+// The @receiver:Language("yaml") does nothing because of this bug on IntelliJ
+// https://youtrack.jetbrains.com/issue/KTIJ-5643/Language-injection-does-not-work-for-extension-receivers
+private fun @receiver:Language("yaml") String.toConfig(vararg subConfigs: String): Config =
+    subConfigs.fold(yamlConfigFromContent(this)) { acc, key -> acc.subConfig(key) }

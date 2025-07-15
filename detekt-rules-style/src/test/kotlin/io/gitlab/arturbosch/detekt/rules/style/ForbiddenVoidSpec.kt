@@ -1,11 +1,11 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -13,7 +13,7 @@ private const val IGNORE_OVERRIDDEN = "ignoreOverridden"
 private const val IGNORE_USAGE_IN_GENERICS = "ignoreUsageInGenerics"
 
 @KotlinCoreEnvironmentTest
-class ForbiddenVoidSpec(val env: KotlinCoreEnvironment) {
+class ForbiddenVoidSpec(val env: KotlinEnvironmentContainer) {
     val subject = ForbiddenVoid(Config.empty)
 
     @Test
@@ -27,7 +27,7 @@ class ForbiddenVoidSpec(val env: KotlinCoreEnvironment) {
             }
         """.trimIndent()
 
-        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(4)
+        assertThat(subject.lintWithContext(env, code)).hasSize(4)
     }
 
     @Test
@@ -37,7 +37,7 @@ class ForbiddenVoidSpec(val env: KotlinCoreEnvironment) {
             val klass = Void::class
         """.trimIndent()
 
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -56,7 +56,7 @@ class ForbiddenVoidSpec(val env: KotlinCoreEnvironment) {
             }
         """.trimIndent()
 
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Nested
@@ -79,7 +79,7 @@ class ForbiddenVoidSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            val findings = ForbiddenVoid(config).compileAndLintWithContext(env, code)
+            val findings = ForbiddenVoid(config).lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -100,7 +100,7 @@ class ForbiddenVoidSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            val findings = ForbiddenVoid(config).compileAndLintWithContext(env, code)
+            val findings = ForbiddenVoid(config).lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -118,7 +118,7 @@ class ForbiddenVoidSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            val findings = ForbiddenVoid(config).compileAndLintWithContext(env, code)
+            val findings = ForbiddenVoid(config).lintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
 
@@ -130,7 +130,7 @@ class ForbiddenVoidSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            val findings = ForbiddenVoid(config).compileAndLintWithContext(env, code)
+            val findings = ForbiddenVoid(config).lintWithContext(env, code)
             assertThat(findings).hasSize(2)
         }
     }
@@ -158,7 +158,7 @@ class ForbiddenVoidSpec(val env: KotlinCoreEnvironment) {
                 class D : A<Void>
             """.trimIndent()
 
-            val findings = ForbiddenVoid(config).compileAndLintWithContext(env, code)
+            val findings = ForbiddenVoid(config).lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -170,7 +170,7 @@ class ForbiddenVoidSpec(val env: KotlinCoreEnvironment) {
                 class C : A<B<Void>>
             """.trimIndent()
 
-            val findings = ForbiddenVoid(config).compileAndLintWithContext(env, code)
+            val findings = ForbiddenVoid(config).lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -180,7 +180,7 @@ class ForbiddenVoidSpec(val env: KotlinCoreEnvironment) {
                 val foo = mutableMapOf<Int, Void>()
             """.trimIndent()
 
-            val findings = ForbiddenVoid(config).compileAndLintWithContext(env, code)
+            val findings = ForbiddenVoid(config).lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -195,7 +195,7 @@ class ForbiddenVoidSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(4)
+            assertThat(subject.lintWithContext(env, code)).hasSize(4)
         }
     }
 }

@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -21,7 +21,7 @@ class UseIfInsteadOfWhenSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -34,7 +34,7 @@ class UseIfInsteadOfWhenSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -49,7 +49,7 @@ class UseIfInsteadOfWhenSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -64,7 +64,7 @@ class UseIfInsteadOfWhenSpec {
                 return false
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     // TC inspired from https://github.com/JetBrains/kotlin/pull/2921/files
@@ -84,7 +84,7 @@ class UseIfInsteadOfWhenSpec {
             }
         """.trimIndent()
         val subject = UseIfInsteadOfWhen(TestConfig(IGNORE_WHEN_CONTAINING_VARIABLE_DECLARATION to true))
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     // TC inspired from https://github.com/JetBrains/kotlin/pull/2921/files
@@ -104,7 +104,7 @@ class UseIfInsteadOfWhenSpec {
             }
         """.trimIndent()
         val subject = UseIfInsteadOfWhen(TestConfig(IGNORE_WHEN_CONTAINING_VARIABLE_DECLARATION to false))
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     companion object {

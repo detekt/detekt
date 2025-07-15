@@ -1,16 +1,16 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import com.intellij.psi.PsiFile
 import io.github.detekt.psi.absolutePath
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.api.config
-import org.jetbrains.kotlin.com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.diagnostics.DiagnosticUtils
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtLiteralStringTemplateEntry
@@ -67,7 +67,7 @@ class MultilineRawStringIndentation(config: Config) : Rule(
 
         if (!expression.isSurroundedByLineBreaks()) {
             report(
-                CodeSmell(
+                Finding(
                     Entity.from(expression),
                     "A multiline raw string should start with a break line and should end with another",
                 )
@@ -158,7 +158,7 @@ class MultilineRawStringIndentation(config: Config) : Rule(
 }
 
 private fun Rule.report(element: KtElement, location: Location, message: String) {
-    report(CodeSmell(Entity.from(element, location), message))
+    report(Finding(Entity.from(element, location), message))
 }
 
 private fun message(desiredIntent: Int, currentIndent: Int): String =

@@ -11,7 +11,11 @@ include("detekt-cli")
 include("detekt-compiler-plugin")
 include("detekt-core")
 include("detekt-formatting")
+include("detekt-formatting:ktlint-repackage")
 include("detekt-generator")
+includeBuild("detekt-gradle-plugin")
+include("detekt-kotlin-analysis-api")
+include("detekt-kotlin-analysis-api-standalone")
 include("detekt-metrics")
 include("detekt-parser")
 include("detekt-psi-utils")
@@ -40,9 +44,9 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
 
 plugins {
-    id("com.gradle.develocity") version "3.19.1"
-    id("com.gradle.common-custom-user-data-gradle-plugin") version "2.1"
-    id("org.gradle.toolchains.foojay-resolver-convention") version "0.9.0"
+    id("com.gradle.develocity") version "4.0.2"
+    id("com.gradle.common-custom-user-data-gradle-plugin") version "2.3"
+    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 
 val isCiBuild = providers.environmentVariable("CI").isPresent
@@ -74,5 +78,7 @@ buildCache {
 dependencyResolutionManagement {
     repositories {
         mavenCentral()
+        // Remove when this is closed: https://youtrack.jetbrains.com/issue/KT-56203/AA-Publish-analysis-api-standalone-and-dependencies-to-Maven-Central
+        maven("https://redirector.kotlinlang.org/maven/intellij-dependencies")
     }
 }

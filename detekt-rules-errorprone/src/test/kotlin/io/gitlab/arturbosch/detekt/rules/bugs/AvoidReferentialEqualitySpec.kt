@@ -1,16 +1,16 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class AvoidReferentialEqualitySpec(private val env: KotlinCoreEnvironment) {
+class AvoidReferentialEqualitySpec(private val env: KotlinEnvironmentContainer) {
 
     @Nested
     inner class `ReferentialEquality with defaults` {
@@ -25,7 +25,7 @@ class AvoidReferentialEqualitySpec(private val env: KotlinCoreEnvironment) {
                 fun g(other: String) = if (s === other) 1 else 2
             """.trimIndent()
 
-            val actual = subject.compileAndLintWithContext(env, code)
+            val actual = subject.lintWithContext(env, code)
 
             assertThat(actual).hasSize(3)
         }
@@ -40,7 +40,7 @@ class AvoidReferentialEqualitySpec(private val env: KotlinCoreEnvironment) {
                 fun g(other: String?) = s === other
             """.trimIndent()
 
-            val actual = subject.compileAndLintWithContext(env, code)
+            val actual = subject.lintWithContext(env, code)
 
             assertThat(actual).hasSize(4)
         }
@@ -52,7 +52,7 @@ class AvoidReferentialEqualitySpec(private val env: KotlinCoreEnvironment) {
                 val b = s !== "something"
             """.trimIndent()
 
-            val actual = subject.compileAndLintWithContext(env, code)
+            val actual = subject.lintWithContext(env, code)
 
             assertThat(actual).hasSize(1)
         }
@@ -66,7 +66,7 @@ class AvoidReferentialEqualitySpec(private val env: KotlinCoreEnvironment) {
                 val b = i === 1 || l === 100L || c === 'b'
             """.trimIndent()
 
-            val actual = subject.compileAndLintWithContext(env, code)
+            val actual = subject.lintWithContext(env, code)
 
             assertThat(actual).isEmpty()
         }
@@ -80,7 +80,7 @@ class AvoidReferentialEqualitySpec(private val env: KotlinCoreEnvironment) {
                 fun g(other: String) = if (s == other) 1 else 2
             """.trimIndent()
 
-            val actual = subject.compileAndLintWithContext(env, code)
+            val actual = subject.lintWithContext(env, code)
 
             assertThat(actual).isEmpty()
         }
@@ -92,7 +92,7 @@ class AvoidReferentialEqualitySpec(private val env: KotlinCoreEnvironment) {
                 val b = same("this", "that")
             """.trimIndent()
 
-            val actual = subject.compileAndLintWithContext(env, code)
+            val actual = subject.lintWithContext(env, code)
 
             assertThat(actual).isEmpty()
         }
@@ -111,7 +111,7 @@ class AvoidReferentialEqualitySpec(private val env: KotlinCoreEnvironment) {
                 val b = s === "other" || i === 42 || list === listOf(2)
             """.trimIndent()
 
-            val actual = subject.compileAndLintWithContext(env, code)
+            val actual = subject.lintWithContext(env, code)
 
             assertThat(actual).hasSize(3)
         }
@@ -132,7 +132,7 @@ class AvoidReferentialEqualitySpec(private val env: KotlinCoreEnvironment) {
                 val b = listOf(2) === listA || listA === listB || mutableList === mutableListOf(2)
             """.trimIndent()
 
-            val actual = subject.compileAndLintWithContext(env, code)
+            val actual = subject.lintWithContext(env, code)
 
             assertThat(actual).hasSize(3)
         }
@@ -146,7 +146,7 @@ class AvoidReferentialEqualitySpec(private val env: KotlinCoreEnvironment) {
                 val b = listOf(2) == listA || listA == listB || mutableList == mutableListOf(2)
             """.trimIndent()
 
-            val actual = subject.compileAndLintWithContext(env, code)
+            val actual = subject.lintWithContext(env, code)
 
             assertThat(actual).isEmpty()
         }

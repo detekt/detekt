@@ -1,14 +1,25 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.KtNodeTypes
-import org.jetbrains.kotlin.builtins.KotlinBuiltIns
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.symbols.receiverType
 import org.jetbrains.kotlin.lexer.KtTokens
-import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.name.CallableId
+import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.name.StandardClassIds.BASE_COLLECTIONS_PACKAGE
+import org.jetbrains.kotlin.name.StandardClassIds.BASE_TEXT_PACKAGE
+import org.jetbrains.kotlin.name.StandardClassIds.Collection
+import org.jetbrains.kotlin.name.StandardClassIds.List
+import org.jetbrains.kotlin.name.StandardClassIds.Map
+import org.jetbrains.kotlin.name.StandardClassIds.Set
+import org.jetbrains.kotlin.name.StandardClassIds.String
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -17,8 +28,6 @@ import org.jetbrains.kotlin.psi.KtPrefixExpression
 import org.jetbrains.kotlin.psi.KtThisExpression
 import org.jetbrains.kotlin.psi.psiUtil.blockExpressionsOrSingle
 import org.jetbrains.kotlin.psi.psiUtil.getPossiblyQualifiedCallExpression
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
-import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 
 /**
  * This rule detects `isEmpty` or `isBlank` calls to assign a default value. They can be replaced with `ifEmpty` or
@@ -43,11 +52,12 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  * </compliant>
  *
  */
-@RequiresFullAnalysis
-class UseIfEmptyOrIfBlank(config: Config) : Rule(
-    config,
-    "Use `ifEmpty` or `ifBlank` instead of `isEmpty` or `isBlank` to assign a default value."
-) {
+class UseIfEmptyOrIfBlank(config: Config) :
+    Rule(
+        config,
+        "Use `ifEmpty` or `ifBlank` instead of `isEmpty` or `isBlank` to assign a default value."
+    ),
+    RequiresAnalysisApi {
 
     @Suppress("ReturnCount", "CyclomaticComplexMethod")
     override fun visitIfExpression(expression: KtIfExpression) {
@@ -75,7 +85,7 @@ class UseIfEmptyOrIfBlank(config: Config) : Rule(
 
         val message =
             "This '$conditionCalleeExpressionText' call can be replaced with '${replacement.replacementFunctionName}'"
-        report(CodeSmell(Entity.from(conditionCalleeExpression), message))
+        report(Finding(Entity.from(conditionCalleeExpression), message))
     }
 
     @Suppress("ReturnCount")
@@ -92,38 +102,42 @@ class UseIfEmptyOrIfBlank(config: Config) : Rule(
 
     @Suppress("ReturnCount")
     private fun KtCallExpression.replacement(): Replacement? {
-        val descriptor = getResolvedCall(bindingContext)?.resultingDescriptor ?: return null
-        val receiverParameter = descriptor.dispatchReceiverParameter ?: descriptor.extensionReceiverParameter
-        val receiverType = receiverParameter?.type ?: return null
-        if (KotlinBuiltIns.isArrayOrPrimitiveArray(receiverType)) return null
-        val conditionCallFqName = descriptor.fqNameOrNull() ?: return null
-        return replacements[conditionCallFqName]
+        analyze(this) {
+            val symbol = resolveToCall()?.singleFunctionCallOrNull()?.symbol ?: return null
+            if (symbol.receiverType?.isArrayOrPrimitiveArray == true) return null
+            return replacements[symbol.callableId]
+        }
     }
 
     private data class Replacement(
-        val conditionFunctionFqName: FqName,
+        val conditionFunctionId: CallableId,
         val replacementFunctionName: String,
-        val negativeCondition: Boolean = false
+        val negativeCondition: Boolean = false,
     )
 
+    @Suppress("NonBooleanPropertyPrefixedWithIs")
     companion object {
         private const val IF_BLANK = "ifBlank"
-
         private const val IF_EMPTY = "ifEmpty"
 
-        private val replacements = listOf(
-            Replacement(FqName("kotlin.text.isBlank"), IF_BLANK),
-            Replacement(FqName("kotlin.text.isEmpty"), IF_EMPTY),
-            Replacement(FqName("kotlin.collections.List.isEmpty"), IF_EMPTY),
-            Replacement(FqName("kotlin.collections.Set.isEmpty"), IF_EMPTY),
-            Replacement(FqName("kotlin.collections.Map.isEmpty"), IF_EMPTY),
-            Replacement(FqName("kotlin.collections.Collection.isEmpty"), IF_EMPTY),
-            Replacement(FqName("kotlin.text.isNotBlank"), IF_BLANK, negativeCondition = true),
-            Replacement(FqName("kotlin.text.isNotEmpty"), IF_EMPTY, negativeCondition = true),
-            Replacement(FqName("kotlin.collections.isNotEmpty"), IF_EMPTY, negativeCondition = true),
-            Replacement(FqName("kotlin.String.isEmpty"), IF_EMPTY)
-        ).associateBy { it.conditionFunctionFqName }
+        private val isBlank = Name.identifier("isBlank")
+        private val isEmpty = Name.identifier("isEmpty")
+        private val isNotBlank = Name.identifier("isNotBlank")
+        private val isNotEmpty = Name.identifier("isNotEmpty")
 
-        private val conditionFunctionShortNames = replacements.keys.map { it.shortName().asString() }.toSet()
+        private val replacements = listOf(
+            Replacement(CallableId(BASE_TEXT_PACKAGE, isBlank), IF_BLANK),
+            Replacement(CallableId(BASE_TEXT_PACKAGE, isEmpty), IF_EMPTY),
+            Replacement(CallableId(List, isEmpty), IF_EMPTY),
+            Replacement(CallableId(Set, isEmpty), IF_EMPTY),
+            Replacement(CallableId(Map, isEmpty), IF_EMPTY),
+            Replacement(CallableId(Collection, isEmpty), IF_EMPTY),
+            Replacement(CallableId(BASE_TEXT_PACKAGE, isNotBlank), IF_BLANK, negativeCondition = true),
+            Replacement(CallableId(BASE_TEXT_PACKAGE, isNotEmpty), IF_EMPTY, negativeCondition = true),
+            Replacement(CallableId(BASE_COLLECTIONS_PACKAGE, isNotEmpty), IF_EMPTY, negativeCondition = true),
+            Replacement(CallableId(String, isEmpty), IF_EMPTY)
+        ).associateBy { it.conditionFunctionId }
+
+        private val conditionFunctionShortNames = replacements.keys.map { it.callableName.asString() }.toSet()
     }
 }

@@ -2,10 +2,10 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.github.detekt.psi.FunctionMatcher
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
@@ -48,12 +48,13 @@ import org.jetbrains.kotlin.types.typeUtil.isUnit
  * val x = returnsValue()
  * </compliant>
  */
-@RequiresFullAnalysis
 @ActiveByDefault(since = "1.21.0")
-class IgnoredReturnValue(config: Config) : Rule(
-    config,
-    "This call returns a value which is ignored"
-) {
+class IgnoredReturnValue(config: Config) :
+    Rule(
+        config,
+        "This call returns a value which is ignored"
+    ),
+    RequiresFullAnalysis {
 
     @Configuration("If the rule should check only methods matching to configuration, or all methods")
     private val restrictToConfig: Boolean by config(defaultValue = true)
@@ -83,6 +84,7 @@ class IgnoredReturnValue(config: Config) : Rule(
     @Configuration("List of return types that should not be ignored")
     private val returnValueTypes: List<Regex> by config(
         listOf(
+            "kotlin.Function*",
             "kotlin.sequences.Sequence",
             "kotlinx.coroutines.flow.*Flow",
             "java.util.stream.*Stream",
@@ -127,7 +129,7 @@ class IgnoredReturnValue(config: Config) : Rule(
 
         val messageText = expression.calleeExpression?.text ?: expression.text
         report(
-            CodeSmell(
+            Finding(
                 Entity.from(expression),
                 message = "The call $messageText is returning a value that is ignored."
             )

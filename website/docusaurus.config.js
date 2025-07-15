@@ -2,7 +2,7 @@
 // Note: type annotations allow type checking and IDEs autocompletion
 
 import { themes as prismThemes } from "prism-react-renderer";
-const detektVersionReplace = require("./src/remark/detektVersionReplace");
+const { detektVersionReplacePlugin, detektVersion } = require("./src/remark/detektVersionReplace");
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -25,7 +25,7 @@ const config = {
         docs: {
           sidebarPath: require.resolve("./sidebars.js"),
           editUrl: "https://github.com/detekt/detekt/edit/main/website/",
-          remarkPlugins: [detektVersionReplace],
+          remarkPlugins: [detektVersionReplacePlugin],
         },
         blog: {
           showReadingTime: true,
@@ -97,6 +97,13 @@ const config = {
           { to: "/docs/rules/style", from: "/style.html" },
           { to: "/docs/introduction/suppressors", from: "/suppressors.html" },
         ],
+        createRedirects(existingPath) {
+          if (existingPath.startsWith("/docs/rules/")) {
+            return existingPath.replace("/docs/rules/", `/docs/${detektVersion}/rules/`)
+          } else {
+            return undefined;
+          }
+        },
       },
     ],
   ],
@@ -123,19 +130,9 @@ const config = {
             position: "left",
           },
           {
+            to: "https://detekt.dev/kdoc/",
             label: "APIs",
-            type: "dropdown",
             position: "left",
-            items: [
-              {
-                href: "https://detekt.dev/kdoc/",
-                label: "Core APIs",
-              },
-              {
-                href: "https://detekt.dev/kdoc/detekt-gradle-plugin/",
-                label: "Gradle Plugin APIs",
-              },
-            ],
           },
           {
             to: "/marketplace",

@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.coroutines
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.coroutines.utils.isCoroutineScope
@@ -46,12 +46,14 @@ import org.jetbrains.kotlin.resolve.source.getPsi
  * </compliant>
  *
  */
-@RequiresFullAnalysis
-class CoroutineLaunchedInTestWithoutRunTest(config: Config) : Rule(
-    config,
-    "Launching coroutines in tests without a `runTest` block could swallow exceptions. " +
-        "You should use `runTest` to avoid altering test results."
-) {
+class CoroutineLaunchedInTestWithoutRunTest(config: Config) :
+    Rule(
+        config,
+        "Launching coroutines in tests without a `runTest` block could swallow exceptions. " +
+            "You should use `runTest` to avoid altering test results."
+    ),
+    RequiresFullAnalysis {
+
     private val funCoroutineLaunchesTraverseHelper = FunCoroutineLaunchesTraverseHelper()
 
     override fun visitNamedFunction(initialFunction: KtNamedFunction) {
@@ -65,7 +67,7 @@ class CoroutineLaunchedInTestWithoutRunTest(config: Config) : Rule(
                 bindingContext
             )
         ) {
-            report(CodeSmell(Entity.from(initialFunction), MESSAGE))
+            report(Finding(Entity.from(initialFunction), MESSAGE))
         }
     }
 
@@ -89,13 +91,13 @@ class FunCoroutineLaunchesTraverseHelper {
 
     fun isFunctionLaunchingCoroutines(
         initialFunction: KtNamedFunction,
-        bindingContext: BindingContext
+        bindingContext: BindingContext,
     ): Boolean {
         val traversedFunctions = mutableSetOf<KtNamedFunction>()
 
         fun checkFunctionAndSaveToCache(
             function: KtNamedFunction,
-            parents: List<KtNamedFunction> = emptyList()
+            parents: List<KtNamedFunction> = emptyList(),
         ) {
             val isLaunching = function.isLaunchingCoroutine(bindingContext)
             exploredFunctionsCache.putIfAbsent(function, isLaunching)
@@ -107,7 +109,7 @@ class FunCoroutineLaunchesTraverseHelper {
 
         fun getChildFunctionsOf(
             function: KtNamedFunction,
-            parents: List<KtNamedFunction> = emptyList()
+            parents: List<KtNamedFunction> = emptyList(),
         ): Set<KtNamedFunction> {
             function.collectDescendantsOfType<KtExpression>().mapNotNull {
                 it.getResolvedCall(bindingContext)

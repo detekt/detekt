@@ -1,15 +1,15 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class NestedScopeFunctionsSpec(private val env: KotlinCoreEnvironment) {
+class NestedScopeFunctionsSpec(private val env: KotlinEnvironmentContainer) {
 
     private val defaultConfig = TestConfig(
         "allowedDepth" to 1,
@@ -104,7 +104,7 @@ class NestedScopeFunctionsSpec(private val env: KotlinCoreEnvironment) {
     }
 
     private fun whenLintRuns() {
-        actual = subject.compileAndLintWithContext(env, givenCode)
+        actual = subject.lintWithContext(env, givenCode)
     }
 
     private fun expectSourceLocation(location: Pair<Int, Int>) {

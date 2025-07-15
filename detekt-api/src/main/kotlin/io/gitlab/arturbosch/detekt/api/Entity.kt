@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.api
 
+import com.intellij.psi.PsiElement
 import io.gitlab.arturbosch.detekt.api.internal.buildFullSignature
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
@@ -13,7 +13,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 class Entity(
     val signature: String,
     val location: Location,
-    val ktElement: KtElement
+    val ktElement: KtElement,
 ) {
     override fun toString(): String =
         "Entity(signature=$signature, location=$location, ktElement=$ktElement)"
@@ -51,7 +51,7 @@ class Entity(
         private fun from(
             elementToReport: PsiElement,
             elementForSignature: PsiElement,
-            location: Location
+            location: Location,
         ): Entity {
             val signature = elementForSignature.buildFullSignature()
             val ktElement = elementToReport.getNonStrictParentOfType<KtElement>() ?: error("KtElement expected")

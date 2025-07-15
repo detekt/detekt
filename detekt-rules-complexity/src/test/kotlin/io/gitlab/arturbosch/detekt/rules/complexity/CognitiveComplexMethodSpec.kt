@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.complexity
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Test
 
 class CognitiveComplexMethodSpec {
@@ -27,7 +27,7 @@ class CognitiveComplexMethodSpec {
                 return total
             }
         """.trimIndent()
-        val findings = CognitiveComplexMethod(testConfig).compileAndLint(code)
+        val findings = CognitiveComplexMethod(testConfig).lint(code)
         assertThat(findings).hasSize(1)
         assertThat(findings).hasStartSourceLocations(SourceLocation(1, 5))
     }
@@ -42,7 +42,7 @@ class CognitiveComplexMethodSpec {
                 return 0
             }
         """.trimIndent()
-        val findings = CognitiveComplexMethod(testConfig).compileAndLint(code)
+        val findings = CognitiveComplexMethod(testConfig).lint(code)
         assertThat(findings).isEmpty()
     }
 
@@ -53,7 +53,7 @@ class CognitiveComplexMethodSpec {
                 return a + b
             }
         """.trimIndent()
-        val findings = CognitiveComplexMethod(testConfig).compileAndLint(code)
+        val findings = CognitiveComplexMethod(testConfig).lint(code)
         assertThat(findings).isEmpty()
     }
 }

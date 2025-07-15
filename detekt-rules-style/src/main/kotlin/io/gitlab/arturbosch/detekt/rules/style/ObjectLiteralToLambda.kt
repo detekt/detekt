@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isOverride
@@ -40,12 +40,13 @@ import org.jetbrains.kotlin.types.KotlinType
  * }
  * </compliant>
  */
-@RequiresFullAnalysis
 @ActiveByDefault(since = "1.21.0")
-class ObjectLiteralToLambda(config: Config) : Rule(
-    config,
-    "Report object literals that can be changed to lambdas."
-) {
+class ObjectLiteralToLambda(config: Config) :
+    Rule(
+        config,
+        "Report object literals that can be changed to lambdas."
+    ),
+    RequiresFullAnalysis {
 
     private val KotlinType.couldBeSamInterface
         get() = JavaSingleAbstractMethodUtils.isSamType(this)
@@ -99,7 +100,7 @@ class ObjectLiteralToLambda(config: Config) : Rule(
                 ?.couldBeSamInterface == true &&
             declaration.hasConvertibleMethod()
         ) {
-            report(CodeSmell(Entity.from(expression), description))
+            report(Finding(Entity.from(expression), description))
         }
     }
 }

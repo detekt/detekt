@@ -1,14 +1,14 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class NullableToStringCallSpec(private val env: KotlinCoreEnvironment) {
+class NullableToStringCallSpec(private val env: KotlinEnvironmentContainer) {
     private val subject = NullableToStringCall(Config.empty)
 
     @Test
@@ -18,7 +18,7 @@ class NullableToStringCallSpec(private val env: KotlinCoreEnvironment) {
                 println(a.toString())
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(1)
         assertThat(actual.first().message).isEqualTo("This call 'a.toString()' may return the string \"null\".")
     }
@@ -30,7 +30,7 @@ class NullableToStringCallSpec(private val env: KotlinCoreEnvironment) {
                 println("${'$'}a")
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(1)
         assertThat(actual.first().message).isEqualTo("This call '\$a' may return the string \"null\".")
     }
@@ -42,7 +42,7 @@ class NullableToStringCallSpec(private val env: KotlinCoreEnvironment) {
                 println("${'$'}{a}")
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(1)
         assertThat(actual.first().message).isEqualTo("This call '\${a}' may return the string \"null\".")
     }
@@ -54,7 +54,7 @@ class NullableToStringCallSpec(private val env: KotlinCoreEnvironment) {
                 println(${'"'}""${'$'}a""${'"'})
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(1)
         assertThat(actual.first().message).isEqualTo("This call '\$a' may return the string \"null\".")
     }
@@ -73,7 +73,7 @@ class NullableToStringCallSpec(private val env: KotlinCoreEnvironment) {
                 val z = baz().toString()
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(3)
         assertThat(actual[0].message).isEqualTo("This call 'foo.a.toString()' may return the string \"null\".")
         assertThat(actual[1].message).isEqualTo("This call 'foo.bar().toString()' may return the string \"null\".")
@@ -94,7 +94,7 @@ class NullableToStringCallSpec(private val env: KotlinCoreEnvironment) {
                 val z = "${'$'}{baz()}"
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(3)
         assertThat(actual[0].message).isEqualTo("This call '\${foo.a}' may return the string \"null\".")
         assertThat(actual[1].message).isEqualTo("This call '\${foo.bar()}' may return the string \"null\".")
@@ -110,7 +110,7 @@ class NullableToStringCallSpec(private val env: KotlinCoreEnvironment) {
                 val y = "${'$'}{foo?.a}"
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(1)
         assertThat(actual[0].message).isEqualTo("This call '\${foo?.a}' may return the string \"null\".")
     }
@@ -157,7 +157,7 @@ class NullableToStringCallSpec(private val env: KotlinCoreEnvironment) {
                 val y = "${'$'}{bar?.a}"
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).isEmpty()
     }
 
@@ -175,7 +175,7 @@ class NullableToStringCallSpec(private val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).isEmpty()
     }
 
@@ -207,7 +207,7 @@ class NullableToStringCallSpec(private val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(4)
     }
 
@@ -223,7 +223,7 @@ class NullableToStringCallSpec(private val env: KotlinCoreEnvironment) {
                 foo.bar(x.toString())
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(1)
     }
 }

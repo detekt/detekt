@@ -1,14 +1,16 @@
 package io.gitlab.arturbosch.detekt.test
 
+import com.intellij.openapi.util.Key
+import com.intellij.openapi.util.UserDataHolderBase
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
-import org.jetbrains.kotlin.com.intellij.openapi.util.Key
-import org.jetbrains.kotlin.com.intellij.openapi.util.UserDataHolderBase
+import io.gitlab.arturbosch.detekt.api.RuleInstance
 
 class TestDetektion(
     vararg issues: Issue,
+    override val rules: List<RuleInstance> = emptyList(),
     metrics: List<ProjectMetric> = emptyList(),
     notifications: List<Notification> = emptyList(),
 ) : Detektion, UserDataHolderBase() {

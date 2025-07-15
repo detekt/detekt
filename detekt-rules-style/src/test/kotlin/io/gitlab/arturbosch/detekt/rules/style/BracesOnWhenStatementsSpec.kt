@@ -4,10 +4,10 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.rules.style.BracesOnWhenStatements.BracePolicy
 import io.gitlab.arturbosch.detekt.rules.style.BracesOnWhenStatementsSpec.Companion.NOT_RELEVANT
+import io.gitlab.arturbosch.detekt.rules.style.BracesOnWhenStatementsSpec.Companion.options
 import io.gitlab.arturbosch.detekt.rules.style.BracesOnWhenStatementsSpec.Companion.test
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode
@@ -63,8 +63,14 @@ class BracesOnWhenStatementsSpec {
             "->"(5),
         )
 
-        private fun flag(code: String, vararg locations: (String) -> Pair<Int, Int>) =
-            testCombinations(BracePolicy.Never.config, BracePolicy.Always.config, code, *locations)
+        private fun flag(code: String, vararg locations: (String) -> Pair<Int, Int>): DynamicNode {
+            val validTopLevelCode = """
+                fun main() {
+                    $code
+                }
+            """.trimIndent()
+            return testCombinations(BracePolicy.Never.config, BracePolicy.Always.config, validTopLevelCode, *locations)
+        }
 
         @TestFactory
         fun `extra line break between branches`() =
@@ -165,8 +171,14 @@ class BracesOnWhenStatementsSpec {
         @Nested
         inner class `=always` {
 
-            private fun flag(code: String, vararg locations: (String) -> Pair<Int, Int>) =
-                testCombinations(BracePolicy.Always.config, NOT_RELEVANT, code, *locations)
+            private fun flag(code: String, vararg locations: (String) -> Pair<Int, Int>): DynamicNode {
+                val validTopLevelCode = """
+                    fun main() {
+                        $code
+                    }
+                """.trimIndent()
+                return testCombinations(BracePolicy.Always.config, NOT_RELEVANT, validTopLevelCode, *locations)
+            }
 
             @TestFactory
             fun `missing braces are flagged`() =
@@ -236,8 +248,14 @@ class BracesOnWhenStatementsSpec {
         @Nested
         inner class `=never` {
 
-            private fun flag(code: String, vararg locations: (String) -> Pair<Int, Int>) =
-                testCombinations(BracePolicy.Never.config, NOT_RELEVANT, code, *locations)
+            private fun flag(code: String, vararg locations: (String) -> Pair<Int, Int>): DynamicNode {
+                val validTopLevelCode = """
+                    fun main() {
+                        $code
+                    }
+                """.trimIndent()
+                return testCombinations(BracePolicy.Never.config, NOT_RELEVANT, validTopLevelCode, *locations)
+            }
 
             @TestFactory fun `no braces are accepted`() =
                 flag(
@@ -351,8 +369,14 @@ class BracesOnWhenStatementsSpec {
         @Nested
         inner class `=necessary` {
 
-            private fun flag(code: String, vararg locations: (String) -> Pair<Int, Int>) =
-                testCombinations(BracePolicy.Necessary.config, NOT_RELEVANT, code, *locations)
+            private fun flag(code: String, vararg locations: (String) -> Pair<Int, Int>): DynamicNode {
+                val validTopLevelCode = """
+                    fun main() {
+                        $code
+                    }
+                """.trimIndent()
+                return testCombinations(BracePolicy.Necessary.config, NOT_RELEVANT, validTopLevelCode, *locations)
+            }
 
             @TestFactory
             fun `no braces are accepted`() =
@@ -467,8 +491,14 @@ class BracesOnWhenStatementsSpec {
         @Nested
         inner class `=consistent` {
 
-            private fun flag(code: String, vararg locations: (String) -> Pair<Int, Int>) =
-                testCombinations(BracePolicy.Consistent.config, NOT_RELEVANT, code, *locations)
+            private fun flag(code: String, vararg locations: (String) -> Pair<Int, Int>): DynamicNode {
+                val validTopLevelCode = """
+                    fun main() {
+                        $code
+                    }
+                """.trimIndent()
+                return testCombinations(BracePolicy.Consistent.config, NOT_RELEVANT, validTopLevelCode, *locations)
+            }
 
             @TestFactory
             fun `no braces are accepted`() =
@@ -584,8 +614,14 @@ class BracesOnWhenStatementsSpec {
         @Nested
         inner class `=always` {
 
-            private fun flag(code: String, vararg locations: (String) -> Pair<Int, Int>) =
-                testCombinations(NOT_RELEVANT, BracePolicy.Always.config, code, *locations)
+            private fun flag(code: String, vararg locations: (String) -> Pair<Int, Int>): DynamicNode {
+                val validTopLevelCode = """
+                    fun main() {
+                        $code
+                    }
+                """.trimIndent()
+                return testCombinations(NOT_RELEVANT, BracePolicy.Always.config, validTopLevelCode, *locations)
+            }
 
             @TestFactory
             fun `missing braces are flagged`() =
@@ -682,8 +718,14 @@ class BracesOnWhenStatementsSpec {
         @Nested
         inner class `=never` {
 
-            private fun flag(code: String, vararg locations: (String) -> Pair<Int, Int>) =
-                testCombinations(NOT_RELEVANT, BracePolicy.Never.config, code, *locations)
+            private fun flag(code: String, vararg locations: (String) -> Pair<Int, Int>): DynamicNode {
+                val validTopLevelCode = """
+                    fun main() {
+                        $code
+                    }
+                """.trimIndent()
+                return testCombinations(NOT_RELEVANT, BracePolicy.Never.config, validTopLevelCode, *locations)
+            }
 
             @TestFactory
             fun `no braces are accepted`() =
@@ -836,8 +878,14 @@ class BracesOnWhenStatementsSpec {
         @Nested
         inner class `=necessary` {
 
-            private fun flag(code: String, vararg locations: (String) -> Pair<Int, Int>) =
-                testCombinations(NOT_RELEVANT, BracePolicy.Necessary.config, code, *locations)
+            private fun flag(code: String, vararg locations: (String) -> Pair<Int, Int>): DynamicNode {
+                val validTopLevelCode = """
+                    fun main() {
+                        $code
+                    }
+                """.trimIndent()
+                return testCombinations(NOT_RELEVANT, BracePolicy.Necessary.config, validTopLevelCode, *locations)
+            }
 
             @TestFactory
             fun `no braces are accepted`() =
@@ -1018,8 +1066,14 @@ class BracesOnWhenStatementsSpec {
         @Nested
         inner class `=consistent` {
 
-            private fun flag(code: String, vararg locations: (String) -> Pair<Int, Int>) =
-                testCombinations(NOT_RELEVANT, BracePolicy.Consistent.config, code, *locations)
+            private fun flag(code: String, vararg locations: (String) -> Pair<Int, Int>): DynamicNode {
+                val validTopLevelCode = """
+                    fun main() {
+                        $code
+                    }
+                """.trimIndent()
+                return testCombinations(NOT_RELEVANT, BracePolicy.Consistent.config, validTopLevelCode, *locations)
+            }
 
             @TestFactory
             fun `no braces are accepted`() =
@@ -1211,12 +1265,12 @@ class BracesOnWhenStatementsSpec {
             singleLine: String,
             multiLine: String,
             code: String,
-            vararg locations: (String) -> Pair<Int, Int>
+            vararg locations: (String) -> Pair<Int, Int>,
         ): DynamicNode {
             val codeLocation = locations.map { it(code) }.toTypedArray()
             // Separately compile the code because otherwise all the combinations would compile them again and again.
             val compileTest = dynamicTest("Compiles: $code") {
-                BracesOnWhenStatements(Config.empty).compileAndLint(code)
+                BracesOnWhenStatements(Config.empty).lint(code)
             }
             val validationTests = createBraceTests(singleLine, multiLine) { rule ->
                 rule.test(code, *codeLocation)
@@ -1232,7 +1286,7 @@ class BracesOnWhenStatementsSpec {
         private fun BracesOnWhenStatements.test(code: String, vararg locations: Pair<Int, Int>) {
             // This creates a 10 character prefix (signature/9, space/1) for every code example.
             // Note: not compileAndLint for performance reasons, compilation is in a separate test.
-            val findings = lint("fun f() { $code }")
+            val findings = lint("fun f() { $code }", compile = false)
             // Offset text locations by the above prefix, it results in 0-indexed locations.
             val offset = 10
             assertThat(findings)
@@ -1250,7 +1304,7 @@ class BracesOnWhenStatementsSpec {
         private fun createBraceTests(
             singleLine: String,
             multiLine: String,
-            test: (BracesOnWhenStatements) -> Unit
+            test: (BracesOnWhenStatements) -> Unit,
         ): List<DynamicNode> {
             val singleOptions = options(singleLine)
             val multiOptions = options(multiLine)

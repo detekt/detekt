@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Test
 
 class ComplexConditionSpec {
@@ -20,7 +20,7 @@ class ComplexConditionSpec {
            }
         """.trimIndent()
 
-        val actual = ComplexCondition(testConfig).compileAndLint(code)
+        val actual = ComplexCondition(testConfig).lint(code)
 
         assertThat(actual).hasSize(1)
     }
@@ -35,7 +35,7 @@ class ComplexConditionSpec {
             }
         """.trimIndent()
 
-        val actual = ComplexCondition(testConfig).compileAndLint(code)
+        val actual = ComplexCondition(testConfig).lint(code)
 
         assertThat(actual).isEmpty()
     }
@@ -51,7 +51,7 @@ class ComplexConditionSpec {
              }
         """.trimIndent()
 
-        val actual = ComplexCondition(testConfig).compileAndLint(code)
+        val actual = ComplexCondition(testConfig).lint(code)
 
         assertThat(actual).isEmpty()
     }

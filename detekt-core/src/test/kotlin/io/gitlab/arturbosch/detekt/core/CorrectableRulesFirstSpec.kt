@@ -3,8 +3,6 @@ package io.gitlab.arturbosch.detekt.core
 import io.github.detekt.test.utils.compileForTest
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.RuleSet
-import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtClass
@@ -17,28 +15,26 @@ class CorrectableRulesFirstSpec {
     @ValueSource(booleans = [true, false])
     fun `runs the correctable rules first, the registration order doesn't matter`(reverse: Boolean) {
         val testFile = path.resolve("Test.kt")
-        val settings = createProcessingSettings(
-            config = yamlConfigFromContent(
-                """
-                    Test:
-                      NonCorrectable:
-                        active: true
-                        autoCorrect: false
-                      Correctable:
-                        active: true
-                        autoCorrect: true
-                """.trimIndent()
-            ),
-        ) { rules { autoCorrect = true } }
+        val config = yamlConfigFromContent(
+            """
+                Test:
+                  NonCorrectable:
+                    active: true
+                    autoCorrect: false
+                  Correctable:
+                    active: true
+                    autoCorrect: true
+            """.trimIndent()
+        )
+        val settings = createProcessingSettings { rules { autoCorrect = true } }
         val detector = Analyzer(
             settings,
-            object : RuleSetProvider {
-                override val ruleSetId = RuleSet.Id("Test")
-                override fun instance() = RuleSet(
-                    ruleSetId,
-                    listOf(::NonCorrectable, ::Correctable).let { if (reverse) it.reversed() else it }
-                )
-            },
+            *listOf(
+                createRuleDescriptor(::NonCorrectable, config.subConfig("Test").subConfig("NonCorrectable")),
+                createRuleDescriptor(::Correctable, config.subConfig("Test").subConfig("Correctable")),
+            )
+                .let { if (reverse) it.reversed() else it }
+                .toTypedArray(),
         )
 
         settings.use { detector.run(listOf(compileForTest(testFile))) }

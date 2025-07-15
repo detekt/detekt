@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.api
 
+import com.intellij.openapi.util.TextRange
+import com.intellij.psi.PsiElement
 import dev.drewhamilton.poko.Poko
-import org.jetbrains.kotlin.com.intellij.openapi.util.TextRange
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.diagnostics.DiagnosticUtils.getLineAndColumnInPsiFile
 import org.jetbrains.kotlin.diagnostics.PsiDiagnosticUtils
 import org.jetbrains.kotlin.psi.KtFile

@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.performance
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.descriptors.ConstructorDescriptor
@@ -47,13 +47,14 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
  * }
  * </compliant>
  */
-@RequiresFullAnalysis
 @ActiveByDefault(since = "1.0.0")
-class SpreadOperator(config: Config) : Rule(
-    config,
-    "In most cases using a spread operator causes a full copy of the array to be created before calling a " +
-        "method. This may result in a performance penalty."
-) {
+class SpreadOperator(config: Config) :
+    Rule(
+        config,
+        "In most cases using a spread operator causes a full copy of the array to be created before calling a " +
+            "method. This may result in a performance penalty."
+    ),
+    RequiresFullAnalysis {
 
     override fun visitValueArgumentList(list: KtValueArgumentList) {
         super.visitValueArgumentList(list)
@@ -68,7 +69,7 @@ class SpreadOperator(config: Config) : Rule(
             return
         }
         report(
-            CodeSmell(
+            Finding(
                 Entity.from(argsList),
                 "Used in this way a spread operator causes a full copy of the array to be created before " +
                     "calling a method. This may result in a performance penalty."

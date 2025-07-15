@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -18,23 +17,23 @@ class ModifierOrderSpec {
 
         @Test
         fun `should report incorrectly ordered modifiers`() {
-            subject.compileAndLint(bad1).let {
+            subject.lint(bad1).let {
                 assertThat(it).singleElement().hasMessage("Modifier order should be: internal data")
             }
-            subject.lint(bad2).let {
+            subject.lint(bad2, compile = false).let {
                 assertThat(it).singleElement().hasMessage("Modifier order should be: private actual")
             }
-            subject.lint(bad3).let {
+            subject.lint(bad3, compile = false).let {
                 assertThat(it).singleElement().hasMessage("Modifier order should be: expect annotation")
             }
         }
 
         @Test
         fun `does not report correctly ordered modifiers`() {
-            assertThat(subject.compileAndLint("internal data class Test(val test: String)")).isEmpty()
-            assertThat(subject.lint("private actual class Test(val test: String)")).isEmpty()
-            assertThat(subject.lint("expect annotation class Test")).isEmpty()
-            assertThat(subject.compileAndLint("private /* comment */ data class Test(val test: String)")).isEmpty()
+            assertThat(subject.lint("internal data class Test(val test: String)")).isEmpty()
+            assertThat(subject.lint("private actual class Test(val test: String)", compile = false)).isEmpty()
+            assertThat(subject.lint("expect annotation class Test", compile = false)).isEmpty()
+            assertThat(subject.lint("private /* comment */ data class Test(val test: String)")).isEmpty()
         }
     }
 
@@ -44,13 +43,13 @@ class ModifierOrderSpec {
         @Test
         fun `should report wrongly ordered modifiers`() {
             val code = "lateinit internal var test: String"
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
 
         @Test
         fun `should not report correctly ordered modifiers`() {
             val code = "internal lateinit var test: String"
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
     }
 
@@ -67,7 +66,7 @@ class ModifierOrderSpec {
                     override open fun test() {}
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
 
         @Test
@@ -80,7 +79,7 @@ class ModifierOrderSpec {
                     override fun test() {}
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
     }
 
@@ -94,7 +93,7 @@ class ModifierOrderSpec {
                     tailrec private fun foo(x: Double = 1.0): Double = 1.0
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
 
         @Test
@@ -104,7 +103,7 @@ class ModifierOrderSpec {
                     private tailrec fun foo(x: Double = 1.0): Double = 1.0
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
     }
 
@@ -114,13 +113,13 @@ class ModifierOrderSpec {
         @Test
         fun `should report incorrectly ordered modifiers`() {
             val code = "class Foo(vararg private val strings: String) {}"
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
 
         @Test
         fun `should not report correctly ordered modifiers`() {
             val code = "class Foo(private vararg val strings: String) {}"
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
     }
 
@@ -134,7 +133,7 @@ class ModifierOrderSpec {
                     fun loadMore(): Boolean
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
     }
 
@@ -147,7 +146,7 @@ class ModifierOrderSpec {
                 @JvmInline
                 private value class Foo(val bar: Int)
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
     }
 }

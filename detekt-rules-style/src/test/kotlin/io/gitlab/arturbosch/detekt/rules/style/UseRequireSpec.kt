@@ -1,15 +1,15 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class UseRequireSpec(val env: KotlinCoreEnvironment) {
+class UseRequireSpec(val env: KotlinEnvironmentContainer) {
     val subject = UseRequire(Config.empty)
 
     @Test
@@ -20,7 +20,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                 println("something")
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasStartSourceLocation(2, 16)
+        assertThat(subject.lintWithContext(env, code)).hasStartSourceLocation(2, 16)
     }
 
     @Test
@@ -34,7 +34,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
             }
         """.trimIndent()
 
-        assertThat(subject.compileAndLintWithContext(env, code)).hasStartSourceLocation(3, 9)
+        assertThat(subject.lintWithContext(env, code)).hasStartSourceLocation(3, 9)
     }
 
     @Test
@@ -45,7 +45,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                 println("something")
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasStartSourceLocation(2, 16)
+        assertThat(subject.lintWithContext(env, code)).hasStartSourceLocation(2, 16)
     }
 
     @Test
@@ -56,7 +56,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                 println("something")
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasStartSourceLocation(2, 16)
+        assertThat(subject.lintWithContext(env, code)).hasStartSourceLocation(2, 16)
     }
 
     @Test
@@ -67,7 +67,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                 println("something")
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasStartSourceLocation(2, 16)
+        assertThat(subject.lintWithContext(env, code)).hasStartSourceLocation(2, 16)
     }
 
     @Test
@@ -79,7 +79,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                 println("something")
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -91,7 +91,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -106,7 +106,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
             }
         """.trimIndent()
 
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -114,19 +114,19 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
         val code = """
             fun throwingFunction(): () -> Any = { throw IllegalArgumentException("message") }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
     fun `does not report an issue if the exception thrown unconditionally`() {
         val code = """fun doThrow(): Nothing = throw IllegalArgumentException("message")"""
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
     fun `does not report an issue if the exception thrown unconditionally in a function block`() {
         val code = """fun doThrow() { throw IllegalArgumentException("message") }"""
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -136,7 +136,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                 if (throwable !is NumberFormatException) throw IllegalArgumentException(throwable)
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -146,7 +146,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                 if (throwable !is NumberFormatException) throw IllegalArgumentException("a", throwable)
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -157,7 +157,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                 if (throwable !is NumberFormatException) throw IllegalArgumentException(s)
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
     }
 
     @Nested
@@ -174,7 +174,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                     else -> throw IllegalArgumentException("Not supported List type")
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -190,7 +190,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                     throw IllegalArgumentException("Test was too big")
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -204,7 +204,7 @@ class UseRequireSpec(val env: KotlinCoreEnvironment) {
                     return subclass
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 }

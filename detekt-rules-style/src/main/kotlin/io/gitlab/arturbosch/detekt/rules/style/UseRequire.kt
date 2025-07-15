@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.arguments
 import io.gitlab.arturbosch.detekt.rules.isEmptyOrSingleStringArgument
@@ -27,21 +27,22 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  * require(value >= 0) { "value is $value but should be at least 0" }
  * </compliant>
  */
-@RequiresFullAnalysis
 @ActiveByDefault(since = "1.21.0")
-class UseRequire(config: Config) : Rule(
-    config,
-    "Use require() instead of throwing an IllegalArgumentException."
-) {
+class UseRequire(config: Config) :
+    Rule(
+        config,
+        "Use require() instead of throwing an IllegalArgumentException."
+    ),
+    RequiresAnalysisApi {
 
     override fun visitThrowExpression(expression: KtThrowExpression) {
         if (!expression.isIllegalArgumentException()) return
         if (expression.hasMoreExpressionsInBlock()) return
 
         if (expression.isEnclosedByConditionalStatement() &&
-            expression.arguments.isEmptyOrSingleStringArgument(bindingContext)
+            expression.arguments.isEmptyOrSingleStringArgument()
         ) {
-            report(CodeSmell(Entity.from(expression), description))
+            report(Finding(Entity.from(expression), description))
         }
     }
 

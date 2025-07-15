@@ -2,15 +2,21 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.github.detekt.psi.FunctionMatcher
 import io.github.detekt.psi.FunctionMatcher.Companion.fromFunctionSignature
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.valuesWithReason
-import org.jetbrains.kotlin.descriptors.CallableDescriptor
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.KaCall
+import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
+import org.jetbrains.kotlin.analysis.api.resolution.KaCompoundAccessCall
+import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaPropertySymbol
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
 import org.jetbrains.kotlin.descriptors.SyntheticPropertyDescriptor
@@ -19,12 +25,13 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCallableReferenceExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
 import org.jetbrains.kotlin.psi.KtPostfixExpression
 import org.jetbrains.kotlin.psi.KtPrefixExpression
 import org.jetbrains.kotlin.psi.psiUtil.isDotSelector
+import org.jetbrains.kotlin.resolve.calls.util.asCallableReferenceExpression
 import org.jetbrains.kotlin.resolve.calls.util.getCalleeExpressionIfAny
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
-import org.jetbrains.kotlin.resolve.descriptorUtil.overriddenTreeUniqueAsSequence
+import org.jetbrains.kotlin.utils.yieldIfNotNull
 
 /**
  * Reports all method or constructor invocations that are forbidden.
@@ -41,12 +48,13 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.overriddenTreeUniqueAsSequenc
  * </noncompliant>
  *
  */
-@RequiresFullAnalysis
-class ForbiddenMethodCall(config: Config) : Rule(
-    config,
-    "Mark forbidden methods. A forbidden method could be an invocation of an unstable / experimental " +
-        "method and hence you might want to mark it as forbidden in order to get warned about the usage."
-) {
+class ForbiddenMethodCall(config: Config) :
+    Rule(
+        config,
+        "Mark forbidden methods. A forbidden method could be an invocation of an unstable / experimental " +
+            "method and hence you might want to mark it as forbidden in order to get warned about the usage."
+    ),
+    RequiresAnalysisApi {
 
     @Configuration(
         "List of fully qualified method signatures which are forbidden. " +
@@ -57,8 +65,9 @@ class ForbiddenMethodCall(config: Config) : Rule(
             "`fun String.hello(a: Int)` you should add the receiver parameter as the first parameter like this: " +
             "`hello(kotlin.String, kotlin.Int)`. To forbid constructor calls you need to define them with `<init>`, " +
             "for example `java.util.Date.<init>`. To forbid calls involving type parameters, omit them, for example " +
-            "`fun hello(args: Array<Any>)` is referred to as simply `hello(kotlin.Array)` (also the signature for " +
-            "vararg parameters). To forbid methods from the companion object reference the Companion class, for " +
+            "`fun hello(args: Array<Any>)` is referred to as simply `hello(kotlin.Array)`. To forbid calls " +
+            "involving varargs for example `fun hello(vararg args: String)` you need to define it like " +
+            "`hello(vararg String)`. To forbid methods from the companion object reference the Companion class, for " +
             "example as `TestClass.Companion.hello()` (even if it is marked `@JvmStatic`)."
     )
     private val methods: List<ForbiddenMethod> by config(
@@ -115,29 +124,48 @@ class ForbiddenMethodCall(config: Config) : Rule(
     }
 
     private fun check(expression: KtExpression) {
-        val descriptors: Set<CallableDescriptor> =
-            expression.getResolvedCall(bindingContext)?.resultingDescriptor?.let { callableDescriptor ->
-                val foundDescriptors = if (callableDescriptor is PropertyDescriptor) {
-                    setOfNotNull(
-                        callableDescriptor.unwrappedGetMethod,
-                        callableDescriptor.unwrappedSetMethod
-                    )
-                } else {
-                    setOf(callableDescriptor)
+        analyze(expression) {
+            val call = expression.resolveToCall()
+                ?: expression.asCallableReferenceExpression()?.resolveToCall()
+                ?: return
+            val symbols = when (val symbol = call.successfulCallOrNull<KaCall>()) {
+                is KaCallableMemberCall<*, *> -> {
+                    val appliedSymbol = symbol.partiallyAppliedSymbol.symbol
+                    if (appliedSymbol is KaPropertySymbol) {
+                        if (expression !is KtOperationReferenceExpression) {
+                            sequence {
+                                yieldIfNotNull(appliedSymbol.getter)
+                                yieldIfNotNull(appliedSymbol.setter)
+                            }
+                        } else {
+                            emptySequence()
+                        }
+                    } else {
+                        sequenceOf(appliedSymbol)
+                    }
                 }
-                foundDescriptors.flatMapTo(mutableSetOf()) {
-                    it.overriddenTreeUniqueAsSequence(true).toSet()
+                is KaCompoundAccessCall -> {
+                    sequenceOf(symbol.compoundOperation.operationPartiallyAppliedSymbol.symbol)
                 }
-            } ?: return
+                else -> {
+                    emptySequence()
+                }
+            }.flatMap { symbol ->
+                sequence {
+                    yield(symbol)
+                    yieldAll(symbol.allOverriddenSymbols)
+                }
+            }
 
-        for (descriptor in descriptors) {
-            methods.find { it.value.match(descriptor) }?.let { forbidden ->
-                val message = if (forbidden.reason != null) {
-                    "The method `${forbidden.value}` has been forbidden: ${forbidden.reason}"
-                } else {
-                    "The method `${forbidden.value}` has been forbidden in the detekt config."
+            for (symbol in symbols) {
+                methods.find { it.value.match(symbol) }?.let { forbidden ->
+                    val message = if (forbidden.reason != null) {
+                        "The method `${forbidden.value}` has been forbidden: ${forbidden.reason}"
+                    } else {
+                        "The method `${forbidden.value}` has been forbidden in the detekt config."
+                    }
+                    report(Finding(Entity.from(expression), message))
                 }
-                report(CodeSmell(Entity.from(expression), message))
             }
         }
     }

@@ -1,12 +1,15 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
-import org.jetbrains.kotlin.diagnostics.Errors
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.components.KaDiagnosticCheckerFilter
+import org.jetbrains.kotlin.analysis.api.fir.diagnostics.KaFirDiagnostic
 import org.jetbrains.kotlin.psi.KtExpression
 
 /**
@@ -29,20 +32,27 @@ import org.jetbrains.kotlin.psi.KtExpression
  * }
  * </noncompliant>
  */
-@RequiresFullAnalysis
 @ActiveByDefault(since = "1.0.0")
-class UnreachableCode(config: Config) : Rule(
-    config,
-    "Unreachable code detected. This code should be removed."
-) {
+class UnreachableCode(config: Config) :
+    Rule(
+        config,
+        "Unreachable code detected. This code should be removed."
+    ),
+    RequiresAnalysisApi {
 
+    @OptIn(KaExperimentalApi::class)
     override fun visitExpression(expression: KtExpression) {
         super.visitExpression(expression)
-        if (bindingContext.diagnostics.forElement(expression)
-                .any { it.factory == Errors.UNREACHABLE_CODE || it.factory == Errors.USELESS_ELVIS }
-        ) {
+
+        val isUnreachableCode = analyze(expression) {
+            expression
+                .diagnostics(KaDiagnosticCheckerFilter.EXTENDED_AND_COMMON_CHECKERS)
+                .any { it is KaFirDiagnostic.UnreachableCode || it is KaFirDiagnostic.UselessElvis }
+        }
+
+        if (isUnreachableCode) {
             report(
-                CodeSmell(
+                Finding(
                     Entity.from(expression),
                     "This expression is unreachable code which should either be used or removed."
                 )

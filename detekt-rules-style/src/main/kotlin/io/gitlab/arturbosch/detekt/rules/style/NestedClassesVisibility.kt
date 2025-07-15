@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isInternal
 import org.jetbrains.kotlin.lexer.KtTokens
@@ -49,7 +49,7 @@ class NestedClassesVisibility(config: Config) : Rule(
         klass.declarations
             .filterIsInstance<KtClassOrObject>()
             .filter { it.hasModifier(KtTokens.PUBLIC_KEYWORD) && it.isNoEnum() && it.isNoCompanionObj() }
-            .forEach { report(CodeSmell(Entity.from(it), description)) }
+            .forEach { report(Finding(Entity.from(it), description)) }
     }
 
     private fun KtClassOrObject.isNoEnum() = !this.hasModifier(KtTokens.ENUM_KEYWORD) && this !is KtEnumEntry

@@ -4,8 +4,8 @@ import org.intellij.lang.annotations.Language
 
 class ProjectLayout(
     val numberOfSourceFilesInRootPerSourceDir: Int,
-    val numberOfCodeSmellsInRootPerSourceDir: Int = 0,
-    val srcDirs: List<String> = listOf("src/main/java", "src/test/java", "src/main/kotlin", "src/test/kotlin")
+    val numberOfFindingsInRootPerSourceDir: Int = 0,
+    val srcDirs: List<String> = listOf("src/main/java", "src/test/java", "src/main/kotlin", "src/test/kotlin"),
 ) {
 
     private val mutableSubmodules: MutableList<Submodule> = mutableListOf()
@@ -16,7 +16,7 @@ class ProjectLayout(
     fun addSubmodule(
         name: String,
         numberOfSourceFilesPerSourceDir: Int,
-        numberOfCodeSmells: Int = 0,
+        numberOfFindings: Int = 0,
         @Language("gradle.kts")
         buildFileContent: String? = null,
         srcDirs: List<String> = this.srcDirs,
@@ -25,7 +25,7 @@ class ProjectLayout(
         val submodule = Submodule(
             name = name,
             numberOfSourceFilesPerSourceDir = numberOfSourceFilesPerSourceDir,
-            numberOfCodeSmells = numberOfCodeSmells,
+            numberOfFindings = numberOfFindings,
             buildFileContent = buildFileContent,
             srcDirs = srcDirs,
             baselineFiles = baselineFiles,
@@ -37,7 +37,7 @@ class ProjectLayout(
 data class Submodule(
     val name: String,
     val numberOfSourceFilesPerSourceDir: Int,
-    val numberOfCodeSmells: Int,
+    val numberOfFindings: Int,
     @Language("gradle.kts")
     val buildFileContent: String?,
     val srcDirs: List<String>,

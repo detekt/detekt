@@ -11,12 +11,12 @@ import kotlin.io.path.absolute
  */
 fun compileContentForTest(
     @Language("kotlin") content: String,
-    filename: String,
+    filename: String = "Test.kt",
 ): KtFile {
     require('/' !in filename && '\\' !in filename) {
         "filename must be a file name only and not contain any path elements"
     }
-    return compileContentForTest(content, path = Path("/$filename"))
+    return compileContentForTest(content, path = Path("/").absolute().resolve(filename))
 }
 
 /**
@@ -24,7 +24,7 @@ fun compileContentForTest(
  */
 fun compileContentForTest(
     @Language("kotlin") content: String,
-    path: Path = Path("/").absolute().resolve("Test.kt"),
+    path: Path,
 ): KtFile = KtTestCompiler.createKtFile(content, path)
 
 /**

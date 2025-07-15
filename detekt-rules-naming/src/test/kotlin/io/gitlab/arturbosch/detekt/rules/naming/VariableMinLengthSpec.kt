@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.naming
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -18,7 +18,7 @@ class VariableMinLengthSpec {
         @Test
         fun `reports a very short variable name`() {
             val code = "private val a = 3"
-            assertThat(variableMinLength.compileAndLint(code)).hasSize(1)
+            assertThat(variableMinLength.lint(code)).hasSize(1)
         }
 
         @Test
@@ -28,20 +28,20 @@ class VariableMinLengthSpec {
                     val prop: (Int) -> Unit = { _ -> Unit }
                 }
             """.trimIndent()
-            assertThat(variableMinLength.compileAndLint(code)).isEmpty()
+            assertThat(variableMinLength.lint(code)).isEmpty()
         }
     }
 
     @Test
     fun `should not report a variable name that is okay`() {
         val code = "private val thisOneIsCool = 3"
-        assertThat(VariableMinLength(Config.empty).compileAndLint(code)).isEmpty()
+        assertThat(VariableMinLength(Config.empty).lint(code)).isEmpty()
     }
 
     @Test
     fun `should not report a variable with single letter name`() {
         val code = "private val a = 3"
-        assertThat(VariableMinLength(Config.empty).compileAndLint(code)).isEmpty()
+        assertThat(VariableMinLength(Config.empty).lint(code)).isEmpty()
     }
 
     @Test
@@ -52,7 +52,7 @@ class VariableMinLengthSpec {
                 val (_, status) = getResult()
             }
         """.trimIndent()
-        assertThat(VariableMinLength(Config.empty).compileAndLint(code)).isEmpty()
+        assertThat(VariableMinLength(Config.empty).lint(code)).isEmpty()
     }
 
     @Test
@@ -69,7 +69,7 @@ class VariableMinLengthSpec {
             }
         """.trimIndent()
         assertThat(
-            VariableMinLength(TestConfig("minimumVariableNameLength" to 15)).compileAndLint(code)
+            VariableMinLength(TestConfig("minimumVariableNameLength" to 15)).lint(code)
         ).isEmpty()
     }
 }

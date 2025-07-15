@@ -1,14 +1,16 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.isOverride
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -16,7 +18,6 @@ import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.KtUserType
-import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * This rule reports a member that has the same name as the containing class or object.
@@ -48,12 +49,13 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * }
  * </compliant>
  */
-@RequiresFullAnalysis
 @ActiveByDefault(since = "1.2.0")
-class MemberNameEqualsClassName(config: Config) : Rule(
-    config,
-    "A member should not be given the same name as its parent class or object."
-) {
+class MemberNameEqualsClassName(config: Config) :
+    Rule(
+        config,
+        "A member should not be given the same name as its parent class or object."
+    ),
+    RequiresAnalysisApi {
 
     private val classMessage = "A member is named after the class. This might result in confusion. " +
         "Either rename the member or change it to a constructor."
@@ -66,7 +68,7 @@ class MemberNameEqualsClassName(config: Config) : Rule(
     override fun visitClass(klass: KtClass) {
         if (!klass.isInterface()) {
             (getMisnamedMembers(klass, klass.name) + getMisnamedCompanionObjectMembers(klass))
-                .forEach { report(CodeSmell(Entity.from(it), classMessage)) }
+                .forEach { report(Finding(Entity.from(it), classMessage)) }
         }
         super.visitClass(klass)
     }
@@ -74,7 +76,7 @@ class MemberNameEqualsClassName(config: Config) : Rule(
     override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
         if (!declaration.isCompanion()) {
             getMisnamedMembers(declaration, declaration.name)
-                .forEach { report(CodeSmell(Entity.from(it), objectMessage)) }
+                .forEach { report(Finding(Entity.from(it), objectMessage)) }
         }
         super.visitObjectDeclaration(declaration)
     }
@@ -100,10 +102,10 @@ class MemberNameEqualsClassName(config: Config) : Rule(
                 refName == klass.name
             }
             function.bodyExpression is KtBlockExpression -> false
-            function.bodyExpression !is KtBlockExpression && bindingContext != BindingContext.EMPTY -> {
-                val functionDescriptor = bindingContext[BindingContext.FUNCTION, function]
-                val classDescriptor = bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, klass]
-                functionDescriptor?.returnType?.constructor?.declarationDescriptor == classDescriptor
+            function.bodyExpression !is KtBlockExpression -> {
+                analyze(function) {
+                    klass.symbol == function.returnType.symbol
+                }
             }
             else -> true // We don't know if it is or not a factory. We assume it is a factory to avoid false-positives
         }

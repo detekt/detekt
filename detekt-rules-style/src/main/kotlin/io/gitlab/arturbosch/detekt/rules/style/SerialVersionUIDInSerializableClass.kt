@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.companionObject
 import io.gitlab.arturbosch.detekt.rules.isConstant
@@ -53,7 +53,7 @@ class SerialVersionUIDInSerializableClass(config: Config) : Rule(
             val companionObject = klass.companionObject()
             if (companionObject == null) {
                 report(
-                    CodeSmell(
+                    Finding(
                         Entity.atName(klass),
                         klass.getIssueMessage("class")
                     )
@@ -75,7 +75,7 @@ class SerialVersionUIDInSerializableClass(config: Config) : Rule(
 
     private fun reportFinding(finding: SerialVersionUIDFindings) {
         report(
-            CodeSmell(
+            Finding(
                 Entity.atName(finding.violatingElement),
                 finding.issueMsg
             )

@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.documentation
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.documentation.internal.isPublicInherited
@@ -29,6 +29,9 @@ class UndocumentedPublicProperty(config: Config) : Rule(
     @Configuration("if protected functions should be searched")
     private val searchProtectedProperty: Boolean by config(false)
 
+    @Configuration("ignores a enum entries when set to true")
+    private val ignoreEnumEntries: Boolean by config(false)
+
     override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {
         if (constructor.isPublicInherited()) {
             val comment = constructor.containingClassOrObject?.docComment?.text
@@ -49,7 +52,11 @@ class UndocumentedPublicProperty(config: Config) : Rule(
 
     override fun visitEnumEntry(enumEntry: KtEnumEntry) {
         super.visitEnumEntry(enumEntry)
-        if (enumEntry.isPublicInherited(searchProtectedProperty) && enumEntry.docComment == null) {
+        if (
+            !ignoreEnumEntries &&
+            enumEntry.isPublicInherited(searchProtectedProperty) &&
+            enumEntry.docComment == null
+        ) {
             report(enumEntry)
         }
     }
@@ -72,7 +79,7 @@ class UndocumentedPublicProperty(config: Config) : Rule(
 
     private fun report(property: KtNamedDeclaration) {
         report(
-            CodeSmell(
+            Finding(
                 Entity.atName(property),
                 "The property ${property.nameAsSafeName} is missing documentation."
             )

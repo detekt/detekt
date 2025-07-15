@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.exceptions
 
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -24,13 +24,13 @@ class ThrowingExceptionsWithoutMessageOrCauseSpec {
 
         @Test
         fun `reports calls to the default constructor`() {
-            assertThat(subject.compileAndLint(code)).hasSize(2)
+            assertThat(subject.lint(code)).hasSize(2)
         }
 
         @Test
         fun `does not report calls to the default constructor with empty configuration`() {
             val config = TestConfig("exceptions" to emptyList<String>())
-            val findings = ThrowingExceptionsWithoutMessageOrCause(config).compileAndLint(code)
+            val findings = ThrowingExceptionsWithoutMessageOrCause(config).lint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -42,7 +42,7 @@ class ThrowingExceptionsWithoutMessageOrCauseSpec {
                 org.assertj.core.api.Assertions.assertThatIllegalArgumentException().isThrownBy { println() }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -56,6 +56,6 @@ class ThrowingExceptionsWithoutMessageOrCauseSpec {
                 illegalArgumentException()
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 }

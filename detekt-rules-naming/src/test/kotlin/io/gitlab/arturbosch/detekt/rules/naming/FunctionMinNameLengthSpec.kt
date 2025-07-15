@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.naming
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -11,7 +11,7 @@ class FunctionMinNameLengthSpec {
     @Test
     fun `should report a function name that is too short`() {
         val code = "fun a() = 3"
-        assertThat(FunctionNameMinLength(Config.empty).compileAndLint(code)).hasSize(1)
+        assertThat(FunctionNameMinLength(Config.empty).lint(code)).hasSize(1)
     }
 
     @Test
@@ -19,14 +19,14 @@ class FunctionMinNameLengthSpec {
         val code = "fun four() = 3"
         assertThat(
             FunctionNameMinLength(TestConfig("minimumFunctionNameLength" to 5))
-                .compileAndLint(code)
+                .lint(code)
         ).hasSize(1)
     }
 
     @Test
     fun `should not report a function name that is okay`() {
         val code = "fun three() = 3"
-        assertThat(FunctionNameMinLength(Config.empty).compileAndLint(code)).isEmpty()
+        assertThat(FunctionNameMinLength(Config.empty).lint(code)).isEmpty()
     }
 
     @Test
@@ -40,7 +40,7 @@ class FunctionMinNameLengthSpec {
         assertThat(
             FunctionNameMinLength(
                 TestConfig("minimumFunctionNameLength" to 50)
-            ).compileAndLint(code)
+            ).lint(code)
         ).isEmpty()
     }
 
@@ -55,7 +55,7 @@ class FunctionMinNameLengthSpec {
         assertThat(
             FunctionNameMinLength(
                 TestConfig("minimumFunctionNameLength" to 5)
-            ).compileAndLint(code)
+            ).lint(code)
         ).isEmpty()
     }
 }

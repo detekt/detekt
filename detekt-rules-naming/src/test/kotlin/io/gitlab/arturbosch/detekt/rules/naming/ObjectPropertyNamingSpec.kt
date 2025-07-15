@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.naming
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -25,7 +25,7 @@ class ObjectPropertyNamingSpec {
                     ${PublicConst.negative}
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -35,7 +35,7 @@ class ObjectPropertyNamingSpec {
                     ${PublicConst.positive}
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
 
         @Test
@@ -45,7 +45,7 @@ class ObjectPropertyNamingSpec {
                     ${PrivateConst.negative}
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -55,7 +55,7 @@ class ObjectPropertyNamingSpec {
                     ${PrivateConst.positive}
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
 
         @Test
@@ -65,7 +65,7 @@ class ObjectPropertyNamingSpec {
                     ${PublicConst.positive}
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasStartSourceLocation(2, 15)
+            assertThat(subject.lint(code)).hasStartSourceLocation(2, 15)
         }
     }
 
@@ -83,7 +83,7 @@ class ObjectPropertyNamingSpec {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -95,7 +95,7 @@ class ObjectPropertyNamingSpec {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
 
         @Test
@@ -107,7 +107,7 @@ class ObjectPropertyNamingSpec {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -119,7 +119,7 @@ class ObjectPropertyNamingSpec {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
 
         @Test
@@ -131,7 +131,7 @@ class ObjectPropertyNamingSpec {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasStartSourceLocation(3, 19)
+            assertThat(subject.lint(code)).hasStartSourceLocation(3, 19)
         }
     }
 
@@ -147,7 +147,7 @@ class ObjectPropertyNamingSpec {
                     ${PublicVal.negative}
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -157,7 +157,7 @@ class ObjectPropertyNamingSpec {
                     ${PublicVal.positive}
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
 
         @Test
@@ -167,7 +167,7 @@ class ObjectPropertyNamingSpec {
                     ${PrivateVal.negative}
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -177,7 +177,7 @@ class ObjectPropertyNamingSpec {
                     private val __NAME = "Artur"
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
     }
 
@@ -198,7 +198,7 @@ class ObjectPropertyNamingSpec {
                     const val _name = "Artur"
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -209,7 +209,7 @@ class ObjectPropertyNamingSpec {
                     private val _1234 = "Artur"
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
     }
 
@@ -228,7 +228,7 @@ class ObjectPropertyNamingSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
     }
 
@@ -242,7 +242,7 @@ class ObjectPropertyNamingSpec {
                 val _invalidNaming = 1
             """.trimIndent()
 
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
     }
 
@@ -254,7 +254,7 @@ class ObjectPropertyNamingSpec {
                 val _invalidNaming = 1
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -267,7 +267,7 @@ class ObjectPropertyNamingSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 }
 

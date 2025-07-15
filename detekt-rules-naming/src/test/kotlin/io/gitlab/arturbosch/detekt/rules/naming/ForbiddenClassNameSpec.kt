@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -18,7 +18,7 @@ class ForbiddenClassNameSpec {
         """.trimIndent()
         assertThat(
             ForbiddenClassName(TestConfig(FORBIDDEN_NAME to listOf("Manager", "Provider")))
-                .compileAndLint(code)
+                .lint(code)
         ).hasSize(2)
     }
 
@@ -27,7 +27,7 @@ class ForbiddenClassNameSpec {
         val code = "class TestProvider {}"
         assertThat(
             ForbiddenClassName(TestConfig(FORBIDDEN_NAME to listOf("test")))
-                .compileAndLint(code)
+                .lint(code)
         ).hasSize(1)
     }
 
@@ -40,7 +40,7 @@ class ForbiddenClassNameSpec {
         """.trimIndent()
         assertThat(
             ForbiddenClassName(TestConfig(FORBIDDEN_NAME to listOf("*Manager*", "*Provider*")))
-                .compileAndLint(code)
+                .lint(code)
         ).hasSize(2)
     }
 
@@ -50,7 +50,7 @@ class ForbiddenClassNameSpec {
             class TestManager {}
         """.trimIndent()
         val actual = ForbiddenClassName(TestConfig(FORBIDDEN_NAME to listOf("Test", "Manager", "Provider")))
-            .compileAndLint(code)
+            .lint(code)
         assertThat(actual.first().message)
             .isEqualTo("Class name TestManager is forbidden as it contains: Test, Manager")
     }

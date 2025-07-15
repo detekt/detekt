@@ -1,16 +1,15 @@
 package io.gitlab.arturbosch.detekt.rules.style.movelambdaout
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.lintWithContext
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Test
 
 // Source https://github.com/JetBrains/intellij-community/tree/master/plugins/kotlin/idea/tests/testData/inspectionsLocal/moveLambdaOutsideParentheses
 @KotlinCoreEnvironmentTest
-class UnnecessaryBracesAroundTrailingLambdaSpec(val env: KotlinCoreEnvironment) {
+class UnnecessaryBracesAroundTrailingLambdaSpec(val env: KotlinEnvironmentContainer) {
     private val subject = UnnecessaryBracesAroundTrailingLambda(Config.empty)
 
     @Test
@@ -23,7 +22,7 @@ class UnnecessaryBracesAroundTrailingLambdaSpec(val env: KotlinCoreEnvironment) 
             fun bar(a: Int = 0, f: (Int) -> Int) { }
             fun bar(a: Int, b: Int, f: (Int) -> Int) { }
         """.trimIndent()
-        val findings = subject.lintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code, compile = false)
         assertThat(findings).hasSize(1)
     }
 
@@ -34,7 +33,7 @@ class UnnecessaryBracesAroundTrailingLambdaSpec(val env: KotlinCoreEnvironment) 
             class C1(s: String, f: (String) -> String) : I
             class C2 : I by C1("", { "" })
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
@@ -45,7 +44,7 @@ class UnnecessaryBracesAroundTrailingLambdaSpec(val env: KotlinCoreEnvironment) 
                 p(1, { 2 })
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).hasSize(1)
     }
 
@@ -60,7 +59,7 @@ class UnnecessaryBracesAroundTrailingLambdaSpec(val env: KotlinCoreEnvironment) 
                 b(1)
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
@@ -73,7 +72,7 @@ class UnnecessaryBracesAroundTrailingLambdaSpec(val env: KotlinCoreEnvironment) 
 
             fun bar(p1: (Int) -> Int, p2: (Int) -> Int) {}
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
@@ -89,7 +88,7 @@ class UnnecessaryBracesAroundTrailingLambdaSpec(val env: KotlinCoreEnvironment) 
                 test({ })
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
@@ -105,7 +104,7 @@ class UnnecessaryBracesAroundTrailingLambdaSpec(val env: KotlinCoreEnvironment) 
                 test({ }, { }) // Don't flag it as IDE also doesn't flag it and trailing lambda might look more complicated in this case
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
@@ -118,7 +117,7 @@ class UnnecessaryBracesAroundTrailingLambdaSpec(val env: KotlinCoreEnvironment) 
 
             fun bar(b: (Int) -> Int, option: Int = 0) {}
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
@@ -133,7 +132,7 @@ class UnnecessaryBracesAroundTrailingLambdaSpec(val env: KotlinCoreEnvironment) 
                 b(a)
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).hasSize(1)
     }
 
@@ -151,7 +150,7 @@ class UnnecessaryBracesAroundTrailingLambdaSpec(val env: KotlinCoreEnvironment) 
                 b(a)
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).hasSize(1).hasStartSourceLocation(2, 5).hasEndSourceLocation(2, 8)
     }
 
@@ -166,7 +165,7 @@ class UnnecessaryBracesAroundTrailingLambdaSpec(val env: KotlinCoreEnvironment) 
                 return name4(name1) + name2 + name3
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
@@ -181,7 +180,7 @@ class UnnecessaryBracesAroundTrailingLambdaSpec(val env: KotlinCoreEnvironment) 
                 return { }
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).hasSize(1)
     }
 
@@ -196,7 +195,7 @@ class UnnecessaryBracesAroundTrailingLambdaSpec(val env: KotlinCoreEnvironment) 
                 runSuspend({ println() })
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).hasSize(1)
     }
 
@@ -211,7 +210,7 @@ class UnnecessaryBracesAroundTrailingLambdaSpec(val env: KotlinCoreEnvironment) 
                 runSuspend({ println() })
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).hasSize(1)
     }
 
@@ -224,7 +223,7 @@ class UnnecessaryBracesAroundTrailingLambdaSpec(val env: KotlinCoreEnvironment) 
                 foo({ "a" })
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).hasSize(1)
     }
 
@@ -236,7 +235,7 @@ class UnnecessaryBracesAroundTrailingLambdaSpec(val env: KotlinCoreEnvironment) 
                 foo({})
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 }

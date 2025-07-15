@@ -1,14 +1,14 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class ExitOutsideMainSpec(private val env: KotlinCoreEnvironment) {
+class ExitOutsideMainSpec(private val env: KotlinEnvironmentContainer) {
     private val subject = ExitOutsideMain(Config.empty)
 
     @Test
@@ -19,7 +19,7 @@ class ExitOutsideMainSpec(private val env: KotlinCoreEnvironment) {
                 exitProcess(0)
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
     }
 
     @Test
@@ -29,7 +29,7 @@ class ExitOutsideMainSpec(private val env: KotlinCoreEnvironment) {
                 System.exit(0)
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
     }
 
     @Test
@@ -39,7 +39,7 @@ class ExitOutsideMainSpec(private val env: KotlinCoreEnvironment) {
                 Runtime.getRuntime().exit(0)
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
     }
 
     @Test
@@ -49,7 +49,7 @@ class ExitOutsideMainSpec(private val env: KotlinCoreEnvironment) {
                 Runtime.getRuntime().halt(0)
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
     }
 
     @Test
@@ -60,7 +60,7 @@ class ExitOutsideMainSpec(private val env: KotlinCoreEnvironment) {
                 exitProcess(0)
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -70,7 +70,7 @@ class ExitOutsideMainSpec(private val env: KotlinCoreEnvironment) {
                 System.exit(0)
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -83,7 +83,7 @@ class ExitOutsideMainSpec(private val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
     }
 
     @Test
@@ -95,6 +95,6 @@ class ExitOutsideMainSpec(private val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
     }
 }

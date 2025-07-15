@@ -2,8 +2,10 @@ package io.gitlab.arturbosch.detekt.api
 
 import dev.drewhamilton.poko.Poko
 import io.gitlab.arturbosch.detekt.api.internal.validateIdentifier
+import org.jetbrains.kotlin.config.LanguageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
+import java.net.URI
 
 /**
  * A rule defines how one specific code structure should look like. If code is found
@@ -13,10 +15,13 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * A rule is implemented using the visitor pattern and should be started using the visit(KtFile)
  * function. If calculations must be done before or after the visiting process, here are
  * two predefined (preVisit/postVisit) functions which can be overridden to setup/teardown additional data.
+ *
+ * @property url An url pointing to the documentation of this rule
  */
 open class Rule(
     val config: Config,
     val description: String,
+    val url: URI? = null,
 ) : DetektVisitor() {
 
     /**
@@ -24,10 +29,14 @@ open class Rule(
      *
      * By default, it is the name of the class name. Override to change it.
      */
-    open val ruleName: Name get() = Name(javaClass.simpleName)
+    open val ruleName: RuleName get() = RuleName(javaClass.simpleName)
 
-    var bindingContext: BindingContext = BindingContext.EMPTY
-    protected lateinit var compilerResources: CompilerResources
+    protected lateinit var languageVersionSettings: LanguageVersionSettings
+    private lateinit var _bindingContext: BindingContext
+
+    @Suppress("UnusedReceiverParameter")
+    val RequiresFullAnalysis.bindingContext: BindingContext
+        get() = _bindingContext
 
     val autoCorrect: Boolean
         get() = config.valueOrDefault(Config.AUTO_CORRECT_KEY, false) &&
@@ -45,12 +54,10 @@ open class Rule(
      */
     fun visitFile(
         root: KtFile,
-        bindingContext: BindingContext = BindingContext.EMPTY,
-        compilerResources: CompilerResources
+        languageVersionSettings: LanguageVersionSettings,
     ): List<Finding> {
         findings.clear()
-        this.bindingContext = bindingContext
-        this.compilerResources = compilerResources
+        this.languageVersionSettings = languageVersionSettings
         preVisit(root)
         visit(root)
         postVisit(root)
@@ -82,18 +89,22 @@ open class Rule(
     }
 
     /**
-     * Adds a code smell to the findings,
+     * Adds a new finding
      */
     fun report(finding: Finding) {
         findings.add(finding)
     }
 
-    @Poko
-    class Name(val value: String) {
-        init {
-            validateIdentifier(value)
-        }
-
-        override fun toString(): String = value
+    fun setBindingContext(bindingContext: BindingContext) {
+        _bindingContext = bindingContext
     }
+}
+
+@Poko
+class RuleName(val value: String) {
+    init {
+        validateIdentifier(value)
+    }
+
+    override fun toString(): String = value
 }

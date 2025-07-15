@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.hasImplicitUnitReturnType
@@ -32,14 +32,15 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * </compliant>
  *
  */
-@RequiresFullAnalysis
-class ImplicitUnitReturnType(config: Config) : Rule(
-    config,
-    "Functions using expression statements have an implicit return type. " +
-        "Changing the type of the expression accidentally, changes the function return type. " +
-        "This may lead to backward incompatibility. " +
-        "Use a block statement to make clear this function will never return a value."
-) {
+class ImplicitUnitReturnType(config: Config) :
+    Rule(
+        config,
+        "Functions using expression statements have an implicit return type. " +
+            "Changing the type of the expression accidentally, changes the function return type. " +
+            "This may lead to backward incompatibility. " +
+            "Use a block statement to make clear this function will never return a value."
+    ),
+    RequiresAnalysisApi {
 
     @Configuration("if functions with explicit `Unit` return type should be allowed")
     private val allowExplicitReturnType: Boolean by config(true)
@@ -53,7 +54,7 @@ class ImplicitUnitReturnType(config: Config) : Rule(
 
         if (function.bodyExpression?.text == "Unit") return
 
-        if (function.hasImplicitUnitReturnType(bindingContext)) {
+        if (function.hasImplicitUnitReturnType()) {
             val message = buildString {
                 append("'${function.name}'  has the implicit return type `Unit`.")
                 append(" Prefer using a block statement")
@@ -63,7 +64,7 @@ class ImplicitUnitReturnType(config: Config) : Rule(
                 append('.')
             }
             report(
-                CodeSmell(
+                Finding(
                     Entity.atName(function),
                     message
                 )

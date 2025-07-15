@@ -17,6 +17,6 @@ interface Notification {
     enum class Level {
         Info,
         Warning,
-        Error
+        Error,
     }
 }

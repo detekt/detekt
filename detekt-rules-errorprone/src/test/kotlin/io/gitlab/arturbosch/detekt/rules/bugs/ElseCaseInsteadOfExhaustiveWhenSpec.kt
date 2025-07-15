@@ -1,17 +1,16 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment) {
+class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinEnvironmentContainer) {
     private val subject = ElseCaseInsteadOfExhaustiveWhen(Config.empty)
 
     @Nested
@@ -33,7 +32,7 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment
                     }
                 }
             """.trimIndent()
-            val actual = subject.compileAndLintWithContext(env, code)
+            val actual = subject.lintWithContext(env, code)
             assertThat(actual).hasSize(1)
         }
 
@@ -54,7 +53,7 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment
                     }
                 }
             """.trimIndent()
-            val actual = subject.compileAndLintWithContext(env, code)
+            val actual = subject.lintWithContext(env, code)
             assertThat(actual).hasSize(1)
         }
 
@@ -88,7 +87,7 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment
                     }
                 }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code, compile = false)).isEmpty()
         }
     }
 
@@ -111,7 +110,7 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -131,7 +130,7 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -150,7 +149,7 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code, compile = false)).isEmpty()
         }
     }
 
@@ -179,7 +178,7 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment
             assertThat(
                 ElseCaseInsteadOfExhaustiveWhen(
                     TestConfig("ignoredSubjectTypes" to listOf("com.example.Color"))
-                ).compileAndLintWithContext(env, code)
+                ).lintWithContext(env, code)
             ).isEmpty()
         }
 
@@ -205,7 +204,7 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment
             assertThat(
                 ElseCaseInsteadOfExhaustiveWhen(
                     TestConfig("ignoredSubjectTypes" to listOf("com.example.Variant"))
-                ).compileAndLintWithContext(env, code)
+                ).lintWithContext(env, code)
             ).isEmpty()
         }
 
@@ -231,7 +230,7 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment
             assertThat(
                 ElseCaseInsteadOfExhaustiveWhen(
                     TestConfig("ignoredSubjectTypes" to listOf("com.example.Class"))
-                ).compileAndLintWithContext(env, code)
+                ).lintWithContext(env, code)
             ).hasSize(1)
         }
 
@@ -257,7 +256,7 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment
             assertThat(
                 ElseCaseInsteadOfExhaustiveWhen(
                     TestConfig("ignoredSubjectTypes" to listOf("com.example.Class"))
-                ).compileAndLintWithContext(env, code)
+                ).lintWithContext(env, code)
             ).hasSize(1)
         }
     }
@@ -281,7 +280,7 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment
                     }
                 }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code, compile = false)).isEmpty()
         }
 
         @Test
@@ -301,7 +300,7 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment
                     }
                 }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code, compile = false)).isEmpty()
         }
     }
 
@@ -317,7 +316,7 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment
                     }
                 }
             """.trimIndent()
-            val actual = subject.compileAndLintWithContext(env, code)
+            val actual = subject.lintWithContext(env, code)
             assertThat(actual).hasSize(1)
         }
 
@@ -332,7 +331,7 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment
                     }
                 }
             """.trimIndent()
-            val actual = subject.compileAndLintWithContext(env, code)
+            val actual = subject.lintWithContext(env, code)
             assertThat(actual).hasSize(1)
         }
 
@@ -351,7 +350,7 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -371,7 +370,7 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -412,7 +411,7 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinCoreEnvironment
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 }

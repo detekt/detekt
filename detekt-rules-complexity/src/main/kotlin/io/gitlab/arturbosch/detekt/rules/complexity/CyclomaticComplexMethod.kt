@@ -2,10 +2,10 @@ package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.github.detekt.metrics.CyclomaticComplexity
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import org.jetbrains.kotlin.psi.KtBlockExpression
@@ -71,7 +71,7 @@ class CyclomaticComplexMethod(config: Config) : Rule(
 
         if (complexity > allowedComplexity) {
             report(
-                CodeSmell(
+                Finding(
                     Entity.atName(function),
                     "The function ${function.nameAsSafeName} appears to be too complex " +
                         "based on Cyclomatic Complexity (complexity: $complexity). " +

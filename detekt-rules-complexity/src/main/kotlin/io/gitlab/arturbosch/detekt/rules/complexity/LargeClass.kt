@@ -1,14 +1,14 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
+import com.intellij.psi.util.PsiTreeUtil
 import io.github.detekt.metrics.linesOfCode
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
-import org.jetbrains.kotlin.com.intellij.psi.util.PsiTreeUtil
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
@@ -42,7 +42,7 @@ class LargeClass(config: Config) : Rule(
         for ((clazz, lines) in classToLinesCache) {
             if (lines > allowedLines) {
                 report(
-                    CodeSmell(
+                    Finding(
                         Entity.atName(clazz),
                         "Class ${clazz.name} is too large. Consider splitting it into smaller pieces."
                     )

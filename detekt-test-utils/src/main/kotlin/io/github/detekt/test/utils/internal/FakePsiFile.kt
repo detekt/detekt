@@ -1,26 +1,26 @@
 package io.github.detekt.test.utils.internal
 
-import org.jetbrains.kotlin.com.intellij.lang.FileASTNode
-import org.jetbrains.kotlin.com.intellij.lang.Language
-import org.jetbrains.kotlin.com.intellij.navigation.ItemPresentation
-import org.jetbrains.kotlin.com.intellij.openapi.fileTypes.FileType
-import org.jetbrains.kotlin.com.intellij.openapi.project.Project
-import org.jetbrains.kotlin.com.intellij.openapi.util.Key
-import org.jetbrains.kotlin.com.intellij.openapi.util.TextRange
-import org.jetbrains.kotlin.com.intellij.openapi.vfs.VirtualFile
-import org.jetbrains.kotlin.com.intellij.psi.FileViewProvider
-import org.jetbrains.kotlin.com.intellij.psi.PsiDirectory
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.com.intellij.psi.PsiElementVisitor
-import org.jetbrains.kotlin.com.intellij.psi.PsiFile
-import org.jetbrains.kotlin.com.intellij.psi.PsiFileSystemItem
-import org.jetbrains.kotlin.com.intellij.psi.PsiManager
-import org.jetbrains.kotlin.com.intellij.psi.PsiReference
-import org.jetbrains.kotlin.com.intellij.psi.ResolveState
-import org.jetbrains.kotlin.com.intellij.psi.scope.PsiScopeProcessor
-import org.jetbrains.kotlin.com.intellij.psi.search.GlobalSearchScope
-import org.jetbrains.kotlin.com.intellij.psi.search.PsiElementProcessor
-import org.jetbrains.kotlin.com.intellij.psi.search.SearchScope
+import com.intellij.lang.FileASTNode
+import com.intellij.lang.Language
+import com.intellij.navigation.ItemPresentation
+import com.intellij.openapi.fileTypes.FileType
+import com.intellij.openapi.project.Project
+import com.intellij.openapi.util.Key
+import com.intellij.openapi.util.TextRange
+import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.psi.FileViewProvider
+import com.intellij.psi.PsiDirectory
+import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiElementVisitor
+import com.intellij.psi.PsiFile
+import com.intellij.psi.PsiFileSystemItem
+import com.intellij.psi.PsiManager
+import com.intellij.psi.PsiReference
+import com.intellij.psi.ResolveState
+import com.intellij.psi.scope.PsiScopeProcessor
+import com.intellij.psi.search.GlobalSearchScope
+import com.intellij.psi.search.PsiElementProcessor
+import com.intellij.psi.search.SearchScope
 import javax.swing.Icon
 
 class FakePsiFile(private val text: String = "", private val name: String = "") : PsiFile {
@@ -195,7 +195,7 @@ class FakePsiFile(private val text: String = "", private val name: String = "") 
         p0: PsiScopeProcessor,
         p1: ResolveState,
         p2: PsiElement?,
-        p3: PsiElement
+        p3: PsiElement,
     ): Boolean = false
 
     override fun getContext(): PsiElement? = null

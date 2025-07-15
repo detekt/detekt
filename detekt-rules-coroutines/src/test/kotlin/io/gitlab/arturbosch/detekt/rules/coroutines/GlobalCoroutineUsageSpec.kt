@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.coroutines
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
@@ -21,7 +21,7 @@ class GlobalCoroutineUsageSpec {
                 GlobalScope.launch { delay(1_000L) }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -36,7 +36,7 @@ class GlobalCoroutineUsageSpec {
                 GlobalScope.async { delay(1_000L) }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -51,7 +51,7 @@ class GlobalCoroutineUsageSpec {
                 bar(GlobalScope)
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -67,6 +67,6 @@ class GlobalCoroutineUsageSpec {
                 bar(scope)
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 }

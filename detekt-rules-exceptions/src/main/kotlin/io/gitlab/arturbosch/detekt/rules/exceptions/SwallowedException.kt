@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.exceptions
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.isAllowedExceptionName
@@ -86,7 +86,7 @@ class SwallowedException(config: Config) : Rule(
                 isExceptionSwallowedOrUnused(catchClause) &&
                 !catchClause.isAllowedExceptionName(allowedExceptionNameRegex)
             ) {
-                report(CodeSmell(Entity.from(catchParameter), description))
+                report(Finding(Entity.from(catchParameter), description))
             }
         }
         super.visitCatchSection(catchClause)
@@ -114,7 +114,7 @@ class SwallowedException(config: Config) : Rule(
 
     private fun KtThrowExpression.parameterReferences(
         parameterName: String?,
-        catchBody: KtExpression
+        catchBody: KtExpression,
     ): List<KtExpression> {
         val parameterReferencesInVariables = mutableMapOf<String, KtExpression>()
         return thrownExpression
@@ -136,7 +136,7 @@ class SwallowedException(config: Config) : Rule(
     private fun KtExpression.findReferenceInVariable(
         referenceName: String?,
         variableName: String,
-        catchBody: KtExpression
+        catchBody: KtExpression,
     ): KtExpression? {
         val block = getStrictParentOfType<KtBlockExpression>() ?: return null
         fun find(block: KtBlockExpression): KtExpression? {

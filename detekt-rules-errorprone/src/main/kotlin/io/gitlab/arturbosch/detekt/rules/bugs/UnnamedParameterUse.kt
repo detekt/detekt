@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.github.detekt.psi.FunctionMatcher
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
@@ -83,11 +83,12 @@ import org.jetbrains.kotlin.types.typeUtil.isSubtypeOf
  * }
  * </compliant>
  */
-@RequiresFullAnalysis
-class UnnamedParameterUse(config: Config) : Rule(
-    config,
-    "Passing no named parameters can cause issue when parameters order change"
-) {
+class UnnamedParameterUse(config: Config) :
+    Rule(
+        config,
+        "Passing no named parameters can cause issue when parameters order change"
+    ),
+    RequiresFullAnalysis {
 
     @Configuration("Allow adjacent unnamed params when type of parameters can not be assigned to each other")
     val allowAdjacentDifferentTypeParams: Boolean by config(true)
@@ -157,7 +158,7 @@ class UnnamedParameterUse(config: Config) : Rule(
         ) {
             val target = expression.calleeExpression ?: expression
             report(
-                CodeSmell(
+                Finding(
                     Entity.from(target),
                     "Consider using named parameters in ${target.text} as they make usage of the function more safe."
                 )
@@ -185,7 +186,7 @@ class UnnamedParameterUse(config: Config) : Rule(
     @Suppress("ReturnCount")
     private fun typeCanBeAssigned(
         firstParam: KtValueArgument,
-        secondParam: KtValueArgument
+        secondParam: KtValueArgument,
     ): Boolean {
         val param1Type =
             bindingContext[BindingContext.EXPRESSION_TYPE_INFO, firstParam.getArgumentExpression()]?.type

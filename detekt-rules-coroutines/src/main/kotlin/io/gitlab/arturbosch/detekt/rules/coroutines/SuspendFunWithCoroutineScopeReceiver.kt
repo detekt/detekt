@@ -1,15 +1,15 @@
 package io.gitlab.arturbosch.detekt.rules.coroutines
 
 import io.gitlab.arturbosch.detekt.api.Alias
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.rules.coroutines.utils.isCoroutineScope
+import io.gitlab.arturbosch.detekt.rules.coroutines.utils.CoroutineClassIds
+import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * Suspend functions that use `CoroutineScope` as receiver should not be marked as `suspend`.
@@ -43,27 +43,27 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * </compliant>
  *
  */
-@RequiresFullAnalysis
 @Alias("SuspendFunctionOnCoroutineScope")
-class SuspendFunWithCoroutineScopeReceiver(config: Config) : Rule(
-    config,
-    "The `suspend` modifier should not be used for functions that use a CoroutinesScope as receiver. You should " +
-        "use suspend functions without the receiver or use plain functions and use coroutineScope { } instead."
-) {
+class SuspendFunWithCoroutineScopeReceiver(config: Config) :
+    Rule(
+        config,
+        "The `suspend` modifier should not be used for functions that use a CoroutinesScope as receiver. You should " +
+            "use suspend functions without the receiver or use plain functions and use coroutineScope { } instead."
+    ),
+    RequiresAnalysisApi {
+
     override fun visitNamedFunction(function: KtNamedFunction) {
         checkReceiver(function)
     }
 
     private fun checkReceiver(function: KtNamedFunction) {
         val suspendModifier = function.modifierList?.getModifier(KtTokens.SUSPEND_KEYWORD) ?: return
-        val receiver = bindingContext[BindingContext.FUNCTION, function]
-            ?.extensionReceiverParameter
-            ?.value
-            ?.type
-            ?: return
-        if (receiver.isCoroutineScope()) {
+        val isCoroutineScope = analyze(function) {
+            function.receiverTypeReference?.type?.isSubtypeOf(CoroutineClassIds.CoroutineScope) == true
+        }
+        if (isCoroutineScope) {
             report(
-                CodeSmell(
+                Finding(
                     entity = Entity.from(suspendModifier),
                     message = "`suspend` function uses CoroutineScope as receiver."
                 )

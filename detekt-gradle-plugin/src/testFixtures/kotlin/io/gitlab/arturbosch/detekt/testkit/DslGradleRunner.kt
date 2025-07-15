@@ -26,7 +26,7 @@ constructor(
     val jvmArgs: String = "-Xmx2g -XX:MaxMetaspaceSize=1g",
     val gradleProperties: Map<String, String> = emptyMap(),
     val customPluginClasspath: List<File> = emptyList(),
-    val projectScript: Project.() -> Unit = {}
+    val projectScript: Project.() -> Unit = {},
 ) {
 
     private val rootDir: File = Files.createTempDirectory("applyPlugin").toFile().apply { deleteOnExit() }
@@ -50,12 +50,12 @@ constructor(
      * Each generated file is different so the artifacts are not cached in between test runs
      */
     @Language("kotlin")
-    private fun ktFileContent(className: String, withCodeSmell: Boolean = false): String =
+    private fun ktFileContent(className: String, withFinding: Boolean = false): String =
         """
             internal class $className(
                 val randomDefaultValue: String = "$randomString"
             ) {
-                val smellyConstant: Int = ${if (withCodeSmell) "11" else "0"}
+                val smellyConstant: Int = ${if (withFinding) "11" else "0"}
             }
             
         """.trimIndent() // Last line empty to prevent NewLineAtEndOfFile.
@@ -73,13 +73,13 @@ constructor(
         baselineFiles.forEach { file -> writeProjectFile(file, baselineContent) }
         projectLayout.srcDirs.forEachIndexed { srcDirIdx, sourceDir ->
             repeat(projectLayout.numberOfSourceFilesInRootPerSourceDir) { srcFileIndex ->
-                val withCodeSmell =
+                val withFinding =
                     srcDirIdx * projectLayout.numberOfSourceFilesInRootPerSourceDir +
-                        srcFileIndex < projectLayout.numberOfCodeSmellsInRootPerSourceDir
+                        srcFileIndex < projectLayout.numberOfFindingsInRootPerSourceDir
                 writeKtFile(
                     dir = File(rootDir, sourceDir),
                     className = "My${srcDirIdx}Root${srcFileIndex}Class",
-                    withCodeSmell = withCodeSmell
+                    withFinding = withFinding
                 )
             }
         }
@@ -89,12 +89,12 @@ constructor(
             submodule.baselineFiles.forEach { file -> submodule.writeModuleFile(file, baselineContent) }
             submodule.srcDirs.forEachIndexed { srcDirIdx, moduleSourceDir ->
                 repeat(submodule.numberOfSourceFilesPerSourceDir) {
-                    val withCodeSmell =
-                        srcDirIdx * submodule.numberOfSourceFilesPerSourceDir + it < submodule.numberOfCodeSmells
+                    val withFinding =
+                        srcDirIdx * submodule.numberOfSourceFilesPerSourceDir + it < submodule.numberOfFindings
                     writeKtFile(
                         dir = File(submodule.moduleRoot, moduleSourceDir),
                         className = "My$srcDirIdx${submodule.name}${it}Class",
-                        withCodeSmell = withCodeSmell
+                        withFinding = withFinding
                     )
                 }
             }
@@ -113,9 +113,9 @@ constructor(
         writeKtFile(File(rootDir, srcDir), className)
     }
 
-    private fun writeKtFile(dir: File, className: String, withCodeSmell: Boolean = false) {
+    private fun writeKtFile(dir: File, className: String, withFinding: Boolean = false) {
         dir.mkdirs()
-        File(dir, "$className.kt").writeText(ktFileContent(className, withCodeSmell))
+        File(dir, "$className.kt").writeText(ktFileContent(className, withFinding))
     }
 
     private fun Submodule.writeModuleFile(filename: String, content: String) {

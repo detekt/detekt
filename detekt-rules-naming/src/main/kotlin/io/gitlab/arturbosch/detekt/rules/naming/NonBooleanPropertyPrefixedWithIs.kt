@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
@@ -27,11 +27,12 @@ import org.jetbrains.kotlin.types.isError
  * val isEnabled: Boolean = false
  * </compliant>
  */
-@RequiresFullAnalysis
-class NonBooleanPropertyPrefixedWithIs(config: Config) : Rule(
-    config,
-    "Only boolean property names can start with `is` prefix."
-) {
+class NonBooleanPropertyPrefixedWithIs(config: Config) :
+    Rule(
+        config,
+        "Only boolean property names can start with `is` prefix."
+    ),
+    RequiresFullAnalysis {
 
     private val booleanTypes = listOf(
         "kotlin.Boolean",
@@ -79,10 +80,10 @@ class NonBooleanPropertyPrefixedWithIs(config: Config) : Rule(
 
     private fun report(declaration: KtCallableDeclaration, name: String, typeFqName: FqName) {
         val typeName = typeFqName.shortName().asString()
-        val codeSmell = CodeSmell(
+        val finding = Finding(
             Entity.from(declaration),
             message = "Non-boolean properties shouldn't start with 'is' prefix. Actual type of $name: $typeName"
         )
-        report(codeSmell)
+        report(finding)
     }
 }

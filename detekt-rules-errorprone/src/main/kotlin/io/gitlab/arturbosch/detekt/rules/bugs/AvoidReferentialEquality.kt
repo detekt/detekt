@@ -1,19 +1,19 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.simplePatternToRegex
-import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.lexer.KtTokens.EQEQEQ
 import org.jetbrains.kotlin.lexer.KtTokens.EXCLEQEQEQ
 import org.jetbrains.kotlin.psi.KtBinaryExpression
-import org.jetbrains.kotlin.resolve.calls.util.getType
 
 /**
  * Kotlin supports two types of equality: structural equality and referential equality. While there are
@@ -30,12 +30,13 @@ import org.jetbrains.kotlin.resolve.calls.util.getType
  *     val areNotEqual = "aString" != otherString
  * </compliant>
  */
-@RequiresFullAnalysis
 @ActiveByDefault(since = "1.21.0")
-class AvoidReferentialEquality(config: Config) : Rule(
-    config,
-    "Avoid using referential equality and prefer to use referential equality checks instead."
-) {
+class AvoidReferentialEquality(config: Config) :
+    Rule(
+        config,
+        "Avoid using referential equality and prefer to use referential equality checks instead."
+    ),
+    RequiresAnalysisApi {
 
     @Configuration(
         "Specifies those types for which referential equality checks are considered a rule violation. " +
@@ -56,12 +57,15 @@ class AvoidReferentialEquality(config: Config) : Rule(
     private fun checkBinaryExpression(expression: KtBinaryExpression) {
         if (expression.operationToken != EQEQEQ && expression.operationToken != EXCLEQEQEQ) return
 
-        val checkedType = expression.left?.getType(bindingContext)?.fqNameOrNull() ?: return
-        val fullyQualifiedType = checkedType.asString()
+        val fullyQualifiedType = expression.left?.let {
+            analyze(it) {
+                it.expressionType?.symbol?.classId?.asFqNameString()
+            }
+        } ?: return
 
         if (forbiddenTypePatterns.any { it.matches(fullyQualifiedType) }) {
             report(
-                CodeSmell(
+                Finding(
                     Entity.from(expression),
                     "Checking referential equality may lead to unwanted results."
                 )

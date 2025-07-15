@@ -1,16 +1,15 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.lintWithContext
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class UnnecessaryNotNullCheckSpec(private val env: KotlinCoreEnvironment) {
+class UnnecessaryNotNullCheckSpec(private val env: KotlinEnvironmentContainer) {
     private val subject = UnnecessaryNotNullCheck(Config.empty)
 
     @Nested
@@ -22,7 +21,7 @@ class UnnecessaryNotNullCheckSpec(private val env: KotlinCoreEnvironment) {
                 val x = 5
                 val y = requireNotNull(x)
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasTextLocations(18 to 35)
         }
@@ -33,7 +32,7 @@ class UnnecessaryNotNullCheckSpec(private val env: KotlinCoreEnvironment) {
                 val x = 5
                 val y = checkNotNull(x)
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasTextLocations(18 to 33)
         }
@@ -48,7 +47,7 @@ class UnnecessaryNotNullCheckSpec(private val env: KotlinCoreEnvironment) {
                     requireNotNull(foo())
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasTextLocations(48 to 69)
         }
@@ -63,7 +62,7 @@ class UnnecessaryNotNullCheckSpec(private val env: KotlinCoreEnvironment) {
                     requireNotNull(foo(5))
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasTextLocations(66 to 88)
         }
@@ -75,7 +74,7 @@ class UnnecessaryNotNullCheckSpec(private val env: KotlinCoreEnvironment) {
                     requireNotNull(System.currentTimeMillis())
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasTextLocations(16 to 58)
         }
@@ -89,7 +88,7 @@ class UnnecessaryNotNullCheckSpec(private val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
 
@@ -102,7 +101,7 @@ class UnnecessaryNotNullCheckSpec(private val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
     }
@@ -116,7 +115,7 @@ class UnnecessaryNotNullCheckSpec(private val env: KotlinCoreEnvironment) {
                 val x: Int? = 5
                 val y = requireNotNull(x)
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -126,7 +125,7 @@ class UnnecessaryNotNullCheckSpec(private val env: KotlinCoreEnvironment) {
                 val x: Int? = null
                 val y = requireNotNull(x)
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -140,7 +139,7 @@ class UnnecessaryNotNullCheckSpec(private val env: KotlinCoreEnvironment) {
                     requireNotNull(foo())
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -154,7 +153,7 @@ class UnnecessaryNotNullCheckSpec(private val env: KotlinCoreEnvironment) {
                     requireNotNull(foo())
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -168,7 +167,7 @@ class UnnecessaryNotNullCheckSpec(private val env: KotlinCoreEnvironment) {
                     requireNotNull(foo<Int?>(5))
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -176,7 +175,7 @@ class UnnecessaryNotNullCheckSpec(private val env: KotlinCoreEnvironment) {
         fun shouldIgnoreWhenCallingObjectJavaMethod() {
             val code = """
                 fun foo() {
-                    requireNotNull(System.getLogger())
+                    requireNotNull(System.getLogger(""))
                 }
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)

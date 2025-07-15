@@ -2,10 +2,10 @@ package io.gitlab.arturbosch.detekt.rules.naming
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.Alias
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import org.jetbrains.kotlin.psi.KtEnumEntry
@@ -26,7 +26,7 @@ class EnumNaming(config: Config) : Rule(
     override fun visitEnumEntry(enumEntry: KtEnumEntry) {
         if (enumEntry.name?.matches(enumEntryPattern) != true) {
             report(
-                CodeSmell(
+                Finding(
                     Entity.atName(enumEntry),
                     message = "Enum entry names should match the pattern: $enumEntryPattern"
                 )

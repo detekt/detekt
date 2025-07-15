@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.authors
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
@@ -33,7 +33,7 @@ class UseEntityAtName(config: Config) : Rule(
             val target = findNameIdentifierReceiver(arg.getArgumentExpression())
             if (target != null) {
                 report(
-                    CodeSmell(
+                    Finding(
                         Entity.from(expression.getCallNameExpression() ?: expression),
                         "Recommended to use Entity.atName(${target.text}) instead."
                     )

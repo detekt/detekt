@@ -1,14 +1,14 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class UseRequireNotNullSpec(val env: KotlinCoreEnvironment) {
+class UseRequireNotNullSpec(val env: KotlinEnvironmentContainer) {
     val subject = UseRequireNotNull(Config.empty)
 
     @Test
@@ -18,7 +18,7 @@ class UseRequireNotNullSpec(val env: KotlinCoreEnvironment) {
                 require(i != null)
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(1)
     }
 
@@ -29,7 +29,7 @@ class UseRequireNotNullSpec(val env: KotlinCoreEnvironment) {
                 require(null != i)
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(1)
     }
 
@@ -40,7 +40,7 @@ class UseRequireNotNullSpec(val env: KotlinCoreEnvironment) {
                 require(i > 0)
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).isEmpty()
     }
 }

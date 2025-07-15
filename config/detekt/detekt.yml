@@ -69,14 +69,14 @@ formatting:
   autoCorrect: true
   BlankLineBeforeDeclaration:
     active: false
-  ConditionWrapping:
-    active: true
+  ChainMethodContinuation:
+    active: false
+  ClassSignature:
+    active: false
   EnumEntryNameCase:
     active: false
   Filename:
     active: false
-  FunctionExpressionBody:
-    active: true
   FunctionSignature:
     active: false
   Kdoc:
@@ -86,8 +86,6 @@ formatting:
     active: false
   MultilineExpressionWrapping:
     active: false
-  MultilineLoop:
-    active: true
   NoEmptyFirstLineInClassBody:
     active: false
   SpacingAroundSquareBrackets:
@@ -97,7 +95,7 @@ formatting:
   TrailingCommaOnCallSite:
     active: false
   TrailingCommaOnDeclarationSite:
-    active: false
+    active: true
   ValueArgumentComment:
     active: false
 
@@ -220,6 +218,10 @@ style:
       - 'java.lang.Class.getResourceAsStream'
       - 'java.lang.ClassLoader.getResourceAsStream'
       - 'kotlin.system.measureTimeMillis'
+      - value: 'org.jetbrains.kotlin.analysis.project.structure.builder.buildKtLibraryModule'
+        reason: 'Not performant due to KT-71706. Use buildKspLibraryModule instead.'
+      - value: 'org.jetbrains.kotlin.analysis.project.structure.builder.buildKtSdkModule'
+        reason: 'Not performant due to KT-71706. Use buildKspSdkModule instead.'
   ForbiddenVoid:
     active: true
     ignoreOverridden: true
@@ -244,8 +246,6 @@ style:
   NestedClassesVisibility:
     active: true
   ObjectLiteralToLambda:
-    active: true
-  PreferToOverPairSyntax:
     active: true
   RangeUntilInsteadOfRangeTo:
     active: true

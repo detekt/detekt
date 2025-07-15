@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -11,7 +11,7 @@ class DataClassShouldBeImmutableSpec {
     @Test
     fun `reports mutable variable in primary constructor`() {
         val code = "data class C(var i: Int)"
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -21,7 +21,7 @@ class DataClassShouldBeImmutableSpec {
                 var s: String? = null
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -32,7 +32,7 @@ class DataClassShouldBeImmutableSpec {
                     private set
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -42,13 +42,13 @@ class DataClassShouldBeImmutableSpec {
                 lateinit var s: String
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
     fun `does not report readonly variable in primary constructor`() {
         val code = "data class C(val i: Int)"
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -58,7 +58,7 @@ class DataClassShouldBeImmutableSpec {
                 val s: String? = null
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -68,7 +68,7 @@ class DataClassShouldBeImmutableSpec {
                 val s: String by lazy { "" }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -78,6 +78,6 @@ class DataClassShouldBeImmutableSpec {
                 val s: String by lazy { "" }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 }

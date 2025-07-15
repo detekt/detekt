@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.performance
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -23,7 +23,7 @@ import org.jetbrains.kotlin.psi2ir.deparenthesize
  * [Exploring Kotlin Hidden Costs - Part 2](https://bladecoder.medium.com/exploring-kotlins-hidden-costs-part-2-324a4a50b70)
  * [Exploring Kotlin Hidden Costs - Part 3](https://bladecoder.medium.com/exploring-kotlins-hidden-costs-part-3-3bf6e0dbf0a4)
  *
- * To solve this CodeSmell, the forEach usage should be replaced by a for loop.
+ * To solve this code smell, the forEach usage should be replaced by a for loop.
  *
  * <noncompliant>
  * (1..10).forEach {
@@ -60,7 +60,7 @@ class ForEachOnRange(config: Config) : Rule(
             }
             val forExpression = it.getReceiverExpression()?.deparenthesize()
             if (forExpression != null && isRangeOperatorsChainCall(forExpression)) {
-                report(CodeSmell(Entity.from(forExpression), description))
+                report(Finding(Entity.from(forExpression), description))
             }
         }
     }

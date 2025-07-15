@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.psi.KtBlockExpression
@@ -69,6 +69,6 @@ class SafeCast(config: Config) : Rule(
         if (this is KtBlockExpression) children.singleOrNull() as? KtExpression else this
 
     private fun addReport(expression: KtIfExpression) {
-        report(CodeSmell(Entity.from(expression), "This cast should be replaced with a safe cast: as?"))
+        report(Finding(Entity.from(expression), "This cast should be replaced with a safe cast: as?"))
     }
 }

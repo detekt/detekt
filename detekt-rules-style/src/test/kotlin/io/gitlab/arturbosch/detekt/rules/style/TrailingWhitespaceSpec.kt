@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -15,29 +15,29 @@ class TrailingWhitespaceSpec {
         @Test
         fun `reports a line just with a whitespace`() {
             val code = " "
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings).hasTextLocations(0 to 1)
         }
 
         @Test
         fun `reports a commented line with a whitespace at the end`() {
             val code = "// A comment "
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings).hasTextLocations(12 to 13)
         }
 
         @Test
         fun `reports a class declaration with a whitespace at the end`() {
             val code = "  class TrailingWhitespacePositive { \n  }"
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings).hasTextLocations(36 to 37)
         }
 
         @Test
         fun `reports a print statement with a tab at the end`() {
-            val code = "\t\tprintln(\"A message\")\t"
-            val findings = subject.compileAndLint(code)
-            assertThat(findings).hasTextLocations(22 to 23)
+            val code = "fun test() {\n\t\tprintln(\"A message\")\t\n}"
+            val findings = subject.lint(code)
+            assertThat(findings).hasTextLocations(35 to 36)
         }
     }
 
@@ -55,7 +55,7 @@ class TrailingWhitespaceSpec {
                     }
                 }
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings).isEmpty()
         }
 
@@ -68,7 +68,7 @@ class TrailingWhitespaceSpec {
                     Should ignore indent on the previous line
                 ""${'"'}
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings).isEmpty()
         }
     }

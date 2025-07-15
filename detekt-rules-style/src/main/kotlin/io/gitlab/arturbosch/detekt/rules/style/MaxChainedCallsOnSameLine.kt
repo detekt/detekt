@@ -1,14 +1,16 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
-import org.jetbrains.kotlin.descriptors.ClassDescriptor
-import org.jetbrains.kotlin.descriptors.PackageViewDescriptor
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaPackageSymbol
+import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -19,7 +21,6 @@ import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtUnaryExpression
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.getStartOffsetIn
-import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * Limits the number of chained calls which can be placed on a single line.
@@ -33,11 +34,12 @@ import org.jetbrains.kotlin.resolve.BindingContext
  *   .d().e().f()
  * </compliant>
  */
-@RequiresFullAnalysis
-class MaxChainedCallsOnSameLine(config: Config) : Rule(
-    config,
-    "Chained calls beyond the maximum should be wrapped to a new line."
-) {
+class MaxChainedCallsOnSameLine(config: Config) :
+    Rule(
+        config,
+        "Chained calls beyond the maximum should be wrapped to a new line."
+    ),
+    RequiresAnalysisApi {
 
     @Configuration("maximum chained calls allowed on a single line")
     private val maxChainedCalls: Int by config(defaultValue = 5)
@@ -55,7 +57,7 @@ class MaxChainedCallsOnSameLine(config: Config) : Rule(
         val chainedCalls = expression.countChainedCalls() + 1
         if (chainedCalls > maxChainedCalls) {
             report(
-                CodeSmell(
+                Finding(
                     entity = Entity.from(expression),
                     message = "$chainedCalls chained calls on a single line; more than $maxChainedCalls calls should " +
                         "be wrapped to a new line."
@@ -77,8 +79,8 @@ class MaxChainedCallsOnSameLine(config: Config) : Rule(
     private fun KtExpression.isReferenceToPackageOrClass(): Boolean {
         val selectorOrThis = (this as? KtQualifiedExpression)?.selectorExpression ?: this
         if (selectorOrThis !is KtReferenceExpression) return false
-        val descriptor = bindingContext[BindingContext.REFERENCE_TARGET, selectorOrThis]
-        return descriptor is PackageViewDescriptor || descriptor is ClassDescriptor
+        val symbol = analyze(selectorOrThis) { selectorOrThis.mainReference.resolveToSymbol() }
+        return symbol is KaPackageSymbol || symbol is KaClassSymbol
     }
 
     private fun KtQualifiedExpression.callOnNewLine(): Boolean {

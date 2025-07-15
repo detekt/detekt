@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.firstParameter
@@ -43,11 +43,13 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * </compliant>
  *
  */
-@RequiresFullAnalysis
-class UnnecessaryLet(config: Config) : Rule(
-    config,
-    "The `let` usage is unnecessary."
-) {
+class UnnecessaryLet(config: Config) :
+    Rule(
+        config,
+        "The `let` usage is unnecessary."
+    ),
+    RequiresFullAnalysis {
+
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 
@@ -75,7 +77,7 @@ class UnnecessaryLet(config: Config) : Rule(
     }
 
     private fun report(expression: KtCallExpression, message: String) {
-        report(CodeSmell(Entity.from(expression), message))
+        report(Finding(Entity.from(expression), message))
     }
 
     companion object {

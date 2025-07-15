@@ -15,11 +15,11 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 
 class AnalysisFacade(
-    private val spec: ProcessingSpec
+    private val spec: ProcessingSpec,
 ) : Detekt {
 
     override fun run(): AnalysisResult = runAnalysis {
-        DefaultLifecycle(spec.getDefaultConfiguration(), it, inputPathsToKtFiles)
+        DefaultLifecycle(spec.getDefaultConfiguration(), it)
     }
 
     override fun run(files: Collection<KtFile>, bindingContext: BindingContext): AnalysisResult =
@@ -27,7 +27,6 @@ class AnalysisFacade(
             DefaultLifecycle(
                 spec.getDefaultConfiguration(),
                 it,
-                parsingStrategy = { files.toList() },
                 bindingProvider = { bindingContext }
             )
         }

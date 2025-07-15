@@ -2,10 +2,10 @@ package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.github.detekt.psi.AnnotationExcluder
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
@@ -25,13 +25,14 @@ import org.jetbrains.kotlin.psi.KtSecondaryConstructor
  */
 @Suppress("ViolatesTypeResolutionRequirements")
 @ActiveByDefault(since = "1.0.0")
-@RequiresFullAnalysis
-class LongParameterList(config: Config) : Rule(
-    config,
-    "The more parameters a function has the more complex it is. Long parameter lists are often " +
-        "used to control complex algorithms and violate the Single Responsibility Principle. " +
-        "Prefer functions with short parameter lists."
-) {
+class LongParameterList(config: Config) :
+    Rule(
+        config,
+        "The more parameters a function has the more complex it is. Long parameter lists are often " +
+            "used to control complex algorithms and violate the Single Responsibility Principle. " +
+            "Prefer functions with short parameter lists."
+    ),
+    RequiresFullAnalysis {
 
     @Configuration("number of function parameters required to trigger the rule")
     private val allowedFunctionParameters: Int by config(DEFAULT_ALLOWED_FUNCTION_PARAMETERS)
@@ -95,7 +96,7 @@ class LongParameterList(config: Config) : Rule(
             }
 
             report(
-                CodeSmell(
+                Finding(
                     Entity.from(parameterList),
                     "The $identifier($parameterPrint) has too many parameters. " +
                         "The current maximum allowed parameters are $maximumAllowedParameter."

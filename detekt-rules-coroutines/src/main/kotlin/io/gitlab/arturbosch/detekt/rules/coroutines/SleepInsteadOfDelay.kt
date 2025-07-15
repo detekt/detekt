@@ -1,13 +1,13 @@
 package io.gitlab.arturbosch.detekt.rules.coroutines
 
+import com.intellij.psi.PsiElement
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.builtins.isSuspendFunctionType
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCallableReferenceExpression
@@ -43,12 +43,13 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  * </compliant>
  *
  */
-@RequiresFullAnalysis
 @ActiveByDefault(since = "1.21.0")
-class SleepInsteadOfDelay(config: Config) : Rule(
-    config,
-    "Usage of `Thread.sleep()` in coroutines can potentially halt multiple coroutines at once."
-) {
+class SleepInsteadOfDelay(config: Config) :
+    Rule(
+        config,
+        "Usage of `Thread.sleep()` in coroutines can potentially halt multiple coroutines at once."
+    ),
+    RequiresFullAnalysis {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
@@ -62,7 +63,7 @@ class SleepInsteadOfDelay(config: Config) : Rule(
 
     private fun checkAndReport(expression: KtExpression) {
         if (expression.isThreadSleepFunction() && shouldReport(expression)) {
-            report(CodeSmell(Entity.from(expression), SUSPEND_FUN_MESSAGE))
+            report(Finding(Entity.from(expression), SUSPEND_FUN_MESSAGE))
         }
     }
 

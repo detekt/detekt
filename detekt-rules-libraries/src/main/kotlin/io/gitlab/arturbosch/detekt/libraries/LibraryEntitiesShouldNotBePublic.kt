@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.libraries
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -35,14 +35,14 @@ class LibraryEntitiesShouldNotBePublic(config: Config) : Rule(
         }
 
         if (klass.isPublic) {
-            report(CodeSmell(Entity.from(klass), "Class ${klass.nameAsSafeName} should not be public"))
+            report(Finding(Entity.from(klass), "Class ${klass.nameAsSafeName} should not be public"))
         }
     }
 
     override fun visitTypeAlias(typeAlias: KtTypeAlias) {
         if (typeAlias.isPublic) {
             report(
-                CodeSmell(
+                Finding(
                     Entity.from(typeAlias),
                     "TypeAlias ${typeAlias.nameAsSafeName} should not be public"
                 )
@@ -53,7 +53,7 @@ class LibraryEntitiesShouldNotBePublic(config: Config) : Rule(
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (function.isTopLevel && function.isPublic) {
             report(
-                CodeSmell(
+                Finding(
                     Entity.from(function),
                     "Top level function ${function.nameAsSafeName} should not be public"
                 )

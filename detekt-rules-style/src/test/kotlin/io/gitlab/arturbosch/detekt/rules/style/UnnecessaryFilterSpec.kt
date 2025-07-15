@@ -1,16 +1,16 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class UnnecessaryFilterSpec(val env: KotlinCoreEnvironment) {
+class UnnecessaryFilterSpec(val env: KotlinEnvironmentContainer) {
     val subject = UnnecessaryFilter(Config.empty)
 
     @Nested
@@ -23,7 +23,7 @@ class UnnecessaryFilterSpec(val env: KotlinCoreEnvironment) {
                     .size
             """.trimIndent()
 
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).singleElement().hasMessage("'filter { it > 1 }' can be replaced by 'count { it > 1 }'")
         }
 
@@ -35,7 +35,7 @@ class UnnecessaryFilterSpec(val env: KotlinCoreEnvironment) {
                 val z = "abc".filter { it > 'a' }.count()
             """.trimIndent()
 
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(3)
         }
 
@@ -48,7 +48,7 @@ class UnnecessaryFilterSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).singleElement().hasMessage("'filter { it > 2 }' can be replaced by 'count { it > 2 }'")
         }
 
@@ -62,7 +62,7 @@ class UnnecessaryFilterSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).singleElement().hasMessage("'filter { it > 2 }' can be replaced by 'count { it > 2 }'")
         }
 
@@ -73,7 +73,7 @@ class UnnecessaryFilterSpec(val env: KotlinCoreEnvironment) {
                 val y = "abc".filter { it > 'a' }.isEmpty()
             """.trimIndent()
 
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(2)
             assertThat(findings[0]).hasMessage("'filter { it > 2 }' can be replaced by 'none { it > 2 }'")
             assertThat(findings[1]).hasMessage("'filter { it > 'a' }' can be replaced by 'none { it > 'a' }'")
@@ -86,7 +86,7 @@ class UnnecessaryFilterSpec(val env: KotlinCoreEnvironment) {
                 val y = "abc".filter { it > 'a' }.isNotEmpty()
             """.trimIndent()
 
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(2)
             assertThat(findings[0]).hasMessage("'filter { it > 2 }' can be replaced by 'any { it > 2 }'")
             assertThat(findings[1]).hasMessage("'filter { it > 'a' }' can be replaced by 'any { it > 'a' }'")
@@ -99,7 +99,7 @@ class UnnecessaryFilterSpec(val env: KotlinCoreEnvironment) {
                 val y = sequenceOf(1, 2, 3).filter { it > 2 }.any()
                 val z = "abc".filter { it > 'a' }.any()
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(3)
         }
 
@@ -110,7 +110,7 @@ class UnnecessaryFilterSpec(val env: KotlinCoreEnvironment) {
                 val y = sequenceOf(1, 2, 3).filter { it > 2 }.none()
                 val z = "abc".filter { it > 'a' }.none()
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(3)
         }
 
@@ -121,7 +121,7 @@ class UnnecessaryFilterSpec(val env: KotlinCoreEnvironment) {
                 val y = sequenceOf(1, 2, 3).filter { it > 2 }.first()
                 val z = "abc".filter { it > 'a' }.first()
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(3)
         }
 
@@ -132,7 +132,7 @@ class UnnecessaryFilterSpec(val env: KotlinCoreEnvironment) {
                 val y = sequenceOf(1, 2, 3).filter { it > 2 }.firstOrNull()
                 val z = "abc".filter { it > 'a' }.firstOrNull()
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(3)
         }
 
@@ -143,7 +143,7 @@ class UnnecessaryFilterSpec(val env: KotlinCoreEnvironment) {
                 val y = sequenceOf(1, 2, 3).filter { it > 2 }.last()
                 val z = "abc".filter { it > 'a' }.last()
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(3)
         }
 
@@ -154,7 +154,7 @@ class UnnecessaryFilterSpec(val env: KotlinCoreEnvironment) {
                 val y = sequenceOf(1, 2, 3).filter { it > 2 }.lastOrNull()
                 val z = "abc".filter { it > 'a' }.lastOrNull()
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(3)
         }
 
@@ -165,7 +165,7 @@ class UnnecessaryFilterSpec(val env: KotlinCoreEnvironment) {
                 val y = sequenceOf(1, 2, 3).filter { it > 2 }.single()
                 val z = "abc".filter { it > 'a' }.single()
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(3)
         }
 
@@ -176,7 +176,7 @@ class UnnecessaryFilterSpec(val env: KotlinCoreEnvironment) {
                 val y = sequenceOf(1, 2, 3).filter { it > 2 }.singleOrNull()
                 val z = "abc".filter { it > 'a' }.singleOrNull()
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(3)
         }
     }
@@ -194,7 +194,7 @@ class UnnecessaryFilterSpec(val env: KotlinCoreEnvironment) {
                 val y = listOf<Int>().filter { it > 0 }.count()
             """.trimIndent()
 
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -209,7 +209,7 @@ class UnnecessaryFilterSpec(val env: KotlinCoreEnvironment) {
                 val y = listOf<Int>().asSequence().filter { it > 0 }.count()
             """.trimIndent()
 
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -223,7 +223,7 @@ class UnnecessaryFilterSpec(val env: KotlinCoreEnvironment) {
                 val x = filter().size
             """.trimIndent()
 
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -234,7 +234,7 @@ class UnnecessaryFilterSpec(val env: KotlinCoreEnvironment) {
                     .count { it > 2 }
             """.trimIndent()
 
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -250,7 +250,7 @@ class UnnecessaryFilterSpec(val env: KotlinCoreEnvironment) {
                 fun foo(list: List<Int>) {}
             """.trimIndent()
 
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -261,7 +261,7 @@ class UnnecessaryFilterSpec(val env: KotlinCoreEnvironment) {
                     .none { it > 2 }
             """.trimIndent()
 
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -272,7 +272,7 @@ class UnnecessaryFilterSpec(val env: KotlinCoreEnvironment) {
                     .any { it > 2 }
             """.trimIndent()
 
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -285,7 +285,7 @@ class UnnecessaryFilterSpec(val env: KotlinCoreEnvironment) {
                     .count { it > 1 }
             """.trimIndent()
 
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -302,7 +302,7 @@ class UnnecessaryFilterSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -318,7 +318,7 @@ class UnnecessaryFilterSpec(val env: KotlinCoreEnvironment) {
                     c.isNotEmpty()
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -329,7 +329,7 @@ class UnnecessaryFilterSpec(val env: KotlinCoreEnvironment) {
                 val y = listOf(1, 2, 3).filter { it > 1 }.singleOrNull { it > 2 }
             """.trimIndent()
 
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
     }

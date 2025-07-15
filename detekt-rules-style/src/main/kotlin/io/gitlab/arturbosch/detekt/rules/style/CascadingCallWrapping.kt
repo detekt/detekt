@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.github.detekt.psi.absolutePath
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.TextLocation
@@ -59,7 +59,7 @@ class CascadingCallWrapping(config: Config) : Rule(
         if (!expression.containsNewline() && expression.receiverContainsNewline()) {
             val callTextOrEmpty = callExpression?.text?.let { " `$it`" }.orEmpty()
             report(
-                CodeSmell(
+                Finding(
                     entity = expression.toErrorReportEntity(),
                     message = "Chained call$callTextOrEmpty should be wrapped to a new line since preceding calls were."
                 )

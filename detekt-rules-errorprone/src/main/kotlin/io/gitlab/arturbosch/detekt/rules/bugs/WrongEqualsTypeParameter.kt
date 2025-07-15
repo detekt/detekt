@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.hasCorrectEqualsParameter
 import org.jetbrains.kotlin.psi.KtClass
@@ -48,7 +48,7 @@ class WrongEqualsTypeParameter(config: Config) : Rule(
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (function.name == "equals" && !function.isTopLevel && function.hasWrongEqualsSignature()) {
             report(
-                CodeSmell(
+                Finding(
                     Entity.atName(function),
                     "equals() methods should only take one parameter " +
                         "of type Any?."

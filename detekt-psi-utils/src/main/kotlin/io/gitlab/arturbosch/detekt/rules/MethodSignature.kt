@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules
 
+import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
@@ -51,3 +52,11 @@ private fun KtNamedFunction.isMainInsideObject() =
 
 fun KtNamedFunction.hasImplicitUnitReturnType(bindingContext: BindingContext) =
     bodyExpression.getResolvedCall(bindingContext)?.resultingDescriptor?.returnType?.isUnit() == true
+
+fun KtNamedFunction.hasImplicitUnitReturnType(): Boolean {
+    if (hasBlockBody()) return false
+
+    return analyze(this) {
+        bodyExpression?.expressionType?.isUnitType == true
+    }
+}

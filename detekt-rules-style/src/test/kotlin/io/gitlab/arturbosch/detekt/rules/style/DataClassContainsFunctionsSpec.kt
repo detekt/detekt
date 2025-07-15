@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -27,14 +27,14 @@ class DataClassContainsFunctionsSpec {
 
         @Test
         fun `reports valid data class with conversion function`() {
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
 
         @Test
         fun `reports valid data class without conversion function`() {
             val config = TestConfig(CONVERSION_FUNCTION_PREFIX to emptyList<String>())
             val rule = DataClassContainsFunctions(config)
-            assertThat(rule.compileAndLint(code)).hasSize(2)
+            assertThat(rule.lint(code)).hasSize(2)
         }
     }
 
@@ -49,28 +49,28 @@ class DataClassContainsFunctionsSpec {
         @Test
         fun `reports operators if not allowed by default`() {
             val rule = DataClassContainsFunctions(Config.empty)
-            assertThat(rule.compileAndLint(code)).hasSize(1)
+            assertThat(rule.lint(code)).hasSize(1)
         }
 
         @Test
         fun `reports operators if not allowed`() {
             val config = TestConfig(ALLOW_OPERATORS to false)
             val rule = DataClassContainsFunctions(config)
-            assertThat(rule.compileAndLint(code)).hasSize(1)
+            assertThat(rule.lint(code)).hasSize(1)
         }
 
         @Test
         fun `does not report operators if allowed`() {
             val config = TestConfig(ALLOW_OPERATORS to true)
             val rule = DataClassContainsFunctions(config)
-            assertThat(rule.compileAndLint(code)).isEmpty()
+            assertThat(rule.lint(code)).isEmpty()
         }
     }
 
     @Test
     fun `does not report a data class without a function`() {
         val code = "data class C(val i: Int)"
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -80,7 +80,7 @@ class DataClassContainsFunctionsSpec {
                 fun f() {}
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -101,6 +101,6 @@ class DataClassContainsFunctionsSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 }

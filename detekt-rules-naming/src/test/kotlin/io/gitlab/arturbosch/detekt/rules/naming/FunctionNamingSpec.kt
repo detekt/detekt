@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -18,7 +18,7 @@ class FunctionNamingSpec {
             @Suppress("FunctionNaming")
             fun MY_FUN() {}
         """.trimIndent()
-        assertThat(FunctionNaming(Config.empty).compileAndLint(code)).isEmpty()
+        assertThat(FunctionNaming(Config.empty).lint(code)).isEmpty()
     }
 
     @Test
@@ -28,7 +28,7 @@ class FunctionNamingSpec {
                 return i + i
             }
         """.trimIndent()
-        assertThat(FunctionNaming(Config.empty).compileAndLint(code)).isEmpty()
+        assertThat(FunctionNaming(Config.empty).lint(code)).isEmpty()
     }
 
     @Test
@@ -39,7 +39,7 @@ class FunctionNamingSpec {
             }
         """.trimIndent()
         val config = TestConfig(FunctionNaming.EXCLUDE_CLASS_PATTERN to ".*Test$")
-        assertThat(FunctionNaming(config).compileAndLint(code)).isEmpty()
+        assertThat(FunctionNaming(config).lint(code)).isEmpty()
     }
 
     @Test
@@ -52,7 +52,7 @@ class FunctionNamingSpec {
             }
             interface I { fun shouldNotBeFlagged() }
         """.trimIndent()
-        assertThat(FunctionNaming(Config.empty).compileAndLint(code)).hasStartSourceLocation(3, 13)
+        assertThat(FunctionNaming(Config.empty).lint(code)).hasStartSourceLocation(3, 13)
     }
 
     @Test
@@ -63,7 +63,7 @@ class FunctionNamingSpec {
             }
             interface I { @Suppress("FunctionNaming") fun SHOULD_NOT_BE_FLAGGED() }
         """.trimIndent()
-        assertThat(FunctionNaming(Config.empty).compileAndLint(code)).isEmpty()
+        assertThat(FunctionNaming(Config.empty).lint(code)).isEmpty()
     }
 
     @Test
@@ -74,7 +74,7 @@ class FunctionNamingSpec {
             
             fun Foo(): Foo = FooImpl()
         """.trimIndent()
-        assertThat(FunctionNaming(Config.empty).compileAndLint(code)).isEmpty()
+        assertThat(FunctionNaming(Config.empty).lint(code)).isEmpty()
     }
 
     @Test
@@ -83,7 +83,7 @@ class FunctionNamingSpec {
             interface Foo<T>
             fun <T> Foo(): Foo<T> = object : Foo<T> {}
         """.trimIndent()
-        assertThat(FunctionNaming(Config.empty).compileAndLint(code)).isEmpty()
+        assertThat(FunctionNaming(Config.empty).lint(code)).isEmpty()
     }
 
     @Test
@@ -96,7 +96,7 @@ class FunctionNamingSpec {
             }
             interface I { @Suppress("FunctionNaming") fun SHOULD_BE_FLAGGED() }
         """.trimIndent()
-        assertThat(FunctionNaming(Config.empty).compileAndLint(code)).hasStartSourceLocation(3, 13)
+        assertThat(FunctionNaming(Config.empty).lint(code)).hasStartSourceLocation(3, 13)
     }
 
     @Test
@@ -104,7 +104,7 @@ class FunctionNamingSpec {
         val code = """
             fun `7his is a function name _`() = Unit
         """.trimIndent()
-        assertThat(FunctionNaming(Config.empty).compileAndLint(code)).hasStartSourceLocations(SourceLocation(1, 5))
+        assertThat(FunctionNaming(Config.empty).lint(code)).hasStartSourceLocations(SourceLocation(1, 5))
     }
 
     @Test
@@ -116,7 +116,7 @@ class FunctionNamingSpec {
             }
         """.trimIndent()
         val config = TestConfig(FunctionNaming.FUNCTION_PATTERN to "^`.+`$")
-        assertThat(FunctionNaming(config).compileAndLint(code)).isEmpty()
+        assertThat(FunctionNaming(config).lint(code)).isEmpty()
     }
 
     @Test
@@ -131,14 +131,14 @@ class FunctionNamingSpec {
             }
         """.trimIndent()
         val config = TestConfig(FunctionNaming.EXCLUDE_CLASS_PATTERN to "Foo|Bar")
-        assertThat(FunctionNaming(config).compileAndLint(code)).isEmpty()
+        assertThat(FunctionNaming(config).lint(code)).isEmpty()
     }
 
     @Test
     fun `should report a function name that begins with a backtick, capitals, and spaces`() {
         val subject = FunctionNaming(Config.empty)
         val code = "fun `Hi bye`() = 3"
-        val findings = subject.compileAndLint(code)
+        val findings = subject.lint(code)
         assertThat(findings).hasSize(1)
     }
 
@@ -158,7 +158,7 @@ class FunctionNamingSpec {
         fun shouldFailWithInvalidRegexFunctionNaming() {
             val config = TestConfig(FunctionNaming.EXCLUDE_CLASS_PATTERN to "*Foo")
             assertThatExceptionOfType(PatternSyntaxException::class.java).isThrownBy {
-                FunctionNaming(config).compileAndLint(excludeClassPatternFunctionRegexCode)
+                FunctionNaming(config).lint(excludeClassPatternFunctionRegexCode)
             }
         }
     }
@@ -171,6 +171,6 @@ class FunctionNamingSpec {
                 val (_, HOLY_GRAIL) = D(5, 4)
             }
         """.trimIndent()
-        assertThat(FunctionNaming(Config.empty).compileAndLint(code)).isEmpty()
+        assertThat(FunctionNaming(Config.empty).lint(code)).isEmpty()
     }
 }

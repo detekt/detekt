@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import org.jetbrains.kotlin.psi.KtBlockExpression
@@ -228,16 +228,18 @@ class BracesOnWhenStatements(config: Config) : Rule(
             BracePolicy.Consistent -> (violator.parent as KtWhenExpression).whenKeyword
             BracePolicy.Always,
             BracePolicy.Necessary,
-            BracePolicy.Never -> requireNotNull(violator.arrow) { "When branch ${violator.text} has no arrow!" }
+            BracePolicy.Never,
+            -> requireNotNull(violator.arrow) { "When branch ${violator.text} has no arrow!" }
         }
-        report(CodeSmell(Entity.from(reported), policy.message))
+        report(Finding(Entity.from(reported), policy.message))
     }
 
     enum class BracePolicy(val config: String, val message: String) {
         Always("always", "Missing braces on this branch, add them."),
         Consistent("consistent", "Inconsistent braces, make sure all branches either have or don't have braces."),
         Necessary("necessary", "Extra braces exist on this branch, remove them."),
-        Never("never", "Extra braces exist on this branch, remove them.");
+        Never("never", "Extra braces exist on this branch, remove them."),
+        ;
 
         companion object {
             fun getValue(arg: String): BracePolicy =

@@ -10,9 +10,9 @@ internal object SuppressedIssueAssert {
 
     fun isReportNull(report: ConsoleReport) {
         report.init(TestSetupContext())
-        val correctableCodeSmell = createIssue(suppressReasons = listOf("suppressed"))
-        val detektionWithCorrectableSmell = TestDetektion(correctableCodeSmell)
-        val result = report.render(detektionWithCorrectableSmell)
+        val correctableIssue = createIssue(suppressReasons = listOf("suppressed"))
+        val detektionWithCorrectableIssue = TestDetektion(correctableIssue)
+        val result = report.render(detektionWithCorrectableIssue)
         assertThat(result).isNull()
     }
 }

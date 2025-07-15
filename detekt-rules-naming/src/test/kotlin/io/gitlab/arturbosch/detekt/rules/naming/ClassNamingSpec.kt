@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.naming
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Test
 
 class ClassNamingSpec {
@@ -19,14 +19,14 @@ class ClassNamingSpec {
             }
         """.trimIndent()
 
-        assertThat(ClassNaming(Config.empty).compileAndLint(code)).isEmpty()
+        assertThat(ClassNaming(Config.empty).lint(code)).isEmpty()
     }
 
     @Test
     fun `should use custom name for method and class`() {
         val config = TestConfig(ClassNaming.CLASS_PATTERN to "^aBbD$")
         assertThat(
-            ClassNaming(config).compileAndLint(
+            ClassNaming(config).lint(
                 """
                     class aBbD{}
                 """.trimIndent()
@@ -40,7 +40,7 @@ class ClassNamingSpec {
             class MyClassWithNumbers5
         """.trimIndent()
 
-        assertThat(ClassNaming(Config.empty).compileAndLint(code)).isEmpty()
+        assertThat(ClassNaming(Config.empty).lint(code)).isEmpty()
     }
 
     @Test
@@ -50,7 +50,7 @@ class ClassNamingSpec {
             }
         """.trimIndent()
 
-        assertThat(ClassNaming(Config.empty).compileAndLint(code)).isEmpty()
+        assertThat(ClassNaming(Config.empty).lint(code)).isEmpty()
     }
 
     @Test
@@ -59,7 +59,7 @@ class ClassNamingSpec {
             class `NamingConventions`
         """.trimIndent()
 
-        assertThat(ClassNaming(Config.empty).compileAndLint(code)).isEmpty()
+        assertThat(ClassNaming(Config.empty).lint(code)).isEmpty()
     }
 
     @Test
@@ -68,7 +68,7 @@ class ClassNamingSpec {
             class _NamingConventions
         """.trimIndent()
 
-        assertThat(ClassNaming(Config.empty).compileAndLint(code))
+        assertThat(ClassNaming(Config.empty).lint(code))
             .hasSize(1)
             .hasTextLocations(6 to 24)
     }
@@ -79,7 +79,7 @@ class ClassNamingSpec {
             class namingConventions {}
         """.trimIndent()
 
-        assertThat(ClassNaming(Config.empty).compileAndLint(code))
+        assertThat(ClassNaming(Config.empty).lint(code))
             .hasSize(1)
             .hasTextLocations(6 to 23)
     }
@@ -90,7 +90,7 @@ class ClassNamingSpec {
             @Suppress("ClassNaming")
             class namingConventions {}
         """.trimIndent()
-        assertThat(ClassNaming(Config.empty).compileAndLint(code)).isEmpty()
+        assertThat(ClassNaming(Config.empty).lint(code)).isEmpty()
     }
 
     @Test
@@ -102,6 +102,6 @@ class ClassNamingSpec {
             }
         """.trimIndent()
 
-        assertThat(ClassNaming(Config.empty).compileAndLint(code)).isEmpty()
+        assertThat(ClassNaming(Config.empty).lint(code)).isEmpty()
     }
 }

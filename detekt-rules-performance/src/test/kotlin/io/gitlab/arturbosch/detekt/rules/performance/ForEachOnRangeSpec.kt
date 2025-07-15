@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.performance
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -65,7 +65,7 @@ class ForEachOnRangeSpec {
 
         @Test
         fun `should report the forEach usage`() {
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings).hasSize(15)
         }
 
@@ -84,7 +84,7 @@ class ForEachOnRangeSpec {
                     }
                 }
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings).hasSize(3)
         }
     }
@@ -99,7 +99,7 @@ class ForEachOnRangeSpec {
 
         @Test
         fun `should not report any issues`() {
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -119,7 +119,7 @@ class ForEachOnRangeSpec {
 
         @Test
         fun `should not report any issues`() {
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings).isEmpty()
         }
     }

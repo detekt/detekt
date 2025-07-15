@@ -1,19 +1,18 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.lintWithContext
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 private const val ALLOW_VARS = "allowVars"
 
 @KotlinCoreEnvironmentTest
-class UseDataClassSpec(val env: KotlinCoreEnvironment) {
+class UseDataClassSpec(val env: KotlinEnvironmentContainer) {
     val subject = UseDataClass(Config.empty)
 
     @Nested
@@ -30,7 +29,7 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
                     object Obj
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -40,7 +39,7 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
                     val c = 2 * b
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -52,7 +51,7 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -60,7 +59,7 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class NoDataClassCandidateWithOnlyPrivateCtor1 private constructor(val i: Int)
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -70,7 +69,7 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
                     private constructor(i: Int)
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -81,7 +80,7 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
                     data class Error(val error: Throwable) : NoDataClassBecauseItsSealed()
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -91,7 +90,7 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
                     FIRST(1), SECOND(2);
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -99,7 +98,7 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 annotation class AnnotationNoDataClass(val i: Int)
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -114,7 +113,7 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -127,7 +126,7 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
                 data class DataClass(override val i: Int): SimpleInterface
             """.trimIndent()
 
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -142,7 +141,7 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
                 class DataClass(override val i: Int, override val j: Int): SimpleInterface, BaseClass(j)
             """.trimIndent()
 
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -153,7 +152,7 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
                 class A(val b: B) : I by b
             """.trimIndent()
 
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -166,7 +165,7 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
                 class DataClassCandidate1(val i: Int)
             """.trimIndent()
 
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
 
             assertThat(findings).hasSize(1)
             assertThat(findings).hasStartSourceLocation(1, 7)
@@ -180,7 +179,7 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
                     val i2: Int = 0
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -190,7 +189,7 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
                     private constructor(i: Int) : this(i.toString())
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -200,7 +199,7 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
                     constructor(i: Int) : this(i.toString())
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -218,7 +217,7 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -228,7 +227,7 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
                 class DataClass(val i: Int): SimpleInterface
             """.trimIndent()
 
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -241,7 +240,7 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
                 class DataClass(override val i: Int): SimpleInterface
             """.trimIndent()
 
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
     }
 
@@ -255,7 +254,7 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
                     fun copy(a: Int, b: String): D = D(a, b)
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -265,7 +264,7 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
                     fun copy(a: Int, b: String) = D(a, b)
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -275,7 +274,7 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
                     fun copy(): D = D(0, "")
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -285,7 +284,7 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
                     fun copy(a: Int, b: String, c: String): D = D(a, b + c)
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -295,7 +294,7 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
                     fun copy(a: Int, b: Int): D = D(a, b.toString())
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -305,7 +304,7 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
                     fun copy(a: Int, b: String?): D = D(a, b.toString())
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -316,7 +315,7 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -327,7 +326,7 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
         fun `does not report class with mutable constructor parameter`() {
             val code = """class DataClassCandidateWithVar(var i: Int)"""
             val config = TestConfig(ALLOW_VARS to "true")
-            assertThat(UseDataClass(config).compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(UseDataClass(config).lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -338,7 +337,7 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
             val config = TestConfig(ALLOW_VARS to "true")
-            assertThat(UseDataClass(config).compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(UseDataClass(config).lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -349,7 +348,7 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
             val config = TestConfig(ALLOW_VARS to "true")
-            assertThat(UseDataClass(config).compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(UseDataClass(config).lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -360,13 +359,13 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
             val config = TestConfig(ALLOW_VARS to "true")
-            assertThat(UseDataClass(config).compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(UseDataClass(config).lintWithContext(env, code)).isEmpty()
         }
     }
 
     @Test
     fun `does not report inline classes`() {
-        assertThat(subject.compileAndLintWithContext(env, "inline class A(val x: Int)")).isEmpty()
+        assertThat(subject.lintWithContext(env, "inline class A(val x: Int)")).isEmpty()
     }
 
     @Test
@@ -375,7 +374,7 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
             @JvmInline
             value class A(val x: Int)
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -388,7 +387,7 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -403,7 +402,7 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
     }
 
     @Test
@@ -413,7 +412,7 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
                 inner class Inner(val x: Int)
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -423,6 +422,6 @@ class UseDataClassSpec(val env: KotlinCoreEnvironment) {
                 val bar: String
             }
         """.trimIndent()
-        assertThat(subject.lintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code, compile = false)).isEmpty()
     }
 }

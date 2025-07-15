@@ -10,5 +10,5 @@ package io.gitlab.arturbosch.detekt.api
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.SOURCE)
 annotation class Alias(
-    vararg val values: String
+    vararg val values: String,
 )

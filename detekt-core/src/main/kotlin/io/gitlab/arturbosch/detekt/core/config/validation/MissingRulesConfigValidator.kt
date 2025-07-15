@@ -17,7 +17,7 @@ internal class MissingRulesConfigValidator(
 
     override fun validate(
         configToValidate: YamlConfig,
-        settings: ValidationSettings
+        settings: ValidationSettings,
     ): Collection<Notification> {
         if (!settings.checkExhaustiveness) {
             return emptyList()

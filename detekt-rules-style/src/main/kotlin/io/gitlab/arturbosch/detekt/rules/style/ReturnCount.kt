@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.api.simplePatternToRegex
@@ -69,7 +69,7 @@ class ReturnCount(config: Config) : Rule(
 
             if (numberOfReturns > max) {
                 report(
-                    CodeSmell(
+                    Finding(
                         Entity.atName(function),
                         "Function ${function.name} has $numberOfReturns return statements " +
                             "which exceeds the limit of $max."

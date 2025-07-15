@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.empty
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.rules.empty.internal.hasCommentInside
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.psiUtil.isObjectLiteral
@@ -22,7 +22,7 @@ class EmptyClassBlock(config: Config) : EmptyRule(config) {
         classOrObject.body?.let { body ->
             if (body.declarations.isEmpty()) {
                 report(
-                    CodeSmell(
+                    Finding(
                         Entity.from(body),
                         "The class or object ${classOrObject.name} is empty."
                     )

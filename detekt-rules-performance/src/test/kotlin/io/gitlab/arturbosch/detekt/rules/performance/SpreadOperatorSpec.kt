@@ -1,14 +1,14 @@
 package io.gitlab.arturbosch.detekt.rules.performance
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class SpreadOperatorSpec(val env: KotlinCoreEnvironment) {
+class SpreadOperatorSpec(val env: KotlinEnvironmentContainer) {
 
     private val subject = SpreadOperator(Config.empty)
 
@@ -22,7 +22,7 @@ class SpreadOperatorSpec(val env: KotlinCoreEnvironment) {
             fun foo(vararg xs: Int) {}
             val testVal = foo(xs = *xsArray)
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(1)
         assertThat(actual.first().message).isEqualTo(errorMessage)
     }
@@ -34,7 +34,7 @@ class SpreadOperatorSpec(val env: KotlinCoreEnvironment) {
             fun foo(vararg xs: Int) {}
             val testVal = foo(*xsArray)
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(1)
         assertThat(actual.first().message).isEqualTo(errorMessage)
     }
@@ -45,7 +45,7 @@ class SpreadOperatorSpec(val env: KotlinCoreEnvironment) {
             fun foo(vararg xs: Int) {}
             val testVal = foo(xs = *intArrayOf(1))
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -54,7 +54,7 @@ class SpreadOperatorSpec(val env: KotlinCoreEnvironment) {
             fun <T> asList(vararg ts: T, stringValue: String): List<Int> = listOf(1,2,3)
             val list = asList(-1, 0, *arrayOf(1, 2, 3), 4, stringValue = "5")
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -63,7 +63,7 @@ class SpreadOperatorSpec(val env: KotlinCoreEnvironment) {
             fun <T> asList(vararg ts: T, stringValue: String): List<Int> = listOf(1,2,3)
             val list = asList(-1, 0, 1, 2, 3, 4, stringValue = "5")
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -77,7 +77,7 @@ class SpreadOperatorSpec(val env: KotlinCoreEnvironment) {
                 strs.forEach { println(it) }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -91,7 +91,7 @@ class SpreadOperatorSpec(val env: KotlinCoreEnvironment) {
                 println(test)
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -102,7 +102,7 @@ class SpreadOperatorSpec(val env: KotlinCoreEnvironment) {
                 b(*bla)
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -115,6 +115,6 @@ class SpreadOperatorSpec(val env: KotlinCoreEnvironment) {
                 b(*bla)
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
     }
 }

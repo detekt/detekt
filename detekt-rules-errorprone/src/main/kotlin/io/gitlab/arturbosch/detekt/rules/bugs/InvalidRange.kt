@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
@@ -36,7 +36,7 @@ class InvalidRange(config: Config) : Rule(
 
     override fun visitBinaryExpression(expression: KtBinaryExpression) {
         if (expression.isInvalidLoopRange()) {
-            report(CodeSmell(Entity.from(expression), "This loop will never be executed due to its expression."))
+            report(Finding(Entity.from(expression), "This loop will never be executed due to its expression."))
         }
         super.visitBinaryExpression(expression)
     }

@@ -1,15 +1,15 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
+class UnnecessaryAnySpec(val env: KotlinEnvironmentContainer) {
     val subject = UnnecessaryAny(Config.empty)
 
     @Test
@@ -19,7 +19,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
                 list.any { it == value }
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual)
             .hasSize(1)
             .allMatch {
@@ -34,7 +34,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
                 list.contains(value)
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).isEmpty()
     }
 
@@ -48,7 +48,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).isEmpty()
     }
 
@@ -59,7 +59,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
                 list.any { it == value * value }
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(1)
     }
 
@@ -70,7 +70,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
                 list.any { it * it == value }
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).isEmpty()
     }
 
@@ -81,7 +81,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
                 list.any { it.also { println(it) } == value }
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).isEmpty()
     }
 
@@ -93,7 +93,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
                 list.any { it * value == it }
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).isEmpty()
     }
 
@@ -104,7 +104,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
                 list.any { return@any it == value }
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(1)
     }
 
@@ -115,7 +115,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
                 list.any { it.equals(value) }
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(1)
     }
 
@@ -126,7 +126,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
                 list.any { value.equals(it) }
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(1)
     }
 
@@ -140,7 +140,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
                 fun equals(value: Custom) = false
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).isEmpty()
     }
 
@@ -151,7 +151,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
                 list.any { value?.equals(it) == true }
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).isEmpty()
     }
 
@@ -162,7 +162,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
                 list.any { value.equals(2 * it) }
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).isEmpty()
     }
 
@@ -174,7 +174,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
                 list.any { 2 == value }
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(2)
             .allMatch { it.message == "`any {  }` expression can be omitted" }
     }
@@ -189,7 +189,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(1)
             .allMatch { it.message == "`any {  }` expression can be omitted" }
     }
@@ -207,7 +207,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).isEmpty()
     }
 
@@ -224,7 +224,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual)
             .hasSize(2)
             .allMatch { it.message == "`any {  }` expression can be omitted" }
@@ -237,7 +237,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
                 list.any { value.also { println(it) } == 2 }
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(1)
     }
 
@@ -250,7 +250,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
                 list.any { value.also { println(it) } }
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(3)
     }
 
@@ -261,7 +261,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
                 list.any { it == values.any { it == value } }
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(2)
     }
 
@@ -272,7 +272,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
             list.any { outerIt -> outerIt == values.any { it == value } }
         }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(2)
     }
 
@@ -283,7 +283,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
                 list.any { it.equals(2 * value) }
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(1)
     }
 
@@ -294,7 +294,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
                 list.any { value == it }
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(1)
     }
 
@@ -308,7 +308,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(1)
     }
 
@@ -319,7 +319,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
                 list.any { it: Int -> it == value }
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(1)
     }
 
@@ -330,7 +330,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
                 list.any(predicate = { it == value })
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(1)
     }
 
@@ -341,7 +341,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
                 list.any({ it == value })
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(1)
     }
 
@@ -354,7 +354,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
                 })
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(1)
     }
 
@@ -365,7 +365,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
                 list.any(fun(it: Int) = it == value)
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(1)
     }
 
@@ -376,7 +376,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
                 list.any(fun(value: Int) = false)
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(1)
             .allMatch { it.message == "`any {  }` expression can be omitted" }
     }
@@ -388,7 +388,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
                 list.any()
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).isEmpty()
     }
 
@@ -402,7 +402,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).isEmpty()
     }
 
@@ -415,7 +415,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).isEmpty()
     }
 
@@ -428,7 +428,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).isEmpty()
     }
 
@@ -441,7 +441,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(1)
     }
 
@@ -454,7 +454,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(1)
     }
 
@@ -467,7 +467,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).isEmpty()
     }
 
@@ -480,7 +480,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(1)
     }
 
@@ -494,7 +494,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
                     list.any(predicate)
                 }
             """.trimIndent()
-            val actual = subject.compileAndLintWithContext(env, code)
+            val actual = subject.lintWithContext(env, code)
             assertThat(actual).isEmpty()
         }
 
@@ -506,7 +506,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
                     list.any(predicate)
                 }
             """.trimIndent()
-            val actual = subject.compileAndLintWithContext(env, code)
+            val actual = subject.lintWithContext(env, code)
             assertThat(actual).isEmpty()
         }
 
@@ -520,7 +520,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
                     list.any(predicate)
                 }
             """.trimIndent()
-            val actual = subject.compileAndLintWithContext(env, code)
+            val actual = subject.lintWithContext(env, code)
             assertThat(actual).isEmpty()
         }
 
@@ -532,7 +532,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
                     list.any(predicate)
                 }
             """.trimIndent()
-            val actual = subject.compileAndLintWithContext(env, code)
+            val actual = subject.lintWithContext(env, code)
             assertThat(actual).isEmpty()
         }
 
@@ -543,7 +543,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
                     list.any(predicate)
                 }
             """.trimIndent()
-            val actual = subject.compileAndLintWithContext(env, code)
+            val actual = subject.lintWithContext(env, code)
             assertThat(actual).isEmpty()
         }
 
@@ -554,7 +554,7 @@ class UnnecessaryAnySpec(val env: KotlinCoreEnvironment) {
                     list.any(predicate)
                 }
             """.trimIndent()
-            val actual = subject.compileAndLintWithContext(env, code)
+            val actual = subject.lintWithContext(env, code)
             assertThat(actual).isEmpty()
         }
     }

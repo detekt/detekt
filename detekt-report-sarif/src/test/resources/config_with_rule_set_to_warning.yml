@@ -1,3 +1,0 @@
-RuleSet1:
-  TestSmellA:
-    severity: 'warning'

@@ -1,17 +1,17 @@
 ---
 id: baseline
-title: "Code Smell Baseline"
+title: "Finding Baseline"
 keywords: [baseline, suppressing, smells]
 sidebar_position: 7
 ---
 
 With the cli option `--baseline` or the detekt-gradle-plugin closure-property `baseline` you can specify a file which is used to generate a `baseline.xml`.
-It is a file where ignored code smells are defined.
+It is a file where ignored findings are defined.
 
-The intention of `CurrentIssues` is that only new code smells are printed on further analysis.
+The intention of `CurrentIssues` is that only new findings are printed on further analysis.
 The `ManuallySuppressedIssues` can be used to write down false positive detections (instead of suppressing them and pollute your code base).
 
-The `ID` node has the following structure: `<RuleID>:<Codesmell_Signature>`.  
+The `ID` node has the following structure: `<RuleID>:<Finding_Signature>`.
 When adding a custom issue to the xml file, make sure the `RuleID` should be self-explaining.
 
 ```xml

@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.documentation
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.isInternal
@@ -90,21 +90,21 @@ class OutdatedDocumentation(config: Config) : Rule(
                     )
             )
             .ifTrue {
-                reportCodeSmell(klass)
+                reportFinding(klass)
             }
     }
 
     override fun visitSecondaryConstructor(constructor: KtSecondaryConstructor) {
         super.visitSecondaryConstructor(constructor)
         isDocumentationOutdated(constructor) { getSecondaryConstructorDeclarations(constructor) }.ifTrue {
-            reportCodeSmell(constructor)
+            reportFinding(constructor)
         }
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
         isDocumentationOutdated(function) { getFunctionDeclarations(function) }.ifTrue {
-            reportCodeSmell(function)
+            reportFinding(function)
         }
     }
 
@@ -214,9 +214,9 @@ class OutdatedDocumentation(config: Config) : Rule(
     private fun declarationMatches(doc: Declaration, element: Declaration): Boolean =
         element.name == doc.name && (element.type == DeclarationType.ANY || element.type == doc.type)
 
-    private fun reportCodeSmell(element: KtNamedDeclaration) {
+    private fun reportFinding(element: KtNamedDeclaration) {
         report(
-            CodeSmell(
+            Finding(
                 Entity.atName(element),
                 "Documentation of ${element.nameAsSafeName} is outdated"
             )
@@ -233,6 +233,6 @@ class OutdatedDocumentation(config: Config) : Rule(
     enum class DeclarationType {
         PARAM,
         PROPERTY,
-        ANY
+        ANY,
     }
 }

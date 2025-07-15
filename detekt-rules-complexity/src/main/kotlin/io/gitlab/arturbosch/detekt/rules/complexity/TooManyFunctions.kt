@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.hasAnnotation
@@ -68,7 +68,7 @@ class TooManyFunctions(config: Config) : Rule(
         super.visitKtFile(file)
         if (amountOfTopLevelFunctions > allowedFunctionsPerFile) {
             report(
-                CodeSmell(
+                Finding(
                     Entity.atPackageOrFirstDecl(file),
                     "File '${file.name}' with '$amountOfTopLevelFunctions' functions detected. " +
                         "The maximum allowed functions per file is set to '$allowedFunctionsPerFile'"
@@ -90,7 +90,7 @@ class TooManyFunctions(config: Config) : Rule(
             klass.isInterface() -> {
                 if (amount > allowedFunctionsPerInterface) {
                     report(
-                        CodeSmell(
+                        Finding(
                             Entity.atName(klass),
                             "Interface '${klass.name}' with '$amount' functions detected. " +
                                 "The maximum allowed functions per interface is set to " +
@@ -103,7 +103,7 @@ class TooManyFunctions(config: Config) : Rule(
             klass.isEnum() -> {
                 if (amount > allowedFunctionsPerEnum) {
                     report(
-                        CodeSmell(
+                        Finding(
                             Entity.atName(klass),
                             "Enum class '${klass.name}' with '$amount' functions detected. " +
                                 "The maximum allowed functions per enum class is set to " +
@@ -116,7 +116,7 @@ class TooManyFunctions(config: Config) : Rule(
             else -> {
                 if (amount > allowedFunctionsPerClass) {
                     report(
-                        CodeSmell(
+                        Finding(
                             Entity.atName(klass),
                             "Class '${klass.name}' with '$amount' functions detected. " +
                                 "The maximum allowed functions per class is set to '$allowedFunctionsPerClass'"
@@ -132,7 +132,7 @@ class TooManyFunctions(config: Config) : Rule(
         val amount = calcFunctions(declaration)
         if (amount > allowedFunctionsPerObject) {
             report(
-                CodeSmell(
+                Finding(
                     Entity.atName(declaration),
                     "Object '${declaration.name}' with '$amount' functions detected. " +
                         "The maximum allowed functions per object is set to '$allowedFunctionsPerObject'"

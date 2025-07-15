@@ -1,11 +1,11 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
+import com.intellij.psi.PsiComment
+import com.intellij.psi.PsiWhiteSpace
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
-import org.jetbrains.kotlin.com.intellij.psi.PsiComment
-import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.siblings
 
@@ -42,7 +42,7 @@ class EqualsOnSignatureLine(config: Config) : Rule(
             .takeWhile { it is PsiWhiteSpace || it is PsiComment }
             .any { it is PsiWhiteSpace && it.textContains('\n') }
         if (hasLineBreakBeforeEqualsToken) {
-            report(CodeSmell(Entity.from(equalsToken), MESSAGE))
+            report(Finding(Entity.from(equalsToken), MESSAGE))
         }
     }
 

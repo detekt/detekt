@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.documentation
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import org.jetbrains.kotlin.psi.KtFile
@@ -32,7 +32,7 @@ class AbsentOrWrongFileLicense(config: Config) : Rule(
     override fun visitKtFile(file: KtFile) {
         if ((file.hasLicenseHeader() || file.hasLicenseHeaderRegex()) && !file.hasValidLicense()) {
             report(
-                CodeSmell(
+                Finding(
                     Entity.atPackageOrFirstDecl(file),
                     "Expected license not found or incorrect in the file: ${file.name}."
                 )

@@ -1,17 +1,20 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isCalling
-import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.name.CallableId
+import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.name.StandardClassIds.BASE_COLLECTIONS_PACKAGE
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
-import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 
 /**
  * If a sort operation followed by a reverse operation or vise versa should be avoided, and both statements
@@ -28,45 +31,45 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  *  .sortedDescending()
  * </compliant>
  */
-@RequiresFullAnalysis
-class UnnecessaryReversed(
-    config: Config,
-) : Rule(
-    config,
-    "Use single sort operation instead of sorting followed by a reverse operation or vise-versa, " +
-        "eg. use `.sortedByDescending { .. }` instead of `.sortedBy { }.asReversed()`",
-) {
+class UnnecessaryReversed(config: Config) :
+    Rule(
+        config,
+        "Use single sort operation instead of sorting followed by a reverse operation or vise-versa, " +
+            "eg. use `.sortedByDescending { .. }` instead of `.sortedBy { }.asReversed()`",
+    ),
+    RequiresAnalysisApi {
+
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 
-        if (!expression.isCalling(sortFunctionNames + reverseFunctionNames, bindingContext)) return
+        if (!expression.isCalling(sortFunctions + reverseFunctions)) return
 
-        val callFq = expression.asFqNameOrNull() ?: return
+        val callId = expression.callableId() ?: return
         val parentCalls = expression.getPrevCallInChainOrNull()
 
-        val oppositeCalls = if (callFq in sortFunctionNames) reverseFunctionNames else sortFunctionNames
+        val oppositeCalls = if (callId in sortFunctions) reverseFunctions else sortFunctions
 
         val parentCall = parentCalls.find { parentExpression ->
-            parentExpression.isCalling(oppositeCalls, bindingContext)
+            parentExpression.isCalling(oppositeCalls)
         } ?: return
 
-        val parentCallFq = parentCall.asFqNameOrNull() ?: return
+        val parentCallId = parentCall.callableId() ?: return
 
-        val sortCallUsed = if (parentCallFq in sortFunctionNames) parentCallFq else callFq
+        val sortCallUsed = if (parentCallId in sortFunctions) parentCallId else callId
 
-        val isSequentialCall = parentCallFq == parentCalls.lastOrNull()?.asFqNameOrNull()
+        val isSequentialCall = parentCallId == parentCalls.lastOrNull()?.callableId()
 
         val suggestion = oppositePairs[sortCallUsed]?.let {
             if (isSequentialCall) {
-                "Replace `${parentCallFq.shortName()}().${callFq.shortName()}()` by a single `${it.shortName()}()`"
+                "Replace `${parentCallId.callableName}().${callId.callableName}()` by a single `${it.callableName}()`"
             } else {
-                "Replace `${callFq.shortName()}()` following `${parentCallFq.shortName()}()` by a " +
-                    "single `${it.shortName()}() call`"
+                "Replace `${callId.callableName}()` following `${parentCallId.callableName}()` by a " +
+                    "single `${it.callableName}() call`"
             }
         } ?: description
 
         report(
-            CodeSmell(
+            Finding(
                 entity = Entity.from(expression),
                 message = suggestion,
                 references = listOf(Entity.from(expression), Entity.from(parentCall)),
@@ -74,32 +77,28 @@ class UnnecessaryReversed(
         )
     }
 
-    private fun KtCallExpression.asFqNameOrNull(): FqName? = getResolvedCall(bindingContext)
-        ?.resultingDescriptor
-        ?.fqNameOrNull()
+    private fun KtCallExpression.callableId(): CallableId? = analyze(this) {
+        resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId
+    }
 
     private fun KtExpression.getPrevCallInChainOrNull(): List<KtCallExpression> =
         parent.collectDescendantsOfType<KtCallExpression>()
             .dropLastWhile { it.psiOrParent == psiOrParent }
 
     companion object {
-        private val reverseFunctionNames = listOf(
-            FqName("kotlin.collections.reversed"),
-            FqName("kotlin.collections.asReversed"),
-        )
+        private val reverseFunctions = listOf("reversed", "asReversed")
+            .map { it.collectionsCall() }
 
-        private val sortFunctionNames = listOf(
-            FqName("kotlin.collections.sortedBy"),
-            FqName("kotlin.collections.sortedByDescending"),
-            FqName("kotlin.collections.sorted"),
-            FqName("kotlin.collections.sortedDescending"),
-        )
+        private val sortFunctions = listOf("sortedBy", "sortedByDescending", "sorted", "sortedDescending")
+            .map { it.collectionsCall() }
 
         private val oppositePairs = mapOf(
-            FqName("kotlin.collections.sortedBy") to FqName("kotlin.collections.sortedByDescending"),
-            FqName("kotlin.collections.sorted") to FqName("kotlin.collections.sortedDescending"),
+            "sortedBy".collectionsCall() to "sortedByDescending".collectionsCall(),
+            "sorted".collectionsCall() to "sortedDescending".collectionsCall()
         ).let { map ->
             map + map.map { it.value to it.key }.toMap()
         }
+
+        private fun String.collectionsCall() = CallableId(BASE_COLLECTIONS_PACKAGE, Name.identifier(this))
     }
 }

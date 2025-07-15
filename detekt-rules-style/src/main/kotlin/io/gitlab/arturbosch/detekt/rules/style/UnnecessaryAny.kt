@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.firstParameter
@@ -41,11 +41,12 @@ import org.jetbrains.kotlin.types.typeUtil.isSubtypeOf
  * list.contains(a)
  * </compliant>
  */
-@RequiresFullAnalysis
-class UnnecessaryAny(config: Config) : Rule(
-    config,
-    "The `any {  }` usage is unnecessary."
-) {
+class UnnecessaryAny(config: Config) :
+    Rule(
+        config,
+        "The `any {  }` usage is unnecessary."
+    ),
+    RequiresFullAnalysis {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
@@ -55,7 +56,7 @@ class UnnecessaryAny(config: Config) : Rule(
         val msg = shouldBeReported(expression)
         if (msg != null) {
             report(
-                CodeSmell(
+                Finding(
                     Entity.from(expression),
                     msg
                 )
@@ -95,7 +96,7 @@ class UnnecessaryAny(config: Config) : Rule(
     }
 
     private fun KtBlockExpression.shouldBlockExpressionBeReported(
-        descriptor: VariableDescriptor
+        descriptor: VariableDescriptor,
     ): String? {
         if (this.statements.isEmpty()) return null
         if (descriptor is WithDestructuringDeclaration) {
@@ -141,7 +142,7 @@ class UnnecessaryAny(config: Config) : Rule(
     private fun isUsageOfValueAndItEligible(
         descriptor: VariableDescriptor,
         leftExpression: KtExpression?,
-        rightExpression: KtExpression?
+        rightExpression: KtExpression?,
     ): String? {
         leftExpression ?: return null
         rightExpression ?: return null

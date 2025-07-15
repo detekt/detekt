@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -53,7 +53,7 @@ class IteratorNotThrowingNoSuchElementException(config: Config) : Rule(
             val nextMethod = classOrObject.findFunctionByName("next")
             if (nextMethod != null && !nextMethod.throwsNoSuchElementExceptionThrown()) {
                 report(
-                    CodeSmell(
+                    Finding(
                         Entity.atName(classOrObject),
                         "This implementation of Iterator does not correctly implement the next() method as " +
                             "it doesn't throw a NoSuchElementException when no elements remain in the Iterator."

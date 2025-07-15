@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.empty
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -20,7 +20,7 @@ class EmptyFunctionBlockSpec {
                 protected fun stuff() {}
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasStartSourceLocation(2, 27)
+        assertThat(subject.lint(code)).hasStartSourceLocation(2, 27)
     }
 
     @Test
@@ -30,7 +30,7 @@ class EmptyFunctionBlockSpec {
                 open fun stuff() {}
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -40,7 +40,7 @@ class EmptyFunctionBlockSpec {
                 fun stuff() {}
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -50,7 +50,7 @@ class EmptyFunctionBlockSpec {
                 fun b() {}
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasStartSourceLocation(2, 13)
+        assertThat(subject.lint(code)).hasStartSourceLocation(2, 13)
     }
 
     @Nested
@@ -82,13 +82,13 @@ class EmptyFunctionBlockSpec {
 
         @Test
         fun `should flag empty block in overridden function`() {
-            assertThat(subject.compileAndLint(code)).hasSize(2)
+            assertThat(subject.lint(code)).hasSize(2)
         }
 
         @Test
         fun `should not flag overridden functions`() {
             val config = TestConfig(IGNORE_OVERRIDDEN to "true")
-            assertThat(EmptyFunctionBlock(config).compileAndLint(code)).hasStartSourceLocation(1, 13)
+            assertThat(EmptyFunctionBlock(config).lint(code)).hasStartSourceLocation(1, 13)
         }
     }
 
@@ -114,13 +114,13 @@ class EmptyFunctionBlockSpec {
 
         @Test
         fun `should not flag overridden functions with commented body`() {
-            assertThat(subject.compileAndLint(code)).hasStartSourceLocation(12, 31)
+            assertThat(subject.lint(code)).hasStartSourceLocation(12, 31)
         }
 
         @Test
         fun `should not flag overridden functions with ignoreOverridden`() {
             val config = TestConfig(IGNORE_OVERRIDDEN to "true")
-            assertThat(EmptyFunctionBlock(config).compileAndLint(code)).isEmpty()
+            assertThat(EmptyFunctionBlock(config).lint(code)).isEmpty()
         }
     }
 }

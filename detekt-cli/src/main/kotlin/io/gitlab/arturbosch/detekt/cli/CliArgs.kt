@@ -91,7 +91,7 @@ class CliArgs {
     @Parameter(
         names = ["--baseline", "-b"],
         description = "If a baseline xml file is passed in," +
-            " only new code smells not in the baseline are printed in the console.",
+            " only new findings not in the baseline are printed in the console.",
         converter = PathConverter::class
     )
     var baseline: Path? = null
@@ -240,7 +240,8 @@ class CliArgs {
 
                 FailureSeverity.Error,
                 FailureSeverity.Warning,
-                FailureSeverity.Info -> FailOnSeverity(minSeverity.toSeverity())
+                FailureSeverity.Info,
+                -> FailOnSeverity(minSeverity.toSeverity())
             }
         }
 }

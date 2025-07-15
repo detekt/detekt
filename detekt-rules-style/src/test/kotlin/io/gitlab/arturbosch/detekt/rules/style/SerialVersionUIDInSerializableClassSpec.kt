@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -17,7 +17,7 @@ class SerialVersionUIDInSerializableClassSpec {
             
             class C : Serializable
         """.trimIndent()
-        val findings = subject.compileAndLint(code)
+        val findings = subject.lint(code)
         assertThat(findings).singleElement()
             .hasMessage(
                 "The class C implements the `Serializable` interface and should thus define " +
@@ -39,7 +39,7 @@ class SerialVersionUIDInSerializableClassSpec {
                 }
             }
         """.trimIndent()
-        val findings = subject.compileAndLint(code)
+        val findings = subject.lint(code)
         assertThat(findings).singleElement().hasMessage(WRONG_SERIAL_VERSION_UID_MESSAGE)
         assertThat(findings)
             .hasStartSourceLocation(5, 27)
@@ -57,7 +57,7 @@ class SerialVersionUIDInSerializableClassSpec {
                 }
             }
         """.trimIndent()
-        val findings = subject.compileAndLint(code)
+        val findings = subject.lint(code)
         assertThat(findings).singleElement().hasMessage(WRONG_SERIAL_VERSION_UID_MESSAGE)
         assertThat(findings)
             .hasStartSourceLocation(5, 27)
@@ -75,7 +75,7 @@ class SerialVersionUIDInSerializableClassSpec {
                 }
             }
         """.trimIndent()
-        val findings = subject.compileAndLint(code)
+        val findings = subject.lint(code)
         assertThat(findings).singleElement().hasMessage(WRONG_SERIAL_VERSION_UID_MESSAGE)
         assertThat(findings)
             .hasStartSourceLocation(5, 19)
@@ -97,7 +97,7 @@ class SerialVersionUIDInSerializableClassSpec {
                 }
             }
         """.trimIndent()
-        val findings = subject.compileAndLint(code)
+        val findings = subject.lint(code)
         assertThat(findings)
             .hasSize(2)
             .hasStartSourceLocations(SourceLocation(3, 7), SourceLocation(8, 12))
@@ -123,7 +123,7 @@ class SerialVersionUIDInSerializableClassSpec {
                 private val serialVersionUID = 1L
             }
         """.trimIndent()
-        val findings = subject.compileAndLint(code)
+        val findings = subject.lint(code)
         assertThat(findings)
             .hasSize(2)
             .hasStartSourceLocations(SourceLocation(5, 21), SourceLocation(8, 17))
@@ -151,7 +151,7 @@ class SerialVersionUIDInSerializableClassSpec {
                 }
             }
         """.trimIndent()
-        val findings = subject.compileAndLint(code)
+        val findings = subject.lint(code)
         assertThat(findings)
             .hasSize(2)
             .hasStartSourceLocations(SourceLocation(6, 25), SourceLocation(11, 21))
@@ -171,7 +171,7 @@ class SerialVersionUIDInSerializableClassSpec {
                 class B : Serializable
             }
         """.trimIndent()
-        val findings = subject.compileAndLint(code)
+        val findings = subject.lint(code)
         assertThat(findings)
             .hasSize(2)
             .hasStartSourceLocations(SourceLocation(3, 7), SourceLocation(4, 11))
@@ -185,7 +185,7 @@ class SerialVersionUIDInSerializableClassSpec {
     @Test
     fun `does not report a unserializable class`() {
         val code = "class NoSerializableClass"
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -195,7 +195,7 @@ class SerialVersionUIDInSerializableClassSpec {
             
             interface I : Serializable
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -209,7 +209,7 @@ class SerialVersionUIDInSerializableClassSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -223,7 +223,7 @@ class SerialVersionUIDInSerializableClassSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -237,7 +237,7 @@ class SerialVersionUIDInSerializableClassSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -251,7 +251,7 @@ class SerialVersionUIDInSerializableClassSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     companion object {

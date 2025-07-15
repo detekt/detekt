@@ -1,14 +1,14 @@
 package io.gitlab.arturbosch.detekt.rules.exceptions
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class InstanceOfCheckForExceptionSpec(private val env: KotlinCoreEnvironment) {
+class InstanceOfCheckForExceptionSpec(private val env: KotlinEnvironmentContainer) {
     val subject = InstanceOfCheckForException(Config.empty)
 
     @Test
@@ -23,7 +23,7 @@ class InstanceOfCheckForExceptionSpec(private val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
+        assertThat(subject.lintWithContext(env, code)).hasSize(2)
     }
 
     @Test
@@ -38,7 +38,7 @@ class InstanceOfCheckForExceptionSpec(private val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
+        assertThat(subject.lintWithContext(env, code)).hasSize(2)
     }
 
     @Test
@@ -55,7 +55,7 @@ class InstanceOfCheckForExceptionSpec(private val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -71,6 +71,6 @@ class InstanceOfCheckForExceptionSpec(private val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 }

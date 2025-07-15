@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoUnusedImports
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Test
 
 class NoUnusedImportsSpec {
@@ -28,7 +28,7 @@ class NoUnusedImportsSpec {
             fun f() = 5
         """.trimIndent()
 
-        val findings = NoUnusedImports(Config.empty).compileAndLint(code)
+        val findings = NoUnusedImports(Config.empty).lint(code)
 
         assertThat(findings)
             .hasSize(3)

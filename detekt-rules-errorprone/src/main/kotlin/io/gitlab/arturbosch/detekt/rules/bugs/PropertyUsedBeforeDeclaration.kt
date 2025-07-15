@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
@@ -47,11 +47,12 @@ import org.jetbrains.kotlin.utils.addIfNotNull
  * }
  * </compliant>
  */
-@RequiresFullAnalysis
-class PropertyUsedBeforeDeclaration(config: Config) : Rule(
-    config,
-    "Properties before declaration should not be used."
-) {
+class PropertyUsedBeforeDeclaration(config: Config) :
+    Rule(
+        config,
+        "Properties before declaration should not be used."
+    ),
+    RequiresFullAnalysis {
 
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
         super.visitClassOrObject(classOrObject)
@@ -70,7 +71,7 @@ class PropertyUsedBeforeDeclaration(config: Config) : Rule(
             member.forEachDescendantOfType<KtNameReferenceExpression> {
                 val property = allProperties[it.text]
                 if (property != null && property !in declaredProperties && property == it.descriptor()) {
-                    report(CodeSmell(Entity.from(it), "'${it.text}' is used before declaration."))
+                    report(Finding(Entity.from(it), "'${it.text}' is used before declaration."))
                 }
             }
             if (member is KtProperty) {

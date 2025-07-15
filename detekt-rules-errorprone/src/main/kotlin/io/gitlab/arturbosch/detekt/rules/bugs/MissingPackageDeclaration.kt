@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtFile
 
@@ -16,7 +16,7 @@ class MissingPackageDeclaration(config: Config) : Rule(
 
     override fun visitKtFile(file: KtFile) {
         if (file.packageDirective?.text.isNullOrBlank()) {
-            report(CodeSmell(Entity.from(file), "The file does not contain a package declaration."))
+            report(Finding(Entity.from(file), "The file does not contain a package declaration."))
         }
     }
 }

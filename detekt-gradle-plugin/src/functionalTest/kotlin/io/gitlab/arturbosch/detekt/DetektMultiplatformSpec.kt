@@ -38,7 +38,7 @@ class DetektMultiplatformSpec {
                     srcDirs = listOf("src/commonMain/kotlin", "src/commonTest/kotlin"),
                     baselineFiles = listOf("detekt-baseline.xml", "detekt-baseline-metadataMain.xml")
                 )
-            }.apply { disableIP = true }
+            }
 
         @Test
         fun `configures baseline task`() {
@@ -116,7 +116,7 @@ class DetektMultiplatformSpec {
                     ),
                     baselineFiles = listOf("detekt-baseline.xml", "detekt-baseline-main.xml")
                 )
-            }.apply { disableIP = true }
+            }
 
         @Test
         fun `configures baseline task`() {
@@ -164,8 +164,8 @@ class DetektMultiplatformSpec {
                             }
                             kotlin {
                                 androidTarget {
-                                    compilations.all {
-                                        kotlinOptions.jvmTarget = "1.8"
+                                    compilerOptions {
+                                        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8
                                     }
                                 }
                             }
@@ -186,7 +186,7 @@ class DetektMultiplatformSpec {
                         "detekt-baseline-release.xml"
                     )
                 )
-            }.apply { disableIP = true }
+            }
 
         @Test
         fun `configures baseline task`() {
@@ -283,7 +283,8 @@ class DetektMultiplatformSpec {
                         KMM_PLUGIN_BLOCK,
                         """
                             kotlin {
-                                ios()
+                                iosArm64()
+                                iosX64()
                             }
                         """.trimIndent(),
                         DETEKT_BLOCK,
@@ -299,7 +300,7 @@ class DetektMultiplatformSpec {
                     ),
                     baselineFiles = listOf("detekt-baseline.xml")
                 )
-            }.apply { disableIP = true }
+            }
 
         @Test
         fun `configures baseline task`() {

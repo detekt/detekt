@@ -23,6 +23,6 @@ internal abstract class AbstractYamlConfigValidator : ConfigValidator {
 
     abstract fun validate(
         configToValidate: YamlConfig,
-        settings: ValidationSettings
+        settings: ValidationSettings,
     ): Collection<Notification>
 }

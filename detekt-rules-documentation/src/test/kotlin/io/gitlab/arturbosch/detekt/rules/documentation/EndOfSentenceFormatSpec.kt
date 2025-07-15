@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.documentation
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -17,7 +17,7 @@ class EndOfSentenceFormatSpec {
             class Test {
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -27,7 +27,7 @@ class EndOfSentenceFormatSpec {
             fun f(x: Int, y: Int, z: Int) =
                 if (x == 0) y + z else x + y
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -38,7 +38,7 @@ class EndOfSentenceFormatSpec {
                 val test = 3
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -47,7 +47,7 @@ class EndOfSentenceFormatSpec {
             /** Some doc */
             fun test() = 3
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -58,7 +58,7 @@ class EndOfSentenceFormatSpec {
                 fun test() = 3
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -69,7 +69,7 @@ class EndOfSentenceFormatSpec {
                 fun test() = 3
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -81,7 +81,7 @@ class EndOfSentenceFormatSpec {
             class Test {
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -95,7 +95,7 @@ class EndOfSentenceFormatSpec {
             class Test {
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -106,7 +106,7 @@ class EndOfSentenceFormatSpec {
             class Test {
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -120,7 +120,7 @@ class EndOfSentenceFormatSpec {
             class Test {
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -140,7 +140,7 @@ class EndOfSentenceFormatSpec {
             class Test {
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -155,7 +155,7 @@ class EndOfSentenceFormatSpec {
             class Test {
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -167,7 +167,7 @@ class EndOfSentenceFormatSpec {
             class Test {
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -179,7 +179,7 @@ class EndOfSentenceFormatSpec {
             class Test {
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -191,7 +191,7 @@ class EndOfSentenceFormatSpec {
             class Test {
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -203,7 +203,7 @@ class EndOfSentenceFormatSpec {
             class Test {
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -218,7 +218,7 @@ class EndOfSentenceFormatSpec {
             class Test2 {
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Nested
@@ -233,7 +233,7 @@ class EndOfSentenceFormatSpec {
                  * This sentence counts too, because it doesn't know where the other ends */
                 fun test() = 3
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
                 .hasStartSourceLocation(2, 2)
                 .hasEndSourceLocation(4, 75)
         }
@@ -247,7 +247,7 @@ class EndOfSentenceFormatSpec {
                     val test = 3
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
                 .hasStartSourceLocation(2, 8)
                 .hasEndSourceLocation(3, 80)
         }
@@ -262,7 +262,7 @@ class EndOfSentenceFormatSpec {
                  */
                 class Test
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
                 .hasStartSourceLocation(2, 2)
                 .hasEndSourceLocation(4, 74)
         }

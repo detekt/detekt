@@ -1,14 +1,14 @@
 package io.gitlab.arturbosch.detekt.rules.exceptions
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class ErrorUsageWithThrowableSpec(private val env: KotlinCoreEnvironment) {
+class ErrorUsageWithThrowableSpec(private val env: KotlinEnvironmentContainer) {
     val subject = ErrorUsageWithThrowable(Config.empty)
 
     @Test
@@ -23,7 +23,7 @@ class ErrorUsageWithThrowableSpec(private val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).hasSize(1)
         assertThat(findings[0]).hasSourceLocation(6, 15)
     }
@@ -40,7 +40,7 @@ class ErrorUsageWithThrowableSpec(private val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -55,7 +55,7 @@ class ErrorUsageWithThrowableSpec(private val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -72,7 +72,7 @@ class ErrorUsageWithThrowableSpec(private val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -89,7 +89,7 @@ class ErrorUsageWithThrowableSpec(private val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
+        assertThat(subject.lintWithContext(env, code)).hasSize(2)
     }
 
     @Test
@@ -106,6 +106,6 @@ class ErrorUsageWithThrowableSpec(private val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
+        assertThat(subject.lintWithContext(env, code)).hasSize(2)
     }
 }

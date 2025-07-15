@@ -6,7 +6,7 @@ import kotlin.io.path.exists
 
 internal data class PluginsHolder(
     override val paths: Collection<Path>?,
-    override val loader: ClassLoader?
+    override val loader: ClassLoader?,
 ) : ExtensionsSpec.Plugins {
 
     init {

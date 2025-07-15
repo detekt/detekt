@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.junit.jupiter.api.Test
@@ -21,28 +21,28 @@ class LateinitUsageSpec {
 
     @Test
     fun `should report lateinit usages`() {
-        val findings = LateinitUsage(Config.empty).compileAndLint(code)
+        val findings = LateinitUsage(Config.empty).lint(code)
         assertThat(findings).hasSize(2)
     }
 
     @Test
     fun `should report lateinit properties when ignoreOnClassesPattern does not match`() {
         val findings =
-            LateinitUsage(TestConfig(IGNORE_ON_CLASSES_PATTERN to "[\\w]+Test1234")).compileAndLint(code)
+            LateinitUsage(TestConfig(IGNORE_ON_CLASSES_PATTERN to "[\\w]+Test1234")).lint(code)
         assertThat(findings).hasSize(2)
     }
 
     @Test
     fun `should not report lateinit properties when ignoreOnClassesPattern does match`() {
         val findings =
-            LateinitUsage(TestConfig(IGNORE_ON_CLASSES_PATTERN to "[\\w]+Test")).compileAndLint(code)
+            LateinitUsage(TestConfig(IGNORE_ON_CLASSES_PATTERN to "[\\w]+Test")).lint(code)
         assertThat(findings).isEmpty()
     }
 
     @Test
     fun `should fail when enabled with faulty regex pattern`() {
         assertThatExceptionOfType(PatternSyntaxException::class.java).isThrownBy {
-            LateinitUsage(TestConfig(IGNORE_ON_CLASSES_PATTERN to "*Test")).compileAndLint(code)
+            LateinitUsage(TestConfig(IGNORE_ON_CLASSES_PATTERN to "*Test")).lint(code)
         }
     }
 }

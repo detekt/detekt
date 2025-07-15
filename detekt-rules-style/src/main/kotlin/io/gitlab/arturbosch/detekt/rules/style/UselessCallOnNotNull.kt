@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.name.FqName
@@ -42,15 +42,16 @@ import org.jetbrains.kotlin.types.isNullable
  * val testString = ""?.isBlank()
  * </compliant>
  */
-@RequiresFullAnalysis
 @ActiveByDefault(since = "1.2.0")
-class UselessCallOnNotNull(config: Config) : Rule(
-    config,
-    "This call on a non-null reference may be reduced or removed. " +
-        "Some calls are intended to be called on nullable collection or text types (e.g. `String?`)." +
-        "When this call is used on a reference to a non-null type " +
-        "(e.g. `String`) it is redundant and will have no effect, so it can be removed."
-) {
+class UselessCallOnNotNull(config: Config) :
+    Rule(
+        config,
+        "This call on a non-null reference may be reduced or removed. " +
+            "Some calls are intended to be called on nullable collection or text types (e.g. `String?`)." +
+            "When this call is used on a reference to a non-null type " +
+            "(e.g. `String`) it is redundant and will have no effect, so it can be removed."
+    ),
+    RequiresFullAnalysis {
 
     override fun visitQualifiedExpression(expression: KtQualifiedExpression) {
         super.visitQualifiedExpression(expression)
@@ -74,7 +75,7 @@ class UselessCallOnNotNull(config: Config) : Rule(
             } else {
                 "Replace $shortName with ${conversion.replacementName}"
             }
-            report(CodeSmell(Entity.from(expression), message))
+            report(Finding(Entity.from(expression), message))
         }
     }
 
@@ -86,7 +87,7 @@ class UselessCallOnNotNull(config: Config) : Rule(
         if (fqName == listOfNotNull) {
             val varargs = resolvedCall.valueArguments.entries.single().value.arguments
             if (varargs.all { it.isNullable() == false }) {
-                report(CodeSmell(Entity.from(expression), "Replace listOfNotNull with listOf"))
+                report(Finding(Entity.from(expression), "Replace listOfNotNull with listOf"))
             }
         }
     }

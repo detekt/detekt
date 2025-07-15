@@ -1,17 +1,17 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.intellij.lang.annotations.Language
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
+class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
     val subject = CanBeNonNullable(Config.empty)
 
     @Nested
@@ -35,7 +35,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
+            assertThat(subject.lintWithContext(env, code)).hasSize(2)
         }
 
         @Test
@@ -55,7 +55,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(3)
+            assertThat(subject.lintWithContext(env, code)).hasSize(3)
         }
 
         @Test
@@ -86,7 +86,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
+            assertThat(subject.lintWithContext(env, code)).hasSize(2)
         }
 
         @Test
@@ -99,7 +99,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     fileB = 6
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
+            assertThat(subject.lintWithContext(env, code)).hasSize(2)
         }
 
         @Test
@@ -123,7 +123,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     private var g: Int? = 0 // never assigned
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code))
+            assertThat(subject.lintWithContext(env, code))
                 .hasSize(2)
                 .hasStartSourceLocations(
                     SourceLocation(8, 5),
@@ -180,7 +180,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     private var g: Int? = 0
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -201,7 +201,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -211,7 +211,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     private var a: Int? by this::aDelegate
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -233,7 +233,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -247,7 +247,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -261,7 +261,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -274,7 +274,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -288,7 +288,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -300,7 +300,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -320,7 +320,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(3)
+            assertThat(subject.lintWithContext(env, code)).hasSize(3)
         }
 
         @Test
@@ -332,7 +332,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -340,7 +340,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 val fileA: Int? = 5
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -357,7 +357,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -377,7 +377,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -392,7 +392,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -400,7 +400,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 val fileA: Int? = null
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -410,7 +410,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     val a: Int = 5
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -418,7 +418,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
             val code = """
                 class A(private val a: Int?)
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -439,7 +439,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(3)
+            assertThat(subject.lintWithContext(env, code)).hasSize(3)
         }
 
         @Test
@@ -463,7 +463,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -475,7 +475,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -486,7 +486,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -497,7 +497,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -514,7 +514,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -526,7 +526,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -538,7 +538,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
     }
 
@@ -550,7 +550,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                 open var b: Int? = 5
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -561,7 +561,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                 abstract var b: Int?
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -575,7 +575,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                 private var a: String? = e.localizedMessage
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -586,7 +586,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                 var b: Int?
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Nested
@@ -600,7 +600,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                         val b = a!! + 2
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
             }
 
             @Test
@@ -612,7 +612,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                     
                     fun fizz(b: Int?) = b!!.plus(2)
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
+                assertThat(subject.lintWithContext(env, code)).hasSize(2)
             }
 
             @Test
@@ -623,7 +623,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                         val c = aNonNull + checkNotNull(b)
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
+                assertThat(subject.lintWithContext(env, code)).hasSize(2)
             }
 
             @Test
@@ -635,7 +635,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                         val b = a.a!! + 2
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
 
             @Test
@@ -651,7 +651,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                         }
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
         }
 
@@ -668,7 +668,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                         
                         fun foo(a: A?) = a?.foo
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    assertThat(subject.lintWithContext(env, code)).isEmpty()
                 }
 
                 @Test
@@ -680,7 +680,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                         fun foo2(bar: RandomBar?) = bar?.nonNullId?.nullable()
                         fun foo3(bar: RandomBar?) = bar?.nonNullId.nonNullable()
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    assertThat(subject.lintWithContext(env, code)).isEmpty()
                 }
             }
 
@@ -695,7 +695,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                             a?.let { println(it.foo) }
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                    assertThat(subject.lintWithContext(env, code)).hasSize(1)
                 }
 
                 @Test
@@ -713,7 +713,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                             }
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    assertThat(subject.lintWithContext(env, code)).isEmpty()
                 }
 
                 @Test
@@ -728,7 +728,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                             val b = 5 + 2
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    assertThat(subject.lintWithContext(env, code)).isEmpty()
                 }
             }
 
@@ -745,7 +745,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                             return aObj?.foo
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    assertThat(subject.lintWithContext(env, code)).isEmpty()
                 }
             }
         }
@@ -763,7 +763,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                             }
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    assertThat(subject.lintWithContext(env, code)).isEmpty()
                 }
 
                 @Test
@@ -775,7 +775,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                             }
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    assertThat(subject.lintWithContext(env, code)).isEmpty()
                 }
 
                 @Test
@@ -787,7 +787,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                             }
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    assertThat(subject.lintWithContext(env, code)).isEmpty()
                 }
 
                 @Test
@@ -799,7 +799,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                             }
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                    assertThat(subject.lintWithContext(env, code)).hasSize(1)
                 }
 
                 @Test
@@ -811,7 +811,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                             }
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                    assertThat(subject.lintWithContext(env, code)).hasSize(1)
                 }
 
                 @Test
@@ -823,7 +823,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                             }
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    assertThat(subject.lintWithContext(env, code)).isEmpty()
                 }
 
                 @Test
@@ -835,7 +835,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                             }
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    assertThat(subject.lintWithContext(env, code)).isEmpty()
                 }
 
                 @Test
@@ -847,7 +847,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                             }
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    assertThat(subject.lintWithContext(env, code)).isEmpty()
                 }
 
                 @Test
@@ -860,7 +860,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                             }
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    assertThat(subject.lintWithContext(env, code)).isEmpty()
                 }
 
                 @Test
@@ -874,7 +874,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                             }
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                    assertThat(subject.lintWithContext(env, code)).hasSize(1)
                 }
 
                 @Test
@@ -899,7 +899,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                             }
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                    assertThat(subject.lintWithContext(env, code)).hasSize(1)
                 }
 
                 @Test
@@ -916,7 +916,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                             }
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    assertThat(subject.lintWithContext(env, code)).isEmpty()
                 }
 
                 @Test
@@ -933,7 +933,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                             }
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    assertThat(subject.lintWithContext(env, code)).isEmpty()
                 }
 
                 @Test
@@ -951,7 +951,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                             }
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    assertThat(subject.lintWithContext(env, code)).isEmpty()
                 }
 
                 @Test
@@ -963,7 +963,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                             }
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                    assertThat(subject.lintWithContext(env, code)).hasSize(1)
                 }
 
                 @Test
@@ -975,7 +975,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                             }
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                    assertThat(subject.lintWithContext(env, code)).hasSize(1)
                 }
 
                 @Test
@@ -988,7 +988,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                             }
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    assertThat(subject.lintWithContext(env, code)).isEmpty()
                 }
             }
 
@@ -1115,7 +1115,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                           }
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    assertThat(subject.lintWithContext(env, code)).isEmpty()
                 }
 
                 @Test
@@ -1127,7 +1127,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                             }
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    assertThat(subject.lintWithContext(env, code)).isEmpty()
                 }
 
                 @Test
@@ -1141,7 +1141,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                             }
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    assertThat(subject.lintWithContext(env, code)).isEmpty()
                 }
 
                 @Test
@@ -1155,7 +1155,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                             }
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    assertThat(subject.lintWithContext(env, code)).isEmpty()
                 }
 
                 @Test
@@ -1168,7 +1168,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                             }
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                    assertThat(subject.lintWithContext(env, code)).hasSize(1)
                 }
 
                 @Test
@@ -1181,7 +1181,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                             }
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    assertThat(subject.lintWithContext(env, code)).isEmpty()
                 }
 
                 @Test
@@ -1194,7 +1194,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                             }
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                    assertThat(subject.lintWithContext(env, code)).hasSize(1)
                 }
 
                 @Test
@@ -1207,7 +1207,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                             }
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                    assertThat(subject.lintWithContext(env, code)).hasSize(1)
                 }
 
                 @Test
@@ -1222,7 +1222,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                             }
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    assertThat(subject.lintWithContext(env, code)).isEmpty()
                 }
 
                 @Test
@@ -1236,7 +1236,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                             }
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                    assertThat(subject.lintWithContext(env, code)).hasSize(1)
                 }
 
                 @Test
@@ -1251,7 +1251,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                             }
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    assertThat(subject.lintWithContext(env, code)).isEmpty()
                 }
 
                 @Test
@@ -1269,7 +1269,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                             }
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    assertThat(subject.lintWithContext(env, code)).isEmpty()
                 }
 
                 @Test
@@ -1281,7 +1281,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                             }
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                    assertThat(subject.lintWithContext(env, code)).hasSize(1)
                 }
 
                 @Test
@@ -1294,7 +1294,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                             }
                         }
                     """.trimIndent()
-                    assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                    assertThat(subject.lintWithContext(env, code)).isEmpty()
                 }
             }
         }
@@ -1316,7 +1316,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                         }
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
 
             @Test
@@ -1330,7 +1330,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                         }
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
 
             @Test
@@ -1348,7 +1348,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                         }
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(2)
+                assertThat(subject.lintWithContext(env, code)).hasSize(2)
             }
 
             @Test
@@ -1360,7 +1360,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                         }
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
             }
 
             @Test
@@ -1371,7 +1371,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                         println(a)
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
             }
 
             @Test
@@ -1382,7 +1382,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                         println(a)
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
             }
 
             @Test
@@ -1394,7 +1394,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                         println(a)
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
 
             @Test
@@ -1406,7 +1406,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                         return a
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
 
             @Test
@@ -1420,7 +1420,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                         }
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
 
             @Test
@@ -1433,7 +1433,7 @@ class CanBeNonNullableSpec(val env: KotlinCoreEnvironment) {
                         val b = 5 + 2
                     }
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
         }
     }

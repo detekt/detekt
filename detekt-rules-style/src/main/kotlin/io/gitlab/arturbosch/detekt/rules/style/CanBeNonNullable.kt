@@ -1,9 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
+import com.intellij.psi.tree.IElementType
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isAbstract
@@ -11,7 +12,6 @@ import io.gitlab.arturbosch.detekt.rules.isNonNullCheck
 import io.gitlab.arturbosch.detekt.rules.isNullCheck
 import io.gitlab.arturbosch.detekt.rules.isOpen
 import io.gitlab.arturbosch.detekt.rules.isOverride
-import org.jetbrains.kotlin.com.intellij.psi.tree.IElementType
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
@@ -125,11 +125,12 @@ import org.jetbrains.kotlin.types.isNullable
  * }
  * </compliant>
  */
-@RequiresFullAnalysis
-class CanBeNonNullable(config: Config) : Rule(
-    config,
-    "Variable can be changed to non-nullable, as it is never set to null."
-) {
+class CanBeNonNullable(config: Config) :
+    Rule(
+        config,
+        "Variable can be changed to non-nullable, as it is never set to null."
+    ),
+    RequiresFullAnalysis {
 
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)
@@ -193,7 +194,7 @@ class CanBeNonNullable(config: Config) : Rule(
                 }
                 .forEach { nullableParam ->
                     report(
-                        CodeSmell(
+                        Finding(
                             Entity.from(nullableParam.param),
                             "The nullable parameter '${nullableParam.param.name}' can be made non-nullable."
                         )
@@ -466,7 +467,7 @@ class CanBeNonNullable(config: Config) : Rule(
             // thus they can be converted to non-nullable.
             candidateProps.forEach { (_, property) ->
                 report(
-                    CodeSmell(
+                    Finding(
                         Entity.from(property),
                         "The nullable variable '${property.name}' can be made non-nullable."
                     )

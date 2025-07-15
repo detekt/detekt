@@ -24,12 +24,13 @@ class OutputFacadeSpec {
         val printStream = StringPrintStream()
         val inputPath: Path = resourceAsPath("/cases")
         val defaultResult = DetektResult(
-            listOf(
+            issues = listOf(
                 createIssue(
                     createRuleInstance(ruleSetId = "Key"),
                     createEntity(location = createLocation("TestFile.kt"))
                 )
-            )
+            ),
+            rules = emptyList(),
         )
         val htmlOutputPath = createTempFileForTest("detekt", ".html")
         val xmlOutputPath = createTempFileForTest("detekt", ".xml")

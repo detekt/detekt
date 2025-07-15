@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.TextLocation
@@ -61,7 +61,7 @@ class UnnecessaryAnnotationUseSiteTarget(config: Config) : Rule(
                 location.path
             )
         }
-        report(CodeSmell(Entity.from(useSite, location), message))
+        report(Finding(Entity.from(useSite, location), message))
     }
 
     private enum class UseSiteTarget(val useSiteTarget: String, val message: String) {
@@ -72,6 +72,6 @@ class UnnecessaryAnnotationUseSiteTarget(config: Config) : Rule(
         PROPERTY(
             "property",
             "An annotation over a property, that it's not a parameter, doesn't need the use-site target @property."
-        )
+        ),
     }
 }

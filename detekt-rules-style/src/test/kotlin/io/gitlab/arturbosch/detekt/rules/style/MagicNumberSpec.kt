@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.junit.jupiter.api.DisplayName
@@ -33,13 +32,13 @@ class MagicNumberSpec {
 
         @Test
         fun `should not be reported by default`() {
-            val findings = MagicNumber(Config.empty).compileAndLint(code)
+            val findings = MagicNumber(Config.empty).lint(code)
             assertThat(findings).isEmpty()
         }
 
         @Test
         fun `should be reported when ignoredNumbers is empty`() {
-            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to emptyList<String>())).compileAndLint(code)
+            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to emptyList<String>())).lint(code)
             assertThat(findings).hasStartSourceLocation(1, 15)
         }
     }
@@ -50,13 +49,13 @@ class MagicNumberSpec {
 
         @Test
         fun `should not be reported by default`() {
-            val findings = MagicNumber(Config.empty).lint(code)
+            val findings = MagicNumber(Config.empty).lint(code, compile = false)
             assertThat(findings).isEmpty()
         }
 
         @Test
         fun `should not be reported when ignoredNumbers is empty`() {
-            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to emptyList<String>())).lint(code)
+            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to emptyList<String>())).lint(code, compile = false)
             assertThat(findings).isEmpty()
         }
     }
@@ -67,13 +66,13 @@ class MagicNumberSpec {
 
         @Test
         fun `should not be reported by default`() {
-            val findings = MagicNumber(Config.empty).compileAndLint(code)
+            val findings = MagicNumber(Config.empty).lint(code)
             assertThat(findings).isEmpty()
         }
 
         @Test
         fun `should be reported when ignoredNumbers is empty`() {
-            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to emptyList<String>())).compileAndLint(code)
+            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to emptyList<String>())).lint(code)
             assertThat(findings).hasStartSourceLocation(1, 13)
         }
     }
@@ -84,13 +83,13 @@ class MagicNumberSpec {
 
         @Test
         fun `should not be reported by default`() {
-            val findings = MagicNumber(Config.empty).lint(code)
+            val findings = MagicNumber(Config.empty).lint(code, compile = false)
             assertThat(findings).isEmpty()
         }
 
         @Test
         fun `should not be reported when ignoredNumbers is empty`() {
-            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to emptyList<String>())).lint(code)
+            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to emptyList<String>())).lint(code, compile = false)
             assertThat(findings).isEmpty()
         }
     }
@@ -101,13 +100,13 @@ class MagicNumberSpec {
 
         @Test
         fun `should not be reported by default`() {
-            val findings = MagicNumber(Config.empty).compileAndLint(code)
+            val findings = MagicNumber(Config.empty).lint(code)
             assertThat(findings).isEmpty()
         }
 
         @Test
         fun `should be reported when ignoredNumbers is empty`() {
-            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to emptyList<String>())).compileAndLint(code)
+            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to emptyList<String>())).lint(code)
             assertThat(findings).hasStartSourceLocation(1, 14)
         }
     }
@@ -118,13 +117,13 @@ class MagicNumberSpec {
 
         @Test
         fun `should not be reported by default`() {
-            val findings = MagicNumber(Config.empty).compileAndLint(code)
+            val findings = MagicNumber(Config.empty).lint(code)
             assertThat(findings).isEmpty()
         }
 
         @Test
         fun `should be reported when ignoredNumbers is empty`() {
-            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to emptyList<String>())).compileAndLint(code)
+            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to emptyList<String>())).lint(code)
             assertThat(findings).hasStartSourceLocation(1, 15)
         }
     }
@@ -135,26 +134,26 @@ class MagicNumberSpec {
 
         @Test
         fun `should be reported by default`() {
-            val findings = MagicNumber(Config.empty).compileAndLint(code)
+            val findings = MagicNumber(Config.empty).lint(code)
             assertThat(findings).hasStartSourceLocation(1, 15)
         }
 
         @Test
         fun `should be ignored when ignoredNumbers contains it verbatim`() {
-            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to listOf("-2L"))).compileAndLint(code)
+            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to listOf("-2L"))).lint(code)
             assertThat(findings).isEmpty()
         }
 
         @Test
         fun `should be ignored when ignoredNumbers contains it as floating point`() {
-            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to listOf("-2f"))).compileAndLint(code)
+            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to listOf("-2f"))).lint(code)
             assertThat(findings).isEmpty()
         }
 
         @Test
         fun `should not be ignored when ignoredNumbers contains 2 but not -2`() {
             val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to listOf("1", "2", "3", "-1", "0")))
-                .compileAndLint(code)
+                .lint(code)
             assertThat(findings).hasStartSourceLocation(1, 15)
         }
     }
@@ -165,13 +164,13 @@ class MagicNumberSpec {
 
         @Test
         fun `should not be reported by default`() {
-            val findings = MagicNumber(Config.empty).lint(code)
+            val findings = MagicNumber(Config.empty).lint(code, compile = false)
             assertThat(findings).isEmpty()
         }
 
         @Test
         fun `should not be reported when ignoredNumbers is empty`() {
-            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to emptyList<String>())).lint(code)
+            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to emptyList<String>())).lint(code, compile = false)
             assertThat(findings).isEmpty()
         }
     }
@@ -182,13 +181,13 @@ class MagicNumberSpec {
 
         @Test
         fun `should not be reported by default`() {
-            val findings = MagicNumber(Config.empty).compileAndLint(code)
+            val findings = MagicNumber(Config.empty).lint(code)
             assertThat(findings).isEmpty()
         }
 
         @Test
         fun `should be reported when ignoredNumbers is empty`() {
-            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to emptyList<String>())).compileAndLint(code)
+            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to emptyList<String>())).lint(code)
             assertThat(findings).hasStartSourceLocation(1, 16)
         }
     }
@@ -199,13 +198,13 @@ class MagicNumberSpec {
 
         @Test
         fun `should not be reported by default`() {
-            val findings = MagicNumber(Config.empty).lint(code)
+            val findings = MagicNumber(Config.empty).lint(code, compile = false)
             assertThat(findings).isEmpty()
         }
 
         @Test
         fun `should not be reported when ignoredNumbers is empty`() {
-            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to emptyList<String>())).lint(code)
+            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to emptyList<String>())).lint(code, compile = false)
             assertThat(findings).isEmpty()
         }
     }
@@ -216,13 +215,13 @@ class MagicNumberSpec {
 
         @Test
         fun `should not be reported by default`() {
-            val findings = MagicNumber(Config.empty).compileAndLint(code)
+            val findings = MagicNumber(Config.empty).lint(code)
             assertThat(findings).isEmpty()
         }
 
         @Test
         fun `should be reported when ignoredNumbers is empty`() {
-            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to emptyList<String>())).compileAndLint(code)
+            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to emptyList<String>())).lint(code)
             assertThat(findings).hasStartSourceLocation(1, 13)
         }
     }
@@ -233,13 +232,13 @@ class MagicNumberSpec {
 
         @Test
         fun `should not be reported by default`() {
-            val findings = MagicNumber(Config.empty).lint(code)
+            val findings = MagicNumber(Config.empty).lint(code, compile = false)
             assertThat(findings).isEmpty()
         }
 
         @Test
         fun `should not be reported when ignoredNumbers is empty`() {
-            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to emptyList<String>())).lint(code)
+            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to emptyList<String>())).lint(code, compile = false)
             assertThat(findings).isEmpty()
         }
     }
@@ -250,13 +249,13 @@ class MagicNumberSpec {
 
         @Test
         fun `should not be reported when ignoredNumbers contains 300`() {
-            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to listOf("300"))).compileAndLint(code)
+            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to listOf("300"))).lint(code)
             assertThat(findings).isEmpty()
         }
 
         @Test
         fun `should not be reported when ignoredNumbers contains a floating point 300`() {
-            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to listOf("300.0"))).compileAndLint(code)
+            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to listOf("300.0"))).lint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -267,13 +266,13 @@ class MagicNumberSpec {
 
         @Test
         fun `should not be reported`() {
-            val findings = MagicNumber(Config.empty).compileAndLint(code)
+            val findings = MagicNumber(Config.empty).lint(code)
             assertThat(findings).hasSize(1)
         }
 
         @Test
         fun `should not be reported when ignoredNumbers contains a binary literal 0b01001`() {
-            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to listOf("0b01001"))).compileAndLint(code)
+            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to listOf("0b01001"))).lint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -284,25 +283,25 @@ class MagicNumberSpec {
 
         @Test
         fun `should be reported by default`() {
-            val findings = MagicNumber(Config.empty).compileAndLint(code)
+            val findings = MagicNumber(Config.empty).lint(code)
             assertThat(findings).hasStartSourceLocation(1, 13)
         }
 
         @Test
         fun `should not be reported when ignored verbatim`() {
-            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to listOf("100_000"))).compileAndLint(code)
+            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to listOf("100_000"))).lint(code)
             assertThat(findings).isEmpty()
         }
 
         @Test
         fun `should not be reported when ignored with different underscores`() {
-            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to listOf("10_00_00"))).compileAndLint(code)
+            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to listOf("10_00_00"))).lint(code)
             assertThat(findings).isEmpty()
         }
 
         @Test
         fun `should not be reported when ignored without underscores`() {
-            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to listOf("100000"))).compileAndLint(code)
+            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to listOf("100000"))).lint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -313,7 +312,7 @@ class MagicNumberSpec {
 
         @Test
         fun `should be reported`() {
-            val findings = MagicNumber(Config.empty).compileAndLint(code)
+            val findings = MagicNumber(Config.empty).lint(code)
             assertThat(findings)
                 .hasStartSourceLocations(
                     SourceLocation(1, 17),
@@ -338,7 +337,7 @@ class MagicNumberSpec {
 
         @Test
         fun `should be reported`() {
-            val findings = MagicNumber(Config.empty).lint(code)
+            val findings = MagicNumber(Config.empty).lint(code, compile = false)
             assertThat(findings).hasStartSourceLocations(
                 SourceLocation(3, 9),
                 SourceLocation(3, 21),
@@ -360,7 +359,7 @@ class MagicNumberSpec {
 
         @Test
         fun `should be reported`() {
-            val findings = MagicNumber(Config.empty).compileAndLint(code)
+            val findings = MagicNumber(Config.empty).lint(code)
             assertThat(findings).hasSize(1)
         }
     }
@@ -375,7 +374,7 @@ class MagicNumberSpec {
 
         @Test
         fun `should not be reported`() {
-            val findings = MagicNumber(Config.empty).compileAndLint(code)
+            val findings = MagicNumber(Config.empty).lint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -386,7 +385,7 @@ class MagicNumberSpec {
 
         @Test
         fun `should not be reported`() {
-            val findings = MagicNumber(Config.empty).compileAndLint(code)
+            val findings = MagicNumber(Config.empty).lint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -398,13 +397,13 @@ class MagicNumberSpec {
 
         @Test
         fun `should be reported by default`() {
-            val findings = MagicNumber(Config.empty).compileAndLint(code)
+            val findings = MagicNumber(Config.empty).lint(code)
             assertThat(findings).hasStartSourceLocation(1, 12)
         }
 
         @Test
         fun `should not be reported when ignoredNumbers contains it`() {
-            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to listOf(".5"))).compileAndLint(code)
+            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to listOf(".5"))).lint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -415,7 +414,7 @@ class MagicNumberSpec {
         @Test
         fun `should report`() {
             val code = "val file = Array<String?>(42) { null }"
-            val findings = MagicNumber(Config.empty).compileAndLint(code)
+            val findings = MagicNumber(Config.empty).lint(code)
             assertThat(findings).hasSize(1)
         }
     }
@@ -426,7 +425,7 @@ class MagicNumberSpec {
         @Test
         fun `throws a NumberFormatException`() {
             assertThatExceptionOfType(NumberFormatException::class.java).isThrownBy {
-                MagicNumber(TestConfig(IGNORE_NUMBERS to listOf("banana"))).compileAndLint("val i = 0")
+                MagicNumber(TestConfig(IGNORE_NUMBERS to listOf("banana"))).lint("val i = 0")
             }
         }
     }
@@ -476,7 +475,7 @@ class MagicNumberSpec {
                 IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "false",
             )
 
-            val findings = MagicNumber(config).lint(code)
+            val findings = MagicNumber(config).lint(code, compile = false)
             assertThat(findings)
                 .hasStartSourceLocations(
                     SourceLocation(1, 17),
@@ -501,7 +500,7 @@ class MagicNumberSpec {
                 IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "true",
             )
 
-            val findings = MagicNumber(config).lint(code)
+            val findings = MagicNumber(config).lint(code, compile = false)
             assertThat(findings).isEmpty()
         }
     }
@@ -520,7 +519,7 @@ class MagicNumberSpec {
 
         @Test
         fun `should not report any issues by default`() {
-            val findings = MagicNumber(Config.empty).compileAndLint(code)
+            val findings = MagicNumber(Config.empty).lint(code)
             assertThat(findings).isEmpty()
         }
 
@@ -532,7 +531,7 @@ class MagicNumberSpec {
                 IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "false",
             )
 
-            val findings = MagicNumber(config).compileAndLint(code)
+            val findings = MagicNumber(config).lint(code)
             assertThat(findings).isEmpty()
         }
 
@@ -544,7 +543,7 @@ class MagicNumberSpec {
                 IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "false",
             )
 
-            val findings = MagicNumber(config).compileAndLint(code)
+            val findings = MagicNumber(config).lint(code)
             assertThat(findings).isEmpty()
         }
 
@@ -556,7 +555,7 @@ class MagicNumberSpec {
                 IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "true"
             )
 
-            val findings = MagicNumber(config).compileAndLint(code)
+            val findings = MagicNumber(config).lint(code)
             assertThat(findings).isEmpty()
         }
 
@@ -568,7 +567,7 @@ class MagicNumberSpec {
                 IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "true",
             )
 
-            val findings = MagicNumber(config).compileAndLint(code)
+            val findings = MagicNumber(config).lint(code)
             assertThat(findings).isEmpty()
         }
 
@@ -580,7 +579,7 @@ class MagicNumberSpec {
                 IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "false",
             )
 
-            val findings = MagicNumber(config).compileAndLint(code)
+            val findings = MagicNumber(config).lint(code)
             assertThat(findings).hasStartSourceLocation(4, 35)
         }
 
@@ -592,7 +591,7 @@ class MagicNumberSpec {
                 IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "false",
             )
 
-            val findings = MagicNumber(config).compileAndLint(code)
+            val findings = MagicNumber(config).lint(code)
             assertThat(findings)
                 .hasStartSourceLocations(
                     SourceLocation(4, 35),
@@ -607,7 +606,7 @@ class MagicNumberSpec {
 
         @Test
         fun `should not lead to a crash #276`() {
-            val findings = MagicNumber(Config.empty).compileAndLint(code)
+            val findings = MagicNumber(Config.empty).lint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -628,35 +627,35 @@ class MagicNumberSpec {
             @Test
             fun `should not ignore int`() {
                 val rule = MagicNumber(TestConfig(IGNORE_NAMED_ARGUMENT to "false"))
-                assertThat(rule.compileAndLint(code("53"))).hasSize(1)
+                assertThat(rule.lint(code("53"))).hasSize(1)
             }
 
             @Test
             fun `should not ignore float`() {
                 val rule = MagicNumber(TestConfig(IGNORE_NAMED_ARGUMENT to "false"))
-                assertThat(rule.lint(code("53f"))).hasSize(1)
+                assertThat(rule.lint(code("53f"), compile = false)).hasSize(1)
             }
 
             @Test
             fun `should not ignore binary`() {
                 val rule = MagicNumber(TestConfig(IGNORE_NAMED_ARGUMENT to "false"))
-                assertThat(rule.compileAndLint(code("0b01001"))).hasSize(1)
+                assertThat(rule.lint(code("0b01001"))).hasSize(1)
             }
 
             @Test
             fun `should ignore integer with underscores`() {
                 val rule = MagicNumber(TestConfig(IGNORE_NAMED_ARGUMENT to "false"))
-                assertThat(rule.compileAndLint(code("101_000"))).hasSize(1)
+                assertThat(rule.lint(code("101_000"))).hasSize(1)
             }
 
             @Test
             fun `should ignore numbers by default`() {
-                assertThat(MagicNumber(Config.empty).compileAndLint(code("53"))).isEmpty()
+                assertThat(MagicNumber(Config.empty).lint(code("53"))).isEmpty()
             }
 
             @Test
             fun `should ignore negative numbers by default`() {
-                assertThat(MagicNumber(Config.empty).compileAndLint(code("-53"))).isEmpty()
+                assertThat(MagicNumber(Config.empty).lint(code("-53"))).isEmpty()
             }
 
             @Test
@@ -666,14 +665,14 @@ class MagicNumberSpec {
                     
                     object B : A(n = 5)
                 """.trimIndent()
-                assertThat(MagicNumber(Config.empty).compileAndLint(code)).isEmpty()
+                assertThat(MagicNumber(Config.empty).lint(code)).isEmpty()
             }
 
             @Test
             fun `should ignore named arguments in parameter annotations - #1115`() {
                 val code =
                     "@JvmStatic fun setCustomDimension(@IntRange(from = 0, to = 19) index: Int, value: String?) {}"
-                assertThat(MagicNumber(Config.empty).lint(code)).isEmpty()
+                assertThat(MagicNumber(Config.empty).lint(code, compile = false)).isEmpty()
             }
         }
 
@@ -691,7 +690,7 @@ class MagicNumberSpec {
 
             @Test
             fun `should detect the argument by default`() {
-                assertThat(MagicNumber(Config.empty).compileAndLint(code("53"))).hasSize(1)
+                assertThat(MagicNumber(Config.empty).lint(code("53"))).hasSize(1)
             }
         }
 
@@ -705,22 +704,22 @@ class MagicNumberSpec {
 
             @Test
             fun `should ignore int by default`() {
-                assertThat(MagicNumber(Config.empty).compileAndLint(code(53))).isEmpty()
+                assertThat(MagicNumber(Config.empty).lint(code(53))).isEmpty()
             }
 
             @Test
             fun `should ignore float by default`() {
-                assertThat(MagicNumber(Config.empty).lint(code(53f))).isEmpty()
+                assertThat(MagicNumber(Config.empty).lint(code(53f), compile = false)).isEmpty()
             }
 
             @Test
             fun `should ignore binary by default`() {
-                assertThat(MagicNumber(Config.empty).compileAndLint(code(0b01001))).isEmpty()
+                assertThat(MagicNumber(Config.empty).lint(code(0b01001))).isEmpty()
             }
 
             @Test
             fun `should ignore integer with underscores`() {
-                assertThat(MagicNumber(Config.empty).compileAndLint(code(101_000))).isEmpty()
+                assertThat(MagicNumber(Config.empty).lint(code(101_000))).isEmpty()
             }
         }
 
@@ -735,13 +734,13 @@ class MagicNumberSpec {
 
             @Test
             fun `should be reported by default`() {
-                assertThat(MagicNumber(Config.empty).compileAndLint(code)).hasSize(1)
+                assertThat(MagicNumber(Config.empty).lint(code)).hasSize(1)
             }
 
             @Test
             fun `numbers when 'ignoreEnums' is set to true`() {
                 val rule = MagicNumber(TestConfig(IGNORE_ENUMS to "true"))
-                assertThat(rule.compileAndLint(code)).isEmpty()
+                assertThat(rule.lint(code)).isEmpty()
             }
         }
 
@@ -757,7 +756,7 @@ class MagicNumberSpec {
             @Test
             fun `should be reported`() {
                 val rule = MagicNumber(TestConfig(IGNORE_NAMED_ARGUMENT to "false"))
-                assertThat(rule.compileAndLint(code)).hasSize(1)
+                assertThat(rule.lint(code)).hasSize(1)
             }
 
             @Test
@@ -768,7 +767,7 @@ class MagicNumberSpec {
                         IGNORE_ENUMS to "true",
                     )
                 )
-                assertThat(rule.compileAndLint(code)).isEmpty()
+                assertThat(rule.lint(code)).isEmpty()
             }
         }
 
@@ -782,7 +781,7 @@ class MagicNumberSpec {
                 )
             """.trimIndent()
 
-            assertThat(rule.compileAndLint(code)).isEmpty()
+            assertThat(rule.lint(code)).isEmpty()
         }
     }
 
@@ -795,7 +794,7 @@ class MagicNumberSpec {
                 fun x() = 9
                 fun y(): Int { return 9 }
             """.trimIndent()
-            assertThat(MagicNumber(Config.empty).compileAndLint(code)).isEmpty()
+            assertThat(MagicNumber(Config.empty).lint(code)).isEmpty()
         }
 
         @Test
@@ -804,7 +803,7 @@ class MagicNumberSpec {
                 fun x() = 9 + 1
                 fun y(): Int { return 9 + 1 }
             """.trimIndent()
-            assertThat(MagicNumber(Config.empty).compileAndLint(code)).hasSize(2)
+            assertThat(MagicNumber(Config.empty).lint(code)).hasSize(2)
         }
     }
 
@@ -814,13 +813,13 @@ class MagicNumberSpec {
         @Test
         fun `reports no finding`() {
             val code = "class SomeClassWithDefault(val defaultValue: Int = 10)"
-            assertThat(MagicNumber(Config.empty).compileAndLint(code)).isEmpty()
+            assertThat(MagicNumber(Config.empty).lint(code)).isEmpty()
         }
 
         @Test
         fun `reports no finding for an explicit declaration`() {
             val code = "class SomeClassWithDefault constructor(val defaultValue: Int = 10)"
-            assertThat(MagicNumber(Config.empty).compileAndLint(code)).isEmpty()
+            assertThat(MagicNumber(Config.empty).lint(code)).isEmpty()
         }
 
         @Test
@@ -830,7 +829,7 @@ class MagicNumberSpec {
 
                 class SomeClassWithDefault constructor(val defaultValue: Duration = 10.toDuration(DurationUnit.MILLISECONDS))
             """.trimIndent()
-            assertThat(MagicNumber(Config.empty).lint(code)).isEmpty()
+            assertThat(MagicNumber(Config.empty).lint(code, compile = false)).isEmpty()
         }
     }
 
@@ -844,7 +843,7 @@ class MagicNumberSpec {
                     constructor(defaultValue: Int = 10) { }
                 }
             """.trimIndent()
-            assertThat(MagicNumber(Config.empty).compileAndLint(code)).isEmpty()
+            assertThat(MagicNumber(Config.empty).lint(code)).isEmpty()
         }
 
         @Test
@@ -854,7 +853,7 @@ class MagicNumberSpec {
                     constructor(defaultValue: Duration = 10.toDuration(DurationUnit.MILLISECONDS)) { }
                 }
             """.trimIndent()
-            assertThat(MagicNumber(Config.empty).lint(code)).isEmpty()
+            assertThat(MagicNumber(Config.empty).lint(code, compile = false)).isEmpty()
         }
     }
 
@@ -864,13 +863,13 @@ class MagicNumberSpec {
         @Test
         fun `reports no finding`() {
             val code = "fun f(p: Int = 100) {}"
-            assertThat(MagicNumber(Config.empty).compileAndLint(code)).isEmpty()
+            assertThat(MagicNumber(Config.empty).lint(code)).isEmpty()
         }
 
         @Test
         fun `reports no finding for a function expression`() {
             val code = "fun f(p: Duration = 10.toDuration(DurationUnit.MILLISECONDS)) {}"
-            assertThat(MagicNumber(Config.empty).lint(code)).isEmpty()
+            assertThat(MagicNumber(Config.empty).lint(code, compile = false)).isEmpty()
         }
     }
 
@@ -890,34 +889,34 @@ class MagicNumberSpec {
 
         @ParameterizedTest
         @MethodSource("cases")
-        fun `reports a code smell by default`(code: String) {
-            assertThat(MagicNumber(Config.empty).compileAndLint(code)).hasSize(1)
+        fun `reports a finding by default`(code: String) {
+            assertThat(MagicNumber(Config.empty).lint(code)).hasSize(1)
         }
 
         @ParameterizedTest
         @MethodSource("cases")
-        fun `reports a code smell if ranges are not ignored`(code: String) {
-            assertThat(MagicNumber(TestConfig(IGNORE_RANGES to "false")).compileAndLint(code))
+        fun `reports a finding if ranges are not ignored`(code: String) {
+            assertThat(MagicNumber(TestConfig(IGNORE_RANGES to "false")).lint(code))
                 .hasSize(1)
         }
 
         @ParameterizedTest
         @MethodSource("cases")
         fun `reports no finding if ranges are ignored`(code: String) {
-            assertThat(MagicNumber(TestConfig(IGNORE_RANGES to "true")).compileAndLint(code))
+            assertThat(MagicNumber(TestConfig(IGNORE_RANGES to "true")).lint(code))
                 .isEmpty()
         }
 
         @Test
         fun `reports a finding for a parenthesized number if ranges are ignored`() {
             val code = "val foo : Int = (127)"
-            assertThat(MagicNumber(TestConfig(IGNORE_RANGES to "true")).compileAndLint(code)).hasSize(1)
+            assertThat(MagicNumber(TestConfig(IGNORE_RANGES to "true")).lint(code)).hasSize(1)
         }
 
         @Test
         fun `reports a finding for an addition if ranges are ignored`() {
             val code = "val foo : Int = 1 + 27"
-            assertThat(MagicNumber(TestConfig(IGNORE_RANGES to "true")).compileAndLint(code)).hasSize(1)
+            assertThat(MagicNumber(TestConfig(IGNORE_RANGES to "true")).lint(code)).hasSize(1)
         }
     }
 
@@ -929,13 +928,13 @@ class MagicNumberSpec {
         @Test
         fun `reports 3 due to the assignment to a local variable`() {
             val rule = MagicNumber(TestConfig(IGNORE_LOCAL_VARIABLES to "false"))
-            assertThat(rule.compileAndLint(code)).hasSize(1)
+            assertThat(rule.lint(code)).hasSize(1)
         }
 
         @Test
         fun `should not report 3 due to the ignored local variable config`() {
             val rule = MagicNumber(TestConfig(IGNORE_LOCAL_VARIABLES to "true"))
-            assertThat(rule.compileAndLint(code)).isEmpty()
+            assertThat(rule.lint(code)).isEmpty()
         }
     }
 
@@ -951,17 +950,17 @@ class MagicNumberSpec {
 
         @Test
         fun `should report 3`() {
-            assertThat(rule.compileAndLint("""fun bar() { foo(3) }; fun foo(n: Int) {}""")).hasSize(1)
+            assertThat(rule.lint("""fun bar() { foo(3) }; fun foo(n: Int) {}""")).hasSize(1)
         }
 
         @Test
         fun `should not report named 3`() {
-            assertThat(rule.compileAndLint("""fun bar() { foo(param=3) }; fun foo(param: Int) {}""")).isEmpty()
+            assertThat(rule.lint("""fun bar() { foo(param=3) }; fun foo(param: Int) {}""")).isEmpty()
         }
 
         @Test
         fun `should not report 3 due to scoped describing variable`() {
-            assertThat(rule.compileAndLint("""fun bar() { val a = 3; foo(a) }; fun foo(n: Int) {}""")).isEmpty()
+            assertThat(rule.lint("""fun bar() { val a = 3; foo(a) }; fun foo(n: Int) {}""")).isEmpty()
         }
     }
 
@@ -980,7 +979,7 @@ class MagicNumberSpec {
                 val a = 500.dp()
             """.trimIndent()
 
-            assertThat(rule.compileAndLint(code)).isEmpty()
+            assertThat(rule.lint(code)).isEmpty()
         }
 
         @Test
@@ -992,7 +991,7 @@ class MagicNumberSpec {
                 val a = 500.dp
             """.trimIndent()
 
-            assertThat(rule.compileAndLint(code)).isEmpty()
+            assertThat(rule.lint(code)).isEmpty()
         }
 
         @Test
@@ -1003,7 +1002,219 @@ class MagicNumberSpec {
                 val a = 500.dp(400)
             """.trimIndent()
 
-            assertThat(rule.compileAndLint(code)).hasSize(1)
+            assertThat(rule.lint(code)).hasSize(1)
+        }
+    }
+
+    @Nested
+    inner class `unsigned integer literals` {
+
+        @Test
+        fun `should report unsigned integer literal`() {
+            val code = "val myUInt = 65520U"
+            val findings = MagicNumber(Config.empty).lint(code)
+            assertThat(findings).hasStartSourceLocation(1, 14)
+        }
+
+        @Test
+        fun `should not report unsigned integer literal when ignored`() {
+            val code = "val myUInt = 65520U"
+            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to listOf("65520U"))).lint(code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `should report unsigned long literal`() {
+            val code = "val myULong = 65520UL"
+            val findings = MagicNumber(Config.empty).lint(code)
+            assertThat(findings).hasStartSourceLocation(1, 15)
+        }
+
+        @Test
+        fun `should not report unsigned long literal when ignored`() {
+            val code = "val myULong = 65520UL"
+            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to listOf("65520UL"))).lint(code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `should report unsigned hex literal`() {
+            val code = "val myUHex = 0xFFF0U"
+            val findings = MagicNumber(Config.empty).lint(code)
+            assertThat(findings).hasStartSourceLocation(1, 14)
+        }
+
+        @Test
+        fun `should not report unsigned hex literal when ignored`() {
+            val code = "val myUHex = 0xFFF0U"
+            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to listOf("0xFFF0U"))).lint(code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `should report unsigned hex long literal`() {
+            val code = "val myUHexLong = 0xFFF0UL"
+            val findings = MagicNumber(Config.empty).lint(code)
+            assertThat(findings).hasStartSourceLocation(1, 18)
+        }
+
+        @Test
+        fun `should report unsigned literals in function calls`() {
+            val code = """
+                fun someFunction(x: UInt) {}
+                fun test() { someFunction(65520U) }
+            """.trimIndent()
+            val findings = MagicNumber(Config.empty).lint(code)
+            assertThat(findings).hasStartSourceLocation(2, 27)
+        }
+
+        @Test
+        fun `should report unsigned literals in array initialization`() {
+            val code = "val array = arrayOf(1U, 2U, 65520U)"
+            val findings = MagicNumber(Config.empty).lint(code)
+            assertThat(findings).hasStartSourceLocation(1, 29)
+        }
+
+        @Test
+        fun `should not report unsigned literals in property declarations by default`() {
+            val code = "val myUInt = 65520U"
+            val findings = MagicNumber(Config.empty).lint(code)
+            assertThat(findings).hasStartSourceLocation(1, 14)
+        }
+
+        @Test
+        fun `should not report unsigned literals in property declarations when ignored`() {
+            val code = "val myUInt = 65520U"
+            val findings = MagicNumber(TestConfig(IGNORE_PROPERTY_DECLARATION to "true")).lint(code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `should report multiple unsigned literals`() {
+            val code = """
+                val a = 65520U
+                val b = 0xFFF0UL
+                val c = 12345U
+            """.trimIndent()
+            val findings = MagicNumber(Config.empty).lint(code)
+            assertThat(findings).hasStartSourceLocations(
+                SourceLocation(1, 9),
+                SourceLocation(2, 9),
+                SourceLocation(3, 9)
+            )
+        }
+
+        @Test
+        fun `should report unsigned integer literal with lowercase u`() {
+            val code = "val myUInt = 65520u"
+            val findings = MagicNumber(Config.empty).lint(code)
+            assertThat(findings).hasStartSourceLocation(1, 14)
+        }
+
+        @Test
+        fun `should not report unsigned integer literal with lowercase u when ignored`() {
+            val code = "val myUInt = 65520u"
+            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to listOf("65520u"))).lint(code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `should report unsigned long literal with lowercase uL`() {
+            val code = "val myULong = 65520uL"
+            val findings = MagicNumber(Config.empty).lint(code)
+            assertThat(findings).hasStartSourceLocation(1, 15)
+        }
+
+        @Test
+        fun `should not report unsigned long literal with lowercase uL when ignored`() {
+            val code = "val myULong = 65520uL"
+            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to listOf("65520uL"))).lint(code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `should report unsigned hex literal with lowercase u`() {
+            val code = "val myUHex = 0xFFF0u"
+            val findings = MagicNumber(Config.empty).lint(code)
+            assertThat(findings).hasStartSourceLocation(1, 14)
+        }
+
+        @Test
+        fun `should not report unsigned hex literal with lowercase u when ignored`() {
+            val code = "val myUHex = 0xFFF0u"
+            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to listOf("0xFFF0u"))).lint(code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `should report unsigned hex long literal with lowercase uL`() {
+            val code = "val myUHexLong = 0xFFF0uL"
+            val findings = MagicNumber(Config.empty).lint(code)
+            assertThat(findings).hasStartSourceLocation(1, 18)
+        }
+
+        @Test
+        fun `should not report unsigned hex long literal with lowercase uL when ignored`() {
+            val code = "val myUHexLong = 0xFFF0uL"
+            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to listOf("0xFFF0uL"))).lint(code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `should report lowercase unsigned literals in function calls`() {
+            val code = """
+                fun someFunction(x: UInt) {}
+                fun test() { someFunction(65520u) }
+            """.trimIndent()
+            val findings = MagicNumber(Config.empty).lint(code)
+            assertThat(findings).hasStartSourceLocation(2, 27)
+        }
+
+        @Test
+        fun `should report lowercase unsigned literals in array initialization`() {
+            val code = "val array = arrayOf(1u, 2u, 65520u)"
+            val findings = MagicNumber(Config.empty).lint(code)
+            assertThat(findings).hasStartSourceLocation(1, 29)
+        }
+
+        @Test
+        fun `should report mixed case unsigned literals`() {
+            val code = """
+                val a = 65520u
+                val b = 0xFFF0uL
+                val c = 12345U
+                val d = 0xABCDUL
+            """.trimIndent()
+            val findings = MagicNumber(Config.empty).lint(code)
+            assertThat(findings).hasStartSourceLocations(
+                SourceLocation(1, 9),
+                SourceLocation(2, 9),
+                SourceLocation(3, 9),
+                SourceLocation(4, 9)
+            )
+        }
+
+        @Test
+        fun `should handle binary literals with lowercase unsigned suffixes`() {
+            val code = """
+                val binary1 = 0b1010u
+                val binary2 = 0b1111uL
+            """.trimIndent()
+            val findings = MagicNumber(Config.empty).lint(code)
+            assertThat(findings).hasStartSourceLocations(
+                SourceLocation(1, 15),
+                SourceLocation(2, 15)
+            )
+        }
+
+        @Test
+        fun `should not report lowercase unsigned literals when ignoring property declarations`() {
+            val code = """
+                val myUInt = 65520u
+                val myULong = 0xFFF0uL
+            """.trimIndent()
+            val findings = MagicNumber(TestConfig(IGNORE_PROPERTY_DECLARATION to "true")).lint(code)
+            assertThat(findings).isEmpty()
         }
     }
 }

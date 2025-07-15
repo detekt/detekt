@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -24,7 +24,7 @@ class MethodOverloadingSpec {
                     fun x(i: Int, j: Int) {}
                 }
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings).hasSize(1)
             assertThat(findings[0].message).isEqualTo("The method 'x' is overloaded 3 times.")
         }
@@ -36,12 +36,12 @@ class MethodOverloadingSpec {
                 fun x(i: Int) {}
                 fun x(i: Int, j: Int) {}
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
 
         @Test
         fun `does not report overloaded methods which do not exceed the threshold`() {
-            val findings = subject.compileAndLint(
+            val findings = subject.lint(
                 """
                     class Test {
                         fun x() { }
@@ -58,7 +58,7 @@ class MethodOverloadingSpec {
 
         @Test
         fun `does not report extension methods with a different receiver`() {
-            val findings = subject.compileAndLint(
+            val findings = subject.lint(
                 """
                     fun Boolean.foo() {}
                     fun Int.foo() {}
@@ -70,7 +70,7 @@ class MethodOverloadingSpec {
 
         @Test
         fun `reports extension methods with the same receiver`() {
-            val findings = subject.compileAndLint(
+            val findings = subject.lint(
                 """
                     fun Int.foo() {}
                     fun Int.foo(i: Int) {}
@@ -95,7 +95,7 @@ class MethodOverloadingSpec {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
 
         @Test
@@ -111,7 +111,7 @@ class MethodOverloadingSpec {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
     }
 
@@ -127,7 +127,7 @@ class MethodOverloadingSpec {
                     fun f(i: Int, j: Int) {}
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
 
         @Test
@@ -138,7 +138,7 @@ class MethodOverloadingSpec {
                     fun f(i: Int) {}
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -152,7 +152,7 @@ class MethodOverloadingSpec {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
 
         @Test
@@ -165,7 +165,7 @@ class MethodOverloadingSpec {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -181,7 +181,7 @@ class MethodOverloadingSpec {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -197,7 +197,7 @@ class MethodOverloadingSpec {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
     }
 
@@ -221,7 +221,7 @@ class MethodOverloadingSpec {
                     abstract fun f()
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -235,7 +235,7 @@ class MethodOverloadingSpec {
                     fun f() {}
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
 
         @Test
@@ -249,14 +249,14 @@ class MethodOverloadingSpec {
                     fun f(i: Int, j: Int) {}
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
     }
 
     @Test
     fun `does not report a class without a body`() {
         val code = "class A"
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -267,7 +267,7 @@ class MethodOverloadingSpec {
                  fun f(i: Int, j: Int) {}
              }
         """.trimIndent()
-        val actual = subject.compileAndLint(code)
+        val actual = subject.lint(code)
 
         assertThat(actual).isEmpty()
     }
@@ -281,6 +281,6 @@ class MethodOverloadingSpec {
                 fun f(i: Int, j: Int) {}
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 }

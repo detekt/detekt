@@ -34,10 +34,10 @@ class ComplexityReportSpec {
                 	- 4 comment lines of code (cloc)
                 	- 2 cyclomatic complexity (mcc)
                 	- 2 cognitive complexity
-                	- 1 number of total code smells
+                	- 1 number of total findings
                 	- 66% comment source ratio
                 	- 400 mcc per 1,000 lloc
-                	- 200 code smells per 1,000 lloc
+                	- 200 findings per 1,000 lloc
                 
             """.trimIndent()
         )
@@ -51,4 +51,7 @@ class ComplexityReportSpec {
     }
 }
 
-private fun createDetektion(): Detektion = DetektResult(listOf(createIssue(createRuleInstance(ruleSetId = "Key"))))
+private fun createDetektion(): Detektion = DetektResult(
+    issues = listOf(createIssue(createRuleInstance(ruleSetId = "Key"))),
+    rules = emptyList(),
+)

@@ -1,13 +1,15 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isCallingWithNonNullCheckArgument
-import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.name.CallableId
+import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.name.StandardClassIds
 import org.jetbrains.kotlin.psi.KtCallExpression
 
 /**
@@ -21,21 +23,23 @@ import org.jetbrains.kotlin.psi.KtCallExpression
  * requireNotNull(x)
  * </compliant>
  */
-@RequiresFullAnalysis
 @ActiveByDefault(since = "1.21.0")
-class UseRequireNotNull(config: Config) : Rule(
-    config,
-    "Use requireNotNull() instead of require() for checking not-null."
-) {
+class UseRequireNotNull(config: Config) :
+    Rule(
+        config,
+        "Use requireNotNull() instead of require() for checking not-null."
+    ),
+    RequiresAnalysisApi {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
-        if (expression.isCallingWithNonNullCheckArgument(requireFunctionFqName, bindingContext)) {
-            report(CodeSmell(Entity.from(expression), description))
+        if (expression.isCallingWithNonNullCheckArgument(requireFunctionCallableId)) {
+            report(Finding(Entity.from(expression), description))
         }
     }
 
     companion object {
-        private val requireFunctionFqName = FqName("kotlin.require")
+        private val requireFunctionCallableId =
+            CallableId(StandardClassIds.BASE_KOTLIN_PACKAGE, Name.identifier("require"))
     }
 }

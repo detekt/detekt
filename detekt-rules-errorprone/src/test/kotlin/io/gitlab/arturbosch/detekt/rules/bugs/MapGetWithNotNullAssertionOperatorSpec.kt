@@ -1,14 +1,14 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class MapGetWithNotNullAssertionOperatorSpec(private val env: KotlinCoreEnvironment) {
+class MapGetWithNotNullAssertionOperatorSpec(private val env: KotlinEnvironmentContainer) {
     private val subject = MapGetWithNotNullAssertionOperator(Config.empty)
 
     @Test
@@ -19,7 +19,7 @@ class MapGetWithNotNullAssertionOperatorSpec(private val env: KotlinCoreEnvironm
                 val value = map["key"]!!
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
     }
 
     @Test
@@ -30,7 +30,7 @@ class MapGetWithNotNullAssertionOperatorSpec(private val env: KotlinCoreEnvironm
                 val value = map.get("key")!!
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
     }
 
     @Test
@@ -41,7 +41,7 @@ class MapGetWithNotNullAssertionOperatorSpec(private val env: KotlinCoreEnvironm
                 map["key"]
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -52,7 +52,7 @@ class MapGetWithNotNullAssertionOperatorSpec(private val env: KotlinCoreEnvironm
                 map.getValue("key")
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -63,7 +63,7 @@ class MapGetWithNotNullAssertionOperatorSpec(private val env: KotlinCoreEnvironm
                 map.getOrDefault("key", "")
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -74,6 +74,6 @@ class MapGetWithNotNullAssertionOperatorSpec(private val env: KotlinCoreEnvironm
                 map.getOrElse("key", { "" })
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 }

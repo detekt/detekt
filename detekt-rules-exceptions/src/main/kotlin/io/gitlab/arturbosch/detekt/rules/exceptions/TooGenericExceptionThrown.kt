@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.exceptions
 
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import org.jetbrains.kotlin.psi.KtThrowExpression
@@ -52,7 +52,7 @@ class TooGenericExceptionThrown(config: Config) : Rule(
         expression.thrownExpression?.referenceExpression()?.text?.let {
             if (it in exceptionNames) {
                 report(
-                    CodeSmell(
+                    Finding(
                         Entity.from(expression),
                         "$it is a too generic Exception. " +
                             "Prefer throwing specific exceptions that indicate a specific error case."

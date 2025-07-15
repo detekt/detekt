@@ -1,12 +1,12 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
+import com.intellij.psi.PsiWhiteSpace
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isPartOf
 import io.gitlab.arturbosch.detekt.rules.isPartOfString
-import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
 import org.jetbrains.kotlin.psi.KtStringTemplateEntryWithExpression
 
 /**
@@ -24,7 +24,7 @@ class NoTabs(config: Config) : Rule(
     override fun visitWhiteSpace(space: PsiWhiteSpace) {
         super.visitWhiteSpace(space)
         if (space.isTab()) {
-            report(CodeSmell(Entity.from(space), "Tab character is in use."))
+            report(Finding(Entity.from(space), "Tab character is in use."))
         }
     }
 

@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -17,7 +17,7 @@ class CascadingCallWrappingSpec {
                 .plus(0).plus(0).plus(0)
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code))
+        assertThat(subject.lint(code))
             .hasSize(1)
             .hasTextLocations(23 to 30)
             .first()
@@ -30,7 +30,7 @@ class CascadingCallWrappingSpec {
             val a = 0.plus(0).plus(0)
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -41,7 +41,7 @@ class CascadingCallWrappingSpec {
                 .plus(0)
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -52,7 +52,7 @@ class CascadingCallWrappingSpec {
                 .plus(0)
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -62,7 +62,7 @@ class CascadingCallWrappingSpec {
                 ?.plus(0)?.plus(0)
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -72,7 +72,7 @@ class CascadingCallWrappingSpec {
                 .plus(0)!!.plus(0)
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -85,7 +85,7 @@ class CascadingCallWrappingSpec {
                 .length.plus(0)
         """.trimIndent()
 
-        assertThat(subject.compileAndLint(code)).hasSize(2)
+        assertThat(subject.lint(code)).hasSize(2)
     }
 
     @Nested
@@ -102,7 +102,7 @@ class CascadingCallWrappingSpec {
                     }
             """.trimIndent()
 
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -119,7 +119,7 @@ class CascadingCallWrappingSpec {
                     )
             """.trimIndent()
 
-            assertThat(subject.compileAndLint(code))
+            assertThat(subject.lint(code))
                 .hasTextLocations(64 to 85)
                 .hasSize(1)
         }
@@ -134,7 +134,7 @@ class CascadingCallWrappingSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -145,7 +145,7 @@ class CascadingCallWrappingSpec {
                 )
             """.trimIndent()
 
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
     }
 
@@ -162,8 +162,8 @@ class CascadingCallWrappingSpec {
                     ?: 0
             """.trimIndent()
 
-            assertThat(subjectIncludingElvis.compileAndLint(code)).isEmpty()
-            assertThat(subjectExcludingElvis.compileAndLint(code)).isEmpty()
+            assertThat(subjectIncludingElvis.lint(code)).isEmpty()
+            assertThat(subjectExcludingElvis.lint(code)).isEmpty()
         }
 
         @Test
@@ -173,25 +173,25 @@ class CascadingCallWrappingSpec {
                     .plus(0) ?: 42
             """.trimIndent()
 
-            assertThat(subjectIncludingElvis.compileAndLint(code))
+            assertThat(subjectIncludingElvis.lint(code))
                 .hasTextLocations(23 to 28)
                 .hasSize(1)
-            assertThat(subjectExcludingElvis.compileAndLint(code)).isEmpty()
+            assertThat(subjectExcludingElvis.lint(code)).isEmpty()
         }
 
         @Test
         fun `reports missing wrapping multiline call`() {
             val code = """
                 val a = 0
-                    .plus(0) ?: let {
+                    .plus(0) ?: run {
                   42
                 }
             """.trimIndent()
 
-            assertThat(subjectIncludingElvis.compileAndLint(code))
+            assertThat(subjectIncludingElvis.lint(code))
                 .hasTextLocations(23 to 38)
                 .hasSize(1)
-            assertThat(subjectExcludingElvis.compileAndLint(code)).isEmpty()
+            assertThat(subjectExcludingElvis.lint(code)).isEmpty()
         }
     }
 }

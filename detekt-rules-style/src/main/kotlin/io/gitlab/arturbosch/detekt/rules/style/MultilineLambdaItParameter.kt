@@ -1,12 +1,11 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.hasImplicitParameterReference
-import io.gitlab.arturbosch.detekt.rules.implicitParameter
 import org.jetbrains.kotlin.builtins.StandardNames.IMPLICIT_LAMBDA_PARAMETER_NAME
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 
@@ -60,11 +59,12 @@ import org.jetbrains.kotlin.psi.KtLambdaExpression
  * </compliant>
  *
  */
-@RequiresFullAnalysis
-class MultilineLambdaItParameter(config: Config) : Rule(
-    config,
-    "Multiline lambdas should not use `it` as a parameter name."
-) {
+class MultilineLambdaItParameter(config: Config) :
+    Rule(
+        config,
+        "Multiline lambdas should not use `it` as a parameter name."
+    ),
+    RequiresAnalysisApi {
 
     override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
         super.visitLambdaExpression(lambdaExpression)
@@ -75,16 +75,16 @@ class MultilineLambdaItParameter(config: Config) : Rule(
         if (IMPLICIT_LAMBDA_PARAMETER_NAME in parameterNames) {
             // Explicit `it`
             report(
-                CodeSmell(
+                Finding(
                     Entity.from(lambdaExpression),
                     "The parameter name in a multiline lambda should not be an explicit `it`. " +
                         "Consider giving your parameter a readable and descriptive name."
                 )
             )
-        } else if (parameterNames.isEmpty() && lambdaExpression.isUsingImplicitParameter()) {
+        } else if (parameterNames.isEmpty() && lambdaExpression.hasImplicitParameterReference()) {
             // Implicit `it`
             report(
-                CodeSmell(
+                Finding(
                     Entity.from(lambdaExpression),
                     "The implicit `it` should not be used in a multiline lambda. " +
                         "Consider giving your parameter a readable and descriptive name."
@@ -100,10 +100,5 @@ class MultilineLambdaItParameter(config: Config) : Rule(
             1 -> statements.single().textContains('\n')
             else -> true
         }
-    }
-
-    private fun KtLambdaExpression.isUsingImplicitParameter(): Boolean {
-        val implicitParameter = implicitParameter(bindingContext) ?: return false
-        return hasImplicitParameterReference(implicitParameter, bindingContext)
     }
 }

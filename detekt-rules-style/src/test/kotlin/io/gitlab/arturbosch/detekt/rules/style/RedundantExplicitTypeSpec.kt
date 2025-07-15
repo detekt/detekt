@@ -1,14 +1,14 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class RedundantExplicitTypeSpec(val env: KotlinCoreEnvironment) {
+class RedundantExplicitTypeSpec(val env: KotlinEnvironmentContainer) {
     val subject = RedundantExplicitType(Config.empty)
 
     @Test
@@ -18,7 +18,7 @@ class RedundantExplicitTypeSpec(val env: KotlinCoreEnvironment) {
                 val x: Boolean = true
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
     }
 
     @Test
@@ -28,7 +28,7 @@ class RedundantExplicitTypeSpec(val env: KotlinCoreEnvironment) {
                 val x: Int = 3
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
     }
 
     @Test
@@ -38,7 +38,7 @@ class RedundantExplicitTypeSpec(val env: KotlinCoreEnvironment) {
                 val x: Long = 3L
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
     }
 
     @Test
@@ -48,7 +48,7 @@ class RedundantExplicitTypeSpec(val env: KotlinCoreEnvironment) {
                 val x: Float = 3.0f
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
     }
 
     @Test
@@ -58,7 +58,7 @@ class RedundantExplicitTypeSpec(val env: KotlinCoreEnvironment) {
                 val x: Double = 3.0
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
     }
 
     @Test
@@ -68,7 +68,7 @@ class RedundantExplicitTypeSpec(val env: KotlinCoreEnvironment) {
                 val x: Char = 'f'
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
     }
 
     @Test
@@ -80,7 +80,7 @@ class RedundantExplicitTypeSpec(val env: KotlinCoreEnvironment) {
                 val y: String = "$substitute"
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
     }
 
     @Test
@@ -92,7 +92,7 @@ class RedundantExplicitTypeSpec(val env: KotlinCoreEnvironment) {
                 val o: Test = Test
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
     }
 
     @Test
@@ -108,7 +108,7 @@ class RedundantExplicitTypeSpec(val env: KotlinCoreEnvironment) {
                 val t: TallPerson = TallPerson("first", 3)
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).hasSize(1)
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
     }
 
     @Test
@@ -124,6 +124,6 @@ class RedundantExplicitTypeSpec(val env: KotlinCoreEnvironment) {
                 val t: Person = TallPerson("first", 3)
             }
         """.trimIndent()
-        assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 }

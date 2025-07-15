@@ -2,10 +2,8 @@
 // https://github.com/gradle/gradle/issues/21285
 @file:Suppress("StringLiteralDuplication")
 
-import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.buildtools.api.ExperimentalBuildToolsApi
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-import java.net.URI
 
 plugins {
     id("module")
@@ -14,8 +12,8 @@ plugins {
     id("idea")
     id("com.gradle.plugin-publish") version "1.3.1"
     // We use this published version of the detekt plugin to self analyse this project.
-    id("io.gitlab.arturbosch.detekt") version "1.23.7"
-    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.17.0"
+    id("io.gitlab.arturbosch.detekt") version "1.23.8"
+    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.18.1"
     id("org.jetbrains.dokka") version "2.0.0"
     id("signing")
 }
@@ -33,6 +31,28 @@ detekt {
     buildUponDefaultConfig = true
     baseline = file("config/gradle-plugin-baseline.xml")
     config.setFrom("config/gradle-plugin-detekt.yml")
+}
+
+dokka {
+    dokkaPublications.configureEach {
+        failOnWarning = true
+    }
+
+    dokkaSourceSets.configureEach {
+        apiVersion = "1.4"
+        modulePath = "detekt-gradle-plugin"
+
+        externalDocumentationLinks {
+            create("gradle") {
+                url("https://docs.gradle.org/current/javadoc/")
+                packageListUrl("https://docs.gradle.org/current/javadoc/element-list")
+            }
+        }
+    }
+
+    dokkaPublications.html {
+        suppressInheritedMembers = true
+    }
 }
 
 testing {
@@ -98,9 +118,9 @@ kotlin {
     }
 }
 
-val testKitRuntimeOnly: Configuration by configurations.creating
-val testKitJava17RuntimeOnly: Configuration by configurations.creating
-val testKitGradleMinVersionRuntimeOnly: Configuration by configurations.creating
+val testKitRuntimeOnly by configurations.registering
+val testKitJava17RuntimeOnly by configurations.registering
+val testKitGradleMinVersionRuntimeOnly by configurations.registering
 
 dependencies {
     compileOnly(libs.android.gradleApi)
@@ -120,7 +140,7 @@ dependencies {
     testKitJava17RuntimeOnly(libs.android.gradle.plugin)
 
     // We use this published version of the detekt-formatting to self analyse this project.
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.7")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.8")
 }
 
 gradlePlugin {
@@ -198,7 +218,7 @@ tasks {
     }
 
     register<PluginUnderTestMetadata>("gradleMinVersionPluginUnderTestMetadata") {
-        pluginClasspath.setFrom(sourceSets.main.get().runtimeClasspath, testKitGradleMinVersionRuntimeOnly)
+        pluginClasspath.setFrom(sourceSets.main.get().output, testKitGradleMinVersionRuntimeOnly)
         outputDirectory = layout.buildDirectory.dir(name)
     }
 
@@ -210,19 +230,6 @@ tasks {
                     maxRetries = 2
                     maxFailures = 20
                 }
-            }
-        }
-    }
-
-    withType<DokkaTask>().configureEach {
-        suppressInheritedMembers = true
-        failOnWarning = true
-        outputDirectory = layout.projectDirectory.dir("../website/static/kdoc/detekt-gradle-plugin")
-
-        dokkaSourceSets.configureEach {
-            apiVersion = "1.4"
-            externalDocumentationLink {
-                url = URI("https://docs.gradle.org/current/javadoc/").toURL()
             }
         }
     }

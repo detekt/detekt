@@ -1,12 +1,12 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
+import com.intellij.psi.PsiElement
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.ConstructorDescriptor
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
@@ -67,13 +67,14 @@ import org.jetbrains.kotlin.types.typeUtil.supertypes
  * functionThatReturnsClosable().use { it.doStuff() }
  * </compliant>
  */
-@RequiresFullAnalysis
 @Suppress("TooManyFunctions")
-class MissingUseCall(config: Config = Config.empty) : Rule(
-    config,
-    "Usage of `Closeable` detected without `use` call. Using `Closeable` without `use` " +
-        "can be problematic as closing `Closeable` may throw exception.",
-) {
+class MissingUseCall(config: Config = Config.empty) :
+    Rule(
+        config,
+        "Usage of `Closeable` detected without `use` call. Using `Closeable` without `use` " +
+            "can be problematic as closing `Closeable` may throw exception.",
+    ),
+    RequiresFullAnalysis {
 
     private val traversedParentExpression: MutableSet<PsiElement> = mutableSetOf()
     private val usedReferences: MutableSet<CallableDescriptor> = mutableSetOf()
@@ -93,7 +94,7 @@ class MissingUseCall(config: Config = Config.empty) : Rule(
         if (isCloseable.not()) return
         if (shouldReport(expression)) {
             report(
-                CodeSmell(
+                Finding(
                     Entity.from(expression),
                     "${
                         (

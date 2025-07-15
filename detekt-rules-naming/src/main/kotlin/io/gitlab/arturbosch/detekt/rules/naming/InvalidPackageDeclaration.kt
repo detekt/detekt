@@ -3,10 +3,10 @@ package io.gitlab.arturbosch.detekt.rules.naming
 import io.github.detekt.psi.absolutePath
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.Alias
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import org.jetbrains.kotlin.name.FqName
@@ -52,7 +52,7 @@ class InvalidPackageDeclaration(config: Config) : Rule(
     }
 
     private fun KtElement.reportInvalidPackageDeclaration(message: String) {
-        report(CodeSmell(Entity.from(this), message))
+        report(Finding(Entity.from(this), message))
     }
 
     private fun <T> Iterable<T>.toNormalizedForm() = joinToString("|")

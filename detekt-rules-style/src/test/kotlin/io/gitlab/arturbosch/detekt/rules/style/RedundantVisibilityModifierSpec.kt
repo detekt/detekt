@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.FakeCompilerResources
+import io.gitlab.arturbosch.detekt.test.FakeLanguageVersionSettings
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.jetbrains.kotlin.config.ExplicitApiMode
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -22,7 +22,7 @@ class RedundantVisibilityModifierSpec {
                 override public fun f() {}
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -36,7 +36,7 @@ class RedundantVisibilityModifierSpec {
                 override fun f() {}
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -50,7 +50,7 @@ class RedundantVisibilityModifierSpec {
                 override public fun f() {}
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -60,7 +60,7 @@ class RedundantVisibilityModifierSpec {
                 public fun f() {}
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -70,7 +70,7 @@ class RedundantVisibilityModifierSpec {
                 fun f() {}
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -80,7 +80,7 @@ class RedundantVisibilityModifierSpec {
                 fun f() {}
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -90,7 +90,7 @@ class RedundantVisibilityModifierSpec {
                 public fun f()
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(2)
+        assertThat(subject.lint(code)).hasSize(2)
     }
 
     @Test
@@ -100,7 +100,7 @@ class RedundantVisibilityModifierSpec {
                 public val str : String = "test"
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -110,7 +110,7 @@ class RedundantVisibilityModifierSpec {
                 val str : String = "test"
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -124,7 +124,7 @@ class RedundantVisibilityModifierSpec {
                 override val test: String = "valid"
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -138,7 +138,7 @@ class RedundantVisibilityModifierSpec {
                 override public val test: String = "valid"
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -148,7 +148,7 @@ class RedundantVisibilityModifierSpec {
                 internal class InternalClass
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -158,7 +158,7 @@ class RedundantVisibilityModifierSpec {
                 internal fun internalFunction() {}
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Nested
@@ -171,19 +171,19 @@ class RedundantVisibilityModifierSpec {
 
         @Test
         fun `does not report public function in class if explicit API mode is set to strict`() {
-            val findings = subject.compileAndLint(code, FakeCompilerResources(ExplicitApiMode.STRICT))
+            val findings = subject.lint(code, FakeLanguageVersionSettings(ExplicitApiMode.STRICT))
             assertThat(findings).isEmpty()
         }
 
         @Test
         fun `does not report public function in class if explicit API mode is set to warning`() {
-            val findings = subject.compileAndLint(code, FakeCompilerResources(ExplicitApiMode.WARNING))
+            val findings = subject.lint(code, FakeLanguageVersionSettings(ExplicitApiMode.WARNING))
             assertThat(findings).isEmpty()
         }
 
         @Test
         fun `reports public function in class if explicit API mode is disabled`() {
-            val findings = subject.compileAndLint(code, FakeCompilerResources(ExplicitApiMode.DISABLED))
+            val findings = subject.lint(code, FakeLanguageVersionSettings(ExplicitApiMode.DISABLED))
             assertThat(findings).hasSize(1)
         }
     }

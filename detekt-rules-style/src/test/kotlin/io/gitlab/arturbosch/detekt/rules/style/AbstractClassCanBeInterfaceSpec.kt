@@ -1,16 +1,16 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class AbstractClassCanBeInterfaceSpec(val env: KotlinCoreEnvironment) {
+class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
     val subject = AbstractClassCanBeInterface(Config.empty)
 
     @Nested
@@ -26,7 +26,7 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinCoreEnvironment) {
                     public abstract fun f2()
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertFindingMessage(findings, message)
             assertThat(findings).hasStartSourceLocation(1, 16)
         }
@@ -36,7 +36,7 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinCoreEnvironment) {
             @Test
             fun `case 1`() {
                 val code = "abstract class A"
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertFindingMessage(findings, message)
                 assertThat(findings).hasStartSourceLocation(1, 16)
             }
@@ -44,21 +44,21 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinCoreEnvironment) {
             @Test
             fun `case 2`() {
                 val code = "abstract class A()"
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertFindingMessage(findings, message)
             }
 
             @Test
             fun `case 3`() {
                 val code = "abstract class A {}"
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertFindingMessage(findings, message)
             }
 
             @Test
             fun `case 4`() {
                 val code = "abstract class A() {}"
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertFindingMessage(findings, message)
             }
 
@@ -70,7 +70,7 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinCoreEnvironment) {
                     }
                     abstract class B : A
                 """.trimIndent()
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertFindingMessage(findings, message)
             }
 
@@ -85,7 +85,7 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinCoreEnvironment) {
                     }
                     abstract class B : A()
                 """.trimIndent()
-                assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
 
             @Test
@@ -101,7 +101,7 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinCoreEnvironment) {
                     }
                     abstract class B: A(), I
                 """.trimIndent()
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
 
@@ -118,7 +118,7 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinCoreEnvironment) {
                     }
                     abstract class B: I, A()
                 """.trimIndent()
-                val findings = subject.compileAndLintWithContext(env, code)
+                val findings = subject.lintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
         }
@@ -135,7 +135,7 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinCoreEnvironment) {
                     abstract fun g()
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -145,7 +145,7 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinCoreEnvironment) {
                     internal abstract fun f()
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -155,7 +155,7 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinCoreEnvironment) {
                     protected abstract fun f()
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -172,7 +172,7 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinCoreEnvironment) {
                     fun f() {}
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -185,7 +185,7 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -198,28 +198,28 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinCoreEnvironment) {
                     }
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
         @Test
         fun `does not report no abstract members in an abstract class with just a constructor`() {
             val code = "abstract class A(val i: Int)"
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
         @Test
         fun `does not report no abstract members in an abstract class with a body and a constructor`() {
             val code = "abstract class A(val i: Int) {}"
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
         @Test
         fun `does not report no abstract members in an abstract class with just a constructor parameter`() {
             val code = "abstract class A(i: Int)"
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -241,7 +241,7 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinCoreEnvironment) {
                     fun g() {}
                 }
             """.trimIndent()
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
     }
@@ -261,7 +261,7 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinCoreEnvironment) {
                     fun g() {}
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -275,7 +275,7 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinCoreEnvironment) {
                     fun g() {}
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -289,7 +289,7 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinCoreEnvironment) {
                     fun f()
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -300,7 +300,7 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinCoreEnvironment) {
                 }
                 abstract class Test(val x: Int) : I
             """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 }

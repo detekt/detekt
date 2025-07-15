@@ -3,9 +3,9 @@ import { visit } from "unist-util-visit";
 // Remark plugin that is replacing the [detekt_version] with the latest
 // released version. Please note that this field is updated automatically
 // by the `applyDocVersion` task.
-const detektVersion = "1.23.7";
+const detektVersion = "1.23.8";
 
-const plugin = (options) => {
+const detektVersionReplacePlugin = (options) => {
   const transformer = async (ast) => {
     visit(ast, "code", (node) => {
       if (node.value.includes("[detekt_version]")) {
@@ -16,4 +16,7 @@ const plugin = (options) => {
   return transformer;
 };
 
-module.exports = plugin;
+module.exports = {
+  detektVersionReplacePlugin: detektVersionReplacePlugin,
+  detektVersion: detektVersion
+};

@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.documentation
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtDeclaration
 
@@ -46,7 +46,7 @@ class DeprecatedBlockTag(config: Config) : Rule(
         dcl.docComment?.getAllSections()?.forEach { section ->
             section.findTagsByName("deprecated").forEach { tag ->
                 report(
-                    CodeSmell(
+                    Finding(
                         Entity.from(dcl),
                         "@deprecated tag block does not properly report deprecation in Kotlin, use @Deprecated " +
                             "annotation instead",

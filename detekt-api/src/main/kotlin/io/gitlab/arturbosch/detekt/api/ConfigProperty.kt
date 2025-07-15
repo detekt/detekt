@@ -12,7 +12,7 @@ import kotlin.reflect.KProperty0
  * the config. Although [T] is defined as [Any], only [String], [Int], [Boolean] and [List<String>] are supported.
  */
 fun <T : Any> config(
-    defaultValue: T
+    defaultValue: T,
 ): ReadOnlyProperty<Rule, T> = config(defaultValue) { it }
 
 /**
@@ -26,7 +26,7 @@ fun <T : Any> config(
  */
 fun <T : Any, U : Any> config(
     defaultValue: T,
-    transformer: (T) -> U
+    transformer: (T) -> U,
 ): ReadOnlyProperty<Rule, U> = TransformedConfigProperty(defaultValue, transformer)
 
 /**
@@ -45,7 +45,7 @@ fun <T : Any, U : Any> config(
  */
 fun <T : Any> configWithFallback(
     fallbackProperty: KProperty0<T>,
-    defaultValue: T
+    defaultValue: T,
 ): ReadOnlyProperty<Rule, T> = configWithFallback(fallbackProperty, defaultValue) { it }
 
 /**
@@ -67,7 +67,7 @@ fun <T : Any> configWithFallback(
 fun <T : Any, U : Any> configWithFallback(
     fallbackProperty: KProperty0<U>,
     defaultValue: T,
-    transformer: (T) -> U
+    transformer: (T) -> U,
 ): ReadOnlyProperty<Rule, U> =
     FallbackConfigProperty(fallbackProperty, defaultValue, transformer)
 
@@ -101,7 +101,7 @@ fun <T : Any> configWithAndroidVariants(
 fun <T : Any, U : Any> configWithAndroidVariants(
     defaultValue: T,
     defaultAndroidValue: T,
-    transformer: (T) -> U
+    transformer: (T) -> U,
 ): ReadOnlyProperty<Rule, U> =
     TransformedConfigPropertyWithAndroidVariants(defaultValue, defaultAndroidValue, transformer)
 
@@ -112,7 +112,8 @@ private fun <T : Any> getValueOrDefault(config: Config, propertyName: String, de
         is List<*> -> config.getListOrDefault(propertyName, defaultValue) as T
         is String,
         is Boolean,
-        is Int -> config.valueOrDefault(propertyName, defaultValue)
+        is Int,
+        -> config.valueOrDefault(propertyName, defaultValue)
 
         else -> error(
             "${defaultValue.javaClass} is not supported for delegated config property '$propertyName'. " +
@@ -132,31 +133,34 @@ private fun Config.getListOrDefault(propertyName: String, defaultValue: List<*>)
 
 private fun Config.getValuesWithReasonOrDefault(
     propertyName: String,
-    defaultValue: ValuesWithReason
+    defaultValue: ValuesWithReason,
 ): ValuesWithReason {
     val valuesAsList: List<*> = valueOrNull(propertyName) ?: return defaultValue
-    if (valuesAsList.all { it is String }) {
-        return ValuesWithReason(values = valuesAsList.map { ValueWithReason(it as String) })
-    }
-    if (valuesAsList.all { it is Map<*, *> }) {
-        return ValuesWithReason(
-            valuesAsList
-                .map { it as Map<*, *> }
-                .map { dict ->
-                    try {
-                        ValueWithReason(
-                            value = dict["value"] as String,
-                            reason = dict["reason"] as String?
-                        )
-                    } catch (e: ClassCastException) {
-                        throw Config.InvalidConfigurationError(e)
-                    } catch (@Suppress("TooGenericExceptionCaught") e: NullPointerException) {
-                        throw Config.InvalidConfigurationError(e)
-                    }
-                }
+    if (!valuesAsList.all { it is String || it is Map<*, *> }) {
+        error(
+            "Only lists of strings and/or maps with keys 'value' and 'reason' are supported. " +
+                "'$propertyName' is invalid."
         )
     }
-    error("Only lists of strings or maps with keys 'value' and 'reason' are supported. '$propertyName' is invalid.")
+    return ValuesWithReason(
+        valuesAsList.map {
+            if (it is String) {
+                ValueWithReason(it)
+            } else {
+                val mapValue = it as Map<*, *>
+                try {
+                    ValueWithReason(
+                        value = mapValue["value"] as String,
+                        reason = mapValue["reason"] as String?
+                    )
+                } catch (e: ClassCastException) {
+                    throw Config.InvalidConfigurationError(e)
+                } catch (@Suppress("TooGenericExceptionCaught") e: NullPointerException) {
+                    throw Config.InvalidConfigurationError(e)
+                }
+            }
+        }
+    )
 }
 
 private abstract class MemoizedConfigProperty<U : Any> : ReadOnlyProperty<Rule, U> {
@@ -171,7 +175,7 @@ private abstract class MemoizedConfigProperty<U : Any> : ReadOnlyProperty<Rule, 
 private class TransformedConfigPropertyWithAndroidVariants<T : Any, U : Any>(
     private val defaultValue: T,
     private val defaultAndroidValue: T,
-    private val transform: (T) -> U
+    private val transform: (T) -> U,
 ) : MemoizedConfigProperty<U>() {
     override fun doGetValue(thisRef: Rule, property: KProperty<*>): U {
         val rulesetConfig = requireNotNull(thisRef.config.parent) {
@@ -185,7 +189,7 @@ private class TransformedConfigPropertyWithAndroidVariants<T : Any, U : Any>(
 
 private class TransformedConfigProperty<T : Any, U : Any>(
     private val defaultValue: T,
-    private val transform: (T) -> U
+    private val transform: (T) -> U,
 ) : MemoizedConfigProperty<U>() {
     override fun doGetValue(thisRef: Rule, property: KProperty<*>): U =
         transform(getValueOrDefault(thisRef.config, property.name, defaultValue))
@@ -194,7 +198,7 @@ private class TransformedConfigProperty<T : Any, U : Any>(
 private class FallbackConfigProperty<T : Any, U : Any>(
     private val fallbackProperty: KProperty0<U>,
     private val defaultValue: T,
-    private val transform: (T) -> U
+    private val transform: (T) -> U,
 ) : MemoizedConfigProperty<U>() {
     override fun doGetValue(thisRef: Rule, property: KProperty<*>): U {
         if (thisRef.config.isConfigured(property.name)) {

@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -19,7 +19,7 @@ class EqualsWithHashCodeExistSpec {
                     override fun hashCode(): Int { return super.hashCode() }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
 
         @Test
@@ -29,7 +29,7 @@ class EqualsWithHashCodeExistSpec {
                     override fun equals(other: Any?): Boolean { return super.equals(other) }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
 
         @Test
@@ -40,7 +40,7 @@ class EqualsWithHashCodeExistSpec {
                     override fun hashCode(): Int { return super.hashCode() }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
 
         @Test
@@ -51,7 +51,7 @@ class EqualsWithHashCodeExistSpec {
                     fun hashCode(i: Int): Int { return super.hashCode() }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
 
         @Test
@@ -66,7 +66,7 @@ class EqualsWithHashCodeExistSpec {
                     override fun hashCode(): Int { return super.hashCode() }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
 
         @Test
@@ -81,7 +81,7 @@ class EqualsWithHashCodeExistSpec {
                     override fun hashCode(i: Int): Int { return super.hashCode() }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
 
         @Test
@@ -92,7 +92,7 @@ class EqualsWithHashCodeExistSpec {
                     override fun hashCode(): Int { return super.hashCode() }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -103,7 +103,7 @@ class EqualsWithHashCodeExistSpec {
                     override fun hashCode(): Int { return super.hashCode() }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -120,7 +120,7 @@ class EqualsWithHashCodeExistSpec {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -137,7 +137,7 @@ class EqualsWithHashCodeExistSpec {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
     }
 
@@ -153,7 +153,7 @@ class EqualsWithHashCodeExistSpec {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
     }
 }

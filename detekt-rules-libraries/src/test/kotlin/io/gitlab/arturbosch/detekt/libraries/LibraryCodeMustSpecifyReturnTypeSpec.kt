@@ -1,18 +1,18 @@
 package io.gitlab.arturbosch.detekt.libraries
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
 @KotlinCoreEnvironmentTest
-class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
+class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinEnvironmentContainer) {
     @Nested
     inner class `positive cases` {
         val subject = LibraryCodeMustSpecifyReturnType(Config.empty)
@@ -20,7 +20,7 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `should report a top level function`() {
             assertThat(
-                subject.compileAndLintWithContext(
+                subject.lintWithContext(
                     env,
                     """
                         fun foo() = 5
@@ -32,7 +32,7 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `should report a top level function returning Unit with default allowOmitUnit value of false`() {
             assertThat(
-                subject.compileAndLintWithContext(
+                subject.lintWithContext(
                     env,
                     """
                         fun foo() = println("")
@@ -45,7 +45,7 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
         fun `should report a top level function returning Unit when allowOmitUnit is false`() {
             val subject = LibraryCodeMustSpecifyReturnType(TestConfig(ALLOW_OMIT_UNIT to false))
             assertThat(
-                subject.compileAndLintWithContext(
+                subject.lintWithContext(
                     env,
                     """
                         fun foo() = println("")
@@ -57,7 +57,7 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `should report a top level property`() {
             assertThat(
-                subject.compileAndLintWithContext(
+                subject.lintWithContext(
                     env,
                     """
                         val foo = 5
@@ -69,7 +69,7 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `should report a public class with public members`() {
             assertThat(
-                subject.compileAndLintWithContext(
+                subject.lintWithContext(
                     env,
                     """
                         class A {
@@ -84,7 +84,7 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `should report a public class with protected members`() {
             assertThat(
-                subject.compileAndLintWithContext(
+                subject.lintWithContext(
                     env,
                     """
                         open class A {
@@ -104,7 +104,7 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `should not report a top level function`() {
             assertThat(
-                subject.compileAndLintWithContext(
+                subject.lintWithContext(
                     env,
                     """
                         fun foo(): Int = 5
@@ -116,7 +116,7 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `should not report a non expression function`() {
             assertThat(
-                subject.compileAndLintWithContext(
+                subject.lintWithContext(
                     env,
                     """
                         fun foo() {}
@@ -129,7 +129,7 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
         fun `should not report a top level function returning Unit when allowOmitUnit is true`() {
             val subject = LibraryCodeMustSpecifyReturnType(TestConfig(ALLOW_OMIT_UNIT to true))
             assertThat(
-                subject.compileAndLintWithContext(
+                subject.lintWithContext(
                     env,
                     """
                         fun foo() = println("")
@@ -141,7 +141,7 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `should not report a top level property`() {
             assertThat(
-                subject.compileAndLintWithContext(
+                subject.lintWithContext(
                     env,
                     """
                         val foo: Int = 5
@@ -153,7 +153,7 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `should not report a public class with public members`() {
             assertThat(
-                subject.compileAndLintWithContext(
+                subject.lintWithContext(
                     env,
                     """
                         class A {
@@ -178,7 +178,7 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
                     ALLOW_OMIT_UNIT to allowOmitUnit
                 )
             )
-            val findings = subject.compileAndLintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
     }
@@ -190,7 +190,7 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `should not report a private top level function`() {
             assertThat(
-                subject.compileAndLintWithContext(
+                subject.lintWithContext(
                     env,
                     """
                         internal fun bar() = 5
@@ -203,7 +203,7 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `should not report a internal top level property`() {
             assertThat(
-                subject.compileAndLintWithContext(
+                subject.lintWithContext(
                     env,
                     """
                         internal val foo = 5
@@ -215,7 +215,7 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `should not report members and local variables`() {
             assertThat(
-                subject.compileAndLintWithContext(
+                subject.lintWithContext(
                     env,
                     """
                         internal class A {
@@ -233,7 +233,7 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `should not report effectively private properties and functions`() {
             assertThat(
-                subject.compileAndLintWithContext(
+                subject.lintWithContext(
                     env,
                     """
                         internal class A {

@@ -1,6 +1,6 @@
-public final class io/gitlab/arturbosch/detekt/test/FakeCompilerResourcesKt {
-	public static final fun FakeCompilerResources (Lorg/jetbrains/kotlin/config/ExplicitApiMode;)Lio/gitlab/arturbosch/detekt/api/CompilerResources;
-	public static synthetic fun FakeCompilerResources$default (Lorg/jetbrains/kotlin/config/ExplicitApiMode;ILjava/lang/Object;)Lio/gitlab/arturbosch/detekt/api/CompilerResources;
+public final class io/gitlab/arturbosch/detekt/test/FakeLanguageVersionSettingsKt {
+	public static final fun FakeLanguageVersionSettings (Lorg/jetbrains/kotlin/config/ExplicitApiMode;)Lorg/jetbrains/kotlin/config/LanguageVersionSettingsImpl;
+	public static synthetic fun FakeLanguageVersionSettings$default (Lorg/jetbrains/kotlin/config/ExplicitApiMode;ILjava/lang/Object;)Lorg/jetbrains/kotlin/config/LanguageVersionSettingsImpl;
 }
 
 public final class io/gitlab/arturbosch/detekt/test/FindingAssert : org/assertj/core/api/AbstractAssert {
@@ -8,6 +8,7 @@ public final class io/gitlab/arturbosch/detekt/test/FindingAssert : org/assertj/
 	public final fun getActual ()Lio/gitlab/arturbosch/detekt/api/Finding;
 	public final fun hasMessage (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/test/FindingAssert;
 	public final fun hasSourceLocation (II)Lio/gitlab/arturbosch/detekt/test/FindingAssert;
+	public final fun noSuppress ()Lio/gitlab/arturbosch/detekt/test/FindingAssert;
 }
 
 public final class io/gitlab/arturbosch/detekt/test/FindingExtensionsKt {
@@ -32,7 +33,7 @@ public final class io/gitlab/arturbosch/detekt/test/FindingsAssertionsKt {
 }
 
 public final class io/gitlab/arturbosch/detekt/test/KotlinCoreEnvironmentExtensionsKt {
-	public static final fun createBindingContext (Lorg/jetbrains/kotlin/cli/jvm/compiler/KotlinCoreEnvironment;Ljava/util/List;)Lorg/jetbrains/kotlin/resolve/BindingContext;
+	public static final fun createBindingContext (Lio/github/detekt/test/utils/KotlinEnvironmentContainer;Ljava/util/List;)Lorg/jetbrains/kotlin/resolve/BindingContext;
 }
 
 public final class io/gitlab/arturbosch/detekt/test/ResourcesKt {
@@ -41,16 +42,14 @@ public final class io/gitlab/arturbosch/detekt/test/ResourcesKt {
 }
 
 public final class io/gitlab/arturbosch/detekt/test/RuleExtensionsKt {
-	public static final fun compileAndLint (Lio/gitlab/arturbosch/detekt/api/Rule;Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/CompilerResources;)Ljava/util/List;
-	public static synthetic fun compileAndLint$default (Lio/gitlab/arturbosch/detekt/api/Rule;Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/CompilerResources;ILjava/lang/Object;)Ljava/util/List;
-	public static final fun compileAndLintWithContext (Lio/gitlab/arturbosch/detekt/api/Rule;Lorg/jetbrains/kotlin/cli/jvm/compiler/KotlinCoreEnvironment;Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/CompilerResources;)Ljava/util/List;
-	public static synthetic fun compileAndLintWithContext$default (Lio/gitlab/arturbosch/detekt/api/Rule;Lorg/jetbrains/kotlin/cli/jvm/compiler/KotlinCoreEnvironment;Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/CompilerResources;ILjava/lang/Object;)Ljava/util/List;
-	public static final fun lint (Lio/gitlab/arturbosch/detekt/api/Rule;Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/CompilerResources;)Ljava/util/List;
-	public static final fun lint (Lio/gitlab/arturbosch/detekt/api/Rule;Lorg/jetbrains/kotlin/psi/KtFile;Lio/gitlab/arturbosch/detekt/api/CompilerResources;)Ljava/util/List;
-	public static synthetic fun lint$default (Lio/gitlab/arturbosch/detekt/api/Rule;Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/CompilerResources;ILjava/lang/Object;)Ljava/util/List;
-	public static synthetic fun lint$default (Lio/gitlab/arturbosch/detekt/api/Rule;Lorg/jetbrains/kotlin/psi/KtFile;Lio/gitlab/arturbosch/detekt/api/CompilerResources;ILjava/lang/Object;)Ljava/util/List;
-	public static final fun lintWithContext (Lio/gitlab/arturbosch/detekt/api/Rule;Lorg/jetbrains/kotlin/cli/jvm/compiler/KotlinCoreEnvironment;Ljava/lang/String;[Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/CompilerResources;)Ljava/util/List;
-	public static synthetic fun lintWithContext$default (Lio/gitlab/arturbosch/detekt/api/Rule;Lorg/jetbrains/kotlin/cli/jvm/compiler/KotlinCoreEnvironment;Ljava/lang/String;[Ljava/lang/String;Lio/gitlab/arturbosch/detekt/api/CompilerResources;ILjava/lang/Object;)Ljava/util/List;
+	public static final fun lint (Lio/gitlab/arturbosch/detekt/api/Rule;Ljava/lang/String;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;Z)Ljava/util/List;
+	public static final fun lint (Lio/gitlab/arturbosch/detekt/api/Rule;Lorg/jetbrains/kotlin/psi/KtFile;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;)Ljava/util/List;
+	public static synthetic fun lint$default (Lio/gitlab/arturbosch/detekt/api/Rule;Ljava/lang/String;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;ZILjava/lang/Object;)Ljava/util/List;
+	public static synthetic fun lint$default (Lio/gitlab/arturbosch/detekt/api/Rule;Lorg/jetbrains/kotlin/psi/KtFile;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;ILjava/lang/Object;)Ljava/util/List;
+	public static final fun lintWithContext (Lio/gitlab/arturbosch/detekt/api/Rule;Lio/github/detekt/test/utils/KotlinEnvironmentContainer;Ljava/lang/String;[Ljava/lang/String;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;Z)Ljava/util/List;
+	public static final fun lintWithContext (Lio/gitlab/arturbosch/detekt/api/Rule;Lio/github/detekt/test/utils/KotlinEnvironmentContainer;Ljava/lang/String;[Ljava/lang/String;Z)Ljava/util/List;
+	public static synthetic fun lintWithContext$default (Lio/gitlab/arturbosch/detekt/api/Rule;Lio/github/detekt/test/utils/KotlinEnvironmentContainer;Ljava/lang/String;[Ljava/lang/String;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;ZILjava/lang/Object;)Ljava/util/List;
+	public static synthetic fun lintWithContext$default (Lio/gitlab/arturbosch/detekt/api/Rule;Lio/github/detekt/test/utils/KotlinEnvironmentContainer;Ljava/lang/String;[Ljava/lang/String;ZILjava/lang/Object;)Ljava/util/List;
 }
 
 public final class io/gitlab/arturbosch/detekt/test/TestConfig : io/gitlab/arturbosch/detekt/api/Config {

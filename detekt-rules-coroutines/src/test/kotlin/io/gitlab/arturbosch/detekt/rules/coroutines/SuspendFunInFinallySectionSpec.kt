@@ -1,15 +1,15 @@
 package io.gitlab.arturbosch.detekt.rules.coroutines
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class SuspendFunInFinallySectionSpec(private val env: KotlinCoreEnvironment) {
+class SuspendFunInFinallySectionSpec(private val env: KotlinEnvironmentContainer) {
     private val subject = SuspendFunInFinallySection(Config.empty)
 
     @Test
@@ -32,7 +32,7 @@ class SuspendFunInFinallySectionSpec(private val env: KotlinCoreEnvironment) {
         """.trimIndent()
 
         assertFindingsForSuspendCall(
-            findings = subject.compileAndLintWithContext(env, code),
+            findings = subject.lintWithContext(env, code),
             "test".find(1)(code),
             "test".find(2)(code)
         )
@@ -61,7 +61,7 @@ class SuspendFunInFinallySectionSpec(private val env: KotlinCoreEnvironment) {
         """.trimIndent()
 
         assertFindingsForSuspendCall(
-            findings = subject.compileAndLintWithContext(env, code),
+            findings = subject.lintWithContext(env, code),
             *NOTHING
         )
     }
@@ -85,7 +85,7 @@ class SuspendFunInFinallySectionSpec(private val env: KotlinCoreEnvironment) {
         """.trimIndent()
 
         assertFindingsForSuspendCall(
-            findings = subject.compileAndLintWithContext(env, code),
+            findings = subject.lintWithContext(env, code),
             "test".find(1)(code),
             "withContext".find(1)(code),
         )
@@ -110,7 +110,7 @@ class SuspendFunInFinallySectionSpec(private val env: KotlinCoreEnvironment) {
         """.trimIndent()
 
         assertFindingsForSuspendCall(
-            findings = subject.compileAndLintWithContext(env, code),
+            findings = subject.lintWithContext(env, code),
             *NOTHING
         )
     }
@@ -143,7 +143,7 @@ class SuspendFunInFinallySectionSpec(private val env: KotlinCoreEnvironment) {
         """.trimIndent()
 
         assertFindingsForSuspendCall(
-            findings = subject.compileAndLintWithContext(env, code),
+            findings = subject.lintWithContext(env, code),
             "wrapper".find(2)(code),
             "test".find(1)(code),
             "block".find(2)(code),

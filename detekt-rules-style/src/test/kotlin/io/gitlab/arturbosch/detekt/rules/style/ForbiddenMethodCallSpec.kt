@@ -1,18 +1,18 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 private const val METHODS = "methods"
 
 @KotlinCoreEnvironmentTest
-class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
+class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
 
     @Test
     fun `should report kotlin print usages by default`() {
@@ -22,7 +22,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
                 println("4")
             }
         """.trimIndent()
-        val findings = ForbiddenMethodCall(TestConfig()).compileAndLintWithContext(env, code)
+        val findings = ForbiddenMethodCall(TestConfig()).lintWithContext(env, code)
 
         assertThat(findings)
             .hasSize(2)
@@ -47,7 +47,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("  "))
-        ).compileAndLintWithContext(env, code)
+        ).lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
@@ -61,7 +61,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("java.lang.System.gc"))
-        ).compileAndLintWithContext(env, code)
+        ).lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
@@ -74,7 +74,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("java.io.PrintStream.println"))
-        ).compileAndLintWithContext(env, code)
+        ).lintWithContext(env, code)
         assertThat(findings).hasSize(1)
         assertThat(findings).hasTextLocations(38 to 54)
     }
@@ -89,7 +89,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("java.io.PrintStream.println"))
-        ).compileAndLintWithContext(env, code)
+        ).lintWithContext(env, code)
         assertThat(findings).hasSize(1)
         assertThat(findings).hasTextLocations(49 to 65)
     }
@@ -110,7 +110,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
                     "java.lang.System.gc",
                 )
             )
-        ).compileAndLintWithContext(env, code)
+        ).lintWithContext(env, code)
         assertThat(findings).hasSize(2)
         assertThat(findings).hasTextLocations(48 to 64, 76 to 80)
     }
@@ -124,7 +124,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("java.math.BigDecimal.equals"))
-        ).compileAndLintWithContext(env, code)
+        ).lintWithContext(env, code)
         assertThat(findings).hasSize(1)
     }
 
@@ -138,7 +138,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("kotlin.Int.inc"))
-        ).compileAndLintWithContext(env, code)
+        ).lintWithContext(env, code)
         assertThat(findings).hasSize(1)
     }
 
@@ -152,7 +152,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("kotlin.Int.dec"))
-        ).compileAndLintWithContext(env, code)
+        ).lintWithContext(env, code)
         assertThat(findings).hasSize(1)
     }
 
@@ -169,7 +169,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("java.time.LocalDate.now"))
-        ).compileAndLintWithContext(env, code)
+        ).lintWithContext(env, code)
         assertThat(findings).hasSize(2)
     }
 
@@ -186,7 +186,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("java.time.LocalDate.now()"))
-        ).compileAndLintWithContext(env, code)
+        ).lintWithContext(env, code)
         assertThat(findings).hasStartSourceLocation(5, 26)
         assertThat(findings).singleElement()
             .hasMessage("The method `java.time.LocalDate.now()` has been forbidden in the detekt config.")
@@ -205,7 +205,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("java.time.LocalDate.now(java.time.Clock)"))
-        ).compileAndLintWithContext(env, code)
+        ).lintWithContext(env, code)
         assertThat(findings).hasSize(1)
         assertThat(findings).hasStartSourceLocation(6, 27)
     }
@@ -220,7 +220,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("java.time.LocalDate.of(kotlin.Int, kotlin.Int, kotlin.Int)"))
-        ).compileAndLintWithContext(env, code)
+        ).lintWithContext(env, code)
         assertThat(findings).hasSize(1)
         assertThat(findings).hasStartSourceLocation(3, 26)
     }
@@ -235,7 +235,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("java.time.LocalDate.of(kotlin.Int,kotlin.Int,kotlin.Int)"))
-        ).compileAndLintWithContext(env, code)
+        ).lintWithContext(env, code)
         assertThat(findings).hasSize(1)
         assertThat(findings).hasStartSourceLocation(3, 26)
     }
@@ -253,7 +253,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("io.gitlab.arturbosch.detekt.rules.style.`some, test`()"))
-        ).compileAndLintWithContext(env, code)
+        ).lintWithContext(env, code)
         assertThat(findings).hasSize(1)
         assertThat(findings).hasStartSourceLocation(6, 13)
     }
@@ -274,7 +274,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
                 METHODS to
                     listOf("io.gitlab.arturbosch.detekt.rules.style.defaultParamsMethod(kotlin.String,kotlin.Int)")
             )
-        ).compileAndLintWithContext(env, code)
+        ).lintWithContext(env, code)
         assertThat(findings).hasSize(1)
         assertThat(findings).hasStartSourceLocation(6, 13)
     }
@@ -292,7 +292,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val methodName = "io.gitlab.arturbosch.detekt.rules.style.arrayMethod(kotlin.Array)"
         val findings = ForbiddenMethodCall(TestConfig(METHODS to listOf(methodName)))
-            .compileAndLintWithContext(env, code)
+            .lintWithContext(env, code)
         assertThat(findings).hasSize(1).hasStartSourceLocation(6, 13)
     }
 
@@ -309,7 +309,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val methodName = "io.gitlab.arturbosch.detekt.rules.style.listMethod(kotlin.collections.List)"
         val findings = ForbiddenMethodCall(TestConfig(METHODS to listOf(methodName)))
-            .compileAndLintWithContext(env, code)
+            .lintWithContext(env, code)
         assertThat(findings).hasSize(1).hasStartSourceLocation(6, 13)
     }
 
@@ -318,16 +318,18 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
         val code = """
             package io.gitlab.arturbosch.detekt.rules.style
             
-            fun varargMethod(vararg args: Any) = args.size
+            fun varargMethod(vararg args: Int) = args.size
+            fun varargMethod(vararg args: String) = args.size
             
             fun test() {
-                val s = varargMethod(arrayOf("test"))
+                val s = varargMethod(1, 2)
+                val r = varargMethod("test")
             }
         """.trimIndent()
-        val methodName = "io.gitlab.arturbosch.detekt.rules.style.varargMethod(kotlin.Array)"
+        val methodName = "io.gitlab.arturbosch.detekt.rules.style.varargMethod(vararg kotlin.String)"
         val findings = ForbiddenMethodCall(TestConfig(METHODS to listOf(methodName)))
-            .compileAndLintWithContext(env, code)
-        assertThat(findings).hasSize(1).hasStartSourceLocation(6, 13)
+            .lintWithContext(env, code)
+        assertThat(findings).hasSize(1).hasStartSourceLocation(8, 13)
     }
 
     @Test
@@ -347,7 +349,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val methodName = "io.gitlab.arturbosch.detekt.rules.style.TestClass.Companion.staticMethod()"
         val findings = ForbiddenMethodCall(TestConfig(METHODS to listOf(methodName)))
-            .compileAndLintWithContext(env, code)
+            .lintWithContext(env, code)
         assertThat(findings).hasSize(1).hasStartSourceLocation(10, 15)
     }
 
@@ -369,7 +371,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val methodName = "io.gitlab.arturbosch.detekt.rules.style.TestClass.Companion.staticMethod()"
         val findings = ForbiddenMethodCall(TestConfig(METHODS to listOf(methodName)))
-            .compileAndLintWithContext(env, code)
+            .lintWithContext(env, code)
         assertThat(findings).hasSize(1).hasStartSourceLocation(11, 15)
     }
 
@@ -393,7 +395,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("org.example.com.I.f"))
-        ).compileAndLintWithContext(env, code)
+        ).lintWithContext(env, code)
         assertThat(findings).hasSize(2)
     }
 
@@ -408,7 +410,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("java.util.Comparator.reversed"))
-        ).compileAndLintWithContext(env, code)
+        ).lintWithContext(env, code)
         assertThat(findings).hasSize(1)
     }
 
@@ -429,7 +431,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("java.util.Comparator.reversed"))
-        ).compileAndLintWithContext(env, code)
+        ).lintWithContext(env, code)
         assertThat(findings).hasSize(1)
     }
 
@@ -457,7 +459,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("java.util.Comparator.reversed"))
-        ).compileAndLintWithContext(env, code)
+        ).lintWithContext(env, code)
         assertThat(findings).hasSize(2)
     }
 
@@ -485,7 +487,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("java.util.Comparator.reversed"))
-        ).compileAndLintWithContext(env, code)
+        ).lintWithContext(env, code)
         assertThat(findings).hasSize(1)
     }
 
@@ -502,7 +504,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("org.example.bar((kotlin.String) -> kotlin.String)"))
-        ).compileAndLintWithContext(env, code)
+        ).lintWithContext(env, code)
         assertThat(findings).hasSize(1)
     }
 
@@ -519,7 +521,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("org.example.bar(kotlin.String)"))
-        ).compileAndLintWithContext(env, code)
+        ).lintWithContext(env, code)
         assertThat(findings).hasSize(1)
     }
 
@@ -539,7 +541,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
         fun `raise the issue`() {
             val findings = ForbiddenMethodCall(
                 TestConfig(METHODS to listOf("org.example.bar(T, U, kotlin.String)"))
-            ).compileAndLintWithContext(env, code)
+            ).lintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
 
@@ -547,7 +549,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
         fun `It doesn't raise any issue because the generics don't match`() {
             val findings = ForbiddenMethodCall(
                 TestConfig(METHODS to listOf("org.example.bar(U, T, kotlin.String)"))
-            ).compileAndLintWithContext(env, code)
+            ).lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
     }
@@ -568,7 +570,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
         fun `raise the issue`() {
             val findings = ForbiddenMethodCall(
                 TestConfig(METHODS to listOf("org.example.bar(R, kotlin.String)"))
-            ).compileAndLintWithContext(env, code)
+            ).lintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
 
@@ -576,7 +578,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
         fun `It doesn't raise any issue because the type doesn't match`() {
             val findings = ForbiddenMethodCall(
                 TestConfig(METHODS to listOf("org.example.bar(kotlin.Int, kotlin.String)"))
-            ).compileAndLintWithContext(env, code)
+            ).lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
     }
@@ -598,7 +600,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
         fun `forbid the one without receiver`() {
             val findings = ForbiddenMethodCall(
                 TestConfig(METHODS to listOf("kotlin.runCatching(() -> R)"))
-            ).compileAndLintWithContext(env, code)
+            ).lintWithContext(env, code)
             assertThat(findings)
                 .hasSize(1)
                 .hasStartSourceLocation(5, 16)
@@ -608,7 +610,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
         fun `forbid the one with receiver`() {
             val findings = ForbiddenMethodCall(
                 TestConfig(METHODS to listOf("kotlin.runCatching(T, (T) -> R)"))
-            ).compileAndLintWithContext(env, code)
+            ).lintWithContext(env, code)
             assertThat(findings)
                 .hasSize(1)
                 .hasStartSourceLocation(6, 9)
@@ -630,7 +632,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
             """.trimIndent()
             val findings = ForbiddenMethodCall(
                 TestConfig(METHODS to listOf("java.util.Calendar.getFirstDayOfWeek"))
-            ).compileAndLintWithContext(env, code)
+            ).lintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
 
@@ -646,7 +648,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
             """.trimIndent()
             val findings = ForbiddenMethodCall(
                 TestConfig(METHODS to listOf("java.util.Calendar.getFirstDayOfWeek"))
-            ).compileAndLintWithContext(env, code)
+            ).lintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
     }
@@ -663,7 +665,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("java.util.Calendar.setFirstDayOfWeek"))
-        ).compileAndLintWithContext(env, code)
+        ).lintWithContext(env, code)
         assertThat(findings).hasSize(1)
     }
 
@@ -679,7 +681,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
         """.trimIndent()
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("java.util.Calendar.compareTo"))
-        ).compileAndLintWithContext(env, code)
+        ).lintWithContext(env, code)
         assertThat(findings).hasSize(1)
     }
 
@@ -696,7 +698,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
                 """.trimIndent()
                 val findings = ForbiddenMethodCall(
                     TestConfig(METHODS to listOf("java.util.Date.<init>"))
-                ).compileAndLintWithContext(env, code)
+                ).lintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
 
@@ -709,7 +711,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
                 """.trimIndent()
                 val findings = ForbiddenMethodCall(
                     TestConfig(METHODS to listOf("java.util.Date.<init>"))
-                ).compileAndLintWithContext(env, code)
+                ).lintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
         }
@@ -725,7 +727,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
                 """.trimIndent()
                 val findings = ForbiddenMethodCall(
                     TestConfig(METHODS to listOf("java.util.Date.<init>()"))
-                ).compileAndLintWithContext(env, code)
+                ).lintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
 
@@ -738,7 +740,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
                 """.trimIndent()
                 val findings = ForbiddenMethodCall(
                     TestConfig(METHODS to listOf("java.util.Date.<init>(kotlin.Int, kotlin.Int, kotlin.Int)"))
-                ).compileAndLintWithContext(env, code)
+                ).lintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
 
@@ -749,7 +751,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
 
                     val x = BigDecimal(3.14)
                 """.trimIndent()
-                val findings = ForbiddenMethodCall(TestConfig()).compileAndLintWithContext(env, code)
+                val findings = ForbiddenMethodCall(TestConfig()).lintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
 
@@ -760,7 +762,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
 
                     val x = BigDecimal("3.14")
                 """.trimIndent()
-                val findings = ForbiddenMethodCall(TestConfig()).compileAndLintWithContext(env, code)
+                val findings = ForbiddenMethodCall(TestConfig()).lintWithContext(env, code)
                 assertThat(findings).hasSize(1)
                 assertThat(findings.first()).hasMessage(
                     "The method `java.math.BigDecimal.<init>(kotlin.String)` has " +
@@ -774,7 +776,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
                 val code = """
                     val x = "3.14".toBigDecimalOrNull()
                 """.trimIndent()
-                val findings = ForbiddenMethodCall(TestConfig()).compileAndLintWithContext(env, code)
+                val findings = ForbiddenMethodCall(TestConfig()).lintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
 
@@ -785,7 +787,7 @@ class ForbiddenMethodCallSpec(val env: KotlinCoreEnvironment) {
 
                     val x = BigDecimal(3)
                 """.trimIndent()
-                val findings = ForbiddenMethodCall(TestConfig()).compileAndLintWithContext(env, code)
+                val findings = ForbiddenMethodCall(TestConfig()).lintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
         }

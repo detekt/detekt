@@ -1,15 +1,15 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class CastNullableToNonNullableTypeSpec(private val env: KotlinCoreEnvironment) {
+class CastNullableToNonNullableTypeSpec(private val env: KotlinEnvironmentContainer) {
     private val subject = CastNullableToNonNullableType(Config.empty)
 
     @Test
@@ -19,7 +19,7 @@ class CastNullableToNonNullableTypeSpec(private val env: KotlinCoreEnvironment) 
                 val x = bar as String
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).singleElement().hasMessage(
             "Use separate `null` assertion and type cast like " +
                 "('(bar ?: error(\"null assertion message\")) as String') instead of 'bar as String'."
@@ -38,7 +38,7 @@ class CastNullableToNonNullableTypeSpec(private val env: KotlinCoreEnvironment) 
                 return null
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).singleElement().hasMessage(
             "Use separate `null` assertion and type cast like " +
                 "('(bar() ?: error(\"null assertion message\")) as Int') instead of 'bar() as Int'."
@@ -57,7 +57,7 @@ class CastNullableToNonNullableTypeSpec(private val env: KotlinCoreEnvironment) 
                 }
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
@@ -76,7 +76,7 @@ class CastNullableToNonNullableTypeSpec(private val env: KotlinCoreEnvironment) 
             TestConfig(
                 IGNORE_PLATFORM_TYPES to true
             )
-        ).compileAndLintWithContext(env, code)
+        ).lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
@@ -95,7 +95,7 @@ class CastNullableToNonNullableTypeSpec(private val env: KotlinCoreEnvironment) 
             TestConfig(
                 IGNORE_PLATFORM_TYPES to false
             )
-        ).compileAndLintWithContext(env, code)
+        ).lintWithContext(env, code)
         assertThat(findings).hasSize(1)
     }
 
@@ -108,7 +108,7 @@ class CastNullableToNonNullableTypeSpec(private val env: KotlinCoreEnvironment) 
                 }
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
@@ -119,7 +119,7 @@ class CastNullableToNonNullableTypeSpec(private val env: KotlinCoreEnvironment) 
                 val x = (bar ?: error("null assertion message")) as String
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
@@ -130,7 +130,7 @@ class CastNullableToNonNullableTypeSpec(private val env: KotlinCoreEnvironment) 
                 val x = bar!! as String
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
@@ -141,7 +141,7 @@ class CastNullableToNonNullableTypeSpec(private val env: KotlinCoreEnvironment) 
                 val x = bar as String?
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
@@ -152,7 +152,7 @@ class CastNullableToNonNullableTypeSpec(private val env: KotlinCoreEnvironment) 
                 val x = bar as? String
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
@@ -163,7 +163,7 @@ class CastNullableToNonNullableTypeSpec(private val env: KotlinCoreEnvironment) 
                 val x = null as String
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
@@ -177,7 +177,7 @@ class CastNullableToNonNullableTypeSpec(private val env: KotlinCoreEnvironment) 
                 array[0] as T
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
@@ -191,7 +191,7 @@ class CastNullableToNonNullableTypeSpec(private val env: KotlinCoreEnvironment) 
                 array[0] as T
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).singleElement().hasMessage(
             "Use separate `null` assertion and type cast like " +
                 "('(array[0] ?: error(\"null assertion message\")) as T') instead of 'array[0] as T'."

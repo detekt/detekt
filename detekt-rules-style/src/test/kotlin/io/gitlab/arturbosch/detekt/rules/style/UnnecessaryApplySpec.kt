@@ -1,15 +1,15 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
+class UnnecessaryApplySpec(val env: KotlinEnvironmentContainer) {
 
     val subject = UnnecessaryApply(Config.empty)
 
@@ -18,7 +18,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
 
         @Test
         fun `reports an apply on non-nullable type`() {
-            val findings = subject.compileAndLintWithContext(
+            val findings = subject.lintWithContext(
                 env,
                 """
                     fun f() {
@@ -35,7 +35,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
 
         @Test
         fun `reports an apply on nullable type`() {
-            val findings = subject.compileAndLintWithContext(
+            val findings = subject.lintWithContext(
                 env,
                 """
                     fun f() {
@@ -55,7 +55,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `reports a false negative apply on nullable type - #1485`() {
             assertThat(
-                subject.compileAndLintWithContext(
+                subject.lintWithContext(
                     env,
                     """
                         val a: Any? = Any()
@@ -74,7 +74,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report an apply with lambda block`() {
             assertThat(
-                subject.compileAndLintWithContext(
+                subject.lintWithContext(
                     env,
                     """
                         fun f() {
@@ -91,7 +91,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report single statement in apply used as function argument`() {
             assertThat(
-                subject.compileAndLintWithContext(
+                subject.lintWithContext(
                     env,
                     """
                         fun b(i: Int?) {}
@@ -110,7 +110,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report single assignment statement in apply used as function argument - #1517`() {
             assertThat(
-                subject.compileAndLintWithContext(
+                subject.lintWithContext(
                     env,
                     """
                         class C {
@@ -137,7 +137,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report if result of apply is used - #2938`() {
             assertThat(
-                subject.compileAndLintWithContext(
+                subject.lintWithContext(
                     env,
                     """
                         fun main() {
@@ -152,7 +152,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report applies with lambda body containing more than one statement`() {
             assertThat(
-                subject.compileAndLintWithContext(
+                subject.lintWithContext(
                     env,
                     """
                         fun b(i: Int?) {}
@@ -179,7 +179,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
 
         @Test
         fun `reports when lambda has a dot qualified expression`() {
-            val findings = subject.compileAndLintWithContext(
+            val findings = subject.lintWithContext(
                 env,
                 """
                     fun test(foo: Foo) {
@@ -200,7 +200,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
 
         @Test
         fun `reports when lambda has a dot qualified expression which has 'this' receiver`() {
-            val findings = subject.compileAndLintWithContext(
+            val findings = subject.lintWithContext(
                 env,
                 """
                     fun test(foo: Foo) {
@@ -221,7 +221,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
 
         @Test
         fun `reports when lambda has a 'this' expression`() {
-            val findings = subject.compileAndLintWithContext(
+            val findings = subject.lintWithContext(
                 env,
                 """
                     fun test() {
@@ -240,7 +240,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `reports apply with a single assignment whose result is unused`() {
             assertThat(
-                subject.compileAndLintWithContext(
+                subject.lintWithContext(
                     env,
                     """
                         class C {
@@ -261,7 +261,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `does not report apply with a single assignment whose result is used`() {
             assertThat(
-                subject.compileAndLintWithContext(
+                subject.lintWithContext(
                     env,
                     """
                         class C {
@@ -285,7 +285,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `is used within an assignment expr itself`() {
             assertThat(
-                subject.compileAndLintWithContext(
+                subject.lintWithContext(
                     env,
                     """
                         class C {
@@ -301,7 +301,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `is used as return type of extension function`() {
             assertThat(
-                subject.compileAndLintWithContext(
+                subject.lintWithContext(
                     env,
                     """
                         class C(var prop: Int)
@@ -315,7 +315,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `should not flag apply when assigning property on this`() {
             assertThat(
-                subject.compileAndLintWithContext(
+                subject.lintWithContext(
                     env,
                     """
                         class C(var prop: Int) {
@@ -331,7 +331,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `should not report apply when using it after returning something`() {
             assertThat(
-                subject.compileAndLintWithContext(
+                subject.lintWithContext(
                     env,
                     """
                         class C(var prop: Int)
@@ -345,7 +345,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `should not report apply usage inside safe chained expressions`() {
             assertThat(
-                subject.compileAndLintWithContext(
+                subject.lintWithContext(
                     env,
                     """
                         fun f() {
@@ -366,7 +366,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `should not report the if expression`() {
             assertThat(
-                subject.compileAndLintWithContext(
+                subject.lintWithContext(
                     env,
                     """
                         class C {
@@ -388,7 +388,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `should report reference expressions`() {
             assertThat(
-                subject.compileAndLintWithContext(
+                subject.lintWithContext(
                     env,
                     """
                         class C {
@@ -416,7 +416,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `do not report when it's used as an assignment`() {
             assertThat(
-                subject.compileAndLintWithContext(
+                subject.lintWithContext(
                     env,
                     """
                         class C {
@@ -438,7 +438,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `do not report when it's used as the last statement of a block inside lambda`() {
             assertThat(
-                subject.compileAndLintWithContext(
+                subject.lintWithContext(
                     env,
                     """
                         class C {
@@ -467,7 +467,7 @@ class UnnecessaryApplySpec(val env: KotlinCoreEnvironment) {
         @Test
         fun `do not report when lambda has multiple member references`() {
             assertThat(
-                subject.compileAndLintWithContext(
+                subject.lintWithContext(
                     env,
                     """
                         fun test(foo: Foo) {

@@ -1,13 +1,13 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
+import com.intellij.psi.PsiFile
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
-import org.jetbrains.kotlin.com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtTypeAlias
@@ -77,7 +77,7 @@ class MatchingDeclarationName(config: Config) : Rule(
             if (declarationName != filename && hasNoMatchingTypeAlias(filename)) {
                 val entity = Entity.atName(declaration)
                 report(
-                    CodeSmell(
+                    Finding(
                         Entity(entity.signature, entity.location, file),
                         "The file name '$filename' " +
                             "does not match the name of the single top-level declaration '$declarationName'."

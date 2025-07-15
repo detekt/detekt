@@ -1,19 +1,17 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.isNullable
+import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.types.isNullable
-import org.jetbrains.kotlin.utils.addToStdlib.ifFalse
-import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
+import org.jetbrains.kotlin.psi.KtTypeReference
 
 /**
  * Reports cast of nullable variable to non-null type. Cast like this can hide `null`
@@ -37,11 +35,12 @@ import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
  * }
  * </compliant>
  */
-@RequiresFullAnalysis
-class CastNullableToNonNullableType(config: Config) : Rule(
-    config,
-    "Nullable type to non-null type cast is found. Consider using two assertions, `null` assertions and type cast"
-) {
+class CastNullableToNonNullableType(config: Config) :
+    Rule(
+        config,
+        "Nullable type to non-null type cast is found. Consider using two assertions, `null` assertions and type cast"
+    ),
+    RequiresAnalysisApi {
 
     @Configuration("Whether platform types should be considered as non-nullable and ignored by this rule")
     private val ignorePlatformTypes: Boolean by config(true)
@@ -54,18 +53,18 @@ class CastNullableToNonNullableType(config: Config) : Rule(
         if (operationReference.getReferencedNameElementType() != KtTokens.AS_KEYWORD) return
         if (expression.left.text == KtTokens.NULL_KEYWORD.value) return
         val typeRef = expression.right ?: return
-        val simpleType = bindingContext[BindingContext.TYPE, typeRef] ?: return
-        simpleType.isNullable().ifTrue { return }
-        expression.left.isNullable(
-            bindingContext,
-            compilerResources.languageVersionSettings,
-            compilerResources.dataFlowValueFactory,
-            shouldConsiderPlatformTypeAsNullable = ignorePlatformTypes.not(),
-        ).ifFalse { return }
+        if (typeRef.isNullable()) return
+        if (!expression.left.isNullable(!ignorePlatformTypes)) return
 
         val message =
             "Use separate `null` assertion and type cast like ('(${expression.left.text} ?: " +
                 "error(\"null assertion message\")) as ${typeRef.text}') instead of '${expression.text}'."
-        report(CodeSmell(Entity.from(operationReference), message))
+        report(Finding(Entity.from(operationReference), message))
+    }
+
+    private fun KtTypeReference.isNullable(): Boolean {
+        analyze(this) {
+            return type.canBeNull
+        }
     }
 }

@@ -1,16 +1,17 @@
 package io.gitlab.arturbosch.detekt.rules.coroutines
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
+import com.intellij.psi.PsiElement
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.builtins.StandardNames.COROUTINES_PACKAGE_FQ_NAME
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptorWithSource
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
 import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCatchClause
 import org.jetbrains.kotlin.psi.KtElement
@@ -34,7 +35,6 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.resolve.source.getPsi
 import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
-import org.jetbrains.kotlin.name.Name as KotlinName
 
 /**
  * `suspend` functions should not be called inside `runCatching`'s lambda block, because `runCatching` catches all the
@@ -118,12 +118,13 @@ import org.jetbrains.kotlin.name.Name as KotlinName
  * </compliant>
  *
  */
-@RequiresFullAnalysis
-class SuspendFunSwallowedCancellation(config: Config) : Rule(
-    config,
-    description = "`CancellationException` must be specially handled and re-thrown when working with exceptions in a" +
-        " suspending context. This includes `runCatching` as well as regular try-catch blocks."
-) {
+class SuspendFunSwallowedCancellation(config: Config) :
+    Rule(
+        config,
+        description = "`CancellationException` must be specially handled and re-thrown when working with exceptions " +
+            "in a suspending context. This includes `runCatching` as well as regular try-catch blocks."
+    ),
+    RequiresFullAnalysis {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
@@ -271,7 +272,7 @@ class SuspendFunSwallowedCancellation(config: Config) : Rule(
 
     private fun report(expression: KtCallExpression) {
         report(
-            CodeSmell(
+            Finding(
                 Entity.from((expression.calleeExpression as? PsiElement) ?: expression),
                 "The `runCatching` has suspend call inside. You should either use specific `try-catch` " +
                     "only catching exception that you are expecting or rethrow the `CancellationException` if " +
@@ -282,7 +283,7 @@ class SuspendFunSwallowedCancellation(config: Config) : Rule(
 
     private fun report(catchClause: KtCatchClause) {
         report(
-            CodeSmell(
+            Finding(
                 entity = Entity.from(catchClause),
                 message = "You should always catch and re-throw CancellationExceptions in" +
                     " a try block from a suspending function. The exception should be re-thrown" +
@@ -309,6 +310,6 @@ class SuspendFunSwallowedCancellation(config: Config) : Rule(
         // Based on code from Kotlin project:
         // https://github.com/JetBrains/kotlin/commit/87bbac9d43e15557a2ff0dc3254fd41a9d5639e1
         private val COROUTINE_CONTEXT_FQ_NAME =
-            COROUTINES_PACKAGE_FQ_NAME.child(KotlinName.identifier("coroutineContext"))
+            COROUTINES_PACKAGE_FQ_NAME.child(Name.identifier("coroutineContext"))
     }
 }

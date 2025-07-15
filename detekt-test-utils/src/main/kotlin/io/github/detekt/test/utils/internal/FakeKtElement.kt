@@ -1,20 +1,20 @@
 package io.github.detekt.test.utils.internal
 
-import org.jetbrains.kotlin.com.intellij.lang.ASTNode
-import org.jetbrains.kotlin.com.intellij.lang.Language
-import org.jetbrains.kotlin.com.intellij.navigation.ItemPresentation
-import org.jetbrains.kotlin.com.intellij.openapi.project.Project
-import org.jetbrains.kotlin.com.intellij.openapi.util.Key
-import org.jetbrains.kotlin.com.intellij.openapi.util.TextRange
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.com.intellij.psi.PsiElementVisitor
-import org.jetbrains.kotlin.com.intellij.psi.PsiFile
-import org.jetbrains.kotlin.com.intellij.psi.PsiManager
-import org.jetbrains.kotlin.com.intellij.psi.PsiReference
-import org.jetbrains.kotlin.com.intellij.psi.ResolveState
-import org.jetbrains.kotlin.com.intellij.psi.scope.PsiScopeProcessor
-import org.jetbrains.kotlin.com.intellij.psi.search.GlobalSearchScope
-import org.jetbrains.kotlin.com.intellij.psi.search.SearchScope
+import com.intellij.lang.ASTNode
+import com.intellij.lang.Language
+import com.intellij.navigation.ItemPresentation
+import com.intellij.openapi.project.Project
+import com.intellij.openapi.util.Key
+import com.intellij.openapi.util.TextRange
+import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiElementVisitor
+import com.intellij.psi.PsiFile
+import com.intellij.psi.PsiManager
+import com.intellij.psi.PsiReference
+import com.intellij.psi.ResolveState
+import com.intellij.psi.scope.PsiScopeProcessor
+import com.intellij.psi.search.GlobalSearchScope
+import com.intellij.psi.search.SearchScope
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtVisitor
@@ -221,7 +221,7 @@ class FakeKtElement(private val psiFile: PsiFile = FakePsiFile("")) : KtElement 
         p0: PsiScopeProcessor,
         p1: ResolveState,
         p2: PsiElement?,
-        p3: PsiElement
+        p3: PsiElement,
     ): Boolean = false
 
     override fun <T : Any?> putCopyableUserData(p0: Key<T>, p1: T?) {

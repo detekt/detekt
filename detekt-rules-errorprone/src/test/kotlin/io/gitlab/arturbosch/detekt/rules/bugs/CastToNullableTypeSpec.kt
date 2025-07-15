@@ -1,14 +1,14 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class CastToNullableTypeSpec(private val env: KotlinCoreEnvironment) {
+class CastToNullableTypeSpec(private val env: KotlinEnvironmentContainer) {
     private val subject = CastToNullableType(Config.empty)
 
     @Test
@@ -18,7 +18,7 @@ class CastToNullableTypeSpec(private val env: KotlinCoreEnvironment) {
                 val x: String? = a as String?
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).singleElement().hasMessage("Use the safe cast ('as? String') instead of 'as String?'.")
         assertThat(findings).hasStartSourceLocation(2, 24)
     }
@@ -30,7 +30,7 @@ class CastToNullableTypeSpec(private val env: KotlinCoreEnvironment) {
                 val x = a as CharSequence?
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
@@ -41,7 +41,7 @@ class CastToNullableTypeSpec(private val env: KotlinCoreEnvironment) {
                 val x: String? = a as? String
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
@@ -52,7 +52,7 @@ class CastToNullableTypeSpec(private val env: KotlinCoreEnvironment) {
                 val x = a is String?
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
@@ -63,7 +63,7 @@ class CastToNullableTypeSpec(private val env: KotlinCoreEnvironment) {
                 val x = null as String?
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
@@ -79,7 +79,7 @@ class CastToNullableTypeSpec(private val env: KotlinCoreEnvironment) {
                 print(a)
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
@@ -93,7 +93,7 @@ class CastToNullableTypeSpec(private val env: KotlinCoreEnvironment) {
                 print(a)
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
@@ -107,7 +107,7 @@ class CastToNullableTypeSpec(private val env: KotlinCoreEnvironment) {
                 print(a)
             }
         """.trimIndent()
-        val findings = subject.compileAndLintWithContext(env, code)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).hasSize(1)
     }
 }

@@ -1,15 +1,15 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
+import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
+import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class MissingSuperCallSpec(private val env: KotlinCoreEnvironment) {
+class MissingSuperCallSpec(private val env: KotlinEnvironmentContainer) {
     private val subject = MissingSuperCall(Config.empty)
 
     @Test
@@ -30,7 +30,7 @@ class MissingSuperCallSpec(private val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(1)
     }
 
@@ -52,7 +52,7 @@ class MissingSuperCallSpec(private val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(1)
     }
 
@@ -81,7 +81,7 @@ class MissingSuperCallSpec(private val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(1)
     }
 
@@ -109,7 +109,7 @@ class MissingSuperCallSpec(private val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(1)
     }
 
@@ -130,7 +130,7 @@ class MissingSuperCallSpec(private val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).isEmpty()
     }
 
@@ -167,7 +167,7 @@ class MissingSuperCallSpec(private val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).isEmpty()
     }
 
@@ -192,7 +192,7 @@ class MissingSuperCallSpec(private val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).isEmpty()
     }
 
@@ -215,7 +215,7 @@ class MissingSuperCallSpec(private val env: KotlinCoreEnvironment) {
                 }
             }
         """.trimIndent()
-        val actual = subject.compileAndLintWithContext(env, code)
+        val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(1)
     }
 }

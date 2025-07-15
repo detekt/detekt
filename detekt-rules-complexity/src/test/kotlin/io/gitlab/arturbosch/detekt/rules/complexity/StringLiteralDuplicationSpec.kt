@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.junit.jupiter.api.Nested
@@ -30,13 +30,13 @@ class StringLiteralDuplicationSpec {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
 
         @Test
         fun `does not report 2 equal hardcoded strings`() {
             val code = """val str = "lorem" + "lorem" + "ipsum""""
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
     }
 
@@ -54,7 +54,7 @@ class StringLiteralDuplicationSpec {
 
         @Test
         fun `does not report strings in annotations`() {
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -71,7 +71,7 @@ class StringLiteralDuplicationSpec {
 
         @Test
         fun `does not report strings with 4 characters`() {
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -125,7 +125,7 @@ class StringLiteralDuplicationSpec {
         fun `should fail with invalid regex`() {
             val config = TestConfig(IGNORE_STRINGS_REGEX to "*lorem")
             assertThatExceptionOfType(PatternSyntaxException::class.java).isThrownBy {
-                StringLiteralDuplication(config).compileAndLint(regexTestingCode)
+                StringLiteralDuplication(config).lint(regexTestingCode)
             }
         }
     }
@@ -143,7 +143,7 @@ class StringLiteralDuplicationSpec {
                     }
                 }
             """.trimIndent()
-            val finding = subject.compileAndLint(code)[0]
+            val finding = subject.lint(code)[0]
             val locations = finding.references.map { it.location } + finding.entity.location
             assertThat(locations).hasSize(3)
         }
@@ -162,7 +162,7 @@ class StringLiteralDuplicationSpec {
                     |
                     ""${'"'}
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
     }
 
@@ -179,11 +179,11 @@ class StringLiteralDuplicationSpec {
             }
         """.trimIndent()
 
-        assertThat(StringLiteralDuplication(Config.empty).compileAndLint(code)).isEmpty()
+        assertThat(StringLiteralDuplication(Config.empty).lint(code)).isEmpty()
     }
 }
 
 private fun assertFindingWithConfig(code: String, config: TestConfig, expected: Int) {
-    val findings = StringLiteralDuplication(config).compileAndLint(code)
+    val findings = StringLiteralDuplication(config).lint(code)
     assertThat(findings).hasSize(expected)
 }

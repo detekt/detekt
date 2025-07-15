@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -20,7 +20,7 @@ class ProtectedMemberInFinalClassSpec {
                     protected var i1 = 0
                 }
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasStartSourceLocation(2, 5)
         }
@@ -35,7 +35,7 @@ class ProtectedMemberInFinalClassSpec {
                     }
                 }
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasStartSourceLocation(3, 5)
         }
@@ -47,7 +47,7 @@ class ProtectedMemberInFinalClassSpec {
                     protected fun function() {}
                 }
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasStartSourceLocation(2, 5)
         }
@@ -61,7 +61,7 @@ class ProtectedMemberInFinalClassSpec {
                     }
                 }
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasStartSourceLocation(3, 9)
         }
@@ -75,7 +75,7 @@ class ProtectedMemberInFinalClassSpec {
                     }
                 }
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings).hasSize(2)
             assertThat(findings).hasStartSourceLocations(
                 SourceLocation(2, 5),
@@ -94,7 +94,7 @@ class ProtectedMemberInFinalClassSpec {
                     }
                 }
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings).hasSize(3)
             assertThat(findings).hasStartSourceLocations(
                 SourceLocation(2, 5),
@@ -114,7 +114,7 @@ class ProtectedMemberInFinalClassSpec {
                     }
                 }
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasStartSourceLocation(4, 13)
         }
@@ -128,7 +128,7 @@ class ProtectedMemberInFinalClassSpec {
                     }
                 }
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasStartSourceLocation(3, 9)
         }
@@ -138,7 +138,7 @@ class ProtectedMemberInFinalClassSpec {
             val code = """
                 class FinalClassWithProtectedConstructor protected constructor()
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasStartSourceLocation(1, 42)
         }
@@ -152,7 +152,7 @@ class ProtectedMemberInFinalClassSpec {
                      }               
                 }
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasStartSourceLocation(2, 6)
         }
@@ -164,7 +164,7 @@ class ProtectedMemberInFinalClassSpec {
                      protected val finalize get() = "hello world"         
                 }
             """.trimIndent()
-            val findings = subject.compileAndLint(code)
+            val findings = subject.lint(code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasStartSourceLocation(2, 6)
         }
@@ -181,7 +181,7 @@ class ProtectedMemberInFinalClassSpec {
                     private val i = 0
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -195,7 +195,7 @@ class ProtectedMemberInFinalClassSpec {
                     protected override val abstractProp = 0
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -210,7 +210,7 @@ class ProtectedMemberInFinalClassSpec {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -223,7 +223,7 @@ class ProtectedMemberInFinalClassSpec {
                     protected object InnerObject
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -233,7 +233,7 @@ class ProtectedMemberInFinalClassSpec {
                     protected fun a() {}
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -244,7 +244,7 @@ class ProtectedMemberInFinalClassSpec {
                     protected fun foo() {}
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -256,7 +256,7 @@ class ProtectedMemberInFinalClassSpec {
                      }               
                 }
             """.trimIndent()
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
     }
 }

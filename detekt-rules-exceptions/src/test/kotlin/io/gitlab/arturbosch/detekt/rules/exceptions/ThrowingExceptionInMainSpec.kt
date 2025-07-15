@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.exceptions
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -13,7 +13,7 @@ class ThrowingExceptionInMainSpec {
         val code = """
             fun main() { throw IllegalArgumentException() }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -21,7 +21,7 @@ class ThrowingExceptionInMainSpec {
         val code = """
             fun main(args: Array<String>) { throw IllegalArgumentException() }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -29,7 +29,7 @@ class ThrowingExceptionInMainSpec {
         val code = """
             fun main(vararg args: String) { throw IllegalArgumentException() }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -54,7 +54,7 @@ class ThrowingExceptionInMainSpec {
                 fun main(args: Array<String>) { throw IllegalArgumentException() }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).hasSize(3)
+        assertThat(subject.lint(code)).hasSize(3)
     }
 
     @Test
@@ -66,7 +66,7 @@ class ThrowingExceptionInMainSpec {
             fun main(args: String) { throw IllegalArgumentException() }
             fun main(args: Array<String>, i: Int) { throw IllegalArgumentException() }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -77,7 +77,7 @@ class ThrowingExceptionInMainSpec {
             fun mai() { }
             fun main(args: String) { }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -86,7 +86,7 @@ class ThrowingExceptionInMainSpec {
             fun main(args: Array<String>) = ""
             fun main() = Unit
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -100,6 +100,6 @@ class ThrowingExceptionInMainSpec {
                 }
             }
         """.trimIndent()
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 }

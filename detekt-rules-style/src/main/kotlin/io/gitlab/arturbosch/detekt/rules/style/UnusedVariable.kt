@@ -1,16 +1,16 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import com.intellij.psi.PsiElement
 import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.Alias
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.descriptors.impl.LocalVariableDescriptor
 import org.jetbrains.kotlin.load.kotlin.toSourceElement
@@ -46,13 +46,15 @@ import org.jetbrains.kotlin.resolve.source.toSourceElement
  * }
  * </compliant>
  */
-@RequiresFullAnalysis
 @ActiveByDefault(since = "2.0.0")
 @Alias("UNUSED_VARIABLE", "unused")
-class UnusedVariable(config: Config) : Rule(
-    config,
-    "Variable is unused and should be removed."
-) {
+class UnusedVariable(config: Config) :
+    Rule(
+        config,
+        "Variable is unused and should be removed."
+    ),
+    RequiresFullAnalysis {
+
     @Configuration("unused variables names matching this regex are ignored")
     private val allowedNames: Regex by config(
         "ignored|_",
@@ -76,7 +78,7 @@ private class UnusedVariableVisitor(
     private val variables = mutableMapOf<PsiElement, KtNamedDeclaration>()
     private val usedVariables = mutableSetOf<PsiElement>()
 
-    fun getUnusedReports(): List<CodeSmell> {
+    fun getUnusedReports(): List<Finding> {
         val unusedVariableNames = variables
             .filterKeys { it !in usedVariables }
 
@@ -84,7 +86,7 @@ private class UnusedVariableVisitor(
             .values
             .filter { !allowedNames.matches(it.nameAsSafeName.identifier) }
             .map {
-                CodeSmell(
+                Finding(
                     entity = Entity.atName(it),
                     message = "Variable `${it.nameAsSafeName.identifier}` is unused."
                 )

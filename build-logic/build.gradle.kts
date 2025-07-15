@@ -8,6 +8,7 @@ repositories {
 }
 
 dependencies {
+    implementation(libs.develocity.plugin)
     implementation(libs.kotlin.gradle.plugin)
     implementation(libs.gradleNexus.publish.plugin)
     implementation(libs.semver4j)
