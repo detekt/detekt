@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package io.gitlab.arturbosch.detekt.formatting.wrappers
 
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfigProperty
