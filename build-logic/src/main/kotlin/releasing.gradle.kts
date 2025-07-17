@@ -119,23 +119,3 @@ tasks.register("publishToMavenLocal") {
     }
     dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":publishToMavenLocal"))
 }
-
-tasks.register("publishAllToSonatypeSnapshot") {
-    description = "Publish all the projects to Sonatype Snapshot Repository"
-    subprojects {
-        if (this.plugins.hasPlugin("publishing")) {
-            dependsOn(tasks.named("publishAllPublicationsToSonatypeSnapshotRepository"))
-        }
-    }
-    dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":publishAllPublicationsToSonatypeSnapshotRepository"))
-}
-
-tasks.register("publishAllToMavenCentral") {
-    description = "Publish all the projects to Sonatype Staging Repository"
-    subprojects {
-        if (this.plugins.hasPlugin("publishing")) {
-            dependsOn(tasks.named("publishAllPublicationsToMavenCentralRepository"))
-        }
-    }
-    dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":publishAllPublicationsToMavenCentralRepository"))
-}
