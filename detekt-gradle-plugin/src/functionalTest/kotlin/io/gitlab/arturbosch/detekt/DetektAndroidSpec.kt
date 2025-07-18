@@ -8,11 +8,8 @@ import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.condition.EnabledForJreRange
 import org.junit.jupiter.api.condition.EnabledIf
-import org.junit.jupiter.api.condition.JRE
 
-@EnabledForJreRange(min = JRE.JAVA_17, disabledReason = "Android Gradle Plugin 8.0+ requires JDK 17 or newer")
 @EnabledIf("io.gitlab.arturbosch.detekt.DetektAndroidSpecKt#isAndroidSdkInstalled")
 class DetektAndroidSpec {
 

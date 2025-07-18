@@ -5,8 +5,6 @@ import io.gitlab.arturbosch.detekt.testkit.ProjectLayout
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.condition.EnabledForJreRange
-import org.junit.jupiter.api.condition.JRE
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
@@ -43,7 +41,6 @@ class DetektBasePluginSpec {
     }
 
     @Test
-    @EnabledForJreRange(min = JRE.JAVA_17, disabledReason = "Android Gradle Plugin 8.0+ requires JDK 17 or newer")
     fun `generates source set tasks for Android project`() {
         val gradleRunner = DslGradleRunner(
             projectLayout = ProjectLayout(
@@ -86,7 +83,6 @@ class DetektBasePluginSpec {
     }
 
     @Nested
-    @EnabledForJreRange(min = JRE.JAVA_17, disabledReason = "Android Gradle Plugin 8.0+ requires JDK 17 or newer")
     inner class `generates source set tasks for KMP project` {
         val gradleRunner = DslGradleRunner(
             projectLayout = ProjectLayout(
