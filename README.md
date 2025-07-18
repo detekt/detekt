@@ -118,7 +118,7 @@ The list of [recommended versions for previous detekt version is listed here](ht
 
 ##### Building detekt
 
-Java 17 is required to build detekt.
+Java 17 or higher is required to build detekt.
 
 ### Adding more rule sets
 
