@@ -504,6 +504,19 @@ class UnnamedParameterUseSpec(private val env: KotlinEnvironmentContainer) {
         ).hasSize(1)
     }
 
+    @Test
+    fun `does not report for a Java method call`() {
+        val code = """
+            import java.time.LocalDate
+            fun main() {
+                LocalDate.of(2025, 1, 2)
+            }
+        """.trimIndent()
+        assertThat(
+            getSubject(allowAdjacentDifferentTypeParams = true).lintWithContext(env, code)
+        ).isEmpty()
+    }
+
     @Nested
     inner class WithVararg {
         @Test
