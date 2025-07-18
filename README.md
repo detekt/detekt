@@ -23,7 +23,7 @@ Visit [the project website](https://detekt.dev/) for installation guides, rule d
 - Highly configurable rule sets.
 - Generate baselines to suppress existing issues for legacy projects while making sure no new issues are introduced.
 - Suppress issues in source files using `@Suppress` annotations.
-- Support for different report formats: HTML, Markdown, [SARIF](https://sarifweb.azurewebsites.net/), XML (Checkstyle) and custom reports.
+- Support for different report formats: HTML, Markdown, [SARIF](https://sarifweb.azurewebsites.net/), XML (Checkstyle), Problems API and custom reports.
 - [Extend detekt](https://detekt.dev/docs/introduction/extensions) with custom rule sets and reports.
 - Complexity reports based on lines of code, cyclomatic complexity and number of code smells.
 - First party integration with Gradle with our [Gradle plugin](#with-gradle).
