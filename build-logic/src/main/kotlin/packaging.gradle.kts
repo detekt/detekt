@@ -5,24 +5,6 @@ plugins {
 }
 
 publishing {
-    repositories {
-        maven {
-            name = "mavenCentral"
-            url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2")
-            credentials {
-                username = "SONATYPE_USERNAME".byProperty
-                password = "SONATYPE_PASSWORD".byProperty
-            }
-        }
-        maven {
-            name = "sonatypeSnapshot"
-            url = uri("https://oss.sonatype.org/content/repositories/snapshots")
-            credentials {
-                username = "SONATYPE_USERNAME".byProperty
-                password = "SONATYPE_PASSWORD".byProperty
-            }
-        }
-    }
     // We don't need to configure publishing for the Gradle plugin.
     if (project.name != "detekt-gradle-plugin") {
         publications.register<MavenPublication>(DETEKT_PUBLICATION) {
