@@ -331,7 +331,7 @@ class UnusedPrivatePropertySpec(val env: KotlinEnvironmentContainer) {
                 private const val unusedTopLevelConst = 1
                 private val unusedTopLevelVal = usedTopLevelVal
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code, compile = false))
+            assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true))
                 .hasSize(2)
                 .hasStartSourceLocations(
                     SourceLocation(2, 19),
@@ -600,7 +600,7 @@ class UnusedPrivatePropertySpec(val env: KotlinEnvironmentContainer) {
             val code = """
                 actual class Foo actual constructor(actual val bar: String) {}
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code, compile = false)).isEmpty()
+            assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true)).isEmpty()
         }
 
         @Test
@@ -608,7 +608,7 @@ class UnusedPrivatePropertySpec(val env: KotlinEnvironmentContainer) {
             val code = """
                 actual class Foo actual constructor(private val bar: String) {}
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code, compile = false)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true)).hasSize(1)
         }
     }
 
@@ -655,7 +655,7 @@ class UnusedPrivatePropertySpec(val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code, compile = false))
+            assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true))
                 .hasSize(0)
         }
 
