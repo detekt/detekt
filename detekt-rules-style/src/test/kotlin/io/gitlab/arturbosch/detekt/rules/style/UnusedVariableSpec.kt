@@ -27,7 +27,7 @@ class UnusedVariableSpec(val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code, compile = false))
+            assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true))
                 .hasSize(1)
         }
     }
@@ -144,7 +144,7 @@ class UnusedVariableSpec(val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code, compile = false))
+            assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true))
                 .isEmpty()
         }
     }
@@ -297,7 +297,7 @@ class UnusedVariableSpec(val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
 
-            val results = subject.lintWithContext(env, code, compile = false)
+            val results = subject.lintWithContext(env, code, allowCompilationErrors = true)
             assertThat(results).hasSize(2)
             assertThat(results).anyMatch { it.message == "Variable `org` is unused." }
             assertThat(results).anyMatch { it.message == "Variable `detekt` is unused." }
@@ -317,7 +317,7 @@ class UnusedVariableSpec(val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code, compile = false))
+            assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true))
                 .hasSize(1)
                 .hasStartSourceLocations(SourceLocation(3, 9))
         }
@@ -332,7 +332,7 @@ class UnusedVariableSpec(val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code, compile = false))
+            assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true))
                 .hasSize(1)
                 .hasStartSourceLocations(SourceLocation(3, 9))
         }
