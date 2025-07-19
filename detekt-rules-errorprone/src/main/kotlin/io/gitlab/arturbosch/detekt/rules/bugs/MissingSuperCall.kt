@@ -4,17 +4,17 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
-import org.jetbrains.kotlin.descriptors.CallableDescriptor
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
-import org.jetbrains.kotlin.resolve.BindingContext.DECLARATION_TO_DESCRIPTOR
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 
 /**
  * This rule checks whether overriding methods invoke the super method when the super method has a specific annotation.
@@ -51,7 +51,7 @@ class MissingSuperCall(config: Config) :
         config,
         "Overriding method is missing a call to overridden super method.",
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     @Configuration("Annotations to require that overriding methods invoke the super method")
     private val mustInvokeSuperAnnotations: List<FqName> by config(
@@ -65,19 +65,24 @@ class MissingSuperCall(config: Config) :
         super.visitNamedFunction(function)
 
         if (!function.hasModifier(KtTokens.OVERRIDE_KEYWORD)) return
-        val functionDescriptor = bindingContext[DECLARATION_TO_DESCRIPTOR, function] as? CallableDescriptor ?: return
-        val superFunctionDescriptor = functionDescriptor.superFunctionWithAnnotation() ?: return
-        if (function.hasSuperCall(superFunctionDescriptor)) return
 
-        report(Finding(Entity.from(function), "Overriding method is missing a call to overridden super method."))
-    }
+        analyze(function) {
+            val superFunctionId = function.symbol.allOverriddenSymbols.firstOrNull {
+                it.annotations.any { ann -> ann.classId?.asSingleFqName() in mustInvokeSuperAnnotations }
+            }?.callableId ?: return
 
-    private fun CallableDescriptor.superFunctionWithAnnotation(): CallableDescriptor? =
-        overriddenDescriptors.firstOrNull { d -> d.annotations.any { it.fqName in mustInvokeSuperAnnotations } }
-            ?: overriddenDescriptors.firstNotNullOfOrNull { it.superFunctionWithAnnotation() }
+            val hasSuperCall = function.anyDescendantOfType<KtQualifiedExpression> {
+                it.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId == superFunctionId
+            }
 
-    private fun KtNamedFunction.hasSuperCall(superFunctionDescriptor: CallableDescriptor): Boolean =
-        anyDescendantOfType<KtQualifiedExpression> {
-            it.getResolvedCall(bindingContext)?.resultingDescriptor == superFunctionDescriptor
+            if (!hasSuperCall) {
+                report(
+                    Finding(
+                        Entity.from(function),
+                        "Overriding method is missing a call to overridden super method.",
+                    ),
+                )
+            }
         }
+    }
 }
