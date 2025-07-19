@@ -63,6 +63,8 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinEnvironmentContainer) {
             val findings = subject.lintWithContext(env, code)
 
             assertThat(findings).hasSize(1)
+            assertThat(findings.first())
+                .hasMessage("Non-boolean properties shouldn't start with 'is' prefix. Actual type of isDefault: Int")
         }
 
         @Test
@@ -311,7 +313,7 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinEnvironmentContainer) {
             """.trimIndent()
 
             // BuildConfig is missing in this test so we can't compile it
-            val findings = subject.lintWithContext(env, code, compile = false)
+            val findings = subject.lintWithContext(env, code, allowCompilationErrors = true)
 
             assertThat(findings).isEmpty()
         }
