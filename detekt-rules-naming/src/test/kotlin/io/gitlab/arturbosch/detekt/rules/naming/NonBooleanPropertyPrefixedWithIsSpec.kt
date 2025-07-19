@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinEnvironmentContainer) {
+class NonBooleanPropertyPrefixedWithIsSpec(val env: KotlinEnvironmentContainer) {
     val subject = NonBooleanPropertyPrefixedWithIs(Config.empty)
 
     @Nested
@@ -310,8 +310,8 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
 
-            // BuildConfig is missing in this test so we can't compile it
-            val findings = subject.lintWithContext(env, code, compile = false)
+            // BuildConfig is missing in this test so compilation will contain errors.
+            val findings = subject.lintWithContext(env, code, allowCompilationErrors = true)
 
             assertThat(findings).isEmpty()
         }
