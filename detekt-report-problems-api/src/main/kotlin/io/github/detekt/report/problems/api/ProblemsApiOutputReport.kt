@@ -15,6 +15,9 @@ class ProblemsApiOutputReport : OutputReport {
 
     private val problems: Problems?
 
+    override val id: String = "problemsAPI"
+    override val ending: String = "txt"
+
     @Inject
     public constructor(problems: Problems) {
         this.problems = problems
@@ -23,9 +26,6 @@ class ProblemsApiOutputReport : OutputReport {
     public constructor() {
         this.problems = null
     }
-
-    override val id: String = "problemsAPI"
-    override val ending: String = "txt"
 
     override fun render(detektion: Detektion): String? {
         if (problems == null) {

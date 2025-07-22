@@ -11,7 +11,6 @@ import org.gradle.api.Action
 import org.gradle.api.problems.ProblemReporter
 import org.gradle.api.problems.ProblemSpec
 import org.gradle.api.problems.Problems
-import org.gradle.api.problems.Severity as GradleSeverity
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.any
@@ -22,8 +21,9 @@ import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import java.nio.file.Paths
+import org.gradle.api.problems.Severity as GradleSeverity
 
-class ProblemsApiOutputReportTest {
+class ProblemsApiOutputReportSpec {
 
     private val problemsService: Problems = mock()
     private val problemReporter: ProblemReporter = mock()
@@ -39,7 +39,6 @@ class ProblemsApiOutputReportTest {
 
     @Test
     fun `given a detekt issue, it correctly reports it to the Gradle Problems API`() {
-
         val ruleInstance = RuleInstance(
             id = "ClassNaming",
             ruleSetId = RuleSet.Id("style"),
