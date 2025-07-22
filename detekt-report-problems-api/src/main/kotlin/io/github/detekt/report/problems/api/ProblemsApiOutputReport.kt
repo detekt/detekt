@@ -2,7 +2,6 @@ package io.github.detekt.report.problems.api
 
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.OutputReport
-import io.gitlab.arturbosch.detekt.api.SeverityLevel
 import org.gradle.api.Incubating
 import org.gradle.api.problems.ProblemGroup
 import org.gradle.api.problems.ProblemId
@@ -12,35 +11,48 @@ import org.gradle.api.problems.Severity
 import javax.inject.Inject
 
 @Incubating
-class ProblemsApiOutputReport @Inject constructor(
-    private val problems: Problems,
-) : OutputReport() {
+class ProblemsApiOutputReport : OutputReport {
 
-    override val id: String = "problems"
-    override val ending: String = ""
+    private val problems: Problems?
 
-    override fun render(detektion: Detektion): String {
-        val reporter: ProblemReporter = problems.reporter
-        detektion.findings.forEach { entry ->
-            entry.value.forEach { finding ->
-                val group = ProblemGroup.create("detekt findings", "detekt findings")
-                val pid = ProblemId.create(finding.id, finding.message, group)
-
-                reporter.report(pid) { spec ->
-                    val file = finding.entity.location.filePath.toString()
-                    spec.severity(mapSeverity(finding.severity))
-                    spec.fileLocation(file)
-                    spec.details(finding.message)
-                }
-            }
-        }
-        return ""
+    @Inject
+    public constructor(problems: Problems) {
+        this.problems = problems
     }
 
-    private fun mapSeverity(level: SeverityLevel): Severity =
-        when (level) {
-            SeverityLevel.ERROR -> Severity.ERROR
-            SeverityLevel.WARNING -> Severity.WARNING
-            SeverityLevel.INFO -> Severity.ADVICE
+    public constructor() {
+        this.problems = null
+    }
+
+    override val id: String = "problemsAPI"
+    override val ending: String = "txt"
+
+    override fun render(detektion: Detektion): String? {
+        if (problems == null) {
+            return "TEST-OK: Detekt found ${detektion.issues.size} issues."
         }
+
+        val reporter: ProblemReporter = problems.reporter
+        detektion.issues.forEach { issue ->
+            val group = ProblemGroup.create("validation", "detekt issue")
+            val id = ProblemId.create(issue.ruleInstance.id, issue.message, group)
+            reporter.report(id) { spec ->
+                val filePath = issue.location.path.toString()
+                val line = issue.location.source.line
+                spec.fileLocation(filePath)
+                spec.lineInFileLocation(filePath, line)
+                spec.details(issue.message)
+                spec.severity(mapSeverity(issue.severity))
+            }
+        }
+
+        return null
+    }
 }
+
+private fun mapSeverity(level: io.gitlab.arturbosch.detekt.api.Severity): Severity =
+    when (level) {
+        io.gitlab.arturbosch.detekt.api.Severity.Error -> Severity.ERROR
+        io.gitlab.arturbosch.detekt.api.Severity.Warning -> Severity.WARNING
+        io.gitlab.arturbosch.detekt.api.Severity.Info -> Severity.ADVICE
+    }

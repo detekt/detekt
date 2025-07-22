@@ -1,117 +1,108 @@
 package io.github.detekt.report.problems.api
 
-import io.github.detekt.psi.FilePath
-import io.github.detekt.report.problems.api.ProblemsApiOutputReport
-import io.gitlab.arturbosch.detekt.api.CodeSmell
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Location
-import io.gitlab.arturbosch.detekt.api.Notification
-import io.gitlab.arturbosch.detekt.api.ProjectMetric
-import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.SeverityLevel
+import io.gitlab.arturbosch.detekt.api.RuleInstance
+import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
+import org.assertj.core.api.Assertions.assertThat
+import org.gradle.api.Action
 import org.gradle.api.problems.ProblemReporter
+import org.gradle.api.problems.ProblemSpec
 import org.gradle.api.problems.Problems
-import org.jetbrains.kotlin.com.intellij.openapi.util.Key
+import org.gradle.api.problems.Severity as GradleSeverity
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.mockito.Mock
-import org.mockito.MockitoAnnotations
 import org.mockito.kotlin.any
-import org.mockito.kotlin.times
+import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.eq
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import java.nio.file.Paths
 
-class ProblemsApiOutputReportSpec {
+class ProblemsApiOutputReportTest {
 
-    @Mock
-    @Suppress("CanBeVal")
-    private lateinit var mockProblemsService: Problems
-
-    @Mock
-    @Suppress("CanBeVal")
-    private lateinit var mockProblemReporter: ProblemReporter
+    private val problemsService: Problems = mock()
+    private val problemReporter: ProblemReporter = mock()
+    private val detektion: Detektion = mock()
 
     private lateinit var report: ProblemsApiOutputReport
 
     @BeforeEach
     fun setUp() {
-        MockitoAnnotations.openMocks(this)
-        whenever(mockProblemsService.reporter).thenReturn(mockProblemReporter)
-        report = ProblemsApiOutputReport(mockProblemsService)
+        whenever(problemsService.reporter).thenReturn(problemReporter)
+        report = ProblemsApiOutputReport(problemsService)
     }
 
     @Test
-    fun `render handles multiple findings`() {
-        val finding1 = createTestFinding(
-            TestFindingParams("Rule1", "Message1", SeverityLevel.WARNING, "src/File1.kt", 1, 1)
-        )
-        val finding2 = createTestFinding(
-            TestFindingParams("Rule2", "Message2", SeverityLevel.INFO, "src/File2.kt", 2, 2)
+    fun `given a detekt issue, it correctly reports it to the Gradle Problems API`() {
+
+        val ruleInstance = RuleInstance(
+            id = "ClassNaming",
+            ruleSetId = RuleSet.Id("style"),
+            url = null,
+            description = "",
+            severity = io.gitlab.arturbosch.detekt.api.Severity.Error,
+            active = true
         )
 
-        val detektion = TestDetektion(finding1, finding2)
-        report.render(detektion)
+        val location = Issue.Location(
+            source = SourceLocation(line = 4, column = 1),
+            endSource = SourceLocation(line = 4, column = 15),
+            text = TextLocation(start = 100, end = 114),
+            path = Paths.get("src/main/kotlin/BadClass.kt")
+        )
 
-        verify(mockProblemReporter, times(2)).report(any(), any())
+        val entity = Issue.Entity(
+            signature = "TestEntitySignature",
+            location = location,
+        )
+
+        val issue = Issue(
+            ruleInstance = ruleInstance,
+            entity = entity,
+            message = "Class name should match the pattern...",
+            severity = io.gitlab.arturbosch.detekt.api.Severity.Error,
+            references = emptyList(),
+            suppressReasons = emptyList()
+        )
+        whenever(detektion.issues).thenReturn(listOf(issue))
+
+        val result = report.render(detektion)
+
+        assertThat(result).isNull()
+
+        val specCaptor = argumentCaptor<Action<ProblemSpec>>()
+        verify(problemReporter).report(any(), specCaptor.capture())
+
+        val spec: ProblemSpec = mock()
+        specCaptor.firstValue.execute(spec)
+
+        verify(spec).details("Class name should match the pattern...")
+        verify(spec).severity(GradleSeverity.ERROR)
+        verify(spec).lineInFileLocation(any(), eq(4))
+        verify(spec).fileLocation(any())
     }
 
     @Test
-    fun `render does nothing with empty findings`() {
-        val detektion = TestDetektion()
-        report.render(detektion)
-        verify(mockProblemReporter, times(0)).report(any(), any())
+    fun `given no issues, it does not report any problems`() {
+        whenever(detektion.issues).thenReturn(emptyList())
+        val result = report.render(detektion)
+
+        assertThat(result).isNull()
+        verify(problemReporter, never()).report(any(), any())
     }
 
-    private fun createTestFinding(
-        params: TestFindingParams,
-    ): Finding {
-        val issue = Issue(params.ruleName, mapSeverity(params.severityLevel), params.message, Debt.Companion.FIVE_MINS)
-        val location = Location(
-            source = SourceLocation(params.line, params.column),
-            text = TextLocation(0, 0),
-            filePath = FilePath(Paths.get(params.filePath))
-        )
-        return CodeSmell(issue, Entity(params.ruleName, "TestEntity", location), params.message)
-    }
+    @Test
+    fun `when constructed without problems, returns test message`() {
+        val reportWithoutProblems = ProblemsApiOutputReport()
+        whenever(detektion.issues).thenReturn(emptyList())
 
-    private fun mapSeverity(level: SeverityLevel): Severity =
-        when (level) {
-            SeverityLevel.ERROR -> Severity.CodeSmell
-            SeverityLevel.WARNING -> Severity.Maintainability
-            SeverityLevel.INFO -> Severity.Style
-        }
+        val result = reportWithoutProblems.render(detektion)
 
-    class TestDetektion(vararg findingsToAdd: Finding) : Detektion {
-        override val findings: Map<String, List<Finding>> =
-            findingsToAdd.groupBy { it.issue.id }
-
-        override val notifications: Collection<Notification> = emptyList()
-        override val metrics: Collection<ProjectMetric> = emptyList()
-        override fun add(notification: Notification) {
-            // no-op
-        }
-        override fun add(projectMetric: ProjectMetric) {
-            // no-op
-        }
-        override fun <V> addData(key: Key<V>, value: V) {
-            // no-op
-        }
-        override fun <V> getData(key: Key<V>): V? = null
+        assertThat(result).isEqualTo("TEST-OK: Detekt found 0 issues.")
     }
 }
-
-data class TestFindingParams(
-    val ruleName: String,
-    val message: String,
-    val severityLevel: SeverityLevel,
-    val filePath: String,
-    val line: Int,
-    val column: Int,
-)
