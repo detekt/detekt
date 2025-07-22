@@ -24,7 +24,7 @@ class ProblemsApiOutputReportFunctionalSpec {
                 numberOfSourceFilesInRootPerSourceDir = 0,
                 srcDirs = listOf("src/main/kotlin")
             ),
-            buildFileName   = "build.gradle.kts",
+            buildFileName = "build.gradle.kts",
             mainBuildFileContent = """
                 plugins {
                     id("io.gitlab.arturbosch.detekt")
@@ -63,11 +63,11 @@ class ProblemsApiOutputReportFunctionalSpec {
     }
 
     private fun makeRunner(ignoreFailures: Boolean, outputLocation: String) = DslGradleRunner(
-        projectLayout   = ProjectLayout(
+        projectLayout = ProjectLayout(
             numberOfSourceFilesInRootPerSourceDir = 0,
             srcDirs = listOf("src/main/kotlin")
         ),
-        buildFileName   = "build.gradle.kts",
+        buildFileName = "build.gradle.kts",
         mainBuildFileContent = """
             plugins {
                 id("io.gitlab.arturbosch.detekt")
@@ -133,7 +133,6 @@ class ProblemsApiOutputReportFunctionalSpec {
         assertThat(htmlFile.readText().trim())
             .isEqualTo("TEST-OK: Detekt found 5 issues.")
     }
-
 
     @Test
     fun `incubating statement appearing from problems api`() {
