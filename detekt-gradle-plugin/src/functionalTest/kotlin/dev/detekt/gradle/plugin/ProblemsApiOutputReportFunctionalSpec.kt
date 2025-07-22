@@ -136,10 +136,6 @@ class ProblemsApiOutputReportFunctionalSpec {
 
     @Test
     fun `incubating statement appearing from problems api`() {
-        val pluginJarPath = File(System.getProperty("user.dir"))
-            .resolve("../detekt-report-problems-api/build/libs/detekt-report-problems-api-1.23.8.jar")
-            .canonicalPath
-
         val gradleRunner = DslGradleRunner(
             projectLayout = ProjectLayout(
                 numberOfSourceFilesInRootPerSourceDir = 0,
@@ -155,7 +151,7 @@ class ProblemsApiOutputReportFunctionalSpec {
                     mavenCentral()
                 }
                 dependencies {
-                    detektPlugins(files("$pluginJarPath"))
+                    detektPlugins(files("${pluginJar.replace('\\', '/')}"))
                     detektPlugins(gradleApi())
                 }
                 detekt {
