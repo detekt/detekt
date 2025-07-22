@@ -77,7 +77,7 @@ class ProblemsApiOutputReportFunctionalSpec {
                 mavenCentral()
             }
             dependencies {
-                detektPlugins(files("$pluginJar"))
+                detektPlugins(files("${pluginJar.replace('\\', '/')}"))
                 detektPlugins(gradleApi())
             }
             detekt {
@@ -125,11 +125,9 @@ class ProblemsApiOutputReportFunctionalSpec {
 
         runner.runTasksAndExpectFailure("detekt") { /* no-op */ }
 
-        // Check if the file exists
         val htmlFile = runner.projectFile("build/reports/problems/problems-report.html")
         assertThat(htmlFile).exists()
 
-        // Check the content of the HTML file
         assertThat(htmlFile.readText().trim())
             .isEqualTo("TEST-OK: Detekt found 5 issues.")
     }
