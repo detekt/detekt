@@ -34,7 +34,7 @@ class ProblemsApiOutputReportFunctionalSpec {
                     mavenCentral()
                 }
                 dependencies {
-                    detektPlugins(files("$pluginJar"))
+                    detektPlugins(files("${pluginJar.replace('\\', '/')}"))
                     detektPlugins(gradleApi())
                 }
                 detekt {
@@ -81,7 +81,7 @@ class ProblemsApiOutputReportFunctionalSpec {
                 detektPlugins(gradleApi())
             }
             detekt {
-                allRules       = true
+                allRules = true
                 ignoreFailures = $ignoreFailures
             }
             tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
