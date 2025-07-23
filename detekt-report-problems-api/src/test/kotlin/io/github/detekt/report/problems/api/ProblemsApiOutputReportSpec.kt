@@ -117,12 +117,11 @@ class ProblemsApiOutputReportSpec {
     )
     fun `mapSeverity maps Detekt severity to Gradle problems api severity`(
         detektSeverity: String,
-        expectedGradleSeverity: String
+        expectedGradleSeverity: String,
     ) {
         val detektSeverityEnum = io.gitlab.arturbosch.detekt.api.Severity.valueOf(detektSeverity)
         val gradleSeverity = mapSeverity(detektSeverityEnum)
 
         assertThat(gradleSeverity).isEqualTo(GradleSeverity.valueOf(expectedGradleSeverity))
     }
-
 }
