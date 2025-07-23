@@ -13,6 +13,8 @@ import org.gradle.api.problems.ProblemSpec
 import org.gradle.api.problems.Problems
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 import org.mockito.kotlin.any
 import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.eq
@@ -104,4 +106,23 @@ class ProblemsApiOutputReportSpec {
 
         assertThat(result).isEqualTo("TEST-OK: Detekt found 0 issues.")
     }
+
+    @ParameterizedTest
+    @CsvSource(
+        value = [
+            "Error, ERROR",
+            "Warning, WARNING",
+            "Info, ADVICE"
+        ]
+    )
+    fun `mapSeverity maps Detekt severity to Gradle problems api severity`(
+        detektSeverity: String,
+        expectedGradleSeverity: String
+    ) {
+        val detektSeverityEnum = io.gitlab.arturbosch.detekt.api.Severity.valueOf(detektSeverity)
+        val gradleSeverity = mapSeverity(detektSeverityEnum)
+
+        assertThat(gradleSeverity).isEqualTo(GradleSeverity.valueOf(expectedGradleSeverity))
+    }
+
 }

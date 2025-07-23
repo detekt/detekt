@@ -50,7 +50,7 @@ class ProblemsApiOutputReport : OutputReport {
     }
 }
 
-private fun mapSeverity(level: io.gitlab.arturbosch.detekt.api.Severity): Severity =
+fun mapSeverity(level: io.gitlab.arturbosch.detekt.api.Severity): Severity =
     when (level) {
         io.gitlab.arturbosch.detekt.api.Severity.Error -> Severity.ERROR
         io.gitlab.arturbosch.detekt.api.Severity.Warning -> Severity.WARNING
