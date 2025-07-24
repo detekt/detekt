@@ -46,7 +46,7 @@ class ProblemsApiOutputReportFunctionalSpec {
                         custom {
                             reportId = "problemsAPI"
                             outputLocation.set(
-                              file("build/reports/detekt/problemsAPI.txt")
+                              file("build/reports/detekt/problems.txt")
                             )
                         }
                     }
@@ -106,7 +106,7 @@ class ProblemsApiOutputReportFunctionalSpec {
     @DisplayName("Fallback .txt report is generated with exact issue count for problems API")
     fun `problems api fallback txt report`() {
         runner.runTasksAndCheckResult("detekt") { _ ->
-            val reportFile = runner.projectFile("build/reports/detekt/problemsAPI.txt")
+            val reportFile = runner.projectFile("build/reports/detekt/problems.txt")
             assertThat(reportFile).exists()
 
             val content = reportFile.readText().trim()
