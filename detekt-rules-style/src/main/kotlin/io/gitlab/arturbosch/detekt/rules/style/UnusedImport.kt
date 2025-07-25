@@ -5,10 +5,13 @@ import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
 import io.gitlab.arturbosch.detekt.rules.isPartOf
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.symbols.KaCallableSymbol
+import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocTag
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtDeclaration
@@ -19,9 +22,6 @@ import org.jetbrains.kotlin.psi.KtPackageDirective
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
 import org.jetbrains.kotlin.psi.psiUtil.isDotReceiver
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
-import org.jetbrains.kotlin.resolve.descriptorUtil.getImportableDescriptor
 
 /**
  * This rule reports unused imports. Unused imports are dead code and should be removed.
@@ -30,13 +30,13 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.getImportableDescriptor
  */
 class UnusedImport(config: Config) :
     Rule(config, "Unused Imports are dead code and should be removed."),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     @Configuration("Additional operators from libraries or tools, such as 'assign'(e.g. compiler plugins for Gradle).")
     private val additionalOperatorSet: List<String> by config(emptyList())
 
     override fun visit(root: KtFile) {
-        with(UnusedImportVisitor(bindingContext, additionalOperatorSet)) {
+        with(UnusedImportVisitor(additionalOperatorSet)) {
             root.accept(this)
             unusedImports().forEach {
                 report(Finding(Entity.from(it), "The import '${it.importedFqName}' is unused."))
@@ -45,10 +45,7 @@ class UnusedImport(config: Config) :
         super.visit(root)
     }
 
-    private class UnusedImportVisitor(
-        private val bindingContext: BindingContext,
-        private val additionalOperatorSet: List<String>,
-    ) : DetektVisitor() {
+    private class UnusedImportVisitor(private val additionalOperatorSet: List<String>) : DetektVisitor() {
         private var currentPackage: FqName? = null
         private var imports: List<KtImportDirective>? = null
         private val namedReferences = mutableSetOf<KtReferenceExpression>()
@@ -158,11 +155,8 @@ class UnusedImport(config: Config) :
             }
         }
 
-        private fun KtReferenceExpression.fqNameOrNull(): FqName? {
-            val descriptor =
-                bindingContext[BindingContext.SHORT_REFERENCE_TO_COMPANION_OBJECT, this]
-                    ?: bindingContext[BindingContext.REFERENCE_TARGET, this]
-            return descriptor?.getImportableDescriptor()?.fqNameOrNull()
+        private fun KtReferenceExpression.fqNameOrNull(): FqName? = analyze(this) {
+            (mainReference.resolveToSymbol() as? KaCallableSymbol)?.callableId?.asSingleFqName()
         }
     }
 

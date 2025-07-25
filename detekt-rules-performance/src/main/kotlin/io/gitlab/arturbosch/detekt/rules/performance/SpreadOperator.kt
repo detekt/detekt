@@ -4,16 +4,18 @@ import io.gitlab.arturbosch.detekt.api.ActiveByDefault
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
-import org.jetbrains.kotlin.descriptors.ConstructorDescriptor
-import org.jetbrains.kotlin.descriptors.ParameterDescriptor
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.singleConstructorCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.singleVariableAccessCall
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaValueParameterSymbol
+import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.KtValueArgumentList
-import org.jetbrains.kotlin.resolve.CompileTimeConstantUtils
-import org.jetbrains.kotlin.resolve.DescriptorUtils
-import org.jetbrains.kotlin.resolve.calls.components.isVararg
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
+import org.jetbrains.kotlin.resolve.ArrayFqNames
 
 /**
  * In most cases using a spread operator causes a full copy of the array to be created before calling a method.
@@ -54,7 +56,7 @@ class SpreadOperator(config: Config) :
         "In most cases using a spread operator causes a full copy of the array to be created before calling a " +
             "method. This may result in a performance penalty."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     override fun visitValueArgumentList(list: KtValueArgumentList) {
         super.visitValueArgumentList(list)
@@ -82,13 +84,18 @@ class SpreadOperator(config: Config) :
      * for this usage of the spread operator, which will have a performance impact.
      */
     private fun KtValueArgument.canSkipArrayCopyForSpreadArgument(): Boolean {
-        val resolvedCall = getArgumentExpression().getResolvedCall(bindingContext) ?: return false
-        val calleeDescriptor = resolvedCall.resultingDescriptor
-        if (calleeDescriptor is ParameterDescriptor && calleeDescriptor.isVararg) {
-            return true // As of Kotlin 1.1.60 passing varargs parameters to vararg calls does not create a new copy
+        val expression = getArgumentExpression() ?: return false
+        analyze(expression) {
+            val call = expression.resolveToCall() ?: return false
+
+            if ((call.singleVariableAccessCall()?.symbol as? KaValueParameterSymbol)?.isVararg == true) {
+                return true // As of Kotlin 1.1.60 passing varargs parameters to vararg calls does not create a new copy
+            }
+
+            if (call.singleConstructorCallOrNull() != null) return true
+
+            val fqName = call.singleFunctionCallOrNull()?.symbol?.callableId?.asSingleFqName()
+            return fqName in ArrayFqNames.ARRAY_CALL_FQ_NAMES || fqName == FqName("kotlin.arrayOfNulls")
         }
-        return calleeDescriptor is ConstructorDescriptor ||
-            CompileTimeConstantUtils.isArrayFunctionCall(resolvedCall) ||
-            DescriptorUtils.getFqName(calleeDescriptor).asString() == "kotlin.arrayOfNulls"
     }
 }

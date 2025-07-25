@@ -36,7 +36,7 @@ class UnusedImportSpec(
             
             infix fun Int.success(f: () -> Unit) {}
             """.trimIndent()
-        assertThat(subject.lintWithContext(env, main, additional, compile = false)).isEmpty()
+        assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
     }
 
     @Test
@@ -59,7 +59,7 @@ class UnusedImportSpec(
             operator fun LocalDate.rangeTo(that: LocalDate) = TODO()
             operator fun LocalDate.rangeUntil(that: LocalDate) = TODO()
             """.trimIndent()
-        assertThat(subject.lintWithContext(env, main, additional, compile = false)).isEmpty()
+        assertThat(subject.lintWithContext(env, main, additional, allowCompilationErrors = true)).isEmpty()
     }
 
     @Test
@@ -81,7 +81,7 @@ class UnusedImportSpec(
             }
             """.trimIndent()
         val configuredSubject = UnusedImport(TestConfig(ADDITIONAL_OPERATOR_SET to listOf("assign")))
-        assertThat(configuredSubject.lintWithContext(env, main, compile = false)).isEmpty()
+        assertThat(configuredSubject.lintWithContext(env, main, allowCompilationErrors = true)).isEmpty()
     }
 
     @Test
@@ -102,7 +102,7 @@ class UnusedImportSpec(
                 }
             }
             """.trimIndent()
-        val lint = subject.lintWithContext(env, main, compile = false)
+        val lint = subject.lintWithContext(env, main, allowCompilationErrors = true)
         with(lint) {
             assertThat(this).hasSize(1)
             assertThat(this[0].entity.signature).endsWith("import org.gradle.kotlin.dsl.assign")
@@ -139,7 +139,7 @@ class UnusedImportSpec(
             infix fun Int.failure(f: () -> Unit) {}
             infix fun Int.undefined(f: () -> Unit) {}
             """.trimIndent()
-        assertThat(subject.lintWithContext(env, main, additional, compile = false)).isEmpty()
+        assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
     }
 
     @Test
@@ -169,7 +169,7 @@ class UnusedImportSpec(
             infix fun Int.failure(f: () -> Unit) {}
             infix fun Int.undefined(f: () -> Unit) {}
             """.trimIndent()
-        val lint = subject.lintWithContext(env, main, additional, compile = false)
+        val lint = subject.lintWithContext(env, main, additional)
         with(lint) {
             assertThat(this).hasSize(1)
             assertThat(this[0].entity.signature).endsWith("import tasks.undefined")
@@ -191,7 +191,7 @@ class UnusedImportSpec(
             
             class SomeClass
             """.trimIndent()
-        val lint = subject.lintWithContext(env, main, additional, compile = false)
+        val lint = subject.lintWithContext(env, main, additional)
         with(lint) {
             assertThat(this).hasSize(1)
             assertThat(this[0].entity.signature).endsWith("import test.SomeClass")
@@ -223,7 +223,7 @@ class UnusedImportSpec(
                 fun beforeTextChanged() {}
             }
             """.trimIndent()
-        assertThat(subject.lintWithContext(env, main, additional, compile = false)).isEmpty()
+        assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
     }
 
     @Test
@@ -251,7 +251,7 @@ class UnusedImportSpec(
                 fun beforeTextChanged() {}
             }
             """.trimIndent()
-        assertThat(subject.lintWithContext(env, main, additional, compile = false)).isEmpty()
+        assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
     }
 
     @Test
@@ -284,7 +284,7 @@ class UnusedImportSpec(
 
             fun TextWatcher.beforeTextChanged() {}
             """.trimIndent()
-        assertThat(subject.lintWithContext(env, main, additional1, additional2, compile = false)).isEmpty()
+        assertThat(subject.lintWithContext(env, main, additional1, additional2)).isEmpty()
     }
 
     @Test
@@ -319,7 +319,7 @@ class UnusedImportSpec(
             fun TextWatcher.beforeTextChanged() {}
             fun TextWatcher.afterTextChanged() {}
             """.trimIndent()
-        assertThat(subject.lintWithContext(env, main, additional1, additional2, compile = false)).hasSize(1)
+        assertThat(subject.lintWithContext(env, main, additional1, additional2)).hasSize(1)
     }
 
     @Test
@@ -372,7 +372,7 @@ class UnusedImportSpec(
             fun `when`() {}
             fun `foo`() {}
             """.trimIndent()
-        val lint = subject.lintWithContext(env, main, p, p2, escaped, compile = false)
+        val lint = subject.lintWithContext(env, main, p, p2, escaped)
         with(lint) {
             assertThat(this).hasSize(3)
             assertThat(this[0].entity.signature).contains("import p.B6")
@@ -401,7 +401,7 @@ class UnusedImportSpec(
                 class Inner
             }
             """.trimIndent()
-        val lint = subject.lintWithContext(env, main, additional, compile = false)
+        val lint = subject.lintWithContext(env, main, additional)
         with(lint) {
             assertThat(this).isEmpty()
         }
@@ -425,7 +425,7 @@ class UnusedImportSpec(
             
             fun success() {}
             """.trimIndent()
-        assertThat(subject.lintWithContext(env, main, additional, compile = false)).isEmpty()
+        assertThat(subject.lintWithContext(env, main, additional, allowCompilationErrors = true)).isEmpty()
     }
 
     @Test
@@ -446,7 +446,7 @@ class UnusedImportSpec(
             
             fun success() {}
             """.trimIndent()
-        assertThat(subject.lintWithContext(env, main, additional, compile = false)).isEmpty()
+        assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
     }
 
     @Test
@@ -467,7 +467,7 @@ class UnusedImportSpec(
             
             fun success() {}
             """.trimIndent()
-        assertThat(subject.lintWithContext(env, main, additional, compile = false)).hasSize(1)
+        assertThat(subject.lintWithContext(env, main, additional)).hasSize(1)
     }
 
     @Test
@@ -488,7 +488,7 @@ class UnusedImportSpec(
             
             fun success() {}
             """.trimIndent()
-        assertThat(subject.lintWithContext(env, main, additional, compile = false)).hasSize(1)
+        assertThat(subject.lintWithContext(env, main, additional)).hasSize(1)
     }
 
     @Test
@@ -514,7 +514,7 @@ class UnusedImportSpec(
             fun success() {}
             fun undefined() {}
             """.trimIndent()
-        assertThat(subject.lintWithContext(env, main, additional, compile = false)).isEmpty()
+        assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
     }
 
     @Test
@@ -529,7 +529,7 @@ class UnusedImportSpec(
             package test
             fun Iterator<Int>.forEach(f: () -> Unit) {}
             """.trimIndent()
-        assertThat(subject.lintWithContext(env, main, additional, compile = false)).isEmpty()
+        assertThat(subject.lintWithContext(env, main, additional, allowCompilationErrors = true)).isEmpty()
     }
 
     @Test
@@ -555,7 +555,7 @@ class UnusedImportSpec(
             package com.example.other
             fun foo() = 1
             """.trimIndent()
-        assertThat(subject.lintWithContext(env, main, additional1, additional2, compile = false)).isEmpty()
+        assertThat(subject.lintWithContext(env, main, additional1, additional2)).isEmpty()
     }
 
     @Test
@@ -582,7 +582,7 @@ class UnusedImportSpec(
                 prop: KProperty<*>
             ) = lazy { "" }
             """.trimIndent()
-        assertThat(subject.lintWithContext(env, main, additional, compile = false)).isEmpty()
+        assertThat(subject.lintWithContext(env, main, additional)).isEmpty()
     }
 
     @Test
@@ -603,7 +603,7 @@ class UnusedImportSpec(
             data class MyClass(val a: Int, val b: Int)
             """.trimIndent()
 
-        assertThat(subject.lintWithContext(env, main, additional, compile = false)).isEmpty()
+        assertThat(subject.lintWithContext(env, main, additional, allowCompilationErrors = true)).isEmpty()
     }
 
     @Test
@@ -631,7 +631,7 @@ class UnusedImportSpec(
             package com.example.component1
             class Unused
             """.trimIndent()
-        val lint = subject.lintWithContext(env, main, additional1, additional2, compile = false)
+        val lint = subject.lintWithContext(env, main, additional1, additional2)
 
         with(lint) {
             assertThat(this).hasSize(4)
@@ -662,7 +662,7 @@ class UnusedImportSpec(
             package bar
             fun test(s: String) {}
             """.trimIndent()
-        val findings = subject.lintWithContext(env, mainFile, additionalFile1, additionalFile2, compile = false)
+        val findings = subject.lintWithContext(env, mainFile, additionalFile1, additionalFile2)
         assertThat(findings).hasSize(1)
         assertThat(findings[0].entity.signature).endsWith("import bar.test")
     }
@@ -710,7 +710,7 @@ class UnusedImportSpec(
             
             class Foo
             """.trimIndent()
-        val findings = subject.lintWithContext(env, mainFile, additionalFile, compile = false)
+        val findings = subject.lintWithContext(env, mainFile, additionalFile)
         assertThat(findings).isEmpty()
     }
 
@@ -729,7 +729,7 @@ class UnusedImportSpec(
             
             annotation class Ann
             """.trimIndent()
-        val findings = subject.lintWithContext(env, mainFile, additionalFile, compile = false)
+        val findings = subject.lintWithContext(env, mainFile, additionalFile)
         assertThat(findings).isEmpty()
     }
 
@@ -749,7 +749,7 @@ class UnusedImportSpec(
                 companion object
             }
             """.trimIndent()
-        val findings = subject.lintWithContext(env, mainFile, additionalFile, compile = false)
+        val findings = subject.lintWithContext(env, mainFile, additionalFile)
         assertThat(findings).isEmpty()
     }
 
@@ -771,7 +771,7 @@ class UnusedImportSpec(
                 }
             }
             """.trimIndent()
-        val findings = subject.lintWithContext(env, mainFile, additionalFile, compile = false)
+        val findings = subject.lintWithContext(env, mainFile, additionalFile)
         assertThat(findings).isEmpty()
     }
 
@@ -793,7 +793,7 @@ class UnusedImportSpec(
                 }
             }
             """.trimIndent()
-        val findings = subject.lintWithContext(env, mainFile, additionalFile, compile = false)
+        val findings = subject.lintWithContext(env, mainFile, additionalFile)
         assertThat(findings).isEmpty()
     }
 
@@ -813,7 +813,7 @@ class UnusedImportSpec(
                 LAZY
             }
             """.trimIndent()
-        assertThat(subject.lintWithContext(env, mainFile, additionalFile, compile = false)).isEmpty()
+        assertThat(subject.lintWithContext(env, mainFile, additionalFile)).isEmpty()
     }
 
     @Test
@@ -835,7 +835,7 @@ class UnusedImportSpec(
             annotation class AnnotationA
             annotation class AnnotationB(val attribute: AnnotationA)
             """.trimIndent()
-        assertThat(subject.lintWithContext(env, mainFile, additionalFile, compile = false)).isEmpty()
+        assertThat(subject.lintWithContext(env, mainFile, additionalFile)).isEmpty()
     }
 
     @Test
@@ -862,7 +862,7 @@ class UnusedImportSpec(
             class SomeClass
             """.trimIndent()
 
-        assertThat(subject.lintWithContext(env, mainFile, additionalFile, compile = false)).isEmpty()
+        assertThat(subject.lintWithContext(env, mainFile, additionalFile)).isEmpty()
     }
 
     @Test
@@ -881,7 +881,7 @@ class UnusedImportSpec(
             }
             """.trimIndent()
 
-        assertThat(subject.lintWithContext(env, mainFile, compile = false)).isEmpty()
+        assertThat(subject.lintWithContext(env, mainFile, allowCompilationErrors = true)).isEmpty()
     }
 
     @Test
@@ -896,7 +896,7 @@ class UnusedImportSpec(
             }
             """.trimIndent()
 
-        assertThat(subject.lintWithContext(env, mainFile, compile = false)).hasSize(2)
+        assertThat(subject.lintWithContext(env, mainFile, allowCompilationErrors = true)).hasSize(2)
     }
 
     @Test
@@ -916,6 +916,6 @@ class UnusedImportSpec(
             inline val myVal get() = 1
             """.trimIndent()
 
-        assertThat(subject.lintWithContext(env, mainFile, additionalFile, compile = false)).isEmpty()
+        assertThat(subject.lintWithContext(env, mainFile, additionalFile)).isEmpty()
     }
 }

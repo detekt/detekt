@@ -119,7 +119,6 @@ kotlin {
 }
 
 val testKitRuntimeOnly by configurations.registering
-val testKitJava17RuntimeOnly by configurations.registering
 val testKitGradleMinVersionRuntimeOnly by configurations.registering
 
 dependencies {
@@ -131,13 +130,13 @@ dependencies {
     compileOnly(libs.jetbrains.annotations)
 
     testKitRuntimeOnly(libs.kotlin.gradle.plugin)
+    testKitRuntimeOnly(libs.android.gradle.plugin)
     testKitGradleMinVersionRuntimeOnly(libs.kotlin.gradle.plugin) {
         attributes {
             // Set this value to the minimum Gradle version tested in testKitGradleMinVersionRuntimeOnly source set
             attribute(GradlePluginApiVersion.GRADLE_PLUGIN_API_VERSION_ATTRIBUTE, objects.named("7.6.3"))
         }
     }
-    testKitJava17RuntimeOnly(libs.android.gradle.plugin)
 
     // We use this published version of the detekt-formatting to self analyse this project.
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.8")
@@ -207,10 +206,6 @@ tasks {
     // Manually inject dependency to gradle-testkit since the default injected plugin classpath is from `main.runtime`.
     pluginUnderTestMetadata {
         pluginClasspath.from(testKitRuntimeOnly)
-
-        if (named<Test>("functionalTest").get().javaVersion.isCompatibleWith(JavaVersion.VERSION_17)) {
-            pluginClasspath.from(testKitJava17RuntimeOnly)
-        }
     }
 
     validatePlugins {

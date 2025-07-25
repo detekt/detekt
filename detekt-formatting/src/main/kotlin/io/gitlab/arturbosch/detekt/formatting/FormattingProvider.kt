@@ -23,9 +23,11 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.ClassSignature
 import io.gitlab.arturbosch.detekt.formatting.wrappers.CommentSpacing
 import io.gitlab.arturbosch.detekt.formatting.wrappers.CommentWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ConditionWrapping
+import io.gitlab.arturbosch.detekt.formatting.wrappers.ContextReceiverListWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ContextReceiverMapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.EnumEntryNameCase
 import io.gitlab.arturbosch.detekt.formatting.wrappers.EnumWrapping
+import io.gitlab.arturbosch.detekt.formatting.wrappers.ExpressionOperandWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.Filename
 import io.gitlab.arturbosch.detekt.formatting.wrappers.FinalNewline
 import io.gitlab.arturbosch.detekt.formatting.wrappers.FunKeywordSpacing
@@ -142,6 +144,7 @@ class FormattingProvider : RuleSetProvider {
             ::CommentWrapping,
             ::ConditionWrapping,
             ::ContextReceiverMapping,
+            ::ContextReceiverListWrapping,
             ::EnumEntryNameCase,
             ::EnumWrapping,
             ::Filename,
@@ -221,6 +224,7 @@ class FormattingProvider : RuleSetProvider {
             ::Wrapping,
             // Wrappers for experimental rules. Disabled by default.
             ::BlankLineBetweenWhenConditions,
+            ::ExpressionOperandWrapping,
             ::Kdoc,
             ::MixedConditionOperators,
             ::SpacingAroundSquareBrackets,
@@ -229,8 +233,8 @@ class FormattingProvider : RuleSetProvider {
     )
 
     companion object {
-        @Configuration("if android style guides should be preferred")
-        val android by ruleSetConfig(false)
+        @Configuration("ktlint code style for formatting rules (ktlint_official, intellij_idea or android_studio)")
+        val code_style by ruleSetConfig("intellij_idea")
 
         @Configuration("if rules should auto correct style violation")
         val autoCorrect by ruleSetConfig(true)

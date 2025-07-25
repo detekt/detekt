@@ -5,15 +5,14 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Configuration
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.rules.hasImplicitUnitReturnType
+import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtProperty
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.checkers.ExplicitApiDeclarationChecker
+import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
 
 /**
  * Functions/properties exposed as public APIs of a library should have an explicit return type.
@@ -48,45 +47,47 @@ class LibraryCodeMustSpecifyReturnType(config: Config) :
         "Library functions/properties should have an explicit return type. " +
             "Inferred return types can easily be changed by mistake which may lead to breaking changes."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     @Configuration("if functions with `Unit` return type should be allowed without return type declaration")
     private val allowOmitUnit: Boolean by config(false)
 
     override fun visitProperty(property: KtProperty) {
-        if (property.explicitReturnTypeRequired()) {
-            report(
-                Finding(
-                    Entity.atName(property),
-                    "Library property '${property.nameAsSafeName}' without explicit return type."
-                )
-            )
-        }
+        property.check()
         super.visitProperty(property)
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
-        if (function.explicitReturnTypeRequired() && !function.isUnitOmissionAllowed()) {
-            report(
-                Finding(
-                    Entity.atName(function),
-                    "Library function '${function.nameAsSafeName}' without explicit return type."
-                )
-            )
-        }
+        function.check()
         super.visitNamedFunction(function)
     }
 
-    private fun KtNamedFunction.isUnitOmissionAllowed(): Boolean =
-        bodyExpression?.text == "Unit" || (allowOmitUnit && this.hasImplicitUnitReturnType(bindingContext))
+    @Suppress("ReturnCount")
+    private fun KtCallableDeclaration.check() {
+        if (this.typeReference != null) return
 
-    private fun KtCallableDeclaration.explicitReturnTypeRequired(): Boolean =
-        ExplicitApiDeclarationChecker.returnTypeCheckIsApplicable(this) &&
-            ExplicitApiDeclarationChecker.returnTypeRequired(
-                element = this,
-                descriptor = bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, this],
-                checkForPublicApi = true,
-                checkForInternal = false,
-                checkForPrivate = false
+        if (this.containingClassOrObject?.isLocal == true) return
+
+        if (this is KtProperty) {
+            if (this.isLocal) return
+            analyze(this) {
+                if (!isPublicApi(symbol)) return
+            }
+        }
+
+        if (this is KtNamedFunction) {
+            if (this.isLocal || this.hasBlockBody() || bodyExpression?.text == "Unit") return
+            analyze(this) {
+                if (allowOmitUnit && symbol.returnType.isUnitType) return
+                if (!isPublicApi(symbol)) return
+            }
+        }
+
+        report(
+            Finding(
+                Entity.atName(this),
+                "Library function '${this.nameAsSafeName}' without explicit return type."
             )
+        )
+    }
 }

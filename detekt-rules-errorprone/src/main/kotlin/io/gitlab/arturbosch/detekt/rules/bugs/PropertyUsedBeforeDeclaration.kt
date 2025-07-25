@@ -3,15 +3,16 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
 import io.gitlab.arturbosch.detekt.api.Rule
-import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.successfulVariableAccessCall
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.forEachDescendantOfType
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.utils.addIfNotNull
 
 /**
@@ -52,33 +53,36 @@ class PropertyUsedBeforeDeclaration(config: Config) :
         config,
         "Properties before declaration should not be used."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
         super.visitClassOrObject(classOrObject)
 
         val classMembers = classOrObject.body?.children?.filterNot { it is KtClassOrObject } ?: return
 
-        val allProperties = classMembers.filterIsInstance<KtProperty>().mapNotNull {
-            val name = it.name ?: return@mapNotNull null
-            val descriptor = bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, it] ?: return@mapNotNull null
-            name to descriptor
-        }.toMap()
+        analyze(classOrObject) {
+            val allProperties = classMembers.filterIsInstance<KtProperty>().mapNotNull {
+                val name = it.name ?: return@mapNotNull null
+                val callableId = it.symbol.callableId ?: return@mapNotNull null
+                name to callableId
+            }.toMap()
 
-        val declaredProperties = mutableSetOf<DeclarationDescriptor>()
+            val declaredProperties = mutableSetOf<CallableId>()
 
-        classMembers.forEach { member ->
-            member.forEachDescendantOfType<KtNameReferenceExpression> {
-                val property = allProperties[it.text]
-                if (property != null && property !in declaredProperties && property == it.descriptor()) {
-                    report(Finding(Entity.from(it), "'${it.text}' is used before declaration."))
+            classMembers.forEach { member ->
+                member.forEachDescendantOfType<KtNameReferenceExpression> {
+                    val property = allProperties[it.text]
+                    if (property != null &&
+                        property !in declaredProperties &&
+                        property == it.resolveToCall()?.successfulVariableAccessCall()?.symbol?.callableId
+                    ) {
+                        report(Finding(Entity.from(it), "'${it.text}' is used before declaration."))
+                    }
                 }
-            }
-            if (member is KtProperty) {
-                declaredProperties.addIfNotNull(allProperties[member.name])
+                if (member is KtProperty) {
+                    declaredProperties.addIfNotNull(allProperties[member.name])
+                }
             }
         }
     }
-
-    private fun KtNameReferenceExpression.descriptor() = getResolvedCall(bindingContext)?.resultingDescriptor
 }
