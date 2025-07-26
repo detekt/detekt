@@ -10,7 +10,7 @@
 
 
 <link rel="search" type="application/opensearchdescription+xml" title="detekt" href="/opensearch.xml"><link rel="stylesheet" href="/assets/css/styles.72331351.css">
-<script src="/assets/js/runtime~main.5af690e1.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.5b57dd0c.js" defer="defer"></script>
 <script src="/assets/js/main.ad691287.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -50,7 +50,7 @@ specialized arrays to represent primitive types without boxing overhead, such as
 <p>Using the forEach method on ranges has a heavy performance cost. Prefer using simple for loops.</p>
 <p>Benchmarks have shown that using forEach on a range can have a huge performance cost in comparison to
 simple for loops. Hence, in most contexts, a simple for loop should be used instead.
-See more details here: <a href="https://sites.google.com/a/athaydes.com/renato-athaydes/posts/kotlinshiddencosts-benchmarks" target="_blank" rel="noopener noreferrer">https://sites.google.com/a/athaydes.com/renato-athaydes/posts/kotlinshiddencosts-benchmarks</a>
+See more details here: <a href="https://sites.google.com/a/athaydes.com/renato-athaydes/posts/kotlins-hidden-costs-benchmarks" target="_blank" rel="noopener noreferrer">https://sites.google.com/a/athaydes.com/renato-athaydes/posts/kotlins-hidden-costs-benchmarks</a>
 To solve this CodeSmell, the forEach usage should be replaced by a for loop.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
 <p><strong>Debt</strong>: 5min</p>
@@ -61,7 +61,7 @@ To solve this CodeSmell, the forEach usage should be replaced by a for loop.</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="spreadoperator">SpreadOperator<a href="#spreadoperator" class="hash-link" aria-label="Direct link to SpreadOperator" title="Direct link to SpreadOperator">​</a></h3>
 <p>In most cases using a spread operator causes a full copy of the array to be created before calling a method.
 This has a very high performance penalty. Benchmarks showing this performance penalty can be seen here:
-<a href="https://sites.google.com/a/athaydes.com/renato-athaydes/posts/kotlinshiddencosts-benchmarks" target="_blank" rel="noopener noreferrer">https://sites.google.com/a/athaydes.com/renato-athaydes/posts/kotlinshiddencosts-benchmarks</a></p>
+<a href="https://sites.google.com/a/athaydes.com/renato-athaydes/posts/kotlins-hidden-costs-benchmarks" target="_blank" rel="noopener noreferrer">https://sites.google.com/a/athaydes.com/renato-athaydes/posts/kotlins-hidden-costs-benchmarks</a></p>
 <p>The Kotlin compiler since v1.1.60 has an optimization that skips the array copy when an array constructor
 function is used to create the arguments that are passed to the vararg parameter. When type resolution is enabled in
 detekt this case will not be flagged by the rule since it doesn&#x27;t suffer the performance penalty of an array copy.</p>
