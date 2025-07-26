@@ -17,9 +17,6 @@ import org.jetbrains.kotlin.analysis.api.resolution.KaCompoundAccessCall
 import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaPropertySymbol
-import org.jetbrains.kotlin.descriptors.FunctionDescriptor
-import org.jetbrains.kotlin.descriptors.PropertyDescriptor
-import org.jetbrains.kotlin.descriptors.SyntheticPropertyDescriptor
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCallableReferenceExpression
@@ -84,12 +81,6 @@ class ForbiddenMethodCall(config: Config) :
     ) { list ->
         list.map { ForbiddenMethod(fromFunctionSignature(it.value), it.reason) }
     }
-
-    private val PropertyDescriptor.unwrappedGetMethod: FunctionDescriptor?
-        get() = if (this is SyntheticPropertyDescriptor) this.getMethod else getter
-
-    private val PropertyDescriptor.unwrappedSetMethod: FunctionDescriptor?
-        get() = if (this is SyntheticPropertyDescriptor) this.setMethod else setter
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
