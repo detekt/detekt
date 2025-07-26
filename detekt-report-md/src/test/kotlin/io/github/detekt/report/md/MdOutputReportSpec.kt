@@ -9,6 +9,7 @@ import io.github.detekt.metrics.processors.sourceLinesKey
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
+import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.TestSetupContext
 import io.gitlab.arturbosch.detekt.test.createEntity
@@ -24,9 +25,9 @@ class MdOutputReportSpec {
     private val basePath = Path("src/test/resources").absolute()
     private val mdReport = MdOutputReport().apply { init(TestSetupContext(basePath = basePath)) }
     private val detektion = createTestDetektionWithMultipleSmells()
+    private val detektVersion = whichDetekt()
     private val result = mdReport.render(detektion)
         .replace("""\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d UTC""".toRegex(), "2024-07-21 21:34:16 UTC")
-        .replace("""\[detekt version \d+\.\d+.\d+]""".toRegex(), "[detekt version 9.9.9]")
 
     @Suppress("LongMethod")
     @Test
@@ -122,7 +123,7 @@ class MdOutputReportSpec {
                 
                 ```
                 
-                generated with [detekt version 9.9.9](https://detekt.dev/) on 2024-07-21 21:34:16 UTC
+                generated with [detekt version $detektVersion](https://detekt.dev/) on 2024-07-21 21:34:16 UTC
                 
             """.trimIndent()
         )
@@ -149,7 +150,7 @@ class MdOutputReportSpec {
 
     @Test
     fun `renders the 'generated with' text correctly`() {
-        val header = "generated with [detekt version 9.9.9](https://detekt.dev/) on "
+        val header = "generated with [detekt version $detektVersion](https://detekt.dev/) on "
 
         assertThat(result).contains(header)
     }
