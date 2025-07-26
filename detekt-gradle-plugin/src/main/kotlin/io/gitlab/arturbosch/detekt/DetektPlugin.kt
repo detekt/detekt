@@ -127,6 +127,10 @@ class DetektPlugin : Plugin<Project> {
                 report.required.convention(DEFAULT_REPORT_ENABLED_VALUE)
                 report.outputLocation.convention(extension.reportsDir.file("$reportName.xml"))
             }
+            task.reports.problemsAPI { report ->
+                report.required.convention(false)
+                report.outputLocation.convention(extension.reportsDir.file("$reportName.problems"))
+            }
         }
 
         project.tasks.withType(DetektCreateBaselineTask::class.java).configureEach { task ->
