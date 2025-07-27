@@ -1,8 +1,7 @@
 package io.gitlab.arturbosch.detekt.api
 
 /**
- * Annotate the target to specify a configuration for [io.gitlab.arturbosch.detekt.api.Rule] or
- * [io.gitlab.arturbosch.detekt.api.RuleSetProvider].
+ * Annotate the target to specify a configuration for [Rule] or [RuleSetProvider].
  */
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
