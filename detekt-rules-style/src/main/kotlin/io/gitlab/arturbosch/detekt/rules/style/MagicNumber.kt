@@ -197,12 +197,20 @@ class MagicNumber(config: Config) : Rule(
     private fun KtConstantExpression.isPartOfRange(): Boolean {
         val theParent = parent
         val rangeOperators = setOf("downTo", "until", "step")
-        return if (theParent is KtBinaryExpression) {
-            theParent.operationToken == KtTokens.RANGE ||
-                theParent.operationReference.getReferencedName() in rangeOperators
-        } else {
-            false
-        }
+
+        val isBinaryRange = theParent is KtBinaryExpression &&
+                (theParent.operationToken == KtTokens.RANGE ||
+                        theParent.operationReference.getReferencedName() in rangeOperators)
+
+        val isPrefixRange = theParent is KtPrefixExpression &&
+                (theParent.firstChild as? KtOperationReferenceExpression)
+                    ?.operationSignTokenType == KtTokens.MINUS &&
+                (theParent.parent as? KtBinaryExpression)?.let {
+                    it.operationToken == KtTokens.RANGE ||
+                            it.operationReference.getReferencedName() in rangeOperators
+                } == true
+
+        return isBinaryRange || isPrefixRange
     }
 
     private fun KtConstantExpression.isSubjectOfExtensionFunction(): Boolean = parent is KtDotQualifiedExpression
