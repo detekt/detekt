@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.test
+package dev.detekt.api.test
 
 import com.intellij.openapi.util.Key
 import com.intellij.openapi.util.UserDataHolderBase

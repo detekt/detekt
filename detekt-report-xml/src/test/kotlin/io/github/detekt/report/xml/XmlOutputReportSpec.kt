@@ -1,10 +1,10 @@
 package io.github.detekt.report.xml
 
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.test.TestDetektion
-import io.gitlab.arturbosch.detekt.test.createEntity
-import io.gitlab.arturbosch.detekt.test.createIssue
-import io.gitlab.arturbosch.detekt.test.createLocation
+import dev.detekt.api.test.TestDetektion
+import dev.detekt.api.test.createEntity
+import dev.detekt.api.test.createIssue
+import dev.detekt.api.test.createLocation
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test

@@ -1,11 +1,11 @@
 package io.gitlab.arturbosch.detekt.core.reporting.console
 
 import io.gitlab.arturbosch.detekt.core.reporting.SuppressedIssueAssert
-import io.gitlab.arturbosch.detekt.test.TestDetektion
-import io.gitlab.arturbosch.detekt.test.TestSetupContext
-import io.gitlab.arturbosch.detekt.test.createIssue
-import io.gitlab.arturbosch.detekt.test.createLocation
-import io.gitlab.arturbosch.detekt.test.createRuleInstance
+import dev.detekt.api.test.TestDetektion
+import dev.detekt.api.test.TestSetupContext
+import dev.detekt.api.test.createIssue
+import dev.detekt.api.test.createLocation
+import dev.detekt.api.test.createRuleInstance
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import kotlin.io.path.Path
