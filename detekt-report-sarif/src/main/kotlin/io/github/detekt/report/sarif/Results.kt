@@ -1,13 +1,13 @@
 package io.github.detekt.report.sarif
 
+import dev.detekt.api.Issue
+import dev.detekt.api.Severity
+import dev.detekt.api.suppressed
 import io.github.detekt.sarif4k.ArtifactLocation
 import io.github.detekt.sarif4k.Level
 import io.github.detekt.sarif4k.Message
 import io.github.detekt.sarif4k.PhysicalLocation
 import io.github.detekt.sarif4k.Region
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.suppressed
 import java.security.MessageDigest
 import kotlin.io.path.invariantSeparatorsPathString
 

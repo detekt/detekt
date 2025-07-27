@@ -1,12 +1,12 @@
 package io.gitlab.arturbosch.detekt.core.reporting
 
+import dev.detekt.api.Detektion
+import dev.detekt.api.OutputReport
 import io.github.detekt.report.html.HtmlOutputReport
 import io.github.detekt.report.md.MdOutputReport
 import io.github.detekt.report.xml.XmlOutputReport
 import io.github.detekt.test.utils.resourceAsPath
 import io.github.detekt.tooling.dsl.ReportsSpecBuilder
-import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.core.createNullLoggingSpec
 import io.gitlab.arturbosch.detekt.core.createProcessingSettings
 import io.gitlab.arturbosch.detekt.core.tooling.withSettings

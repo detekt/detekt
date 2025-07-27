@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.generator.printer
 
-import io.gitlab.arturbosch.detekt.api.valuesWithReason
+import dev.detekt.api.valuesWithReason
 import io.gitlab.arturbosch.detekt.generator.collection.Configuration
 import io.gitlab.arturbosch.detekt.generator.collection.DefaultValue
 import org.assertj.core.api.Assertions.assertThat

@@ -1,16 +1,16 @@
 package io.gitlab.arturbosch.detekt.core
 
+import dev.detekt.api.Config
+import dev.detekt.api.Detektion
+import dev.detekt.api.FileProcessListener
+import dev.detekt.api.Rule
+import dev.detekt.api.RuleSet
+import dev.detekt.api.RuleSetProvider
 import io.github.detekt.test.utils.NullPrintStream
 import io.github.detekt.test.utils.readResourceContent
 import io.github.detekt.test.utils.resourceAsPath
 import io.github.detekt.test.utils.resourceUrl
 import io.github.detekt.tooling.api.spec.ProcessingSpec
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.FileProcessListener
-import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.RuleSet
-import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.core.tooling.AnalysisFacade
 import io.gitlab.arturbosch.detekt.core.tooling.DefaultLifecycle
 import org.assertj.core.api.Assertions.assertThat

@@ -11,7 +11,7 @@ interface ReportsSpec {
      * Spec to identify a report.
      *
      * Can be a provided report like 'xml' or 'html; or a custom defined
-     * via the [io.gitlab.arturbosch.detekt.api.OutputReport] extension.
+     * via the [dev.detekt.api.OutputReport] extension.
      */
     interface Report {
 

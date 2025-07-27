@@ -1,11 +1,11 @@
 package io.gitlab.arturbosch.detekt.core
 
+import dev.detekt.api.Config
 import io.github.detekt.test.utils.NullPrintStream
 import io.github.detekt.test.utils.resourceAsPath
 import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.github.detekt.tooling.api.spec.ReportsSpec
 import io.github.detekt.tooling.dsl.ProcessingSpecBuilder
-import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.core.reporting.DETEKT_OUTPUT_REPORT_PATHS_KEY
 import java.io.PrintStream
 import java.nio.file.Path

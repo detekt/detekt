@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.core.config.validation
 
+import dev.detekt.api.Config
+import dev.detekt.api.ConfigValidator
+import dev.detekt.api.Notification
+import dev.detekt.api.Notification.Level
 import io.github.detekt.tooling.api.InvalidConfig
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.ConfigValidator
-import io.gitlab.arturbosch.detekt.api.Notification
-import io.gitlab.arturbosch.detekt.api.Notification.Level
 import io.gitlab.arturbosch.detekt.core.NL
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.config.YamlConfig

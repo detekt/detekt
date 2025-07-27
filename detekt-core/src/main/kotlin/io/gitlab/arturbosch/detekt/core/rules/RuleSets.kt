@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.core.rules
 
+import dev.detekt.api.RuleSetProvider
+import dev.detekt.api.internal.DefaultRuleSetProvider
 import io.github.detekt.tooling.api.spec.RulesSpec
-import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.extensions.LIST_ITEM_SPACING
 import io.gitlab.arturbosch.detekt.core.extractRuleName

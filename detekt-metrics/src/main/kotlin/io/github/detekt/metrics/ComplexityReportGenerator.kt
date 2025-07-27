@@ -1,6 +1,6 @@
 package io.github.detekt.metrics
 
-import io.gitlab.arturbosch.detekt.api.Detektion
+import dev.detekt.api.Detektion
 import java.util.Locale
 
 class ComplexityReportGenerator(private val complexityMetric: ComplexityMetric) {

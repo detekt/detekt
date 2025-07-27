@@ -1,11 +1,11 @@
 package io.gitlab.arturbosch.detekt.core
 
 import com.intellij.openapi.util.Disposer
+import dev.detekt.api.Config
+import dev.detekt.api.PropertiesAware
+import dev.detekt.api.SetupContext
 import io.github.detekt.tooling.api.spec.ConfigSpec
 import io.github.detekt.tooling.api.spec.ProcessingSpec
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.PropertiesAware
-import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.core.settings.ClassloaderAware
 import io.gitlab.arturbosch.detekt.core.settings.EnvironmentAware
 import io.gitlab.arturbosch.detekt.core.settings.EnvironmentFacade

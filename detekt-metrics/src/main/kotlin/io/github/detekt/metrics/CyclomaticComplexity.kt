@@ -1,6 +1,6 @@
 package io.github.detekt.metrics
 
-import io.gitlab.arturbosch.detekt.api.DetektVisitor
+import dev.detekt.api.DetektVisitor
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBlockExpression

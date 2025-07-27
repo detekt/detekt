@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.core.extensions
 
-import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.ReportingExtension
+import dev.detekt.api.Detektion
+import dev.detekt.api.ReportingExtension
 import io.gitlab.arturbosch.detekt.core.DelegatingResult
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 

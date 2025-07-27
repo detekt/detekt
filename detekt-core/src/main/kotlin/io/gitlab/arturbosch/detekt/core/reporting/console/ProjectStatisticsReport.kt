@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.core.reporting.console
 
-import io.gitlab.arturbosch.detekt.api.ConsoleReport
-import io.gitlab.arturbosch.detekt.api.Detektion
+import dev.detekt.api.ConsoleReport
+import dev.detekt.api.Detektion
 
 /**
  * Contains metrics and statistics concerning the analyzed project sorted by priority.

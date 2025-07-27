@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.core.suppressors
 
-import io.gitlab.arturbosch.detekt.api.RuleName
-import io.gitlab.arturbosch.detekt.api.RuleSet
+import dev.detekt.api.RuleName
+import dev.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.core.extractRuleName
 import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
