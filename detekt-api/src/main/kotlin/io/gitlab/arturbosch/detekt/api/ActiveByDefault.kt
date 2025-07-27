@@ -1,8 +1,7 @@
 package io.gitlab.arturbosch.detekt.api
 
 /**
- * Annotated [io.gitlab.arturbosch.detekt.api.Rule] or [io.gitlab.arturbosch.detekt.api.RuleSetProvider]
- * is active by default.
+ * Annotated [Rule] or [RuleSetProvider] is active by default.
  */
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.SOURCE)
