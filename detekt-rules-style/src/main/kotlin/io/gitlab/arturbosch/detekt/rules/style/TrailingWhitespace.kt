@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
-import io.github.detekt.psi.absolutePath
+import dev.detekt.psi.absolutePath
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
@@ -10,7 +10,7 @@ import dev.detekt.api.Location
 import dev.detekt.api.Rule
 import dev.detekt.api.SourceLocation
 import dev.detekt.api.TextLocation
-import io.gitlab.arturbosch.detekt.rules.isPartOfString
+import dev.detekt.psi.isPartOfString
 import org.jetbrains.kotlin.KtPsiSourceFileLinesMapping
 import org.jetbrains.kotlin.diagnostics.DiagnosticUtils.getLineAndColumnRangeInPsiFile
 import org.jetbrains.kotlin.psi.KtFile

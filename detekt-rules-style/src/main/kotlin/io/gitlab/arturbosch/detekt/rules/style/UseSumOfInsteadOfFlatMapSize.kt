@@ -5,7 +5,7 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.rules.isCalling
+import dev.detekt.psi.isCalling
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.Name

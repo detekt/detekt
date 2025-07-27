@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.github.detekt.psi.absolutePath
+import dev.detekt.psi.absolutePath
 import dev.detekt.api.Config
 import dev.detekt.api.Configuration
 import dev.detekt.api.Entity

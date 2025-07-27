@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
-import io.github.detekt.psi.AnnotationExcluder
+import dev.detekt.psi.AnnotationExcluder
 import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.Config
 import dev.detekt.api.Configuration
@@ -9,7 +9,7 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresFullAnalysis
 import dev.detekt.api.Rule
 import dev.detekt.api.config
-import io.gitlab.arturbosch.detekt.rules.isOverride
+import dev.detekt.psi.isOverride
 import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtConstructor

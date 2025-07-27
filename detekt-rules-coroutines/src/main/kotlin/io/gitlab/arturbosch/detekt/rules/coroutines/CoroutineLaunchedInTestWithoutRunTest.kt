@@ -7,7 +7,7 @@ import dev.detekt.api.RequiresFullAnalysis
 import dev.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.coroutines.utils.isCoroutineScope
 import io.gitlab.arturbosch.detekt.rules.coroutines.utils.isCoroutinesFlow
-import io.gitlab.arturbosch.detekt.rules.hasAnnotation
+import dev.detekt.psi.hasAnnotation
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression

@@ -8,9 +8,9 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.Rule
 import dev.detekt.api.config
-import io.gitlab.arturbosch.detekt.rules.isConstant
-import io.gitlab.arturbosch.detekt.rules.isHashCodeFunction
-import io.gitlab.arturbosch.detekt.rules.isPartOf
+import dev.detekt.psi.isConstant
+import dev.detekt.psi.isHashCodeFunction
+import dev.detekt.psi.isPartOf
 import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtAnnotationEntry

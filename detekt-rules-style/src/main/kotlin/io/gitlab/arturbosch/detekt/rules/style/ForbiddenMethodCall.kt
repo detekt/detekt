@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.github.detekt.psi.FunctionMatcher
-import io.github.detekt.psi.FunctionMatcher.Companion.fromFunctionSignature
+import dev.detekt.psi.FunctionMatcher
+import dev.detekt.psi.FunctionMatcher.Companion.fromFunctionSignature
 import dev.detekt.api.Config
 import dev.detekt.api.Configuration
 import dev.detekt.api.Entity

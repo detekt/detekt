@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.core
 
 import com.intellij.openapi.util.text.StringUtilRt
-import io.github.detekt.psi.absolutePath
+import dev.detekt.psi.absolutePath
 import dev.detekt.api.Detektion
 import dev.detekt.api.FileProcessListener
 import dev.detekt.api.Notification

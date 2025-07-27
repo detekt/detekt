@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.core
 
-import io.github.detekt.psi.absolutePath
+import dev.detekt.psi.absolutePath
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.FileProcessListener

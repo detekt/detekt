@@ -5,9 +5,9 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresFullAnalysis
 import dev.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.rules.firstParameter
-import io.gitlab.arturbosch.detekt.rules.isCalling
-import io.gitlab.arturbosch.detekt.rules.receiverIsUsed
+import dev.detekt.psi.firstParameter
+import dev.detekt.psi.isCalling
+import dev.detekt.psi.receiverIsUsed
 import org.jetbrains.kotlin.builtins.StandardNames.IMPLICIT_LAMBDA_PARAMETER_NAME
 import org.jetbrains.kotlin.descriptors.impl.ValueParameterDescriptorImpl.WithDestructuringDeclaration
 import org.jetbrains.kotlin.name.FqName

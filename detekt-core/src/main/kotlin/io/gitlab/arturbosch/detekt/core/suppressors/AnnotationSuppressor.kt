@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.suppressors
 
-import io.github.detekt.psi.AnnotationExcluder
+import dev.detekt.psi.AnnotationExcluder
 import dev.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtElement

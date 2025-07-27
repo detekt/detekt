@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.suppressors
 
-import io.github.detekt.psi.FunctionMatcher
+import dev.detekt.psi.FunctionMatcher
 import dev.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtNamedFunction
