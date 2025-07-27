@@ -920,6 +920,12 @@ class MagicNumberSpec {
         }
     }
 
+    @Test
+    fun `does not report negative numbers in ranges when ranges are ignored`() {
+        val code = "val range = -15..-10"
+        assertThat(MagicNumber(TestConfig(IGNORE_RANGES to "true")).lint(code)).isEmpty()
+    }
+
     @Nested
     inner class `a number assigned to a local variable` {
 
