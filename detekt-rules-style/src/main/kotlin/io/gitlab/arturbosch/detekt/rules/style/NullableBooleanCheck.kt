@@ -61,6 +61,6 @@ class NullableBooleanCheck(config: Config) :
 
     private fun KtExpression.isNullableBoolean() = analyze(this) {
         val type = expressionType
-        type?.isBooleanType == true && type.nullability.isNullable
+        type?.isBooleanType == true && type.isMarkedNullable
     }
 }
