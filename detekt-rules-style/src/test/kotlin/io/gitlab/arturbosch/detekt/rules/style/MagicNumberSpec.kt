@@ -879,9 +879,11 @@ class MagicNumberSpec {
         @Suppress("UnusedPrivateFunction")
         private fun cases() = listOf(
             "val range = 1..27",
+            "val range = -1..-27",
             "val range = (1..27)",
             "val range = 27 downTo 1",
             "val range = 1 until 27 step 1",
+            "val range = -1 until -27 step 1",
             "val inRange = 1 in 1..27",
             "val inRange = (1 in 27 downTo 0 step 1)",
             "val inRange = (1..27 step 1).last"
@@ -918,12 +920,6 @@ class MagicNumberSpec {
             val code = "val foo : Int = 1 + 27"
             assertThat(MagicNumber(TestConfig(IGNORE_RANGES to "true")).lint(code)).hasSize(1)
         }
-    }
-
-    @Test
-    fun `does not report negative numbers in ranges when ranges are ignored`() {
-        val code = "val range = -15..-10"
-        assertThat(MagicNumber(TestConfig(IGNORE_RANGES to "true")).lint(code)).isEmpty()
     }
 
     @Nested
