@@ -10,7 +10,6 @@ import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.types.KaClassType
-import org.jetbrains.kotlin.analysis.api.types.KaTypeNullability
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
@@ -65,7 +64,7 @@ class UselessCallOnNotNull(config: Config) :
         if (calleeText !in uselessCallNames) return
 
         analyze(expression) {
-            if (expression.receiverExpression.expressionType?.nullability != KaTypeNullability.NON_NULLABLE) return
+            if (expression.receiverExpression.expressionType?.isNullable == true) return
 
             val callableId = expression.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId ?: return
             val conversion = uselessCallFqNames[callableId] ?: return
@@ -98,7 +97,7 @@ class UselessCallOnNotNull(config: Config) :
                         it
                     }
                 }
-                type?.nullability != KaTypeNullability.NON_NULLABLE
+                type?.isNullable == true
             }
             if (!hasNullableType) {
                 report(Finding(Entity.from(expression), "Replace $calleeText with $replacementName"))
