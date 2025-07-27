@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.generator.collection
 
-import io.gitlab.arturbosch.detekt.api.ValueWithReason
-import io.gitlab.arturbosch.detekt.api.valuesWithReason
+import dev.detekt.api.ValueWithReason
+import dev.detekt.api.valuesWithReason
 import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.ConfigWithAndroidVariantsSupport.ANDROID_VARIANTS_DELEGATE_NAME
 import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.ConfigWithAndroidVariantsSupport.DEFAULT_ANDROID_VALUE_ARGUMENT_NAME
 import io.gitlab.arturbosch.detekt.generator.collection.ConfigurationCollector.ConfigWithAndroidVariantsSupport.isAndroidVariantConfigDelegate
@@ -30,7 +30,7 @@ import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
-import io.gitlab.arturbosch.detekt.api.Configuration as ConfigAnnotation
+import dev.detekt.api.Configuration as ConfigAnnotation
 
 class ConfigurationCollector {
 

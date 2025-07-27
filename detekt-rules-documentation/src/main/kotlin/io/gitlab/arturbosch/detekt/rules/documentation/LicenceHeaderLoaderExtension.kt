@@ -2,9 +2,9 @@ package io.gitlab.arturbosch.detekt.rules.documentation
 
 import com.intellij.openapi.util.Key
 import com.intellij.openapi.util.text.StringUtilRt
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.FileProcessListener
-import io.gitlab.arturbosch.detekt.api.SetupContext
+import dev.detekt.api.Config
+import dev.detekt.api.FileProcessListener
+import dev.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.rules.documentation.AbsentOrWrongFileLicense.Companion.DEFAULT_LICENSE_TEMPLATE_FILE
 import io.gitlab.arturbosch.detekt.rules.documentation.AbsentOrWrongFileLicense.Companion.DEFAULT_LICENSE_TEMPLATE_IS_REGEX
 import io.gitlab.arturbosch.detekt.rules.documentation.AbsentOrWrongFileLicense.Companion.PARAM_LICENSE_TEMPLATE_FILE

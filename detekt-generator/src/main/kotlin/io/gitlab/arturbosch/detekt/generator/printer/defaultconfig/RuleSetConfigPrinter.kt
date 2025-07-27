@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.generator.printer.defaultconfig
 import io.github.detekt.utils.YamlNode
 import io.github.detekt.utils.keyValue
 import io.github.detekt.utils.node
-import io.gitlab.arturbosch.detekt.api.Config
+import dev.detekt.api.Config
 import io.gitlab.arturbosch.detekt.generator.collection.Configuration
 import io.gitlab.arturbosch.detekt.generator.collection.Rule
 import io.gitlab.arturbosch.detekt.generator.collection.RuleSetPage

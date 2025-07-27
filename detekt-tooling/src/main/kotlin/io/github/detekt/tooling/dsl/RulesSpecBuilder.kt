@@ -2,7 +2,7 @@ package io.github.detekt.tooling.dsl
 
 import io.github.detekt.tooling.api.spec.RulesSpec
 import io.github.detekt.tooling.api.spec.RulesSpec.FailurePolicy
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Severity
 
 class RulesSpecBuilder : Builder<RulesSpec> {
 

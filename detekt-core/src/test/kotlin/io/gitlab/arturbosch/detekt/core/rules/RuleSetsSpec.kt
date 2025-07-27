@@ -3,8 +3,8 @@ package io.gitlab.arturbosch.detekt.core.rules
 import io.github.detekt.test.utils.resourceAsPath
 import io.github.detekt.tooling.api.spec.RulesSpec.RunPolicy.DisableDefaultRuleSets
 import io.github.detekt.tooling.api.spec.RulesSpec.RunPolicy.RestrictToSingleRule
-import io.gitlab.arturbosch.detekt.api.RuleName
-import io.gitlab.arturbosch.detekt.api.RuleSet
+import dev.detekt.api.RuleName
+import dev.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.core.createNullLoggingSpec
 import io.gitlab.arturbosch.detekt.core.tooling.withSettings
 import org.assertj.core.api.Assertions.assertThat

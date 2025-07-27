@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Finding
+import dev.detekt.api.Config
+import dev.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach

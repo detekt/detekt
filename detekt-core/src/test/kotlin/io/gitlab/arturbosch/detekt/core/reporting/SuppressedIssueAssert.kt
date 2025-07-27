@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.reporting
 
-import io.gitlab.arturbosch.detekt.api.ConsoleReport
+import dev.detekt.api.ConsoleReport
 import dev.detekt.api.test.TestDetektion
 import dev.detekt.api.test.TestSetupContext
 import dev.detekt.api.test.createIssue

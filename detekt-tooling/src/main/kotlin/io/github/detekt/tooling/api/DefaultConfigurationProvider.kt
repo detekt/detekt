@@ -1,7 +1,7 @@
 package io.github.detekt.tooling.api
 
 import io.github.detekt.tooling.api.spec.ExtensionsSpec
-import io.gitlab.arturbosch.detekt.api.Config
+import dev.detekt.api.Config
 import java.nio.file.Path
 import java.util.ServiceLoader
 

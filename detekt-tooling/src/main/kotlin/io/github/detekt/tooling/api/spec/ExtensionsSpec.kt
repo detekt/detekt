@@ -5,14 +5,14 @@ import java.nio.file.Path
 interface ExtensionsSpec {
 
     /**
-     * Where to look for [io.gitlab.arturbosch.detekt.api.Extension]s?
+     * Where to look for [dev.detekt.api.Extension]s?
      *
      * Defaults to looking at the running classpath.
      */
     val plugins: Plugins?
 
     /**
-     * Identifiers for [io.gitlab.arturbosch.detekt.api.Extension] which should not be loaded during the analysis.
+     * Identifiers for [dev.detekt.api.Extension] which should not be loaded during the analysis.
      */
     val disabledExtensions: Set<ExtensionId>
 

@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.core.config
 
 import io.github.detekt.test.utils.resourceAsPath
 import io.github.detekt.utils.getSafeResourceAsStream
-import io.gitlab.arturbosch.detekt.api.Config
+import dev.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat

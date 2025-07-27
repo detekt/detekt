@@ -1,11 +1,11 @@
 package io.gitlab.arturbosch.detekt.generator.config
 
 import io.github.classgraph.ClassGraph
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.RuleName
-import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
+import dev.detekt.api.Config
+import dev.detekt.api.Rule
+import dev.detekt.api.RuleName
+import dev.detekt.api.RuleSetProvider
+import dev.detekt.api.internal.DefaultRuleSetProvider
 import io.gitlab.arturbosch.detekt.core.config.YamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.fail

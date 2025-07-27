@@ -1,12 +1,12 @@
 package io.gitlab.arturbosch.detekt.core.suppressors
 
 import io.github.detekt.test.utils.compileContentForTest
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.Location
-import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.SourceLocation
-import io.gitlab.arturbosch.detekt.api.TextLocation
+import dev.detekt.api.Entity
+import dev.detekt.api.Finding
+import dev.detekt.api.Location
+import dev.detekt.api.Rule
+import dev.detekt.api.SourceLocation
+import dev.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import org.jetbrains.kotlin.psi.KtElement
 import kotlin.io.path.Path

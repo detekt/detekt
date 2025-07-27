@@ -5,7 +5,7 @@ import io.github.detekt.tooling.api.spec.RulesSpec
 import io.github.detekt.tooling.api.spec.RulesSpec.RunPolicy.DisableDefaultRuleSets
 import io.github.detekt.tooling.api.spec.RulesSpec.RunPolicy.NoRestrictions
 import io.github.detekt.utils.PathFilters
-import io.gitlab.arturbosch.detekt.api.RuleSet
+import dev.detekt.api.RuleSet
 import java.nio.file.Path
 import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.absolute

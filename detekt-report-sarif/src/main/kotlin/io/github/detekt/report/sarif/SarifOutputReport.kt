@@ -6,11 +6,11 @@ import io.github.detekt.sarif4k.SarifSerializer
 import io.github.detekt.sarif4k.Tool
 import io.github.detekt.sarif4k.ToolComponent
 import io.github.detekt.sarif4k.Version
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.OutputReport
-import io.gitlab.arturbosch.detekt.api.SetupContext
-import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
+import dev.detekt.api.Config
+import dev.detekt.api.Detektion
+import dev.detekt.api.OutputReport
+import dev.detekt.api.SetupContext
+import dev.detekt.api.internal.BuiltInOutputReport
 
 const val SRCROOT = "%SRCROOT%"
 

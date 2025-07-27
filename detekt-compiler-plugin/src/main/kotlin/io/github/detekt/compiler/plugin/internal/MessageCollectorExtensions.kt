@@ -1,8 +1,8 @@
 package io.github.detekt.compiler.plugin.internal
 
-import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.suppressed
+import dev.detekt.api.Detektion
+import dev.detekt.api.Issue
+import dev.detekt.api.suppressed
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageLocation
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSourceLocation

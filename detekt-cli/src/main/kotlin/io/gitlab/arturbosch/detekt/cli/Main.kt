@@ -7,7 +7,7 @@ import io.github.detekt.tooling.api.InvalidConfig
 import io.github.detekt.tooling.api.IssuesFound
 import io.github.detekt.tooling.api.UnexpectedError
 import io.github.detekt.tooling.internal.NotApiButProbablyUsedByUsers
-import io.gitlab.arturbosch.detekt.api.internal.whichKotlin
+import dev.detekt.api.internal.whichKotlin
 import io.gitlab.arturbosch.detekt.cli.runners.ConfigExporter
 import io.gitlab.arturbosch.detekt.cli.runners.Executable
 import io.gitlab.arturbosch.detekt.cli.runners.Runner

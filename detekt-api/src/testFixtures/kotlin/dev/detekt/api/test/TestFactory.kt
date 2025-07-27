@@ -1,11 +1,11 @@
 package dev.detekt.api.test
 
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.RuleInstance
-import io.gitlab.arturbosch.detekt.api.RuleSet
-import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.SourceLocation
-import io.gitlab.arturbosch.detekt.api.TextLocation
+import dev.detekt.api.Issue
+import dev.detekt.api.RuleInstance
+import dev.detekt.api.RuleSet
+import dev.detekt.api.Severity
+import dev.detekt.api.SourceLocation
+import dev.detekt.api.TextLocation
 import java.net.URI
 import kotlin.io.path.Path
 

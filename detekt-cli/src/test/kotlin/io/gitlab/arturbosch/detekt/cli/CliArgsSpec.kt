@@ -4,7 +4,7 @@ import io.github.detekt.test.utils.resourceAsPath
 import io.github.detekt.tooling.api.AnalysisMode
 import io.github.detekt.tooling.api.spec.RulesSpec.FailurePolicy.FailOnSeverity
 import io.github.detekt.tooling.api.spec.RulesSpec.FailurePolicy.NeverFail
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Severity
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode
 import org.assertj.core.api.Assertions.assertThatExceptionOfType

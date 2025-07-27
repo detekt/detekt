@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.core.config
 
 import io.github.detekt.tooling.api.IssuesFound
 import io.github.detekt.tooling.api.spec.RulesSpec
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Severity
 import dev.detekt.api.test.TestDetektion
 import dev.detekt.api.test.createIssue
 import org.assertj.core.api.Assertions.assertThatThrownBy

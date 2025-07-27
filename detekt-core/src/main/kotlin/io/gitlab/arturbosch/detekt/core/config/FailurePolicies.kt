@@ -2,9 +2,9 @@ package io.gitlab.arturbosch.detekt.core.config
 
 import io.github.detekt.tooling.api.IssuesFound
 import io.github.detekt.tooling.api.spec.RulesSpec
-import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.suppressed
+import dev.detekt.api.Detektion
+import dev.detekt.api.Severity
+import dev.detekt.api.suppressed
 
 internal fun RulesSpec.FailurePolicy.check(result: Detektion) {
     when (this) {

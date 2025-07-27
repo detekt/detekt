@@ -5,7 +5,7 @@ import io.github.detekt.metrics.processors.complexityKey
 import io.github.detekt.metrics.processors.linesKey
 import io.github.detekt.metrics.processors.logicalLinesKey
 import io.github.detekt.metrics.processors.sourceLinesKey
-import io.gitlab.arturbosch.detekt.api.Detektion
+import dev.detekt.api.Detektion
 import dev.detekt.api.test.TestDetektion
 import dev.detekt.api.test.createIssue
 import org.assertj.core.api.Assertions.assertThat

@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.formatting
 
 import com.pinterest.ktlint.rule.engine.core.api.Rule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.RuleSet
+import dev.detekt.api.Config
+import dev.detekt.api.RuleSet
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.authors
 
-import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.RuleSet
-import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import dev.detekt.api.ActiveByDefault
+import dev.detekt.api.RuleSet
+import dev.detekt.api.RuleSetProvider
 
 /**
  * The rule authors ruleset provides rules that ensures good practices when writing detekt rules.

@@ -2,11 +2,11 @@ package dev.detekt.api.test
 
 import com.intellij.openapi.util.Key
 import com.intellij.openapi.util.UserDataHolderBase
-import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Notification
-import io.gitlab.arturbosch.detekt.api.ProjectMetric
-import io.gitlab.arturbosch.detekt.api.RuleInstance
+import dev.detekt.api.Detektion
+import dev.detekt.api.Issue
+import dev.detekt.api.Notification
+import dev.detekt.api.ProjectMetric
+import dev.detekt.api.RuleInstance
 
 class TestDetektion(
     vararg issues: Issue,

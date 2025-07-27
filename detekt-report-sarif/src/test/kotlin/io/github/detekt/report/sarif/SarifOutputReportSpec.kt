@@ -1,9 +1,9 @@
 package io.github.detekt.report.sarif
 
 import io.github.detekt.test.utils.readResourceContent
-import io.gitlab.arturbosch.detekt.api.RuleInstance
-import io.gitlab.arturbosch.detekt.api.RuleSet
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.RuleInstance
+import dev.detekt.api.RuleSet
+import dev.detekt.api.Severity
 import dev.detekt.api.test.TestDetektion
 import dev.detekt.api.test.TestSetupContext
 import dev.detekt.api.test.createEntity

@@ -1,6 +1,6 @@
 package io.github.detekt.report.xml
 
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Severity
 import dev.detekt.api.test.TestDetektion
 import dev.detekt.api.test.createEntity
 import dev.detekt.api.test.createIssue

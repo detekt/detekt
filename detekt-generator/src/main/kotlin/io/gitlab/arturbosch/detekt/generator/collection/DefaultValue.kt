@@ -4,7 +4,7 @@ import io.github.detekt.utils.YamlNode
 import io.github.detekt.utils.keyValue
 import io.github.detekt.utils.list
 import io.github.detekt.utils.listOfMaps
-import io.gitlab.arturbosch.detekt.api.ValuesWithReason
+import dev.detekt.api.ValuesWithReason
 
 sealed interface DefaultValue {
 

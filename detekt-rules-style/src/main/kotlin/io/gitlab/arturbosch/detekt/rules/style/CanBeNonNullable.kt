@@ -1,12 +1,12 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import com.intellij.psi.tree.IElementType
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.DetektVisitor
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
-import io.gitlab.arturbosch.detekt.api.Rule
+import dev.detekt.api.Config
+import dev.detekt.api.DetektVisitor
+import dev.detekt.api.Entity
+import dev.detekt.api.Finding
+import dev.detekt.api.RequiresFullAnalysis
+import dev.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isAbstract
 import io.gitlab.arturbosch.detekt.rules.isNonNullCheck
 import io.gitlab.arturbosch.detekt.rules.isNullCheck

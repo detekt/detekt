@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.core.baseline
 import io.github.detekt.tooling.api.Baseline
 import io.github.detekt.tooling.api.FindingId
 import io.github.detekt.tooling.api.FindingsIdList
-import io.gitlab.arturbosch.detekt.api.Issue
+import dev.detekt.api.Issue
 import java.nio.file.Path
 import kotlin.io.path.exists
 import kotlin.io.path.isRegularFile
