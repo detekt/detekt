@@ -108,6 +108,7 @@ kotlin {
         allWarningsAsErrors = false
         // The apiVersion Gradle property cannot be used here, so set api version using free compiler args.
         // https://youtrack.jetbrains.com/issue/KT-72247/KGP-Cannot-use-unsupported-API-version-with-compilerVersion-that-supports-it#focus=Comments-27-11050897.0-0
+        freeCompilerArgs.addAll("-language-version", "1.8")
         freeCompilerArgs.addAll("-api-version", "1.7")
     }
 
