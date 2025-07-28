@@ -2,6 +2,8 @@ package dev.detekt.gradle.plugin
 
 import dev.detekt.gradle.plugin.internal.mapExplicitArgMode
 import dev.detekt.gradle.plugin.internal.rootProjectDirectoryCompat
+import dev.detekt.gradle.plugin.internal.setCreateBaselineTaskDefaults
+import dev.detekt.gradle.plugin.internal.setDetektTaskDefaults
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import io.gitlab.arturbosch.detekt.DetektPlugin
@@ -10,8 +12,6 @@ import io.gitlab.arturbosch.detekt.extensions.FailOnSeverity
 import io.gitlab.arturbosch.detekt.extensions.loadDetektVersion
 import io.gitlab.arturbosch.detekt.internal.addVariantName
 import io.gitlab.arturbosch.detekt.internal.existingVariantOrBaseFile
-import io.gitlab.arturbosch.detekt.internal.setCreateBaselineTaskDefaults
-import io.gitlab.arturbosch.detekt.internal.setDetektTaskDefaults
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.ReportingBasePlugin
