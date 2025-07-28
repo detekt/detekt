@@ -2,7 +2,7 @@ package dev.detekt.test.utils
 
 import com.intellij.openapi.util.Disposer
 import com.intellij.openapi.util.text.StringUtilRt
-import io.github.detekt.parser.KtCompiler
+import dev.detekt.parser.KtCompiler
 import kotlinx.coroutines.CoroutineScope
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.analysis.api.standalone.buildStandaloneAnalysisAPISession

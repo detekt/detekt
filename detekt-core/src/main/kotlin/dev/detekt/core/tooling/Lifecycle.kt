@@ -1,7 +1,7 @@
 package dev.detekt.core.tooling
 
-import io.github.detekt.parser.DetektMessageCollector
-import io.github.detekt.parser.generateBindingContext
+import dev.detekt.parser.DetektMessageCollector
+import dev.detekt.parser.generateBindingContext
 import dev.detekt.tooling.api.AnalysisMode
 import dev.detekt.api.Config
 import dev.detekt.api.Detektion

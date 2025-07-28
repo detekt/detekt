@@ -1,4 +1,4 @@
-package io.github.detekt.parser
+package dev.detekt.parser
 
 import dev.detekt.test.utils.resourceAsPath
 import org.assertj.core.api.Assertions.assertThat
