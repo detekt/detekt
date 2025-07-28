@@ -31,12 +31,12 @@ class ProblemsApiOutputReportSpec {
     private val problemReporter: ProblemReporter = mock()
     private val detektion: Detektion = mock()
 
-    private lateinit var report: ProblemsApiOutputReport
+    private lateinit var report: ProblemsApiConsoleReport
 
     @BeforeEach
     fun setUp() {
         whenever(problemsService.reporter).thenReturn(problemReporter)
-        report = ProblemsApiOutputReport(problemsService)
+        report = ProblemsApiConsoleReport(problemsService)
     }
 
     @Test

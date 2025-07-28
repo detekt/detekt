@@ -38,14 +38,6 @@ class ProblemsApiOutputReportFunctionalSpec {
                     // FAIL the build on errors so that Problems API is invoked
                     ignoreFailures = false
                 }
-                // Register your report so Detekt actually calls it
-                 tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
-                    reports {
-                        custom {
-                            reportId = "problemsAPI"
-                        }
-                    }
-                }
             """.trimIndent(),
             dryRun = false
         ).also {

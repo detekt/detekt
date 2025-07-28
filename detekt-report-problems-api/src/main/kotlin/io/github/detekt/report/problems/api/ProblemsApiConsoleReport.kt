@@ -11,7 +11,7 @@ import org.gradle.api.problems.Severity
 import javax.inject.Inject
 
 @Incubating
-class ProblemsApiOutputReport : ConsoleReport {
+class ProblemsApiConsoleReport : ConsoleReport {
 
     private val problems: Problems?
 
