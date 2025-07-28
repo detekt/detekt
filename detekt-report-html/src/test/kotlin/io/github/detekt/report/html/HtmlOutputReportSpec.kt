@@ -1,5 +1,11 @@
 package io.github.detekt.report.html
 
+import dev.detekt.api.testfixtures.TestDetektion
+import dev.detekt.api.testfixtures.TestSetupContext
+import dev.detekt.api.testfixtures.createEntity
+import dev.detekt.api.testfixtures.createIssue
+import dev.detekt.api.testfixtures.createLocation
+import dev.detekt.api.testfixtures.createRuleInstance
 import io.github.detekt.metrics.CognitiveComplexity
 import io.github.detekt.metrics.processors.commentLinesKey
 import io.github.detekt.metrics.processors.complexityKey
@@ -12,12 +18,6 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
-import io.gitlab.arturbosch.detekt.test.TestDetektion
-import io.gitlab.arturbosch.detekt.test.TestSetupContext
-import io.gitlab.arturbosch.detekt.test.createEntity
-import io.gitlab.arturbosch.detekt.test.createIssue
-import io.gitlab.arturbosch.detekt.test.createLocation
-import io.gitlab.arturbosch.detekt.test.createRuleInstance
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.nio.file.Path

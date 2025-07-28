@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.documentation
 
+import dev.detekt.api.testfixtures.TestSetupContext
 import io.github.detekt.test.utils.compileContentForTest
 import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.test.TestSetupContext
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lint
 import io.gitlab.arturbosch.detekt.test.yamlConfig
