@@ -1,6 +1,6 @@
 package io.github.detekt.report.html
 
-import io.github.detekt.metrics.ComplexityReportGenerator
+import dev.detekt.metrics.ComplexityReportGenerator
 import dev.detekt.utils.openSafeStream
 import dev.detekt.api.Detektion
 import dev.detekt.api.Issue

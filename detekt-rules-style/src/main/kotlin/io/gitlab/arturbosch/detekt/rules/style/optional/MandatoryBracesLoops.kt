@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style.optional
 
 import com.intellij.psi.PsiWhiteSpace
-import io.github.detekt.metrics.linesOfCode
+import dev.detekt.metrics.linesOfCode
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding

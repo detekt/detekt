@@ -1,6 +1,6 @@
 package io.github.detekt.report.md
 
-import io.github.detekt.metrics.ComplexityReportGenerator
+import dev.detekt.metrics.ComplexityReportGenerator
 import dev.detekt.utils.MarkdownContent
 import dev.detekt.utils.codeBlock
 import dev.detekt.utils.emptyLine

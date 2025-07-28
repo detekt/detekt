@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
 import com.intellij.psi.util.PsiTreeUtil
-import io.github.detekt.metrics.linesOfCode
+import dev.detekt.metrics.linesOfCode
 import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.Config
 import dev.detekt.api.Configuration

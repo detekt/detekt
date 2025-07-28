@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
-import io.github.detekt.metrics.CyclomaticComplexity
+import dev.detekt.metrics.CyclomaticComplexity
 import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.Config
 import dev.detekt.api.Configuration

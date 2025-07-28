@@ -1,6 +1,6 @@
 package dev.detekt.core.reporting.console
 
-import io.github.detekt.metrics.ComplexityReportGenerator
+import dev.detekt.metrics.ComplexityReportGenerator
 import dev.detekt.api.ConsoleReport
 import dev.detekt.api.Detektion
 

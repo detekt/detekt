@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
-import io.github.detekt.metrics.CognitiveComplexity
+import dev.detekt.metrics.CognitiveComplexity
 import dev.detekt.api.Config
 import dev.detekt.api.Configuration
 import dev.detekt.api.Entity
