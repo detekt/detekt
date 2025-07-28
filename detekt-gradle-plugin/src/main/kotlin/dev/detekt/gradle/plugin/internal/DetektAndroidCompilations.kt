@@ -2,8 +2,8 @@ package dev.detekt.gradle.plugin.internal
 
 import com.android.build.api.variant.AndroidComponentsExtension
 import com.android.build.api.variant.Variant
-import io.gitlab.arturbosch.detekt.DetektPlugin
-import io.gitlab.arturbosch.detekt.extensions.DetektExtension
+import dev.detekt.gradle.plugin.DetektPlugin
+import dev.detekt.gradle.plugin.extensions.DetektExtension
 import org.gradle.api.Project
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 
