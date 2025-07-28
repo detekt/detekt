@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.api.internal
 
-import io.github.detekt.utils.openSafeStream
+import dev.detekt.utils.openSafeStream
 import io.gitlab.arturbosch.detekt.api.Extension
 import java.net.URL
 import java.util.jar.Manifest

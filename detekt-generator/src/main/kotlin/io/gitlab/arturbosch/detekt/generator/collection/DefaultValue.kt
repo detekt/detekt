@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.generator.collection
 
-import io.github.detekt.utils.YamlNode
-import io.github.detekt.utils.keyValue
-import io.github.detekt.utils.list
-import io.github.detekt.utils.listOfMaps
+import dev.detekt.utils.YamlNode
+import dev.detekt.utils.keyValue
+import dev.detekt.utils.list
+import dev.detekt.utils.listOfMaps
 import io.gitlab.arturbosch.detekt.api.ValuesWithReason
 
 sealed interface DefaultValue {
