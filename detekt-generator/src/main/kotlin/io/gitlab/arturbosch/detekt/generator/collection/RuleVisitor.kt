@@ -130,7 +130,7 @@ internal class RuleVisitor(textReplacements: Map<String, String>) : DetektVisito
             // which needs detekt-formatting.jar,
             // which needs :detekt-formatting:processResources task output,
             // which needs output of this class.
-            "Rule", // io.gitlab.arturbosch.detekt.api.Rule
+            "Rule", // dev.detekt.api.Rule
             "FormattingRule", // io.gitlab.arturbosch.detekt.formatting.FormattingRule
             "EmptyRule", // io.gitlab.arturbosch.detekt.rules.empty.EmptyRule
         )

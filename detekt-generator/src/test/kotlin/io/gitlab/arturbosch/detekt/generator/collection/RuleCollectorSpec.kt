@@ -743,7 +743,7 @@ class RuleCollectorSpec {
                  * description
                  */
 
-                class SomeRandomClass : Rule(), io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+                class SomeRandomClass : Rule(), dev.detekt.api.RequiresFullAnalysis
             """.trimIndent()
             val items = subject.run(code)
             assertThat(items[0].requiresFullAnalysis).isTrue()

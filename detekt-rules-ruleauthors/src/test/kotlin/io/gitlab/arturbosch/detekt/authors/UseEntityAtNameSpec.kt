@@ -12,9 +12,9 @@ internal class UseEntityAtNameSpec {
     @Test
     fun `should not report calls when there's no name involved`() {
         val code = """
-            import io.gitlab.arturbosch.detekt.api.Finding
-            import io.gitlab.arturbosch.detekt.api.Entity
-            import io.gitlab.arturbosch.detekt.api.Rule
+            import dev.detekt.api.Finding
+            import dev.detekt.api.Entity
+            import dev.detekt.api.Rule
             import com.intellij.psi.PsiElement
             
             fun Rule.f(element: PsiElement) {
@@ -28,9 +28,9 @@ internal class UseEntityAtNameSpec {
     @Test
     fun `should not report calls when atName is already used`() {
         val code = """
-            import io.gitlab.arturbosch.detekt.api.Finding
-            import io.gitlab.arturbosch.detekt.api.Entity
-            import io.gitlab.arturbosch.detekt.api.Rule
+            import dev.detekt.api.Finding
+            import dev.detekt.api.Entity
+            import dev.detekt.api.Rule
             import org.jetbrains.kotlin.psi.KtNamedDeclaration
             
             fun Rule.f(element: KtNamedDeclaration) {
@@ -44,9 +44,9 @@ internal class UseEntityAtNameSpec {
     @Test
     fun `should report calls where nameIdentifier is used directly with bang`() {
         val code = """
-            import io.gitlab.arturbosch.detekt.api.Finding
-            import io.gitlab.arturbosch.detekt.api.Entity
-            import io.gitlab.arturbosch.detekt.api.Rule
+            import dev.detekt.api.Finding
+            import dev.detekt.api.Entity
+            import dev.detekt.api.Rule
             import com.intellij.psi.PsiNameIdentifierOwner
             
             fun Rule.f(element: PsiNameIdentifierOwner) {
@@ -61,9 +61,9 @@ internal class UseEntityAtNameSpec {
     @Test
     fun `should report calls where nameIdentifier is used directly with double-bang`() {
         val code = """
-            import io.gitlab.arturbosch.detekt.api.Finding
-            import io.gitlab.arturbosch.detekt.api.Entity
-            import io.gitlab.arturbosch.detekt.api.Rule
+            import dev.detekt.api.Finding
+            import dev.detekt.api.Entity
+            import dev.detekt.api.Rule
             import com.intellij.psi.PsiNameIdentifierOwner
             
             fun Rule.f(element: PsiNameIdentifierOwner) {
@@ -78,9 +78,9 @@ internal class UseEntityAtNameSpec {
     @Test
     fun `should report calls where nameIdentifier is used with elvis with same fallback`() {
         val code = """
-            import io.gitlab.arturbosch.detekt.api.Finding
-            import io.gitlab.arturbosch.detekt.api.Entity
-            import io.gitlab.arturbosch.detekt.api.Rule
+            import dev.detekt.api.Finding
+            import dev.detekt.api.Entity
+            import dev.detekt.api.Rule
             import com.intellij.psi.PsiNameIdentifierOwner
             
             fun Rule.f(element: PsiNameIdentifierOwner) {
@@ -95,9 +95,9 @@ internal class UseEntityAtNameSpec {
     @Test
     fun `should report calls where nameIdentifier is used with elvis with complex fallback`() {
         val code = """
-            import io.gitlab.arturbosch.detekt.api.Finding
-            import io.gitlab.arturbosch.detekt.api.Entity
-            import io.gitlab.arturbosch.detekt.api.Rule
+            import dev.detekt.api.Finding
+            import dev.detekt.api.Entity
+            import dev.detekt.api.Rule
             import com.intellij.psi.PsiExpression
             import com.intellij.psi.PsiNameIdentifierOwner
             import org.jetbrains.kotlin.psi.KtClass
@@ -116,9 +116,9 @@ internal class UseEntityAtNameSpec {
     @Test
     fun `should report calls where nameIdentifier is used with elvis with other fallback`() {
         val code = """
-            import io.gitlab.arturbosch.detekt.api.Finding
-            import io.gitlab.arturbosch.detekt.api.Entity
-            import io.gitlab.arturbosch.detekt.api.Rule
+            import dev.detekt.api.Finding
+            import dev.detekt.api.Entity
+            import dev.detekt.api.Rule
             import com.intellij.psi.PsiElement
             import com.intellij.psi.PsiNameIdentifierOwner
             
@@ -134,9 +134,9 @@ internal class UseEntityAtNameSpec {
     @Test
     fun `should not report calls where from is used with multiple parameters`() {
         val code = """
-            import io.gitlab.arturbosch.detekt.api.Finding
-            import io.gitlab.arturbosch.detekt.api.Entity
-            import io.gitlab.arturbosch.detekt.api.Rule
+            import dev.detekt.api.Finding
+            import dev.detekt.api.Entity
+            import dev.detekt.api.Rule
             import com.intellij.psi.PsiElement
             import com.intellij.psi.PsiNameIdentifierOwner
             

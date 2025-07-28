@@ -352,20 +352,3 @@ public final class dev/detekt/api/ValuesWithReasonKt {
 	public static final fun valuesWithReason ([Lkotlin/Pair;)Ldev/detekt/api/ValuesWithReason;
 }
 
-public abstract interface annotation class dev/detekt/api/internal/AutoCorrectable : java/lang/annotation/Annotation {
-	public abstract fun since ()Ljava/lang/String;
-}
-
-public abstract interface class dev/detekt/api/internal/BuiltInOutputReport {
-}
-
-public abstract interface class dev/detekt/api/internal/DefaultRuleSetProvider : dev/detekt/api/RuleSetProvider {
-}
-
-public final class dev/detekt/api/internal/VersionsKt {
-	public static final fun whichDetekt ()Ljava/lang/String;
-	public static final fun whichJava ()Ljava/lang/String;
-	public static final fun whichKotlin ()Ljava/lang/String;
-	public static final fun whichOS ()Ljava/lang/String;
-}
-
