@@ -1,7 +1,7 @@
 package io.github.detekt.report.problems.api
 
+import io.gitlab.arturbosch.detekt.api.ConsoleReport
 import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.OutputReport
 import org.gradle.api.Incubating
 import org.gradle.api.problems.ProblemGroup
 import org.gradle.api.problems.ProblemId
@@ -11,12 +11,11 @@ import org.gradle.api.problems.Severity
 import javax.inject.Inject
 
 @Incubating
-class ProblemsApiOutputReport : OutputReport {
+class ProblemsApiOutputReport : ConsoleReport {
 
     private val problems: Problems?
 
     override val id: String = "problemsAPI"
-    override val ending: String = "txt"
 
     @Inject
     public constructor(problems: Problems) {
@@ -28,25 +27,25 @@ class ProblemsApiOutputReport : OutputReport {
     }
 
     override fun render(detektion: Detektion): String? {
-        if (problems == null) {
-            return "TEST-OK: Detekt found ${detektion.issues.size} issues."
-        }
+        val reporter: ProblemReporter? = problems?.reporter ?: null
+        val reportLines = mutableListOf<String>()
 
-        val reporter: ProblemReporter = problems.reporter
         detektion.issues.forEach { issue ->
             val group = ProblemGroup.create("validation", "detekt issue")
             val id = ProblemId.create(issue.ruleInstance.id, issue.message, group)
-            reporter.report(id) { spec ->
+            reporter?.report(id) { spec ->
                 val filePath = issue.location.path.toString()
                 val line = issue.location.source.line
                 spec.fileLocation(filePath)
                 spec.lineInFileLocation(filePath, line)
                 spec.details(issue.message)
                 spec.severity(mapSeverity(issue.severity))
+                reportLines.add(
+                    "${issue.location.path}:${issue.location.source.line} [${issue.ruleInstance.id}] ${issue.message}"
+                )
             }
         }
-
-        return null
+        return reportLines.joinToString(separator = System.lineSeparator())
     }
 }
 

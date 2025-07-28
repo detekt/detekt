@@ -26,9 +26,6 @@ open class DetektReports @Inject constructor(@get:Internal val objects: ObjectFa
     open val md: DetektReport = objects.newInstance(DetektReport::class.java, MD)
 
     @get:Nested
-    open val problemsAPI: DetektReport = objects.newInstance(DetektReport::class.java, DetektReportType.PROBLEMS_API)
-
-    @get:Nested
     open val custom = mutableListOf<CustomDetektReport>()
 
     fun xml(action: Action<in DetektReport>): Unit = action.execute(xml)
@@ -38,8 +35,6 @@ open class DetektReports @Inject constructor(@get:Internal val objects: ObjectFa
     fun sarif(action: Action<in DetektReport>): Unit = action.execute(sarif)
 
     fun md(action: Action<in DetektReport>): Unit = action.execute(md)
-
-    fun problemsAPI(action: Action<in DetektReport>): Unit = action.execute(problemsAPI)
 
     fun custom(action: Action<in CustomDetektReport>): Unit = action.execute(createAndAddCustomReport())
 

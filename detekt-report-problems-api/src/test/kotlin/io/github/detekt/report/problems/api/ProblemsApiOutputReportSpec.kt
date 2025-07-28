@@ -74,7 +74,7 @@ class ProblemsApiOutputReportSpec {
 
         val result = report.render(detektion)
 
-        assertThat(result).isNull()
+        assertThat(result).isEqualTo("")
 
         val specCaptor = argumentCaptor<Action<ProblemSpec>>()
         verify(problemReporter).report(any(), specCaptor.capture())
@@ -93,18 +93,8 @@ class ProblemsApiOutputReportSpec {
         whenever(detektion.issues).thenReturn(emptyList())
         val result = report.render(detektion)
 
-        assertThat(result).isNull()
+        assertThat(result).isEqualTo("")
         verify(problemReporter, never()).report(any(), any())
-    }
-
-    @Test
-    fun `when constructed without problems, returns test message`() {
-        val reportWithoutProblems = ProblemsApiOutputReport()
-        whenever(detektion.issues).thenReturn(emptyList())
-
-        val result = reportWithoutProblems.render(detektion)
-
-        assertThat(result).isEqualTo("TEST-OK: Detekt found 0 issues.")
     }
 
     @ParameterizedTest

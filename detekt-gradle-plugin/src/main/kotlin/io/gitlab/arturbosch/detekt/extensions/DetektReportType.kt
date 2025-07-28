@@ -6,7 +6,6 @@ enum class DetektReportType(val reportId: String, val extension: String) {
     HTML("html", "html"),
     SARIF("sarif", "sarif"),
     MD("md", "md"),
-    PROBLEMS_API("problems-api", ""),
     ;
 
     internal companion object {
