@@ -2,8 +2,8 @@ package io.gitlab.arturbosch.detekt.formatting
 
 import io.github.classgraph.ClassGraph
 import dev.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.test.assertThat
+import dev.detekt.test.lint
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 

@@ -5,7 +5,7 @@ import io.github.detekt.test.utils.compileContentForTest
 import io.github.detekt.test.utils.compileForTest
 import io.github.detekt.test.utils.resource
 import dev.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.test.FakeLanguageVersionSettings
+import dev.detekt.test.FakeLanguageVersionSettings
 import org.intellij.lang.annotations.Language
 import java.io.File
 import kotlin.io.path.toPath

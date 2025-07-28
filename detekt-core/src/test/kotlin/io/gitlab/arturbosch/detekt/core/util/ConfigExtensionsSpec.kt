@@ -3,8 +3,8 @@ package io.gitlab.arturbosch.detekt.core.util
 import io.github.detekt.test.utils.compileForTest
 import io.github.detekt.test.utils.resourceAsPath
 import dev.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
+import dev.detekt.test.TestConfig
+import dev.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test

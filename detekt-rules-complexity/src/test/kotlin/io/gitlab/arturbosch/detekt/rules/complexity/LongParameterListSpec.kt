@@ -2,8 +2,8 @@ package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.lintWithContext
+import dev.detekt.test.TestConfig
+import dev.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test

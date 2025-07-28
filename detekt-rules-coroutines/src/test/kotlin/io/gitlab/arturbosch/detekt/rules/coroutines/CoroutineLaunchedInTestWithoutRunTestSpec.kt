@@ -4,9 +4,9 @@ import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.github.detekt.test.utils.compileContentForTest
 import dev.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.createBindingContext
-import io.gitlab.arturbosch.detekt.test.lintWithContext
-import io.gitlab.arturbosch.detekt.test.location
+import dev.detekt.test.createBindingContext
+import dev.detekt.test.lintWithContext
+import dev.detekt.test.location
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType

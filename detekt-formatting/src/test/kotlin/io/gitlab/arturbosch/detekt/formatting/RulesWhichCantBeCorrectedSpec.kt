@@ -7,8 +7,8 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.Indentation
 import io.gitlab.arturbosch.detekt.formatting.wrappers.MaximumLineLength
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoWildcardImports
 import io.gitlab.arturbosch.detekt.formatting.wrappers.PackageName
-import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.assertThat
+import dev.detekt.test.TestConfig
+import dev.detekt.test.assertThat
 import org.junit.jupiter.api.Test
 
 class RulesWhichCantBeCorrectedSpec {

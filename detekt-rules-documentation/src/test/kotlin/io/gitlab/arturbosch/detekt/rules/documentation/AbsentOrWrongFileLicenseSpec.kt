@@ -5,9 +5,9 @@ import io.github.detekt.test.utils.resourceAsPath
 import dev.detekt.api.Config
 import dev.detekt.api.Finding
 import dev.detekt.api.test.TestSetupContext
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lint
-import io.gitlab.arturbosch.detekt.test.yamlConfig
+import dev.detekt.test.assertThat
+import dev.detekt.test.lint
+import dev.detekt.test.yamlConfig
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test

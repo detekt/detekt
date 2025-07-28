@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.formatting
 
 import io.gitlab.arturbosch.detekt.formatting.wrappers.TrailingCommaOnCallSite
-import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.assertThat
+import dev.detekt.test.TestConfig
+import dev.detekt.test.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 

@@ -18,7 +18,7 @@ import dev.detekt.api.Severity
 import dev.detekt.api.SourceLocation
 import dev.detekt.api.TextLocation
 import dev.detekt.api.config
-import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
+import dev.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.intellij.lang.annotations.Language

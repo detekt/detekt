@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.test
+package dev.detekt.test
 
 import io.github.detekt.test.utils.resource
 import io.github.detekt.utils.openSafeStream

@@ -5,7 +5,7 @@ import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.test.TestConfig
+import dev.detekt.test.TestConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.junit.jupiter.api.Test

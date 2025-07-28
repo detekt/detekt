@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.test
+package dev.detekt.test
 
 import com.intellij.openapi.vfs.impl.jar.CoreJarFileSystem
 import io.github.detekt.test.utils.KotlinEnvironmentContainer

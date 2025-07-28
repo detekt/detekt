@@ -3,8 +3,8 @@ package io.gitlab.arturbosch.detekt.core.config
 import io.github.detekt.test.utils.resourceAsPath
 import io.github.detekt.utils.getSafeResourceAsStream
 import dev.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.yamlConfig
-import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
+import dev.detekt.test.yamlConfig
+import dev.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException

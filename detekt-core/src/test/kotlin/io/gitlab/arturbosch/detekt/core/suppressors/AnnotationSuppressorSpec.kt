@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.core.suppressors
 import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.github.detekt.test.utils.compileContentForTest
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.createBindingContext
+import dev.detekt.test.createBindingContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtFunction

@@ -2,8 +2,8 @@ package io.gitlab.arturbosch.detekt.rules.style.optional
 
 import dev.detekt.api.Config
 import dev.detekt.api.SourceLocation
-import io.gitlab.arturbosch.detekt.test.lint
-import io.gitlab.arturbosch.detekt.test.location
+import dev.detekt.test.lint
+import dev.detekt.test.location
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -150,7 +150,7 @@ class MandatoryBracesLoopsSpec {
 
             assertThat(findings).hasSize(2)
 
-            io.gitlab.arturbosch.detekt.test.assertThat(findings).hasTextLocations(42 to 80, 71 to 80)
+            dev.detekt.test.assertThat(findings).hasTextLocations(42 to 80, 71 to 80)
         }
 
         @Test

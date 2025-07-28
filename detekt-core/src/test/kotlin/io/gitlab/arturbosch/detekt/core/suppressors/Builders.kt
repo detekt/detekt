@@ -7,7 +7,7 @@ import dev.detekt.api.Location
 import dev.detekt.api.Rule
 import dev.detekt.api.SourceLocation
 import dev.detekt.api.TextLocation
-import io.gitlab.arturbosch.detekt.test.TestConfig
+import dev.detekt.test.TestConfig
 import org.jetbrains.kotlin.psi.KtElement
 import kotlin.io.path.Path
 

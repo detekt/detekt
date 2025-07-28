@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.core.config
 
 import dev.detekt.api.Config
 import io.gitlab.arturbosch.detekt.core.config.validation.DeprecatedRule
-import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
+import dev.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test

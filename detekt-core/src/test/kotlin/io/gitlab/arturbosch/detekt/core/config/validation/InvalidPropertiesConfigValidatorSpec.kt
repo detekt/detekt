@@ -7,8 +7,8 @@ import io.gitlab.arturbosch.detekt.core.config.YamlConfig
 import io.gitlab.arturbosch.detekt.core.config.validation.InvalidPropertiesConfigValidator.Companion.nestedConfigurationExpected
 import io.gitlab.arturbosch.detekt.core.config.validation.InvalidPropertiesConfigValidator.Companion.propertyDoesNotExists
 import io.gitlab.arturbosch.detekt.core.config.validation.InvalidPropertiesConfigValidator.Companion.unexpectedNestedConfiguration
-import io.gitlab.arturbosch.detekt.test.yamlConfig
-import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
+import dev.detekt.test.yamlConfig
+import dev.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested

@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.core.config.validation
 
 import dev.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.core.config.YamlConfig
-import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
+import dev.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

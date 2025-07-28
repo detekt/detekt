@@ -6,9 +6,9 @@ import io.gitlab.arturbosch.detekt.rules.style.BracesOnWhenStatements.BracePolic
 import io.gitlab.arturbosch.detekt.rules.style.BracesOnWhenStatementsSpec.Companion.NOT_RELEVANT
 import io.gitlab.arturbosch.detekt.rules.style.BracesOnWhenStatementsSpec.Companion.options
 import io.gitlab.arturbosch.detekt.rules.style.BracesOnWhenStatementsSpec.Companion.test
-import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.test.TestConfig
+import dev.detekt.test.assertThat
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode
 import org.junit.jupiter.api.DynamicContainer.dynamicContainer

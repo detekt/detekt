@@ -2,8 +2,8 @@ package io.gitlab.arturbosch.detekt.formatting
 
 import dev.detekt.api.Config
 import io.gitlab.arturbosch.detekt.formatting.wrappers.Wrapping
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.test.assertThat
+import dev.detekt.test.lint
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 

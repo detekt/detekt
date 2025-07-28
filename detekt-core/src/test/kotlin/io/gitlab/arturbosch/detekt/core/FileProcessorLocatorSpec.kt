@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.core
 import io.github.classgraph.ClassGraph
 import io.github.detekt.test.utils.resourceAsPath
 import dev.detekt.api.FileProcessListener
-import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
+import dev.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.fail
 import org.junit.jupiter.api.Test

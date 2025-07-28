@@ -2,9 +2,9 @@ package io.gitlab.arturbosch.detekt.formatting
 
 import dev.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.formatting.wrappers.MaximumLineLength
-import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.test.TestConfig
+import dev.detekt.test.assertThat
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested

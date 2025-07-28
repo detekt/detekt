@@ -2,8 +2,8 @@ package io.gitlab.arturbosch.detekt.rules.empty
 
 import dev.detekt.api.Config
 import dev.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.test.TestConfig
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.junit.jupiter.api.Test

@@ -4,8 +4,8 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.github.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lintWithContext
+import dev.detekt.test.assertThat
+import dev.detekt.test.lintWithContext
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
