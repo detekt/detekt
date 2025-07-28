@@ -10,7 +10,7 @@ import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.RequiresFullAnalysis
 import dev.detekt.api.Rule
 import dev.detekt.api.RuleSet
-import io.gitlab.arturbosch.detekt.core.suppressors.isSuppressedBy
+import dev.detekt.core.suppressors.isSuppressedBy
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.config.LanguageVersionSettings
 import org.jetbrains.kotlin.config.languageVersionSettings

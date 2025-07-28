@@ -1,0 +1,9 @@
+package dev.detekt.core.tooling
+
+import dev.detekt.tooling.api.VersionProvider
+import dev.detekt.api.internal.whichDetekt
+
+class DefaultVersionProvider : VersionProvider {
+
+    override fun current(): String = whichDetekt()
+}
