@@ -1,6 +1,5 @@
-package io.gitlab.arturbosch.detekt.generator.config
+package io.gitlab.arturbosch.detekt.core.config
 
-import io.gitlab.arturbosch.detekt.core.config.YamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
