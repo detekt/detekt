@@ -1,4 +1,4 @@
-package io.github.detekt.test.utils
+package dev.detekt.test.utils
 
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.project.Project

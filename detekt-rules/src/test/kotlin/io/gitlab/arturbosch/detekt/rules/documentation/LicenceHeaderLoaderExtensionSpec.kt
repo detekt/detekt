@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.documentation
 
-import io.github.detekt.test.utils.resource
+import dev.detekt.test.utils.resource
 import dev.detekt.api.test.TestSetupContext
 import org.assertj.core.api.Assertions.assertThatCode
 import org.junit.jupiter.api.Test

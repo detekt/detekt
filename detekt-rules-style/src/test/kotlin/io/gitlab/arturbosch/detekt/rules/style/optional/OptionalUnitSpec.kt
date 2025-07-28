@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.style.optional
 
-import io.github.detekt.test.utils.KotlinEnvironmentContainer
+import dev.detekt.test.utils.KotlinEnvironmentContainer
 import dev.detekt.api.Config
 import dev.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
+import dev.detekt.test.utils.KotlinCoreEnvironmentTest
 import dev.detekt.test.FakeLanguageVersionSettings
 import dev.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat

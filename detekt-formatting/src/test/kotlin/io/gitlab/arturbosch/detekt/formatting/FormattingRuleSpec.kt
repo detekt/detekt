@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.formatting
 
-import io.github.detekt.test.utils.compileForTest
+import dev.detekt.test.utils.compileForTest
 import dev.detekt.api.Config
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ChainWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoLineBreakBeforeAssignment

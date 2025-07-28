@@ -1,6 +1,6 @@
 package io.github.detekt.report.sarif
 
-import io.github.detekt.test.utils.readResourceContent
+import dev.detekt.test.utils.readResourceContent
 import dev.detekt.api.RuleInstance
 import dev.detekt.api.RuleSet
 import dev.detekt.api.Severity

@@ -2,9 +2,9 @@ package io.gitlab.arturbosch.detekt.core
 
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
-import io.github.detekt.test.utils.compileContentForTest
-import io.github.detekt.test.utils.compileForTest
-import io.github.detekt.test.utils.resourceAsPath
+import dev.detekt.test.utils.compileContentForTest
+import dev.detekt.test.utils.compileForTest
+import dev.detekt.test.utils.resourceAsPath
 import dev.detekt.api.Config
 import dev.detekt.api.Configuration
 import dev.detekt.api.Entity

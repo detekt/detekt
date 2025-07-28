@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.config
 
-import io.github.detekt.test.utils.resourceAsPath
+import dev.detekt.test.utils.resourceAsPath
 import io.github.detekt.utils.getSafeResourceAsStream
 import dev.detekt.api.Config
 import dev.detekt.test.yamlConfig

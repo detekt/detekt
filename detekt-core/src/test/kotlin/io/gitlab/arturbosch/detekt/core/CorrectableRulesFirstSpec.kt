@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.core
 
-import io.github.detekt.test.utils.compileForTest
+import dev.detekt.test.utils.compileForTest
 import dev.detekt.api.Config
 import dev.detekt.api.Rule
 import dev.detekt.test.yamlConfigFromContent

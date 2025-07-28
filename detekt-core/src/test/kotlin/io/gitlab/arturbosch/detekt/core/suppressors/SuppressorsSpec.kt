@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.suppressors
 
-import io.github.detekt.test.utils.compileContentForTest
+import dev.detekt.test.utils.compileContentForTest
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding

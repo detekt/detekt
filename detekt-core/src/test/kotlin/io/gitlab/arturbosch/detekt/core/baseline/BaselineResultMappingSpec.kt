@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.core.baseline
 
-import io.github.detekt.test.utils.createTempDirectoryForTest
-import io.github.detekt.test.utils.resourceAsPath
+import dev.detekt.test.utils.createTempDirectoryForTest
+import dev.detekt.test.utils.resourceAsPath
 import dev.detekt.api.test.TestSetupContext
 import dev.detekt.api.test.createEntity
 import dev.detekt.api.test.createIssue

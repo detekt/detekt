@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.rules
 
-import io.github.detekt.test.utils.resourceAsPath
+import dev.detekt.test.utils.resourceAsPath
 import io.github.detekt.tooling.api.spec.RulesSpec.RunPolicy.DisableDefaultRuleSets
 import io.github.detekt.tooling.api.spec.RulesSpec.RunPolicy.RestrictToSingleRule
 import dev.detekt.api.RuleName

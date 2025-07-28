@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
-import io.github.detekt.test.utils.KotlinEnvironmentContainer
+import dev.detekt.test.utils.KotlinEnvironmentContainer
 import dev.detekt.api.Config
-import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
+import dev.detekt.test.utils.KotlinCoreEnvironmentTest
 import dev.detekt.test.TestConfig
 import dev.detekt.test.assertThat
 import dev.detekt.test.lintWithContext

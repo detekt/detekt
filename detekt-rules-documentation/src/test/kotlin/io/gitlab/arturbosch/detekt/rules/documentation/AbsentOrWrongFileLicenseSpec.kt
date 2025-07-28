@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.documentation
 
-import io.github.detekt.test.utils.compileContentForTest
-import io.github.detekt.test.utils.resourceAsPath
+import dev.detekt.test.utils.compileContentForTest
+import dev.detekt.test.utils.resourceAsPath
 import dev.detekt.api.Config
 import dev.detekt.api.Finding
 import dev.detekt.api.test.TestSetupContext

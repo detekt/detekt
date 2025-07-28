@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
-import io.github.detekt.test.utils.compileForTest
+import dev.detekt.test.utils.compileForTest
 import dev.detekt.api.Config
 import dev.detekt.test.TestConfig
 import dev.detekt.test.assertThat

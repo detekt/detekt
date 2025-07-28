@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.core.util
 
-import io.github.detekt.test.utils.compileForTest
-import io.github.detekt.test.utils.resourceAsPath
+import dev.detekt.test.utils.compileForTest
+import dev.detekt.test.utils.resourceAsPath
 import dev.detekt.api.Config
 import dev.detekt.test.TestConfig
 import dev.detekt.test.yamlConfigFromContent

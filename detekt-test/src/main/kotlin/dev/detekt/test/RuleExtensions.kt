@@ -1,9 +1,9 @@
 package dev.detekt.test
 
-import io.github.detekt.test.utils.KotlinAnalysisApiEngine
-import io.github.detekt.test.utils.KotlinEnvironmentContainer
-import io.github.detekt.test.utils.KotlinScriptEngine
-import io.github.detekt.test.utils.compileContentForTest
+import dev.detekt.test.utils.KotlinAnalysisApiEngine
+import dev.detekt.test.utils.KotlinEnvironmentContainer
+import dev.detekt.test.utils.KotlinScriptEngine
+import dev.detekt.test.utils.compileContentForTest
 import dev.detekt.api.Config
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi

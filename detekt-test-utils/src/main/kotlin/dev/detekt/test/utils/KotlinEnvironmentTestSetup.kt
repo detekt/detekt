@@ -1,9 +1,5 @@
-package io.gitlab.arturbosch.detekt.rules
+package dev.detekt.test.utils
 
-import io.github.detekt.test.utils.KotlinCoreEnvironmentWrapper
-import io.github.detekt.test.utils.KotlinEnvironmentContainer
-import io.github.detekt.test.utils.createEnvironment
-import io.github.detekt.test.utils.resourceAsPath
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.api.extension.ParameterContext

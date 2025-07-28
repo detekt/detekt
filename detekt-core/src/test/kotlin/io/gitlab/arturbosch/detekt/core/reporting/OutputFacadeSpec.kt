@@ -3,9 +3,9 @@ package io.gitlab.arturbosch.detekt.core.reporting
 import io.github.detekt.report.html.HtmlOutputReport
 import io.github.detekt.report.md.MdOutputReport
 import io.github.detekt.report.xml.XmlOutputReport
-import io.github.detekt.test.utils.StringPrintStream
-import io.github.detekt.test.utils.createTempFileForTest
-import io.github.detekt.test.utils.resourceAsPath
+import dev.detekt.test.utils.StringPrintStream
+import dev.detekt.test.utils.createTempFileForTest
+import dev.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.core.DetektResult
 import io.gitlab.arturbosch.detekt.core.createNullLoggingSpec
 import io.gitlab.arturbosch.detekt.core.tooling.withSettings

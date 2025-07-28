@@ -1,7 +1,7 @@
 package dev.detekt.test
 
 import com.intellij.openapi.vfs.impl.jar.CoreJarFileSystem
-import io.github.detekt.test.utils.KotlinEnvironmentContainer
+import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.jetbrains.kotlin.analysis.api.standalone.base.projectStructure.StandaloneProjectFactory
 import org.jetbrains.kotlin.cli.jvm.compiler.NoScopeRecordCliBindingTrace
 import org.jetbrains.kotlin.cli.jvm.compiler.TopDownAnalyzerFacadeForJVM

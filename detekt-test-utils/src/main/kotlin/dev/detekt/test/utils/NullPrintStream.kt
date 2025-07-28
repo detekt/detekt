@@ -1,4 +1,4 @@
-package io.github.detekt.test.utils
+package dev.detekt.test.utils
 
 import java.io.OutputStream
 import java.io.PrintStream

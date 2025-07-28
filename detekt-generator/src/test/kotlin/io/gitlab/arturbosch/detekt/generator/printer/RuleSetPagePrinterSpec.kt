@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.generator.printer
 
-import io.github.detekt.test.utils.resourceAsPath
+import dev.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.generator.util.createRuleSetPage
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.core.reporting
 import io.github.detekt.report.html.HtmlOutputReport
 import io.github.detekt.report.md.MdOutputReport
 import io.github.detekt.report.xml.XmlOutputReport
-import io.github.detekt.test.utils.resourceAsPath
+import dev.detekt.test.utils.resourceAsPath
 import io.github.detekt.tooling.dsl.ReportsSpecBuilder
 import dev.detekt.api.Detektion
 import dev.detekt.api.OutputReport

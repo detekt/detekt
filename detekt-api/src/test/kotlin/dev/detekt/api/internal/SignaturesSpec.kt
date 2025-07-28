@@ -1,6 +1,6 @@
 package dev.detekt.api.internal
 
-import io.github.detekt.test.utils.compileContentForTest
+import dev.detekt.test.utils.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.jetbrains.kotlin.psi.KtNamedFunction

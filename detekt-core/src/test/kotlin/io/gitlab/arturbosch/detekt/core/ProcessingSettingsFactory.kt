@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.core
 
-import io.github.detekt.test.utils.NullPrintStream
-import io.github.detekt.test.utils.resourceAsPath
+import dev.detekt.test.utils.NullPrintStream
+import dev.detekt.test.utils.resourceAsPath
 import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.github.detekt.tooling.api.spec.ReportsSpec
 import io.github.detekt.tooling.dsl.ProcessingSpecBuilder

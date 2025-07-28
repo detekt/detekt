@@ -6,8 +6,8 @@ import io.github.detekt.metrics.processors.complexityKey
 import io.github.detekt.metrics.processors.linesKey
 import io.github.detekt.metrics.processors.logicalLinesKey
 import io.github.detekt.metrics.processors.sourceLinesKey
-import io.github.detekt.test.utils.createTempFileForTest
-import io.github.detekt.test.utils.readResourceContent
+import dev.detekt.test.utils.createTempFileForTest
+import dev.detekt.test.utils.readResourceContent
 import dev.detekt.api.Detektion
 import dev.detekt.api.Issue
 import dev.detekt.api.ProjectMetric
