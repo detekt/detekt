@@ -1,11 +1,9 @@
 package dev.detekt.gradle.plugin.internal
 
-import io.gitlab.arturbosch.detekt.Detekt
-import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
-import io.gitlab.arturbosch.detekt.DetektPlugin
-import io.gitlab.arturbosch.detekt.extensions.DetektExtension
-import io.gitlab.arturbosch.detekt.internal.addVariantName
-import io.gitlab.arturbosch.detekt.internal.existingVariantOrBaseFile
+import dev.detekt.gradle.plugin.Detekt
+import dev.detekt.gradle.plugin.DetektCreateBaselineTask
+import dev.detekt.gradle.plugin.DetektPlugin
+import dev.detekt.gradle.plugin.extensions.DetektExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaBasePlugin
