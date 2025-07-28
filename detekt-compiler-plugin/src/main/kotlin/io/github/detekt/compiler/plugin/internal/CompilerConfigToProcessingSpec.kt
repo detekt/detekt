@@ -1,8 +1,8 @@
 package io.github.detekt.compiler.plugin.internal
 
 import io.github.detekt.compiler.plugin.Keys
-import io.github.detekt.tooling.api.spec.ProcessingSpec
-import io.github.detekt.tooling.api.spec.RulesSpec
+import dev.detekt.tooling.api.spec.ProcessingSpec
+import dev.detekt.tooling.api.spec.RulesSpec
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import kotlin.io.path.Path

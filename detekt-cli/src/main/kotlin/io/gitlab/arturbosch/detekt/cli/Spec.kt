@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.cli
 
-import io.github.detekt.tooling.api.spec.ProcessingSpec
-import io.github.detekt.tooling.api.spec.RulesSpec
-import io.github.detekt.tooling.api.spec.RulesSpec.RunPolicy.DisableDefaultRuleSets
-import io.github.detekt.tooling.api.spec.RulesSpec.RunPolicy.NoRestrictions
+import dev.detekt.tooling.api.spec.ProcessingSpec
+import dev.detekt.tooling.api.spec.RulesSpec
+import dev.detekt.tooling.api.spec.RulesSpec.RunPolicy.DisableDefaultRuleSets
+import dev.detekt.tooling.api.spec.RulesSpec.RunPolicy.NoRestrictions
 import dev.detekt.utils.PathFilters
 import dev.detekt.api.RuleSet
 import java.nio.file.Path

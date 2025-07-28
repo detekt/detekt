@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.rules
 
-import io.github.detekt.tooling.api.spec.RulesSpec
+import dev.detekt.tooling.api.spec.RulesSpec
 import dev.detekt.api.RuleSetProvider
 import dev.detekt.api.internal.DefaultRuleSetProvider
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings

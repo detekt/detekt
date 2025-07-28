@@ -1,1 +1,1 @@
-io.github.detekt.tooling.api.TestVersionProvider
+dev.detekt.tooling.api.TestVersionProvider

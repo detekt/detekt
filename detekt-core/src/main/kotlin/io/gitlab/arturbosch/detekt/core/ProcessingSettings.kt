@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.core
 
 import com.intellij.openapi.util.Disposer
-import io.github.detekt.tooling.api.spec.ConfigSpec
-import io.github.detekt.tooling.api.spec.ProcessingSpec
+import dev.detekt.tooling.api.spec.ConfigSpec
+import dev.detekt.tooling.api.spec.ProcessingSpec
 import dev.detekt.api.Config
 import dev.detekt.api.PropertiesAware
 import dev.detekt.api.SetupContext

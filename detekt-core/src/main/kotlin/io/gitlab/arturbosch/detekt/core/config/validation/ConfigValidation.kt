@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.config.validation
 
-import io.github.detekt.tooling.api.InvalidConfig
+import dev.detekt.tooling.api.InvalidConfig
 import dev.detekt.api.Config
 import dev.detekt.api.ConfigValidator
 import dev.detekt.api.Notification

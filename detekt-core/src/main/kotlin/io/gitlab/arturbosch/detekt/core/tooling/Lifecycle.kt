@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.core.tooling
 
 import io.github.detekt.parser.DetektMessageCollector
 import io.github.detekt.parser.generateBindingContext
-import io.github.detekt.tooling.api.AnalysisMode
+import dev.detekt.tooling.api.AnalysisMode
 import dev.detekt.api.Config
 import dev.detekt.api.Detektion
 import dev.detekt.api.FileProcessListener

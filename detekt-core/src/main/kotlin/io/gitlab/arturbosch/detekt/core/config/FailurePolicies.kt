@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.core.config
 
-import io.github.detekt.tooling.api.IssuesFound
-import io.github.detekt.tooling.api.spec.RulesSpec
+import dev.detekt.tooling.api.IssuesFound
+import dev.detekt.tooling.api.spec.RulesSpec
 import dev.detekt.api.Detektion
 import dev.detekt.api.Severity
 import dev.detekt.api.suppressed

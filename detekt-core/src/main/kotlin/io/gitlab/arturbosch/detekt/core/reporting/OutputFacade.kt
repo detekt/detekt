@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.reporting
 
-import io.github.detekt.tooling.api.spec.ReportsSpec
+import dev.detekt.tooling.api.spec.ReportsSpec
 import dev.detekt.api.Detektion
 import dev.detekt.api.getOrNull
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
