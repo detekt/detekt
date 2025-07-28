@@ -1,6 +1,5 @@
-package io.gitlab.arturbosch.detekt.generator.printer
+package io.gitlab.arturbosch.detekt.generator
 
-import io.gitlab.arturbosch.detekt.generator.main
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll

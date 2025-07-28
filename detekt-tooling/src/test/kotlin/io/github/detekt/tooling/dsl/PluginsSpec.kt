@@ -1,6 +1,5 @@
-package io.github.detekt.tooling.api
+package io.github.detekt.tooling.dsl
 
-import io.github.detekt.tooling.dsl.ExtensionsSpecBuilder
 import io.github.detekt.tooling.internal.PluginsHolder
 import org.assertj.core.api.Assertions.assertThatCode
 import org.junit.jupiter.api.Test

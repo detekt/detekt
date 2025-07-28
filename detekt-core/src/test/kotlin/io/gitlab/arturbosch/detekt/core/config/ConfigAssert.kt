@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.generator.config
+package io.gitlab.arturbosch.detekt.core.config
 
 import io.github.classgraph.ClassGraph
 import io.gitlab.arturbosch.detekt.api.Config
@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleName
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
-import io.gitlab.arturbosch.detekt.core.config.YamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.fail
 import java.lang.reflect.Modifier
