@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.sample.extensions
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.ConfigValidator
-import io.gitlab.arturbosch.detekt.api.Notification
+import dev.detekt.api.Config
+import dev.detekt.api.ConfigValidator
+import dev.detekt.api.Notification
 
 class SampleConfigValidator : ConfigValidator {
 
@@ -15,13 +15,8 @@ class SampleConfigValidator : ConfigValidator {
                 .subConfig("TooManyFunctions")
                 .valueOrNull<Boolean>("active")
         }.onFailure {
-            result.add(SampleMessage("'active' property must be of type boolean."))
+            result.add(Notification("'active' property must be of type boolean.", Notification.Level.Error))
         }
         return result
     }
 }
-
-class SampleMessage(
-    override val message: String,
-    override val level: Notification.Level = Notification.Level.Error,
-) : Notification
