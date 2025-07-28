@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.generator.printer.defaultconfig
 
-import io.github.detekt.utils.yaml
+import dev.detekt.utils.yaml
 import dev.detekt.api.Config
 import dev.detekt.api.valuesWithReason
 import io.gitlab.arturbosch.detekt.generator.collection.Active

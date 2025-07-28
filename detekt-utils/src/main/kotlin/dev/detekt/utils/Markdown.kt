@@ -1,6 +1,6 @@
 @file:Suppress("detekt.TooManyFunctions")
 
-package io.github.detekt.utils
+package dev.detekt.utils
 
 sealed class Markdown(open var content: String = "") {
     fun append(value: String) {

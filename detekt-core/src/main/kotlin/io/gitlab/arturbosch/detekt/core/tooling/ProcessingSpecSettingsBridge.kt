@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.core.tooling
 
 import io.github.detekt.tooling.api.spec.ProcessingSpec
-import io.github.detekt.utils.openSafeStream
+import dev.detekt.utils.openSafeStream
 import dev.detekt.api.Config
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.baseline.DETEKT_BASELINE_CREATION_KEY

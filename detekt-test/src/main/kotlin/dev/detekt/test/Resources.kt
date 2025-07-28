@@ -1,7 +1,7 @@
 package dev.detekt.test
 
 import dev.detekt.test.utils.resource
-import io.github.detekt.utils.openSafeStream
+import dev.detekt.utils.openSafeStream
 import dev.detekt.api.Config
 import io.gitlab.arturbosch.detekt.core.config.YamlConfig
 import org.intellij.lang.annotations.Language

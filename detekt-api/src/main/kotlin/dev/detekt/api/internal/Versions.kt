@@ -1,7 +1,7 @@
 package dev.detekt.api.internal
 
 import dev.detekt.api.Extension
-import io.github.detekt.utils.openSafeStream
+import dev.detekt.utils.openSafeStream
 import java.net.URL
 import java.util.jar.Manifest
 

@@ -1,4 +1,4 @@
-package io.github.detekt.utils
+package dev.detekt.utils
 
 import java.nio.file.Path
 import java.nio.file.PathMatcher

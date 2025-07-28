@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.config.validation
 
-import io.github.detekt.utils.openSafeStream
+import dev.detekt.utils.openSafeStream
 import java.util.Properties
 
 internal sealed class Deprecation
