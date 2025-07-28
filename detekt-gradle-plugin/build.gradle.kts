@@ -99,7 +99,7 @@ testing {
 
 kotlin {
     @OptIn(ExperimentalBuildToolsApi::class, ExperimentalKotlinGradlePluginApi::class)
-    compilerVersion = "2.0.21"
+    compilerVersion = "2.1.21"
 
     compilerOptions {
         suppressWarnings = true
