@@ -13,7 +13,7 @@ class ProblemsApiOutputReportFunctionalSpec {
     @Test
     fun `incubating statement appearing from problems api`() {
         pluginJar = File(System.getProperty("user.dir"))
-            .resolve("../detekt-report-problems-api/build/libs/detekt-report-problems-api-*.jar")
+            .resolve("../detekt-report-problems-api/build/libs/detekt-report-problems-api-1.23.8.jar")
             .canonicalPath
 
         val gradleRunner = DslGradleRunner(
