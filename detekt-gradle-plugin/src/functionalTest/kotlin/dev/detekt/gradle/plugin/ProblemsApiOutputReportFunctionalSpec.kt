@@ -32,10 +32,10 @@ class ProblemsApiOutputReportFunctionalSpec {
                 }
                 dependencies {
                     detektPlugins(files("${pluginJar.replace('\\', '/')}"))
+                    detektPlugins(gradleApi())
                 }
                 detekt {
                     allRules = true
-                    // FAIL the build on errors so that Problems API is invoked
                     ignoreFailures = false
                 }
             """.trimIndent(),
@@ -49,10 +49,9 @@ class ProblemsApiOutputReportFunctionalSpec {
         }
 
         gradleRunner.runTasksAndExpectFailure("detekt") { result ->
-            println("----- Detekt console output -----")
             val output = result.output
 
-            assertThat(output).contains("[Incubating] Problems report is available at:")
+            assertThat(output).contains("The file does not contain a package declaration.")
         }
     }
 }

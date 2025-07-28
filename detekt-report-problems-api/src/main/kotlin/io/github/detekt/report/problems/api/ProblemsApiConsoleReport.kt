@@ -13,7 +13,7 @@ import javax.inject.Inject
 @Incubating
 class ProblemsApiConsoleReport : ConsoleReport {
 
-    private val problems: Problems?
+    private var problems: Problems? = null
 
     override val id: String = "problemsAPI"
 
