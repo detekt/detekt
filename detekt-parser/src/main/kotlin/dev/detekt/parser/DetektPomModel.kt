@@ -1,4 +1,4 @@
-package io.github.detekt.parser
+package dev.detekt.parser
 
 import com.intellij.openapi.util.UserDataHolderBase
 import com.intellij.pom.PomModel

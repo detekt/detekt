@@ -1,4 +1,4 @@
-package io.github.detekt.parser
+package dev.detekt.parser
 
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFileManager

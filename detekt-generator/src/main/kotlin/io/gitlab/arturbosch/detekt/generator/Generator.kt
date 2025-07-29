@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.generator
 
-import io.github.detekt.parser.KtCompiler
+import dev.detekt.parser.KtCompiler
 import io.gitlab.arturbosch.detekt.generator.collection.DetektCollector
 import org.jetbrains.kotlin.psi.KtFile
 import java.io.PrintStream
