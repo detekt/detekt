@@ -1,4 +1,4 @@
-package io.github.detekt.parser
+package dev.detekt.parser
 
 import org.jetbrains.kotlin.cli.common.arguments.K2JVMCompilerArguments
 import org.jetbrains.kotlin.cli.common.arguments.parseCommandLineArguments

@@ -4,8 +4,8 @@ import dev.detekt.api.Config
 import dev.detekt.api.Detektion
 import dev.detekt.api.FileProcessListener
 import dev.detekt.api.RuleSetProvider
-import io.github.detekt.parser.DetektMessageCollector
-import io.github.detekt.parser.generateBindingContext
+import dev.detekt.parser.DetektMessageCollector
+import dev.detekt.parser.generateBindingContext
 import io.github.detekt.tooling.api.AnalysisMode
 import io.gitlab.arturbosch.detekt.core.Analyzer
 import io.gitlab.arturbosch.detekt.core.DetektResult
