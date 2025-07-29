@@ -6,7 +6,7 @@ import dev.detekt.api.Notification
 import dev.detekt.api.RuleSet
 import dev.detekt.api.RuleSetProvider
 import dev.detekt.test.utils.createTempDirectoryForTest
-import io.github.detekt.tooling.api.InvalidConfig
+import dev.detekt.tooling.api.InvalidConfig
 import io.gitlab.arturbosch.detekt.core.createNullLoggingSpec
 import io.gitlab.arturbosch.detekt.core.createProcessingSettings
 import io.gitlab.arturbosch.detekt.core.tooling.getDefaultConfiguration

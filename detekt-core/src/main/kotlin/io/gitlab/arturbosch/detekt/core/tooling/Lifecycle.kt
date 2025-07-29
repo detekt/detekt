@@ -6,7 +6,7 @@ import dev.detekt.api.FileProcessListener
 import dev.detekt.api.RuleSetProvider
 import dev.detekt.parser.DetektMessageCollector
 import dev.detekt.parser.generateBindingContext
-import io.github.detekt.tooling.api.AnalysisMode
+import dev.detekt.tooling.api.AnalysisMode
 import io.gitlab.arturbosch.detekt.core.Analyzer
 import io.gitlab.arturbosch.detekt.core.DetektResult
 import io.gitlab.arturbosch.detekt.core.FileProcessorLocator

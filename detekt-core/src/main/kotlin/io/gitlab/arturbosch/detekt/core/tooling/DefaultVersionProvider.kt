@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.core.tooling
 
 import dev.detekt.api.internal.whichDetekt
-import io.github.detekt.tooling.api.VersionProvider
+import dev.detekt.tooling.api.VersionProvider
 
 class DefaultVersionProvider : VersionProvider {
 

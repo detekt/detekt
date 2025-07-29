@@ -10,5 +10,5 @@ dependencies {
 }
 
 apiValidation {
-    ignoredPackages.add("io.github.detekt.tooling.internal")
+    ignoredPackages.add("dev.detekt.tooling.internal")
 }

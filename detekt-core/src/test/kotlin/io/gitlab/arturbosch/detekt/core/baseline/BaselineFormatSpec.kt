@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.core.baseline
 
 import dev.detekt.test.utils.createTempFileForTest
 import dev.detekt.test.utils.resourceAsPath
-import io.github.detekt.tooling.api.BaselineProvider
+import dev.detekt.tooling.api.BaselineProvider
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.assertj.core.api.Assertions.assertThatThrownBy

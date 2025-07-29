@@ -10,7 +10,7 @@ import dev.detekt.test.utils.NullPrintStream
 import dev.detekt.test.utils.readResourceContent
 import dev.detekt.test.utils.resourceAsPath
 import dev.detekt.test.utils.resourceUrl
-import io.github.detekt.tooling.api.spec.ProcessingSpec
+import dev.detekt.tooling.api.spec.ProcessingSpec
 import io.gitlab.arturbosch.detekt.core.tooling.AnalysisFacade
 import io.gitlab.arturbosch.detekt.core.tooling.DefaultLifecycle
 import org.assertj.core.api.Assertions.assertThat

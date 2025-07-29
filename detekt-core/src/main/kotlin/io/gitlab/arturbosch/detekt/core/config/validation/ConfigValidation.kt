@@ -4,7 +4,7 @@ import dev.detekt.api.Config
 import dev.detekt.api.ConfigValidator
 import dev.detekt.api.Notification
 import dev.detekt.api.Notification.Level
-import io.github.detekt.tooling.api.InvalidConfig
+import dev.detekt.tooling.api.InvalidConfig
 import io.gitlab.arturbosch.detekt.core.NL
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.config.YamlConfig

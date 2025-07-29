@@ -2,9 +2,9 @@ package io.gitlab.arturbosch.detekt.cli
 
 import dev.detekt.api.Severity
 import dev.detekt.test.utils.resourceAsPath
-import io.github.detekt.tooling.api.AnalysisMode
-import io.github.detekt.tooling.api.spec.RulesSpec.FailurePolicy.FailOnSeverity
-import io.github.detekt.tooling.api.spec.RulesSpec.FailurePolicy.NeverFail
+import dev.detekt.tooling.api.AnalysisMode
+import dev.detekt.tooling.api.spec.RulesSpec.FailurePolicy.FailOnSeverity
+import dev.detekt.tooling.api.spec.RulesSpec.FailurePolicy.NeverFail
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
