@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.coroutines
 
 import dev.detekt.api.Config
-import io.github.detekt.test.utils.KotlinEnvironmentContainer
-import io.github.detekt.test.utils.compileContentForTest
-import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
+import dev.detekt.test.utils.KotlinCoreEnvironmentTest
+import dev.detekt.test.utils.KotlinEnvironmentContainer
+import dev.detekt.test.utils.compileContentForTest
 import io.gitlab.arturbosch.detekt.test.createBindingContext
 import io.gitlab.arturbosch.detekt.test.lintWithContext
 import io.gitlab.arturbosch.detekt.test.location

@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.cli
 
 import dev.detekt.api.Severity
-import io.github.detekt.test.utils.resourceAsPath
+import dev.detekt.test.utils.resourceAsPath
 import io.github.detekt.tooling.api.AnalysisMode
 import io.github.detekt.tooling.api.spec.RulesSpec.FailurePolicy.FailOnSeverity
 import io.github.detekt.tooling.api.spec.RulesSpec.FailurePolicy.NeverFail

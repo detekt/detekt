@@ -1,4 +1,4 @@
-package io.github.detekt.test.utils.internal
+package dev.detekt.test.utils.internal
 
 import com.intellij.lang.FileASTNode
 import com.intellij.lang.Language

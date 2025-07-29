@@ -1,6 +1,6 @@
 package dev.detekt.parser
 
-import io.github.detekt.test.utils.resourceAsPath
+import dev.detekt.test.utils.resourceAsPath
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.jetbrains.kotlin.psi.KtTreeVisitorVoid

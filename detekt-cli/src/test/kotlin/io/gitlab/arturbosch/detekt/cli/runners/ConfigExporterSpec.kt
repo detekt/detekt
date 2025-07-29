@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.cli.runners
 
-import io.github.detekt.test.utils.NullPrintStream
-import io.github.detekt.test.utils.createTempFileForTest
+import dev.detekt.test.utils.NullPrintStream
+import dev.detekt.test.utils.createTempFileForTest
 import io.gitlab.arturbosch.detekt.cli.parseArguments
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

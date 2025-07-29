@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules
 
-import io.github.detekt.test.utils.compileContentForTest
+import dev.detekt.test.utils.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.psi.KtThrowExpression

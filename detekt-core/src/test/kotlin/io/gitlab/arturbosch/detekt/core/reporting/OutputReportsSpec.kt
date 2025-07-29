@@ -5,7 +5,7 @@ import dev.detekt.api.OutputReport
 import dev.detekt.report.html.HtmlOutputReport
 import dev.detekt.report.md.MdOutputReport
 import dev.detekt.report.xml.XmlOutputReport
-import io.github.detekt.test.utils.resourceAsPath
+import dev.detekt.test.utils.resourceAsPath
 import io.github.detekt.tooling.dsl.ReportsSpecBuilder
 import io.gitlab.arturbosch.detekt.core.createNullLoggingSpec
 import io.gitlab.arturbosch.detekt.core.createProcessingSettings

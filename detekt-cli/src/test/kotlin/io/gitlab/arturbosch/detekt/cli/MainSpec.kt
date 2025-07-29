@@ -2,9 +2,9 @@
 
 package io.gitlab.arturbosch.detekt.cli
 
-import io.github.detekt.test.utils.NullPrintStream
-import io.github.detekt.test.utils.StringPrintStream
-import io.github.detekt.test.utils.resourceAsPath
+import dev.detekt.test.utils.NullPrintStream
+import dev.detekt.test.utils.StringPrintStream
+import dev.detekt.test.utils.resourceAsPath
 import io.github.detekt.tooling.api.InvalidConfig
 import io.github.detekt.tooling.api.IssuesFound
 import io.github.detekt.tooling.api.UnexpectedError

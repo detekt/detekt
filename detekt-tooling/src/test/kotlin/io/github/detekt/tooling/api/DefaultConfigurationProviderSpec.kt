@@ -1,7 +1,7 @@
 package io.github.detekt.tooling.api
 
 import dev.detekt.api.Config
-import io.github.detekt.test.utils.createTempFileForTest
+import dev.detekt.test.utils.createTempFileForTest
 import io.github.detekt.tooling.api.spec.ExtensionId
 import io.github.detekt.tooling.api.spec.ExtensionsSpec
 import org.assertj.core.api.Assertions.assertThatCode

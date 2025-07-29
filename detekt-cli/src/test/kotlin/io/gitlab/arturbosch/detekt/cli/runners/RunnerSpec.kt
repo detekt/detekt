@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.cli.runners
 
-import io.github.detekt.test.utils.StringPrintStream
-import io.github.detekt.test.utils.resourceAsPath
+import dev.detekt.test.utils.StringPrintStream
+import dev.detekt.test.utils.resourceAsPath
 import io.github.detekt.tooling.api.InvalidConfig
 import io.github.detekt.tooling.api.IssuesFound
 import io.gitlab.arturbosch.detekt.cli.executeDetekt
