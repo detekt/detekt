@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.core.reporting.console
 
+import dev.detekt.api.ProjectMetric
 import dev.detekt.api.testfixtures.TestDetektion
-import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

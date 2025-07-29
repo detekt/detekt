@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.settings
 
-import io.gitlab.arturbosch.detekt.api.PropertiesAware
+import dev.detekt.api.PropertiesAware
 import java.util.concurrent.ConcurrentHashMap
 
 internal class PropertiesFacade : PropertiesAware {

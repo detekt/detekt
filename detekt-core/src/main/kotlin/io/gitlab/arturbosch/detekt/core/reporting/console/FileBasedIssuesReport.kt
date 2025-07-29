@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.core.reporting.console
 
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.SetupContext
+import dev.detekt.api.Issue
+import dev.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.core.reporting.printIssues
 import java.nio.file.Path
 import kotlin.io.path.absolutePathString

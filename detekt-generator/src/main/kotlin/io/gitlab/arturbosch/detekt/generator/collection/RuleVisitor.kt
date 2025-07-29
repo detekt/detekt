@@ -1,11 +1,11 @@
 package io.gitlab.arturbosch.detekt.generator.collection
 
-import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.Alias
-import io.gitlab.arturbosch.detekt.api.DetektVisitor
-import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
-import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
+import dev.detekt.api.ActiveByDefault
+import dev.detekt.api.Alias
+import dev.detekt.api.DetektVisitor
+import dev.detekt.api.RequiresAnalysisApi
+import dev.detekt.api.RequiresFullAnalysis
+import dev.detekt.api.internal.AutoCorrectable
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -130,7 +130,7 @@ internal class RuleVisitor(textReplacements: Map<String, String>) : DetektVisito
             // which needs detekt-formatting.jar,
             // which needs :detekt-formatting:processResources task output,
             // which needs output of this class.
-            "Rule", // io.gitlab.arturbosch.detekt.api.Rule
+            "Rule", // dev.detekt.api.Rule
             "FormattingRule", // io.gitlab.arturbosch.detekt.formatting.FormattingRule
             "EmptyRule", // io.gitlab.arturbosch.detekt.rules.empty.EmptyRule
         )

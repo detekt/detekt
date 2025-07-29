@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.test
 
-import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.SourceLocation
-import io.gitlab.arturbosch.detekt.api.TextLocation
+import dev.detekt.api.Finding
+import dev.detekt.api.SourceLocation
+import dev.detekt.api.TextLocation
 import org.assertj.core.api.AbstractAssert
 import org.assertj.core.api.AbstractListAssert
 import org.assertj.core.util.CheckReturnValue

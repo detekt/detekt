@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.core.config.validation
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Notification
-import io.gitlab.arturbosch.detekt.api.RuleSet
-import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import dev.detekt.api.Config
+import dev.detekt.api.Notification
+import dev.detekt.api.RuleSet
+import dev.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.core.config.YamlConfig
 import io.gitlab.arturbosch.detekt.core.util.SimpleNotification
 import java.util.ServiceLoader

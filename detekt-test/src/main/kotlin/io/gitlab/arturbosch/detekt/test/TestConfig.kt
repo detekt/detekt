@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.test
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.ValueWithReason
+import dev.detekt.api.Config
+import dev.detekt.api.ValueWithReason
 import io.gitlab.arturbosch.detekt.core.config.tryParseBasedOnDefault
 import io.gitlab.arturbosch.detekt.core.config.valueOrDefaultInternal
 

@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.generator.collection
 
-import io.gitlab.arturbosch.detekt.api.valuesWithReason
+import dev.detekt.api.valuesWithReason
 import io.gitlab.arturbosch.detekt.generator.collection.DefaultValue.Companion.of
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidCodeExampleDocumentationException
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
@@ -743,7 +743,7 @@ class RuleCollectorSpec {
                  * description
                  */
 
-                class SomeRandomClass : Rule(), io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
+                class SomeRandomClass : Rule(), dev.detekt.api.RequiresFullAnalysis
             """.trimIndent()
             val items = subject.run(code)
             assertThat(items[0].requiresFullAnalysis).isTrue()

@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.libraries
 
-import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.RuleSet
-import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import dev.detekt.api.ActiveByDefault
+import dev.detekt.api.RuleSet
+import dev.detekt.api.RuleSetProvider
 
 /**
  * Rules in this rule set report issues related to libraries API exposure.

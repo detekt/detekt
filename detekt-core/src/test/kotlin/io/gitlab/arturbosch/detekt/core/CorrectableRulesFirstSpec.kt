@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.core
 
+import dev.detekt.api.Config
+import dev.detekt.api.Rule
 import io.github.detekt.test.utils.compileForTest
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtClass

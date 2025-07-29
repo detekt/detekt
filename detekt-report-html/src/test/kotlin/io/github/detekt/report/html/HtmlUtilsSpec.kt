@@ -1,6 +1,6 @@
 package io.github.detekt.report.html
 
-import io.gitlab.arturbosch.detekt.api.SourceLocation
+import dev.detekt.api.SourceLocation
 import kotlinx.html.div
 import kotlinx.html.stream.createHTML
 import org.assertj.core.api.Assertions.assertThat

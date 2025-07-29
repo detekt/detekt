@@ -7,7 +7,7 @@ public final class io/github/detekt/tooling/api/AnalysisMode : java/lang/Enum {
 }
 
 public abstract interface class io/github/detekt/tooling/api/AnalysisResult {
-	public abstract fun getContainer ()Lio/gitlab/arturbosch/detekt/api/Detektion;
+	public abstract fun getContainer ()Ldev/detekt/api/Detektion;
 	public abstract fun getError ()Lio/github/detekt/tooling/api/DetektError;
 }
 
@@ -32,7 +32,7 @@ public final class io/github/detekt/tooling/api/BaselineProvider$Companion {
 public abstract interface class io/github/detekt/tooling/api/DefaultConfigurationProvider {
 	public static final field Companion Lio/github/detekt/tooling/api/DefaultConfigurationProvider$Companion;
 	public abstract fun copy (Ljava/nio/file/Path;)V
-	public abstract fun get ()Lio/gitlab/arturbosch/detekt/api/Config;
+	public abstract fun get ()Ldev/detekt/api/Config;
 	public abstract fun init (Lio/github/detekt/tooling/api/spec/ExtensionsSpec;)V
 }
 
@@ -182,12 +182,12 @@ public abstract class io/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy 
 }
 
 public final class io/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy$FailOnSeverity : io/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy {
-	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Severity;)V
-	public final fun component1 ()Lio/gitlab/arturbosch/detekt/api/Severity;
-	public final fun copy (Lio/gitlab/arturbosch/detekt/api/Severity;)Lio/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy$FailOnSeverity;
-	public static synthetic fun copy$default (Lio/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy$FailOnSeverity;Lio/gitlab/arturbosch/detekt/api/Severity;ILjava/lang/Object;)Lio/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy$FailOnSeverity;
+	public fun <init> (Ldev/detekt/api/Severity;)V
+	public final fun component1 ()Ldev/detekt/api/Severity;
+	public final fun copy (Ldev/detekt/api/Severity;)Lio/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy$FailOnSeverity;
+	public static synthetic fun copy$default (Lio/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy$FailOnSeverity;Ldev/detekt/api/Severity;ILjava/lang/Object;)Lio/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy$FailOnSeverity;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getMinSeverity ()Lio/gitlab/arturbosch/detekt/api/Severity;
+	public final fun getMinSeverity ()Ldev/detekt/api/Severity;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
@@ -217,9 +217,9 @@ public final class io/github/detekt/tooling/api/spec/RulesSpec$RunPolicy$NoRestr
 }
 
 public final class io/github/detekt/tooling/api/spec/RulesSpec$RunPolicy$RestrictToSingleRule : io/github/detekt/tooling/api/spec/RulesSpec$RunPolicy {
-	public fun <init> (Lio/gitlab/arturbosch/detekt/api/RuleSet$Id;Ljava/lang/String;)V
+	public fun <init> (Ldev/detekt/api/RuleSet$Id;Ljava/lang/String;)V
 	public final fun getRuleId ()Ljava/lang/String;
-	public final fun getRuleSetId ()Lio/gitlab/arturbosch/detekt/api/RuleSet$Id;
+	public final fun getRuleSetId ()Ldev/detekt/api/RuleSet$Id;
 }
 
 public final class io/github/detekt/tooling/dsl/BaselineSpecBuilder : io/github/detekt/tooling/dsl/Builder {

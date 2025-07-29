@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.core.reporting
 
+import dev.detekt.api.ConsoleReport
 import dev.detekt.api.testfixtures.TestDetektion
 import dev.detekt.api.testfixtures.TestSetupContext
 import dev.detekt.api.testfixtures.createIssue
-import io.gitlab.arturbosch.detekt.api.ConsoleReport
 import org.assertj.core.api.Assertions.assertThat
 
 internal object SuppressedIssueAssert {

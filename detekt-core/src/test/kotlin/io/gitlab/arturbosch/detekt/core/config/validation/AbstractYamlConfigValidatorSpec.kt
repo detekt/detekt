@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.config.validation
 
-import io.gitlab.arturbosch.detekt.api.Notification
+import dev.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.core.config.YamlConfig
 import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat

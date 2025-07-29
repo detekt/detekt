@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.formatting
 
+import dev.detekt.api.Config
 import io.github.detekt.test.utils.compileForTest
-import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ChainWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoLineBreakBeforeAssignment
 import io.gitlab.arturbosch.detekt.test.lint

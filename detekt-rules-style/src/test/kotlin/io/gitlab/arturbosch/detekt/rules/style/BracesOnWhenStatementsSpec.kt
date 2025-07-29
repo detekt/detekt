@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.TextLocation
+import dev.detekt.api.Config
+import dev.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.rules.style.BracesOnWhenStatements.BracePolicy
 import io.gitlab.arturbosch.detekt.rules.style.BracesOnWhenStatementsSpec.Companion.NOT_RELEVANT
 import io.gitlab.arturbosch.detekt.rules.style.BracesOnWhenStatementsSpec.Companion.options

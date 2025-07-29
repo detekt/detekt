@@ -1,7 +1,7 @@
 package dev.detekt.api.testfixtures
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.SetupContext
+import dev.detekt.api.Config
+import dev.detekt.api.SetupContext
 import java.net.URI
 import java.nio.file.Path
 import kotlin.io.path.Path

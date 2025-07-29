@@ -1,9 +1,9 @@
 package io.github.detekt.tooling.api
 
+import dev.detekt.api.Config
 import io.github.detekt.test.utils.createTempFileForTest
 import io.github.detekt.tooling.api.spec.ExtensionId
 import io.github.detekt.tooling.api.spec.ExtensionsSpec
-import io.gitlab.arturbosch.detekt.api.Config
 import org.assertj.core.api.Assertions.assertThatCode
 import org.junit.jupiter.api.Test
 import java.nio.file.Path

@@ -1,6 +1,6 @@
 package io.github.detekt.tooling.api
 
-import io.gitlab.arturbosch.detekt.api.Detektion
+import dev.detekt.api.Detektion
 
 interface AnalysisResult {
 

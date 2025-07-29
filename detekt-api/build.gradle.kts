@@ -30,5 +30,5 @@ listOf(configurations.testFixturesApiElements, configurations.testFixturesRuntim
 }
 
 apiValidation {
-    ignoredPackages.add("io.gitlab.arturbosch.detekt.api.internal")
+    ignoredPackages.add("dev.detekt.api.internal")
 }

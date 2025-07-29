@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.generator.collection
 
-import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.DetektVisitor
-import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
+import dev.detekt.api.ActiveByDefault
+import dev.detekt.api.DetektVisitor
+import dev.detekt.api.internal.DefaultRuleSetProvider
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtAnnotatedExpression
@@ -17,7 +17,7 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.KtSuperTypeList
 import org.jetbrains.kotlin.psi.psiUtil.containingClass
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
-import io.gitlab.arturbosch.detekt.api.Configuration as ConfigAnnotation
+import dev.detekt.api.Configuration as ConfigAnnotation
 
 data class RuleSetProvider(
     val name: String,
@@ -47,7 +47,7 @@ class RuleSetProviderCollector : Collector<RuleSetProvider> {
 private const val PROPERTY_RULE_SET_ID = "ruleSetId"
 
 private val SUPPORTED_PROVIDERS = setOf(
-    io.gitlab.arturbosch.detekt.api.RuleSetProvider::class.simpleName,
+    dev.detekt.api.RuleSetProvider::class.simpleName,
     DefaultRuleSetProvider::class.simpleName,
 )
 

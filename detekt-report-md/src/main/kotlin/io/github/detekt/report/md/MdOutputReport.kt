@@ -1,5 +1,15 @@
 package io.github.detekt.report.md
 
+import dev.detekt.api.Detektion
+import dev.detekt.api.Issue
+import dev.detekt.api.OutputReport
+import dev.detekt.api.ProjectMetric
+import dev.detekt.api.RuleInstance
+import dev.detekt.api.SetupContext
+import dev.detekt.api.SourceLocation
+import dev.detekt.api.internal.BuiltInOutputReport
+import dev.detekt.api.internal.whichDetekt
+import dev.detekt.api.suppressed
 import dev.detekt.utils.MarkdownContent
 import dev.detekt.utils.codeBlock
 import dev.detekt.utils.emptyLine
@@ -11,16 +21,6 @@ import dev.detekt.utils.list
 import dev.detekt.utils.markdown
 import dev.detekt.utils.paragraph
 import io.github.detekt.metrics.ComplexityReportGenerator
-import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.OutputReport
-import io.gitlab.arturbosch.detekt.api.ProjectMetric
-import io.gitlab.arturbosch.detekt.api.RuleInstance
-import io.gitlab.arturbosch.detekt.api.SetupContext
-import io.gitlab.arturbosch.detekt.api.SourceLocation
-import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
-import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
-import io.gitlab.arturbosch.detekt.api.suppressed
 import java.nio.file.Path
 import java.time.OffsetDateTime
 import java.time.ZoneOffset

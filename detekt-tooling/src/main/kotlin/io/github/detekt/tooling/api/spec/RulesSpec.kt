@@ -1,7 +1,7 @@
 package io.github.detekt.tooling.api.spec
 
-import io.gitlab.arturbosch.detekt.api.RuleSet
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.RuleSet
+import dev.detekt.api.Severity
 
 interface RulesSpec {
 
@@ -32,7 +32,7 @@ interface RulesSpec {
     }
 
     /**
-     * Should detekt create mutable ASTs which [io.gitlab.arturbosch.detekt.api.Rule]s can manipulate?
+     * Should detekt create mutable ASTs which [dev.detekt.api.Rule]s can manipulate?
      */
     val autoCorrect: Boolean
 
@@ -49,7 +49,7 @@ interface RulesSpec {
     sealed class RunPolicy {
 
         /**
-         * Run all loaded rules provided by [io.gitlab.arturbosch.detekt.api.RuleSetProvider]
+         * Run all loaded rules provided by [dev.detekt.api.RuleSetProvider]
          */
         data object NoRestrictions : RunPolicy()
 

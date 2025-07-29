@@ -1,8 +1,8 @@
 package io.github.detekt.tooling.internal
 
+import dev.detekt.api.Detektion
 import io.github.detekt.tooling.api.AnalysisResult
 import io.github.detekt.tooling.api.DetektError
-import io.gitlab.arturbosch.detekt.api.Detektion
 
 class DefaultAnalysisResult(
     override val container: Detektion?,

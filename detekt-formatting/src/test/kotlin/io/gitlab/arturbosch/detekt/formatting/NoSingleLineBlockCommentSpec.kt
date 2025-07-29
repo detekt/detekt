@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.formatting
 
-import io.gitlab.arturbosch.detekt.api.Config
+import dev.detekt.api.Config
 import io.gitlab.arturbosch.detekt.formatting.wrappers.CommentWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoSingleLineBlockComment
 import io.gitlab.arturbosch.detekt.test.assertThat

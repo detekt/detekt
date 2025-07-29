@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.core.suppressors
 
-import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.Rule
+import dev.detekt.api.Finding
+import dev.detekt.api.Rule
 import org.jetbrains.kotlin.resolve.BindingContext
 
 fun interface Suppressor {

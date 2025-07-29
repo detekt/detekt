@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.core.config
 
+import dev.detekt.api.Severity
 import dev.detekt.api.testfixtures.TestDetektion
 import dev.detekt.api.testfixtures.createIssue
 import io.github.detekt.tooling.api.IssuesFound
 import io.github.detekt.tooling.api.spec.RulesSpec
-import io.gitlab.arturbosch.detekt.api.Severity
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test

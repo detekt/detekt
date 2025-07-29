@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.core.util
 
+import dev.detekt.api.Config
 import dev.detekt.utils.PathFilters
 import io.github.detekt.psi.absolutePath
-import io.gitlab.arturbosch.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
 import kotlin.io.path.Path

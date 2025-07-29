@@ -1,10 +1,10 @@
 package io.github.detekt.report.xml
 
-import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.OutputReport
-import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
-import io.gitlab.arturbosch.detekt.api.suppressed
+import dev.detekt.api.Detektion
+import dev.detekt.api.Issue
+import dev.detekt.api.OutputReport
+import dev.detekt.api.internal.BuiltInOutputReport
+import dev.detekt.api.suppressed
 import java.util.Locale
 import kotlin.io.path.invariantSeparatorsPathString
 
