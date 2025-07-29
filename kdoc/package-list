@@ -2,8 +2,8 @@ $dokka.format:html-v1
 $dokka.linkExtension:html
 
 module:detekt-api
-io.gitlab.arturbosch.detekt.api
-io.gitlab.arturbosch.detekt.api.internal
+dev.detekt.api
+dev.detekt.api.internal
 module:detekt-gradle-plugin
 dev.detekt.gradle.plugin
 io.github.detekt.gradle

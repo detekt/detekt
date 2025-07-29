@@ -1,0 +1,730 @@
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>dev.detekt.api</title>
+<link href="../../images/logo-icon.svg" rel="icon" type="image/svg">    <script>var pathToRoot = "../../";</script>
+    <script>document.documentElement.classList.replace("no-js","js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../styles/font-jb-sans-auto.css" rel="Stylesheet">
+<link href="../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../ui-kit/ui-kit.min.js" defer></script>
+<script type="text/javascript" src="../../scripts/symbol-parameters-wrapper_deferred.js" defer></script></head>
+<body>
+    <div class="root">
+    <nav class="navigation theme-dark" id="navigation-wrapper">
+<a class="library-name--link" href="../../index.html">
+                    detekt
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">1.23.8
+        </div>
+        <div class="navigation-controls">
+        <div class="filter-section filter-section_loading" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":detekt-api/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox">
+                    <div class="dropdown--header"><span>Platform filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close platform filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":detekt-api/main" data-filter=":detekt-api/main">
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </div>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </nav>
+        <div id="container">
+            <div class="sidebar" id="leftColumn">
+                <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                    <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox">
+                        <div class="dropdown--header">
+                            <span>
+                                    detekt
+                            </span>
+                            <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                                <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                            </button>
+                        </div>
+                        <div class="sidebar--inner" id="sideMenu"></div>
+                    </ul>
+                    <div class="dropdown--overlay"></div>
+                </div>
+            </div>
+            <div id="main">
+<div class="main-content" data-page-type="package" id="content" pageids="detekt-api::dev.detekt.api////PointingToDeclaration//-473829336">
+  <div class="breadcrumbs"><a href="../index.html">detekt-api</a><span class="delimiter">/</span><span class="current">dev.detekt.api</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button><button class="section-tab" data-togglable="FUNCTION,EXTENSION_FUNCTION">Functions</button><button class="section-tab" data-togglable="PROPERTY,EXTENSION_PROPERTY">Properties</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="">Types</h2>
+        <div class="table"><a data-name="276412860%2FClasslikes%2F-473829336" anchor-label="ActiveByDefault" id="276412860%2FClasslikes%2F-473829336" data-filterable-set=":detekt-api/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-api/main" data-filterable-set=":detekt-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-active-by-default/index.html"><span>Active</span><wbr><span>By</span><wbr><span><span>Default</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="276412860%2FClasslikes%2F-473829336"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.annotation/-target/index.html"><span class="token annotation builtin">Target</span></a><span class="token punctuation">(</span><span>allowedTargets<span class="token operator"> = </span><span class="token punctuation">[</span><span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.annotation/-annotation-target/-c-l-a-s-s/index.html">AnnotationTarget.CLASS</a></span><wbr><span class="token punctuation">]</span></span><wbr><span class="token punctuation">)</span></div></div><span class="token keyword">annotation class </span><a href="-active-by-default/index.html">ActiveByDefault</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>since<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Annotated <a href="-rule/index.html">Rule</a> or <a href="-rule-set-provider/index.html">RuleSetProvider</a> is active by default.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2081210672%2FClasslikes%2F-473829336" anchor-label="Alias" id="2081210672%2FClasslikes%2F-473829336" data-filterable-set=":detekt-api/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-api/main" data-filterable-set=":detekt-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-alias/index.html"><span><span>Alias</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2081210672%2FClasslikes%2F-473829336"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.annotation/-target/index.html"><span class="token annotation builtin">Target</span></a><span class="token punctuation">(</span><span>allowedTargets<span class="token operator"> = </span><span class="token punctuation">[</span><span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.annotation/-annotation-target/-c-l-a-s-s/index.html">AnnotationTarget.CLASS</a></span><wbr><span class="token punctuation">]</span></span><wbr><span class="token punctuation">)</span></div></div><span class="token keyword">annotation class </span><a href="-alias/index.html">Alias</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>values<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Provides alias for the annotated rule</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1540834240%2FClasslikes%2F-473829336" anchor-label="Config" id="1540834240%2FClasslikes%2F-473829336" data-filterable-set=":detekt-api/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-api/main" data-filterable-set=":detekt-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-config/index.html"><span><span>Config</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1540834240%2FClasslikes%2F-473829336"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-config/index.html">Config</a></div><div class="brief "><p class="paragraph">A configuration holds information about how to configure specific rules.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1234449846%2FClasslikes%2F-473829336" anchor-label="Configuration" id="-1234449846%2FClasslikes%2F-473829336" data-filterable-set=":detekt-api/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-api/main" data-filterable-set=":detekt-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-configuration/index.html"><span><span>Configuration</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1234449846%2FClasslikes%2F-473829336"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.annotation/-target/index.html"><span class="token annotation builtin">Target</span></a><span class="token punctuation">(</span><span>allowedTargets<span class="token operator"> = </span><span class="token punctuation">[</span><span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.annotation/-annotation-target/-p-r-o-p-e-r-t-y/index.html">AnnotationTarget.PROPERTY</a></span><wbr><span class="token punctuation">]</span></span><wbr><span class="token punctuation">)</span></div></div><span class="token keyword">annotation class </span><a href="-configuration/index.html">Configuration</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>description<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Annotate the target to specify a configuration for <a href="-rule/index.html">Rule</a> or <a href="-rule-set-provider/index.html">RuleSetProvider</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-639980912%2FClasslikes%2F-473829336" anchor-label="ConfigValidator" id="-639980912%2FClasslikes%2F-473829336" data-filterable-set=":detekt-api/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-api/main" data-filterable-set=":detekt-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-config-validator/index.html"><span>Config</span><wbr><span><span>Validator</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-639980912%2FClasslikes%2F-473829336"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-config-validator/index.html">ConfigValidator</a> : <a href="-extension/index.html">Extension</a></div><div class="brief "><p class="paragraph">An extension which allows users to validate parts of the configuration.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1823093621%2FClasslikes%2F-473829336" anchor-label="ConsoleReport" id="1823093621%2FClasslikes%2F-473829336" data-filterable-set=":detekt-api/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-api/main" data-filterable-set=":detekt-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-console-report/index.html"><span>Console</span><wbr><span><span>Report</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1823093621%2FClasslikes%2F-473829336"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-console-report/index.html">ConsoleReport</a> : <a href="-extension/index.html">Extension</a></div><div class="brief "><p class="paragraph">Extension point which describes how findings should be printed on the console.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="286416915%2FClasslikes%2F-473829336" anchor-label="Detektion" id="286416915%2FClasslikes%2F-473829336" data-filterable-set=":detekt-api/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-api/main" data-filterable-set=":detekt-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-detektion/index.html"><span><span>Detektion</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="286416915%2FClasslikes%2F-473829336"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-detektion/index.html">Detektion</a> : <span data-unresolved-link="com.intellij.openapi.util/UserDataHolder///PointingToDeclaration/">UserDataHolder</span></div><div class="brief "><p class="paragraph">Storage for all kinds of findings and additional information which needs to be transferred from the detekt engine to the user.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-267001459%2FClasslikes%2F-473829336" anchor-label="DetektVisitor" id="-267001459%2FClasslikes%2F-473829336" data-filterable-set=":detekt-api/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-api/main" data-filterable-set=":detekt-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-detekt-visitor/index.html"><span>Detekt</span><wbr><span><span>Visitor</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-267001459%2FClasslikes%2F-473829336"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">class </span><a href="-detekt-visitor/index.html">DetektVisitor</a> : <span data-unresolved-link="org.jetbrains.kotlin.psi/KtTreeVisitorVoid///PointingToDeclaration/">KtTreeVisitorVoid</span></div><div class="brief "><p class="paragraph">Basic visitor which is used inside detekt. Guarantees a better looking name as the extended base class :).</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-418239937%2FClasslikes%2F-473829336" anchor-label="Entity" id="-418239937%2FClasslikes%2F-473829336" data-filterable-set=":detekt-api/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-api/main" data-filterable-set=":detekt-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-entity/index.html"><span><span>Entity</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-418239937%2FClasslikes%2F-473829336"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-entity/index.html">Entity</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>signature<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>location<span class="token operator">: </span><a href="-location/index.html">Location</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>ktElement<span class="token operator">: </span><span data-unresolved-link="org.jetbrains.kotlin.psi/KtElement///PointingToDeclaration/">KtElement</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Stores information about a specific code fragment.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2112566945%2FClasslikes%2F-473829336" anchor-label="Extension" id="2112566945%2FClasslikes%2F-473829336" data-filterable-set=":detekt-api/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-api/main" data-filterable-set=":detekt-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-extension/index.html"><span><span>Extension</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2112566945%2FClasslikes%2F-473829336"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-extension/index.html">Extension</a></div><div class="brief "><p class="paragraph">Defines extension points in detekt. Currently supported extensions are:</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-402248199%2FClasslikes%2F-473829336" anchor-label="FileProcessListener" id="-402248199%2FClasslikes%2F-473829336" data-filterable-set=":detekt-api/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-api/main" data-filterable-set=":detekt-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-file-process-listener/index.html"><span>File</span><wbr><span>Process</span><wbr><span><span>Listener</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-402248199%2FClasslikes%2F-473829336"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-file-process-listener/index.html">FileProcessListener</a> : <a href="-extension/index.html">Extension</a></div><div class="brief "><p class="paragraph">Gather additional metrics about the analyzed kotlin file. Pay attention to the thread policy of each function!</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1572816471%2FClasslikes%2F-473829336" anchor-label="Finding" id="1572816471%2FClasslikes%2F-473829336" data-filterable-set=":detekt-api/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-api/main" data-filterable-set=":detekt-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-finding/index.html"><span><span>Finding</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1572816471%2FClasslikes%2F-473829336"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-finding/index.html">Finding</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>entity<span class="token operator">: </span><a href="-entity/index.html">Entity</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>message<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>references<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-entity/index.html">Entity</a><span class="token operator">&gt;</span><span class="token operator"> = </span>emptyList()<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>suppressReasons<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span><span class="token operator"> = </span>emptyList()</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Represents a detected problem in the source code.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1799252679%2FClasslikes%2F-473829336" anchor-label="Issue" id="1799252679%2FClasslikes%2F-473829336" data-filterable-set=":detekt-api/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-api/main" data-filterable-set=":detekt-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-issue/index.html"><span><span>Issue</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1799252679%2FClasslikes%2F-473829336"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-issue/index.html">Issue</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>ruleInstance<span class="token operator">: </span><a href="-rule-instance/index.html">RuleInstance</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>entity<span class="token operator">: </span><a href="-issue/-entity/index.html">Issue.Entity</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>references<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-issue/-entity/index.html">Issue.Entity</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>message<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>severity<span class="token operator">: </span><a href="-severity/index.html">Severity</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>suppressReasons<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Represents a problem detected by detekt on the source code</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1696636525%2FClasslikes%2F-473829336" anchor-label="Location" id="1696636525%2FClasslikes%2F-473829336" data-filterable-set=":detekt-api/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-api/main" data-filterable-set=":detekt-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-location/index.html"><span><span>Location</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1696636525%2FClasslikes%2F-473829336"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-location/index.html">Location</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>source<span class="token operator">: </span><a href="-source-location/index.html">SourceLocation</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>endSource<span class="token operator">: </span><a href="-source-location/index.html">SourceLocation</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>text<span class="token operator">: </span><a href="-text-location/index.html">TextLocation</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>path<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/file/Path.html">Path</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Specifies a position within a source code fragment.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-155595401%2FClasslikes%2F-473829336" anchor-label="Notification" id="-155595401%2FClasslikes%2F-473829336" data-filterable-set=":detekt-api/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-api/main" data-filterable-set=":detekt-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-notification/index.html"><span><span>Notification</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-155595401%2FClasslikes%2F-473829336"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-notification/index.html">Notification</a></div><div class="brief "><p class="paragraph">Any kind of notification which should be printed to the console. For example when using the formatting rule set, any change to your kotlin file is a notification.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-10406899%2FClasslikes%2F-473829336" anchor-label="OutputReport" id="-10406899%2FClasslikes%2F-473829336" data-filterable-set=":detekt-api/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-api/main" data-filterable-set=":detekt-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-output-report/index.html"><span>Output</span><wbr><span><span>Report</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-10406899%2FClasslikes%2F-473829336"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">class </span><a href="-output-report/index.html">OutputReport</a> : <a href="-extension/index.html">Extension</a></div><div class="brief "><p class="paragraph">Translates detekt's result container - <a href="-detektion/index.html">Detektion</a> - into an output report which is written inside a file.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2041366409%2FClasslikes%2F-473829336" anchor-label="ProjectMetric" id="-2041366409%2FClasslikes%2F-473829336" data-filterable-set=":detekt-api/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-api/main" data-filterable-set=":detekt-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-project-metric/index.html"><span>Project</span><wbr><span><span>Metric</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2041366409%2FClasslikes%2F-473829336"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">class </span><a href="-project-metric/index.html">ProjectMetric</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>type<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>priority<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span>-1<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>isDouble<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>conversionFactor<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span>DEFAULT_FLOAT_CONVERSION_FACTOR</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Anything that can be expressed as a numeric value for projects.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1149464523%2FClasslikes%2F-473829336" anchor-label="PropertiesAware" id="-1149464523%2FClasslikes%2F-473829336" data-filterable-set=":detekt-api/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-api/main" data-filterable-set=":detekt-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-properties-aware/index.html"><span>Properties</span><wbr><span><span>Aware</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1149464523%2FClasslikes%2F-473829336"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-properties-aware/index.html">PropertiesAware</a></div><div class="brief "><p class="paragraph">Properties holder. Allows to store and retrieve any data.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-949438799%2FClasslikes%2F-473829336" anchor-label="ReportingExtension" id="-949438799%2FClasslikes%2F-473829336" data-filterable-set=":detekt-api/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-api/main" data-filterable-set=":detekt-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-reporting-extension/index.html"><span>Reporting</span><wbr><span><span>Extension</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-949438799%2FClasslikes%2F-473829336"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-reporting-extension/index.html">ReportingExtension</a> : <a href="-extension/index.html">Extension</a></div><div class="brief "><p class="paragraph">Allows to intercept detekt's result container by listening to the initial and final state and manipulate the reported issues.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="921592880%2FClasslikes%2F-473829336" anchor-label="RequiresAnalysisApi" id="921592880%2FClasslikes%2F-473829336" data-filterable-set=":detekt-api/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-api/main" data-filterable-set=":detekt-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-requires-analysis-api/index.html"><span>Requires</span><wbr><span>Analysis</span><wbr><span><span>Api</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="921592880%2FClasslikes%2F-473829336"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-requires-analysis-api/index.html">RequiresAnalysisApi</a></div><div class="brief "><p class="paragraph">Interface to let the core know that this <a href="-rule/index.html">Rule</a> uses the Analysis API</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1658452023%2FClasslikes%2F-473829336" anchor-label="RequiresFullAnalysis" id="-1658452023%2FClasslikes%2F-473829336" data-filterable-set=":detekt-api/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-api/main" data-filterable-set=":detekt-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-requires-full-analysis/index.html"><span>Requires</span><wbr><span>Full</span><wbr><span><span>Analysis</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1658452023%2FClasslikes%2F-473829336"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-requires-full-analysis/index.html">RequiresFullAnalysis</a></div><div class="brief "><p class="paragraph">Interface to let the core know that this <a href="-rule/index.html">Rule</a> needs a <span data-unresolved-link="org.jetbrains.kotlin.resolve/BindingContext///PointingToDeclaration/">BindingContext</span> instance</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-39033466%2FClasslikes%2F-473829336" anchor-label="Rule" id="-39033466%2FClasslikes%2F-473829336" data-filterable-set=":detekt-api/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-api/main" data-filterable-set=":detekt-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-rule/index.html"><span><span>Rule</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-39033466%2FClasslikes%2F-473829336"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">class </span><a href="-rule/index.html">Rule</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>config<span class="token operator">: </span><a href="-config/index.html">Config</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>description<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>url<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/net/URI.html">URI</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span> : <a href="-detekt-visitor/index.html">DetektVisitor</a></div><div class="brief "><p class="paragraph">A rule defines how one specific code structure should look like. If code is found which does not meet this structure, it is considered as harmful regarding maintainability or readability.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2032405873%2FClasslikes%2F-473829336" anchor-label="RuleInstance" id="2032405873%2FClasslikes%2F-473829336" data-filterable-set=":detekt-api/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-api/main" data-filterable-set=":detekt-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-rule-instance/index.html"><span>Rule</span><wbr><span><span>Instance</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2032405873%2FClasslikes%2F-473829336"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-rule-instance/index.html">RuleInstance</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>id<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>ruleSetId<span class="token operator">: </span><a href="-rule-set/-id/index.html">RuleSet.Id</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>url<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/net/URI.html">URI</a><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>description<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>severity<span class="token operator">: </span><a href="-severity/index.html">Severity</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>active<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="478677691%2FClasslikes%2F-473829336" anchor-label="RuleName" id="478677691%2FClasslikes%2F-473829336" data-filterable-set=":detekt-api/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-api/main" data-filterable-set=":detekt-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-rule-name/index.html"><span>Rule</span><wbr><span><span>Name</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="478677691%2FClasslikes%2F-473829336"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-rule-name/index.html">RuleName</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1159410874%2FClasslikes%2F-473829336" anchor-label="RuleSet" id="1159410874%2FClasslikes%2F-473829336" data-filterable-set=":detekt-api/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-api/main" data-filterable-set=":detekt-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-rule-set/index.html"><span>Rule</span><wbr><span><span>Set</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1159410874%2FClasslikes%2F-473829336"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-rule-set/index.html">RuleSet</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>id<span class="token operator">: </span><a href="-rule-set/-id/index.html">RuleSet.Id</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>rules<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><a href="-rule-name/index.html">RuleName</a><span class="token punctuation">, </span><span class="token punctuation">(</span><a href="-config/index.html">Config</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="-rule/index.html">Rule</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">A rule set is a collection of rules and must be defined within a rule set provider implementation.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1835534647%2FClasslikes%2F-473829336" anchor-label="RuleSetProvider" id="-1835534647%2FClasslikes%2F-473829336" data-filterable-set=":detekt-api/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-api/main" data-filterable-set=":detekt-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-rule-set-provider/index.html"><span>Rule</span><wbr><span>Set</span><wbr><span><span>Provider</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1835534647%2FClasslikes%2F-473829336"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-rule-set-provider/index.html">RuleSetProvider</a></div><div class="brief "><p class="paragraph">A rule set provider, as the name states, is responsible for creating rule sets.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1364897840%2FClasslikes%2F-473829336" anchor-label="SetupContext" id="-1364897840%2FClasslikes%2F-473829336" data-filterable-set=":detekt-api/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-api/main" data-filterable-set=":detekt-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-setup-context/index.html"><span>Setup</span><wbr><span><span>Context</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1364897840%2FClasslikes%2F-473829336"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="-setup-context/index.html">SetupContext</a> : <a href="-properties-aware/index.html">PropertiesAware</a></div><div class="brief "><p class="paragraph">Context providing useful processing settings to initialize extensions.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-194384859%2FClasslikes%2F-473829336" anchor-label="Severity" id="-194384859%2FClasslikes%2F-473829336" data-filterable-set=":detekt-api/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-api/main" data-filterable-set=":detekt-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-severity/index.html"><span><span>Severity</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-194384859%2FClasslikes%2F-473829336"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">enum </span><a href="-severity/index.html">Severity</a> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="-severity/index.html">Severity</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">The severity for each <a href="-issue/index.html">Issue</a>. This will be printed to the output, such as XML or Sarif. Depending on the severity of the issues found, the build process result is determined.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1778296018%2FClasslikes%2F-473829336" anchor-label="SourceLocation" id="1778296018%2FClasslikes%2F-473829336" data-filterable-set=":detekt-api/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-api/main" data-filterable-set=":detekt-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-source-location/index.html"><span>Source</span><wbr><span><span>Location</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1778296018%2FClasslikes%2F-473829336"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-source-location/index.html">SourceLocation</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>line<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>column<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-comparable/index.html">Comparable</a><span class="token operator">&lt;</span><a href="-source-location/index.html">SourceLocation</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Stores line and column information of a location.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2027331008%2FClasslikes%2F-473829336" anchor-label="TextLocation" id="-2027331008%2FClasslikes%2F-473829336" data-filterable-set=":detekt-api/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-api/main" data-filterable-set=":detekt-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-text-location/index.html"><span>Text</span><wbr><span><span>Location</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2027331008%2FClasslikes%2F-473829336"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-text-location/index.html">TextLocation</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>start<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>end<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Stores character start and end positions of a text file.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1930498154%2FClasslikes%2F-473829336" anchor-label="ValuesWithReason" id="-1930498154%2FClasslikes%2F-473829336" data-filterable-set=":detekt-api/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-api/main" data-filterable-set=":detekt-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-values-with-reason/index.html"><span>Values</span><wbr><span>With</span><wbr><span><span>Reason</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1930498154%2FClasslikes%2F-473829336"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-values-with-reason/index.html">ValuesWithReason</a> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-iterable/index.html">Iterable</a><span class="token operator">&lt;</span><a href="-value-with-reason/index.html">ValueWithReason</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph"><a href="-values-with-reason/index.html">ValuesWithReason</a> is essentially the same as <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a> of <a href="-value-with-reason/index.html">ValueWithReason</a>. Due to type erasure we cannot use the list directly. Instances of this type should always created using the <a href="values-with-reason.html">valuesWithReason</a> factory method.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1607938085%2FClasslikes%2F-473829336" anchor-label="ValueWithReason" id="1607938085%2FClasslikes%2F-473829336" data-filterable-set=":detekt-api/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-api/main" data-filterable-set=":detekt-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-value-with-reason/index.html"><span>Value</span><wbr><span>With</span><wbr><span><span>Reason</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1607938085%2FClasslikes%2F-473829336"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-value-with-reason/index.html">ValueWithReason</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>reason<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">A ValueWithReason represents a single configuration value that may have an explanation as to why it is used.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="EXTENSION_PROPERTY">
+        <h2 class="">Properties</h2>
+        <div class="table"><a data-name="1624660397%2FProperties%2F-473829336" anchor-label="modifiedText" id="1624660397%2FProperties%2F-473829336" data-filterable-set=":detekt-api/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-api/main" data-filterable-set=":detekt-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="modified-text.html"><span>modified</span><wbr><span><span>Text</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1624660397%2FProperties%2F-473829336"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">var </span><span data-unresolved-link="org.jetbrains.kotlin.psi/KtFile///PointingToDeclaration/">KtFile</span><span class="token punctuation">.</span><a href="modified-text.html">modifiedText</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1922582292%2FProperties%2F-473829336" anchor-label="suppressed" id="1922582292%2FProperties%2F-473829336" data-filterable-set=":detekt-api/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-api/main" data-filterable-set=":detekt-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="suppressed.html"><span><span>suppressed</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1922582292%2FProperties%2F-473829336"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="-issue/index.html">Issue</a><span class="token punctuation">.</span><a href="suppressed.html">suppressed</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="-637619223%2FFunctions%2F-473829336" anchor-label="config" id="-637619223%2FFunctions%2F-473829336" data-filterable-set=":detekt-api/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-api/main" data-filterable-set=":detekt-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="config.html"><span><span>config</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-637619223%2FFunctions%2F-473829336"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="config.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="config.html"><span class="token function">config</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">defaultValue<span class="token operator">: </span><a href="config.html">T</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.properties/-read-only-property/index.html">ReadOnlyProperty</a><span class="token operator">&lt;</span><a href="-rule/index.html">Rule</a><span class="token punctuation">, </span><a href="config.html">T</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Creates a delegated read-only property that can be used in ConfigAware objects. The name of the property is the key that is used during configuration lookup. The value of the property is evaluated only once.</p></div><div class="symbol monospace"><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="config.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token punctuation">, </span><a href="config.html">U</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="config.html"><span class="token function">config</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">defaultValue<span class="token operator">: </span><a href="config.html">T</a><span class="token punctuation">, </span></span><span class="parameter ">transformer<span class="token operator">: </span><span class="token punctuation">(</span><a href="config.html">T</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="config.html">U</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.properties/-read-only-property/index.html">ReadOnlyProperty</a><span class="token operator">&lt;</span><a href="-rule/index.html">Rule</a><span class="token punctuation">, </span><a href="config.html">U</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Creates a delegated read-only property that can be used in ConfigAware objects. The name of the property is the key that is used during configuration lookup. The value of the property is evaluated and transformed only once.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1531525751%2FFunctions%2F-473829336" anchor-label="configWithAndroidVariants" id="-1531525751%2FFunctions%2F-473829336" data-filterable-set=":detekt-api/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-api/main" data-filterable-set=":detekt-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="config-with-android-variants.html"><span>config</span><wbr><span>With</span><wbr><span>Android</span><wbr><span><span>Variants</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1531525751%2FFunctions%2F-473829336"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="config-with-android-variants.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="config-with-android-variants.html"><span class="token function">configWithAndroidVariants</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">defaultValue<span class="token operator">: </span><a href="config-with-android-variants.html">T</a><span class="token punctuation">, </span></span><span class="parameter ">defaultAndroidValue<span class="token operator">: </span><a href="config-with-android-variants.html">T</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.properties/-read-only-property/index.html">ReadOnlyProperty</a><span class="token operator">&lt;</span><a href="-rule/index.html">Rule</a><span class="token punctuation">, </span><a href="config-with-android-variants.html">T</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Creates a delegated read-only property that can be used in ConfigAware objects. The name of the property is the key that is used during configuration lookup. The value of the property is evaluated only once.</p></div><div class="symbol monospace"><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="config-with-android-variants.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token punctuation">, </span><a href="config-with-android-variants.html">U</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="config-with-android-variants.html"><span class="token function">configWithAndroidVariants</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">defaultValue<span class="token operator">: </span><a href="config-with-android-variants.html">T</a><span class="token punctuation">, </span></span><span class="parameter ">defaultAndroidValue<span class="token operator">: </span><a href="config-with-android-variants.html">T</a><span class="token punctuation">, </span></span><span class="parameter ">transformer<span class="token operator">: </span><span class="token punctuation">(</span><a href="config-with-android-variants.html">T</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="config-with-android-variants.html">U</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.properties/-read-only-property/index.html">ReadOnlyProperty</a><span class="token operator">&lt;</span><a href="-rule/index.html">Rule</a><span class="token punctuation">, </span><a href="config-with-android-variants.html">U</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Creates a delegated read-only property that can be used in ConfigAware objects. The name of the property is the key that is used during configuration lookup. The value of the property is evaluated and transformed only once.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-634089879%2FFunctions%2F-473829336" anchor-label="configWithFallback" id="-634089879%2FFunctions%2F-473829336" data-filterable-set=":detekt-api/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-api/main" data-filterable-set=":detekt-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="config-with-fallback.html"><span>config</span><wbr><span>With</span><wbr><span><span>Fallback</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-634089879%2FFunctions%2F-473829336"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="config-with-fallback.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="config-with-fallback.html"><span class="token function">configWithFallback</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">fallbackProperty<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.reflect/-k-property0/index.html">KProperty0</a><span class="token operator">&lt;</span><a href="config-with-fallback.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">defaultValue<span class="token operator">: </span><a href="config-with-fallback.html">T</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.properties/-read-only-property/index.html">ReadOnlyProperty</a><span class="token operator">&lt;</span><a href="-rule/index.html">Rule</a><span class="token punctuation">, </span><a href="config-with-fallback.html">T</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Creates a delegated read-only property that can be used in ConfigAware objects. The name of the property is the key that is used during configuration lookup. If there is no such property, the value of the supplied <a href="config-with-fallback.html">fallbackProperty</a> is also considered before using the <a href="config-with-fallback.html">defaultValue</a>. The value of the property is evaluated only once.</p></div><div class="symbol monospace"><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="config-with-fallback.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token punctuation">, </span><a href="config-with-fallback.html">U</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="config-with-fallback.html"><span class="token function">configWithFallback</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">fallbackProperty<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.reflect/-k-property0/index.html">KProperty0</a><span class="token operator">&lt;</span><a href="config-with-fallback.html">U</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">defaultValue<span class="token operator">: </span><a href="config-with-fallback.html">T</a><span class="token punctuation">, </span></span><span class="parameter ">transformer<span class="token operator">: </span><span class="token punctuation">(</span><a href="config-with-fallback.html">T</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="config-with-fallback.html">U</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.properties/-read-only-property/index.html">ReadOnlyProperty</a><span class="token operator">&lt;</span><a href="-rule/index.html">Rule</a><span class="token punctuation">, </span><a href="config-with-fallback.html">U</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Creates a delegated read-only property that can be used in ConfigAware objects. The name of the property is the key that is used during configuration lookup. If there is no such property, the value of the supplied <a href="config-with-fallback.html">fallbackProperty</a> is also considered before using the <a href="config-with-fallback.html">defaultValue</a>. The value of the property is evaluated and transformed only once.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="524590474%2FFunctions%2F-473829336" anchor-label="getOrNull" id="524590474%2FFunctions%2F-473829336" data-filterable-set=":detekt-api/main"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":detekt-api/main" data-filterable-set=":detekt-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-or-null.html"><span>get</span><wbr><span>Or</span><wbr><span><span>Null</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="524590474%2FFunctions%2F-473829336"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="get-or-null.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="-properties-aware/index.html">PropertiesAware</a><span class="token punctuation">.</span><a href="get-or-null.html"><span class="token function">getOrNull</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">key<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="get-or-null.html">T</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Allows to retrieve stored properties in a type safe way.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1074866379%2FFunctions%2F-473829336" anchor-label="simplePatternToRegex" id="1074866379%2FFunctions%2F-473829336" data-filterable-set=":detekt-api/main"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":detekt-api/main" data-filterable-set=":detekt-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="simple-pattern-to-regex.html"><span>simple</span><wbr><span>Pattern</span><wbr><span>To</span><wbr><span><span>Regex</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1074866379%2FFunctions%2F-473829336"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">.</span><a href="simple-pattern-to-regex.html"><span class="token function">simplePatternToRegex</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.text/-regex/index.html">Regex</a></div><div class="brief "><p class="paragraph">Convert a simple pattern String to a Regex</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="952886155%2FFunctions%2F-473829336" anchor-label="valuesWithReason" id="952886155%2FFunctions%2F-473829336" data-filterable-set=":detekt-api/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-api/main" data-filterable-set=":detekt-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="values-with-reason.html"><span>values</span><wbr><span>With</span><wbr><span><span>Reason</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="952886155%2FFunctions%2F-473829336"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="values-with-reason.html"><span class="token function">valuesWithReason</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">vararg </span>values<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-pair/index.html">Pair</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-values-with-reason/index.html">ValuesWithReason</a></div><div class="brief "><p class="paragraph">This factory method can be used by rule authors to specify one or many configuration values along with an explanation for each value. For example:</p></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="values-with-reason.html"><span class="token function">valuesWithReason</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">values<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="-value-with-reason/index.html">ValueWithReason</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-values-with-reason/index.html">ValuesWithReason</a></div><div class="brief "><p class="paragraph">This factory method can be used by rule authors to specify one or many configuration values along with an explanation for each value.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+        <span>© 2025 Copyright</span>
+        <span class="pull-right">
+            <span>Generated by </span>
+            <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                <span>dokka</span>
+            </a>
+        </span>
+    </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
