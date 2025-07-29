@@ -1,16 +1,16 @@
 package io.github.detekt.report.md
 
+import dev.detekt.utils.MarkdownContent
+import dev.detekt.utils.codeBlock
+import dev.detekt.utils.emptyLine
+import dev.detekt.utils.h1
+import dev.detekt.utils.h2
+import dev.detekt.utils.h3
+import dev.detekt.utils.item
+import dev.detekt.utils.list
+import dev.detekt.utils.markdown
+import dev.detekt.utils.paragraph
 import io.github.detekt.metrics.ComplexityReportGenerator
-import io.github.detekt.utils.MarkdownContent
-import io.github.detekt.utils.codeBlock
-import io.github.detekt.utils.emptyLine
-import io.github.detekt.utils.h1
-import io.github.detekt.utils.h2
-import io.github.detekt.utils.h3
-import io.github.detekt.utils.item
-import io.github.detekt.utils.list
-import io.github.detekt.utils.markdown
-import io.github.detekt.utils.paragraph
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.OutputReport

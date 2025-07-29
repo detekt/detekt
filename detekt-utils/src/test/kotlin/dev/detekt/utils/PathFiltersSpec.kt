@@ -1,4 +1,4 @@
-package io.github.detekt.utils
+package dev.detekt.utils
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

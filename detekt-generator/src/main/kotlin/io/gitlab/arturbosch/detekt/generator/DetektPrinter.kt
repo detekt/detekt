@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.generator
 
-import io.github.detekt.utils.yaml
+import dev.detekt.utils.yaml
 import io.gitlab.arturbosch.detekt.generator.collection.RuleSetPage
 import io.gitlab.arturbosch.detekt.generator.out.MarkdownWriter
 import io.gitlab.arturbosch.detekt.generator.out.PropertiesWriter
