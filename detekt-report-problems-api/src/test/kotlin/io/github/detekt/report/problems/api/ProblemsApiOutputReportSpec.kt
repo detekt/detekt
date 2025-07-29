@@ -27,16 +27,18 @@ import org.gradle.api.problems.Severity as GradleSeverity
 
 class ProblemsApiOutputReportSpec {
 
-    private val problemsService: Problems = mock()
-    private val problemReporter: ProblemReporter = mock()
-    private val detektion: Detektion = mock()
-
+    private lateinit var problemsService: Problems
+    private lateinit var problemReporter: ProblemReporter
+    private lateinit var detektion: Detektion
     private lateinit var report: ProblemsApiConsoleReport
 
     @BeforeEach
     fun setUp() {
-        whenever(problemsService.reporter).thenReturn(problemReporter)
+        problemsService = mock()
+        problemReporter = mock()
+        detektion = mock()
         report = ProblemsApiConsoleReport(problemsService)
+        whenever(problemsService.reporter).thenReturn(problemReporter)
     }
 
     @Test
@@ -92,6 +94,17 @@ class ProblemsApiOutputReportSpec {
     fun `given no issues, it does not report any problems`() {
         whenever(detektion.issues).thenReturn(emptyList())
         val result = report.render(detektion)
+
+        assertThat(result).isEqualTo("")
+        verify(problemReporter, never()).report(any(), any())
+    }
+
+    @Test
+    fun `problems service is not available when reporting`() {
+        val reportWithoutProblems = ProblemsApiConsoleReport()
+        whenever(problemsService.reporter).thenReturn(null)
+
+        val result = reportWithoutProblems.render(detektion)
 
         assertThat(result).isEqualTo("")
         verify(problemReporter, never()).report(any(), any())
