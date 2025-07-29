@@ -1,1 +1,1 @@
-io.gitlab.arturbosch.detekt.rules.exceptions.ExceptionsProvider
+dev.detekt.rules.exceptions.ExceptionsProvider
