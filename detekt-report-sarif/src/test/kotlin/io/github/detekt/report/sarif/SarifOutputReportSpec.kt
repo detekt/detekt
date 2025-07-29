@@ -1,15 +1,15 @@
 package io.github.detekt.report.sarif
 
+import dev.detekt.api.testfixtures.TestDetektion
+import dev.detekt.api.testfixtures.TestSetupContext
+import dev.detekt.api.testfixtures.createEntity
+import dev.detekt.api.testfixtures.createIssue
+import dev.detekt.api.testfixtures.createLocation
+import dev.detekt.api.testfixtures.createRuleInstance
 import io.github.detekt.test.utils.readResourceContent
 import io.gitlab.arturbosch.detekt.api.RuleInstance
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.test.TestDetektion
-import io.gitlab.arturbosch.detekt.test.TestSetupContext
-import io.gitlab.arturbosch.detekt.test.createEntity
-import io.gitlab.arturbosch.detekt.test.createIssue
-import io.gitlab.arturbosch.detekt.test.createLocation
-import io.gitlab.arturbosch.detekt.test.createRuleInstance
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.net.URI
