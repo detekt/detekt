@@ -25,7 +25,7 @@ class DetektYmlConfigSpec {
     private fun ruleSetsNamesToPackage(): List<Arguments> = listOf(
         arguments("complexity", "io.gitlab.arturbosch.detekt.rules.complexity"),
         arguments("coroutines", "io.gitlab.arturbosch.detekt.rules.coroutines"),
-        arguments("comments", "io.gitlab.arturbosch.detekt.rules.documentation"),
+        arguments("comments", "dev.detekt.rules.documentation"),
         arguments("empty-blocks", "io.gitlab.arturbosch.detekt.rules.empty"),
         arguments("exceptions", "io.gitlab.arturbosch.detekt.rules.exceptions"),
         arguments("naming", "io.gitlab.arturbosch.detekt.rules.naming"),

@@ -4,11 +4,11 @@ import dev.detekt.api.Config
 import dev.detekt.api.Rule
 import dev.detekt.api.RuleSetProvider
 import dev.detekt.api.internal.DefaultRuleSetProvider
+import dev.detekt.rules.documentation.CommentSmellProvider
 import io.github.classgraph.ClassGraph
 import io.gitlab.arturbosch.detekt.rules.bugs.PotentialBugProvider
 import io.gitlab.arturbosch.detekt.rules.complexity.ComplexityProvider
 import io.gitlab.arturbosch.detekt.rules.coroutines.CoroutinesProvider
-import io.gitlab.arturbosch.detekt.rules.documentation.CommentSmellProvider
 import io.gitlab.arturbosch.detekt.rules.empty.EmptyCodeProvider
 import io.gitlab.arturbosch.detekt.rules.exceptions.ExceptionsProvider
 import io.gitlab.arturbosch.detekt.rules.naming.NamingProvider
@@ -46,7 +46,7 @@ class RuleProviderSpec {
 }
 
 private val ruleMap: Map<Class<out DefaultRuleSetProvider>, String> = mapOf(
-    CommentSmellProvider::class.java to "io.gitlab.arturbosch.detekt.rules.documentation",
+    CommentSmellProvider::class.java to "dev.detekt.rules.documentation",
     ComplexityProvider::class.java to "io.gitlab.arturbosch.detekt.rules.complexity",
     EmptyCodeProvider::class.java to "io.gitlab.arturbosch.detekt.rules.empty",
     ExceptionsProvider::class.java to "io.gitlab.arturbosch.detekt.rules.exceptions",
