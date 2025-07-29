@@ -25,7 +25,7 @@ import org.mockito.kotlin.whenever
 import java.nio.file.Paths
 import org.gradle.api.problems.Severity as GradleSeverity
 
-class ProblemsApiOutputReportSpec {
+class ProblemsApiConsoleReportSpec {
 
     private lateinit var problemsService: Problems
     private lateinit var problemReporter: ProblemReporter
