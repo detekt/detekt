@@ -1,1 +1,1 @@
-io.github.detekt.report.sarif.SarifOutputReport
+dev.detekt.report.sarif.SarifOutputReport

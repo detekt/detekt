@@ -4,9 +4,9 @@ import dev.detekt.api.testfixtures.createEntity
 import dev.detekt.api.testfixtures.createIssue
 import dev.detekt.api.testfixtures.createLocation
 import dev.detekt.api.testfixtures.createRuleInstance
-import io.github.detekt.report.html.HtmlOutputReport
-import io.github.detekt.report.md.MdOutputReport
-import io.github.detekt.report.xml.XmlOutputReport
+import dev.detekt.report.html.HtmlOutputReport
+import dev.detekt.report.md.MdOutputReport
+import dev.detekt.report.xml.XmlOutputReport
 import io.github.detekt.test.utils.StringPrintStream
 import io.github.detekt.test.utils.createTempFileForTest
 import io.github.detekt.test.utils.resourceAsPath
