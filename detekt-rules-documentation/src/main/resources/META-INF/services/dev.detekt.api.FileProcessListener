@@ -1,1 +1,1 @@
-io.gitlab.arturbosch.detekt.rules.documentation.LicenceHeaderLoaderExtension
+dev.detekt.rules.documentation.LicenceHeaderLoaderExtension

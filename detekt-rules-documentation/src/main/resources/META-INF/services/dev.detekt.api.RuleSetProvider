@@ -1,1 +1,1 @@
-io.gitlab.arturbosch.detekt.rules.documentation.CommentSmellProvider
+dev.detekt.rules.documentation.CommentSmellProvider
