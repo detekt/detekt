@@ -102,7 +102,6 @@ class ProblemsApiOutputReportSpec {
     @Test
     fun `problems service is not available when reporting`() {
         val reportWithoutProblems = ProblemsApiConsoleReport()
-        whenever(problemsService.reporter).thenReturn(null)
 
         val result = reportWithoutProblems.render(detektion)
 
