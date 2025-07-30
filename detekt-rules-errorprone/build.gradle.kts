@@ -7,5 +7,6 @@ dependencies {
     compileOnly(projects.detektKotlinAnalysisApi)
     compileOnly(projects.detektPsiUtils)
     testImplementation(projects.detektTest)
+    testImplementation(projects.detektTestAssertj)
     testImplementation(libs.assertj.core)
 }

@@ -16,6 +16,7 @@ dependencies {
     runtimeOnly(libs.slf4j.api)
 
     testImplementation(projects.detektTest)
+    testImplementation(projects.detektTestAssertj)
     testImplementation(libs.assertj.core)
     testImplementation(libs.classgraph)
 
