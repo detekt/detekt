@@ -9,7 +9,7 @@ import dev.detekt.api.RuleSet
 import dev.detekt.api.Severity
 import dev.detekt.api.SourceLocation
 import dev.detekt.api.TextLocation
-import dev.detekt.test.utils.internal.FakeKtElement
+import dev.detekt.psi.testfixtures.FakeKtElement
 import org.jetbrains.kotlin.psi.KtElement
 import java.net.URI
 import java.nio.file.Path

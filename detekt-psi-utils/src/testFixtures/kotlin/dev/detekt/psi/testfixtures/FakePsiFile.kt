@@ -1,4 +1,4 @@
-package dev.detekt.test.utils.internal
+package dev.detekt.psi.testfixtures
 
 import com.intellij.lang.FileASTNode
 import com.intellij.lang.Language
