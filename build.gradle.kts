@@ -12,6 +12,7 @@ dependencies {
     dokka(projects.detektApi)
     dokka(projects.detektPsiUtils)
     dokka(projects.detektTest)
+    dokka(projects.detektTestAssertj)
     dokka(projects.detektTestUtils)
     dokka(projects.detektTooling)
     dokka("dev.detekt:detekt-gradle-plugin")
