@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.rules.performance
+package dev.detekt.rules.performance
 
 import dev.detekt.test.TestConfig
 import dev.detekt.test.lintWithContext
