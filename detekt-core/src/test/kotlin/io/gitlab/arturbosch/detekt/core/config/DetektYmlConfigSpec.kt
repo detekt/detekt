@@ -27,7 +27,7 @@ class DetektYmlConfigSpec {
         arguments("coroutines", "io.gitlab.arturbosch.detekt.rules.coroutines"),
         arguments("comments", "dev.detekt.rules.documentation"),
         arguments("empty-blocks", "dev.detekt.rules.empty"),
-        arguments("exceptions", "io.gitlab.arturbosch.detekt.rules.exceptions"),
+        arguments("exceptions", "dev.detekt.rules.exceptions"),
         arguments("naming", "io.gitlab.arturbosch.detekt.rules.naming"),
         arguments("performance", "io.gitlab.arturbosch.detekt.rules.performance"),
         arguments("potential-bugs", "io.gitlab.arturbosch.detekt.rules.bugs"),
