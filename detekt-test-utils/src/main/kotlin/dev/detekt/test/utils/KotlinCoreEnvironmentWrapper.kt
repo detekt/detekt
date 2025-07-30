@@ -19,8 +19,6 @@ import org.jetbrains.kotlin.resolve.CodeAnalyzerInitializer
 import org.junit.jupiter.api.extension.ExtensionContext
 import java.io.File
 
-class KotlinEnvironmentContainer(val project: Project, val configuration: CompilerConfiguration)
-
 /**
  * Make sure to always call [close] or use a [use] block when working with [StandaloneAnalysisAPISession]s.
  */
