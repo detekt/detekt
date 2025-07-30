@@ -15,7 +15,6 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.nio.file.Path
 import kotlin.io.path.absolutePathString
-import kotlin.jvm.java
 
 class RunnerSpec {
 
