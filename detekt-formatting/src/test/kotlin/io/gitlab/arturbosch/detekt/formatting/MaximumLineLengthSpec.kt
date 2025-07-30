@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.formatting
 
 import dev.detekt.api.SourceLocation
 import dev.detekt.test.TestConfig
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
 import io.gitlab.arturbosch.detekt.formatting.wrappers.MaximumLineLength
 import org.assertj.core.api.Assertions.assertThat

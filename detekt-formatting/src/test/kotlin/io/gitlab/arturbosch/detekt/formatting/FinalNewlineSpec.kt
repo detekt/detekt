@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.formatting
 
 import dev.detekt.api.Config
 import dev.detekt.test.TestConfig
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import io.gitlab.arturbosch.detekt.formatting.wrappers.FinalNewline
 import org.junit.jupiter.api.Test
 

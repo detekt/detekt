@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.formatting
 
 import dev.detekt.api.Config
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ChainWrapping
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

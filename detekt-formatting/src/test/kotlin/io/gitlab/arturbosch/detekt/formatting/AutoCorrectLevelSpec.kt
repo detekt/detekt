@@ -5,7 +5,7 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RuleSet
 import dev.detekt.api.RuleSetProvider
 import dev.detekt.api.modifiedText
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
 import dev.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat

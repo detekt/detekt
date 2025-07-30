@@ -150,7 +150,7 @@ class MandatoryBracesLoopsSpec {
 
             assertThat(findings).hasSize(2)
 
-            dev.detekt.test.assertThat(findings).hasTextLocations(42 to 80, 71 to 80)
+            dev.detekt.test.assertj.assertThat(findings).hasTextLocations(42 to 80, 71 to 80)
         }
 
         @Test
