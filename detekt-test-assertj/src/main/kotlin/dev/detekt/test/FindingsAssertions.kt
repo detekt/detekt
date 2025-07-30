@@ -1,6 +1,7 @@
 package dev.detekt.test
 
 import dev.detekt.api.Finding
+import dev.detekt.api.Location
 import dev.detekt.api.SourceLocation
 import dev.detekt.api.TextLocation
 import org.assertj.core.api.AbstractAssert
@@ -135,3 +136,6 @@ class FindingAssert(val actual: Finding?) : AbstractAssert<FindingAssert, Findin
         }
     }
 }
+
+private val Finding.location: Location
+    get() = entity.location

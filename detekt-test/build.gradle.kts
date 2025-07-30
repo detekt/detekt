@@ -6,9 +6,9 @@ plugins {
 dependencies {
     api(projects.detektApi)
     api(projects.detektTestUtils)
+    api(projects.detektTestAssertj)
     implementation(projects.detektKotlinAnalysisApiStandalone)
     implementation(projects.detektUtils)
     implementation(libs.kotlin.reflect)
-    compileOnly(libs.assertj.core)
     implementation(projects.detektCore)
 }
