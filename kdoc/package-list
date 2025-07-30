@@ -16,7 +16,7 @@ io.github.detekt.psi
 io.github.detekt.psi.internal
 io.gitlab.arturbosch.detekt.rules
 module:detekt-test
-io.gitlab.arturbosch.detekt.test
+dev.detekt.test
 module:detekt-test-utils
 dev.detekt.test.utils
 dev.detekt.test.utils.internal
