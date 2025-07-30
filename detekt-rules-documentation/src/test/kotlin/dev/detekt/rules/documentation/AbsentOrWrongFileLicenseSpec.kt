@@ -3,8 +3,8 @@ package dev.detekt.rules.documentation
 import dev.detekt.api.Config
 import dev.detekt.api.Finding
 import dev.detekt.api.testfixtures.TestSetupContext
-import io.github.detekt.test.utils.compileContentForTest
-import io.github.detekt.test.utils.resourceAsPath
+import dev.detekt.test.utils.compileContentForTest
+import dev.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lint
 import io.gitlab.arturbosch.detekt.test.yamlConfig

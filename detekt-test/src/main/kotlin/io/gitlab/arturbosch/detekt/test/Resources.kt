@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.test
 
 import dev.detekt.api.Config
+import dev.detekt.test.utils.resource
 import dev.detekt.utils.openSafeStream
-import io.github.detekt.test.utils.resource
 import io.gitlab.arturbosch.detekt.core.config.YamlConfig
 import org.intellij.lang.annotations.Language
 import java.io.StringReader

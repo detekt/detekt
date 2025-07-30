@@ -10,14 +10,14 @@ import dev.detekt.api.testfixtures.createEntity
 import dev.detekt.api.testfixtures.createIssue
 import dev.detekt.api.testfixtures.createLocation
 import dev.detekt.api.testfixtures.createRuleInstance
+import dev.detekt.test.utils.createTempFileForTest
+import dev.detekt.test.utils.readResourceContent
 import io.github.detekt.metrics.CognitiveComplexity
 import io.github.detekt.metrics.processors.commentLinesKey
 import io.github.detekt.metrics.processors.complexityKey
 import io.github.detekt.metrics.processors.linesKey
 import io.github.detekt.metrics.processors.logicalLinesKey
 import io.github.detekt.metrics.processors.sourceLinesKey
-import io.github.detekt.test.utils.createTempFileForTest
-import io.github.detekt.test.utils.readResourceContent
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.nio.file.Path

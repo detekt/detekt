@@ -19,5 +19,5 @@ dependencies {
 }
 
 apiValidation {
-    ignoredPackages.add("io.github.detekt.test.utils.internal")
+    ignoredPackages.add("dev.detekt.test.utils.internal")
 }

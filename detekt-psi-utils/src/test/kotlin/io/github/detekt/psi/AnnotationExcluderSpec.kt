@@ -1,8 +1,8 @@
 package io.github.detekt.psi
 
-import io.github.detekt.test.utils.KotlinEnvironmentContainer
-import io.github.detekt.test.utils.compileContentForTest
-import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
+import dev.detekt.test.utils.KotlinCoreEnvironmentTest
+import dev.detekt.test.utils.KotlinEnvironmentContainer
+import dev.detekt.test.utils.compileContentForTest
 import io.gitlab.arturbosch.detekt.test.createBindingContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtAnnotationEntry

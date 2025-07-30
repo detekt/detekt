@@ -7,9 +7,9 @@ import dev.detekt.api.testfixtures.createRuleInstance
 import dev.detekt.report.html.HtmlOutputReport
 import dev.detekt.report.md.MdOutputReport
 import dev.detekt.report.xml.XmlOutputReport
-import io.github.detekt.test.utils.StringPrintStream
-import io.github.detekt.test.utils.createTempFileForTest
-import io.github.detekt.test.utils.resourceAsPath
+import dev.detekt.test.utils.StringPrintStream
+import dev.detekt.test.utils.createTempFileForTest
+import dev.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.core.DetektResult
 import io.gitlab.arturbosch.detekt.core.createNullLoggingSpec
 import io.gitlab.arturbosch.detekt.core.tooling.withSettings

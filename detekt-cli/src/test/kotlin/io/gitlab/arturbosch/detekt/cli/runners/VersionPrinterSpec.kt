@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.cli.runners
 
-import io.github.detekt.test.utils.StringPrintStream
+import dev.detekt.test.utils.StringPrintStream
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

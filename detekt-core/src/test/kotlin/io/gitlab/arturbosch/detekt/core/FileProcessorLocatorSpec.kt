@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.core
 
 import dev.detekt.api.FileProcessListener
+import dev.detekt.test.utils.resourceAsPath
 import io.github.classgraph.ClassGraph
-import io.github.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.fail

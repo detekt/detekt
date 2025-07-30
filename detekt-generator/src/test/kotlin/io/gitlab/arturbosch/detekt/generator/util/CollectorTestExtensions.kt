@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.generator.util
 
-import io.github.detekt.test.utils.compileContentForTest
+import dev.detekt.test.utils.compileContentForTest
 import io.gitlab.arturbosch.detekt.generator.collection.Collector
 import org.intellij.lang.annotations.Language
 

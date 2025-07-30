@@ -9,7 +9,7 @@ import dev.detekt.api.testfixtures.createEntity
 import dev.detekt.api.testfixtures.createIssue
 import dev.detekt.api.testfixtures.createLocation
 import dev.detekt.api.testfixtures.createRuleInstance
-import io.github.detekt.test.utils.readResourceContent
+import dev.detekt.test.utils.readResourceContent
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.net.URI

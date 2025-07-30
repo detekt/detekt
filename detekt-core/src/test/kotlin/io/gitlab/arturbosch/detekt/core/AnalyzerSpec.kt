@@ -15,9 +15,9 @@ import dev.detekt.api.Severity
 import dev.detekt.api.SourceLocation
 import dev.detekt.api.TextLocation
 import dev.detekt.api.config
-import io.github.detekt.test.utils.compileContentForTest
-import io.github.detekt.test.utils.compileForTest
-import io.github.detekt.test.utils.resourceAsPath
+import dev.detekt.test.utils.compileContentForTest
+import dev.detekt.test.utils.compileForTest
+import dev.detekt.test.utils.resourceAsPath
 import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy

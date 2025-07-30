@@ -6,10 +6,10 @@ import dev.detekt.api.FileProcessListener
 import dev.detekt.api.Rule
 import dev.detekt.api.RuleSet
 import dev.detekt.api.RuleSetProvider
-import io.github.detekt.test.utils.NullPrintStream
-import io.github.detekt.test.utils.readResourceContent
-import io.github.detekt.test.utils.resourceAsPath
-import io.github.detekt.test.utils.resourceUrl
+import dev.detekt.test.utils.NullPrintStream
+import dev.detekt.test.utils.readResourceContent
+import dev.detekt.test.utils.resourceAsPath
+import dev.detekt.test.utils.resourceUrl
 import io.github.detekt.tooling.api.spec.ProcessingSpec
 import io.gitlab.arturbosch.detekt.core.tooling.AnalysisFacade
 import io.gitlab.arturbosch.detekt.core.tooling.DefaultLifecycle

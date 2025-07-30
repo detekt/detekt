@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.github.detekt.test.utils.KotlinEnvironmentContainer
-import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
+import dev.detekt.test.utils.KotlinCoreEnvironmentTest
+import dev.detekt.test.utils.KotlinEnvironmentContainer
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lintWithContext

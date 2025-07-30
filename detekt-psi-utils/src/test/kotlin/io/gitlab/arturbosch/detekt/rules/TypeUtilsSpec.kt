@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules
 
-import io.github.detekt.test.utils.KotlinAnalysisApiEngine
+import dev.detekt.test.utils.KotlinAnalysisApiEngine
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtProperty

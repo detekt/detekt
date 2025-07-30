@@ -5,7 +5,7 @@ import dev.detekt.api.ConfigValidator
 import dev.detekt.api.Notification
 import dev.detekt.api.RuleSet
 import dev.detekt.api.RuleSetProvider
-import io.github.detekt.test.utils.createTempDirectoryForTest
+import dev.detekt.test.utils.createTempDirectoryForTest
 import io.github.detekt.tooling.api.InvalidConfig
 import io.gitlab.arturbosch.detekt.core.createNullLoggingSpec
 import io.gitlab.arturbosch.detekt.core.createProcessingSettings

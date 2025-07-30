@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.core.suppressors
 
 import dev.detekt.api.RuleSet
-import io.github.detekt.test.utils.compileContentForTest
+import dev.detekt.test.utils.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtElement

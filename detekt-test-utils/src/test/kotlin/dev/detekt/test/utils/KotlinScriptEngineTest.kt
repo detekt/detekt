@@ -1,10 +1,10 @@
-package io.github.detekt.test.utils
+package dev.detekt.test.utils
 
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.RepeatedTest
 import org.junit.jupiter.api.Test
 
-class KotlinAnalysisAAEngineTest {
+class KotlinScriptEngineTest {
 
     @Test
     fun `can compile a valid script`() {
@@ -13,7 +13,7 @@ class KotlinAnalysisAAEngineTest {
             
             class A
         """.trimIndent()
-        KotlinAnalysisApiEngine.compile(code)
+        KotlinScriptEngine.compile(code)
     }
 
     @Test
@@ -23,7 +23,7 @@ class KotlinAnalysisAAEngineTest {
             
             val unknownType: UnknownType
         """.trimIndent()
-        assertThatThrownBy { KotlinAnalysisApiEngine.compile(invalidCode) }
+        assertThatThrownBy { KotlinScriptEngine.compile(invalidCode) }
             .isInstanceOf(IllegalStateException::class.java)
     }
 
@@ -37,7 +37,7 @@ class KotlinAnalysisAAEngineTest {
             }
         """.trimIndent()
 
-        KotlinAnalysisApiEngine.compile(validCode)
+        KotlinScriptEngine.compile(validCode)
 
         val codeWithMissingImport = """
             fun useRandom() {
@@ -45,9 +45,9 @@ class KotlinAnalysisAAEngineTest {
             }
         """.trimIndent()
 
-        assertThatThrownBy { KotlinAnalysisApiEngine.compile(codeWithMissingImport) }
+        assertThatThrownBy { KotlinScriptEngine.compile(codeWithMissingImport) }
             .isInstanceOf(IllegalStateException::class.java)
-            .hasMessage("ERROR Unresolved reference 'Random'. (dummy.kt:2:5)")
+            .hasMessage("ERROR Unresolved reference 'Random'. (script.main.kts:2:5)")
     }
 
     @RepeatedTest(10)
@@ -57,7 +57,7 @@ class KotlinAnalysisAAEngineTest {
             
             class A
         """.trimIndent()
-        KotlinAnalysisApiEngine.compile(code)
+        KotlinScriptEngine.compile(code)
     }
 
     @RepeatedTest(10)
@@ -67,7 +67,7 @@ class KotlinAnalysisAAEngineTest {
             
             val unknownType: UnknownType
         """.trimIndent()
-        assertThatThrownBy { KotlinAnalysisApiEngine.compile(invalidCode) }
+        assertThatThrownBy { KotlinScriptEngine.compile(invalidCode) }
             .isInstanceOf(IllegalStateException::class.java)
     }
 }

@@ -2,8 +2,8 @@ package io.gitlab.arturbosch.detekt.rules.naming
 
 import com.intellij.psi.PsiFile
 import dev.detekt.api.Config
-import io.github.detekt.test.utils.compileContentForTest
-import io.github.detekt.test.utils.internal.FakePsiFile
+import dev.detekt.test.utils.compileContentForTest
+import dev.detekt.test.utils.internal.FakePsiFile
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lint

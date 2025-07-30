@@ -1,4 +1,4 @@
-package io.github.detekt.test.utils
+package dev.detekt.test.utils
 
 import java.nio.file.Path
 import kotlin.io.path.createTempDirectory

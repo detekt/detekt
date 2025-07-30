@@ -6,10 +6,10 @@ import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.RequiresFullAnalysis
 import dev.detekt.api.Rule
 import dev.detekt.api.RuleSet
-import io.github.detekt.test.utils.KotlinAnalysisApiEngine
-import io.github.detekt.test.utils.KotlinEnvironmentContainer
-import io.github.detekt.test.utils.KotlinScriptEngine
-import io.github.detekt.test.utils.compileContentForTest
+import dev.detekt.test.utils.KotlinAnalysisApiEngine
+import dev.detekt.test.utils.KotlinEnvironmentContainer
+import dev.detekt.test.utils.KotlinScriptEngine
+import dev.detekt.test.utils.compileContentForTest
 import io.gitlab.arturbosch.detekt.core.suppressors.isSuppressedBy
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.config.LanguageVersionSettings

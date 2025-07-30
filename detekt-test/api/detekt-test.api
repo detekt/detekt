@@ -33,7 +33,7 @@ public final class io/gitlab/arturbosch/detekt/test/FindingsAssertionsKt {
 }
 
 public final class io/gitlab/arturbosch/detekt/test/KotlinCoreEnvironmentExtensionsKt {
-	public static final fun createBindingContext (Lio/github/detekt/test/utils/KotlinEnvironmentContainer;Ljava/util/List;)Lorg/jetbrains/kotlin/resolve/BindingContext;
+	public static final fun createBindingContext (Ldev/detekt/test/utils/KotlinEnvironmentContainer;Ljava/util/List;)Lorg/jetbrains/kotlin/resolve/BindingContext;
 }
 
 public final class io/gitlab/arturbosch/detekt/test/ResourcesKt {
@@ -46,10 +46,10 @@ public final class io/gitlab/arturbosch/detekt/test/RuleExtensionsKt {
 	public static final fun lint (Ldev/detekt/api/Rule;Lorg/jetbrains/kotlin/psi/KtFile;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;)Ljava/util/List;
 	public static synthetic fun lint$default (Ldev/detekt/api/Rule;Ljava/lang/String;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;ZILjava/lang/Object;)Ljava/util/List;
 	public static synthetic fun lint$default (Ldev/detekt/api/Rule;Lorg/jetbrains/kotlin/psi/KtFile;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;ILjava/lang/Object;)Ljava/util/List;
-	public static final fun lintWithContext (Ldev/detekt/api/Rule;Lio/github/detekt/test/utils/KotlinEnvironmentContainer;Ljava/lang/String;[Ljava/lang/String;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;Z)Ljava/util/List;
-	public static final fun lintWithContext (Ldev/detekt/api/Rule;Lio/github/detekt/test/utils/KotlinEnvironmentContainer;Ljava/lang/String;[Ljava/lang/String;Z)Ljava/util/List;
-	public static synthetic fun lintWithContext$default (Ldev/detekt/api/Rule;Lio/github/detekt/test/utils/KotlinEnvironmentContainer;Ljava/lang/String;[Ljava/lang/String;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;ZILjava/lang/Object;)Ljava/util/List;
-	public static synthetic fun lintWithContext$default (Ldev/detekt/api/Rule;Lio/github/detekt/test/utils/KotlinEnvironmentContainer;Ljava/lang/String;[Ljava/lang/String;ZILjava/lang/Object;)Ljava/util/List;
+	public static final fun lintWithContext (Ldev/detekt/api/Rule;Ldev/detekt/test/utils/KotlinEnvironmentContainer;Ljava/lang/String;[Ljava/lang/String;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;Z)Ljava/util/List;
+	public static final fun lintWithContext (Ldev/detekt/api/Rule;Ldev/detekt/test/utils/KotlinEnvironmentContainer;Ljava/lang/String;[Ljava/lang/String;Z)Ljava/util/List;
+	public static synthetic fun lintWithContext$default (Ldev/detekt/api/Rule;Ldev/detekt/test/utils/KotlinEnvironmentContainer;Ljava/lang/String;[Ljava/lang/String;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;ZILjava/lang/Object;)Ljava/util/List;
+	public static synthetic fun lintWithContext$default (Ldev/detekt/api/Rule;Ldev/detekt/test/utils/KotlinEnvironmentContainer;Ljava/lang/String;[Ljava/lang/String;ZILjava/lang/Object;)Ljava/util/List;
 }
 
 public final class io/gitlab/arturbosch/detekt/test/TestConfig : dev/detekt/api/Config {

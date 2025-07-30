@@ -1,4 +1,4 @@
-package io.github.detekt.test.utils
+package dev.detekt.test.utils
 
 import java.net.URI
 import java.net.URL
