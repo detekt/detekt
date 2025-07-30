@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.authors
+package dev.detekt.rules.ruleauthors
 
 import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.RuleSet
