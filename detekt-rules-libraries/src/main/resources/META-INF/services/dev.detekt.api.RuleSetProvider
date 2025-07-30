@@ -1,1 +1,1 @@
-io.gitlab.arturbosch.detekt.libraries.RuleLibrariesProvider
+dev.detekt.rules.libraries.RuleLibrariesProvider

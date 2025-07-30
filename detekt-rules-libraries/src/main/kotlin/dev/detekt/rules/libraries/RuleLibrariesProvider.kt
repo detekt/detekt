@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.libraries
+package dev.detekt.rules.libraries
 
 import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.RuleSet
