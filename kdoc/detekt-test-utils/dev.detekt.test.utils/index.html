@@ -1,0 +1,366 @@
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>dev.detekt.test.utils</title>
+<link href="../../images/logo-icon.svg" rel="icon" type="image/svg">    <script>var pathToRoot = "../../";</script>
+    <script>document.documentElement.classList.replace("no-js","js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../styles/font-jb-sans-auto.css" rel="Stylesheet">
+<link href="../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../ui-kit/ui-kit.min.js" defer></script>
+<script type="text/javascript" src="../../scripts/symbol-parameters-wrapper_deferred.js" defer></script></head>
+<body>
+    <div class="root">
+    <nav class="navigation theme-dark" id="navigation-wrapper">
+<a class="library-name--link" href="../../index.html">
+                    detekt
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">1.23.8
+        </div>
+        <div class="navigation-controls">
+        <div class="filter-section filter-section_loading" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":detekt-test-utils/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox">
+                    <div class="dropdown--header"><span>Platform filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close platform filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":detekt-test-utils/main" data-filter=":detekt-test-utils/main">
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </div>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </nav>
+        <div id="container">
+            <div class="sidebar" id="leftColumn">
+                <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                    <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox">
+                        <div class="dropdown--header">
+                            <span>
+                                    detekt
+                            </span>
+                            <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                                <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                            </button>
+                        </div>
+                        <div class="sidebar--inner" id="sideMenu"></div>
+                    </ul>
+                    <div class="dropdown--overlay"></div>
+                </div>
+            </div>
+            <div id="main">
+<div class="main-content" data-page-type="package" id="content" pageids="detekt-test-utils::dev.detekt.test.utils////PointingToDeclaration//1643042966">
+  <div class="breadcrumbs"><a href="../index.html">detekt-test-utils</a><span class="delimiter">/</span><span class="current">dev.detekt.test.utils</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button><button class="section-tab" data-togglable="FUNCTION,EXTENSION_FUNCTION">Functions</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="">Types</h2>
+        <div class="table"><a data-name="-2091101230%2FClasslikes%2F1643042966" anchor-label="KotlinAnalysisApiEngine" id="-2091101230%2FClasslikes%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-kotlin-analysis-api-engine/index.html"><span>Kotlin</span><wbr><span>Analysis</span><wbr><span>Api</span><wbr><span><span>Engine</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2091101230%2FClasslikes%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-kotlin-analysis-api-engine/index.html">KotlinAnalysisApiEngine</a></div><div class="brief "><p class="paragraph">The object to use the Kotlin Analysis API for code compilation.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1967247404%2FClasslikes%2F1643042966" anchor-label="KotlinCoreEnvironmentTest" id="1967247404%2FClasslikes%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-kotlin-core-environment-test/index.html"><span>Kotlin</span><wbr><span>Core</span><wbr><span>Environment</span><wbr><span><span>Test</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1967247404%2FClasslikes%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.annotation/-target/index.html"><span class="token annotation builtin">Target</span></a><span class="token punctuation">(</span><span>allowedTargets<span class="token operator"> = </span><span class="token punctuation">[</span><span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.annotation/-annotation-target/-c-l-a-s-s/index.html">AnnotationTarget.CLASS</a></span><wbr><span class="token punctuation">]</span></span><wbr><span class="token punctuation">)</span></div><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="org.junit.jupiter.api.extension/ExtendWith///PointingToDeclaration/"><span class="token annotation builtin">ExtendWith</span></span><span class="token punctuation">(</span><span>value<span class="token operator"> = </span><span class="token punctuation">[</span><span><a href="../../detekt-test-utils/dev.detekt.test.utils/-kotlin-environment-resolver/index.html">KotlinEnvironmentResolver::class</a></span><wbr><span class="token punctuation">]</span></span><wbr><span class="token punctuation">)</span></div></div><span class="token keyword">annotation class </span><a href="-kotlin-core-environment-test/index.html">KotlinCoreEnvironmentTest</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>additionalJavaSourcePaths<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span><span class="token operator"> = </span>[]</span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1797556335%2FClasslikes%2F1643042966" anchor-label="KotlinCoreEnvironmentWrapper" id="-1797556335%2FClasslikes%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-kotlin-core-environment-wrapper/index.html"><span>Kotlin</span><wbr><span>Core</span><wbr><span>Environment</span><wbr><span><span>Wrapper</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1797556335%2FClasslikes%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-kotlin-core-environment-wrapper/index.html">KotlinCoreEnvironmentWrapper</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">project<span class="token operator">: </span><span data-unresolved-link="com.intellij.openapi.project/Project///PointingToDeclaration/">Project</span><span class="token punctuation">, </span></span><span class="parameter ">configuration<span class="token operator">: </span><span data-unresolved-link="org.jetbrains.kotlin.config/CompilerConfiguration///PointingToDeclaration/">CompilerConfiguration</span><span class="token punctuation">, </span></span><span class="parameter ">disposable<span class="token operator">: </span><span data-unresolved-link="com.intellij.openapi/Disposable///PointingToDeclaration/">Disposable</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>env<span class="token operator">: </span><a href="-kotlin-environment-container/index.html">KotlinEnvironmentContainer</a><span class="token operator"> = </span>KotlinEnvironmentContainer(project, configuration)</span></span><span class="token punctuation">)</span> : <span data-unresolved-link="org.junit.jupiter.api.extension/ExtensionContext.Store.CloseableResource///PointingToDeclaration/">ExtensionContext.Store.CloseableResource</span>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/AutoCloseable.html">AutoCloseable</a></div><div class="brief "><p class="paragraph">Make sure to always call <a href="-kotlin-core-environment-wrapper/close.html">close</a> or use a use block when working with <span data-unresolved-link="org.jetbrains.kotlin.analysis.api.standalone/StandaloneAnalysisAPISession///PointingToDeclaration/">StandaloneAnalysisAPISession</span>s.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="343334786%2FClasslikes%2F1643042966" anchor-label="KotlinEnvironmentContainer" id="343334786%2FClasslikes%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-kotlin-environment-container/index.html"><span>Kotlin</span><wbr><span>Environment</span><wbr><span><span>Container</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="343334786%2FClasslikes%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-kotlin-environment-container/index.html">KotlinEnvironmentContainer</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>project<span class="token operator">: </span><span data-unresolved-link="com.intellij.openapi.project/Project///PointingToDeclaration/">Project</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>configuration<span class="token operator">: </span><span data-unresolved-link="org.jetbrains.kotlin.config/CompilerConfiguration///PointingToDeclaration/">CompilerConfiguration</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-153317341%2FClasslikes%2F1643042966" anchor-label="KotlinScriptEngine" id="-153317341%2FClasslikes%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-kotlin-script-engine/index.html"><span>Kotlin</span><wbr><span>Script</span><wbr><span><span>Engine</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-153317341%2FClasslikes%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-kotlin-script-engine/index.html">KotlinScriptEngine</a></div><div class="brief "><p class="paragraph">The object to use the Kotlin script engine for code compilation.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1180984405%2FClasslikes%2F1643042966" anchor-label="NullPrintStream" id="-1180984405%2FClasslikes%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-null-print-stream/index.html"><span>Null</span><wbr><span>Print</span><wbr><span><span>Stream</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1180984405%2FClasslikes%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-null-print-stream/index.html">NullPrintStream</a> : <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/PrintStream.html">PrintStream</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1955567307%2FClasslikes%2F1643042966" anchor-label="StringPrintStream" id="-1955567307%2FClasslikes%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-string-print-stream/index.html"><span>String</span><wbr><span>Print</span><wbr><span><span>Stream</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1955567307%2FClasslikes%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-string-print-stream/index.html">StringPrintStream</a> : <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/PrintStream.html">PrintStream</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="-1423041849%2FFunctions%2F1643042966" anchor-label="compileContentForTest" id="-1423041849%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="compile-content-for-test.html"><span>compile</span><wbr><span>Content</span><wbr><span>For</span><wbr><span><span>Test</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1423041849%2FFunctions%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="compile-content-for-test.html"><span class="token function">compileContentForTest</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">content<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">path<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/file/Path.html">Path</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.jetbrains.kotlin.psi/KtFile///PointingToDeclaration/">KtFile</span></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="compile-content-for-test.html"><span class="token function">compileContentForTest</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">content<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">filename<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator"> = </span><span class="token string">"Test.kt"</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.jetbrains.kotlin.psi/KtFile///PointingToDeclaration/">KtFile</span></div><div class="brief "><p class="paragraph">Use this method if you define a kt file/class as a plain string in your test.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1612290091%2FFunctions%2F1643042966" anchor-label="compileForTest" id="-1612290091%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="compile-for-test.html"><span>compile</span><wbr><span>For</span><wbr><span><span>Test</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1612290091%2FFunctions%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="compile-for-test.html"><span class="token function">compileForTest</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">path<span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/file/Path.html">Path</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.jetbrains.kotlin.psi/KtFile///PointingToDeclaration/">KtFile</span></div><div class="brief "><p class="paragraph">Use this method if you test a kt file/class in the test resources.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="627389876%2FFunctions%2F1643042966" anchor-label="createEnvironment" id="627389876%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="create-environment.html"><span>create</span><wbr><span><span>Environment</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="627389876%2FFunctions%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="create-environment.html"><span class="token function">createEnvironment</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">additionalRootPaths<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/File.html">File</a><span class="token operator">&gt;</span><span class="token operator"> = </span>emptyList()<span class="token punctuation">, </span></span><span class="parameter ">additionalJavaSourceRootPaths<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/File.html">File</a><span class="token operator">&gt;</span><span class="token operator"> = </span>emptyList()</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="-kotlin-core-environment-wrapper/index.html">KotlinCoreEnvironmentWrapper</a></div><div class="brief "><p class="paragraph">Create a {@link KotlinCoreEnvironmentWrapper} used for test.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1562182700%2FFunctions%2F1643042966" anchor-label="createTempDirectoryForTest" id="-1562182700%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="create-temp-directory-for-test.html"><span>create</span><wbr><span>Temp</span><wbr><span>Directory</span><wbr><span>For</span><wbr><span><span>Test</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1562182700%2FFunctions%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="create-temp-directory-for-test.html"><span class="token function">createTempDirectoryForTest</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">prefix<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/file/Path.html">Path</a></div><div class="brief "><p class="paragraph">Creates a new directory in the default temporary-file directory, using the given <a href="create-temp-directory-for-test.html">prefix</a> to generate its name. The resulting directory in the returned path is automatically deleted on JVM exit.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1212644820%2FFunctions%2F1643042966" anchor-label="createTempFileForTest" id="-1212644820%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="create-temp-file-for-test.html"><span>create</span><wbr><span>Temp</span><wbr><span>File</span><wbr><span>For</span><wbr><span><span>Test</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1212644820%2FFunctions%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="create-temp-file-for-test.html"><span class="token function">createTempFileForTest</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">prefix<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">suffix<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/file/Path.html">Path</a></div><div class="brief "><p class="paragraph">Creates an empty file in the default temporary-file directory, using the given <a href="create-temp-file-for-test.html">prefix</a> and <a href="create-temp-file-for-test.html">suffix</a> to generate its name. The resulting file in the returned path is automatically deleted on JVM exit.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1074377357%2FFunctions%2F1643042966" anchor-label="readResourceContent" id="1074377357%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="read-resource-content.html"><span>read</span><wbr><span>Resource</span><wbr><span><span>Content</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1074377357%2FFunctions%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="read-resource-content.html"><span class="token function">readResourceContent</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1648092356%2FFunctions%2F1643042966" anchor-label="resource" id="1648092356%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="resource.html"><span><span>resource</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1648092356%2FFunctions%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="resource.html"><span class="token function">resource</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/net/URI.html">URI</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1746168155%2FFunctions%2F1643042966" anchor-label="resourceAsPath" id="1746168155%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="resource-as-path.html"><span>resource</span><wbr><span>As</span><wbr><span><span>Path</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1746168155%2FFunctions%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="resource-as-path.html"><span class="token function">resourceAsPath</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/file/Path.html">Path</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1361638151%2FFunctions%2F1643042966" anchor-label="resourceUrl" id="-1361638151%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="resource-url.html"><span>resource</span><wbr><span><span>Url</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1361638151%2FFunctions%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="resource-url.html"><span class="token function">resourceUrl</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/net/URL.html">URL</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+        <span>© 2025 Copyright</span>
+        <span class="pull-right">
+            <span>Generated by </span>
+            <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                <span>dokka</span>
+            </a>
+        </span>
+    </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
