@@ -6,7 +6,7 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresFullAnalysis
 import dev.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.rules.isOverride
+import dev.detekt.psi.isOverride
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.load.java.sam.JavaSingleAbstractMethodUtils
 import org.jetbrains.kotlin.psi.KtExpression

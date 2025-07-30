@@ -6,8 +6,8 @@ import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.rules.isEqualsFunction
-import io.gitlab.arturbosch.detekt.rules.isHashCodeFunction
+import dev.detekt.psi.isEqualsFunction
+import dev.detekt.psi.isHashCodeFunction
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedFunction

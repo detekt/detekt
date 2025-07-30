@@ -6,9 +6,9 @@ import dev.detekt.api.DetektVisitor
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.rules.isJvmFinalizeFunction
-import io.gitlab.arturbosch.detekt.rules.isOpen
-import io.gitlab.arturbosch.detekt.rules.isOverride
+import dev.detekt.psi.isJvmFinalizeFunction
+import dev.detekt.psi.isOpen
+import dev.detekt.psi.isOverride
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction

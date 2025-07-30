@@ -6,7 +6,7 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.Rule
 import dev.detekt.api.config
-import io.gitlab.arturbosch.detekt.rules.isConstant
+import dev.detekt.psi.isConstant
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtLiteralStringTemplateEntry

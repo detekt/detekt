@@ -8,8 +8,8 @@ import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.api.config
 import dev.detekt.api.valuesWithReason
-import io.github.detekt.psi.FunctionMatcher
-import io.github.detekt.psi.FunctionMatcher.Companion.fromFunctionSignature
+import dev.detekt.psi.FunctionMatcher
+import dev.detekt.psi.FunctionMatcher.Companion.fromFunctionSignature
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.resolution.KaCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall

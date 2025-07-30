@@ -9,9 +9,9 @@ import dev.detekt.api.RequiresFullAnalysis
 import dev.detekt.api.Rule
 import dev.detekt.api.config
 import dev.detekt.api.simplePatternToRegex
-import io.github.detekt.psi.FunctionMatcher
-import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
-import io.gitlab.arturbosch.detekt.rules.isCalling
+import dev.detekt.psi.FunctionMatcher
+import dev.detekt.psi.fqNameOrNull
+import dev.detekt.psi.isCalling
 import org.jetbrains.kotlin.descriptors.annotations.AnnotationDescriptor
 import org.jetbrains.kotlin.descriptors.findPackage
 import org.jetbrains.kotlin.name.FqName

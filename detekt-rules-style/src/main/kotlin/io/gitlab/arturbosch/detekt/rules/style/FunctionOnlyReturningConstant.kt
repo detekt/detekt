@@ -8,9 +8,9 @@ import dev.detekt.api.Finding
 import dev.detekt.api.Rule
 import dev.detekt.api.config
 import dev.detekt.api.simplePatternToRegex
-import io.gitlab.arturbosch.detekt.rules.isActual
-import io.gitlab.arturbosch.detekt.rules.isOpen
-import io.gitlab.arturbosch.detekt.rules.isOverride
+import dev.detekt.psi.isActual
+import dev.detekt.psi.isOpen
+import dev.detekt.psi.isOverride
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction

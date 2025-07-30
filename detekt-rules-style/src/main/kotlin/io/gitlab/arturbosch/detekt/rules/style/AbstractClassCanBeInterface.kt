@@ -7,9 +7,9 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.rules.isAbstract
-import io.gitlab.arturbosch.detekt.rules.isInternal
-import io.gitlab.arturbosch.detekt.rules.isProtected
+import dev.detekt.psi.isAbstract
+import dev.detekt.psi.isInternal
+import dev.detekt.psi.isProtected
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassKind

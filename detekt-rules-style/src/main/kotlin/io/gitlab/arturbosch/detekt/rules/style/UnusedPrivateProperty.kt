@@ -11,7 +11,7 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresFullAnalysis
 import dev.detekt.api.Rule
 import dev.detekt.api.config
-import io.gitlab.arturbosch.detekt.rules.isExpect
+import dev.detekt.psi.isExpect
 import org.jetbrains.kotlin.descriptors.ClassConstructorDescriptor
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptorWithSource

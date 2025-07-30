@@ -4,7 +4,7 @@ import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.Config
 import dev.detekt.api.Configuration
 import dev.detekt.api.config
-import io.gitlab.arturbosch.detekt.rules.isAllowedExceptionName
+import dev.detekt.psi.isAllowedExceptionName
 import org.jetbrains.kotlin.psi.KtCatchClause
 
 /**

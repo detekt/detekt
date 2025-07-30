@@ -5,7 +5,7 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresFullAnalysis
 import dev.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.rules.isOverride
+import dev.detekt.psi.isOverride
 import org.jetbrains.kotlin.cfg.WhenChecker
 import org.jetbrains.kotlin.config.AnalysisFlags
 import org.jetbrains.kotlin.config.ExplicitApiMode

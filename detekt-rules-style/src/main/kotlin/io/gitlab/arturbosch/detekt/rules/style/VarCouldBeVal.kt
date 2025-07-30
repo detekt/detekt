@@ -10,8 +10,8 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresFullAnalysis
 import dev.detekt.api.Rule
 import dev.detekt.api.config
-import io.gitlab.arturbosch.detekt.rules.isLateinit
-import io.gitlab.arturbosch.detekt.rules.isOverride
+import dev.detekt.psi.isLateinit
+import dev.detekt.psi.isOverride
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression

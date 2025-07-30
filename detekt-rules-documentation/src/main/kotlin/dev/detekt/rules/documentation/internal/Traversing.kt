@@ -1,6 +1,6 @@
 package dev.detekt.rules.documentation.internal
 
-import io.gitlab.arturbosch.detekt.rules.isProtected
+import dev.detekt.psi.isProtected
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
 import org.jetbrains.kotlin.psi.psiUtil.isPublic

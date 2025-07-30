@@ -6,7 +6,7 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresFullAnalysis
 import dev.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
+import dev.detekt.psi.fqNameOrNull
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.ConstructorDescriptor
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor

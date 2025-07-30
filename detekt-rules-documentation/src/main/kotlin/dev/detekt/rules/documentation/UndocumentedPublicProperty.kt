@@ -6,8 +6,8 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.Rule
 import dev.detekt.api.config
+import dev.detekt.psi.isPublicNotOverridden
 import dev.detekt.rules.documentation.internal.isPublicInherited
-import io.gitlab.arturbosch.detekt.rules.isPublicNotOverridden
 import org.jetbrains.kotlin.psi.KtEnumEntry
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtPrimaryConstructor

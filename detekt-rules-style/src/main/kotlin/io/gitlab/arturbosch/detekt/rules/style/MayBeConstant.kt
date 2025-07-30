@@ -5,8 +5,8 @@ import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.rules.isConstant
-import io.gitlab.arturbosch.detekt.rules.isOverride
+import dev.detekt.psi.isConstant
+import dev.detekt.psi.isOverride
 import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.lexer.KtSingleValueToken
 import org.jetbrains.kotlin.lexer.KtTokens

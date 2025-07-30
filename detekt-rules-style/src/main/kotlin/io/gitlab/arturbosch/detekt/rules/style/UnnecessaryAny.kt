@@ -5,8 +5,8 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresFullAnalysis
 import dev.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.rules.firstParameter
-import io.gitlab.arturbosch.detekt.rules.isCalling
+import dev.detekt.psi.firstParameter
+import dev.detekt.psi.isCalling
 import org.jetbrains.kotlin.contracts.parsing.isEqualsDescriptor
 import org.jetbrains.kotlin.descriptors.VariableDescriptor
 import org.jetbrains.kotlin.descriptors.impl.ValueParameterDescriptorImpl.WithDestructuringDeclaration

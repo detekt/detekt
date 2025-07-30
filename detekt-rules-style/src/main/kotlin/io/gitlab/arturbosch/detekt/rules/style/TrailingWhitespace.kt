@@ -9,8 +9,8 @@ import dev.detekt.api.Location
 import dev.detekt.api.Rule
 import dev.detekt.api.SourceLocation
 import dev.detekt.api.TextLocation
-import io.github.detekt.psi.absolutePath
-import io.gitlab.arturbosch.detekt.rules.isPartOfString
+import dev.detekt.psi.absolutePath
+import dev.detekt.psi.isPartOfString
 import org.jetbrains.kotlin.KtPsiSourceFileLinesMapping
 import org.jetbrains.kotlin.diagnostics.DiagnosticUtils.getLineAndColumnRangeInPsiFile
 import org.jetbrains.kotlin.psi.KtFile

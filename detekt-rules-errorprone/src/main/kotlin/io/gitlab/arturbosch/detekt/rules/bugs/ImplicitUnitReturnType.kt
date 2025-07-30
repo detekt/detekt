@@ -7,7 +7,7 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.api.config
-import io.gitlab.arturbosch.detekt.rules.hasImplicitUnitReturnType
+import dev.detekt.psi.hasImplicitUnitReturnType
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
