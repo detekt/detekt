@@ -2,8 +2,8 @@ package io.gitlab.arturbosch.detekt.cli.runners
 
 import dev.detekt.test.utils.StringPrintStream
 import dev.detekt.test.utils.resourceAsPath
-import io.github.detekt.tooling.api.InvalidConfig
-import io.github.detekt.tooling.api.IssuesFound
+import dev.detekt.tooling.api.InvalidConfig
+import dev.detekt.tooling.api.IssuesFound
 import io.gitlab.arturbosch.detekt.cli.executeDetekt
 import io.gitlab.arturbosch.detekt.cli.parseArguments
 import org.assertj.core.api.Assertions.assertThat
@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.nio.file.Path
 import kotlin.io.path.absolutePathString
+import kotlin.jvm.java
 
 class RunnerSpec {
 

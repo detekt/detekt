@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.core.util
 
 import dev.detekt.test.utils.StringPrintStream
 import dev.detekt.test.utils.resourceAsPath
-import io.github.detekt.tooling.api.spec.ProcessingSpec
+import dev.detekt.tooling.api.spec.ProcessingSpec
 import io.gitlab.arturbosch.detekt.core.tooling.DefaultDetektProvider
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

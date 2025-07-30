@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.core.reporting
 
 import dev.detekt.api.Detektion
 import dev.detekt.api.getOrNull
-import io.github.detekt.tooling.api.spec.ReportsSpec
+import dev.detekt.tooling.api.spec.ReportsSpec
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.util.SimpleNotification
 

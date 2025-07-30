@@ -3,11 +3,11 @@
 package io.gitlab.arturbosch.detekt.cli
 
 import dev.detekt.api.internal.whichKotlin
-import io.github.detekt.tooling.api.AnalysisResult
-import io.github.detekt.tooling.api.InvalidConfig
-import io.github.detekt.tooling.api.IssuesFound
-import io.github.detekt.tooling.api.UnexpectedError
-import io.github.detekt.tooling.internal.NotApiButProbablyUsedByUsers
+import dev.detekt.tooling.api.AnalysisResult
+import dev.detekt.tooling.api.InvalidConfig
+import dev.detekt.tooling.api.IssuesFound
+import dev.detekt.tooling.api.UnexpectedError
+import dev.detekt.tooling.internal.NotApiButProbablyUsedByUsers
 import io.gitlab.arturbosch.detekt.cli.runners.ConfigExporter
 import io.gitlab.arturbosch.detekt.cli.runners.Executable
 import io.gitlab.arturbosch.detekt.cli.runners.Runner

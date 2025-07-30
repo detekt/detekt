@@ -1,14 +1,14 @@
 package io.gitlab.arturbosch.detekt.core.tooling
 
 import dev.detekt.api.Detektion
-import io.github.detekt.tooling.api.AnalysisResult
-import io.github.detekt.tooling.api.Detekt
-import io.github.detekt.tooling.api.DetektError
-import io.github.detekt.tooling.api.InvalidConfig
-import io.github.detekt.tooling.api.IssuesFound
-import io.github.detekt.tooling.api.UnexpectedError
-import io.github.detekt.tooling.api.spec.ProcessingSpec
-import io.github.detekt.tooling.internal.DefaultAnalysisResult
+import dev.detekt.tooling.api.AnalysisResult
+import dev.detekt.tooling.api.Detekt
+import dev.detekt.tooling.api.DetektError
+import dev.detekt.tooling.api.InvalidConfig
+import dev.detekt.tooling.api.IssuesFound
+import dev.detekt.tooling.api.UnexpectedError
+import dev.detekt.tooling.api.spec.ProcessingSpec
+import dev.detekt.tooling.internal.DefaultAnalysisResult
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.config.check
 import org.jetbrains.kotlin.psi.KtFile

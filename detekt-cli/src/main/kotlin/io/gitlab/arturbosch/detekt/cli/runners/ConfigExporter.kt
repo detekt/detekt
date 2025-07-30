@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.cli.runners
 
-import io.github.detekt.tooling.api.DefaultConfigurationProvider
-import io.github.detekt.tooling.api.spec.ProcessingSpec
+import dev.detekt.tooling.api.DefaultConfigurationProvider
+import dev.detekt.tooling.api.spec.ProcessingSpec
 import io.gitlab.arturbosch.detekt.cli.CliArgs
 import kotlin.io.path.absolute
 
