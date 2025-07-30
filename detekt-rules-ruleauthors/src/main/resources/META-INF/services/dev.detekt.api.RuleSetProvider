@@ -1,1 +1,1 @@
-io.gitlab.arturbosch.detekt.authors.RuleAuthorsProvider
+dev.detekt.rules.ruleauthors.RuleAuthorsProvider

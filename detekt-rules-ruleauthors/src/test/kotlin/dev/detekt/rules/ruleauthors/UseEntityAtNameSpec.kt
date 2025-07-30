@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.authors
+package dev.detekt.rules.ruleauthors
 
 import dev.detekt.api.Config
 import dev.detekt.test.assertThat
