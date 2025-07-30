@@ -1,5 +1,7 @@
-package dev.detekt.test.utils
+package dev.detekt.test.junit
 
+import dev.detekt.test.utils.KotlinEnvironmentContainer
+import dev.detekt.test.utils.resourceAsPath
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.api.extension.ParameterContext
