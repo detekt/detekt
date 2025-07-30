@@ -3,8 +3,19 @@ package dev.detekt.test.utils
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Disposer
+import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.kotlin.analysis.api.standalone.StandaloneAnalysisAPISession
+import org.jetbrains.kotlin.analysis.api.standalone.buildStandaloneAnalysisAPISession
+import org.jetbrains.kotlin.cli.common.messages.MessageCollector
+import org.jetbrains.kotlin.cli.jvm.compiler.CliTraceHolder
+import org.jetbrains.kotlin.cli.jvm.config.addJavaSourceRoots
+import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoot
+import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoots
+import org.jetbrains.kotlin.cli.jvm.config.configureJdkClasspathRoots
+import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
+import org.jetbrains.kotlin.config.JVMConfigurationKeys
+import org.jetbrains.kotlin.resolve.CodeAnalyzerInitializer
 import org.junit.jupiter.api.extension.ExtensionContext
 import java.io.File
 
@@ -13,7 +24,7 @@ class KotlinEnvironmentContainer(val project: Project, val configuration: Compil
 /**
  * Make sure to always call [close] or use a [use] block when working with [StandaloneAnalysisAPISession]s.
  */
-class KotlinCoreEnvironmentWrapper(
+internal class KotlinCoreEnvironmentWrapper(
     private val project: Project,
     private val configuration: CompilerConfiguration,
     private val disposable: Disposable,
@@ -32,7 +43,38 @@ class KotlinCoreEnvironmentWrapper(
  *
  * @param additionalRootPaths the optional JVM classpath roots list.
  */
-fun createEnvironment(
+internal fun createEnvironment(
     additionalRootPaths: List<File> = emptyList(),
     additionalJavaSourceRootPaths: List<File> = emptyList(),
-): KotlinCoreEnvironmentWrapper = KtTestCompiler.createEnvironment(additionalRootPaths, additionalJavaSourceRootPaths)
+): KotlinCoreEnvironmentWrapper {
+    val configuration = CompilerConfiguration()
+    configuration.put(CommonConfigurationKeys.MODULE_NAME, "test_module")
+    configuration.put(CommonConfigurationKeys.MESSAGE_COLLECTOR_KEY, MessageCollector.NONE)
+
+    // Get the runtime locations of both the stdlib and kotlinx coroutines core jars and pass
+    // to the compiler so it's available to generate the BindingContext for rules under test.
+    configuration.apply {
+        addJvmClasspathRoot(kotlinStdLibPath())
+        addJvmClasspathRoot(kotlinxCoroutinesCorePath())
+        addJvmClasspathRoots(additionalRootPaths)
+        addJavaSourceRoots(additionalJavaSourceRootPaths)
+        put(JVMConfigurationKeys.JDK_HOME, File(System.getProperty("java.home")))
+        configureJdkClasspathRoots()
+    }
+
+    val parentDisposable = Disposer.newDisposable()
+    val analysisSession = buildStandaloneAnalysisAPISession(parentDisposable) {
+        @Suppress("DEPRECATION") // Required until fully transitioned to setting up Kotlin Analysis API session
+        buildKtModuleProviderByCompilerConfiguration(configuration)
+
+        // Required to set up BindingContext with TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration
+        registerProjectService(CodeAnalyzerInitializer::class.java, CliTraceHolder(project))
+    }
+
+    return KotlinCoreEnvironmentWrapper(analysisSession.project, configuration, parentDisposable)
+}
+
+private fun kotlinStdLibPath(): File = File(CharRange::class.java.protectionDomain.codeSource.location.path)
+
+private fun kotlinxCoroutinesCorePath(): File =
+    File(CoroutineScope::class.java.protectionDomain.codeSource.location.path)
