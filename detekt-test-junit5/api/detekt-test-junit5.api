@@ -1,4 +1,4 @@
-public abstract interface annotation class dev/detekt/test/utils/KotlinCoreEnvironmentTest : java/lang/annotation/Annotation {
+public abstract interface annotation class dev/detekt/test/junit/KotlinCoreEnvironmentTest : java/lang/annotation/Annotation {
 	public abstract fun additionalJavaSourcePaths ()[Ljava/lang/String;
 }
 

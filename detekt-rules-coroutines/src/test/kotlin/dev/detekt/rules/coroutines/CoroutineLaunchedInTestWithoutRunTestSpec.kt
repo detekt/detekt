@@ -1,10 +1,10 @@
 package dev.detekt.rules.coroutines
 
 import dev.detekt.api.Config
+import dev.detekt.test.junit.KotlinCoreEnvironmentTest
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.location
 import dev.detekt.test.utils.KotlinAnalysisApiEngine
-import dev.detekt.test.utils.KotlinCoreEnvironmentTest
 import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.analysis.api.analyze
