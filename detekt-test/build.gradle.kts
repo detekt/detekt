@@ -5,6 +5,7 @@ plugins {
 
 dependencies {
     api(projects.detektApi)
+    api(projects.detektTestJunit5)
     api(projects.detektTestUtils)
     implementation(projects.detektKotlinAnalysisApiStandalone)
     implementation(projects.detektUtils)
