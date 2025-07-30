@@ -8,7 +8,7 @@ import dev.detekt.rules.ktlintwrapper.wrappers.MaximumLineLength
 import dev.detekt.rules.ktlintwrapper.wrappers.NoWildcardImports
 import dev.detekt.rules.ktlintwrapper.wrappers.PackageName
 import dev.detekt.test.TestConfig
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import org.junit.jupiter.api.Test
 
 class RulesWhichCantBeCorrectedSpec {

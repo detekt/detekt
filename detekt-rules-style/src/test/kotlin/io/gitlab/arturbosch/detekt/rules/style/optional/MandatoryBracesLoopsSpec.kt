@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.style.optional
 
 import dev.detekt.api.Config
 import dev.detekt.api.SourceLocation
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
