@@ -1,1 +1,1 @@
-io.gitlab.arturbosch.detekt.cli.CliRunner
+dev.detekt.cli.CliRunner

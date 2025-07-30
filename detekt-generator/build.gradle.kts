@@ -32,7 +32,7 @@ dependencies {
 
 val generateCliOptions by tasks.registering(JavaExec::class) {
     classpath = detektCliClasspath
-    mainClass = "io.gitlab.arturbosch.detekt.cli.Main"
+    mainClass = "dev.detekt.cli.Main"
     args = listOf("--help")
 
     val cliOptionsOutput = isolated.rootProject.projectDirectory.file("website/docs/gettingstarted/_cli-options.md")

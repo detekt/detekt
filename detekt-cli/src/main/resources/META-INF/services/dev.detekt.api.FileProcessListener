@@ -1,1 +1,1 @@
-io.gitlab.arturbosch.detekt.cli.DetektProgressListener
+dev.detekt.cli.DetektProgressListener
