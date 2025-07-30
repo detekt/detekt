@@ -1,1 +1,1 @@
-io.gitlab.arturbosch.detekt.rules.empty.EmptyCodeProvider
+dev.detekt.rules.empty.EmptyCodeProvider
