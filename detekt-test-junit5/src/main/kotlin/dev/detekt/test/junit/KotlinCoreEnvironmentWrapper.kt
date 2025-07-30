@@ -1,8 +1,9 @@
-package dev.detekt.test.utils
+package dev.detekt.test.junit
 
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Disposer
+import dev.detekt.test.utils.KotlinEnvironmentContainer
 import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.kotlin.analysis.api.standalone.StandaloneAnalysisAPISession
 import org.jetbrains.kotlin.analysis.api.standalone.buildStandaloneAnalysisAPISession
