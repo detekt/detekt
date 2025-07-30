@@ -2,7 +2,7 @@ package dev.detekt.rules.complexity
 
 import dev.detekt.api.SourceLocation
 import dev.detekt.test.TestConfig
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
 import org.junit.jupiter.api.Test
 

@@ -2,7 +2,7 @@ package dev.detekt.rules.ktlintwrapper
 
 import dev.detekt.rules.ktlintwrapper.wrappers.TrailingCommaOnDeclarationSite
 import dev.detekt.test.TestConfig
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 

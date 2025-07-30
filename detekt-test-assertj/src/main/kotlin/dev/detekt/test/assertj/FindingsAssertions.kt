@@ -1,4 +1,4 @@
-package dev.detekt.test
+package dev.detekt.test.assertj
 
 import dev.detekt.api.Finding
 import dev.detekt.api.Location

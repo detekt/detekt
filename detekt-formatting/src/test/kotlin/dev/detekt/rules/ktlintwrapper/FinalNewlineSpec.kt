@@ -3,7 +3,7 @@ package dev.detekt.rules.ktlintwrapper
 import dev.detekt.api.Config
 import dev.detekt.rules.ktlintwrapper.wrappers.FinalNewline
 import dev.detekt.test.TestConfig
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import org.junit.jupiter.api.Test
 
 class FinalNewlineSpec {

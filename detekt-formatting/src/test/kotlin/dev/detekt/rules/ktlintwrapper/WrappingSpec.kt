@@ -2,7 +2,7 @@ package dev.detekt.rules.ktlintwrapper
 
 import dev.detekt.api.Config
 import dev.detekt.rules.ktlintwrapper.wrappers.Wrapping
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
