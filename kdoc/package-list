@@ -21,7 +21,7 @@ module:detekt-test-utils
 dev.detekt.test.utils
 dev.detekt.test.utils.internal
 module:detekt-tooling
-io.github.detekt.tooling.api
-io.github.detekt.tooling.api.spec
-io.github.detekt.tooling.dsl
-io.github.detekt.tooling.internal
+dev.detekt.tooling.api
+dev.detekt.tooling.api.spec
+dev.detekt.tooling.dsl
+dev.detekt.tooling.internal
