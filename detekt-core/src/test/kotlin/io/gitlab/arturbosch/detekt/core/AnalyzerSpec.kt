@@ -18,7 +18,7 @@ import dev.detekt.api.config
 import dev.detekt.test.utils.compileContentForTest
 import dev.detekt.test.utils.compileForTest
 import dev.detekt.test.utils.resourceAsPath
-import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
+import dev.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.intellij.lang.annotations.Language

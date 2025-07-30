@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.formatting
 
 import dev.detekt.api.RuleSet
 import dev.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.test.TestConfig
+import dev.detekt.test.TestConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
