@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.rules.performance
+package dev.detekt.rules.performance
 
 import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.RuleSet

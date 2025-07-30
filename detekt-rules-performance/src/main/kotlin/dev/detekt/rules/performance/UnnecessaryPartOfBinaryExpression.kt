@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.rules.performance
+package dev.detekt.rules.performance
 
 import com.intellij.psi.tree.IElementType
 import dev.detekt.api.Config

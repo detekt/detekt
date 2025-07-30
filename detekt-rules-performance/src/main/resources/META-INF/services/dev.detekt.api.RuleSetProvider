@@ -1,1 +1,1 @@
-io.gitlab.arturbosch.detekt.rules.performance.PerformanceProvider
+dev.detekt.rules.performance.PerformanceProvider
