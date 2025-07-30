@@ -6,9 +6,9 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.rules.arguments
-import io.gitlab.arturbosch.detekt.rules.isEmptyOrSingleStringArgument
-import io.gitlab.arturbosch.detekt.rules.isIllegalStateException
+import dev.detekt.psi.arguments
+import dev.detekt.psi.isEmptyOrSingleStringArgument
+import dev.detekt.psi.isIllegalStateException
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtFunctionLiteral
 import org.jetbrains.kotlin.psi.KtThrowExpression

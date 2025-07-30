@@ -5,8 +5,8 @@ import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.rules.isPartOf
-import io.gitlab.arturbosch.detekt.rules.isPartOfString
+import dev.detekt.psi.isPartOf
+import dev.detekt.psi.isPartOfString
 import org.jetbrains.kotlin.psi.KtStringTemplateEntryWithExpression
 
 /**

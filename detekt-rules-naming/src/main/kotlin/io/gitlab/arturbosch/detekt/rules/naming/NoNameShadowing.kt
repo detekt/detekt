@@ -6,8 +6,8 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresFullAnalysis
 import dev.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.rules.hasImplicitParameterReference
-import io.gitlab.arturbosch.detekt.rules.implicitParameter
+import dev.detekt.psi.hasImplicitParameterReference
+import dev.detekt.psi.implicitParameter
 import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.psi.KtDestructuringDeclarationEntry
 import org.jetbrains.kotlin.psi.KtLambdaExpression

@@ -6,9 +6,9 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.rules.isCalling
-import io.gitlab.arturbosch.detekt.rules.isNonNullCheck
-import io.gitlab.arturbosch.detekt.rules.isNullCheck
+import dev.detekt.psi.isCalling
+import dev.detekt.psi.isNonNullCheck
+import dev.detekt.psi.isNullCheck
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.name.StandardClassIds

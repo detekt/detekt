@@ -3,8 +3,8 @@ package io.gitlab.arturbosch.detekt.generator.collection
 import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.DetektVisitor
 import dev.detekt.api.internal.DefaultRuleSetProvider
+import dev.detekt.psi.isOverride
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
-import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtAnnotatedExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCallableReferenceExpression

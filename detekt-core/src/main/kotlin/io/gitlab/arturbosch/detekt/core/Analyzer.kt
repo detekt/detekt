@@ -13,7 +13,7 @@ import dev.detekt.api.Severity
 import dev.detekt.api.internal.whichDetekt
 import dev.detekt.api.internal.whichJava
 import dev.detekt.api.internal.whichOS
-import io.github.detekt.psi.absolutePath
+import dev.detekt.psi.absolutePath
 import io.gitlab.arturbosch.detekt.core.suppressors.buildSuppressors
 import io.gitlab.arturbosch.detekt.core.suppressors.isSuppressedBy
 import io.gitlab.arturbosch.detekt.core.util.shouldAnalyzeFile

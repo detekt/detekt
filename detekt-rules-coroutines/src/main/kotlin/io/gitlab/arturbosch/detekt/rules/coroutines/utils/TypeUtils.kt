@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.coroutines.utils
 
-import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
+import dev.detekt.psi.fqNameOrNull
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.typeUtil.supertypes

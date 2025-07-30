@@ -7,11 +7,11 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresFullAnalysis
 import dev.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.rules.isAbstract
-import io.gitlab.arturbosch.detekt.rules.isNonNullCheck
-import io.gitlab.arturbosch.detekt.rules.isNullCheck
-import io.gitlab.arturbosch.detekt.rules.isOpen
-import io.gitlab.arturbosch.detekt.rules.isOverride
+import dev.detekt.psi.isAbstract
+import dev.detekt.psi.isNonNullCheck
+import dev.detekt.psi.isNullCheck
+import dev.detekt.psi.isOpen
+import dev.detekt.psi.isOverride
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
