@@ -2,10 +2,10 @@ package io.gitlab.arturbosch.detekt.rules.style.optional
 
 import dev.detekt.api.Config
 import dev.detekt.api.Finding
+import dev.detekt.test.FakeLanguageVersionSettings
+import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.KotlinCoreEnvironmentTest
 import dev.detekt.test.utils.KotlinEnvironmentContainer
-import io.gitlab.arturbosch.detekt.test.FakeLanguageVersionSettings
-import io.gitlab.arturbosch.detekt.test.lintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.config.ExplicitApiMode
 import org.junit.jupiter.api.BeforeEach

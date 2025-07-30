@@ -1,7 +1,7 @@
 package dev.detekt.rules.documentation
 
 import dev.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

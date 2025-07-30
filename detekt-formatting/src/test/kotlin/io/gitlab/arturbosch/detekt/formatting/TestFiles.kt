@@ -2,10 +2,10 @@ package io.gitlab.arturbosch.detekt.formatting
 
 import com.intellij.openapi.util.text.StringUtilRt
 import dev.detekt.api.Finding
+import dev.detekt.test.FakeLanguageVersionSettings
 import dev.detekt.test.utils.compileContentForTest
 import dev.detekt.test.utils.compileForTest
 import dev.detekt.test.utils.resource
-import io.gitlab.arturbosch.detekt.test.FakeLanguageVersionSettings
 import org.intellij.lang.annotations.Language
 import java.io.File
 import kotlin.io.path.toPath

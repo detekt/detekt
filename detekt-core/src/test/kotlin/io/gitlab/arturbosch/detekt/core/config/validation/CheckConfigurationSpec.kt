@@ -6,12 +6,12 @@ import dev.detekt.api.Notification
 import dev.detekt.api.RuleSet
 import dev.detekt.api.RuleSetProvider
 import dev.detekt.test.utils.createTempDirectoryForTest
+import dev.detekt.test.yamlConfigFromContent
 import dev.detekt.tooling.api.InvalidConfig
 import io.gitlab.arturbosch.detekt.core.createNullLoggingSpec
 import io.gitlab.arturbosch.detekt.core.createProcessingSettings
 import io.gitlab.arturbosch.detekt.core.tooling.getDefaultConfiguration
 import io.gitlab.arturbosch.detekt.core.util.SimpleNotification
-import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThatCode
 import org.junit.jupiter.api.Test
 

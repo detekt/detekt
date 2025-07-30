@@ -13,7 +13,7 @@ import dev.detekt.api.Severity.Info
 import dev.detekt.api.Severity.Warning
 import dev.detekt.api.config
 import dev.detekt.api.internal.DefaultRuleSetProvider
-import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
+import dev.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.assertj.core.api.ThrowingConsumer

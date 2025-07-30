@@ -1,7 +1,7 @@
 package dev.detekt.api
 
+import dev.detekt.test.location
 import dev.detekt.test.utils.internal.FakeKtElement
-import io.gitlab.arturbosch.detekt.test.location
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import kotlin.io.path.Path

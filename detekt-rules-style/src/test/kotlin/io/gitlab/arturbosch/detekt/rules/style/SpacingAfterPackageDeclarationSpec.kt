@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import dev.detekt.api.Config
+import dev.detekt.test.lint
 import dev.detekt.test.utils.compileContentForTest
-import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
