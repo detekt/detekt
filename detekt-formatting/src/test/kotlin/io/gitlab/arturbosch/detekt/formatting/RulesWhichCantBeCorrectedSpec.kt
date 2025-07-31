@@ -1,5 +1,7 @@
 package io.gitlab.arturbosch.detekt.formatting
 
+import dev.detekt.test.TestConfig
+import dev.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.formatting.wrappers.EnumEntryNameCase
 import io.gitlab.arturbosch.detekt.formatting.wrappers.Filename
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ImportOrdering
@@ -7,8 +9,6 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.Indentation
 import io.gitlab.arturbosch.detekt.formatting.wrappers.MaximumLineLength
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoWildcardImports
 import io.gitlab.arturbosch.detekt.formatting.wrappers.PackageName
-import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.assertThat
 import org.junit.jupiter.api.Test
 
 class RulesWhichCantBeCorrectedSpec {

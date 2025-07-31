@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.cli
 
-import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.FileProcessListener
-import io.gitlab.arturbosch.detekt.api.SetupContext
+import dev.detekt.api.Detektion
+import dev.detekt.api.FileProcessListener
+import dev.detekt.api.SetupContext
 import org.jetbrains.kotlin.psi.KtFile
 
 class DetektProgressListener : FileProcessListener {

@@ -2,7 +2,7 @@
 
 plugins {
     id("packaging")
-    id("com.gradleup.shadow") version "8.3.7"
+    id("com.gradleup.shadow") version "8.3.8"
 }
 
 dependencies {
@@ -21,6 +21,7 @@ dependencies {
             attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
         }
     }
+    implementation(libs.kotlinx.serializationCore)
 }
 
 java {

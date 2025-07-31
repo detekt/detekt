@@ -1,8 +1,8 @@
 package ruleset1
 
-import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.RuleSet
-import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
+import dev.detekt.api.ActiveByDefault
+import dev.detekt.api.RuleSet
+import dev.detekt.api.internal.DefaultRuleSetProvider
 
 /**
  * Description

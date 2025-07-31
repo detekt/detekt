@@ -18,5 +18,5 @@ detekt {
 }
 
 apiValidation {
-    ignoredPackages.add("io.github.detekt.psi.internal")
+    ignoredPackages.add("dev.detekt.psi.internal")
 }

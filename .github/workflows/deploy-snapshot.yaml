@@ -43,4 +43,4 @@ jobs:
           ORG_GRADLE_PROJECT_SIGNING_PWD: ${{ secrets.ORG_GRADLE_PROJECT_SIGNING_PWD }}
           ORG_GRADLE_PROJECT_SONATYPE_USERNAME: ${{ secrets.ORG_GRADLE_PROJECT_SONATYPE_USERNAME }}
           ORG_GRADLE_PROJECT_SONATYPE_PASSWORD: ${{ secrets.ORG_GRADLE_PROJECT_SONATYPE_PASSWORD }}
-        run: ./gradlew publishAllToSonatypeSnapshot -Dsnapshot=true --stacktrace
+        run: ./gradlew publishToSonatype -Dsnapshot=true --stacktrace

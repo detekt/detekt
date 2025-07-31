@@ -1,23 +1,24 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import com.intellij.psi.PsiElement
-import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
-import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.rules.isAbstract
-import io.gitlab.arturbosch.detekt.rules.isInternal
-import io.gitlab.arturbosch.detekt.rules.isProtected
-import org.jetbrains.kotlin.descriptors.MemberDescriptor
-import org.jetbrains.kotlin.descriptors.Modality
+import dev.detekt.api.ActiveByDefault
+import dev.detekt.api.Config
+import dev.detekt.api.Entity
+import dev.detekt.api.Finding
+import dev.detekt.api.RequiresAnalysisApi
+import dev.detekt.api.Rule
+import dev.detekt.psi.isAbstract
+import dev.detekt.psi.isInternal
+import dev.detekt.psi.isProtected
+import org.jetbrains.kotlin.analysis.api.KaSession
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.symbols.KaClassKind
+import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolModality
+import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.psiUtil.isAbstract
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.lazy.descriptors.LazyClassMemberScope
-import org.jetbrains.kotlin.types.typeUtil.isInterface
 
 /**
  * This rule inspects `abstract` classes. In case an `abstract class` does not define any
@@ -50,38 +51,41 @@ class AbstractClassCanBeInterface(config: Config) :
         config,
         "An abstract class is unnecessary. May be refactored to an interface."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     private val noConcreteMember = "An abstract class without a concrete member can be refactored to an interface."
 
     override fun visitClass(klass: KtClass) {
-        klass.check()
+        check(klass)
         super.visitClass(klass)
     }
 
-    private fun KtClass.check() {
-        val nameIdentifier = this.nameIdentifier ?: return
-        if (isInterface() || !isAbstract()) return
-        val members = members()
-        when {
-            members.isNotEmpty() -> checkMembers(members, nameIdentifier)
-            hasInheritedMember(true) && isAnyParentAbstract() -> return
-            !hasConstructorParameter() ->
-                report(Finding(Entity.from(nameIdentifier), noConcreteMember))
+    private fun check(klass: KtClass) {
+        val nameIdentifier = klass.nameIdentifier ?: return
+        if (klass.isInterface() || !klass.isAbstract()) return
+        val members = klass.members()
+        analyze(klass) {
+            when {
+                members.isNotEmpty() -> checkMembers(klass, members, nameIdentifier)
+                hasInheritedMember(klass, isAbstract = true) && isAnyParentAbstract(klass) -> return
+                !klass.hasConstructorParameter() ->
+                    report(Finding(Entity.from(nameIdentifier), noConcreteMember))
+            }
         }
     }
 
-    private fun KtClass.checkMembers(
+    private fun KaSession.checkMembers(
+        klass: KtClass,
         members: List<KtCallableDeclaration>,
         nameIdentifier: PsiElement,
     ) {
         val (abstractMembers, concreteMembers) = members.partition { it.isAbstract() }
         when {
-            abstractMembers.isEmpty() && !hasInheritedMember(true) ->
+            abstractMembers.isEmpty() && !hasInheritedMember(klass, isAbstract = true) ->
                 Unit
-            abstractMembers.any { it.isInternal() || it.isProtected() } || hasConstructorParameter() ->
+            abstractMembers.any { it.isInternal() || it.isProtected() } || klass.hasConstructorParameter() ->
                 Unit
-            concreteMembers.isEmpty() && !hasInheritedMember(false) ->
+            concreteMembers.isEmpty() && !hasInheritedMember(klass, isAbstract = false) ->
                 report(Finding(Entity.from(nameIdentifier), noConcreteMember))
         }
     }
@@ -91,20 +95,18 @@ class AbstractClassCanBeInterface(config: Config) :
 
     private fun KtClass.hasConstructorParameter() = primaryConstructor?.valueParameters?.isNotEmpty() == true
 
-    private fun KtClass.hasInheritedMember(isAbstract: Boolean): Boolean =
+    private fun KaSession.hasInheritedMember(klass: KtClass, isAbstract: Boolean): Boolean =
         when {
-            superTypeListEntries.isEmpty() -> false
-            bindingContext == BindingContext.EMPTY -> true
+            klass.superTypeListEntries.isEmpty() -> false
             else -> {
-                val descriptor = bindingContext[BindingContext.CLASS, this]
-                descriptor?.unsubstitutedMemberScope?.getContributedDescriptors().orEmpty().any {
-                    (it as? MemberDescriptor)?.modality == Modality.ABSTRACT == isAbstract
+                (klass.symbol as? KaClassSymbol)?.memberScope?.declarations.orEmpty().any {
+                    it.modality == KaSymbolModality.ABSTRACT == isAbstract
                 }
             }
         }
 
-    private fun KtClass.isAnyParentAbstract() =
-        (bindingContext[BindingContext.CLASS, this]?.unsubstitutedMemberScope as? LazyClassMemberScope)
-            ?.supertypes
-            ?.all { it.isInterface() } == false
+    private fun KaSession.isAnyParentAbstract(klass: KtClass): Boolean =
+        (klass.symbol as? KaClassSymbol)
+            ?.superTypes
+            ?.all { (it.symbol as? KaClassSymbol)?.classKind == KaClassKind.INTERFACE } == false
 }

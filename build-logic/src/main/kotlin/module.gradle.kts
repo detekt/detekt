@@ -40,7 +40,7 @@ tasks.withType<Test>().configureEach {
     if (compileTestSnippetsAa) {
         maxHeapSize = "3g"
     } else {
-        maxHeapSize = "1g"
+        maxHeapSize = "2g"
     }
 
     testLogging {
@@ -82,6 +82,7 @@ kotlin {
         progressiveMode = true
         allWarningsAsErrors = providers.gradleProperty("warningsAsErrors").orNull.toBoolean()
         freeCompilerArgs.add("-Xjvm-default=all")
+        freeCompilerArgs.add("-Xcontext-parameters")
     }
 }
 

@@ -1,13 +1,13 @@
 import java.io.ByteArrayOutputStream
 
 plugins {
-    id("com.gradleup.shadow") version "8.3.7"
+    id("com.gradleup.shadow") version "8.3.8"
     id("module")
     id("application")
 }
 
 application {
-    mainClass = "io.gitlab.arturbosch.detekt.generator.Main"
+    mainClass = "dev.detekt.generator.Main"
 }
 
 val detektCli by configurations.dependencyScope("detektCli")
@@ -86,7 +86,7 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
         configurations.compileClasspath.get(),
         sourceSets.main.get().output,
     )
-    mainClass = "io.gitlab.arturbosch.detekt.generator.Main"
+    mainClass = "dev.detekt.generator.Main"
     args = listOf(
         "--input",
         ruleModules.joinToString(","),

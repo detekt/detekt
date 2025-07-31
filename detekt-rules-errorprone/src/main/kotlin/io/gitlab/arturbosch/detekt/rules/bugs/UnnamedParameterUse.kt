@@ -1,23 +1,21 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
-import io.github.detekt.psi.FunctionMatcher
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Configuration
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
-import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.config
-import org.jetbrains.kotlin.descriptors.CallableMemberDescriptor
-import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
-import org.jetbrains.kotlin.load.java.isFromJava
+import dev.detekt.api.Config
+import dev.detekt.api.Configuration
+import dev.detekt.api.Entity
+import dev.detekt.api.Finding
+import dev.detekt.api.RequiresAnalysisApi
+import dev.detekt.api.Rule
+import dev.detekt.api.config
+import dev.detekt.psi.FunctionMatcher
+import org.jetbrains.kotlin.analysis.api.KaSession
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolOrigin
+import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtValueArgument
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.components.isVararg
-import org.jetbrains.kotlin.resolve.calls.util.getParameterForArgument
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
-import org.jetbrains.kotlin.types.typeUtil.isSubtypeOf
 
 /**
  * Reports usage of unnamed parameter. Passing parameters without name can cause issue when parameters order of same
@@ -88,7 +86,7 @@ class UnnamedParameterUse(config: Config) :
         config,
         "Passing no named parameters can cause issue when parameters order change"
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     @Configuration("Allow adjacent unnamed params when type of parameters can not be assigned to each other")
     val allowAdjacentDifferentTypeParams: Boolean by config(true)
@@ -118,55 +116,52 @@ class UnnamedParameterUse(config: Config) :
         if (valueArgumentList.arguments.isEmpty()) {
             return
         }
-        val callDescriptor = expression.getResolvedCall(bindingContext) ?: return
-        if ((callDescriptor.resultingDescriptor as? CallableMemberDescriptor)?.isFromJava == true) {
-            return
-        }
-        if (ignoreFunctionCall.any { it.match(callDescriptor.resultingDescriptor) }) return
-        val paramDescriptorToArgumentMap =
-            valueArgumentList.arguments.associateWith {
-                val valueParamDescriptor = callDescriptor.getParameterForArgument(it)
+
+        analyze(expression) {
+            val call = expression.resolveToCall()?.singleFunctionCallOrNull() ?: return
+            val symbol = call.symbol
+            if (symbol.origin.let { it == KaSymbolOrigin.JAVA_SOURCE || it == KaSymbolOrigin.JAVA_LIBRARY }) return
+            if (ignoreFunctionCall.any { it.match(symbol) }) return
+
+            val argumentToParameterMap = valueArgumentList.arguments.associateWith {
+                val parameter = call.argumentMapping[it.getArgumentExpression()]?.symbol
                 ParamInfo(
+                    name = parameter?.name,
                     isNamed = it.isNamed(),
-                    isVararg = valueParamDescriptor?.isVararg == true,
-                    valueParaDescriptor = valueParamDescriptor,
-                    isSameNamed = valueParamDescriptor?.run { name.asString() } == it.getArgumentExpression()?.text
+                    isVararg = parameter?.isVararg == true,
+                    isSameNamed = parameter?.run { name.asString() } == it.getArgumentExpression()?.text,
                 )
             }
-        if (allowSingleParamUse && paramDescriptorToArgumentMap.values.distinct().size <= 1) {
-            return
-        }
+            if (allowSingleParamUse && argumentToParameterMap.values.distinct().size <= 1) return
 
-        if (
-            allowAdjacentDifferentTypeParams &&
-            paramDescriptorToArgumentMap
-                .entries
-                .windowed(2)
-                .all(::isAdjacentUnnamedParamsAllowed)
-        ) {
-            return
-        }
+            if (allowAdjacentDifferentTypeParams &&
+                argumentToParameterMap
+                    .entries
+                    .windowed(2)
+                    .all { isAdjacentUnnamedParamsAllowed(it) }
+            ) {
+                return
+            }
 
-        if (
-            paramDescriptorToArgumentMap.values.any {
-                if (ignoreArgumentsMatchingNames) {
-                    !(it.isNamed || it.isSameNamed)
-                } else {
-                    !it.isNamed
+            if (argumentToParameterMap.values.any {
+                    if (ignoreArgumentsMatchingNames) {
+                        !(it.isNamed || it.isSameNamed)
+                    } else {
+                        !it.isNamed
+                    }
                 }
-            }
-        ) {
-            val target = expression.calleeExpression ?: expression
-            report(
-                Finding(
-                    Entity.from(target),
+            ) {
+                val target = expression.calleeExpression ?: expression
+                val message =
                     "Consider using named parameters in ${target.text} as they make usage of the function more safe."
-                )
-            )
+                report(Finding(Entity.from(target), message))
+            }
         }
     }
 
-    private fun isAdjacentUnnamedParamsAllowed(paramInfos: List<Map.Entry<KtValueArgument, ParamInfo>>): Boolean {
+    private fun KaSession.isAdjacentUnnamedParamsAllowed(
+        paramInfos: List<Map.Entry<KtValueArgument, ParamInfo>>,
+    ): Boolean {
         fun ParamInfo.isNamedOrVararg() = this.isNamed || this.isVararg
         val (firstEntry, secondEntry) = paramInfos
         if (
@@ -184,22 +179,17 @@ class UnnamedParameterUse(config: Config) :
     }
 
     @Suppress("ReturnCount")
-    private fun typeCanBeAssigned(
+    private fun KaSession.typeCanBeAssigned(
         firstParam: KtValueArgument,
         secondParam: KtValueArgument,
     ): Boolean {
-        val param1Type =
-            bindingContext[BindingContext.EXPRESSION_TYPE_INFO, firstParam.getArgumentExpression()]?.type
-                ?: return true
-        val param2Type =
-            bindingContext[BindingContext.EXPRESSION_TYPE_INFO, secondParam.getArgumentExpression()]?.type
-                ?: return true
-
+        val param1Type = firstParam.getArgumentExpression()?.expressionType ?: return true
+        val param2Type = secondParam.getArgumentExpression()?.expressionType ?: return true
         return param1Type.isSubtypeOf(param2Type) || param2Type.isSubtypeOf(param1Type)
     }
 
     private data class ParamInfo(
-        val valueParaDescriptor: ValueParameterDescriptor?,
+        val name: Name?,
         val isNamed: Boolean,
         val isVararg: Boolean,
         val isSameNamed: Boolean,

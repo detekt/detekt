@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.core.config
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Config.Companion.CONFIG_SEPARATOR
+import dev.detekt.api.Config
+import dev.detekt.api.Config.Companion.CONFIG_SEPARATOR
 import kotlin.reflect.KClass
 
 private val ALLOWED_BOOL_VALUES = setOf("true", "false")

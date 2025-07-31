@@ -1,18 +1,18 @@
 package io.gitlab.arturbosch.detekt.rules
 
+import dev.detekt.api.Config
+import dev.detekt.api.Rule
+import dev.detekt.api.RuleSetProvider
+import dev.detekt.api.internal.DefaultRuleSetProvider
+import dev.detekt.rules.documentation.CommentSmellProvider
+import dev.detekt.rules.empty.EmptyCodeProvider
+import dev.detekt.rules.exceptions.ExceptionsProvider
+import dev.detekt.rules.performance.PerformanceProvider
 import io.github.classgraph.ClassGraph
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 import io.gitlab.arturbosch.detekt.rules.bugs.PotentialBugProvider
 import io.gitlab.arturbosch.detekt.rules.complexity.ComplexityProvider
 import io.gitlab.arturbosch.detekt.rules.coroutines.CoroutinesProvider
-import io.gitlab.arturbosch.detekt.rules.documentation.CommentSmellProvider
-import io.gitlab.arturbosch.detekt.rules.empty.EmptyCodeProvider
-import io.gitlab.arturbosch.detekt.rules.exceptions.ExceptionsProvider
 import io.gitlab.arturbosch.detekt.rules.naming.NamingProvider
-import io.gitlab.arturbosch.detekt.rules.performance.PerformanceProvider
 import io.gitlab.arturbosch.detekt.rules.style.StyleGuideProvider
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -46,12 +46,12 @@ class RuleProviderSpec {
 }
 
 private val ruleMap: Map<Class<out DefaultRuleSetProvider>, String> = mapOf(
-    CommentSmellProvider::class.java to "io.gitlab.arturbosch.detekt.rules.documentation",
+    CommentSmellProvider::class.java to "dev.detekt.rules.documentation",
     ComplexityProvider::class.java to "io.gitlab.arturbosch.detekt.rules.complexity",
-    EmptyCodeProvider::class.java to "io.gitlab.arturbosch.detekt.rules.empty",
-    ExceptionsProvider::class.java to "io.gitlab.arturbosch.detekt.rules.exceptions",
+    EmptyCodeProvider::class.java to "dev.detekt.rules.empty",
+    ExceptionsProvider::class.java to "dev.detekt.rules.exceptions",
     NamingProvider::class.java to "io.gitlab.arturbosch.detekt.rules.naming",
-    PerformanceProvider::class.java to "io.gitlab.arturbosch.detekt.rules.performance",
+    PerformanceProvider::class.java to "dev.detekt.rules.performance",
     PotentialBugProvider::class.java to "io.gitlab.arturbosch.detekt.rules.bugs",
     StyleGuideProvider::class.java to "io.gitlab.arturbosch.detekt.rules.style",
     CoroutinesProvider::class.java to "io.gitlab.arturbosch.detekt.rules.coroutines"

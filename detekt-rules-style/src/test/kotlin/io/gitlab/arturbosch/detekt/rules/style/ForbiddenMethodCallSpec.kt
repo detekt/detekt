@@ -1,11 +1,11 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.github.detekt.test.utils.KotlinEnvironmentContainer
-import io.gitlab.arturbosch.detekt.api.SourceLocation
-import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lintWithContext
+import dev.detekt.api.SourceLocation
+import dev.detekt.test.TestConfig
+import dev.detekt.test.assertThat
+import dev.detekt.test.lintWithContext
+import dev.detekt.test.utils.KotlinCoreEnvironmentTest
+import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -318,16 +318,18 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
         val code = """
             package io.gitlab.arturbosch.detekt.rules.style
             
-            fun varargMethod(vararg args: Any) = args.size
+            fun varargMethod(vararg args: Int) = args.size
+            fun varargMethod(vararg args: String) = args.size
             
             fun test() {
-                val s = varargMethod(arrayOf("test"))
+                val s = varargMethod(1, 2)
+                val r = varargMethod("test")
             }
         """.trimIndent()
-        val methodName = "io.gitlab.arturbosch.detekt.rules.style.varargMethod(kotlin.Array)"
+        val methodName = "io.gitlab.arturbosch.detekt.rules.style.varargMethod(vararg kotlin.String)"
         val findings = ForbiddenMethodCall(TestConfig(METHODS to listOf(methodName)))
             .lintWithContext(env, code)
-        assertThat(findings).hasSize(1).hasStartSourceLocation(6, 13)
+        assertThat(findings).hasSize(1).hasStartSourceLocation(8, 13)
     }
 
     @Test

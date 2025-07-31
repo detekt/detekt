@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.util
 
-import io.gitlab.arturbosch.detekt.api.Notification
+import dev.detekt.api.Notification
 
 internal data class SimpleNotification(
     override val message: String,

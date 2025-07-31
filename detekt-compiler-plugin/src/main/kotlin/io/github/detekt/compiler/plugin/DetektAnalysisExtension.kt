@@ -1,9 +1,9 @@
 package io.github.detekt.compiler.plugin
 
 import com.intellij.openapi.project.Project
+import dev.detekt.tooling.api.spec.ProcessingSpec
 import io.github.detekt.compiler.plugin.internal.DetektService
 import io.github.detekt.compiler.plugin.internal.info
-import io.github.detekt.tooling.api.spec.ProcessingSpec
 import org.jetbrains.kotlin.analyzer.AnalysisResult
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.descriptors.ModuleDescriptor

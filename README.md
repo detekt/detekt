@@ -100,11 +100,13 @@ tasks.withType<DetektCreateBaselineTask>().configureEach {
 }
 ```
 
-See [maven central](https://search.maven.org/artifact/io.gitlab.arturbosch.detekt/detekt-cli) for releases and [sonatype](https://oss.sonatype.org/#view-repositories;snapshots~browsestorage~io/gitlab/arturbosch/detekt) for snapshots.
+See [maven central](https://search.maven.org/artifact/io.gitlab.arturbosch.detekt/detekt-cli) for releases and [sonatype](https://central.sonatype.com/repository/maven-snapshots/) for snapshots.
 
 If you want to use a SNAPSHOT version, you can find more info on [this documentation page](https://detekt.dev/snapshots.html).
 
 #### Requirements
+
+##### Executing detekt
 
 Gradle 6.8.3+ is the minimum requirement. However, the recommended versions together with the other tools recommended versions are:
 
@@ -113,6 +115,10 @@ Gradle 6.8.3+ is the minimum requirement. However, the recommended versions toge
 | `1.23.8`       | `8.12.1` | `2.0.21` | `8.8.1` | `1.8`             | `21`            |
 
 The list of [recommended versions for previous detekt version is listed here](https://detekt.dev/compatibility.html).
+
+##### Building detekt
+
+Java 17 or higher is required to build detekt.
 
 ### Adding more rule sets
 

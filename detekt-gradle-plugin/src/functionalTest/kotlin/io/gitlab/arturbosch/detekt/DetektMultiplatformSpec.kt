@@ -8,10 +8,8 @@ import org.gradle.testkit.runner.BuildResult
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.condition.EnabledForJreRange
 import org.junit.jupiter.api.condition.EnabledIf
 import org.junit.jupiter.api.condition.EnabledOnOs
-import org.junit.jupiter.api.condition.JRE.JAVA_17
 import org.junit.jupiter.api.condition.OS.MAC
 import java.util.concurrent.TimeUnit
 
@@ -135,7 +133,6 @@ class DetektMultiplatformSpec {
     }
 
     @Nested
-    @EnabledForJreRange(min = JAVA_17, disabledReason = "Android Gradle Plugin 8.0+ requires JDK 17 or newer")
     @EnabledIf("io.gitlab.arturbosch.detekt.DetektAndroidSpecKt#isAndroidSdkInstalled")
     inner class `multiplatform projects - Android target` {
         val gradleRunner =

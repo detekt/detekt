@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.config
 
-import io.gitlab.arturbosch.detekt.test.yamlConfig
+import dev.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Nested

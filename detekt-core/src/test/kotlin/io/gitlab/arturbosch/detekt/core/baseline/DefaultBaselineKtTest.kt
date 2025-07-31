@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.baseline
 
-import io.gitlab.arturbosch.detekt.test.createIssue
+import dev.detekt.api.testfixtures.createIssue
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

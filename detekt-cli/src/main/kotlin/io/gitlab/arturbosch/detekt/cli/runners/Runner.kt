@@ -1,11 +1,11 @@
 package io.gitlab.arturbosch.detekt.cli.runners
 
-import io.github.detekt.tooling.api.AnalysisResult
-import io.github.detekt.tooling.api.Detekt
-import io.github.detekt.tooling.api.DetektProvider
-import io.github.detekt.tooling.api.UnexpectedError
-import io.github.detekt.tooling.api.spec.ProcessingSpec
-import io.github.detekt.tooling.internal.NotApiButProbablyUsedByUsers
+import dev.detekt.tooling.api.AnalysisResult
+import dev.detekt.tooling.api.Detekt
+import dev.detekt.tooling.api.DetektProvider
+import dev.detekt.tooling.api.UnexpectedError
+import dev.detekt.tooling.api.spec.ProcessingSpec
+import dev.detekt.tooling.internal.NotApiButProbablyUsedByUsers
 import io.gitlab.arturbosch.detekt.cli.CliArgs
 import io.gitlab.arturbosch.detekt.cli.createSpec
 import java.util.concurrent.Callable

@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.formatting
 
-import io.gitlab.arturbosch.detekt.api.Config
+import dev.detekt.api.Config
+import dev.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.formatting.wrappers.KdocWrapping
-import io.gitlab.arturbosch.detekt.test.assertThat
 import org.junit.jupiter.api.Test
 
 /**

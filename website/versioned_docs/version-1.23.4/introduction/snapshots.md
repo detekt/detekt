@@ -10,7 +10,7 @@ This page explains how you can use our **latest snapshots** to test upcoming unr
 
 ## Where to download snapshots
 
-You can find the latest snapshot on [sonatype](https://oss.sonatype.org/#view-repositories;snapshots~browsestorage~io/gitlab/arturbosch/detekt). A new snapshot is published after every merge to `main` from the [Deploy Snapshot](https://github.com/detekt/detekt/actions?query=workflow%3A%22Deploy+Snapshot%22) GitHub Action workflow. 
+You can find the latest snapshot on [sonatype](https://central.sonatype.com/repository/maven-snapshots/). A new snapshot is published after every merge to `main` from the [Deploy Snapshot](https://github.com/detekt/detekt/actions?query=workflow%3A%22Deploy+Snapshot%22) GitHub Action workflow. 
 
 ## Gradle setup with Buildscript
 
@@ -20,7 +20,7 @@ If you're using Gradle with the `buildscript` block, you should update your top 
 buildscript {
   repositories {
     maven {
-      url "https://oss.sonatype.org/content/repositories/snapshots/"
+      url "https://central.sonatype.com/repository/maven-snapshots/"
     }
   }
   dependencies {
@@ -33,7 +33,7 @@ apply plugin: "io.gitlab.arturbosch.detekt"
 allprojects {
   repositories {
     maven {
-      url "https://oss.sonatype.org/content/repositories/snapshots/"
+      url "https://central.sonatype.com/repository/maven-snapshots/"
     }
   }
 }
@@ -53,7 +53,7 @@ plugins {
 allprojects {
   repositories {
     maven {
-      url "https://oss.sonatype.org/content/repositories/snapshots/"
+      url "https://central.sonatype.com/repository/maven-snapshots/"
     }
   }
 }
@@ -73,7 +73,7 @@ pluginManagement {
     repositories {
         // Your other repos here.
         maven {
-            url = uri("https://oss.sonatype.org/content/repositories/snapshots/")
+            url = uri("https://central.sonatype.com/repository/maven-snapshots/")
         }
     }
 }

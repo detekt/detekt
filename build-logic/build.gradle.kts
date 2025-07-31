@@ -19,7 +19,7 @@ dependencies {
 
 kotlin {
     @Suppress("MagicNumber")
-    jvmToolchain(8)
+    jvmToolchain(17)
 
     compilerOptions {
         allWarningsAsErrors = providers.gradleProperty("warningsAsErrors").orNull.toBoolean()

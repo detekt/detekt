@@ -1,16 +1,16 @@
 package io.gitlab.arturbosch.detekt.core
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
-import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.RuleInstance
-import io.gitlab.arturbosch.detekt.api.RuleName
-import io.gitlab.arturbosch.detekt.api.RuleSet
-import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
-import io.gitlab.arturbosch.detekt.api.internal.whichDetekt
+import dev.detekt.api.Config
+import dev.detekt.api.RequiresAnalysisApi
+import dev.detekt.api.RequiresFullAnalysis
+import dev.detekt.api.Rule
+import dev.detekt.api.RuleInstance
+import dev.detekt.api.RuleName
+import dev.detekt.api.RuleSet
+import dev.detekt.api.RuleSetProvider
+import dev.detekt.api.Severity
+import dev.detekt.api.internal.DefaultRuleSetProvider
+import dev.detekt.api.internal.whichDetekt
 import io.gitlab.arturbosch.detekt.core.util.isActiveOrDefault
 import java.net.URI
 

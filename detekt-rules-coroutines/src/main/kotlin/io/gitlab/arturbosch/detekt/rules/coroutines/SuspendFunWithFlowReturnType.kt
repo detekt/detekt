@@ -1,15 +1,15 @@
 package io.gitlab.arturbosch.detekt.rules.coroutines
 
-import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
-import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.rules.coroutines.utils.isCoroutinesFlow
+import dev.detekt.api.ActiveByDefault
+import dev.detekt.api.Config
+import dev.detekt.api.Entity
+import dev.detekt.api.Finding
+import dev.detekt.api.RequiresAnalysisApi
+import dev.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.rules.coroutines.utils.CoroutineClassIds
+import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * Functions that return `Flow` from `kotlinx.coroutines.flow` should not be marked as `suspend`.
@@ -61,20 +61,16 @@ class SuspendFunWithFlowReturnType(config: Config) :
         "The `suspend` modifier should not be used for functions that return a Coroutines Flow type. Flows are cold " +
             "streams and invoking a function that returns one should not produce any side effects."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         val suspendModifier = function.modifierList?.getModifier(KtTokens.SUSPEND_KEYWORD) ?: return
-        bindingContext[BindingContext.FUNCTION, function]
-            ?.returnType
-            ?.takeIf { it.isCoroutinesFlow() }
-            ?.also {
-                report(
-                    Finding(
-                        entity = Entity.from(suspendModifier),
-                        message = "`suspend` function returns Coroutines Flow."
-                    )
-                )
-            }
+        if (!analyze(function) { function.returnType.isSubtypeOf(CoroutineClassIds.Flow) }) return
+        report(
+            Finding(
+                entity = Entity.from(suspendModifier),
+                message = "`suspend` function returns Coroutines Flow."
+            )
+        )
     }
 }

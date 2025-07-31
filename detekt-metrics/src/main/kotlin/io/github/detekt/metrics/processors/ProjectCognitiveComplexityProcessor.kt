@@ -1,7 +1,7 @@
 package io.github.detekt.metrics.processors
 
+import dev.detekt.api.DetektVisitor
 import io.github.detekt.metrics.CognitiveComplexity
-import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import org.jetbrains.kotlin.psi.KtFile
 
 class ProjectCognitiveComplexityProcessor : AbstractProcessor() {

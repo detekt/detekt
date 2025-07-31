@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.formatting.wrappers
 
 import com.pinterest.ktlint.ruleset.standard.rules.FilenameRule
-import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.Config
+import dev.detekt.api.ActiveByDefault
+import dev.detekt.api.Config
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 
 /**

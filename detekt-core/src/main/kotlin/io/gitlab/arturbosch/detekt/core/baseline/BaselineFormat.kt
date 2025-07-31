@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.core.baseline
 
-import io.github.detekt.tooling.api.Baseline
-import io.github.detekt.tooling.api.BaselineProvider
-import io.github.detekt.tooling.api.FindingsIdList
+import dev.detekt.tooling.api.Baseline
+import dev.detekt.tooling.api.BaselineProvider
+import dev.detekt.tooling.api.FindingsIdList
 import org.xml.sax.SAXParseException
 import java.nio.file.Path
 import javax.xml.XMLConstants

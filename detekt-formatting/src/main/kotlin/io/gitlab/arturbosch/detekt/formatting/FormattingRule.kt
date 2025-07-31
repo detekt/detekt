@@ -11,15 +11,15 @@ import com.pinterest.ktlint.rule.engine.core.api.editorconfig.INDENT_STYLE_PROPE
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.createRuleExecutionEditorConfigProperty
 import com.pinterest.ktlint.ruleset.standard.StandardRule
 import com.pinterest.ktlint.ruleset.standard.rules.MAX_LINE_LENGTH_RULE_ID
-import io.github.detekt.psi.absolutePath
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.Location
-import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.SourceLocation
-import io.gitlab.arturbosch.detekt.api.TextLocation
-import io.gitlab.arturbosch.detekt.api.modifiedText
+import dev.detekt.api.Config
+import dev.detekt.api.Entity
+import dev.detekt.api.Finding
+import dev.detekt.api.Location
+import dev.detekt.api.Rule
+import dev.detekt.api.SourceLocation
+import dev.detekt.api.TextLocation
+import dev.detekt.api.modifiedText
+import dev.detekt.psi.absolutePath
 import org.ec4j.core.model.Property
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtPsiFactory
@@ -32,12 +32,10 @@ abstract class FormattingRule(config: Config, description: String) : Rule(config
 
     abstract val wrapping: StandardRule
 
-    /**
-     * Should the android style guide be enforced?
-     * This property is read from the ruleSet config.
-     */
-    protected val isAndroid: Boolean
-        get() = config.parent?.let { FormattingProvider.android.value(it) } == true
+    protected val codeStyle: String
+        get() = config.valueOrNull("code_style")
+            ?: config.parent?.let { FormattingProvider.code_style.value(it) }
+            ?: FormattingProvider.code_style.defaultValue
 
     private lateinit var positionByOffset: (offset: Int) -> Pair<Int, Int>
     private lateinit var root: KtFile
@@ -69,11 +67,7 @@ abstract class FormattingRule(config: Config, description: String) : Rule(config
            respected: https://github.com/pinterest/ktlint/pull/2783 */
         usesEditorConfigProperties[MAX_LINE_LENGTH_RULE_ID.createRuleExecutionEditorConfigProperty()] = "enabled"
 
-        if (isAndroid) {
-            usesEditorConfigProperties[CODE_STYLE_PROPERTY] = "android_studio"
-        } else {
-            usesEditorConfigProperties[CODE_STYLE_PROPERTY] = "intellij_idea"
-        }
+        usesEditorConfigProperties[CODE_STYLE_PROPERTY] = codeStyle
 
         usesEditorConfigProperties[INDENT_STYLE_PROPERTY] = "space"
 

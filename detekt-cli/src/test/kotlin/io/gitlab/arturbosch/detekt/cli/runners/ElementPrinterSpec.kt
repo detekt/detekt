@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.cli.runners
 
-import io.github.detekt.test.utils.compileForTest
-import io.github.detekt.test.utils.resourceAsPath
+import dev.detekt.test.utils.compileForTest
+import dev.detekt.test.utils.resourceAsPath
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

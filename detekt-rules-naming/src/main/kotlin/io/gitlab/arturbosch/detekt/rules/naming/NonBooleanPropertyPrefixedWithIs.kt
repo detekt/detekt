@@ -1,19 +1,17 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
-import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
-import org.jetbrains.kotlin.builtins.isFunctionOrKFunctionTypeWithAnySuspendability
+import dev.detekt.api.Config
+import dev.detekt.api.Entity
+import dev.detekt.api.Finding
+import dev.detekt.api.RequiresAnalysisApi
+import dev.detekt.api.Rule
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.types.KaFunctionType
+import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
-import org.jetbrains.kotlin.resolve.typeBinding.createTypeBindingForReturnType
-import org.jetbrains.kotlin.types.KotlinType
-import org.jetbrains.kotlin.types.isError
 
 /**
  * Reports when property with 'is' prefix doesn't have a boolean type.
@@ -32,7 +30,7 @@ class NonBooleanPropertyPrefixedWithIs(config: Config) :
         config,
         "Only boolean property names can start with `is` prefix."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     private val booleanTypes = listOf(
         "kotlin.Boolean",
@@ -57,26 +55,15 @@ class NonBooleanPropertyPrefixedWithIs(config: Config) :
     private fun validateDeclaration(declaration: KtCallableDeclaration) {
         val name = declaration.name ?: return
         if (name.startsWith("is") && name.getOrNull(2)?.isUpperCase() == true) {
-            val (type, typeFqName) = getType(declaration) ?: return
-            if (!type.isBoolean()) {
-                report(declaration, name, typeFqName)
+            analyze(declaration) {
+                val type = declaration.returnType.let { (it as? KaFunctionType)?.returnType ?: it }
+                val typeFqName = type.symbol?.classId?.asSingleFqName() ?: return
+                if (typeFqName !in booleanTypes) {
+                    report(declaration, name, typeFqName)
+                }
             }
         }
     }
-
-    private fun getType(parameter: KtCallableDeclaration): Pair<KotlinType, FqName>? {
-        val type = parameter.createTypeBindingForReturnType(bindingContext)?.type ?: return null
-        if (type.isError) return null
-        val fqName = type.fqNameOrNull() ?: return null
-        return type to fqName
-    }
-
-    private fun KotlinType.isBoolean(): Boolean =
-        if (isFunctionOrKFunctionTypeWithAnySuspendability) {
-            arguments.lastOrNull()?.type?.fqNameOrNull() in booleanTypes
-        } else {
-            fqNameOrNull() in booleanTypes
-        }
 
     private fun report(declaration: KtCallableDeclaration, name: String, typeFqName: FqName) {
         val typeName = typeFqName.shortName().asString()

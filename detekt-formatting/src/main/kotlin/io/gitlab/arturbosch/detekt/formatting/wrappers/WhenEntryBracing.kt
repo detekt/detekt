@@ -3,10 +3,10 @@ package io.gitlab.arturbosch.detekt.formatting.wrappers
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfigProperty
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.INDENT_SIZE_PROPERTY
 import com.pinterest.ktlint.ruleset.standard.rules.WhenEntryBracing
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Configuration
-import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
+import dev.detekt.api.Config
+import dev.detekt.api.Configuration
+import dev.detekt.api.config
+import dev.detekt.api.internal.AutoCorrectable
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 
 /**

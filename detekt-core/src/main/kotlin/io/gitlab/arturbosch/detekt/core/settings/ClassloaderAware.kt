@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.settings
 
-import io.github.detekt.tooling.api.spec.ExtensionsSpec
+import dev.detekt.tooling.api.spec.ExtensionsSpec
 import org.jetbrains.kotlin.utils.closeQuietly
 import java.io.Closeable
 import java.net.URLClassLoader

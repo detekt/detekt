@@ -1,10 +1,10 @@
 package io.github.detekt.metrics.processors
 
 import com.intellij.openapi.util.Key
-import io.gitlab.arturbosch.detekt.api.DetektVisitor
-import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.FileProcessListener
-import io.gitlab.arturbosch.detekt.api.ProjectMetric
+import dev.detekt.api.DetektVisitor
+import dev.detekt.api.Detektion
+import dev.detekt.api.FileProcessListener
+import dev.detekt.api.ProjectMetric
 import org.jetbrains.kotlin.psi.KtFile
 
 class PackageCountProcessor : FileProcessListener {

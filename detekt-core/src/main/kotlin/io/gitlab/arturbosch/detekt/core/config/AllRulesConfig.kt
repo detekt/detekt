@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.config
 
-import io.gitlab.arturbosch.detekt.api.Config
+import dev.detekt.api.Config
 import io.gitlab.arturbosch.detekt.core.config.validation.DeprecatedRule
 import io.gitlab.arturbosch.detekt.core.config.validation.ValidatableConfiguration
 import io.gitlab.arturbosch.detekt.core.config.validation.validateConfig

@@ -1,11 +1,11 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
-import io.github.detekt.test.utils.KotlinEnvironmentContainer
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lintWithContext
+import dev.detekt.api.Config
+import dev.detekt.test.TestConfig
+import dev.detekt.test.assertThat
+import dev.detekt.test.lintWithContext
+import dev.detekt.test.utils.KotlinCoreEnvironmentTest
+import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -502,6 +502,19 @@ class UnnamedParameterUseSpec(private val env: KotlinEnvironmentContainer) {
         assertThat(
             getSubject(allowAdjacentDifferentTypeParams = true).lintWithContext(env, code)
         ).hasSize(1)
+    }
+
+    @Test
+    fun `does not report for a Java method call`() {
+        val code = """
+            import java.time.LocalDate
+            fun main() {
+                LocalDate.of(2025, 1, 2)
+            }
+        """.trimIndent()
+        assertThat(
+            getSubject(allowAdjacentDifferentTypeParams = true).lintWithContext(env, code)
+        ).isEmpty()
     }
 
     @Nested

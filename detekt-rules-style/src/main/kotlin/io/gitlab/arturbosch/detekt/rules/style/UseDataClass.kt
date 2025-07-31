@@ -1,14 +1,18 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Configuration
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
-import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.rules.isExpect
-import io.gitlab.arturbosch.detekt.rules.isOpen
+import dev.detekt.api.Config
+import dev.detekt.api.Configuration
+import dev.detekt.api.Entity
+import dev.detekt.api.Finding
+import dev.detekt.api.RequiresAnalysisApi
+import dev.detekt.api.Rule
+import dev.detekt.api.config
+import dev.detekt.psi.isExpect
+import dev.detekt.psi.isOpen
+import org.jetbrains.kotlin.analysis.api.KaSession
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
+import org.jetbrains.kotlin.analysis.api.types.KaType
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -19,8 +23,6 @@ import org.jetbrains.kotlin.psi.psiUtil.forEachDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.isAbstract
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.types.KotlinType
 
 /**
  * Classes that simply hold data should be refactored into a `data class`. Data classes are specialized to hold data
@@ -48,7 +50,7 @@ class UseDataClass(config: Config) :
         config,
         "Classes that do nothing but hold data should be replaced with a data class."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     @Configuration("allows to relax this rule in order to exclude classes that contains one (or more) vars")
     private val allowVars: Boolean by config(false)
@@ -72,27 +74,33 @@ class UseDataClass(config: Config) :
 
             val propertyParameters = klass.extractConstructorPropertyParameters()
 
-            val primaryConstructor = bindingContext[BindingContext.CONSTRUCTOR, klass.primaryConstructor]
-            val primaryConstructorParameterTypes = primaryConstructor?.valueParameters?.map { it.type }.orEmpty()
-            val classType = primaryConstructor?.containingDeclaration?.defaultType
-            val containsFunctions = functions.all { it.isDefaultFunction(classType, primaryConstructorParameterTypes) }
-            val containsPropertyOrPropertyParameters = properties.isNotEmpty() || propertyParameters.isNotEmpty()
-            val containsVars = properties.any { it.isVar } || propertyParameters.any { it.isMutable }
-            val containsDelegatedProperty = properties.any { it.hasDelegate() }
-            val containsNonPropertyParameter = klass.extractConstructorNonPropertyParameters().isNotEmpty()
-            val containsOnlyPropertyParameters = containsPropertyOrPropertyParameters && !containsNonPropertyParameter
-
-            if (containsFunctions && !containsDelegatedProperty && containsOnlyPropertyParameters) {
-                if (allowVars && containsVars) {
-                    return
+            analyze(klass) {
+                val primaryConstructorParameterTypes = klass.primaryConstructor?.valueParameters?.map {
+                    it.typeReference?.type ?: return
+                }.orEmpty()
+                val classType = (klass.symbol as? KaClassSymbol)?.defaultType
+                val containsFunctions = functions.all {
+                    isDefaultFunction(it, classType, primaryConstructorParameterTypes)
                 }
-                report(
-                    Finding(
-                        Entity.atName(klass),
-                        "The class ${klass.nameAsSafeName} defines no " +
-                            "functionality and only holds data. Consider converting it to a data class."
+                val containsPropertyOrPropertyParameters = properties.isNotEmpty() || propertyParameters.isNotEmpty()
+                val containsVars = properties.any { it.isVar } || propertyParameters.any { it.isMutable }
+                val containsDelegatedProperty = properties.any { it.hasDelegate() }
+                val containsNonPropertyParameter = klass.extractConstructorNonPropertyParameters().isNotEmpty()
+                val containsOnlyPropertyParameters =
+                    containsPropertyOrPropertyParameters && !containsNonPropertyParameter
+
+                if (containsFunctions && !containsDelegatedProperty && containsOnlyPropertyParameters) {
+                    if (allowVars && containsVars) {
+                        return
+                    }
+                    report(
+                        Finding(
+                            Entity.atName(klass),
+                            "The class ${klass.nameAsSafeName} defines no " +
+                                "functionality and only holds data. Consider converting it to a data class."
+                        )
                     )
-                )
+                }
             }
         }
     }
@@ -136,17 +144,17 @@ class UseDataClass(config: Config) :
             ?.filter { !it.isPropertyParameter() }
             .orEmpty()
 
-    private fun KtNamedFunction.isDefaultFunction(
-        classType: KotlinType?,
-        primaryConstructorParameterTypes: List<KotlinType>,
+    private fun KaSession.isDefaultFunction(
+        function: KtNamedFunction,
+        classType: KaType?,
+        primaryConstructorParameterTypes: List<KaType>,
     ): Boolean =
-        when (name) {
+        when (function.name) {
             !in DEFAULT_FUNCTION_NAMES -> false
             "copy" -> {
                 if (classType != null) {
-                    val descriptor = bindingContext[BindingContext.FUNCTION, this]
-                    val returnType = descriptor?.returnType
-                    val parameterTypes = descriptor?.valueParameters?.map { it.type }.orEmpty()
+                    val returnType = function.symbol.returnType
+                    val parameterTypes = function.symbol.valueParameters.map { it.returnType }
                     returnType == classType &&
                         parameterTypes.size == primaryConstructorParameterTypes.size &&
                         parameterTypes.zip(primaryConstructorParameterTypes).all { it.first == it.second }
@@ -154,6 +162,7 @@ class UseDataClass(config: Config) :
                     true
                 }
             }
+
             else -> true
         }
 

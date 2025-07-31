@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.github.detekt.test.utils.KotlinEnvironmentContainer
-import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lintWithContext
+import dev.detekt.test.TestConfig
+import dev.detekt.test.assertThat
+import dev.detekt.test.lintWithContext
+import dev.detekt.test.utils.KotlinCoreEnvironmentTest
+import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -184,7 +184,7 @@ class ForbiddenNamedParamSpec(val env: KotlinEnvironmentContainer) {
                 val s = varargMethod(args = arrayOf("test"))
             }
         """.trimIndent()
-        val methodName = "com.example.varargMethod(kotlin.Array)"
+        val methodName = "com.example.varargMethod(vararg kotlin.Any)"
         val findings = ForbiddenNamedParam(TestConfig(METHODS to listOf(methodName)))
             .lintWithContext(env, code)
         assertThat(findings).hasSize(1).hasStartSourceLocation(6, 13)

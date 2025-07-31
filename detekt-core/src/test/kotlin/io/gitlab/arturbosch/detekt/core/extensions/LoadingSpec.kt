@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.extensions
 
-import io.gitlab.arturbosch.detekt.api.ConfigValidator
+import dev.detekt.api.ConfigValidator
 import io.gitlab.arturbosch.detekt.core.createNullLoggingSpec
 import io.gitlab.arturbosch.detekt.core.tooling.withSettings
 import org.assertj.core.api.Assertions.assertThat

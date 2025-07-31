@@ -1,10 +1,10 @@
 package io.github.detekt.compiler.plugin.internal
 
-import io.github.detekt.tooling.api.DetektProvider
-import io.github.detekt.tooling.api.InvalidConfig
-import io.github.detekt.tooling.api.IssuesFound
-import io.github.detekt.tooling.api.UnexpectedError
-import io.github.detekt.tooling.api.spec.ProcessingSpec
+import dev.detekt.tooling.api.DetektProvider
+import dev.detekt.tooling.api.InvalidConfig
+import dev.detekt.tooling.api.IssuesFound
+import dev.detekt.tooling.api.UnexpectedError
+import dev.detekt.tooling.api.spec.ProcessingSpec
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
