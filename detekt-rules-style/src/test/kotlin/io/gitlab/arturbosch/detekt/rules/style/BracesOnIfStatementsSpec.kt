@@ -1,14 +1,14 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.TextLocation
+import dev.detekt.api.Config
+import dev.detekt.api.TextLocation
+import dev.detekt.test.TestConfig
+import dev.detekt.test.assertThat
+import dev.detekt.test.lint
 import io.gitlab.arturbosch.detekt.rules.style.BracesOnIfStatements.BracePolicy
 import io.gitlab.arturbosch.detekt.rules.style.BracesOnIfStatementsSpec.Companion.NOT_RELEVANT
 import io.gitlab.arturbosch.detekt.rules.style.BracesOnIfStatementsSpec.Companion.options
 import io.gitlab.arturbosch.detekt.rules.style.BracesOnIfStatementsSpec.Companion.test
-import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode
 import org.junit.jupiter.api.DynamicContainer.dynamicContainer

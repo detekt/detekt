@@ -1,16 +1,16 @@
 package io.gitlab.arturbosch.detekt.rules.coroutines
 
-import io.github.detekt.test.utils.KotlinEnvironmentContainer
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.SourceLocation
-import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.lintWithContext
+import dev.detekt.api.Config
+import dev.detekt.api.Finding
+import dev.detekt.api.SourceLocation
+import dev.detekt.test.lintWithContext
+import dev.detekt.test.utils.KotlinCoreEnvironmentTest
+import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.assertj.core.api.Assertions.assertThat
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import io.gitlab.arturbosch.detekt.test.assertThat as assertThatFindings
+import dev.detekt.test.assertThat as assertThatFindings
 
 @KotlinCoreEnvironmentTest
 class SuspendFunSwallowedCancellationSpec(private val env: KotlinEnvironmentContainer) {

@@ -3,12 +3,12 @@ package io.gitlab.arturbosch.detekt.formatting.wrappers
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfigProperty
 import com.pinterest.ktlint.ruleset.standard.rules.EnumEntryNameCaseRule
 import com.pinterest.ktlint.ruleset.standard.rules.EnumEntryNameCaseRule.Companion.ENUM_ENTRY_NAME_CASING_PROPERTY
-import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.Alias
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Configuration
-import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.api.internal.AutoCorrectable
+import dev.detekt.api.ActiveByDefault
+import dev.detekt.api.Alias
+import dev.detekt.api.Config
+import dev.detekt.api.Configuration
+import dev.detekt.api.config
+import dev.detekt.api.internal.AutoCorrectable
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 
 /**

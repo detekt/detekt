@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.coroutines
 
-import io.github.detekt.test.utils.KotlinEnvironmentContainer
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.lintWithContext
+import dev.detekt.api.Config
+import dev.detekt.test.lintWithContext
+import dev.detekt.test.utils.KotlinCoreEnvironmentTest
+import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test

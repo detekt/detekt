@@ -1,7 +1,7 @@
 package ruleset2
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Rule
+import dev.detekt.api.Config
+import dev.detekt.api.Rule
 
 /**
  * Description

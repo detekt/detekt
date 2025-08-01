@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.cli.runners
 
-import io.gitlab.arturbosch.detekt.api.DetektVisitor
+import dev.detekt.api.DetektVisitor
 import org.jetbrains.kotlin.diagnostics.PsiDiagnosticUtils
 import org.jetbrains.kotlin.psi.KtContainerNode
 import org.jetbrains.kotlin.psi.KtDeclarationContainer

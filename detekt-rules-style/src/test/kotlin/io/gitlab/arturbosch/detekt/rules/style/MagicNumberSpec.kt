@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.SourceLocation
-import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.api.SourceLocation
+import dev.detekt.test.TestConfig
+import dev.detekt.test.assertThat
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -879,9 +879,11 @@ class MagicNumberSpec {
         @Suppress("UnusedPrivateFunction")
         private fun cases() = listOf(
             "val range = 1..27",
+            "val range = -1..-27",
             "val range = (1..27)",
             "val range = 27 downTo 1",
             "val range = 1 until 27 step 1",
+            "val range = -1 until -27 step 1",
             "val inRange = 1 in 1..27",
             "val inRange = (1 in 27 downTo 0 step 1)",
             "val inRange = (1..27 step 1).last"

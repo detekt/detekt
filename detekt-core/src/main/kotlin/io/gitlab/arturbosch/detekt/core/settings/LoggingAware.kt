@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.settings
 
-import io.github.detekt.tooling.api.spec.LoggingSpec
+import dev.detekt.tooling.api.spec.LoggingSpec
 import java.io.PrintStream
 import java.io.PrintWriter
 

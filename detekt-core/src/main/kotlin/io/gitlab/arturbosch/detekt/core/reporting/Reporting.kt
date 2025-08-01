@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.core.reporting
 
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.OutputReport
-import io.gitlab.arturbosch.detekt.api.internal.BuiltInOutputReport
+import dev.detekt.api.Issue
+import dev.detekt.api.OutputReport
+import dev.detekt.api.internal.BuiltInOutputReport
 import java.nio.file.Path
 
 internal fun defaultReportMapping(report: OutputReport) =

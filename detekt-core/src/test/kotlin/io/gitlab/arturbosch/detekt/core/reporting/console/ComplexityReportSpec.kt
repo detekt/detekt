@@ -1,15 +1,15 @@
 package io.gitlab.arturbosch.detekt.core.reporting.console
 
+import dev.detekt.api.Detektion
+import dev.detekt.api.testfixtures.createIssue
+import dev.detekt.api.testfixtures.createRuleInstance
 import io.github.detekt.metrics.CognitiveComplexity
 import io.github.detekt.metrics.processors.commentLinesKey
 import io.github.detekt.metrics.processors.complexityKey
 import io.github.detekt.metrics.processors.linesKey
 import io.github.detekt.metrics.processors.logicalLinesKey
 import io.github.detekt.metrics.processors.sourceLinesKey
-import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.core.DetektResult
-import io.gitlab.arturbosch.detekt.test.createIssue
-import io.gitlab.arturbosch.detekt.test.createRuleInstance
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

@@ -12,12 +12,12 @@ dependencies {
     implementation(libs.kotlin.mainKts) {
         isTransitive = false
     }
-    implementation(libs.kotlin.scriptingCompiler)
+    runtimeOnly(libs.kotlin.scriptingCompiler)
     implementation(libs.kotlinx.coroutinesCore)
 
     testImplementation(libs.assertj.core)
 }
 
 apiValidation {
-    ignoredPackages.add("io.github.detekt.test.utils.internal")
+    ignoredPackages.add("dev.detekt.test.utils.internal")
 }
