@@ -7,13 +7,16 @@ import dev.detekt.api.Configuration
 import dev.detekt.api.DetektVisitor
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
-import dev.detekt.api.RequiresFullAnalysis
+import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.api.config
 import dev.detekt.psi.isOperator
-import org.jetbrains.kotlin.descriptors.CallableDescriptor
-import org.jetbrains.kotlin.descriptors.FunctionDescriptor
-import org.jetbrains.kotlin.descriptors.PropertyDescriptor
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaCallableSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaFunctionSymbol
+import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.lexer.KtSingleValueToken
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.Name
@@ -30,9 +33,6 @@ import org.jetbrains.kotlin.psi.KtPropertyDelegate
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
-import org.jetbrains.kotlin.resolve.source.getPsi
 import org.jetbrains.kotlin.types.expressions.OperatorConventions
 import org.jetbrains.kotlin.util.OperatorNameConventions
 
@@ -51,33 +51,30 @@ class UnusedPrivateFunction(config: Config) :
         config,
         "Private function is unused and should be removed."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     @Configuration("unused private function names matching this regex are ignored")
     private val allowedNames: Regex by config("", String::toRegex)
 
     override fun visit(root: KtFile) {
         super.visit(root)
-        val visitor = UnusedFunctionVisitor(allowedNames, bindingContext)
+        val visitor = UnusedFunctionVisitor(allowedNames)
         root.accept(visitor)
         visitor.getUnusedReports().forEach { report(it) }
     }
 }
 
-private class UnusedFunctionVisitor(
-    private val allowedNames: Regex,
-    private val bindingContext: BindingContext,
-) : DetektVisitor() {
+private class UnusedFunctionVisitor(private val allowedNames: Regex) : DetektVisitor() {
 
     private val functionDeclarations = mutableMapOf<String, MutableList<KtFunction>>()
     private val functionReferences = mutableMapOf<String, MutableList<KtReferenceExpression>>()
-    private val invokeOperatorReferences = mutableMapOf<CallableDescriptor, MutableList<KtReferenceExpression>>()
+    private val invokeOperatorReferences = mutableMapOf<KaCallableSymbol, MutableList<KtReferenceExpression>>()
     private val propertyDelegates = mutableListOf<KtPropertyDelegate>()
 
     @Suppress("CyclomaticComplexMethod", "LongMethod")
     fun getUnusedReports(): List<Finding> {
-        val propertyDelegateResultingDescriptors by lazy(LazyThreadSafetyMode.NONE) {
-            propertyDelegates.flatMap { it.resultingDescriptors() }
+        val propertyDelegateSymbols by lazy(LazyThreadSafetyMode.NONE) {
+            propertyDelegates.flatMap { it.symbols() }
         }
         return functionDeclarations
             .flatMap { (functionName, functions) ->
@@ -116,18 +113,24 @@ private class UnusedFunctionVisitor(
                         } else {
                             emptyList()
                         }
-                        val referenceDescriptors = (references + referencesViaOperator)
-                            .mapNotNull { it.getResolvedCall(bindingContext)?.resultingDescriptor }
-                            .map { it.original }
+                        val referenceSymbols = (references + referencesViaOperator)
+                            .mapNotNull {
+                                analyze(it) {
+                                    it.resolveToCall()?.singleFunctionCallOrNull()?.symbol
+                                        ?: it.mainReference.resolveToSymbol() as? KaFunctionSymbol
+                                }
+                            }
                             .let {
                                 if (functionNameAsName in OperatorNameConventions.DELEGATED_PROPERTY_OPERATORS) {
-                                    it + propertyDelegateResultingDescriptors
+                                    it + propertyDelegateSymbols
                                 } else {
                                     it
                                 }
                             }
                         functions.filterNot {
-                            bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, it] in referenceDescriptors
+                            analyze(it) {
+                                it.symbol in referenceSymbols
+                            }
                         }
                     }
 
@@ -142,11 +145,7 @@ private class UnusedFunctionVisitor(
 
     private fun getInvokeReferences(functions: MutableList<KtFunction>) =
         functions.flatMap { function ->
-            val callableDescriptor =
-                bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, function]
-            callableDescriptor?.let {
-                invokeOperatorReferences[it]
-            }.orEmpty()
+            analyze(function) { invokeOperatorReferences[function.symbol] }.orEmpty()
         }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
@@ -166,12 +165,10 @@ private class UnusedFunctionVisitor(
         }
     }
 
-    private fun KtPropertyDelegate.resultingDescriptors(): List<FunctionDescriptor> {
-        val property = this.parent as? KtProperty ?: return emptyList()
-        val propertyDescriptor =
-            bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, property] as? PropertyDescriptor
-        return listOfNotNull(propertyDescriptor?.getter, propertyDescriptor?.setter).mapNotNull {
-            bindingContext[BindingContext.DELEGATED_PROPERTY_RESOLVED_CALL, it]?.resultingDescriptor
+    private fun KtPropertyDelegate.symbols(): List<KaFunctionSymbol> {
+        val delegate = (this.parent as? KtProperty)?.delegate ?: return emptyList()
+        return analyze(delegate) {
+            delegate.mainReference?.resolveToSymbols()?.filterIsInstance<KaFunctionSymbol>().orEmpty()
         }
     }
 
@@ -192,12 +189,14 @@ private class UnusedFunctionVisitor(
             is KtNameReferenceExpression -> expression.getReferencedName()
             is KtArrayAccessExpression -> ARRAY_GET_METHOD_NAME
             is KtCallExpression -> {
-                val resolvedCall = expression.getResolvedCall(bindingContext) ?: return
-                val callableDescriptor = resolvedCall.resultingDescriptor
-                if ((callableDescriptor.source.getPsi() as? KtNamedFunction)?.isOperator() == true) {
-                    invokeOperatorReferences.getOrPut(callableDescriptor) { mutableListOf() }.add(expression)
+                analyze(expression) {
+                    val symbol = expression.resolveToCall()?.singleFunctionCallOrNull()?.symbol
+                    val psi = symbol?.psi
+                    if ((psi as? KtNamedFunction)?.isOperator() == true) {
+                        invokeOperatorReferences.getOrPut(symbol) { mutableListOf() }.add(expression)
+                    }
+                    null
                 }
-                null
             }
 
             else -> null
