@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.extensions
 
-import io.gitlab.arturbosch.detekt.api.Extension
+import dev.detekt.api.Extension
 import io.gitlab.arturbosch.detekt.core.NL
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import java.util.ServiceLoader

@@ -16,7 +16,6 @@ dependencies {
     testRuntimeOnly(projects.detektRules)
     testImplementation(projects.detektReportHtml)
     testImplementation(projects.detektReportMd)
-    testImplementation(projects.detektReportSarif)
     testImplementation(projects.detektReportXml)
     testImplementation(projects.detektTest)
     testImplementation(testFixtures(projects.detektApi))

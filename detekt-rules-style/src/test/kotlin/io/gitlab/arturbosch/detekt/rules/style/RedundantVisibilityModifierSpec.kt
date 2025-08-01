@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.FakeLanguageVersionSettings
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.FakeLanguageVersionSettings
+import dev.detekt.test.assertThat
+import dev.detekt.test.lint
 import org.jetbrains.kotlin.config.ExplicitApiMode
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test

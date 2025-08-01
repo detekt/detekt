@@ -13,7 +13,6 @@ dependencies {
     runtimeOnly(projects.detektRulesPerformance)
     runtimeOnly(projects.detektRulesStyle)
 
-    testImplementation(projects.detektCore)
     testImplementation(projects.detektTest)
     testImplementation(projects.detektRulesComplexity)
     testImplementation(projects.detektRulesCoroutines)

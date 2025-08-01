@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.core.tooling
 
-import io.github.detekt.test.utils.resourceAsPath
-import io.github.detekt.test.utils.resourceUrl
-import io.github.detekt.tooling.api.spec.ProcessingSpec
+import dev.detekt.test.utils.resourceAsPath
+import dev.detekt.test.utils.resourceUrl
+import dev.detekt.tooling.api.spec.ProcessingSpec
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test

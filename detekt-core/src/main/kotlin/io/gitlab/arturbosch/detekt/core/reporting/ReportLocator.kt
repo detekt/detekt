@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.core.reporting
 
-import io.gitlab.arturbosch.detekt.api.ConsoleReport
-import io.gitlab.arturbosch.detekt.api.Extension
-import io.gitlab.arturbosch.detekt.api.OutputReport
+import dev.detekt.api.ConsoleReport
+import dev.detekt.api.Extension
+import dev.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.extensions.loadExtensions
 import io.gitlab.arturbosch.detekt.core.util.isActiveOrDefault

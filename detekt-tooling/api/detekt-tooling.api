@@ -1,107 +1,107 @@
-public final class io/github/detekt/tooling/api/AnalysisMode : java/lang/Enum {
-	public static final field full Lio/github/detekt/tooling/api/AnalysisMode;
-	public static final field light Lio/github/detekt/tooling/api/AnalysisMode;
+public final class dev/detekt/tooling/api/AnalysisMode : java/lang/Enum {
+	public static final field full Ldev/detekt/tooling/api/AnalysisMode;
+	public static final field light Ldev/detekt/tooling/api/AnalysisMode;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public static fun valueOf (Ljava/lang/String;)Lio/github/detekt/tooling/api/AnalysisMode;
-	public static fun values ()[Lio/github/detekt/tooling/api/AnalysisMode;
+	public static fun valueOf (Ljava/lang/String;)Ldev/detekt/tooling/api/AnalysisMode;
+	public static fun values ()[Ldev/detekt/tooling/api/AnalysisMode;
 }
 
-public abstract interface class io/github/detekt/tooling/api/AnalysisResult {
-	public abstract fun getContainer ()Lio/gitlab/arturbosch/detekt/api/Detektion;
-	public abstract fun getError ()Lio/github/detekt/tooling/api/DetektError;
+public abstract interface class dev/detekt/tooling/api/AnalysisResult {
+	public abstract fun getContainer ()Ldev/detekt/api/Detektion;
+	public abstract fun getError ()Ldev/detekt/tooling/api/DetektError;
 }
 
-public abstract interface class io/github/detekt/tooling/api/Baseline {
+public abstract interface class dev/detekt/tooling/api/Baseline {
 	public abstract fun contains (Ljava/lang/String;)Z
 	public abstract fun getCurrentIssues ()Ljava/util/Set;
 	public abstract fun getManuallySuppressedIssues ()Ljava/util/Set;
 }
 
-public abstract interface class io/github/detekt/tooling/api/BaselineProvider {
-	public static final field Companion Lio/github/detekt/tooling/api/BaselineProvider$Companion;
-	public abstract fun of (Ljava/util/Set;Ljava/util/Set;)Lio/github/detekt/tooling/api/Baseline;
-	public abstract fun read (Ljava/nio/file/Path;)Lio/github/detekt/tooling/api/Baseline;
-	public abstract fun write (Ljava/nio/file/Path;Lio/github/detekt/tooling/api/Baseline;)V
+public abstract interface class dev/detekt/tooling/api/BaselineProvider {
+	public static final field Companion Ldev/detekt/tooling/api/BaselineProvider$Companion;
+	public abstract fun of (Ljava/util/Set;Ljava/util/Set;)Ldev/detekt/tooling/api/Baseline;
+	public abstract fun read (Ljava/nio/file/Path;)Ldev/detekt/tooling/api/Baseline;
+	public abstract fun write (Ljava/nio/file/Path;Ldev/detekt/tooling/api/Baseline;)V
 }
 
-public final class io/github/detekt/tooling/api/BaselineProvider$Companion {
-	public final fun load (Ljava/lang/ClassLoader;)Lio/github/detekt/tooling/api/BaselineProvider;
-	public static synthetic fun load$default (Lio/github/detekt/tooling/api/BaselineProvider$Companion;Ljava/lang/ClassLoader;ILjava/lang/Object;)Lio/github/detekt/tooling/api/BaselineProvider;
+public final class dev/detekt/tooling/api/BaselineProvider$Companion {
+	public final fun load (Ljava/lang/ClassLoader;)Ldev/detekt/tooling/api/BaselineProvider;
+	public static synthetic fun load$default (Ldev/detekt/tooling/api/BaselineProvider$Companion;Ljava/lang/ClassLoader;ILjava/lang/Object;)Ldev/detekt/tooling/api/BaselineProvider;
 }
 
-public abstract interface class io/github/detekt/tooling/api/DefaultConfigurationProvider {
-	public static final field Companion Lio/github/detekt/tooling/api/DefaultConfigurationProvider$Companion;
+public abstract interface class dev/detekt/tooling/api/DefaultConfigurationProvider {
+	public static final field Companion Ldev/detekt/tooling/api/DefaultConfigurationProvider$Companion;
 	public abstract fun copy (Ljava/nio/file/Path;)V
-	public abstract fun get ()Lio/gitlab/arturbosch/detekt/api/Config;
-	public abstract fun init (Lio/github/detekt/tooling/api/spec/ExtensionsSpec;)V
+	public abstract fun get ()Ldev/detekt/api/Config;
+	public abstract fun init (Ldev/detekt/tooling/api/spec/ExtensionsSpec;)V
 }
 
-public final class io/github/detekt/tooling/api/DefaultConfigurationProvider$Companion {
-	public final fun load (Lio/github/detekt/tooling/api/spec/ExtensionsSpec;Ljava/lang/ClassLoader;)Lio/github/detekt/tooling/api/DefaultConfigurationProvider;
-	public static synthetic fun load$default (Lio/github/detekt/tooling/api/DefaultConfigurationProvider$Companion;Lio/github/detekt/tooling/api/spec/ExtensionsSpec;Ljava/lang/ClassLoader;ILjava/lang/Object;)Lio/github/detekt/tooling/api/DefaultConfigurationProvider;
+public final class dev/detekt/tooling/api/DefaultConfigurationProvider$Companion {
+	public final fun load (Ldev/detekt/tooling/api/spec/ExtensionsSpec;Ljava/lang/ClassLoader;)Ldev/detekt/tooling/api/DefaultConfigurationProvider;
+	public static synthetic fun load$default (Ldev/detekt/tooling/api/DefaultConfigurationProvider$Companion;Ldev/detekt/tooling/api/spec/ExtensionsSpec;Ljava/lang/ClassLoader;ILjava/lang/Object;)Ldev/detekt/tooling/api/DefaultConfigurationProvider;
 }
 
-public abstract interface class io/github/detekt/tooling/api/Detekt {
-	public abstract fun run ()Lio/github/detekt/tooling/api/AnalysisResult;
-	public abstract fun run (Ljava/util/Collection;Lorg/jetbrains/kotlin/resolve/BindingContext;)Lio/github/detekt/tooling/api/AnalysisResult;
+public abstract interface class dev/detekt/tooling/api/Detekt {
+	public abstract fun run ()Ldev/detekt/tooling/api/AnalysisResult;
+	public abstract fun run (Ljava/util/Collection;Lorg/jetbrains/kotlin/resolve/BindingContext;)Ldev/detekt/tooling/api/AnalysisResult;
 }
 
-public abstract interface class io/github/detekt/tooling/api/DetektCli {
-	public static final field Companion Lio/github/detekt/tooling/api/DetektCli$Companion;
-	public abstract fun run ([Ljava/lang/String;)Lio/github/detekt/tooling/api/AnalysisResult;
-	public abstract fun run ([Ljava/lang/String;Ljava/lang/Appendable;Ljava/lang/Appendable;)Lio/github/detekt/tooling/api/AnalysisResult;
+public abstract interface class dev/detekt/tooling/api/DetektCli {
+	public static final field Companion Ldev/detekt/tooling/api/DetektCli$Companion;
+	public abstract fun run ([Ljava/lang/String;)Ldev/detekt/tooling/api/AnalysisResult;
+	public abstract fun run ([Ljava/lang/String;Ljava/lang/Appendable;Ljava/lang/Appendable;)Ldev/detekt/tooling/api/AnalysisResult;
 }
 
-public final class io/github/detekt/tooling/api/DetektCli$Companion {
-	public final fun load (Ljava/lang/ClassLoader;)Lio/github/detekt/tooling/api/DetektCli;
-	public static synthetic fun load$default (Lio/github/detekt/tooling/api/DetektCli$Companion;Ljava/lang/ClassLoader;ILjava/lang/Object;)Lio/github/detekt/tooling/api/DetektCli;
+public final class dev/detekt/tooling/api/DetektCli$Companion {
+	public final fun load (Ljava/lang/ClassLoader;)Ldev/detekt/tooling/api/DetektCli;
+	public static synthetic fun load$default (Ldev/detekt/tooling/api/DetektCli$Companion;Ljava/lang/ClassLoader;ILjava/lang/Object;)Ldev/detekt/tooling/api/DetektCli;
 }
 
-public abstract class io/github/detekt/tooling/api/DetektError : java/lang/RuntimeException {
+public abstract class dev/detekt/tooling/api/DetektError : java/lang/RuntimeException {
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 }
 
-public abstract interface class io/github/detekt/tooling/api/DetektProvider {
-	public static final field Companion Lio/github/detekt/tooling/api/DetektProvider$Companion;
-	public abstract fun get (Lio/github/detekt/tooling/api/spec/ProcessingSpec;)Lio/github/detekt/tooling/api/Detekt;
+public abstract interface class dev/detekt/tooling/api/DetektProvider {
+	public static final field Companion Ldev/detekt/tooling/api/DetektProvider$Companion;
+	public abstract fun get (Ldev/detekt/tooling/api/spec/ProcessingSpec;)Ldev/detekt/tooling/api/Detekt;
 	public fun getPriority ()I
 }
 
-public final class io/github/detekt/tooling/api/DetektProvider$Companion {
-	public final fun load (Ljava/lang/ClassLoader;)Lio/github/detekt/tooling/api/DetektProvider;
-	public static synthetic fun load$default (Lio/github/detekt/tooling/api/DetektProvider$Companion;Ljava/lang/ClassLoader;ILjava/lang/Object;)Lio/github/detekt/tooling/api/DetektProvider;
+public final class dev/detekt/tooling/api/DetektProvider$Companion {
+	public final fun load (Ljava/lang/ClassLoader;)Ldev/detekt/tooling/api/DetektProvider;
+	public static synthetic fun load$default (Ldev/detekt/tooling/api/DetektProvider$Companion;Ljava/lang/ClassLoader;ILjava/lang/Object;)Ldev/detekt/tooling/api/DetektProvider;
 }
 
-public final class io/github/detekt/tooling/api/InvalidConfig : io/github/detekt/tooling/api/DetektError {
+public final class dev/detekt/tooling/api/InvalidConfig : dev/detekt/tooling/api/DetektError {
 	public fun <init> (Ljava/lang/String;)V
 }
 
-public final class io/github/detekt/tooling/api/IssuesFound : io/github/detekt/tooling/api/DetektError {
+public final class dev/detekt/tooling/api/IssuesFound : dev/detekt/tooling/api/DetektError {
 	public fun <init> (Ljava/lang/String;)V
 }
 
-public final class io/github/detekt/tooling/api/UnexpectedError : io/github/detekt/tooling/api/DetektError {
+public final class dev/detekt/tooling/api/UnexpectedError : dev/detekt/tooling/api/DetektError {
 	public fun <init> (Ljava/lang/Throwable;)V
 	public fun getCause ()Ljava/lang/Throwable;
 }
 
-public abstract interface class io/github/detekt/tooling/api/VersionProvider {
-	public static final field Companion Lio/github/detekt/tooling/api/VersionProvider$Companion;
+public abstract interface class dev/detekt/tooling/api/VersionProvider {
+	public static final field Companion Ldev/detekt/tooling/api/VersionProvider$Companion;
 	public abstract fun current ()Ljava/lang/String;
 }
 
-public final class io/github/detekt/tooling/api/VersionProvider$Companion {
-	public final fun load (Ljava/lang/ClassLoader;)Lio/github/detekt/tooling/api/VersionProvider;
-	public static synthetic fun load$default (Lio/github/detekt/tooling/api/VersionProvider$Companion;Ljava/lang/ClassLoader;ILjava/lang/Object;)Lio/github/detekt/tooling/api/VersionProvider;
+public final class dev/detekt/tooling/api/VersionProvider$Companion {
+	public final fun load (Ljava/lang/ClassLoader;)Ldev/detekt/tooling/api/VersionProvider;
+	public static synthetic fun load$default (Ldev/detekt/tooling/api/VersionProvider$Companion;Ljava/lang/ClassLoader;ILjava/lang/Object;)Ldev/detekt/tooling/api/VersionProvider;
 }
 
-public abstract interface class io/github/detekt/tooling/api/spec/BaselineSpec {
+public abstract interface class dev/detekt/tooling/api/spec/BaselineSpec {
 	public abstract fun getPath ()Ljava/nio/file/Path;
 	public abstract fun getShouldCreateDuringAnalysis ()Z
 }
 
-public abstract interface class io/github/detekt/tooling/api/spec/CompilerSpec {
+public abstract interface class dev/detekt/tooling/api/spec/CompilerSpec {
 	public abstract fun getApiVersion ()Ljava/lang/String;
 	public abstract fun getClasspath ()Ljava/lang/String;
 	public abstract fun getFreeCompilerArgs ()Ljava/util/List;
@@ -110,121 +110,121 @@ public abstract interface class io/github/detekt/tooling/api/spec/CompilerSpec {
 	public abstract fun getLanguageVersion ()Ljava/lang/String;
 }
 
-public abstract interface class io/github/detekt/tooling/api/spec/ConfigSpec {
+public abstract interface class dev/detekt/tooling/api/spec/ConfigSpec {
 	public abstract fun getConfigPaths ()Ljava/util/Collection;
 	public abstract fun getResources ()Ljava/util/Collection;
 	public abstract fun getShouldValidateBeforeAnalysis ()Ljava/lang/Boolean;
 	public abstract fun getUseDefaultConfig ()Z
 }
 
-public abstract interface class io/github/detekt/tooling/api/spec/ExecutionSpec {
+public abstract interface class dev/detekt/tooling/api/spec/ExecutionSpec {
 	public abstract fun getExecutorService ()Ljava/util/concurrent/ExecutorService;
 	public abstract fun getParallelAnalysis ()Z
 	public abstract fun getParallelParsing ()Z
 }
 
-public abstract interface class io/github/detekt/tooling/api/spec/ExtensionsSpec {
+public abstract interface class dev/detekt/tooling/api/spec/ExtensionsSpec {
 	public abstract fun getDisabledExtensions ()Ljava/util/Set;
-	public abstract fun getPlugins ()Lio/github/detekt/tooling/api/spec/ExtensionsSpec$Plugins;
+	public abstract fun getPlugins ()Ldev/detekt/tooling/api/spec/ExtensionsSpec$Plugins;
 }
 
-public abstract interface class io/github/detekt/tooling/api/spec/ExtensionsSpec$Plugins {
+public abstract interface class dev/detekt/tooling/api/spec/ExtensionsSpec$Plugins {
 	public abstract fun getLoader ()Ljava/lang/ClassLoader;
 	public abstract fun getPaths ()Ljava/util/Collection;
 }
 
-public abstract interface class io/github/detekt/tooling/api/spec/LoggingSpec {
+public abstract interface class dev/detekt/tooling/api/spec/LoggingSpec {
 	public abstract fun getDebug ()Z
 	public abstract fun getErrorChannel ()Ljava/lang/Appendable;
 	public abstract fun getOutputChannel ()Ljava/lang/Appendable;
 }
 
-public abstract interface class io/github/detekt/tooling/api/spec/ProcessingSpec {
-	public static final field Companion Lio/github/detekt/tooling/api/spec/ProcessingSpec$Companion;
-	public abstract fun getBaselineSpec ()Lio/github/detekt/tooling/api/spec/BaselineSpec;
-	public abstract fun getCompilerSpec ()Lio/github/detekt/tooling/api/spec/CompilerSpec;
-	public abstract fun getConfigSpec ()Lio/github/detekt/tooling/api/spec/ConfigSpec;
-	public abstract fun getExecutionSpec ()Lio/github/detekt/tooling/api/spec/ExecutionSpec;
-	public abstract fun getExtensionsSpec ()Lio/github/detekt/tooling/api/spec/ExtensionsSpec;
-	public abstract fun getLoggingSpec ()Lio/github/detekt/tooling/api/spec/LoggingSpec;
-	public abstract fun getProjectSpec ()Lio/github/detekt/tooling/api/spec/ProjectSpec;
-	public abstract fun getReportsSpec ()Lio/github/detekt/tooling/api/spec/ReportsSpec;
-	public abstract fun getRulesSpec ()Lio/github/detekt/tooling/api/spec/RulesSpec;
+public abstract interface class dev/detekt/tooling/api/spec/ProcessingSpec {
+	public static final field Companion Ldev/detekt/tooling/api/spec/ProcessingSpec$Companion;
+	public abstract fun getBaselineSpec ()Ldev/detekt/tooling/api/spec/BaselineSpec;
+	public abstract fun getCompilerSpec ()Ldev/detekt/tooling/api/spec/CompilerSpec;
+	public abstract fun getConfigSpec ()Ldev/detekt/tooling/api/spec/ConfigSpec;
+	public abstract fun getExecutionSpec ()Ldev/detekt/tooling/api/spec/ExecutionSpec;
+	public abstract fun getExtensionsSpec ()Ldev/detekt/tooling/api/spec/ExtensionsSpec;
+	public abstract fun getLoggingSpec ()Ldev/detekt/tooling/api/spec/LoggingSpec;
+	public abstract fun getProjectSpec ()Ldev/detekt/tooling/api/spec/ProjectSpec;
+	public abstract fun getReportsSpec ()Ldev/detekt/tooling/api/spec/ReportsSpec;
+	public abstract fun getRulesSpec ()Ldev/detekt/tooling/api/spec/RulesSpec;
 }
 
-public final class io/github/detekt/tooling/api/spec/ProcessingSpec$Companion {
-	public final fun invoke (Lkotlin/jvm/functions/Function1;)Lio/github/detekt/tooling/api/spec/ProcessingSpec;
+public final class dev/detekt/tooling/api/spec/ProcessingSpec$Companion {
+	public final fun invoke (Lkotlin/jvm/functions/Function1;)Ldev/detekt/tooling/api/spec/ProcessingSpec;
 }
 
-public abstract interface class io/github/detekt/tooling/api/spec/ProjectSpec {
-	public abstract fun getAnalysisMode ()Lio/github/detekt/tooling/api/AnalysisMode;
+public abstract interface class dev/detekt/tooling/api/spec/ProjectSpec {
+	public abstract fun getAnalysisMode ()Ldev/detekt/tooling/api/AnalysisMode;
 	public abstract fun getBasePath ()Ljava/nio/file/Path;
 	public abstract fun getInputPaths ()Ljava/util/Collection;
 }
 
-public abstract interface class io/github/detekt/tooling/api/spec/ReportsSpec {
+public abstract interface class dev/detekt/tooling/api/spec/ReportsSpec {
 	public abstract fun getReports ()Ljava/util/Collection;
 }
 
-public abstract interface class io/github/detekt/tooling/api/spec/ReportsSpec$Report {
+public abstract interface class dev/detekt/tooling/api/spec/ReportsSpec$Report {
 	public abstract fun getPath ()Ljava/nio/file/Path;
 	public abstract fun getType ()Ljava/lang/String;
 }
 
-public abstract interface class io/github/detekt/tooling/api/spec/RulesSpec {
+public abstract interface class dev/detekt/tooling/api/spec/RulesSpec {
 	public abstract fun getActivateAllRules ()Z
 	public abstract fun getAutoCorrect ()Z
-	public abstract fun getFailurePolicy ()Lio/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy;
-	public abstract fun getRunPolicy ()Lio/github/detekt/tooling/api/spec/RulesSpec$RunPolicy;
+	public abstract fun getFailurePolicy ()Ldev/detekt/tooling/api/spec/RulesSpec$FailurePolicy;
+	public abstract fun getRunPolicy ()Ldev/detekt/tooling/api/spec/RulesSpec$RunPolicy;
 }
 
-public abstract class io/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy {
+public abstract class dev/detekt/tooling/api/spec/RulesSpec$FailurePolicy {
 }
 
-public final class io/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy$FailOnSeverity : io/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy {
-	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Severity;)V
-	public final fun component1 ()Lio/gitlab/arturbosch/detekt/api/Severity;
-	public final fun copy (Lio/gitlab/arturbosch/detekt/api/Severity;)Lio/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy$FailOnSeverity;
-	public static synthetic fun copy$default (Lio/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy$FailOnSeverity;Lio/gitlab/arturbosch/detekt/api/Severity;ILjava/lang/Object;)Lio/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy$FailOnSeverity;
+public final class dev/detekt/tooling/api/spec/RulesSpec$FailurePolicy$FailOnSeverity : dev/detekt/tooling/api/spec/RulesSpec$FailurePolicy {
+	public fun <init> (Ldev/detekt/api/Severity;)V
+	public final fun component1 ()Ldev/detekt/api/Severity;
+	public final fun copy (Ldev/detekt/api/Severity;)Ldev/detekt/tooling/api/spec/RulesSpec$FailurePolicy$FailOnSeverity;
+	public static synthetic fun copy$default (Ldev/detekt/tooling/api/spec/RulesSpec$FailurePolicy$FailOnSeverity;Ldev/detekt/api/Severity;ILjava/lang/Object;)Ldev/detekt/tooling/api/spec/RulesSpec$FailurePolicy$FailOnSeverity;
 	public fun equals (Ljava/lang/Object;)Z
-	public final fun getMinSeverity ()Lio/gitlab/arturbosch/detekt/api/Severity;
+	public final fun getMinSeverity ()Ldev/detekt/api/Severity;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy$NeverFail : io/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy {
-	public static final field INSTANCE Lio/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy$NeverFail;
-	public fun equals (Ljava/lang/Object;)Z
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public abstract class io/github/detekt/tooling/api/spec/RulesSpec$RunPolicy {
-}
-
-public final class io/github/detekt/tooling/api/spec/RulesSpec$RunPolicy$DisableDefaultRuleSets : io/github/detekt/tooling/api/spec/RulesSpec$RunPolicy {
-	public static final field INSTANCE Lio/github/detekt/tooling/api/spec/RulesSpec$RunPolicy$DisableDefaultRuleSets;
+public final class dev/detekt/tooling/api/spec/RulesSpec$FailurePolicy$NeverFail : dev/detekt/tooling/api/spec/RulesSpec$FailurePolicy {
+	public static final field INSTANCE Ldev/detekt/tooling/api/spec/RulesSpec$FailurePolicy$NeverFail;
 	public fun equals (Ljava/lang/Object;)Z
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/github/detekt/tooling/api/spec/RulesSpec$RunPolicy$NoRestrictions : io/github/detekt/tooling/api/spec/RulesSpec$RunPolicy {
-	public static final field INSTANCE Lio/github/detekt/tooling/api/spec/RulesSpec$RunPolicy$NoRestrictions;
+public abstract class dev/detekt/tooling/api/spec/RulesSpec$RunPolicy {
+}
+
+public final class dev/detekt/tooling/api/spec/RulesSpec$RunPolicy$DisableDefaultRuleSets : dev/detekt/tooling/api/spec/RulesSpec$RunPolicy {
+	public static final field INSTANCE Ldev/detekt/tooling/api/spec/RulesSpec$RunPolicy$DisableDefaultRuleSets;
 	public fun equals (Ljava/lang/Object;)Z
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/github/detekt/tooling/api/spec/RulesSpec$RunPolicy$RestrictToSingleRule : io/github/detekt/tooling/api/spec/RulesSpec$RunPolicy {
-	public fun <init> (Lio/gitlab/arturbosch/detekt/api/RuleSet$Id;Ljava/lang/String;)V
+public final class dev/detekt/tooling/api/spec/RulesSpec$RunPolicy$NoRestrictions : dev/detekt/tooling/api/spec/RulesSpec$RunPolicy {
+	public static final field INSTANCE Ldev/detekt/tooling/api/spec/RulesSpec$RunPolicy$NoRestrictions;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/detekt/tooling/api/spec/RulesSpec$RunPolicy$RestrictToSingleRule : dev/detekt/tooling/api/spec/RulesSpec$RunPolicy {
+	public fun <init> (Ldev/detekt/api/RuleSet$Id;Ljava/lang/String;)V
 	public final fun getRuleId ()Ljava/lang/String;
-	public final fun getRuleSetId ()Lio/gitlab/arturbosch/detekt/api/RuleSet$Id;
+	public final fun getRuleSetId ()Ldev/detekt/api/RuleSet$Id;
 }
 
-public final class io/github/detekt/tooling/dsl/BaselineSpecBuilder : io/github/detekt/tooling/dsl/Builder {
+public final class dev/detekt/tooling/dsl/BaselineSpecBuilder : dev/detekt/tooling/dsl/Builder {
 	public fun <init> ()V
-	public fun build ()Lio/github/detekt/tooling/api/spec/BaselineSpec;
+	public fun build ()Ldev/detekt/tooling/api/spec/BaselineSpec;
 	public synthetic fun build ()Ljava/lang/Object;
 	public final fun getPath ()Ljava/nio/file/Path;
 	public final fun getShouldCreateDuringAnalysis ()Z
@@ -232,13 +232,13 @@ public final class io/github/detekt/tooling/dsl/BaselineSpecBuilder : io/github/
 	public final fun setShouldCreateDuringAnalysis (Z)V
 }
 
-public abstract interface class io/github/detekt/tooling/dsl/Builder {
+public abstract interface class dev/detekt/tooling/dsl/Builder {
 	public abstract fun build ()Ljava/lang/Object;
 }
 
-public final class io/github/detekt/tooling/dsl/CompilerSpecBuilder : io/github/detekt/tooling/dsl/Builder {
+public final class dev/detekt/tooling/dsl/CompilerSpecBuilder : dev/detekt/tooling/dsl/Builder {
 	public fun <init> ()V
-	public fun build ()Lio/github/detekt/tooling/api/spec/CompilerSpec;
+	public fun build ()Ldev/detekt/tooling/api/spec/CompilerSpec;
 	public synthetic fun build ()Ljava/lang/Object;
 	public final fun getApiVersion ()Ljava/lang/String;
 	public final fun getClasspath ()Ljava/lang/String;
@@ -254,9 +254,9 @@ public final class io/github/detekt/tooling/dsl/CompilerSpecBuilder : io/github/
 	public final fun setLanguageVersion (Ljava/lang/String;)V
 }
 
-public final class io/github/detekt/tooling/dsl/ConfigSpecBuilder : io/github/detekt/tooling/dsl/Builder {
+public final class dev/detekt/tooling/dsl/ConfigSpecBuilder : dev/detekt/tooling/dsl/Builder {
 	public fun <init> ()V
-	public fun build ()Lio/github/detekt/tooling/api/spec/ConfigSpec;
+	public fun build ()Ldev/detekt/tooling/api/spec/ConfigSpec;
 	public synthetic fun build ()Ljava/lang/Object;
 	public final fun getConfigPaths ()Ljava/util/Collection;
 	public final fun getResources ()Ljava/util/Collection;
@@ -268,9 +268,9 @@ public final class io/github/detekt/tooling/dsl/ConfigSpecBuilder : io/github/de
 	public final fun setUseDefaultConfig (Z)V
 }
 
-public final class io/github/detekt/tooling/dsl/ExecutionSpecBuilder : io/github/detekt/tooling/dsl/Builder {
+public final class dev/detekt/tooling/dsl/ExecutionSpecBuilder : dev/detekt/tooling/dsl/Builder {
 	public fun <init> ()V
-	public fun build ()Lio/github/detekt/tooling/api/spec/ExecutionSpec;
+	public fun build ()Ldev/detekt/tooling/api/spec/ExecutionSpec;
 	public synthetic fun build ()Ljava/lang/Object;
 	public final fun getExecutorService ()Ljava/util/concurrent/ExecutorService;
 	public final fun getParallelAnalysis ()Z
@@ -280,20 +280,20 @@ public final class io/github/detekt/tooling/dsl/ExecutionSpecBuilder : io/github
 	public final fun setParallelParsing (Z)V
 }
 
-public final class io/github/detekt/tooling/dsl/ExtensionsSpecBuilder : io/github/detekt/tooling/dsl/Builder {
+public final class dev/detekt/tooling/dsl/ExtensionsSpecBuilder : dev/detekt/tooling/dsl/Builder {
 	public fun <init> ()V
-	public fun build ()Lio/github/detekt/tooling/api/spec/ExtensionsSpec;
+	public fun build ()Ldev/detekt/tooling/api/spec/ExtensionsSpec;
 	public synthetic fun build ()Ljava/lang/Object;
 	public final fun disableExtension (Ljava/lang/String;)V
 	public final fun fromClassloader (Lkotlin/jvm/functions/Function0;)V
 	public final fun fromPaths (Lkotlin/jvm/functions/Function0;)V
-	public final fun getPlugins ()Lio/github/detekt/tooling/api/spec/ExtensionsSpec$Plugins;
-	public final fun setPlugins (Lio/github/detekt/tooling/api/spec/ExtensionsSpec$Plugins;)V
+	public final fun getPlugins ()Ldev/detekt/tooling/api/spec/ExtensionsSpec$Plugins;
+	public final fun setPlugins (Ldev/detekt/tooling/api/spec/ExtensionsSpec$Plugins;)V
 }
 
-public final class io/github/detekt/tooling/dsl/LoggingSpecBuilder : io/github/detekt/tooling/dsl/Builder {
+public final class dev/detekt/tooling/dsl/LoggingSpecBuilder : dev/detekt/tooling/dsl/Builder {
 	public fun <init> ()V
-	public fun build ()Lio/github/detekt/tooling/api/spec/LoggingSpec;
+	public fun build ()Ldev/detekt/tooling/api/spec/LoggingSpec;
 	public synthetic fun build ()Ljava/lang/Object;
 	public final fun getDebug ()Z
 	public final fun getErrorChannel ()Ljava/lang/Appendable;
@@ -303,13 +303,13 @@ public final class io/github/detekt/tooling/dsl/LoggingSpecBuilder : io/github/d
 	public final fun setOutputChannel (Ljava/lang/Appendable;)V
 }
 
-public abstract interface annotation class io/github/detekt/tooling/dsl/ProcessingModelDsl : java/lang/annotation/Annotation {
+public abstract interface annotation class dev/detekt/tooling/dsl/ProcessingModelDsl : java/lang/annotation/Annotation {
 }
 
-public final class io/github/detekt/tooling/dsl/ProcessingSpecBuilder : io/github/detekt/tooling/dsl/Builder {
+public final class dev/detekt/tooling/dsl/ProcessingSpecBuilder : dev/detekt/tooling/dsl/Builder {
 	public fun <init> ()V
 	public final fun baseline (Lkotlin/jvm/functions/Function1;)V
-	public fun build ()Lio/github/detekt/tooling/api/spec/ProcessingSpec;
+	public fun build ()Ldev/detekt/tooling/api/spec/ProcessingSpec;
 	public synthetic fun build ()Ljava/lang/Object;
 	public final fun compiler (Lkotlin/jvm/functions/Function1;)V
 	public final fun config (Lkotlin/jvm/functions/Function1;)V
@@ -321,38 +321,38 @@ public final class io/github/detekt/tooling/dsl/ProcessingSpecBuilder : io/githu
 	public final fun rules (Lkotlin/jvm/functions/Function1;)V
 }
 
-public final class io/github/detekt/tooling/dsl/ProjectSpecBuilder : io/github/detekt/tooling/dsl/Builder {
+public final class dev/detekt/tooling/dsl/ProjectSpecBuilder : dev/detekt/tooling/dsl/Builder {
 	public fun <init> ()V
-	public fun build ()Lio/github/detekt/tooling/api/spec/ProjectSpec;
+	public fun build ()Ldev/detekt/tooling/api/spec/ProjectSpec;
 	public synthetic fun build ()Ljava/lang/Object;
-	public final fun getAnalysisMode ()Lio/github/detekt/tooling/api/AnalysisMode;
+	public final fun getAnalysisMode ()Ldev/detekt/tooling/api/AnalysisMode;
 	public final fun getBasePath ()Ljava/nio/file/Path;
 	public final fun getInputPaths ()Ljava/util/Collection;
-	public final fun setAnalysisMode (Lio/github/detekt/tooling/api/AnalysisMode;)V
+	public final fun setAnalysisMode (Ldev/detekt/tooling/api/AnalysisMode;)V
 	public final fun setBasePath (Ljava/nio/file/Path;)V
 	public final fun setInputPaths (Ljava/util/Collection;)V
 }
 
-public final class io/github/detekt/tooling/dsl/ReportsSpecBuilder : io/github/detekt/tooling/dsl/Builder {
+public final class dev/detekt/tooling/dsl/ReportsSpecBuilder : dev/detekt/tooling/dsl/Builder {
 	public fun <init> ()V
-	public fun build ()Lio/github/detekt/tooling/api/spec/ReportsSpec;
+	public fun build ()Ldev/detekt/tooling/api/spec/ReportsSpec;
 	public synthetic fun build ()Ljava/lang/Object;
 	public final fun getReports ()Ljava/util/Collection;
 	public final fun report (Lkotlin/jvm/functions/Function0;)V
 	public final fun setReports (Ljava/util/Collection;)V
 }
 
-public final class io/github/detekt/tooling/dsl/RulesSpecBuilder : io/github/detekt/tooling/dsl/Builder {
+public final class dev/detekt/tooling/dsl/RulesSpecBuilder : dev/detekt/tooling/dsl/Builder {
 	public fun <init> ()V
-	public fun build ()Lio/github/detekt/tooling/api/spec/RulesSpec;
+	public fun build ()Ldev/detekt/tooling/api/spec/RulesSpec;
 	public synthetic fun build ()Ljava/lang/Object;
 	public final fun getActivateAllRules ()Z
 	public final fun getAutoCorrect ()Z
-	public final fun getFailurePolicy ()Lio/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy;
-	public final fun getRunPolicy ()Lio/github/detekt/tooling/api/spec/RulesSpec$RunPolicy;
+	public final fun getFailurePolicy ()Ldev/detekt/tooling/api/spec/RulesSpec$FailurePolicy;
+	public final fun getRunPolicy ()Ldev/detekt/tooling/api/spec/RulesSpec$RunPolicy;
 	public final fun setActivateAllRules (Z)V
 	public final fun setAutoCorrect (Z)V
-	public final fun setFailurePolicy (Lio/github/detekt/tooling/api/spec/RulesSpec$FailurePolicy;)V
-	public final fun setRunPolicy (Lio/github/detekt/tooling/api/spec/RulesSpec$RunPolicy;)V
+	public final fun setFailurePolicy (Ldev/detekt/tooling/api/spec/RulesSpec$FailurePolicy;)V
+	public final fun setRunPolicy (Ldev/detekt/tooling/api/spec/RulesSpec$RunPolicy;)V
 }
 

@@ -9,7 +9,8 @@ import org.gradle.api.provider.Property
 import org.gradle.api.provider.SetProperty
 
 open class KotlinCompileTaskDetektExtension(project: Project) {
-    val reports: NamedDomainObjectContainer<DetektReport> = project.container(DetektReport::class.java)
+    val reports: NamedDomainObjectContainer<DetektCompilerPluginReport> =
+        project.container(DetektCompilerPluginReport::class.java)
 
     init {
         reports.create("xml")
@@ -30,7 +31,7 @@ open class KotlinCompileTaskDetektExtension(project: Project) {
     val config: ConfigurableFileCollection = objects.fileCollection()
     val excludes: SetProperty<String> = objects.setProperty(String::class.java)
 
-    fun getXml(): DetektReport = reports.getByName("xml")
-    fun getHtml(): DetektReport = reports.getByName("html")
-    fun getSarif(): DetektReport = reports.getByName("sarif")
+    fun getXml(): DetektCompilerPluginReport = reports.getByName("xml")
+    fun getHtml(): DetektCompilerPluginReport = reports.getByName("html")
+    fun getSarif(): DetektCompilerPluginReport = reports.getByName("sarif")
 }

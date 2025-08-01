@@ -1,70 +1,70 @@
-public final class io/gitlab/arturbosch/detekt/test/FakeLanguageVersionSettingsKt {
+public final class dev/detekt/test/FakeLanguageVersionSettingsKt {
 	public static final fun FakeLanguageVersionSettings (Lorg/jetbrains/kotlin/config/ExplicitApiMode;)Lorg/jetbrains/kotlin/config/LanguageVersionSettingsImpl;
 	public static synthetic fun FakeLanguageVersionSettings$default (Lorg/jetbrains/kotlin/config/ExplicitApiMode;ILjava/lang/Object;)Lorg/jetbrains/kotlin/config/LanguageVersionSettingsImpl;
 }
 
-public final class io/gitlab/arturbosch/detekt/test/FindingAssert : org/assertj/core/api/AbstractAssert {
-	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Finding;)V
-	public final fun getActual ()Lio/gitlab/arturbosch/detekt/api/Finding;
-	public final fun hasMessage (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/test/FindingAssert;
-	public final fun hasSourceLocation (II)Lio/gitlab/arturbosch/detekt/test/FindingAssert;
-	public final fun noSuppress ()Lio/gitlab/arturbosch/detekt/test/FindingAssert;
+public final class dev/detekt/test/FindingAssert : org/assertj/core/api/AbstractAssert {
+	public fun <init> (Ldev/detekt/api/Finding;)V
+	public final fun getActual ()Ldev/detekt/api/Finding;
+	public final fun hasMessage (Ljava/lang/String;)Ldev/detekt/test/FindingAssert;
+	public final fun hasSourceLocation (II)Ldev/detekt/test/FindingAssert;
+	public final fun noSuppress ()Ldev/detekt/test/FindingAssert;
 }
 
-public final class io/gitlab/arturbosch/detekt/test/FindingExtensionsKt {
-	public static final fun getLocation (Lio/gitlab/arturbosch/detekt/api/Finding;)Lio/gitlab/arturbosch/detekt/api/Location;
+public final class dev/detekt/test/FindingExtensionsKt {
+	public static final fun getLocation (Ldev/detekt/api/Finding;)Ldev/detekt/api/Location;
 }
 
-public final class io/gitlab/arturbosch/detekt/test/FindingsAssert : org/assertj/core/api/AbstractListAssert {
+public final class dev/detekt/test/FindingsAssert : org/assertj/core/api/AbstractListAssert {
 	public fun <init> (Ljava/util/List;)V
-	public final fun hasEndSourceLocation (II)Lio/gitlab/arturbosch/detekt/test/FindingsAssert;
-	public final fun hasEndSourceLocations ([Lio/gitlab/arturbosch/detekt/api/SourceLocation;)Lio/gitlab/arturbosch/detekt/test/FindingsAssert;
-	public final fun hasStartSourceLocation (II)Lio/gitlab/arturbosch/detekt/test/FindingsAssert;
-	public final fun hasStartSourceLocations ([Lio/gitlab/arturbosch/detekt/api/SourceLocation;)Lio/gitlab/arturbosch/detekt/test/FindingsAssert;
-	public final fun hasTextLocations ([Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/test/FindingsAssert;
-	public final fun hasTextLocations ([Lkotlin/Pair;)Lio/gitlab/arturbosch/detekt/test/FindingsAssert;
+	public final fun hasEndSourceLocation (II)Ldev/detekt/test/FindingsAssert;
+	public final fun hasEndSourceLocations ([Ldev/detekt/api/SourceLocation;)Ldev/detekt/test/FindingsAssert;
+	public final fun hasStartSourceLocation (II)Ldev/detekt/test/FindingsAssert;
+	public final fun hasStartSourceLocations ([Ldev/detekt/api/SourceLocation;)Ldev/detekt/test/FindingsAssert;
+	public final fun hasTextLocations ([Ljava/lang/String;)Ldev/detekt/test/FindingsAssert;
+	public final fun hasTextLocations ([Lkotlin/Pair;)Ldev/detekt/test/FindingsAssert;
 	public synthetic fun newAbstractIterableAssert (Ljava/lang/Iterable;)Lorg/assertj/core/api/AbstractIterableAssert;
 	public synthetic fun toAssert (Ljava/lang/Object;Ljava/lang/String;)Lorg/assertj/core/api/AbstractAssert;
 }
 
-public final class io/gitlab/arturbosch/detekt/test/FindingsAssertionsKt {
-	public static final fun assertThat (Lio/gitlab/arturbosch/detekt/api/Finding;)Lio/gitlab/arturbosch/detekt/test/FindingAssert;
-	public static final fun assertThat (Ljava/util/List;)Lio/gitlab/arturbosch/detekt/test/FindingsAssert;
+public final class dev/detekt/test/FindingsAssertionsKt {
+	public static final fun assertThat (Ldev/detekt/api/Finding;)Ldev/detekt/test/FindingAssert;
+	public static final fun assertThat (Ljava/util/List;)Ldev/detekt/test/FindingsAssert;
 }
 
-public final class io/gitlab/arturbosch/detekt/test/KotlinCoreEnvironmentExtensionsKt {
-	public static final fun createBindingContext (Lio/github/detekt/test/utils/KotlinEnvironmentContainer;Ljava/util/List;)Lorg/jetbrains/kotlin/resolve/BindingContext;
+public final class dev/detekt/test/KotlinCoreEnvironmentExtensionsKt {
+	public static final fun createBindingContext (Ldev/detekt/test/utils/KotlinEnvironmentContainer;Ljava/util/List;)Lorg/jetbrains/kotlin/resolve/BindingContext;
 }
 
-public final class io/gitlab/arturbosch/detekt/test/ResourcesKt {
-	public static final fun yamlConfig (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/Config;
-	public static final fun yamlConfigFromContent (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/Config;
+public final class dev/detekt/test/ResourcesKt {
+	public static final fun yamlConfig (Ljava/lang/String;)Ldev/detekt/api/Config;
+	public static final fun yamlConfigFromContent (Ljava/lang/String;)Ldev/detekt/api/Config;
 }
 
-public final class io/gitlab/arturbosch/detekt/test/RuleExtensionsKt {
-	public static final fun lint (Lio/gitlab/arturbosch/detekt/api/Rule;Ljava/lang/String;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;Z)Ljava/util/List;
-	public static final fun lint (Lio/gitlab/arturbosch/detekt/api/Rule;Lorg/jetbrains/kotlin/psi/KtFile;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;)Ljava/util/List;
-	public static synthetic fun lint$default (Lio/gitlab/arturbosch/detekt/api/Rule;Ljava/lang/String;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;ZILjava/lang/Object;)Ljava/util/List;
-	public static synthetic fun lint$default (Lio/gitlab/arturbosch/detekt/api/Rule;Lorg/jetbrains/kotlin/psi/KtFile;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;ILjava/lang/Object;)Ljava/util/List;
-	public static final fun lintWithContext (Lio/gitlab/arturbosch/detekt/api/Rule;Lio/github/detekt/test/utils/KotlinEnvironmentContainer;Ljava/lang/String;[Ljava/lang/String;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;Z)Ljava/util/List;
-	public static final fun lintWithContext (Lio/gitlab/arturbosch/detekt/api/Rule;Lio/github/detekt/test/utils/KotlinEnvironmentContainer;Ljava/lang/String;[Ljava/lang/String;Z)Ljava/util/List;
-	public static synthetic fun lintWithContext$default (Lio/gitlab/arturbosch/detekt/api/Rule;Lio/github/detekt/test/utils/KotlinEnvironmentContainer;Ljava/lang/String;[Ljava/lang/String;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;ZILjava/lang/Object;)Ljava/util/List;
-	public static synthetic fun lintWithContext$default (Lio/gitlab/arturbosch/detekt/api/Rule;Lio/github/detekt/test/utils/KotlinEnvironmentContainer;Ljava/lang/String;[Ljava/lang/String;ZILjava/lang/Object;)Ljava/util/List;
+public final class dev/detekt/test/RuleExtensionsKt {
+	public static final fun lint (Ldev/detekt/api/Rule;Ljava/lang/String;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;Z)Ljava/util/List;
+	public static final fun lint (Ldev/detekt/api/Rule;Lorg/jetbrains/kotlin/psi/KtFile;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;)Ljava/util/List;
+	public static synthetic fun lint$default (Ldev/detekt/api/Rule;Ljava/lang/String;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;ZILjava/lang/Object;)Ljava/util/List;
+	public static synthetic fun lint$default (Ldev/detekt/api/Rule;Lorg/jetbrains/kotlin/psi/KtFile;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;ILjava/lang/Object;)Ljava/util/List;
+	public static final fun lintWithContext (Ldev/detekt/api/Rule;Ldev/detekt/test/utils/KotlinEnvironmentContainer;Ljava/lang/String;[Ljava/lang/String;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;Z)Ljava/util/List;
+	public static final fun lintWithContext (Ldev/detekt/api/Rule;Ldev/detekt/test/utils/KotlinEnvironmentContainer;Ljava/lang/String;[Ljava/lang/String;Z)Ljava/util/List;
+	public static synthetic fun lintWithContext$default (Ldev/detekt/api/Rule;Ldev/detekt/test/utils/KotlinEnvironmentContainer;Ljava/lang/String;[Ljava/lang/String;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;ZILjava/lang/Object;)Ljava/util/List;
+	public static synthetic fun lintWithContext$default (Ldev/detekt/api/Rule;Ldev/detekt/test/utils/KotlinEnvironmentContainer;Ljava/lang/String;[Ljava/lang/String;ZILjava/lang/Object;)Ljava/util/List;
 }
 
-public final class io/gitlab/arturbosch/detekt/test/TestConfig : io/gitlab/arturbosch/detekt/api/Config {
-	public fun <init> (Lio/gitlab/arturbosch/detekt/api/Config;[Lkotlin/Pair;)V
+public final class dev/detekt/test/TestConfig : dev/detekt/api/Config {
+	public fun <init> (Ldev/detekt/api/Config;[Lkotlin/Pair;)V
 	public fun <init> ([Lkotlin/Pair;)V
-	public fun getParent ()Lio/gitlab/arturbosch/detekt/api/Config;
+	public fun getParent ()Ldev/detekt/api/Config;
 	public fun getParentPath ()Ljava/lang/String;
-	public synthetic fun subConfig (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/api/Config;
-	public fun subConfig (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/test/TestConfig;
+	public synthetic fun subConfig (Ljava/lang/String;)Ldev/detekt/api/Config;
+	public fun subConfig (Ljava/lang/String;)Ldev/detekt/test/TestConfig;
 	public fun subConfigKeys ()Ljava/util/Set;
 	public fun valueOrDefault (Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/Object;
 	public fun valueOrNull (Ljava/lang/String;)Ljava/lang/Object;
 }
 
-public final class io/gitlab/arturbosch/detekt/test/TestConfigKt {
-	public static final fun toConfig (Lio/gitlab/arturbosch/detekt/api/ValueWithReason;)Ljava/util/Map;
+public final class dev/detekt/test/TestConfigKt {
+	public static final fun toConfig (Ldev/detekt/api/ValueWithReason;)Ljava/util/Map;
 }
 
