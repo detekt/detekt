@@ -39,7 +39,8 @@ dokka {
     }
 
     dokkaSourceSets.configureEach {
-        apiVersion = "1.4"
+        // Using `set` instead of simple property assignment to work around this Gradle 9 incompatibility: https://github.com/Kotlin/dokka/issues/4096
+        apiVersion.set("1.4")
         modulePath = "detekt-gradle-plugin"
 
         externalDocumentationLinks {
@@ -99,7 +100,7 @@ testing {
 
 kotlin {
     @OptIn(ExperimentalBuildToolsApi::class, ExperimentalKotlinGradlePluginApi::class)
-    compilerVersion = "2.0.21"
+    compilerVersion = "2.1.21"
 
     compilerOptions {
         suppressWarnings = true
@@ -108,7 +109,8 @@ kotlin {
         allWarningsAsErrors = false
         // The apiVersion Gradle property cannot be used here, so set api version using free compiler args.
         // https://youtrack.jetbrains.com/issue/KT-72247/KGP-Cannot-use-unsupported-API-version-with-compilerVersion-that-supports-it#focus=Comments-27-11050897.0-0
-        freeCompilerArgs.addAll("-api-version", "1.4")
+        freeCompilerArgs.addAll("-language-version", "1.8")
+        freeCompilerArgs.addAll("-api-version", "1.7")
     }
 
     // Some functional tests reference internal functions in the Gradle plugin. This should become unnecessary as further

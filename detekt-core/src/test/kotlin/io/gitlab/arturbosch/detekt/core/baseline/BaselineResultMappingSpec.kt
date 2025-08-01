@@ -1,11 +1,11 @@
 package io.gitlab.arturbosch.detekt.core.baseline
 
-import io.github.detekt.test.utils.createTempDirectoryForTest
-import io.github.detekt.test.utils.resourceAsPath
-import io.gitlab.arturbosch.detekt.test.TestSetupContext
-import io.gitlab.arturbosch.detekt.test.createEntity
-import io.gitlab.arturbosch.detekt.test.createIssue
-import io.gitlab.arturbosch.detekt.test.createRuleInstance
+import dev.detekt.api.testfixtures.TestSetupContext
+import dev.detekt.api.testfixtures.createEntity
+import dev.detekt.api.testfixtures.createIssue
+import dev.detekt.api.testfixtures.createRuleInstance
+import dev.detekt.test.utils.createTempDirectoryForTest
+import dev.detekt.test.utils.resourceAsPath
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test

@@ -4,7 +4,7 @@ plugins {
 }
 
 dependencies {
-    implementation(libs.ktlint.rulesetStandard) {
+    runtimeOnly(libs.ktlint.rulesetStandard) {
         exclude(group = "org.jetbrains.kotlin")
     }
 }

@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.core.baseline
 
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.ReportingExtension
-import io.gitlab.arturbosch.detekt.api.SetupContext
-import io.gitlab.arturbosch.detekt.api.getOrNull
+import dev.detekt.api.Issue
+import dev.detekt.api.ReportingExtension
+import dev.detekt.api.SetupContext
+import dev.detekt.api.getOrNull
 import java.nio.file.Path
 import kotlin.io.path.createParentDirectories
 import kotlin.io.path.exists

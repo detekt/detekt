@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.formatting
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.SourceLocation
+import dev.detekt.api.Config
+import dev.detekt.api.SourceLocation
+import dev.detekt.test.assertThat
+import dev.detekt.test.lint
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoUnusedImports
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Test
 
 class NoUnusedImportsSpec {

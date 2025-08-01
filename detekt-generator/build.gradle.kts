@@ -7,7 +7,7 @@ plugins {
 }
 
 application {
-    mainClass = "io.gitlab.arturbosch.detekt.generator.Main"
+    mainClass = "dev.detekt.generator.Main"
 }
 
 val detektCli by configurations.dependencyScope("detektCli")
@@ -86,7 +86,7 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
         configurations.compileClasspath.get(),
         sourceSets.main.get().output,
     )
-    mainClass = "io.gitlab.arturbosch.detekt.generator.Main"
+    mainClass = "dev.detekt.generator.Main"
     args = listOf(
         "--input",
         ruleModules.joinToString(","),

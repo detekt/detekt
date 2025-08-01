@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.core.reporting.console
 
+import dev.detekt.api.ConsoleReport
+import dev.detekt.api.Detektion
 import io.github.detekt.metrics.ComplexityReportGenerator
-import io.gitlab.arturbosch.detekt.api.ConsoleReport
-import io.gitlab.arturbosch.detekt.api.Detektion
 
 /**
  * Contains metrics concerning the analyzed code.

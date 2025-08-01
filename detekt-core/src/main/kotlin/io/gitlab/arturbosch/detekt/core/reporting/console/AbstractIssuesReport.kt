@@ -1,11 +1,11 @@
 package io.gitlab.arturbosch.detekt.core.reporting.console
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.ConsoleReport
-import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.SetupContext
-import io.gitlab.arturbosch.detekt.api.suppressed
+import dev.detekt.api.Config
+import dev.detekt.api.ConsoleReport
+import dev.detekt.api.Detektion
+import dev.detekt.api.Issue
+import dev.detekt.api.SetupContext
+import dev.detekt.api.suppressed
 
 abstract class AbstractIssuesReport : ConsoleReport {
 

@@ -1,13 +1,13 @@
 package io.gitlab.arturbosch.detekt.formatting
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RuleSet
-import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.api.modifiedText
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lint
-import io.gitlab.arturbosch.detekt.test.yamlConfigFromContent
+import dev.detekt.api.Config
+import dev.detekt.api.Finding
+import dev.detekt.api.RuleSet
+import dev.detekt.api.RuleSetProvider
+import dev.detekt.api.modifiedText
+import dev.detekt.test.assertThat
+import dev.detekt.test.lint
+import dev.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtFile
 import org.junit.jupiter.params.ParameterizedTest

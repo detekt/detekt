@@ -6,11 +6,11 @@ import com.intellij.openapi.Disposable
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Disposer
 import com.intellij.pom.PomModel
-import io.github.detekt.parser.DetektPomModel
-import io.github.detekt.parser.createCompilerConfiguration
-import io.github.detekt.tooling.api.spec.CompilerSpec
-import io.github.detekt.tooling.api.spec.LoggingSpec
-import io.github.detekt.tooling.api.spec.ProjectSpec
+import dev.detekt.parser.DetektPomModel
+import dev.detekt.parser.createCompilerConfiguration
+import dev.detekt.tooling.api.spec.CompilerSpec
+import dev.detekt.tooling.api.spec.LoggingSpec
+import dev.detekt.tooling.api.spec.ProjectSpec
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.projectStructure.KaSourceModule
 import org.jetbrains.kotlin.analysis.api.standalone.buildStandaloneAnalysisAPISession

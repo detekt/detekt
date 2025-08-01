@@ -1,11 +1,11 @@
 package io.gitlab.arturbosch.detekt.core.tooling
 
-import io.github.detekt.tooling.api.DefaultConfigurationProvider
-import io.github.detekt.tooling.api.spec.ExtensionsSpec
-import io.github.detekt.tooling.api.spec.ProcessingSpec
-import io.github.detekt.utils.getSafeResourceAsStream
-import io.github.detekt.utils.openSafeStream
-import io.gitlab.arturbosch.detekt.api.Config
+import dev.detekt.api.Config
+import dev.detekt.tooling.api.DefaultConfigurationProvider
+import dev.detekt.tooling.api.spec.ExtensionsSpec
+import dev.detekt.tooling.api.spec.ProcessingSpec
+import dev.detekt.utils.getSafeResourceAsStream
+import dev.detekt.utils.openSafeStream
 import io.gitlab.arturbosch.detekt.core.config.YamlConfig
 import io.gitlab.arturbosch.detekt.core.settings.ExtensionFacade
 import java.io.ByteArrayInputStream

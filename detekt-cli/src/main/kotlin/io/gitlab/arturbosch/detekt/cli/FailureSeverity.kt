@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.cli
 
-import io.gitlab.arturbosch.detekt.api.Severity
+import dev.detekt.api.Severity
 
 enum class FailureSeverity {
     Error,
