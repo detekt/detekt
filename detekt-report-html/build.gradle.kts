@@ -9,6 +9,8 @@ dependencies {
     implementation(libs.kotlinx.html) {
         exclude(group = "org.jetbrains.kotlin")
     }
+
+    testImplementation(libs.kotlin.compiler)
     testImplementation(projects.detektMetrics)
     testImplementation(projects.detektTestUtils)
     testImplementation(testFixtures(projects.detektApi))
