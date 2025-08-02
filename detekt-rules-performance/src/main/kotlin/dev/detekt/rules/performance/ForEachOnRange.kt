@@ -9,9 +9,9 @@ import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.psi.KtPsiUtil
 import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
-import org.jetbrains.kotlin.psi2ir.deparenthesize
 
 /**
  * Using the forEach method on ranges has a heavy performance cost. Prefer using simple for loops.
@@ -58,7 +58,7 @@ class ForEachOnRange(config: Config) : Rule(
             if (!it.textMatches("forEach")) {
                 return
             }
-            val forExpression = it.getReceiverExpression()?.deparenthesize()
+            val forExpression = it.getReceiverExpression()?.let { receiver -> KtPsiUtil.safeDeparenthesize(receiver) }
             if (forExpression != null && isRangeOperatorsChainCall(forExpression)) {
                 report(Finding(Entity.from(forExpression), description))
             }
@@ -71,12 +71,12 @@ class ForEachOnRange(config: Config) : Rule(
         } else {
             when (expression) {
                 is KtBinaryExpression -> {
-                    val receiverExpression = expression.left?.deparenthesize() ?: return false
+                    val receiverExpression = expression.left?.let { KtPsiUtil.safeDeparenthesize(it) } ?: return false
                     isRangeOperatorsChainCall(receiverExpression)
                 }
 
                 is KtDotQualifiedExpression -> {
-                    val receiverExpression = expression.receiverExpression.deparenthesize()
+                    val receiverExpression = KtPsiUtil.safeDeparenthesize(expression.receiverExpression)
                     isRangeOperatorsChainCall(receiverExpression)
                 }
 

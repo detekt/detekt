@@ -32,6 +32,7 @@ import org.jetbrains.kotlin.psi.KtObjectLiteralExpression
 import org.jetbrains.kotlin.psi.KtParenthesizedExpression
 import org.jetbrains.kotlin.psi.KtPostfixExpression
 import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.psi.KtPsiUtil
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
@@ -40,7 +41,6 @@ import org.jetbrains.kotlin.psi.psiUtil.getParentOfTypes
 import org.jetbrains.kotlin.psi.psiUtil.parents
 import org.jetbrains.kotlin.psi.psiUtil.parentsWithSelf
 import org.jetbrains.kotlin.psi.psiUtil.siblings
-import org.jetbrains.kotlin.psi2ir.deparenthesize
 
 /**
  * Prefer using the `use` function with `Closeable` or `AutoCloseable`. As `use` function ensures proper closure of
@@ -108,10 +108,12 @@ class MissingUseCall(config: Config = Config.empty) :
         }
     }
 
-    private fun KaSession.isChildOfCloseable(expression: KtExpression): Boolean {
-        val symbol = (expression as? KtObjectLiteralExpression)?.symbol
-            ?: expression.deparenthesize().resolveToCall()?.singleFunctionCallOrNull()?.symbol?.returnType?.symbol
-            ?: return false
+    private fun KaSession.isChildOfCloseable(expr: KtExpression): Boolean {
+        val symbol = if (expr is KtObjectLiteralExpression) {
+            expr.symbol
+        } else {
+            KtPsiUtil.safeDeparenthesize(expr).resolveToCall()?.singleFunctionCallOrNull()?.symbol?.returnType?.symbol
+        } ?: return false
         return isChildOfCloseable(symbol)
     }
 
