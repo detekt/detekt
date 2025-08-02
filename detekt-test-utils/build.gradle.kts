@@ -17,7 +17,3 @@ dependencies {
 
     testImplementation(libs.assertj.core)
 }
-
-apiValidation {
-    ignoredPackages.add("dev.detekt.test.utils.internal")
-}
