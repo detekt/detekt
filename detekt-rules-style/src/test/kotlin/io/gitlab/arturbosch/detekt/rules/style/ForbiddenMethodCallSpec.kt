@@ -651,6 +651,25 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
             ).lintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
+
+        @Test
+        fun `should report property getter and setter call`() {
+            val code = """
+                import java.util.Calendar
+                
+                fun main() {
+                    val calendar = Calendar.getInstance()
+                    val day = calendar.firstDayOfWeek
+                    calendar.firstDayOfWeek = 1
+                }
+            """.trimIndent()
+            val findings = ForbiddenMethodCall(
+                TestConfig(
+                    METHODS to listOf("java.util.Calendar.getFirstDayOfWeek", "java.util.Calendar.setFirstDayOfWeek"),
+                )
+            ).lintWithContext(env, code)
+            assertThat(findings).hasSize(2)
+        }
     }
 
     @Test
