@@ -23,11 +23,8 @@ dependencies {
     implementation(projects.detektUtils)
     implementation(libs.jcommander)
 
-    testImplementation(projects.detektCore)
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.assertj.core)
-    testImplementation(libs.classgraph)
-    testRuntimeOnly(projects.detektRules)
 }
 
 val generateCliOptions by tasks.registering(JavaExec::class) {
