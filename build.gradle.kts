@@ -25,6 +25,7 @@ dokka {
 
 dependencyAnalysis {
     structure {
+        // Could potentially remove in future if DAGP starts handling this natively https://github.com/autonomousapps/dependency-analysis-gradle-plugin/issues/1269
         bundle("junit-jupiter") {
             includeDependency("org.junit.jupiter:junit-jupiter")
             includeDependency("org.junit.jupiter:junit-jupiter-api")
