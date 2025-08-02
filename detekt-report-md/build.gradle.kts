@@ -3,8 +3,8 @@ plugins {
 }
 
 dependencies {
+    compileOnly(projects.detektApi)
     implementation(projects.detektMetrics)
-    implementation(projects.detektApi)
     implementation(projects.detektUtils)
 
     testImplementation(testFixtures(projects.detektApi))
