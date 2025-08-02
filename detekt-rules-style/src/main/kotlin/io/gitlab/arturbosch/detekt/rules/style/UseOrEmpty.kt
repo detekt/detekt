@@ -19,8 +19,8 @@ import org.jetbrains.kotlin.psi.KtArrayAccessExpression
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtPsiUtil
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
-import org.jetbrains.kotlin.psi2ir.deparenthesize
 
 /**
  * This rule detects `?: emptyList()` that can be replaced with `orEmpty()` call.
@@ -60,7 +60,7 @@ class UseOrEmpty(config: Config) :
         val leftType = analyze(left) {
             val leftType = left.expressionType ?: return
             if (!leftType.nullability.isNullable) return
-            left.deparenthesize().let {
+            KtPsiUtil.safeDeparenthesize(left).let {
                 if (it is KtArrayAccessExpression) {
                     val called = it.resolveToCall()?.singleFunctionCallOrNull()?.symbol as? KaNamedFunctionSymbol
                     if (called?.isOperator == true && called.typeParameters.isNotEmpty()) return

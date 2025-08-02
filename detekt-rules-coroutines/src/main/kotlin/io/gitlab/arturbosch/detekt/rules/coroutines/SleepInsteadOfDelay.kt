@@ -21,11 +21,11 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.psi.KtPsiUtil
 import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfTypes
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfTypesAndPredicate
-import org.jetbrains.kotlin.psi2ir.deparenthesize
 
 /**
  * Report usages of `Thread.sleep` in suspending functions and coroutine blocks. A thread can
@@ -98,7 +98,7 @@ class SleepInsteadOfDelay(config: Config) :
     private fun getNearestParentForSuspension(psiElement: PsiElement): PsiElement? {
         fun KtValueArgument.isNearestParentForSuspension(): Boolean {
             val parent = this.getParentOfTypes(true, KtCallExpression::class.java) ?: return false
-            val argumentExpression = this.getArgumentExpression()?.deparenthesize()
+            val argumentExpression = this.getArgumentExpression()?.let { KtPsiUtil.deparenthesize(it) }
             with(session) {
                 val functionCall = parent.resolveToCall()?.singleFunctionCallOrNull() ?: return false
                 val functionSymbol = functionCall.symbol as? KaNamedFunctionSymbol ?: return false
@@ -134,7 +134,7 @@ class SleepInsteadOfDelay(config: Config) :
     context(session: KaSession)
     private fun KtValueArgument.isSuspendAllowed(): Boolean {
         val parent = this.getParentOfTypes(true, KtCallExpression::class.java) ?: return false
-        val argumentExpression = this.getArgumentExpression()?.deparenthesize() ?: return false
+        val argumentExpression = this.getArgumentExpression()?.let { KtPsiUtil.safeDeparenthesize(it) } ?: return false
         with(session) {
             val parameter = parent.resolveToCall()?.singleFunctionCallOrNull()?.argumentMapping[argumentExpression]
             return parameter?.returnType?.isSuspendFunctionType == true
