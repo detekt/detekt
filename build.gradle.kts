@@ -23,6 +23,16 @@ dokka {
     }
 }
 
+dependencyAnalysis {
+    structure {
+        bundle("junit-jupiter") {
+            includeDependency("org.junit.jupiter:junit-jupiter")
+            includeDependency("org.junit.jupiter:junit-jupiter-api")
+            includeDependency("org.junit.jupiter:junit-jupiter-params")
+        }
+    }
+}
+
 val detektReportMergeSarif by tasks.registering(ReportMergeTask::class) {
     output = layout.buildDirectory.file("reports/detekt/merge.sarif.json")
 }
