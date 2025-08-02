@@ -16,6 +16,7 @@ val detektCliClasspath by configurations.resolvable("detektCliClasspath") {
 }
 
 dependencies {
+    implementation(libs.kotlin.compiler)
     implementation(projects.detektParser)
     implementation(projects.detektApi)
     implementation(projects.detektPsiUtils)
@@ -23,11 +24,8 @@ dependencies {
     implementation(projects.detektUtils)
     implementation(libs.jcommander)
 
-    testImplementation(projects.detektCore)
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.assertj.core)
-    testImplementation(libs.classgraph)
-    testRuntimeOnly(projects.detektRules)
 }
 
 val generateCliOptions by tasks.registering(JavaExec::class) {
