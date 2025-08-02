@@ -11,11 +11,6 @@ plugins {
     id("jacoco")
 }
 
-tasks.withType<AbstractArchiveTask>().configureEach {
-    isPreserveFileTimestamps = false
-    isReproducibleFileOrder = true
-}
-
 // Add attributes to JAR manifest, to be used at runtime
 tasks.withType<Jar>().configureEach {
     manifest {
