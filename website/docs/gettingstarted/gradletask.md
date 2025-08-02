@@ -22,7 +22,7 @@ configurations {
 }
 
 def detektTask = tasks.register("detekt", JavaExec) {
-	mainClass = "io.gitlab.arturbosch.detekt.cli.Main"
+	mainClass = "dev.detekt.cli.Main"
 	classpath = configurations.detekt
 
 	def input = "$projectDir"
@@ -50,7 +50,7 @@ repositories {
 val detekt by configurations.creating
 
 val detektTask = tasks.register<JavaExec>("detekt") {
-    mainClass.set("io.gitlab.arturbosch.detekt.cli.Main")
+    mainClass.set("dev.detekt.cli.Main")
     classpath = detekt
 
     val input = projectDir

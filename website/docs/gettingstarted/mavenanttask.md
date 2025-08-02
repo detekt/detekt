@@ -28,7 +28,7 @@ sidebar_position: 4
                             <java taskname="detekt" dir="${basedir}"
                                   fork="true" 
                                   failonerror="true"
-                                  classname="io.gitlab.arturbosch.detekt.cli.Main"
+                                  classname="dev.detekt.cli.Main"
                                   classpathref="maven.plugin.classpath">
                                 <arg value="--input"/>
                                 <arg value="${basedir}/src/main/kotlin"/>

@@ -7,7 +7,7 @@ plugins {
 }
 
 application {
-    mainClass = "io.gitlab.arturbosch.detekt.cli.Main"
+    mainClass = "dev.detekt.cli.Main"
 }
 
 val pluginsJar by configurations.dependencyScope("pluginsJar") {
