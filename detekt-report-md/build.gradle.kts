@@ -9,4 +9,5 @@ dependencies {
 
     testImplementation(testFixtures(projects.detektApi))
     testImplementation(libs.assertj.core)
+    testImplementation(libs.kotlin.compiler)
 }
