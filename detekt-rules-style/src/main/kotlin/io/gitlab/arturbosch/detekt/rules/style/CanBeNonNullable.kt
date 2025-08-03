@@ -36,6 +36,7 @@ import org.jetbrains.kotlin.psi.KtPostfixExpression
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtPropertyAccessor
 import org.jetbrains.kotlin.psi.KtPropertyDelegate
+import org.jetbrains.kotlin.psi.KtPsiUtil
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
@@ -50,7 +51,6 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
 import org.jetbrains.kotlin.psi.psiUtil.forEachDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.isFirstStatement
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
-import org.jetbrains.kotlin.psi2ir.deparenthesize
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.smartcasts.getKotlinTypeForComparison
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
@@ -352,8 +352,8 @@ class CanBeNonNullable(config: Config) :
         private fun KtBinaryExpression.evaluateBinaryExpression(
             parentOperatorToken: IElementType?,
         ): List<CallableDescriptor> {
-            val leftExpression = left?.deparenthesize()
-            val rightExpression = right?.deparenthesize()
+            val leftExpression = left?.let { KtPsiUtil.safeDeparenthesize(it) }
+            val rightExpression = right?.let { KtPsiUtil.safeDeparenthesize(it) }
             val nonNullChecks = mutableListOf<CallableDescriptor>()
 
             if (isNullCheck()) {

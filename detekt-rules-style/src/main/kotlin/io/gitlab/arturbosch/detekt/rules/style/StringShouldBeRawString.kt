@@ -11,11 +11,11 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtParenthesizedExpression
+import org.jetbrains.kotlin.psi.KtPsiUtil
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfTypesAndPredicate
 import org.jetbrains.kotlin.psi.psiUtil.parents
-import org.jetbrains.kotlin.psi2ir.deparenthesize
 
 /**
  * This rule reports when the string can be converted to Kotlin raw string.
@@ -65,13 +65,14 @@ class StringShouldBeRawString(config: Config) : Rule(
 
     private val KtElement.leftMostElementOfLeftSubtree: KtElement
         get() {
-            val leftChild = (this as? KtBinaryExpression)?.left?.deparenthesize() ?: return this
+            val leftChild = (this as? KtBinaryExpression)?.left?.let { KtPsiUtil.safeDeparenthesize(it) } ?: return this
             return leftChild.leftMostElementOfLeftSubtree
         }
 
     private val KtElement.rightMostElementOfRightSubtree: KtElement
         get() {
-            val leftChild = (this as? KtBinaryExpression)?.right?.deparenthesize() ?: return this
+            val leftChild =
+                (this as? KtBinaryExpression)?.right?.let { KtPsiUtil.safeDeparenthesize(it) } ?: return this
             return leftChild.rightMostElementOfRightSubtree
         }
 
@@ -128,10 +129,10 @@ class StringShouldBeRawString(config: Config) : Rule(
                 yield(this@getStringSequence)
             } else if (this@getStringSequence is KtBinaryExpression) {
                 left?.let {
-                    yieldAll(it.deparenthesize().getStringSequence())
+                    yieldAll(KtPsiUtil.safeDeparenthesize(it).getStringSequence())
                 }
                 right?.let {
-                    yieldAll(it.deparenthesize().getStringSequence())
+                    yieldAll(KtPsiUtil.safeDeparenthesize(it).getStringSequence())
                 }
             }
         }
@@ -151,7 +152,7 @@ class StringShouldBeRawString(config: Config) : Rule(
         ) {
             val parent = (it as KtExpression).parent
             parent !is KtBinaryExpression && parent !is KtParenthesizedExpression
-        }?.deparenthesize()
+        }?.let { KtPsiUtil.safeDeparenthesize(it) }
 
     companion object {
         private val REGEX_FOR_ESCAPE_CHARS = """\\[t"\\n]""".toRegex()
