@@ -8,7 +8,6 @@ import dev.detekt.api.Rule
 import dev.detekt.api.RuleSet
 import dev.detekt.test.utils.KotlinAnalysisApiEngine
 import dev.detekt.test.utils.KotlinEnvironmentContainer
-import dev.detekt.test.utils.KotlinScriptEngine
 import dev.detekt.test.utils.compileContentForTest
 import io.gitlab.arturbosch.detekt.core.suppressors.isSuppressedBy
 import org.intellij.lang.annotations.Language
@@ -18,9 +17,6 @@ import org.jetbrains.kotlin.psi.KtFile
 
 private val shouldCompileTestSnippets: Boolean =
     System.getProperty("compile-test-snippets", "false")!!.toBoolean()
-
-private val shouldCompileTestSnippetsAa: Boolean =
-    System.getProperty("compile-test-snippets-aa", "false")!!.toBoolean()
 
 fun Rule.lint(
     @Language("kotlin") content: String,
@@ -34,9 +30,6 @@ fun Rule.lint(
         "${this.ruleName} requires Analysis APi so you should use lintWithContext instead of lint"
     }
     if (compile && shouldCompileTestSnippets) {
-        KotlinScriptEngine.compile(content)
-    }
-    if (compile && shouldCompileTestSnippetsAa) {
         try {
             KotlinAnalysisApiEngine.compile(content)
         } catch (ex: RuntimeException) {
@@ -55,9 +48,6 @@ fun <T> T.lintWithContext(
     compile: Boolean = true,
 ): List<Finding> where T : Rule, T : RequiresFullAnalysis {
     if (compile && shouldCompileTestSnippets) {
-        KotlinScriptEngine.compile(content)
-    }
-    if (compile && shouldCompileTestSnippetsAa) {
         try {
             KotlinAnalysisApiEngine.compile(content)
         } catch (ex: RuntimeException) {
