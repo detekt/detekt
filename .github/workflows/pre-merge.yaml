@@ -33,10 +33,7 @@ jobs:
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
       - name: Check build health
-        run: ./gradlew buildHealth
-
-      - name: Check detekt-gradle-plugin build health
-        run: ./gradlew :detekt-gradle-plugin:buildHealth
+        run: ./gradlew buildHealth :detekt-gradle-plugin:buildHealth
 
   gradle:
     strategy:
