@@ -63,6 +63,7 @@ fun generateBindingContext(
     )
 
     analyzer.analyzeAndReport(files) {
+        @Suppress("DEPRECATION")
         TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration(
             project,
             files,
