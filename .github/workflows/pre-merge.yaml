@@ -35,6 +35,9 @@ jobs:
       - name: Check build health
         run: ./gradlew buildHealth
 
+      - name: Check detekt-gradle-plugin build health
+        run: ./gradlew :detekt-gradle-plugin:buildHealth
+
   gradle:
     strategy:
       fail-fast: false
