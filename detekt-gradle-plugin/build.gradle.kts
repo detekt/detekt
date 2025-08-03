@@ -254,6 +254,13 @@ with(components["java"] as AdhocComponentWithVariants) {
 }
 
 dependencyAnalysis {
+    issues {
+        all {
+            onAny {
+                severity("fail")
+            }
+        }
+    }
     structure {
         // Could potentially remove in future if DAGP starts handling this natively https://github.com/autonomousapps/dependency-analysis-gradle-plugin/issues/1269
         bundle("junit-jupiter") {
