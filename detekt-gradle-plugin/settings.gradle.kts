@@ -15,6 +15,9 @@ dependencyResolutionManagement {
 plugins {
     id("com.gradle.develocity") version "4.1"
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
+    id("com.autonomousapps.build-health") version "2.19.0"
+    // Kotlin plugin must be added to classpath to support build-health analysis
+    id("org.jetbrains.kotlin.jvm") version "2.2.0" apply false
 }
 
 val isCiBuild = providers.environmentVariable("CI").isPresent
