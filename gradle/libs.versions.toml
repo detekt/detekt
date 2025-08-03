@@ -31,9 +31,8 @@ junit-jupiterApi = { module = "org.junit.jupiter:junit-jupiter-api", version.ref
 kctfork-core = { module = "dev.zacsweers.kctfork:core", version = "0.8.0" }
 kotlin-compiler = { module = "org.jetbrains.kotlin:kotlin-compiler", version.ref = "kotlin" }
 kotlin-gradlePluginApi = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin-api", version.ref = "kotlin" }
-kotlin-mainKts = { module = "org.jetbrains.kotlin:kotlin-main-kts", version.ref = "kotlin" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
-kotlin-scriptingCompiler = { module = "org.jetbrains.kotlin:kotlin-scripting-compiler", version.ref = "kotlin" }
+kotlin-scriptingJvm = { module = "org.jetbrains.kotlin:kotlin-scripting-jvm", version.ref = "kotlin" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
 kotlinx-coroutinesCore = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlinx-serializationCore = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version = "1.9.0" }

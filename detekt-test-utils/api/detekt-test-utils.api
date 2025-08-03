@@ -38,11 +38,6 @@ public final class dev/detekt/test/utils/KotlinEnvironmentContainer {
 	public final fun getProject ()Lcom/intellij/openapi/project/Project;
 }
 
-public final class dev/detekt/test/utils/KotlinScriptEngine {
-	public static final field INSTANCE Ldev/detekt/test/utils/KotlinScriptEngine;
-	public final fun compile (Ljava/lang/String;)V
-}
-
 public final class dev/detekt/test/utils/NullPrintStream : java/io/PrintStream {
 	public fun <init> ()V
 }
