@@ -27,7 +27,7 @@ fun Rule.lint(
         "${this.ruleName} requires full analysis so you should use lintWithContext instead of lint"
     }
     require(this !is RequiresAnalysisApi) {
-        "${this.ruleName} requires Analysis APi so you should use lintWithContext instead of lint"
+        "${this.ruleName} requires Analysis API so you should use lintWithContext instead of lint"
     }
     if (compile && shouldCompileTestSnippets) {
         try {
