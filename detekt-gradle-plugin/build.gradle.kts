@@ -68,6 +68,7 @@ testing {
         register<JvmTestSuite>("functionalTest") {
             dependencies {
                 implementation(libs.assertj.core)
+                implementation(project())
                 implementation(testFixtures(project()))
             }
 
@@ -129,7 +130,6 @@ dependencies {
     compileOnly(libs.kotlin.gradlePluginApi)
     implementation(libs.sarif4k)
     testFixturesCompileOnly(libs.jetbrains.annotations)
-    compileOnly(libs.jetbrains.annotations)
 
     testKitRuntimeOnly(libs.kotlin.gradle.plugin)
     testKitRuntimeOnly(libs.android.gradle.plugin)
@@ -251,4 +251,22 @@ tasks {
 with(components["java"] as AdhocComponentWithVariants) {
     withVariantsFromConfiguration(configurations["testFixturesApiElements"]) { skip() }
     withVariantsFromConfiguration(configurations["testFixturesRuntimeElements"]) { skip() }
+}
+
+dependencyAnalysis {
+    issues {
+        all {
+            onAny {
+                severity("fail")
+            }
+        }
+    }
+    structure {
+        // Could potentially remove in future if DAGP starts handling this natively https://github.com/autonomousapps/dependency-analysis-gradle-plugin/issues/1269
+        bundle("junit-jupiter") {
+            includeDependency("org.junit.jupiter:junit-jupiter")
+            includeDependency("org.junit.jupiter:junit-jupiter-api")
+            includeDependency("org.junit.jupiter:junit-jupiter-params")
+        }
+    }
 }
