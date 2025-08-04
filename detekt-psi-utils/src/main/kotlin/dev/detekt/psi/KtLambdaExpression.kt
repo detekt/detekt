@@ -13,6 +13,10 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 fun KtLambdaExpression.firstParameter(bindingContext: BindingContext) =
     bindingContext[BindingContext.FUNCTION, functionLiteral]?.valueParameters?.singleOrNull()
 
+fun KtLambdaExpression.firstParameterOrNull() = analyze(this) {
+    functionLiteral.symbol.valueParameters.singleOrNull()
+}
+
 fun KtLambdaExpression.implicitParameter(bindingContext: BindingContext): ValueParameterDescriptor? =
     if (valueParameters.isNotEmpty()) {
         null
