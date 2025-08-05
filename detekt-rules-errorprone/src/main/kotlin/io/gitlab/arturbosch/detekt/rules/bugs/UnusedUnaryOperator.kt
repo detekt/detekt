@@ -6,18 +6,16 @@ import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
-import dev.detekt.api.RequiresFullAnalysis
+import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
-import org.jetbrains.kotlin.builtins.KotlinBuiltIns
-import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtPrefixExpression
 import org.jetbrains.kotlin.psi.psiUtil.leaves
 import org.jetbrains.kotlin.psi.psiUtil.parents
-import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 
 /**
  * Detects unused unary operators.
@@ -40,7 +38,7 @@ class UnusedUnaryOperator(config: Config) :
         config,
         "This unary operator is unused."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     @Suppress("ReturnCount")
     override fun visitPrefixExpression(expression: KtPrefixExpression) {
@@ -57,15 +55,13 @@ class UnusedUnaryOperator(config: Config) :
             return
         }
 
-        val parentOrSelf = expression.parentBinaryExpressionOrThis()
-        if (parentOrSelf.isUsedAsExpression(bindingContext)) return
-
-        val operatorDescriptor = expression.operationReference.getResolvedCall(bindingContext)
-            ?.resultingDescriptor as? DeclarationDescriptor ?: return
-        if (!KotlinBuiltIns.isUnderKotlinPackage(operatorDescriptor)) return
-
-        val message = "This '${parentOrSelf.text}' is not used"
-        report(Finding(Entity.from(expression), message))
+        analyze(expression) {
+            val parentOrSelf = expression.parentBinaryExpressionOrThis()
+            if (parentOrSelf.isUsedAsExpression) return
+            if (expression.operationReference.mainReference.resolveToSymbol() != null) return
+            val message = "This '${parentOrSelf.text}' is not used"
+            report(Finding(Entity.from(expression), message))
+        }
     }
 
     private fun KtExpression.parentBinaryExpressionOrThis(): KtExpression =
