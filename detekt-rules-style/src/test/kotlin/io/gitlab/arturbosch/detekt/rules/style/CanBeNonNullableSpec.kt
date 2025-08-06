@@ -86,7 +86,7 @@ class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
                     }
                 }
             """.trimIndent()
-            // one for  private var a: Int? by PropDelegate() and one for value: Any?
+            // one for private var a: Int? by PropDelegate() and one for value: Any?
             assertThat(subject.lintWithContext(env, code)).hasSize(2)
         }
 
@@ -677,6 +677,17 @@ class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
         }
 
         @Test
+        fun `does report when vals with getters uses unnecessary let`() {
+            val code = """
+                class A {
+                    val a: Int?
+                        get() = 1?.let { it }
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        }
+
+        @Test
         fun `does not report on non-null properties of a parameterized type`() {
             val code = """
                 class P<T>(foo: T) {
@@ -1103,6 +1114,156 @@ class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
                     """.trimIndent()
                     assertThat(subject.lintWithContext(env, code)).isEmpty()
                 }
+            }
+        }
+
+        @Nested
+        inner class `using a dot expression` {
+            @Test
+            fun `does not report when extension method handles the nullability`() {
+                val code = """
+                    fun foo(a: Int?) {
+                        a.toString()
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does report when extension method does not handle the nullability`() {
+                val code = """
+                    fun foo(a: Int?) {
+                        a?.toString()
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
+            }
+
+            @Test
+            fun `does not report when nullable param is passed to a fun`() {
+                val code = """
+                    fun Any.log(obj: Any?) = println(this.toString() + obj.toString())
+                    fun foo(a: Int?) {
+                        1.plus(2).log(a)
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does not report when nullable param is passed`() {
+                val code = """
+                    class A(val foo: String)
+                    fun Int.print(obj: Any?) { repeat(this) { println(obj) } }
+                    fun foo(a: A?) {
+                        1.plus(2).print(a)
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does not report when receiver fun handles nullability`() {
+                val code = """
+                    fun foo(a: Int?, b: Int) {
+                        if (b > 10) {
+                            a.toString()
+                        }
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does report when receiver fun does not handle nullability`() {
+                val code = """
+                    fun foo(a: Int?, b: Int) {
+                        if (b > 10) {
+                            a?.toString()
+                        }
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
+            }
+
+            @Test
+            fun `does not report when receiver fun handles nullability with long chain`() {
+                val code = """
+                    fun foo(a: Int?, b: Int) {
+                        if (b > 10) {
+                            a?.plus(1).toString()
+                        }
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does report when receiver fun doesn not handle nullability with long chain`() {
+                val code = """
+                    fun foo(a: Int?, b: Int) {
+                        if (b > 10) {
+                            a?.plus(1)?.toString()
+                        }
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
+            }
+
+            @Test
+            fun `does report when receiver val handles nullability`() {
+                val code = """
+                    val Any?.log: Unit
+                        get() = println(this?.toString())
+                    fun foo(a: Int?, b: Int) {
+                        if (b > 10) {
+                            a.log
+                        }
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does report when receiver val handles nullability with long chain`() {
+                val code = """
+                    val Any?.log: Unit
+                        get() = println(this?.toString())
+                    fun foo(a: Int?, b: Int) {
+                        if (b > 10) {
+                            a?.plus(1).log
+                        }
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does report when receiver val does not not handle nullability`() {
+                val code = """
+                    val Any.log: Unit
+                        get() = println(this.toString())
+                    fun foo(a: Int?, b: Int) {
+                        if (b > 10) {
+                            a?.plus(1)?.log
+                        }
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
+            }
+
+            @Test
+            fun `does report when receiver val does not not handle nullability with long chain`() {
+                val code = """
+                    val Any.log: Unit
+                        get() = println(this.toString())
+                    fun foo(a: Int?, b: Int) {
+                        if (b > 10) {
+                            a?.plus(1)?.log
+                        }
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
             }
         }
 
