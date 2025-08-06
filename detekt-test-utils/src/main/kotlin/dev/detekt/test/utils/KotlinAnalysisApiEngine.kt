@@ -45,6 +45,7 @@ object KotlinAnalysisApiEngine {
     fun compile(
         @Language("kotlin") code: String,
         dependencyCodes: List<String> = emptyList(),
+        javaSourceRoots: List<Path> = emptyList(),
         allowCompilationErrors: Boolean = false,
     ): KtFile {
         val disposable = Disposer.newDisposable()
@@ -91,6 +92,7 @@ object KotlinAnalysisApiEngine {
                         addRegularDependency(coroutinesCore)
                         addSourceVirtualFile(vf)
                         addSourceVirtualFiles(depVfs)
+                        addSourceRoots(javaSourceRoots)
                         platform = targetPlatform
                         moduleName = "source"
                     }
