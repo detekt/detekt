@@ -16,7 +16,3 @@ dependencies {
 detekt {
     config.from("config/detekt.yml")
 }
-
-apiValidation {
-    ignoredPackages.add("dev.detekt.psi.internal")
-}
