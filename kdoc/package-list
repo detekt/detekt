@@ -13,7 +13,6 @@ io.gitlab.arturbosch.detekt.extensions
 io.gitlab.arturbosch.detekt.report
 module:detekt-psi-utils
 dev.detekt.psi
-dev.detekt.psi.internal
 module:detekt-test
 dev.detekt.test
 module:detekt-test-utils
