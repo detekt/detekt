@@ -8,7 +8,7 @@ version = "$kotlinVersion-$detektVersion"
 
 plugins {
     id("module")
-    id("com.gradleup.shadow") version "8.3.9"
+    id("com.gradleup.shadow") version "9.0.0"
     id("de.undercouch.download") version "5.6.0"
 }
 
