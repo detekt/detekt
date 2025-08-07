@@ -8,6 +8,7 @@ dependencies {
 
     testImplementation(libs.kotlin.compiler)
     testImplementation(projects.detektTest)
+    testImplementation(projects.detektTestAssertj)
     testImplementation(libs.assertj.core)
     testRuntimeOnly(libs.kotlinx.coroutinesCore)
     testRuntimeOnly(libs.kotlinx.coroutinesTest)
