@@ -3,20 +3,21 @@ package io.gitlab.arturbosch.detekt.rules.style
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
-import dev.detekt.api.RequiresFullAnalysis
+import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
-import dev.detekt.psi.fqNameOrNull
-import org.jetbrains.kotlin.descriptors.ClassDescriptor
-import org.jetbrains.kotlin.descriptors.FunctionDescriptor
-import org.jetbrains.kotlin.load.java.isFromJava
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
+import org.jetbrains.kotlin.analysis.api.KaSession
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolOrigin
+import org.jetbrains.kotlin.analysis.api.types.symbol
+import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
-import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelector
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
-import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
-import org.jetbrains.kotlin.types.error.ErrorType
-import org.jetbrains.kotlin.types.typeUtil.supertypes
 
 /**
  * In Kotlin functions `get` or `set` can be replaced with the shorter operator — `[]`,
@@ -40,7 +41,7 @@ class ExplicitCollectionElementAccessMethod(config: Config) :
         config,
         "Prefer usage of the indexed access operator [] for map element access or insert methods."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     override fun visitDotQualifiedExpression(expression: KtDotQualifiedExpression) {
         super.visitDotQualifiedExpression(expression)
@@ -51,21 +52,23 @@ class ExplicitCollectionElementAccessMethod(config: Config) :
     }
 
     private fun isIndexGetterRecommended(expression: KtCallExpression): Boolean {
-        val getter = if (expression.calleeExpression?.text == "get") {
-            expression.getFunctionDescriptor()
-        } else {
-            null
-        } ?: return false
+        analyze(expression) {
+            val getter = if (expression.calleeExpression?.text == "get") {
+                expression.getFunctionSymbol()
+            } else {
+                null
+            } ?: return false
 
-        if (expression.valueArguments.any { it.isSpread }) return false
+            if (expression.valueArguments.any { it.isSpread }) return false
 
-        return canReplace(getter) && shouldReplace(getter)
+            return canReplace(getter) && shouldReplace(getter)
+        }
     }
 
-    private fun isIndexSetterRecommended(expression: KtCallExpression): Boolean =
+    private fun isIndexSetterRecommended(expression: KtCallExpression): Boolean = analyze(expression) {
         when (expression.calleeExpression?.text) {
             "set" -> {
-                val setter = expression.getFunctionDescriptor()
+                val setter = expression.getFunctionSymbol()
                 if (setter == null) {
                     false
                 } else {
@@ -75,45 +78,54 @@ class ExplicitCollectionElementAccessMethod(config: Config) :
             // `put` isn't an operator function, but can be replaced with indexer when the caller is Map.
             "put" -> isCallerMap(expression)
             else -> false
-        } &&
-            unusedReturnValue(expression)
+        } && unusedReturnValue(expression)
+    }
 
-    private fun KtCallExpression.getFunctionDescriptor(): FunctionDescriptor? =
-        getResolvedCall(bindingContext)?.resultingDescriptor as? FunctionDescriptor
+    @Suppress("ModifierListSpacing")
+    context(session: KaSession)
+    private fun KtCallExpression.getFunctionSymbol(): KaNamedFunctionSymbol? = with(session) {
+        resolveToCall()?.singleFunctionCallOrNull()?.symbol as? KaNamedFunctionSymbol
+    }
 
-    private fun canReplace(function: FunctionDescriptor): Boolean {
+    @OptIn(KaExperimentalApi::class)
+    private fun canReplace(function: KaNamedFunctionSymbol): Boolean {
         // Can't use index operator when insufficient information is available to infer type variable.
         // For now, this is an incomplete check and doesn't report edge cases (e.g. inference using return type).
-        val genericParameterTypeNames = function.valueParameters.map { it.original.type.toString() }.toSet()
+        val genericParameterTypeNames = function.valueParameters.map { it.returnType.toString() }.toSet()
         val typeParameterNames = function.typeParameters.map { it.name.asString() }
         if (!genericParameterTypeNames.containsAll(typeParameterNames)) return false
 
         return function.isOperator
     }
 
-    private fun shouldReplace(function: FunctionDescriptor): Boolean {
+    @Suppress("ReturnCount")
+    private fun KaSession.shouldReplace(function: KaNamedFunctionSymbol): Boolean {
         // The intent of kotlin operation functions is to support indexed accessed, so should always be replaced.
-        if (!function.isFromJava) return true
+        val isJava = function.origin.let { it == KaSymbolOrigin.JAVA_SOURCE || it == KaSymbolOrigin.JAVA_LIBRARY }
+        if (!isJava) return true
 
         // It does not always make sense for all Java get/set functions to be replaced by index accessors.
         // Only recommend known collection types.
-        val javaClass = function.containingDeclaration as? ClassDescriptor ?: return false
-        return javaClass.fqNameSafe.asString() in setOf(
+        val javaClass = (function.containingDeclaration as? KaClassSymbol)?.classId ?: return false
+        return javaClass.asSingleFqName().asString() in setOf(
             "java.util.ArrayList",
             "java.util.HashMap",
             "java.util.LinkedHashMap"
         )
     }
 
-    private fun isCallerMap(expression: KtCallExpression): Boolean {
+    @Suppress("ReturnCount")
+    private fun KaSession.isCallerMap(expression: KtCallExpression): Boolean {
         if (expression.valueArguments.size != 2) return false
-        val caller = expression.getQualifiedExpressionForSelector()?.receiverExpression
-        val type = caller.getResolvedCall(bindingContext)?.resultingDescriptor?.returnType
-        if (type == null || type is ErrorType) return false // There is no caller or it can't be resolved.
+        val symbol = expression.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.containingSymbol as? KaClassSymbol
+            ?: return false
 
-        val mapName = "kotlin.collections.Map"
-        return type.fqNameOrNull()?.asString() == mapName ||
-            type.supertypes().any { it.fqNameOrNull()?.asString() == mapName }
+        val mapName = FqName("kotlin.collections.Map")
+        if (symbol.classId?.asSingleFqName() == mapName) return true
+        if (symbol.superTypes.any { it.symbol?.classId?.asSingleFqName() == mapName }) return true
+        return symbol.superTypes.asSequence().flatMap { it.allSupertypes }.any {
+            it.symbol?.classId?.asSingleFqName() == mapName
+        }
     }
 
     private fun unusedReturnValue(expression: KtCallExpression): Boolean =
