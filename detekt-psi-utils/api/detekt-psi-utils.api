@@ -2,7 +2,7 @@ public final class dev/detekt/psi/AllowedExceptionNamePatternKt {
 	public static final fun isAllowedExceptionName (Lorg/jetbrains/kotlin/psi/KtCatchClause;Lkotlin/text/Regex;)Z
 }
 
-public final class dev/detekt/psi/AnnotationExcluder {
+public final class dev/detekt/psi/AnnotationExcluderBindingContext {
 	public fun <init> (Lorg/jetbrains/kotlin/psi/KtFile;Ljava/util/List;Lorg/jetbrains/kotlin/resolve/BindingContext;)V
 	public final fun shouldExclude (Ljava/util/List;)Z
 }
