@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import dev.detekt.api.Finding
 import dev.detekt.test.TestConfig
 import dev.detekt.test.assertThat
 import dev.detekt.test.lintWithContext
@@ -167,7 +166,8 @@ class AbstractClassCanBeConcreteClassSpec(val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
-            assertFindingMessage(findings, message)
+            assertThat(findings).singleElement()
+                .hasMessage(message)
         }
 
         @Test
@@ -180,7 +180,8 @@ class AbstractClassCanBeConcreteClassSpec(val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
-            assertFindingMessage(findings, message)
+            assertThat(findings).singleElement()
+                .hasMessage(message)
         }
 
         @Test
@@ -193,14 +194,16 @@ class AbstractClassCanBeConcreteClassSpec(val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
-            assertFindingMessage(findings, message)
+            assertThat(findings).singleElement()
+                .hasMessage(message)
         }
 
         @Test
         fun `does not report no abstract members in an abstract class with just a constructor`() {
             val code = "abstract class A(val i: Int)"
             val findings = subject.lintWithContext(env, code)
-            assertFindingMessage(findings, message)
+            assertThat(findings).singleElement()
+                .hasMessage(message)
             assertThat(findings).hasStartSourceLocation(1, 16)
         }
 
@@ -208,14 +211,16 @@ class AbstractClassCanBeConcreteClassSpec(val env: KotlinEnvironmentContainer) {
         fun `does not report no abstract members in an abstract class with a body and a constructor`() {
             val code = "abstract class A(val i: Int) {}"
             val findings = subject.lintWithContext(env, code)
-            assertFindingMessage(findings, message)
+            assertThat(findings).singleElement()
+                .hasMessage(message)
         }
 
         @Test
         fun `does not report no abstract members in an abstract class with just a constructor parameter`() {
             val code = "abstract class A(i: Int)"
             val findings = subject.lintWithContext(env, code)
-            assertFindingMessage(findings, message)
+            assertThat(findings).singleElement()
+                .hasMessage(message)
             assertThat(findings).hasStartSourceLocation(1, 16)
         }
 
@@ -238,7 +243,8 @@ class AbstractClassCanBeConcreteClassSpec(val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
-            assertFindingMessage(findings, message)
+            assertThat(findings).singleElement()
+                .hasMessage(message)
         }
     }
 
@@ -315,9 +321,4 @@ class AbstractClassCanBeConcreteClassSpec(val env: KotlinEnvironmentContainer) {
             assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
-}
-
-private fun assertFindingMessage(findings: List<Finding>, message: String) {
-    assertThat(findings).hasSize(1)
-    assertThat(findings.first()).hasMessage(message)
 }
