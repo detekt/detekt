@@ -927,7 +927,7 @@ class UnusedPrivateFunctionSpec(val env: KotlinEnvironmentContainer) {
                     private fun foo() = 1
                 }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code)).hasSize(1).hasStartSourceLocation(5, 17)
+            assertThat(subject.lintWithContext(env, code)).singleElement().hasStartSourceLocation(5, 17)
         }
     }
 }

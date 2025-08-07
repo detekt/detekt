@@ -128,8 +128,7 @@ class UnusedPrivatePropertySpec(val env: KotlinEnvironmentContainer) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code))
-                .hasSize(1)
+            assertThat(subject.lintWithContext(env, code)).singleElement()
                 .hasStartSourceLocation(4, 21)
         }
 
@@ -588,7 +587,7 @@ class UnusedPrivatePropertySpec(val env: KotlinEnvironmentContainer) {
                     private val foo = 1
                 }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code)).hasSize(1).hasStartSourceLocation(5, 17)
+            assertThat(subject.lintWithContext(env, code)).singleElement().hasStartSourceLocation(5, 17)
         }
     }
 

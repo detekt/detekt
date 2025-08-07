@@ -204,7 +204,7 @@ class AbstractClassCanBeConcreteClassSpec(val env: KotlinEnvironmentContainer) {
             val findings = subject.lintWithContext(env, code)
             assertThat(findings).singleElement()
                 .hasMessage(message)
-            assertThat(findings).hasStartSourceLocation(1, 16)
+                .hasStartSourceLocation(1, 16)
         }
 
         @Test
@@ -221,7 +221,7 @@ class AbstractClassCanBeConcreteClassSpec(val env: KotlinEnvironmentContainer) {
             val findings = subject.lintWithContext(env, code)
             assertThat(findings).singleElement()
                 .hasMessage(message)
-            assertThat(findings).hasStartSourceLocation(1, 16)
+                .hasStartSourceLocation(1, 16)
         }
 
         @Test

@@ -52,7 +52,7 @@ class FunctionNamingSpec {
             }
             interface I { fun shouldNotBeFlagged() }
         """.trimIndent()
-        assertThat(FunctionNaming(Config.empty).lint(code)).hasStartSourceLocation(3, 13)
+        assertThat(FunctionNaming(Config.empty).lint(code)).singleElement().hasStartSourceLocation(3, 13)
     }
 
     @Test
@@ -96,7 +96,7 @@ class FunctionNamingSpec {
             }
             interface I { @Suppress("FunctionNaming") fun SHOULD_BE_FLAGGED() }
         """.trimIndent()
-        assertThat(FunctionNaming(Config.empty).lint(code)).hasStartSourceLocation(3, 13)
+        assertThat(FunctionNaming(Config.empty).lint(code)).singleElement().hasStartSourceLocation(3, 13)
     }
 
     @Test

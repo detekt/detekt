@@ -53,14 +53,6 @@ class FindingsAssert(actual: List<Finding>) :
         }
     }
 
-    fun hasStartSourceLocation(line: Int, column: Int) = apply {
-        hasStartSourceLocations(SourceLocation(line, column))
-    }
-
-    fun hasEndSourceLocation(line: Int, column: Int) = apply {
-        hasEndSourceLocations(SourceLocation(line, column))
-    }
-
     fun hasTextLocations(vararg expected: Pair<Int, Int>) = apply {
         val actualSources = actual.asSequence()
             .map { it.location.text }

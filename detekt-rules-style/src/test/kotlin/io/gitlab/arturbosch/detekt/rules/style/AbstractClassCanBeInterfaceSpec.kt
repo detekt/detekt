@@ -28,7 +28,7 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
             val findings = subject.lintWithContext(env, code)
             assertThat(findings).singleElement()
                 .hasMessage(message)
-            assertThat(findings).hasStartSourceLocation(1, 16)
+                .hasStartSourceLocation(1, 16)
         }
 
         @Nested
@@ -39,7 +39,7 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
                 val findings = subject.lintWithContext(env, code)
                 assertThat(findings).singleElement()
                     .hasMessage(message)
-                assertThat(findings).hasStartSourceLocation(1, 16)
+                    .hasStartSourceLocation(1, 16)
             }
 
             @Test

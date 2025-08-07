@@ -23,8 +23,8 @@ class UnreachableCatchBlockSpec(private val env: KotlinEnvironmentContainer) {
             }
         """.trimIndent()
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings).hasStartSourceLocation(4, 7)
+        assertThat(findings).singleElement()
+            .hasStartSourceLocation(4, 7)
     }
 
     @Test
@@ -38,8 +38,8 @@ class UnreachableCatchBlockSpec(private val env: KotlinEnvironmentContainer) {
             }
         """.trimIndent()
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings).hasStartSourceLocation(4, 7)
+        assertThat(findings).singleElement()
+            .hasStartSourceLocation(4, 7)
     }
 
     @Test
