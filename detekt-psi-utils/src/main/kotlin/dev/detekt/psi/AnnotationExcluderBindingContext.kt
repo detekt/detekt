@@ -12,7 +12,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * excluded from further analysis. This is done by checking if a special annotation
  * is present over the element.
  */
-class AnnotationExcluder(
+class AnnotationExcluderBindingContext(
     root: KtFile,
     private val excludes: List<Regex>,
     private val context: BindingContext,

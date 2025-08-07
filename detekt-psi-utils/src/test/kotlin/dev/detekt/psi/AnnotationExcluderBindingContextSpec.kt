@@ -16,7 +16,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvFileSource
 
 @KotlinCoreEnvironmentTest
-class AnnotationExcluderSpec(private val env: KotlinEnvironmentContainer) {
+class AnnotationExcluderBindingContextSpec(private val env: KotlinEnvironmentContainer) {
     private val annotationsKtFile = compileContentForTest(
         """
             package dagger
@@ -33,7 +33,7 @@ class AnnotationExcluderSpec(private val env: KotlinEnvironmentContainer) {
     @CsvFileSource(resources = ["/annotation_excluder.csv"])
     fun `all cases`(exclusion: String, annotation: String, shouldExclude: Boolean) {
         val (file, ktAnnotation) = createKtFile(annotation)
-        val excluder = AnnotationExcluder(file, listOf(exclusion.toRegex()), BindingContext.EMPTY)
+        val excluder = AnnotationExcluderBindingContext(file, listOf(exclusion.toRegex()), BindingContext.EMPTY)
 
         assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isEqualTo(shouldExclude)
     }
@@ -45,7 +45,7 @@ class AnnotationExcluderSpec(private val env: KotlinEnvironmentContainer) {
     fun `all cases - Type Solving`(exclusion: String, annotation: String, shouldExclude: Boolean) {
         val (file, ktAnnotation) = createKtFile(annotation)
         val binding = env.createBindingContext(listOf(file, annotationsKtFile))
-        val excluder = AnnotationExcluder(file, listOf(exclusion.toRegex()), binding)
+        val excluder = AnnotationExcluderBindingContext(file, listOf(exclusion.toRegex()), binding)
 
         assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isEqualTo(shouldExclude)
     }
@@ -55,7 +55,7 @@ class AnnotationExcluderSpec(private val env: KotlinEnvironmentContainer) {
         @Test
         fun `should not exclude when the annotation was not found`() {
             val (file, ktAnnotation) = createKtFile("@Component")
-            val excluder = AnnotationExcluder(file, listOf("SinceKotlin".toRegex()), BindingContext.EMPTY)
+            val excluder = AnnotationExcluderBindingContext(file, listOf("SinceKotlin".toRegex()), BindingContext.EMPTY)
 
             assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isFalse()
         }
@@ -63,7 +63,7 @@ class AnnotationExcluderSpec(private val env: KotlinEnvironmentContainer) {
         @Test
         fun `should not exclude when no annotations should be excluded`() {
             val (file, ktAnnotation) = createKtFile("@Component")
-            val excluder = AnnotationExcluder(file, emptyList(), BindingContext.EMPTY)
+            val excluder = AnnotationExcluderBindingContext(file, emptyList(), BindingContext.EMPTY)
 
             assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isFalse()
         }
@@ -71,7 +71,7 @@ class AnnotationExcluderSpec(private val env: KotlinEnvironmentContainer) {
         @Test
         fun `should also exclude an annotation that is not imported`() {
             val (file, ktAnnotation) = createKtFile("@SinceKotlin")
-            val excluder = AnnotationExcluder(file, listOf("SinceKotlin".toRegex()), BindingContext.EMPTY)
+            val excluder = AnnotationExcluderBindingContext(file, listOf("SinceKotlin".toRegex()), BindingContext.EMPTY)
 
             assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isTrue()
         }
@@ -86,7 +86,8 @@ class AnnotationExcluderSpec(private val env: KotlinEnvironmentContainer) {
             @Test
             fun `incorrect without type solving`() {
                 val (file, ktAnnotation) = createKtFile("@Deprecated")
-                val excluder = AnnotationExcluder(file, listOf("foo\\.Deprecated".toRegex()), BindingContext.EMPTY)
+                val excluder =
+                    AnnotationExcluderBindingContext(file, listOf("foo\\.Deprecated".toRegex()), BindingContext.EMPTY)
 
                 assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isTrue()
             }
@@ -95,7 +96,7 @@ class AnnotationExcluderSpec(private val env: KotlinEnvironmentContainer) {
             fun `correct without type solving`() {
                 val (file, ktAnnotation) = createKtFile("@Deprecated")
                 val binding = env.createBindingContext(listOf(file, annotationsKtFile))
-                val excluder = AnnotationExcluder(file, listOf("foo\\.Deprecated".toRegex()), binding)
+                val excluder = AnnotationExcluderBindingContext(file, listOf("foo\\.Deprecated".toRegex()), binding)
 
                 assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isFalse()
             }
@@ -124,7 +125,8 @@ class AnnotationExcluderSpec(private val env: KotlinEnvironmentContainer) {
 
             @Test
             fun `incorrect without type solving`() {
-                val excluder = AnnotationExcluder(file, listOf("Hello\\.World".toRegex()), BindingContext.EMPTY)
+                val excluder =
+                    AnnotationExcluderBindingContext(file, listOf("Hello\\.World".toRegex()), BindingContext.EMPTY)
 
                 assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isTrue()
             }
@@ -133,7 +135,7 @@ class AnnotationExcluderSpec(private val env: KotlinEnvironmentContainer) {
             @Disabled("This should be doable but it's not imlemented yet")
             fun `correct with type solving`() {
                 val binding = env.createBindingContext(listOf(file, helloWorldAnnotationsKtFile))
-                val excluder = AnnotationExcluder(file, listOf("Hello\\.World".toRegex()), binding)
+                val excluder = AnnotationExcluderBindingContext(file, listOf("Hello\\.World".toRegex()), binding)
 
                 assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isFalse()
             }
@@ -162,11 +164,16 @@ class AnnotationExcluderSpec(private val env: KotlinEnvironmentContainer) {
 
             @Test
             fun `incorrect without type solving`() {
-                val excluder = AnnotationExcluder(file, listOf("foo\\.World".toRegex()), BindingContext.EMPTY)
+                val excluder =
+                    AnnotationExcluderBindingContext(file, listOf("foo\\.World".toRegex()), BindingContext.EMPTY)
 
                 assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isTrue()
 
-                val excluder2 = AnnotationExcluder(file, listOf("com\\.hello\\.World".toRegex()), BindingContext.EMPTY)
+                val excluder2 = AnnotationExcluderBindingContext(
+                    file,
+                    listOf("com\\.hello\\.World".toRegex()),
+                    BindingContext.EMPTY
+                )
 
                 assertThat(excluder2.shouldExclude(listOf(ktAnnotation))).isTrue()
             }
@@ -174,11 +181,11 @@ class AnnotationExcluderSpec(private val env: KotlinEnvironmentContainer) {
             @Test
             fun `correct with type solving`() {
                 val binding = env.createBindingContext(listOf(file, helloWorldAnnotationsKtFile))
-                val excluder = AnnotationExcluder(file, listOf("foo\\.World".toRegex()), binding)
+                val excluder = AnnotationExcluderBindingContext(file, listOf("foo\\.World".toRegex()), binding)
 
                 assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isFalse()
 
-                val excluder2 = AnnotationExcluder(file, listOf("com\\.hello\\.World".toRegex()), binding)
+                val excluder2 = AnnotationExcluderBindingContext(file, listOf("com\\.hello\\.World".toRegex()), binding)
 
                 assertThat(excluder2.shouldExclude(listOf(ktAnnotation))).isTrue()
             }
