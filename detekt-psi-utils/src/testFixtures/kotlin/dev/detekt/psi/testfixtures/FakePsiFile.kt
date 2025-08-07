@@ -23,6 +23,7 @@ import com.intellij.psi.search.PsiElementProcessor
 import com.intellij.psi.search.SearchScope
 import javax.swing.Icon
 
+@Suppress("StringLiteralDuplication")
 class FakePsiFile(private val text: String = "", private val name: String = "") : PsiFile {
 
     override fun navigate(p0: Boolean) {
