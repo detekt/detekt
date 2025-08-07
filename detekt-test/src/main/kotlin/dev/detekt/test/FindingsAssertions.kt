@@ -134,4 +134,34 @@ class FindingAssert(val actual: Finding?) : AbstractAssert<FindingAssert, Findin
             failWithMessage("Expect no suppressions but ${actual.suppressReasons} was found")
         }
     }
+
+    fun hasStartSourceLocation(line: Int, column: Int) = apply {
+        hasStartSourceLocation(SourceLocation(line, column))
+    }
+
+    fun hasStartSourceLocation(expected: SourceLocation) = apply {
+        val actual = actual!!.location.source
+        if (actual != expected) {
+            throw failureWithActualExpected(
+                actual,
+                expected,
+                "Expected start source location to be $expected but was $actual"
+            )
+        }
+    }
+
+    fun hasEndSourceLocation(line: Int, column: Int) = apply {
+        hasEndSourceLocation(SourceLocation(line, column))
+    }
+
+    fun hasEndSourceLocation(expected: SourceLocation) = apply {
+        val actual = actual!!.location.endSource
+        if (actual != expected) {
+            throw failureWithActualExpected(
+                actual,
+                expected,
+                "Expected end source location to be $expected but was $actual"
+            )
+        }
+    }
 }

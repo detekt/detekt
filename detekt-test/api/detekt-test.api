@@ -6,8 +6,12 @@ public final class dev/detekt/test/FakeLanguageVersionSettingsKt {
 public final class dev/detekt/test/FindingAssert : org/assertj/core/api/AbstractAssert {
 	public fun <init> (Ldev/detekt/api/Finding;)V
 	public final fun getActual ()Ldev/detekt/api/Finding;
+	public final fun hasEndSourceLocation (II)Ldev/detekt/test/FindingAssert;
+	public final fun hasEndSourceLocation (Ldev/detekt/api/SourceLocation;)Ldev/detekt/test/FindingAssert;
 	public final fun hasMessage (Ljava/lang/String;)Ldev/detekt/test/FindingAssert;
 	public final fun hasSourceLocation (II)Ldev/detekt/test/FindingAssert;
+	public final fun hasStartSourceLocation (II)Ldev/detekt/test/FindingAssert;
+	public final fun hasStartSourceLocation (Ldev/detekt/api/SourceLocation;)Ldev/detekt/test/FindingAssert;
 	public final fun noSuppress ()Ldev/detekt/test/FindingAssert;
 }
 
