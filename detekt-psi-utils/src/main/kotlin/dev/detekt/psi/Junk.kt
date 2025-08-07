@@ -24,6 +24,6 @@ fun KtCallExpression.receiverIsUsed(): Boolean =
         val scopeOfApplyCall = parent.parent
         !(
             (scopeOfApplyCall == null || scopeOfApplyCall is KtBlockExpression) &&
-                (context == BindingContext.EMPTY || !analyze(it) { it.isUsedAsExpression })
+                !analyze(it) { it.isUsedAsExpression }
             )
     } ?: true
