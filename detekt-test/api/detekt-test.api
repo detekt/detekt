@@ -12,6 +12,9 @@ public final class dev/detekt/test/FindingAssert : org/assertj/core/api/Abstract
 	public final fun hasSourceLocation (II)Ldev/detekt/test/FindingAssert;
 	public final fun hasStartSourceLocation (II)Ldev/detekt/test/FindingAssert;
 	public final fun hasStartSourceLocation (Ldev/detekt/api/SourceLocation;)Ldev/detekt/test/FindingAssert;
+	public final fun hasTextLocation (Ldev/detekt/api/TextLocation;)Ldev/detekt/test/FindingAssert;
+	public final fun hasTextLocation (Ljava/lang/String;)Ldev/detekt/test/FindingAssert;
+	public final fun hasTextLocation (Lkotlin/Pair;)Ldev/detekt/test/FindingAssert;
 	public final fun noSuppress ()Ldev/detekt/test/FindingAssert;
 }
 
