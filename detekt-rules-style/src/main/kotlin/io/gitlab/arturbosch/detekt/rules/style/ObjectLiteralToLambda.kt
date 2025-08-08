@@ -4,22 +4,21 @@ import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
-import dev.detekt.api.RequiresFullAnalysis
+import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.psi.isOverride
-import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
-import org.jetbrains.kotlin.load.java.sam.JavaSingleAbstractMethodUtils
+import org.jetbrains.kotlin.analysis.api.KaSession
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
+import org.jetbrains.kotlin.analysis.api.resolution.singleCallOrNull
+import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
+import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.KtObjectLiteralExpression
 import org.jetbrains.kotlin.psi.KtThisExpression
 import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
-import org.jetbrains.kotlin.resolve.scopes.receivers.ImplicitClassReceiver
-import org.jetbrains.kotlin.resolve.scopes.receivers.ReceiverValue
-import org.jetbrains.kotlin.types.KotlinType
 
 /**
  * An anonymous object that does nothing other than the implementation of a single method
@@ -46,61 +45,53 @@ class ObjectLiteralToLambda(config: Config) :
         config,
         "Report object literals that can be changed to lambdas."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
-    private val KotlinType.couldBeSamInterface
-        get() = JavaSingleAbstractMethodUtils.isSamType(this)
-
-    private fun KotlinType.singleSuperTypeOrNull(): KotlinType? =
-        constructor.supertypes.singleOrNull()
-
-    private fun KtObjectDeclaration.singleNamedMethodOrNull(): KtNamedFunction? =
-        declarations.singleOrNull() as? KtNamedFunction
-
-    private fun KtExpression.containsThisReference(descriptor: DeclarationDescriptor) =
-        anyDescendantOfType<KtThisExpression> { thisReference ->
-            bindingContext[BindingContext.REFERENCE_TARGET, thisReference.instanceReference] == descriptor
+    @Suppress("ModifierListSpacing")
+    context(session: KaSession)
+    private fun KtExpression.containsThisReference(objectSymbol: KaClassSymbol) = with(session) {
+        anyDescendantOfType<KtThisExpression> {
+            it.expressionType?.symbol == objectSymbol
         }
-
-    private fun KtExpression.containsOwnMethodCall(descriptor: DeclarationDescriptor) =
-        anyDescendantOfType<KtExpression> {
-            it.getResolvedCall(bindingContext)?.let { resolvedCall ->
-                resolvedCall.dispatchReceiver.isImplicitClassFor(descriptor) ||
-                    resolvedCall.extensionReceiver.isImplicitClassFor(descriptor)
-            } == true
-        }
-
-    private fun ReceiverValue?.isImplicitClassFor(descriptor: DeclarationDescriptor) =
-        this is ImplicitClassReceiver && classDescriptor == descriptor
-
-    private fun KtExpression.containsMethodOf(declaration: KtObjectDeclaration): Boolean {
-        val objectDescriptor = bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, declaration]
-            ?: return false
-
-        return containsThisReference(objectDescriptor) ||
-            containsOwnMethodCall(objectDescriptor)
     }
 
-    private fun KtObjectDeclaration.hasConvertibleMethod(): Boolean {
-        val singleNamedMethod = singleNamedMethodOrNull()
-        val functionBody = singleNamedMethod?.bodyExpression ?: return false
+    @Suppress("ModifierListSpacing")
+    context(session: KaSession)
+    private fun KtExpression.containsOwnMethodCall(objectSymbol: KaClassSymbol) = with(session) {
+        anyDescendantOfType<KtExpression> { expr ->
+            val symbol = expr.resolveToCall()?.singleCallOrNull<KaCallableMemberCall<*, *>>()?.partiallyAppliedSymbol
+            listOfNotNull(symbol?.dispatchReceiver, symbol?.extensionReceiver).any { it.type.symbol == objectSymbol }
+        }
+    }
 
-        return singleNamedMethod.isOverride() &&
-            !functionBody.containsMethodOf(this)
+    @Suppress("ModifierListSpacing")
+    context(session: KaSession)
+    private fun KtExpression.containsMethodOf(declaration: KtObjectDeclaration): Boolean {
+        with(session) {
+            val objectSymbol = declaration.symbol
+            return containsThisReference(objectSymbol) || containsOwnMethodCall(objectSymbol)
+        }
+    }
+
+    @Suppress("ModifierListSpacing")
+    context(session: KaSession)
+    private fun KtObjectDeclaration.hasConvertibleMethod(): Boolean {
+        val singleNamedMethod = declarations.singleOrNull() as? KtNamedFunction
+        val functionBody = singleNamedMethod?.bodyExpression ?: return false
+        return singleNamedMethod.isOverride() && !functionBody.containsMethodOf(this)
     }
 
     override fun visitObjectLiteralExpression(expression: KtObjectLiteralExpression) {
         super.visitObjectLiteralExpression(expression)
-        val declaration = expression.objectDeclaration
 
-        if (
-            declaration.name == null &&
-            bindingContext.getType(expression)
-                ?.singleSuperTypeOrNull()
-                ?.couldBeSamInterface == true &&
-            declaration.hasConvertibleMethod()
-        ) {
-            report(Finding(Entity.from(expression), description))
+        val declaration = expression.objectDeclaration
+        analyze(expression) {
+            if (declaration.name == null &&
+                expression.symbol.superTypes.singleOrNull()?.isFunctionalInterface == true &&
+                declaration.hasConvertibleMethod()
+            ) {
+                report(Finding(Entity.from(expression), description))
+            }
         }
     }
 }
