@@ -1,25 +1,31 @@
 package io.gitlab.arturbosch.detekt.rules.coroutines.utils
 
-import dev.detekt.psi.fqNameOrNull
+import org.jetbrains.kotlin.analysis.api.KaSession
+import org.jetbrains.kotlin.analysis.api.types.KaType
+import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.name.ClassId
-import org.jetbrains.kotlin.types.KotlinType
-import org.jetbrains.kotlin.types.typeUtil.supertypes
 
-internal fun KotlinType.isCoroutineScope(): Boolean =
+@Suppress("ModifierListSpacing")
+context(session: KaSession)
+internal fun KaType.isCoroutineScope(): Boolean = with(session) {
     sequence {
         yield(this@isCoroutineScope)
-        yieldAll(this@isCoroutineScope.supertypes())
+        yieldAll(this@isCoroutineScope.allSupertypes)
     }
-        .mapNotNull { it.fqNameOrNull()?.asString() }
+        .mapNotNull { it.symbol?.classId?.asFqNameString() }
         .contains("kotlinx.coroutines.CoroutineScope")
+}
 
-internal fun KotlinType.isCoroutinesFlow(): Boolean =
+@Suppress("ModifierListSpacing")
+context(session: KaSession)
+internal fun KaType.isCoroutinesFlow(): Boolean = with(session) {
     sequence {
         yield(this@isCoroutinesFlow)
-        yieldAll(this@isCoroutinesFlow.supertypes())
+        yieldAll(this@isCoroutinesFlow.allSupertypes)
     }
-        .mapNotNull { it.fqNameOrNull()?.asString() }
+        .mapNotNull { it.symbol?.classId?.asFqNameString() }
         .contains("kotlinx.coroutines.flow.Flow")
+}
 
 internal object CoroutineClassIds {
     val Flow: ClassId = ClassId.fromString("kotlinx/coroutines/flow/Flow")
