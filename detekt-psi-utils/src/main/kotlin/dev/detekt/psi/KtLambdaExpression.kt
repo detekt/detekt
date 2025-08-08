@@ -1,6 +1,7 @@
 package dev.detekt.psi
 
 import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.symbols.KaValueParameterSymbol
 import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
 import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.psi.KtLambdaExpression
@@ -13,7 +14,7 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 fun KtLambdaExpression.firstParameter(bindingContext: BindingContext) =
     bindingContext[BindingContext.FUNCTION, functionLiteral]?.valueParameters?.singleOrNull()
 
-fun KtLambdaExpression.firstParameterOrNull() = analyze(this) {
+fun KtLambdaExpression.firstParameterOrNull(): KaValueParameterSymbol? = analyze(this) {
     functionLiteral.symbol.valueParameters.singleOrNull()
 }
 
