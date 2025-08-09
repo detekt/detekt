@@ -2,9 +2,8 @@ package io.gitlab.arturbosch.detekt.rules.style.optional
 
 import dev.detekt.api.Config
 import dev.detekt.api.SourceLocation
+import dev.detekt.test.assertThat
 import dev.detekt.test.lint
-import dev.detekt.test.location
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -60,8 +59,8 @@ class MandatoryBracesLoopsSpec {
 
             val findings = subject.lint(code)
 
-            assertThat(findings).hasSize(1)
-            assertThat(findings[0].entity.ktElement.text).isEqualTo("println(i)")
+            assertThat(findings).singleElement()
+                .hasTextLocation("println(i)")
         }
 
         @Test
@@ -116,8 +115,8 @@ class MandatoryBracesLoopsSpec {
 
             val findings = subject.lint(code)
 
-            assertThat(findings).hasSize(1)
-            assertThat(findings[0].location.source).isEqualTo(SourceLocation(line = 3, column = 9))
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(SourceLocation(line = 3, column = 9))
         }
 
         @Test
@@ -148,9 +147,9 @@ class MandatoryBracesLoopsSpec {
 
             val findings = subject.lint(code)
 
-            assertThat(findings).hasSize(2)
-
-            dev.detekt.test.assertThat(findings).hasTextLocations(42 to 80, 71 to 80)
+            assertThat(findings)
+                .hasSize(2)
+                .hasTextLocations(42 to 80, 71 to 80)
         }
 
         @Test
@@ -169,8 +168,8 @@ class MandatoryBracesLoopsSpec {
 
             val findings = subject.lint(code)
 
-            assertThat(findings).hasSize(1)
-            assertThat(findings[0].location.source).isEqualTo(SourceLocation(line = 4, column = 9))
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(SourceLocation(line = 4, column = 9))
         }
 
         @Test
@@ -190,8 +189,8 @@ class MandatoryBracesLoopsSpec {
 
             val findings = subject.lint(code)
 
-            assertThat(findings).hasSize(1)
-            assertThat(findings[0].location.source).isEqualTo(SourceLocation(line = 6, column = 13))
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(SourceLocation(line = 6, column = 13))
         }
     }
 
@@ -233,8 +232,8 @@ class MandatoryBracesLoopsSpec {
 
             val findings = subject.lint(code)
 
-            assertThat(findings).hasSize(1)
-            assertThat(findings[0].entity.ktElement.text).isEqualTo("println()")
+            assertThat(findings).singleElement()
+                .hasTextLocation("println()")
         }
 
         @Test
@@ -306,8 +305,8 @@ class MandatoryBracesLoopsSpec {
 
             val findings = subject.lint(code)
 
-            assertThat(findings).hasSize(1)
-            assertThat(findings[0].entity.ktElement.text).isEqualTo("println()")
+            assertThat(findings).singleElement()
+                .hasTextLocation("println()")
         }
 
         @Test
@@ -365,8 +364,8 @@ class MandatoryBracesLoopsSpec {
 
             val findings = subject.lint(code)
 
-            assertThat(findings).hasSize(1)
-            assertThat(findings[0].location.source).isEqualTo(SourceLocation(line = 3, column = 9))
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(SourceLocation(line = 3, column = 9))
         }
 
         @Test

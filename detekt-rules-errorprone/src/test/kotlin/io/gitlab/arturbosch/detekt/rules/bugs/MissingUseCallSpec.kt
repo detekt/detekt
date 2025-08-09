@@ -40,8 +40,8 @@ class MissingUseCallSpec(private val env: KotlinEnvironmentContainer) {
             ${myClosable(clazz)}
         """.trimIndent()
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings[0]).hasSourceLocation(2, 23)
+        assertThat(findings).singleElement()
+            .hasSourceLocation(2, 23)
     }
 
     @Test
