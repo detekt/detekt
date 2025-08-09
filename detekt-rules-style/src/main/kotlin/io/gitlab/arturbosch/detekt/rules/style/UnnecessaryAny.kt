@@ -5,7 +5,9 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
+import dev.detekt.psi.firstParameterOrNull
 import dev.detekt.psi.isCalling
+import dev.detekt.psi.mainReference
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
@@ -16,7 +18,7 @@ import org.jetbrains.kotlin.analysis.api.symbols.KaDeclarationSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaDestructuringDeclarationSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaVariableSymbol
-import org.jetbrains.kotlin.idea.references.mainReference
+import org.jetbrains.kotlin.builtins.StandardNames
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.Name
@@ -79,7 +81,7 @@ class UnnecessaryAny(config: Config) :
                 val bodyExpression = valueExpression.bodyExpression ?: return null
                 val parameter =
                     valueExpression.functionLiteral.valueParameters.singleOrNull()?.destructuringDeclaration?.symbol
-                        ?: valueExpression.functionLiteral.symbol.valueParameters.singleOrNull()
+                        ?: valueExpression.firstParameterOrNull()
                         ?: return null
                 bodyExpression.shouldBlockExpressionBeReported(parameter)
             }
@@ -100,7 +102,6 @@ class UnnecessaryAny(config: Config) :
         }
     }
 
-    @Suppress("ModifierListSpacing")
     context(session: KaSession)
     private fun KtBlockExpression.shouldBlockExpressionBeReported(parameter: KaDeclarationSymbol): String? {
         if (this.statements.isEmpty()) return null
@@ -123,7 +124,6 @@ class UnnecessaryAny(config: Config) :
         return statement.shouldStatementBeReported(parameter)
     }
 
-    @Suppress("ModifierListSpacing")
     context(session: KaSession)
     private fun KtExpression.shouldStatementBeReported(parameter: KaDeclarationSymbol): String? =
         when (this) {
@@ -174,7 +174,7 @@ class UnnecessaryAny(config: Config) :
 
             itRefCountInLeft == 1 -> {
                 with(session) {
-                    val itExpressionType = (leftExpression.mainReference?.resolveToSymbol() as? KaVariableSymbol)
+                    val itExpressionType = (leftExpression.mainReference()?.resolveToSymbol() as? KaVariableSymbol)
                         ?.returnType
                         ?: return null
                     val valueExpressionType = rightExpression
@@ -201,7 +201,7 @@ class UnnecessaryAny(config: Config) :
     context(session: KaSession)
     private fun KtExpression.getItUsageCount(symbol: KaDeclarationSymbol) = with(session) {
         collectDescendantsOfType<KtNameReferenceExpression>().count {
-            it.mainReference.resolveToSymbol() == symbol
+            it.mainReference()?.resolveToSymbol() == symbol
         }
     }
 
@@ -211,7 +211,7 @@ class UnnecessaryAny(config: Config) :
         if (this == null) return false
         with(session) {
             val symbol = resolveToCall()?.singleFunctionCallOrNull()?.symbol as? KaNamedFunctionSymbol ?: return false
-            return symbol.name.asString() == "equals" &&
+            return symbol.name == StandardNames.EQUALS_NAME &&
                 symbol.returnType.isBooleanType &&
                 symbol.valueParameters.singleOrNull()?.returnType?.let { it.isAnyType && it.isMarkedNullable } == true
         }

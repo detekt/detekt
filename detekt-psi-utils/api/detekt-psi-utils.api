@@ -45,6 +45,10 @@ public final class dev/detekt/psi/KtCallExpressionKt {
 	public static final fun isCallingWithNonNullCheckArgument (Lorg/jetbrains/kotlin/psi/KtCallExpression;Lorg/jetbrains/kotlin/name/CallableId;)Z
 }
 
+public final class dev/detekt/psi/KtElemenetKt {
+	public static final fun mainReference (Lorg/jetbrains/kotlin/psi/KtElement;)Lorg/jetbrains/kotlin/idea/references/KtReference;
+}
+
 public final class dev/detekt/psi/KtFilesKt {
 	public static final fun absolutePath (Lcom/intellij/psi/PsiFile;)Ljava/nio/file/Path;
 	public static final fun absolutePath (Lorg/jetbrains/kotlin/psi/KtFile;)Ljava/nio/file/Path;
