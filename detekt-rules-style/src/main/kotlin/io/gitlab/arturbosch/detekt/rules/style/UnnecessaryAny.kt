@@ -7,7 +7,6 @@ import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.psi.firstParameterOrNull
 import dev.detekt.psi.isCalling
-import dev.detekt.psi.mainReference
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
@@ -19,6 +18,7 @@ import org.jetbrains.kotlin.analysis.api.symbols.KaDestructuringDeclarationSymbo
 import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaVariableSymbol
 import org.jetbrains.kotlin.builtins.StandardNames
+import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.Name
@@ -174,7 +174,7 @@ class UnnecessaryAny(config: Config) :
 
             itRefCountInLeft == 1 -> {
                 with(session) {
-                    val itExpressionType = (leftExpression.mainReference()?.resolveToSymbol() as? KaVariableSymbol)
+                    val itExpressionType = (leftExpression.mainReference?.resolveToSymbol() as? KaVariableSymbol)
                         ?.returnType
                         ?: return null
                     val valueExpressionType = rightExpression
@@ -200,7 +200,7 @@ class UnnecessaryAny(config: Config) :
     context(session: KaSession)
     private fun KtExpression.getItUsageCount(symbol: KaDeclarationSymbol) = with(session) {
         collectDescendantsOfType<KtNameReferenceExpression>().count {
-            it.mainReference()?.resolveToSymbol() == symbol
+            it.mainReference.resolveToSymbol() == symbol
         }
     }
 
