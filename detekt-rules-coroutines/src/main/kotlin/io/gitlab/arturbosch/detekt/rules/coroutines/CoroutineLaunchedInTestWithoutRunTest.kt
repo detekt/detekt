@@ -12,7 +12,9 @@ import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -67,10 +69,9 @@ class CoroutineLaunchedInTestWithoutRunTest(config: Config) :
         }
     }
 
-    @Suppress("ModifierListSpacing")
     context(session: KaSession)
     private fun KtNamedFunction.runsInRunTestBlock(): Boolean = with(session) {
-        bodyExpression?.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId?.asSingleFqName() == RUN_TEST_FQ
+        bodyExpression?.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId == RUN_TEST_CALLABLE_ID
     }
 
     companion object {
@@ -78,14 +79,13 @@ class CoroutineLaunchedInTestWithoutRunTest(config: Config) :
             "Launching coroutines in tests without a `runTest` block."
 
         private const val TEST_ANNOTATION_NAME = "Test"
-        private val RUN_TEST_FQ = FqName("kotlinx.coroutines.test.runTest")
+        private val RUN_TEST_CALLABLE_ID = CallableId(FqName("kotlinx.coroutines.test"), Name.identifier("runTest"))
     }
 }
 
 class FunCoroutineLaunchesTraverseHelper {
     val exploredFunctionsCache = mutableMapOf<KtNamedFunction, Boolean>()
 
-    @Suppress("ModifierListSpacing")
     context(session: KaSession)
     fun isFunctionLaunchingCoroutines(initialFunction: KtNamedFunction): Boolean {
         val traversedFunctions = mutableSetOf<KtNamedFunction>()
@@ -131,7 +131,6 @@ class FunCoroutineLaunchesTraverseHelper {
         return traversedFunctions.any { exploredFunctionsCache[it] == true }
     }
 
-    @Suppress("ModifierListSpacing")
     context(session: KaSession)
     private fun KtNamedFunction.isLaunchingCoroutine() = with(session) {
         anyDescendantOfType<KtDotQualifiedExpression> {

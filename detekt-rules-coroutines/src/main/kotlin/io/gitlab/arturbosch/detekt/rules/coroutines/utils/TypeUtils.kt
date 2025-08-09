@@ -5,26 +5,24 @@ import org.jetbrains.kotlin.analysis.api.types.KaType
 import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.name.ClassId
 
-@Suppress("ModifierListSpacing")
 context(session: KaSession)
 internal fun KaType.isCoroutineScope(): Boolean = with(session) {
     sequence {
         yield(this@isCoroutineScope)
         yieldAll(this@isCoroutineScope.allSupertypes)
     }
-        .mapNotNull { it.symbol?.classId?.asFqNameString() }
-        .contains("kotlinx.coroutines.CoroutineScope")
+        .mapNotNull { it.symbol?.classId }
+        .contains(ClassId.fromString("kotlinx/coroutines/CoroutineScope"))
 }
 
-@Suppress("ModifierListSpacing")
 context(session: KaSession)
 internal fun KaType.isCoroutinesFlow(): Boolean = with(session) {
     sequence {
         yield(this@isCoroutinesFlow)
         yieldAll(this@isCoroutinesFlow.allSupertypes)
     }
-        .mapNotNull { it.symbol?.classId?.asFqNameString() }
-        .contains("kotlinx.coroutines.flow.Flow")
+        .mapNotNull { it.symbol?.classId }
+        .contains(ClassId.fromString("kotlinx/coroutines/flow/Flow"))
 }
 
 internal object CoroutineClassIds {
