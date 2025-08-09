@@ -37,8 +37,8 @@ class LargeClassSpec {
             val aTopLevelPropertyOfNestedClasses = 0
         """.trimIndent()
         val findings = subject(allowedLines = 4).lint(code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings).hasStartSourceLocations(SourceLocation(7, 15))
+        assertThat(findings).singleElement()
+            .hasStartSourceLocation(SourceLocation(7, 15))
     }
 
     @Test

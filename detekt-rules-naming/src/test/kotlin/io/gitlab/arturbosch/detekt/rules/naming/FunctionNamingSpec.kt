@@ -104,7 +104,8 @@ class FunctionNamingSpec {
         val code = """
             fun `7his is a function name _`() = Unit
         """.trimIndent()
-        assertThat(FunctionNaming(Config.empty).lint(code)).hasStartSourceLocations(SourceLocation(1, 5))
+        assertThat(FunctionNaming(Config.empty).lint(code)).singleElement()
+            .hasStartSourceLocation(SourceLocation(1, 5))
     }
 
     @Test

@@ -22,11 +22,12 @@ class ForbiddenAnnotationSpec(val env: KotlinEnvironmentContainer) {
         """.trimIndent()
         val findings = ForbiddenAnnotation(Config.empty).lintWithContext(env, code)
 
-        assertThat(findings)
-            .hasSize(1)
-            .hasStartSourceLocations(
+        assertThat(findings).singleElement()
+            .hasStartSourceLocation(
                 SourceLocation(1, 1)
             )
+
+        assertThat(findings)
             .hasTextLocations("@SuppressWarnings")
             .extracting("message")
             .containsExactly(

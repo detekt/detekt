@@ -87,7 +87,7 @@ class MayBeConstantSpec {
                 val x = 1
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings).hasSize(1).hasStartSourceLocations(
+            assertThat(findings).singleElement().hasStartSourceLocation(
                 SourceLocation(1, 5)
             )
         }
@@ -98,7 +98,7 @@ class MayBeConstantSpec {
                 @JvmField val x = 1
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings).hasSize(1).hasStartSourceLocations(
+            assertThat(findings).singleElement().hasStartSourceLocation(
                 SourceLocation(1, 15)
             )
         }
@@ -111,7 +111,7 @@ class MayBeConstantSpec {
                 }
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings).hasSize(1).hasStartSourceLocations(
+            assertThat(findings).singleElement().hasStartSourceLocation(
                 SourceLocation(2, 19)
             )
         }
@@ -126,7 +126,7 @@ class MayBeConstantSpec {
                 }
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings).hasSize(1).hasStartSourceLocations(
+            assertThat(findings).singleElement().hasStartSourceLocation(
                 SourceLocation(3, 13)
             )
         }
@@ -143,7 +143,7 @@ class MayBeConstantSpec {
                 }
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings).hasSize(1).hasStartSourceLocations(
+            assertThat(findings).singleElement().hasStartSourceLocation(
                 SourceLocation(3, 9)
             )
         }
@@ -159,7 +159,7 @@ class MayBeConstantSpec {
                 }
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings).hasSize(1).hasStartSourceLocations(
+            assertThat(findings).singleElement().hasStartSourceLocation(
                 SourceLocation(4, 13)
             )
         }
@@ -173,7 +173,7 @@ class MayBeConstantSpec {
                 }
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings).hasSize(1).hasStartSourceLocations(
+            assertThat(findings).singleElement().hasStartSourceLocation(
                 SourceLocation(3, 9)
             )
         }
@@ -187,7 +187,7 @@ class MayBeConstantSpec {
                 }
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings).hasSize(1).hasStartSourceLocations(
+            assertThat(findings).singleElement().hasStartSourceLocation(
                 SourceLocation(3, 9)
             )
         }
@@ -203,7 +203,7 @@ class MayBeConstantSpec {
                 }
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings).hasSize(1).hasStartSourceLocations(
+            assertThat(findings).singleElement().hasStartSourceLocation(
                 SourceLocation(5, 9)
             )
         }
@@ -217,7 +217,7 @@ class MayBeConstantSpec {
                 }
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings).hasSize(1).hasStartSourceLocations(
+            assertThat(findings).singleElement().hasStartSourceLocation(
                 SourceLocation(3, 17)
             )
         }
