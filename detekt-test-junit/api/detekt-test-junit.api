@@ -1,0 +1,11 @@
+public abstract interface annotation class dev/detekt/test/junit/KotlinCoreEnvironmentTest : java/lang/annotation/Annotation {
+	public abstract fun additionalJavaSourcePaths ()[Ljava/lang/String;
+}
+
+public final class dev/detekt/test/junit/KotlinCoreEnvironmentWrapper : java/lang/AutoCloseable, org/junit/jupiter/api/extension/ExtensionContext$Store$CloseableResource {
+	public fun <init> (Lcom/intellij/openapi/project/Project;Lorg/jetbrains/kotlin/config/CompilerConfiguration;Lcom/intellij/openapi/Disposable;Ldev/detekt/test/utils/KotlinEnvironmentContainer;)V
+	public synthetic fun <init> (Lcom/intellij/openapi/project/Project;Lorg/jetbrains/kotlin/config/CompilerConfiguration;Lcom/intellij/openapi/Disposable;Ldev/detekt/test/utils/KotlinEnvironmentContainer;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun close ()V
+	public final fun getEnv ()Ldev/detekt/test/utils/KotlinEnvironmentContainer;
+}
+
