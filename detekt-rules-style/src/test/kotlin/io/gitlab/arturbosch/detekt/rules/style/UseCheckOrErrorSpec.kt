@@ -19,7 +19,8 @@ class UseCheckOrErrorSpec(val env: KotlinEnvironmentContainer) {
                 if (a < 0) throw IllegalStateException()
             }
         """.trimIndent()
-        assertThat(subject.lintWithContext(env, code)).hasStartSourceLocation(3, 16)
+        assertThat(subject.lintWithContext(env, code)).singleElement()
+            .hasStartSourceLocation(3, 16)
     }
 
     @Test
@@ -32,7 +33,8 @@ class UseCheckOrErrorSpec(val env: KotlinEnvironmentContainer) {
                 }
             }
         """.trimIndent()
-        assertThat(subject.lintWithContext(env, code)).hasStartSourceLocation(4, 9)
+        assertThat(subject.lintWithContext(env, code)).singleElement()
+            .hasStartSourceLocation(4, 9)
     }
 
     @Test
@@ -43,7 +45,8 @@ class UseCheckOrErrorSpec(val env: KotlinEnvironmentContainer) {
                 if (a < 0) throw IllegalStateException("More details")
             }
         """.trimIndent()
-        assertThat(subject.lintWithContext(env, code)).hasStartSourceLocation(3, 16)
+        assertThat(subject.lintWithContext(env, code)).singleElement()
+            .hasStartSourceLocation(3, 16)
     }
 
     @Test
@@ -55,7 +58,8 @@ class UseCheckOrErrorSpec(val env: KotlinEnvironmentContainer) {
                     else -> throw IllegalStateException()
                 }
         """.trimIndent()
-        assertThat(subject.lintWithContext(env, code)).hasStartSourceLocation(4, 17)
+        assertThat(subject.lintWithContext(env, code)).singleElement()
+            .hasStartSourceLocation(4, 17)
     }
 
     @Test
@@ -66,7 +70,8 @@ class UseCheckOrErrorSpec(val env: KotlinEnvironmentContainer) {
                 if (a < 0) throw java.lang.IllegalStateException()
             }
         """.trimIndent()
-        assertThat(subject.lintWithContext(env, code)).hasStartSourceLocation(3, 16)
+        assertThat(subject.lintWithContext(env, code)).singleElement()
+            .hasStartSourceLocation(3, 16)
     }
 
     @Test
@@ -77,7 +82,8 @@ class UseCheckOrErrorSpec(val env: KotlinEnvironmentContainer) {
                 if (a < 0) throw kotlin.IllegalStateException()
             }
         """.trimIndent()
-        assertThat(subject.lintWithContext(env, code)).hasStartSourceLocation(3, 16)
+        assertThat(subject.lintWithContext(env, code)).singleElement()
+            .hasStartSourceLocation(3, 16)
     }
 
     @Test
@@ -126,13 +132,15 @@ class UseCheckOrErrorSpec(val env: KotlinEnvironmentContainer) {
     @Test
     fun `reports an issue if the exception thrown as the only action in a function`() {
         val code = """fun doThrow(): Nothing = throw IllegalStateException("message")"""
-        assertThat(subject.lintWithContext(env, code)).hasStartSourceLocation(1, 26)
+        assertThat(subject.lintWithContext(env, code)).singleElement()
+            .hasStartSourceLocation(1, 26)
     }
 
     @Test
     fun `reports an issue if the exception thrown as the only action in a function block`() {
         val code = """fun doThrow(): Nothing { throw IllegalStateException("message") }"""
-        assertThat(subject.lintWithContext(env, code)).hasStartSourceLocation(1, 26)
+        assertThat(subject.lintWithContext(env, code)).singleElement()
+            .hasStartSourceLocation(1, 26)
     }
 
     @Test

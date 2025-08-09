@@ -27,7 +27,7 @@ class UseIsNullOrEmptySpec(val env: KotlinEnvironmentContainer) {
                 assertThat(findings).singleElement().hasMessage(
                     "This 'x == null || x.isEmpty()' can be replaced with 'isNullOrEmpty()' call"
                 )
-                assertThat(findings).hasStartSourceLocation(2, 9)
+                assertThat(findings).singleElement().hasStartSourceLocation(2, 9)
             }
 
             @Test

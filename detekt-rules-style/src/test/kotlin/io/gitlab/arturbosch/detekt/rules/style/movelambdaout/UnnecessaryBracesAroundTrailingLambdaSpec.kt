@@ -151,7 +151,7 @@ class UnnecessaryBracesAroundTrailingLambdaSpec(val env: KotlinEnvironmentContai
             }
         """.trimIndent()
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).hasSize(1).hasStartSourceLocation(2, 5).hasEndSourceLocation(2, 8)
+        assertThat(findings).singleElement().hasStartSourceLocation(2, 5).hasEndSourceLocation(2, 8)
     }
 
     @Test

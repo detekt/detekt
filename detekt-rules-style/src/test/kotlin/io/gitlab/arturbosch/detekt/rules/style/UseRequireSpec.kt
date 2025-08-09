@@ -20,7 +20,8 @@ class UseRequireSpec(val env: KotlinEnvironmentContainer) {
                 println("something")
             }
         """.trimIndent()
-        assertThat(subject.lintWithContext(env, code)).hasStartSourceLocation(2, 16)
+        assertThat(subject.lintWithContext(env, code)).singleElement()
+            .hasStartSourceLocation(2, 16)
     }
 
     @Test
@@ -34,7 +35,8 @@ class UseRequireSpec(val env: KotlinEnvironmentContainer) {
             }
         """.trimIndent()
 
-        assertThat(subject.lintWithContext(env, code)).hasStartSourceLocation(3, 9)
+        assertThat(subject.lintWithContext(env, code)).singleElement()
+            .hasStartSourceLocation(3, 9)
     }
 
     @Test
@@ -45,7 +47,8 @@ class UseRequireSpec(val env: KotlinEnvironmentContainer) {
                 println("something")
             }
         """.trimIndent()
-        assertThat(subject.lintWithContext(env, code)).hasStartSourceLocation(2, 16)
+        assertThat(subject.lintWithContext(env, code)).singleElement()
+            .hasStartSourceLocation(2, 16)
     }
 
     @Test
@@ -56,7 +59,8 @@ class UseRequireSpec(val env: KotlinEnvironmentContainer) {
                 println("something")
             }
         """.trimIndent()
-        assertThat(subject.lintWithContext(env, code)).hasStartSourceLocation(2, 16)
+        assertThat(subject.lintWithContext(env, code)).singleElement()
+            .hasStartSourceLocation(2, 16)
     }
 
     @Test
@@ -67,7 +71,8 @@ class UseRequireSpec(val env: KotlinEnvironmentContainer) {
                 println("something")
             }
         """.trimIndent()
-        assertThat(subject.lintWithContext(env, code)).hasStartSourceLocation(2, 16)
+        assertThat(subject.lintWithContext(env, code)).singleElement()
+            .hasStartSourceLocation(2, 16)
     }
 
     @Test

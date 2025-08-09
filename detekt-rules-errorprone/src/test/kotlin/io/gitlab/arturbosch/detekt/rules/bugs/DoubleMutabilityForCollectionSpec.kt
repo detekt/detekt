@@ -29,8 +29,8 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinEnvironmentContai
                     }
                 """.trimIndent()
                 val result = subject.lintWithContext(env, code)
-                assertThat(result).hasSize(1)
-                assertThat(result).hasStartSourceLocation(2, 5)
+                assertThat(result).singleElement()
+                    .hasStartSourceLocation(2, 5)
             }
 
             @Test
@@ -41,8 +41,8 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinEnvironmentContai
                     }
                 """.trimIndent()
                 val result = subject.lintWithContext(env, code)
-                assertThat(result).hasSize(1)
-                assertThat(result).hasStartSourceLocation(2, 5)
+                assertThat(result).singleElement()
+                    .hasStartSourceLocation(2, 5)
             }
 
             @Test
@@ -53,8 +53,8 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinEnvironmentContai
                     }
                 """.trimIndent()
                 val result = subject.lintWithContext(env, code)
-                assertThat(result).hasSize(1)
-                assertThat(result).hasStartSourceLocation(2, 5)
+                assertThat(result).singleElement()
+                    .hasStartSourceLocation(2, 5)
             }
 
             @Test
@@ -65,8 +65,8 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinEnvironmentContai
                     }
                 """.trimIndent()
                 val result = subject.lintWithContext(env, code)
-                assertThat(result).hasSize(1)
-                assertThat(result).hasStartSourceLocation(2, 5)
+                assertThat(result).singleElement()
+                    .hasStartSourceLocation(2, 5)
             }
 
             @Test
@@ -77,8 +77,8 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinEnvironmentContai
                     }
                 """.trimIndent()
                 val result = subject.lintWithContext(env, code)
-                assertThat(result).hasSize(1)
-                assertThat(result).hasStartSourceLocation(2, 5)
+                assertThat(result).singleElement()
+                    .hasStartSourceLocation(2, 5)
             }
 
             @Test
@@ -89,8 +89,8 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinEnvironmentContai
                     }
                 """.trimIndent()
                 val result = subject.lintWithContext(env, code)
-                assertThat(result).hasSize(1)
-                assertThat(result).hasStartSourceLocation(2, 5)
+                assertThat(result).singleElement()
+                    .hasStartSourceLocation(2, 5)
             }
 
             @Test
@@ -101,8 +101,8 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinEnvironmentContai
                     }
                 """.trimIndent()
                 val result = subject.lintWithContext(env, code)
-                assertThat(result).hasSize(1)
-                assertThat(result).hasStartSourceLocation(2, 5)
+                assertThat(result).singleElement()
+                    .hasStartSourceLocation(2, 5)
             }
 
             @Test
@@ -113,8 +113,8 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinEnvironmentContai
                     }
                 """.trimIndent()
                 val result = subject.lintWithContext(env, code)
-                assertThat(result).hasSize(1)
-                assertThat(result).hasStartSourceLocation(2, 5)
+                assertThat(result).singleElement()
+                    .hasStartSourceLocation(2, 5)
             }
 
             @Test
@@ -130,8 +130,8 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinEnvironmentContai
                     }
                 """.trimIndent()
                 val result = rule.lintWithContext(env, code)
-                assertThat(result).hasSize(1)
-                assertThat(result).hasStartSourceLocation(3, 5)
+                assertThat(result).singleElement()
+                    .hasStartSourceLocation(3, 5)
             }
 
             @Test
@@ -148,8 +148,8 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinEnvironmentContai
                     }
                 """.trimIndent()
                 val result = rule.lintWithContext(env, code)
-                assertThat(result).hasSize(1)
-                assertThat(result).hasStartSourceLocation(4, 5)
+                assertThat(result).singleElement()
+                    .hasStartSourceLocation(4, 5)
             }
 
             @Test
@@ -165,8 +165,8 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinEnvironmentContai
                     }
                 """.trimIndent()
                 val result = rule.lintWithContext(env, code)
-                assertThat(result).hasSize(1)
-                assertThat(result).hasStartSourceLocation(5, 5)
+                assertThat(result).singleElement()
+                    .hasStartSourceLocation(5, 5)
             }
         }
 
@@ -338,8 +338,8 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinEnvironmentContai
                     var myList = mutableListOf(1, 2, 3)
                 """.trimIndent()
                 val result = subject.lintWithContext(env, code)
-                assertThat(result).hasSize(1)
-                assertThat(result).hasStartSourceLocation(1, 1)
+                assertThat(result).singleElement()
+                    .hasStartSourceLocation(1, 1)
             }
 
             @Test
@@ -348,8 +348,8 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinEnvironmentContai
                     var mySet = mutableSetOf(1, 2, 3)
                 """.trimIndent()
                 val result = subject.lintWithContext(env, code)
-                assertThat(result).hasSize(1)
-                assertThat(result).hasStartSourceLocation(1, 1)
+                assertThat(result).singleElement()
+                    .hasStartSourceLocation(1, 1)
             }
 
             @Test
@@ -358,8 +358,8 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinEnvironmentContai
                     var myMap = mutableMapOf("answer" to 42)
                 """.trimIndent()
                 val result = subject.lintWithContext(env, code)
-                assertThat(result).hasSize(1)
-                assertThat(result).hasStartSourceLocation(1, 1)
+                assertThat(result).singleElement()
+                    .hasStartSourceLocation(1, 1)
             }
 
             @Test
@@ -368,8 +368,8 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinEnvironmentContai
                     var myArrayList = ArrayList<Int>()
                 """.trimIndent()
                 val result = subject.lintWithContext(env, code)
-                assertThat(result).hasSize(1)
-                assertThat(result).hasStartSourceLocation(1, 1)
+                assertThat(result).singleElement()
+                    .hasStartSourceLocation(1, 1)
             }
 
             @Test
@@ -378,8 +378,8 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinEnvironmentContai
                     var myLinkedHashSet = LinkedHashSet<Int>()
                 """.trimIndent()
                 val result = subject.lintWithContext(env, code)
-                assertThat(result).hasSize(1)
-                assertThat(result).hasStartSourceLocation(1, 1)
+                assertThat(result).singleElement()
+                    .hasStartSourceLocation(1, 1)
             }
 
             @Test
@@ -388,8 +388,8 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinEnvironmentContai
                     var myHashSet = HashSet<Int>()
                 """.trimIndent()
                 val result = subject.lintWithContext(env, code)
-                assertThat(result).hasSize(1)
-                assertThat(result).hasStartSourceLocation(1, 1)
+                assertThat(result).singleElement()
+                    .hasStartSourceLocation(1, 1)
             }
 
             @Test
@@ -398,8 +398,8 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinEnvironmentContai
                     var myLinkedHashMap = LinkedHashMap<String, Int>()
                 """.trimIndent()
                 val result = subject.lintWithContext(env, code)
-                assertThat(result).hasSize(1)
-                assertThat(result).hasStartSourceLocation(1, 1)
+                assertThat(result).singleElement()
+                    .hasStartSourceLocation(1, 1)
             }
 
             @Test
@@ -408,8 +408,8 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinEnvironmentContai
                     var myHashMap = HashMap<String, Int>()
                 """.trimIndent()
                 val result = subject.lintWithContext(env, code)
-                assertThat(result).hasSize(1)
-                assertThat(result).hasStartSourceLocation(1, 1)
+                assertThat(result).singleElement()
+                    .hasStartSourceLocation(1, 1)
             }
 
             @Test
@@ -423,8 +423,8 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinEnvironmentContai
                     var myState = MutableState("foo")
                 """.trimIndent()
                 val result = rule.lintWithContext(env, code)
-                assertThat(result).hasSize(1)
-                assertThat(result).hasStartSourceLocation(2, 1)
+                assertThat(result).singleElement()
+                    .hasStartSourceLocation(2, 1)
             }
 
             @Test
@@ -439,8 +439,8 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinEnvironmentContai
                     var myState = mutableStateOf("foo")
                 """.trimIndent()
                 val result = rule.lintWithContext(env, code)
-                assertThat(result).hasSize(1)
-                assertThat(result).hasStartSourceLocation(3, 1)
+                assertThat(result).singleElement()
+                    .hasStartSourceLocation(3, 1)
             }
 
             @Test
@@ -456,8 +456,8 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinEnvironmentContai
                     var myState = remember { mutableStateOf("foo") }
                 """.trimIndent()
                 val result = rule.lintWithContext(env, code)
-                assertThat(result).hasSize(1)
-                assertThat(result).hasStartSourceLocation(4, 1)
+                assertThat(result).singleElement()
+                    .hasStartSourceLocation(4, 1)
             }
         }
 
@@ -607,8 +607,8 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinEnvironmentContai
                     }
                 """.trimIndent()
                 val result = subject.lintWithContext(env, code)
-                assertThat(result).hasSize(1)
-                assertThat(result).hasStartSourceLocation(2, 5)
+                assertThat(result).singleElement()
+                    .hasStartSourceLocation(2, 5)
             }
 
             @Test
@@ -619,8 +619,8 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinEnvironmentContai
                     }
                 """.trimIndent()
                 val result = subject.lintWithContext(env, code)
-                assertThat(result).hasSize(1)
-                assertThat(result).hasStartSourceLocation(2, 5)
+                assertThat(result).singleElement()
+                    .hasStartSourceLocation(2, 5)
             }
 
             @Test
@@ -631,8 +631,8 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinEnvironmentContai
                     }
                 """.trimIndent()
                 val result = subject.lintWithContext(env, code)
-                assertThat(result).hasSize(1)
-                assertThat(result).hasStartSourceLocation(2, 5)
+                assertThat(result).singleElement()
+                    .hasStartSourceLocation(2, 5)
             }
 
             @Test
@@ -643,8 +643,8 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinEnvironmentContai
                     }
                 """.trimIndent()
                 val result = subject.lintWithContext(env, code)
-                assertThat(result).hasSize(1)
-                assertThat(result).hasStartSourceLocation(2, 5)
+                assertThat(result).singleElement()
+                    .hasStartSourceLocation(2, 5)
             }
 
             @Test
@@ -655,8 +655,8 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinEnvironmentContai
                     }
                 """.trimIndent()
                 val result = subject.lintWithContext(env, code)
-                assertThat(result).hasSize(1)
-                assertThat(result).hasStartSourceLocation(2, 5)
+                assertThat(result).singleElement()
+                    .hasStartSourceLocation(2, 5)
             }
 
             @Test
@@ -667,8 +667,8 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinEnvironmentContai
                     }
                 """.trimIndent()
                 val result = subject.lintWithContext(env, code)
-                assertThat(result).hasSize(1)
-                assertThat(result).hasStartSourceLocation(2, 5)
+                assertThat(result).singleElement()
+                    .hasStartSourceLocation(2, 5)
             }
 
             @Test
@@ -679,8 +679,8 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinEnvironmentContai
                     }
                 """.trimIndent()
                 val result = subject.lintWithContext(env, code)
-                assertThat(result).hasSize(1)
-                assertThat(result).hasStartSourceLocation(2, 5)
+                assertThat(result).singleElement()
+                    .hasStartSourceLocation(2, 5)
             }
 
             @Test
@@ -691,8 +691,8 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinEnvironmentContai
                     }
                 """.trimIndent()
                 val result = subject.lintWithContext(env, code)
-                assertThat(result).hasSize(1)
-                assertThat(result).hasStartSourceLocation(2, 5)
+                assertThat(result).singleElement()
+                    .hasStartSourceLocation(2, 5)
             }
 
             @Test
@@ -708,8 +708,8 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinEnvironmentContai
                     }
                 """.trimIndent()
                 val result = rule.lintWithContext(env, code)
-                assertThat(result).hasSize(1)
-                assertThat(result).hasStartSourceLocation(3, 5)
+                assertThat(result).singleElement()
+                    .hasStartSourceLocation(3, 5)
             }
 
             @Test
@@ -726,8 +726,8 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinEnvironmentContai
                     }
                 """.trimIndent()
                 val result = rule.lintWithContext(env, code)
-                assertThat(result).hasSize(1)
-                assertThat(result).hasStartSourceLocation(4, 5)
+                assertThat(result).singleElement()
+                    .hasStartSourceLocation(4, 5)
             }
 
             @Test
@@ -745,8 +745,8 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinEnvironmentContai
                     }
                 """.trimIndent()
                 val result = rule.lintWithContext(env, code)
-                assertThat(result).hasSize(1)
-                assertThat(result).hasStartSourceLocation(5, 5)
+                assertThat(result).singleElement()
+                    .hasStartSourceLocation(5, 5)
             }
         }
 
