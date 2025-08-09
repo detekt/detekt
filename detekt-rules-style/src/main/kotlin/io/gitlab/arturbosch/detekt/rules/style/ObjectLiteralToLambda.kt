@@ -47,7 +47,6 @@ class ObjectLiteralToLambda(config: Config) :
     ),
     RequiresAnalysisApi {
 
-    @Suppress("ModifierListSpacing")
     context(session: KaSession)
     private fun KtExpression.containsThisReference(objectSymbol: KaClassSymbol) = with(session) {
         anyDescendantOfType<KtThisExpression> {
@@ -55,7 +54,6 @@ class ObjectLiteralToLambda(config: Config) :
         }
     }
 
-    @Suppress("ModifierListSpacing")
     context(session: KaSession)
     private fun KtExpression.containsOwnMethodCall(objectSymbol: KaClassSymbol) = with(session) {
         anyDescendantOfType<KtExpression> { expr ->
@@ -64,7 +62,6 @@ class ObjectLiteralToLambda(config: Config) :
         }
     }
 
-    @Suppress("ModifierListSpacing")
     context(session: KaSession)
     private fun KtExpression.containsMethodOf(declaration: KtObjectDeclaration): Boolean {
         with(session) {
@@ -73,7 +70,6 @@ class ObjectLiteralToLambda(config: Config) :
         }
     }
 
-    @Suppress("ModifierListSpacing")
     context(session: KaSession)
     private fun KtObjectDeclaration.hasConvertibleMethod(): Boolean {
         val singleNamedMethod = declarations.singleOrNull() as? KtNamedFunction
