@@ -13,6 +13,7 @@ import dev.detekt.api.config
 import dev.detekt.api.simplePatternToRegex
 import dev.detekt.psi.FunctionMatcher
 import dev.detekt.psi.isCalling
+import dev.detekt.psi.mainReference
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
@@ -23,7 +24,6 @@ import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolOrigin
 import org.jetbrains.kotlin.analysis.api.types.KaClassType
 import org.jetbrains.kotlin.analysis.api.types.KaFunctionType
 import org.jetbrains.kotlin.analysis.api.types.KaType
-import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.load.java.JavaClassFinderImpl
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.ClassId
@@ -185,7 +185,6 @@ class IgnoredReturnValue(config: Config) :
         return true
     }
 
-    @Suppress("ModifierListSpacing")
     context(session: KaSession)
     private fun KtExpression.isLambdaResult(lambda: KtLambdaExpression): Boolean {
         val statement = getQualifiedExpressionForSelectorOrThis().let {
@@ -196,7 +195,7 @@ class IgnoredReturnValue(config: Config) :
                 with(session) {
                     val symbol = lambda.functionLiteral.symbol
                     val label = (statement as? KtExpressionWithLabel)?.getTargetLabel()
-                    label?.mainReference?.resolveToSymbol() == symbol
+                    label?.mainReference()?.resolveToSymbol() == symbol
                 }
             }
 
