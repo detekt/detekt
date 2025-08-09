@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
 import dev.detekt.test.TestConfig
+import dev.detekt.test.assertThat
 import dev.detekt.test.lint
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -25,8 +25,8 @@ class MethodOverloadingSpec {
                 }
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings).hasSize(1)
-            assertThat(findings[0].message).isEqualTo("The method 'x' is overloaded 3 times.")
+            assertThat(findings).singleElement()
+                .hasMessage("The method 'x' is overloaded 3 times.")
         }
 
         @Test

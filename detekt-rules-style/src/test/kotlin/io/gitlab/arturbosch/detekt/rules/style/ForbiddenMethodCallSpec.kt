@@ -780,12 +780,12 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
                     val x = BigDecimal("3.14")
                 """.trimIndent()
                 val findings = ForbiddenMethodCall(TestConfig()).lintWithContext(env, code)
-                assertThat(findings).hasSize(1)
-                assertThat(findings.first()).hasMessage(
-                    "The method `java.math.BigDecimal.<init>(kotlin.String)` has " +
-                        "been forbidden: using `BigDecimal(String)` can result in a " +
-                        "`NumberFormatException`. Use `String.toBigDecimalOrNull()`"
-                )
+                assertThat(findings).singleElement()
+                    .hasMessage(
+                        "The method `java.math.BigDecimal.<init>(kotlin.String)` has " +
+                            "been forbidden: using `BigDecimal(String)` can result in a " +
+                            "`NumberFormatException`. Use `String.toBigDecimalOrNull()`"
+                    )
             }
 
             @Test
