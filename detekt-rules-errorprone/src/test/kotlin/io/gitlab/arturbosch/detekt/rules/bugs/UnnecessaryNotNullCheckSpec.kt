@@ -22,8 +22,8 @@ class UnnecessaryNotNullCheckSpec(private val env: KotlinEnvironmentContainer) {
                 val y = requireNotNull(x)
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
-            assertThat(findings).hasSize(1)
-            assertThat(findings).hasTextLocations(18 to 35)
+            assertThat(findings).singleElement()
+                .hasTextLocation(18 to 35)
         }
 
         @Test
@@ -33,8 +33,8 @@ class UnnecessaryNotNullCheckSpec(private val env: KotlinEnvironmentContainer) {
                 val y = checkNotNull(x)
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
-            assertThat(findings).hasSize(1)
-            assertThat(findings).hasTextLocations(18 to 33)
+            assertThat(findings).singleElement()
+                .hasTextLocation(18 to 33)
         }
 
         @Test
@@ -48,8 +48,8 @@ class UnnecessaryNotNullCheckSpec(private val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
-            assertThat(findings).hasSize(1)
-            assertThat(findings).hasTextLocations(48 to 69)
+            assertThat(findings).singleElement()
+                .hasTextLocation(48 to 69)
         }
 
         @Test
@@ -63,8 +63,8 @@ class UnnecessaryNotNullCheckSpec(private val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
-            assertThat(findings).hasSize(1)
-            assertThat(findings).hasTextLocations(66 to 88)
+            assertThat(findings).singleElement()
+                .hasTextLocation(66 to 88)
         }
 
         @Test
@@ -75,8 +75,8 @@ class UnnecessaryNotNullCheckSpec(private val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
-            assertThat(findings).hasSize(1)
-            assertThat(findings).hasTextLocations(16 to 58)
+            assertThat(findings).singleElement()
+                .hasTextLocation(16 to 58)
         }
 
         @Test

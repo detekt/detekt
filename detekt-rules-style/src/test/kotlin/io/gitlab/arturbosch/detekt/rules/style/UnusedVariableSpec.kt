@@ -60,9 +60,8 @@ class UnusedVariableSpec(val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code))
-                .hasSize(1)
-                .hasStartSourceLocations(SourceLocation(3, 9))
+            assertThat(subject.lintWithContext(env, code)).singleElement()
+                .hasStartSourceLocation(SourceLocation(3, 9))
         }
 
         @Test
@@ -106,9 +105,8 @@ class UnusedVariableSpec(val env: KotlinEnvironmentContainer) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code))
-                .hasSize(1)
-                .hasStartSourceLocations(SourceLocation(4, 13))
+            assertThat(subject.lintWithContext(env, code)).singleElement()
+                .hasStartSourceLocation(SourceLocation(4, 13))
         }
 
         @Test
@@ -129,9 +127,8 @@ class UnusedVariableSpec(val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code))
-                .hasSize(1)
-                .hasStartSourceLocations(SourceLocation(5, 11))
+            assertThat(subject.lintWithContext(env, code)).singleElement()
+                .hasStartSourceLocation(SourceLocation(5, 11))
         }
 
         @Test
@@ -171,9 +168,8 @@ class UnusedVariableSpec(val env: KotlinEnvironmentContainer) {
                   for (i in 0 until 10) { }
                 }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code))
-                .hasSize(1)
-                .hasStartSourceLocations(SourceLocation(2, 8))
+            assertThat(subject.lintWithContext(env, code)).singleElement()
+                .hasStartSourceLocation(SourceLocation(2, 8))
         }
 
         @Test
@@ -317,9 +313,8 @@ class UnusedVariableSpec(val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true))
-                .hasSize(1)
-                .hasStartSourceLocations(SourceLocation(3, 9))
+            assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true)).singleElement()
+                .hasStartSourceLocation(SourceLocation(3, 9))
         }
 
         @Test
@@ -332,9 +327,8 @@ class UnusedVariableSpec(val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true))
-                .hasSize(1)
-                .hasStartSourceLocations(SourceLocation(3, 9))
+            assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true)).singleElement()
+                .hasStartSourceLocation(SourceLocation(3, 9))
         }
     }
 
@@ -349,9 +343,8 @@ class UnusedVariableSpec(val env: KotlinEnvironmentContainer) {
                }
             """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code))
-                .hasSize(1)
-                .hasStartSourceLocations(SourceLocation(2, 16))
+            assertThat(subject.lintWithContext(env, code)).singleElement()
+                .hasStartSourceLocation(SourceLocation(2, 16))
         }
     }
 }

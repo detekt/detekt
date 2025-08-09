@@ -53,9 +53,8 @@ class UseArrayLiteralsInAnnotationsSpec {
             annotation class Test(val s: Array<String> = arrayOf("a", "b"))
         """.trimIndent()
         val findings = subject.lint(code)
-        assertThat(findings)
-            .hasSize(1)
-            .hasTextLocations(45 to 62)
+        assertThat(findings).singleElement()
+            .hasTextLocation(45 to 62)
     }
 
     @Test

@@ -5,7 +5,6 @@ import dev.detekt.api.SourceLocation
 import dev.detekt.test.TestConfig
 import dev.detekt.test.assertThat
 import dev.detekt.test.lint
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -167,7 +166,8 @@ class CyclomaticComplexMethodSpec {
             )
             val subject = CyclomaticComplexMethod(config)
 
-            assertThat(subject.lint(code)).hasStartSourceLocations(SourceLocation(39, 5))
+            assertThat(subject.lint(code)).singleElement()
+                .hasStartSourceLocation(SourceLocation(39, 5))
         }
 
         @Test
@@ -299,7 +299,7 @@ class CyclomaticComplexMethodSpec {
 private fun assertExpectedComplexityValue(code: String, config: TestConfig, expectedValue: Int) {
     val findings = CyclomaticComplexMethod(config).lint(code)
 
-    assertThat(findings).hasStartSourceLocations(SourceLocation(1, 5))
-
-    assertThat(findings[0].message).contains("(complexity: $expectedValue)")
+    assertThat(findings).singleElement()
+        .hasStartSourceLocation(SourceLocation(1, 5))
+        .hasMessage("(complexity: $expectedValue)")
 }

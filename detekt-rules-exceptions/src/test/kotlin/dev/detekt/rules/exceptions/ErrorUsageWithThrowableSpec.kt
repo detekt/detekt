@@ -24,8 +24,8 @@ class ErrorUsageWithThrowableSpec(private val env: KotlinEnvironmentContainer) {
             }
         """.trimIndent()
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings[0]).hasSourceLocation(6, 15)
+        assertThat(findings).singleElement()
+            .hasSourceLocation(6, 15)
     }
 
     @Test
