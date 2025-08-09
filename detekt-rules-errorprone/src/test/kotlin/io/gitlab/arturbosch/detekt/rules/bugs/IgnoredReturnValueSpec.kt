@@ -220,7 +220,7 @@ class IgnoredReturnValueSpec {
                 annotation class CheckReturnValue
             """.trimIndent()
 
-            val findings = subject.lintWithContext(env, code, annotationClass, compile = false)
+            val findings = subject.lintWithContext(env, code, annotationClass)
             assertThat(findings).singleElement()
                 .hasMessage("The call listOfChecked is returning a value that is ignored.")
                 .hasStartSourceLocation(7, 5)
@@ -1209,7 +1209,7 @@ class IgnoredReturnValueSpec {
                     foo.foo()
                 }
             """.trimIndent()
-            val findings = subject.lintWithContext(env, code, compile = false)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
 
@@ -1222,7 +1222,7 @@ class IgnoredReturnValueSpec {
                     bar.bar()
                 }
             """.trimIndent()
-            val findings = subject.lintWithContext(env, code, compile = false)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(1)
         }
 
@@ -1237,7 +1237,7 @@ class IgnoredReturnValueSpec {
                     map.put("another-key", foo.foo())
                 }
             """.trimIndent()
-            val findings = subject.lintWithContext(env, code, compile = false)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
     }

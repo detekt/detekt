@@ -1,35 +1,44 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
+import com.intellij.openapi.project.Project
+import com.intellij.psi.search.GlobalSearchScope
 import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.Config
 import dev.detekt.api.Configuration
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
-import dev.detekt.api.RequiresFullAnalysis
+import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.api.config
 import dev.detekt.api.simplePatternToRegex
 import dev.detekt.psi.FunctionMatcher
-import dev.detekt.psi.fqNameOrNull
 import dev.detekt.psi.isCalling
-import org.jetbrains.kotlin.descriptors.annotations.AnnotationDescriptor
-import org.jetbrains.kotlin.descriptors.findPackage
-import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.analysis.api.KaSession
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaDeclarationSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolOrigin
+import org.jetbrains.kotlin.analysis.api.types.KaClassType
+import org.jetbrains.kotlin.analysis.api.types.KaFunctionType
+import org.jetbrains.kotlin.analysis.api.types.KaType
+import org.jetbrains.kotlin.idea.references.mainReference
+import org.jetbrains.kotlin.load.java.JavaClassFinderImpl
+import org.jetbrains.kotlin.name.CallableId
+import org.jetbrains.kotlin.name.ClassId
+import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.name.StandardClassIds
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtExpressionWithLabel
 import org.jetbrains.kotlin.psi.KtFunctionLiteral
 import org.jetbrains.kotlin.psi.KtLambdaExpression
+import org.jetbrains.kotlin.psi.KtPsiUtil
 import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelectorOrThis
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
-import org.jetbrains.kotlin.resolve.BindingContext.FUNCTION
-import org.jetbrains.kotlin.resolve.bindingContextUtil.getTargetFunctionDescriptor
-import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
-import org.jetbrains.kotlin.types.KotlinType
-import org.jetbrains.kotlin.types.typeUtil.isNothing
-import org.jetbrains.kotlin.types.typeUtil.isUnit
 
 /**
  * This rule warns on instances where a function, annotated with either `@CheckReturnValue` or `@CheckResult`,
@@ -54,7 +63,7 @@ class IgnoredReturnValue(config: Config) :
         config,
         "This call returns a value which is ignored"
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     @Configuration("If the rule should check only methods matching to configuration, or all methods")
     private val restrictToConfig: Boolean by config(defaultValue = true)
@@ -102,62 +111,92 @@ class IgnoredReturnValue(config: Config) :
         it.map(FunctionMatcher::fromFunctionSignature)
     }
 
-    @Suppress("ComplexCondition")
+    @Suppress("ComplexCondition", "ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 
-        if (isUsedAsExpression(expression)) return
+        analyze(expression) {
+            val symbol = expression.resolveToCall()?.singleFunctionCallOrNull()?.symbol ?: return
+            val returnType = symbol.returnType
+            if (returnType.isUnitType || returnType.isNothingType) return
 
-        val resultingDescriptor = expression.getResolvedCall(bindingContext)?.resultingDescriptor ?: return
-        if (resultingDescriptor.returnType?.isUnit() == true) return
-        if (resultingDescriptor.returnType?.isNothing() == true) return
+            if (ignoreFunctionCall.any { it.match(symbol) }) return
 
-        if (ignoreFunctionCall.any { it.match(resultingDescriptor) }) return
+            if (isUsedAsExpression(expression, returnType)) return
 
-        val annotations = buildList {
-            addAll(resultingDescriptor.annotations)
-            addAll(resultingDescriptor.findPackage().annotations)
-            addAll(resultingDescriptor.containingDeclaration.annotations)
-        }
-        if (annotations.any { it in ignoreReturnValueAnnotations }) return
-        if (restrictToConfig &&
-            resultingDescriptor.returnType !in returnValueTypes &&
-            annotations.none { it in returnValueAnnotations }
-        ) {
-            return
-        }
+            val containingDeclaration = symbol.containingDeclaration
+            val annotations = buildList {
+                addAll(symbol.annotations())
+                addAll(containingDeclaration.annotations())
+                addAll(containingDeclaration.javaPackageAnnotations(expression.resolveScope, expression.project))
+            }
 
-        val messageText = expression.calleeExpression?.text ?: expression.text
-        report(
-            Finding(
-                Entity.from(expression),
-                message = "The call $messageText is returning a value that is ignored."
+            if (annotations.any { it in ignoreReturnValueAnnotations }) return
+
+            if (restrictToConfig &&
+                returnType !in returnValueTypes &&
+                annotations.none { it in returnValueAnnotations }
+            ) {
+                return
+            }
+
+            val messageText = expression.calleeExpression?.text ?: expression.text
+            report(
+                Finding(
+                    Entity.from(expression),
+                    message = "The call $messageText is returning a value that is ignored."
+                )
             )
-        )
+        }
     }
 
-    private fun isUsedAsExpression(call: KtCallExpression): Boolean {
-        if (!call.isUsedAsExpression(bindingContext)) return false
+    private fun KaDeclarationSymbol?.annotations(): List<ClassId> =
+        this?.annotations?.mapNotNull { it.classId }.orEmpty()
+
+    @Suppress("ReturnCount")
+    private fun KaDeclarationSymbol?.javaPackageAnnotations(scope: GlobalSearchScope, project: Project): List<ClassId> {
+        val origin = (this as? KaClassSymbol)?.origin
+        if (origin != KaSymbolOrigin.JAVA_SOURCE && origin != KaSymbolOrigin.JAVA_LIBRARY) return emptyList()
+        val packageFqName = this.classId?.packageFqName ?: return emptyList()
+        val javaClassFinder = JavaClassFinderImpl().apply {
+            setScope(scope)
+            setProjectInstance(project)
+        }
+        return javaClassFinder.findPackage(packageFqName)?.annotations?.mapNotNull { it.classId }.orEmpty()
+    }
+
+    private fun KaSession.isUsedAsExpression(call: KtCallExpression, returnType: KaType): Boolean {
+        if (returnType is KaFunctionType &&
+            call.getStrictParentOfType<KtCallExpression>()?.calleeExpression == KtPsiUtil.safeDeparenthesize(call)
+        ) {
+            return true
+        }
+
+        if (!call.isUsedAsExpression) return false
 
         val lambda = call.getStrictParentOfType<KtFunctionLiteral>()?.parent as? KtLambdaExpression
         if (lambda != null && call.isLambdaResult(lambda)) {
             val parentCall = (lambda.parent as? KtValueArgument)?.getStrictParentOfType<KtCallExpression>()
-            val isLambdaResultScopeFunction = parentCall?.isCalling(lambdaResultScopeFunctions, bindingContext) == true
-            val isUsedAsExpression = parentCall?.isUsedAsExpression(bindingContext) == true
+            val isLambdaResultScopeFunction = parentCall?.isCalling(lambdaResultScopeFunctions) == true
+            val isUsedAsExpression = parentCall?.isUsedAsExpression == true
             if (isLambdaResultScopeFunction && !isUsedAsExpression) return false
         }
 
         return true
     }
 
+    context(session: KaSession)
     private fun KtExpression.isLambdaResult(lambda: KtLambdaExpression): Boolean {
         val statement = getQualifiedExpressionForSelectorOrThis().let {
             it.getStrictParentOfType<KtReturnExpression>() ?: it
         }
         return when (statement) {
             is KtReturnExpression -> {
-                val lambdaDescriptor = bindingContext[FUNCTION, lambda.functionLiteral]
-                statement.getTargetFunctionDescriptor(bindingContext) == lambdaDescriptor
+                with(session) {
+                    val symbol = lambda.functionLiteral.symbol
+                    val label = (statement as? KtExpressionWithLabel)?.getTargetLabel()
+                    label?.mainReference?.resolveToSymbol() == symbol
+                }
             }
 
             else -> {
@@ -167,16 +206,16 @@ class IgnoredReturnValue(config: Config) :
         }
     }
 
-    private operator fun List<Regex>.contains(type: KotlinType?) = contains(type?.fqNameOrNull())
+    private operator fun List<Regex>.contains(type: KaType?) = contains((type as? KaClassType)?.classId)
 
-    private operator fun List<Regex>.contains(annotation: AnnotationDescriptor) = contains(annotation.fqName)
-
-    private operator fun List<Regex>.contains(fqName: FqName?): Boolean {
-        val name = fqName?.asString() ?: return false
+    private operator fun List<Regex>.contains(classId: ClassId?): Boolean {
+        val name = classId?.asSingleFqName()?.asString() ?: return false
         return any { it.matches(name) }
     }
 
     companion object {
-        private val lambdaResultScopeFunctions = listOf("with", "run", "let").map { FqName("kotlin.$it") }
+        private val lambdaResultScopeFunctions = listOf("with", "run", "let").map {
+            CallableId(StandardClassIds.BASE_KOTLIN_PACKAGE, Name.identifier(it))
+        }
     }
 }
