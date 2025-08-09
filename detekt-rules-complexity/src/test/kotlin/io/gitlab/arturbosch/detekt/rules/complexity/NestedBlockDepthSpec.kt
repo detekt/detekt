@@ -74,9 +74,8 @@ class NestedBlockDepthSpec {
         """.trimIndent()
         val findings = subject.lint(code)
 
-        assertThat(findings)
-            .hasSize(1)
-            .hasTextLocations(4 to 5)
+        assertThat(findings).singleElement()
+            .hasTextLocation(4 to 5)
     }
 
     @Test

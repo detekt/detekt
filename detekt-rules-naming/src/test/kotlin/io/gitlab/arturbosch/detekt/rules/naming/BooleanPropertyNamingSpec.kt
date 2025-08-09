@@ -148,9 +148,8 @@ class BooleanPropertyNamingSpec(val env: KotlinEnvironmentContainer) {
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
 
-            assertThat(findings)
-                .hasSize(1)
-                .hasTextLocations("emailVerified")
+            assertThat(findings).singleElement()
+                .hasTextLocation("emailVerified")
         }
     }
 
@@ -359,9 +358,8 @@ class BooleanPropertyNamingSpec(val env: KotlinEnvironmentContainer) {
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
 
-            assertThat(findings)
-                .hasSize(1)
-                .hasTextLocations("emailVerified")
+            assertThat(findings).singleElement()
+                .hasTextLocation("emailVerified")
         }
     }
 }

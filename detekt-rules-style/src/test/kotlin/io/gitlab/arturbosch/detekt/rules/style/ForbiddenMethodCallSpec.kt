@@ -75,8 +75,8 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("java.io.PrintStream.println"))
         ).lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings).hasTextLocations(38 to 54)
+        assertThat(findings).singleElement()
+            .hasTextLocation(38 to 54)
     }
 
     @Test
@@ -90,8 +90,8 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("java.io.PrintStream.println"))
         ).lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings).hasTextLocations(49 to 65)
+        assertThat(findings).singleElement()
+            .hasTextLocation(49 to 65)
     }
 
     @Test

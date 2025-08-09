@@ -23,7 +23,8 @@ class LoopWithTooManyJumpStatementsSpec {
                 }
             }
         """.trimIndent()
-        assertThat(LoopWithTooManyJumpStatements(Config.empty).lint(code)).hasTextLocations(20 to 23)
+        assertThat(LoopWithTooManyJumpStatements(Config.empty).lint(code)).singleElement()
+            .hasTextLocation(20 to 23)
     }
 
     @Test
@@ -35,7 +36,8 @@ class LoopWithTooManyJumpStatementsSpec {
                 }
             }
         """.trimIndent()
-        assertThat(LoopWithTooManyJumpStatements(Config.empty).lint(code)).hasTextLocations(20 to 25)
+        assertThat(LoopWithTooManyJumpStatements(Config.empty).lint(code)).singleElement()
+            .hasTextLocation(20 to 25)
     }
 
     @Test
@@ -47,7 +49,8 @@ class LoopWithTooManyJumpStatementsSpec {
                 } while (i < 1)
             }
         """.trimIndent()
-        assertThat(LoopWithTooManyJumpStatements(Config.empty).lint(code)).hasTextLocations(20 to 22)
+        assertThat(LoopWithTooManyJumpStatements(Config.empty).lint(code)).singleElement()
+            .hasTextLocation(20 to 22)
     }
 
     @Test
