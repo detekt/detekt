@@ -1,6 +1,6 @@
 package com.example.fromjava;
 
-class Rect {
-    void set(int left, int top, int right) {}
-    void set(int left, int top) {}
+public class Rect {
+    public void set(int left, int top, int right) {}
+    public void set(int left, int top) {}
 }

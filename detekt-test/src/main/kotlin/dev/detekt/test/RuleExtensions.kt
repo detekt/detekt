@@ -11,9 +11,11 @@ import dev.detekt.test.utils.KotlinEnvironmentContainer
 import dev.detekt.test.utils.compileContentForTest
 import io.gitlab.arturbosch.detekt.core.suppressors.isSuppressedBy
 import org.intellij.lang.annotations.Language
+import org.jetbrains.kotlin.cli.jvm.config.javaSourceRoots
 import org.jetbrains.kotlin.config.LanguageVersionSettings
 import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
+import kotlin.io.path.Path
 
 private val shouldCompileTestSnippets: Boolean =
     System.getProperty("compile-test-snippets", "false")!!.toBoolean()
@@ -69,7 +71,12 @@ fun <T> T.lintWithContext(
     @Language("kotlin") vararg dependencyContents: String,
     allowCompilationErrors: Boolean = false,
 ): List<Finding> where T : Rule, T : RequiresAnalysisApi {
-    val ktFile = KotlinAnalysisApiEngine.compile(content, dependencyContents.toList(), allowCompilationErrors)
+    val ktFile = KotlinAnalysisApiEngine.compile(
+        code = content,
+        dependencyCodes = dependencyContents.toList(),
+        javaSourceRoots = environment.configuration.javaSourceRoots.map(::Path),
+        allowCompilationErrors = allowCompilationErrors
+    )
     return visitFile(ktFile, environment.configuration.languageVersionSettings).filterSuppressed(this)
 }
 
