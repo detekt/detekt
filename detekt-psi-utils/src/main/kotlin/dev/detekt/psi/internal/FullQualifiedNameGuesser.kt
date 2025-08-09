@@ -5,7 +5,7 @@ import org.jetbrains.kotlin.psi.KtImportDirective
 import org.jetbrains.kotlin.utils.addIfNotNull
 import kotlin.LazyThreadSafetyMode.NONE
 
-class FullQualifiedNameGuesser internal constructor(
+internal class FullQualifiedNameGuesser internal constructor(
     private val packageName: String?,
     imports: List<KtImportDirective>,
 ) {

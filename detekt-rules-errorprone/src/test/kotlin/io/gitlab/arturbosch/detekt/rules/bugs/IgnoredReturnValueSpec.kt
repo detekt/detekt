@@ -223,7 +223,7 @@ class IgnoredReturnValueSpec {
             val findings = subject.lintWithContext(env, code, annotationClass, compile = false)
             assertThat(findings).singleElement()
                 .hasMessage("The call listOfChecked is returning a value that is ignored.")
-            assertThat(findings).hasStartSourceLocation(7, 5)
+                .hasStartSourceLocation(7, 5)
         }
 
         @Test
@@ -244,7 +244,7 @@ class IgnoredReturnValueSpec {
             val findings = subject.lintWithContext(env, code)
             assertThat(findings).singleElement()
                 .hasMessage("The call listOfChecked is returning a value that is ignored.")
-            assertThat(findings).hasStartSourceLocation(9, 5)
+                .hasStartSourceLocation(9, 5)
         }
 
         @Test
@@ -311,7 +311,7 @@ class IgnoredReturnValueSpec {
             val findings = subject.lintWithContext(env, code)
             assertThat(findings).singleElement()
                 .hasMessage("The call listOfChecked is returning a value that is ignored.")
-            assertThat(findings).hasStartSourceLocation(12, 10)
+                .hasStartSourceLocation(12, 10)
         }
 
         @Test
@@ -331,7 +331,7 @@ class IgnoredReturnValueSpec {
             val findings = subject.lintWithContext(env, code)
             assertThat(findings).singleElement()
                 .hasMessage("The call listOfChecked is returning a value that is ignored.")
-            assertThat(findings).hasStartSourceLocation(9, 5)
+                .hasStartSourceLocation(9, 5)
         }
 
         @Test
@@ -352,7 +352,7 @@ class IgnoredReturnValueSpec {
             val findings = subject.lintWithContext(env, code)
             assertThat(findings).singleElement()
                 .hasMessage("The call listOfChecked is returning a value that is ignored.")
-            assertThat(findings).hasStartSourceLocation(9, 20)
+                .hasStartSourceLocation(9, 20)
         }
 
         @Test
@@ -373,7 +373,7 @@ class IgnoredReturnValueSpec {
             val findings = subject.lintWithContext(env, code)
             assertThat(findings).singleElement()
                 .hasMessage("The call listOfChecked is returning a value that is ignored.")
-            assertThat(findings).hasStartSourceLocation(9, 14)
+                .hasStartSourceLocation(9, 14)
         }
 
         @Test
@@ -393,7 +393,7 @@ class IgnoredReturnValueSpec {
             val findings = subject.lintWithContext(env, code)
             assertThat(findings).singleElement()
                 .hasMessage("The call isTheAnswer is returning a value that is ignored.")
-            assertThat(findings).hasStartSourceLocation(8, 11)
+                .hasStartSourceLocation(8, 11)
         }
 
         @Test
@@ -848,7 +848,7 @@ class IgnoredReturnValueSpec {
             val findings = subject.lintWithContext(env, code)
             assertThat(findings).singleElement()
                 .hasMessage("The call listOfChecked is returning a value that is ignored.")
-            assertThat(findings).hasStartSourceLocation(8, 5)
+                .hasStartSourceLocation(8, 5)
         }
 
         @Test
@@ -910,7 +910,7 @@ class IgnoredReturnValueSpec {
             val findings = subject.lintWithContext(env, code)
             assertThat(findings).singleElement()
                 .hasMessage("The call listOfChecked is returning a value that is ignored.")
-            assertThat(findings).hasStartSourceLocation(9, 5)
+                .hasStartSourceLocation(9, 5)
         }
 
         @Test
@@ -926,7 +926,7 @@ class IgnoredReturnValueSpec {
             val findings = subject.lintWithContext(env, code)
             assertThat(findings).singleElement()
                 .hasMessage("The call listOfChecked is returning a value that is ignored.")
-            assertThat(findings).hasStartSourceLocation(4, 5)
+                .hasStartSourceLocation(4, 5)
         }
 
         @Test
@@ -941,7 +941,7 @@ class IgnoredReturnValueSpec {
             val findings = subject.lintWithContext(env, code)
             assertThat(findings).singleElement()
                 .hasMessage("The call ignoredReturn is returning a value that is ignored.")
-            assertThat(findings).hasStartSourceLocation(2, 5)
+                .hasStartSourceLocation(2, 5)
         }
 
         @Test
@@ -957,8 +957,7 @@ class IgnoredReturnValueSpec {
                 }
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
-            assertThat(findings)
-                .singleElement()
+            assertThat(findings).singleElement()
                 .hasSourceLocation(6, 5)
                 .hasMessage("The call flowOfChecked is returning a value that is ignored.")
         }
@@ -1095,8 +1094,7 @@ class IgnoredReturnValueSpec {
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
 
-            assertThat(findings)
-                .singleElement()
+            assertThat(findings).singleElement()
                 .hasSourceLocation(line = 4, column = 5)
                 .hasMessage("The call flowOf is returning a value that is ignored.")
         }
@@ -1113,8 +1111,7 @@ class IgnoredReturnValueSpec {
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
 
-            assertThat(findings)
-                .singleElement()
+            assertThat(findings).singleElement()
                 .hasSourceLocation(line = 5, column = 10)
                 .hasMessage("The call onEach is returning a value that is ignored.")
         }
@@ -1158,8 +1155,7 @@ class IgnoredReturnValueSpec {
                 }
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
-            assertThat(findings)
-                .singleElement()
+            assertThat(findings).singleElement()
                 .hasSourceLocation(6, 5)
                 .hasMessage("The call returnsALambda is returning a value that is ignored.")
         }
@@ -1177,8 +1173,7 @@ class IgnoredReturnValueSpec {
                 }
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
-            assertThat(findings)
-                .singleElement()
+            assertThat(findings).singleElement()
                 .hasSourceLocation(6, 5)
                 .hasMessage("The call returnsALambda is returning a value that is ignored.")
         }

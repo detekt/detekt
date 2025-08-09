@@ -53,14 +53,6 @@ class FindingsAssert(actual: List<Finding>) :
         }
     }
 
-    fun hasStartSourceLocation(line: Int, column: Int) = apply {
-        hasStartSourceLocations(SourceLocation(line, column))
-    }
-
-    fun hasEndSourceLocation(line: Int, column: Int) = apply {
-        hasEndSourceLocations(SourceLocation(line, column))
-    }
-
     fun hasTextLocations(vararg expected: Pair<Int, Int>) = apply {
         val actualSources = actual.asSequence()
             .map { it.location.text }
@@ -133,5 +125,65 @@ class FindingAssert(val actual: Finding?) : AbstractAssert<FindingAssert, Findin
         } else if (actual.suppressReasons.isNotEmpty()) {
             failWithMessage("Expect no suppressions but ${actual.suppressReasons} was found")
         }
+    }
+
+    fun hasStartSourceLocation(line: Int, column: Int) = apply {
+        hasStartSourceLocation(SourceLocation(line, column))
+    }
+
+    fun hasStartSourceLocation(expected: SourceLocation) = apply {
+        val actual = actual!!.location.source
+        if (actual != expected) {
+            throw failureWithActualExpected(
+                actual,
+                expected,
+                "Expected start source location to be $expected but was $actual"
+            )
+        }
+    }
+
+    fun hasEndSourceLocation(line: Int, column: Int) = apply {
+        hasEndSourceLocation(SourceLocation(line, column))
+    }
+
+    fun hasEndSourceLocation(expected: SourceLocation) = apply {
+        val actual = actual!!.location.endSource
+        if (actual != expected) {
+            throw failureWithActualExpected(
+                actual,
+                expected,
+                "Expected end source location to be $expected but was $actual"
+            )
+        }
+    }
+
+    fun hasTextLocation(expected: Pair<Int, Int>) = apply {
+        hasTextLocation(TextLocation(expected.first, expected.second))
+    }
+
+    fun hasTextLocation(expected: TextLocation) = apply {
+        val actual = actual!!.location.text
+        if (actual != expected) {
+            throw failureWithActualExpected(
+                actual,
+                expected,
+                "Expected text location to be $expected but was $actual"
+            )
+        }
+    }
+
+    fun hasTextLocation(expected: String) = apply {
+        val code = actual!!.entity.ktElement.containingKtFile.text
+
+        val index = code.indexOf(expected)
+        if (index < 0) {
+            failWithMessage("The snippet \"$expected\" doesn't exist in the code")
+        } else {
+            if (code.indexOf(expected, index + 1) >= 0) {
+                failWithMessage("The snippet \"$expected\" appears multiple times in the code")
+            }
+        }
+
+        hasTextLocation(TextLocation(index, index + expected.length))
     }
 }

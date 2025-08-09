@@ -220,8 +220,9 @@ class DoubleNegativeLambdaSpec {
         assertThat(findings).singleElement().hasMessage(
             "Double negative through using `!in`, `!=` inside a `takeUnless` lambda. Use `takeIf` instead."
         )
-        assertThat(findings).hasStartSourceLocation(3, 37)
-        assertThat(findings).hasEndSourceLocation(3, 74)
+        assertThat(findings).singleElement()
+            .hasStartSourceLocation(3, 37)
+            .hasEndSourceLocation(3, 74)
     }
 
     @Test

@@ -27,7 +27,7 @@ class UseIfEmptyOrIfBlankSpec(val env: KotlinEnvironmentContainer) {
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
             assertThat(findings).singleElement().hasMessage("This 'isBlank' call can be replaced with 'ifBlank'")
-            assertThat(findings).hasStartSourceLocation(4, 29)
+            assertThat(findings).singleElement().hasStartSourceLocation(4, 29)
         }
 
         @Test
@@ -45,7 +45,7 @@ class UseIfEmptyOrIfBlankSpec(val env: KotlinEnvironmentContainer) {
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
             assertThat(findings).singleElement().hasMessage("This 'isNotBlank' call can be replaced with 'ifBlank'")
-            assertThat(findings).hasStartSourceLocation(4, 29)
+            assertThat(findings).singleElement().hasStartSourceLocation(4, 29)
         }
 
         @Test
@@ -60,7 +60,7 @@ class UseIfEmptyOrIfBlankSpec(val env: KotlinEnvironmentContainer) {
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
             assertThat(findings).singleElement().hasMessage("This 'isEmpty' call can be replaced with 'ifEmpty'")
-            assertThat(findings).hasStartSourceLocation(4, 29)
+            assertThat(findings).singleElement().hasStartSourceLocation(4, 29)
         }
 
         @Test
@@ -78,7 +78,7 @@ class UseIfEmptyOrIfBlankSpec(val env: KotlinEnvironmentContainer) {
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
             assertThat(findings).singleElement().hasMessage("This 'isNotEmpty' call can be replaced with 'ifEmpty'")
-            assertThat(findings).hasStartSourceLocation(4, 29)
+            assertThat(findings).singleElement().hasStartSourceLocation(4, 29)
         }
 
         @Test
