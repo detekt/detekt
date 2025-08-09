@@ -26,7 +26,7 @@ class PropertyUsedBeforeDeclarationSpec(private val env: KotlinEnvironmentContai
         val findings = subject.lintWithContext(env, code)
         assertThat(findings).singleElement()
             .hasTextLocation(45 to 52)
-        assertThat(findings.first()).hasMessage("'isValid' is used before declaration.")
+            .hasMessage("'isValid' is used before declaration.")
     }
 
     @Test

@@ -3,9 +3,9 @@ package io.gitlab.arturbosch.detekt.rules.style
 import dev.detekt.api.Config
 import dev.detekt.api.ValueWithReason
 import dev.detekt.test.TestConfig
+import dev.detekt.test.assertThat
 import dev.detekt.test.lint
 import dev.detekt.test.toConfig
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
@@ -60,10 +60,10 @@ class ForbiddenImportSpec {
         val config = TestConfig(IMPORTS to listOf(ValueWithReason("kotlin.*", "I'm just joking!").toConfig()))
         val findings = ForbiddenImport(config).lint(code, compile = false)
         assertThat(findings).hasSize(2)
-        assertThat(findings[0].message)
-            .isEqualTo("The import `kotlin.jvm.JvmField` has been forbidden: I'm just joking!")
-        assertThat(findings[1].message)
-            .isEqualTo("The import `kotlin.SinceKotlin` has been forbidden: I'm just joking!")
+        assertThat(findings).element(0)
+            .hasMessage("The import `kotlin.jvm.JvmField` has been forbidden: I'm just joking!")
+        assertThat(findings).element(1)
+            .hasMessage("The import `kotlin.SinceKotlin` has been forbidden: I'm just joking!")
     }
 
     @Test
@@ -127,9 +127,9 @@ class ForbiddenImportSpec {
         val findings = ForbiddenImport(TestConfig(FORBIDDEN_PATTERNS to "net.*R|com.*expiremental"))
             .lint(code, compile = false)
         assertThat(findings).hasSize(2)
-        assertThat(findings[0].message)
-            .isEqualTo("The import `net.example.R.dimen` has been forbidden in the detekt config.")
-        assertThat(findings[1].message)
-            .isEqualTo("The import `net.example.R.dimension` has been forbidden in the detekt config.")
+        assertThat(findings[0])
+            .hasMessage("The import `net.example.R.dimen` has been forbidden in the detekt config.")
+        assertThat(findings[1])
+            .hasMessage("The import `net.example.R.dimension` has been forbidden in the detekt config.")
     }
 }

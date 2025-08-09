@@ -60,8 +60,7 @@ class ExplicitItLambdaMultipleParametersSpec {
                     }
                     """.trimIndent(),
                 )
-            assertThat(findings).hasSize(1)
-            assertThat(findings[0]).hasMessage("`it` should not be used as name for a lambda parameter.")
+            assertThat(findings).singleElement().hasMessage("`it` should not be used as name for a lambda parameter.")
         }
     }
 

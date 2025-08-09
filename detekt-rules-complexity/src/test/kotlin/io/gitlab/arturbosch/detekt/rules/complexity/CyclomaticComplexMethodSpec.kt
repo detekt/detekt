@@ -5,7 +5,6 @@ import dev.detekt.api.SourceLocation
 import dev.detekt.test.TestConfig
 import dev.detekt.test.assertThat
 import dev.detekt.test.lint
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -302,6 +301,5 @@ private fun assertExpectedComplexityValue(code: String, config: TestConfig, expe
 
     assertThat(findings).singleElement()
         .hasStartSourceLocation(SourceLocation(1, 5))
-
-    assertThat(findings[0].message).contains("(complexity: $expectedValue)")
+        .hasMessage("(complexity: $expectedValue)")
 }
