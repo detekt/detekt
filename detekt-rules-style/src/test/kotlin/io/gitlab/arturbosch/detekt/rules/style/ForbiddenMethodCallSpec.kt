@@ -187,8 +187,8 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("java.time.LocalDate.now()"))
         ).lintWithContext(env, code)
-        assertThat(findings).hasStartSourceLocation(5, 26)
         assertThat(findings).singleElement()
+            .hasStartSourceLocation(5, 26)
             .hasMessage("The method `java.time.LocalDate.now()` has been forbidden in the detekt config.")
     }
 
@@ -206,8 +206,8 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("java.time.LocalDate.now(java.time.Clock)"))
         ).lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings).hasStartSourceLocation(6, 27)
+        assertThat(findings).singleElement()
+            .hasStartSourceLocation(6, 27)
     }
 
     @Test
@@ -221,8 +221,8 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("java.time.LocalDate.of(kotlin.Int, kotlin.Int, kotlin.Int)"))
         ).lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings).hasStartSourceLocation(3, 26)
+        assertThat(findings).singleElement()
+            .hasStartSourceLocation(3, 26)
     }
 
     @Test
@@ -236,8 +236,8 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("java.time.LocalDate.of(kotlin.Int,kotlin.Int,kotlin.Int)"))
         ).lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings).hasStartSourceLocation(3, 26)
+        assertThat(findings).singleElement()
+            .hasStartSourceLocation(3, 26)
     }
 
     @Test
@@ -254,8 +254,8 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("io.gitlab.arturbosch.detekt.rules.style.`some, test`()"))
         ).lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings).hasStartSourceLocation(6, 13)
+        assertThat(findings).singleElement()
+            .hasStartSourceLocation(6, 13)
     }
 
     @Test
@@ -275,8 +275,8 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
                     listOf("io.gitlab.arturbosch.detekt.rules.style.defaultParamsMethod(kotlin.String,kotlin.Int)")
             )
         ).lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings).hasStartSourceLocation(6, 13)
+        assertThat(findings).singleElement()
+            .hasStartSourceLocation(6, 13)
     }
 
     @Test
@@ -293,7 +293,7 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
         val methodName = "io.gitlab.arturbosch.detekt.rules.style.arrayMethod(kotlin.Array)"
         val findings = ForbiddenMethodCall(TestConfig(METHODS to listOf(methodName)))
             .lintWithContext(env, code)
-        assertThat(findings).hasSize(1).hasStartSourceLocation(6, 13)
+        assertThat(findings).singleElement().hasStartSourceLocation(6, 13)
     }
 
     @Test
@@ -310,7 +310,7 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
         val methodName = "io.gitlab.arturbosch.detekt.rules.style.listMethod(kotlin.collections.List)"
         val findings = ForbiddenMethodCall(TestConfig(METHODS to listOf(methodName)))
             .lintWithContext(env, code)
-        assertThat(findings).hasSize(1).hasStartSourceLocation(6, 13)
+        assertThat(findings).singleElement().hasStartSourceLocation(6, 13)
     }
 
     @Test
@@ -329,7 +329,7 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
         val methodName = "io.gitlab.arturbosch.detekt.rules.style.varargMethod(vararg kotlin.String)"
         val findings = ForbiddenMethodCall(TestConfig(METHODS to listOf(methodName)))
             .lintWithContext(env, code)
-        assertThat(findings).hasSize(1).hasStartSourceLocation(8, 13)
+        assertThat(findings).singleElement().hasStartSourceLocation(8, 13)
     }
 
     @Test
@@ -350,7 +350,7 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
         val methodName = "io.gitlab.arturbosch.detekt.rules.style.TestClass.Companion.staticMethod()"
         val findings = ForbiddenMethodCall(TestConfig(METHODS to listOf(methodName)))
             .lintWithContext(env, code)
-        assertThat(findings).hasSize(1).hasStartSourceLocation(10, 15)
+        assertThat(findings).singleElement().hasStartSourceLocation(10, 15)
     }
 
     @Test
@@ -372,7 +372,7 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
         val methodName = "io.gitlab.arturbosch.detekt.rules.style.TestClass.Companion.staticMethod()"
         val findings = ForbiddenMethodCall(TestConfig(METHODS to listOf(methodName)))
             .lintWithContext(env, code)
-        assertThat(findings).hasSize(1).hasStartSourceLocation(11, 15)
+        assertThat(findings).singleElement().hasStartSourceLocation(11, 15)
     }
 
     @Test
@@ -601,8 +601,7 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
             val findings = ForbiddenMethodCall(
                 TestConfig(METHODS to listOf("kotlin.runCatching(() -> R)"))
             ).lintWithContext(env, code)
-            assertThat(findings)
-                .hasSize(1)
+            assertThat(findings).singleElement()
                 .hasStartSourceLocation(5, 16)
         }
 
@@ -611,8 +610,7 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
             val findings = ForbiddenMethodCall(
                 TestConfig(METHODS to listOf("kotlin.runCatching(T, (T) -> R)"))
             ).lintWithContext(env, code)
-            assertThat(findings)
-                .hasSize(1)
+            assertThat(findings).singleElement()
                 .hasStartSourceLocation(6, 9)
         }
     }
