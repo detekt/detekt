@@ -185,7 +185,6 @@ class IgnoredReturnValue(config: Config) :
         return true
     }
 
-    @Suppress("ModifierListSpacing")
     context(session: KaSession)
     private fun KtExpression.isLambdaResult(lambda: KtLambdaExpression): Boolean {
         val statement = getQualifiedExpressionForSelectorOrThis().let {
