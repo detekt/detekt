@@ -1,7 +1,7 @@
 package dev.detekt.gradle.plugin
 
-import io.gitlab.arturbosch.detekt.testkit.DslGradleRunner
-import io.gitlab.arturbosch.detekt.testkit.ProjectLayout
+import dev.detekt.gradle.plugin.testkit.DslGradleRunner
+import dev.detekt.gradle.plugin.testkit.ProjectLayout
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test

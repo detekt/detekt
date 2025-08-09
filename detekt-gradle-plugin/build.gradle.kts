@@ -154,11 +154,11 @@ gradlePlugin {
         }
         create("detektPlugin") {
             id = "io.gitlab.arturbosch.detekt"
-            implementationClass = "io.gitlab.arturbosch.detekt.DetektPlugin"
+            implementationClass = "dev.detekt.gradle.plugin.DetektPlugin"
         }
         create("detektCompilerPlugin") {
             id = "io.github.detekt.gradle.compiler-plugin"
-            implementationClass = "io.github.detekt.gradle.DetektKotlinCompilerPlugin"
+            implementationClass = "dev.detekt.gradle.plugin.DetektKotlinCompilerPlugin"
         }
         configureEach {
             displayName = "Static code analysis for Kotlin"
