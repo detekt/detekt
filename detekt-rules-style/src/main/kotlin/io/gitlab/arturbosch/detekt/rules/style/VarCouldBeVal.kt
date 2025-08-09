@@ -95,12 +95,10 @@ class VarCouldBeVal(config: Config) :
         private val assignments = mutableMapOf<String, MutableSet<KtExpression>>()
         private val escapeCandidates = mutableMapOf<KaSymbol, List<KtProperty>>()
 
-        @Suppress("ModifierListSpacing")
         context(session: KaSession)
         fun getNonReAssignedDeclarations(): List<KtNamedDeclaration> =
             declarationCandidates.filterNot { it.hasAssignments() }
 
-        @Suppress("ModifierListSpacing")
         context(session: KaSession)
         private fun KtNamedDeclaration.hasAssignments(): Boolean {
             val declarationName = nameAsSafeName.toString()

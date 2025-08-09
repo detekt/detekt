@@ -72,7 +72,6 @@ class SleepInsteadOfDelay(config: Config) :
         }
     }
 
-    @Suppress("ModifierListSpacing")
     context(session: KaSession)
     private fun KtExpression.isThreadSleepFunction(): Boolean {
         fun KtCallableReferenceExpression.isSleepCallableRef(): Boolean =
@@ -93,7 +92,7 @@ class SleepInsteadOfDelay(config: Config) :
         }
     }
 
-    @Suppress("ReturnCount", "ModifierListSpacing")
+    @Suppress("ReturnCount")
     context(session: KaSession)
     private fun getNearestParentForSuspension(psiElement: PsiElement): PsiElement? {
         fun KtValueArgument.isNearestParentForSuspension(): Boolean {
@@ -121,7 +120,6 @@ class SleepInsteadOfDelay(config: Config) :
         }
     }
 
-    @Suppress("ModifierListSpacing")
     context(session: KaSession)
     private fun PsiElement.isSuspendAllowed(): Boolean = when (this) {
         is KtValueArgument -> this.isSuspendAllowed()
@@ -130,7 +128,6 @@ class SleepInsteadOfDelay(config: Config) :
         else -> false
     }
 
-    @Suppress("ModifierListSpacing")
     context(session: KaSession)
     private fun KtValueArgument.isSuspendAllowed(): Boolean {
         val parent = this.getParentOfTypes(true, KtCallExpression::class.java) ?: return false
@@ -141,7 +138,6 @@ class SleepInsteadOfDelay(config: Config) :
         }
     }
 
-    @Suppress("ModifierListSpacing")
     context(session: KaSession)
     private fun KtLambdaExpression.isSuspendAllowed(): Boolean {
         val parent = this.getParentOfTypes(true, KtProperty::class.java) ?: return false
@@ -150,7 +146,6 @@ class SleepInsteadOfDelay(config: Config) :
         }
     }
 
-    @Suppress("ModifierListSpacing")
     context(session: KaSession)
     private fun KtNamedFunction.isSuspendAllowed(): Boolean {
         with(session) {
@@ -158,7 +153,6 @@ class SleepInsteadOfDelay(config: Config) :
         }
     }
 
-    @Suppress("ModifierListSpacing")
     context(session: KaSession)
     private fun shouldReport(expression: KtExpression): Boolean {
         val nearestParentForSuspension = getNearestParentForSuspension(expression) ?: return false

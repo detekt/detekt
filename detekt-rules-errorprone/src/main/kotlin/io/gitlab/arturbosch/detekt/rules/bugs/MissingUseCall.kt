@@ -172,7 +172,6 @@ class MissingUseCall(config: Config = Config.empty) :
         return isChildOfCloseable(symbol)
     }
 
-    @Suppress("ModifierListSpacing")
     context(session: KaSession)
     private fun KtQualifiedExpression.doesEndWithUse(): Boolean = with(session) {
         receiverExpression.resolveToCall()?.successfulCallOrNull<KaCallableMemberCall<*, *>>()?.symbol?.let {
@@ -182,7 +181,6 @@ class MissingUseCall(config: Config = Config.empty) :
             ?.asSingleFqName() in useFqNames
     }
 
-    @Suppress("ModifierListSpacing")
     context(session: KaSession)
     private fun KtElement?.isCloseableNotUsed(): Boolean {
         this ?: return true
@@ -264,7 +262,6 @@ class MissingUseCall(config: Config = Config.empty) :
         return expression
     }
 
-    @Suppress("ModifierListSpacing")
     context(session: KaSession)
     private fun KtQualifiedExpression.firstCallableReceiverOrNull(): KtElement? {
         fun KtExpression.isCallableExpression(): Boolean = with(session) {

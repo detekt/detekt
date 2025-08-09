@@ -138,7 +138,6 @@ private class UnusedVariableVisitor(private val allowedNames: Regex) : DetektVis
         references.forEach(::registerVariableUse)
     }
 
-    @Suppress("ModifierListSpacing")
     context(session: KaSession)
     private fun KtExpression.resolveToLocalVariableSymbol(): KaLocalVariableSymbol? = with(session) {
         mainReference?.resolveToSymbol() as? KaLocalVariableSymbol
