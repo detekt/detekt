@@ -144,7 +144,7 @@ class UnnecessaryAny(config: Config) :
             }
         }
 
-    @Suppress("ReturnCount", "ModifierListSpacing")
+    @Suppress("ReturnCount")
     context(session: KaSession)
     private fun isUsageOfValueAndItEligible(
         parameter: KaDeclarationSymbol,
@@ -197,7 +197,6 @@ class UnnecessaryAny(config: Config) :
         }
     }
 
-    @Suppress("ModifierListSpacing")
     context(session: KaSession)
     private fun KtExpression.getItUsageCount(symbol: KaDeclarationSymbol) = with(session) {
         collectDescendantsOfType<KtNameReferenceExpression>().count {
@@ -205,7 +204,6 @@ class UnnecessaryAny(config: Config) :
         }
     }
 
-    @Suppress("ModifierListSpacing")
     context(session: KaSession)
     private fun KtExpression?.isCallingEquals(): Boolean {
         if (this == null) return false
