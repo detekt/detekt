@@ -439,9 +439,8 @@ class UnusedPrivateFunctionSpec(val env: KotlinEnvironmentContainer) {
                         val answer = A(1, 1)
                     }
                 """.trimIndent()
-                assertThat(subject.lintWithContext(env, code))
-                    .hasSize(1)
-                    .hasStartSourceLocations(
+                assertThat(subject.lintWithContext(env, code)).singleElement()
+                    .hasStartSourceLocation(
                         SourceLocation(3, 30)
                     )
             }
@@ -455,9 +454,8 @@ class UnusedPrivateFunctionSpec(val env: KotlinEnvironmentContainer) {
                     fun answer() = A()(9)
                     val answer = answer()
                 """.trimIndent()
-                assertThat(subject.lintWithContext(env, code))
-                    .hasSize(1)
-                    .hasStartSourceLocations(
+                assertThat(subject.lintWithContext(env, code)).singleElement()
+                    .hasStartSourceLocation(
                         SourceLocation(3, 24)
                     )
             }
@@ -472,9 +470,8 @@ class UnusedPrivateFunctionSpec(val env: KotlinEnvironmentContainer) {
                     fun answer() = A()(nullableInt)
                     val answer = answer()
                 """.trimIndent()
-                assertThat(subject.lintWithContext(env, code))
-                    .hasSize(1)
-                    .hasStartSourceLocations(
+                assertThat(subject.lintWithContext(env, code)).singleElement()
+                    .hasStartSourceLocation(
                         SourceLocation(2, 24)
                     )
             }
@@ -691,7 +688,7 @@ class UnusedPrivateFunctionSpec(val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
-            assertThat(findings).hasSize(1).hasStartSourceLocations(
+            assertThat(findings).singleElement().hasStartSourceLocation(
                 SourceLocation(3, 30),
             )
         }
