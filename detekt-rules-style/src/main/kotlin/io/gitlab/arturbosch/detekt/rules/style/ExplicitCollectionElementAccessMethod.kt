@@ -5,7 +5,6 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
-import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
@@ -14,7 +13,7 @@ import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolOrigin
 import org.jetbrains.kotlin.analysis.api.types.symbol
-import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
@@ -52,42 +51,37 @@ class ExplicitCollectionElementAccessMethod(config: Config) :
     }
 
     private fun isIndexGetterRecommended(expression: KtCallExpression): Boolean {
+        if (expression.calleeExpression?.text != "get") return false
         analyze(expression) {
-            val getter = if (expression.calleeExpression?.text == "get") {
-                expression.getFunctionSymbol()
-            } else {
-                null
-            } ?: return false
-
-            if (expression.valueArguments.any { it.isSpread }) return false
-
-            return canReplace(getter) && shouldReplace(getter)
+            val getter = expression.getFunctionSymbol() ?: return false
+            return expression.valueArguments.none { it.isSpread } && canReplace(getter) && shouldReplace(getter)
         }
     }
 
-    private fun isIndexSetterRecommended(expression: KtCallExpression): Boolean = analyze(expression) {
+    private fun isIndexSetterRecommended(expression: KtCallExpression): Boolean =
         when (expression.calleeExpression?.text) {
             "set" -> {
-                val setter = expression.getFunctionSymbol()
-                if (setter == null) {
-                    false
-                } else {
-                    canReplace(setter) && shouldReplace(setter)
+                analyze(expression) {
+                    val setter = expression.getFunctionSymbol()
+                    setter != null && canReplace(setter) && shouldReplace(setter)
                 }
             }
+
             // `put` isn't an operator function, but can be replaced with indexer when the caller is Map.
-            "put" -> isCallerMap(expression)
+            "put" -> {
+                analyze(expression) {
+                    isCallerMap(expression)
+                }
+            }
+
             else -> false
         } && unusedReturnValue(expression)
-    }
 
-    @Suppress("ModifierListSpacing")
     context(session: KaSession)
     private fun KtCallExpression.getFunctionSymbol(): KaNamedFunctionSymbol? = with(session) {
         resolveToCall()?.singleFunctionCallOrNull()?.symbol as? KaNamedFunctionSymbol
     }
 
-    @OptIn(KaExperimentalApi::class)
     private fun canReplace(function: KaNamedFunctionSymbol): Boolean {
         // Can't use index operator when insufficient information is available to infer type variable.
         // For now, this is an incomplete check and doesn't report edge cases (e.g. inference using return type).
@@ -107,10 +101,10 @@ class ExplicitCollectionElementAccessMethod(config: Config) :
         // It does not always make sense for all Java get/set functions to be replaced by index accessors.
         // Only recommend known collection types.
         val javaClass = (function.containingDeclaration as? KaClassSymbol)?.classId ?: return false
-        return javaClass.asSingleFqName().asString() in setOf(
-            "java.util.ArrayList",
-            "java.util.HashMap",
-            "java.util.LinkedHashMap"
+        return javaClass in setOf(
+            ClassId.fromString("java/util/ArrayList"),
+            ClassId.fromString("java/util/HashMap"),
+            ClassId.fromString("java/util/LinkedHashMap"),
         )
     }
 
@@ -120,12 +114,10 @@ class ExplicitCollectionElementAccessMethod(config: Config) :
         val symbol = expression.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.containingSymbol as? KaClassSymbol
             ?: return false
 
-        val mapName = FqName("kotlin.collections.Map")
-        if (symbol.classId?.asSingleFqName() == mapName) return true
-        if (symbol.superTypes.any { it.symbol?.classId?.asSingleFqName() == mapName }) return true
-        return symbol.superTypes.asSequence().flatMap { it.allSupertypes }.any {
-            it.symbol?.classId?.asSingleFqName() == mapName
-        }
+        val mapClass = ClassId.fromString("kotlin/collections/Map")
+        return symbol.classId == mapClass ||
+            symbol.superTypes.any { it.symbol?.classId == mapClass } ||
+            symbol.superTypes.asSequence().flatMap { it.allSupertypes }.any { it.symbol?.classId == mapClass }
     }
 
     private fun unusedReturnValue(expression: KtCallExpression): Boolean =
