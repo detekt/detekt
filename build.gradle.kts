@@ -14,7 +14,7 @@ dependencies {
     dokka(projects.detektTest)
     dokka(projects.detektTestUtils)
     dokka(projects.detektTooling)
-    dokka("io.gitlab.arturbosch.detekt:detekt-gradle-plugin")
+    dokka("dev.detekt:detekt-gradle-plugin")
 }
 
 dokka {
