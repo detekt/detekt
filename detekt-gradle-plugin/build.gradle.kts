@@ -23,7 +23,7 @@ repositories {
     google()
 }
 
-group = "io.gitlab.arturbosch.detekt"
+group = "dev.detekt"
 version = Versions.currentOrSnapshot()
 
 detekt {
@@ -149,15 +149,15 @@ gradlePlugin {
     vcsUrl = "https://github.com/detekt/detekt"
     plugins {
         create("detektBasePlugin") {
-            id = "io.github.detekt.gradle.base"
+            id = "dev.detekt.gradle.base"
             implementationClass = "dev.detekt.gradle.plugin.DetektBasePlugin"
         }
         create("detektPlugin") {
-            id = "io.gitlab.arturbosch.detekt"
+            id = "dev.detekt"
             implementationClass = "io.gitlab.arturbosch.detekt.DetektPlugin"
         }
         create("detektCompilerPlugin") {
-            id = "io.github.detekt.gradle.compiler-plugin"
+            id = "dev.detekt.gradle.compiler-plugin"
             implementationClass = "io.github.detekt.gradle.DetektKotlinCompilerPlugin"
         }
         configureEach {

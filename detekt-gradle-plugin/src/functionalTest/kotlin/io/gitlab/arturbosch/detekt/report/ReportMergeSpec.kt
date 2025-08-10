@@ -34,7 +34,7 @@ class ReportMergeSpec {
         }
         val mainBuildFileContent: String = """
             plugins {
-                id("io.gitlab.arturbosch.detekt")
+                id("dev.detekt")
             }
             
             val reportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.ReportMergeTask::class) {
@@ -45,7 +45,7 @@ class ReportMergeSpec {
             
             subprojects {
                 apply(plugin = "org.jetbrains.kotlin.jvm")
-                apply(plugin = "io.gitlab.arturbosch.detekt")
+                apply(plugin = "dev.detekt")
             
                 plugins.withType<io.gitlab.arturbosch.detekt.DetektPlugin> {
                     tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
@@ -96,7 +96,7 @@ class ReportMergeSpec {
                     plugins {
                         id("com.android.application")
                         kotlin("android")
-                        id("io.gitlab.arturbosch.detekt")
+                        id("dev.detekt")
                     }
                     android {
                        compileSdk = 34
@@ -144,7 +144,7 @@ class ReportMergeSpec {
         }
         val mainBuildFileContent: String = """
             plugins {
-                id("io.gitlab.arturbosch.detekt")
+                id("dev.detekt")
             }
             
             val reportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.ReportMergeTask::class) {
@@ -154,7 +154,7 @@ class ReportMergeSpec {
             }
             
             subprojects {
-                apply(plugin = "io.gitlab.arturbosch.detekt")
+                apply(plugin = "dev.detekt")
             
                 plugins.withType<io.gitlab.arturbosch.detekt.DetektPlugin> {
                     tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
