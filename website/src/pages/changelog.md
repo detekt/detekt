@@ -6,6 +6,12 @@ keywords: [changelog, release-notes, migration]
 
 # Changelog and Migration Guide
 
+:::info
+
+The changelog for Detekt 2.0.0 alphas can be found [here](/changelog-2.0.0).
+
+:::
+
 #### 1.23.8 - 2025-02-20
 
 This is a point release for Detekt `1.23.0`, built against Kotlin `2.0.21`, with fixes for several bugs that got reported by the community.

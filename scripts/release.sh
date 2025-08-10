@@ -2,8 +2,8 @@
 set -e
 gradle publishToMavenLocal
 gradle build
-gradle publishToSonatype closeSonatypeStagingRepository --max-workers 1
+gradle publishToSonatype closeSonatypeStagingRepository --no-configuration-cache
 gradle :detekt-gradle-plugin:publishPlugins
-gradle githubRelease
+gradle githubRelease --no-configuration-cache
 gradle applyDocVersion
-gradle closeAndReleaseSonatypeStagingRepository
+gradle releaseSonatypeStagingRepository --no-configuration-cache

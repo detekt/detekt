@@ -1,5 +1,5 @@
 #!/bin/sh
-//bin/true; exec kotlinc -script "$0" -- "$@"
+//usr/bin/true; exec kotlinc -script "$0" -- "$@"
 
 /**
  * Script to prepare release notes for the upcoming detekt release.
@@ -56,7 +56,7 @@ class GithubMilestoneReport : CliktCommand() {
             .filter { it.pullRequest != null }
 
         if (filterExisting) {
-            val changeLogContent = File("./website/src/pages/changelog.md").readText()
+            val changeLogContent = File("./website/src/pages/changelog-2.0.0.md").readText()
             ghIssues = ghIssues.filter { "[#${it.number}]" !in changeLogContent }
         }
 
@@ -70,12 +70,14 @@ class GithubMilestoneReport : CliktCommand() {
             val labels = issue.labels.map { it.name }
             when {
                 "notable changes" in labels -> "notable changes"
+                "breaking change" in labels -> "breaking change"
                 "dependencies" in labels -> "dependencies"
                 "housekeeping" in labels -> "housekeeping"
                 else -> "changes"
             }
         }
         val notableChanges = groups["notable changes"]
+        val breakingChanges = groups["breaking change"]
         val dependencyBumps = groups["dependencies"]
         val housekeepingChanges = groups["housekeeping"]
         val issuesForUsers = groups["changes"]
@@ -88,6 +90,10 @@ class GithubMilestoneReport : CliktCommand() {
             append(section("Notable Changes"))
             append("\n")
             append(formatIssues(notableChanges))
+            append("\n")
+            append(section("Breaking Changes"))
+            append("\n")
+            append(formatIssues(breakingChanges))
             append("\n")
             append(section("Migration"))
             append("\n")
@@ -140,9 +146,9 @@ class GithubMilestoneReport : CliktCommand() {
 
     private fun footer(footer: String, url: URL) = "See all issues at: [$footer]($url)"
 
-    private fun header(name: String) = "#### $name - ${DateTimeFormatter.ISO_DATE.format(LocalDate.now())} \n"
+    private fun header(name: String) = "## $name - ${DateTimeFormatter.ISO_DATE.format(LocalDate.now())} \n"
 
-    private fun section(name: String) = "##### $name\n"
+    private fun section(name: String) = "### $name\n"
 }
 
 GithubMilestoneReport().main(args)
