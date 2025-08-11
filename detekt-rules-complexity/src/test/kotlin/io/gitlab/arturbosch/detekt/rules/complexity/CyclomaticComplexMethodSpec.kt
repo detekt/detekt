@@ -301,5 +301,7 @@ private fun assertExpectedComplexityValue(code: String, config: TestConfig, expe
 
     assertThat(findings).singleElement()
         .hasStartSourceLocation(SourceLocation(1, 5))
-        .hasMessage("(complexity: $expectedValue)")
+        .hasMessage(
+            "The function test appears to be too complex based on Cyclomatic Complexity (complexity: $expectedValue). The maximum allowed complexity for methods is set to '1'"
+        )
 }
