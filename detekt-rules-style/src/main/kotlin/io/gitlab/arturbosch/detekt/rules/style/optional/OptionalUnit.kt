@@ -3,10 +3,15 @@ package io.gitlab.arturbosch.detekt.rules.style.optional
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
-import dev.detekt.api.RequiresFullAnalysis
+import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.psi.isOverride
-import org.jetbrains.kotlin.cfg.WhenChecker
+import org.jetbrains.kotlin.analysis.api.KaIdeApi
+import org.jetbrains.kotlin.analysis.api.KaSession
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.types.KaTypeParameterType
 import org.jetbrains.kotlin.config.AnalysisFlags
 import org.jetbrains.kotlin.config.ExplicitApiMode
 import org.jetbrains.kotlin.psi.KtBlockExpression
@@ -18,12 +23,6 @@ import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.jetbrains.kotlin.psi.psiUtil.isPublic
 import org.jetbrains.kotlin.psi.psiUtil.siblings
-import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
-import org.jetbrains.kotlin.resolve.calls.util.getType
-import org.jetbrains.kotlin.types.typeUtil.isNothing
-import org.jetbrains.kotlin.types.typeUtil.isTypeParameter
-import org.jetbrains.kotlin.types.typeUtil.isUnit
 import org.jetbrains.kotlin.utils.addToStdlib.firstIsInstanceOrNull
 
 /**
@@ -54,7 +53,7 @@ class OptionalUnit(config: Config) :
         config,
         "Return type of `Unit` is unnecessary and can be safely removed."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         val typeReference = function.typeReference
@@ -69,30 +68,36 @@ class OptionalUnit(config: Config) :
     override fun visitBlockExpression(expression: KtBlockExpression) {
         val statements = expression.statements
         val lastStatement = statements.lastOrNull() ?: return
-        statements
-            .filter {
-                when {
-                    it !is KtNameReferenceExpression || it.text != UNIT -> false
-                    it != lastStatement -> true
-                    !it.isUsedAsExpression(bindingContext) -> true
-                    else -> {
-                        val prev =
-                            it.siblings(forward = false, withItself = false).firstIsInstanceOrNull<KtExpression>()
-                        prev?.getType(bindingContext)?.isUnit() == true && prev.canBeUsedAsValue()
+
+        analyze(expression) {
+            statements
+                .filter {
+                    when {
+                        it !is KtNameReferenceExpression || it.text != UNIT -> false
+                        it != lastStatement -> true
+                        !it.isUsedAsExpression -> true
+                        else -> {
+                            val prev =
+                                it.siblings(forward = false, withItself = false).firstIsInstanceOrNull<KtExpression>()
+                            prev?.expressionType?.isUnitType == true && prev.canBeUsedAsValue()
+                        }
                     }
                 }
-            }
-            .onEach {
-                report(
-                    Finding(
-                        Entity.from(expression),
-                        "A single Unit expression is unnecessary and can safely be removed."
+                .onEach {
+                    report(
+                        Finding(
+                            Entity.from(expression),
+                            "A single Unit expression is unnecessary and can safely be removed."
+                        )
                     )
-                )
-            }
+                }
+        }
+
         super.visitBlockExpression(expression)
     }
 
+    @OptIn(KaIdeApi::class)
+    context(session: KaSession)
     private fun KtExpression.canBeUsedAsValue(): Boolean =
         when (this) {
             is KtIfExpression -> {
@@ -101,7 +106,7 @@ class OptionalUnit(config: Config) :
             }
 
             is KtWhenExpression ->
-                entries.lastOrNull()?.elseKeyword != null || WhenChecker.getMissingCases(this, bindingContext).isEmpty()
+                entries.lastOrNull()?.elseKeyword != null || with(session) { computeMissingCases().isEmpty() }
 
             else ->
                 true
@@ -134,11 +139,13 @@ class OptionalUnit(config: Config) :
         "defines a return type of Unit. This is unnecessary and can safely be removed."
 
     private fun KtExpression.isGenericOrNothingType(): Boolean {
-        val isGenericType = getResolvedCall(bindingContext)?.candidateDescriptor?.returnType?.isTypeParameter() == true
-        val isNothingType = getType(bindingContext)?.isNothing() == true
-        // Either the function initializer returns Nothing or it is a generic function
-        // into which Unit is passed, but not both.
-        return (isGenericType && !isNothingType) || (isNothingType && !isGenericType)
+        analyze(this) {
+            val isGenericType = resolveToCall()?.singleFunctionCallOrNull()?.symbol?.returnType is KaTypeParameterType
+            val isNothingType = expressionType?.isNothingType == true
+            // Either the function initializer returns Nothing or it is a generic function
+            // into which Unit is passed, but not both.
+            return (isGenericType && !isNothingType) || (isNothingType && !isGenericType)
+        }
     }
 
     companion object {
