@@ -10,11 +10,11 @@ private const val FORBIDDEN_NAME = "forbiddenName"
 class ForbiddenClassNameSpec {
 
     @Test
-    fun `should report classes with forbidden names`() {
+    fun `should report classes with exactly matching forbidden names`() {
         val code = """
-            class TestManager {} // violation
-            class TestProvider {} // violation
-            class TestHolder
+            class Manager {} // violation
+            class Provider {} // violation
+            class Holder
         """.trimIndent()
         assertThat(
             ForbiddenClassName(TestConfig(FORBIDDEN_NAME to listOf("Manager", "Provider")))
@@ -23,10 +23,25 @@ class ForbiddenClassNameSpec {
     }
 
     @Test
+    fun `should treat patterns as case-sensitive`() {
+        val code = """
+            class Manager {} // allowed, since it doesn't match the rule's capitalization
+            class Provider {} // violation
+            class Holder
+        """.trimIndent()
+        assertThat(
+            ForbiddenClassName(TestConfig(FORBIDDEN_NAME to listOf("manager", "Provider")))
+                .lint(code)
+        ).hasSize(1)
+            .withFailMessage("Class name Provider is forbidden as it matches: Provider")
+            .isNotNull()
+    }
+
+    @Test
     fun `should report a class that starts with a forbidden name`() {
         val code = "class TestProvider {}"
         assertThat(
-            ForbiddenClassName(TestConfig(FORBIDDEN_NAME to listOf("test")))
+            ForbiddenClassName(TestConfig(FORBIDDEN_NAME to listOf("Test*")))
                 .lint(code)
         ).hasSize(1)
     }
@@ -34,9 +49,9 @@ class ForbiddenClassNameSpec {
     @Test
     fun `should report classes with forbidden names using config string using wildcards`() {
         val code = """
-            class TestManager {} // violation
-            class TestProvider {} // violation
-            class TestHolder
+            class TestManagerUtil {} // violation
+            class TestProviderUtil {} // violation
+            class TestHolderUtil
         """.trimIndent()
         assertThat(
             ForbiddenClassName(TestConfig(FORBIDDEN_NAME to listOf("*Manager*", "*Provider*")))
@@ -49,9 +64,9 @@ class ForbiddenClassNameSpec {
         val code = """
             class TestManager {}
         """.trimIndent()
-        val actual = ForbiddenClassName(TestConfig(FORBIDDEN_NAME to listOf("Test", "Manager", "Provider")))
+        val actual = ForbiddenClassName(TestConfig(FORBIDDEN_NAME to listOf("Test*", "*Manager", "Provider")))
             .lint(code)
         assertThat(actual.first().message)
-            .isEqualTo("Class name TestManager is forbidden as it contains: Test, Manager")
+            .isEqualTo("Class name TestManager is forbidden as it matches: Test.*, .*Manager")
     }
 }
