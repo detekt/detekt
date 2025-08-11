@@ -1,7 +1,7 @@
 import java.io.ByteArrayOutputStream
 
 plugins {
-    id("com.gradleup.shadow") version "8.3.8"
+    id("com.gradleup.shadow") version "9.0.1"
     id("module")
     id("application")
 }
@@ -16,6 +16,7 @@ val detektCliClasspath by configurations.resolvable("detektCliClasspath") {
 }
 
 dependencies {
+    implementation(libs.kotlin.compiler)
     implementation(projects.detektParser)
     implementation(projects.detektApi)
     implementation(projects.detektPsiUtils)
@@ -23,16 +24,13 @@ dependencies {
     implementation(projects.detektUtils)
     implementation(libs.jcommander)
 
-    testImplementation(projects.detektCore)
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.assertj.core)
-    testImplementation(libs.classgraph)
-    testRuntimeOnly(projects.detektRules)
 }
 
 val generateCliOptions by tasks.registering(JavaExec::class) {
     classpath = detektCliClasspath
-    mainClass = "io.gitlab.arturbosch.detekt.cli.Main"
+    mainClass = "dev.detekt.cli.Main"
     args = listOf("--help")
 
     val cliOptionsOutput = isolated.rootProject.projectDirectory.file("website/docs/gettingstarted/_cli-options.md")

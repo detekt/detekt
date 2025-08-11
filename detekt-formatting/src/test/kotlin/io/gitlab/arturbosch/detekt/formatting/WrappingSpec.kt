@@ -29,9 +29,8 @@ class WrappingSpec {
             
         """.trimIndent()
 
-        assertThat(subject.lint(code))
-            .hasSize(1)
+        assertThat(subject.lint(code)).singleElement()
             .hasStartSourceLocation(1, 12)
-            .hasTextLocations(11 to 12)
+            .hasTextLocation(11 to 12)
     }
 }

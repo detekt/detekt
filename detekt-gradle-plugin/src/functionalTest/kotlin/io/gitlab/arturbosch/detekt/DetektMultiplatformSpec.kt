@@ -146,7 +146,7 @@ class DetektMultiplatformSpec {
                             plugins {
                                 kotlin("multiplatform")
                                 id("com.android.library")
-                                id("io.gitlab.arturbosch.detekt")
+                                id("dev.detekt")
                             }
                             android {
                                 compileSdk = 34
@@ -381,7 +381,7 @@ private fun assertDetektWithClasspath(buildResult: BuildResult) {
 private val KMM_PLUGIN_BLOCK = """
     plugins {
         kotlin("multiplatform")
-        id("io.gitlab.arturbosch.detekt")
+        id("dev.detekt")
     }
 """.trimIndent()
 

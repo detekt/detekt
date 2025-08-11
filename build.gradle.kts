@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.report.ReportMergeTask
 
 plugins {
     id("releasing")
-    id("io.gitlab.arturbosch.detekt")
+    id("dev.detekt")
     id("org.jetbrains.dokka") version "2.0.0"
 }
 
@@ -14,12 +14,23 @@ dependencies {
     dokka(projects.detektTest)
     dokka(projects.detektTestUtils)
     dokka(projects.detektTooling)
-    dokka("io.gitlab.arturbosch.detekt:detekt-gradle-plugin")
+    dokka("dev.detekt:detekt-gradle-plugin")
 }
 
 dokka {
     dokkaPublications.html {
         outputDirectory = layout.projectDirectory.dir("website/static/kdoc")
+    }
+}
+
+dependencyAnalysis {
+    structure {
+        // Could potentially remove in future if DAGP starts handling this natively https://github.com/autonomousapps/dependency-analysis-gradle-plugin/issues/1269
+        bundle("junit-jupiter") {
+            includeDependency("org.junit.jupiter:junit-jupiter")
+            includeDependency("org.junit.jupiter:junit-jupiter-api")
+            includeDependency("org.junit.jupiter:junit-jupiter-params")
+        }
     }
 }
 
@@ -31,7 +42,7 @@ allprojects {
     group = "io.gitlab.arturbosch.detekt"
     version = Versions.currentOrSnapshot()
 
-    apply(plugin = "io.gitlab.arturbosch.detekt")
+    apply(plugin = "dev.detekt")
 
     detekt {
         buildUponDefaultConfig = true

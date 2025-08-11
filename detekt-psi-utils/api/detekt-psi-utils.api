@@ -24,6 +24,7 @@ public final class dev/detekt/psi/IsPartOfUtilsKt {
 
 public final class dev/detekt/psi/JunkKt {
 	public static final fun companionObject (Lorg/jetbrains/kotlin/psi/KtClass;)Lorg/jetbrains/kotlin/psi/KtObjectDeclaration;
+	public static final fun receiverIsUsed (Lorg/jetbrains/kotlin/psi/KtCallExpression;)Z
 	public static final fun receiverIsUsed (Lorg/jetbrains/kotlin/psi/KtCallExpression;Lorg/jetbrains/kotlin/resolve/BindingContext;)Z
 }
 
@@ -51,6 +52,7 @@ public final class dev/detekt/psi/KtFilesKt {
 
 public final class dev/detekt/psi/KtLambdaExpressionKt {
 	public static final fun firstParameter (Lorg/jetbrains/kotlin/psi/KtLambdaExpression;Lorg/jetbrains/kotlin/resolve/BindingContext;)Lorg/jetbrains/kotlin/descriptors/ValueParameterDescriptor;
+	public static final fun firstParameterOrNull (Lorg/jetbrains/kotlin/psi/KtLambdaExpression;)Lorg/jetbrains/kotlin/analysis/api/symbols/KaValueParameterSymbol;
 	public static final fun hasImplicitParameterReference (Lorg/jetbrains/kotlin/psi/KtLambdaExpression;)Z
 	public static final fun hasImplicitParameterReference (Lorg/jetbrains/kotlin/psi/KtLambdaExpression;Lorg/jetbrains/kotlin/descriptors/ValueParameterDescriptor;Lorg/jetbrains/kotlin/resolve/BindingContext;)Z
 	public static final fun implicitParameter (Lorg/jetbrains/kotlin/psi/KtLambdaExpression;Lorg/jetbrains/kotlin/resolve/BindingContext;)Lorg/jetbrains/kotlin/descriptors/ValueParameterDescriptor;

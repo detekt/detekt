@@ -1,1 +1,1 @@
-io.gitlab.arturbosch.detekt.cli.runners.TestProvider
+dev.detekt.cli.runners.TestProvider

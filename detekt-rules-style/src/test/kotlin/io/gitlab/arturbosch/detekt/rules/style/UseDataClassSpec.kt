@@ -167,9 +167,9 @@ class UseDataClassSpec(val env: KotlinEnvironmentContainer) {
 
             val findings = subject.lintWithContext(env, code)
 
-            assertThat(findings).hasSize(1)
-            assertThat(findings).hasStartSourceLocation(1, 7)
-            assertThat(findings).hasEndSourceLocation(1, 26)
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(1, 7)
+                .hasEndSourceLocation(1, 26)
         }
 
         @Test

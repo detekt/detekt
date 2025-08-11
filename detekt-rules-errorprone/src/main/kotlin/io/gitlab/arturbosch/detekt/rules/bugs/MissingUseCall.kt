@@ -4,12 +4,17 @@ import com.intellij.psi.PsiElement
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
-import dev.detekt.api.RequiresFullAnalysis
+import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
-import dev.detekt.psi.fqNameOrNull
-import org.jetbrains.kotlin.descriptors.CallableDescriptor
-import org.jetbrains.kotlin.descriptors.ConstructorDescriptor
-import org.jetbrains.kotlin.descriptors.FunctionDescriptor
+import org.jetbrains.kotlin.analysis.api.KaSession
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
+import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaSymbol
+import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtBlockExpression
@@ -27,6 +32,7 @@ import org.jetbrains.kotlin.psi.KtObjectLiteralExpression
 import org.jetbrains.kotlin.psi.KtParenthesizedExpression
 import org.jetbrains.kotlin.psi.KtPostfixExpression
 import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.psi.KtPsiUtil
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
@@ -35,13 +41,6 @@ import org.jetbrains.kotlin.psi.psiUtil.getParentOfTypes
 import org.jetbrains.kotlin.psi.psiUtil.parents
 import org.jetbrains.kotlin.psi.psiUtil.parentsWithSelf
 import org.jetbrains.kotlin.psi.psiUtil.siblings
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
-import org.jetbrains.kotlin.resolve.calls.util.getType
-import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
-import org.jetbrains.kotlin.resolve.sam.SamConstructorDescriptor
-import org.jetbrains.kotlin.types.KotlinType
-import org.jetbrains.kotlin.types.typeUtil.supertypes
 
 /**
  * Prefer using the `use` function with `Closeable` or `AutoCloseable`. As `use` function ensures proper closure of
@@ -74,10 +73,10 @@ class MissingUseCall(config: Config = Config.empty) :
         "Usage of `Closeable` detected without `use` call. Using `Closeable` without `use` " +
             "can be problematic as closing `Closeable` may throw exception.",
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     private val traversedParentExpression: MutableSet<PsiElement> = mutableSetOf()
-    private val usedReferences: MutableSet<CallableDescriptor> = mutableSetOf()
+    private val usedReferences: MutableSet<KaSymbol> = mutableSetOf()
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
@@ -90,54 +89,43 @@ class MissingUseCall(config: Config = Config.empty) :
     }
 
     private fun checkAndReport(expression: KtExpression) {
-        val isCloseable = isChildOfCloseable(expression)
-        if (isCloseable.not()) return
-        if (shouldReport(expression)) {
-            report(
-                Finding(
-                    Entity.from(expression),
-                    "${
-                        (
-                            expression.findDescendantOfType<KtNameReferenceExpression>()
-                                ?: expression
-                            ).text
-                    } doesn't call `use` to access the `Closeable`"
+        analyze(expression) {
+            val isCloseable = isChildOfCloseable(expression)
+            if (isCloseable.not()) return
+            if (shouldReport(expression)) {
+                report(
+                    Finding(
+                        Entity.from(expression),
+                        "${
+                            (
+                                expression.findDescendantOfType<KtNameReferenceExpression>()
+                                    ?: expression
+                                ).text
+                        } doesn't call `use` to access the `Closeable`"
+                    )
                 )
-            )
+            }
         }
     }
 
-    private fun isChildOfCloseable(expression: KtExpression): Boolean {
-        val expressionType = expression.getType(bindingContext) ?: return false
-        return isChildOfCloseable(expressionType)
+    private fun KaSession.isChildOfCloseable(expr: KtExpression): Boolean {
+        val symbol = if (expr is KtObjectLiteralExpression) {
+            expr.symbol
+        } else {
+            KtPsiUtil.safeDeparenthesize(expr).resolveToCall()?.singleFunctionCallOrNull()?.symbol?.returnType?.symbol
+        } ?: return false
+        return isChildOfCloseable(symbol)
     }
 
-    private fun isChildOfCloseable(type: KotlinType): Boolean {
-        val isCloseable = type.supertypes()
-            .map {
-                it.fqNameOrNull()
-            }
-            .any {
-                it in listOfCloseables
-            }
-        return isCloseable
+    private fun KaSession.isChildOfCloseable(symbol: KaSymbol): Boolean {
+        val superTypes = (symbol as? KaClassSymbol)?.superTypes.orEmpty().flatMap { listOf(it) + it.allSupertypes }
+        return superTypes.any { it.symbol?.classId?.asSingleFqName() in listOfCloseables }
     }
 
-    private fun shouldReport(expression: KtExpression): Boolean {
+    private fun KaSession.shouldReport(expression: KtExpression): Boolean {
         val expressionParent = getParentChainExpression(expression) ?: return false
         return when {
             expressionParent is KtQualifiedExpression -> {
-                val expressionCallDescriptor =
-                    expression.getResolvedCall(bindingContext)?.resultingDescriptor
-                // this should not first chain as that can't be helper chain
-                if (
-                    expression != expressionParent.firstCallableReceiverOrNull() &&
-                    expressionCallDescriptor !is ConstructorDescriptor &&
-                    expressionCallDescriptor !is SamConstructorDescriptor
-                ) {
-                    // probably some helper method which takes and return closeable
-                    return false
-                }
                 expressionParent.doesEndWithUse().not() &&
                     expressionParent.firstCallableReceiverOrNull().isCloseableNotUsed()
             }
@@ -165,43 +153,43 @@ class MissingUseCall(config: Config = Config.empty) :
         }.also { traversedParentExpression.add(expressionParent) }
     }
 
-    private fun isParentFunctionReturnsCloseable(expression: KtExpression): Boolean {
+    private fun KaSession.isParentFunctionReturnsCloseable(expression: KtExpression): Boolean {
         val parent = expression.getParentOfType<KtNamedFunction>(
             true,
             KtLambdaExpression::class.java,
             KtClassInitializer::class.java,
             KtClassBody::class.java,
         ) ?: return false
-        val functionReturnType =
-            bindingContext[BindingContext.FUNCTION, parent]?.returnType ?: return false
-        return isChildOfCloseable(functionReturnType)
+        val symbol = parent.returnType.symbol ?: return false
+        return isChildOfCloseable(symbol)
     }
 
-    private fun isParamForClosableOrFunReturningClosable(expression: KtExpression): Boolean {
+    private fun KaSession.isParamForClosableOrFunReturningClosable(expression: KtExpression): Boolean {
         if (expression.parent !is KtValueArgument) return false
         val callExpression = expression.parent.parent.parent as? KtCallExpression ?: return false
-        val descriptor =
-            callExpression.getResolvedCall(bindingContext)?.resultingDescriptor ?: return false
-        val returnType = descriptor.returnType ?: return false
-        return isChildOfCloseable(returnType)
+        val symbol =
+            callExpression.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.returnType?.symbol ?: return false
+        return isChildOfCloseable(symbol)
     }
 
-    private fun KtQualifiedExpression.doesEndWithUse(): Boolean {
-        receiverExpression.getResolvedCall(bindingContext)?.resultingDescriptor?.let {
+    context(session: KaSession)
+    private fun KtQualifiedExpression.doesEndWithUse(): Boolean = with(session) {
+        receiverExpression.resolveToCall()?.successfulCallOrNull<KaCallableMemberCall<*, *>>()?.symbol?.let {
             usedReferences.add(it)
         }
-        return selectorExpression
-            .getResolvedCall(bindingContext)
-            ?.resultingDescriptor
-            ?.fqNameOrNull() in useFqNames
+        selectorExpression?.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId
+            ?.asSingleFqName() in useFqNames
     }
 
+    context(session: KaSession)
     private fun KtElement?.isCloseableNotUsed(): Boolean {
         this ?: return true
-        return usedReferences.contains(this.getResolvedCall(bindingContext)?.resultingDescriptor)
+        return with(session) {
+            resolveToCall()?.singleFunctionCallOrNull()?.symbol as? KaSymbol in usedReferences
+        }
     }
 
-    private fun isExpressionUsedOnSameOrNextLine(expression: KtExpression): Boolean {
+    private fun KaSession.isExpressionUsedOnSameOrNextLine(expression: KtExpression): Boolean {
         val parent = expression.getParentOfTypes(
             true,
             KtQualifiedExpression::class.java,
@@ -233,7 +221,7 @@ class MissingUseCall(config: Config = Config.empty) :
     }
 
     @Suppress("ReturnCount")
-    private fun isPartOfIfElseExpressionReturningCloseable(expression: KtExpression): Boolean {
+    private fun KaSession.isPartOfIfElseExpressionReturningCloseable(expression: KtExpression): Boolean {
         val expressionAfterParens = expression.parents.firstOrNull { it !is KtParenthesizedExpression } ?: return false
         val (ifExpression, containerExpression) =
             @Suppress("BracesOnIfStatements")
@@ -274,9 +262,11 @@ class MissingUseCall(config: Config = Config.empty) :
         return expression
     }
 
+    context(session: KaSession)
     private fun KtQualifiedExpression.firstCallableReceiverOrNull(): KtElement? {
-        fun KtExpression.isCallableExpression() =
-            this.getResolvedCall(bindingContext)?.resultingDescriptor is FunctionDescriptor
+        fun KtExpression.isCallableExpression(): Boolean = with(session) {
+            resolveToCall()?.singleFunctionCallOrNull() != null
+        }
 
         var expression = receiverExpression
 

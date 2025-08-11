@@ -11,7 +11,6 @@ import org.jetbrains.kotlin.diagnostics.DiagnosticUtils
 import org.jetbrains.kotlin.kdoc.psi.api.KDoc
 import org.jetbrains.kotlin.kdoc.psi.api.KDocElement
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocElementImpl
-import org.jetbrains.kotlin.kdoc.psi.impl.KDocImpl
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocLink
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocName
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocSection
@@ -49,7 +48,6 @@ private val comments: Set<Class<out PsiElement>> = setOf(
     PsiComment::class.java,
     PsiCommentImpl::class.java,
     KDoc::class.java,
-    KDocImpl::class.java,
     KDocElementImpl::class.java,
     KDocElement::class.java,
     KDocLink::class.java,

@@ -21,11 +21,11 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.psi.KtPsiUtil
 import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfTypes
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfTypesAndPredicate
-import org.jetbrains.kotlin.psi2ir.deparenthesize
 
 /**
  * Report usages of `Thread.sleep` in suspending functions and coroutine blocks. A thread can
@@ -72,7 +72,6 @@ class SleepInsteadOfDelay(config: Config) :
         }
     }
 
-    @Suppress("ModifierListSpacing")
     context(session: KaSession)
     private fun KtExpression.isThreadSleepFunction(): Boolean {
         fun KtCallableReferenceExpression.isSleepCallableRef(): Boolean =
@@ -93,12 +92,12 @@ class SleepInsteadOfDelay(config: Config) :
         }
     }
 
-    @Suppress("ReturnCount", "ModifierListSpacing")
+    @Suppress("ReturnCount")
     context(session: KaSession)
     private fun getNearestParentForSuspension(psiElement: PsiElement): PsiElement? {
         fun KtValueArgument.isNearestParentForSuspension(): Boolean {
             val parent = this.getParentOfTypes(true, KtCallExpression::class.java) ?: return false
-            val argumentExpression = this.getArgumentExpression()?.deparenthesize()
+            val argumentExpression = this.getArgumentExpression()?.let { KtPsiUtil.deparenthesize(it) }
             with(session) {
                 val functionCall = parent.resolveToCall()?.singleFunctionCallOrNull() ?: return false
                 val functionSymbol = functionCall.symbol as? KaNamedFunctionSymbol ?: return false
@@ -121,7 +120,6 @@ class SleepInsteadOfDelay(config: Config) :
         }
     }
 
-    @Suppress("ModifierListSpacing")
     context(session: KaSession)
     private fun PsiElement.isSuspendAllowed(): Boolean = when (this) {
         is KtValueArgument -> this.isSuspendAllowed()
@@ -130,18 +128,16 @@ class SleepInsteadOfDelay(config: Config) :
         else -> false
     }
 
-    @Suppress("ModifierListSpacing")
     context(session: KaSession)
     private fun KtValueArgument.isSuspendAllowed(): Boolean {
         val parent = this.getParentOfTypes(true, KtCallExpression::class.java) ?: return false
-        val argumentExpression = this.getArgumentExpression()?.deparenthesize() ?: return false
+        val argumentExpression = this.getArgumentExpression()?.let { KtPsiUtil.safeDeparenthesize(it) } ?: return false
         with(session) {
             val parameter = parent.resolveToCall()?.singleFunctionCallOrNull()?.argumentMapping[argumentExpression]
             return parameter?.returnType?.isSuspendFunctionType == true
         }
     }
 
-    @Suppress("ModifierListSpacing")
     context(session: KaSession)
     private fun KtLambdaExpression.isSuspendAllowed(): Boolean {
         val parent = this.getParentOfTypes(true, KtProperty::class.java) ?: return false
@@ -150,7 +146,6 @@ class SleepInsteadOfDelay(config: Config) :
         }
     }
 
-    @Suppress("ModifierListSpacing")
     context(session: KaSession)
     private fun KtNamedFunction.isSuspendAllowed(): Boolean {
         with(session) {
@@ -158,7 +153,6 @@ class SleepInsteadOfDelay(config: Config) :
         }
     }
 
-    @Suppress("ModifierListSpacing")
     context(session: KaSession)
     private fun shouldReport(expression: KtExpression): Boolean {
         val nearestParentForSuspension = getNearestParentForSuspension(expression) ?: return false

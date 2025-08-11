@@ -4,11 +4,22 @@ import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
-import dev.detekt.api.RequiresFullAnalysis
+import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.psi.receiverIsUsed
+import org.jetbrains.kotlin.analysis.api.KaSession
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
+import org.jetbrains.kotlin.analysis.api.resolution.KaImplicitReceiverValue
+import org.jetbrains.kotlin.analysis.api.resolution.singleCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaSymbol
+import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.lexer.KtTokens
-import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.name.CallableId
+import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.name.StandardClassIds
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
@@ -17,10 +28,6 @@ import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.psi.KtThisExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.util.getImplicitReceiverValue
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
-import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 
 /**
  * `apply` expressions are used frequently, but sometimes their usage should be replaced with
@@ -45,28 +52,30 @@ class UnnecessaryApply(config: Config) :
         config,
         "The `apply` usage is unnecessary and can be removed."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 
-        if (expression.isApplyExpr() &&
-            expression.hasOnlyOneMemberAccessStatement() &&
-            !expression.receiverIsUsed(bindingContext)
-        ) {
-            val message = if (expression.parent is KtSafeQualifiedExpression) {
-                "apply can be replaced with let or an if"
-            } else {
-                "apply expression can be omitted"
+        if (expression.calleeExpression?.text != "apply") return
+
+        analyze(expression) {
+            if (expression.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId == applyCallableId &&
+                expression.hasOnlyOneMemberAccessStatement() &&
+                !expression.receiverIsUsed()
+            ) {
+                val message = if (expression.parent is KtSafeQualifiedExpression) {
+                    "apply can be replaced with let or an if"
+                } else {
+                    "apply expression can be omitted"
+                }
+                report(Finding(Entity.from(expression), message))
             }
-            report(Finding(Entity.from(expression), message))
         }
     }
 
-    private fun KtCallExpression.isApplyExpr() = calleeExpression?.textMatches(APPLY_LITERAL) == true &&
-        getResolvedCall(bindingContext)?.resultingDescriptor?.fqNameOrNull() == APPLY_FQ_NAME
-
     @Suppress("ReturnCount")
+    context(session: KaSession)
     private fun KtCallExpression.hasOnlyOneMemberAccessStatement(): Boolean {
         val lambda = lambdaArguments.firstOrNull()?.getLambdaExpression() ?: return false
         var singleStatement = lambda.bodyExpression?.statements?.singleOrNull() ?: return false
@@ -83,18 +92,29 @@ class UnnecessaryApply(config: Config) :
             return false
         }
 
-        val lambdaDescriptor = bindingContext[BindingContext.FUNCTION, lambda.functionLiteral] ?: return false
-        return singleStatement.collectDescendantsOfType<KtNameReferenceExpression> {
-            val resolvedCall = it.getResolvedCall(bindingContext)
-            if (it.parent is KtThisExpression) {
-                resolvedCall?.resultingDescriptor?.containingDeclaration == lambdaDescriptor
-            } else {
-                resolvedCall?.getImplicitReceiverValue()?.declarationDescriptor == lambdaDescriptor
-            }
-        }.size == 1
+        with(session) {
+            val lambdaSymbol = lambda.functionLiteral.symbol
+            return singleStatement.collectDescendantsOfType<KtNameReferenceExpression> {
+                val symbol = if (it.parent is KtThisExpression) {
+                    it.mainReference.resolveToSymbol()
+                } else {
+                    it.implicitReceiver()
+                }
+                symbol?.containingSymbol == lambdaSymbol
+            }.size == 1
+        }
+    }
+
+    context(session: KaSession)
+    fun KtNameReferenceExpression.implicitReceiver(): KaSymbol? {
+        with(session) {
+            val symbol = resolveToCall()?.singleCallOrNull<KaCallableMemberCall<*, *>>()?.partiallyAppliedSymbol
+            val implicitReceiver = (symbol?.dispatchReceiver ?: symbol?.extensionReceiver) as? KaImplicitReceiverValue
+            return implicitReceiver?.symbol
+        }
+    }
+
+    companion object {
+        private val applyCallableId = CallableId(StandardClassIds.BASE_KOTLIN_PACKAGE, Name.identifier("apply"))
     }
 }
-
-private const val APPLY_LITERAL = "apply"
-
-private val APPLY_FQ_NAME = FqName("kotlin.apply")

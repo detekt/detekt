@@ -8,14 +8,16 @@ import dev.detekt.api.Configuration
 import dev.detekt.api.DetektVisitor
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
-import dev.detekt.api.RequiresFullAnalysis
+import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.api.config
-import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
-import org.jetbrains.kotlin.descriptors.impl.LocalVariableDescriptor
-import org.jetbrains.kotlin.load.kotlin.toSourceElement
+import org.jetbrains.kotlin.analysis.api.KaSession
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.symbols.KaLocalVariableSymbol
+import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDeclaration
+import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
@@ -25,8 +27,6 @@ import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtValueArgumentList
 import org.jetbrains.kotlin.psi.KtVariableDeclaration
 import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.bindingContextUtil.getReferenceTargets
 import org.jetbrains.kotlin.resolve.source.getPsi
 import org.jetbrains.kotlin.resolve.source.toSourceElement
 
@@ -53,7 +53,7 @@ class UnusedVariable(config: Config) :
         config,
         "Variable is unused and should be removed."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     @Configuration("unused variables names matching this regex are ignored")
     private val allowedNames: Regex by config(
@@ -63,17 +63,14 @@ class UnusedVariable(config: Config) :
 
     override fun visit(root: KtFile) {
         super.visit(root)
-        val visitor = UnusedVariableVisitor(allowedNames, bindingContext)
+        val visitor = UnusedVariableVisitor(allowedNames)
         root.accept(visitor)
         visitor.getUnusedReports().forEach { report(it) }
     }
 }
 
 @Suppress("unused")
-private class UnusedVariableVisitor(
-    private val allowedNames: Regex,
-    private val bindingContext: BindingContext,
-) : DetektVisitor() {
+private class UnusedVariableVisitor(private val allowedNames: Regex) : DetektVisitor() {
 
     private val variables = mutableMapOf<PsiElement, KtNamedDeclaration>()
     private val usedVariables = mutableSetOf<PsiElement>()
@@ -117,25 +114,37 @@ private class UnusedVariableVisitor(
         super.visitReferenceExpression(expression)
 
         val references = when (expression) {
-            is KtNameReferenceExpression -> expression.getReferenceTargets(bindingContext)
+            is KtNameReferenceExpression -> {
+                analyze(expression) {
+                    listOfNotNull(expression.resolveToLocalVariableSymbol())
+                }
+            }
             is KtCallExpression -> {
-                expression.getChildrenOfType<KtValueArgumentList>()
-                    .flatMap { it.arguments }
-                    .flatMap {
-                        it.getArgumentExpression()?.getReferenceTargets(bindingContext).orEmpty()
+                val arguments = expression.getChildrenOfType<KtValueArgumentList>().flatMap { it.arguments }
+                if (arguments.isNotEmpty()) {
+                    analyze(expression) {
+                        arguments.mapNotNull {
+                            it.getArgumentExpression()?.resolveToLocalVariableSymbol()
+                        }
                     }
+                } else {
+                    emptyList()
+                }
             }
 
             else -> return
         }
 
-        references
-            .filterIsInstance<LocalVariableDescriptor>()
-            .forEach(::registerVariableUse)
+        references.forEach(::registerVariableUse)
     }
 
-    private fun registerVariableUse(descriptor: DeclarationDescriptor) {
-        descriptor.toSourceElement.getPsi()?.also {
+    context(session: KaSession)
+    private fun KtExpression.resolveToLocalVariableSymbol(): KaLocalVariableSymbol? = with(session) {
+        mainReference?.resolveToSymbol() as? KaLocalVariableSymbol
+    }
+
+    private fun registerVariableUse(symbol: KaLocalVariableSymbol) {
+        symbol.psi?.also {
             usedVariables.add(it)
         }
     }

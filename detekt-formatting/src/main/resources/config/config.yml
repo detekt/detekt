@@ -157,6 +157,7 @@ formatting:
   ModifierListSpacing:
     active: true
     autoCorrect: true
+    indentSize: 4
   ModifierOrdering:
     active: true
     autoCorrect: true

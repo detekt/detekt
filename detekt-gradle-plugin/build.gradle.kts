@@ -23,7 +23,7 @@ repositories {
     google()
 }
 
-group = "io.gitlab.arturbosch.detekt"
+group = "dev.detekt"
 version = Versions.currentOrSnapshot()
 
 detekt {
@@ -39,7 +39,8 @@ dokka {
     }
 
     dokkaSourceSets.configureEach {
-        apiVersion = "1.4"
+        // Using `set` instead of simple property assignment to work around this Gradle 9 incompatibility: https://github.com/Kotlin/dokka/issues/4096
+        apiVersion.set("1.4")
         modulePath = "detekt-gradle-plugin"
 
         externalDocumentationLinks {
@@ -67,6 +68,7 @@ testing {
         register<JvmTestSuite>("functionalTest") {
             dependencies {
                 implementation(libs.assertj.core)
+                implementation(project())
                 implementation(testFixtures(project()))
             }
 
@@ -128,7 +130,6 @@ dependencies {
     compileOnly(libs.kotlin.gradlePluginApi)
     implementation(libs.sarif4k)
     testFixturesCompileOnly(libs.jetbrains.annotations)
-    compileOnly(libs.jetbrains.annotations)
 
     testKitRuntimeOnly(libs.kotlin.gradle.plugin)
     testKitRuntimeOnly(libs.android.gradle.plugin)
@@ -148,15 +149,15 @@ gradlePlugin {
     vcsUrl = "https://github.com/detekt/detekt"
     plugins {
         create("detektBasePlugin") {
-            id = "io.github.detekt.gradle.base"
+            id = "dev.detekt.gradle.base"
             implementationClass = "dev.detekt.gradle.plugin.DetektBasePlugin"
         }
         create("detektPlugin") {
-            id = "io.gitlab.arturbosch.detekt"
+            id = "dev.detekt"
             implementationClass = "io.gitlab.arturbosch.detekt.DetektPlugin"
         }
         create("detektCompilerPlugin") {
-            id = "io.github.detekt.gradle.compiler-plugin"
+            id = "dev.detekt.gradle.compiler-plugin"
             implementationClass = "io.github.detekt.gradle.DetektKotlinCompilerPlugin"
         }
         configureEach {
@@ -250,4 +251,22 @@ tasks {
 with(components["java"] as AdhocComponentWithVariants) {
     withVariantsFromConfiguration(configurations["testFixturesApiElements"]) { skip() }
     withVariantsFromConfiguration(configurations["testFixturesRuntimeElements"]) { skip() }
+}
+
+dependencyAnalysis {
+    issues {
+        all {
+            onAny {
+                severity("fail")
+            }
+        }
+    }
+    structure {
+        // Could potentially remove in future if DAGP starts handling this natively https://github.com/autonomousapps/dependency-analysis-gradle-plugin/issues/1269
+        bundle("junit-jupiter") {
+            includeDependency("org.junit.jupiter:junit-jupiter")
+            includeDependency("org.junit.jupiter:junit-jupiter-api")
+            includeDependency("org.junit.jupiter:junit-jupiter-params")
+        }
+    }
 }

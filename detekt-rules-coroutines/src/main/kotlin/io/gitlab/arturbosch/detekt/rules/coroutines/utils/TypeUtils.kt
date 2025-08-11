@@ -1,25 +1,29 @@
 package io.gitlab.arturbosch.detekt.rules.coroutines.utils
 
-import dev.detekt.psi.fqNameOrNull
+import org.jetbrains.kotlin.analysis.api.KaSession
+import org.jetbrains.kotlin.analysis.api.types.KaType
+import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.name.ClassId
-import org.jetbrains.kotlin.types.KotlinType
-import org.jetbrains.kotlin.types.typeUtil.supertypes
 
-internal fun KotlinType.isCoroutineScope(): Boolean =
+context(session: KaSession)
+internal fun KaType.isCoroutineScope(): Boolean = with(session) {
     sequence {
         yield(this@isCoroutineScope)
-        yieldAll(this@isCoroutineScope.supertypes())
+        yieldAll(this@isCoroutineScope.allSupertypes)
     }
-        .mapNotNull { it.fqNameOrNull()?.asString() }
-        .contains("kotlinx.coroutines.CoroutineScope")
+        .mapNotNull { it.symbol?.classId }
+        .contains(ClassId.fromString("kotlinx/coroutines/CoroutineScope"))
+}
 
-internal fun KotlinType.isCoroutinesFlow(): Boolean =
+context(session: KaSession)
+internal fun KaType.isCoroutinesFlow(): Boolean = with(session) {
     sequence {
         yield(this@isCoroutinesFlow)
-        yieldAll(this@isCoroutinesFlow.supertypes())
+        yieldAll(this@isCoroutinesFlow.allSupertypes)
     }
-        .mapNotNull { it.fqNameOrNull()?.asString() }
-        .contains("kotlinx.coroutines.flow.Flow")
+        .mapNotNull { it.symbol?.classId }
+        .contains(ClassId.fromString("kotlinx/coroutines/flow/Flow"))
+}
 
 internal object CoroutineClassIds {
     val Flow: ClassId = ClassId.fromString("kotlinx/coroutines/flow/Flow")
