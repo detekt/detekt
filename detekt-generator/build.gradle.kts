@@ -1,7 +1,7 @@
 import java.io.ByteArrayOutputStream
 
 plugins {
-    id("com.gradleup.shadow") version "9.0.1"
+    id("com.gradleup.shadow")
     id("module")
     id("application")
 }

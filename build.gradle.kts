@@ -6,6 +6,9 @@ plugins {
     id("releasing")
     id("dev.detekt")
     id("org.jetbrains.dokka") version "2.0.0"
+    id("com.gradleup.shadow") version "9.0.1" apply false
+    id("de.undercouch.download") version "5.6.0" apply false
+    id("dev.drewhamilton.poko") version "0.19.3" apply false
 }
 
 dependencies {
