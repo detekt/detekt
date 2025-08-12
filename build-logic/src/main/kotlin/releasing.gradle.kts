@@ -6,7 +6,7 @@ plugins {
 }
 
 nexusPublishing {
-    packageGroup = "io.gitlab.arturbosch"
+    packageGroup = "dev.detekt"
 
     repositories {
         create("sonatype") {
