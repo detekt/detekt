@@ -37,8 +37,8 @@ class ProblemsApiConsoleReportSpec {
         problemsService = mock()
         problemReporter = mock()
         detektion = mock()
-        report = ProblemsApiConsoleReport(problemsService)
         whenever(problemsService.reporter).thenReturn(problemReporter)
+        report = ProblemsApiConsoleReport(problemsService)
     }
 
     @Test
@@ -94,16 +94,6 @@ class ProblemsApiConsoleReportSpec {
     fun `given no issues, it does not report any problems`() {
         whenever(detektion.issues).thenReturn(emptyList())
         val result = report.render(detektion)
-
-        assertThat(result).isEqualTo("")
-        verify(problemReporter, never()).report(any(), any())
-    }
-
-    @Test
-    fun `problems service is not available when reporting`() {
-        val reportWithoutProblems = ProblemsApiConsoleReport()
-
-        val result = reportWithoutProblems.render(detektion)
 
         assertThat(result).isEqualTo("")
         verify(problemReporter, never()).report(any(), any())

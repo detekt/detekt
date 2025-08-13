@@ -11,20 +11,11 @@ import org.gradle.api.problems.Severity
 import javax.inject.Inject
 
 @Incubating
-class ProblemsApiConsoleReport : ConsoleReport {
-
-    private var problems: Problems? = null
+class ProblemsApiConsoleReport @Inject constructor(
+    private val problems: Problems,
+) : ConsoleReport {
 
     override val id: String = "problemsAPI"
-
-    @Inject
-    public constructor(problems: Problems) {
-        this.problems = problems
-    }
-
-    public constructor() {
-        this.problems = null
-    }
 
     override fun render(detektion: Detektion): String? {
         val reporter: ProblemReporter? = problems?.reporter ?: null
