@@ -12,7 +12,7 @@ import dev.detekt.api.valuesWithReason
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.types.KaType
 import org.jetbrains.kotlin.analysis.api.types.symbol
-import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtClassLiteralExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
@@ -47,7 +47,7 @@ class ForbiddenOptIn(config: Config) :
     }
 
     private fun check(annotation: KtAnnotationEntry, type: KaType?) {
-        if (type?.symbol?.classId?.asSingleFqName() != optInFqName) {
+        if (type?.symbol?.classId != optInClassId) {
             return
         }
 
@@ -69,6 +69,6 @@ class ForbiddenOptIn(config: Config) :
     }
 
     companion object {
-        private val optInFqName: FqName = FqName("kotlin.OptIn")
+        private val optInClassId: ClassId = ClassId.fromString("kotlin/OptIn")
     }
 }
