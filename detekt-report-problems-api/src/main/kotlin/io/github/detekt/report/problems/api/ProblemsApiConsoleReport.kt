@@ -18,13 +18,13 @@ class ProblemsApiConsoleReport @Inject constructor(
     override val id: String = "problemsAPI"
 
     override fun render(detektion: Detektion): String? {
-        val reporter: ProblemReporter? = problems?.reporter ?: null
+        val reporter: ProblemReporter = problems.reporter
         val reportLines = mutableListOf<String>()
 
         detektion.issues.forEach { issue ->
             val group = ProblemGroup.create("validation", "detekt issue")
             val id = ProblemId.create(issue.ruleInstance.id, issue.message, group)
-            reporter?.report(id) { spec ->
+            reporter.report(id) { spec ->
                 val filePath = issue.location.path.toString()
                 val line = issue.location.source.line
                 spec.fileLocation(filePath)
