@@ -32,9 +32,8 @@ class ForbiddenClassNameSpec {
         assertThat(
             ForbiddenClassName(TestConfig(FORBIDDEN_NAME to listOf("manager", "Provider")))
                 .lint(code)
-        ).hasSize(1)
-            .withFailMessage("Class name Provider is forbidden as it matches: Provider")
-            .isNotNull()
+        ).singleElement()
+            .matches { it.message == "Class name Provider is forbidden as it matches: Provider" }
     }
 
     @Test
@@ -50,7 +49,7 @@ class ForbiddenClassNameSpec {
     fun `should report classes with forbidden names using config string using wildcards`() {
         val code = """
             class TestManagerUtil {} // violation
-            class TestProviderUtil {} // violation
+            class Provider {} // violation
             class TestHolderUtil
         """.trimIndent()
         assertThat(
@@ -68,5 +67,20 @@ class ForbiddenClassNameSpec {
             .lint(code)
         assertThat(actual.first().message)
             .isEqualTo("Class name TestManager is forbidden as it matches: Test.*, .*Manager")
+    }
+
+    /**
+     * Before 2.0.0, forbidden names were treated unconditionally as substrings;
+     * this test checks that is no longer the case.
+     */
+    @Test
+    fun `does not treat pattern as a substring`() {
+        val code = """
+            class TestManagerUtil {}
+        """.trimIndent()
+        assertThat(
+            ForbiddenClassName(TestConfig(FORBIDDEN_NAME to listOf("Manager")))
+                .lint(code)
+        ).isEmpty()
     }
 }
