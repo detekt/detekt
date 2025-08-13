@@ -10,8 +10,6 @@ import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Test
 
-private const val MARKER_CLASSES = "markerClasses"
-
 @Language("kotlin")
 private const val ANNOTAION_DECLARATIONS = """
     package annotations
@@ -35,7 +33,7 @@ private const val ANNOTAION_DECLARATIONS = """
 @KotlinCoreEnvironmentTest
 class ForbiddenOptInSpec(val env: KotlinEnvironmentContainer) {
     private val optInConfig = TestConfig(
-        MARKER_CLASSES to listOf(
+        "markerClasses" to listOf(
             ValueWithReason("ForbiddenApi").toConfig(),
             ValueWithReason("DoNotUseApi", "Do not use!").toConfig(),
         )
