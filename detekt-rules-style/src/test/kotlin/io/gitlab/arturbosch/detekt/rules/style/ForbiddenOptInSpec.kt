@@ -40,6 +40,19 @@ class ForbiddenOptInSpec(val env: KotlinEnvironmentContainer) {
     )
 
     @Test
+    fun `should not report violation if no forbidden opt-ins are used`() {
+        val code = """
+            import annotations.*
+
+            @OptIn(AllowedApi::class)
+            fun main() {}
+        """.trimIndent()
+        val findings = ForbiddenOptIn(optInConfig).lintWithContext(env, code, ANNOTAION_DECLARATIONS)
+
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
     fun `should report single forbidden opt-in without a stating a reason`() {
         val code = """
             import annotations.*
