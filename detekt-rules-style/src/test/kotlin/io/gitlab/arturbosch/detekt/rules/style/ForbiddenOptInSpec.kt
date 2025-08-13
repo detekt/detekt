@@ -88,4 +88,19 @@ class ForbiddenOptInSpec(val env: KotlinEnvironmentContainer) {
                 "The opt-in `ForbiddenApi` has been forbidden in the detekt config."
             )
     }
+
+    @Test
+    fun `should report forbidden opt-in at file level`() {
+        val code = """
+            @file:OptIn(DoNotUseApi::class)
+
+            import annotations.*
+
+            fun main() {}
+        """.trimIndent()
+        val findings = ForbiddenOptIn(optInConfig).lintWithContext(env, code, ANNOTAION_DECLARATIONS)
+
+        assertThat(findings).singleElement()
+            .hasSourceLocation(1, 1)
+    }
 }
