@@ -3,7 +3,6 @@ import de.undercouch.gradle.tasks.download.Download
 val kotlinVersion: String = libs.versions.kotlin.get()
 val detektVersion: String = Versions.DETEKT
 
-group = "dev.detekt"
 version = "$kotlinVersion-$detektVersion"
 
 plugins {
