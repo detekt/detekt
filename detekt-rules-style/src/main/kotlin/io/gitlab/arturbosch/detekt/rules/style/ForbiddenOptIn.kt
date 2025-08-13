@@ -20,7 +20,6 @@ import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 /**
  * This rule allows to set a list of forbidden opt-ins. This can be used to avoid opting into an api by accident.
  * By default, the list of forbidden opt-ins is empty.
- *
  */
 class ForbiddenOptIn(config: Config) :
     Rule(
