@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test
 private const val MARKER_CLASSES = "markerClasses"
 
 @Language("kotlin")
-private const val annotationDeclarations = """
+private const val ANNOTAION_DECLARATIONS = """
     package annotations
 
     @RequiresOptIn(message = "This API is forbidden.")
@@ -49,7 +49,7 @@ class ForbiddenOptInSpec(val env: KotlinEnvironmentContainer) {
             @OptIn(ForbiddenApi::class)
             fun main() {}
         """.trimIndent()
-        val findings = ForbiddenOptIn(optInConfig).lintWithContext(env, code, annotationDeclarations)
+        val findings = ForbiddenOptIn(optInConfig).lintWithContext(env, code, ANNOTAION_DECLARATIONS)
 
         assertThat(findings).singleElement()
             .hasSourceLocation(3, 1)
@@ -64,7 +64,7 @@ class ForbiddenOptInSpec(val env: KotlinEnvironmentContainer) {
             @OptIn(DoNotUseApi::class)
             fun main() {}
         """.trimIndent()
-        val findings = ForbiddenOptIn(optInConfig).lintWithContext(env, code, annotationDeclarations)
+        val findings = ForbiddenOptIn(optInConfig).lintWithContext(env, code, ANNOTAION_DECLARATIONS)
 
         assertThat(findings).singleElement()
             .hasSourceLocation(3, 1)
@@ -79,7 +79,7 @@ class ForbiddenOptInSpec(val env: KotlinEnvironmentContainer) {
             @OptIn(DoNotUseApi::class, AllowedApi::class, ForbiddenApi::class)
             fun main() {}
         """.trimIndent()
-        val findings = ForbiddenOptIn(optInConfig).lintWithContext(env, code, annotationDeclarations)
+        val findings = ForbiddenOptIn(optInConfig).lintWithContext(env, code, ANNOTAION_DECLARATIONS)
 
         assertThat(findings)
             .extracting("message")
@@ -89,5 +89,3 @@ class ForbiddenOptInSpec(val env: KotlinEnvironmentContainer) {
             )
     }
 }
-
-

@@ -47,7 +47,6 @@ class ForbiddenOptIn(config: Config) :
         }
     }
 
-
     private fun check(annotation: KtAnnotationEntry, type: KaType?) {
         if (type?.symbol?.classId?.asSingleFqName() != optInFqName) {
             return
@@ -62,9 +61,9 @@ class ForbiddenOptIn(config: Config) :
         forbidden.forEach { forbiddenOptIn ->
             val reason = markerClasses[forbiddenOptIn]?.reason
             val message = if (reason != null) {
-                "The opt-in `${forbiddenOptIn}` has been forbidden: ${reason}"
+                "The opt-in `$forbiddenOptIn` has been forbidden: $reason"
             } else {
-                "The opt-in `${forbiddenOptIn}` has been forbidden in the detekt config."
+                "The opt-in `$forbiddenOptIn` has been forbidden in the detekt config."
             }
             report(Finding(Entity.from(annotation), message))
         }
