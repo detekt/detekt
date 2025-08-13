@@ -10,7 +10,6 @@ import dev.detekt.api.ValueWithReason
 import dev.detekt.api.config
 import dev.detekt.api.valuesWithReason
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.types.KaType
 import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
@@ -42,15 +41,14 @@ class ForbiddenOptIn(config: Config) :
         }
 
         analyze(annotation) {
-            check(annotation, annotation.typeReference?.type)
+            if (annotation.typeReference?.type?.symbol?.classId != optInClassId) {
+                return
+            }
         }
+        checkOptIn(annotation)
     }
 
-    private fun check(annotation: KtAnnotationEntry, type: KaType?) {
-        if (type?.symbol?.classId != optInClassId) {
-            return
-        }
-
+    private fun checkOptIn(annotation: KtAnnotationEntry) {
         val usedOptIn = annotation.valueArguments.mapNotNull { arg ->
             val optInClassArgument = arg.getArgumentExpression() as? KtClassLiteralExpression
             (optInClassArgument?.receiverExpression as? KtNameReferenceExpression)?.getReferencedName()
