@@ -10,7 +10,7 @@
 
 
 <link rel="search" type="application/opensearchdescription+xml" title="detekt" href="/opensearch.xml"><link rel="stylesheet" href="/assets/css/styles.72331351.css">
-<script src="/assets/js/runtime~main.d5810be9.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.f1a27cde.js" defer="defer"></script>
 <script src="/assets/js/main.46bbce39.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -75,13 +75,14 @@
 </ul>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="forbiddenclassname">ForbiddenClassName<a href="#forbiddenclassname" class="hash-link" aria-label="Direct link to ForbiddenClassName" title="Direct link to ForbiddenClassName">​</a></h3>
 <p>Reports class names which are forbidden per configuration. By default, this rule does not report any classes.
-Examples for forbidden names might be too generic class names like <code>...Manager</code>.</p>
+This can be used to prevent the use of overly generic class names like <code>*Manager</code> or names shadowing common
+types like <code>LocalDate</code>.</p>
 <p><strong>Active by default</strong>: No</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-4">Configuration options:<a href="#configuration-options-4" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>forbiddenName</code> (default: <code>[]</code>)</p>
-<p>forbidden class names</p>
+<p>List of glob patterns to be disallowed as class names</p>
 </li>
 </ul>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="functionnamemaxlength">FunctionNameMaxLength<a href="#functionnamemaxlength" class="hash-link" aria-label="Direct link to FunctionNameMaxLength" title="Direct link to FunctionNameMaxLength">​</a></h3>
