@@ -1,6 +1,9 @@
 package dev.detekt.psi
 
 import dev.detekt.psi.internal.FullQualifiedNameGuesser
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.types.KaType
+import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtFile
@@ -15,7 +18,8 @@ import org.jetbrains.kotlin.resolve.BindingContext
 class AnnotationExcluder(
     root: KtFile,
     private val excludes: List<Regex>,
-    private val context: BindingContext,
+    context: BindingContext? = null, // this will be removed
+    private val fullAnalysis: Boolean = false
 ) {
 
     private val fullQualifiedNameGuesser = FullQualifiedNameGuesser(root)
@@ -24,27 +28,50 @@ class AnnotationExcluder(
      * Is true if any given annotation name is declared in the SplitPattern
      * which basically describes entries to exclude.
      */
-    fun shouldExclude(annotations: List<KtAnnotationEntry>): Boolean =
-        annotations.any { annotation -> annotation.typeReference?.let { isExcluded(it, context) } ?: false }
+    fun shouldExclude(annotations: List<KtAnnotationEntry>): Boolean {
+        if (annotations.isEmpty()) return false
 
-    private fun isExcluded(annotation: KtTypeReference, context: BindingContext): Boolean {
-        val fqName = if (context == BindingContext.EMPTY) null else annotation.fqNameOrNull(context)
-        val possibleNames = if (fqName == null) {
-            fullQualifiedNameGuesser.getFullQualifiedName(annotation.text.toString())
-                .map { it.getPackage() to it }
-        } else {
-            listOf(fqName.getPackage() to fqName.toString())
-        }
-            .flatMap { (packaage, fqName) ->
-                fqName.substringAfter("$packaage.", "")
-                    .split(".")
-                    .reversed()
-                    .scan("") { acc, name -> if (acc.isEmpty()) name else "$name.$acc" }
-                    .drop(1) + fqName
+        if (fullAnalysis) {
+
+            return annotations.any { annotation ->
+                analyze(annotation) {
+                    annotation.typeReference?.let { isExcludedFullAnalysis(it.type) } ?: false
+                }
             }
+        }
+        return annotations.any { annotation ->
+            annotation.typeReference?.let { isExcludedLightAnalysis(it) } ?: false
+        }
+    }
+
+
+    private fun isExcludedFullAnalysis(type: KaType): Boolean {
+        val fqName = type.symbol?.classId?.asSingleFqName() ?: return false
+        val possibleNames = calculateCandidates(
+            listOf(fqName.getPackage() to fqName.toString())
+        )
 
         return possibleNames.any { name -> name in excludes }
     }
+
+    private fun isExcludedLightAnalysis(annotation: KtTypeReference): Boolean {
+        val possibleNames = calculateCandidates(
+            fullQualifiedNameGuesser.getFullQualifiedName(annotation.text.toString())
+                .map { it.getPackage() to it }
+        )
+
+        return possibleNames.any { name -> name in excludes }
+    }
+
+    private fun calculateCandidates(packageToFqName: List<Pair<String, String>>): List<String> = packageToFqName
+        .flatMap { (packaage, fqName) ->
+            fqName.substringAfter("$packaage.", "")
+                .split(".")
+                .reversed()
+                .scan("") { acc, name -> if (acc.isEmpty()) name else "$name.$acc" }
+                .drop(1) + fqName
+        }
+
 }
 
 private fun FqName.getPackage(): String {
@@ -68,9 +95,6 @@ private fun String.getPackage(): String {
         .takeWhile { it.first().isLowerCase() }
         .joinToString(".")
 }
-
-private fun KtTypeReference.fqNameOrNull(bindingContext: BindingContext): FqName? =
-    bindingContext[BindingContext.TYPE, this]?.fqNameOrNull()
 
 private operator fun Iterable<Regex>.contains(a: String?): Boolean {
     if (a == null) return false
