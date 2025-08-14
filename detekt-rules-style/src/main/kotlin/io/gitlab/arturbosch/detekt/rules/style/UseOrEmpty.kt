@@ -59,7 +59,7 @@ class UseOrEmpty(config: Config) :
 
         val leftType = analyze(left) {
             val leftType = left.expressionType ?: return
-            if (!leftType.nullability.isNullable) return
+            if (!leftType.isMarkedNullable) return
             KtPsiUtil.safeDeparenthesize(left).let {
                 if (it is KtArrayAccessExpression) {
                     val called = it.resolveToCall()?.singleFunctionCallOrNull()?.symbol as? KaNamedFunctionSymbol

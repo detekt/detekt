@@ -49,11 +49,11 @@ class UnnecessaryNotNullCheck(config: Config) :
             ) {
                 return
             }
-            if (expression.expressionType?.canBeNull == true) return
+            if (expression.expressionType?.isNullable == true) return
         }
 
         analyze(argument) {
-            if (argument.expressionType?.canBeNull == true) return
+            if (argument.expressionType?.isNullable == true) return
         }
 
         report(
