@@ -7,17 +7,15 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.api.config
-import dev.detekt.psi.isCalling
-import org.jetbrains.kotlin.name.CallableId
-import org.jetbrains.kotlin.name.Name
-import org.jetbrains.kotlin.name.StandardClassIds
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
+import org.jetbrains.kotlin.analysis.api.resolution.singleCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForReceiver
 import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelectorOrThis
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
-import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
-import org.jetbrains.kotlin.resolve.descriptorUtil.module
 
 /**
  * Long chains of collection operations will have a performance penalty due to a new list being created for each call. Consider using sequences instead. Read more about this in the [documentation](https://kotlinlang.org/docs/sequences.html)
@@ -49,13 +47,13 @@ class CouldBeSequence(config: Config) :
 
         if (visitedCallExpressions.contains(expression)) return
 
-        if (!expression.isCallingKotlinCollectionFun()) return
+        if (!expression.isCallingKotlinCollectionFunPresentInSequence()) return
 
         var counter = 1
         var nextCall = expression.nextChainedCall()
         while (nextCall != null) {
             visitedCallExpressions += nextCall
-            if (!nextCall.isCallingKotlinCollectionFun()) {
+            if (!nextCall.isCallingKotlinCollectionFunPresentInSequence()) {
                 break
             }
 
@@ -70,35 +68,29 @@ class CouldBeSequence(config: Config) :
     }
 
     @Suppress("ReturnCount")
-    private fun KtExpression.isCallingKotlinCollectionFun(): Boolean {
-        val operatorNameFqName = getResolvedCall(bindingContext)
-            ?.resultingDescriptor
-            ?.fqNameOrNull()
-            ?.asString()
-            ?: return false
-        val isExpressionPresentInKotlinCollections =
-            operatorNameFqName.startsWith("kotlin.collections.") == true
-        if (!isExpressionPresentInKotlinCollections) return false
-        val sequenceOperatorFqName =
-            FqName("kotlin.sequences." + operatorNameFqName.substringAfter("kotlin.collections."))
-
-        val moduleDescriptor =
-            getResolvedCall(bindingContext)?.resultingDescriptor?.module ?: return false
-
-        val sequencePackage = moduleDescriptor.getPackage(FqName("kotlin.sequences"))
-
-        val functionName = sequenceOperatorFqName.shortName()
-
-        val sequenceFunctions = sequencePackage.memberScope.getContributedFunctions(
-            functionName,
-            NoLookupLocation.FROM_BACKEND
-        )
-
-        return sequenceFunctions.isNotEmpty()
+    private fun KtExpression.isCallingKotlinCollectionFunPresentInSequence(): Boolean {
+        return analyze(this) {
+            val callableId = this@isCallingKotlinCollectionFunPresentInSequence
+                .resolveToCall()
+                ?.singleCallOrNull<KaCallableMemberCall<*, *>>()
+                ?.symbol
+                ?.callableId
+                ?: return false
+            if (!callableId.toString().startsWith(KOTLIN_COLLECTION_PREFIX)) return false
+            findTopLevelCallables(
+                SEQUENCE_FQ_NAME,
+                callableId.callableName
+            ).any()
+        }
     }
 
     private fun KtExpression.nextChainedCall(): KtExpression? {
         val expression = this.getQualifiedExpressionForSelectorOrThis()
         return expression.getQualifiedExpressionForReceiver()?.selectorExpression
+    }
+
+    companion object {
+        private const val KOTLIN_COLLECTION_PREFIX = "kotlin/collections/"
+        private val SEQUENCE_FQ_NAME = FqName.fromSegments(listOf("kotlin", "sequences"))
     }
 }
