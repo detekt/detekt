@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     id("module")
     id("public-api")
@@ -18,4 +20,14 @@ dependencies {
 
 apiValidation {
     ignoredPackages.add("dev.detekt.test.utils.internal")
+}
+
+java {
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>().configureEach {
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_17
+    }
 }
