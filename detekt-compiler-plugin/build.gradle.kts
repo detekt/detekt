@@ -3,7 +3,6 @@ import de.undercouch.gradle.tasks.download.Download
 val kotlinVersion: String = libs.versions.kotlin.get()
 val detektVersion: String = Versions.DETEKT
 
-group = "io.github.detekt"
 version = "$kotlinVersion-$detektVersion"
 
 plugins {
@@ -45,8 +44,7 @@ tasks.shadowJar {
     relocate("org.snakeyaml.engine", "dev.detekt.shaded.snakeyaml")
     mergeServiceFiles()
     dependencies {
-        include(dependency("io.gitlab.arturbosch.detekt:.*"))
-        include(dependency("io.github.detekt:.*"))
+        include(dependency("dev.detekt:.*"))
         include(dependency("org.snakeyaml:snakeyaml-engine"))
     }
 }

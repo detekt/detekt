@@ -6,8 +6,6 @@ plugins {
 }
 
 nexusPublishing {
-    packageGroup = "io.gitlab.arturbosch"
-
     repositories {
         create("sonatype") {
             nexusUrl = uri("https://ossrh-staging-api.central.sonatype.com/service/local/")
