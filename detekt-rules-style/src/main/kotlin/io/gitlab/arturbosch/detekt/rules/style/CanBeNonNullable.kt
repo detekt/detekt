@@ -14,11 +14,14 @@ import dev.detekt.psi.isNullable
 import dev.detekt.psi.isOpen
 import dev.detekt.psi.isOverride
 import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
+import org.jetbrains.kotlin.analysis.api.resolution.singleCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.singleVariableAccessCall
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaFunctionSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaVariableSymbol
+import org.jetbrains.kotlin.analysis.api.types.KaClassType
 import org.jetbrains.kotlin.analysis.api.types.KaTypeNullability
 import org.jetbrains.kotlin.analysis.api.types.KaTypeParameterType
 import org.jetbrains.kotlin.idea.references.mainReference
@@ -551,23 +554,29 @@ class CanBeNonNullable(config: Config) :
         private fun KtPropertyDelegate?.returnsNullable(): Boolean {
             val delegate = this ?: return true
             return analyze(delegate) {
-                val functionSymbol = delegate
+                val returnType = delegate
                     .mainReference
                     ?.resolveToSymbols()
                     ?.filterIsInstance<KaFunctionSymbol>()
                     ?.firstOrNull {
                         it.callableId?.callableName == OperatorNameConventions.GET_VALUE
                     }
-                functionSymbol?.run {
-                    if (returnType is KaTypeParameterType) {
-                        // todo<k2> ignoring some case which in pre k2 was passing as earlier
-                        //  using BindingContext.DELEGATED_PROPERTY_RESOLVED_CALL we were able to
-                        //  get the actual type of the implementation
-                        returnType.canBeNull
-                    } else {
-                        returnType.nullability != KaTypeNullability.NON_NULLABLE
+                    ?.returnType
+                    ?.let {
+                        if (it is KaTypeParameterType) {
+                            val classType = delegate
+                                .expression
+                                ?.resolveToCall()
+                                ?.singleCallOrNull<KaCallableMemberCall<*, *>>()
+                                ?.partiallyAppliedSymbol
+                                ?.signature
+                                ?.returnType as? KaClassType
+                            classType?.typeArguments?.lastOrNull()?.type
+                        } else {
+                            it
+                        }
                     }
-                } ?: true
+                returnType?.nullability != KaTypeNullability.NON_NULLABLE
             }
         }
 
