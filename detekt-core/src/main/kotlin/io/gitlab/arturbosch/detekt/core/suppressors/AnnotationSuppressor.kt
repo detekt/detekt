@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.core.suppressors
 
 import dev.detekt.api.Rule
-import dev.detekt.psi.AnnotationExcluder
+import dev.detekt.psi.AnnotationExcluderBindingContext
 import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
@@ -21,14 +21,16 @@ internal fun annotationSuppressorFactory(rule: Rule, bindingContext: BindingCont
     return if (annotations.isNotEmpty()) {
         Suppressor { finding ->
             val element = finding.entity.ktElement
-            element.isAnnotatedWith(AnnotationExcluder(element.containingKtFile, annotations, bindingContext))
+            element.isAnnotatedWith(
+                AnnotationExcluderBindingContext(element.containingKtFile, annotations, bindingContext)
+            )
         }
     } else {
         null
     }
 }
 
-private fun KtElement.isAnnotatedWith(excluder: AnnotationExcluder): Boolean =
+private fun KtElement.isAnnotatedWith(excluder: AnnotationExcluderBindingContext): Boolean =
     if (this is KtAnnotated && excluder.shouldExclude(annotationEntries)) {
         true
     } else {
