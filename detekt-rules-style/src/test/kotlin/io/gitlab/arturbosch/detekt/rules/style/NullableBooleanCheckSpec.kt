@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import dev.detekt.api.Config
+import dev.detekt.test.assertThat
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.KotlinCoreEnvironmentTest
 import dev.detekt.test.utils.KotlinEnvironmentContainer
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
@@ -32,8 +32,7 @@ class NullableBooleanCheckSpec(val env: KotlinEnvironmentContainer) {
         """.trimIndent()
 
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings).first().extracting { it.message }.isEqualTo(
+        assertThat(findings).singleElement().hasMessage(
             "The nullable boolean check `nullableBoolean() ?: $bool` should use " +
                 "`${replacementForElvis(bool)}` rather than `?: $bool`"
         )
@@ -53,8 +52,7 @@ class NullableBooleanCheckSpec(val env: KotlinEnvironmentContainer) {
         """.trimIndent()
 
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings).first().extracting { it.message }.isEqualTo(
+        assertThat(findings).singleElement().hasMessage(
             "The nullable boolean check `nullableBoolean() ?: $bool` should use " +
                 "`${replacementForElvis(bool)}` rather than `?: $bool`"
         )

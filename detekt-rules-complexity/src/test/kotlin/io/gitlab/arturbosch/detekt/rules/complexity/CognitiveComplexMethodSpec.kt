@@ -28,8 +28,8 @@ class CognitiveComplexMethodSpec {
             }
         """.trimIndent()
         val findings = CognitiveComplexMethod(testConfig).lint(code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings).hasStartSourceLocations(SourceLocation(1, 5))
+        assertThat(findings).singleElement()
+            .hasStartSourceLocation(SourceLocation(1, 5))
     }
 
     @Test

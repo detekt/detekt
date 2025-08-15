@@ -24,8 +24,8 @@ class UnnecessarySafeCallSpec(private val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
-            assertThat(findings).hasSize(1)
-            assertThat(findings).hasTextLocations(48 to 61)
+            assertThat(findings).singleElement()
+                .hasTextLocation(48 to 61)
         }
 
         @Test
@@ -37,8 +37,8 @@ class UnnecessarySafeCallSpec(private val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
-            assertThat(findings).hasSize(1)
-            assertThat(findings).hasTextLocations(48 to 59)
+            assertThat(findings).singleElement()
+                .hasTextLocation(48 to 59)
         }
 
         @Test
@@ -50,8 +50,8 @@ class UnnecessarySafeCallSpec(private val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
-            assertThat(findings).hasSize(1)
-            assertThat(findings).hasTextLocations(48 to 59)
+            assertThat(findings).singleElement()
+                .hasTextLocation(48 to 59)
         }
     }
 
@@ -113,8 +113,8 @@ class UnnecessarySafeCallSpec(private val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
             val findings = subject.lintWithContext(env, code, allowCompilationErrors = true)
-            assertThat(findings).hasSize(1)
-            assertThat(findings).hasTextLocations(103 to 114)
+            assertThat(findings).singleElement()
+                .hasTextLocation(103 to 114)
         }
     }
 }

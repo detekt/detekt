@@ -27,8 +27,8 @@ class InvalidPackageDeclarationSpec {
         val ktFile = compileForTest(Path("src/test/resources/InvalidPackageDeclarationSpec/src/bar/incorrect.kt"))
         val findings = InvalidPackageDeclaration(Config.empty).lint(ktFile)
 
-        assertThat(findings).hasSize(1)
-        assertThat(findings).hasTextLocations(0 to 11)
+        assertThat(findings).singleElement()
+            .hasTextLocation(0 to 11)
     }
 
     @Nested

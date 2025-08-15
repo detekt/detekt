@@ -40,8 +40,8 @@ class MissingUseCallSpec(private val env: KotlinEnvironmentContainer) {
             ${myClosable(clazz)}
         """.trimIndent()
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings[0]).hasSourceLocation(2, 23)
+        assertThat(findings).singleElement()
+            .hasSourceLocation(2, 23)
     }
 
     @Test
@@ -101,10 +101,10 @@ class MissingUseCallSpec(private val env: KotlinEnvironmentContainer) {
             )
         """.trimIndent()
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings[0]).hasMessage(
-            "BufferedReader doesn't call `use` to access the `Closeable`"
-        )
+        assertThat(findings).singleElement()
+            .hasMessage(
+                "BufferedReader doesn't call `use` to access the `Closeable`"
+            )
     }
 
     @Test
@@ -147,8 +147,8 @@ class MissingUseCallSpec(private val env: KotlinEnvironmentContainer) {
             }
         """.trimIndent()
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings[0]).hasMessage("MyCloseable doesn't call `use` to access the `Closeable`")
+        assertThat(findings).singleElement()
+            .hasMessage("MyCloseable doesn't call `use` to access the `Closeable`")
     }
 
     @Test
