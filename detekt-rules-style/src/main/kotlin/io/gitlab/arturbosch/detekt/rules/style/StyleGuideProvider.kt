@@ -41,6 +41,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             ::ForbiddenImport,
             ::ForbiddenMethodCall,
             ::ForbiddenNamedParam,
+            ::ForbiddenOptIn,
             ::ForbiddenSuppress,
             ::FunctionOnlyReturningConstant,
             ::SpacingAfterPackageDeclaration,
