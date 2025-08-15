@@ -8,7 +8,7 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresFullAnalysis
 import dev.detekt.api.Rule
 import dev.detekt.api.config
-import dev.detekt.psi.AnnotationExcluder
+import dev.detekt.psi.AnnotationExcluderBindingContext
 import dev.detekt.psi.isOverride
 import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtClass
@@ -54,10 +54,10 @@ class LongParameterList(config: Config) :
         list.map { it.replace(".", "\\.").replace("*", ".*").toRegex() }
     }
 
-    private lateinit var annotationExcluder: AnnotationExcluder
+    private lateinit var annotationExcluder: AnnotationExcluderBindingContext
 
     override fun visitKtFile(file: KtFile) {
-        annotationExcluder = AnnotationExcluder(file, ignoreAnnotatedParameter, bindingContext)
+        annotationExcluder = AnnotationExcluderBindingContext(file, ignoreAnnotatedParameter, bindingContext)
         super.visitKtFile(file)
     }
 
