@@ -9,4 +9,5 @@ dependencies {
     testImplementation(libs.kotlin.compiler)
     testImplementation(projects.detektTest)
     testImplementation(libs.assertj.core)
+    testImplementation(testFixtures(projects.detektPsiUtils))
 }
