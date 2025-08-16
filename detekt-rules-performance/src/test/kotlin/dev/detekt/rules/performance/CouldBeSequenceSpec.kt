@@ -6,6 +6,8 @@ import dev.detekt.test.utils.KotlinCoreEnvironmentTest
 import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 
 @KotlinCoreEnvironmentTest
 class CouldBeSequenceSpec(val env: KotlinEnvironmentContainer) {
@@ -107,17 +109,24 @@ class CouldBeSequenceSpec(val env: KotlinEnvironmentContainer) {
         assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
-    @Test
-    fun `#8190 - all functions should be accounted for`() {
+    @ParameterizedTest
+    @ValueSource(
+        strings = [
+            ".filterIsInstance<String>()",
+            ".filterNot { true }",
+            ".filterNotNull()",
+            ".take(1)",
+            ".drop(1)",
+            ".takeWhile { true }",
+            ".mapNotNull { it }",
+        ]
+    )
+    fun `#8190 - all functions should be accounted for`(additionalCall: String) {
         val code = """
-        val bar = listOf<String?>("bar")
-            .filterIsInstance<String>()
-            .filterNot { true }
-            .filterNotNull()
-            .take(1)
-            .drop(1)
-            .takeWhile { true }
-            .mapNotNull { it }
+        val bar = listOf<String>("bar")
+            .filter { it.length > 1}
+            .map { "text" }
+            $additionalCall
         """.trimIndent()
         assertThat(subject.lintWithContext(env, code)).hasSize(1)
     }

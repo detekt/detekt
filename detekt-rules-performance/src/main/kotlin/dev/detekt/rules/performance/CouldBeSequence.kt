@@ -11,7 +11,7 @@ import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.singleCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
-import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.name.StandardClassIds
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForReceiver
@@ -67,30 +67,17 @@ class CouldBeSequence(config: Config) :
         }
     }
 
-    @Suppress("ReturnCount")
-    private fun KtExpression.isCallingKotlinCollectionFunPresentInSequence(): Boolean {
-        return analyze(this) {
-            val callableId = this@isCallingKotlinCollectionFunPresentInSequence
-                .resolveToCall()
-                ?.singleCallOrNull<KaCallableMemberCall<*, *>>()
-                ?.symbol
-                ?.callableId
-                ?: return false
-            if (!callableId.toString().startsWith(KOTLIN_COLLECTION_PREFIX)) return false
-            findTopLevelCallables(
-                SEQUENCE_FQ_NAME,
-                callableId.callableName
-            ).any()
-        }
+    private fun KtExpression.isCallingKotlinCollectionFunPresentInSequence(): Boolean = analyze(this) {
+        val callableId = resolveToCall()
+            ?.singleCallOrNull<KaCallableMemberCall<*, *>>()
+            ?.symbol
+            ?.callableId
+        callableId?.packageName == StandardClassIds.BASE_COLLECTIONS_PACKAGE &&
+            findTopLevelCallables(StandardClassIds.BASE_SEQUENCES_PACKAGE, callableId.callableName).any()
     }
 
     private fun KtExpression.nextChainedCall(): KtExpression? {
         val expression = this.getQualifiedExpressionForSelectorOrThis()
         return expression.getQualifiedExpressionForReceiver()?.selectorExpression
-    }
-
-    companion object {
-        private const val KOTLIN_COLLECTION_PREFIX = "kotlin/collections/"
-        private val SEQUENCE_FQ_NAME = FqName.fromSegments(listOf("kotlin", "sequences"))
     }
 }
