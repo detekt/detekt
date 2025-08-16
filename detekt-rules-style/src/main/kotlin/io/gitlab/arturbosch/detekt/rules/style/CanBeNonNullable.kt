@@ -571,7 +571,7 @@ class CanBeNonNullable(config: Config) :
                                 ?.partiallyAppliedSymbol
                                 ?.signature
                                 ?.returnType as? KaClassType
-                            classType?.typeArguments?.lastOrNull()?.type
+                            classType?.typeArguments?.lastOrNull()?.type ?: classType
                         } else {
                             it
                         }
