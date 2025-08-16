@@ -148,12 +148,60 @@ class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
 
         @Disabled("No way to get the type of the delegation body")
         @Test
+        fun `does report when non nullable val utilize non-nullable delegate values with extra nullable type parameter at the end used via a function`() {
+            val code = """
+                import kotlin.reflect.KProperty
+                
+                class A {
+                    private val a: Int? by propDelegate<Int, String?>(0)
+                
+                    fun <K: Any, T: Any?>propDelegate(propVal: K) = PropDelegate<K, T>(propVal)
+                }
+                
+                class PropDelegate<K: Any, T: Any?>(private var propVal: K) {
+                    operator fun getValue(thisRef: A, property: KProperty<*>): K {
+                        return propVal
+                    }
+                
+                    operator fun setValue(thisRef: A, property: KProperty<*>, value: K) {
+                        if (value is Int) {
+                            propVal = value
+                        }
+                    }
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        }
+
+        @Disabled("No way to get the type of the delegation body")
+        @Test
         fun `does report when non nullable val utilize non-nullable delegate values with extra nullable type parameter at the start`() {
             val code = """
                 import kotlin.reflect.KProperty
                 
                 class A {
                     private val a: Int? by PropDelegate<Int?, String>(0)
+                }
+        
+                class PropDelegate<K: Any?, T: Any>(private var propVal: K) {
+                    operator fun getValue(thisRef: A, property: KProperty<*>): K {
+                        return propVal
+                    }
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Disabled
+        @Test
+        fun `does report when non nullable val utilize non-nullable delegate values with extra nullable type parameter at the start via a function`() {
+            val code = """
+                import kotlin.reflect.KProperty
+                
+                class A {
+                    private val a: Int? by PropDelegate<Int?, String>(0)
+
+                    fun <K: Any?, T: Any>propDelegate(propVal: K) = PropDelegate<K, T>(propVal)
                 }
         
                 class PropDelegate<K: Any?, T: Any>(private var propVal: K) {
@@ -303,7 +351,6 @@ class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
             assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
-        @Disabled("No way to get the type of the delegation body")
         @Test
         fun `does report vars that utilize non delegate values with nullable type`() {
             val code = """
