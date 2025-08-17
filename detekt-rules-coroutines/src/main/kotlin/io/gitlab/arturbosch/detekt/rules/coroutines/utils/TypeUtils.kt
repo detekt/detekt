@@ -12,7 +12,7 @@ internal fun KaType.isCoroutineScope(): Boolean = with(session) {
         yieldAll(this@isCoroutineScope.allSupertypes)
     }
         .mapNotNull { it.symbol?.classId }
-        .contains(ClassId.fromString("kotlinx/coroutines/CoroutineScope"))
+        .contains(CoroutineClassIds.CoroutineScope)
 }
 
 context(session: KaSession)
@@ -22,7 +22,7 @@ internal fun KaType.isCoroutinesFlow(): Boolean = with(session) {
         yieldAll(this@isCoroutinesFlow.allSupertypes)
     }
         .mapNotNull { it.symbol?.classId }
-        .contains(ClassId.fromString("kotlinx/coroutines/flow/Flow"))
+        .contains(CoroutineClassIds.Flow)
 }
 
 internal object CoroutineClassIds {
