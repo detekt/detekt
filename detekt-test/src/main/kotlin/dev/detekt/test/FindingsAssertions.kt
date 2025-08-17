@@ -3,9 +3,9 @@ package dev.detekt.test
 import dev.detekt.api.Finding
 import dev.detekt.api.SourceLocation
 import dev.detekt.api.TextLocation
+import org.assertj.core.annotation.CheckReturnValue
 import org.assertj.core.api.AbstractAssert
 import org.assertj.core.api.AbstractListAssert
-import org.assertj.core.util.CheckReturnValue
 import java.util.Objects
 
 @CheckReturnValue

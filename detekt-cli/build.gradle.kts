@@ -1,7 +1,7 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
-    id("com.gradleup.shadow") version "9.0.1"
+    id("com.gradleup.shadow") version "9.0.2"
     id("module")
     id("application")
 }
@@ -20,6 +20,7 @@ val pluginsJarFiles by configurations.resolvable("pluginsJarFiles") {
 
 dependencies {
     implementation(libs.jcommander)
+    implementation(projects.detektApi)
     implementation(projects.detektTooling)
     implementation(projects.detektUtils)
     implementation(libs.kotlin.compiler) {

@@ -39,7 +39,7 @@ val detektReportMergeSarif by tasks.registering(ReportMergeTask::class) {
 }
 
 allprojects {
-    group = "io.gitlab.arturbosch.detekt"
+    group = "dev.detekt"
     version = Versions.currentOrSnapshot()
 
     apply(plugin = "dev.detekt")
