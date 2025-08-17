@@ -8,6 +8,7 @@ dependencies {
     compileOnly(projects.detektPsiUtils)
 
     testImplementation(libs.kotlin.compiler)
+    testImplementation(projects.detektApi)
     testImplementation(projects.detektTest)
     testImplementation(libs.assertj.core)
 }
