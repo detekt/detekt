@@ -5,6 +5,7 @@ plugins {
 dependencies {
     api(projects.detektApi)
     api(projects.detektTooling)
+    api(libs.kotlin.compiler)
     implementation(projects.detektKotlinAnalysisApiStandalone)
     implementation(libs.snakeyaml.engine)
     implementation(libs.kotlin.reflect)
