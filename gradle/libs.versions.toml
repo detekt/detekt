@@ -33,7 +33,6 @@ kotlin-compiler = { module = "org.jetbrains.kotlin:kotlin-compiler", version.ref
 kotlin-gradlePluginApi = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin-api", version.ref = "kotlin" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 kotlin-scriptingJvm = { module = "org.jetbrains.kotlin:kotlin-scripting-jvm", version.ref = "kotlin" }
-kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
 kotlinx-coroutinesCore = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlinx-serializationCore = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version = "1.9.0" }
 kotlinx-coroutinesTest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }

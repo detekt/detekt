@@ -3,7 +3,6 @@ plugins {
 }
 
 dependencies {
-    compileOnly(libs.kotlin.stdlib)
     compileOnly(projects.detektApi)
     compileOnly(projects.detektPsiUtils)
 

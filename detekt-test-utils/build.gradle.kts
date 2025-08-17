@@ -4,7 +4,6 @@ plugins {
 }
 
 dependencies {
-    api(libs.kotlin.stdlib)
     api(libs.junit.jupiterApi)
     implementation(projects.detektKotlinAnalysisApi)
     implementation(projects.detektKotlinAnalysisApiStandalone)
