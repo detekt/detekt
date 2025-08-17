@@ -18,10 +18,11 @@ kotlin {
 }
 
 dependencies {
+    api(projects.detektApi)
+    api(projects.detektTooling)
+
     compileOnly(libs.kotlin.compiler)
 
-    implementation(projects.detektApi)
-    implementation(projects.detektTooling)
     runtimeOnly(projects.detektCore)
     runtimeOnly(projects.detektRules)
 

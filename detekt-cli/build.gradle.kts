@@ -20,6 +20,7 @@ val pluginsJarFiles by configurations.resolvable("pluginsJarFiles") {
 
 dependencies {
     implementation(libs.jcommander)
+    implementation(projects.detektApi)
     implementation(projects.detektTooling)
     implementation(projects.detektUtils)
     implementation(libs.kotlin.compiler) {
