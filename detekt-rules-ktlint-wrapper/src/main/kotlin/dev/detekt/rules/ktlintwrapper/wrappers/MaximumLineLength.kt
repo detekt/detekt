@@ -9,7 +9,7 @@ import dev.detekt.api.Config
 import dev.detekt.api.Configuration
 import dev.detekt.api.config
 import dev.detekt.api.configWithAndroidVariants
-import dev.detekt.rules.ktlintwrapper.FormattingRule
+import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
  * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#max-line-length) for documentation.
@@ -19,7 +19,7 @@ import dev.detekt.rules.ktlintwrapper.FormattingRule
  */
 @ActiveByDefault(since = "1.0.0")
 @Alias("MaxLineLength")
-class MaximumLineLength(config: Config) : FormattingRule(
+class MaximumLineLength(config: Config) : KtlintRule(
     config,
     "Reports lines with exceeded length"
 ) {

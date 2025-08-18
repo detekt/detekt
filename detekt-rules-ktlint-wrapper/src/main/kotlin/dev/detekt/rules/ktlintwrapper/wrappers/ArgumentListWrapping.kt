@@ -11,14 +11,14 @@ import dev.detekt.api.Configuration
 import dev.detekt.api.config
 import dev.detekt.api.configWithAndroidVariants
 import dev.detekt.api.internal.AutoCorrectable
-import dev.detekt.rules.ktlintwrapper.FormattingRule
+import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
  * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#argument-list-wrapping) for documentation.
  */
 @AutoCorrectable(since = "1.0.0")
 @ActiveByDefault(since = "1.22.0")
-class ArgumentListWrapping(config: Config) : FormattingRule(
+class ArgumentListWrapping(config: Config) : KtlintRule(
     config,
     "Reports incorrect argument list wrapping"
 ) {

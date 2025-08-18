@@ -4,7 +4,7 @@ import com.pinterest.ktlint.ruleset.standard.rules.FunctionStartOfBodySpacingRul
 import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.Config
 import dev.detekt.api.internal.AutoCorrectable
-import dev.detekt.rules.ktlintwrapper.FormattingRule
+import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
  * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#function-start-of-body-spacing) for
@@ -12,7 +12,7 @@ import dev.detekt.rules.ktlintwrapper.FormattingRule
  */
 @ActiveByDefault(since = "1.23.0")
 @AutoCorrectable(since = "1.22.0")
-class FunctionStartOfBodySpacing(config: Config) : FormattingRule(
+class FunctionStartOfBodySpacing(config: Config) : KtlintRule(
     config,
     "Check for consistent spacing before start of function body."
 ) {

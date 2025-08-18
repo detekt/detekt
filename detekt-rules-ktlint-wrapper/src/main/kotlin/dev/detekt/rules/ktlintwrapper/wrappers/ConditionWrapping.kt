@@ -10,14 +10,14 @@ import dev.detekt.api.Config
 import dev.detekt.api.Configuration
 import dev.detekt.api.config
 import dev.detekt.api.internal.AutoCorrectable
-import dev.detekt.rules.ktlintwrapper.FormattingRule
+import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
  * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#condition-wrapping) for documentation.
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "2.0.0")
-class ConditionWrapping(config: Config) : FormattingRule(
+class ConditionWrapping(config: Config) : KtlintRule(
     config,
     "Conditions should be wrapped when expression doesn't fit on one line"
 ) {

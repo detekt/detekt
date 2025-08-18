@@ -7,14 +7,14 @@ import dev.detekt.api.Config
 import dev.detekt.api.Configuration
 import dev.detekt.api.config
 import dev.detekt.api.internal.AutoCorrectable
-import dev.detekt.rules.ktlintwrapper.FormattingRule
+import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
  * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/experimental/#blank-lines-between-when-conditions)
  * for documentation.
  */
 @AutoCorrectable(since = "2.0.0")
-class BlankLineBetweenWhenConditions(config: Config) : FormattingRule(
+class BlankLineBetweenWhenConditions(config: Config) : KtlintRule(
     config,
     "Consistently add or remove blank lines between when-conditions in a when-statement"
 ) {

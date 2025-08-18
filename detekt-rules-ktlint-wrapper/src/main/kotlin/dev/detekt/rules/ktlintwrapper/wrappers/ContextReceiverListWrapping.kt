@@ -10,14 +10,14 @@ import dev.detekt.api.Configuration
 import dev.detekt.api.config
 import dev.detekt.api.configWithAndroidVariants
 import dev.detekt.api.internal.AutoCorrectable
-import dev.detekt.rules.ktlintwrapper.FormattingRule
+import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
  * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#context-receiver-list-wrapping) for documentation.
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "2.0.0")
-class ContextReceiverListWrapping(config: Config) : FormattingRule(
+class ContextReceiverListWrapping(config: Config) : KtlintRule(
     config,
     "Wraps the context receiver list containing a context parameter"
 ) {

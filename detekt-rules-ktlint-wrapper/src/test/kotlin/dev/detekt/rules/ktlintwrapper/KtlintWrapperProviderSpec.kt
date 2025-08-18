@@ -11,7 +11,7 @@ class KtlintWrapperProviderSpec {
     @Test
     fun `run as late as possible is observed`() {
         val subject: RuleSet = KtlintWrapperProvider().instance()
-        val ktlintRules = subject.rules.map { (_, provider) -> provider(Config.empty) as FormattingRule }
+        val ktlintRules = subject.rules.map { (_, provider) -> provider(Config.empty) as KtlintRule }
         val indexOfFirstLateRule = ktlintRules.indexOfFirst { it.runAsLateAsPossible }
         assertThat(indexOfFirstLateRule).isGreaterThan(0)
     }
@@ -19,7 +19,7 @@ class KtlintWrapperProviderSpec {
     @Test
     fun `run after rule is observed`() {
         val subject: RuleSet = KtlintWrapperProvider().instance()
-        val ktlintRules = subject.rules.map { (_, provider) -> provider(Config.empty) as FormattingRule }
+        val ktlintRules = subject.rules.map { (_, provider) -> provider(Config.empty) as KtlintRule }
         val ruleIdToIndices = ktlintRules
             .mapIndexed { index, ktlintRule -> ktlintRule.wrapping.ruleId to index }
             .toMap()
