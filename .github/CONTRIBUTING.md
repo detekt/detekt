@@ -14,7 +14,7 @@
   See "Testing a rule that uses type resolution" section of the [Using Type Resolution](../website/docs/gettingstarted/type-resolution.md)
   guide for details.
 - The code in `detekt-api` and any rule in `detekt-rules` must be documented. We generate documentation for our website based on these modules.
-- If some Kotlin code in `resources` folder (like `detekt-formatting`) shows a compilation error, right click on it and use `Mark as plain text`.
+- If some Kotlin code in `resources` folder (like `detekt-rules-ktlint-wrapper`) shows a compilation error, right click on it and use `Mark as plain text`.
 
 ## Implementing new rules
 
