@@ -75,7 +75,7 @@ private fun generateDefaultUrl(ruleSetId: RuleSet.Id, ruleName: RuleName) =
     URI("https://detekt.dev/docs/${whichDetekt()}/rules/${ruleSetId.value.lowercase()}#${ruleName.value.lowercase()}")
 
 private val externalFirstPartyRuleSets = setOf(
-    "formatting",
+    "ktlint",
     "ruleauthors",
     "libraries",
 )

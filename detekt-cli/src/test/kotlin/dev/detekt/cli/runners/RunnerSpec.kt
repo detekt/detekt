@@ -194,7 +194,7 @@ class RunnerSpec {
         private val outPrintStream = StringPrintStream()
         private val errPrintStream = StringPrintStream()
 
-        private val config = resourceAsPath("/configs/formatting-config.yml")
+        private val config = resourceAsPath("/configs/ktlint-config.yml")
 
         private val args = arrayOf(
             "--auto-correct",
