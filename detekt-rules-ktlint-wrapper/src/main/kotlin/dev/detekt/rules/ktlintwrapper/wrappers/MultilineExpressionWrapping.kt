@@ -9,7 +9,7 @@ import dev.detekt.api.Config
 import dev.detekt.api.Configuration
 import dev.detekt.api.config
 import dev.detekt.api.internal.AutoCorrectable
-import dev.detekt.rules.ktlintwrapper.FormattingRule
+import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
  * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#multiline-expression-wrapping) for
@@ -17,7 +17,7 @@ import dev.detekt.rules.ktlintwrapper.FormattingRule
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "1.23.0")
-class MultilineExpressionWrapping(config: Config) : FormattingRule(
+class MultilineExpressionWrapping(config: Config) : KtlintRule(
     config,
     "Multiline expression on the right hand side of an expression must start on a separate line."
 ) {
