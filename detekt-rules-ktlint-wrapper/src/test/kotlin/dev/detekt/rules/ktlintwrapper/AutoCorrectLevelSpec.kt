@@ -78,7 +78,7 @@ private fun runRule(config: Config): Pair<KtFile, List<Finding>> {
     // reset modification text, otherwise it will be persisted between tests
     testFile.modifiedText = null
 
-    val ruleSet = loadRuleSet<FormattingProvider>()
+    val ruleSet = loadRuleSet<KtlintWrapperProvider>()
     val rules = ruleSet.rules
         .map { (ruleName, provider) -> provider(config.subConfig(ruleSet.id.value).subConfig(ruleName.value)) }
         .filter { it.config.valueOrDefault("active", false) }

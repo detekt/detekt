@@ -120,7 +120,7 @@ import dev.detekt.rules.ktlintwrapper.wrappers.Wrapping
  * Note: Issues reported by this rule set can only be suppressed on file level (`@file:Suppress("detekt.rule")`).
  */
 @ActiveByDefault(since = "1.0.0")
-class FormattingProvider : RuleSetProvider {
+class KtlintWrapperProvider : RuleSetProvider {
 
     override val ruleSetId = RuleSet.Id("ktlint")
 
