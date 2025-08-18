@@ -80,8 +80,8 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
         .toList()
 
     classpath(
-        configurations.runtimeClasspath.get(),
-        sourceSets.main.get().output,
+        configurations.runtimeClasspath,
+        sourceSets.main.map { it.output },
     )
     mainClass = "dev.detekt.generator.Main"
     args = listOf(
