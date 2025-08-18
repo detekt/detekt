@@ -1,7 +1,4 @@
-.DS_Store
-
 /.gradle
 /.idea
-!/.idea/icon.svg
 /.kotlin
 /build
