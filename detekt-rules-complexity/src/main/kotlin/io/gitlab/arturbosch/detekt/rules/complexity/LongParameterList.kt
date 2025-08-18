@@ -5,10 +5,10 @@ import dev.detekt.api.Config
 import dev.detekt.api.Configuration
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
-import dev.detekt.api.RequiresFullAnalysis
+import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.api.config
-import dev.detekt.psi.AnnotationExcluderBindingContext
+import dev.detekt.psi.AnnotationExcluder
 import dev.detekt.psi.isOverride
 import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtClass
@@ -32,7 +32,7 @@ class LongParameterList(config: Config) :
             "used to control complex algorithms and violate the Single Responsibility Principle. " +
             "Prefer functions with short parameter lists."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     @Configuration("number of function parameters required to trigger the rule")
     private val allowedFunctionParameters: Int by config(DEFAULT_ALLOWED_FUNCTION_PARAMETERS)
@@ -54,10 +54,10 @@ class LongParameterList(config: Config) :
         list.map { it.replace(".", "\\.").replace("*", ".*").toRegex() }
     }
 
-    private lateinit var annotationExcluder: AnnotationExcluderBindingContext
+    private lateinit var annotationExcluder: AnnotationExcluder
 
     override fun visitKtFile(file: KtFile) {
-        annotationExcluder = AnnotationExcluderBindingContext(file, ignoreAnnotatedParameter, bindingContext)
+        annotationExcluder = AnnotationExcluder(file, ignoreAnnotatedParameter)
         super.visitKtFile(file)
     }
 
