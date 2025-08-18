@@ -1,1 +1,1 @@
-dev.detekt.rules.ktlintwrapper.FormattingProvider
+dev.detekt.rules.ktlintwrapper.KtlintWrapperProvider
