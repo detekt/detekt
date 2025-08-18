@@ -83,6 +83,15 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
         configurations.runtimeClasspath,
         sourceSets.main.map { it.output },
     )
+
+    inputs.files(ruleModules)
+    outputs.dir(documentationDir)
+    outputs.file(defaultConfigFile)
+    outputs.file(deprecationFile)
+    outputs.file(formattingConfigFile)
+    outputs.file(librariesConfigFile)
+    outputs.file(ruleauthorsConfigFile)
+
     mainClass = "dev.detekt.generator.Main"
     args = listOf(
         "--input",
