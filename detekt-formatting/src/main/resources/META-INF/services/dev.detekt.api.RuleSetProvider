@@ -1,1 +1,1 @@
-io.gitlab.arturbosch.detekt.formatting.FormattingProvider
+dev.detekt.rules.ktlintwrapper.FormattingProvider
