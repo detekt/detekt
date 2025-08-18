@@ -51,7 +51,7 @@ val documentationDir = "$rootDir/website/docs/rules"
 val configDir = "$rootDir/detekt-core/src/main/resources"
 val defaultConfigFile = "$configDir/default-detekt-config.yml"
 val deprecationFile = "$configDir/deprecation.properties"
-val formattingConfigFile = "$rootDir/detekt-formatting/src/main/resources/config/config.yml"
+val ktlintWrapperConfigFile = "$rootDir/detekt-rules-ktlint-wrapper/src/main/resources/config/config.yml"
 val librariesConfigFile = "$rootDir/detekt-rules-libraries/src/main/resources/config/config.yml"
 val ruleauthorsConfigFile = "$rootDir/detekt-rules-ruleauthors/src/main/resources/config/config.yml"
 
@@ -73,7 +73,7 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
     group = "documentation"
 
     val ruleModules = rootProject.subprojects.asSequence()
-        .filter { "rules" in it.name || it.name == "detekt-formatting" }
+        .filter { "rules" in it.name }
         .filterNot { it.name == "detekt-rules" }
         .flatMap { it.sourceSets.main.get().kotlin.srcDirs }
         .filter { it.exists() }
@@ -97,13 +97,13 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
     )
 }
 
-val generatedFormattingConfig by configurations.consumable("generatedFormattingConfig")
+val generatedKtlintWrapperConfig by configurations.consumable("generatedKtlintWrapperConfig")
 val generatedLibrariesConfig by configurations.consumable("generatedLibrariesConfig")
 val generatedRuleauthorsConfig by configurations.consumable("generatedRuleauthorsConfig")
 val generatedCoreConfig by configurations.consumable("generatedCoreConfig")
 
 artifacts {
-    add(generatedFormattingConfig.name, file(formattingConfigFile)) {
+    add(generatedKtlintWrapperConfig.name, file(ktlintWrapperConfigFile)) {
         builtBy(generateDocumentation)
     }
     add(generatedLibrariesConfig.name, file(librariesConfigFile)) {
@@ -128,7 +128,7 @@ val verifyGeneratorOutput by tasks.registering(Exec::class) {
         "diff",
         "--quiet",
         defaultConfigFile,
-        formattingConfigFile,
+        ktlintWrapperConfigFile,
         librariesConfigFile,
         ruleauthorsConfigFile,
         deprecationFile,

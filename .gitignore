@@ -156,7 +156,7 @@ target/
 /classes/
 /out/
 */build/
-/detekt-formatting/ktlint-repackage/build/
+/detekt-rules-ktlint-wrapper/ktlint-repackage/build/
 .gradletasknamecache
 *.iml
 */out

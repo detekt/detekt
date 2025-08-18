@@ -113,8 +113,8 @@ import dev.detekt.rules.ktlintwrapper.wrappers.Wrapping
  *
  * **Note: The `formatting` rule set is not included in the detekt-cli or Gradle plugin.**
  *
- * To enable this rule set, add `detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:$version"`
- * to your gradle `dependencies` or reference the `detekt-formatting`-jar with the `--plugins` option
+ * To enable this rule set, add `detektPlugins "io.gitlab.arturbosch.detekt:detekt-rules-ktlint-wrapper:$version"`
+ * to your gradle `dependencies` or reference the `detekt-rules-ktlint-wrapper`-jar with the `--plugins` option
  * in the command line interface.
  *
  * Note: Issues reported by this rule set can only be suppressed on file level (`@file:Suppress("detekt.rule")`).

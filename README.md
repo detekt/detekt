@@ -127,7 +127,7 @@ which can be easily added to the Gradle configuration:
 
 ```kotlin
 dependencies {
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:[version]")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-rules-ktlint-wrapper:[version]")
 }
 ```
 

@@ -32,7 +32,7 @@ To generate yourself a `baseline.xml` you need to provide the same config as the
 
 ```diff
 java -jar detekt-cli-all.jar \
-  --plugins detekt-formatting.jar \
+  --plugins detekt-rules-ktlint-wrapper.jar \
   --build-upon-default-config \
   --config path/to/config/detekt/detekt.yml \
 + --baseline path/to/new/config/detekt/baseline.xml \
