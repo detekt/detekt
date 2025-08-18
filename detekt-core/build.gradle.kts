@@ -19,6 +19,7 @@ dependencies {
     testImplementation(projects.detektReportMd)
     testImplementation(projects.detektReportXml)
     testImplementation(projects.detektTest)
+    testImplementation(projects.detektTestJunit)
     testImplementation(projects.detektTestUtils)
     testImplementation(testFixtures(projects.detektApi))
     testImplementation(libs.classgraph)
