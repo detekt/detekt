@@ -1,4 +1,4 @@
-# detekt
+repo# detekt
 
 [![Join the chat at #detekt on KotlinLang](https://img.shields.io/badge/%23detekt-on_slack-red.svg?logo=slack)](https://kotlinlang.slack.com/archives/C88E12QH4)
 [![Visit the website at detekt.dev/](https://img.shields.io/badge/visit-website-red.svg?logo=firefox)](https://detekt.dev/)
