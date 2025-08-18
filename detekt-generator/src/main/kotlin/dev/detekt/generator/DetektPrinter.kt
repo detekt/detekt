@@ -32,18 +32,18 @@ class DetektPrinter(
         if (configPath != null) {
             yamlWriter.write(configPath, "default-detekt-config") {
                 ConfigPrinter.print(
-                    pages.filterNot { it.ruleSet.name in listOf("formatting", "libraries", "ruleauthors") }
+                    pages.filterNot { it.ruleSet.name in listOf("ktlint", "libraries", "ruleauthors") }
                 )
             }
             propertiesWriter.write(configPath, "deprecation") {
-                // We intentionally not filter for "formatting" as we want to be able to deprecate
+                // We intentionally not filter for "ktlint" as we want to be able to deprecate
                 // properties from that ruleset as well.
                 DeprecatedPrinter.print(pages)
             }
         }
         yamlWriter.write(Path("../detekt-rules-ktlint-wrapper/src/main/resources/config"), "config") {
             yaml {
-                printRuleSetPage(pages.first { it.ruleSet.name == "formatting" })
+                printRuleSetPage(pages.first { it.ruleSet.name == "ktlint" })
             }
         }
         yamlWriter.write(Path("../detekt-rules-libraries/src/main/resources/config"), "config") {

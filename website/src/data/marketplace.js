@@ -245,9 +245,9 @@ export const extensions = [
     description:
       "This rule set provides wrappers for rules implemented by ktlint.",
     repo: "https://github.com/detekt/detekt",
-    docs: "https://detekt.dev/docs/next/rules/formatting",
+    docs: "https://detekt.dev/docs/next/rules/ktlint",
     tags: ["ruleset"],
-    ruleset: "formatting",
+    ruleset: "ktlint",
     rules: [
       "AnnotationOnSeparateLine",
       "AnnotationSpacing",
