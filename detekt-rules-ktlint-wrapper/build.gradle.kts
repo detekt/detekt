@@ -7,7 +7,7 @@ val extraDepsToPackage by configurations.registering
 dependencies {
     compileOnly(projects.detektApi)
     compileOnly(projects.detektPsiUtils)
-    implementation(projects.detektFormatting.ktlintRepackage) {
+    implementation(projects.detektRulesKtlintWrapper.ktlintRepackage) {
         attributes {
             attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.SHADOWED))
         }
@@ -29,12 +29,12 @@ dependencies {
 
 consumeGeneratedConfig(
     fromProject = projects.detektGenerator,
-    fromConfiguration = "generatedFormattingConfig",
+    fromConfiguration = "generatedKtlintWrapperConfig",
     forTask = tasks.sourcesJar
 )
 consumeGeneratedConfig(
     fromProject = projects.detektGenerator,
-    fromConfiguration = "generatedFormattingConfig",
+    fromConfiguration = "generatedKtlintWrapperConfig",
     forTask = tasks.processResources
 )
 

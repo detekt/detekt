@@ -37,9 +37,9 @@ dependencies {
 
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.assertj.core)
-    testRuntimeOnly(projects.detektFormatting)
+    testRuntimeOnly(projects.detektRulesKtlintWrapper)
 
-    pluginsJar(projects.detektFormatting)
+    pluginsJar(projects.detektRulesKtlintWrapper)
     pluginsJar(projects.detektRulesLibraries)
     pluginsJar(projects.detektRulesRuleauthors)
 }

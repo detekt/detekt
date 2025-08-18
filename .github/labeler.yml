@@ -34,7 +34,7 @@ documentation:
 
 formatting:
   - changed-files:
-      - any-glob-to-any-file: ["detekt-formatting/src/**/*"]
+      - any-glob-to-any-file: ["detekt-rules-ktlint-wrapper/src/**/*"]
 
 gradle-plugin:
   - changed-files:
