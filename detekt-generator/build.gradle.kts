@@ -81,7 +81,6 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
 
     classpath(
         configurations.runtimeClasspath.get(),
-        configurations.compileClasspath.get(),
         sourceSets.main.get().output,
     )
     mainClass = "dev.detekt.generator.Main"
