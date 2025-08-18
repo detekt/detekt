@@ -111,7 +111,7 @@ import dev.detekt.rules.ktlintwrapper.wrappers.Wrapping
 /**
  * This rule set provides wrappers for rules implemented by ktlint - https://ktlint.github.io/.
  *
- * **Note: The `formatting` rule set is not included in the detekt-cli or Gradle plugin.**
+ * **Note: The `ktlint` rule set is not included in the detekt-cli or Gradle plugin.**
  *
  * To enable this rule set, add `detektPlugins "io.gitlab.arturbosch.detekt:detekt-rules-ktlint-wrapper:$version"`
  * to your gradle `dependencies` or reference the `detekt-rules-ktlint-wrapper`-jar with the `--plugins` option
@@ -122,7 +122,7 @@ import dev.detekt.rules.ktlintwrapper.wrappers.Wrapping
 @ActiveByDefault(since = "1.0.0")
 class FormattingProvider : RuleSetProvider {
 
-    override val ruleSetId = RuleSet.Id("formatting")
+    override val ruleSetId = RuleSet.Id("ktlint")
 
     @Suppress("LongMethod")
     override fun instance() = RuleSet(
