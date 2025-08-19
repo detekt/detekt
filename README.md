@@ -122,12 +122,12 @@ Java 17 or higher is required to build detekt.
 
 ### Adding more rule sets
 
-detekt itself provides a wrapper over [ktlint](https://github.com/pinterest/ktlint) as the `formatting` rule set
+detekt itself provides a wrapper over [ktlint](https://github.com/pinterest/ktlint) as the `ktlint` rule set
 which can be easily added to the Gradle configuration:
 
 ```kotlin
 dependencies {
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:[version]")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-rules-ktlint-wrapper:[version]")
 }
 ```
 

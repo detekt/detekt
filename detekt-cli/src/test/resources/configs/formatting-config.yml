@@ -1,8 +1,0 @@
-formatting:
-  autoCorrect: true
-  ChainWrapping:
-    active: true
-    autoCorrect: true
-  NoConsecutiveBlankLines:
-    active: true
-    autoCorrect: true

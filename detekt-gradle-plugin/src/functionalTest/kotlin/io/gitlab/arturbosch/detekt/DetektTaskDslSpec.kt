@@ -480,7 +480,7 @@ class DetektTaskDslSpec {
         }
 
         @Test
-        fun `adds the formatting lib to the project dependencies`() {
+        fun `adds the ktlint-wrapper lib to the project dependencies`() {
             assertThat(result.output).contains("dev.detekt:detekt-formatting:$defaultDetektVersion")
         }
     }

@@ -33,7 +33,7 @@ Some rules like `TooManyFunctions` can only be suppressed by using a file level 
 
 **Formatting rules suppression**
 
-Please note that rules inside the [`formatting`](/docs/rules/formatting) ruleset can only be suppressed at **the file level**.
+Please note that rules inside the [`ktlint`](/docs/rules/formatting) ruleset can only be suppressed at **the file level**.
 
 Rules inside this ruleset are wrappers around KtLint rules, and we don't have the same reporting capabilities that we offer for first party rules. For example, you can suppress the [MaximumLineLength](/docs/rules/formatting#maximumlinelength) rule only in your entire file with:
 
@@ -47,6 +47,6 @@ object AClassWithLongLines {
 }
 ```
 
-Several rules in the [`formatting`](/docs/rules/formatting) ruleset also have a "first party" counterpart. For instance you can use the [`MaxLineLength`](/docs/rules/style#maxlinelength) rule instead from the [`style`](/docs/rules/style) ruleset.
+Several rules in the [`ktlint`](/docs/rules/formatting) ruleset also have a "first party" counterpart. For instance you can use the [`MaxLineLength`](/docs/rules/style#maxlinelength) rule instead from the [`style`](/docs/rules/style) ruleset.
 
 For those rules, you can suppress the inspection also locally (on top of an expression, function, class, etc.).
