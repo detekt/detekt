@@ -2,8 +2,8 @@ package dev.detekt.test
 
 import dev.detekt.api.Config
 import dev.detekt.api.ValueWithReason
-import io.gitlab.arturbosch.detekt.core.config.tryParseBasedOnDefault
-import io.gitlab.arturbosch.detekt.core.config.valueOrDefaultInternal
+import dev.detekt.core.config.tryParseBasedOnDefault
+import dev.detekt.core.config.valueOrDefaultInternal
 
 @Suppress("UNCHECKED_CAST")
 class TestConfig(override val parent: Config?, vararg pairs: Pair<String, Any>) : Config {
