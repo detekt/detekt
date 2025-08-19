@@ -23,7 +23,7 @@ class DetektYmlConfigSpec {
     ) as YamlConfig
 
     private fun ruleSetsNamesToPackage(): List<Arguments> = listOf(
-        arguments("complexity", "io.gitlab.arturbosch.detekt.rules.complexity"),
+        arguments("complexity", "dev.detekt.rules.complexity"),
         arguments("coroutines", "io.gitlab.arturbosch.detekt.rules.coroutines"),
         arguments("comments", "dev.detekt.rules.documentation"),
         arguments("empty-blocks", "dev.detekt.rules.empty"),

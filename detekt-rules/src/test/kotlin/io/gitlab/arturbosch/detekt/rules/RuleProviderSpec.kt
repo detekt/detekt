@@ -5,12 +5,12 @@ import dev.detekt.api.Rule
 import dev.detekt.api.RuleSetProvider
 import dev.detekt.api.internal.DefaultRuleSetProvider
 import dev.detekt.rules.bugs.PotentialBugProvider
+import dev.detekt.rules.complexity.ComplexityProvider
 import dev.detekt.rules.documentation.CommentSmellProvider
 import dev.detekt.rules.empty.EmptyCodeProvider
 import dev.detekt.rules.exceptions.ExceptionsProvider
 import dev.detekt.rules.performance.PerformanceProvider
 import io.github.classgraph.ClassGraph
-import io.gitlab.arturbosch.detekt.rules.complexity.ComplexityProvider
 import io.gitlab.arturbosch.detekt.rules.coroutines.CoroutinesProvider
 import io.gitlab.arturbosch.detekt.rules.naming.NamingProvider
 import io.gitlab.arturbosch.detekt.rules.style.StyleGuideProvider
