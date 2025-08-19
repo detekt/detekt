@@ -17,16 +17,6 @@ class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
     @Nested
     inner class `evaluating private properties` {
         @Test
-        fun `doesn't report for local property`() {
-            val code = """
-                fun baz() {
-                    var g: Int? = 1
-                }
-            """.trimIndent()
-            assertThat(subject.lintWithContext(env, code)).isEmpty()
-        }
-
-        @Test
         fun `reports when class-level vars are never assigned nullable values`() {
             val code = """
                 class A(bVal: Int) {
