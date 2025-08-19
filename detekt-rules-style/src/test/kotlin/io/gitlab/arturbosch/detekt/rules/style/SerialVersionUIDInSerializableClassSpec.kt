@@ -152,14 +152,15 @@ class SerialVersionUIDInSerializableClassSpec {
             }
         """.trimIndent()
         val findings = subject.lint(code)
-        assertThat(findings)
-            .hasSize(2)
-            .hasStartSourceLocations(SourceLocation(6, 25), SourceLocation(11, 21))
-            .hasEndSourceLocations(SourceLocation(6, 41), SourceLocation(11, 37))
-        assertThat(findings.map { it.message }).containsOnly(
-            WRONG_SERIAL_VERSION_UID_MESSAGE,
-            WRONG_SERIAL_VERSION_UID_MESSAGE
-        )
+        assertThat(findings).hasSize(2)
+        assertThat(findings).element(0)
+            .hasStartSourceLocation(SourceLocation(6, 25))
+            .hasEndSourceLocation(SourceLocation(6, 41))
+            .hasMessage(WRONG_SERIAL_VERSION_UID_MESSAGE)
+        assertThat(findings).element(1)
+            .hasStartSourceLocation(SourceLocation(11, 21))
+            .hasEndSourceLocation(SourceLocation(11, 37))
+            .hasMessage(WRONG_SERIAL_VERSION_UID_MESSAGE)
     }
 
     @Test
