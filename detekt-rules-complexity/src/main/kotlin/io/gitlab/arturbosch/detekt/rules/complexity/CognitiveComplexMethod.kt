@@ -6,7 +6,7 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.Rule
 import dev.detekt.api.config
-import io.github.detekt.metrics.CognitiveComplexity
+import dev.detekt.metrics.CognitiveComplexity
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**

@@ -2,7 +2,7 @@ package dev.detekt.core.reporting.console
 
 import dev.detekt.api.ConsoleReport
 import dev.detekt.api.Detektion
-import io.github.detekt.metrics.ComplexityReportGenerator
+import dev.detekt.metrics.ComplexityReportGenerator
 
 /**
  * Contains metrics concerning the analyzed code.
