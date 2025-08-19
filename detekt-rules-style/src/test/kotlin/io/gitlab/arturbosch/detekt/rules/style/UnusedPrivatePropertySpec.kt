@@ -48,6 +48,25 @@ class UnusedPrivatePropertySpec(val env: KotlinEnvironmentContainer) {
         }
 
         @Test
+        fun `does not reports when used in guard clause`() {
+            val code = """
+                class Test {
+                    private val used = true
+                
+                    fun use() {
+                        val a = '1'.digitToInt() + 1
+                        val c = false
+                        when (a) {
+                            1 if used -> Unit
+                            2      -> if (c) Unit else Unit
+                        }
+                    }
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
         fun `does not report unused public properties`() {
             val code = """
                 class Test {
