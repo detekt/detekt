@@ -5,6 +5,7 @@ import dev.detekt.api.SourceLocation
 import dev.detekt.api.TextLocation
 import org.assertj.core.annotation.CheckReturnValue
 import org.assertj.core.api.AbstractAssert
+import org.assertj.core.api.AbstractIterableAssert
 import org.assertj.core.api.AbstractListAssert
 import java.util.Objects
 
@@ -97,6 +98,12 @@ class FindingsAssert(actual: List<Finding>) :
 
         return hasTextLocations(*textLocations)
     }
+
+    fun iterate(block: Iterator<FindingAssert>.() -> Unit) = apply {
+        val iterator = iterator()
+        block(iterator)
+        check(!iterator.hasNext()) { "The iterator wasn't consumed completely" }
+    }
 }
 
 class FindingAssert(val actual: Finding?) : AbstractAssert<FindingAssert, Finding>(actual, FindingAssert::class.java) {
@@ -185,5 +192,19 @@ class FindingAssert(val actual: Finding?) : AbstractAssert<FindingAssert, Findin
         }
 
         hasTextLocation(TextLocation(index, index + expected.length))
+    }
+}
+
+private fun <
+    SELF : AbstractIterableAssert<SELF, ACTUAL, ELEMENT, ELEMENT_ASSERT>,
+    ACTUAL : Iterable<ELEMENT>?,
+    ELEMENT,
+    ELEMENT_ASSERT : AbstractAssert<ELEMENT_ASSERT, ELEMENT>,
+    > SELF.iterator(): Iterator<ELEMENT_ASSERT> {
+    isNotNull()
+    return iterator {
+        for (i in 0..<actual()!!.count()) {
+            yield(element(i))
+        }
     }
 }
