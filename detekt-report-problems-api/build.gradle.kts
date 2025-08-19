@@ -5,7 +5,7 @@ plugins {
 dependencies {
     testImplementation(kotlin("test"))
     compileOnly(gradleApi())
-    compileOnly(projects.detektApi)
+    implementation(projects.detektApi)
     testImplementation(projects.detektTest)
     testImplementation(gradleApi())
     testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")

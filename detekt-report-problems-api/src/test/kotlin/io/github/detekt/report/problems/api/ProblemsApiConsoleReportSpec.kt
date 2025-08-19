@@ -104,7 +104,7 @@ class ProblemsApiConsoleReportSpec {
         value = [
             "Error, ERROR",
             "Warning, WARNING",
-            "Info, ADVICE"
+            "Info, WARNING"
         ]
     )
     fun `mapSeverity maps Detekt severity to Gradle problems api severity`(
