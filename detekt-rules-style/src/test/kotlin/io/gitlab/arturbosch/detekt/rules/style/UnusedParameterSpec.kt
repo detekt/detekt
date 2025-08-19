@@ -161,6 +161,22 @@ class UnusedParameterSpec {
 
             assertThat(subject.lint(code)).hasSize(1)
         }
+
+        @Test
+        fun `does not report single parameters if they used in guard clause`() {
+            val code = """
+                fun function(used: Boolean) {
+                    val a = '1'.digitToInt() + 1
+                    val c = false
+                    when (a) {
+                        1 if used -> Unit
+                        2 -> if (c) Unit else Unit
+                    }
+                }
+            """.trimIndent()
+
+            assertThat(subject.lint(code)).isEmpty()
+        }
     }
 
     @Nested
