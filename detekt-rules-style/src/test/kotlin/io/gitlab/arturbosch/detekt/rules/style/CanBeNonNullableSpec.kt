@@ -17,6 +17,16 @@ class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
     @Nested
     inner class `evaluating private properties` {
         @Test
+        fun `doesn't report for local property`() {
+            val code = """
+                fun baz() {
+                    var g: Int? = 1
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
         fun `reports when class-level vars are never assigned nullable values`() {
             val code = """
                 class A(bVal: Int) {
@@ -86,7 +96,126 @@ class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
                     }
                 }
             """.trimIndent()
+            // one for  private var a: Int? by PropDelegate() and one for value: Any?
             assertThat(subject.lintWithContext(env, code)).hasSize(2)
+        }
+
+        @Test
+        fun `reports when nullable val utilize non-nullable delegate values with Any upper bounded`() {
+            val code = """
+                import kotlin.reflect.KProperty
+                
+                class A {
+                    private val a: Int? by PropDelegate(0)
+                }
+        
+                class PropDelegate<T: Any>(private var propVal: T) {
+                    operator fun getValue(thisRef: A, property: KProperty<*>): T {
+                        return propVal
+                    }
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        }
+
+        @Test
+        fun `does not report when non nullable val utilize non-nullable delegate values with Any upper bounded`() {
+            val code = """
+                import kotlin.reflect.KProperty
+                
+                class A {
+                    private val a: Int by PropDelegate(0)
+                }
+        
+                class PropDelegate<T: Any>(private var propVal: T) {
+                    operator fun getValue(thisRef: A, property: KProperty<*>): T {
+                        return propVal
+                    }
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does report when non nullable val utilize non-nullable delegate values with extra nullable type parameter at the end`() {
+            val code = """
+                import kotlin.reflect.KProperty
+                
+                class A {
+                    private val a: Int? by PropDelegate<Int, String?>(0)
+                }
+
+                class PropDelegate<K: Any, T: Any?>(private var propVal: K) {
+                    operator fun getValue(thisRef: A, property: KProperty<*>): K {
+                        return propVal
+                    }
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        }
+
+        @Test
+        fun `does report when non nullable val utilize non-nullable delegate values with extra nullable type parameter at the end used via a function`() {
+            val code = """
+                import kotlin.reflect.KProperty
+                
+                class A {
+                    private val a: Int? by propDelegate<Int, String?>(0)
+                
+                    fun <K: Any, T: Any?>propDelegate(propVal: K) = PropDelegate<K, T>(propVal)
+                }
+                
+                class PropDelegate<K: Any, T: Any?>(private var propVal: K) {
+                    operator fun getValue(thisRef: A, property: KProperty<*>): K {
+                        return propVal
+                    }
+                
+                    operator fun setValue(thisRef: A, property: KProperty<*>, value: K) {
+                        if (value is Int) {
+                            propVal = value
+                        }
+                    }
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        }
+
+        @Test
+        fun `does report when non nullable val utilize non-nullable delegate values with extra nullable type parameter at the start`() {
+            val code = """
+                import kotlin.reflect.KProperty
+                
+                class A {
+                    private val a: Int? by PropDelegate<Int?, String>(0)
+                }
+        
+                class PropDelegate<K: Any?, T: Any>(private var propVal: K) {
+                    operator fun getValue(thisRef: A, property: KProperty<*>): K {
+                        return propVal
+                    }
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does report when non nullable val utilize non-nullable delegate values with extra nullable type parameter at the start via a function`() {
+            val code = """
+                import kotlin.reflect.KProperty
+                
+                class A {
+                    private val a: Int? by PropDelegate<Int?, String>(0)
+
+                    fun <K: Any?, T: Any>propDelegate(propVal: K) = PropDelegate<K, T>(propVal)
+                }
+        
+                class PropDelegate<K: Any?, T: Any>(private var propVal: K) {
+                    operator fun getValue(thisRef: A, property: KProperty<*>): K {
+                        return propVal
+                    }
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -184,6 +313,19 @@ class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
         }
 
         @Test
+        fun `does report when class-level var is not assigned to nullable value in if and else`() {
+            val code = """
+                class A {
+                    private var a: Int? = 0
+                    fun foo(fizz: Int) {
+                        a = if (fizz % 2 == 0) fizz else 1
+                    }
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        }
+
+        @Test
         fun `does not report when class-level vars are assigned nullable values via chained call`() {
             val code = """
                 $COMMON_CHAIN_CODE
@@ -212,6 +354,16 @@ class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
             assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does report vars that utilize non delegate values with nullable type`() {
+            val code = """
+                class A(private var aDelegate: Int) {
+                    private val a: Int? by this::aDelegate
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -336,6 +488,50 @@ class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
         }
 
         @Test
+        fun `reports when vals utilize non-nullable delegate using callable ref`() {
+            val code = """
+                class A {
+                    fun getVal() = 5
+                    val a: Int? by lazy(::getVal)
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        }
+
+        @Test
+        fun `does not report when vals utilize nullable delegate using callable ref`() {
+            val code = """
+                class A {
+                    fun getVal() = if (System.currentTimeMillis() % 2 == 0L) 5 else null
+                    val a: Int? by lazy(::getVal)
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does report when vals utilize non-nullable delegate values using observable`() {
+            val code = """
+                import kotlin.properties.Delegates
+                class A {
+                    val a: Int? by Delegates.observable(0, { _, _, _ -> })
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        }
+
+        @Test
+        fun `does not report when vals utilize nullable delegate values using observable`() {
+            val code = """
+                import kotlin.properties.Delegates
+                class A(initialVal: Int?) {
+                    val a: Int? by Delegates.observable(initialVal, { _, _, _ -> })
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
         fun `reports when file-level vals are set to non-nullable values`() {
             val code = """
                 val fileA: Int? = 5
@@ -443,16 +639,40 @@ class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
         }
 
         @Test
-        fun `does not report when vals with getters return potentially-nullable values`() {
+        fun `does not report when vals with getters return potentially-nullable values with let`() {
             val code = """
                 import kotlin.random.Random
                 
                 class A {
                     val a: Int?
-                        get() = Random.nextInt()?.let { if (it % 2 == 0) it else null }
+                        get() = Random.nextInt().let { if (it % 2 == 0) it else null }
                     val b: Int?
                         get() {
-                            return Random.nextInt()?.let { if (it % 2 == 0) it else null }
+                            return Random.nextInt().let { if (it % 2 == 0) it else null }
+                        }
+                    val c: Int?
+                        get() = foo()
+                    
+                    private fun foo(): Int? {
+                        val randInt = Random.nextInt()
+                        return if (randInt % 2 == 0) randInt else null
+                    }
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report when vals with getters return potentially-nullable values`() {
+            val code = """
+                import kotlin.random.Random
+
+                class A {
+                    val a: Int?
+                        get() = if (System.currentTimeMillis() % 2 == 0L) 1 else null
+                    val b: Int?
+                        get() {
+                            return if (System.currentTimeMillis() % 2 == 0L) 1 else null
                         }
                     val c: Int?
                         get() = foo()
@@ -565,7 +785,7 @@ class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
     }
 
     @Test
-    fun `does not report properties whose initial assignment derives from unsafe non-Java code`() {
+    fun `does not report nullable property whose initial assignment derives from unsafe non-Java variable`() {
         val code = """
             class A(msg: String?) {
                 private val e = Exception(msg)
@@ -573,6 +793,123 @@ class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
                 // cannot guarantee that it will be non-null, even though it is treated
                 // as non-null in Kotlin code.
                 private var a: String? = e.localizedMessage
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
+    fun `does not report platform type property without type whose initial assignment derives from unsafe non-Java variable`() {
+        val code = """
+            class A(msg: String?) {
+                private val e = Exception(msg)
+                private var a = e.localizedMessage
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
+    fun `does report nullable properties whose initial assignment derives from non null variable`() {
+        val code = """
+            data class B(val msg: String)
+            class A {
+                private val b = B("")
+                private var a: String? = b.msg
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
+    fun `does not report nullable properties whose initial assignment derives from null variable`() {
+        val code = """
+            data class B(val msg: String?)
+            class A {
+                private val b = B("")
+                private var a: String? = b.msg
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
+    fun `does not report non-nullable properties whose initial assignment derives from non null variable`() {
+        val code = """
+            data class B(val msg: String)
+            class A {
+                private val b = B("")
+                private var a: String = b.msg
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
+    fun `does not report nullable property whose initial assignment derives from unsafe non-Java method call`() {
+        val code = """
+            class A(msg: String?) {
+                private val e = Exception(msg)
+                // e.initCause is marked as Throwable! by Kotlin, meaning Kotlin
+                // cannot guarantee that it will be non-null, even though it is treated
+                // as non-null in Kotlin code.
+                private var a: Throwable? = e.initCause(IllegalStateException())
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
+    fun `does not report platform type property without type whose initial assignment derives from unsafe non-Java method call`() {
+        val code = """
+            class A(msg: String?) {
+                private val e = Exception(msg)
+                // e.initCause is marked as Throwable! by Kotlin, meaning Kotlin
+                // cannot guarantee that it will be non-null, even though it is treated
+                // as non-null in Kotlin code.
+                private var a = e.initCause(IllegalStateException())
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
+    fun `does report nullable properties whose initial assignment derives from non null method call`() {
+        val code = """
+            data class B(private val msg: String) {
+                fun sayMsg(): String = msg
+            }
+            class A {
+                private val b = B("")
+                private var a: String? = b.sayMsg()
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
+    fun `does not report nullable properties whose initial assignment derives from null method call`() {
+        val code = """
+            data class B(private val msg: String) {
+                fun sayMsg(): String? = msg
+            }
+            class A {
+                private val b = B("")
+                private var a: String? = b.sayMsg()
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
+    fun `does not report non nullable properties whose initial assignment derives from non null method call`() {
+        val code = """
+            data class B(private val msg: String) {
+                fun sayMsg(): String = msg
+            }
+            class A {
+                private val b = B("")
+                private var a: String = b.sayMsg()
             }
         """.trimIndent()
         assertThat(subject.lintWithContext(env, code)).isEmpty()
@@ -699,6 +1036,19 @@ class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
                 }
 
                 @Test
+                fun `does not report when the safe-qualified expression is not only expression of the function`() {
+                    val code = """
+                        class A(val foo: String)
+                        
+                        fun foo(a: A?) {
+                            a?.let { println(it.foo) }
+                            val b = 5 + 2
+                        }
+                    """.trimIndent()
+                    assertThat(subject.lintWithContext(env, code)).isEmpty()
+                }
+
+                @Test
                 fun `does not report when the safe-qualified expression is within a lambda`() {
                     val code = """
                         class A {
@@ -723,6 +1073,7 @@ class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
                             fun doFoo() { println("FOO") }
                         }
                         
+                        // this fun can do some other work even with a being null
                         fun foo(a: A?) {
                             a?.doFoo()
                             val b = 5 + 2
@@ -735,7 +1086,7 @@ class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
             @Nested
             inner class `in a return statement` {
                 @Test
-                fun `does not report when the safe-qualified expression is the only expression of the function`() {
+                fun `does not report when the safe-qualified expression is the only expression of the function body`() {
                     val code = """
                         class A {
                             val foo = "BAR"
@@ -747,6 +1098,171 @@ class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
                     """.trimIndent()
                     assertThat(subject.lintWithContext(env, code)).isEmpty()
                 }
+
+                @Test
+                fun `does not report when the safe-qualified expression is not only expression of the function expression body`() {
+                    val code = """
+                        class A {
+                            val foo = "BAR"
+                        }
+                        
+                        fun fizz(aObj: A?): String? {
+                            val b = 5 + 1
+                            return aObj?.foo
+                        }
+                    """.trimIndent()
+                    assertThat(subject.lintWithContext(env, code)).isEmpty()
+                }
+            }
+        }
+
+        @Nested
+        inner class `using a dot expression` {
+            @Test
+            fun `does not report when extension method handles the nullability`() {
+                val code = """
+                    fun foo(a: Int?) {
+                        a.toString()
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does report when extension method does not handle the nullability`() {
+                val code = """
+                    fun foo(a: Int?) {
+                        a?.toString()
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
+            }
+
+            @Test
+            fun `does not report when nullable param is passed to a fun`() {
+                val code = """
+                    fun Any.log(obj: Any?) = println(this.toString() + obj.toString())
+                    fun foo(a: Int?) {
+                        1.plus(2).log(a)
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does not report when nullable param is passed`() {
+                val code = """
+                    class A(val foo: String)
+                    fun Int.print(obj: Any?) { repeat(this) { println(obj) } }
+                    fun foo(a: A?) {
+                        1.plus(2).print(a)
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does not report when receiver fun handles nullability`() {
+                val code = """
+                    fun foo(a: Int?, b: Int) {
+                        if (b > 10) {
+                            a.toString()
+                        }
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does report when receiver fun does not handle nullability`() {
+                val code = """
+                    fun foo(a: Int?, b: Int) {
+                        if (b > 10) {
+                            a?.toString()
+                        }
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
+            }
+
+            @Test
+            fun `does not report when receiver fun handles nullability with long chain`() {
+                val code = """
+                    fun foo(a: Int?, b: Int) {
+                        if (b > 10) {
+                            a?.plus(1).toString()
+                        }
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does report when receiver fun doesn not handle nullability with long chain`() {
+                val code = """
+                    fun foo(a: Int?, b: Int) {
+                        if (b > 10) {
+                            a?.plus(1)?.toString()
+                        }
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
+            }
+
+            @Test
+            fun `does report when receiver val handles nullability`() {
+                val code = """
+                    val Any?.log: Unit
+                        get() = println(this?.toString())
+                    fun foo(a: Int?, b: Int) {
+                        if (b > 10) {
+                            a.log
+                        }
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does report when receiver val handles nullability with long chain`() {
+                val code = """
+                    val Any?.log: Unit
+                        get() = println(this?.toString())
+                    fun foo(a: Int?, b: Int) {
+                        if (b > 10) {
+                            a?.plus(1).log
+                        }
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does report when receiver val does not not handle nullability`() {
+                val code = """
+                    val Any.log: Unit
+                        get() = println(this.toString())
+                    fun foo(a: Int?, b: Int) {
+                        if (b > 10) {
+                            a?.plus(1)?.log
+                        }
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
+            }
+
+            @Test
+            fun `does report when receiver val does not not handle nullability with long chain`() {
+                val code = """
+                    val Any.log: Unit
+                        get() = println(this.toString())
+                    fun foo(a: Int?, b: Int) {
+                        if (b > 10) {
+                            a?.plus(1)?.log
+                        }
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
             }
         }
 
