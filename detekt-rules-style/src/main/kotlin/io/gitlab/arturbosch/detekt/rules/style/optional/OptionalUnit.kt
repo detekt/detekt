@@ -9,7 +9,8 @@ import dev.detekt.psi.isOverride
 import org.jetbrains.kotlin.analysis.api.KaIdeApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
+import org.jetbrains.kotlin.analysis.api.resolution.singleCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.types.KaTypeParameterType
 import org.jetbrains.kotlin.config.AnalysisFlags
@@ -140,7 +141,10 @@ class OptionalUnit(config: Config) :
 
     private fun KtExpression.isGenericOrNothingType(): Boolean {
         analyze(this) {
-            val isGenericType = resolveToCall()?.singleFunctionCallOrNull()?.symbol?.returnType is KaTypeParameterType
+            val isGenericType = resolveToCall()
+                ?.singleCallOrNull<KaCallableMemberCall<*, *>>()
+                ?.symbol
+                ?.returnType is KaTypeParameterType
             val isNothingType = expressionType?.isNothingType == true
             // Either the function initializer returns Nothing or it is a generic function
             // into which Unit is passed, but not both.
