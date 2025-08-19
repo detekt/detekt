@@ -30,7 +30,7 @@ class DetektYmlConfigSpec {
         arguments("exceptions", "dev.detekt.rules.exceptions"),
         arguments("naming", "io.gitlab.arturbosch.detekt.rules.naming"),
         arguments("performance", "dev.detekt.rules.performance"),
-        arguments("potential-bugs", "io.gitlab.arturbosch.detekt.rules.bugs"),
+        arguments("potential-bugs", "dev.detekt.rules.bugs"),
         arguments("style", "io.gitlab.arturbosch.detekt.rules.style"),
     )
 
