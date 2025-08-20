@@ -1,13 +1,31 @@
 package dev.detekt.api.testfixtures
 
+import dev.detekt.api.Entity
+import dev.detekt.api.Finding
 import dev.detekt.api.Issue
+import dev.detekt.api.Location
 import dev.detekt.api.RuleInstance
 import dev.detekt.api.RuleSet
 import dev.detekt.api.Severity
 import dev.detekt.api.SourceLocation
 import dev.detekt.api.TextLocation
+import dev.detekt.test.utils.internal.FakeKtElement
+import org.jetbrains.kotlin.psi.KtElement
 import java.net.URI
+import java.nio.file.Path
 import kotlin.io.path.Path
+
+fun createFinding(
+    entity: Entity = createEntity(),
+    message: String = "TestMessage",
+    references: List<Entity> = emptyList(),
+    suppressReasons: List<String> = emptyList(),
+) = Finding(
+    entity = entity,
+    message = message,
+    references = references,
+    suppressReasons = suppressReasons.toList(),
+)
 
 fun createIssue(
     ruleId: String = "TestSmell/id",
@@ -68,6 +86,28 @@ fun createRuleInstance(
     description = description,
     severity = severity,
     active = active,
+)
+
+fun createEntity(
+    location: Location = createLocation(),
+    signature: String = "TestEntitySignature",
+    ktElement: KtElement = FakeKtElement()
+): Entity = Entity(
+    signature = signature,
+    location = location,
+    ktElement = ktElement,
+)
+
+fun createLocation(
+    source: Pair<Int, Int> = 1 to 1,
+    endSource: Pair<Int, Int> = 1 to 1,
+    text: IntRange = 0..0,
+    path: Path = Path("TestFile.kt"),
+): Location = Location(
+    source = SourceLocation(source.first, source.second),
+    endSource = SourceLocation(endSource.first, endSource.second),
+    text = TextLocation(text.first, text.last),
+    path = path,
 )
 
 fun createIssueEntity(
