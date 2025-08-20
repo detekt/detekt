@@ -1,20 +1,31 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
+import com.intellij.psi.PsiElement
+import com.intellij.psi.util.parentOfType
+import com.intellij.psi.util.parents
 import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
-import dev.detekt.api.RequiresFullAnalysis
+import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.psi.hasImplicitParameterReference
-import dev.detekt.psi.implicitParameter
-import org.jetbrains.kotlin.diagnostics.Errors
+import dev.detekt.psi.implicitParameterOrNull
+import org.jetbrains.kotlin.builtins.StandardNames
+import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtClassInitializer
+import org.jetbrains.kotlin.psi.KtClassOrObject
+import org.jetbrains.kotlin.psi.KtDestructuringDeclaration
 import org.jetbrains.kotlin.psi.KtDestructuringDeclarationEntry
+import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtParameter
+import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
+import org.jetbrains.kotlin.psi.psiUtil.hasInnerModifier
 
 /**
  * Disallows shadowing variable declarations.
@@ -51,34 +62,99 @@ class NoNameShadowing(config: Config) :
         config,
         "Disallow shadowing variable declarations."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     override fun visitProperty(property: KtProperty) {
         super.visitProperty(property)
-        checkNameShadowing(property)
+        checkNameShadowing(
+            property,
+            property,
+            property.accessibleClasses,
+        )
     }
 
     override fun visitDestructuringDeclarationEntry(multiDeclarationEntry: KtDestructuringDeclarationEntry) {
         super.visitDestructuringDeclarationEntry(multiDeclarationEntry)
-        checkNameShadowing(multiDeclarationEntry)
+        checkNameShadowing(
+            multiDeclarationEntry,
+            multiDeclarationEntry.parent as KtDestructuringDeclaration,
+            multiDeclarationEntry.accessibleClasses,
+        )
     }
 
     override fun visitParameter(parameter: KtParameter) {
         super.visitParameter(parameter)
-        checkNameShadowing(parameter)
+        parameter.parentOfType<KtFunction>(false)
+        checkNameShadowing(
+            parameter,
+            // if this param is from lambda or we fallback to function(ctor)
+            (parameter.parent.parent.parent as? KtLambdaExpression)
+                ?: parameter.parentOfType<KtFunction>(false).let {
+                    if (it is KtPrimaryConstructor) {
+                        // if this param is from primary constructor then pass the class to
+                        // start(excluding) the search from
+                        parameter.parentOfType<KtClass>(false)
+                    } else {
+                        it
+                    }
+                },
+            parameter.accessibleClasses,
+        )
     }
 
-    private fun checkNameShadowing(declaration: KtNamedDeclaration) {
+    private fun checkNameShadowing(
+        declaration: KtNamedDeclaration,
+        parentToSkipSearchFrom: PsiElement?,
+        accessibleClasses: List<KtClassOrObject>,
+    ) {
+        parentToSkipSearchFrom ?: return
         val nameIdentifier = declaration.nameIdentifier ?: return
-        if (bindingContext.diagnostics.forElement(declaration).any { it.factory == Errors.NAME_SHADOWING }) {
-            report(Finding(Entity.from(nameIdentifier), "Name shadowed: ${nameIdentifier.text}"))
+        val matched = parentToSkipSearchFrom
+            .parents(false)
+            .filter {
+               it is KtClass || it is KtFunction || it is KtLambdaExpression
+            }.any { parent ->
+                when (parent) {
+                    is KtClass -> {
+                        parent in accessibleClasses &&
+                            parent
+                            .primaryConstructor
+                            ?.valueParameters
+                            .orEmpty()
+                            .filter { declaration.parentOfType<KtClassInitializer>(false) != null || it.hasValOrVar() }
+                            .any { it.name == nameIdentifier.text }
+                    }
+
+                    is KtFunction -> {
+                        parent.containingClassOrObject in accessibleClasses &&
+                            parent.valueParameters.any { it.name == nameIdentifier.text }
+                    }
+
+                    is KtLambdaExpression -> {
+                        if (parent.valueParameters.isNotEmpty()) {
+                            parent.valueParameters.any { it.name == nameIdentifier.text }
+                        } else {
+                            parent.implicitParameterOrNull() != null && nameIdentifier.text ==
+                                StandardNames.IMPLICIT_LAMBDA_PARAMETER_NAME.asString()
+                        }
+                    }
+
+                    else -> false
+                }
+            }
+        if (matched) {
+            report(
+                Finding(
+                    Entity.from(nameIdentifier),
+                    "Name shadowed: ${nameIdentifier.text}"
+                )
+            )
         }
     }
 
     override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
         super.visitLambdaExpression(lambdaExpression)
-        val implicitParameter = lambdaExpression.implicitParameter(bindingContext) ?: return
-        if (lambdaExpression.hasImplicitParameterReference(implicitParameter, bindingContext) &&
+        if (lambdaExpression.hasImplicitParameterReference() &&
             lambdaExpression.hasParentImplicitParameterLambda()
         ) {
             report(
@@ -91,5 +167,14 @@ class NoNameShadowing(config: Config) :
     }
 
     private fun KtLambdaExpression.hasParentImplicitParameterLambda(): Boolean =
-        getStrictParentOfType<KtLambdaExpression>()?.implicitParameter(bindingContext) != null
+        getStrictParentOfType<KtLambdaExpression>()?.implicitParameterOrNull() != null
+
+    private val KtNamedDeclaration.accessibleClasses: List<KtClassOrObject>
+        get() = buildList {
+            var currentClass: KtClassOrObject?
+            do {
+                currentClass = containingClassOrObject
+                add(currentClass)
+            } while (currentClass?.hasInnerModifier() == true)
+        }.filterNotNull()
 }
