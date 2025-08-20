@@ -917,4 +917,18 @@ class UnusedImportSpec(
 
         assertThat(subject.lintWithContext(env, mainFile, additionalFile)).isEmpty()
     }
+
+    @Test
+    fun `does report only for function when import is used based on type - #8120`() {
+        val mainFile =
+            """
+            import java.nio.file.Path // this import is used
+            import kotlin.io.path.Path // this one is not
+
+            typealias Foo = Path
+            """.trimIndent()
+        assertThat(subject.lintWithContext(env, mainFile))
+            .singleElement()
+            .hasMessage("The import 'kotlin.io.path.Path' is unused.")
+    }
 }
