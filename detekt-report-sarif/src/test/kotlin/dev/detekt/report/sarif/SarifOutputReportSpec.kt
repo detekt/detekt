@@ -5,8 +5,8 @@ import dev.detekt.api.RuleSet
 import dev.detekt.api.Severity
 import dev.detekt.api.testfixtures.TestDetektion
 import dev.detekt.api.testfixtures.TestSetupContext
-import dev.detekt.api.testfixtures.createEntity
 import dev.detekt.api.testfixtures.createIssue
+import dev.detekt.api.testfixtures.createIssueEntity
 import dev.detekt.api.testfixtures.createLocation
 import dev.detekt.api.testfixtures.createRuleInstance
 import dev.detekt.test.utils.readResourceContent
@@ -21,7 +21,7 @@ class SarifOutputReportSpec {
         val result = TestDetektion(
             createIssue(
                 ruleInstance = createRuleInstance("TestSmellA/id", "RuleSet1"),
-                entity = createEntity(
+                entity = createIssueEntity(
                     signature = "one",
                     location = createLocation(position = 1 to 1, endPosition = 2 to 3),
                 ),
@@ -29,7 +29,7 @@ class SarifOutputReportSpec {
             ),
             createIssue(
                 ruleInstance = createRuleInstance("TestSmellD/id", "RuleSet1"),
-                entity = createEntity(
+                entity = createIssueEntity(
                     signature = "two",
                     location = createLocation(position = 1 to 1, endPosition = 2 to 3),
                 ),
@@ -38,7 +38,7 @@ class SarifOutputReportSpec {
             ),
             createIssue(
                 ruleInstance = createRuleInstance("TestSmellB/id", "RuleSet2"),
-                entity = createEntity(
+                entity = createIssueEntity(
                     signature = "three",
                     location = createLocation(position = 3 to 5, endPosition = 3 to 5),
                 ),
@@ -46,7 +46,7 @@ class SarifOutputReportSpec {
             ),
             createIssue(
                 ruleInstance = createRuleInstance("TestSmellC/id", "RuleSet2"),
-                entity = createEntity(
+                entity = createIssueEntity(
                     signature = "four",
                     location = createLocation(position = 2 to 1, endPosition = 3 to 1),
                 ),

@@ -11,7 +11,7 @@ import kotlin.io.path.Path
 
 fun createIssue(
     ruleId: String = "TestSmell/id",
-    entity: Issue.Entity = createEntity(),
+    entity: Issue.Entity = createIssueEntity(),
     message: String = "TestMessage",
     severity: Severity = Severity.Error,
     suppressReasons: List<String> = emptyList(),
@@ -25,7 +25,7 @@ fun createIssue(
 
 fun createIssue(
     ruleInstance: RuleInstance,
-    entity: Issue.Entity = createEntity(),
+    entity: Issue.Entity = createIssueEntity(),
     message: String = "TestMessage",
     severity: Severity = Severity.Error,
     suppressReasons: List<String> = emptyList(),
@@ -46,7 +46,7 @@ fun createIssue(
     suppressReasons: List<String> = emptyList(),
 ): Issue = Issue(
     ruleInstance = ruleInstance,
-    entity = createEntity(location = location),
+    entity = createIssueEntity(location = location),
     references = emptyList(),
     message = message,
     severity = severity,
@@ -70,7 +70,7 @@ fun createRuleInstance(
     active = active,
 )
 
-fun createEntity(
+fun createIssueEntity(
     signature: String = "TestEntitySignature",
     location: Issue.Location = createLocation(),
 ): Issue.Entity = Issue.Entity(

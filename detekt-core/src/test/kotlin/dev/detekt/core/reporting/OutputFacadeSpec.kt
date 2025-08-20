@@ -1,7 +1,7 @@
 package dev.detekt.core.reporting
 
-import dev.detekt.api.testfixtures.createEntity
 import dev.detekt.api.testfixtures.createIssue
+import dev.detekt.api.testfixtures.createIssueEntity
 import dev.detekt.api.testfixtures.createLocation
 import dev.detekt.api.testfixtures.createRuleInstance
 import dev.detekt.core.DetektResult
@@ -27,7 +27,7 @@ class OutputFacadeSpec {
             issues = listOf(
                 createIssue(
                     createRuleInstance(ruleSetId = "Key"),
-                    createEntity(location = createLocation("TestFile.kt"))
+                    createIssueEntity(location = createLocation("TestFile.kt"))
                 )
             ),
             rules = emptyList(),
