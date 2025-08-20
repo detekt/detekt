@@ -27,6 +27,7 @@ public class io/github/detekt/gradle/extensions/KotlinCompileTaskDetektExtension
 	public final fun getAllRules ()Lorg/gradle/api/provider/Property;
 	public final fun getBaseline ()Lorg/gradle/api/file/RegularFileProperty;
 	public final fun getBuildUponDefaultConfig ()Lorg/gradle/api/provider/Property;
+	public final fun getCheckstyle ()Lio/github/detekt/gradle/extensions/DetektCompilerPluginReport;
 	public final fun getConfig ()Lorg/gradle/api/file/ConfigurableFileCollection;
 	public final fun getDebug ()Lorg/gradle/api/provider/Property;
 	public final fun getDisableDefaultRuleSets ()Lorg/gradle/api/provider/Property;
@@ -35,7 +36,6 @@ public class io/github/detekt/gradle/extensions/KotlinCompileTaskDetektExtension
 	public final fun getParallel ()Lorg/gradle/api/provider/Property;
 	public final fun getReports ()Lorg/gradle/api/NamedDomainObjectContainer;
 	public final fun getSarif ()Lio/github/detekt/gradle/extensions/DetektCompilerPluginReport;
-	public final fun getXml ()Lio/github/detekt/gradle/extensions/DetektCompilerPluginReport;
 	public final fun isEnabled ()Lorg/gradle/api/provider/Property;
 }
 
@@ -154,10 +154,10 @@ public abstract class io/gitlab/arturbosch/detekt/extensions/DetektReport {
 }
 
 public final class io/gitlab/arturbosch/detekt/extensions/DetektReportType : java/lang/Enum {
+	public static final field CHECKSTYLE Lio/gitlab/arturbosch/detekt/extensions/DetektReportType;
 	public static final field HTML Lio/gitlab/arturbosch/detekt/extensions/DetektReportType;
 	public static final field MD Lio/gitlab/arturbosch/detekt/extensions/DetektReportType;
 	public static final field SARIF Lio/gitlab/arturbosch/detekt/extensions/DetektReportType;
-	public static final field XML Lio/gitlab/arturbosch/detekt/extensions/DetektReportType;
 	public final fun getExtension ()Ljava/lang/String;
 	public final fun getReportId ()Ljava/lang/String;
 	public static fun valueOf (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/extensions/DetektReportType;
@@ -166,17 +166,17 @@ public final class io/gitlab/arturbosch/detekt/extensions/DetektReportType : jav
 
 public class io/gitlab/arturbosch/detekt/extensions/DetektReports {
 	public fun <init> (Lorg/gradle/api/model/ObjectFactory;)V
+	public final fun checkstyle (Lorg/gradle/api/Action;)V
 	public final fun custom (Lorg/gradle/api/Action;)V
+	public fun getCheckstyle ()Lio/gitlab/arturbosch/detekt/extensions/DetektReport;
 	public fun getCustom ()Ljava/util/List;
 	public fun getHtml ()Lio/gitlab/arturbosch/detekt/extensions/DetektReport;
 	public fun getMd ()Lio/gitlab/arturbosch/detekt/extensions/DetektReport;
 	public final fun getObjects ()Lorg/gradle/api/model/ObjectFactory;
 	public fun getSarif ()Lio/gitlab/arturbosch/detekt/extensions/DetektReport;
-	public fun getXml ()Lio/gitlab/arturbosch/detekt/extensions/DetektReport;
 	public final fun html (Lorg/gradle/api/Action;)V
 	public final fun md (Lorg/gradle/api/Action;)V
 	public final fun sarif (Lorg/gradle/api/Action;)V
-	public final fun xml (Lorg/gradle/api/Action;)V
 }
 
 public final class io/gitlab/arturbosch/detekt/extensions/FailOnSeverity : java/lang/Enum {
