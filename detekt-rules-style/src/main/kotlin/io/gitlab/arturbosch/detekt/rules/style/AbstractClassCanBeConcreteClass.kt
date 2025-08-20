@@ -1,19 +1,19 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import com.intellij.psi.PsiElement
-import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
-import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.rules.isAbstract
-import org.jetbrains.kotlin.descriptors.MemberDescriptor
-import org.jetbrains.kotlin.descriptors.Modality
+import dev.detekt.api.ActiveByDefault
+import dev.detekt.api.Config
+import dev.detekt.api.Entity
+import dev.detekt.api.Finding
+import dev.detekt.api.RequiresAnalysisApi
+import dev.detekt.api.Rule
+import dev.detekt.psi.isAbstract
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolModality
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.psiUtil.isAbstract
-import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * This rule inspects `abstract` classes. Abstract classes which do not define any `abstract` members should instead be
@@ -45,7 +45,7 @@ class AbstractClassCanBeConcreteClass(config: Config) :
         config,
         "An abstract class is unnecessary. May be refactored to a concrete class."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     private val noAbstractMember = "An abstract class without an abstract member can be refactored to a concrete class."
 
@@ -84,9 +84,10 @@ class AbstractClassCanBeConcreteClass(config: Config) :
         when {
             superTypeListEntries.isEmpty() -> false
             else -> {
-                val descriptor = bindingContext[BindingContext.CLASS, this]
-                descriptor?.unsubstitutedMemberScope?.getContributedDescriptors().orEmpty().any {
-                    (it as? MemberDescriptor)?.modality == Modality.ABSTRACT
+                analyze(this) {
+                    (symbol as? KaClassSymbol)?.memberScope?.declarations.orEmpty().any {
+                        it.modality == KaSymbolModality.ABSTRACT
+                    }
                 }
             }
         }

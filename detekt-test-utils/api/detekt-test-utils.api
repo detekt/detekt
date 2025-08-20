@@ -1,61 +1,56 @@
-public final class io/github/detekt/test/utils/CompileExtensionsKt {
+public final class dev/detekt/test/utils/CompileExtensionsKt {
 	public static final fun compileContentForTest (Ljava/lang/String;Ljava/lang/String;)Lorg/jetbrains/kotlin/psi/KtFile;
 	public static final fun compileContentForTest (Ljava/lang/String;Ljava/nio/file/Path;)Lorg/jetbrains/kotlin/psi/KtFile;
 	public static synthetic fun compileContentForTest$default (Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lorg/jetbrains/kotlin/psi/KtFile;
 	public static final fun compileForTest (Ljava/nio/file/Path;)Lorg/jetbrains/kotlin/psi/KtFile;
 }
 
-public final class io/github/detekt/test/utils/FileExtensionKt {
+public final class dev/detekt/test/utils/FileExtensionKt {
 	public static final fun createTempDirectoryForTest (Ljava/lang/String;)Ljava/nio/file/Path;
 	public static final fun createTempFileForTest (Ljava/lang/String;Ljava/lang/String;)Ljava/nio/file/Path;
 }
 
-public final class io/github/detekt/test/utils/KotlinAnalysisApiEngine {
-	public static final field INSTANCE Lio/github/detekt/test/utils/KotlinAnalysisApiEngine;
-	public final fun compile (Ljava/lang/String;Ljava/util/List;)Lorg/jetbrains/kotlin/psi/KtFile;
-	public static synthetic fun compile$default (Lio/github/detekt/test/utils/KotlinAnalysisApiEngine;Ljava/lang/String;Ljava/util/List;ILjava/lang/Object;)Lorg/jetbrains/kotlin/psi/KtFile;
+public final class dev/detekt/test/utils/KotlinAnalysisApiEngine {
+	public static final field INSTANCE Ldev/detekt/test/utils/KotlinAnalysisApiEngine;
+	public final fun compile (Ljava/lang/String;Ljava/util/List;Ljava/util/List;Z)Lorg/jetbrains/kotlin/psi/KtFile;
+	public static synthetic fun compile$default (Ldev/detekt/test/utils/KotlinAnalysisApiEngine;Ljava/lang/String;Ljava/util/List;Ljava/util/List;ZILjava/lang/Object;)Lorg/jetbrains/kotlin/psi/KtFile;
 }
 
-public final class io/github/detekt/test/utils/KotlinCoreEnvironmentWrapper : java/lang/AutoCloseable, org/junit/jupiter/api/extension/ExtensionContext$Store$CloseableResource {
-	public fun <init> (Lcom/intellij/openapi/project/Project;Lorg/jetbrains/kotlin/config/CompilerConfiguration;Lcom/intellij/openapi/Disposable;Lio/github/detekt/test/utils/KotlinEnvironmentContainer;)V
-	public synthetic fun <init> (Lcom/intellij/openapi/project/Project;Lorg/jetbrains/kotlin/config/CompilerConfiguration;Lcom/intellij/openapi/Disposable;Lio/github/detekt/test/utils/KotlinEnvironmentContainer;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+public abstract interface annotation class dev/detekt/test/utils/KotlinCoreEnvironmentTest : java/lang/annotation/Annotation {
+	public abstract fun additionalJavaSourcePaths ()[Ljava/lang/String;
+}
+
+public final class dev/detekt/test/utils/KotlinCoreEnvironmentWrapper : java/lang/AutoCloseable, org/junit/jupiter/api/extension/ExtensionContext$Store$CloseableResource {
+	public fun <init> (Lcom/intellij/openapi/project/Project;Lorg/jetbrains/kotlin/config/CompilerConfiguration;Lcom/intellij/openapi/Disposable;Ldev/detekt/test/utils/KotlinEnvironmentContainer;)V
+	public synthetic fun <init> (Lcom/intellij/openapi/project/Project;Lorg/jetbrains/kotlin/config/CompilerConfiguration;Lcom/intellij/openapi/Disposable;Ldev/detekt/test/utils/KotlinEnvironmentContainer;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun close ()V
-	public final fun getEnv ()Lio/github/detekt/test/utils/KotlinEnvironmentContainer;
+	public final fun getEnv ()Ldev/detekt/test/utils/KotlinEnvironmentContainer;
 }
 
-public final class io/github/detekt/test/utils/KotlinCoreEnvironmentWrapperKt {
-	public static final fun createEnvironment (Ljava/util/List;Ljava/util/List;)Lio/github/detekt/test/utils/KotlinCoreEnvironmentWrapper;
-	public static synthetic fun createEnvironment$default (Ljava/util/List;Ljava/util/List;ILjava/lang/Object;)Lio/github/detekt/test/utils/KotlinCoreEnvironmentWrapper;
+public final class dev/detekt/test/utils/KotlinCoreEnvironmentWrapperKt {
+	public static final fun createEnvironment (Ljava/util/List;Ljava/util/List;)Ldev/detekt/test/utils/KotlinCoreEnvironmentWrapper;
+	public static synthetic fun createEnvironment$default (Ljava/util/List;Ljava/util/List;ILjava/lang/Object;)Ldev/detekt/test/utils/KotlinCoreEnvironmentWrapper;
 }
 
-public final class io/github/detekt/test/utils/KotlinEnvironmentContainer {
+public final class dev/detekt/test/utils/KotlinEnvironmentContainer {
 	public fun <init> (Lcom/intellij/openapi/project/Project;Lorg/jetbrains/kotlin/config/CompilerConfiguration;)V
 	public final fun getConfiguration ()Lorg/jetbrains/kotlin/config/CompilerConfiguration;
 	public final fun getProject ()Lcom/intellij/openapi/project/Project;
 }
 
-public final class io/github/detekt/test/utils/KotlinScriptEngine {
-	public static final field INSTANCE Lio/github/detekt/test/utils/KotlinScriptEngine;
-	public final fun compile (Ljava/lang/String;)V
-}
-
-public final class io/github/detekt/test/utils/NullPrintStream : java/io/PrintStream {
+public final class dev/detekt/test/utils/NullPrintStream : java/io/PrintStream {
 	public fun <init> ()V
 }
 
-public final class io/github/detekt/test/utils/ResourcesKt {
+public final class dev/detekt/test/utils/ResourcesKt {
 	public static final fun readResourceContent (Ljava/lang/String;)Ljava/lang/String;
 	public static final fun resource (Ljava/lang/String;)Ljava/net/URI;
 	public static final fun resourceAsPath (Ljava/lang/String;)Ljava/nio/file/Path;
 	public static final fun resourceUrl (Ljava/lang/String;)Ljava/net/URL;
 }
 
-public final class io/github/detekt/test/utils/StringPrintStream : java/io/PrintStream {
+public final class dev/detekt/test/utils/StringPrintStream : java/io/PrintStream {
 	public fun <init> ()V
 	public fun toString ()Ljava/lang/String;
-}
-
-public abstract interface annotation class io/gitlab/arturbosch/detekt/rules/KotlinCoreEnvironmentTest : java/lang/annotation/Annotation {
-	public abstract fun additionalJavaSourcePaths ()[Ljava/lang/String;
 }
 

@@ -1,11 +1,11 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.github.detekt.test.utils.KotlinEnvironmentContainer
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lintWithContext
+import dev.detekt.api.Config
+import dev.detekt.test.TestConfig
+import dev.detekt.test.assertThat
+import dev.detekt.test.lintWithContext
+import dev.detekt.test.utils.KotlinCoreEnvironmentTest
+import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -167,9 +167,9 @@ class UseDataClassSpec(val env: KotlinEnvironmentContainer) {
 
             val findings = subject.lintWithContext(env, code)
 
-            assertThat(findings).hasSize(1)
-            assertThat(findings).hasStartSourceLocation(1, 7)
-            assertThat(findings).hasEndSourceLocation(1, 26)
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(1, 7)
+                .hasEndSourceLocation(1, 26)
         }
 
         @Test
@@ -422,6 +422,6 @@ class UseDataClassSpec(val env: KotlinEnvironmentContainer) {
                 val bar: String
             }
         """.trimIndent()
-        assertThat(subject.lintWithContext(env, code, compile = false)).isEmpty()
+        assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true)).isEmpty()
     }
 }

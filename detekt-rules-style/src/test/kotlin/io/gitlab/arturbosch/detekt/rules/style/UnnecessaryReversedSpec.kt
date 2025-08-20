@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.github.detekt.test.utils.KotlinEnvironmentContainer
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lintWithContext
+import dev.detekt.api.Config
+import dev.detekt.test.assertThat
+import dev.detekt.test.lintWithContext
+import dev.detekt.test.utils.KotlinCoreEnvironmentTest
+import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
@@ -26,8 +26,7 @@ class UnnecessaryReversedSpec(
 
         val findings = subject.lintWithContext(env, code)
 
-        assertThat(findings)
-            .isNotEmpty
+        assertThat(findings).singleElement()
             .hasStartSourceLocation(4, 7)
             .withFailMessage("Replace `sorted().asReversed()` by single `sortedDescending()`")
             .isNotNull()
@@ -80,8 +79,7 @@ class UnnecessaryReversedSpec(
 
         val findings = subject.lintWithContext(env, code)
 
-        assertThat(findings)
-            .isNotEmpty
+        assertThat(findings).singleElement()
             .hasStartSourceLocation(4, 10)
             .withFailMessage("Replace `sorted().reversed()` by single `sortedDescending()`")
             .isNotNull()
@@ -100,8 +98,7 @@ class UnnecessaryReversedSpec(
 
         val findings = subject.lintWithContext(env, code)
 
-        assertThat(findings)
-            .isNotEmpty
+        assertThat(findings).singleElement()
             .hasStartSourceLocation(4, 10)
             .withFailMessage("Replace `sorted().reversed()` by single `sortedDescending()`")
             .isNotNull()
@@ -120,8 +117,7 @@ class UnnecessaryReversedSpec(
 
         val findings = subject.lintWithContext(env, code)
 
-        assertThat(findings)
-            .isNotEmpty
+        assertThat(findings).singleElement()
             .hasStartSourceLocation(4, 10)
             .withFailMessage("Replace `sortedDescending().asReversed()` by single `sorted()`")
             .isNotNull()
@@ -140,8 +136,7 @@ class UnnecessaryReversedSpec(
 
         val findings = subject.lintWithContext(env, code)
 
-        assertThat(findings)
-            .isNotEmpty
+        assertThat(findings).singleElement()
             .hasStartSourceLocation(4, 10)
             .withFailMessage("Replace `sortedDescending().reversed()` by single `sorted()`")
             .isNotNull()

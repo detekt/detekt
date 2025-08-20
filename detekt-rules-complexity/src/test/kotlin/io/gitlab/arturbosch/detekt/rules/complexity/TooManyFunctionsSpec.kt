@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
-import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.test.TestConfig
+import dev.detekt.test.assertThat
+import dev.detekt.test.lint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -38,8 +38,8 @@ class TooManyFunctionsSpec {
         """.trimIndent()
 
         val findings = rule.lint(code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings).hasTextLocations(6 to 7)
+        assertThat(findings).singleElement()
+            .hasTextLocation(6 to 7)
     }
 
     @Test
@@ -52,8 +52,8 @@ class TooManyFunctionsSpec {
         """.trimIndent()
 
         val findings = rule.lint(code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings).hasTextLocations(7 to 8)
+        assertThat(findings).singleElement()
+            .hasTextLocation(7 to 8)
     }
 
     @Test
@@ -66,8 +66,8 @@ class TooManyFunctionsSpec {
         """.trimIndent()
 
         val findings = rule.lint(code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings).hasTextLocations(10 to 11)
+        assertThat(findings).singleElement()
+            .hasTextLocation(10 to 11)
     }
 
     @Test
@@ -81,8 +81,8 @@ class TooManyFunctionsSpec {
         """.trimIndent()
 
         val findings = rule.lint(code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings).hasTextLocations(11 to 12)
+        assertThat(findings).singleElement()
+            .hasTextLocation(11 to 12)
     }
 
     @Test
@@ -122,8 +122,8 @@ class TooManyFunctionsSpec {
         """.trimIndent()
 
         val findings = rule.lint(code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings).hasTextLocations(20 to 21)
+        assertThat(findings).singleElement()
+            .hasTextLocation(20 to 21)
     }
 
     @Nested

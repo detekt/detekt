@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.github.detekt.test.utils.KotlinEnvironmentContainer
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.lintWithContext
-import org.assertj.core.api.Assertions.assertThat
+import dev.detekt.api.Config
+import dev.detekt.test.assertThat
+import dev.detekt.test.lintWithContext
+import dev.detekt.test.utils.KotlinCoreEnvironmentTest
+import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -29,8 +29,8 @@ class UnnecessaryApplySpec(val env: KotlinEnvironmentContainer) {
                     }
                 """.trimIndent()
             )
-            assertThat(findings).hasSize(1)
-            assertThat(findings.first().message).isEqualTo("apply expression can be omitted")
+            assertThat(findings).singleElement()
+                .hasMessage("apply expression can be omitted")
         }
 
         @Test
@@ -48,8 +48,8 @@ class UnnecessaryApplySpec(val env: KotlinEnvironmentContainer) {
                     }
                 """.trimIndent()
             )
-            assertThat(findings).hasSize(1)
-            assertThat(findings.first().message).isEqualTo("apply can be replaced with let or an if")
+            assertThat(findings).singleElement()
+                .hasMessage("apply can be replaced with let or an if")
         }
 
         @Test

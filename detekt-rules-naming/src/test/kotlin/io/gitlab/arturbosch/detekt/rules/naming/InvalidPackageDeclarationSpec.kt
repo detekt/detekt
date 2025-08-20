@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
-import io.github.detekt.test.utils.compileForTest
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.TestConfig
+import dev.detekt.test.assertThat
+import dev.detekt.test.lint
+import dev.detekt.test.utils.compileForTest
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import kotlin.io.path.Path
@@ -27,8 +27,8 @@ class InvalidPackageDeclarationSpec {
         val ktFile = compileForTest(Path("src/test/resources/InvalidPackageDeclarationSpec/src/bar/incorrect.kt"))
         val findings = InvalidPackageDeclaration(Config.empty).lint(ktFile)
 
-        assertThat(findings).hasSize(1)
-        assertThat(findings).hasTextLocations(0 to 11)
+        assertThat(findings).singleElement()
+            .hasTextLocation(0 to 11)
     }
 
     @Nested

@@ -1,0 +1,11 @@
+dev.detekt.metrics.processors.KtFileCountProcessor
+dev.detekt.metrics.processors.PackageCountProcessor
+dev.detekt.metrics.processors.ClassCountProcessor
+dev.detekt.metrics.processors.FunctionCountProcessor
+dev.detekt.metrics.processors.PropertyCountProcessor
+dev.detekt.metrics.processors.ProjectComplexityProcessor
+dev.detekt.metrics.processors.ProjectCognitiveComplexityProcessor
+dev.detekt.metrics.processors.ProjectLLOCProcessor
+dev.detekt.metrics.processors.ProjectCLOCProcessor
+dev.detekt.metrics.processors.ProjectLOCProcessor
+dev.detekt.metrics.processors.ProjectSLOCProcessor

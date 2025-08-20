@@ -1,23 +1,25 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import com.intellij.psi.PsiElement
-import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.Alias
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Configuration
-import io.gitlab.arturbosch.detekt.api.DetektVisitor
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
-import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.rules.isExpect
-import org.jetbrains.kotlin.descriptors.ClassConstructorDescriptor
-import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
-import org.jetbrains.kotlin.descriptors.DeclarationDescriptorWithSource
-import org.jetbrains.kotlin.descriptors.PropertyDescriptor
-import org.jetbrains.kotlin.descriptors.Visibilities
-import org.jetbrains.kotlin.descriptors.isTopLevelInPackage
+import dev.detekt.api.ActiveByDefault
+import dev.detekt.api.Alias
+import dev.detekt.api.Config
+import dev.detekt.api.Configuration
+import dev.detekt.api.DetektVisitor
+import dev.detekt.api.Entity
+import dev.detekt.api.Finding
+import dev.detekt.api.RequiresAnalysisApi
+import dev.detekt.api.Rule
+import dev.detekt.api.config
+import dev.detekt.psi.isExpect
+import org.jetbrains.kotlin.analysis.api.KaSession
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.symbols.KaConstructorSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaPropertySymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolVisibility
+import org.jetbrains.kotlin.analysis.api.symbols.KaValueParameterSymbol
+import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtConstructor
@@ -34,9 +36,6 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
 import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.bindingContextUtil.getReferenceTargets
-import org.jetbrains.kotlin.resolve.source.getPsi
 
 /**
  * An unused private property can be removed to simplify the source file.
@@ -67,7 +66,7 @@ class UnusedPrivateProperty(config: Config) :
         config,
         "Property is unused and should be removed."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     @Configuration("unused property names matching this regex are ignored")
     private val allowedNames: Regex by config(
@@ -77,17 +76,14 @@ class UnusedPrivateProperty(config: Config) :
 
     override fun visit(root: KtFile) {
         super.visit(root)
-        val visitor = UnusedPrivatePropertyVisitor(allowedNames, bindingContext)
+        val visitor = UnusedPrivatePropertyVisitor(allowedNames)
         root.accept(visitor)
         visitor.getUnusedReports().forEach { report(it) }
     }
 }
 
 @Suppress("unused")
-private class UnusedPrivatePropertyVisitor(
-    private val allowedNames: Regex,
-    private val bindingContext: BindingContext,
-) : DetektVisitor() {
+private class UnusedPrivatePropertyVisitor(private val allowedNames: Regex) : DetektVisitor() {
 
     private val topLevelProperties = hashSetOf<KtNamedDeclaration>()
     private val usedTopLevelProperties = hashSetOf<PsiElement>()
@@ -171,43 +167,47 @@ private class UnusedPrivatePropertyVisitor(
 
     override fun visitReferenceExpression(expression: KtReferenceExpression) {
         super.visitReferenceExpression(expression)
-        val references = when (expression) {
-            is KtNameReferenceExpression -> expression.getReferenceTargets(bindingContext)
-            is KtCallExpression -> expression.getChildrenOfType<KtValueArgumentList>()
-                .flatMap { it.arguments }
-                .flatMap {
-                    it.getArgumentExpression()?.getReferenceTargets(bindingContext).orEmpty()
-                }
 
-            else -> return
+        analyze(expression) {
+            val references = when (expression) {
+                is KtNameReferenceExpression -> listOfNotNull(expression.mainReference.resolveToSymbol())
+
+                is KtCallExpression -> expression.getChildrenOfType<KtValueArgumentList>()
+                    .flatMap { it.arguments }
+                    .mapNotNull { it.getArgumentExpression()?.mainReference?.resolveToSymbol() }
+
+                else -> return
+            }
+
+            references
+                .filter { it.isPrivateProperty() || it.isConstructorParameter() }
+                .forEach {
+                    val psi = it.psi ?: return@forEach
+                    when {
+                        psi is KtProperty && psi.isTopLevel -> usedTopLevelProperties.add(psi)
+                        psi is KtProperty || psi is KtParameter && psi.hasValOrVar() -> usedClassProperties.add(psi)
+                        else -> usedConstructorParameters.add(psi)
+                    }
+                }
         }
+    }
 
-        references
-            .filter {
-                it.containingDeclaration is ClassConstructorDescriptor || it.isPrivateProperty()
-            }
-            .forEach { descriptor ->
-                val psi = (descriptor as? DeclarationDescriptorWithSource)?.source?.getPsi() ?: return@forEach
-                when {
-                    descriptor.isTopLevelInPackage() -> usedTopLevelProperties.add(psi)
-                    descriptor.isPropertyParameter() -> usedClassProperties.add(psi)
-                    else -> usedConstructorParameters.add(psi)
-                }
-            }
+    private fun KtConstructor<*>.isExpectClassConstructor() =
+        containingClassOrObject?.isExpect() == true
+
+    private fun KtConstructor<*>.isDataOrValueClassConstructor(): Boolean {
+        val parent = parent as? KtClass ?: return false
+        return parent.isData() || parent.isValue() || parent.isInline()
+    }
+
+    fun KaSymbol.isPrivateProperty() =
+        this is KaPropertySymbol && this.visibility == KaSymbolVisibility.PRIVATE
+
+    context(session: KaSession)
+    fun KaSymbol.isConstructorParameter(): Boolean {
+        val symbol = this
+        return with(session) {
+            symbol is KaValueParameterSymbol && symbol.containingDeclaration is KaConstructorSymbol
+        }
     }
 }
-
-private fun KtConstructor<*>.isExpectClassConstructor() =
-    containingClassOrObject?.isExpect() == true
-
-private fun KtConstructor<*>.isDataOrValueClassConstructor(): Boolean {
-    val parent = parent as? KtClass ?: return false
-    return parent.isData() || parent.isValue() || parent.isInline()
-}
-
-fun DeclarationDescriptor.isPrivateProperty() =
-    this is PropertyDescriptor && visibility.name == Visibilities.Private.name
-
-private fun DeclarationDescriptor.isPropertyParameter() =
-    this is PropertyDescriptor ||
-        ((this as? DeclarationDescriptorWithSource)?.source?.getPsi() as? KtParameter)?.isPropertyParameter() ?: false

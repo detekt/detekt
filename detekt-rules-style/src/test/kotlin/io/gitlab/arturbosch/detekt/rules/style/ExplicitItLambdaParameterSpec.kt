@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.assertThat
+import dev.detekt.test.lint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -21,10 +21,10 @@ class ExplicitItLambdaParameterSpec {
                     }
                     """.trimIndent(),
                 )
-            assertThat(findings).hasSize(1)
-            assertThat(findings[0]).hasMessage(
-                "This explicit usage of `it` as the lambda parameter name can be omitted.",
-            )
+            assertThat(findings).singleElement()
+                .hasMessage(
+                    "This explicit usage of `it` as the lambda parameter name can be omitted.",
+                )
         }
 
         @Test

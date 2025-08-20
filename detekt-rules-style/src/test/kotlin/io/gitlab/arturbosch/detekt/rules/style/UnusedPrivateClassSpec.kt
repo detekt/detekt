@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.assertThat
+import dev.detekt.test.lint
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -22,8 +22,8 @@ class UnusedPrivateClassSpec {
 
             val findings = subject.lint(code)
 
-            assertThat(findings).hasSize(1)
-            assertThat(findings).hasStartSourceLocation(1, 1)
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(1, 1)
         }
 
         @Nested
@@ -38,8 +38,8 @@ class UnusedPrivateClassSpec {
 
                 val findings = subject.lint(code)
 
-                assertThat(findings).hasSize(1)
-                assertThat(findings).hasStartSourceLocation(1, 1)
+                assertThat(findings).singleElement()
+                    .hasStartSourceLocation(1, 1)
             }
 
             @Test
@@ -51,8 +51,8 @@ class UnusedPrivateClassSpec {
 
                 val findings = subject.lint(code)
 
-                assertThat(findings).hasSize(1)
-                assertThat(findings).hasStartSourceLocation(2, 1)
+                assertThat(findings).singleElement()
+                    .hasStartSourceLocation(2, 1)
             }
 
             @Test
@@ -454,8 +454,8 @@ class UnusedPrivateClassSpec {
                 }
             """.trimIndent()
             val findings = UnusedPrivateClass(Config.empty).lint(code)
-            assertThat(findings).hasSize(1)
-            assertThat(findings).hasStartSourceLocation(10, 5)
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(10, 5)
         }
 
         @Test

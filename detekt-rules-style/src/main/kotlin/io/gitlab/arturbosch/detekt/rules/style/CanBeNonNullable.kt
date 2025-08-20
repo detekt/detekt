@@ -1,17 +1,17 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import com.intellij.psi.tree.IElementType
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.DetektVisitor
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
-import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.rules.isAbstract
-import io.gitlab.arturbosch.detekt.rules.isNonNullCheck
-import io.gitlab.arturbosch.detekt.rules.isNullCheck
-import io.gitlab.arturbosch.detekt.rules.isOpen
-import io.gitlab.arturbosch.detekt.rules.isOverride
+import dev.detekt.api.Config
+import dev.detekt.api.DetektVisitor
+import dev.detekt.api.Entity
+import dev.detekt.api.Finding
+import dev.detekt.api.RequiresFullAnalysis
+import dev.detekt.api.Rule
+import dev.detekt.psi.isAbstract
+import dev.detekt.psi.isNonNullCheck
+import dev.detekt.psi.isNullCheck
+import dev.detekt.psi.isOpen
+import dev.detekt.psi.isOverride
 import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.descriptors.PropertyDescriptor
@@ -36,6 +36,7 @@ import org.jetbrains.kotlin.psi.KtPostfixExpression
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtPropertyAccessor
 import org.jetbrains.kotlin.psi.KtPropertyDelegate
+import org.jetbrains.kotlin.psi.KtPsiUtil
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
@@ -50,7 +51,6 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
 import org.jetbrains.kotlin.psi.psiUtil.forEachDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.isFirstStatement
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
-import org.jetbrains.kotlin.psi2ir.deparenthesize
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.smartcasts.getKotlinTypeForComparison
 import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
@@ -352,8 +352,8 @@ class CanBeNonNullable(config: Config) :
         private fun KtBinaryExpression.evaluateBinaryExpression(
             parentOperatorToken: IElementType?,
         ): List<CallableDescriptor> {
-            val leftExpression = left?.deparenthesize()
-            val rightExpression = right?.deparenthesize()
+            val leftExpression = left?.let { KtPsiUtil.safeDeparenthesize(it) }
+            val rightExpression = right?.let { KtPsiUtil.safeDeparenthesize(it) }
             val nonNullChecks = mutableListOf<CallableDescriptor>()
 
             if (isNullCheck()) {

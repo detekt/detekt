@@ -1,6 +1,6 @@
 formatting:
   active: true
-  android: false
+  code_style: 'intellij_idea'
   autoCorrect: true
   AnnotationOnSeparateLine:
     active: true
@@ -60,6 +60,11 @@ formatting:
     active: true
     autoCorrect: true
     indentSize: 4
+  ContextReceiverListWrapping:
+    active: true
+    autoCorrect: true
+    maxLineLength: 120
+    indentSize: 4
   ContextReceiverMapping:
     active: true
     autoCorrect: true
@@ -72,6 +77,10 @@ formatting:
     enumEntryNameCasing: 'upper_or_camel_cases'
   EnumWrapping:
     active: true
+    autoCorrect: true
+    indentSize: 4
+  ExpressionOperandWrapping:
+    active: false
     autoCorrect: true
     indentSize: 4
   Filename:
@@ -148,6 +157,7 @@ formatting:
   ModifierListSpacing:
     active: true
     autoCorrect: true
+    indentSize: 4
   ModifierOrdering:
     active: true
     autoCorrect: true

@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.SourceLocation
-import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.api.SourceLocation
+import dev.detekt.test.TestConfig
+import dev.detekt.test.assertThat
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -52,7 +52,7 @@ class FunctionNamingSpec {
             }
             interface I { fun shouldNotBeFlagged() }
         """.trimIndent()
-        assertThat(FunctionNaming(Config.empty).lint(code)).hasStartSourceLocation(3, 13)
+        assertThat(FunctionNaming(Config.empty).lint(code)).singleElement().hasStartSourceLocation(3, 13)
     }
 
     @Test
@@ -96,7 +96,7 @@ class FunctionNamingSpec {
             }
             interface I { @Suppress("FunctionNaming") fun SHOULD_BE_FLAGGED() }
         """.trimIndent()
-        assertThat(FunctionNaming(Config.empty).lint(code)).hasStartSourceLocation(3, 13)
+        assertThat(FunctionNaming(Config.empty).lint(code)).singleElement().hasStartSourceLocation(3, 13)
     }
 
     @Test
@@ -104,7 +104,8 @@ class FunctionNamingSpec {
         val code = """
             fun `7his is a function name _`() = Unit
         """.trimIndent()
-        assertThat(FunctionNaming(Config.empty).lint(code)).hasStartSourceLocations(SourceLocation(1, 5))
+        assertThat(FunctionNaming(Config.empty).lint(code)).singleElement()
+            .hasStartSourceLocation(SourceLocation(1, 5))
     }
 
     @Test

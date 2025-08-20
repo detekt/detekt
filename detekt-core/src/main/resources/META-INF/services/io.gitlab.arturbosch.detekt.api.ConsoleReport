@@ -1,6 +1,0 @@
-io.gitlab.arturbosch.detekt.core.reporting.console.ComplexityReport
-io.gitlab.arturbosch.detekt.core.reporting.console.IssuesReport
-io.gitlab.arturbosch.detekt.core.reporting.console.FileBasedIssuesReport
-io.gitlab.arturbosch.detekt.core.reporting.console.LiteIssuesReport
-io.gitlab.arturbosch.detekt.core.reporting.console.NotificationReport
-io.gitlab.arturbosch.detekt.core.reporting.console.ProjectStatisticsReport

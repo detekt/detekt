@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.RuleSet
-import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
+import dev.detekt.api.ActiveByDefault
+import dev.detekt.api.RuleSet
+import dev.detekt.api.internal.DefaultRuleSetProvider
 import io.gitlab.arturbosch.detekt.rules.style.movelambdaout.UnnecessaryBracesAroundTrailingLambda
 import io.gitlab.arturbosch.detekt.rules.style.optional.MandatoryBracesLoops
 import io.gitlab.arturbosch.detekt.rules.style.optional.OptionalUnit
@@ -41,6 +41,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             ::ForbiddenImport,
             ::ForbiddenMethodCall,
             ::ForbiddenNamedParam,
+            ::ForbiddenOptIn,
             ::ForbiddenSuppress,
             ::FunctionOnlyReturningConstant,
             ::SpacingAfterPackageDeclaration,

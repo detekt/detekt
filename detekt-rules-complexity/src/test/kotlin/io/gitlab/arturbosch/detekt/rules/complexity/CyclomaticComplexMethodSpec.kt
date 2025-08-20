@@ -1,11 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.SourceLocation
-import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lint
-import org.assertj.core.api.Assertions.assertThat
+import dev.detekt.api.Config
+import dev.detekt.api.SourceLocation
+import dev.detekt.test.TestConfig
+import dev.detekt.test.assertThat
+import dev.detekt.test.lint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -167,7 +166,8 @@ class CyclomaticComplexMethodSpec {
             )
             val subject = CyclomaticComplexMethod(config)
 
-            assertThat(subject.lint(code)).hasStartSourceLocations(SourceLocation(39, 5))
+            assertThat(subject.lint(code)).singleElement()
+                .hasStartSourceLocation(SourceLocation(39, 5))
         }
 
         @Test
@@ -299,7 +299,9 @@ class CyclomaticComplexMethodSpec {
 private fun assertExpectedComplexityValue(code: String, config: TestConfig, expectedValue: Int) {
     val findings = CyclomaticComplexMethod(config).lint(code)
 
-    assertThat(findings).hasStartSourceLocations(SourceLocation(1, 5))
-
-    assertThat(findings[0].message).contains("(complexity: $expectedValue)")
+    assertThat(findings).singleElement()
+        .hasStartSourceLocation(SourceLocation(1, 5))
+        .hasMessage(
+            "The function test appears to be too complex based on Cyclomatic Complexity (complexity: $expectedValue). The maximum allowed complexity for methods is set to '1'"
+        )
 }

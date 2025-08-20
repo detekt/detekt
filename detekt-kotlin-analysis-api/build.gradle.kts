@@ -2,7 +2,7 @@
 
 plugins {
     id("packaging")
-    id("com.gradleup.shadow") version "8.3.8"
+    id("com.gradleup.shadow") version "9.0.2"
 }
 
 dependencies {
@@ -21,17 +21,11 @@ dependencies {
             attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
         }
     }
+    implementation(libs.kotlinx.serializationCore)
 }
 
 java {
     targetCompatibility = JavaVersion.VERSION_1_8
-}
-
-configurations.shadowRuntimeElements {
-    attributes {
-        // This is not needed in shadow plugin 9+: https://github.com/GradleUp/shadow/pull/1199
-        attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, JavaVersion.VERSION_1_8.majorVersion.toInt())
-    }
 }
 
 val javaComponent = components["java"] as AdhocComponentWithVariants

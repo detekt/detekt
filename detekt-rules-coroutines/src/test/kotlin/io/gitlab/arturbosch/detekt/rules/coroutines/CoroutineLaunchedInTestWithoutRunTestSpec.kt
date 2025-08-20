@@ -1,13 +1,13 @@
 package io.gitlab.arturbosch.detekt.rules.coroutines
 
-import io.github.detekt.test.utils.KotlinEnvironmentContainer
-import io.github.detekt.test.utils.compileContentForTest
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.createBindingContext
-import io.gitlab.arturbosch.detekt.test.lintWithContext
-import io.gitlab.arturbosch.detekt.test.location
+import dev.detekt.api.Config
+import dev.detekt.test.lintWithContext
+import dev.detekt.test.location
+import dev.detekt.test.utils.KotlinAnalysisApiEngine
+import dev.detekt.test.utils.KotlinCoreEnvironmentTest
+import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.junit.jupiter.api.Test
@@ -243,7 +243,7 @@ class CoroutineLaunchedInTestWithoutRunTestSpec(private val env: KotlinEnvironme
                 }
             }
         """.trimIndent()
-        assertThat(subject.lintWithContext(env, code, compile = false)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -288,7 +288,7 @@ class CoroutineLaunchedInTestWithoutRunTestSpec(private val env: KotlinEnvironme
                 }
             }
         """.trimIndent()
-        assertThat(subject.lintWithContext(env, code, compile = false)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 
     @Test
@@ -326,7 +326,7 @@ class CoroutineLaunchedInTestWithoutRunTestSpec(private val env: KotlinEnvironme
 
                 @Test
                 fun `test that does not launch a coroutine`() = runBlocking {
-                    doNotLaunchCoroutineOne()()
+                    doNotLaunchCoroutineOne()
                 }
                 
                 fun launchCoroutineOne() { launchCoroutineTwo() }
@@ -344,8 +344,7 @@ class CoroutineLaunchedInTestWithoutRunTestSpec(private val env: KotlinEnvironme
             }
         """.trimIndent()
 
-        val ktFile = compileContentForTest(code)
-        val bindingContext = env.createBindingContext(listOf(ktFile))
+        val ktFile = KotlinAnalysisApiEngine.compile(code)
 
         val namedFunctions = ktFile
             .collectDescendantsOfType<KtNamedFunction>()
@@ -353,15 +352,17 @@ class CoroutineLaunchedInTestWithoutRunTestSpec(private val env: KotlinEnvironme
         val testLaunch = namedFunctions.first { it.name == "test that launches a coroutine" }
         val testNotLaunch = namedFunctions.first { it.name == "test that does not launch a coroutine" }
 
-        subject.isFunctionLaunchingCoroutines(testLaunch, bindingContext)
+        analyze(testLaunch) {
+            subject.isFunctionLaunchingCoroutines(testLaunch)
+            assertThat(subject.exploredFunctionsCache).hasSize(4)
+            assertThat(subject.exploredFunctionsCache.values.filter { it }).hasSize(4)
+        }
 
-        assertThat(subject.exploredFunctionsCache).hasSize(4)
-        assertThat(subject.exploredFunctionsCache.values.filter { it }).hasSize(4)
-
-        subject.isFunctionLaunchingCoroutines(testNotLaunch, bindingContext)
-
-        assertThat(subject.exploredFunctionsCache).hasSize(8)
-        assertThat(subject.exploredFunctionsCache.values.filterNot { it }).hasSize(4)
+        analyze(testNotLaunch) {
+            subject.isFunctionLaunchingCoroutines(testNotLaunch)
+            assertThat(subject.exploredFunctionsCache).hasSize(8)
+            assertThat(subject.exploredFunctionsCache.values.filterNot { it }).hasSize(4)
+        }
     }
 
     @Test
@@ -616,6 +617,6 @@ class CoroutineLaunchedInTestWithoutRunTestSpec(private val env: KotlinEnvironme
                 }
             }
         """.trimIndent()
-        assertThat(subject.lintWithContext(env, code, file, compile = false)).hasSize(1)
+        assertThat(subject.lintWithContext(env, code, file)).hasSize(1)
     }
 }

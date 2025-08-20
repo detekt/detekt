@@ -1,13 +1,13 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
-    id("com.gradleup.shadow") version "8.3.8"
+    id("com.gradleup.shadow") version "9.0.2"
     id("module")
     id("application")
 }
 
 application {
-    mainClass = "io.gitlab.arturbosch.detekt.cli.Main"
+    mainClass = "dev.detekt.cli.Main"
 }
 
 val pluginsJar by configurations.dependencyScope("pluginsJar") {
@@ -20,6 +20,7 @@ val pluginsJarFiles by configurations.resolvable("pluginsJarFiles") {
 
 dependencies {
     implementation(libs.jcommander)
+    implementation(projects.detektApi)
     implementation(projects.detektTooling)
     implementation(projects.detektUtils)
     implementation(libs.kotlin.compiler) {

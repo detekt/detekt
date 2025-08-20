@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.test.TestConfig
+import dev.detekt.test.assertThat
+import dev.detekt.test.lint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -23,11 +23,11 @@ internal class ForbiddenSuppressSpec {
                 class Foo
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings).hasSize(1)
-            assertThat(findings).hasStartSourceLocation(3, 1)
-            assertThat(findings.first()).hasMessage(
-                "Cannot @Suppress rule \"ARule\" due to the current configuration."
-            )
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(3, 1)
+                .hasMessage(
+                    "Cannot @Suppress rule \"ARule\" due to the current configuration."
+                )
         }
 
         @Test
@@ -37,11 +37,11 @@ internal class ForbiddenSuppressSpec {
                 package config
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings).hasSize(1)
-            assertThat(findings).hasStartSourceLocation(1, 1)
-            assertThat(findings.first()).hasMessage(
-                "Cannot @Suppress rule \"ARule\" due to the current configuration."
-            )
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(1, 1)
+                .hasMessage(
+                    "Cannot @Suppress rule \"ARule\" due to the current configuration."
+                )
         }
 
         @Test
@@ -53,11 +53,11 @@ internal class ForbiddenSuppressSpec {
                 fun foo() { }
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings).hasSize(1)
-            assertThat(findings).hasStartSourceLocation(3, 1)
-            assertThat(findings.first()).hasMessage(
-                "Cannot @Suppress rule \"ARule\" due to the current configuration."
-            )
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(3, 1)
+                .hasMessage(
+                    "Cannot @Suppress rule \"ARule\" due to the current configuration."
+                )
         }
 
         @Test
@@ -71,11 +71,11 @@ internal class ForbiddenSuppressSpec {
                 }
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings).hasSize(1)
-            assertThat(findings).hasStartSourceLocation(4, 5)
-            assertThat(findings.first()).hasMessage(
-                "Cannot @Suppress rule \"ARule\" due to the current configuration."
-            )
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(4, 5)
+                .hasMessage(
+                    "Cannot @Suppress rule \"ARule\" due to the current configuration."
+                )
         }
 
         @Test
@@ -99,10 +99,10 @@ internal class ForbiddenSuppressSpec {
                 fun foo() { }
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings).hasSize(1)
-            assertThat(findings.first()).hasMessage(
-                "Cannot @Suppress rule \"ARule\" due to the current configuration."
-            )
+            assertThat(findings).singleElement()
+                .hasMessage(
+                    "Cannot @Suppress rule \"ARule\" due to the current configuration."
+                )
         }
 
         @Test
@@ -132,12 +132,12 @@ internal class ForbiddenSuppressSpec {
                 package config
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings).hasSize(1)
-            assertThat(findings).hasStartSourceLocation(1, 1)
-            assertThat(findings.first()).hasMessage(
-                "Cannot @Suppress rules \"ARule\", \"BRule\" " +
-                    "due to the current configuration."
-            )
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(1, 1)
+                .hasMessage(
+                    "Cannot @Suppress rules \"ARule\", \"BRule\" " +
+                        "due to the current configuration."
+                )
         }
 
         @Test
@@ -149,11 +149,11 @@ internal class ForbiddenSuppressSpec {
                 fun foo() { }
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings).hasSize(1)
-            assertThat(findings).hasStartSourceLocation(3, 1)
-            assertThat(findings.first()).hasMessage(
-                "Cannot @Suppress rule \"BRule\" due to the current configuration."
-            )
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(3, 1)
+                .hasMessage(
+                    "Cannot @Suppress rule \"BRule\" due to the current configuration."
+                )
         }
     }
 

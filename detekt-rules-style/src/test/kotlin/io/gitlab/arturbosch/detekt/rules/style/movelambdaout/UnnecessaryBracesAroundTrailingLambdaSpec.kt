@@ -1,30 +1,16 @@
 package io.gitlab.arturbosch.detekt.rules.style.movelambdaout
 
-import io.github.detekt.test.utils.KotlinEnvironmentContainer
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lintWithContext
+import dev.detekt.api.Config
+import dev.detekt.test.assertThat
+import dev.detekt.test.lintWithContext
+import dev.detekt.test.utils.KotlinCoreEnvironmentTest
+import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.junit.jupiter.api.Test
 
 // Source https://github.com/JetBrains/intellij-community/tree/master/plugins/kotlin/idea/tests/testData/inspectionsLocal/moveLambdaOutsideParentheses
 @KotlinCoreEnvironmentTest
 class UnnecessaryBracesAroundTrailingLambdaSpec(val env: KotlinEnvironmentContainer) {
     private val subject = UnnecessaryBracesAroundTrailingLambda(Config.empty)
-
-    @Test
-    fun `does report when trailing lambda had braces`() {
-        val code = """
-            fun foo() {
-                bar({ it })
-            }
-
-            fun bar(a: Int = 0, f: (Int) -> Int) { }
-            fun bar(a: Int, b: Int, f: (Int) -> Int) { }
-        """.trimIndent()
-        val findings = subject.lintWithContext(env, code, compile = false)
-        assertThat(findings).hasSize(1)
-    }
 
     @Test
     fun `does not report when lambda inside braces is used in class delegation`() {
@@ -46,6 +32,92 @@ class UnnecessaryBracesAroundTrailingLambdaSpec(val env: KotlinEnvironmentContai
         """.trimIndent()
         val findings = subject.lintWithContext(env, code)
         assertThat(findings).hasSize(1)
+    }
+
+    @Test
+    fun `does not report when trailing lambda is used for function param`() {
+        val code = """
+            fun foo(p: (Int, () -> Int) -> Unit) {
+                p(1) { 2 }
+            }
+        """.trimIndent()
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `does not report when trailing lambda is not possible for function param`() {
+        val code = """
+            fun foo(p: (Int, Int) -> Unit) {
+                p(1, 2)
+            }
+        """.trimIndent()
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `does report when lambda inside braces is used for lambda param with suspending lambda`() {
+        val code = """
+            fun foo(p: (Int, suspend () -> Int) -> Unit) {
+                p(1, { 2 })
+            }
+        """.trimIndent()
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).hasSize(1)
+    }
+
+    @Test
+    fun `does not report when trailing lambda is used for function lambda param with suspending lambda`() {
+        val code = """
+            fun foo(p: (Int, suspend () -> Int) -> Unit) {
+                p(1) { 2 }
+            }
+        """.trimIndent()
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `does when lambda inside braces is used for function suspending lambda param`() {
+        val code = """
+            suspend fun foo(p: suspend (Int, () -> Int) -> Unit) {
+                p(1, { 2 })
+            }
+        """.trimIndent()
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).hasSize(1)
+    }
+
+    @Test
+    fun `does not report when trailing lambda is used for function suspending lambda param`() {
+        val code = """
+            suspend fun foo(p: suspend (Int, () -> Int) -> Unit) {
+                p(1) { 2 }
+            }
+        """.trimIndent()
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `does report when lambda inside braces is used for ctor`() {
+        val code = """
+            class A(block: () -> Unit)
+            fun foo() = A({ println() })
+        """.trimIndent()
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).hasSize(1)
+    }
+
+    @Test
+    fun `does not report when trailing lambda is used for ctor`() {
+        val code = """
+            class A(block: () -> Unit)
+            fun foo() = A { println() }
+        """.trimIndent()
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -122,7 +194,7 @@ class UnnecessaryBracesAroundTrailingLambdaSpec(val env: KotlinEnvironmentContai
     }
 
     @Test
-    fun `does report second lambda with label can not be moved out of the braces`() {
+    fun `does report second lambda with label can be moved out of the braces`() {
         val code = """
             fun foo() {
                 bar(2, l@{ it })
@@ -137,7 +209,7 @@ class UnnecessaryBracesAroundTrailingLambdaSpec(val env: KotlinEnvironmentContai
     }
 
     @Test
-    fun `does report lambda with multiline expression can not be moved out of the braces`() {
+    fun `does report lambda with multiline expression can be moved out of the braces`() {
         val code = """
             fun foo() {
                 bar(2, {
@@ -151,11 +223,11 @@ class UnnecessaryBracesAroundTrailingLambdaSpec(val env: KotlinEnvironmentContai
             }
         """.trimIndent()
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).hasSize(1).hasStartSourceLocation(2, 5).hasEndSourceLocation(2, 8)
+        assertThat(findings).singleElement().hasStartSourceLocation(2, 5).hasEndSourceLocation(2, 8)
     }
 
     @Test
-    fun `does not report lambda with label which can be moved out of the braces`() {
+    fun `does not report named lambda with label which can be moved out of the braces`() {
         val code = """
             fun foo() {
                 bar(name1 = 3, name2 = 2, name3 = 1, name4 = { it })
@@ -185,6 +257,21 @@ class UnnecessaryBracesAroundTrailingLambdaSpec(val env: KotlinEnvironmentContai
     }
 
     @Test
+    fun `does not report when lambda returned from fun is using trailing lambda`() {
+        val code = """
+            fun bar() {
+                foo { "one" }() { "two" }
+            }
+
+            fun foo(a: () -> String): (() -> String) -> Unit {
+                return { }
+            }
+        """.trimIndent()
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
     fun `does report when suspend lambda inside braces`() {
         val code = """
             fun runSuspend(block: suspend () -> Unit) {}
@@ -200,18 +287,18 @@ class UnnecessaryBracesAroundTrailingLambdaSpec(val env: KotlinEnvironmentContai
     }
 
     @Test
-    fun `does not report when suspend lambda inside braces`() {
+    fun `does not report when suspend lambda using trailing syntax`() {
         val code = """
             fun runSuspend(block: suspend () -> Unit) {}
 
             fun println() {}
 
             fun usage() {
-                runSuspend({ println() })
+                runSuspend { println() }
             }
         """.trimIndent()
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
+        assertThat(findings).isEmpty()
     }
 
     @Test

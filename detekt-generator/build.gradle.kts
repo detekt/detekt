@@ -1,13 +1,13 @@
 import java.io.ByteArrayOutputStream
 
 plugins {
-    id("com.gradleup.shadow") version "8.3.8"
+    id("com.gradleup.shadow") version "9.0.2"
     id("module")
     id("application")
 }
 
 application {
-    mainClass = "io.gitlab.arturbosch.detekt.generator.Main"
+    mainClass = "dev.detekt.generator.Main"
 }
 
 val detektCli by configurations.dependencyScope("detektCli")
@@ -16,6 +16,7 @@ val detektCliClasspath by configurations.resolvable("detektCliClasspath") {
 }
 
 dependencies {
+    implementation(libs.kotlin.compiler)
     implementation(projects.detektParser)
     implementation(projects.detektApi)
     implementation(projects.detektPsiUtils)
@@ -23,16 +24,13 @@ dependencies {
     implementation(projects.detektUtils)
     implementation(libs.jcommander)
 
-    testImplementation(projects.detektCore)
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.assertj.core)
-    testImplementation(libs.classgraph)
-    testRuntimeOnly(projects.detektRules)
 }
 
 val generateCliOptions by tasks.registering(JavaExec::class) {
     classpath = detektCliClasspath
-    mainClass = "io.gitlab.arturbosch.detekt.cli.Main"
+    mainClass = "dev.detekt.cli.Main"
     args = listOf("--help")
 
     val cliOptionsOutput = isolated.rootProject.projectDirectory.file("website/docs/gettingstarted/_cli-options.md")
@@ -82,11 +80,19 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
         .toList()
 
     classpath(
-        configurations.runtimeClasspath.get(),
-        configurations.compileClasspath.get(),
-        sourceSets.main.get().output,
+        configurations.runtimeClasspath,
+        sourceSets.main.map { it.output },
     )
-    mainClass = "io.gitlab.arturbosch.detekt.generator.Main"
+
+    inputs.files(ruleModules)
+    outputs.dir(documentationDir)
+    outputs.file(defaultConfigFile)
+    outputs.file(deprecationFile)
+    outputs.file(formattingConfigFile)
+    outputs.file(librariesConfigFile)
+    outputs.file(ruleauthorsConfigFile)
+
+    mainClass = "dev.detekt.generator.Main"
     args = listOf(
         "--input",
         ruleModules.joinToString(","),

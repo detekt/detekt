@@ -2,12 +2,12 @@
 
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.ValueWithReason
-import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lint
-import io.gitlab.arturbosch.detekt.test.toConfig
+import dev.detekt.api.Config
+import dev.detekt.api.ValueWithReason
+import dev.detekt.test.TestConfig
+import dev.detekt.test.assertThat
+import dev.detekt.test.lint
+import dev.detekt.test.toConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -238,9 +238,8 @@ class ForbiddenCommentSpec {
         fun `should report a Finding with message 'Custom Message'`() {
             val comment = "// Comment"
             val findings = ForbiddenComment(messageConfig).lint(comment)
-            assertThat(findings).hasSize(1)
-            assertThat(findings.first().message)
-                .isEqualTo("This comment contains 'Comment' that has been defined as forbidden.")
+            assertThat(findings).singleElement()
+                .hasMessage("This comment contains 'Comment' that has been defined as forbidden.")
         }
     }
 
@@ -254,8 +253,8 @@ class ForbiddenCommentSpec {
         fun `should report a Finding with reason`() {
             val comment = "// Comment"
             val findings = ForbiddenComment(messageWithReasonConfig).lint(comment)
-            assertThat(findings).hasSize(1)
-            assertThat(findings.first().message).isEqualTo("Comment is disallowed")
+            assertThat(findings).singleElement()
+                .hasMessage("Comment is disallowed")
         }
     }
 

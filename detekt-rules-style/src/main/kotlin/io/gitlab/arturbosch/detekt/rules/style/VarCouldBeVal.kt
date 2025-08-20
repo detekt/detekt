@@ -1,18 +1,23 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.Alias
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Configuration
-import io.gitlab.arturbosch.detekt.api.DetektVisitor
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
-import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.rules.isLateinit
-import io.gitlab.arturbosch.detekt.rules.isOverride
-import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
+import dev.detekt.api.ActiveByDefault
+import dev.detekt.api.Alias
+import dev.detekt.api.Config
+import dev.detekt.api.Configuration
+import dev.detekt.api.DetektVisitor
+import dev.detekt.api.Entity
+import dev.detekt.api.Finding
+import dev.detekt.api.RequiresAnalysisApi
+import dev.detekt.api.Rule
+import dev.detekt.api.config
+import dev.detekt.psi.isLateinit
+import dev.detekt.psi.isOverride
+import org.jetbrains.kotlin.analysis.api.KaSession
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.singleVariableAccessCall
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaSymbol
+import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBlockExpression
@@ -33,8 +38,6 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
 import org.jetbrains.kotlin.psi.psiUtil.isObjectLiteral
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.psi.psiUtil.lastBlockStatementOrThis
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
 import org.jetbrains.kotlin.util.containingNonLocalDeclaration
 
 /**
@@ -63,50 +66,49 @@ class VarCouldBeVal(config: Config) :
         config,
         "Var declaration could be val."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     @Configuration("Whether to ignore uninitialized lateinit vars")
     private val ignoreLateinitVar: Boolean by config(defaultValue = false)
 
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)
-        val assignmentVisitor = AssignmentVisitor(bindingContext, ignoreLateinitVar)
+        val assignmentVisitor = AssignmentVisitor(ignoreLateinitVar)
         file.accept(assignmentVisitor)
 
-        assignmentVisitor.getNonReAssignedDeclarations().forEach {
-            report(
-                Finding(
-                    Entity.from(it),
-                    "Variable '${it.nameAsSafeName.identifier}' could be val."
+        analyze(file) {
+            assignmentVisitor.getNonReAssignedDeclarations().forEach {
+                report(
+                    Finding(
+                        Entity.from(it),
+                        "Variable '${it.nameAsSafeName.identifier}' could be val."
+                    )
                 )
-            )
+            }
         }
     }
 
     @Suppress("TooManyFunctions")
-    private class AssignmentVisitor(
-        private val bindingContext: BindingContext,
-        private val ignoreLateinitVar: Boolean,
-    ) : DetektVisitor() {
+    private class AssignmentVisitor(private val ignoreLateinitVar: Boolean) : DetektVisitor() {
 
         private val declarationCandidates = mutableSetOf<KtNamedDeclaration>()
         private val assignments = mutableMapOf<String, MutableSet<KtExpression>>()
-        private val escapeCandidates = mutableMapOf<DeclarationDescriptor, List<KtProperty>>()
+        private val escapeCandidates = mutableMapOf<KaSymbol, List<KtProperty>>()
 
+        context(session: KaSession)
         fun getNonReAssignedDeclarations(): List<KtNamedDeclaration> =
             declarationCandidates.filterNot { it.hasAssignments() }
 
+        context(session: KaSession)
         private fun KtNamedDeclaration.hasAssignments(): Boolean {
             val declarationName = nameAsSafeName.toString()
             val assignments = assignments[declarationName]
             if (assignments.isNullOrEmpty()) return false
-            val declarationDescriptor =
-                bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, this]
-            return assignments.any {
-                it.getResolvedCall(bindingContext)?.resultingDescriptor?.original == declarationDescriptor ||
-                    // inside an unknown types context? (example: with-statement with unknown type)
-                    // (i.e, it can't be resolved if the assignment is from the context or from an outer variable)
-                    it.getResolvedCall(bindingContext) == null
+            with(session) {
+                val declarationSymbol = symbol
+                return assignments.any {
+                    it.resolveToCall()?.singleVariableAccessCall()?.symbol == declarationSymbol
+                }
             }
         }
 
@@ -114,7 +116,9 @@ class VarCouldBeVal(config: Config) :
             // The super() call should be first in the function so that any properties
             // declared in potential object literals can be evaluated.
             super.visitNamedFunction(function)
-            evaluateReturnExpression(function.initializer)
+            analyze(function) {
+                function.initializer?.let { evaluateReturnExpression(it) }
+            }
         }
 
         override fun visitProperty(property: KtProperty) {
@@ -124,10 +128,11 @@ class VarCouldBeVal(config: Config) :
             }
 
             // Check for whether the initializer contains an object literal.
-            val descriptor = bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, property]
             val initializer = property.initializer
-            if (descriptor != null && initializer != null) {
-                evaluateAssignmentExpression(descriptor, initializer)
+            if (initializer != null) {
+                analyze(property) {
+                    evaluateAssignmentExpression(property.symbol, initializer)
+                }
             }
         }
 
@@ -144,44 +149,45 @@ class VarCouldBeVal(config: Config) :
                 expression.left?.let(::visitAssignment)
 
                 // Check for whether the assignment contains an object literal.
-                val descriptor = (expression.left as? KtNameReferenceExpression)
-                    ?.getResolvedCall(bindingContext)
-                    ?.resultingDescriptor
                 val expressionRight = expression.right
-                if (descriptor != null && expressionRight != null) {
-                    evaluateAssignmentExpression(descriptor, expressionRight)
+                if (expressionRight != null) {
+                    analyze(expression) {
+                        val symbol = (expression.left as? KtNameReferenceExpression)?.mainReference?.resolveToSymbol()
+                        if (symbol != null) {
+                            evaluateAssignmentExpression(symbol, expressionRight)
+                        }
+                    }
                 }
             }
         }
 
         override fun visitReturnExpression(expression: KtReturnExpression) {
             super.visitReturnExpression(expression)
-            evaluateReturnExpression(expression.returnedExpression)
+            analyze(expression) {
+                expression.returnedExpression?.let { evaluateReturnExpression(it) }
+            }
         }
 
-        private fun evaluateAssignmentExpression(
-            descriptor: DeclarationDescriptor,
-            rightExpression: KtExpression,
-        ) {
+        private fun evaluateAssignmentExpression(symbol: KaSymbol, rightExpression: KtExpression) {
             when (rightExpression) {
                 is KtObjectLiteralExpression -> {
-                    escapeCandidates[descriptor] = rightExpression.collectDescendantsOfType {
+                    escapeCandidates[symbol] = rightExpression.collectDescendantsOfType {
                         it.isEscapeCandidate()
                     }
                 }
                 is KtIfExpression -> {
-                    rightExpression.then?.let { evaluateAssignmentExpression(descriptor, it) }
-                    rightExpression.`else`?.let { evaluateAssignmentExpression(descriptor, it) }
+                    rightExpression.then?.let { evaluateAssignmentExpression(symbol, it) }
+                    rightExpression.`else`?.let { evaluateAssignmentExpression(symbol, it) }
                 }
                 is KtBlockExpression -> {
                     rightExpression.lastBlockStatementOrThis()
                         .takeIf { it != rightExpression }
-                        ?.let { evaluateAssignmentExpression(descriptor, it) }
+                        ?.let { evaluateAssignmentExpression(symbol, it) }
                 }
             }
         }
 
-        private fun evaluateReturnExpression(returnedExpression: KtExpression?) {
+        private fun KaSession.evaluateReturnExpression(returnedExpression: KtExpression) {
             when (returnedExpression) {
                 is KtObjectLiteralExpression -> {
                     returnedExpression.collectDescendantsOfType<KtProperty> {
@@ -189,13 +195,13 @@ class VarCouldBeVal(config: Config) :
                     }.forEach(declarationCandidates::remove)
                 }
                 is KtNameReferenceExpression -> {
-                    returnedExpression.getResolvedCall(bindingContext)?.resultingDescriptor?.let { descriptor ->
-                        escapeCandidates[descriptor]?.forEach(declarationCandidates::remove)
+                    returnedExpression.mainReference.resolveToSymbol()?.let {
+                        escapeCandidates[it]?.forEach(declarationCandidates::remove)
                     }
                 }
                 is KtIfExpression -> {
-                    evaluateReturnExpression(returnedExpression.then)
-                    evaluateReturnExpression(returnedExpression.`else`)
+                    returnedExpression.then?.let { evaluateReturnExpression(it) }
+                    returnedExpression.`else`?.let { evaluateReturnExpression(it) }
                 }
                 is KtBlockExpression -> {
                     returnedExpression.lastBlockStatementOrThis()

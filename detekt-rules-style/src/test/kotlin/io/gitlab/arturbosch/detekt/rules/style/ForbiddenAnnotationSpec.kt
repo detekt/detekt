@@ -1,12 +1,12 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.github.detekt.test.utils.KotlinEnvironmentContainer
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.SourceLocation
-import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lintWithContext
+import dev.detekt.api.Config
+import dev.detekt.api.SourceLocation
+import dev.detekt.test.TestConfig
+import dev.detekt.test.assertThat
+import dev.detekt.test.lintWithContext
+import dev.detekt.test.utils.KotlinCoreEnvironmentTest
+import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.junit.jupiter.api.Test
 
 private const val ANNOTATIONS = "annotations"
@@ -22,12 +22,13 @@ class ForbiddenAnnotationSpec(val env: KotlinEnvironmentContainer) {
         """.trimIndent()
         val findings = ForbiddenAnnotation(Config.empty).lintWithContext(env, code)
 
-        assertThat(findings)
-            .hasSize(1)
-            .hasStartSourceLocations(
+        assertThat(findings).singleElement()
+            .hasStartSourceLocation(
                 SourceLocation(1, 1)
             )
-            .hasTextLocations("@SuppressWarnings")
+            .hasTextLocation("@SuppressWarnings")
+
+        assertThat(findings)
             .extracting("message")
             .containsExactly(
                 "The annotation `java.lang.SuppressWarnings` has been forbidden: it is a java annotation. Use `Suppress` instead.",
@@ -86,8 +87,8 @@ class ForbiddenAnnotationSpec(val env: KotlinEnvironmentContainer) {
         val findings = ForbiddenAnnotation(
             TestConfig(ANNOTATIONS to listOf("java.lang.SuppressWarnings"))
         ).lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-            .hasTextLocations("@java.lang.SuppressWarnings")
+        assertThat(findings).singleElement()
+            .hasTextLocation("@java.lang.SuppressWarnings")
     }
 
     @Test
@@ -122,8 +123,8 @@ class ForbiddenAnnotationSpec(val env: KotlinEnvironmentContainer) {
         val findings = ForbiddenAnnotation(
             TestConfig(ANNOTATIONS to listOf("java.lang.SuppressWarnings"))
         ).lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-            .hasTextLocations("@SuppressWarnings")
+        assertThat(findings).singleElement()
+            .hasTextLocation("@SuppressWarnings")
     }
 
     @Test
@@ -137,8 +138,8 @@ class ForbiddenAnnotationSpec(val env: KotlinEnvironmentContainer) {
         val findings = ForbiddenAnnotation(
             TestConfig(ANNOTATIONS to listOf("java.lang.SuppressWarnings"))
         ).lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-            .hasTextLocations("@SuppressWarnings")
+        assertThat(findings).singleElement()
+            .hasTextLocation("@SuppressWarnings")
     }
 
     @Test
@@ -152,8 +153,8 @@ class ForbiddenAnnotationSpec(val env: KotlinEnvironmentContainer) {
         val findings = ForbiddenAnnotation(
             TestConfig(ANNOTATIONS to listOf("java.lang.SuppressWarnings"))
         ).lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-            .hasTextLocations("@SuppressWarnings")
+        assertThat(findings).singleElement()
+            .hasTextLocation("@SuppressWarnings")
     }
 
     @Test
@@ -164,8 +165,8 @@ class ForbiddenAnnotationSpec(val env: KotlinEnvironmentContainer) {
         val findings = ForbiddenAnnotation(
             TestConfig(ANNOTATIONS to listOf("java.lang.SuppressWarnings"))
         ).lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-            .hasTextLocations("@SuppressWarnings")
+        assertThat(findings).singleElement()
+            .hasTextLocation("@SuppressWarnings")
     }
 
     @Test
@@ -180,8 +181,8 @@ class ForbiddenAnnotationSpec(val env: KotlinEnvironmentContainer) {
         val findings = ForbiddenAnnotation(
             TestConfig(ANNOTATIONS to listOf("java.lang.SuppressWarnings"))
         ).lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-            .hasTextLocations("@SuppressWarnings")
+        assertThat(findings).singleElement()
+            .hasTextLocation("@SuppressWarnings")
     }
 
     @Test
@@ -196,8 +197,8 @@ class ForbiddenAnnotationSpec(val env: KotlinEnvironmentContainer) {
         val findings = ForbiddenAnnotation(
             TestConfig(ANNOTATIONS to listOf("java.lang.SuppressWarnings"))
         ).lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-            .hasTextLocations("@SuppressWarnings")
+        assertThat(findings).singleElement()
+            .hasTextLocation("@SuppressWarnings")
     }
 
     @Test
@@ -210,8 +211,8 @@ class ForbiddenAnnotationSpec(val env: KotlinEnvironmentContainer) {
         val findings = ForbiddenAnnotation(
             TestConfig(ANNOTATIONS to listOf("kotlin.ReplaceWith"))
         ).lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-            .hasTextLocations("ReplaceWith")
+        assertThat(findings).singleElement()
+            .hasTextLocation("ReplaceWith")
     }
 
     @Test
@@ -222,8 +223,8 @@ class ForbiddenAnnotationSpec(val env: KotlinEnvironmentContainer) {
             fun f() = Unit
         """.trimIndent()
         val findings = ForbiddenAnnotation(Config.empty).lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-            .hasTextLocations("@Dep")
+        assertThat(findings).singleElement()
+            .hasTextLocation("@Dep")
     }
 
     @Test
@@ -234,8 +235,8 @@ class ForbiddenAnnotationSpec(val env: KotlinEnvironmentContainer) {
         val findings = ForbiddenAnnotation(
             TestConfig(ANNOTATIONS to listOf("kotlin.Suppress"))
         ).lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-            .hasTextLocations("@Suppress")
+        assertThat(findings).singleElement()
+            .hasTextLocation("@Suppress")
     }
 
     @Test
@@ -248,7 +249,7 @@ class ForbiddenAnnotationSpec(val env: KotlinEnvironmentContainer) {
         val findings = ForbiddenAnnotation(
             TestConfig(ANNOTATIONS to listOf("kotlin.Suppress"))
         ).lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-            .hasTextLocations("@Suppress")
+        assertThat(findings).singleElement()
+            .hasTextLocation("@Suppress")
     }
 }

@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.github.detekt.test.utils.KotlinEnvironmentContainer
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.lintWithContext
-import org.assertj.core.api.Assertions.assertThat
+import dev.detekt.api.Config
+import dev.detekt.test.assertThat
+import dev.detekt.test.lintWithContext
+import dev.detekt.test.utils.KotlinCoreEnvironmentTest
+import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
@@ -15,24 +15,24 @@ class UselessCallOnNotNullSpec(val env: KotlinEnvironmentContainer) {
     fun `reports when calling orEmpty on a list`() {
         val code = """val testList = listOf("string").orEmpty()"""
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings[0].message).isEqualTo("Remove redundant call to orEmpty")
+        assertThat(findings).singleElement()
+            .hasMessage("Remove redundant call to orEmpty")
     }
 
     @Test
     fun `reports when calling orEmpty on a list with a safe call`() {
         val code = """val testList = listOf("string")?.orEmpty()"""
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings[0].message).isEqualTo("Remove redundant call to orEmpty")
+        assertThat(findings).singleElement()
+            .hasMessage("Remove redundant call to orEmpty")
     }
 
     @Test
     fun `reports when calling orEmpty on a list in a chain`() {
         val code = """val testList = listOf("string").orEmpty().map { }"""
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings[0].message).isEqualTo("Remove redundant call to orEmpty")
+        assertThat(findings).singleElement()
+            .hasMessage("Remove redundant call to orEmpty")
     }
 
     @Test
@@ -40,8 +40,8 @@ class UselessCallOnNotNullSpec(val env: KotlinEnvironmentContainer) {
         // System.getenv().keys.toList() will be of type List<String!>.
         val code = """val testSequence = System.getenv().keys.toList().orEmpty()"""
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings[0].message).isEqualTo("Remove redundant call to orEmpty")
+        assertThat(findings).singleElement()
+            .hasMessage("Remove redundant call to orEmpty")
     }
 
     @Test
@@ -57,8 +57,8 @@ class UselessCallOnNotNullSpec(val env: KotlinEnvironmentContainer) {
     fun `reports when calling isNullOrBlank on a string with a safe call`() {
         val code = """val testString = ""?.isNullOrBlank()"""
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings[0].message).isEqualTo("Replace isNullOrBlank with isBlank")
+        assertThat(findings).singleElement()
+            .hasMessage("Replace isNullOrBlank with isBlank")
     }
 
     @Test
@@ -74,8 +74,8 @@ class UselessCallOnNotNullSpec(val env: KotlinEnvironmentContainer) {
     fun `reports when calling isNullOrEmpty on a string`() {
         val code = """val testString = "".isNullOrEmpty()"""
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings[0].message).isEqualTo("Replace isNullOrEmpty with isEmpty")
+        assertThat(findings).singleElement()
+            .hasMessage("Replace isNullOrEmpty with isEmpty")
     }
 
     @Test
@@ -97,8 +97,8 @@ class UselessCallOnNotNullSpec(val env: KotlinEnvironmentContainer) {
     fun `reports when calling orEmpty on a string`() {
         val code = """val testString = "".orEmpty()"""
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings[0].message).isEqualTo("Remove redundant call to orEmpty")
+        assertThat(findings).singleElement()
+            .hasMessage("Remove redundant call to orEmpty")
     }
 
     @Test
@@ -114,8 +114,8 @@ class UselessCallOnNotNullSpec(val env: KotlinEnvironmentContainer) {
     fun `reports when calling orEmpty on a sequence`() {
         val code = """val testSequence = listOf(1).asSequence().orEmpty()"""
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings[0].message).isEqualTo("Remove redundant call to orEmpty")
+        assertThat(findings).singleElement()
+            .hasMessage("Remove redundant call to orEmpty")
     }
 
     @Test
@@ -136,8 +136,8 @@ class UselessCallOnNotNullSpec(val env: KotlinEnvironmentContainer) {
             val list = listOf(1, 2, 3).orEmpty()
         """.trimIndent()
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings[0].message).isEqualTo("Remove redundant call to orEmpty")
+        assertThat(findings).singleElement()
+            .hasMessage("Remove redundant call to orEmpty")
     }
 
     @Test
@@ -146,8 +146,8 @@ class UselessCallOnNotNullSpec(val env: KotlinEnvironmentContainer) {
             val strings = listOfNotNull("string")
         """.trimIndent()
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings[0].message).isEqualTo("Replace listOfNotNull with listOf")
+        assertThat(findings).singleElement()
+            .hasMessage("Replace listOfNotNull with listOf")
     }
 
     @Test
@@ -156,8 +156,8 @@ class UselessCallOnNotNullSpec(val env: KotlinEnvironmentContainer) {
             val strings = listOfNotNull<String>()
         """.trimIndent()
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings[0].message).isEqualTo("Replace listOfNotNull with listOf")
+        assertThat(findings).singleElement()
+            .hasMessage("Replace listOfNotNull with listOf")
     }
 
     @Test
@@ -186,8 +186,8 @@ class UselessCallOnNotNullSpec(val env: KotlinEnvironmentContainer) {
             val strings = listOfNotNull(*nonNullableArray)
         """.trimIndent()
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings[0].message).isEqualTo("Replace listOfNotNull with listOf")
+        assertThat(findings).singleElement()
+            .hasMessage("Replace listOfNotNull with listOf")
     }
 
     @Test
@@ -219,8 +219,8 @@ class UselessCallOnNotNullSpec(val env: KotlinEnvironmentContainer) {
             val strings = listOfNotNull("string", *nonNullableArray, "foo", *otherNonNullableArray)
         """.trimIndent()
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings[0].message).isEqualTo("Replace listOfNotNull with listOf")
+        assertThat(findings).singleElement()
+            .hasMessage("Replace listOfNotNull with listOf")
     }
 
     @Test
@@ -242,7 +242,7 @@ class UselessCallOnNotNullSpec(val env: KotlinEnvironmentContainer) {
             }
         """.trimIndent()
 
-        val findings = subject.lintWithContext(env, code, compile = false)
+        val findings = subject.lintWithContext(env, code, allowCompilationErrors = true)
         assertThat(findings).isEmpty()
     }
 
@@ -250,13 +250,13 @@ class UselessCallOnNotNullSpec(val env: KotlinEnvironmentContainer) {
     fun `does not report when calling listOfNotNull with values whose type is derived and unknown`() {
         val code = """
             import kotlin.random.Random
-            
+
             fun test() {
                 listOfNotNull(unknown.takeIf { Random.nextBoolean() })
             }
         """.trimIndent()
 
-        val findings = subject.lintWithContext(env, code, compile = false)
+        val findings = subject.lintWithContext(env, code, allowCompilationErrors = true)
         assertThat(findings).isEmpty()
     }
 
@@ -268,7 +268,17 @@ class UselessCallOnNotNullSpec(val env: KotlinEnvironmentContainer) {
             }
         """.trimIndent()
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings[0].message).isEqualTo("Replace isNullOrEmpty with isEmpty")
+        assertThat(findings).singleElement()
+            .hasMessage("Replace isNullOrEmpty with isEmpty")
+    }
+
+    @Test
+    fun `reports when calling setOfNotNull on all non-nullable arguments`() {
+        val code = """
+            val strings = setOfNotNull("string")
+        """.trimIndent()
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).singleElement()
+            .hasMessage("Replace setOfNotNull with setOf")
     }
 }

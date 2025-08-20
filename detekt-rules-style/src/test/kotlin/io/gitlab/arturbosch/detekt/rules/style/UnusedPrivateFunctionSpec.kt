@@ -1,11 +1,11 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.github.detekt.test.utils.KotlinEnvironmentContainer
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.SourceLocation
-import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lintWithContext
+import dev.detekt.api.Config
+import dev.detekt.api.SourceLocation
+import dev.detekt.test.assertThat
+import dev.detekt.test.lintWithContext
+import dev.detekt.test.utils.KotlinCoreEnvironmentTest
+import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -25,7 +25,7 @@ class UnusedPrivateFunctionSpec(val env: KotlinEnvironmentContainer) {
                     fun unplug()
                 }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code, compile = false)).isEmpty()
+            assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true)).isEmpty()
         }
     }
 
@@ -40,7 +40,7 @@ class UnusedPrivateFunctionSpec(val env: KotlinEnvironmentContainer) {
                     fun baz(i: Int, s: String)
                 }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code, compile = false)).isEmpty()
+            assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true)).isEmpty()
         }
 
         @Test
@@ -51,7 +51,7 @@ class UnusedPrivateFunctionSpec(val env: KotlinEnvironmentContainer) {
                     fun baz(i: Int, s: String)
                 }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code, compile = false)).isEmpty()
+            assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true)).isEmpty()
         }
 
         @Test
@@ -60,7 +60,7 @@ class UnusedPrivateFunctionSpec(val env: KotlinEnvironmentContainer) {
                 expect fun bar(i: Int)
                 expect fun baz(i: Int, s: String)
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code, compile = false)).isEmpty()
+            assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true)).isEmpty()
         }
 
         @Test
@@ -69,7 +69,7 @@ class UnusedPrivateFunctionSpec(val env: KotlinEnvironmentContainer) {
                 expect class Foo1(private val bar: String) {}
                 expect class Foo2(bar: String) {}
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code, compile = false)).isEmpty()
+            assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true)).isEmpty()
         }
     }
 
@@ -96,7 +96,7 @@ class UnusedPrivateFunctionSpec(val env: KotlinEnvironmentContainer) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code, compile = false)).isEmpty()
+            assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true)).isEmpty()
         }
     }
 
@@ -128,7 +128,7 @@ class UnusedPrivateFunctionSpec(val env: KotlinEnvironmentContainer) {
                     })
                 }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code, compile = false)).isEmpty()
+            assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true)).isEmpty()
         }
 
         @Test
@@ -250,7 +250,7 @@ class UnusedPrivateFunctionSpec(val env: KotlinEnvironmentContainer) {
                 private fun doSomethingElse() {}
             """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code, compile = false)).isEmpty()
+            assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true)).isEmpty()
         }
     }
 
@@ -314,8 +314,8 @@ class UnusedPrivateFunctionSpec(val env: KotlinEnvironmentContainer) {
 
             val findings = subject.lintWithContext(env, code)
 
-            assertThat(findings).hasSize(1)
-            assertThat(findings[0].message).isEqualTo("Private function `foo` is unused.")
+            assertThat(findings).singleElement()
+                .hasMessage("Private function `foo` is unused.")
         }
 
         @Test
@@ -439,9 +439,8 @@ class UnusedPrivateFunctionSpec(val env: KotlinEnvironmentContainer) {
                         val answer = A(1, 1)
                     }
                 """.trimIndent()
-                assertThat(subject.lintWithContext(env, code))
-                    .hasSize(1)
-                    .hasStartSourceLocations(
+                assertThat(subject.lintWithContext(env, code)).singleElement()
+                    .hasStartSourceLocation(
                         SourceLocation(3, 30)
                     )
             }
@@ -455,9 +454,8 @@ class UnusedPrivateFunctionSpec(val env: KotlinEnvironmentContainer) {
                     fun answer() = A()(9)
                     val answer = answer()
                 """.trimIndent()
-                assertThat(subject.lintWithContext(env, code))
-                    .hasSize(1)
-                    .hasStartSourceLocations(
+                assertThat(subject.lintWithContext(env, code)).singleElement()
+                    .hasStartSourceLocation(
                         SourceLocation(3, 24)
                     )
             }
@@ -472,9 +470,8 @@ class UnusedPrivateFunctionSpec(val env: KotlinEnvironmentContainer) {
                     fun answer() = A()(nullableInt)
                     val answer = answer()
                 """.trimIndent()
-                assertThat(subject.lintWithContext(env, code))
-                    .hasSize(1)
-                    .hasStartSourceLocations(
+                assertThat(subject.lintWithContext(env, code)).singleElement()
+                    .hasStartSourceLocation(
                         SourceLocation(2, 24)
                     )
             }
@@ -526,9 +523,21 @@ class UnusedPrivateFunctionSpec(val env: KotlinEnvironmentContainer) {
                     fun f() {
                         var number: Int? = 0
                         number += 1
+                    }
+                    fun f2() {
+                        var number: Int? = 0
                         number -= 1
+                    }
+                    fun f3() {
+                        var number: Int? = 0
                         number *= 1
+                    }
+                    fun f4() {
+                        var number: Int? = 0
                         number /= 1
+                    }
+                    fun f5() {
+                        var number: Int? = 0
                         number %= 1
                     }
                     private operator fun Int?.plus(other: Int) = 1
@@ -679,7 +688,7 @@ class UnusedPrivateFunctionSpec(val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
-            assertThat(findings).hasSize(1).hasStartSourceLocations(
+            assertThat(findings).singleElement().hasStartSourceLocation(
                 SourceLocation(3, 30),
             )
         }
@@ -915,7 +924,7 @@ class UnusedPrivateFunctionSpec(val env: KotlinEnvironmentContainer) {
                     private fun foo() = 1
                 }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code)).hasSize(1).hasStartSourceLocation(5, 17)
+            assertThat(subject.lintWithContext(env, code)).singleElement().hasStartSourceLocation(5, 17)
         }
     }
 }

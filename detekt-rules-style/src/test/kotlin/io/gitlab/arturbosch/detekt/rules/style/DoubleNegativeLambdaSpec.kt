@@ -1,11 +1,11 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.ValueWithReason
-import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lint
-import io.gitlab.arturbosch.detekt.test.toConfig
+import dev.detekt.api.Config
+import dev.detekt.api.ValueWithReason
+import dev.detekt.test.TestConfig
+import dev.detekt.test.assertThat
+import dev.detekt.test.lint
+import dev.detekt.test.toConfig
 import org.junit.jupiter.api.Test
 
 class DoubleNegativeLambdaSpec {
@@ -220,8 +220,9 @@ class DoubleNegativeLambdaSpec {
         assertThat(findings).singleElement().hasMessage(
             "Double negative through using `!in`, `!=` inside a `takeUnless` lambda. Use `takeIf` instead."
         )
-        assertThat(findings).hasStartSourceLocation(3, 37)
-        assertThat(findings).hasEndSourceLocation(3, 74)
+        assertThat(findings).singleElement()
+            .hasStartSourceLocation(3, 37)
+            .hasEndSourceLocation(3, 74)
     }
 
     @Test

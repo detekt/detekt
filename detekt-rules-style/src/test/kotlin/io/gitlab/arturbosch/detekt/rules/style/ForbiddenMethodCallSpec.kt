@@ -1,11 +1,11 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.github.detekt.test.utils.KotlinEnvironmentContainer
-import io.gitlab.arturbosch.detekt.api.SourceLocation
-import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lintWithContext
+import dev.detekt.api.SourceLocation
+import dev.detekt.test.TestConfig
+import dev.detekt.test.assertThat
+import dev.detekt.test.lintWithContext
+import dev.detekt.test.utils.KotlinCoreEnvironmentTest
+import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -75,8 +75,8 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("java.io.PrintStream.println"))
         ).lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings).hasTextLocations(38 to 54)
+        assertThat(findings).singleElement()
+            .hasTextLocation(38 to 54)
     }
 
     @Test
@@ -90,8 +90,8 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("java.io.PrintStream.println"))
         ).lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings).hasTextLocations(49 to 65)
+        assertThat(findings).singleElement()
+            .hasTextLocation(49 to 65)
     }
 
     @Test
@@ -187,8 +187,8 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("java.time.LocalDate.now()"))
         ).lintWithContext(env, code)
-        assertThat(findings).hasStartSourceLocation(5, 26)
         assertThat(findings).singleElement()
+            .hasStartSourceLocation(5, 26)
             .hasMessage("The method `java.time.LocalDate.now()` has been forbidden in the detekt config.")
     }
 
@@ -206,8 +206,8 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("java.time.LocalDate.now(java.time.Clock)"))
         ).lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings).hasStartSourceLocation(6, 27)
+        assertThat(findings).singleElement()
+            .hasStartSourceLocation(6, 27)
     }
 
     @Test
@@ -221,8 +221,8 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("java.time.LocalDate.of(kotlin.Int, kotlin.Int, kotlin.Int)"))
         ).lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings).hasStartSourceLocation(3, 26)
+        assertThat(findings).singleElement()
+            .hasStartSourceLocation(3, 26)
     }
 
     @Test
@@ -236,8 +236,8 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("java.time.LocalDate.of(kotlin.Int,kotlin.Int,kotlin.Int)"))
         ).lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings).hasStartSourceLocation(3, 26)
+        assertThat(findings).singleElement()
+            .hasStartSourceLocation(3, 26)
     }
 
     @Test
@@ -254,8 +254,8 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
         val findings = ForbiddenMethodCall(
             TestConfig(METHODS to listOf("io.gitlab.arturbosch.detekt.rules.style.`some, test`()"))
         ).lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings).hasStartSourceLocation(6, 13)
+        assertThat(findings).singleElement()
+            .hasStartSourceLocation(6, 13)
     }
 
     @Test
@@ -275,8 +275,8 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
                     listOf("io.gitlab.arturbosch.detekt.rules.style.defaultParamsMethod(kotlin.String,kotlin.Int)")
             )
         ).lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings).hasStartSourceLocation(6, 13)
+        assertThat(findings).singleElement()
+            .hasStartSourceLocation(6, 13)
     }
 
     @Test
@@ -293,7 +293,7 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
         val methodName = "io.gitlab.arturbosch.detekt.rules.style.arrayMethod(kotlin.Array)"
         val findings = ForbiddenMethodCall(TestConfig(METHODS to listOf(methodName)))
             .lintWithContext(env, code)
-        assertThat(findings).hasSize(1).hasStartSourceLocation(6, 13)
+        assertThat(findings).singleElement().hasStartSourceLocation(6, 13)
     }
 
     @Test
@@ -310,7 +310,7 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
         val methodName = "io.gitlab.arturbosch.detekt.rules.style.listMethod(kotlin.collections.List)"
         val findings = ForbiddenMethodCall(TestConfig(METHODS to listOf(methodName)))
             .lintWithContext(env, code)
-        assertThat(findings).hasSize(1).hasStartSourceLocation(6, 13)
+        assertThat(findings).singleElement().hasStartSourceLocation(6, 13)
     }
 
     @Test
@@ -318,16 +318,18 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
         val code = """
             package io.gitlab.arturbosch.detekt.rules.style
             
-            fun varargMethod(vararg args: Any) = args.size
+            fun varargMethod(vararg args: Int) = args.size
+            fun varargMethod(vararg args: String) = args.size
             
             fun test() {
-                val s = varargMethod(arrayOf("test"))
+                val s = varargMethod(1, 2)
+                val r = varargMethod("test")
             }
         """.trimIndent()
-        val methodName = "io.gitlab.arturbosch.detekt.rules.style.varargMethod(kotlin.Array)"
+        val methodName = "io.gitlab.arturbosch.detekt.rules.style.varargMethod(vararg kotlin.String)"
         val findings = ForbiddenMethodCall(TestConfig(METHODS to listOf(methodName)))
             .lintWithContext(env, code)
-        assertThat(findings).hasSize(1).hasStartSourceLocation(6, 13)
+        assertThat(findings).singleElement().hasStartSourceLocation(8, 13)
     }
 
     @Test
@@ -348,7 +350,7 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
         val methodName = "io.gitlab.arturbosch.detekt.rules.style.TestClass.Companion.staticMethod()"
         val findings = ForbiddenMethodCall(TestConfig(METHODS to listOf(methodName)))
             .lintWithContext(env, code)
-        assertThat(findings).hasSize(1).hasStartSourceLocation(10, 15)
+        assertThat(findings).singleElement().hasStartSourceLocation(10, 15)
     }
 
     @Test
@@ -370,7 +372,7 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
         val methodName = "io.gitlab.arturbosch.detekt.rules.style.TestClass.Companion.staticMethod()"
         val findings = ForbiddenMethodCall(TestConfig(METHODS to listOf(methodName)))
             .lintWithContext(env, code)
-        assertThat(findings).hasSize(1).hasStartSourceLocation(11, 15)
+        assertThat(findings).singleElement().hasStartSourceLocation(11, 15)
     }
 
     @Test
@@ -599,8 +601,7 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
             val findings = ForbiddenMethodCall(
                 TestConfig(METHODS to listOf("kotlin.runCatching(() -> R)"))
             ).lintWithContext(env, code)
-            assertThat(findings)
-                .hasSize(1)
+            assertThat(findings).singleElement()
                 .hasStartSourceLocation(5, 16)
         }
 
@@ -609,8 +610,7 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
             val findings = ForbiddenMethodCall(
                 TestConfig(METHODS to listOf("kotlin.runCatching(T, (T) -> R)"))
             ).lintWithContext(env, code)
-            assertThat(findings)
-                .hasSize(1)
+            assertThat(findings).singleElement()
                 .hasStartSourceLocation(6, 9)
         }
     }
@@ -648,6 +648,25 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
                 TestConfig(METHODS to listOf("java.util.Calendar.getFirstDayOfWeek"))
             ).lintWithContext(env, code)
             assertThat(findings).hasSize(1)
+        }
+
+        @Test
+        fun `should report property getter and setter call`() {
+            val code = """
+                import java.util.Calendar
+                
+                fun main() {
+                    val calendar = Calendar.getInstance()
+                    val day = calendar.firstDayOfWeek
+                    calendar.firstDayOfWeek = 1
+                }
+            """.trimIndent()
+            val findings = ForbiddenMethodCall(
+                TestConfig(
+                    METHODS to listOf("java.util.Calendar.getFirstDayOfWeek", "java.util.Calendar.setFirstDayOfWeek"),
+                )
+            ).lintWithContext(env, code)
+            assertThat(findings).hasSize(2)
         }
     }
 
@@ -761,12 +780,12 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
                     val x = BigDecimal("3.14")
                 """.trimIndent()
                 val findings = ForbiddenMethodCall(TestConfig()).lintWithContext(env, code)
-                assertThat(findings).hasSize(1)
-                assertThat(findings.first()).hasMessage(
-                    "The method `java.math.BigDecimal.<init>(kotlin.String)` has " +
-                        "been forbidden: using `BigDecimal(String)` can result in a " +
-                        "`NumberFormatException`. Use `String.toBigDecimalOrNull()`"
-                )
+                assertThat(findings).singleElement()
+                    .hasMessage(
+                        "The method `java.math.BigDecimal.<init>(kotlin.String)` has " +
+                            "been forbidden: using `BigDecimal(String)` can result in a " +
+                            "`NumberFormatException`. Use `String.toBigDecimalOrNull()`"
+                    )
             }
 
             @Test

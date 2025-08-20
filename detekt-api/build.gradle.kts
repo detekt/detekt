@@ -2,7 +2,7 @@ plugins {
     id("module")
     id("public-api")
     id("java-test-fixtures")
-    id("dev.drewhamilton.poko") version "0.18.7"
+    id("dev.drewhamilton.poko") version "0.19.3"
 }
 
 dependencies {
@@ -11,9 +11,10 @@ dependencies {
     implementation(projects.detektUtils)
 
     testImplementation(projects.detektTest)
+    testImplementation(projects.detektTestUtils)
     testImplementation(libs.assertj.core)
-    testFixturesImplementation(projects.detektTestUtils)
-    testFixturesImplementation(libs.poko.annotations)
+
+    testFixturesApi(libs.kotlin.compiler)
 }
 
 detekt {
@@ -30,5 +31,5 @@ listOf(configurations.testFixturesApiElements, configurations.testFixturesRuntim
 }
 
 apiValidation {
-    ignoredPackages.add("io.gitlab.arturbosch.detekt.api.internal")
+    ignoredPackages.add("dev.detekt.api.internal")
 }

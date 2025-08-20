@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.github.detekt.test.utils.KotlinEnvironmentContainer
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lintWithContext
+import dev.detekt.api.Config
+import dev.detekt.test.assertThat
+import dev.detekt.test.lintWithContext
+import dev.detekt.test.utils.KotlinCoreEnvironmentTest
+import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -192,7 +192,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinEnvironmentContainer) {
                         inner class B {
                             val fizz = "BUZZ"
                             fun printFoo() {
-                                if (fizz == "BUZZ" && foo) {
+                                if (fizz == "BUZZ" && foo == "BAR") {
                                     println("FOO")
                                 }
                             }
@@ -200,7 +200,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinEnvironmentContainer) {
                     }
                 """.trimIndent()
 
-                assertThat(subject.lintWithContext(env, code, compile = false)).isEmpty()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
         }
 

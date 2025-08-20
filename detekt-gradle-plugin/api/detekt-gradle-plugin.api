@@ -15,7 +15,7 @@ public final class io/github/detekt/gradle/DetektKotlinCompilerPlugin : org/jetb
 	public fun isApplicable (Lorg/jetbrains/kotlin/gradle/plugin/KotlinCompilation;)Z
 }
 
-public class io/github/detekt/gradle/extensions/DetektReport {
+public class io/github/detekt/gradle/extensions/DetektCompilerPluginReport {
 	public fun <init> (Ljava/lang/String;Lorg/gradle/api/model/ObjectFactory;)V
 	public final fun getDestination ()Lorg/gradle/api/file/RegularFileProperty;
 	public final fun getEnabled ()Lorg/gradle/api/provider/Property;
@@ -31,11 +31,11 @@ public class io/github/detekt/gradle/extensions/KotlinCompileTaskDetektExtension
 	public final fun getDebug ()Lorg/gradle/api/provider/Property;
 	public final fun getDisableDefaultRuleSets ()Lorg/gradle/api/provider/Property;
 	public final fun getExcludes ()Lorg/gradle/api/provider/SetProperty;
-	public final fun getHtml ()Lio/github/detekt/gradle/extensions/DetektReport;
+	public final fun getHtml ()Lio/github/detekt/gradle/extensions/DetektCompilerPluginReport;
 	public final fun getParallel ()Lorg/gradle/api/provider/Property;
 	public final fun getReports ()Lorg/gradle/api/NamedDomainObjectContainer;
-	public final fun getSarif ()Lio/github/detekt/gradle/extensions/DetektReport;
-	public final fun getXml ()Lio/github/detekt/gradle/extensions/DetektReport;
+	public final fun getSarif ()Lio/github/detekt/gradle/extensions/DetektCompilerPluginReport;
+	public final fun getXml ()Lio/github/detekt/gradle/extensions/DetektCompilerPluginReport;
 	public final fun isEnabled ()Lorg/gradle/api/provider/Property;
 }
 

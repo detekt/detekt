@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.TestConfig
+import dev.detekt.test.assertThat
+import dev.detekt.test.lint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -20,11 +20,10 @@ class MultilineRawStringIndentationSpec {
                 $TQ.trimIndent()
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings)
-                .hasSize(1)
+            assertThat(findings).singleElement()
                 .hasStartSourceLocation(2, 1)
                 .hasEndSourceLocation(2, 13)
-                .hasTextLocations("Hello world!")
+                .hasTextLocation("Hello world!")
         }
 
         @Test
@@ -50,11 +49,10 @@ class MultilineRawStringIndentationSpec {
                 $TQ.trimIndent()
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings)
-                .hasSize(1)
+            assertThat(findings).singleElement()
                 .hasStartSourceLocation(2, 2)
                 .hasEndSourceLocation(2, 14)
-                .hasTextLocations("Hello world!")
+                .hasTextLocation("Hello world!")
         }
 
         @Test
@@ -66,11 +64,10 @@ class MultilineRawStringIndentationSpec {
                 $TQ.trimIndent()
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings)
-                .hasSize(1)
+            assertThat(findings).singleElement()
                 .hasStartSourceLocation(2, 5)
                 .hasEndSourceLocation(3, 18)
-                .hasTextLocations(" Hello world!\n     How are you?")
+                .hasTextLocation(" Hello world!\n     How are you?")
         }
 
         @Test
@@ -123,8 +120,7 @@ class MultilineRawStringIndentationSpec {
                 $TQ.trimIndent()
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings)
-                .hasSize(1)
+            assertThat(findings).singleElement()
                 .hasStartSourceLocation(3, 1)
                 .hasEndSourceLocation(3, 3)
         }
@@ -138,8 +134,7 @@ class MultilineRawStringIndentationSpec {
                     $TQ.trimIndent()
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings)
-                .hasSize(1)
+            assertThat(findings).singleElement()
                 .hasStartSourceLocation(4, 1)
                 .hasEndSourceLocation(4, 5)
         }
@@ -156,8 +151,7 @@ class MultilineRawStringIndentationSpec {
                     $TQ.trimIndent()
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings)
-                .hasSize(1)
+            assertThat(findings).singleElement()
                 .hasStartSourceLocation(3, 5)
                 .hasEndSourceLocation(3, 17)
         }
@@ -186,8 +180,7 @@ class MultilineRawStringIndentationSpec {
                     $TQ.trimIndent()
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings)
-                .hasSize(1)
+            assertThat(findings).singleElement()
                 .hasStartSourceLocation(3, 6)
                 .hasEndSourceLocation(3, 18)
         }
@@ -202,11 +195,10 @@ class MultilineRawStringIndentationSpec {
                     $TQ.trimIndent()
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings)
-                .hasSize(1)
+            assertThat(findings).singleElement()
                 .hasStartSourceLocation(3, 9)
                 .hasEndSourceLocation(4, 22)
-                .hasTextLocations(" Hello world!\n         How are you?")
+                .hasTextLocation(" Hello world!\n         How are you?")
         }
 
         @Test
@@ -247,8 +239,7 @@ class MultilineRawStringIndentationSpec {
                         $TQ.trimIndent()
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings)
-                .hasSize(1)
+            assertThat(findings).singleElement()
                 .hasStartSourceLocation(5, 5)
                 .hasEndSourceLocation(5, 9)
         }
@@ -263,8 +254,7 @@ class MultilineRawStringIndentationSpec {
                   $TQ.trimIndent()
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings)
-                .hasSize(1)
+            assertThat(findings).singleElement()
                 .hasStartSourceLocation(5, 3)
                 .hasEndSourceLocation(5, 6)
         }

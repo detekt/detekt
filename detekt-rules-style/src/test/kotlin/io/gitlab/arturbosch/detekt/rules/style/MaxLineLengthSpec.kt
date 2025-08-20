@@ -1,10 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.SourceLocation
-import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.TestConfig
+import dev.detekt.test.assertThat
+import dev.detekt.test.lint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.assertj.core.api.Assertions.assertThat as doAssert
@@ -399,9 +398,8 @@ class MaxLineLengthSpec {
             )
 
             val findings = rule.lint(code)
-            assertThat(findings)
-                .hasSize(1)
-                .hasStartSourceLocations(SourceLocation(6, 1))
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(6, 1)
                 .hasEndSourceLocation(6, 109)
         }
     }
@@ -445,8 +443,8 @@ class MaxLineLengthSpec {
                 // that is the right length
             """.trimIndent()
         )
-        assertThat(findings).hasSize(1)
-        assertThat(findings).hasTextLocations(22 to 96)
+        assertThat(findings).singleElement()
+            .hasTextLocation(22 to 96)
     }
 
     @Test

@@ -1,11 +1,11 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
-import io.gitlab.arturbosch.detekt.api.Rule
+import dev.detekt.api.ActiveByDefault
+import dev.detekt.api.Config
+import dev.detekt.api.Entity
+import dev.detekt.api.Finding
+import dev.detekt.api.RequiresAnalysisApi
+import dev.detekt.api.Rule
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
@@ -19,8 +19,8 @@ import org.jetbrains.kotlin.psi.KtArrayAccessExpression
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtPsiUtil
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
-import org.jetbrains.kotlin.psi2ir.deparenthesize
 
 /**
  * This rule detects `?: emptyList()` that can be replaced with `orEmpty()` call.
@@ -60,7 +60,7 @@ class UseOrEmpty(config: Config) :
         val leftType = analyze(left) {
             val leftType = left.expressionType ?: return
             if (!leftType.nullability.isNullable) return
-            left.deparenthesize().let {
+            KtPsiUtil.safeDeparenthesize(left).let {
                 if (it is KtArrayAccessExpression) {
                     val called = it.resolveToCall()?.singleFunctionCallOrNull()?.symbol as? KaNamedFunctionSymbol
                     if (called?.isOperator == true && called.typeParameters.isNotEmpty()) return

@@ -6,10 +6,10 @@ plugins {
 }
 
 nexusPublishing {
-    packageGroup = "io.gitlab.arturbosch"
-
     repositories {
         create("sonatype") {
+            nexusUrl = uri("https://ossrh-staging-api.central.sonatype.com/service/local/")
+            snapshotRepositoryUrl = uri("https://central.sonatype.com/repository/maven-snapshots/")
             username = providers.environmentVariable("ORG_GRADLE_PROJECT_SONATYPE_USERNAME")
             password = providers.environmentVariable("ORG_GRADLE_PROJECT_SONATYPE_PASSWORD")
         }
@@ -116,24 +116,4 @@ tasks.register("publishToMavenLocal") {
         }
     }
     dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":publishToMavenLocal"))
-}
-
-tasks.register("publishAllToSonatypeSnapshot") {
-    description = "Publish all the projects to Sonatype Snapshot Repository"
-    subprojects {
-        if (this.plugins.hasPlugin("publishing")) {
-            dependsOn(tasks.named("publishAllPublicationsToSonatypeSnapshotRepository"))
-        }
-    }
-    dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":publishAllPublicationsToSonatypeSnapshotRepository"))
-}
-
-tasks.register("publishAllToMavenCentral") {
-    description = "Publish all the projects to Sonatype Staging Repository"
-    subprojects {
-        if (this.plugins.hasPlugin("publishing")) {
-            dependsOn(tasks.named("publishAllPublicationsToMavenCentralRepository"))
-        }
-    }
-    dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":publishAllPublicationsToMavenCentralRepository"))
 }

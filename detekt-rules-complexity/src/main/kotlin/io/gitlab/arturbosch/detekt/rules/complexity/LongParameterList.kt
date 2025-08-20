@@ -1,15 +1,15 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
-import io.github.detekt.psi.AnnotationExcluder
-import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Configuration
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
-import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.rules.isOverride
+import dev.detekt.api.ActiveByDefault
+import dev.detekt.api.Config
+import dev.detekt.api.Configuration
+import dev.detekt.api.Entity
+import dev.detekt.api.Finding
+import dev.detekt.api.RequiresAnalysisApi
+import dev.detekt.api.Rule
+import dev.detekt.api.config
+import dev.detekt.psi.AnnotationExcluder
+import dev.detekt.psi.isOverride
 import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtConstructor
@@ -32,7 +32,7 @@ class LongParameterList(config: Config) :
             "used to control complex algorithms and violate the Single Responsibility Principle. " +
             "Prefer functions with short parameter lists."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     @Configuration("number of function parameters required to trigger the rule")
     private val allowedFunctionParameters: Int by config(DEFAULT_ALLOWED_FUNCTION_PARAMETERS)
@@ -57,7 +57,7 @@ class LongParameterList(config: Config) :
     private lateinit var annotationExcluder: AnnotationExcluder
 
     override fun visitKtFile(file: KtFile) {
-        annotationExcluder = AnnotationExcluder(file, ignoreAnnotatedParameter, bindingContext)
+        annotationExcluder = AnnotationExcluder(file, ignoreAnnotatedParameter)
         super.visitKtFile(file)
     }
 

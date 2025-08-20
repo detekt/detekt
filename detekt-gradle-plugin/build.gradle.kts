@@ -13,7 +13,7 @@ plugins {
     id("com.gradle.plugin-publish") version "1.3.1"
     // We use this published version of the detekt plugin to self analyse this project.
     id("io.gitlab.arturbosch.detekt") version "1.23.8"
-    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.18.0"
+    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.18.1"
     id("org.jetbrains.dokka") version "2.0.0"
     id("signing")
 }
@@ -23,7 +23,7 @@ repositories {
     google()
 }
 
-group = "io.gitlab.arturbosch.detekt"
+group = "dev.detekt"
 version = Versions.currentOrSnapshot()
 
 detekt {
@@ -39,7 +39,8 @@ dokka {
     }
 
     dokkaSourceSets.configureEach {
-        apiVersion = "1.4"
+        // Using `set` instead of simple property assignment to work around this Gradle 9 incompatibility: https://github.com/Kotlin/dokka/issues/4096
+        apiVersion.set("1.4")
         modulePath = "detekt-gradle-plugin"
 
         externalDocumentationLinks {
@@ -67,6 +68,7 @@ testing {
         register<JvmTestSuite>("functionalTest") {
             dependencies {
                 implementation(libs.assertj.core)
+                implementation(project())
                 implementation(testFixtures(project()))
             }
 
@@ -99,7 +101,7 @@ testing {
 
 kotlin {
     @OptIn(ExperimentalBuildToolsApi::class, ExperimentalKotlinGradlePluginApi::class)
-    compilerVersion = "2.0.21"
+    compilerVersion = "2.1.21"
 
     compilerOptions {
         suppressWarnings = true
@@ -108,7 +110,8 @@ kotlin {
         allWarningsAsErrors = false
         // The apiVersion Gradle property cannot be used here, so set api version using free compiler args.
         // https://youtrack.jetbrains.com/issue/KT-72247/KGP-Cannot-use-unsupported-API-version-with-compilerVersion-that-supports-it#focus=Comments-27-11050897.0-0
-        freeCompilerArgs.addAll("-api-version", "1.4")
+        freeCompilerArgs.addAll("-language-version", "1.8")
+        freeCompilerArgs.addAll("-api-version", "1.7")
     }
 
     // Some functional tests reference internal functions in the Gradle plugin. This should become unnecessary as further
@@ -119,7 +122,6 @@ kotlin {
 }
 
 val testKitRuntimeOnly by configurations.registering
-val testKitJava17RuntimeOnly by configurations.registering
 val testKitGradleMinVersionRuntimeOnly by configurations.registering
 
 dependencies {
@@ -128,16 +130,15 @@ dependencies {
     compileOnly(libs.kotlin.gradlePluginApi)
     implementation(libs.sarif4k)
     testFixturesCompileOnly(libs.jetbrains.annotations)
-    compileOnly(libs.jetbrains.annotations)
 
     testKitRuntimeOnly(libs.kotlin.gradle.plugin)
+    testKitRuntimeOnly(libs.android.gradle.plugin)
     testKitGradleMinVersionRuntimeOnly(libs.kotlin.gradle.plugin) {
         attributes {
             // Set this value to the minimum Gradle version tested in testKitGradleMinVersionRuntimeOnly source set
             attribute(GradlePluginApiVersion.GRADLE_PLUGIN_API_VERSION_ATTRIBUTE, objects.named("7.6.3"))
         }
     }
-    testKitJava17RuntimeOnly(libs.android.gradle.plugin)
 
     // We use this published version of the detekt-formatting to self analyse this project.
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.8")
@@ -148,15 +149,15 @@ gradlePlugin {
     vcsUrl = "https://github.com/detekt/detekt"
     plugins {
         create("detektBasePlugin") {
-            id = "io.github.detekt.gradle.base"
+            id = "dev.detekt.gradle.base"
             implementationClass = "dev.detekt.gradle.plugin.DetektBasePlugin"
         }
         create("detektPlugin") {
-            id = "io.gitlab.arturbosch.detekt"
+            id = "dev.detekt"
             implementationClass = "io.gitlab.arturbosch.detekt.DetektPlugin"
         }
         create("detektCompilerPlugin") {
-            id = "io.github.detekt.gradle.compiler-plugin"
+            id = "dev.detekt.gradle.compiler-plugin"
             implementationClass = "io.github.detekt.gradle.DetektKotlinCompilerPlugin"
         }
         configureEach {
@@ -207,10 +208,6 @@ tasks {
     // Manually inject dependency to gradle-testkit since the default injected plugin classpath is from `main.runtime`.
     pluginUnderTestMetadata {
         pluginClasspath.from(testKitRuntimeOnly)
-
-        if (named<Test>("functionalTest").get().javaVersion.isCompatibleWith(JavaVersion.VERSION_17)) {
-            pluginClasspath.from(testKitJava17RuntimeOnly)
-        }
     }
 
     validatePlugins {
@@ -254,4 +251,22 @@ tasks {
 with(components["java"] as AdhocComponentWithVariants) {
     withVariantsFromConfiguration(configurations["testFixturesApiElements"]) { skip() }
     withVariantsFromConfiguration(configurations["testFixturesRuntimeElements"]) { skip() }
+}
+
+dependencyAnalysis {
+    issues {
+        all {
+            onAny {
+                severity("fail")
+            }
+        }
+    }
+    structure {
+        // Could potentially remove in future if DAGP starts handling this natively https://github.com/autonomousapps/dependency-analysis-gradle-plugin/issues/1269
+        bundle("junit-jupiter") {
+            includeDependency("org.junit.jupiter:junit-jupiter")
+            includeDependency("org.junit.jupiter:junit-jupiter-api")
+            includeDependency("org.junit.jupiter:junit-jupiter-params")
+        }
+    }
 }

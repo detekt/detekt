@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
-import io.github.detekt.test.utils.KotlinEnvironmentContainer
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lintWithContext
+import dev.detekt.api.Config
+import dev.detekt.test.assertThat
+import dev.detekt.test.lintWithContext
+import dev.detekt.test.utils.KotlinCoreEnvironmentTest
+import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -62,7 +62,8 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinEnvironmentContainer) {
             val code = """data class O (var isDefault: Int)"""
             val findings = subject.lintWithContext(env, code)
 
-            assertThat(findings).hasSize(1)
+            assertThat(findings).singleElement()
+                .hasMessage("Non-boolean properties shouldn't start with 'is' prefix. Actual type of isDefault: Int")
         }
 
         @Test
@@ -311,7 +312,7 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinEnvironmentContainer) {
             """.trimIndent()
 
             // BuildConfig is missing in this test so we can't compile it
-            val findings = subject.lintWithContext(env, code, compile = false)
+            val findings = subject.lintWithContext(env, code, allowCompilationErrors = true)
 
             assertThat(findings).isEmpty()
         }

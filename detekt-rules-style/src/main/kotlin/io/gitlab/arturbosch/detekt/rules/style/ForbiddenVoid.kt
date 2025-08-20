@@ -1,15 +1,16 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Configuration
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
-import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.rules.fqNameOrNull
-import io.gitlab.arturbosch.detekt.rules.isOverride
+import dev.detekt.api.ActiveByDefault
+import dev.detekt.api.Config
+import dev.detekt.api.Configuration
+import dev.detekt.api.Entity
+import dev.detekt.api.Finding
+import dev.detekt.api.RequiresAnalysisApi
+import dev.detekt.api.Rule
+import dev.detekt.api.config
+import dev.detekt.psi.isOverride
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
@@ -17,7 +18,6 @@ import org.jetbrains.kotlin.psi.KtTypeArgumentList
 import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
-import org.jetbrains.kotlin.resolve.bindingContextUtil.getAbbreviatedTypeOrType
 
 /**
  * This rule detects usages of `Void` and reports them as forbidden.
@@ -40,7 +40,7 @@ class ForbiddenVoid(config: Config) :
         config,
         "`Unit` should be used instead of `Void`."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     @Configuration("ignores void types in signatures of overridden functions")
     private val ignoreOverridden: Boolean by config(false)
@@ -49,9 +49,9 @@ class ForbiddenVoid(config: Config) :
     private val ignoreUsageInGenerics: Boolean by config(false)
 
     override fun visitTypeReference(typeReference: KtTypeReference) {
-        val kotlinType = typeReference.getAbbreviatedTypeOrType(bindingContext) ?: return
+        val classId = analyze(typeReference) { typeReference.type.symbol?.classId } ?: return
 
-        if (kotlinType.fqNameOrNull() == VOID_FQ_NAME) {
+        if (classId.asSingleFqName() == VOID_FQ_NAME) {
             if (ignoreOverridden && typeReference.isPartOfOverriddenSignature()) {
                 return
             }

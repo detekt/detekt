@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.github.detekt.test.utils.KotlinEnvironmentContainer
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lintWithContext
+import dev.detekt.api.Config
+import dev.detekt.test.assertThat
+import dev.detekt.test.lintWithContext
+import dev.detekt.test.utils.KotlinCoreEnvironmentTest
+import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -24,7 +24,7 @@ class UseOrEmptySpec(val env: KotlinEnvironmentContainer) {
             val findings = subject.lintWithContext(env, code)
             assertThat(findings).singleElement()
                 .hasMessage("This '?: emptyList()' can be replaced with 'orEmpty()' call")
-            assertThat(findings).hasStartSourceLocation(2, 13)
+            assertThat(findings).singleElement().hasStartSourceLocation(2, 13)
         }
 
         @Test

@@ -1,11 +1,11 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.github.detekt.test.utils.KotlinEnvironmentContainer
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.SourceLocation
-import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lintWithContext
+import dev.detekt.api.Config
+import dev.detekt.api.SourceLocation
+import dev.detekt.test.assertThat
+import dev.detekt.test.lintWithContext
+import dev.detekt.test.utils.KotlinCoreEnvironmentTest
+import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -29,9 +29,8 @@ class ObjectLiteralToLambdaSpec {
                         }
                     }
                 """.trimIndent()
-                assertThat(subject.lintWithContext(env, code))
-                    .hasSize(1)
-                    .hasStartSourceLocations(SourceLocation(4, 9))
+                assertThat(subject.lintWithContext(env, code)).singleElement()
+                    .hasStartSourceLocation(SourceLocation(4, 9))
             }
 
             @Test
@@ -47,9 +46,8 @@ class ObjectLiteralToLambdaSpec {
                         }
                     }
                 """.trimIndent()
-                assertThat(subject.lintWithContext(env, code))
-                    .hasSize(1)
-                    .hasStartSourceLocations(SourceLocation(5, 5))
+                assertThat(subject.lintWithContext(env, code)).singleElement()
+                    .hasStartSourceLocation(SourceLocation(5, 5))
             }
 
             @Test
@@ -67,9 +65,8 @@ class ObjectLiteralToLambdaSpec {
                         }
                     }
                 """.trimIndent()
-                assertThat(subject.lintWithContext(env, code))
-                    .hasSize(1)
-                    .hasStartSourceLocations(SourceLocation(6, 9))
+                assertThat(subject.lintWithContext(env, code)).singleElement()
+                    .hasStartSourceLocation(SourceLocation(6, 9))
             }
 
             @Test
@@ -84,9 +81,8 @@ class ObjectLiteralToLambdaSpec {
                         }
                     }
                 """.trimIndent()
-                assertThat(subject.lintWithContext(env, code))
-                    .hasSize(1)
-                    .hasStartSourceLocations(SourceLocation(4, 9))
+                assertThat(subject.lintWithContext(env, code)).singleElement()
+                    .hasStartSourceLocation(SourceLocation(4, 9))
             }
 
             @Test
@@ -101,9 +97,8 @@ class ObjectLiteralToLambdaSpec {
                         }
                     }
                 """.trimIndent()
-                assertThat(subject.lintWithContext(env, code))
-                    .hasSize(1)
-                    .hasStartSourceLocations(SourceLocation(5, 9))
+                assertThat(subject.lintWithContext(env, code)).singleElement()
+                    .hasStartSourceLocation(SourceLocation(5, 9))
             }
 
             @Test
@@ -121,9 +116,8 @@ class ObjectLiteralToLambdaSpec {
                         }
                     }
                 """.trimIndent()
-                assertThat(subject.lintWithContext(env, code))
-                    .hasSize(1)
-                    .hasStartSourceLocations(SourceLocation(7, 5))
+                assertThat(subject.lintWithContext(env, code)).singleElement()
+                    .hasStartSourceLocation(SourceLocation(7, 5))
             }
 
             @Test
@@ -136,9 +130,8 @@ class ObjectLiteralToLambdaSpec {
                         override fun foo() = 3
                     }
                 """.trimIndent()
-                assertThat(subject.lintWithContext(env, code))
-                    .hasSize(1)
-                    .hasStartSourceLocations(SourceLocation(4, 9))
+                assertThat(subject.lintWithContext(env, code)).singleElement()
+                    .hasStartSourceLocation(SourceLocation(4, 9))
             }
         }
 
@@ -312,9 +305,8 @@ class ObjectLiteralToLambdaSpec {
                         }
                     }
                 """.trimIndent()
-                assertThat(subject.lintWithContext(env, code))
-                    .hasSize(1)
-                    .hasStartSourceLocations(SourceLocation(1, 9))
+                assertThat(subject.lintWithContext(env, code)).singleElement()
+                    .hasStartSourceLocation(SourceLocation(1, 9))
             }
 
             @Test
@@ -327,9 +319,8 @@ class ObjectLiteralToLambdaSpec {
                         }
                     }
                 """.trimIndent()
-                assertThat(subject.lintWithContext(env, code))
-                    .hasSize(1)
-                    .hasStartSourceLocations(SourceLocation(2, 9))
+                assertThat(subject.lintWithContext(env, code)).singleElement()
+                    .hasStartSourceLocation(SourceLocation(2, 9))
             }
 
             @Test
@@ -439,9 +430,8 @@ class ObjectLiteralToLambdaSpec {
                         }
                     }
                 """.trimIndent()
-                assertThat(subject.lintWithContext(env, code))
-                    .hasSize(1)
-                    .hasStartSourceLocations(SourceLocation(6, 5))
+                assertThat(subject.lintWithContext(env, code)).singleElement()
+                    .hasStartSourceLocation(SourceLocation(6, 5))
             }
 
             @Test
@@ -461,9 +451,8 @@ class ObjectLiteralToLambdaSpec {
                         }
                     }
                 """.trimIndent()
-                assertThat(subject.lintWithContext(env, code))
-                    .hasSize(1)
-                    .hasStartSourceLocations(SourceLocation(7, 9))
+                assertThat(subject.lintWithContext(env, code)).singleElement()
+                    .hasStartSourceLocation(SourceLocation(7, 9))
             }
 
             @Test
@@ -505,9 +494,8 @@ class ObjectLiteralToLambdaSpec {
                     val a = newObject() === newObject() // false
                     val b = lambda() === lambda() // true
                 """.trimIndent()
-                assertThat(subject.lintWithContext(env, code))
-                    .hasSize(1)
-                    .hasStartSourceLocations(SourceLocation(5, 19))
+                assertThat(subject.lintWithContext(env, code)).singleElement()
+                    .hasStartSourceLocation(SourceLocation(5, 19))
             }
         }
     }
@@ -530,7 +518,7 @@ class ObjectLiteralToLambdaSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code, compile = false)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -543,7 +531,7 @@ class ObjectLiteralToLambdaSpec {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code, compile = false)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -559,7 +547,7 @@ class ObjectLiteralToLambdaSpec {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code, compile = false)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 }

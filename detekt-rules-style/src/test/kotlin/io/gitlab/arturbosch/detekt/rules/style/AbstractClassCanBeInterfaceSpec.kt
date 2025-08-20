@@ -1,11 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.github.detekt.test.utils.KotlinEnvironmentContainer
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lintWithContext
+import dev.detekt.api.Config
+import dev.detekt.test.assertThat
+import dev.detekt.test.lintWithContext
+import dev.detekt.test.utils.KotlinCoreEnvironmentTest
+import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -27,8 +26,9 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
-            assertFindingMessage(findings, message)
-            assertThat(findings).hasStartSourceLocation(1, 16)
+            assertThat(findings).singleElement()
+                .hasMessage(message)
+                .hasStartSourceLocation(1, 16)
         }
 
         @Nested
@@ -37,29 +37,33 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
             fun `case 1`() {
                 val code = "abstract class A"
                 val findings = subject.lintWithContext(env, code)
-                assertFindingMessage(findings, message)
-                assertThat(findings).hasStartSourceLocation(1, 16)
+                assertThat(findings).singleElement()
+                    .hasMessage(message)
+                    .hasStartSourceLocation(1, 16)
             }
 
             @Test
             fun `case 2`() {
                 val code = "abstract class A()"
                 val findings = subject.lintWithContext(env, code)
-                assertFindingMessage(findings, message)
+                assertThat(findings).singleElement()
+                    .hasMessage(message)
             }
 
             @Test
             fun `case 3`() {
                 val code = "abstract class A {}"
                 val findings = subject.lintWithContext(env, code)
-                assertFindingMessage(findings, message)
+                assertThat(findings).singleElement()
+                    .hasMessage(message)
             }
 
             @Test
             fun `case 4`() {
                 val code = "abstract class A() {}"
                 val findings = subject.lintWithContext(env, code)
-                assertFindingMessage(findings, message)
+                assertThat(findings).singleElement()
+                    .hasMessage(message)
             }
 
             @Test
@@ -71,7 +75,8 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
                     abstract class B : A
                 """.trimIndent()
                 val findings = subject.lintWithContext(env, code)
-                assertFindingMessage(findings, message)
+                assertThat(findings).singleElement()
+                    .hasMessage(message)
             }
 
             @Test
@@ -303,9 +308,4 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
             assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
-}
-
-private fun assertFindingMessage(findings: List<Finding>, message: String) {
-    assertThat(findings).hasSize(1)
-    assertThat(findings.first()).hasMessage(message)
 }

@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.assertThat
+import dev.detekt.test.lint
 import org.junit.jupiter.api.Test
 
 class LambdaParameterNamingSpec {
@@ -12,9 +12,8 @@ class LambdaParameterNamingSpec {
         val code = """
             val a: (String) -> Unit = { HELLO_THERE -> Unit }
         """.trimIndent()
-        assertThat(LambdaParameterNaming(Config.empty).lint(code))
-            .hasSize(1)
-            .hasTextLocations("HELLO_THERE")
+        assertThat(LambdaParameterNaming(Config.empty).lint(code)).singleElement()
+            .hasTextLocation("HELLO_THERE")
     }
 
     @Test
@@ -78,9 +77,8 @@ class LambdaParameterNamingSpec {
             data class Bar(val a: String)
             val a: (Bar) -> Unit = { (HELLO_THERE) -> Unit }
         """.trimIndent()
-        assertThat(LambdaParameterNaming(Config.empty).lint(code))
-            .hasSize(1)
-            .hasTextLocations("HELLO_THERE")
+        assertThat(LambdaParameterNaming(Config.empty).lint(code)).singleElement()
+            .hasTextLocation("HELLO_THERE")
     }
 
     @Test

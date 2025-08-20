@@ -1,21 +1,25 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresFullAnalysis
-import io.gitlab.arturbosch.detekt.api.Rule
+import dev.detekt.api.ActiveByDefault
+import dev.detekt.api.Config
+import dev.detekt.api.Entity
+import dev.detekt.api.Finding
+import dev.detekt.api.RequiresAnalysisApi
+import dev.detekt.api.Rule
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.types.KaClassType
+import org.jetbrains.kotlin.analysis.api.types.KaTypeNullability
+import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.name.StandardClassIds.BASE_COLLECTIONS_PACKAGE
+import org.jetbrains.kotlin.name.StandardClassIds.BASE_SEQUENCES_PACKAGE
+import org.jetbrains.kotlin.name.StandardClassIds.BASE_TEXT_PACKAGE
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
-import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
-import org.jetbrains.kotlin.psi.ValueArgument
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
-import org.jetbrains.kotlin.resolve.calls.util.getType
-import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
-import org.jetbrains.kotlin.types.error.ErrorType
-import org.jetbrains.kotlin.types.isNullable
+import org.jetbrains.kotlin.resolve.calls.util.getCalleeExpressionIfAny
 
 /*
  * Rule adapted from Kotlin's IntelliJ plugin:
@@ -51,29 +55,25 @@ class UselessCallOnNotNull(config: Config) :
             "When this call is used on a reference to a non-null type " +
             "(e.g. `String`) it is redundant and will have no effect, so it can be removed."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
+    @Suppress("ReturnCount")
     override fun visitQualifiedExpression(expression: KtQualifiedExpression) {
         super.visitQualifiedExpression(expression)
 
-        val safeExpression = expression as? KtSafeQualifiedExpression
-        val notNullType = expression.receiverExpression.getType(bindingContext)?.isNullable() == false
-        if (notNullType || safeExpression != null) {
-            resolveCallForExpression(expression)
-        }
-    }
+        val calleeText = expression.getCalleeExpressionIfAny()?.text
+        if (calleeText !in uselessCallNames) return
 
-    private fun resolveCallForExpression(expression: KtQualifiedExpression) {
-        val resolvedCall = expression.getResolvedCall(bindingContext) ?: return
-        val fqName = resolvedCall.resultingDescriptor.fqNameOrNull() ?: return
+        analyze(expression) {
+            if (expression.receiverExpression.expressionType?.nullability != KaTypeNullability.NON_NULLABLE) return
 
-        val conversion = uselessFqNames[fqName]
-        if (conversion != null) {
-            val shortName = fqName.shortName().asString()
-            val message = if (conversion.replacementName == null) {
-                "Remove redundant call to $shortName"
+            val callableId = expression.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId ?: return
+            val conversion = uselessCallFqNames[callableId] ?: return
+
+            val message = if (conversion.replacementName != null) {
+                "Replace $calleeText with ${conversion.replacementName}"
             } else {
-                "Replace $shortName with ${conversion.replacementName}"
+                "Remove redundant call to $calleeText"
             }
             report(Finding(Entity.from(expression), message))
         }
@@ -81,48 +81,52 @@ class UselessCallOnNotNull(config: Config) :
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
-        val resolvedCall = expression.getResolvedCall(bindingContext) ?: return
 
-        val fqName = resolvedCall.resultingDescriptor.fqNameOrNull()
-        if (fqName == listOfNotNull) {
-            val varargs = resolvedCall.valueArguments.entries.single().value.arguments
-            if (varargs.all { it.isNullable() == false }) {
-                report(Finding(Entity.from(expression), "Replace listOfNotNull with listOf"))
+        val calleeText = expression.calleeExpression?.text ?: return
+        if (calleeText !in ofNotNullNames) return
+
+        analyze(expression) {
+            val callableId = expression.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId
+
+            val replacementName = ofNotNullFqNames[callableId]?.replacementName ?: return
+
+            val hasNullableType = expression.valueArguments.any { valueArgument ->
+                val type = valueArgument.getArgumentExpression()?.expressionType?.let {
+                    if (valueArgument.getSpreadElement() != null) {
+                        (it as? KaClassType)?.typeArguments?.firstOrNull()?.type
+                    } else {
+                        it
+                    }
+                }
+                type?.nullability != KaTypeNullability.NON_NULLABLE
+            }
+            if (!hasNullableType) {
+                report(Finding(Entity.from(expression), "Replace $calleeText with $replacementName"))
             }
         }
-    }
-
-    /**
-     * Determines whether this [ValueArgument] is nullable, returning null if its type cannot be
-     * determined.
-     */
-    private fun ValueArgument.isNullable(): Boolean? {
-        val wrapperType = getArgumentExpression()?.getType(bindingContext) ?: return null
-        val type = if (getSpreadElement() != null) {
-            // in case of a spread operator (`*list`),
-            // we actually want to get the generic parameter from the collection
-            wrapperType.arguments.first().type
-        } else {
-            wrapperType
-        }
-
-        return type
-            .takeUnless { it is ErrorType }
-            ?.isNullable()
     }
 
     private data class Conversion(val replacementName: String? = null)
 
     companion object {
-        private val uselessFqNames = mapOf(
-            FqName("kotlin.collections.orEmpty") to Conversion(),
-            FqName("kotlin.sequences.orEmpty") to Conversion(),
-            FqName("kotlin.text.orEmpty") to Conversion(),
-            FqName("kotlin.text.isNullOrEmpty") to Conversion("isEmpty"),
-            FqName("kotlin.text.isNullOrBlank") to Conversion("isBlank"),
-            FqName("kotlin.collections.isNullOrEmpty") to Conversion("isEmpty")
+        private val uselessCallFqNames = mapOf(
+            callableId(BASE_COLLECTIONS_PACKAGE, "orEmpty") to Conversion(),
+            callableId(BASE_SEQUENCES_PACKAGE, "orEmpty") to Conversion(),
+            callableId(BASE_TEXT_PACKAGE, "orEmpty") to Conversion(),
+            callableId(BASE_TEXT_PACKAGE, "isNullOrEmpty") to Conversion("isEmpty"),
+            callableId(BASE_TEXT_PACKAGE, "isNullOrBlank") to Conversion("isBlank"),
+            callableId(BASE_COLLECTIONS_PACKAGE, "isNullOrEmpty") to Conversion("isEmpty")
         )
 
-        private val listOfNotNull = FqName("kotlin.collections.listOfNotNull")
+        private val uselessCallNames = uselessCallFqNames.keys.map { it.callableName.identifier }
+
+        private val ofNotNullFqNames = mapOf(
+            callableId(BASE_COLLECTIONS_PACKAGE, "listOfNotNull") to Conversion("listOf"),
+            callableId(BASE_COLLECTIONS_PACKAGE, "setOfNotNull") to Conversion("setOf"),
+        )
+
+        private val ofNotNullNames = ofNotNullFqNames.keys.map { it.callableName.asString() }
+
+        private fun callableId(pkg: FqName, callable: String) = CallableId(pkg, Name.identifier(callable))
     }
 }

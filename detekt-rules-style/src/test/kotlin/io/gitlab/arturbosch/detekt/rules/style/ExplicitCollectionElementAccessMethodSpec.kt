@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.github.detekt.test.utils.KotlinEnvironmentContainer
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.lintWithContext
+import dev.detekt.api.Config
+import dev.detekt.test.lintWithContext
+import dev.detekt.test.utils.KotlinCoreEnvironmentTest
+import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -316,12 +316,11 @@ class ExplicitCollectionElementAccessMethodSpec {
             @Test
             fun `does not report ByteBuffer get`() {
                 val code = """
-                    fun f() {
-                        val buffer = java.nio.ByteBuffer()
+                    fun f(buffer: java.nio.ByteBuffer) {
                         buffer.get(byteArrayOf(0x42))
                     }
                 """.trimIndent()
-                assertThat(subject.lintWithContext(env, code, compile = false)).isEmpty()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
 
             @Test
@@ -556,7 +555,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                        val value = unknownType.put("answer", 42)
                     }
                 """.trimIndent()
-                assertThat(subject.lintWithContext(env, code, compile = false)).isEmpty()
+                assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true)).isEmpty()
             }
 
             @Test
@@ -586,7 +585,7 @@ class ExplicitCollectionElementAccessMethodSpec {
                     rect.set(0, 1, 2)
                 }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code, compile = false)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 }

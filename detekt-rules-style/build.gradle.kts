@@ -6,7 +6,10 @@ dependencies {
     compileOnly(projects.detektApi)
     compileOnly(projects.detektMetrics)
     compileOnly(projects.detektPsiUtils)
-    testImplementation(projects.detektMetrics)
+
+    testImplementation(libs.kotlin.compiler)
+    testImplementation(projects.detektApi)
     testImplementation(projects.detektTest)
+    testImplementation(projects.detektTestUtils)
     testImplementation(libs.assertj.core)
 }

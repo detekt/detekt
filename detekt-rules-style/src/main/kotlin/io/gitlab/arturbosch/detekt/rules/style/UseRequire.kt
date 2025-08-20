@@ -1,15 +1,15 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RequiresAnalysisApi
-import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.rules.arguments
-import io.gitlab.arturbosch.detekt.rules.isEmptyOrSingleStringArgument
-import io.gitlab.arturbosch.detekt.rules.isEnclosedByConditionalStatement
-import io.gitlab.arturbosch.detekt.rules.isIllegalArgumentException
+import dev.detekt.api.ActiveByDefault
+import dev.detekt.api.Config
+import dev.detekt.api.Entity
+import dev.detekt.api.Finding
+import dev.detekt.api.RequiresAnalysisApi
+import dev.detekt.api.Rule
+import dev.detekt.psi.arguments
+import dev.detekt.psi.isEmptyOrSingleStringArgument
+import dev.detekt.psi.isEnclosedByConditionalStatement
+import dev.detekt.psi.isIllegalArgumentException
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtThrowExpression
 

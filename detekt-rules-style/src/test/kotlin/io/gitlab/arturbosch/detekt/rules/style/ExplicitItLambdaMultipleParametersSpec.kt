@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.assertThat
+import dev.detekt.test.lint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -60,8 +60,7 @@ class ExplicitItLambdaMultipleParametersSpec {
                     }
                     """.trimIndent(),
                 )
-            assertThat(findings).hasSize(1)
-            assertThat(findings[0]).hasMessage("`it` should not be used as name for a lambda parameter.")
+            assertThat(findings).singleElement().hasMessage("`it` should not be used as name for a lambda parameter.")
         }
     }
 

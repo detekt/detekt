@@ -8,9 +8,7 @@ import io.gitlab.arturbosch.detekt.testkit.reIndent
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.TaskOutcome
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.condition.EnabledForJreRange
 import org.junit.jupiter.api.condition.EnabledIf
-import org.junit.jupiter.api.condition.JRE.JAVA_17
 
 class ReportMergeSpec {
 
@@ -36,7 +34,7 @@ class ReportMergeSpec {
         }
         val mainBuildFileContent: String = """
             plugins {
-                id("io.gitlab.arturbosch.detekt")
+                id("dev.detekt")
             }
             
             val reportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.ReportMergeTask::class) {
@@ -47,7 +45,7 @@ class ReportMergeSpec {
             
             subprojects {
                 apply(plugin = "org.jetbrains.kotlin.jvm")
-                apply(plugin = "io.gitlab.arturbosch.detekt")
+                apply(plugin = "dev.detekt")
             
                 plugins.withType<io.gitlab.arturbosch.detekt.DetektPlugin> {
                     tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
@@ -87,7 +85,6 @@ class ReportMergeSpec {
 
     @Suppress("LongMethod")
     @Test
-    @EnabledForJreRange(min = JAVA_17, disabledReason = "Android Gradle Plugin 8.0+ requires JDK 17 or newer")
     @EnabledIf("io.gitlab.arturbosch.detekt.DetektAndroidSpecKt#isAndroidSdkInstalled")
     fun `for android detekt`() {
         val builder = DslTestBuilder.kotlin()
@@ -99,7 +96,7 @@ class ReportMergeSpec {
                     plugins {
                         id("com.android.application")
                         kotlin("android")
-                        id("io.gitlab.arturbosch.detekt")
+                        id("dev.detekt")
                     }
                     android {
                        compileSdk = 34
@@ -147,7 +144,7 @@ class ReportMergeSpec {
         }
         val mainBuildFileContent: String = """
             plugins {
-                id("io.gitlab.arturbosch.detekt")
+                id("dev.detekt")
             }
             
             val reportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.ReportMergeTask::class) {
@@ -157,7 +154,7 @@ class ReportMergeSpec {
             }
             
             subprojects {
-                apply(plugin = "io.gitlab.arturbosch.detekt")
+                apply(plugin = "dev.detekt")
             
                 plugins.withType<io.gitlab.arturbosch.detekt.DetektPlugin> {
                     tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {

@@ -1,11 +1,11 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.github.detekt.test.utils.KotlinEnvironmentContainer
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.lintWithContext
-import org.assertj.core.api.Assertions.assertThat
+import dev.detekt.api.Config
+import dev.detekt.test.TestConfig
+import dev.detekt.test.assertThat
+import dev.detekt.test.lintWithContext
+import dev.detekt.test.utils.KotlinCoreEnvironmentTest
+import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -63,7 +63,7 @@ class VarCouldBeValSpec(val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code, compile = false)).isEmpty()
+            assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true)).isEmpty()
         }
 
         @Test
@@ -226,8 +226,8 @@ class VarCouldBeValSpec(val env: KotlinEnvironmentContainer) {
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
 
-            assertThat(findings).hasSize(1)
-            assertThat(findings[0].message).isEqualTo("Variable 'a' could be val.")
+            assertThat(findings).singleElement()
+                .hasMessage("Variable 'a' could be val.")
         }
 
         @Test
@@ -240,8 +240,8 @@ class VarCouldBeValSpec(val env: KotlinEnvironmentContainer) {
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
 
-            assertThat(findings).hasSize(1)
-            assertThat(findings[0].message).isEqualTo("Variable 'a' could be val.")
+            assertThat(findings).singleElement()
+                .hasMessage("Variable 'a' could be val.")
         }
 
         @Test
@@ -257,10 +257,8 @@ class VarCouldBeValSpec(val env: KotlinEnvironmentContainer) {
             """.trimIndent()
             val lint = subject.lintWithContext(env, code)
 
-            assertThat(lint).hasSize(1)
-            with(lint[0].entity) {
-                assertThat(ktElement.text).isEqualTo("var shadowed = 1")
-            }
+            assertThat(lint).singleElement()
+                .hasTextLocation("var shadowed = 1")
         }
     }
 
@@ -304,9 +302,8 @@ class VarCouldBeValSpec(val env: KotlinEnvironmentContainer) {
                     }
                 }
             """.trimIndent()
-            with(subject.lintWithContext(env, code)[0]) {
-                assertThat(entity.ktElement.text).isEqualTo("var myVar = value")
-            }
+            assertThat(subject.lintWithContext(env, code)).singleElement()
+                .hasTextLocation("var myVar = value")
         }
     }
 

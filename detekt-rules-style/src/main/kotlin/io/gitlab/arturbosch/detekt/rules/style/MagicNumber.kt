@@ -1,16 +1,16 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import com.intellij.psi.PsiElement
-import io.gitlab.arturbosch.detekt.api.ActiveByDefault
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Configuration
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.config
-import io.gitlab.arturbosch.detekt.rules.isConstant
-import io.gitlab.arturbosch.detekt.rules.isHashCodeFunction
-import io.gitlab.arturbosch.detekt.rules.isPartOf
+import dev.detekt.api.ActiveByDefault
+import dev.detekt.api.Config
+import dev.detekt.api.Configuration
+import dev.detekt.api.Entity
+import dev.detekt.api.Finding
+import dev.detekt.api.Rule
+import dev.detekt.api.config
+import dev.detekt.psi.isConstant
+import dev.detekt.psi.isHashCodeFunction
+import dev.detekt.psi.isPartOf
 import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
@@ -173,9 +173,11 @@ class MagicNumber(config: Config) : Rule(
         text.trim()
             .lowercase(Locale.US)
             .replace("_", "")
+            .removeSuffix("ul") // Handle UL suffix (unsigned long)
             .removeSuffix("l")
             .removeSuffix("d")
             .removeSuffix("f")
+            .removeSuffix("u")
 
     private fun KtConstantExpression.isNamedArgument(): Boolean {
         val valueArgument = this.getNonStrictParentOfType<KtValueArgument>()
@@ -192,15 +194,27 @@ class MagicNumber(config: Config) : Rule(
                 else -> false
             }
 
+    @Suppress("ReturnCount")
     private fun KtConstantExpression.isPartOfRange(): Boolean {
         val theParent = parent
-        val rangeOperators = setOf("downTo", "until", "step")
-        return if (theParent is KtBinaryExpression) {
-            theParent.operationToken == KtTokens.RANGE ||
-                theParent.operationReference.getReferencedName() in rangeOperators
-        } else {
-            false
+
+        // Case 1: Direct range expression
+        if (theParent is KtBinaryExpression) {
+            return theParent.operationToken == KtTokens.RANGE ||
+                theParent.operationReference.getReferencedName() in RANGE_OPERATORS
         }
+
+        // Case 2: Negative number part of a range
+        if (theParent is KtPrefixExpression) {
+            val opRef = theParent.firstChild as? KtOperationReferenceExpression
+            if (opRef?.operationSignTokenType != KtTokens.MINUS) return false
+
+            val grandParent = theParent.parent as? KtBinaryExpression ?: return false
+            return grandParent.operationToken == KtTokens.RANGE ||
+                grandParent.operationReference.getReferencedName() in RANGE_OPERATORS
+        }
+
+        return false
     }
 
     private fun KtConstantExpression.isSubjectOfExtensionFunction(): Boolean = parent is KtDotQualifiedExpression
@@ -230,5 +244,6 @@ class MagicNumber(config: Config) : Rule(
     companion object {
         private const val HEX_RADIX = 16
         private const val BINARY_RADIX = 2
+        private val RANGE_OPERATORS = setOf("downTo", "until", "step")
     }
 }

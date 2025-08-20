@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
-import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.test.TestConfig
+import dev.detekt.test.assertThat
+import dev.detekt.test.lint
 import org.junit.jupiter.api.Test
 
 class LongMethodSpec {
@@ -154,8 +154,7 @@ class LongMethodSpec {
 
         val findings = subject.lint(code)
 
-        assertThat(findings)
-            .hasSize(1)
-            .hasTextLocations("nestedLongMethod")
+        assertThat(findings).singleElement()
+            .hasTextLocation("nestedLongMethod")
     }
 }

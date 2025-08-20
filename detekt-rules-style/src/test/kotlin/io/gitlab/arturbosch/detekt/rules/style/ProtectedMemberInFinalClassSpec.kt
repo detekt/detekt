@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.SourceLocation
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.api.SourceLocation
+import dev.detekt.test.assertThat
+import dev.detekt.test.lint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -21,8 +21,8 @@ class ProtectedMemberInFinalClassSpec {
                 }
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings).hasSize(1)
-            assertThat(findings).hasStartSourceLocation(2, 5)
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(2, 5)
         }
 
         @Test
@@ -36,8 +36,8 @@ class ProtectedMemberInFinalClassSpec {
                 }
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings).hasSize(1)
-            assertThat(findings).hasStartSourceLocation(3, 5)
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(3, 5)
         }
 
         @Test
@@ -48,8 +48,8 @@ class ProtectedMemberInFinalClassSpec {
                 }
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings).hasSize(1)
-            assertThat(findings).hasStartSourceLocation(2, 5)
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(2, 5)
         }
 
         @Test
@@ -62,8 +62,8 @@ class ProtectedMemberInFinalClassSpec {
                 }
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings).hasSize(1)
-            assertThat(findings).hasStartSourceLocation(3, 9)
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(3, 9)
         }
 
         @Test
@@ -115,8 +115,8 @@ class ProtectedMemberInFinalClassSpec {
                 }
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings).hasSize(1)
-            assertThat(findings).hasStartSourceLocation(4, 13)
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(4, 13)
         }
 
         @Test
@@ -129,8 +129,8 @@ class ProtectedMemberInFinalClassSpec {
                 }
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings).hasSize(1)
-            assertThat(findings).hasStartSourceLocation(3, 9)
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(3, 9)
         }
 
         @Test
@@ -139,8 +139,8 @@ class ProtectedMemberInFinalClassSpec {
                 class FinalClassWithProtectedConstructor protected constructor()
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings).hasSize(1)
-            assertThat(findings).hasStartSourceLocation(1, 42)
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(1, 42)
         }
 
         @Test
@@ -153,8 +153,8 @@ class ProtectedMemberInFinalClassSpec {
                 }
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings).hasSize(1)
-            assertThat(findings).hasStartSourceLocation(2, 6)
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(2, 6)
         }
 
         @Test
@@ -165,8 +165,8 @@ class ProtectedMemberInFinalClassSpec {
                 }
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings).hasSize(1)
-            assertThat(findings).hasStartSourceLocation(2, 6)
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(2, 6)
         }
     }
 

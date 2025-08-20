@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
-import io.github.detekt.test.utils.KotlinEnvironmentContainer
-import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.lintWithContext
-import org.assertj.core.api.Assertions.assertThat
+import dev.detekt.test.TestConfig
+import dev.detekt.test.assertThat
+import dev.detekt.test.lintWithContext
+import dev.detekt.test.utils.KotlinCoreEnvironmentTest
+import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -36,8 +36,8 @@ class LongParameterListSpec(private val env: KotlinEnvironmentContainer) {
     fun `reports too long parameter list`() {
         val code = "fun long(a: Int, b: Int, c: Int) {}"
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings.first().message).isEqualTo(reportMessageForFunction)
+        assertThat(findings).singleElement()
+            .hasMessage(reportMessageForFunction)
     }
 
     @Test
@@ -64,8 +64,8 @@ class LongParameterListSpec(private val env: KotlinEnvironmentContainer) {
     fun `reports too long parameter list for primary constructors`() {
         val code = "class LongCtor(a: Int, b: Int, c: Int)"
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings.first().message).isEqualTo(reportMessageForConstructor)
+        assertThat(findings).singleElement()
+            .hasMessage(reportMessageForConstructor)
     }
 
     @Test
@@ -78,8 +78,8 @@ class LongParameterListSpec(private val env: KotlinEnvironmentContainer) {
     fun `reports too long parameter list for secondary constructors`() {
         val code = "class LongCtor() { constructor(a: Int, b: Int, c: Int) : this() }"
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings.first().message).isEqualTo(reportMessageForConstructor)
+        assertThat(findings).singleElement()
+            .hasMessage(reportMessageForConstructor)
     }
 
     @Test

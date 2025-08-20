@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.assertThat
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -161,6 +161,22 @@ class UnusedParameterSpec {
 
             assertThat(subject.lint(code)).hasSize(1)
         }
+
+        @Test
+        fun `does not report single parameters if they used in guard clause`() {
+            val code = """
+                fun function(used: Boolean) {
+                    val a = '1'.digitToInt() + 1
+                    val c = false
+                    when (a) {
+                        1 if used -> Unit
+                        2 -> if (c) Unit else Unit
+                    }
+                }
+            """.trimIndent()
+
+            assertThat(subject.lint(code)).isEmpty()
+        }
     }
 
     @Nested
@@ -306,7 +322,7 @@ class UnusedParameterSpec {
                     ) = 1
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(1).hasStartSourceLocation(6, 9)
+            assertThat(subject.lint(code)).singleElement().hasStartSourceLocation(6, 9)
         }
     }
 
@@ -323,7 +339,7 @@ class UnusedParameterSpec {
                     println(modifier)
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(1).hasStartSourceLocation(1, 9)
+            assertThat(subject.lint(code)).singleElement().hasStartSourceLocation(1, 9)
         }
 
         @Test

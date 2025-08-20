@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.github.detekt.test.utils.KotlinEnvironmentContainer
-import io.gitlab.arturbosch.detekt.rules.KotlinCoreEnvironmentTest
-import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lintWithContext
+import dev.detekt.test.TestConfig
+import dev.detekt.test.assertThat
+import dev.detekt.test.lintWithContext
+import dev.detekt.test.utils.KotlinCoreEnvironmentTest
+import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -138,7 +138,7 @@ class MaxChainedCallsOnSameLineSpec(private val env: KotlinEnvironmentContainer)
 
     @Test
     fun `does not report long imports`() {
-        val code = "import a.b.c.d.e"
+        val code = "import a.b.c.d.e val b = 2"
         val dependency = "package a.b.c.d val e = 1"
 
         assertThat(rule.lintWithContext(env, code, dependency)).isEmpty()
@@ -146,7 +146,7 @@ class MaxChainedCallsOnSameLineSpec(private val env: KotlinEnvironmentContainer)
 
     @Test
     fun `does not report long package declarations`() {
-        val code = "package a.b.c.d.e"
+        val code = "package a.b.c.d.e val b = 2"
 
         assertThat(rule.lintWithContext(env, code)).isEmpty()
     }

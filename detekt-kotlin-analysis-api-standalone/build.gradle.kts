@@ -5,7 +5,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     kotlin("jvm") // Plugin can be removed when KspLibraryModuleBuilder is retired. Blocked by https://youtrack.jetbrains.com/issue/KT-71706
     id("packaging")
-    id("com.gradleup.shadow") version "8.3.8"
+    id("com.gradleup.shadow") version "9.0.2"
 }
 
 dependencies {
@@ -24,13 +24,6 @@ kotlin {
 
 java {
     targetCompatibility = JavaVersion.VERSION_1_8
-}
-
-configurations.shadowRuntimeElements {
-    attributes {
-        // This is not needed in shadow plugin 9+: https://github.com/GradleUp/shadow/pull/1199
-        attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, JavaVersion.VERSION_1_8.majorVersion.toInt())
-    }
 }
 
 val javaComponent = components["java"] as AdhocComponentWithVariants

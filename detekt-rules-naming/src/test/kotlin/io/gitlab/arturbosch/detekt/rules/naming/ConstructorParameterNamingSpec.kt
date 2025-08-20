@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lint
+import dev.detekt.api.Config
+import dev.detekt.test.assertThat
+import dev.detekt.test.lint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -39,7 +39,8 @@ class ConstructorParameterNamingSpec {
         val code = """
             class C(val PARAM: String)
         """.trimIndent()
-        assertThat(ConstructorParameterNaming(Config.empty).lint(code)).hasTextLocations(8 to 25)
+        assertThat(ConstructorParameterNaming(Config.empty).lint(code)).singleElement()
+            .hasTextLocation(8 to 25)
     }
 
     @Test
@@ -75,8 +76,7 @@ class ConstructorParameterNamingSpec {
             val code = """
                 class Foo(private val `PARAM_NAME`: Boolean)
             """.trimIndent()
-            assertThat(ConstructorParameterNaming(Config.empty).lint(code))
-                .hasSize(1)
+            assertThat(ConstructorParameterNaming(Config.empty).lint(code)).singleElement()
                 .hasStartSourceLocation(1, 11)
         }
 
