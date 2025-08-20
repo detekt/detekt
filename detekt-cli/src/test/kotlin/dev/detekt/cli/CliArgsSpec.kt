@@ -31,7 +31,7 @@ internal class CliArgsSpec {
         private val pathCliArgs = Path("src/main/kotlin/dev/detekt/cli/CliArgs.kt").absolute()
         private val pathCliArgsSpec = Path("src/test/kotlin/dev/detekt/cli/CliArgsSpec.kt").absolute()
         private val pathAnalyzer =
-            Path("../detekt-core/src/test/kotlin/io/gitlab/arturbosch/detekt/core/AnalyzerSpec.kt").absolute()
+            Path("../detekt-core/src/test/kotlin/dev/detekt/core/AnalyzerSpec.kt").absolute()
                 .normalize()
 
         @Test
