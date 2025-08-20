@@ -2,11 +2,10 @@ package dev.detekt.rules.bugs
 
 import dev.detekt.api.Config
 import dev.detekt.test.TestConfig
+import dev.detekt.test.assertThat
 import dev.detekt.test.lintWithContext
-import dev.detekt.test.location
 import dev.detekt.test.utils.KotlinCoreEnvironmentTest
 import dev.detekt.test.utils.KotlinEnvironmentContainer
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -31,8 +30,8 @@ class DeprecationSpec(private val env: KotlinEnvironmentContainer) {
             }
         """.trimIndent()
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings.first().message).isEqualTo("""Foo is deprecated with message "deprecation message"""")
+        assertThat(findings).singleElement()
+            .hasMessage("""Foo is deprecated with message "deprecation message"""")
     }
 
     @Test
@@ -73,13 +72,8 @@ class DeprecationSpec(private val env: KotlinEnvironmentContainer) {
                 val d by state
             }
         """.trimIndent()
-        assertThat(subject.lintWithContext(env, code, stateFile))
-            .hasSize(1)
-            .first()
-            .extracting {
-                it.message
-            }
-            .isEqualTo("""state is deprecated with message "Some reason"""")
+        assertThat(subject.lintWithContext(env, code, stateFile)).singleElement()
+            .hasMessage("""state is deprecated with message "Some reason"""")
     }
 
     @Test
@@ -109,11 +103,8 @@ class DeprecationSpec(private val env: KotlinEnvironmentContainer) {
                 }
             }
         """.trimIndent()
-        assertThat(subject.lintWithContext(env, code, deprecatedFile))
-            .hasSize(1)
-            .first()
-            .extracting { it.location.source.line }
-            .isEqualTo(1)
+        assertThat(subject.lintWithContext(env, code, deprecatedFile)).singleElement()
+            .hasSourceLocation(1, 1)
     }
 
     @Nested
@@ -148,13 +139,7 @@ class DeprecationSpec(private val env: KotlinEnvironmentContainer) {
                     }
                 }
             """.trimIndent()
-            assertThat(
-                ignoredImportSubject.lintWithContext(
-                    env,
-                    code,
-                    deprecatedFile,
-                )
-            )
+            assertThat(ignoredImportSubject.lintWithContext(env, code, deprecatedFile))
                 .isEmpty()
         }
 
@@ -176,13 +161,8 @@ class DeprecationSpec(private val env: KotlinEnvironmentContainer) {
                     val d by state
                 }
             """.trimIndent()
-            assertThat(ignoredImportSubject.lintWithContext(env, code, stateFile))
-                .hasSize(1)
-                .first()
-                .extracting {
-                    it.message
-                }
-                .isEqualTo("""state is deprecated with message "Some reason"""")
+            assertThat(ignoredImportSubject.lintWithContext(env, code, stateFile)).singleElement()
+                .hasMessage("""state is deprecated with message "Some reason"""")
         }
     }
 

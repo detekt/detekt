@@ -24,7 +24,8 @@ class UnnecessaryFilterSpec(val env: KotlinEnvironmentContainer) {
             """.trimIndent()
 
             val findings = subject.lintWithContext(env, code)
-            assertThat(findings).singleElement().hasMessage("'filter { it > 1 }' can be replaced by 'count { it > 1 }'")
+            assertThat(findings).singleElement()
+                .hasMessage("'filter { it > 1 }' can be replaced by 'count { it > 1 }'")
         }
 
         @Test
@@ -49,7 +50,8 @@ class UnnecessaryFilterSpec(val env: KotlinEnvironmentContainer) {
             """.trimIndent()
 
             val findings = subject.lintWithContext(env, code)
-            assertThat(findings).singleElement().hasMessage("'filter { it > 2 }' can be replaced by 'count { it > 2 }'")
+            assertThat(findings).singleElement()
+                .hasMessage("'filter { it > 2 }' can be replaced by 'count { it > 2 }'")
         }
 
         @Test
@@ -63,7 +65,8 @@ class UnnecessaryFilterSpec(val env: KotlinEnvironmentContainer) {
             """.trimIndent()
 
             val findings = subject.lintWithContext(env, code)
-            assertThat(findings).singleElement().hasMessage("'filter { it > 2 }' can be replaced by 'count { it > 2 }'")
+            assertThat(findings).singleElement()
+                .hasMessage("'filter { it > 2 }' can be replaced by 'count { it > 2 }'")
         }
 
         @Test
@@ -75,8 +78,10 @@ class UnnecessaryFilterSpec(val env: KotlinEnvironmentContainer) {
 
             val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(2)
-            assertThat(findings[0]).hasMessage("'filter { it > 2 }' can be replaced by 'none { it > 2 }'")
-            assertThat(findings[1]).hasMessage("'filter { it > 'a' }' can be replaced by 'none { it > 'a' }'")
+            assertThat(findings).element(0)
+                .hasMessage("'filter { it > 2 }' can be replaced by 'none { it > 2 }'")
+            assertThat(findings).element(1)
+                .hasMessage("'filter { it > 'a' }' can be replaced by 'none { it > 'a' }'")
         }
 
         @Test
@@ -88,8 +93,10 @@ class UnnecessaryFilterSpec(val env: KotlinEnvironmentContainer) {
 
             val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(2)
-            assertThat(findings[0]).hasMessage("'filter { it > 2 }' can be replaced by 'any { it > 2 }'")
-            assertThat(findings[1]).hasMessage("'filter { it > 'a' }' can be replaced by 'any { it > 'a' }'")
+            assertThat(findings).element(0)
+                .hasMessage("'filter { it > 2 }' can be replaced by 'any { it > 2 }'")
+            assertThat(findings).element(1)
+                .hasMessage("'filter { it > 'a' }' can be replaced by 'any { it > 'a' }'")
         }
 
         @Test

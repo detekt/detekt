@@ -290,7 +290,8 @@ class UnusedPrivateFunctionSpec(val env: KotlinEnvironmentContainer) {
 
             val lint = subject.lintWithContext(env, code)
 
-            assertThat(lint.first().message).startsWith("Private function")
+            assertThat(lint).singleElement()
+                .hasMessage("Private function `unusedFunction` is unused.")
         }
     }
 
@@ -440,9 +441,7 @@ class UnusedPrivateFunctionSpec(val env: KotlinEnvironmentContainer) {
                     }
                 """.trimIndent()
                 assertThat(subject.lintWithContext(env, code)).singleElement()
-                    .hasStartSourceLocation(
-                        SourceLocation(3, 30)
-                    )
+                    .hasStartSourceLocation(SourceLocation(3, 30))
             }
 
             @Test
@@ -455,9 +454,7 @@ class UnusedPrivateFunctionSpec(val env: KotlinEnvironmentContainer) {
                     val answer = answer()
                 """.trimIndent()
                 assertThat(subject.lintWithContext(env, code)).singleElement()
-                    .hasStartSourceLocation(
-                        SourceLocation(3, 24)
-                    )
+                    .hasStartSourceLocation(SourceLocation(3, 24))
             }
 
             @Test
@@ -471,9 +468,7 @@ class UnusedPrivateFunctionSpec(val env: KotlinEnvironmentContainer) {
                     val answer = answer()
                 """.trimIndent()
                 assertThat(subject.lintWithContext(env, code)).singleElement()
-                    .hasStartSourceLocation(
-                        SourceLocation(2, 24)
-                    )
+                    .hasStartSourceLocation(SourceLocation(2, 24))
             }
 
             @Test
@@ -688,9 +683,8 @@ class UnusedPrivateFunctionSpec(val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
-            assertThat(findings).singleElement().hasStartSourceLocation(
-                SourceLocation(3, 30),
-            )
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(SourceLocation(3, 30),)
         }
     }
 
@@ -924,7 +918,8 @@ class UnusedPrivateFunctionSpec(val env: KotlinEnvironmentContainer) {
                     private fun foo() = 1
                 }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code)).singleElement().hasStartSourceLocation(5, 17)
+            assertThat(subject.lintWithContext(env, code)).singleElement()
+                .hasStartSourceLocation(5, 17)
         }
     }
 }

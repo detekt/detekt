@@ -20,11 +20,12 @@ class CastNullableToNonNullableTypeSpec(private val env: KotlinEnvironmentContai
             }
         """.trimIndent()
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).singleElement().hasMessage(
-            "Use separate `null` assertion and type cast like " +
-                "('(bar ?: error(\"null assertion message\")) as String') instead of 'bar as String'."
-        )
-        assertThat(findings).singleElement().hasStartSourceLocation(2, 17)
+        assertThat(findings).singleElement()
+            .hasMessage(
+                "Use separate `null` assertion and type cast like " +
+                    "('(bar ?: error(\"null assertion message\")) as String') instead of 'bar as String'."
+            )
+            .hasStartSourceLocation(2, 17)
     }
 
     @Test
@@ -39,11 +40,12 @@ class CastNullableToNonNullableTypeSpec(private val env: KotlinEnvironmentContai
             }
         """.trimIndent()
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).singleElement().hasMessage(
-            "Use separate `null` assertion and type cast like " +
-                "('(bar() ?: error(\"null assertion message\")) as Int') instead of 'bar() as Int'."
-        )
-        assertThat(findings).singleElement().hasStartSourceLocation(2, 11)
+        assertThat(findings).singleElement()
+            .hasMessage(
+                "Use separate `null` assertion and type cast like " +
+                    "('(bar() ?: error(\"null assertion message\")) as Int') instead of 'bar() as Int'."
+            )
+            .hasStartSourceLocation(2, 11)
     }
 
     @Test
@@ -192,10 +194,11 @@ class CastNullableToNonNullableTypeSpec(private val env: KotlinEnvironmentContai
             }
         """.trimIndent()
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).singleElement().hasMessage(
-            "Use separate `null` assertion and type cast like " +
-                "('(array[0] ?: error(\"null assertion message\")) as T') instead of 'array[0] as T'."
-        )
+        assertThat(findings).singleElement()
+            .hasMessage(
+                "Use separate `null` assertion and type cast like " +
+                    "('(array[0] ?: error(\"null assertion message\")) as T') instead of 'array[0] as T'."
+            )
     }
 
     companion object {

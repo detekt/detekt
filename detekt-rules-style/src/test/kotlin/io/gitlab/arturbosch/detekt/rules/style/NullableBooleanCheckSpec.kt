@@ -32,10 +32,11 @@ class NullableBooleanCheckSpec(val env: KotlinEnvironmentContainer) {
         """.trimIndent()
 
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).singleElement().hasMessage(
-            "The nullable boolean check `nullableBoolean() ?: $bool` should use " +
-                "`${replacementForElvis(bool)}` rather than `?: $bool`"
-        )
+        assertThat(findings).singleElement()
+            .hasMessage(
+                "The nullable boolean check `nullableBoolean() ?: $bool` should use " +
+                    "`${replacementForElvis(bool)}` rather than `?: $bool`"
+            )
     }
 
     @ParameterizedTest
@@ -52,10 +53,11 @@ class NullableBooleanCheckSpec(val env: KotlinEnvironmentContainer) {
         """.trimIndent()
 
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).singleElement().hasMessage(
-            "The nullable boolean check `nullableBoolean() ?: $bool` should use " +
-                "`${replacementForElvis(bool)}` rather than `?: $bool`"
-        )
+        assertThat(findings).singleElement()
+            .hasMessage(
+                "The nullable boolean check `nullableBoolean() ?: $bool` should use " +
+                    "`${replacementForElvis(bool)}` rather than `?: $bool`"
+            )
     }
 
     @Test

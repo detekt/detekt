@@ -127,9 +127,9 @@ class ForbiddenImportSpec {
         val findings = ForbiddenImport(TestConfig(FORBIDDEN_PATTERNS to "net.*R|com.*expiremental"))
             .lint(code, compile = false)
         assertThat(findings).hasSize(2)
-        assertThat(findings[0])
+        assertThat(findings).element(0)
             .hasMessage("The import `net.example.R.dimen` has been forbidden in the detekt config.")
-        assertThat(findings[1])
+        assertThat(findings).element(1)
             .hasMessage("The import `net.example.R.dimension` has been forbidden in the detekt config.")
     }
 }

@@ -2,8 +2,8 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import dev.detekt.api.Config
 import dev.detekt.test.TestConfig
+import dev.detekt.test.assertThat
 import dev.detekt.test.lint
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -119,8 +119,8 @@ class ThrowsCountSpec {
         @Test
         fun `reports violation by default`() {
             val findings = subject.lint(code)
-            assertThat(findings).hasSize(1)
-            assertThat(findings[0].entity.location.source.line).isEqualTo(4)
+            assertThat(findings).singleElement()
+                .hasSourceLocation(4, 9)
         }
     }
 

@@ -171,7 +171,8 @@ class ForbiddenNamedParamSpec(val env: KotlinEnvironmentContainer) {
         val methodName = "com.example.arrayMethod(kotlin.Array)"
         val findings = ForbiddenNamedParam(TestConfig(METHODS to listOf(methodName)))
             .lintWithContext(env, code)
-        assertThat(findings).singleElement().hasStartSourceLocation(6, 13)
+        assertThat(findings).singleElement()
+            .hasStartSourceLocation(6, 13)
     }
 
     @Test
@@ -188,7 +189,8 @@ class ForbiddenNamedParamSpec(val env: KotlinEnvironmentContainer) {
         val methodName = "com.example.varargMethod(vararg kotlin.Any)"
         val findings = ForbiddenNamedParam(TestConfig(METHODS to listOf(methodName)))
             .lintWithContext(env, code)
-        assertThat(findings).singleElement().hasStartSourceLocation(6, 13)
+        assertThat(findings).singleElement()
+            .hasStartSourceLocation(6, 13)
     }
 
     @Test
@@ -211,7 +213,8 @@ class ForbiddenNamedParamSpec(val env: KotlinEnvironmentContainer) {
             "com.example.TestClass.Companion.staticMethod(kotlin.Int)"
         val findings = ForbiddenNamedParam(TestConfig(METHODS to listOf(methodName)))
             .lintWithContext(env, code)
-        assertThat(findings).singleElement().hasStartSourceLocation(11, 15)
+        assertThat(findings).singleElement()
+            .hasStartSourceLocation(11, 15)
     }
 
     @Test

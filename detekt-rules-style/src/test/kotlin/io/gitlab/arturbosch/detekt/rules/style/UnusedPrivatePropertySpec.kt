@@ -501,8 +501,8 @@ class UnusedPrivatePropertySpec(val env: KotlinEnvironmentContainer) {
 
             val lint = subject.lintWithContext(env, code)
 
-            assertThat(lint).hasSize(1)
-            assertThat(lint[0].message).isEqualTo("Private property `bar` is unused.")
+            assertThat(lint).singleElement()
+                .hasMessage("Private property `bar` is unused.")
         }
 
         @Test
@@ -557,8 +557,8 @@ class UnusedPrivatePropertySpec(val env: KotlinEnvironmentContainer) {
 
             val lint = subject.lintWithContext(env, code)
 
-            assertThat(lint).hasSize(1)
-            assertThat(lint[0].message).isEqualTo("Private property `bar` is unused.")
+            assertThat(lint).singleElement()
+                .hasMessage("Private property `bar` is unused.")
         }
 
         @Test
@@ -605,7 +605,8 @@ class UnusedPrivatePropertySpec(val env: KotlinEnvironmentContainer) {
                     private val foo = 1
                 }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code)).singleElement().hasStartSourceLocation(5, 17)
+            assertThat(subject.lintWithContext(env, code)).singleElement()
+                .hasStartSourceLocation(5, 17)
         }
     }
 

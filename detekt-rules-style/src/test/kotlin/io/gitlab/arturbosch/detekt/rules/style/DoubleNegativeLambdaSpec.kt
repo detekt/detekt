@@ -66,8 +66,10 @@ class DoubleNegativeLambdaSpec {
 
         val findings = subject.lint(code)
         assertThat(findings).hasSize(2)
-        assertThat(findings[0]).hasSourceLocation(3, 62) // second takeUnless
-        assertThat(findings[1]).hasSourceLocation(3, 37) // first takeUnless
+        assertThat(findings).element(0)
+            .hasSourceLocation(3, 62) // second takeUnless
+        assertThat(findings).element(1)
+            .hasSourceLocation(3, 37) // first takeUnless
     }
 
     @Test
@@ -217,9 +219,8 @@ class DoubleNegativeLambdaSpec {
         """.trimIndent()
 
         val findings = subject.lint(code)
-        assertThat(findings).singleElement().hasMessage(
-            "Double negative through using `!in`, `!=` inside a `takeUnless` lambda. Use `takeIf` instead."
-        )
+        assertThat(findings).singleElement()
+            .hasMessage("Double negative through using `!in`, `!=` inside a `takeUnless` lambda. Use `takeIf` instead.")
         assertThat(findings).singleElement()
             .hasStartSourceLocation(3, 37)
             .hasEndSourceLocation(3, 74)
@@ -240,8 +241,7 @@ class DoubleNegativeLambdaSpec {
         """.trimIndent()
 
         val findings = DoubleNegativeLambda(config).lint(code)
-        assertThat(findings).singleElement().hasMessage(
-            "Double negative through using `!=` inside a `never` lambda. Rewrite in the positive."
-        )
+        assertThat(findings).singleElement()
+            .hasMessage("Double negative through using `!=` inside a `never` lambda. Rewrite in the positive.")
     }
 }

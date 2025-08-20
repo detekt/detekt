@@ -23,9 +23,7 @@ class ForbiddenAnnotationSpec(val env: KotlinEnvironmentContainer) {
         val findings = ForbiddenAnnotation(Config.empty).lintWithContext(env, code)
 
         assertThat(findings).singleElement()
-            .hasStartSourceLocation(
-                SourceLocation(1, 1)
-            )
+            .hasStartSourceLocation(SourceLocation(1, 1))
             .hasTextLocation("@SuppressWarnings")
 
         assertThat(findings)

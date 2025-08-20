@@ -253,8 +253,7 @@ class RuleDescriptorKtTest {
                 log,
             )
 
-            assertThat(rules)
-                .singleElement()
+            assertThat(rules).singleElement()
                 .satisfies(
                     RuleDescriptionMatcher(
                         ::OneRule,
@@ -284,8 +283,7 @@ class RuleDescriptorKtTest {
                 log,
             )
 
-            assertThat(rules)
-                .singleElement()
+            assertThat(rules).singleElement()
                 .satisfies(
                     RuleDescriptionMatcher(
                         ::OneRule,

@@ -17,15 +17,13 @@ class RulesWhichCantBeCorrectedSpec {
 
     @Test
     fun `Filename findings can't be corrected`() {
-        assertThat(Filename(autoCorrectConfig).lint("class NotTheFilename"))
-            .singleElement()
+        assertThat(Filename(autoCorrectConfig).lint("class NotTheFilename")).singleElement()
             .noSuppress()
     }
 
     @Test
     fun `PackageName findings can't be corrected`() {
-        assertThat(PackageName(autoCorrectConfig).lint("package under_score"))
-            .singleElement()
+        assertThat(PackageName(autoCorrectConfig).lint("package under_score")).singleElement()
             .noSuppress()
     }
 
@@ -36,15 +34,13 @@ class RulesWhichCantBeCorrectedSpec {
             /*comment in between*/
             import java.io.*
         """.trimIndent()
-        assertThat(ImportOrdering(autoCorrectConfig).lint(code))
-            .singleElement()
+        assertThat(ImportOrdering(autoCorrectConfig).lint(code)).singleElement()
             .noSuppress()
     }
 
     @Test
     fun `NoWildcardImports can't be corrected`() {
-        assertThat(NoWildcardImports(autoCorrectConfig).lint("import java.io.*"))
-            .singleElement()
+        assertThat(NoWildcardImports(autoCorrectConfig).lint("import java.io.*")).singleElement()
             .noSuppress()
     }
 
@@ -52,8 +48,7 @@ class RulesWhichCantBeCorrectedSpec {
     fun `MaximumLineLength can't be corrected`() {
         val code =
             "class MaximumLeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeth"
-        assertThat(MaximumLineLength(autoCorrectConfig).lint(code))
-            .singleElement()
+        assertThat(MaximumLineLength(autoCorrectConfig).lint(code)).singleElement()
             .noSuppress()
     }
 
@@ -74,8 +69,7 @@ class RulesWhichCantBeCorrectedSpec {
                 $multilineQuote.trimIndent()
         """.trimIndent()
 
-        assertThat(Indentation(autoCorrectConfig).lint(code))
-            .singleElement()
+        assertThat(Indentation(autoCorrectConfig).lint(code)).singleElement()
             .noSuppress()
     }
 }

@@ -198,8 +198,8 @@ class UnusedParameterSpec {
 
             val lint = subject.lint(code)
 
-            assertThat(lint).hasSize(1)
-            assertThat(lint[0].message).isEqualTo("Function parameter `unusedWithoutAnnotation` is unused.")
+            assertThat(lint).singleElement()
+                .hasMessage("Function parameter `unusedWithoutAnnotation` is unused.")
         }
 
         @Test
@@ -264,7 +264,8 @@ class UnusedParameterSpec {
 
             val lint = subject.lint(code)
 
-            assertThat(lint.first().message).startsWith("Function parameter")
+            assertThat(lint).singleElement()
+                .hasMessage("Function parameter `unused` is unused.")
         }
     }
 
@@ -322,7 +323,8 @@ class UnusedParameterSpec {
                     ) = 1
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).singleElement().hasStartSourceLocation(6, 9)
+            assertThat(subject.lint(code)).singleElement()
+                .hasStartSourceLocation(6, 9)
         }
     }
 
@@ -339,7 +341,8 @@ class UnusedParameterSpec {
                     println(modifier)
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).singleElement().hasStartSourceLocation(1, 9)
+            assertThat(subject.lint(code)).singleElement()
+                .hasStartSourceLocation(1, 9)
         }
 
         @Test

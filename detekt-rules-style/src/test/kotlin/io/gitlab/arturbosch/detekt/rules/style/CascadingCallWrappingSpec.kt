@@ -17,8 +17,7 @@ class CascadingCallWrappingSpec {
                 .plus(0).plus(0).plus(0)
         """.trimIndent()
 
-        assertThat(subject.lint(code))
-            .singleElement()
+        assertThat(subject.lint(code)).singleElement()
             .hasTextLocation(23 to 30)
             .hasMessage("Chained call `plus(0)` should be wrapped to a new line since preceding calls were.")
     }

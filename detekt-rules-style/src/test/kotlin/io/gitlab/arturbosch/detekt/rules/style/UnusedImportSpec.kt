@@ -2,10 +2,10 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import dev.detekt.api.Config
 import dev.detekt.test.TestConfig
+import dev.detekt.test.assertThat
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.KotlinCoreEnvironmentTest
 import dev.detekt.test.utils.KotlinEnvironmentContainer
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 private const val ADDITIONAL_OPERATOR_SET = "additionalOperatorSet"
@@ -103,10 +103,9 @@ class UnusedImportSpec(
             }
             """.trimIndent()
         val lint = subject.lintWithContext(env, main, allowCompilationErrors = true)
-        with(lint) {
-            assertThat(this).hasSize(1)
-            assertThat(this[0].entity.signature).endsWith("import org.gradle.kotlin.dsl.assign")
-        }
+        assertThat(lint).hasSize(1)
+        assertThat(lint).element(0)
+            .hasTextLocation("import org.gradle.kotlin.dsl.assign")
     }
 
     @Test
@@ -170,10 +169,9 @@ class UnusedImportSpec(
             infix fun Int.undefined(f: () -> Unit) {}
             """.trimIndent()
         val lint = subject.lintWithContext(env, main, additional)
-        with(lint) {
-            assertThat(this).hasSize(1)
-            assertThat(this[0].entity.signature).endsWith("import tasks.undefined")
-        }
+        assertThat(lint).hasSize(1)
+        assertThat(lint).element(0)
+            .hasTextLocation("import tasks.undefined")
     }
 
     @Test
@@ -192,10 +190,9 @@ class UnusedImportSpec(
             class SomeClass
             """.trimIndent()
         val lint = subject.lintWithContext(env, main, additional)
-        with(lint) {
-            assertThat(this).hasSize(1)
-            assertThat(this[0].entity.signature).endsWith("import test.SomeClass")
-        }
+        assertThat(lint).hasSize(1)
+        assertThat(lint).element(0)
+            .hasTextLocation("import test.SomeClass")
     }
 
     @Test
@@ -373,12 +370,13 @@ class UnusedImportSpec(
             fun `foo`() {}
             """.trimIndent()
         val lint = subject.lintWithContext(env, main, p, p2, escaped)
-        with(lint) {
-            assertThat(this).hasSize(3)
-            assertThat(this[0].entity.signature).contains("import p.B6")
-            assertThat(this[1].entity.signature).contains("import p.B as B12")
-            assertThat(this[2].entity.signature).contains("import escaped.`foo`")
-        }
+        assertThat(lint).hasSize(3)
+        assertThat(lint).element(0)
+            .hasTextLocation("import p.B6 // positive")
+        assertThat(lint).element(1)
+            .hasTextLocation("import p.B as B12 // positive")
+        assertThat(lint).element(2)
+            .hasTextLocation("import escaped.`foo` // positive")
     }
 
     @Test
@@ -402,9 +400,7 @@ class UnusedImportSpec(
             }
             """.trimIndent()
         val lint = subject.lintWithContext(env, main, additional)
-        with(lint) {
-            assertThat(this).isEmpty()
-        }
+        assertThat(lint).isEmpty()
     }
 
     @Test
@@ -633,13 +629,15 @@ class UnusedImportSpec(
             """.trimIndent()
         val lint = subject.lintWithContext(env, main, additional1, additional2)
 
-        with(lint) {
-            assertThat(this).hasSize(4)
-            assertThat(this[0].entity.signature).endsWith("import com.example.TestComponent")
-            assertThat(this[1].entity.signature).endsWith("import com.example.component1.Unused")
-            assertThat(this[2].entity.signature).endsWith("import com.example.components")
-            assertThat(this[3].entity.signature).endsWith("import com.example.component1AndSomethingElse")
-        }
+        assertThat(lint).hasSize(4)
+        assertThat(lint).element(0)
+            .hasTextLocation("import com.example.TestComponent")
+        assertThat(lint).element(1)
+            .hasTextLocation("import com.example.component1.Unused")
+        assertThat(lint).element(2)
+            .hasTextLocation("import com.example.components")
+        assertThat(lint).element(3)
+            .hasTextLocation("import com.example.component1AndSomethingElse")
     }
 
     @Test
@@ -664,7 +662,8 @@ class UnusedImportSpec(
             """.trimIndent()
         val findings = subject.lintWithContext(env, mainFile, additionalFile1, additionalFile2)
         assertThat(findings).hasSize(1)
-        assertThat(findings[0].entity.signature).endsWith("import bar.test")
+        assertThat(findings).element(0)
+            .hasTextLocation("import bar.test")
     }
 
     @Test
