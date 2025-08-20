@@ -42,7 +42,7 @@ class UnusedVariableSpec(val env: KotlinEnvironmentContainer) {
 
             val lint = subject.lintWithContext(env, code)
 
-            assertThat(lint.first())
+            assertThat(lint).singleElement()
                 .hasMessage("Variable `unused` is unused.")
         }
     }

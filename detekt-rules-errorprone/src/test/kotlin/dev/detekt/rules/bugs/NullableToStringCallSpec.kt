@@ -1,10 +1,10 @@
 package dev.detekt.rules.bugs
 
 import dev.detekt.api.Config
+import dev.detekt.test.assertThat
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.KotlinCoreEnvironmentTest
 import dev.detekt.test.utils.KotlinEnvironmentContainer
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
@@ -19,8 +19,8 @@ class NullableToStringCallSpec(private val env: KotlinEnvironmentContainer) {
             }
         """.trimIndent()
         val actual = subject.lintWithContext(env, code)
-        assertThat(actual).hasSize(1)
-        assertThat(actual.first().message).isEqualTo("This call 'a.toString()' may return the string \"null\".")
+        assertThat(actual).singleElement()
+            .hasMessage("This call 'a.toString()' may return the string \"null\".")
     }
 
     @Test
@@ -31,8 +31,8 @@ class NullableToStringCallSpec(private val env: KotlinEnvironmentContainer) {
             }
         """.trimIndent()
         val actual = subject.lintWithContext(env, code)
-        assertThat(actual).hasSize(1)
-        assertThat(actual.first().message).isEqualTo("This call '\$a' may return the string \"null\".")
+        assertThat(actual).singleElement()
+            .hasMessage("This call '\$a' may return the string \"null\".")
     }
 
     @Test
@@ -43,8 +43,8 @@ class NullableToStringCallSpec(private val env: KotlinEnvironmentContainer) {
             }
         """.trimIndent()
         val actual = subject.lintWithContext(env, code)
-        assertThat(actual).hasSize(1)
-        assertThat(actual.first().message).isEqualTo("This call '\${a}' may return the string \"null\".")
+        assertThat(actual).singleElement()
+            .hasMessage("This call '\${a}' may return the string \"null\".")
     }
 
     @Test
@@ -55,8 +55,8 @@ class NullableToStringCallSpec(private val env: KotlinEnvironmentContainer) {
             }
         """.trimIndent()
         val actual = subject.lintWithContext(env, code)
-        assertThat(actual).hasSize(1)
-        assertThat(actual.first().message).isEqualTo("This call '\$a' may return the string \"null\".")
+        assertThat(actual).singleElement()
+            .hasMessage("This call '\$a' may return the string \"null\".")
     }
 
     @Test
@@ -75,9 +75,12 @@ class NullableToStringCallSpec(private val env: KotlinEnvironmentContainer) {
         """.trimIndent()
         val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(3)
-        assertThat(actual[0].message).isEqualTo("This call 'foo.a.toString()' may return the string \"null\".")
-        assertThat(actual[1].message).isEqualTo("This call 'foo.bar().toString()' may return the string \"null\".")
-        assertThat(actual[2].message).isEqualTo("This call 'baz().toString()' may return the string \"null\".")
+        assertThat(actual).element(0)
+            .hasMessage("This call 'foo.a.toString()' may return the string \"null\".")
+        assertThat(actual).element(1)
+            .hasMessage("This call 'foo.bar().toString()' may return the string \"null\".")
+        assertThat(actual).element(2)
+            .hasMessage("This call 'baz().toString()' may return the string \"null\".")
     }
 
     @Test
@@ -96,9 +99,12 @@ class NullableToStringCallSpec(private val env: KotlinEnvironmentContainer) {
         """.trimIndent()
         val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(3)
-        assertThat(actual[0].message).isEqualTo("This call '\${foo.a}' may return the string \"null\".")
-        assertThat(actual[1].message).isEqualTo("This call '\${foo.bar()}' may return the string \"null\".")
-        assertThat(actual[2].message).isEqualTo("This call '\${baz()}' may return the string \"null\".")
+        assertThat(actual).element(0)
+            .hasMessage("This call '\${foo.a}' may return the string \"null\".")
+        assertThat(actual).element(1)
+            .hasMessage("This call '\${foo.bar()}' may return the string \"null\".")
+        assertThat(actual).element(2)
+            .hasMessage("This call '\${baz()}' may return the string \"null\".")
     }
 
     @Test
@@ -111,8 +117,8 @@ class NullableToStringCallSpec(private val env: KotlinEnvironmentContainer) {
             }
         """.trimIndent()
         val actual = subject.lintWithContext(env, code)
-        assertThat(actual).hasSize(1)
-        assertThat(actual[0].message).isEqualTo("This call '\${foo?.a}' may return the string \"null\".")
+        assertThat(actual).singleElement()
+            .hasMessage("This call '\${foo?.a}' may return the string \"null\".")
     }
 
     @Test

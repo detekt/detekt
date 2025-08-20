@@ -290,7 +290,8 @@ class UnusedPrivateFunctionSpec(val env: KotlinEnvironmentContainer) {
 
             val lint = subject.lintWithContext(env, code)
 
-            assertThat(lint.first().message).startsWith("Private function")
+            assertThat(lint).singleElement()
+                .hasMessage("Private function `unusedFunction` is unused.")
         }
     }
 

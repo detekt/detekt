@@ -261,9 +261,12 @@ class ClassOrderingSpec {
 
         val findings = subject.lint(code)
         assertThat(findings).hasSize(3)
-        assertThat(findings[0]).hasMessage("method `returnX()` should be declared before companion object.")
-        assertThat(findings[1]).hasMessage("secondary constructor should be declared before companion object.")
-        assertThat(findings[2]).hasMessage("property `y` should be declared before companion object.")
+        assertThat(findings).element(0)
+            .hasMessage("method `returnX()` should be declared before companion object.")
+        assertThat(findings).element(1)
+            .hasMessage("secondary constructor should be declared before companion object.")
+        assertThat(findings).element(2)
+            .hasMessage("property `y` should be declared before companion object.")
     }
 
     @Test
@@ -284,9 +287,12 @@ class ClassOrderingSpec {
 
         val findings = subject.lint(code)
         assertThat(findings).hasSize(3)
-        assertThat(findings[0]).hasMessage("method `returnX()` should be declared before companion object.")
-        assertThat(findings[1]).hasMessage("secondary constructor should be declared before companion object.")
-        assertThat(findings[2]).hasMessage("property `y` should be declared before companion object.")
+        assertThat(findings).element(0)
+            .hasMessage("method `returnX()` should be declared before companion object.")
+        assertThat(findings).element(1)
+            .hasMessage("secondary constructor should be declared before companion object.")
+        assertThat(findings).element(2)
+            .hasMessage("property `y` should be declared before companion object.")
     }
 
     @Test
