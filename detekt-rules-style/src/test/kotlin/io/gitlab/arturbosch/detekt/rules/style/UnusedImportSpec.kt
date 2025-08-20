@@ -103,10 +103,8 @@ class UnusedImportSpec(
             }
             """.trimIndent()
         val lint = subject.lintWithContext(env, main, allowCompilationErrors = true)
-        with(lint) {
-            assertThat(this).hasSize(1)
-            assertThat(this[0].entity.signature).endsWith("import org.gradle.kotlin.dsl.assign")
-        }
+        assertThat(lint).hasSize(1)
+        assertThat(lint[0].entity.signature).endsWith("import org.gradle.kotlin.dsl.assign")
     }
 
     @Test
@@ -170,10 +168,8 @@ class UnusedImportSpec(
             infix fun Int.undefined(f: () -> Unit) {}
             """.trimIndent()
         val lint = subject.lintWithContext(env, main, additional)
-        with(lint) {
-            assertThat(this).hasSize(1)
-            assertThat(this[0].entity.signature).endsWith("import tasks.undefined")
-        }
+        assertThat(lint).hasSize(1)
+        assertThat(lint[0].entity.signature).endsWith("import tasks.undefined")
     }
 
     @Test
@@ -192,10 +188,8 @@ class UnusedImportSpec(
             class SomeClass
             """.trimIndent()
         val lint = subject.lintWithContext(env, main, additional)
-        with(lint) {
-            assertThat(this).hasSize(1)
-            assertThat(this[0].entity.signature).endsWith("import test.SomeClass")
-        }
+        assertThat(lint).hasSize(1)
+        assertThat(lint[0].entity.signature).endsWith("import test.SomeClass")
     }
 
     @Test
@@ -373,12 +367,10 @@ class UnusedImportSpec(
             fun `foo`() {}
             """.trimIndent()
         val lint = subject.lintWithContext(env, main, p, p2, escaped)
-        with(lint) {
-            assertThat(this).hasSize(3)
-            assertThat(this[0].entity.signature).contains("import p.B6")
-            assertThat(this[1].entity.signature).contains("import p.B as B12")
-            assertThat(this[2].entity.signature).contains("import escaped.`foo`")
-        }
+        assertThat(lint).hasSize(3)
+        assertThat(lint[0].entity.signature).contains("import p.B6")
+        assertThat(lint[1].entity.signature).contains("import p.B as B12")
+        assertThat(lint[2].entity.signature).contains("import escaped.`foo`")
     }
 
     @Test
@@ -402,9 +394,7 @@ class UnusedImportSpec(
             }
             """.trimIndent()
         val lint = subject.lintWithContext(env, main, additional)
-        with(lint) {
-            assertThat(this).isEmpty()
-        }
+        assertThat(lint).isEmpty()
     }
 
     @Test
@@ -633,13 +623,11 @@ class UnusedImportSpec(
             """.trimIndent()
         val lint = subject.lintWithContext(env, main, additional1, additional2)
 
-        with(lint) {
-            assertThat(this).hasSize(4)
-            assertThat(this[0].entity.signature).endsWith("import com.example.TestComponent")
-            assertThat(this[1].entity.signature).endsWith("import com.example.component1.Unused")
-            assertThat(this[2].entity.signature).endsWith("import com.example.components")
-            assertThat(this[3].entity.signature).endsWith("import com.example.component1AndSomethingElse")
-        }
+        assertThat(lint).hasSize(4)
+        assertThat(lint[0].entity.signature).endsWith("import com.example.TestComponent")
+        assertThat(lint[1].entity.signature).endsWith("import com.example.component1.Unused")
+        assertThat(lint[2].entity.signature).endsWith("import com.example.components")
+        assertThat(lint[3].entity.signature).endsWith("import com.example.component1AndSomethingElse")
     }
 
     @Test
