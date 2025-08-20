@@ -1,6 +1,7 @@
 package dev.detekt.test.assertj
 
 import dev.detekt.api.SourceLocation
+import dev.detekt.api.TextLocation
 import dev.detekt.api.testfixtures.createEntity
 import dev.detekt.api.testfixtures.createFinding
 import dev.detekt.api.testfixtures.createLocation
@@ -10,7 +11,7 @@ import org.junit.jupiter.api.Test
 
 class FindingAssertSpec {
     private val finding = createFinding(
-        entity = createEntity(createLocation(source = 1 to 1, endSource = 1 to 11)),
+        entity = createEntity(createLocation(source = 1 to 1, endSource = 1 to 11, text = 0..10)),
         message = "TestMessage",
     )
 
@@ -164,6 +165,51 @@ class FindingAssertSpec {
                     .hasActual(SourceLocation(1, 11))
                     .hasExpected(SourceLocation(2, 14))
             }
+        }
+    }
+
+    @Nested
+    inner class TextLocationChecks {
+        @Test
+        fun `hasTextLocation with null value`() {
+            assertThatThrownBy { FindingAssert(null).hasTextLocation(TextLocation(1, 1)) }
+                .isExactlyInstanceOf(AssertionError::class.java)
+                .hasMessage("\nExpecting actual not to be null")
+        }
+
+        @Test
+        fun `hasTextLocationPair with null value`() {
+            assertThatThrownBy { FindingAssert(null).hasTextLocation(1 to 1) }
+                .isExactlyInstanceOf(AssertionError::class.java)
+                .hasMessage("\nExpecting actual not to be null")
+        }
+
+        @Test
+        fun hasTextLocation() {
+            FindingAssert(finding).hasTextLocation(TextLocation(0, 10))
+        }
+
+        @Test
+        fun hasTextLocationPair() {
+            FindingAssert(finding).hasTextLocation(0 to 10)
+        }
+
+        @Test
+        fun `hasTextLocation failing`() {
+            assertThatThrownBy { FindingAssert(finding).hasTextLocation(TextLocation(17, 26)) }
+                .isInstanceOfAssertionFailedError()
+                .hasMessage("Expected text location to be 17:26 but was 0:10")
+                .hasActual(TextLocation(0, 10))
+                .hasExpected(TextLocation(17, 26))
+        }
+
+        @Test
+        fun `hasTextLocationPair failing`() {
+            assertThatThrownBy { FindingAssert(finding).hasTextLocation(17 to 26) }
+                .isInstanceOfAssertionFailedError()
+                .hasMessage("Expected text location to be 17:26 but was 0:10")
+                .hasActual(TextLocation(0, 10))
+                .hasExpected(TextLocation(17, 26))
         }
     }
 }
