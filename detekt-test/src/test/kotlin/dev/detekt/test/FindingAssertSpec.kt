@@ -6,6 +6,32 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class FindingAssertSpec {
+    private val finding = createFinding(message = "TestMessage")
+
+    @Nested
+    inner class Message {
+        @Test
+        fun `hasMessage with null value`() {
+            assertThatThrownBy { FindingAssert(null).hasMessage("") }
+                .isExactlyInstanceOf(AssertionError::class.java)
+                .hasMessage("\nExpecting actual not to be null")
+        }
+
+        @Test
+        fun hasMessage() {
+            FindingAssert(finding).hasMessage("TestMessage")
+        }
+
+        @Test
+        fun `hasMessage failing`() {
+            assertThatThrownBy { FindingAssert(finding).hasMessage("Other Message") }
+                .isInstanceOfAssertionFailedError()
+                .hasMessage("""Expected message "Other Message" but actual message was "TestMessage"""")
+                .hasActual("TestMessage")
+                .hasExpected("Other Message")
+        }
+    }
+
     @Nested
     inner class Suppress {
         @Test

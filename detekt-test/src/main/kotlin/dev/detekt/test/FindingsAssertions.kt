@@ -102,12 +102,14 @@ class FindingsAssert(actual: List<Finding>) :
 class FindingAssert(val actual: Finding?) : AbstractAssert<FindingAssert, Finding>(actual, FindingAssert::class.java) {
 
     fun hasMessage(expectedMessage: String) = apply {
-        if (expectedMessage.isNotBlank() && actual?.message.isNullOrBlank()) {
-            failWithMessage("Expected message <$expectedMessage> but finding has no message")
-        }
-
-        if (!actual?.message?.trim().equals(expectedMessage.trim(), ignoreCase = true)) {
-            failWithMessage("Expected message <$expectedMessage> but actual message was <${actual?.message}>")
+        isNotNull()
+        actual!!
+        if (actual.message != expectedMessage) {
+            throw failureWithActualExpected(
+                actual.message,
+                expectedMessage,
+                """Expected message "$expectedMessage" but actual message was "${actual.message}"""",
+            )
         }
     }
 
