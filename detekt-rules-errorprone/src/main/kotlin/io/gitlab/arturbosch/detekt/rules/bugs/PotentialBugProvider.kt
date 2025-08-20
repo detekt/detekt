@@ -54,6 +54,7 @@ class PotentialBugProvider : DefaultRuleSetProvider {
             ::PropertyUsedBeforeDeclaration,
             ::CharArrayToStringCall,
             ::MissingSuperCall,
+            ::LateinitUsageInClassLevelVal,
         )
     )
 }
