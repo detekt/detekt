@@ -7,7 +7,6 @@ import dev.detekt.tooling.api.spec.RulesSpec.RunPolicy.DisableDefaultRuleSets
 import dev.detekt.tooling.api.spec.RulesSpec.RunPolicy.NoRestrictions
 import dev.detekt.utils.PathFilters
 import java.nio.file.Path
-import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.absolute
 import kotlin.io.path.extension
 import kotlin.io.path.relativeTo
@@ -85,7 +84,6 @@ internal fun CliArgs.createSpec(output: Appendable, error: Appendable): Processi
     }
 }
 
-@OptIn(ExperimentalPathApi::class)
 private fun Iterable<Path>.walk(): Sequence<Path> = asSequence().flatMap { it.walk() }
 
 private fun Path.isKotlinFile() = extension in KT_ENDINGS

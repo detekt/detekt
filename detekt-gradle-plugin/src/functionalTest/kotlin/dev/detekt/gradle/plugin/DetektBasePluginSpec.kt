@@ -22,7 +22,7 @@ class DetektBasePluginSpec {
             buildFileName = "build.gradle.kts",
             mainBuildFileContent = """
                 plugins {
-                    id("io.gitlab.arturbosch.detekt")
+                    id("dev.detekt")
                     kotlin("jvm")
                 }
                 
@@ -55,7 +55,7 @@ class DetektBasePluginSpec {
             buildFileName = "build.gradle.kts",
             mainBuildFileContent = """
                 plugins {
-                    id("io.gitlab.arturbosch.detekt")
+                    id("dev.detekt")
                     id("com.android.library")
                     kotlin("android")
                 }
@@ -108,7 +108,7 @@ class DetektBasePluginSpec {
             buildFileName = "build.gradle.kts",
             mainBuildFileContent = """
                 plugins {
-                    id("io.gitlab.arturbosch.detekt")
+                    id("dev.detekt")
                     kotlin("multiplatform")
                     id("com.android.library")
                 }

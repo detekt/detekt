@@ -530,7 +530,7 @@ class ObjectLiteralToLambdaSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code, compile = false)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -543,7 +543,7 @@ class ObjectLiteralToLambdaSpec {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code, compile = false)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -559,7 +559,7 @@ class ObjectLiteralToLambdaSpec {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code, compile = false)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 }

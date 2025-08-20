@@ -38,8 +38,8 @@ class LabeledExpressionSpec {
 
         val findings = subject.lint(code)
 
-        assertThat(findings).hasSize(1)
-        assertThat(findings).hasStartSourceLocation(3, 28)
+        assertThat(findings).singleElement()
+            .hasStartSourceLocation(3, 28)
     }
 
     @Test

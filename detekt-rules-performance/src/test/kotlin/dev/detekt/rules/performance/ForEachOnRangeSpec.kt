@@ -20,7 +20,6 @@ class ForEachOnRangeSpec {
                 (1.rangeTo(10)).forEach {
                     println(it)
                 }
-                @OptIn(ExperimentalStdlibApi::class)
                 (1..<10).forEach {
                     println(it)
                 }

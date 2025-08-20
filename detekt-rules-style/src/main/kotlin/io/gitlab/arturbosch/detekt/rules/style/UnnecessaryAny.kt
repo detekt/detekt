@@ -3,15 +3,26 @@ package io.gitlab.arturbosch.detekt.rules.style
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
-import dev.detekt.api.RequiresFullAnalysis
+import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
-import dev.detekt.psi.firstParameter
+import dev.detekt.psi.firstParameterOrNull
 import dev.detekt.psi.isCalling
-import org.jetbrains.kotlin.contracts.parsing.isEqualsDescriptor
-import org.jetbrains.kotlin.descriptors.VariableDescriptor
-import org.jetbrains.kotlin.descriptors.impl.ValueParameterDescriptorImpl.WithDestructuringDeclaration
+import org.jetbrains.kotlin.analysis.api.KaSession
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
+import org.jetbrains.kotlin.analysis.api.resolution.singleCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaDeclarationSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaDestructuringDeclarationSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaVariableSymbol
+import org.jetbrains.kotlin.builtins.StandardNames
+import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.lexer.KtTokens
-import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.name.CallableId
+import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.name.StandardClassIds
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -20,12 +31,8 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
-import org.jetbrains.kotlin.types.typeUtil.isSubtypeOf
 
 /**
  * Turn on this rule to flag usage of `any` which can either be replaced with simple `contains` call
@@ -46,14 +53,16 @@ class UnnecessaryAny(config: Config) :
         config,
         "The `any {  }` usage is unnecessary."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 
-        if (!expression.isCallingAny()) return
+        if (!expression.isCalling(anyCallableId)) return
 
-        val msg = shouldBeReported(expression)
+        val msg = analyze(expression) {
+            shouldBeReported(expression)
+        }
         if (msg != null) {
             report(
                 Finding(
@@ -65,28 +74,26 @@ class UnnecessaryAny(config: Config) :
     }
 
     @Suppress("ReturnCount")
-    private fun shouldBeReported(expression: KtCallExpression): String? {
-        val valueArgument = expression.valueArguments.getOrNull(0) ?: return null
+    private fun KaSession.shouldBeReported(expression: KtCallExpression): String? {
+        val valueArgument = expression.valueArguments.singleOrNull() ?: return null
         return when (val valueExpression = valueArgument.getArgumentExpression()) {
             is KtLambdaExpression -> {
                 val bodyExpression = valueExpression.bodyExpression ?: return null
-                val descriptor =
-                    valueExpression.firstParameter(bindingContext) ?: return null
-
-                bodyExpression.shouldBlockExpressionBeReported(descriptor)
+                val parameter =
+                    valueExpression.functionLiteral.valueParameters.singleOrNull()?.destructuringDeclaration?.symbol
+                        ?: valueExpression.firstParameterOrNull()
+                        ?: return null
+                bodyExpression.shouldBlockExpressionBeReported(parameter)
             }
 
             is KtNamedFunction -> {
-                val descriptor =
-                    bindingContext[
-                        BindingContext.DECLARATION_TO_DESCRIPTOR, valueExpression.valueParameters[0]
-                    ] as? VariableDescriptor ?: return null
-                val bodyExpression =
-                    valueExpression.bodyExpression as? KtBlockExpression
-                        ?: return valueExpression.bodyExpression?.shouldStatementBeReported(
-                            descriptor,
-                        )
-                bodyExpression.shouldBlockExpressionBeReported(descriptor)
+                val bodyExpression = valueExpression.bodyExpression ?: return null
+                val parameter = valueExpression.valueParameters.singleOrNull()?.symbol ?: return null
+                if (bodyExpression is KtBlockExpression) {
+                    bodyExpression.shouldBlockExpressionBeReported(parameter)
+                } else {
+                    bodyExpression.shouldStatementBeReported(parameter)
+                }
             }
 
             else -> {
@@ -95,18 +102,17 @@ class UnnecessaryAny(config: Config) :
         }
     }
 
-    private fun KtBlockExpression.shouldBlockExpressionBeReported(
-        descriptor: VariableDescriptor,
-    ): String? {
+    context(session: KaSession)
+    private fun KtBlockExpression.shouldBlockExpressionBeReported(parameter: KaDeclarationSymbol): String? {
         if (this.statements.isEmpty()) return null
-        if (descriptor is WithDestructuringDeclaration) {
-            return if (descriptor.destructuringVariables.all { getItUsageCount(it) == 0 }) {
+        if (parameter is KaDestructuringDeclarationSymbol) {
+            return if (parameter.entries.all { getItUsageCount(it) == 0 }) {
                 ANY_CAN_BE_OMITTED_MSG
             } else {
                 null
             }
         }
-        if (this.statements.isNotEmpty() && getItUsageCount(descriptor) == 0) return ANY_CAN_BE_OMITTED_MSG
+        if (this.statements.isNotEmpty() && getItUsageCount(parameter) == 0) return ANY_CAN_BE_OMITTED_MSG
 
         val firstStatement = this.statements[0]
         val statement = if (firstStatement is KtReturnExpression) {
@@ -115,40 +121,41 @@ class UnnecessaryAny(config: Config) :
             firstStatement
         } ?: return null
 
-        return statement.shouldStatementBeReported(descriptor)
+        return statement.shouldStatementBeReported(parameter)
     }
 
-    private fun KtExpression.shouldStatementBeReported(descriptor: VariableDescriptor): String? =
-        when {
-            this is KtBinaryExpression && operationToken == KtTokens.EQEQ -> {
-                isUsageOfValueAndItEligible(descriptor, left, right)
+    context(session: KaSession)
+    private fun KtExpression.shouldStatementBeReported(parameter: KaDeclarationSymbol): String? =
+        when (this) {
+            is KtBinaryExpression if operationToken == KtTokens.EQEQ -> {
+                isUsageOfValueAndItEligible(parameter, left, right)
             }
 
-            this is KtDotQualifiedExpression && selectorExpression.isCallingEquals() -> {
+            is KtDotQualifiedExpression if selectorExpression.isCallingEquals() -> {
                 isUsageOfValueAndItEligible(
-                    descriptor,
+                    parameter,
                     receiverExpression,
-                    (selectorExpression as? KtCallExpression)?.valueArguments?.getOrNull(0)
-                        ?.getArgumentExpression()
+                    (selectorExpression as? KtCallExpression)?.valueArguments?.firstOrNull()?.getArgumentExpression(),
                 )
             }
 
             else -> {
-                if (this.getItUsageCount(descriptor) <= 0) ANY_CAN_BE_OMITTED_MSG else null
+                if (this.getItUsageCount(parameter) <= 0) ANY_CAN_BE_OMITTED_MSG else null
             }
         }
 
     @Suppress("ReturnCount")
+    context(session: KaSession)
     private fun isUsageOfValueAndItEligible(
-        descriptor: VariableDescriptor,
+        parameter: KaDeclarationSymbol,
         leftExpression: KtExpression?,
         rightExpression: KtExpression?,
     ): String? {
         leftExpression ?: return null
         rightExpression ?: return null
 
-        val itRefCountInLeft = leftExpression.getItUsageCount(descriptor)
-        val itRefCountInRight = rightExpression.getItUsageCount(descriptor)
+        val itRefCountInLeft = leftExpression.getItUsageCount(parameter)
+        val itRefCountInRight = rightExpression.getItUsageCount(parameter)
         return when {
             itRefCountInLeft > 0 && itRefCountInRight > 0 -> {
                 // both side `it` has been used
@@ -162,20 +169,25 @@ class UnnecessaryAny(config: Config) :
 
             itRefCountInRight == 1 -> {
                 // reversing the order of parameter
-                isUsageOfValueAndItEligible(descriptor, rightExpression, leftExpression)
+                isUsageOfValueAndItEligible(parameter, rightExpression, leftExpression)
             }
 
             itRefCountInLeft == 1 -> {
-                val valueExpressionType =
-                    rightExpression.getResolvedCall(bindingContext)?.resultingDescriptor?.returnType ?: return null
-                val itExpressionType =
-                    leftExpression.getResolvedCall(bindingContext)?.resultingDescriptor?.returnType ?: return null
-                if (leftExpression is KtReferenceExpression &&
-                    valueExpressionType.isSubtypeOf(itExpressionType)
-                ) {
-                    USE_CONTAINS_MSG
-                } else {
-                    null
+                with(session) {
+                    val itExpressionType = (leftExpression.mainReference?.resolveToSymbol() as? KaVariableSymbol)
+                        ?.returnType
+                        ?: return null
+                    val valueExpressionType = rightExpression
+                        .resolveToCall()
+                        ?.singleCallOrNull<KaCallableMemberCall<*, *>>()
+                        ?.symbol
+                        ?.returnType
+                        ?: return null
+                    if (valueExpressionType.isSubtypeOf(itExpressionType)) {
+                        USE_CONTAINS_MSG
+                    } else {
+                        null
+                    }
                 }
             }
 
@@ -185,21 +197,26 @@ class UnnecessaryAny(config: Config) :
         }
     }
 
-    private fun KtExpression.getItUsageCount(descriptor: VariableDescriptor) =
+    context(session: KaSession)
+    private fun KtExpression.getItUsageCount(symbol: KaDeclarationSymbol) = with(session) {
         collectDescendantsOfType<KtNameReferenceExpression>().count {
-            bindingContext[BindingContext.REFERENCE_TARGET, it] == descriptor
+            it.mainReference.resolveToSymbol() == symbol
         }
+    }
 
-    private fun KtCallExpression.isCallingAny(): Boolean = isCalling(anyFqName, bindingContext)
-
+    context(session: KaSession)
     private fun KtExpression?.isCallingEquals(): Boolean {
-        this ?: return false
-        val resolvedCall = this.getResolvedCall(bindingContext) ?: return false
-        return resolvedCall.resultingDescriptor.isEqualsDescriptor()
+        if (this == null) return false
+        with(session) {
+            val symbol = resolveToCall()?.singleFunctionCallOrNull()?.symbol as? KaNamedFunctionSymbol ?: return false
+            return symbol.name == StandardNames.EQUALS_NAME &&
+                symbol.returnType.isBooleanType &&
+                symbol.valueParameters.singleOrNull()?.returnType?.let { it.isAnyType && it.isMarkedNullable } == true
+        }
     }
 
     companion object {
-        private val anyFqName = FqName("kotlin.collections.any")
+        private val anyCallableId = CallableId(StandardClassIds.BASE_COLLECTIONS_PACKAGE, Name.identifier("any"))
         private const val USE_CONTAINS_MSG =
             "Use `contains` instead of `any {  }` call to check the presence of the element"
         private const val ANY_CAN_BE_OMITTED_MSG = "`any {  }` expression can be omitted"

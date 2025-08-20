@@ -4,15 +4,15 @@ import dev.detekt.api.Config
 import dev.detekt.api.Configuration
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
-import dev.detekt.api.RequiresFullAnalysis
+import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.api.config
-import dev.detekt.psi.fqNameOrNull
-import org.jetbrains.kotlin.cfg.WhenChecker
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.symbols.KaClassKind
+import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolModality
+import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.psi.KtWhenExpression
-import org.jetbrains.kotlin.resolve.calls.util.getType
-import org.jetbrains.kotlin.types.KotlinType
-import org.jetbrains.kotlin.types.typeUtil.isBooleanOrNullableBoolean
 
 /**
  * This rule reports `when` expressions that contain an `else` case even though they have an exhaustive set of cases.
@@ -54,7 +54,7 @@ class ElseCaseInsteadOfExhaustiveWhen(config: Config) :
         config,
         "A `when` expression that has an exhaustive set of cases should not contain an `else` case."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     @Configuration(
         "List of fully qualified types which should be ignored for when expressions with a subject. " +
@@ -72,23 +72,26 @@ class ElseCaseInsteadOfExhaustiveWhen(config: Config) :
         val subjectExpression = whenExpression.subjectExpression ?: return
         if (whenExpression.elseExpression == null) return
 
-        val subjectType = subjectExpression.getType(bindingContext)
-        if (ignoredSubjectTypes.contains(subjectType?.fqNameOrNull()?.toString())) {
-            return
-        }
-
-        val isEnumSubject = WhenChecker.getClassDescriptorOfTypeIfEnum(subjectType) != null
-        val isSealedSubject = isNonExpectedSealedClass(subjectType)
-        val isBooleanSubject = subjectType?.isBooleanOrNullableBoolean() == true
-
-        if (isEnumSubject || isSealedSubject || isBooleanSubject) {
-            val subjectTypeName = when {
-                isEnumSubject -> "enum class"
-                isSealedSubject -> "sealed class"
-                else -> "boolean"
+        analyze(whenExpression) {
+            val subjectType = subjectExpression.expressionType
+            val subjectSymbol = subjectType?.symbol as? KaClassSymbol
+            if (ignoredSubjectTypes.contains(subjectSymbol?.classId?.asFqNameString())) {
+                return
             }
-            val message = "When expression with $subjectTypeName subject should not contain an `else` case."
-            report(Finding(Entity.from(whenExpression), message))
+
+            val isEnumSubject = subjectSymbol?.classKind == KaClassKind.ENUM_CLASS
+            val isSealedSubject = isNonExpectedSealedClass(subjectSymbol)
+            val isBooleanSubject = subjectType?.isBooleanType == true
+
+            if (isEnumSubject || isSealedSubject || isBooleanSubject) {
+                val subjectTypeName = when {
+                    isEnumSubject -> "enum class"
+                    isSealedSubject -> "sealed class"
+                    else -> "boolean"
+                }
+                val message = "When expression with $subjectTypeName subject should not contain an `else` case."
+                report(Finding(Entity.from(whenExpression), message))
+            }
         }
     }
 
@@ -97,8 +100,6 @@ class ElseCaseInsteadOfExhaustiveWhen(config: Config) :
      * `else` branch. This happens because subclasses of `actual` platform implementations aren't known in the common
      *  code.
      */
-    private fun isNonExpectedSealedClass(type: KotlinType?): Boolean {
-        val sealedClassDescriptor = WhenChecker.getClassDescriptorOfTypeIfSealed(type)
-        return sealedClassDescriptor != null && !sealedClassDescriptor.isExpect
-    }
+    private fun isNonExpectedSealedClass(symbol: KaClassSymbol?): Boolean =
+        symbol?.modality == KaSymbolModality.SEALED && !symbol.isExpect
 }

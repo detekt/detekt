@@ -233,7 +233,7 @@ class EndOfSentenceFormatSpec {
                  * This sentence counts too, because it doesn't know where the other ends */
                 fun test() = 3
             """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.lint(code)).singleElement()
                 .hasStartSourceLocation(2, 2)
                 .hasEndSourceLocation(4, 75)
         }
@@ -247,7 +247,7 @@ class EndOfSentenceFormatSpec {
                     val test = 3
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.lint(code)).singleElement()
                 .hasStartSourceLocation(2, 8)
                 .hasEndSourceLocation(3, 80)
         }
@@ -262,7 +262,7 @@ class EndOfSentenceFormatSpec {
                  */
                 class Test
             """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.lint(code)).singleElement()
                 .hasStartSourceLocation(2, 2)
                 .hasEndSourceLocation(4, 74)
         }

@@ -3,23 +3,24 @@ package io.gitlab.arturbosch.detekt.rules.coroutines
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
-import dev.detekt.api.RequiresFullAnalysis
+import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.psi.hasAnnotation
 import io.gitlab.arturbosch.detekt.rules.coroutines.utils.isCoroutineScope
 import io.gitlab.arturbosch.detekt.rules.coroutines.utils.isCoroutinesFlow
+import org.jetbrains.kotlin.analysis.api.KaSession
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.util.getCalleeExpressionIfAny
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
-import org.jetbrains.kotlin.resolve.calls.util.getType
-import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
-import org.jetbrains.kotlin.resolve.source.getPsi
 
 /**
  * Detect coroutine launches from `@Test` functions outside a `runTest` block.
@@ -52,54 +53,48 @@ class CoroutineLaunchedInTestWithoutRunTest(config: Config) :
         "Launching coroutines in tests without a `runTest` block could swallow exceptions. " +
             "You should use `runTest` to avoid altering test results."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     private val funCoroutineLaunchesTraverseHelper = FunCoroutineLaunchesTraverseHelper()
 
     override fun visitNamedFunction(initialFunction: KtNamedFunction) {
         if (!initialFunction.hasBody()) return
         if (!initialFunction.hasAnnotation(TEST_ANNOTATION_NAME)) return
-        if (initialFunction.runsInRunTestBlock()) return
-
-        // By this point we know we're inside a test function that is not a `runTest` function.
-        if (funCoroutineLaunchesTraverseHelper.isFunctionLaunchingCoroutines(
-                initialFunction,
-                bindingContext
-            )
-        ) {
-            report(Finding(Entity.from(initialFunction), MESSAGE))
+        analyze(initialFunction) {
+            if (initialFunction.runsInRunTestBlock()) return
+            // By this point we know we're inside a test function that is not a `runTest` function.
+            if (funCoroutineLaunchesTraverseHelper.isFunctionLaunchingCoroutines(initialFunction)) {
+                report(Finding(Entity.from(initialFunction), MESSAGE))
+            }
         }
     }
 
-    private fun KtNamedFunction.runsInRunTestBlock() =
-        bodyExpression
-            .getResolvedCall(bindingContext)
-            ?.resultingDescriptor
-            ?.fqNameSafe == RUN_TEST_FQ
+    context(session: KaSession)
+    private fun KtNamedFunction.runsInRunTestBlock(): Boolean = with(session) {
+        bodyExpression?.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId == RUN_TEST_CALLABLE_ID
+    }
 
     companion object {
         private const val MESSAGE =
             "Launching coroutines in tests without a `runTest` block."
 
         private const val TEST_ANNOTATION_NAME = "Test"
-        private val RUN_TEST_FQ = FqName("kotlinx.coroutines.test.runTest")
+        private val RUN_TEST_CALLABLE_ID = CallableId(FqName("kotlinx.coroutines.test"), Name.identifier("runTest"))
     }
 }
 
 class FunCoroutineLaunchesTraverseHelper {
     val exploredFunctionsCache = mutableMapOf<KtNamedFunction, Boolean>()
 
-    fun isFunctionLaunchingCoroutines(
-        initialFunction: KtNamedFunction,
-        bindingContext: BindingContext,
-    ): Boolean {
+    context(session: KaSession)
+    fun isFunctionLaunchingCoroutines(initialFunction: KtNamedFunction): Boolean {
         val traversedFunctions = mutableSetOf<KtNamedFunction>()
 
         fun checkFunctionAndSaveToCache(
             function: KtNamedFunction,
             parents: List<KtNamedFunction> = emptyList(),
         ) {
-            val isLaunching = function.isLaunchingCoroutine(bindingContext)
+            val isLaunching = function.isLaunchingCoroutine()
             exploredFunctionsCache.putIfAbsent(function, isLaunching)
 
             if (isLaunching) {
@@ -112,10 +107,9 @@ class FunCoroutineLaunchesTraverseHelper {
             parents: List<KtNamedFunction> = emptyList(),
         ): Set<KtNamedFunction> {
             function.collectDescendantsOfType<KtExpression>().mapNotNull {
-                it.getResolvedCall(bindingContext)
-                    ?.resultingDescriptor
-                    ?.source
-                    ?.getPsi() as? KtNamedFunction
+                with(session) {
+                    it.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.psi as? KtNamedFunction
+                }
             }.forEach {
                 traversedFunctions.add(it)
                 if (exploredFunctionsCache.contains(it)) return@forEach
@@ -137,15 +131,13 @@ class FunCoroutineLaunchesTraverseHelper {
         return traversedFunctions.any { exploredFunctionsCache[it] == true }
     }
 
-    private fun KtNamedFunction.isLaunchingCoroutine(bindingContext: BindingContext) =
+    context(session: KaSession)
+    private fun KtNamedFunction.isLaunchingCoroutine() = with(session) {
         anyDescendantOfType<KtDotQualifiedExpression> {
-            it.receiverExpression
-                .getType(bindingContext)
-                ?.isCoroutineScope() == true &&
-                it.getCalleeExpressionIfAny()?.text in listOf("launch", "async") ||
-                it.receiverExpression
-                    .getType(bindingContext)
-                    ?.isCoroutinesFlow() == true &&
-                it.getCalleeExpressionIfAny()?.text == "launchIn"
+            val receiverType = it.receiverExpression.expressionType ?: return@anyDescendantOfType false
+            val calleeText = it.getCalleeExpressionIfAny()?.text ?: return@anyDescendantOfType false
+            receiverType.isCoroutineScope() && calleeText in listOf("launch", "async") ||
+                receiverType.isCoroutinesFlow() && calleeText == "launchIn"
         }
+    }
 }

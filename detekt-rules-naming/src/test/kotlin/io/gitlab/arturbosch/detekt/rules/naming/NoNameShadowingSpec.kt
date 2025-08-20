@@ -19,8 +19,9 @@ class NoNameShadowingSpec(val env: KotlinEnvironmentContainer) {
             }
         """.trimIndent()
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).singleElement().hasMessage("Name shadowed: i")
-        assertThat(findings).hasStartSourceLocation(2, 9)
+        assertThat(findings).singleElement()
+            .hasMessage("Name shadowed: i")
+            .hasStartSourceLocation(2, 9)
     }
 
     @Test

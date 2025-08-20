@@ -65,7 +65,7 @@ class ObjectPropertyNamingSpec {
                     ${PublicConst.positive}
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).hasStartSourceLocation(2, 15)
+            assertThat(subject.lint(code)).singleElement().hasStartSourceLocation(2, 15)
         }
     }
 
@@ -131,7 +131,7 @@ class ObjectPropertyNamingSpec {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).hasStartSourceLocation(3, 19)
+            assertThat(subject.lint(code)).singleElement().hasStartSourceLocation(3, 19)
         }
     }
 

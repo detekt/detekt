@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import dev.detekt.api.Config
-import dev.detekt.api.SourceLocation
 import dev.detekt.test.TestConfig
 import dev.detekt.test.assertThat
 import dev.detekt.test.lint
@@ -399,9 +398,8 @@ class MaxLineLengthSpec {
             )
 
             val findings = rule.lint(code)
-            assertThat(findings)
-                .hasSize(1)
-                .hasStartSourceLocations(SourceLocation(6, 1))
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(6, 1)
                 .hasEndSourceLocation(6, 109)
         }
     }

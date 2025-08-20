@@ -23,7 +23,7 @@ class SerialVersionUIDInSerializableClassSpec {
                 "The class C implements the `Serializable` interface and should thus define " +
                     "a `serialVersionUID`."
             )
-        assertThat(findings)
+        assertThat(findings).singleElement()
             .hasStartSourceLocation(3, 7)
             .hasEndSourceLocation(3, 8)
     }
@@ -40,8 +40,8 @@ class SerialVersionUIDInSerializableClassSpec {
             }
         """.trimIndent()
         val findings = subject.lint(code)
-        assertThat(findings).singleElement().hasMessage(WRONG_SERIAL_VERSION_UID_MESSAGE)
-        assertThat(findings)
+        assertThat(findings).singleElement()
+            .hasMessage(WRONG_SERIAL_VERSION_UID_MESSAGE)
             .hasStartSourceLocation(5, 27)
             .hasEndSourceLocation(5, 43)
     }
@@ -58,8 +58,8 @@ class SerialVersionUIDInSerializableClassSpec {
             }
         """.trimIndent()
         val findings = subject.lint(code)
-        assertThat(findings).singleElement().hasMessage(WRONG_SERIAL_VERSION_UID_MESSAGE)
-        assertThat(findings)
+        assertThat(findings).singleElement()
+            .hasMessage(WRONG_SERIAL_VERSION_UID_MESSAGE)
             .hasStartSourceLocation(5, 27)
             .hasEndSourceLocation(5, 43)
     }
@@ -76,8 +76,8 @@ class SerialVersionUIDInSerializableClassSpec {
             }
         """.trimIndent()
         val findings = subject.lint(code)
-        assertThat(findings).singleElement().hasMessage(WRONG_SERIAL_VERSION_UID_MESSAGE)
-        assertThat(findings)
+        assertThat(findings).singleElement()
+            .hasMessage(WRONG_SERIAL_VERSION_UID_MESSAGE)
             .hasStartSourceLocation(5, 19)
             .hasEndSourceLocation(5, 35)
     }

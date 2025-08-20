@@ -12,8 +12,8 @@ public final class dev/detekt/test/utils/FileExtensionKt {
 
 public final class dev/detekt/test/utils/KotlinAnalysisApiEngine {
 	public static final field INSTANCE Ldev/detekt/test/utils/KotlinAnalysisApiEngine;
-	public final fun compile (Ljava/lang/String;Ljava/util/List;Z)Lorg/jetbrains/kotlin/psi/KtFile;
-	public static synthetic fun compile$default (Ldev/detekt/test/utils/KotlinAnalysisApiEngine;Ljava/lang/String;Ljava/util/List;ZILjava/lang/Object;)Lorg/jetbrains/kotlin/psi/KtFile;
+	public final fun compile (Ljava/lang/String;Ljava/util/List;Ljava/util/List;Z)Lorg/jetbrains/kotlin/psi/KtFile;
+	public static synthetic fun compile$default (Ldev/detekt/test/utils/KotlinAnalysisApiEngine;Ljava/lang/String;Ljava/util/List;Ljava/util/List;ZILjava/lang/Object;)Lorg/jetbrains/kotlin/psi/KtFile;
 }
 
 public abstract interface annotation class dev/detekt/test/utils/KotlinCoreEnvironmentTest : java/lang/annotation/Annotation {
@@ -36,11 +36,6 @@ public final class dev/detekt/test/utils/KotlinEnvironmentContainer {
 	public fun <init> (Lcom/intellij/openapi/project/Project;Lorg/jetbrains/kotlin/config/CompilerConfiguration;)V
 	public final fun getConfiguration ()Lorg/jetbrains/kotlin/config/CompilerConfiguration;
 	public final fun getProject ()Lcom/intellij/openapi/project/Project;
-}
-
-public final class dev/detekt/test/utils/KotlinScriptEngine {
-	public static final field INSTANCE Ldev/detekt/test/utils/KotlinScriptEngine;
-	public final fun compile (Ljava/lang/String;)V
 }
 
 public final class dev/detekt/test/utils/NullPrintStream : java/io/PrintStream {

@@ -5,6 +5,7 @@ import com.google.devtools.ksp.standalone.buildKspSdkModule
 import com.intellij.openapi.util.Disposer
 import com.intellij.testFramework.LightVirtualFile
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.test.TestScope
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaImplementationDetail
@@ -45,6 +46,7 @@ object KotlinAnalysisApiEngine {
     fun compile(
         @Language("kotlin") code: String,
         dependencyCodes: List<String> = emptyList(),
+        javaSourceRoots: List<Path> = emptyList(),
         allowCompilationErrors: Boolean = false,
     ): KtFile {
         val disposable = Disposer.newDisposable()
@@ -78,6 +80,14 @@ object KotlinAnalysisApiEngine {
                     }
                 )
 
+                val coroutinesTest = addModule(
+                    buildKspLibraryModule {
+                        addBinaryRoot(kotlinxCoroutinesTestPath())
+                        platform = targetPlatform
+                        libraryName = "coroutines-test"
+                    }
+                )
+
                 val vf = LightVirtualFile("dummy.kt", code)
 
                 val depVfs = dependencyCodes.mapIndexed { index, depCode ->
@@ -89,8 +99,10 @@ object KotlinAnalysisApiEngine {
                         addRegularDependency(jdk)
                         addRegularDependency(stdlib)
                         addRegularDependency(coroutinesCore)
+                        addRegularDependency(coroutinesTest)
                         addSourceVirtualFile(vf)
                         addSourceVirtualFiles(depVfs)
+                        addSourceRoots(javaSourceRoots)
                         platform = targetPlatform
                         moduleName = "source"
                     }
@@ -133,4 +145,7 @@ object KotlinAnalysisApiEngine {
 
     private fun kotlinxCoroutinesCorePath(): Path =
         File(CoroutineScope::class.java.protectionDomain.codeSource.location.path).toPath()
+
+    private fun kotlinxCoroutinesTestPath(): Path =
+        File(TestScope::class.java.protectionDomain.codeSource.location.path).toPath()
 }

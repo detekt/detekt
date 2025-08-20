@@ -24,7 +24,7 @@ class CastNullableToNonNullableTypeSpec(private val env: KotlinEnvironmentContai
             "Use separate `null` assertion and type cast like " +
                 "('(bar ?: error(\"null assertion message\")) as String') instead of 'bar as String'."
         )
-        assertThat(findings).hasStartSourceLocation(2, 17)
+        assertThat(findings).singleElement().hasStartSourceLocation(2, 17)
     }
 
     @Test
@@ -43,7 +43,7 @@ class CastNullableToNonNullableTypeSpec(private val env: KotlinEnvironmentContai
             "Use separate `null` assertion and type cast like " +
                 "('(bar() ?: error(\"null assertion message\")) as Int') instead of 'bar() as Int'."
         )
-        assertThat(findings).hasStartSourceLocation(2, 11)
+        assertThat(findings).singleElement().hasStartSourceLocation(2, 11)
     }
 
     @Test

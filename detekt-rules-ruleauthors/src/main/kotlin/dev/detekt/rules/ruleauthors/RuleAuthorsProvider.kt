@@ -9,7 +9,7 @@ import dev.detekt.api.RuleSetProvider
  *
  * **Note: The `ruleauthors` rule set is not included in the detekt-cli or Gradle plugin.**
  *
- * To enable this rule set, add `detektPlugins "io.gitlab.arturbosch.detekt:detekt-rules-ruleauthors:$version"`
+ * To enable this rule set, add `detektPlugins "dev.detekt:detekt-rules-ruleauthors:$version"`
  * to your Gradle `dependencies` or reference the `detekt-rules-ruleauthors`-jar with the `--plugins` option
  * in the command line interface.
  */

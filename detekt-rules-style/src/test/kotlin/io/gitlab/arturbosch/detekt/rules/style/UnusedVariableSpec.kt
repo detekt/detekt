@@ -218,6 +218,27 @@ class UnusedVariableSpec(val env: KotlinEnvironmentContainer) {
     }
 
     @Nested
+    inner class `when` {
+        @Test
+        fun `does not report when used in when guard clause`() {
+            val code = """
+                fun main() {
+                    val a = '1'.digitToInt() + 1
+                    val b = true // false positive UnusedVariable on `b`
+                    val c = false
+                    when (a) {
+                        1 if b -> Unit
+                        2 -> if (c) Unit else Unit
+                    }
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code))
+                .isEmpty()
+        }
+    }
+
+    @Nested
     inner class `backtick identifiers - #3825` {
 
         @Test

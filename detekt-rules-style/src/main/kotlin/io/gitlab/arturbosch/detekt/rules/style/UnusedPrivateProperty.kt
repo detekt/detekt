@@ -203,7 +203,6 @@ private class UnusedPrivatePropertyVisitor(private val allowedNames: Regex) : De
     fun KaSymbol.isPrivateProperty() =
         this is KaPropertySymbol && this.visibility == KaSymbolVisibility.PRIVATE
 
-    @Suppress("ModifierListSpacing")
     context(session: KaSession)
     fun KaSymbol.isConstructorParameter(): Boolean {
         val symbol = this

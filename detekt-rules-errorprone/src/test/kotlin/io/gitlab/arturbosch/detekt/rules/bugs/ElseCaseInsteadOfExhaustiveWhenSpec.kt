@@ -87,7 +87,7 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinEnvironmentCont
                     }
                 }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code, compile = false)).isEmpty()
+            assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true)).isEmpty()
         }
     }
 
@@ -149,7 +149,7 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinEnvironmentCont
                     }
                 }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code, compile = false)).isEmpty()
+            assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true)).isEmpty()
         }
     }
 
@@ -280,7 +280,7 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinEnvironmentCont
                     }
                 }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code, compile = false)).isEmpty()
+            assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true)).isEmpty()
         }
 
         @Test
@@ -300,7 +300,7 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinEnvironmentCont
                     }
                 }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code, compile = false)).isEmpty()
+            assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true)).isEmpty()
         }
     }
 

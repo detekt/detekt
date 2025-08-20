@@ -3,14 +3,17 @@ package io.gitlab.arturbosch.detekt.rules.style
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
-import dev.detekt.api.RequiresFullAnalysis
+import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
-import dev.detekt.psi.firstParameter
+import dev.detekt.psi.firstParameterOrNull
 import dev.detekt.psi.isCalling
 import dev.detekt.psi.receiverIsUsed
+import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.builtins.StandardNames.IMPLICIT_LAMBDA_PARAMETER_NAME
-import org.jetbrains.kotlin.descriptors.impl.ValueParameterDescriptorImpl.WithDestructuringDeclaration
+import org.jetbrains.kotlin.idea.references.mainReference
+import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtLambdaExpression
@@ -19,7 +22,6 @@ import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.psi.KtSimpleNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
-import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * `let` expressions are used extensively in our code for null-checking and chaining functions,
@@ -48,21 +50,21 @@ class UnnecessaryLet(config: Config) :
         config,
         "The `let` usage is unnecessary."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 
-        if (!expression.isCalling(letFqName, bindingContext)) return
+        if (!expression.isCalling(letCallableId)) return
         val lambdaExpr = expression.lambdaArguments.firstOrNull()?.getLambdaExpression()
 
-        val referenceCount = lambdaExpr?.countLambdaParameterReference(bindingContext) ?: 0
+        val referenceCount = lambdaExpr?.countLambdaParameterReference() ?: 0
         if (referenceCount > 1) return
 
         if (expression.parent is KtSafeQualifiedExpression) {
             if (lambdaExpr != null) {
                 when {
-                    referenceCount == 0 && !expression.receiverIsUsed(bindingContext) ->
+                    referenceCount == 0 && !expression.receiverIsUsed() ->
                         report(expression, "let expression can be replaced with a simple if")
 
                     referenceCount == 1 && canBeReplacedWithCall(lambdaExpr) ->
@@ -81,7 +83,7 @@ class UnnecessaryLet(config: Config) :
     }
 
     companion object {
-        private val letFqName = FqName("kotlin.let")
+        private val letCallableId = CallableId(FqName("kotlin"), Name.identifier("let"))
     }
 }
 
@@ -119,19 +121,24 @@ private fun KtExpression?.getRootExpression(): KtExpression? {
     return receiverExpression
 }
 
-private fun KtLambdaExpression.countLambdaParameterReference(context: BindingContext): Int {
+private fun KtLambdaExpression.countLambdaParameterReference(): Int {
     val bodyExpression = bodyExpression ?: return 0
-    val firstParameter = firstParameter(context) ?: return 0
-
-    val parameters = if (firstParameter is WithDestructuringDeclaration) {
-        firstParameter.destructuringVariables
+    val variableList = if (valueParameters.isNotEmpty()) {
+        valueParameters.first().destructuringDeclaration?.let {
+            analyze(it) {
+                it.symbol.entries
+            }
+        } ?: listOf(firstParameterOrNull())
     } else {
-        listOf(firstParameter)
-    }
+        // implicit it param
+        listOf(firstParameterOrNull())
+    }.filterNotNull()
 
-    return parameters.sumOf { parameter ->
+    return variableList.sumOf { variableSymbol ->
         bodyExpression.collectDescendantsOfType<KtSimpleNameExpression> {
-            context[BindingContext.REFERENCE_TARGET, it] == parameter
+            analyze(it) {
+                it.mainReference.resolveToSymbol() == variableSymbol
+            }
         }.count()
     }
 }

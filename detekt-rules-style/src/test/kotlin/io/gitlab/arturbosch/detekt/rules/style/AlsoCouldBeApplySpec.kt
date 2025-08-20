@@ -45,9 +45,9 @@ class AlsoCouldBeApplySpec {
 
         val findings = subject.lint(code)
 
-        assertThat(findings).hasSize(1)
-        assertThat(findings).hasStartSourceLocation(2, 7)
-        assertThat(findings).hasEndSourceLocation(2, 11)
+        assertThat(findings).singleElement()
+            .hasStartSourceLocation(2, 7)
+            .hasEndSourceLocation(2, 11)
     }
 
     @Test

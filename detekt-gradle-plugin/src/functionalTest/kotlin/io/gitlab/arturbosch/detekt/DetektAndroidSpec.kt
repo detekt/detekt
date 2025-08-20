@@ -635,7 +635,7 @@ private val APP_PLUGIN_BLOCK = """
     plugins {
         id("com.android.application")
         kotlin("android")
-        id("io.gitlab.arturbosch.detekt")
+        id("dev.detekt")
     }
     kotlin {
         compilerOptions {
@@ -649,7 +649,7 @@ private val LIB_PLUGIN_BLOCK = """
     plugins {
         id("com.android.library")
         kotlin("android")
-        id("io.gitlab.arturbosch.detekt")
+        id("dev.detekt")
     }
     kotlin {
         compilerOptions {
@@ -662,7 +662,7 @@ private val LIB_PLUGIN_BLOCK = """
 private val KOTLIN_ONLY_LIB_PLUGIN_BLOCK = """
     plugins {
         kotlin("jvm")
-        id("io.gitlab.arturbosch.detekt")
+        id("dev.detekt")
     }
 """.trimIndent()
 

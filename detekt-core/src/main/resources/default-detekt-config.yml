@@ -653,6 +653,9 @@ style:
   ForbiddenNamedParam:
     active: false
     methods: []
+  ForbiddenOptIn:
+    active: false
+    markerClasses: []
   ForbiddenSuppress:
     active: false
     rules: []

@@ -20,7 +20,7 @@ class EmptyFunctionBlockSpec {
                 protected fun stuff() {}
             }
         """.trimIndent()
-        assertThat(subject.lint(code)).hasStartSourceLocation(2, 27)
+        assertThat(subject.lint(code)).singleElement().hasStartSourceLocation(2, 27)
     }
 
     @Test
@@ -50,7 +50,7 @@ class EmptyFunctionBlockSpec {
                 fun b() {}
             }
         """.trimIndent()
-        assertThat(subject.lint(code)).hasStartSourceLocation(2, 13)
+        assertThat(subject.lint(code)).singleElement().hasStartSourceLocation(2, 13)
     }
 
     @Nested
@@ -88,7 +88,7 @@ class EmptyFunctionBlockSpec {
         @Test
         fun `should not flag overridden functions`() {
             val config = TestConfig(IGNORE_OVERRIDDEN to "true")
-            assertThat(EmptyFunctionBlock(config).lint(code)).hasStartSourceLocation(1, 13)
+            assertThat(EmptyFunctionBlock(config).lint(code)).singleElement().hasStartSourceLocation(1, 13)
         }
     }
 
@@ -114,7 +114,7 @@ class EmptyFunctionBlockSpec {
 
         @Test
         fun `should not flag overridden functions with commented body`() {
-            assertThat(subject.lint(code)).hasStartSourceLocation(12, 31)
+            assertThat(subject.lint(code)).singleElement().hasStartSourceLocation(12, 31)
         }
 
         @Test

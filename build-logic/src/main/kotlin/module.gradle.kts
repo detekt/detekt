@@ -34,10 +34,8 @@ tasks.withType<Test>().configureEach {
     systemProperty("junit.platform.discovery.issue.severity.critical", "INFO")
     val compileTestSnippets = providers.gradleProperty("compile-test-snippets").orNull.toBoolean()
     systemProperty("compile-test-snippets", compileTestSnippets)
-    val compileTestSnippetsAa = providers.gradleProperty("compile-test-snippets-aa").orNull.toBoolean()
-    systemProperty("compile-test-snippets-aa", compileTestSnippetsAa)
 
-    if (compileTestSnippetsAa) {
+    if (compileTestSnippets) {
         maxHeapSize = "3g"
     } else {
         maxHeapSize = "2g"

@@ -75,8 +75,7 @@ class ConstructorParameterNamingSpec {
             val code = """
                 class Foo(private val `PARAM_NAME`: Boolean)
             """.trimIndent()
-            assertThat(ConstructorParameterNaming(Config.empty).lint(code))
-                .hasSize(1)
+            assertThat(ConstructorParameterNaming(Config.empty).lint(code)).singleElement()
                 .hasStartSourceLocation(1, 11)
         }
 
