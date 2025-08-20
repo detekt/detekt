@@ -139,7 +139,7 @@ class ForbiddenNamedParamSpec(val env: KotlinEnvironmentContainer) {
             TestConfig(METHODS to listOf("kotlin.math.atan2(kotlin.Double, kotlin.Double)"))
         ).lintWithContext(env, code)
         assertThat(findings).singleElement()
-            .hasSourceLocation(3, 16)
+            .hasStartSourceLocation(3, 16)
     }
 
     @Test

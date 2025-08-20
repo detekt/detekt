@@ -63,7 +63,7 @@ class ForbiddenOptInSpec(val env: KotlinEnvironmentContainer) {
         val findings = ForbiddenOptIn(optInConfig).lintWithContext(env, code, ANNOTAION_DECLARATIONS)
 
         assertThat(findings).singleElement()
-            .hasSourceLocation(3, 1)
+            .hasStartSourceLocation(3, 1)
             .hasMessage("The opt-in `ForbiddenApi` has been forbidden in the detekt config.")
     }
 
@@ -78,7 +78,7 @@ class ForbiddenOptInSpec(val env: KotlinEnvironmentContainer) {
         val findings = ForbiddenOptIn(optInConfig).lintWithContext(env, code, ANNOTAION_DECLARATIONS)
 
         assertThat(findings).singleElement()
-            .hasSourceLocation(3, 1)
+            .hasStartSourceLocation(3, 1)
             .hasMessage("The opt-in `DoNotUseApi` has been forbidden: Do not use!")
     }
 
@@ -112,6 +112,6 @@ class ForbiddenOptInSpec(val env: KotlinEnvironmentContainer) {
         val findings = ForbiddenOptIn(optInConfig).lintWithContext(env, code, ANNOTAION_DECLARATIONS)
 
         assertThat(findings).singleElement()
-            .hasSourceLocation(1, 1)
+            .hasStartSourceLocation(1, 1)
     }
 }

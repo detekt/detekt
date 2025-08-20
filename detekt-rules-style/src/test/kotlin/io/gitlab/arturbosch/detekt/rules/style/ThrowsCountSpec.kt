@@ -120,7 +120,7 @@ class ThrowsCountSpec {
         fun `reports violation by default`() {
             val findings = subject.lint(code)
             assertThat(findings).singleElement()
-                .hasSourceLocation(4, 9)
+                .hasStartSourceLocation(4, 9)
         }
     }
 
