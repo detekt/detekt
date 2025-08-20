@@ -123,7 +123,7 @@ class DetektPlugin : Plugin<Project> {
                 report.required.convention(DEFAULT_REPORT_ENABLED_VALUE)
                 report.outputLocation.convention(extension.reportsDir.file("$reportName.sarif"))
             }
-            task.reports.xml { report ->
+            task.reports.checkstyle { report ->
                 report.required.convention(DEFAULT_REPORT_ENABLED_VALUE)
                 report.outputLocation.convention(extension.reportsDir.file("$reportName.xml"))
             }
