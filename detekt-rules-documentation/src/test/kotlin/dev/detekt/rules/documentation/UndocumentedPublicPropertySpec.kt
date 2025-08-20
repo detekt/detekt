@@ -328,7 +328,7 @@ class UndocumentedPublicPropertySpec {
             """.trimIndent()
             val findings = subject.lint(code)
             assertThat(findings).singleElement()
-                .hasSourceLocation(9, 13)
+                .hasStartSourceLocation(9, 13)
         }
 
         @Test
@@ -348,7 +348,7 @@ class UndocumentedPublicPropertySpec {
             """.trimIndent()
             val findings = subject.lint(code)
             assertThat(findings).singleElement()
-                .hasSourceLocation(2, 9)
+                .hasStartSourceLocation(2, 9)
         }
 
         @Test

@@ -101,14 +101,6 @@ class FindingsAssert(actual: List<Finding>) :
 
 class FindingAssert(val actual: Finding?) : AbstractAssert<FindingAssert, Finding>(actual, FindingAssert::class.java) {
 
-    fun hasSourceLocation(line: Int, column: Int) = apply {
-        val expectedLocation = SourceLocation(line, column)
-        val actualLocation = actual?.location?.source
-        if (actualLocation != expectedLocation) {
-            failWithMessage("Expected source location to be $expectedLocation but was $actualLocation")
-        }
-    }
-
     fun hasMessage(expectedMessage: String) = apply {
         if (expectedMessage.isNotBlank() && actual?.message.isNullOrBlank()) {
             failWithMessage("Expected message <$expectedMessage> but finding has no message")

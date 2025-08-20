@@ -395,7 +395,7 @@ class StringShouldBeRawStringSpec {
         val subject = StringShouldBeRawString(TestConfig(MAX_ESCAPED_CHARACTER_COUNT to 0))
         val findings = subject.lint(code)
         assertThat(findings).singleElement()
-            .hasSourceLocation(5, 13)
+            .hasStartSourceLocation(5, 13)
     }
 
     @Test
