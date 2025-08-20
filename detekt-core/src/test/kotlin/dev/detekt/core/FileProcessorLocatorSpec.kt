@@ -42,7 +42,7 @@ class FileProcessorLocatorSpec {
 
 private fun getProcessorClasses(): List<Class<out FileProcessListener>> =
     ClassGraph()
-        .acceptPackages("io.github.detekt.metrics.processors")
+        .acceptPackages("dev.detekt.metrics.processors")
         .scan()
         .use { scanResult ->
             scanResult.getClassesImplementing(FileProcessListener::class.java)

@@ -4,12 +4,12 @@ import dev.detekt.api.Detektion
 import dev.detekt.api.testfixtures.createIssue
 import dev.detekt.api.testfixtures.createRuleInstance
 import dev.detekt.core.DetektResult
-import io.github.detekt.metrics.CognitiveComplexity
-import io.github.detekt.metrics.processors.commentLinesKey
-import io.github.detekt.metrics.processors.complexityKey
-import io.github.detekt.metrics.processors.linesKey
-import io.github.detekt.metrics.processors.logicalLinesKey
-import io.github.detekt.metrics.processors.sourceLinesKey
+import dev.detekt.metrics.CognitiveComplexity
+import dev.detekt.metrics.processors.commentLinesKey
+import dev.detekt.metrics.processors.complexityKey
+import dev.detekt.metrics.processors.linesKey
+import dev.detekt.metrics.processors.logicalLinesKey
+import dev.detekt.metrics.processors.sourceLinesKey
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
