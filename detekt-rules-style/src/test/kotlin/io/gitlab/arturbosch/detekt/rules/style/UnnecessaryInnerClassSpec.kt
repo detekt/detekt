@@ -604,9 +604,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code))
-                .hasSize(1)
-                .first()
+            assertThat(subject.lintWithContext(env, code)).singleElement()
                 .hasMessage("Class 'C' does not require `inner` keyword.")
         }
 
