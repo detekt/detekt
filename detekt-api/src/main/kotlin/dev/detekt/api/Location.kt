@@ -89,5 +89,10 @@ class SourceLocation(val line: Int, val column: Int) : Comparable<SourceLocation
  */
 @Poko
 class TextLocation(val start: Int, val end: Int) {
+    init {
+        require(start >= 0) { "start can't be negative" }
+        require(end >= start) { "end must be greater than or equal to start" }
+    }
+
     override fun toString(): String = "$start:$end"
 }
