@@ -125,12 +125,12 @@ class FindingAssert(val actual: Finding?) : AbstractAssert<FindingAssert, Findin
         }
     }
 
-    fun hasStartSourceLocation(line: Int, column: Int) = apply {
-        hasStartSourceLocation(SourceLocation(line, column))
-    }
+    fun hasStartSourceLocation(line: Int, column: Int) = hasStartSourceLocation(SourceLocation(line, column))
 
     fun hasStartSourceLocation(expected: SourceLocation) = apply {
-        val actual = actual!!.location.source
+        isNotNull()
+        actual!!
+        val actual = actual.location.source
         if (actual != expected) {
             throw failureWithActualExpected(
                 actual,
@@ -140,12 +140,12 @@ class FindingAssert(val actual: Finding?) : AbstractAssert<FindingAssert, Findin
         }
     }
 
-    fun hasEndSourceLocation(line: Int, column: Int) = apply {
-        hasEndSourceLocation(SourceLocation(line, column))
-    }
+    fun hasEndSourceLocation(line: Int, column: Int) = hasEndSourceLocation(SourceLocation(line, column))
 
     fun hasEndSourceLocation(expected: SourceLocation) = apply {
-        val actual = actual!!.location.endSource
+        isNotNull()
+        actual!!
+        val actual = actual.location.endSource
         if (actual != expected) {
             throw failureWithActualExpected(
                 actual,
