@@ -14,7 +14,7 @@ import java.util.Locale
 
 private const val TAB = "\t"
 
-class XmlOutputReportSpec {
+class CheckstyleOutputReportSpec {
 
     private val entity1 = createIssueEntity(
         signature = "Sample1",
@@ -30,7 +30,7 @@ class XmlOutputReportSpec {
             position = 22 to 2,
         ),
     )
-    private val outputReport = XmlOutputReport()
+    private val outputReport = CheckstyleOutputReport()
 
     @Test
     fun `renders empty report`() {

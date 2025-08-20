@@ -60,7 +60,7 @@ allprojects {
     tasks.withType<Detekt>().configureEach {
         jvmTarget = "1.8"
         reports {
-            xml.required = true
+            checkstyle.required = true
             html.required = true
             sarif.required = true
             md.required = true
