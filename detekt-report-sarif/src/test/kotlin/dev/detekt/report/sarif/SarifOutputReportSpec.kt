@@ -7,7 +7,7 @@ import dev.detekt.api.testfixtures.TestDetektion
 import dev.detekt.api.testfixtures.TestSetupContext
 import dev.detekt.api.testfixtures.createIssue
 import dev.detekt.api.testfixtures.createIssueEntity
-import dev.detekt.api.testfixtures.createLocation
+import dev.detekt.api.testfixtures.createIssueLocation
 import dev.detekt.api.testfixtures.createRuleInstance
 import dev.detekt.test.utils.readResourceContent
 import org.assertj.core.api.Assertions.assertThat
@@ -23,7 +23,7 @@ class SarifOutputReportSpec {
                 ruleInstance = createRuleInstance("TestSmellA/id", "RuleSet1"),
                 entity = createIssueEntity(
                     signature = "one",
-                    location = createLocation(position = 1 to 1, endPosition = 2 to 3),
+                    location = createIssueLocation(position = 1 to 1, endPosition = 2 to 3),
                 ),
                 severity = Severity.Error
             ),
@@ -31,7 +31,7 @@ class SarifOutputReportSpec {
                 ruleInstance = createRuleInstance("TestSmellD/id", "RuleSet1"),
                 entity = createIssueEntity(
                     signature = "two",
-                    location = createLocation(position = 1 to 1, endPosition = 2 to 3),
+                    location = createIssueLocation(position = 1 to 1, endPosition = 2 to 3),
                 ),
                 severity = Severity.Error,
                 suppressReasons = listOf("suppress")
@@ -40,7 +40,7 @@ class SarifOutputReportSpec {
                 ruleInstance = createRuleInstance("TestSmellB/id", "RuleSet2"),
                 entity = createIssueEntity(
                     signature = "three",
-                    location = createLocation(position = 3 to 5, endPosition = 3 to 5),
+                    location = createIssueLocation(position = 3 to 5, endPosition = 3 to 5),
                 ),
                 severity = Severity.Warning
             ),
@@ -48,7 +48,7 @@ class SarifOutputReportSpec {
                 ruleInstance = createRuleInstance("TestSmellC/id", "RuleSet2"),
                 entity = createIssueEntity(
                     signature = "four",
-                    location = createLocation(position = 2 to 1, endPosition = 3 to 1),
+                    location = createIssueLocation(position = 2 to 1, endPosition = 3 to 1),
                 ),
                 severity = Severity.Info
             ),

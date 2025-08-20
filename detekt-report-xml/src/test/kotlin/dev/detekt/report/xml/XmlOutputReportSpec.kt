@@ -4,7 +4,7 @@ import dev.detekt.api.Severity
 import dev.detekt.api.testfixtures.TestDetektion
 import dev.detekt.api.testfixtures.createIssue
 import dev.detekt.api.testfixtures.createIssueEntity
-import dev.detekt.api.testfixtures.createLocation
+import dev.detekt.api.testfixtures.createIssueLocation
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -18,14 +18,14 @@ class XmlOutputReportSpec {
 
     private val entity1 = createIssueEntity(
         "Sample1",
-        createLocation(
+        createIssueLocation(
             path = "src/main/com/sample/Sample1.kt",
             position = 11 to 1,
         ),
     )
     private val entity2 = createIssueEntity(
         "Sample2",
-        createLocation(
+        createIssueLocation(
             path = "src/main/com/sample/Sample2.kt",
             position = 22 to 2,
         ),

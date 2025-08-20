@@ -72,13 +72,13 @@ fun createRuleInstance(
 
 fun createIssueEntity(
     signature: String = "TestEntitySignature",
-    location: Issue.Location = createLocation(),
+    location: Issue.Location = createIssueLocation(),
 ): Issue.Entity = Issue.Entity(
     signature = signature,
     location = location,
 )
 
-fun createLocation(
+fun createIssueLocation(
     path: String = "TestFile.kt",
     position: Pair<Int, Int> = 1 to 1,
     endPosition: Pair<Int, Int> = 1 to 1,
