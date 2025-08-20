@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import dev.detekt.api.Config
+import dev.detekt.test.assertThat
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.KotlinCoreEnvironmentTest
 import dev.detekt.test.utils.KotlinEnvironmentContainer
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
@@ -20,8 +20,8 @@ class UseSumOfInsteadOfFlatMapSizeSpec(val env: KotlinEnvironmentContainer) {
             class Foo(val foo: List<Int>)
         """.trimIndent()
         val actual = subject.lintWithContext(env, code)
-        assertThat(actual).hasSize(1)
-        assertThat(actual[0].message).isEqualTo("Use 'sumOf' instead of 'flatMap' and 'size'")
+        assertThat(actual).singleElement()
+            .hasMessage("Use 'sumOf' instead of 'flatMap' and 'size'")
     }
 
     @Test
@@ -33,8 +33,8 @@ class UseSumOfInsteadOfFlatMapSizeSpec(val env: KotlinEnvironmentContainer) {
             class Foo(val foo: List<Int>)
         """.trimIndent()
         val actual = subject.lintWithContext(env, code)
-        assertThat(actual).hasSize(1)
-        assertThat(actual[0].message).isEqualTo("Use 'sumOf' instead of 'flatMap' and 'count'")
+        assertThat(actual).singleElement()
+            .hasMessage("Use 'sumOf' instead of 'flatMap' and 'count'")
     }
 
     @Test
@@ -46,8 +46,8 @@ class UseSumOfInsteadOfFlatMapSizeSpec(val env: KotlinEnvironmentContainer) {
             class Foo(val foo: List<Int>)
         """.trimIndent()
         val actual = subject.lintWithContext(env, code)
-        assertThat(actual).hasSize(1)
-        assertThat(actual[0].message).isEqualTo("Use 'sumOf' instead of 'flatMap' and 'count'")
+        assertThat(actual).singleElement()
+            .hasMessage("Use 'sumOf' instead of 'flatMap' and 'count'")
     }
 
     @Test
@@ -59,8 +59,8 @@ class UseSumOfInsteadOfFlatMapSizeSpec(val env: KotlinEnvironmentContainer) {
             class Foo(val foo: List<Int>)
         """.trimIndent()
         val actual = subject.lintWithContext(env, code)
-        assertThat(actual).hasSize(1)
-        assertThat(actual[0].message).isEqualTo("Use 'sumOf' instead of 'flatten' and 'size'")
+        assertThat(actual).singleElement()
+            .hasMessage("Use 'sumOf' instead of 'flatten' and 'size'")
     }
 
     @Test

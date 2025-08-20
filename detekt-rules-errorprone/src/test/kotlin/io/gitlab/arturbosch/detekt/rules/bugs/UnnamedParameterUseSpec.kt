@@ -221,8 +221,8 @@ class UnnamedParameterUseSpec(private val env: KotlinEnvironmentContainer) {
             }
         """.trimIndent()
         assertThat(subject.lintWithContext(env, code))
-            .hasTextLocations(102 to 103)
             .singleElement()
+            .hasTextLocation(102 to 103)
             .hasMessage("Consider using named parameters in f as they make usage of the function more safe.")
     }
 

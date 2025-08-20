@@ -39,7 +39,8 @@ class ConstructorParameterNamingSpec {
         val code = """
             class C(val PARAM: String)
         """.trimIndent()
-        assertThat(ConstructorParameterNaming(Config.empty).lint(code)).hasTextLocations(8 to 25)
+        assertThat(ConstructorParameterNaming(Config.empty).lint(code)).singleElement()
+            .hasTextLocation(8 to 25)
     }
 
     @Test

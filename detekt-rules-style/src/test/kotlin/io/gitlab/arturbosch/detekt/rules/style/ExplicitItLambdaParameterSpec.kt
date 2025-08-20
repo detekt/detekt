@@ -21,10 +21,10 @@ class ExplicitItLambdaParameterSpec {
                     }
                     """.trimIndent(),
                 )
-            assertThat(findings).hasSize(1)
-            assertThat(findings[0]).hasMessage(
-                "This explicit usage of `it` as the lambda parameter name can be omitted.",
-            )
+            assertThat(findings).singleElement()
+                .hasMessage(
+                    "This explicit usage of `it` as the lambda parameter name can be omitted.",
+                )
         }
 
         @Test

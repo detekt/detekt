@@ -154,8 +154,7 @@ class LongMethodSpec {
 
         val findings = subject.lint(code)
 
-        assertThat(findings)
-            .hasSize(1)
-            .hasTextLocations("nestedLongMethod")
+        assertThat(findings).singleElement()
+            .hasTextLocation("nestedLongMethod")
     }
 }

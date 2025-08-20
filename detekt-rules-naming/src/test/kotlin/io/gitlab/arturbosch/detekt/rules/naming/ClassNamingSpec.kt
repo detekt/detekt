@@ -68,9 +68,8 @@ class ClassNamingSpec {
             class _NamingConventions
         """.trimIndent()
 
-        assertThat(ClassNaming(Config.empty).lint(code))
-            .hasSize(1)
-            .hasTextLocations(6 to 24)
+        assertThat(ClassNaming(Config.empty).lint(code)).singleElement()
+            .hasTextLocation(6 to 24)
     }
 
     @Test
@@ -79,9 +78,8 @@ class ClassNamingSpec {
             class namingConventions {}
         """.trimIndent()
 
-        assertThat(ClassNaming(Config.empty).lint(code))
-            .hasSize(1)
-            .hasTextLocations(6 to 23)
+        assertThat(ClassNaming(Config.empty).lint(code)).singleElement()
+            .hasTextLocation(6 to 23)
     }
 
     @Test

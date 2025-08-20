@@ -379,9 +379,8 @@ class UnusedPrivatePropertySpec(val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code))
-                .hasSize(1)
-                .hasStartSourceLocations(SourceLocation(1, 13))
+            assertThat(subject.lintWithContext(env, code)).singleElement()
+                .hasStartSourceLocation(SourceLocation(1, 13))
         }
 
         @Test

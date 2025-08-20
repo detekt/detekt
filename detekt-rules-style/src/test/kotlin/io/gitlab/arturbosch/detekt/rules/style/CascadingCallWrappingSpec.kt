@@ -18,9 +18,8 @@ class CascadingCallWrappingSpec {
         """.trimIndent()
 
         assertThat(subject.lint(code))
-            .hasSize(1)
-            .hasTextLocations(23 to 30)
-            .first()
+            .singleElement()
+            .hasTextLocation(23 to 30)
             .hasMessage("Chained call `plus(0)` should be wrapped to a new line since preceding calls were.")
     }
 
@@ -119,9 +118,8 @@ class CascadingCallWrappingSpec {
                     )
             """.trimIndent()
 
-            assertThat(subject.lint(code))
-                .hasTextLocations(64 to 85)
-                .hasSize(1)
+            assertThat(subject.lint(code)).singleElement()
+                .hasTextLocation(64 to 85)
         }
 
         @Test
@@ -173,9 +171,8 @@ class CascadingCallWrappingSpec {
                     .plus(0) ?: 42
             """.trimIndent()
 
-            assertThat(subjectIncludingElvis.lint(code))
-                .hasTextLocations(23 to 28)
-                .hasSize(1)
+            assertThat(subjectIncludingElvis.lint(code)).singleElement()
+                .hasTextLocation(23 to 28)
             assertThat(subjectExcludingElvis.lint(code)).isEmpty()
         }
 
@@ -188,9 +185,8 @@ class CascadingCallWrappingSpec {
                 }
             """.trimIndent()
 
-            assertThat(subjectIncludingElvis.lint(code))
-                .hasTextLocations(23 to 38)
-                .hasSize(1)
+            assertThat(subjectIncludingElvis.lint(code)).singleElement()
+                .hasTextLocation(23 to 38)
             assertThat(subjectExcludingElvis.lint(code)).isEmpty()
         }
     }
