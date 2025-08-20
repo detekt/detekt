@@ -28,9 +28,9 @@ class DetektTaskDslSpec {
         }
 
         @Test
-        fun `enables xml report to default location`() {
-            val xmlReportFile = gradleRunner.projectFile("build/reports/detekt/detekt.xml")
-            assertThat(result.output).contains("--report xml:$xmlReportFile")
+        fun `enables checkstyle report to default location`() {
+            val checkstyleReportFile = gradleRunner.projectFile("build/reports/detekt/detekt.xml")
+            assertThat(result.output).contains("--report checkstyle:$checkstyleReportFile")
         }
 
         @Test
@@ -167,9 +167,9 @@ class DetektTaskDslSpec {
         private val result = gradleRunner.runDetektTask()
 
         @Test
-        fun `configures xml report to custom directory`() {
-            val xmlReportFile = gradleRunner.projectFile("build/detekt-reports/detekt.xml")
-            assertThat(result.output).contains("--report xml:$xmlReportFile")
+        fun `configures checkstyle report to custom directory`() {
+            val checkstyleReportFile = gradleRunner.projectFile("build/detekt-reports/detekt.xml")
+            assertThat(result.output).contains("--report checkstyle:$checkstyleReportFile")
         }
 
         @Test
@@ -194,7 +194,7 @@ class DetektTaskDslSpec {
             
             tasks.detekt {
                 reports {
-                    xml.outputLocation.set(file("build/xml-reports/custom-detekt.xml"))
+                    checkstyle.outputLocation.set(file("build/xml-reports/custom-detekt.xml"))
                 }
             }
         """.trimIndent()
@@ -203,9 +203,9 @@ class DetektTaskDslSpec {
         private val result = gradleRunner.runDetektTask()
 
         @Test
-        fun `configures xml report to specific absolute filename`() {
-            val xmlReportFile = gradleRunner.projectFile("build/xml-reports/custom-detekt.xml")
-            assertThat(result.output).contains("--report xml:$xmlReportFile")
+        fun `configures checkstyle report to specific absolute filename`() {
+            val checkstyleReportFile = gradleRunner.projectFile("build/xml-reports/custom-detekt.xml")
+            assertThat(result.output).contains("--report checkstyle:$checkstyleReportFile")
         }
 
         @Test
@@ -220,7 +220,7 @@ class DetektTaskDslSpec {
         private val config = """
             tasks.detekt {
                 reports {
-                    xml.required.set(false)
+                    checkstyle.required.set(false)
                     html {
                         required.set(false)
                     }
@@ -530,7 +530,7 @@ class DetektTaskDslSpec {
                 failOnSeverity = dev.detekt.gradle.extensions.FailOnSeverity.Error
                 autoCorrect = false
                 reports {
-                    xml {
+                    checkstyle {
                         required.set(true)
                         outputLocation.set(file("build/reports/mydetekt.xml"))
                     }
@@ -557,9 +557,9 @@ class DetektTaskDslSpec {
         }
 
         @Test
-        fun `enables xml report to specified location`() {
-            val xmlReportFile = gradleRunner.projectFile("build/reports/mydetekt.xml")
-            assertThat(result.output).contains("--report xml:$xmlReportFile")
+        fun `enables checkstyle report to specified location`() {
+            val checkstyleReportFile = gradleRunner.projectFile("build/reports/mydetekt.xml")
+            assertThat(result.output).contains("--report checkstyle:$checkstyleReportFile")
         }
 
         @Test

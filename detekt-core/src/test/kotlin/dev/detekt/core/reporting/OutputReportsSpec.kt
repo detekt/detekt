@@ -35,7 +35,7 @@ class OutputReportsSpec {
         }
 
         @Test
-        fun `it should properly parse XML report entry`() {
+        fun `it should properly parse Checkstyle report entry`() {
             val xmlReport = reports[0]
             assertThat(xmlReport.type).isEqualTo(defaultReportMapping(CheckstyleOutputReport()))
             assertThat(xmlReport.path).isEqualTo(Path("/tmp/path1"))
