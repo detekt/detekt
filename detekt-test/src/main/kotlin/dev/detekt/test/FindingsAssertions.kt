@@ -155,12 +155,12 @@ class FindingAssert(val actual: Finding?) : AbstractAssert<FindingAssert, Findin
         }
     }
 
-    fun hasTextLocation(expected: Pair<Int, Int>) = apply {
-        hasTextLocation(TextLocation(expected.first, expected.second))
-    }
+    fun hasTextLocation(expected: Pair<Int, Int>) = hasTextLocation(TextLocation(expected.first, expected.second))
 
     fun hasTextLocation(expected: TextLocation) = apply {
-        val actual = actual!!.location.text
+        isNotNull()
+        actual!!
+        val actual = actual.location.text
         if (actual != expected) {
             throw failureWithActualExpected(
                 actual,
