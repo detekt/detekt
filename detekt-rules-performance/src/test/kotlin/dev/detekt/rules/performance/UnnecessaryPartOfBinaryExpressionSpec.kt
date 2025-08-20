@@ -106,7 +106,8 @@ class UnnecessaryPartOfBinaryExpressionSpec {
         """.trimIndent()
 
         val findings = UnnecessaryPartOfBinaryExpression(Config.empty).lint(code)
-        assertThat(findings).singleElement().hasTextLocation("baz && baz")
+        assertThat(findings).singleElement()
+            .hasTextLocation("baz && baz")
     }
 
     @Test

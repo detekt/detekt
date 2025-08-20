@@ -132,8 +132,7 @@ class AnalyzerSpec {
                 ),
             )
 
-            assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) })
-                .singleElement()
+            assertThat(settings.use { analyzer.run(listOf(compileForTest(testFile))) }).singleElement()
                 .isEqualTo(
                     Issue(
                         ruleInstance = RuleInstance(

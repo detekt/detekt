@@ -61,9 +61,10 @@ class ForbiddenCommentSpec {
         fun reportStopShipColon() {
             val findings =
                 ForbiddenComment(Config.empty).lint("// STOPSHIP: I need to fix this.")
-            assertThat(findings).singleElement().hasMessage(
-                "Forbidden STOPSHIP todo marker in comment, please address the problem before shipping the code."
-            )
+            assertThat(findings).singleElement()
+                .hasMessage(
+                    "Forbidden STOPSHIP todo marker in comment, please address the problem before shipping the code."
+                )
         }
 
         @Test

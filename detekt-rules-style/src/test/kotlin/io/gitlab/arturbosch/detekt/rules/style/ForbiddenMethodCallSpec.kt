@@ -293,7 +293,8 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
         val methodName = "io.gitlab.arturbosch.detekt.rules.style.arrayMethod(kotlin.Array)"
         val findings = ForbiddenMethodCall(TestConfig(METHODS to listOf(methodName)))
             .lintWithContext(env, code)
-        assertThat(findings).singleElement().hasStartSourceLocation(6, 13)
+        assertThat(findings).singleElement()
+            .hasStartSourceLocation(6, 13)
     }
 
     @Test
@@ -310,7 +311,8 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
         val methodName = "io.gitlab.arturbosch.detekt.rules.style.listMethod(kotlin.collections.List)"
         val findings = ForbiddenMethodCall(TestConfig(METHODS to listOf(methodName)))
             .lintWithContext(env, code)
-        assertThat(findings).singleElement().hasStartSourceLocation(6, 13)
+        assertThat(findings).singleElement()
+            .hasStartSourceLocation(6, 13)
     }
 
     @Test
@@ -329,7 +331,8 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
         val methodName = "io.gitlab.arturbosch.detekt.rules.style.varargMethod(vararg kotlin.String)"
         val findings = ForbiddenMethodCall(TestConfig(METHODS to listOf(methodName)))
             .lintWithContext(env, code)
-        assertThat(findings).singleElement().hasStartSourceLocation(8, 13)
+        assertThat(findings).singleElement()
+            .hasStartSourceLocation(8, 13)
     }
 
     @Test
@@ -350,7 +353,8 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
         val methodName = "io.gitlab.arturbosch.detekt.rules.style.TestClass.Companion.staticMethod()"
         val findings = ForbiddenMethodCall(TestConfig(METHODS to listOf(methodName)))
             .lintWithContext(env, code)
-        assertThat(findings).singleElement().hasStartSourceLocation(10, 15)
+        assertThat(findings).singleElement()
+            .hasStartSourceLocation(10, 15)
     }
 
     @Test
@@ -372,7 +376,8 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
         val methodName = "io.gitlab.arturbosch.detekt.rules.style.TestClass.Companion.staticMethod()"
         val findings = ForbiddenMethodCall(TestConfig(METHODS to listOf(methodName)))
             .lintWithContext(env, code)
-        assertThat(findings).singleElement().hasStartSourceLocation(11, 15)
+        assertThat(findings).singleElement()
+            .hasStartSourceLocation(11, 15)
     }
 
     @Test

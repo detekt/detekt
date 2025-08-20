@@ -322,7 +322,8 @@ class UnusedParameterSpec {
                     ) = 1
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).singleElement().hasStartSourceLocation(6, 9)
+            assertThat(subject.lint(code)).singleElement()
+                .hasStartSourceLocation(6, 9)
         }
     }
 
@@ -339,7 +340,8 @@ class UnusedParameterSpec {
                     println(modifier)
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).singleElement().hasStartSourceLocation(1, 9)
+            assertThat(subject.lint(code)).singleElement()
+                .hasStartSourceLocation(1, 9)
         }
 
         @Test
