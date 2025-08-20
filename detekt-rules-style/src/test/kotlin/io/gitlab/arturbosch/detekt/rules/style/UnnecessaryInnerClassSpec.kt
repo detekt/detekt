@@ -533,8 +533,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinEnvironmentContainer) {
             """.trimIndent()
 
             val findings = subject.lintWithContext(env, code)
-            assertThat(findings)
-                .hasSize(1)
+            assertThat(findings).hasSize(1)
         }
 
         @Test
