@@ -33,3 +33,8 @@ javaComponent.withVariantsFromConfiguration(configurations["apiElements"]) {
 javaComponent.withVariantsFromConfiguration(configurations["runtimeElements"]) {
     skip()
 }
+
+tasks.shadowJar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    failOnDuplicateEntries = true
+}

@@ -10,6 +10,8 @@ dependencies {
 }
 
 tasks.shadowJar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    failOnDuplicateEntries = true
     relocate("org.jetbrains.kotlin.com.intellij", "com.intellij")
 }
 
