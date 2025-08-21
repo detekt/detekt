@@ -54,10 +54,10 @@ open class Rule(
      */
     fun visitFile(
         root: KtFile,
-        languageVersionSettings: LanguageVersionSettings,
+        langVersionSettings: LanguageVersionSettings,
     ): List<Finding> {
         findings.clear()
-        this.languageVersionSettings = languageVersionSettings
+        this.languageVersionSettings = langVersionSettings
         preVisit(root)
         visit(root)
         postVisit(root)

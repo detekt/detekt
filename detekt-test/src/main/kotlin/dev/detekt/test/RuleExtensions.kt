@@ -39,7 +39,7 @@ fun Rule.lint(
         }
     }
     val ktFile = compileContentForTest(content)
-    return visitFile(ktFile, languageVersionSettings = languageVersionSettings).filterSuppressed(this)
+    return visitFile(ktFile, langVersionSettings = languageVersionSettings).filterSuppressed(this)
 }
 
 fun <T> T.lintWithContext(
@@ -90,7 +90,7 @@ fun Rule.lint(
     require(this !is RequiresAnalysisApi) {
         "${this.ruleName} requires Analysis Api so you should use lintWithContext instead of lint"
     }
-    return visitFile(ktFile, languageVersionSettings = languageVersionSettings).filterSuppressed(this)
+    return visitFile(ktFile, langVersionSettings = languageVersionSettings).filterSuppressed(this)
 }
 
 private fun List<Finding>.filterSuppressed(rule: Rule): List<Finding> =

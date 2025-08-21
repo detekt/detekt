@@ -15,7 +15,7 @@ fun FormattingRule.lint(@Language("kotlin") content: String, fileName: String = 
         "filename must be a file name only and not contain any path elements"
     }
     val root = compileContentForTest(content, fileName)
-    return this.visitFile(root, languageVersionSettings = FakeLanguageVersionSettings())
+    return this.visitFile(root, langVersionSettings = FakeLanguageVersionSettings())
 }
 
 fun loadFile(resourceName: String) = compileForTest(resource(resourceName).toPath())

@@ -418,7 +418,7 @@ class NoNameShadowingSpec(val env: KotlinEnvironmentContainer) {
         }
 
         @Test
-        fun `report shadowing variable with file level prop`() {
+        fun `report shadowing variable with instance level prop`() {
             val code = """
                 class A {
                     val i: Int = 0
@@ -428,6 +428,20 @@ class NoNameShadowingSpec(val env: KotlinEnvironmentContainer) {
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
             assertThat(findings).singleElement()
+        }
+
+        @Test
+        fun `does not report shadowing variable with instance level extension prop`() {
+            val code = """
+                class A {
+                    val Int.i: Int
+                        get() = this
+                    fun test(i: Int) {
+                    }
+                }
+            """.trimIndent()
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings).isEmpty()
         }
 
         @Test
@@ -477,7 +491,26 @@ class NoNameShadowingSpec(val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
-            assertThat(findings).hasSize(3)
+            assertThat(findings).hasSize(4)
+        }
+
+        @Test
+        fun `does not report param from inner class when class doesn't use var or val`() {
+            val code = """
+                class A(a: Int, b: Int, c: Int, d: Int, e: Int) {
+                    inner class B(val a: Int = 0) {
+                        fun test(b: Int) {
+                            listOf(1).map { c ->  }
+                        }
+                        init {
+                            listOf(1).map { d -> print(d) }
+                        }
+                        val e: Int = 0
+                    }
+                }
+            """.trimIndent()
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings).isEmpty()
         }
 
         @Test
@@ -501,22 +534,22 @@ class NoNameShadowingSpec(val env: KotlinEnvironmentContainer) {
         }
 
         @Test
-        fun `reports class inside function`() {
+        fun `does not report class inside function with different names`() {
             val code = """
                 fun foo(a: Int, b: Int, c: Int, d: Int) {
-                    class A(val a: Int) {
-                        fun bar(b: Int) {
-                            listOf(1).map { c -> }
+                    class A(val a1: Int) {
+                        fun bar(b1: Int) {
+                            listOf(1).map { c1 -> }
                         }
 
                         init {
-                            listOf(1).map { d -> }
+                            listOf(1).map { d1 -> }
                         }
                     }
                 }
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
-            assertThat(findings).hasSize(4)
+            assertThat(findings).isEmpty()
         }
     }
 }

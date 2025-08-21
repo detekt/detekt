@@ -27,8 +27,8 @@ class AnnotationExcluderBindingContext(
     fun shouldExclude(annotations: List<KtAnnotationEntry>): Boolean =
         annotations.any { annotation -> annotation.typeReference?.let { isExcluded(it, context) } ?: false }
 
-    private fun isExcluded(annotation: KtTypeReference, context: BindingContext): Boolean {
-        val fqName = if (context == BindingContext.EMPTY) null else annotation.fqNameOrNull(context)
+    private fun isExcluded(annotation: KtTypeReference, ctx: BindingContext): Boolean {
+        val fqName = if (ctx == BindingContext.EMPTY) null else annotation.fqNameOrNull(ctx)
         val possibleNames = if (fqName == null) {
             fullQualifiedNameGuesser.getFullQualifiedName(annotation.text.toString())
                 .map { it.getPackage() to it }

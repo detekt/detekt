@@ -38,22 +38,22 @@ abstract class FormattingRule(config: Config, description: String) : Rule(config
             ?: FormattingProvider.code_style.defaultValue
 
     private lateinit var positionByOffset: (offset: Int) -> Pair<Int, Int>
-    private lateinit var root: KtFile
+    private lateinit var fileRoot: KtFile
     private lateinit var originalFilePath: Path
 
     override fun visit(root: KtFile) {
         val fileCopy = KtPsiFactory(root.project).createPhysicalFile(root.name, root.modifiedText ?: root.text)
 
-        this.root = fileCopy
+        this.fileRoot = fileCopy
         originalFilePath = root.absolutePath()
         positionByOffset = KtLintLineColCalculator.calculateLineColByOffset(fileCopy.text)
 
         wrapping.beforeFirstNode(computeEditorConfigProperties())
-        this.root.node.visitASTNodes()
+        this.fileRoot.node.visitASTNodes()
         wrapping.afterLastNode()
 
-        if (this.root.modificationStamp > 0) {
-            root.modifiedText = this.root.text
+        if (this.fileRoot.modificationStamp > 0) {
+            root.modifiedText = this.fileRoot.text
         }
     }
 

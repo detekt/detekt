@@ -40,12 +40,12 @@ class Generator(
             inputPaths
                 .map { parseAll(parser, it.resolve("src/main/kotlin/")) to it }
                 .forEach { (list: Collection<KtFile>, folder: Path) ->
-                    val collector = DetektCollector(textReplacements)
+                    val detektCollector = DetektCollector(textReplacements)
                     list.forEach { file ->
-                        collector.visit(file)
+                        detektCollector.visit(file)
                     }
                     printer.printCustomRuleConfig(
-                        collector.items,
+                        detektCollector.items,
                         folder.resolve("src/main/resources/config/")
                     )
                 }

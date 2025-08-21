@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.naming
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.parentOfType
 import com.intellij.psi.util.parents
+import com.intellij.psi.util.parentsOfType
 import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
@@ -15,17 +16,23 @@ import org.jetbrains.kotlin.builtins.StandardNames
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassInitializer
 import org.jetbrains.kotlin.psi.KtClassOrObject
+import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.KtDestructuringDeclaration
 import org.jetbrains.kotlin.psi.KtDestructuringDeclarationEntry
+import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
+import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
+import org.jetbrains.kotlin.psi.psiUtil.findPropertyByName
+import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.hasInnerModifier
+import org.jetbrains.kotlin.psi.psiUtil.isExtensionDeclaration
 
 /**
  * Disallows shadowing variable declarations.
@@ -84,7 +91,6 @@ class NoNameShadowing(config: Config) :
 
     override fun visitParameter(parameter: KtParameter) {
         super.visitParameter(parameter)
-        parameter.parentOfType<KtFunction>(false)
         checkNameShadowing(
             parameter,
             // if this param is from lambda or we fallback to function(ctor)
@@ -108,49 +114,74 @@ class NoNameShadowing(config: Config) :
         accessibleClasses: List<KtClassOrObject>,
     ) {
         parentToSkipSearchFrom ?: return
-        val nameIdentifier = declaration.nameIdentifier ?: return
-        val matched = parentToSkipSearchFrom
-            .parents(false)
-            .filter {
-               it is KtClass || it is KtFunction || it is KtLambdaExpression
-            }.any { parent ->
-                when (parent) {
-                    is KtClass -> {
-                        parent in accessibleClasses &&
-                            parent
-                            .primaryConstructor
-                            ?.valueParameters
-                            .orEmpty()
-                            .filter { declaration.parentOfType<KtClassInitializer>(false) != null || it.hasValOrVar() }
-                            .any { it.name == nameIdentifier.text }
-                    }
+        val declarationNameIdentifier = declaration.nameIdentifier ?: return
+        val declarationName = declarationNameIdentifier.text
+        val matched =
+            if (
+                accessibleClasses.any {
+                    val declarationWithSameName = it.findPropertyByName(declarationName)
+                    declarationWithSameName != null &&
+                        !declarationWithSameName.isExtensionDeclaration() &&
+                        declarationWithSameName != declaration
+                }
+            ) {
+                // already have some different instance level property with same name
+                true
+            } else {
+                parentToSkipSearchFrom
+                    .parents(false)
+                    .filter {
+                        it is KtClass || it is KtFunction || it is KtLambdaExpression
+                    }.any { parent ->
+                        when (parent) {
+                            is KtClass -> {
+                                parent.isParentElementAccessible(accessibleClasses) &&
+                                    parent
+                                        .primaryConstructor
+                                        ?.valueParameters
+                                        .orEmpty()
+                                        .filter {
+                                            (
+                                                declaration.parentOfType<KtClassInitializer>(false) != null &&
+                                                    // only accessible when declaration is in the same class
+                                                    declaration.getParentOfType<KtClass>(true) == parent
+                                                ) || it.hasValOrVar()
+                                        }
+                                        .any { it.name == declarationName }
+                            }
 
-                    is KtFunction -> {
-                        parent.containingClassOrObject in accessibleClasses &&
-                            parent.valueParameters.any { it.name == nameIdentifier.text }
-                    }
+                            is KtFunction -> {
+                                parent.isParentElementAccessible(accessibleClasses) &&
+                                    parent.valueParameters.any { it.name == declarationName }
+                            }
 
-                    is KtLambdaExpression -> {
-                        if (parent.valueParameters.isNotEmpty()) {
-                            parent.valueParameters.any { it.name == nameIdentifier.text }
-                        } else {
-                            parent.implicitParameterOrNull() != null && nameIdentifier.text ==
-                                StandardNames.IMPLICIT_LAMBDA_PARAMETER_NAME.asString()
+                            is KtLambdaExpression -> {
+                                parent.isParentElementAccessible(accessibleClasses) &&
+                                    if (parent.valueParameters.isNotEmpty()) {
+                                        parent.valueParameters.any { it.name == declarationName }
+                                    } else {
+                                        parent.implicitParameterOrNull() != null &&
+                                            declarationName ==
+                                            StandardNames.IMPLICIT_LAMBDA_PARAMETER_NAME.asString()
+                                    }
+                            }
+
+                            else -> false
                         }
                     }
-
-                    else -> false
-                }
             }
         if (matched) {
             report(
-                Finding(
-                    Entity.from(nameIdentifier),
-                    "Name shadowed: ${nameIdentifier.text}"
+                Finding(Entity.from(declarationNameIdentifier),
+                    "Name shadowed: $declarationName"
                 )
             )
         }
     }
+
+    private fun KtElement.isParentElementAccessible(accessibleClasses: List<KtClassOrObject>) =
+        (this.containingClassOrObject() == null && accessibleClasses.isEmpty()) ||
+            (this.containingClassOrObject() in accessibleClasses)
 
     override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
         super.visitLambdaExpression(lambdaExpression)
@@ -169,12 +200,23 @@ class NoNameShadowing(config: Config) :
     private fun KtLambdaExpression.hasParentImplicitParameterLambda(): Boolean =
         getStrictParentOfType<KtLambdaExpression>()?.implicitParameterOrNull() != null
 
-    private val KtNamedDeclaration.accessibleClasses: List<KtClassOrObject>
+    @Suppress("ClassOrdering")
+    private val KtDeclaration.accessibleClasses: List<KtClassOrObject>
         get() = buildList {
-            var currentClass: KtClassOrObject?
-            do {
-                currentClass = containingClassOrObject
-                add(currentClass)
-            } while (currentClass?.hasInnerModifier() == true)
-        }.filterNotNull()
+            var currentClass: KtClassOrObject? = containingClassOrObject()
+            if (currentClass is KtClass) {
+                while (currentClass != null) {
+                    add(currentClass)
+                    currentClass = if (currentClass.hasInnerModifier()) {
+                        currentClass.containingClassOrObject
+                    } else {
+                        null
+                    }
+                }
+            } else {
+                addAll(this@accessibleClasses.parentsOfType<KtObjectDeclaration>().toList())
+            }
+        }
+
+    private fun KtElement.containingClassOrObject(): KtClassOrObject? = getParentOfType(false)
 }
