@@ -13,7 +13,6 @@ import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.symbols.KaCallableSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassLikeSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbol
-import org.jetbrains.kotlin.builtins.StandardNames
 import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocTag
 import org.jetbrains.kotlin.name.FqName
@@ -163,14 +162,13 @@ class UnusedImport(config: Config) :
         private val KaSymbol.fqNameForImport: FqName?
             get() = when (this) {
                 is KaClassLikeSymbol -> {
-                    StandardNames
-                    (
+                    val classIdRemovingCompanion =
                         if (classId?.shortClassName == SpecialNames.DEFAULT_NAME_FOR_COMPANION_OBJECT) {
                             classId?.outerClassId
                         } else {
                             classId
                         }
-                        )?.asSingleFqName()
+                    classIdRemovingCompanion?.asSingleFqName()
                 }
 
                 is KaCallableSymbol -> callableId?.asSingleFqName()
