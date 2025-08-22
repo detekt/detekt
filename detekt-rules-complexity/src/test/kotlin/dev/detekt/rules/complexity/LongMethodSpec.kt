@@ -28,8 +28,9 @@ class LongMethodSpec {
         """.trimIndent()
         val findings = subject.lint(code)
 
-        assertThat(findings).hasSize(2)
-        assertThat(findings).hasTextLocations("longMethod", "nestedLongMethod")
+        assertThat(findings)
+            .hasSize(2)
+            .hasTextLocations("longMethod", "nestedLongMethod")
     }
 
     @Test
