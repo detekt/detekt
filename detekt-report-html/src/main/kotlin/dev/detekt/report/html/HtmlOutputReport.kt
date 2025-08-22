@@ -11,8 +11,8 @@ import dev.detekt.api.TextLocation
 import dev.detekt.api.internal.BuiltInOutputReport
 import dev.detekt.api.internal.whichDetekt
 import dev.detekt.api.suppressed
+import dev.detekt.metrics.ComplexityReportGenerator
 import dev.detekt.utils.openSafeStream
-import io.github.detekt.metrics.ComplexityReportGenerator
 import kotlinx.html.CommonAttributeGroupFacadeFlowInteractiveContent
 import kotlinx.html.FlowContent
 import kotlinx.html.FlowOrInteractiveContent

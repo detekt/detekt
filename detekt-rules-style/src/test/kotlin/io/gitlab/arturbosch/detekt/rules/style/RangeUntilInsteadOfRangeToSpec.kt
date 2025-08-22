@@ -18,7 +18,8 @@ class RangeUntilInsteadOfRangeToSpec {
             }
         """.trimIndent()
         val findings = subject.lint(code)
-        assertThat(findings).singleElement().hasMessage("`..` call can be replaced with `..<`")
+        assertThat(findings).singleElement()
+            .hasMessage("`..` call can be replaced with `..<`")
     }
 
     @Test
@@ -69,6 +70,7 @@ class RangeUntilInsteadOfRangeToSpec {
     fun `reports for 'rangeTo'`() {
         val code = "val r = 0.rangeTo(10 - 1)"
         val findings = subject.lint(code)
-        assertThat(findings).singleElement().hasMessage("`rangeTo` call can be replaced with `..<`")
+        assertThat(findings).singleElement()
+            .hasMessage("`rangeTo` call can be replaced with `..<`")
     }
 }

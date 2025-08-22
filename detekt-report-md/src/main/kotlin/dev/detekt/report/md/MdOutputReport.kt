@@ -10,6 +10,7 @@ import dev.detekt.api.SourceLocation
 import dev.detekt.api.internal.BuiltInOutputReport
 import dev.detekt.api.internal.whichDetekt
 import dev.detekt.api.suppressed
+import dev.detekt.metrics.ComplexityReportGenerator
 import dev.detekt.utils.MarkdownContent
 import dev.detekt.utils.codeBlock
 import dev.detekt.utils.emptyLine
@@ -20,7 +21,6 @@ import dev.detekt.utils.item
 import dev.detekt.utils.list
 import dev.detekt.utils.markdown
 import dev.detekt.utils.paragraph
-import io.github.detekt.metrics.ComplexityReportGenerator
 import java.nio.file.Path
 import java.time.OffsetDateTime
 import java.time.ZoneOffset

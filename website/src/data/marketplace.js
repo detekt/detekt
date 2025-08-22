@@ -180,7 +180,7 @@ export const extensions = [
     description:
       "The rule authors ruleset provides rules that ensures good practices when writing detekt rules.",
     repo: "https://github.com/detekt/detekt",
-    docs: "https://detekt.dev/docs/next/rules/ruleauthors",
+    docs: "https://detekt.dev/docs/rules/ruleauthors",
     tags: ["ruleset"],
     ruleset: "ruleauthors",
     rules: [
@@ -245,7 +245,7 @@ export const extensions = [
     description:
       "This rule set provides wrappers for rules implemented by ktlint.",
     repo: "https://github.com/detekt/detekt",
-    docs: "https://detekt.dev/docs/next/rules/formatting",
+    docs: "https://detekt.dev/docs/rules/formatting",
     tags: ["ruleset"],
     ruleset: "formatting",
     rules: [
@@ -339,7 +339,7 @@ export const extensions = [
     description:
       "Rules in this rule set report issues related to libraries API exposure.",
     repo: "https://github.com/detekt/detekt",
-    docs: "https://detekt.dev/docs/next/rules/libraries",
+    docs: "https://detekt.dev/docs/rules/libraries",
     tags: ["ruleset"],
     ruleset: "libraries",
     rules: [

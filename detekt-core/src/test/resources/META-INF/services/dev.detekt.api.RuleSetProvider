@@ -1,1 +1,1 @@
-io.gitlab.arturbosch.detekt.core.config.validation.SampleRuleProvider
+dev.detekt.core.config.validation.SampleRuleProvider

@@ -4,7 +4,7 @@ import com.intellij.psi.PsiElement
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
-import dev.detekt.api.RequiresFullAnalysis
+import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
@@ -35,11 +35,11 @@ class UnnecessaryBracesAroundTrailingLambda(config: Config) :
         config,
         "Braces around trailing lambda is unnecessary."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
-        if (shouldReportUnnecessaryBracesAroundTrailingLambda(bindingContext, expression)) {
+        if (shouldReportUnnecessaryBracesAroundTrailingLambda(expression)) {
             report(
                 Finding(
                     Entity.from(getIssueElement(expression)),

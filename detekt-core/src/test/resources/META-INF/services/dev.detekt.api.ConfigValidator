@@ -1,1 +1,1 @@
-io.gitlab.arturbosch.detekt.core.config.validation.SampleConfigValidator
+dev.detekt.core.config.validation.SampleConfigValidator

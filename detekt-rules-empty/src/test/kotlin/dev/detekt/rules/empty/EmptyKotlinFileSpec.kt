@@ -12,7 +12,7 @@ class EmptyKotlinFileSpec {
     fun `reports empty if file is blank`() {
         val code = ""
         assertThat(subject.lint(code)).singleElement()
-            .hasSourceLocation(1, 1)
+            .hasStartSourceLocation(1, 1)
     }
 
     @Test
@@ -21,7 +21,7 @@ class EmptyKotlinFileSpec {
             package my.packagee
         """.trimIndent()
         assertThat(subject.lint(codeWithPackageStatement)).singleElement()
-            .hasSourceLocation(1, 1)
+            .hasStartSourceLocation(1, 1)
     }
 
     @Test

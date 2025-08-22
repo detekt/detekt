@@ -1,1 +1,1 @@
-io.gitlab.arturbosch.detekt.core.reporting.TestOutputReport
+dev.detekt.core.reporting.TestOutputReport

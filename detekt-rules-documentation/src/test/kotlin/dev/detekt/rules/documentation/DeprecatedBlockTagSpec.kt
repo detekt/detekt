@@ -35,10 +35,11 @@ class DeprecatedBlockTagSpec {
 
         @Test
         fun `correct message`() {
-            assertThat(subject.lint(code)).singleElement().hasMessage(
-                "@deprecated tag block does not properly report " +
-                    "deprecation in Kotlin, use @Deprecated annotation instead"
-            )
+            assertThat(subject.lint(code)).singleElement()
+                .hasMessage(
+                    "@deprecated tag block does not properly report " +
+                        "deprecation in Kotlin, use @Deprecated annotation instead"
+                )
         }
     }
 

@@ -72,6 +72,7 @@ class EnumNamingSpec {
             }
         """.trimIndent()
         val findings = EnumNaming(Config.empty).lint(code)
-        assertThat(findings).hasTextLocations(26 to 34)
+        assertThat(findings).singleElement()
+            .hasTextLocation(26 to 34)
     }
 }

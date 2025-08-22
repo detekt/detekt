@@ -1,1 +1,1 @@
-io.gitlab.arturbosch.detekt.core.tooling.DefaultConfigProvider
+dev.detekt.core.tooling.DefaultConfigProvider

@@ -52,7 +52,7 @@ reports:
   - changed-files:
       - any-glob-to-any-file:
           [
-            "detekt-core/src/main/kotlin/io/gitlab/arturbosch/detekt/core/reporting/**/*",
+            "detekt-core/src/main/kotlin/dev/detekt/core/reporting/**/*",
           ]
 
 rules:
@@ -75,5 +75,5 @@ suppressors:
   - changed-files:
       - any-glob-to-any-file:
           [
-            "detekt-core/src/main/kotlin/io/gitlab/arturbosch/detekt/core/suppressors/**/*",
+            "detekt-core/src/main/kotlin/dev/detekt/core/suppressors/**/*",
           ]
