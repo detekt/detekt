@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.coroutines
 
 import dev.detekt.api.Config
-import dev.detekt.api.Finding
 import dev.detekt.api.SourceLocation
 import dev.detekt.test.assertThat
 import dev.detekt.test.lintWithContext
@@ -382,11 +381,13 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinEnvironmentCont
             }
         """.trimIndent()
         val findings = subject.lintWithContext(env, code)
-        assertFindingsForSuspendCall(
-            findings,
-            listOf(SourceLocation(6, 5), SourceLocation(8, 9)),
-            listOf(SourceLocation(6, 16), SourceLocation(8, 20))
-        )
+        assertThat(findings).hasSize(2)
+        assertThat(findings).element(0)
+            .hasStartSourceLocation(SourceLocation(8, 9))
+            .hasEndSourceLocation(SourceLocation(8, 20))
+        assertThat(findings).element(1)
+            .hasStartSourceLocation(SourceLocation(6, 5))
+            .hasEndSourceLocation(SourceLocation(6, 16))
     }
 
     @Test
@@ -1061,11 +1062,13 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinEnvironmentCont
             """.trimIndent()
 
             val findings = subject.lintWithContext(env, code)
-            assertFindingsForSuspendCall(
-                findings,
-                listOf(SourceLocation(8, 5), SourceLocation(12, 5)),
-                listOf(SourceLocation(8, 16), SourceLocation(12, 16))
-            )
+            assertThat(findings).hasSize(2)
+            assertThat(findings).element(0)
+                .hasStartSourceLocation(SourceLocation(8, 5))
+                .hasEndSourceLocation(SourceLocation(8, 16))
+            assertThat(findings).element(1)
+                .hasStartSourceLocation(SourceLocation(12, 5))
+                .hasEndSourceLocation(SourceLocation(12, 16))
         }
 
         @Test
@@ -1090,11 +1093,13 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinEnvironmentCont
             """.trimIndent()
 
             val findings = subject.lintWithContext(env, code)
-            assertFindingsForSuspendCall(
-                findings,
-                listOf(SourceLocation(8, 5), SourceLocation(12, 5)),
-                listOf(SourceLocation(8, 16), SourceLocation(12, 16))
-            )
+            assertThat(findings).hasSize(2)
+            assertThat(findings).element(0)
+                .hasStartSourceLocation(SourceLocation(8, 5))
+                .hasEndSourceLocation(SourceLocation(8, 16))
+            assertThat(findings).element(1)
+                .hasStartSourceLocation(SourceLocation(12, 5))
+                .hasEndSourceLocation(SourceLocation(12, 16))
         }
 
         @Test
@@ -1505,16 +1510,6 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinEnvironmentCont
                 assertThat(findings).isEmpty()
             }
         }
-    }
-
-    private fun assertFindingsForSuspendCall(
-        findings: List<Finding>,
-        listOfStartLocation: List<SourceLocation>,
-        listOfEndLocation: List<SourceLocation>,
-    ) {
-        assertThat(findings).hasSameSizeAs(listOfStartLocation)
-        assertThat(findings).hasStartSourceLocations(*listOfStartLocation.toTypedArray())
-        assertThat(findings).hasEndSourceLocations(*listOfEndLocation.toTypedArray())
     }
 
     private fun assertNoFindings(@Language("kotlin") code: String) {
