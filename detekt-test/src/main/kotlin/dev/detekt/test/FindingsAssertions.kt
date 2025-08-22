@@ -132,9 +132,10 @@ class FindingAssert(val actual: Finding?) : AbstractAssert<FindingAssert, Findin
         actual!!
         val actual = actual.location.source
         if (actual != expected) {
+            val code = this.actual.entity.ktElement.containingFile.text
             throw failureWithActualExpected(
-                actual,
-                expected,
+                code.addPinAt(actual),
+                code.addPinAt(expected),
                 "Expected start source location to be $expected but was $actual"
             )
         }
@@ -147,9 +148,10 @@ class FindingAssert(val actual: Finding?) : AbstractAssert<FindingAssert, Findin
         actual!!
         val actual = actual.location.endSource
         if (actual != expected) {
+            val code = this.actual.entity.ktElement.containingFile.text
             throw failureWithActualExpected(
-                actual,
-                expected,
+                code.addPinAt(actual),
+                code.addPinAt(expected),
                 "Expected end source location to be $expected but was $actual"
             )
         }
@@ -183,3 +185,8 @@ class FindingAssert(val actual: Finding?) : AbstractAssert<FindingAssert, Findin
         hasTextLocation(TextLocation(index, index + expected.length))
     }
 }
+
+private fun String.addPinAt(sourceLocation: SourceLocation): String = lines().toMutableList().apply {
+    val line = this[sourceLocation.line - 1]
+    this[sourceLocation.line - 1] = line.replaceRange(sourceLocation.column - 1, sourceLocation.column - 1, "📍")
+}.joinToString("\n")

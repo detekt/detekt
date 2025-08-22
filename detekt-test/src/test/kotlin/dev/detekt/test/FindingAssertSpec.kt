@@ -125,8 +125,28 @@ class FindingAssertSpec {
                 assertThatThrownBy { FindingAssert(finding).hasStartSourceLocation(SourceLocation(2, 5)) }
                     .isInstanceOfAssertionFailedError()
                     .hasMessage("Expected start source location to be 2:5 but was 1:1")
-                    .hasActual(SourceLocation(1, 1))
-                    .hasExpected(SourceLocation(2, 5))
+                    .hasActual(
+                        """
+                            📍fun test() {
+                                val a = 1
+                                val b = 2
+                                fun foo() {
+                                    val b = 2
+                                }
+                            }
+                        """.trimIndent()
+                    )
+                    .hasExpected(
+                        """
+                            fun test() {
+                                📍val a = 1
+                                val b = 2
+                                fun foo() {
+                                    val b = 2
+                                }
+                            }
+                        """.trimIndent()
+                    )
             }
 
             @Test
@@ -134,8 +154,28 @@ class FindingAssertSpec {
                 assertThatThrownBy { FindingAssert(finding).hasStartSourceLocation(2, 5) }
                     .isInstanceOfAssertionFailedError()
                     .hasMessage("Expected start source location to be 2:5 but was 1:1")
-                    .hasActual(SourceLocation(1, 1))
-                    .hasExpected(SourceLocation(2, 5))
+                    .hasActual(
+                        """
+                            📍fun test() {
+                                val a = 1
+                                val b = 2
+                                fun foo() {
+                                    val b = 2
+                                }
+                            }
+                        """.trimIndent()
+                    )
+                    .hasExpected(
+                        """
+                            fun test() {
+                                📍val a = 1
+                                val b = 2
+                                fun foo() {
+                                    val b = 2
+                                }
+                            }
+                        """.trimIndent()
+                    )
             }
         }
 
@@ -170,8 +210,28 @@ class FindingAssertSpec {
                 assertThatThrownBy { FindingAssert(finding).hasEndSourceLocation(SourceLocation(2, 14)) }
                     .isInstanceOfAssertionFailedError()
                     .hasMessage("Expected end source location to be 2:14 but was 1:11")
-                    .hasActual(SourceLocation(1, 11))
-                    .hasExpected(SourceLocation(2, 14))
+                    .hasActual(
+                        """
+                            fun test()📍 {
+                                val a = 1
+                                val b = 2
+                                fun foo() {
+                                    val b = 2
+                                }
+                            }
+                        """.trimIndent()
+                    )
+                    .hasExpected(
+                        """
+                            fun test() {
+                                val a = 1📍
+                                val b = 2
+                                fun foo() {
+                                    val b = 2
+                                }
+                            }
+                        """.trimIndent()
+                    )
             }
 
             @Test
@@ -179,8 +239,28 @@ class FindingAssertSpec {
                 assertThatThrownBy { FindingAssert(finding).hasEndSourceLocation(2, 14) }
                     .isInstanceOfAssertionFailedError()
                     .hasMessage("Expected end source location to be 2:14 but was 1:11")
-                    .hasActual(SourceLocation(1, 11))
-                    .hasExpected(SourceLocation(2, 14))
+                    .hasActual(
+                        """
+                            fun test()📍 {
+                                val a = 1
+                                val b = 2
+                                fun foo() {
+                                    val b = 2
+                                }
+                            }
+                        """.trimIndent()
+                    )
+                    .hasExpected(
+                        """
+                            fun test() {
+                                val a = 1📍
+                                val b = 2
+                                fun foo() {
+                                    val b = 2
+                                }
+                            }
+                        """.trimIndent()
+                    )
             }
         }
     }
