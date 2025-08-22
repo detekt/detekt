@@ -91,9 +91,10 @@ class FindingAssert(val actual: Finding?) : AbstractAssert<FindingAssert, Findin
         actual!!
         val actual = actual.location.text
         if (actual != expected) {
+            val file = this.actual.entity.ktElement.containingFile.text
             throw failureWithActualExpected(
-                actual,
-                expected,
+                file.substring(actual.start, actual.end),
+                file.substring(expected.start, expected.end),
                 "Expected text location to be $expected but was $actual"
             )
         }
