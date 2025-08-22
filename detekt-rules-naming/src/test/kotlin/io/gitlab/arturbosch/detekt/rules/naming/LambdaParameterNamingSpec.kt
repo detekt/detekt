@@ -22,9 +22,11 @@ class LambdaParameterNamingSpec {
             val a: (String, Int) -> Unit = { HI, HELLO_THERE -> Unit }
         """.trimIndent()
         val findings = LambdaParameterNaming(Config.empty).lint(code)
-        assertThat(findings)
-            .hasSize(2)
-            .hasTextLocations("HI", "HELLO_THERE")
+        assertThat(findings).hasSize(2)
+        assertThat(findings).element(0)
+            .hasTextLocation("HI")
+        assertThat(findings).element(1)
+            .hasTextLocation("HELLO_THERE")
     }
 
     @Test
@@ -89,9 +91,11 @@ class LambdaParameterNamingSpec {
             val a: (Bar) -> Unit = { (HI, HELLO_THERE) -> Unit }
         """.trimIndent()
         val findings = LambdaParameterNaming(Config.empty).lint(code)
-        assertThat(findings)
-            .hasSize(2)
-            .hasTextLocations("HI", "HELLO_THERE")
+        assertThat(findings).hasSize(2)
+        assertThat(findings).element(0)
+            .hasTextLocation("HI")
+        assertThat(findings).element(1)
+            .hasTextLocation("HELLO_THERE")
     }
 
     @Test
