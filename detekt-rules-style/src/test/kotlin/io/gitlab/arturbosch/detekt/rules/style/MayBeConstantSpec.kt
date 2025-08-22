@@ -352,7 +352,12 @@ class MayBeConstantSpec {
             """.trimIndent()
             val findings = subject.lint(code)
             assertThat(findings).hasSize(3)
-            assertThat(findings).hasStartSourceLocations(SourceLocation(4, 13), SourceLocation(7, 17), SourceLocation(11, 13))
+            assertThat(findings).element(0)
+                .hasStartSourceLocation(4, 13)
+            assertThat(findings).element(1)
+                .hasStartSourceLocation(7, 17)
+            assertThat(findings).element(2)
+                .hasStartSourceLocation(11, 13)
         }
     }
 }

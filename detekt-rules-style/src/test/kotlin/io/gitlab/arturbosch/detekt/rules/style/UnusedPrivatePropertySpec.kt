@@ -7,7 +7,6 @@ import dev.detekt.test.assertThat
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.KotlinCoreEnvironmentTest
 import dev.detekt.test.utils.KotlinEnvironmentContainer
-import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -351,7 +350,10 @@ class UnusedPrivatePropertySpec(val env: KotlinEnvironmentContainer) {
             """.trimIndent()
             val findings = subject.lintWithContext(env, code, allowCompilationErrors = true)
             assertThat(findings).hasSize(2)
-            assertThat(findings).hasStartSourceLocations(SourceLocation(2, 19), SourceLocation(3, 13))
+            assertThat(findings).element(0)
+                .hasStartSourceLocation(2, 19)
+            assertThat(findings).element(1)
+                .hasStartSourceLocation(3, 13)
         }
 
         @Test
@@ -421,7 +423,10 @@ class UnusedPrivatePropertySpec(val env: KotlinEnvironmentContainer) {
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(2)
-            assertThat(findings).hasStartSourceLocations(SourceLocation(2, 27), SourceLocation(6, 27))
+            assertThat(findings).element(0)
+                .hasStartSourceLocation(2, 27)
+            assertThat(findings).element(1)
+                .hasStartSourceLocation(6, 27)
         }
 
         @Test
@@ -440,7 +445,10 @@ class UnusedPrivatePropertySpec(val env: KotlinEnvironmentContainer) {
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(2)
-            assertThat(findings).hasStartSourceLocations(SourceLocation(2, 17), SourceLocation(6, 25))
+            assertThat(findings).element(0)
+                .hasStartSourceLocation(2, 17)
+            assertThat(findings).element(1)
+                .hasStartSourceLocation(6, 25)
         }
 
         @Test

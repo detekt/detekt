@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
 import dev.detekt.api.Config
-import dev.detekt.api.SourceLocation
 import dev.detekt.test.TestConfig
 import dev.detekt.test.assertThat
 import dev.detekt.test.lint
@@ -60,7 +59,12 @@ class VariableNamingSpec {
         """.trimIndent()
         val findings = VariableNaming(Config.empty).lint(code)
         assertThat(findings).hasSize(3)
-        assertThat(findings).hasStartSourceLocations(SourceLocation(2, 17), SourceLocation(3, 9), SourceLocation(4, 9))
+        assertThat(findings).element(0)
+            .hasStartSourceLocation(2, 17)
+        assertThat(findings).element(1)
+            .hasStartSourceLocation(3, 9)
+        assertThat(findings).element(2)
+            .hasStartSourceLocation(4, 9)
     }
 
     @Test

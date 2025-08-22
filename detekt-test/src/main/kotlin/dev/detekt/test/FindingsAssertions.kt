@@ -23,21 +23,6 @@ class FindingsAssert(actual: List<Finding>) :
     override fun toAssert(value: Finding?, description: String?): FindingAssert =
         FindingAssert(value).`as`(description)
 
-    fun hasStartSourceLocations(vararg expected: SourceLocation) = apply {
-        val actualSources = actual.asSequence()
-            .map { it.location.source }
-            .sortedWith(compareBy({ it.line }, { it.column }))
-
-        val expectedSources = expected.asSequence()
-            .sortedWith(compareBy({ it.line }, { it.column }))
-
-        if (!Objects.deepEquals(actualSources.toList(), expectedSources.toList())) {
-            failWithMessage(
-                "Expected start source locations to be ${expectedSources.toList()} but was ${actualSources.toList()}"
-            )
-        }
-    }
-
     fun hasTextLocations(vararg expected: Pair<Int, Int>) = apply {
         val actualSources = actual.asSequence()
             .map { it.location.text }

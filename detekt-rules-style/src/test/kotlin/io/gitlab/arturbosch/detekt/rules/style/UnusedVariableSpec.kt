@@ -75,7 +75,10 @@ class UnusedVariableSpec(val env: KotlinEnvironmentContainer) {
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(2)
-            assertThat(findings).hasStartSourceLocations(SourceLocation(3, 9), SourceLocation(4, 9))
+            assertThat(findings).element(0)
+                .hasStartSourceLocation(3, 9)
+            assertThat(findings).element(1)
+                .hasStartSourceLocation(4, 9)
         }
 
         @Test
