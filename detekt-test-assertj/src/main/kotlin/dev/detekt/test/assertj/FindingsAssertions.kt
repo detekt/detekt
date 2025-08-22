@@ -92,6 +92,7 @@ class FindingAssert(val actual: Finding?) : AbstractAssert<FindingAssert, Findin
         val actual = actual.location.text
         if (actual != expected) {
             val file = this.actual.entity.ktElement.containingFile.text
+            assertTextLocationInRange(file, expected)
             throw failureWithActualExpected(
                 file.substring(actual.start, actual.end),
                 file.substring(expected.start, expected.end),
@@ -133,6 +134,20 @@ private inline fun assertSourceLocationInRange(code: String, sourceLocation: Sou
     if (sourceLocation.column - 1 > lines[sourceLocation.line - 1].count()) {
         throw IndexOutOfBoundsException(
             "The column ${sourceLocation.column} doesn't exist in the line ${sourceLocation.line}. The line has ${lines[sourceLocation.line - 1].count() + 1} columns"
+        )
+    }
+}
+
+@Suppress("NOTHING_TO_INLINE") // avoid noise in the Stacktrace
+private inline fun assertTextLocationInRange(file: String, textLocation: TextLocation) {
+    if (textLocation.start > file.count()) {
+        throw IndexOutOfBoundsException(
+            "The character ${textLocation.start} doesn't exist in the file. The file has ${file.count()} characters"
+        )
+    }
+    if (textLocation.end > file.count()) {
+        throw IndexOutOfBoundsException(
+            "The character ${textLocation.end} doesn't exist in the file. The file has ${file.count()} characters"
         )
     }
 }
