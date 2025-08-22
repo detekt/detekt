@@ -228,8 +228,8 @@ class FindingAssertSpec {
             assertThatThrownBy { FindingAssert(finding).hasTextLocation(TextLocation(17, 26)) }
                 .isInstanceOfAssertionFailedError()
                 .hasMessage("Expected text location to be 17:26 but was 0:10")
-                .hasActual(TextLocation(0, 10))
-                .hasExpected(TextLocation(17, 26))
+                .hasActual("fun test()")
+                .hasExpected("val a = 1")
         }
 
         @Test
@@ -237,8 +237,8 @@ class FindingAssertSpec {
             assertThatThrownBy { FindingAssert(finding).hasTextLocation(17 to 26) }
                 .isInstanceOfAssertionFailedError()
                 .hasMessage("Expected text location to be 17:26 but was 0:10")
-                .hasActual(TextLocation(0, 10))
-                .hasExpected(TextLocation(17, 26))
+                .hasActual("fun test()")
+                .hasExpected("val a = 1")
         }
 
         @Test
@@ -246,8 +246,8 @@ class FindingAssertSpec {
             assertThatThrownBy { FindingAssert(finding).hasTextLocation("val a = 1") }
                 .isInstanceOfAssertionFailedError()
                 .hasMessage("Expected text location to be 17:26 but was 0:10")
-                .hasActual(TextLocation(0, 10))
-                .hasExpected(TextLocation(17, 26))
+                .hasActual("fun test()")
+                .hasExpected("val a = 1")
         }
 
         @Test
