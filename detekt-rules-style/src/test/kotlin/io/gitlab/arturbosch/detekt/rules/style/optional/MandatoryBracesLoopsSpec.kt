@@ -148,7 +148,10 @@ class MandatoryBracesLoopsSpec {
             val findings = subject.lint(code)
 
             assertThat(findings).hasSize(2)
-            assertThat(findings).hasTextLocations(42 to 80, 71 to 80)
+            assertThat(findings).element(0)
+                .hasTextLocation(42 to 80)
+            assertThat(findings).element(1)
+                .hasTextLocation(71 to 80)
         }
 
         @Test

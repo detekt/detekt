@@ -53,7 +53,12 @@ class ForbiddenNamedParamSpec(val env: KotlinEnvironmentContainer) {
             TestConfig(METHODS to listOf("kotlin.io.println"))
         ).lintWithContext(env, code)
         assertThat(findings).hasSize(3)
-        assertThat(findings).hasTextLocations(17 to 38, 43 to 63, 68 to 90)
+        assertThat(findings).element(0)
+            .hasTextLocation(17 to 38)
+        assertThat(findings).element(1)
+            .hasTextLocation(43 to 63)
+        assertThat(findings).element(2)
+            .hasTextLocation(68 to 90)
     }
 
     @Test
@@ -76,12 +81,16 @@ class ForbiddenNamedParamSpec(val env: KotlinEnvironmentContainer) {
             )
         ).lintWithContext(env, code)
         assertThat(findings).hasSize(3)
-        assertThat(findings).hasTextLocations(17 to 38, 43 to 63, 68 to 90)
-            .element(0)
+        assertThat(findings).element(0)
+            .hasTextLocation(17 to 38)
             .hasMessage(
                 "The method `kotlin.io.println` has been forbidden from using named param: " +
                     "As it is self explanatory"
             )
+        assertThat(findings).element(1)
+            .hasTextLocation(43 to 63)
+        assertThat(findings).element(2)
+            .hasTextLocation(68 to 90)
     }
 
     @Test
