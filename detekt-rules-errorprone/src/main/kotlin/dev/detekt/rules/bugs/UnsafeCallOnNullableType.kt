@@ -42,7 +42,7 @@ class UnsafeCallOnNullableType(config: Config) :
         if (expression.operationToken != KtTokens.EXCLEXCL) return
 
         val isNullable = analyze(expression) {
-            expression.baseExpression?.expressionType?.nullability?.isNullable == true
+            expression.baseExpression?.expressionType?.isMarkedNullable == true
         }
 
         if (isNullable) {
