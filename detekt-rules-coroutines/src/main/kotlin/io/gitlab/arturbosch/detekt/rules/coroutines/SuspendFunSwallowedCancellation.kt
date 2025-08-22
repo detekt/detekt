@@ -155,16 +155,14 @@ class SuspendFunSwallowedCancellation(config: Config) :
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 
-        val functionFqName = analyze(expression) {
+        val callableId = analyze(expression) {
             expression.resolveToCall()
                 ?.successfulFunctionCallOrNull()
                 ?.symbol
                 ?.callableId
-                ?.asSingleFqName()
         }
 
-        if (functionFqName == null) return
-        if (functionFqName != RUN_CATCHING_FQ) return
+        if (callableId != RUN_CATCHING_CALLABLE_ID) return
 
         fun shouldTraverseInside(element: PsiElement): Boolean =
             expression == element || shouldTraverseInsideImpl(element)
@@ -356,6 +354,10 @@ class SuspendFunSwallowedCancellation(config: Config) :
     }
 
     companion object {
+        private val RUN_CATCHING_CALLABLE_ID = CallableId(
+            packageName = FqName("kotlin"),
+            callableName = Name.identifier("runCatching")
+        )
         private val RUN_CATCHING_FQ = FqName("kotlin.runCatching")
 
         // Pulled from https://github.com/search?q=repo%3AKotlin%2Fkotlinx.coroutines+%22actual+typealias+CancellationException%22&type=code,
