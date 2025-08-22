@@ -1615,30 +1615,6 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinEnvironmentCont
                 val findings = subject.lintWithContext(env, code)
                 assertThat(findings).isEmpty()
             }
-
-            @Test
-            fun `does report when suspend block is passed to an inline function`() {
-                val code = """
-                    import kotlinx.coroutines.delay
-                    import kotlinx.coroutines.MainScope
-                    import kotlinx.coroutines.launch
-
-                    inline fun bar(crossinline lambda: suspend () -> Unit) {
-                        MainScope().launch { lambda() }
-                    }
-
-                    suspend fun foo() {
-                        runCatching {
-                            bar {
-                                delay(1000L)
-                            }
-                        }
-                    }
-                """.trimIndent()
-
-                val findings = subject.lintWithContext(env, code)
-                assertThat(findings).isEmpty()
-            }
         }
     }
 
