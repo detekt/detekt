@@ -64,7 +64,7 @@ fun createIssue(
     suppressReasons: List<String> = emptyList(),
 ): Issue = Issue(
     ruleInstance = ruleInstance,
-    entity = createIssueEntity(location = location),
+    entity = createIssueEntity(location),
     references = emptyList(),
     message = message,
     severity = severity,
@@ -91,7 +91,7 @@ fun createRuleInstance(
 fun createEntity(
     location: Location = createLocation(),
     signature: String = "TestEntitySignature",
-    ktElement: KtElement = FakeKtElement()
+    ktElement: KtElement = FakeKtElement(),
 ): Entity = Entity(
     signature = signature,
     location = location,
@@ -111,8 +111,8 @@ fun createLocation(
 )
 
 fun createIssueEntity(
-    signature: String = "TestEntitySignature",
     location: Issue.Location = createIssueLocation(),
+    signature: String = "TestEntitySignature",
 ): Issue.Entity = Issue.Entity(
     signature = signature,
     location = location,

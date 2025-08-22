@@ -27,7 +27,7 @@ class OutputFacadeSpec {
             issues = listOf(
                 createIssue(
                     createRuleInstance(ruleSetId = "Key"),
-                    createIssueEntity(location = createIssueLocation("TestFile.kt"))
+                    createIssueEntity(createIssueLocation("TestFile.kt"))
                 )
             ),
             rules = emptyList(),

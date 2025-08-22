@@ -17,15 +17,15 @@ private const val TAB = "\t"
 class XmlOutputReportSpec {
 
     private val entity1 = createIssueEntity(
-        "Sample1",
-        createIssueLocation(
+        signature = "Sample1",
+        location = createIssueLocation(
             path = "src/main/com/sample/Sample1.kt",
             position = 11 to 1,
         ),
     )
     private val entity2 = createIssueEntity(
-        "Sample2",
-        createIssueLocation(
+        signature = "Sample2",
+        location = createIssueLocation(
             path = "src/main/com/sample/Sample2.kt",
             position = 22 to 2,
         ),

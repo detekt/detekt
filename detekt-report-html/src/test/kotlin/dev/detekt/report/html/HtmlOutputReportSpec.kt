@@ -193,10 +193,10 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
 }
 
 private fun issues(): Array<Issue> {
-    val entity1 = createIssueEntity(location = createIssueLocation("src/main/com/sample/Sample1.kt", position = 11 to 5))
-    val entity2 = createIssueEntity(location = createIssueLocation("src/main/com/sample/Sample1.kt", position = 22 to 2))
-    val entity3 = createIssueEntity(location = createIssueLocation("src/main/com/sample/Sample1.kt", position = 11 to 2))
-    val entity4 = createIssueEntity(location = createIssueLocation("src/main/com/sample/Sample2.kt", position = 1 to 1))
+    val entity1 = createIssueEntity(createIssueLocation("src/main/com/sample/Sample1.kt", position = 11 to 5))
+    val entity2 = createIssueEntity(createIssueLocation("src/main/com/sample/Sample1.kt", position = 22 to 2))
+    val entity3 = createIssueEntity(createIssueLocation("src/main/com/sample/Sample1.kt", position = 11 to 2))
+    val entity4 = createIssueEntity(createIssueLocation("src/main/com/sample/Sample2.kt", position = 1 to 1))
 
     return arrayOf(
         createIssue(createRuleInstance("rule_a", "RuleSet1"), entity1),
