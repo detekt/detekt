@@ -29,7 +29,6 @@ class ConfigPrinterSpec {
                 conf3:
                   - 'a'
                   - 'b'
-                conf5: 120
               EqualsNull:
                 active: false
               NoUnitKeyword:
