@@ -3,14 +3,13 @@ package io.gitlab.arturbosch.detekt.rules.coroutines
 import dev.detekt.api.Config
 import dev.detekt.api.Finding
 import dev.detekt.api.SourceLocation
+import dev.detekt.test.assertThat
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.KotlinCoreEnvironmentTest
 import dev.detekt.test.utils.KotlinEnvironmentContainer
-import org.assertj.core.api.Assertions.assertThat
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import dev.detekt.test.assertThat as assertThatFindings
 
 @KotlinCoreEnvironmentTest
 class SuspendFunSwallowedCancellationSpec(private val env: KotlinEnvironmentContainer) {
@@ -1599,10 +1598,9 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinEnvironmentCont
         listOfStartLocation: List<SourceLocation>,
         listOfEndLocation: List<SourceLocation>,
     ) {
-        assertThat(listOfEndLocation).hasSameSizeAs(listOfStartLocation)
-        assertThatFindings(findings).hasSameSizeAs(listOfStartLocation)
-        assertThatFindings(findings).hasStartSourceLocations(*listOfStartLocation.toTypedArray())
-        assertThatFindings(findings).hasEndSourceLocations(*listOfEndLocation.toTypedArray())
+        assertThat(findings).hasSameSizeAs(listOfStartLocation)
+        assertThat(findings).hasStartSourceLocations(*listOfStartLocation.toTypedArray())
+        assertThat(findings).hasEndSourceLocations(*listOfEndLocation.toTypedArray())
     }
 
     private fun assertOneFindingAt(@Language("kotlin") code: String, start: SourceLocation, end: SourceLocation) {
