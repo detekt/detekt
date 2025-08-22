@@ -133,6 +133,7 @@ class FindingAssert(val actual: Finding?) : AbstractAssert<FindingAssert, Findin
         val actual = actual.location.source
         if (actual != expected) {
             val code = this.actual.entity.ktElement.containingFile.text
+            assertSourceLocationInRange(code, expected)
             throw failureWithActualExpected(
                 code.addPinAt(actual),
                 code.addPinAt(expected),
@@ -149,6 +150,7 @@ class FindingAssert(val actual: Finding?) : AbstractAssert<FindingAssert, Findin
         val actual = actual.location.endSource
         if (actual != expected) {
             val code = this.actual.entity.ktElement.containingFile.text
+            assertSourceLocationInRange(code, expected)
             throw failureWithActualExpected(
                 code.addPinAt(actual),
                 code.addPinAt(expected),
@@ -190,3 +192,14 @@ private fun String.addPinAt(sourceLocation: SourceLocation): String = lines().to
     val line = this[sourceLocation.line - 1]
     this[sourceLocation.line - 1] = line.replaceRange(sourceLocation.column - 1, sourceLocation.column - 1, "📍")
 }.joinToString("\n")
+
+@Suppress("NOTHING_TO_INLINE") // avoid noise in the Stacktrace
+private inline fun assertSourceLocationInRange(code: String, sourceLocation: SourceLocation) {
+    val lines = code.lines()
+    require(sourceLocation.line - 1 < lines.count()) {
+        "The line ${sourceLocation.line} doesn't exist in the file. The file has ${lines.count()} lines"
+    }
+    require(sourceLocation.column - 1 <= lines[sourceLocation.line - 1].count()) {
+        "The column ${sourceLocation.column} doesn't exist in the line ${sourceLocation.line}. The line has ${lines[sourceLocation.line - 1].count() + 1} columns"
+    }
+}
