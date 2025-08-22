@@ -7,15 +7,16 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaCompoundVariableAccessCall
 import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
-import org.jetbrains.kotlin.analysis.api.resolution.successfulVariableAccessCall
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
 import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.builtins.StandardNames.COROUTINES_PACKAGE_FQ_NAME
 import org.jetbrains.kotlin.idea.references.mainReference
+import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -267,18 +268,12 @@ class SuspendFunSwallowedCancellation(config: Config) :
         }
 
         is KtNameReferenceExpression -> {
-            val symbolFqName = analyze(this) {
+            analyze(this) {
                 resolveToCall()
-                    ?.let {
-                        it.successfulFunctionCallOrNull()
-                            ?: it.successfulVariableAccessCall()
-                    }
+                    ?.successfulCallOrNull<KaCallableMemberCall<*, *>>()
                     ?.symbol
-                    ?.callableId
-                    ?.asSingleFqName()
+                    ?.callableId == COROUTINE_CONTEXT_CALLABLE_ID
             }
-
-            symbolFqName == COROUTINE_CONTEXT_FQ_NAME
         }
 
         else -> {
@@ -373,9 +368,9 @@ class SuspendFunSwallowedCancellation(config: Config) :
             "java.lang.Exception", // JVM
         )
 
-        // Based on code from Kotlin project:
-        // https://github.com/JetBrains/kotlin/commit/87bbac9d43e15557a2ff0dc3254fd41a9d5639e1
-        private val COROUTINE_CONTEXT_FQ_NAME =
-            COROUTINES_PACKAGE_FQ_NAME.child(Name.identifier("coroutineContext"))
+        private val COROUTINE_CONTEXT_CALLABLE_ID = CallableId(
+            packageName = COROUTINES_PACKAGE_FQ_NAME,
+            callableName = Name.identifier("coroutineContext")
+        )
     }
 }
