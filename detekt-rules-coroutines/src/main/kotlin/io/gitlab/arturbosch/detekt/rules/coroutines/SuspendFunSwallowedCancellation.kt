@@ -209,12 +209,7 @@ class SuspendFunSwallowedCancellation(config: Config) :
                     as? KaNamedFunctionSymbol
             }
 
-            functionSymbol?.callableId
-                ?.asSingleFqName()
-                ?.let { functionFqName ->
-                    functionFqName != RUN_CATCHING_FQ && functionSymbol.isInline
-                }
-                ?: false
+            functionSymbol?.callableId != RUN_CATCHING_CALLABLE_ID && functionSymbol?.isInline == true
         }
 
         is KtValueArgument -> {
@@ -358,7 +353,6 @@ class SuspendFunSwallowedCancellation(config: Config) :
             packageName = FqName("kotlin"),
             callableName = Name.identifier("runCatching")
         )
-        private val RUN_CATCHING_FQ = FqName("kotlin.runCatching")
 
         // Pulled from https://github.com/search?q=repo%3AKotlin%2Fkotlinx.coroutines+%22actual+typealias+CancellationException%22&type=code,
         // in descending order of priority.
