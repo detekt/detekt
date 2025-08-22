@@ -171,17 +171,15 @@ class FindingAssert(val actual: Finding?) : AbstractAssert<FindingAssert, Findin
     }
 
     fun hasTextLocation(expected: String) = apply {
-        val code = actual!!.entity.ktElement.containingKtFile.text
+        isNotNull()
+        actual!!
+        val code = actual.entity.ktElement.containingFile.text
 
         val index = code.indexOf(expected)
-        if (index < 0) {
-            failWithMessage("The snippet \"$expected\" doesn't exist in the code")
-        } else {
-            if (code.indexOf(expected, index + 1) >= 0) {
-                failWithMessage("The snippet \"$expected\" appears multiple times in the code")
-            }
+        require(index >= 0) { """The snippet "$expected" doesn't exist in the code""" }
+        require(code.indexOf(expected, index + 1) < 0) {
+            """The snippet "$expected" appears multiple times in the code"""
         }
-
         hasTextLocation(TextLocation(index, index + expected.length))
     }
 }

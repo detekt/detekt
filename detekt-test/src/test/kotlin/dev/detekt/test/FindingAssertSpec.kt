@@ -5,13 +5,30 @@ import dev.detekt.api.TextLocation
 import dev.detekt.api.testfixtures.createEntity
 import dev.detekt.api.testfixtures.createFinding
 import dev.detekt.api.testfixtures.createLocation
+import dev.detekt.test.utils.internal.FakeKtElement
+import dev.detekt.test.utils.internal.FakePsiFile
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class FindingAssertSpec {
     private val finding = createFinding(
-        entity = createEntity(createLocation(source = 1 to 1, endSource = 1 to 11, text = 0..10)),
+        entity = createEntity(
+            location = createLocation(source = 1 to 1, endSource = 1 to 11, text = 0..10),
+            ktElement = FakeKtElement(
+                FakePsiFile(
+                    """
+                        fun test() {
+                            val a = 1
+                            val b = 2
+                            fun foo() {
+                                val b = 2
+                            }
+                        }
+                    """.trimIndent()
+                )
+            ),
+        ),
         message = "TestMessage",
     )
 
@@ -185,6 +202,13 @@ class FindingAssertSpec {
         }
 
         @Test
+        fun `hasTextLocationString with null value`() {
+            assertThatThrownBy { FindingAssert(null).hasTextLocation("val a = 1") }
+                .isExactlyInstanceOf(AssertionError::class.java)
+                .hasMessage("\nExpecting actual not to be null")
+        }
+
+        @Test
         fun hasTextLocation() {
             FindingAssert(finding).hasTextLocation(TextLocation(0, 10))
         }
@@ -192,6 +216,11 @@ class FindingAssertSpec {
         @Test
         fun hasTextLocationPair() {
             FindingAssert(finding).hasTextLocation(0 to 10)
+        }
+
+        @Test
+        fun hasTextLocationString() {
+            FindingAssert(finding).hasTextLocation("fun test()")
         }
 
         @Test
@@ -210,6 +239,29 @@ class FindingAssertSpec {
                 .hasMessage("Expected text location to be 17:26 but was 0:10")
                 .hasActual(TextLocation(0, 10))
                 .hasExpected(TextLocation(17, 26))
+        }
+
+        @Test
+        fun `hasTextLocationString failing`() {
+            assertThatThrownBy { FindingAssert(finding).hasTextLocation("val a = 1") }
+                .isInstanceOfAssertionFailedError()
+                .hasMessage("Expected text location to be 17:26 but was 0:10")
+                .hasActual(TextLocation(0, 10))
+                .hasExpected(TextLocation(17, 26))
+        }
+
+        @Test
+        fun `hasTextLocationString no occurrences`() {
+            assertThatThrownBy { FindingAssert(finding).hasTextLocation("val c = 3") }
+                .isInstanceOf(IllegalArgumentException::class.java)
+                .hasMessage("""The snippet "val c = 3" doesn't exist in the code""")
+        }
+
+        @Test
+        fun `hasTextLocationString multiple occurrences`() {
+            assertThatThrownBy { FindingAssert(finding).hasTextLocation("val b = 2") }
+                .isInstanceOf(IllegalArgumentException::class.java)
+                .hasMessage("""The snippet "val b = 2" appears multiple times in the code""")
         }
     }
 }
