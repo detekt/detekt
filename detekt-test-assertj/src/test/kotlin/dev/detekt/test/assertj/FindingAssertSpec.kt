@@ -177,6 +177,32 @@ class FindingAssertSpec {
                         """.trimIndent()
                     )
             }
+
+            @Test
+            fun `hasStartSourceLocation failing when expected line doesn't even exist`() {
+                assertThatThrownBy { FindingAssert(finding).hasStartSourceLocation(SourceLocation(20, 1)) }
+                    .isInstanceOf(IndexOutOfBoundsException::class.java)
+                    .hasMessage("The line 20 doesn't exist in the file. The file has 7 lines")
+            }
+
+            @Test
+            fun `hasStartSourceLocationInt failing when expected column doesn't even exist`() {
+                assertThatThrownBy { FindingAssert(finding).hasStartSourceLocation(1, 20) }
+                    .isInstanceOf(IndexOutOfBoundsException::class.java)
+                    .hasMessage("The column 20 doesn't exist in the line 1. The line has 13 columns")
+            }
+
+            @Test
+            fun `hasStartSourceLocation failing when expected line is the last one`() {
+                assertThatThrownBy { FindingAssert(finding).hasStartSourceLocation(SourceLocation(7, 1)) }
+                    .isInstanceOf(AssertionError::class.java)
+            }
+
+            @Test
+            fun `hasStartSourceLocationInt failing when expected column is the last one`() {
+                assertThatThrownBy { FindingAssert(finding).hasStartSourceLocation(1, 13) }
+                    .isInstanceOf(AssertionError::class.java)
+            }
         }
 
         @Nested
@@ -261,6 +287,32 @@ class FindingAssertSpec {
                             }
                         """.trimIndent()
                     )
+            }
+
+            @Test
+            fun `hasEndSourceLocation failing when expected line doesn't even exist`() {
+                assertThatThrownBy { FindingAssert(finding).hasEndSourceLocation(SourceLocation(20, 1)) }
+                    .isInstanceOf(IndexOutOfBoundsException::class.java)
+                    .hasMessage("The line 20 doesn't exist in the file. The file has 7 lines")
+            }
+
+            @Test
+            fun `hasEndSourceLocationInt failing when expected column doesn't even exist`() {
+                assertThatThrownBy { FindingAssert(finding).hasEndSourceLocation(1, 20) }
+                    .isInstanceOf(IndexOutOfBoundsException::class.java)
+                    .hasMessage("The column 20 doesn't exist in the line 1. The line has 13 columns")
+            }
+
+            @Test
+            fun `hasEndSourceLocation failing when expected line is the last one`() {
+                assertThatThrownBy { FindingAssert(finding).hasEndSourceLocation(SourceLocation(7, 1)) }
+                    .isInstanceOf(AssertionError::class.java)
+            }
+
+            @Test
+            fun `hasEndSourceLocationInt failing when expected column is the last one`() {
+                assertThatThrownBy { FindingAssert(finding).hasEndSourceLocation(1, 13) }
+                    .isInstanceOf(AssertionError::class.java)
             }
         }
     }
