@@ -250,12 +250,14 @@ class SuspendFunSwallowedCancellation(config: Config) :
                     ?.compoundOperation
                     ?.operationPartiallyAppliedSymbol
                     ?.signature
-                    ?.symbol?.isSuspend
+                    ?.symbol
+                    ?.isSuspend
 
-                    ?: (resolveToCall()
-                        ?.successfulFunctionCallOrNull()
-                        ?.symbol as? KaNamedFunctionSymbol)
-                        ?.isSuspend
+                    ?: (
+                        resolveToCall()
+                            ?.successfulFunctionCallOrNull()
+                            ?.symbol as? KaNamedFunctionSymbol
+                        )?.isSuspend
 
                     ?: false
             }
