@@ -478,11 +478,12 @@ class MaxLineLengthSpec {
             """.trimIndent()
         )
         assertThat(findings).hasSize(3)
-        assertThat(findings).hasTextLocations(
-            "    project.tasks.register(\"veryVeryVeryVeryVeryVeryLongName\${part}WithSuffix1\")",
-            "    project.tasks.register(\"veryVeryVeryVeryVeryVeryLongName\${part}WithSuffix2\") {",
-            "        .register(\"veryVeryVeryVeryVeryVeryLongName\${part}WithSuffix3\") {",
-        )
+        assertThat(findings).element(0)
+            .hasTextLocation("    project.tasks.register(\"veryVeryVeryVeryVeryVeryLongName\${part}WithSuffix1\")")
+        assertThat(findings).element(1)
+            .hasTextLocation("    project.tasks.register(\"veryVeryVeryVeryVeryVeryLongName\${part}WithSuffix2\") {")
+        assertThat(findings).element(2)
+            .hasTextLocation("        .register(\"veryVeryVeryVeryVeryVeryLongName\${part}WithSuffix3\") {")
     }
 
     @Nested
