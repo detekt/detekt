@@ -24,12 +24,8 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
         """.trimIndent()
         val findings = ForbiddenMethodCall(TestConfig()).lintWithContext(env, code)
 
-        assertThat(findings)
-            .hasSize(2)
-            .hasStartSourceLocations(
-                SourceLocation(2, 5),
-                SourceLocation(3, 5),
-            )
+        assertThat(findings).hasSize(2)
+        assertThat(findings).hasStartSourceLocations(SourceLocation(2, 5), SourceLocation(3, 5))
             .extracting("message")
             .containsExactly(
                 "The method `kotlin.io.print` has been forbidden: print does not allow you to configure the output stream. Use a logger instead.",

@@ -58,12 +58,9 @@ class VariableNamingSpec {
                 val camel_Case_Property = 5
             }
         """.trimIndent()
-        assertThat(VariableNaming(Config.empty).lint(code))
-            .hasStartSourceLocations(
-                SourceLocation(2, 17),
-                SourceLocation(3, 9),
-                SourceLocation(4, 9)
-            )
+        val findings = VariableNaming(Config.empty).lint(code)
+        assertThat(findings).hasSize(3)
+        assertThat(findings).hasStartSourceLocations(SourceLocation(2, 17), SourceLocation(3, 9), SourceLocation(4, 9))
     }
 
     @Test

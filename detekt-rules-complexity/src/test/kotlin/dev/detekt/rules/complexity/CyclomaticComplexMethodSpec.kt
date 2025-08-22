@@ -178,13 +178,7 @@ class CyclomaticComplexMethodSpec {
             val findings = subject.lint(code)
 
             assertThat(findings).hasSize(5)
-            assertThat(findings).hasStartSourceLocations(
-                SourceLocation(2, 5),
-                SourceLocation(11, 5),
-                SourceLocation(21, 5),
-                SourceLocation(31, 5),
-                SourceLocation(39, 5)
-            )
+            assertThat(findings).hasStartSourceLocations(SourceLocation(2, 5), SourceLocation(11, 5), SourceLocation(21, 5), SourceLocation(31, 5), SourceLocation(39, 5))
         }
 
         @Test

@@ -349,12 +349,9 @@ class UnusedPrivatePropertySpec(val env: KotlinEnvironmentContainer) {
                 private const val unusedTopLevelConst = 1
                 private val unusedTopLevelVal = usedTopLevelVal
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true))
-                .hasSize(2)
-                .hasStartSourceLocations(
-                    SourceLocation(2, 19),
-                    SourceLocation(3, 13),
-                )
+            val findings = subject.lintWithContext(env, code, allowCompilationErrors = true)
+            assertThat(findings).hasSize(2)
+            assertThat(findings).hasStartSourceLocations(SourceLocation(2, 19), SourceLocation(3, 13))
         }
 
         @Test
@@ -422,13 +419,9 @@ class UnusedPrivatePropertySpec(val env: KotlinEnvironmentContainer) {
                     class Foo(private val value: Int)
                 }
             """.trimIndent()
-
-            assertThat(subject.lintWithContext(env, code))
-                .hasSize(2)
-                .hasStartSourceLocations(
-                    SourceLocation(2, 27),
-                    SourceLocation(6, 27)
-                )
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings).hasSize(2)
+            assertThat(findings).hasStartSourceLocations(SourceLocation(2, 27), SourceLocation(6, 27))
         }
 
         @Test
@@ -445,12 +438,9 @@ class UnusedPrivatePropertySpec(val env: KotlinEnvironmentContainer) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code))
-                .hasSize(2)
-                .hasStartSourceLocations(
-                    SourceLocation(2, 17),
-                    SourceLocation(6, 25)
-                )
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings).hasSize(2)
+            assertThat(findings).hasStartSourceLocations(SourceLocation(2, 17), SourceLocation(6, 25))
         }
 
         @Test

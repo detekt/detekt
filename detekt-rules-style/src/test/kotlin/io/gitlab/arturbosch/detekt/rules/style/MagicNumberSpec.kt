@@ -322,13 +322,8 @@ class MagicNumberSpec {
         @Test
         fun `should be reported`() {
             val findings = MagicNumber(Config.empty).lint(code)
-            assertThat(findings)
-                .hasStartSourceLocations(
-                    SourceLocation(1, 17),
-                    SourceLocation(1, 21),
-                    SourceLocation(1, 24),
-                    SourceLocation(1, 31)
-                )
+            assertThat(findings).hasSize(4)
+            assertThat(findings).hasStartSourceLocations(SourceLocation(1, 17), SourceLocation(1, 21), SourceLocation(1, 24), SourceLocation(1, 31))
         }
     }
 
@@ -347,14 +342,8 @@ class MagicNumberSpec {
         @Test
         fun `should be reported`() {
             val findings = MagicNumber(Config.empty).lint(code, compile = false)
-            assertThat(findings).hasStartSourceLocations(
-                SourceLocation(3, 9),
-                SourceLocation(3, 21),
-                SourceLocation(4, 9),
-                SourceLocation(4, 21),
-                SourceLocation(5, 9),
-                SourceLocation(5, 21)
-            )
+            assertThat(findings).hasSize(6)
+            assertThat(findings).hasStartSourceLocations(SourceLocation(3, 9), SourceLocation(3, 21), SourceLocation(4, 9), SourceLocation(4, 21), SourceLocation(5, 9), SourceLocation(5, 21))
         }
     }
 
@@ -486,18 +475,8 @@ class MagicNumberSpec {
             )
 
             val findings = MagicNumber(config).lint(code, compile = false)
-            assertThat(findings)
-                .hasStartSourceLocations(
-                    SourceLocation(1, 17),
-                    SourceLocation(3, 24),
-                    SourceLocation(4, 33),
-                    SourceLocation(5, 37),
-                    SourceLocation(9, 26),
-                    SourceLocation(13, 35),
-                    SourceLocation(14, 43),
-                    SourceLocation(15, 27),
-                    SourceLocation(16, 56)
-                )
+            assertThat(findings).hasSize(9)
+            assertThat(findings).hasStartSourceLocations(SourceLocation(1, 17), SourceLocation(3, 24), SourceLocation(4, 33), SourceLocation(5, 37), SourceLocation(9, 26), SourceLocation(13, 35), SourceLocation(14, 43), SourceLocation(15, 27), SourceLocation(16, 56))
         }
 
         @Test
@@ -603,11 +582,8 @@ class MagicNumberSpec {
             )
 
             val findings = MagicNumber(config).lint(code)
-            assertThat(findings)
-                .hasStartSourceLocations(
-                    SourceLocation(4, 35),
-                    SourceLocation(5, 43)
-                )
+            assertThat(findings).hasSize(2)
+            assertThat(findings).hasStartSourceLocations(SourceLocation(4, 35), SourceLocation(5, 43))
         }
     }
 
@@ -1117,11 +1093,8 @@ class MagicNumberSpec {
                 val c = 12345U
             """.trimIndent()
             val findings = MagicNumber(Config.empty).lint(code)
-            assertThat(findings).hasStartSourceLocations(
-                SourceLocation(1, 9),
-                SourceLocation(2, 9),
-                SourceLocation(3, 9)
-            )
+            assertThat(findings).hasSize(3)
+            assertThat(findings).hasStartSourceLocations(SourceLocation(1, 9), SourceLocation(2, 9), SourceLocation(3, 9))
         }
 
         @Test
@@ -1212,12 +1185,8 @@ class MagicNumberSpec {
                 val d = 0xABCDUL
             """.trimIndent()
             val findings = MagicNumber(Config.empty).lint(code)
-            assertThat(findings).hasStartSourceLocations(
-                SourceLocation(1, 9),
-                SourceLocation(2, 9),
-                SourceLocation(3, 9),
-                SourceLocation(4, 9)
-            )
+            assertThat(findings).hasSize(4)
+            assertThat(findings).hasStartSourceLocations(SourceLocation(1, 9), SourceLocation(2, 9), SourceLocation(3, 9), SourceLocation(4, 9))
         }
 
         @Test
@@ -1227,10 +1196,8 @@ class MagicNumberSpec {
                 val binary2 = 0b1111uL
             """.trimIndent()
             val findings = MagicNumber(Config.empty).lint(code)
-            assertThat(findings).hasStartSourceLocations(
-                SourceLocation(1, 15),
-                SourceLocation(2, 15)
-            )
+            assertThat(findings).hasSize(2)
+            assertThat(findings).hasStartSourceLocations(SourceLocation(1, 15), SourceLocation(2, 15))
         }
 
         @Test

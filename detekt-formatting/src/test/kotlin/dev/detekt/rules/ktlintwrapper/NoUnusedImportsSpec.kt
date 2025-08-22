@@ -30,12 +30,7 @@ class NoUnusedImportsSpec {
 
         val findings = NoUnusedImports(Config.empty).lint(code)
 
-        assertThat(findings)
-            .hasSize(3)
-            .hasStartSourceLocations(
-                SourceLocation(3, 1),
-                SourceLocation(4, 1),
-                SourceLocation(5, 1)
-            )
+        assertThat(findings).hasSize(3)
+        assertThat(findings).hasStartSourceLocations(SourceLocation(3, 1), SourceLocation(4, 1), SourceLocation(5, 1))
     }
 }
