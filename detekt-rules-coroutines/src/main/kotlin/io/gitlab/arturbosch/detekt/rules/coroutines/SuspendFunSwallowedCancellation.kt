@@ -251,20 +251,21 @@ class SuspendFunSwallowedCancellation(config: Config) :
         }
 
         is KtCallExpression, is KtOperationExpression -> {
-            val symbol = analyze(this) {
+            analyze(this) {
                 resolveToCall()
                     ?.successfulCallOrNull<KaCompoundVariableAccessCall>()
                     ?.compoundOperation
                     ?.operationPartiallyAppliedSymbol
                     ?.signature
-                    ?.symbol
+                    ?.symbol?.isSuspend
 
-                    ?: resolveToCall()
+                    ?: (resolveToCall()
                         ?.successfulFunctionCallOrNull()
-                        ?.symbol as? KaNamedFunctionSymbol
-            }
+                        ?.symbol as? KaNamedFunctionSymbol)
+                        ?.isSuspend
 
-            symbol?.isSuspend == true
+                    ?: false
+            }
         }
 
         is KtNameReferenceExpression -> {
