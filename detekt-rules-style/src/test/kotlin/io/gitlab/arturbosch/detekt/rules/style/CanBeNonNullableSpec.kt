@@ -127,7 +127,6 @@ class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
             assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
-        @Disabled("No way to get the type of the delegation body, https://youtrack.jetbrains.com/issue/KT-66039")
         @Test
         fun `does report when non nullable val utilize non-nullable delegate values with extra nullable type parameter at the end`() {
             val code = """
@@ -146,7 +145,6 @@ class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
             assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
-        @Disabled("No way to get the type of the delegation body, https://youtrack.jetbrains.com/issue/KT-66039")
         @Test
         fun `does report when non nullable val utilize non-nullable delegate values with extra nullable type parameter at the end used via a function`() {
             val code = """
@@ -173,7 +171,6 @@ class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
             assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
-        @Disabled("No way to get the type of the delegation body, https://youtrack.jetbrains.com/issue/KT-66039")
         @Test
         fun `does report when non nullable val utilize non-nullable delegate values with extra nullable type parameter at the start`() {
             val code = """
@@ -192,7 +189,6 @@ class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
             assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
-        @Disabled("No way to get the type of the delegation body, https://youtrack.jetbrains.com/issue/KT-66039")
         @Test
         fun `does report when non nullable val utilize non-nullable delegate values with extra nullable type parameter at the start via a function`() {
             val code = """
@@ -351,6 +347,7 @@ class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
             assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
+        @Disabled("No way to get the type of the delegation body, https://youtrack.jetbrains.com/issue/KT-66039")
         @Test
         fun `does report vars that utilize non delegate values with nullable type`() {
             val code = """
@@ -470,6 +467,7 @@ class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
             assertThat(subject.lintWithContext(env, code)).hasSize(3)
         }
 
+        @Disabled("No way to get the type of the delegation body, https://youtrack.jetbrains.com/issue/KT-66039")
         @Test
         fun `reports when vals utilize non-nullable delegate values`() {
             val code = """
@@ -482,6 +480,7 @@ class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
             assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
+        @Disabled("No way to get the type of the delegation body, https://youtrack.jetbrains.com/issue/KT-66039")
         @Test
         fun `reports when vals utilize non-nullable delegate using callable ref`() {
             val code = """
@@ -504,6 +503,7 @@ class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
             assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
+        @Disabled("No way to get the type of the delegation body, https://youtrack.jetbrains.com/issue/KT-66039")
         @Test
         fun `does report when vals utilize non-nullable delegate values using observable`() {
             val code = """
