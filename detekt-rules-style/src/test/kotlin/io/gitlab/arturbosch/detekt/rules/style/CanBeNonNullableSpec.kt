@@ -7,6 +7,7 @@ import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.KotlinCoreEnvironmentTest
 import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.intellij.lang.annotations.Language
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -86,7 +87,7 @@ class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
                     }
                 }
             """.trimIndent()
-            // one for  private var a: Int? by PropDelegate() and one for value: Any?
+            // one for private var a: Int? by PropDelegate() and one for value: Any?
             assertThat(subject.lintWithContext(env, code)).hasSize(2)
         }
 
@@ -346,6 +347,7 @@ class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
             assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
+        @Disabled("No way to get the type of the delegation body, https://youtrack.jetbrains.com/issue/KT-66039")
         @Test
         fun `does report vars that utilize non delegate values with nullable type`() {
             val code = """
@@ -465,6 +467,7 @@ class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
             assertThat(subject.lintWithContext(env, code)).hasSize(3)
         }
 
+        @Disabled("No way to get the type of the delegation body, https://youtrack.jetbrains.com/issue/KT-66039")
         @Test
         fun `reports when vals utilize non-nullable delegate values`() {
             val code = """
@@ -477,6 +480,7 @@ class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
             assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
+        @Disabled("No way to get the type of the delegation body, https://youtrack.jetbrains.com/issue/KT-66039")
         @Test
         fun `reports when vals utilize non-nullable delegate using callable ref`() {
             val code = """
@@ -499,6 +503,7 @@ class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
             assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
+        @Disabled("No way to get the type of the delegation body, https://youtrack.jetbrains.com/issue/KT-66039")
         @Test
         fun `does report when vals utilize non-nullable delegate values using observable`() {
             val code = """
@@ -674,6 +679,17 @@ class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
             assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does report when vals with getters uses unnecessary let`() {
+            val code = """
+                class A {
+                    val a: Int?
+                        get() = 1?.let { it }
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
