@@ -38,21 +38,6 @@ class FindingsAssert(actual: List<Finding>) :
         }
     }
 
-    fun hasEndSourceLocations(vararg expected: SourceLocation) = apply {
-        val actualSources = actual.asSequence()
-            .map { it.location.endSource }
-            .sortedWith(compareBy({ it.line }, { it.column }))
-
-        val expectedSources = expected.asSequence()
-            .sortedWith(compareBy({ it.line }, { it.column }))
-
-        if (!Objects.deepEquals(actualSources.toList(), expectedSources.toList())) {
-            failWithMessage(
-                "Expected end source locations to be ${expectedSources.toList()} but was ${actualSources.toList()}"
-            )
-        }
-    }
-
     fun hasTextLocations(vararg expected: Pair<Int, Int>) = apply {
         val actualSources = actual.asSequence()
             .map { it.location.text }
