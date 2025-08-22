@@ -88,6 +88,7 @@ class FindingAssert(val actual: Finding?) : AbstractAssert<FindingAssert, Findin
         val actual = actual.location.text
         if (actual != expected) {
             val file = this.actual.entity.ktElement.containingFile.text
+            assertTextLocationInRange(file, expected)
             throw failureWithActualExpected(
                 file.substring(actual.start, actual.end),
                 file.substring(expected.start, expected.end),
@@ -112,3 +113,13 @@ class FindingAssert(val actual: Finding?) : AbstractAssert<FindingAssert, Findin
 
 private val Finding.location: Location
     get() = entity.location
+
+@Suppress("NOTHING_TO_INLINE") // avoid noise in the Stacktrace
+private inline fun assertTextLocationInRange(file: String, textLocation: TextLocation) {
+    require(textLocation.start <= file.count()) {
+        "The character ${textLocation.start} doesn't exist in the file. The file has ${file.count()} characters"
+    }
+    require(textLocation.end <= file.count()) {
+        "The character ${textLocation.end} doesn't exist in the file. The file has ${file.count()} characters"
+    }
+}
