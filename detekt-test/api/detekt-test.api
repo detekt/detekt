@@ -23,7 +23,6 @@ public final class dev/detekt/test/FindingExtensionsKt {
 
 public final class dev/detekt/test/FindingsAssert : org/assertj/core/api/AbstractListAssert {
 	public fun <init> (Ljava/util/List;)V
-	public final fun hasEndSourceLocations ([Ldev/detekt/api/SourceLocation;)Ldev/detekt/test/FindingsAssert;
 	public final fun hasStartSourceLocations ([Ldev/detekt/api/SourceLocation;)Ldev/detekt/test/FindingsAssert;
 	public final fun hasTextLocations ([Ljava/lang/String;)Ldev/detekt/test/FindingsAssert;
 	public final fun hasTextLocations ([Lkotlin/Pair;)Ldev/detekt/test/FindingsAssert;
