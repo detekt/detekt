@@ -68,7 +68,7 @@ tasks.withType<Test>().configureEach {
             }
         }
         predictiveTestSelection {
-            enabled = providers.gradleProperty("enablePTS").map(String::toBooleanStrict)
+            enabled = false
         }
     }
 }
