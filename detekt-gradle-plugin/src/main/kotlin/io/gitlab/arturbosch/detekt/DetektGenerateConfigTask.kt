@@ -1,17 +1,16 @@
 package io.gitlab.arturbosch.detekt
 
+import dev.detekt.gradle.plugin.DetektCliTool
 import io.gitlab.arturbosch.detekt.invoke.CliArgument
 import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
 import io.gitlab.arturbosch.detekt.invoke.DetektWorkAction
 import io.gitlab.arturbosch.detekt.invoke.GenerateConfigArgument
 import org.gradle.api.DefaultTask
-import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.ProviderFactory
 import org.gradle.api.services.BuildService
 import org.gradle.api.services.BuildServiceParameters
 import org.gradle.api.tasks.CacheableTask
-import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
@@ -23,18 +22,12 @@ import javax.inject.Inject
 abstract class DetektGenerateConfigTask @Inject constructor(
     private val workerExecutor: WorkerExecutor,
     private val providers: ProviderFactory,
-) : DefaultTask() {
+) : DetektCliTool, DefaultTask() {
 
     init {
         description = "Generate a detekt configuration file inside your project."
         group = LifecycleBasePlugin.VERIFICATION_GROUP
     }
-
-    @get:Classpath
-    abstract val detektClasspath: ConfigurableFileCollection
-
-    @get:Classpath
-    abstract val pluginClasspath: ConfigurableFileCollection
 
     @get:OutputFile
     abstract val configFile: RegularFileProperty
