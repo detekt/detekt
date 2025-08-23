@@ -40,6 +40,7 @@ fun Rule.lint(
     }
     val ktFile = compileContentForTest(content)
     return visitFile(ktFile, languageVersionSettings = languageVersionSettings).filterSuppressed(this)
+        .sortedWith(findingComparator)
 }
 
 fun <T> T.lintWithContext(
@@ -63,6 +64,7 @@ fun <T> T.lintWithContext(
     setBindingContext(environment.createBindingContext(listOf(ktFile) + additionalKtFiles))
 
     return visitFile(ktFile, languageVersionSettings).filterSuppressed(this)
+        .sortedWith(findingComparator)
 }
 
 fun <T> T.lintWithContext(
@@ -78,6 +80,7 @@ fun <T> T.lintWithContext(
         allowCompilationErrors = allowCompilationErrors
     )
     return visitFile(ktFile, environment.configuration.languageVersionSettings).filterSuppressed(this)
+        .sortedWith(findingComparator)
 }
 
 fun Rule.lint(
@@ -91,6 +94,7 @@ fun Rule.lint(
         "${this.ruleName} requires Analysis Api so you should use lintWithContext instead of lint"
     }
     return visitFile(ktFile, languageVersionSettings = languageVersionSettings).filterSuppressed(this)
+        .sortedWith(findingComparator)
 }
 
 private fun List<Finding>.filterSuppressed(rule: Rule): List<Finding> =
@@ -102,3 +106,5 @@ private val Rule.aliases: Set<String> get() = config.valueOrDefault(Config.ALIAS
 
 private fun RuntimeException.isNoMatchingOutputFiles() =
     message?.contains("Compilation produced no matching output files") == true
+
+private val findingComparator = compareBy<Finding>({ it.location.source }, { it.location.endSource })
