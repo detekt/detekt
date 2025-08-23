@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.sample.extensions.processors
 
-import io.gitlab.arturbosch.detekt.api.DetektVisitor
-import io.gitlab.arturbosch.detekt.api.FileProcessListener
-import org.jetbrains.kotlin.com.intellij.openapi.util.Key
+import com.intellij.openapi.util.Key
+import dev.detekt.api.DetektVisitor
+import dev.detekt.api.FileProcessListener
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtLoopExpression
 
