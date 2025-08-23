@@ -494,7 +494,7 @@ potential-bugs:
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
     ignoreOnClassesPattern: ''
   LateinitUsageInClassLevelVal:
-    active: true
+    active: false
   MapGetWithNotNullAssertionOperator:
     active: true
   MissingPackageDeclaration:

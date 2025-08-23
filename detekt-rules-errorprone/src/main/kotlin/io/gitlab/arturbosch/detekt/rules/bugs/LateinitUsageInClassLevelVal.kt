@@ -61,7 +61,6 @@ import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
  * }
  * </compliant>
  */
-@ActiveByDefault(since = "1.0.0")
 class LateinitUsageInClassLevelVal(config: Config) :
     Rule(
         config,
