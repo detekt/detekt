@@ -140,7 +140,6 @@ class DetektReportMergeSpec {
                     > Analysis failed with 4 issues.
                 """.trimIndent()
             )
-            println("Debug print, child files = " + projectFile("build/reports/detekt/").listFiles().map { it.name })
             assertThat(projectFile("build/reports/detekt/detekt.xml")).doesNotExist()
             assertThat(projectFile("build/reports/detekt/merge.xml")).exists()
             assertThat(projectFile("build/reports/detekt/merge.xml").readText())

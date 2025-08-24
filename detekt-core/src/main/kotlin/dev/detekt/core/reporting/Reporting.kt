@@ -6,7 +6,7 @@ import dev.detekt.api.internal.BuiltInOutputReport
 import java.nio.file.Path
 
 internal fun defaultReportMapping(report: OutputReport) =
-    if (report is BuiltInOutputReport) report.ending else report.id
+    if (report is BuiltInOutputReport) (report.reportId ?: report.ending) else report.id
 
 internal fun printIssues(issues: Map<String, List<Issue>>, basePath: Path): String =
     buildString {
