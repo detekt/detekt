@@ -23,7 +23,7 @@ class OutputReportsSpec {
 
         private val reportUnderTest = TestOutputReport::class.java.simpleName
         private val reports = ReportsSpecBuilder().apply {
-            report { "xml" to Path("/tmp/path1") }
+            report { "checkstyle" to Path("/tmp/path1") }
             report { reportUnderTest to Path("/tmp/path3") }
             report { "html" to Path("D:_Gradle\\xxx\\xxx\\build\\reports\\detekt\\detekt.html") }
             report { "md" to Path("/tmp/path4") }
@@ -36,9 +36,9 @@ class OutputReportsSpec {
 
         @Test
         fun `it should properly parse Checkstyle report entry`() {
-            val xmlReport = reports[0]
-            assertThat(xmlReport.type).isEqualTo(defaultReportMapping(CheckstyleOutputReport()))
-            assertThat(xmlReport.path).isEqualTo(Path("/tmp/path1"))
+            val checkstyleReport = reports[0]
+            assertThat(checkstyleReport.type).isEqualTo(defaultReportMapping(CheckstyleOutputReport()))
+            assertThat(checkstyleReport.path).isEqualTo(Path("/tmp/path1"))
         }
 
         @Test
