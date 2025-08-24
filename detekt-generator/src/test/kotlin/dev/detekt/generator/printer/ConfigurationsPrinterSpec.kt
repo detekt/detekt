@@ -7,7 +7,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-internal class RuleConfigurationPrinterTest {
+internal class ConfigurationsPrinterSpec {
     private val configTemplate = Configuration(
         name = "configName",
         description = "config description",
@@ -21,42 +21,42 @@ internal class RuleConfigurationPrinterTest {
         @Test
         fun `boolean default`() {
             val config = configTemplate.copy(defaultValue = DefaultValue.of(true))
-            val actual = RuleConfigurationPrinter.print(listOf(config))
+            val actual = ConfigurationsPrinter.print(listOf(config))
             assertThat(actual).contains("""* ``configName`` (default: ``true``)""")
         }
 
         @Test
         fun `int default`() {
             val config = configTemplate.copy(defaultValue = DefaultValue.of(99))
-            val actual = RuleConfigurationPrinter.print(listOf(config))
+            val actual = ConfigurationsPrinter.print(listOf(config))
             assertThat(actual).contains("""* ``configName`` (default: ``99``)""")
         }
 
         @Test
         fun `int default with groupings`() {
             val config = configTemplate.copy(defaultValue = DefaultValue.of(99_999))
-            val actual = RuleConfigurationPrinter.print(listOf(config))
+            val actual = ConfigurationsPrinter.print(listOf(config))
             assertThat(actual).contains("""* ``configName`` (default: ``99999``)""")
         }
 
         @Test
         fun `string default`() {
             val config = configTemplate.copy(defaultValue = DefaultValue.of("abc"))
-            val actual = RuleConfigurationPrinter.print(listOf(config))
+            val actual = ConfigurationsPrinter.print(listOf(config))
             assertThat(actual).contains("""* ``configName`` (default: ``'abc'``)""")
         }
 
         @Test
         fun `string list default`() {
             val config = configTemplate.copy(defaultValue = DefaultValue.of(listOf("a", "b", "c")))
-            val actual = RuleConfigurationPrinter.print(listOf(config))
+            val actual = ConfigurationsPrinter.print(listOf(config))
             assertThat(actual).contains("""* ``configName`` (default: ``['a', 'b', 'c']``)""")
         }
 
         @Test
         fun `empty string list default`() {
             val config = configTemplate.copy(defaultValue = DefaultValue.of(emptyList()))
-            val actual = RuleConfigurationPrinter.print(listOf(config))
+            val actual = ConfigurationsPrinter.print(listOf(config))
             assertThat(actual).contains("""* ``configName`` (default: ``[]``)""")
         }
 
@@ -71,7 +71,7 @@ internal class RuleConfigurationPrinterTest {
                     )
                 )
             )
-            val actual = RuleConfigurationPrinter.print(listOf(config))
+            val actual = ConfigurationsPrinter.print(listOf(config))
             assertThat(actual).contains("""* ``configName`` (default: ``['a', 'b', 'c']``)""")
         }
 
@@ -81,7 +81,7 @@ internal class RuleConfigurationPrinterTest {
                 defaultValue = DefaultValue.of(99),
                 defaultAndroidValue = DefaultValue.of(100)
             )
-            val actual = RuleConfigurationPrinter.print(listOf(config))
+            val actual = ConfigurationsPrinter.print(listOf(config))
             assertThat(actual).contains("""* ``configName`` (default: ``99``) (android default: ``100``)""")
         }
     }
@@ -89,7 +89,7 @@ internal class RuleConfigurationPrinterTest {
     @Nested
     inner class DeprecatedProperties {
         private val config = configTemplate.copy(deprecated = "Use something else instead")
-        private val actual = RuleConfigurationPrinter.print(listOf(config))
+        private val actual = ConfigurationsPrinter.print(listOf(config))
 
         @Test
         fun `contain deprecation information`() {
