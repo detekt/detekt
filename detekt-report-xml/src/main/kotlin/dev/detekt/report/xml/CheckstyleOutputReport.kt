@@ -15,7 +15,7 @@ import kotlin.io.path.invariantSeparatorsPathString
 class CheckstyleOutputReport : BuiltInOutputReport, OutputReport() {
 
     override val id: String = "CheckstyleOutputReport"
-    override val ending = "xml"
+    override val ending = "checkstyle"
 
     private val Issue.severityLabel: String
         get() = severity.name.lowercase(Locale.US)
