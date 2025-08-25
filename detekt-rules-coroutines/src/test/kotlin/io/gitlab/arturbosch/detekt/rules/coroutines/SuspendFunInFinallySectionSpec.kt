@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.coroutines
 
 import dev.detekt.api.Config
-import dev.detekt.api.Finding
 import dev.detekt.test.assertThat
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.KotlinCoreEnvironmentTest
@@ -31,11 +30,12 @@ class SuspendFunInFinallySectionSpec(private val env: KotlinEnvironmentContainer
             suspend fun test() { yield() }
         """.trimIndent()
 
-        assertFindingsForSuspendCall(
-            findings = subject.lintWithContext(env, code),
-            "test".find(1)(code),
-            "test".find(2)(code)
-        )
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).hasSize(2)
+        assertThat(findings).element(0)
+            .hasTextLocation("test".find(1)(code))
+        assertThat(findings).element(1)
+            .hasTextLocation("test".find(2)(code))
     }
 
     @Test
@@ -59,11 +59,8 @@ class SuspendFunInFinallySectionSpec(private val env: KotlinEnvironmentContainer
             
             suspend fun test() { yield() }
         """.trimIndent()
-
-        assertFindingsForSuspendCall(
-            findings = subject.lintWithContext(env, code),
-            *NOTHING
-        )
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -84,11 +81,12 @@ class SuspendFunInFinallySectionSpec(private val env: KotlinEnvironmentContainer
             suspend fun test() { yield() }
         """.trimIndent()
 
-        assertFindingsForSuspendCall(
-            findings = subject.lintWithContext(env, code),
-            "test".find(1)(code),
-            "withContext".find(1)(code),
-        )
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).hasSize(2)
+        assertThat(findings).element(0)
+            .hasTextLocation("withContext".find(1)(code))
+        assertThat(findings).element(1)
+            .hasTextLocation("test".find(1)(code))
     }
 
     @Test
@@ -108,11 +106,8 @@ class SuspendFunInFinallySectionSpec(private val env: KotlinEnvironmentContainer
             
             fun test() { println(".") }
         """.trimIndent()
-
-        assertFindingsForSuspendCall(
-            findings = subject.lintWithContext(env, code),
-            *NOTHING
-        )
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).isEmpty()
     }
 
     @Test
@@ -141,18 +136,17 @@ class SuspendFunInFinallySectionSpec(private val env: KotlinEnvironmentContainer
             
             suspend fun test() { yield() }
         """.trimIndent()
-
-        assertFindingsForSuspendCall(
-            findings = subject.lintWithContext(env, code),
-            "wrapper".find(2)(code),
-            "test".find(1)(code),
-            "block".find(2)(code),
-        )
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).hasSize(3)
+        assertThat(findings).element(0)
+            .hasTextLocation("wrapper".find(2)(code))
+        assertThat(findings).element(1)
+            .hasTextLocation("test".find(1)(code))
+        assertThat(findings).element(2)
+            .hasTextLocation("block".find(2)(code))
     }
 
     companion object {
-        private val NOTHING: Array<Pair<Int, Int>> = emptyArray()
-
         private fun String.find(ordinal: Int): (String) -> Pair<Int, Int> =
             { code ->
                 fun String.next(string: String, start: Int): Int? = indexOf(string, start).takeIf { it != -1 }
@@ -165,12 +159,5 @@ class SuspendFunInFinallySectionSpec(private val env: KotlinEnvironmentContainer
                 }
                 index to index + this.length
             }
-
-        private fun assertFindingsForSuspendCall(findings: List<Finding>, vararg locations: Pair<Int, Int>) {
-            assertThat(findings)
-                .hasTextLocations(
-                    *(locations.map { it.first to it.second }).toTypedArray()
-                )
-        }
     }
 }

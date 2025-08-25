@@ -2275,10 +2275,11 @@ class BracesOnIfStatementsSpec {
             val findings = lint("fun f() { $code }", compile = false)
             // Offset text locations by the above prefix, it results in 0-indexed locations.
             val offset = 10
-            assertThat(findings)
-                .hasTextLocations(
-                    *(locations.map { it.first + offset to it.second + offset }).toTypedArray()
-                )
+            locations.map { it.first + offset to it.second + offset }
+                .forEachIndexed { position, textPosition ->
+                    assertThat(findings).element(position)
+                        .hasTextLocation(textPosition)
+                }
         }
 
         /**

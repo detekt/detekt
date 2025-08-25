@@ -26,7 +26,10 @@ class OptionalAbstractKeywordSpec {
         val findings = subject.lint(code)
 
         assertThat(findings).hasSize(2)
-        assertThat(findings).hasTextLocations(0 to 8, 23 to 31)
+        assertThat(findings).element(0)
+            .hasTextLocation(0 to 8)
+        assertThat(findings).element(1)
+            .hasTextLocation(23 to 31)
     }
 
     @Test

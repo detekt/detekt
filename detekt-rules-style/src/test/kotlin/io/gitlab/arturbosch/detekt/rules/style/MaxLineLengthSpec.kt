@@ -424,7 +424,10 @@ class MaxLineLengthSpec {
             """.trimIndent()
         )
         assertThat(findings).hasSize(2)
-        assertThat(findings).hasTextLocations(40 to 97, 98 to 157)
+        assertThat(findings).element(0)
+            .hasTextLocation(40 to 97)
+        assertThat(findings).element(1)
+            .hasTextLocation(98 to 157)
     }
 
     @Test
