@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import dev.detekt.api.Config
 import dev.detekt.test.FakeLanguageVersionSettings
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
 import org.jetbrains.kotlin.config.ExplicitApiMode
 import org.junit.jupiter.api.Nested

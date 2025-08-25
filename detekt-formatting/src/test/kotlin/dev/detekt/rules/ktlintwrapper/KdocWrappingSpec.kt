@@ -2,7 +2,7 @@ package dev.detekt.rules.ktlintwrapper
 
 import dev.detekt.api.Config
 import dev.detekt.rules.ktlintwrapper.wrappers.KdocWrapping
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import org.junit.jupiter.api.Test
 
 /**

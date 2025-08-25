@@ -2,7 +2,6 @@ package dev.detekt.rules.ktlintwrapper
 
 import dev.detekt.api.Config
 import dev.detekt.rules.ktlintwrapper.wrappers.ChainWrapping
-import dev.detekt.test.assertThat
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

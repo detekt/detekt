@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 import dev.detekt.api.Config
 import dev.detekt.api.TextLocation
 import dev.detekt.test.TestConfig
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
 import io.gitlab.arturbosch.detekt.rules.style.BracesOnWhenStatements.BracePolicy
 import io.gitlab.arturbosch.detekt.rules.style.BracesOnWhenStatementsSpec.Companion.NOT_RELEVANT
