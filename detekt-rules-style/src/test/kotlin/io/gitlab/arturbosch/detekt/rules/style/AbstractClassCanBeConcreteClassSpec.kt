@@ -2,8 +2,8 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import dev.detekt.test.TestConfig
 import dev.detekt.test.assertThat
+import dev.detekt.test.junit.KotlinCoreEnvironmentTest
 import dev.detekt.test.lintWithContext
-import dev.detekt.test.utils.KotlinCoreEnvironmentTest
 import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
