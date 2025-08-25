@@ -1,5 +1,6 @@
 package dev.detekt.test.junit
 
+import com.intellij.openapi.util.Disposer
 import dev.detekt.test.utils.KotlinEnvironmentContainer
 import dev.detekt.test.utils.resourceAsPath
 import org.junit.jupiter.api.extension.ExtendWith
@@ -25,13 +26,21 @@ internal class KotlinEnvironmentResolver : ParameterResolver {
         parameterContext.parameter.type == KotlinEnvironmentContainer::class.java
 
     override fun resolveParameter(parameterContext: ParameterContext, extensionContext: ExtensionContext): Any {
-        val closeableWrapper = extensionContext.wrapper
-            ?: createEnvironment(
-                additionalRootPaths = checkNotNull(
-                    classpathFromClassloader(Thread.currentThread().contextClassLoader)
-                ) { "We should always have a classpath" },
-                additionalJavaSourceRootPaths = extensionContext.additionalJavaSourcePaths(),
-            ).also { extensionContext.wrapper = it }
+        var closeableWrapper = extensionContext.wrapper
+        if (closeableWrapper == null) {
+            val disposable = Disposer.newDisposable()
+            closeableWrapper = KotlinCoreEnvironmentWrapper(
+                createEnvironment(
+                    disposable,
+                    additionalRootPaths = checkNotNull(
+                        classpathFromClassloader(Thread.currentThread().contextClassLoader)
+                    ) { "We should always have a classpath" },
+                    additionalJavaSourceRootPaths = extensionContext.additionalJavaSourcePaths(),
+                ),
+                disposable,
+            )
+            extensionContext.wrapper = closeableWrapper
+        }
         return closeableWrapper.env
     }
 

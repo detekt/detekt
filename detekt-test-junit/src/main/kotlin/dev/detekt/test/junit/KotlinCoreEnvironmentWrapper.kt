@@ -35,14 +35,17 @@ internal class KotlinCoreEnvironmentWrapper(
 }
 
 /**
- * Create a {@link KotlinCoreEnvironmentWrapper} used for test.
+ * Create a {@link KotlinEnvironmentContainer} used for test.
  *
+ * @param disposable a disposable that should be called once the returned [KotlinEnvironmentContainer] is not used anymore
  * @param additionalRootPaths the optional JVM classpath roots list.
+ * @param additionalRootPaths the optional Java classpath roots list.
  */
 internal fun createEnvironment(
+    disposable: Disposable,
     additionalRootPaths: List<File> = emptyList(),
     additionalJavaSourceRootPaths: List<File> = emptyList(),
-): KotlinCoreEnvironmentWrapper {
+): KotlinEnvironmentContainer {
     val configuration = CompilerConfiguration()
     configuration.put(CommonConfigurationKeys.MODULE_NAME, "test_module")
     configuration.put(CommonConfigurationKeys.MESSAGE_COLLECTOR_KEY, MessageCollector.NONE)
@@ -58,8 +61,7 @@ internal fun createEnvironment(
         configureJdkClasspathRoots()
     }
 
-    val parentDisposable = Disposer.newDisposable()
-    val analysisSession = buildStandaloneAnalysisAPISession(parentDisposable) {
+    val analysisSession = buildStandaloneAnalysisAPISession(disposable) {
         @Suppress("DEPRECATION") // Required until fully transitioned to setting up Kotlin Analysis API session
         buildKtModuleProviderByCompilerConfiguration(configuration)
 
@@ -67,10 +69,7 @@ internal fun createEnvironment(
         registerProjectService(CodeAnalyzerInitializer::class.java, CliTraceHolder(project))
     }
 
-    return KotlinCoreEnvironmentWrapper(
-        KotlinEnvironmentContainer(analysisSession.project, configuration),
-        parentDisposable,
-    )
+    return KotlinEnvironmentContainer(analysisSession.project, configuration)
 }
 
 private fun kotlinStdLibPath(): File = File(CharRange::class.java.protectionDomain.codeSource.location.path)
