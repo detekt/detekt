@@ -1,7 +1,9 @@
 package dev.detekt.test.junit
 
+import com.intellij.openapi.Disposable
 import com.intellij.openapi.util.Disposer
 import dev.detekt.test.utils.KotlinEnvironmentContainer
+import dev.detekt.test.utils.createEnvironment
 import dev.detekt.test.utils.resourceAsPath
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.api.extension.ExtensionContext
@@ -52,5 +54,17 @@ internal class KotlinEnvironmentResolver : ParameterResolver {
                 .find { it is KotlinCoreEnvironmentTest } as? KotlinCoreEnvironmentTest ?: return emptyList()
             return annotation.additionalJavaSourcePaths.map { resourceAsPath(it).toFile() }
         }
+    }
+}
+
+private class KotlinCoreEnvironmentWrapper(
+    val env: KotlinEnvironmentContainer,
+    private val disposable: Disposable,
+) :
+    @Suppress("DEPRECATION")
+    ExtensionContext.Store.CloseableResource,
+    AutoCloseable {
+    override fun close() {
+        Disposer.dispose(disposable)
     }
 }
