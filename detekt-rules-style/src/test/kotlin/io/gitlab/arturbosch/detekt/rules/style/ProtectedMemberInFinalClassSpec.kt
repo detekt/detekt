@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import dev.detekt.api.Config
-import dev.detekt.api.SourceLocation
 import dev.detekt.test.assertThat
 import dev.detekt.test.lint
 import org.junit.jupiter.api.Nested
@@ -77,10 +76,10 @@ class ProtectedMemberInFinalClassSpec {
             """.trimIndent()
             val findings = subject.lint(code)
             assertThat(findings).hasSize(2)
-            assertThat(findings).hasStartSourceLocations(
-                SourceLocation(2, 5),
-                SourceLocation(3, 9)
-            )
+            assertThat(findings).element(0)
+                .hasStartSourceLocation(2, 5)
+            assertThat(findings).element(1)
+                .hasStartSourceLocation(3, 9)
         }
 
         @Test
@@ -96,11 +95,12 @@ class ProtectedMemberInFinalClassSpec {
             """.trimIndent()
             val findings = subject.lint(code)
             assertThat(findings).hasSize(3)
-            assertThat(findings).hasStartSourceLocations(
-                SourceLocation(2, 5),
-                SourceLocation(2, 5),
-                SourceLocation(4, 13)
-            )
+            assertThat(findings).element(0)
+                .hasStartSourceLocation(2, 5)
+            assertThat(findings).element(1)
+                .hasStartSourceLocation(2, 5)
+            assertThat(findings).element(2)
+                .hasStartSourceLocation(4, 13)
         }
 
         @Test

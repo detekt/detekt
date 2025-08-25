@@ -1,7 +1,6 @@
 package dev.detekt.rules.ktlintwrapper
 
 import dev.detekt.api.Config
-import dev.detekt.api.SourceLocation
 import dev.detekt.rules.ktlintwrapper.wrappers.NoUnusedImports
 import dev.detekt.test.assertThat
 import dev.detekt.test.lint
@@ -30,12 +29,12 @@ class NoUnusedImportsSpec {
 
         val findings = NoUnusedImports(Config.empty).lint(code)
 
-        assertThat(findings)
-            .hasSize(3)
-            .hasStartSourceLocations(
-                SourceLocation(3, 1),
-                SourceLocation(4, 1),
-                SourceLocation(5, 1)
-            )
+        assertThat(findings).hasSize(3)
+        assertThat(findings).element(0)
+            .hasStartSourceLocation(3, 1)
+        assertThat(findings).element(1)
+            .hasStartSourceLocation(4, 1)
+        assertThat(findings).element(2)
+            .hasStartSourceLocation(5, 1)
     }
 }

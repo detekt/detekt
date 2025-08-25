@@ -1,7 +1,6 @@
 package dev.detekt.rules.bugs
 
 import dev.detekt.api.Config
-import dev.detekt.api.SourceLocation
 import dev.detekt.test.assertThat
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.KotlinCoreEnvironmentTest
@@ -55,10 +54,10 @@ class UnreachableCatchBlockSpec(private val env: KotlinEnvironmentContainer) {
         """.trimIndent()
         val findings = subject.lintWithContext(env, code)
         assertThat(findings).hasSize(2)
-        assertThat(findings).hasStartSourceLocations(
-            SourceLocation(4, 7),
-            SourceLocation(5, 7)
-        )
+        assertThat(findings).element(0)
+            .hasStartSourceLocation(4, 7)
+        assertThat(findings).element(1)
+            .hasStartSourceLocation(5, 7)
     }
 
     @Test

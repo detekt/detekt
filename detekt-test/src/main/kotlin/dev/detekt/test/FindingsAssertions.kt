@@ -23,21 +23,6 @@ class FindingsAssert(actual: List<Finding>) :
     override fun toAssert(value: Finding?, description: String?): FindingAssert =
         FindingAssert(value).`as`(description)
 
-    fun hasStartSourceLocations(vararg expected: SourceLocation) = apply {
-        val actualSources = actual.asSequence()
-            .map { it.location.source }
-            .sortedWith(compareBy({ it.line }, { it.column }))
-
-        val expectedSources = expected.asSequence()
-            .sortedWith(compareBy({ it.line }, { it.column }))
-
-        if (!Objects.deepEquals(actualSources.toList(), expectedSources.toList())) {
-            failWithMessage(
-                "Expected start source locations to be ${expectedSources.toList()} but was ${actualSources.toList()}"
-            )
-        }
-    }
-
     fun hasTextLocations(vararg expected: Pair<Int, Int>) = apply {
         val actualSources = actual.asSequence()
             .map { it.location.text }
@@ -52,35 +37,6 @@ class FindingsAssert(actual: List<Finding>) :
                 "Expected text locations to be ${expectedSources.toList()} but was ${actualSources.toList()}"
             )
         }
-    }
-
-    fun hasTextLocations(vararg expected: String): FindingsAssert {
-        val finding = actual.firstOrNull()
-        if (finding == null) {
-            if (expected.isEmpty()) {
-                return this
-            } else {
-                failWithMessage("Expected ${expected.size} findings but was 0")
-                // This should never execute. `failWithMessage` always throws an exception but the kotlin compiled
-                // doesn't know that. So this line below helps it.
-                error("This should never execute, if you find this please open an issue with a reproducer")
-            }
-        }
-        val code = finding.entity.ktElement.containingKtFile.text
-
-        val textLocations = expected.map { snippet ->
-            val index = code.indexOf(snippet)
-            if (index < 0) {
-                failWithMessage("The snippet \"$snippet\" doesn't exist in the code")
-            } else {
-                if (code.indexOf(snippet, index + 1) >= 0) {
-                    failWithMessage("The snippet \"$snippet\" appears multiple times in the code")
-                }
-            }
-            index to index + snippet.length
-        }.toTypedArray()
-
-        return hasTextLocations(*textLocations)
     }
 }
 

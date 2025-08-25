@@ -54,14 +54,12 @@ class ForbiddenAnnotationSpec(val env: KotlinEnvironmentContainer) {
         """.trimIndent()
         val findings = ForbiddenAnnotation(Config.empty).lintWithContext(env, code)
         assertThat(findings).hasSize(6)
-            .hasTextLocations(
-                "@Deprecated",
-                "@Documented",
-                "@Retention",
-                "@Target",
-                "@Repeatable",
-                "@Inherited"
-            )
+        assertThat(findings).element(0).hasTextLocation("@Deprecated")
+        assertThat(findings).element(1).hasTextLocation("@Documented")
+        assertThat(findings).element(2).hasTextLocation("@Retention")
+        assertThat(findings).element(3).hasTextLocation("@Target")
+        assertThat(findings).element(4).hasTextLocation("@Repeatable")
+        assertThat(findings).element(5).hasTextLocation("@Inherited")
     }
 
     @Test
@@ -109,7 +107,12 @@ class ForbiddenAnnotationSpec(val env: KotlinEnvironmentContainer) {
             )
         ).lintWithContext(env, code)
         assertThat(findings).hasSize(3)
-            .hasTextLocations("@SuppressWarnings", "@Transient", "@Volatile")
+        assertThat(findings).element(0)
+            .hasTextLocation("@SuppressWarnings")
+        assertThat(findings).element(1)
+            .hasTextLocation("@Transient")
+        assertThat(findings).element(2)
+            .hasTextLocation("@Volatile")
     }
 
     @Test

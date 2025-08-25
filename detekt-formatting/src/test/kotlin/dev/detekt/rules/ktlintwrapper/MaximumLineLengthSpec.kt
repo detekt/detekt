@@ -1,6 +1,5 @@
 package dev.detekt.rules.ktlintwrapper
 
-import dev.detekt.api.SourceLocation
 import dev.detekt.rules.ktlintwrapper.wrappers.MaximumLineLength
 import dev.detekt.test.TestConfig
 import dev.detekt.test.assertThat
@@ -61,9 +60,11 @@ class MaximumLineLengthSpec {
 
         // Note that KtLint's MaximumLineLength rule, in contrast to detekt's MaxLineLength rule, does not report
         // exceeded lines in block comments.
-        assertThat(findings)
-            .hasSize(2)
-            .hasStartSourceLocations(SourceLocation(8, 31), SourceLocation(14, 31))
+        assertThat(findings).hasSize(2)
+        assertThat(findings).element(0)
+            .hasStartSourceLocation(8, 31)
+        assertThat(findings).element(1)
+            .hasStartSourceLocation(14, 31)
     }
 
     @Test

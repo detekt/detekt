@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import dev.detekt.api.SourceLocation
 import dev.detekt.test.TestConfig
 import dev.detekt.test.assertThat
 import dev.detekt.test.lintWithContext
@@ -24,16 +23,16 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
         """.trimIndent()
         val findings = ForbiddenMethodCall(TestConfig()).lintWithContext(env, code)
 
-        assertThat(findings)
-            .hasSize(2)
-            .hasStartSourceLocations(
-                SourceLocation(2, 5),
-                SourceLocation(3, 5),
+        assertThat(findings).hasSize(2)
+        assertThat(findings).element(0)
+            .hasStartSourceLocation(2, 5)
+            .hasMessage(
+                "The method `kotlin.io.print` has been forbidden: print does not allow you to configure the output stream. Use a logger instead."
             )
-            .extracting("message")
-            .containsExactly(
-                "The method `kotlin.io.print` has been forbidden: print does not allow you to configure the output stream. Use a logger instead.",
-                "The method `kotlin.io.println` has been forbidden: println does not allow you to configure the output stream. Use a logger instead.",
+        assertThat(findings).element(1)
+            .hasStartSourceLocation(3, 5)
+            .hasMessage(
+                "The method `kotlin.io.println` has been forbidden: println does not allow you to configure the output stream. Use a logger instead."
             )
     }
 
