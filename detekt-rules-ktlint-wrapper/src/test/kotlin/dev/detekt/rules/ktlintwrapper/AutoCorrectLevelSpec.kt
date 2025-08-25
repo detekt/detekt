@@ -61,7 +61,7 @@ enum class AutoCorrectConfig {
 
 private fun createConfig(ruleSet: AutoCorrectConfig, rule: AutoCorrectConfig): String =
     buildString {
-        appendLine("formatting:")
+        appendLine("ktlint:")
         appendLine("  active: true")
         if (ruleSet != AutoCorrectConfig.Undefined) {
             appendLine("  autoCorrect: $ruleSet")
