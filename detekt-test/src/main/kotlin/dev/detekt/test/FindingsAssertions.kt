@@ -38,35 +38,6 @@ class FindingsAssert(actual: List<Finding>) :
             )
         }
     }
-
-    fun hasTextLocations(vararg expected: String): FindingsAssert {
-        val finding = actual.firstOrNull()
-        if (finding == null) {
-            if (expected.isEmpty()) {
-                return this
-            } else {
-                failWithMessage("Expected ${expected.size} findings but was 0")
-                // This should never execute. `failWithMessage` always throws an exception but the kotlin compiled
-                // doesn't know that. So this line below helps it.
-                error("This should never execute, if you find this please open an issue with a reproducer")
-            }
-        }
-        val code = finding.entity.ktElement.containingKtFile.text
-
-        val textLocations = expected.map { snippet ->
-            val index = code.indexOf(snippet)
-            if (index < 0) {
-                failWithMessage("The snippet \"$snippet\" doesn't exist in the code")
-            } else {
-                if (code.indexOf(snippet, index + 1) >= 0) {
-                    failWithMessage("The snippet \"$snippet\" appears multiple times in the code")
-                }
-            }
-            index to index + snippet.length
-        }.toTypedArray()
-
-        return hasTextLocations(*textLocations)
-    }
 }
 
 class FindingAssert(val actual: Finding?) : AbstractAssert<FindingAssert, Finding>(actual, FindingAssert::class.java) {
