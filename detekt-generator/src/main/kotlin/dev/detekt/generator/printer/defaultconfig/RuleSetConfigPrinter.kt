@@ -51,5 +51,11 @@ internal fun YamlNode.printRule(rule: Rule) {
 internal fun YamlNode.printConfiguration(configuration: Configuration) {
     if (configuration.isDeprecated()) return
 
-    configuration.defaultValue.printAsYaml(configuration.name, this)
+    // Whenever there are dynamic default, we must not put the value into the yaml file.
+    val hasStaticDefaultValue = configuration.defaultAndroidValue == null ||
+        configuration.defaultValue == configuration.defaultAndroidValue
+
+    if (hasStaticDefaultValue) {
+        configuration.defaultValue.printAsYaml(configuration.name, this)
+    }
 }
