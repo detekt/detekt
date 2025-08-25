@@ -22,6 +22,11 @@ public final class dev/detekt/test/utils/KotlinEnvironmentContainer {
 	public final fun getProject ()Lcom/intellij/openapi/project/Project;
 }
 
+public final class dev/detekt/test/utils/KotlinEnvironmentContainerKt {
+	public static final fun createEnvironment (Lcom/intellij/openapi/Disposable;Ljava/util/List;Ljava/util/List;)Ldev/detekt/test/utils/KotlinEnvironmentContainer;
+	public static synthetic fun createEnvironment$default (Lcom/intellij/openapi/Disposable;Ljava/util/List;Ljava/util/List;ILjava/lang/Object;)Ldev/detekt/test/utils/KotlinEnvironmentContainer;
+}
+
 public final class dev/detekt/test/utils/NullPrintStream : java/io/PrintStream {
 	public fun <init> ()V
 }
