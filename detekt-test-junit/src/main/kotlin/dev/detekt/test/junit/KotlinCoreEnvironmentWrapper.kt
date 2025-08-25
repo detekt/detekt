@@ -1,7 +1,6 @@
 package dev.detekt.test.junit
 
 import com.intellij.openapi.Disposable
-import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Disposer
 import dev.detekt.test.utils.KotlinEnvironmentContainer
 import kotlinx.coroutines.CoroutineScope
@@ -24,10 +23,8 @@ import java.io.File
  * Make sure to always call [close] or use a [use] block when working with [StandaloneAnalysisAPISession]s.
  */
 internal class KotlinCoreEnvironmentWrapper(
-    private val project: Project,
-    private val configuration: CompilerConfiguration,
+    val env: KotlinEnvironmentContainer,
     private val disposable: Disposable,
-    val env: KotlinEnvironmentContainer = KotlinEnvironmentContainer(project, configuration),
 ) :
     @Suppress("DEPRECATION")
     ExtensionContext.Store.CloseableResource,
@@ -70,7 +67,10 @@ internal fun createEnvironment(
         registerProjectService(CodeAnalyzerInitializer::class.java, CliTraceHolder(project))
     }
 
-    return KotlinCoreEnvironmentWrapper(analysisSession.project, configuration, parentDisposable)
+    return KotlinCoreEnvironmentWrapper(
+        KotlinEnvironmentContainer(analysisSession.project, configuration),
+        parentDisposable,
+    )
 }
 
 private fun kotlinStdLibPath(): File = File(CharRange::class.java.protectionDomain.codeSource.location.path)
