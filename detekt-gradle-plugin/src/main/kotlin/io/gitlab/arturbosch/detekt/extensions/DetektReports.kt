@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.extensions
 
+import io.gitlab.arturbosch.detekt.extensions.DetektReportType.CHECKSTYLE
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType.HTML
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType.MD
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType.SARIF
-import io.gitlab.arturbosch.detekt.extensions.DetektReportType.XML
 import org.gradle.api.Action
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.tasks.Internal
@@ -14,7 +14,7 @@ import javax.inject.Inject
 open class DetektReports @Inject constructor(@get:Internal val objects: ObjectFactory) {
 
     @get:Nested
-    open val xml: DetektReport = objects.newInstance(DetektReport::class.java, XML)
+    open val checkstyle: DetektReport = objects.newInstance(DetektReport::class.java, CHECKSTYLE)
 
     @get:Nested
     open val html: DetektReport = objects.newInstance(DetektReport::class.java, HTML)
@@ -28,7 +28,7 @@ open class DetektReports @Inject constructor(@get:Internal val objects: ObjectFa
     @get:Nested
     open val custom = mutableListOf<CustomDetektReport>()
 
-    fun xml(action: Action<in DetektReport>): Unit = action.execute(xml)
+    fun checkstyle(action: Action<in DetektReport>): Unit = action.execute(checkstyle)
 
     fun html(action: Action<in DetektReport>): Unit = action.execute(html)
 

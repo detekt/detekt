@@ -49,7 +49,7 @@ class ReportMergeSpec {
             
                 plugins.withType<io.gitlab.arturbosch.detekt.DetektPlugin> {
                     tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
-                        reportMerge.configure { input.from(reports.xml.outputLocation) }
+                        reportMerge.configure { input.from(reports.checkstyle.outputLocation) }
                     }
                 }
             }
@@ -158,7 +158,7 @@ class ReportMergeSpec {
             
                 plugins.withType<io.gitlab.arturbosch.detekt.DetektPlugin> {
                     tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
-                        reportMerge.configure { input.from(reports.xml.outputLocation) }
+                        reportMerge.configure { input.from(reports.checkstyle.outputLocation) }
                     }
                 }
             }

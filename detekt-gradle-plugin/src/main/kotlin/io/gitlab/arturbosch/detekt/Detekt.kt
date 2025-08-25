@@ -178,7 +178,7 @@ abstract class Detekt @Inject constructor(
             JdkHomeArgument(jdkHome),
             ConfigArgument(config),
             BaselineArgumentOrEmpty(baseline.orNull),
-            DefaultReportArgument(reports.xml),
+            DefaultReportArgument(reports.checkstyle),
             DefaultReportArgument(reports.html),
             DefaultReportArgument(reports.sarif),
             DefaultReportArgument(reports.md),

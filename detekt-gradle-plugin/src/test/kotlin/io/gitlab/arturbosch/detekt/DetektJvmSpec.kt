@@ -41,7 +41,7 @@ class DetektJvmSpec {
         val argumentString = detektTask.arguments.joinToString(" ")
 
         assertThat(argumentString).containsPattern("""--baseline \S*[/\\]detekt-baseline-main.xml """)
-        assertThat(argumentString).contains("--report xml:")
+        assertThat(argumentString).contains("--report checkstyle:")
         assertThat(argumentString).contains("--report sarif:")
         assertThat(argumentString).doesNotContain("--report md:")
         assertThat(argumentString).contains("--classpath")
@@ -59,7 +59,7 @@ class DetektJvmSpec {
         val argumentString = detektTask.arguments.joinToString(" ")
 
         assertThat(argumentString).containsPattern("""--baseline \S*[/\\]detekt-baseline-test.xml """)
-        assertThat(argumentString).contains("--report xml:")
+        assertThat(argumentString).contains("--report checkstyle:")
         assertThat(argumentString).contains("--report sarif:")
         assertThat(argumentString).doesNotContain("--report md:")
         assertThat(argumentString).contains("--classpath")
