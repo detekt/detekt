@@ -10,7 +10,7 @@ import dev.detekt.utils.item
 import dev.detekt.utils.list
 import dev.detekt.utils.markdown
 
-internal object RuleConfigurationPrinter : DocumentationPrinter<List<Configuration>> {
+internal object ConfigurationsPrinter : DocumentationPrinter<List<Configuration>> {
 
     override fun print(item: List<Configuration>): String {
         if (item.isEmpty()) return ""
