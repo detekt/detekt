@@ -10,6 +10,7 @@ dependencies {
     api(projects.detektKotlinAnalysisApi)
     implementation(projects.detektUtils)
 
+    testImplementation(testFixtures(projects.detektPsiUtils))
     testImplementation(projects.detektTest)
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.assertj.core)
