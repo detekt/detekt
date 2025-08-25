@@ -57,7 +57,8 @@ publishing {
 
 tasks {
     shadowJar {
-        mergeServiceFiles()
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        failOnDuplicateEntries = true
     }
 
     shadowDistZip {

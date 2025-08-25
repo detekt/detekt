@@ -42,8 +42,9 @@ publishing {
 }
 
 tasks.shadowJar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    failOnDuplicateEntries = true
     relocate("org.snakeyaml.engine", "dev.detekt.shaded.snakeyaml")
-    mergeServiceFiles()
     dependencies {
         include(dependency("dev.detekt:.*"))
         include(dependency("org.snakeyaml:snakeyaml-engine"))
