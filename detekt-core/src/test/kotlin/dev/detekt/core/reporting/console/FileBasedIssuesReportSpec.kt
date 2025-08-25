@@ -3,7 +3,7 @@ package dev.detekt.core.reporting.console
 import dev.detekt.api.testfixtures.TestDetektion
 import dev.detekt.api.testfixtures.TestSetupContext
 import dev.detekt.api.testfixtures.createIssue
-import dev.detekt.api.testfixtures.createLocation
+import dev.detekt.api.testfixtures.createIssueLocation
 import dev.detekt.api.testfixtures.createRuleInstance
 import dev.detekt.core.reporting.SuppressedIssueAssert
 import dev.detekt.core.reporting.decolorized
@@ -18,8 +18,8 @@ class FileBasedIssuesReportSpec {
 
     @Test
     fun `has the reference content`() {
-        val location1 = createLocation("File1.kt")
-        val location2 = createLocation("File2.kt")
+        val location1 = createIssueLocation("File1.kt")
+        val location2 = createIssueLocation("File2.kt")
         val detektion = TestDetektion(
             createIssue(createRuleInstance(ruleSetId = "Ruleset1"), location1),
             createIssue(createRuleInstance(ruleSetId = "Ruleset1"), location2),

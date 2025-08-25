@@ -12,4 +12,8 @@ dependencies {
     implementation(libs.kotlin.reflect)
     compileOnly(libs.assertj.core)
     implementation(projects.detektCore)
+
+    testImplementation(testFixtures(projects.detektApi))
+    testImplementation(libs.assertj.core)
+    testImplementation(libs.opentest4j)
 }
