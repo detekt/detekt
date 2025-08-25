@@ -1,8 +1,8 @@
 package dev.detekt.core.baseline
 
 import dev.detekt.api.testfixtures.TestSetupContext
-import dev.detekt.api.testfixtures.createEntity
 import dev.detekt.api.testfixtures.createIssue
+import dev.detekt.api.testfixtures.createIssueEntity
 import dev.detekt.api.testfixtures.createRuleInstance
 import dev.detekt.test.utils.createTempDirectoryForTest
 import dev.detekt.test.utils.resourceAsPath
@@ -21,19 +21,19 @@ class BaselineResultMappingSpec {
     private val issues = listOf(
         createIssue(
             ruleInstance = createRuleInstance("SomeIssue", "RuleSet"),
-            entity = createEntity(signature = "SomeSignature"),
+            entity = createIssueEntity(signature = "SomeSignature"),
         ),
         createIssue(
             ruleId = "LongParameterList",
-            entity = createEntity(signature = "Signature")
+            entity = createIssueEntity(signature = "Signature")
         ),
         createIssue(
             ruleId = "LongMethod",
-            entity = createEntity(signature = "Signature")
+            entity = createIssueEntity(signature = "Signature")
         ),
         createIssue(
             ruleId = "FeatureEnvy",
-            entity = createEntity(signature = "Signature")
+            entity = createIssueEntity(signature = "Signature")
         ),
     )
 
