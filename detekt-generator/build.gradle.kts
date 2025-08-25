@@ -28,6 +28,11 @@ dependencies {
     testImplementation(libs.assertj.core)
 }
 
+tasks.shadowJar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    failOnDuplicateEntries = true
+}
+
 val generateCliOptions by tasks.registering(JavaExec::class) {
     classpath = detektCliClasspath
     mainClass = "dev.detekt.cli.Main"
