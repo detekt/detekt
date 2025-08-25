@@ -6,6 +6,7 @@ import dev.detekt.generator.collection.Rule
 import dev.detekt.generator.collection.RuleSetPage
 import dev.detekt.generator.collection.RuleSetProvider
 import dev.detekt.utils.YamlNode
+import dev.detekt.utils.comment
 import dev.detekt.utils.keyValue
 import dev.detekt.utils.node
 
@@ -51,11 +52,16 @@ internal fun YamlNode.printRule(rule: Rule) {
 internal fun YamlNode.printConfiguration(configuration: Configuration) {
     if (configuration.isDeprecated()) return
 
-    // Whenever there are dynamic default, we must not put the value into the yaml file.
-    val hasStaticDefaultValue = configuration.defaultAndroidValue == null ||
-        configuration.defaultValue == configuration.defaultAndroidValue
+    val hasDeviatingAndroidDefault = configuration.defaultAndroidValue != null &&
+        configuration.defaultValue != configuration.defaultAndroidValue
 
-    if (hasStaticDefaultValue) {
+    if (hasDeviatingAndroidDefault) {
+        val description =
+            "If the 'android' ruleset property is set to true, " +
+                "the default is '${configuration.defaultAndroidValue.getPlainValue()}', " +
+                "otherwise '${configuration.defaultValue.getPlainValue()}'."
+        comment("${configuration.name}: $description")
+    } else {
         configuration.defaultValue.printAsYaml(configuration.name, this)
     }
 }
