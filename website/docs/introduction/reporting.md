@@ -18,8 +18,7 @@ and complexity reports of this run, in addition to the findings with detailed de
 report. Check out the example: ![HTML report](/img/tutorial/html.png)
 
 ### CHECKSTYLE
-Checkstyle is a machine-readable xml format that can be integrated with CI tools. It is compatible with
-[Checkstyle](https://checkstyle.sourceforge.io/) output.
+[Checkstyle](https://checkstyle.sourceforge.io/) is a machine-readable xml format that can be integrated with CI tools.
 
 ### SARIF
 [SARIF](https://sarifweb.azurewebsites.net/) is a standard format for the output of 
