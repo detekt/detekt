@@ -1,4 +1,4 @@
-formatting:
+ktlint:
   autoCorrect: true
   ChainWrapping:
     active: true
