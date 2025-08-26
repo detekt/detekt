@@ -13,6 +13,8 @@ object RuleSetPagePrinter : DocumentationPrinter<RuleSetPage> {
             } else {
                 paragraph { "TODO: Specify description" }
             }
+            markdown { ConfigurationsPrinter.print(item.ruleSet.configuration) }
+
             item.rules.forEach {
                 markdown { RulePrinter.print(it) }
             }
