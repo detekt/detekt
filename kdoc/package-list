@@ -15,6 +15,8 @@ module:detekt-psi-utils
 dev.detekt.psi
 module:detekt-test
 dev.detekt.test
+module:detekt-test-assertj
+dev.detekt.test.assertj
 module:detekt-test-utils
 dev.detekt.test.utils
 dev.detekt.test.utils.internal

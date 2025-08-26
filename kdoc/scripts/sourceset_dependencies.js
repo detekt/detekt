@@ -1,1 +1,1 @@
-sourceset_dependencies = '{":detekt-test/main":[],":detekt-api/main":[],":detekt-test-utils/main":[],":detekt-psi-utils/main":[],":/main":[],":detekt-tooling/main":[]}'
+sourceset_dependencies = '{":detekt-test/main":[],":detekt-test-assertj/main":[],":detekt-api/main":[],":detekt-test-utils/main":[],":detekt-psi-utils/main":[],":/main":[],":detekt-tooling/main":[]}'
