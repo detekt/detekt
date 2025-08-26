@@ -23,17 +23,22 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
         """.trimIndent()
         val findings = ForbiddenMethodCall(TestConfig()).lintWithContext(env, code)
 
-        assertThat(findings).hasSize(2)
-        assertThat(findings).element(0)
-            .hasStartSourceLocation(2, 5)
-            .hasMessage(
-                "The method `kotlin.io.print` has been forbidden: print does not allow you to configure the output stream. Use a logger instead."
-            )
-        assertThat(findings).element(1)
-            .hasStartSourceLocation(3, 5)
-            .hasMessage(
-                "The method `kotlin.io.println` has been forbidden: println does not allow you to configure the output stream. Use a logger instead."
-            )
+        assertThat(findings).satisfiesExactlyInAnyOrder(
+            {
+                assertThat(it)
+                    .hasStartSourceLocation(2, 5)
+                    .hasMessage(
+                        "The method `kotlin.io.print` has been forbidden: print does not allow you to configure the output stream. Use a logger instead."
+                    )
+            },
+            {
+                assertThat(it)
+                    .hasStartSourceLocation(3, 5)
+                    .hasMessage(
+                        "The method `kotlin.io.println` has been forbidden: println does not allow you to configure the output stream. Use a logger instead."
+                    )
+            },
+        )
     }
 
     @Test
