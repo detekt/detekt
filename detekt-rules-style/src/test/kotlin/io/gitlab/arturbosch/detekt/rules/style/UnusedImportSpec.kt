@@ -103,8 +103,7 @@ class UnusedImportSpec(
             }
             """.trimIndent()
         val lint = subject.lintWithContext(env, main, allowCompilationErrors = true)
-        assertThat(lint).hasSize(1)
-        assertThat(lint).element(0)
+        assertThat(lint).singleElement()
             .hasTextLocation("import org.gradle.kotlin.dsl.assign")
     }
 
@@ -169,8 +168,7 @@ class UnusedImportSpec(
             infix fun Int.undefined(f: () -> Unit) {}
             """.trimIndent()
         val lint = subject.lintWithContext(env, main, additional)
-        assertThat(lint).hasSize(1)
-        assertThat(lint).element(0)
+        assertThat(lint).singleElement()
             .hasTextLocation("import tasks.undefined")
     }
 
@@ -190,8 +188,7 @@ class UnusedImportSpec(
             class SomeClass
             """.trimIndent()
         val lint = subject.lintWithContext(env, main, additional)
-        assertThat(lint).hasSize(1)
-        assertThat(lint).element(0)
+        assertThat(lint).singleElement()
             .hasTextLocation("import test.SomeClass")
     }
 
@@ -661,8 +658,7 @@ class UnusedImportSpec(
             fun test(s: String) {}
             """.trimIndent()
         val findings = subject.lintWithContext(env, mainFile, additionalFile1, additionalFile2)
-        assertThat(findings).hasSize(1)
-        assertThat(findings).element(0)
+        assertThat(findings).singleElement()
             .hasTextLocation("import bar.test")
     }
 
