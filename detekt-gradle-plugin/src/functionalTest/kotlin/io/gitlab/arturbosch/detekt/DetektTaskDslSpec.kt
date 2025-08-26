@@ -467,7 +467,7 @@ class DetektTaskDslSpec {
     inner class `with an additional plugin` {
         private val config = """
             dependencies {
-               detektPlugins("dev.detekt:detekt-formatting:$defaultDetektVersion")
+               detektPlugins("dev.detekt:ktlint-wrapper:$defaultDetektVersion")
             }
         """.trimIndent()
         private val builder = kotlin().dryRun()
@@ -481,7 +481,7 @@ class DetektTaskDslSpec {
 
         @Test
         fun `adds the ktlint-wrapper lib to the project dependencies`() {
-            assertThat(result.output).contains("dev.detekt:detekt-formatting:$defaultDetektVersion")
+            assertThat(result.output).contains("dev.detekt:ktlint-wrapper:$defaultDetektVersion")
         }
     }
 
