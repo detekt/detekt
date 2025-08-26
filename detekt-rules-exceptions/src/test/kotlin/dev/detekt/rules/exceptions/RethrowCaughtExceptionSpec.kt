@@ -203,7 +203,9 @@ class RethrowCaughtExceptionSpec {
         """.trimIndent()
         val result = subject.lint(code)
         assertThat(result).hasSize(2)
-        assertThat(result).element(0).hasStartSourceLocation(4, 9)
-        assertThat(result).element(1).hasStartSourceLocation(7, 9)
+        assertThat(result).element(0)
+            .hasStartSourceLocation(4, 9)
+        assertThat(result).element(1)
+            .hasStartSourceLocation(7, 9)
     }
 }
