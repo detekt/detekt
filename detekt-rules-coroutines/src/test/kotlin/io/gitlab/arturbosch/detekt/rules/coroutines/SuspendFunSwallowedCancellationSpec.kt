@@ -1260,6 +1260,28 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinEnvironmentCont
         }
 
         @Test
+        fun `does report in case of suspend plus called as an infix function`() {
+            val code = """
+                class C
+                @Suppress("RedundantSuspendModifier")
+                suspend infix operator fun C.plus(i: Int): C = TODO()
+
+                suspend fun f() {
+                    runCatching {
+                        var x = C()
+                        x = x plus 1
+                    }
+                    
+                }
+            """.trimIndent()
+
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(SourceLocation(6, 5))
+                .hasEndSourceLocation(SourceLocation(6, 16))
+        }
+
+        @Test
         fun `does report in case of suspend divAssign operator`() {
             val code = """
                 import kotlinx.coroutines.delay
