@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import dev.detekt.api.Config
 import dev.detekt.api.SourceLocation
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.KotlinCoreEnvironmentTest
 import dev.detekt.test.utils.KotlinEnvironmentContainer
@@ -73,13 +73,12 @@ class UnusedVariableSpec(val env: KotlinEnvironmentContainer) {
                     val b = 12
                 }
             """.trimIndent()
-
-            assertThat(subject.lintWithContext(env, code))
-                .hasSize(2)
-                .hasStartSourceLocations(
-                    SourceLocation(3, 9),
-                    SourceLocation(4, 9)
-                )
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings).hasSize(2)
+            assertThat(findings).element(0)
+                .hasStartSourceLocation(3, 9)
+            assertThat(findings).element(1)
+                .hasStartSourceLocation(4, 9)
         }
 
         @Test

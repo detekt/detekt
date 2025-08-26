@@ -1,8 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import dev.detekt.api.Config
-import dev.detekt.api.SourceLocation
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.KotlinCoreEnvironmentTest
 import dev.detekt.test.utils.KotlinEnvironmentContainer
@@ -242,12 +241,12 @@ class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
                     private var g: Int? = 0 // never assigned
                 }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code))
-                .hasSize(2)
-                .hasStartSourceLocations(
-                    SourceLocation(8, 5),
-                    SourceLocation(16, 5)
-                )
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings).hasSize(2)
+            assertThat(findings).element(0)
+                .hasStartSourceLocation(8, 5)
+            assertThat(findings).element(1)
+                .hasStartSourceLocation(16, 5)
         }
 
         @Test

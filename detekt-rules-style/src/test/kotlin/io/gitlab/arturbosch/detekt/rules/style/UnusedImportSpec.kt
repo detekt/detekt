@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import dev.detekt.api.Config
 import dev.detekt.test.TestConfig
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.KotlinCoreEnvironmentTest
 import dev.detekt.test.utils.KotlinEnvironmentContainer
@@ -916,5 +916,19 @@ class UnusedImportSpec(
             """.trimIndent()
 
         assertThat(subject.lintWithContext(env, mainFile, additionalFile)).isEmpty()
+    }
+
+    @Test
+    fun `does report only for function when import is used based on type - #8120`() {
+        val mainFile =
+            """
+            import java.nio.file.Path // this import is used
+            import kotlin.io.path.Path // this one is not
+
+            typealias Foo = Path
+            """.trimIndent()
+        assertThat(subject.lintWithContext(env, mainFile))
+            .singleElement()
+            .hasMessage("The import 'kotlin.io.path.Path' is unused.")
     }
 }

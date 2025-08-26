@@ -1,5 +1,31 @@
 style rule set
 
+#### Configuration options:
+
+* ``rulesetconfig1`` (default: ``true``)
+
+  description rulesetconfig1
+
+* ``rulesetconfig2`` (default: ``['foo', 'bar']``)
+
+  description rulesetconfig2
+
+* ~~``deprecatedSimpleConfig``~~ (default: ``true``)
+
+  **Deprecated**: is deprecated
+
+  description deprecatedSimpleConfig
+
+* ~~``deprecatedListConfig``~~ (default: ``['foo', 'bar']``)
+
+  **Deprecated**: is deprecated
+
+  description deprecatedListConfig
+
+* ``rulesetconfig3`` (default: ``['first', 'se*cond']``)
+
+  description rulesetconfig2
+
 ### MagicNumber
 
 a wildcard import
