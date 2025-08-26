@@ -19,7 +19,7 @@ By enabling type resolution, you provide to detekt all the information to unders
 
 ### An example
 
-detekt has a rule called [MagicNumber](/docs/rules/style#magicnumber) to detect usages of magic numbers in your code. 
+detekt has a rule called [MagicNumber](../rules/style.md#magicnumber) to detect usages of magic numbers in your code. 
 
 In the following code:
 
@@ -29,7 +29,7 @@ val user = getUserById(42)?.toString()
 
 detekt is able to report the usage of the number `42` as a magic number, **without** type resolution. All the information needed to run this inspection is already available in the source code.
 
-Similarly, detekt has another rule called [UnnecessarySafeCall](/docs/rules/potential-bugs#unnecessarysafecall) to detect unnecessary usages of safe call operators (`?.`).
+Similarly, detekt has another rule called [UnnecessarySafeCall](../rules/potential-bugs.md#unnecessarysafecall) to detect unnecessary usages of safe call operators (`?.`).
 
 In the previous example, detekt is able to determine if the safe call in `getUserById(42)?.toString()` is required **only with** type resolution. 
 
