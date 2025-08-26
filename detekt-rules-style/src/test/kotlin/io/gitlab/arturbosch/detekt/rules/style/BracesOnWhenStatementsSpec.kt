@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import dev.detekt.api.Config
+import dev.detekt.api.Finding
 import dev.detekt.api.TextLocation
 import dev.detekt.test.TestConfig
 import dev.detekt.test.assertj.assertThat
@@ -11,6 +12,7 @@ import io.gitlab.arturbosch.detekt.rules.style.BracesOnWhenStatementsSpec.Compan
 import io.gitlab.arturbosch.detekt.rules.style.BracesOnWhenStatementsSpec.Companion.test
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode
+import org.assertj.core.api.ThrowingConsumer
 import org.junit.jupiter.api.DynamicContainer.dynamicContainer
 import org.junit.jupiter.api.DynamicNode
 import org.junit.jupiter.api.DynamicTest.dynamicTest
@@ -1289,11 +1291,12 @@ class BracesOnWhenStatementsSpec {
             val findings = lint("fun f() { $code }", compile = false)
             // Offset text locations by the above prefix, it results in 0-indexed locations.
             val offset = 10
-            locations.map { it.first + offset to it.second + offset }
-                .forEachIndexed { position, textPosition ->
-                    assertThat(findings).element(position)
-                        .hasTextLocation(textPosition)
-                }
+            val textPositions = locations.map { it.first + offset to it.second + offset }
+            assertThat(findings).satisfiesExactlyInAnyOrder(
+                *textPositions
+                    .map { textPosition -> ThrowingConsumer<Finding> { assertThat(it).hasTextLocation(textPosition) } }
+                    .toTypedArray()
+            )
         }
 
         /**
