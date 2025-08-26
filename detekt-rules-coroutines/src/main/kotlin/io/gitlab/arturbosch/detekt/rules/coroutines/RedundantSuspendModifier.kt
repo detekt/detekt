@@ -7,6 +7,7 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.psi.isOpen
+import io.gitlab.arturbosch.detekt.rules.coroutines.utils.CoroutineCallableIds
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
@@ -14,10 +15,8 @@ import org.jetbrains.kotlin.analysis.api.resolution.KaVariableAccessCall
 import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
-import org.jetbrains.kotlin.builtins.StandardNames
 import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.lexer.KtTokens
-import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtForExpression
@@ -113,17 +112,11 @@ class RedundantSuspendModifier(config: Config) :
                         }
 
                         is KaVariableAccessCall -> {
-                            call.symbol.callableId?.asSingleFqName() == coroutineContextFqName
+                            call.symbol.callableId == CoroutineCallableIds.CoroutineContextCallableId
                         }
                     }
                 }
             }
         }
-    }
-
-    companion object {
-        private val coroutineContextFqName = StandardNames.COROUTINES_PACKAGE_FQ_NAME.child(
-            Name.identifier("coroutineContext")
-        )
     }
 }
