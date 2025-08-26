@@ -113,7 +113,7 @@ import dev.detekt.rules.ktlintwrapper.wrappers.Wrapping
  *
  * **Note: The `ktlint` rule set is not included in the detekt-cli or Gradle plugin.**
  *
- * To enable this rule set, add `detektPlugins "io.gitlab.arturbosch.detekt:detekt-rules-ktlint-wrapper:$version"`
+ * To enable this rule set, add `detektPlugins "dev.detekt:detekt-rules-ktlint-wrapper:$version"`
  * to your gradle `dependencies` or reference the `detekt-rules-ktlint-wrapper`-jar with the `--plugins` option
  * in the command line interface.
  *
