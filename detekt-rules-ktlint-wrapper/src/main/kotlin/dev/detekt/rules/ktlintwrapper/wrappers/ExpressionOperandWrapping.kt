@@ -7,14 +7,14 @@ import dev.detekt.api.Config
 import dev.detekt.api.Configuration
 import dev.detekt.api.config
 import dev.detekt.api.internal.AutoCorrectable
-import dev.detekt.rules.ktlintwrapper.FormattingRule
+import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
  * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/experimental/#expression-operand-wrapping) for
  * documentation.
  */
 @AutoCorrectable(since = "2.0.0")
-class ExpressionOperandWrapping(config: Config) : FormattingRule(
+class ExpressionOperandWrapping(config: Config) : KtlintRule(
     config,
     "Wraps each operand in a multiline expression to a separate line"
 ) {

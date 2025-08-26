@@ -7,14 +7,14 @@ import dev.detekt.api.Config
 import dev.detekt.api.Configuration
 import dev.detekt.api.config
 import dev.detekt.api.internal.AutoCorrectable
-import dev.detekt.rules.ktlintwrapper.FormattingRule
+import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
  * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/experimental/#when-entry-bracing) for
  * documentation.
  */
 @AutoCorrectable(since = "2.0.0")
-class WhenEntryBracing(config: Config) : FormattingRule(
+class WhenEntryBracing(config: Config) : KtlintRule(
     config,
     "Enforce consistent usages of braces inside the when-statement."
 ) {

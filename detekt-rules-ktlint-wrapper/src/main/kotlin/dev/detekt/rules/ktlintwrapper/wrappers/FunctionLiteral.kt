@@ -10,7 +10,7 @@ import dev.detekt.api.Configuration
 import dev.detekt.api.config
 import dev.detekt.api.configWithAndroidVariants
 import dev.detekt.api.internal.AutoCorrectable
-import dev.detekt.rules.ktlintwrapper.FormattingRule
+import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
  * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#function-literal) for
@@ -18,7 +18,7 @@ import dev.detekt.rules.ktlintwrapper.FormattingRule
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "2.0.0")
-class FunctionLiteral(config: Config) : FormattingRule(
+class FunctionLiteral(config: Config) : KtlintRule(
     config,
     "Parameters and -> of a function literal should be on the same line as the opening brace."
 ) {

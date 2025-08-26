@@ -11,7 +11,7 @@ import dev.detekt.api.Configuration
 import dev.detekt.api.config
 import dev.detekt.api.configWithAndroidVariants
 import dev.detekt.api.internal.AutoCorrectable
-import dev.detekt.rules.ktlintwrapper.FormattingRule
+import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
  * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#chain-method-continuation)
@@ -19,7 +19,7 @@ import dev.detekt.rules.ktlintwrapper.FormattingRule
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "2.0.0")
-class ChainMethodContinuation(config: Config) : FormattingRule(
+class ChainMethodContinuation(config: Config) : KtlintRule(
     config,
     "Checks if condition chaining is wrapped right"
 ) {

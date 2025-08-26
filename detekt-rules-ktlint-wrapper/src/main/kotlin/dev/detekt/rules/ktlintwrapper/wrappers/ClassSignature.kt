@@ -11,7 +11,7 @@ import dev.detekt.api.Configuration
 import dev.detekt.api.config
 import dev.detekt.api.configWithAndroidVariants
 import dev.detekt.api.internal.AutoCorrectable
-import dev.detekt.rules.ktlintwrapper.FormattingRule
+import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
  * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#class-signature) for
@@ -19,7 +19,7 @@ import dev.detekt.rules.ktlintwrapper.FormattingRule
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "2.0.0")
-class ClassSignature(config: Config) : FormattingRule(
+class ClassSignature(config: Config) : KtlintRule(
     config,
     "Ensure class signatures have a consistent format."
 ) {

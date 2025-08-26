@@ -10,7 +10,7 @@ import dev.detekt.api.Configuration
 import dev.detekt.api.config
 import dev.detekt.api.configWithAndroidVariants
 import dev.detekt.api.internal.AutoCorrectable
-import dev.detekt.rules.ktlintwrapper.FormattingRule
+import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
  * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#binary-expression-wrapping) for
@@ -18,7 +18,7 @@ import dev.detekt.rules.ktlintwrapper.FormattingRule
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "2.0.0")
-class BinaryExpressionWrapping(config: Config) : FormattingRule(
+class BinaryExpressionWrapping(config: Config) : KtlintRule(
     config,
     "Wrap binary expression at the operator reference if the binary expression does not fit on the line"
 ) {

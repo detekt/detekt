@@ -4,7 +4,7 @@ import com.pinterest.ktlint.ruleset.standard.rules.NoEmptyFirstLineInMethodBlock
 import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.Config
 import dev.detekt.api.internal.AutoCorrectable
-import dev.detekt.rules.ktlintwrapper.FormattingRule
+import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
  * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#no-leading-empty-lines-in-method-blocks) for
@@ -12,7 +12,7 @@ import dev.detekt.rules.ktlintwrapper.FormattingRule
  */
 @AutoCorrectable(since = "1.4.0")
 @ActiveByDefault(since = "1.22.0")
-class NoEmptyFirstLineInMethodBlock(config: Config) : FormattingRule(
+class NoEmptyFirstLineInMethodBlock(config: Config) : KtlintRule(
     config,
     "Reports methods that have an empty first line."
 ) {

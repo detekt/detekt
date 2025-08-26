@@ -120,7 +120,7 @@ import dev.detekt.rules.ktlintwrapper.wrappers.Wrapping
  * Note: Issues reported by this rule set can only be suppressed on file level (`@file:Suppress("detekt.rule")`).
  */
 @ActiveByDefault(since = "1.0.0")
-class FormattingProvider : RuleSetProvider {
+class KtlintWrapperProvider : RuleSetProvider {
 
     override val ruleSetId = RuleSet.Id("ktlint")
 
@@ -242,12 +242,12 @@ class FormattingProvider : RuleSetProvider {
 }
 
 /**
- * Return a list of [FormattingRule] that respects
+ * Return a list of [KtlintRule] that respects
  * [Rule.VisitorModifier.RunAsLateAsPossible] and [Rule.VisitorModifier.RunAfterRule].
  * Algorithm is based on [com.pinterest.ktlint.rule.engine.internal.RuleProviderSorter].
  */
-internal fun List<(Config) -> FormattingRule>.sorted(): List<(Config) -> FormattingRule> {
-    val sortedRules = mutableListOf<(Config) -> FormattingRule>()
+internal fun List<(Config) -> KtlintRule>.sorted(): List<(Config) -> KtlintRule> {
+    val sortedRules = mutableListOf<(Config) -> KtlintRule>()
     val sortedRuleIds = mutableSetOf<RuleId>()
     val unprocessedRules = this
         .map { it to it(Config.empty) }
@@ -288,23 +288,23 @@ internal fun List<(Config) -> FormattingRule>.sorted(): List<(Config) -> Formatt
 private fun defaultRuleOrderComparator() =
 // The sort order below should guarantee a stable order of the rule between multiple invocations of KtLint given
     // the same set of input parameters. There should be no dependency on data ordering outside this class.
-    compareBy<Pair<(Config) -> FormattingRule, FormattingRule>> { (_, rule) ->
+    compareBy<Pair<(Config) -> KtlintRule, KtlintRule>> { (_, rule) ->
         if (rule.runAsLateAsPossible) 1 else 0
     }.thenBy { (_, rule) ->
         if (rule.wrappingRuleId.ruleSetId == RuleSetId.STANDARD) 0 else 1
     }.thenBy { (_, rule) -> rule.wrappingRuleId.value }
 
-internal val FormattingRule.wrappingRuleId
+internal val KtlintRule.wrappingRuleId
     get() = wrapping.ruleId
 
-internal val FormattingRule.visitorModifiers
+internal val KtlintRule.visitorModifiers
     get() = wrapping.visitorModifiers
 
-internal val FormattingRule.runAsLateAsPossible
+internal val KtlintRule.runAsLateAsPossible
     get() = Rule.VisitorModifier.RunAsLateAsPossible in visitorModifiers
 
-private fun FormattingRule.runAfterRules() =
+private fun KtlintRule.runAfterRules() =
     visitorModifiers.filterIsInstance<Rule.VisitorModifier.RunAfterRule>()
 
-private fun FormattingRule.hasNoRunAfterRules() =
+private fun KtlintRule.hasNoRunAfterRules() =
     visitorModifiers.filterIsInstance<Rule.VisitorModifier.RunAfterRule>().isEmpty()
