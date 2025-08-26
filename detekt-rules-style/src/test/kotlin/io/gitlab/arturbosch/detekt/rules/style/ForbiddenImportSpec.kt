@@ -127,7 +127,10 @@ class ForbiddenImportSpec {
             .lint(code, compile = false)
         assertThat(findings).satisfiesExactlyInAnyOrder(
             { assertThat(it).hasMessage("The import `net.example.R.dimen` has been forbidden in the detekt config.") },
-            { assertThat(it).hasMessage("The import `net.example.R.dimension` has been forbidden in the detekt config.") },
+            {
+                assertThat(it)
+                    .hasMessage("The import `net.example.R.dimension` has been forbidden in the detekt config.")
+            },
         )
     }
 }

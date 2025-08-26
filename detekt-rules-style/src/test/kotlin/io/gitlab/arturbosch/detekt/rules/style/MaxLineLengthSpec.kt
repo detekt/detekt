@@ -480,9 +480,21 @@ class MaxLineLengthSpec {
             """.trimIndent()
         )
         assertThat(findings).satisfiesExactlyInAnyOrder(
-            { assertThat(it).hasTextLocation("    project.tasks.register(\"veryVeryVeryVeryVeryVeryLongName\${part}WithSuffix1\")") },
-            { assertThat(it).hasTextLocation("    project.tasks.register(\"veryVeryVeryVeryVeryVeryLongName\${part}WithSuffix2\") {") },
-            { assertThat(it).hasTextLocation("        .register(\"veryVeryVeryVeryVeryVeryLongName\${part}WithSuffix3\") {") },
+            {
+                assertThat(it).hasTextLocation(
+                    "    project.tasks.register(\"veryVeryVeryVeryVeryVeryLongName\${part}WithSuffix1\")"
+                )
+            },
+            {
+                assertThat(it).hasTextLocation(
+                    "    project.tasks.register(\"veryVeryVeryVeryVeryVeryLongName\${part}WithSuffix2\") {"
+                )
+            },
+            {
+                assertThat(it).hasTextLocation(
+                    "        .register(\"veryVeryVeryVeryVeryVeryLongName\${part}WithSuffix3\") {"
+                )
+            },
         )
     }
 

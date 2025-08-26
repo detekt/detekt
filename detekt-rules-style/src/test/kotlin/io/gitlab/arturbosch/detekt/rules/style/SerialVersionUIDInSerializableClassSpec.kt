@@ -129,12 +129,18 @@ class SerialVersionUIDInSerializableClassSpec {
         """.trimIndent()
         val findings = subject.lint(code)
         assertThat(findings).satisfiesExactlyInAnyOrder(
-            { assertThat(it).hasMessage(WRONG_SERIAL_VERSION_UID_MESSAGE)
-            .hasStartSourceLocation(SourceLocation(5, 21))
-            .hasEndSourceLocation(SourceLocation(5, 37)) },
-            { assertThat(it).hasMessage(WRONG_SERIAL_VERSION_UID_MESSAGE)
-            .hasStartSourceLocation(SourceLocation(8, 17))
-            .hasEndSourceLocation(SourceLocation(8, 33)) },
+            {
+                assertThat(it)
+                    .hasMessage(WRONG_SERIAL_VERSION_UID_MESSAGE)
+                    .hasStartSourceLocation(SourceLocation(5, 21))
+                    .hasEndSourceLocation(SourceLocation(5, 37))
+            },
+            {
+                assertThat(it)
+                    .hasMessage(WRONG_SERIAL_VERSION_UID_MESSAGE)
+                    .hasStartSourceLocation(SourceLocation(8, 17))
+                    .hasEndSourceLocation(SourceLocation(8, 33))
+            },
         )
     }
 
@@ -157,12 +163,18 @@ class SerialVersionUIDInSerializableClassSpec {
         """.trimIndent()
         val findings = subject.lint(code)
         assertThat(findings).satisfiesExactlyInAnyOrder(
-            { assertThat(it).hasMessage(WRONG_SERIAL_VERSION_UID_MESSAGE)
-            .hasStartSourceLocation(SourceLocation(6, 25))
-            .hasEndSourceLocation(SourceLocation(6, 41)) },
-            { assertThat(it).hasMessage(WRONG_SERIAL_VERSION_UID_MESSAGE)
-            .hasStartSourceLocation(SourceLocation(11, 21))
-            .hasEndSourceLocation(SourceLocation(11, 37)) },
+            {
+                assertThat(it)
+                    .hasMessage(WRONG_SERIAL_VERSION_UID_MESSAGE)
+                    .hasStartSourceLocation(SourceLocation(6, 25))
+                    .hasEndSourceLocation(SourceLocation(6, 41))
+            },
+            {
+                assertThat(it)
+                    .hasMessage(WRONG_SERIAL_VERSION_UID_MESSAGE)
+                    .hasStartSourceLocation(SourceLocation(11, 21))
+                    .hasEndSourceLocation(SourceLocation(11, 37))
+            },
         )
     }
 
