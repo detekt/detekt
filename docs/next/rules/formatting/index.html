@@ -10,7 +10,7 @@
 
 
 <link rel="search" type="application/opensearchdescription+xml" title="detekt" href="/opensearch.xml"><link rel="stylesheet" href="/assets/css/styles.72331351.css">
-<script src="/assets/js/runtime~main.cf997d12.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.f20c06d0.js" defer="defer"></script>
 <script src="/assets/js/main.46bbce39.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -23,10 +23,21 @@
 to your gradle <code>dependencies</code> or reference the <code>detekt-formatting</code>-jar with the <code>--plugins</code> option
 in the command line interface.</p>
 <p>Note: Issues reported by this rule set can only be suppressed on file level (<code>@file:Suppress(&quot;detekt.rule&quot;)</code>).</p>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options">Configuration options:<a href="#configuration-options" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<ul>
+<li>
+<p><code>code_style</code> (default: <code>&#x27;intellij_idea&#x27;</code>) (android default: <code>&#x27;intellij_idea&#x27;</code>)</p>
+<p>ktlint code style for formatting rules (ktlint_official, intellij_idea or android_studio)</p>
+</li>
+<li>
+<p><code>autoCorrect</code> (default: <code>true</code>) (android default: <code>true</code>)</p>
+<p>if rules should auto correct style violation</p>
+</li>
+</ul>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="annotationonseparateline">AnnotationOnSeparateLine<a href="#annotationonseparateline" class="hash-link" aria-label="Direct link to AnnotationOnSeparateLine" title="Direct link to AnnotationOnSeparateLine">​</a></h3>
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#annotation-formatting" target="_blank" rel="noopener noreferrer">ktlint docs</a> for documentation.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.22.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options">Configuration options:<a href="#configuration-options" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-1">Configuration options:<a href="#configuration-options-1" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>indentSize</code> (default: <code>4</code>)</p>
@@ -39,7 +50,7 @@ in the command line interface.</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="argumentlistwrapping">ArgumentListWrapping<a href="#argumentlistwrapping" class="hash-link" aria-label="Direct link to ArgumentListWrapping" title="Direct link to ArgumentListWrapping">​</a></h3>
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#argument-list-wrapping" target="_blank" rel="noopener noreferrer">ktlint docs</a> for documentation.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.22.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-1">Configuration options:<a href="#configuration-options-1" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-2">Configuration options:<a href="#configuration-options-2" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>indentSize</code> (default: <code>4</code>)</p>
@@ -62,7 +73,7 @@ for documentation.</p>
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#binary-expression-wrapping" target="_blank" rel="noopener noreferrer">ktlint docs</a> for
 documentation.</p>
 <p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-2">Configuration options:<a href="#configuration-options-2" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-3">Configuration options:<a href="#configuration-options-3" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>maxLineLength</code> (default: <code>120</code>) (android default: <code>100</code>)</p>
@@ -81,7 +92,7 @@ documentation.</p>
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/experimental/#blank-lines-between-when-conditions" target="_blank" rel="noopener noreferrer">ktlint docs</a>
 for documentation.</p>
 <p><strong>Active by default</strong>: No</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-3">Configuration options:<a href="#configuration-options-3" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-4">Configuration options:<a href="#configuration-options-4" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>lineBreakAfterWhenEntries</code> (default: <code>true</code>)</p>
@@ -96,7 +107,7 @@ documentation.</p>
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#chain-method-continuation" target="_blank" rel="noopener noreferrer">ktlint docs</a>
 for documentation.</p>
 <p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-4">Configuration options:<a href="#configuration-options-4" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-5">Configuration options:<a href="#configuration-options-5" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>indentSize</code> (default: <code>4</code>)</p>
@@ -114,7 +125,7 @@ for documentation.</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="chainwrapping">ChainWrapping<a href="#chainwrapping" class="hash-link" aria-label="Direct link to ChainWrapping" title="Direct link to ChainWrapping">​</a></h3>
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#chain-wrapping" target="_blank" rel="noopener noreferrer">ktlint docs</a> for documentation.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-5">Configuration options:<a href="#configuration-options-5" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-6">Configuration options:<a href="#configuration-options-6" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>indentSize</code> (default: <code>4</code>)</p>
@@ -129,7 +140,7 @@ documentation.</p>
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#class-signature" target="_blank" rel="noopener noreferrer">ktlint docs</a> for
 documentation.</p>
 <p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-6">Configuration options:<a href="#configuration-options-6" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-7">Configuration options:<a href="#configuration-options-7" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>indentSize</code> (default: <code>4</code>)</p>
@@ -146,7 +157,7 @@ documentation.</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="commentwrapping">CommentWrapping<a href="#commentwrapping" class="hash-link" aria-label="Direct link to CommentWrapping" title="Direct link to CommentWrapping">​</a></h3>
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#comment-wrapping" target="_blank" rel="noopener noreferrer">ktlint docs</a> for documentation.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.23.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-7">Configuration options:<a href="#configuration-options-7" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-8">Configuration options:<a href="#configuration-options-8" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>indentSize</code> (default: <code>4</code>)</p>
@@ -156,7 +167,7 @@ documentation.</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="conditionwrapping">ConditionWrapping<a href="#conditionwrapping" class="hash-link" aria-label="Direct link to ConditionWrapping" title="Direct link to ConditionWrapping">​</a></h3>
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#condition-wrapping" target="_blank" rel="noopener noreferrer">ktlint docs</a> for documentation.</p>
 <p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-8">Configuration options:<a href="#configuration-options-8" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-9">Configuration options:<a href="#configuration-options-9" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>indentSize</code> (default: <code>4</code>)</p>
@@ -166,7 +177,7 @@ documentation.</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="contextreceiverlistwrapping">ContextReceiverListWrapping<a href="#contextreceiverlistwrapping" class="hash-link" aria-label="Direct link to ContextReceiverListWrapping" title="Direct link to ContextReceiverListWrapping">​</a></h3>
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#context-receiver-list-wrapping" target="_blank" rel="noopener noreferrer">ktlint docs</a> for documentation.</p>
 <p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-9">Configuration options:<a href="#configuration-options-9" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-10">Configuration options:<a href="#configuration-options-10" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>maxLineLength</code> (default: <code>120</code>) (android default: <code>100</code>)</p>
@@ -180,7 +191,7 @@ documentation.</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="contextreceivermapping">ContextReceiverMapping<a href="#contextreceivermapping" class="hash-link" aria-label="Direct link to ContextReceiverMapping" title="Direct link to ContextReceiverMapping">​</a></h3>
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#content-receiver-wrapping" target="_blank" rel="noopener noreferrer">ktlint docs</a> for documentation.</p>
 <p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-10">Configuration options:<a href="#configuration-options-10" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-11">Configuration options:<a href="#configuration-options-11" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>maxLineLength</code> (default: <code>120</code>) (android default: <code>100</code>)</p>
@@ -195,7 +206,7 @@ documentation.</p>
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#enum-entry" target="_blank" rel="noopener noreferrer">ktlint docs</a> for documentation.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.22.0</p>
 <p><strong>Aliases</strong>: EnumEntryName</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-11">Configuration options:<a href="#configuration-options-11" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-12">Configuration options:<a href="#configuration-options-12" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>enumEntryNameCasing</code> (default: <code>&#x27;upper_or_camel_cases&#x27;</code>)</p>
@@ -205,7 +216,7 @@ documentation.</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="enumwrapping">EnumWrapping<a href="#enumwrapping" class="hash-link" aria-label="Direct link to EnumWrapping" title="Direct link to EnumWrapping">​</a></h3>
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#enum-wrapping" target="_blank" rel="noopener noreferrer">ktlint docs</a> for documentation.</p>
 <p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-12">Configuration options:<a href="#configuration-options-12" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-13">Configuration options:<a href="#configuration-options-13" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>indentSize</code> (default: <code>4</code>)</p>
@@ -216,7 +227,7 @@ documentation.</p>
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/experimental/#expression-operand-wrapping" target="_blank" rel="noopener noreferrer">ktlint docs</a> for
 documentation.</p>
 <p><strong>Active by default</strong>: No</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-13">Configuration options:<a href="#configuration-options-13" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-14">Configuration options:<a href="#configuration-options-14" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>indentSize</code> (default: <code>4</code>)</p>
@@ -233,7 +244,7 @@ from the standard rules, make sure to enable just one.</p>
 <p>This rules overlaps with <a href="https://detekt.dev/style.html#newlineatendoffile" target="_blank" rel="noopener noreferrer">style&gt;NewLineAtEndOfFile</a>
 from the standard rules, make sure to enable just one. The pro of this rule is that it can auto-correct the issue.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-14">Configuration options:<a href="#configuration-options-14" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-15">Configuration options:<a href="#configuration-options-15" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>insertFinalNewLine</code> (default: <code>true</code>)</p>
@@ -247,7 +258,7 @@ from the standard rules, make sure to enable just one. The pro of this rule is t
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#function-expression-body" target="_blank" rel="noopener noreferrer">ktlint docs</a>
 for documentation.</p>
 <p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-15">Configuration options:<a href="#configuration-options-15" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-16">Configuration options:<a href="#configuration-options-16" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>indentSize</code> (default: <code>4</code>)</p>
@@ -262,7 +273,7 @@ for documentation.</p>
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#function-literal" target="_blank" rel="noopener noreferrer">ktlint docs</a> for
 documentation.</p>
 <p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-16">Configuration options:<a href="#configuration-options-16" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-17">Configuration options:<a href="#configuration-options-17" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>indentSize</code> (default: <code>4</code>)</p>
@@ -281,7 +292,7 @@ documentation.</p>
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#function-return-type-spacing" target="_blank" rel="noopener noreferrer">ktlint docs</a> for
 documentation.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.23.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-17">Configuration options:<a href="#configuration-options-17" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-18">Configuration options:<a href="#configuration-options-18" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>maxLineLength</code> (default: <code>120</code>) (android default: <code>100</code>)</p>
@@ -292,7 +303,7 @@ documentation.</p>
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#function-signature" target="_blank" rel="noopener noreferrer">ktlint docs</a> for
 documentation.</p>
 <p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-18">Configuration options:<a href="#configuration-options-18" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-19">Configuration options:<a href="#configuration-options-19" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>forceMultilineWhenParameterCountGreaterOrEqualThan</code> (default: <code>2147483647</code>)</p>
@@ -326,7 +337,7 @@ documentation.</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="ifelsebracing">IfElseBracing<a href="#ifelsebracing" class="hash-link" aria-label="Direct link to IfElseBracing" title="Direct link to IfElseBracing">​</a></h3>
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#if-else-bracing" target="_blank" rel="noopener noreferrer">ktlint docs</a> for documentation.</p>
 <p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-19">Configuration options:<a href="#configuration-options-19" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-20">Configuration options:<a href="#configuration-options-20" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>indentSize</code> (default: <code>4</code>)</p>
@@ -336,7 +347,7 @@ documentation.</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="ifelsewrapping">IfElseWrapping<a href="#ifelsewrapping" class="hash-link" aria-label="Direct link to IfElseWrapping" title="Direct link to IfElseWrapping">​</a></h3>
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#if-else-wrapping" target="_blank" rel="noopener noreferrer">ktlint docs</a> for documentation.</p>
 <p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-20">Configuration options:<a href="#configuration-options-20" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-21">Configuration options:<a href="#configuration-options-21" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>indentSize</code> (default: <code>4</code>)</p>
@@ -347,7 +358,7 @@ documentation.</p>
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#import-ordering" target="_blank" rel="noopener noreferrer">ktlint docs</a> for documentation.</p>
 <p>For defining import layout patterns see the <a href="https://github.com/pinterest/ktlint/blob/0.50.0/ktlint-ruleset-standard/src/main/kotlin/com/pinterest/ktlint/ruleset/standard/rules/ImportOrderingRule.kt" target="_blank" rel="noopener noreferrer">KtLint Source Code</a></p>
 <p><strong>Active by default</strong>: Yes - Since v1.19.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-21">Configuration options:<a href="#configuration-options-21" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-22">Configuration options:<a href="#configuration-options-22" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>layout</code> (default: <code>&#x27;*,java.**,javax.**,kotlin.**,^&#x27;</code>) (android default: <code>&#x27;*&#x27;</code>)</p>
@@ -357,7 +368,7 @@ documentation.</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="indentation">Indentation<a href="#indentation" class="hash-link" aria-label="Direct link to Indentation" title="Direct link to Indentation">​</a></h3>
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#indentation" target="_blank" rel="noopener noreferrer">ktlint docs</a> for documentation.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.19.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-22">Configuration options:<a href="#configuration-options-22" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-23">Configuration options:<a href="#configuration-options-23" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>indentSize</code> (default: <code>4</code>)</p>
@@ -374,7 +385,7 @@ documentation.</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="kdocwrapping">KdocWrapping<a href="#kdocwrapping" class="hash-link" aria-label="Direct link to KdocWrapping" title="Direct link to KdocWrapping">​</a></h3>
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#kdoc-wrapping" target="_blank" rel="noopener noreferrer">ktlint docs</a> for documentation.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.23.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-23">Configuration options:<a href="#configuration-options-23" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-24">Configuration options:<a href="#configuration-options-24" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>indentSize</code> (default: <code>4</code>)</p>
@@ -387,7 +398,7 @@ documentation.</p>
 from the standard rules, make sure to enable just one or keep them aligned.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
 <p><strong>Aliases</strong>: MaxLineLength</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-24">Configuration options:<a href="#configuration-options-24" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-25">Configuration options:<a href="#configuration-options-25" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>maxLineLength</code> (default: <code>120</code>) (android default: <code>100</code>)</p>
@@ -404,7 +415,7 @@ from the standard rules, make sure to enable just one or keep them aligned.</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="modifierlistspacing">ModifierListSpacing<a href="#modifierlistspacing" class="hash-link" aria-label="Direct link to ModifierListSpacing" title="Direct link to ModifierListSpacing">​</a></h3>
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#modifier-list-spacing" target="_blank" rel="noopener noreferrer">ktlint docs</a> for documentation.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.23.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-25">Configuration options:<a href="#configuration-options-25" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-26">Configuration options:<a href="#configuration-options-26" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>indentSize</code> (default: <code>4</code>)</p>
@@ -419,7 +430,7 @@ from the standard rules, make sure to enable just one. The pro of this rule is t
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="multilineifelse">MultiLineIfElse<a href="#multilineifelse" class="hash-link" aria-label="Direct link to MultiLineIfElse" title="Direct link to MultiLineIfElse">​</a></h3>
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#multiline-if-else" target="_blank" rel="noopener noreferrer">ktlint docs</a> for documentation.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.22.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-26">Configuration options:<a href="#configuration-options-26" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-27">Configuration options:<a href="#configuration-options-27" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>indentSize</code> (default: <code>4</code>)</p>
@@ -430,7 +441,7 @@ from the standard rules, make sure to enable just one. The pro of this rule is t
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#multiline-expression-wrapping" target="_blank" rel="noopener noreferrer">ktlint docs</a> for
 documentation.</p>
 <p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-27">Configuration options:<a href="#configuration-options-27" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-28">Configuration options:<a href="#configuration-options-28" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>indentSize</code> (default: <code>4</code>)</p>
@@ -444,7 +455,7 @@ documentation.</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="multilineloop">MultilineLoop<a href="#multilineloop" class="hash-link" aria-label="Direct link to MultilineLoop" title="Direct link to MultilineLoop">​</a></h3>
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#multiline-loop" target="_blank" rel="noopener noreferrer">ktlint docs</a> for documentation.</p>
 <p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-28">Configuration options:<a href="#configuration-options-28" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-29">Configuration options:<a href="#configuration-options-29" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>indentSize</code> (default: <code>4</code>)</p>
@@ -479,7 +490,7 @@ from the standard rules, make sure to enable just one.</p>
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#no-empty-first-line-at-start-in-class-body" target="_blank" rel="noopener noreferrer">ktlint docs</a>
 for documentation.</p>
 <p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-29">Configuration options:<a href="#configuration-options-29" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-30">Configuration options:<a href="#configuration-options-30" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>indentSize</code> (default: <code>4</code>)</p>
@@ -506,7 +517,7 @@ documentation.</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="nosinglelineblockcomment">NoSingleLineBlockComment<a href="#nosinglelineblockcomment" class="hash-link" aria-label="Direct link to NoSingleLineBlockComment" title="Direct link to NoSingleLineBlockComment">​</a></h3>
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#no-single-line-block-comment" target="_blank" rel="noopener noreferrer">ktlint docs</a> for documentation.</p>
 <p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-30">Configuration options:<a href="#configuration-options-30" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-31">Configuration options:<a href="#configuration-options-31" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>indentSize</code> (default: <code>4</code>)</p>
@@ -525,7 +536,7 @@ documentation.</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="nowildcardimports">NoWildcardImports<a href="#nowildcardimports" class="hash-link" aria-label="Direct link to NoWildcardImports" title="Direct link to NoWildcardImports">​</a></h3>
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#no-wildcard-imports" target="_blank" rel="noopener noreferrer">ktlint docs</a> for documentation.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-31">Configuration options:<a href="#configuration-options-31" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-32">Configuration options:<a href="#configuration-options-32" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>packagesToUseImportOnDemandProperty</code> (default: <code>&#x27;java.util.*,kotlinx.android.synthetic.**&#x27;</code>)</p>
@@ -544,7 +555,7 @@ documentation.</p>
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#parameter-list-spacing" target="_blank" rel="noopener noreferrer">ktlint docs</a> for
 documentation.</p>
 <p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-32">Configuration options:<a href="#configuration-options-32" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-33">Configuration options:<a href="#configuration-options-33" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>maxLineLength</code> (default: <code>120</code>) (android default: <code>100</code>)</p>
@@ -554,7 +565,7 @@ documentation.</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="parameterlistwrapping">ParameterListWrapping<a href="#parameterlistwrapping" class="hash-link" aria-label="Direct link to ParameterListWrapping" title="Direct link to ParameterListWrapping">​</a></h3>
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#parameter-list-wrapping" target="_blank" rel="noopener noreferrer">ktlint docs</a> for documentation.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-33">Configuration options:<a href="#configuration-options-33" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-34">Configuration options:<a href="#configuration-options-34" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>maxLineLength</code> (default: <code>120</code>) (android default: <code>100</code>)</p>
@@ -568,7 +579,7 @@ documentation.</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="parameterwrapping">ParameterWrapping<a href="#parameterwrapping" class="hash-link" aria-label="Direct link to ParameterWrapping" title="Direct link to ParameterWrapping">​</a></h3>
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#parameter-wrapping" target="_blank" rel="noopener noreferrer">ktlint docs</a> for documentation.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.23.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-34">Configuration options:<a href="#configuration-options-34" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-35">Configuration options:<a href="#configuration-options-35" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>indentSize</code> (default: <code>4</code>)</p>
@@ -583,7 +594,7 @@ documentation.</p>
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#property-naming" target="_blank" rel="noopener noreferrer">ktlint docs</a> for
 documentation.</p>
 <p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-35">Configuration options:<a href="#configuration-options-35" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-36">Configuration options:<a href="#configuration-options-36" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>constantNamingStyle</code> (default: <code>&#x27;screaming_snake_case&#x27;</code>)</p>
@@ -593,7 +604,7 @@ documentation.</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="propertywrapping">PropertyWrapping<a href="#propertywrapping" class="hash-link" aria-label="Direct link to PropertyWrapping" title="Direct link to PropertyWrapping">​</a></h3>
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#property-wrapping" target="_blank" rel="noopener noreferrer">ktlint docs</a> for documentation.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.23.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-36">Configuration options:<a href="#configuration-options-36" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-37">Configuration options:<a href="#configuration-options-37" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>indentSize</code> (default: <code>4</code>)</p>
@@ -616,7 +627,7 @@ documentation.</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="spacingaroundcurly">SpacingAroundCurly<a href="#spacingaroundcurly" class="hash-link" aria-label="Direct link to SpacingAroundCurly" title="Direct link to SpacingAroundCurly">​</a></h3>
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#curly-spacing" target="_blank" rel="noopener noreferrer">ktlint docs</a> for documentation.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-37">Configuration options:<a href="#configuration-options-37" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-38">Configuration options:<a href="#configuration-options-38" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>indentSize</code> (default: <code>4</code>)</p>
@@ -664,7 +675,7 @@ documentation.</p>
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#statement-wrapping" target="_blank" rel="noopener noreferrer">ktlint docs</a> for
 documentation.</p>
 <p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-38">Configuration options:<a href="#configuration-options-38" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-39">Configuration options:<a href="#configuration-options-39" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>indentSize</code> (default: <code>4</code>)</p>
@@ -677,7 +688,7 @@ documentation.</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="stringtemplateindent">StringTemplateIndent<a href="#stringtemplateindent" class="hash-link" aria-label="Direct link to StringTemplateIndent" title="Direct link to StringTemplateIndent">​</a></h3>
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#string-template-indent" target="_blank" rel="noopener noreferrer">ktlint docs</a> for documentation.</p>
 <p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-39">Configuration options:<a href="#configuration-options-39" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-40">Configuration options:<a href="#configuration-options-40" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>indentSize</code> (default: <code>4</code>)</p>
@@ -695,7 +706,7 @@ leaves it at your discretion for the call site.</li>
 trailing comma usage yet.</li>
 </ul>
 <p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-40">Configuration options:<a href="#configuration-options-40" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-41">Configuration options:<a href="#configuration-options-41" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>useTrailingCommaOnCallSite</code> (default: <code>true</code>) (android default: <code>false</code>)</p>
@@ -713,7 +724,7 @@ leaves it at your discretion for the call site.</li>
 trailing comma usage yet.</li>
 </ul>
 <p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-41">Configuration options:<a href="#configuration-options-41" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-42">Configuration options:<a href="#configuration-options-42" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>useTrailingCommaOnDeclarationSite</code> (default: <code>true</code>) (android default: <code>false</code>)</p>
@@ -724,7 +735,7 @@ trailing comma usage yet.</li>
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#try-catch-finally-spacing" target="_blank" rel="noopener noreferrer">ktlint docs</a> for
 documentation.</p>
 <p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-42">Configuration options:<a href="#configuration-options-42" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-43">Configuration options:<a href="#configuration-options-43" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>indentSize</code> (default: <code>4</code>)</p>
@@ -739,7 +750,7 @@ documentation.</p>
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#type-argument-list-spacing" target="_blank" rel="noopener noreferrer">ktlint docs</a> for
 documentation.</p>
 <p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-43">Configuration options:<a href="#configuration-options-43" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-44">Configuration options:<a href="#configuration-options-44" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>indentSize</code> (default: <code>4</code>)</p>
@@ -754,7 +765,7 @@ documentation.</p>
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#type-parameter-list-spacing" target="_blank" rel="noopener noreferrer">ktlint docs</a> for
 documentation.</p>
 <p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-44">Configuration options:<a href="#configuration-options-44" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-45">Configuration options:<a href="#configuration-options-45" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>indentSize</code> (default: <code>4</code>)</p>
@@ -777,7 +788,7 @@ documentation.</p>
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/experimental/#when-entry-bracing" target="_blank" rel="noopener noreferrer">ktlint docs</a> for
 documentation.</p>
 <p><strong>Active by default</strong>: No</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-45">Configuration options:<a href="#configuration-options-45" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-46">Configuration options:<a href="#configuration-options-46" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>indentSize</code> (default: <code>4</code>)</p>
@@ -787,7 +798,7 @@ documentation.</p>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="wrapping">Wrapping<a href="#wrapping" class="hash-link" aria-label="Direct link to Wrapping" title="Direct link to Wrapping">​</a></h3>
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#wrapping" target="_blank" rel="noopener noreferrer">ktlint docs</a> for documentation.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.20.0</p>
-<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-46">Configuration options:<a href="#configuration-options-46" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
+<h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-47">Configuration options:<a href="#configuration-options-47" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:">​</a></h4>
 <ul>
 <li>
 <p><code>indentSize</code> (default: <code>4</code>)</p>
