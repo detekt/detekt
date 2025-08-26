@@ -11,9 +11,9 @@ import javax.xml.transform.dom.DOMSource
 import javax.xml.transform.stream.StreamResult
 
 /**
- * A naive implementation to merge xml assuming all input xml are written by detekt.
+ * A naive implementation to merge checkstyle assuming all input checkstyle are written by detekt.
  */
-internal object XmlReportMerger {
+internal object CheckstyleReportMerger {
 
     private val documentBuilder by lazy { DocumentBuilderFactory.newInstance().newDocumentBuilder() }
 

@@ -35,7 +35,7 @@ console-reports:
 output-reports:
   active: true
   exclude:
-  # - 'XmlOutputReport'
+  # - 'CheckstyleOutputReport'
   # - 'HtmlOutputReport'
   # - 'MdOutputReport'
   # - 'sarif'

@@ -31,8 +31,8 @@ abstract class ReportMergeTask : DefaultTask() {
 
         val xmls = existingFiles.filter { it.extension == "xml" }
         if (!xmls.isEmpty) {
-            XmlReportMerger.merge(xmls.files, output.get().asFile)
-            logger.lifecycle("Merged XML output to ${output.get().asFile.absolutePath}")
+            CheckstyleReportMerger.merge(xmls.files, output.get().asFile)
+            logger.lifecycle("Merged checkstyle output to ${output.get().asFile.absolutePath}")
         }
 
         val sarifs = existingFiles.filter { it.extension == "sarif" || it.name.endsWith(".sarif.json") }
