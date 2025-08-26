@@ -6,7 +6,6 @@ import dev.detekt.api.TextLocation
 import org.assertj.core.annotation.CheckReturnValue
 import org.assertj.core.api.AbstractAssert
 import org.assertj.core.api.AbstractListAssert
-import java.util.Objects
 
 @CheckReturnValue
 fun assertThat(findings: List<Finding>) = FindingsAssert(findings)
@@ -22,22 +21,6 @@ class FindingsAssert(actual: List<Finding>) :
 
     override fun toAssert(value: Finding?, description: String?): FindingAssert =
         FindingAssert(value).`as`(description)
-
-    fun hasTextLocations(vararg expected: Pair<Int, Int>) = apply {
-        val actualSources = actual.asSequence()
-            .map { it.location.text }
-            .sortedWith(compareBy({ it.start }, { it.end }))
-
-        val expectedSources = expected.asSequence()
-            .map { (start, end) -> TextLocation(start, end) }
-            .sortedWith(compareBy({ it.start }, { it.end }))
-
-        if (!Objects.deepEquals(actualSources.toList(), expectedSources.toList())) {
-            failWithMessage(
-                "Expected text locations to be ${expectedSources.toList()} but was ${actualSources.toList()}"
-            )
-        }
-    }
 }
 
 class FindingAssert(val actual: Finding?) : AbstractAssert<FindingAssert, Finding>(actual, FindingAssert::class.java) {
