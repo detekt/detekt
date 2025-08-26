@@ -52,13 +52,11 @@ class ForbiddenNamedParamSpec(val env: KotlinEnvironmentContainer) {
         val findings = ForbiddenNamedParam(
             TestConfig(METHODS to listOf("kotlin.io.println"))
         ).lintWithContext(env, code)
-        assertThat(findings).hasSize(3)
-        assertThat(findings).element(0)
-            .hasTextLocation(17 to 38)
-        assertThat(findings).element(1)
-            .hasTextLocation(43 to 63)
-        assertThat(findings).element(2)
-            .hasTextLocation(68 to 90)
+        assertThat(findings).satisfiesExactlyInAnyOrder(
+            { assertThat(it).hasTextLocation(17 to 38) },
+            { assertThat(it).hasTextLocation(43 to 63) },
+            { assertThat(it).hasTextLocation(68 to 90) },
+        )
     }
 
     @Test

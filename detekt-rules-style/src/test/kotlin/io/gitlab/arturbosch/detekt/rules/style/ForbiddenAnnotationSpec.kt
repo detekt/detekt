@@ -53,19 +53,14 @@ class ForbiddenAnnotationSpec(val env: KotlinEnvironmentContainer) {
             annotation class SomeClass(val value: Array<SomeClass>)
         """.trimIndent()
         val findings = ForbiddenAnnotation(Config.empty).lintWithContext(env, code)
-        assertThat(findings).hasSize(6)
-        assertThat(findings).element(0)
-            .hasTextLocation("@Deprecated")
-        assertThat(findings).element(1)
-            .hasTextLocation("@Documented")
-        assertThat(findings).element(2)
-            .hasTextLocation("@Retention")
-        assertThat(findings).element(3)
-            .hasTextLocation("@Target")
-        assertThat(findings).element(4)
-            .hasTextLocation("@Repeatable")
-        assertThat(findings).element(5)
-            .hasTextLocation("@Inherited")
+        assertThat(findings).satisfiesExactlyInAnyOrder(
+            { assertThat(it).hasTextLocation("@Deprecated") },
+            { assertThat(it).hasTextLocation("@Documented") },
+            { assertThat(it).hasTextLocation("@Retention") },
+            { assertThat(it).hasTextLocation("@Target") },
+            { assertThat(it).hasTextLocation("@Repeatable") },
+            { assertThat(it).hasTextLocation("@Inherited") },
+        )
     }
 
     @Test
@@ -112,13 +107,11 @@ class ForbiddenAnnotationSpec(val env: KotlinEnvironmentContainer) {
                 )
             )
         ).lintWithContext(env, code)
-        assertThat(findings).hasSize(3)
-        assertThat(findings).element(0)
-            .hasTextLocation("@SuppressWarnings")
-        assertThat(findings).element(1)
-            .hasTextLocation("@Transient")
-        assertThat(findings).element(2)
-            .hasTextLocation("@Volatile")
+        assertThat(findings).satisfiesExactlyInAnyOrder(
+            { assertThat(it).hasTextLocation("@SuppressWarnings") },
+            { assertThat(it).hasTextLocation("@Transient") },
+            { assertThat(it).hasTextLocation("@Volatile") },
+        )
     }
 
     @Test

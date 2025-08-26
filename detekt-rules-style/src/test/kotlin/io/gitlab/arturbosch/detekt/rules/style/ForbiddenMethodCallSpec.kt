@@ -110,11 +110,10 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
                 )
             )
         ).lintWithContext(env, code)
-        assertThat(findings).hasSize(2)
-        assertThat(findings).element(0)
-            .hasTextLocation(48 to 64)
-        assertThat(findings).element(1)
-            .hasTextLocation(76 to 80)
+        assertThat(findings).satisfiesExactlyInAnyOrder(
+            { assertThat(it).hasTextLocation(48 to 64) },
+            { assertThat(it).hasTextLocation(76 to 80) },
+        )
     }
 
     @Test

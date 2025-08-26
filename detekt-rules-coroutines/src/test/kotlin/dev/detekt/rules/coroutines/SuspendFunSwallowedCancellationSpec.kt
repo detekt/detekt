@@ -381,13 +381,12 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinEnvironmentCont
             }
         """.trimIndent()
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).hasSize(2)
-        assertThat(findings).element(0)
-            .hasStartSourceLocation(SourceLocation(6, 5))
-            .hasEndSourceLocation(SourceLocation(6, 16))
-        assertThat(findings).element(1)
-            .hasStartSourceLocation(SourceLocation(8, 9))
-            .hasEndSourceLocation(SourceLocation(8, 20))
+        assertThat(findings).satisfiesExactlyInAnyOrder(
+            { assertThat(it).hasStartSourceLocation(SourceLocation(6, 5))
+            .hasEndSourceLocation(SourceLocation(6, 16)) },
+            { assertThat(it).hasStartSourceLocation(SourceLocation(8, 9))
+            .hasEndSourceLocation(SourceLocation(8, 20)) },
+        )
     }
 
     @Test
@@ -1062,13 +1061,12 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinEnvironmentCont
             """.trimIndent()
 
             val findings = subject.lintWithContext(env, code)
-            assertThat(findings).hasSize(2)
-            assertThat(findings).element(0)
-                .hasStartSourceLocation(SourceLocation(8, 5))
-                .hasEndSourceLocation(SourceLocation(8, 16))
-            assertThat(findings).element(1)
-                .hasStartSourceLocation(SourceLocation(12, 5))
-                .hasEndSourceLocation(SourceLocation(12, 16))
+            assertThat(findings).satisfiesExactlyInAnyOrder(
+                { assertThat(it).hasStartSourceLocation(SourceLocation(8, 5))
+                .hasEndSourceLocation(SourceLocation(8, 16)) },
+                { assertThat(it).hasStartSourceLocation(SourceLocation(12, 5))
+                .hasEndSourceLocation(SourceLocation(12, 16)) },
+            )
         }
 
         @Test
@@ -1093,13 +1091,12 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinEnvironmentCont
             """.trimIndent()
 
             val findings = subject.lintWithContext(env, code)
-            assertThat(findings).hasSize(2)
-            assertThat(findings).element(0)
-                .hasStartSourceLocation(SourceLocation(8, 5))
-                .hasEndSourceLocation(SourceLocation(8, 16))
-            assertThat(findings).element(1)
-                .hasStartSourceLocation(SourceLocation(12, 5))
-                .hasEndSourceLocation(SourceLocation(12, 16))
+            assertThat(findings).satisfiesExactlyInAnyOrder(
+                { assertThat(it).hasStartSourceLocation(SourceLocation(8, 5))
+                .hasEndSourceLocation(SourceLocation(8, 16)) },
+                { assertThat(it).hasStartSourceLocation(SourceLocation(12, 5))
+                .hasEndSourceLocation(SourceLocation(12, 16)) },
+            )
         }
 
         @Test

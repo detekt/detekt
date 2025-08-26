@@ -367,13 +367,11 @@ class UnusedImportSpec(
             fun `foo`() {}
             """.trimIndent()
         val lint = subject.lintWithContext(env, main, p, p2, escaped)
-        assertThat(lint).hasSize(3)
-        assertThat(lint).element(0)
-            .hasTextLocation("import p.B6 // positive")
-        assertThat(lint).element(1)
-            .hasTextLocation("import p.B as B12 // positive")
-        assertThat(lint).element(2)
-            .hasTextLocation("import escaped.`foo` // positive")
+        assertThat(lint).satisfiesExactlyInAnyOrder(
+            { assertThat(it).hasTextLocation("import p.B6 // positive") },
+            { assertThat(it).hasTextLocation("import p.B as B12 // positive") },
+            { assertThat(it).hasTextLocation("import escaped.`foo` // positive") },
+        )
     }
 
     @Test
@@ -626,15 +624,12 @@ class UnusedImportSpec(
             """.trimIndent()
         val lint = subject.lintWithContext(env, main, additional1, additional2)
 
-        assertThat(lint).hasSize(4)
-        assertThat(lint).element(0)
-            .hasTextLocation("import com.example.TestComponent")
-        assertThat(lint).element(1)
-            .hasTextLocation("import com.example.component1.Unused")
-        assertThat(lint).element(2)
-            .hasTextLocation("import com.example.components")
-        assertThat(lint).element(3)
-            .hasTextLocation("import com.example.component1AndSomethingElse")
+        assertThat(lint).satisfiesExactlyInAnyOrder(
+            { assertThat(it).hasTextLocation("import com.example.TestComponent") },
+            { assertThat(it).hasTextLocation("import com.example.component1.Unused") },
+            { assertThat(it).hasTextLocation("import com.example.components") },
+            { assertThat(it).hasTextLocation("import com.example.component1AndSomethingElse") },
+        )
     }
 
     @Test

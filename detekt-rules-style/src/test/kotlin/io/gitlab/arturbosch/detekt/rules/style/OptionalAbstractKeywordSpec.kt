@@ -25,11 +25,10 @@ class OptionalAbstractKeywordSpec {
         val code = "abstract interface A { abstract fun x() }"
         val findings = subject.lint(code)
 
-        assertThat(findings).hasSize(2)
-        assertThat(findings).element(0)
-            .hasTextLocation(0 to 8)
-        assertThat(findings).element(1)
-            .hasTextLocation(23 to 31)
+        assertThat(findings).satisfiesExactlyInAnyOrder(
+            { assertThat(it).hasTextLocation(0 to 8) },
+            { assertThat(it).hasTextLocation(23 to 31) },
+        )
     }
 
     @Test

@@ -65,11 +65,10 @@ class DoubleNegativeLambdaSpec {
         """.trimIndent()
 
         val findings = subject.lint(code)
-        assertThat(findings).hasSize(2)
-        assertThat(findings).element(0)
-            .hasStartSourceLocation(3, 37) // first takeUnless
-        assertThat(findings).element(1)
-            .hasStartSourceLocation(3, 62) // second takeUnless
+        assertThat(findings).satisfiesExactlyInAnyOrder(
+            { assertThat(it).hasStartSourceLocation(3, 37) }, // first takeUnless
+            { assertThat(it).hasStartSourceLocation(3, 62) }, // second takeUnless
+        )
     }
 
     @Test
