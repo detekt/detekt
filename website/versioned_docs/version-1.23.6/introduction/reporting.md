@@ -9,12 +9,12 @@ sidebar_position: 4
 ## Formats
 
 In addition to the CLI output, detekt supports 4 different types of output reporting formats.
-You can refer to [CLI](/docs/gettingstarted/cli) or [Gradle](/docs/gettingstarted/gradle) to find
+You can refer to [CLI](../gettingstarted/cli) or [Gradle](../gettingstarted/gradle) to find
 out how to configure these report formats.
 
 ### TXT
 Similar to the console output, each line of the txt output represents a finding and contains
-finding signature to help edit [baseline files](/docs/gettingstarted/gradle).
+finding signature to help edit [baseline files](../gettingstarted/gradle).
 
 ```
 EmptyFunctionBlock - [This empty block of code can be removed.] at /user/home/detekt/detekt-gradle-plugin/src/main/kotlin/io/gitlab/arturbosch/detekt/DetektPlugin.kt:14:42 - Signature=DetektPlugin.kt$DetektPlugin${ }

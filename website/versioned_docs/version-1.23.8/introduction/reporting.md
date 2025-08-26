@@ -9,7 +9,7 @@ sidebar_position: 4
 ## Formats
 
 In addition to the CLI output, detekt supports 4 different types of output reporting formats.
-You can refer to [CLI](/docs/gettingstarted/cli) or [Gradle](/docs/gettingstarted/gradle) to find
+You can refer to [CLI](../gettingstarted/cli) or [Gradle](../gettingstarted/gradle) to find
 out how to configure these report formats.
 
 ### HTML
