@@ -3,7 +3,7 @@ package dev.detekt.rules.complexity
 import dev.detekt.api.Config
 import dev.detekt.api.SourceLocation
 import dev.detekt.test.TestConfig
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -178,13 +178,16 @@ class CyclomaticComplexMethodSpec {
             val findings = subject.lint(code)
 
             assertThat(findings).hasSize(5)
-            assertThat(findings).hasStartSourceLocations(
-                SourceLocation(2, 5),
-                SourceLocation(11, 5),
-                SourceLocation(21, 5),
-                SourceLocation(31, 5),
-                SourceLocation(39, 5)
-            )
+            assertThat(findings).element(0)
+                .hasStartSourceLocation(2, 5)
+            assertThat(findings).element(1)
+                .hasStartSourceLocation(11, 5)
+            assertThat(findings).element(2)
+                .hasStartSourceLocation(21, 5)
+            assertThat(findings).element(3)
+                .hasStartSourceLocation(31, 5)
+            assertThat(findings).element(4)
+                .hasStartSourceLocation(39, 5)
         }
 
         @Test

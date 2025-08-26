@@ -222,14 +222,14 @@ detekt --input ... --plugins /path/to/my/jar
 ##### Integrate your extension with the Detekt Gradle Plugin 
 
 For example `detekt` itself provides a wrapper over [ktlint](https://github.com/pinterest/ktlint) as a 
-custom `formatting` rule set.
+custom `ktlint` rule set.
 To enable it, we add the published dependency to `detekt` via the `detektPlugins` configuration:
 
 ###### Gradle (Kotlin/Groovy DSL)
 
 ```kotlin
 dependencies {
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:[detekt_version]")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-rules-ktlint-wrapper:[detekt_version]")
 }
 ```
 

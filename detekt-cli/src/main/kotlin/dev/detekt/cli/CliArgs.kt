@@ -156,7 +156,7 @@ class CliArgs {
         description = "Allow rules to auto correct code if they support it. " +
             "The default rule sets do NOT support auto correcting and won't change any line in the users code base. " +
             "However custom rules can be written to support auto correcting. " +
-            "The additional 'formatting' rule set, added with '--plugins', does support it and needs this flag."
+            "The additional 'ktlint' rule set, added with '--plugins', does support it and needs this flag."
     )
     var autoCorrect: Boolean = false
 

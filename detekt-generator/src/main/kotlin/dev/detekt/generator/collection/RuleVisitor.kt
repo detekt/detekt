@@ -127,8 +127,8 @@ internal class RuleVisitor(textReplacements: Map<String, String>) : DetektVisito
         private val ruleClasses = listOf(
             // These references are stringly-typed to prevent dependency cycle:
             // This class requires FormattingRule,
-            // which needs detekt-formatting.jar,
-            // which needs :detekt-formatting:processResources task output,
+            // which needs detekt-rules-ktlint-wrapper.jar,
+            // which needs :detekt-rules-ktlint-wrapper:processResources task output,
             // which needs output of this class.
             "Rule", // dev.detekt.api.Rule
             "FormattingRule", // dev.detekt.rules.ktlintwrapper.wrappers.FormattingRule

@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import dev.detekt.api.Config
 import dev.detekt.test.TestConfig
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -35,9 +35,11 @@ class MultilineRawStringIndentationSpec {
                 $TQ.trimIndent()
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings)
-                .hasSize(2)
-                .hasTextLocations("Hello world!", "How are you?")
+            assertThat(findings).hasSize(2)
+            assertThat(findings).element(0)
+                .hasTextLocation("Hello world!")
+            assertThat(findings).element(1)
+                .hasTextLocation("How are you?")
         }
 
         @Test

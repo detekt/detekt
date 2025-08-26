@@ -10,7 +10,7 @@
 
 /build
 */build/
-/detekt-formatting/ktlint-repackage/build/
+/detekt-rules-ktlint-wrapper/ktlint-repackage/build/
 
 *.jar
 !gradle-wrapper.jar

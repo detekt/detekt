@@ -12,6 +12,7 @@ dependencies {
     dokka(projects.detektApi)
     dokka(projects.detektPsiUtils)
     dokka(projects.detektTest)
+    dokka(projects.detektTestAssertj)
     dokka(projects.detektTestUtils)
     dokka(projects.detektTooling)
     dokka("dev.detekt:detekt-gradle-plugin")
@@ -51,7 +52,7 @@ allprojects {
 
     dependencies {
         detekt(project(":detekt-cli"))
-        detektPlugins(project(":detekt-formatting"))
+        detektPlugins(project(":detekt-rules-ktlint-wrapper"))
         detektPlugins(project(":detekt-rules-libraries"))
         detektPlugins(project(":detekt-rules-ruleauthors"))
     }
