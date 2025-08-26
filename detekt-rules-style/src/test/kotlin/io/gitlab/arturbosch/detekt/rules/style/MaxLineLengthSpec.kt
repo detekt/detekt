@@ -4,9 +4,9 @@ import dev.detekt.api.Config
 import dev.detekt.test.TestConfig
 import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.assertj.core.api.Assertions.assertThat as doAssert
 
 private const val MAX_LINE_LENGTH = "maxLineLength"
 private const val EXCLUDE_PACKAGE_STATEMENTS = "excludePackageStatements"
@@ -109,8 +109,8 @@ class MaxLineLengthSpec {
             val rule = MaxLineLength(Config.empty)
 
             val findings = rule.lint(code)
-            val locations = findings.map { it.entity.signature.substringAfterLast('$') }
-            doAssert(locations).allSatisfy { doAssert(it).isNotBlank() }
+            assertThat(findings).hasSize(3)
+                .allSatisfy { assertThat(it.entity.signature.substringAfterLast('$')).isNotBlank() }
         }
 
         @Test
