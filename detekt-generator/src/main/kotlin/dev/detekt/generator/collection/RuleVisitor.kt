@@ -131,7 +131,7 @@ internal class RuleVisitor(textReplacements: Map<String, String>) : DetektVisito
             // which needs :detekt-rules-ktlint-wrapper:processResources task output,
             // which needs output of this class.
             "Rule", // dev.detekt.api.Rule
-            "KtlintRule", // dev.detekt.rules.ktlintwrapper.wrappers.KtlintRule
+            "KtlintRule", // dev.detekt.rules.ktlintwrapper.KtlintRule
             "EmptyRule", // dev.detekt.rules.empty.EmptyRule
         )
     }
