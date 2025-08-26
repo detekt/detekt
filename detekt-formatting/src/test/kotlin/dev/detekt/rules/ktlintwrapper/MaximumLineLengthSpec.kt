@@ -2,7 +2,7 @@ package dev.detekt.rules.ktlintwrapper
 
 import dev.detekt.rules.ktlintwrapper.wrappers.MaximumLineLength
 import dev.detekt.test.TestConfig
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach

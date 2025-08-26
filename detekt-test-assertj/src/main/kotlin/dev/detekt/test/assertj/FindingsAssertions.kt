@@ -1,6 +1,7 @@
-package dev.detekt.test
+package dev.detekt.test.assertj
 
 import dev.detekt.api.Finding
+import dev.detekt.api.Location
 import dev.detekt.api.SourceLocation
 import dev.detekt.api.TextLocation
 import org.assertj.core.annotation.CheckReturnValue
@@ -103,3 +104,6 @@ class FindingAssert(val actual: Finding?) : AbstractAssert<FindingAssert, Findin
         hasTextLocation(TextLocation(index, index + expected.length))
     }
 }
+
+private val Finding.location: Location
+    get() = entity.location
