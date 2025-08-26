@@ -13,14 +13,14 @@ formatting:
     active: true
     autoCorrect: true
     indentSize: 4
-    maxLineLength: 120
+    # maxLineLength: If the 'android' ruleset property is set to true, the default is '100', otherwise '120'.
     ignoreRuleParameterThreshold: 8
   BackingPropertyNaming:
     active: true
   BinaryExpressionWrapping:
     active: true
     autoCorrect: true
-    maxLineLength: 120
+    # maxLineLength: If the 'android' ruleset property is set to true, the default is '100', otherwise '120'.
     indentSize: 4
   BlankLineBeforeDeclaration:
     active: true
@@ -36,7 +36,7 @@ formatting:
     active: true
     autoCorrect: true
     indentSize: 4
-    maxLineLength: 120
+    # maxLineLength: If the 'android' ruleset property is set to true, the default is '100', otherwise '120'.
     forceMultilineWhenChainOperatorCountGreaterOrEqualThan: 4
   ChainWrapping:
     active: true
@@ -48,7 +48,7 @@ formatting:
     active: true
     autoCorrect: true
     indentSize: 4
-    maxLineLength: 120
+    # maxLineLength: If the 'android' ruleset property is set to true, the default is '100', otherwise '120'.
   CommentSpacing:
     active: true
     autoCorrect: true
@@ -63,12 +63,12 @@ formatting:
   ContextReceiverListWrapping:
     active: true
     autoCorrect: true
-    maxLineLength: 120
+    # maxLineLength: If the 'android' ruleset property is set to true, the default is '100', otherwise '120'.
     indentSize: 4
   ContextReceiverMapping:
     active: true
     autoCorrect: true
-    maxLineLength: 120
+    # maxLineLength: If the 'android' ruleset property is set to true, the default is '100', otherwise '120'.
     indentSize: 4
   EnumEntryNameCase:
     active: true
@@ -96,24 +96,24 @@ formatting:
     active: true
     autoCorrect: true
     indentSize: 4
-    maxLineLength: 120
+    # maxLineLength: If the 'android' ruleset property is set to true, the default is '100', otherwise '120'.
   FunctionLiteral:
     active: true
     autoCorrect: true
     indentSize: 4
-    maxLineLength: 120
+    # maxLineLength: If the 'android' ruleset property is set to true, the default is '100', otherwise '120'.
   FunctionName:
     active: false
   FunctionReturnTypeSpacing:
     active: true
     autoCorrect: true
-    maxLineLength: 120
+    # maxLineLength: If the 'android' ruleset property is set to true, the default is '100', otherwise '120'.
   FunctionSignature:
     active: true
     autoCorrect: true
     forceMultilineWhenParameterCountGreaterOrEqualThan: 2147483647
     functionBodyExpressionWrapping: 'default'
-    maxLineLength: 120
+    # maxLineLength: If the 'android' ruleset property is set to true, the default is '100', otherwise '120'.
     indentSize: 4
   FunctionStartOfBodySpacing:
     active: true
@@ -135,7 +135,7 @@ formatting:
   ImportOrdering:
     active: true
     autoCorrect: true
-    layout: '*,java.**,javax.**,kotlin.**,^'
+    # layout: If the 'android' ruleset property is set to true, the default is '*', otherwise '*,java.**,javax.**,kotlin.**,^'.
   Indentation:
     active: true
     autoCorrect: true
@@ -150,7 +150,7 @@ formatting:
   MaximumLineLength:
     active: true
     aliases: ['MaxLineLength']
-    maxLineLength: 120
+    # maxLineLength: If the 'android' ruleset property is set to true, the default is '100', otherwise '120'.
     ignoreBackTickedIdentifier: false
   MixedConditionOperators:
     active: false
@@ -236,17 +236,17 @@ formatting:
   ParameterListSpacing:
     active: true
     autoCorrect: true
-    maxLineLength: 120
+    # maxLineLength: If the 'android' ruleset property is set to true, the default is '100', otherwise '120'.
   ParameterListWrapping:
     active: true
     autoCorrect: true
-    maxLineLength: 120
+    # maxLineLength: If the 'android' ruleset property is set to true, the default is '100', otherwise '120'.
     indentSize: 4
   ParameterWrapping:
     active: true
     autoCorrect: true
     indentSize: 4
-    maxLineLength: 120
+    # maxLineLength: If the 'android' ruleset property is set to true, the default is '100', otherwise '120'.
   PropertyName:
     active: true
     constantNamingStyle: 'screaming_snake_case'
@@ -254,7 +254,7 @@ formatting:
     active: true
     autoCorrect: true
     indentSize: 4
-    maxLineLength: 120
+    # maxLineLength: If the 'android' ruleset property is set to true, the default is '100', otherwise '120'.
   SpacingAroundAngleBrackets:
     active: true
     autoCorrect: true
@@ -315,11 +315,11 @@ formatting:
   TrailingCommaOnCallSite:
     active: true
     autoCorrect: true
-    useTrailingCommaOnCallSite: true
+    # useTrailingCommaOnCallSite: If the 'android' ruleset property is set to true, the default is 'false', otherwise 'true'.
   TrailingCommaOnDeclarationSite:
     active: true
     autoCorrect: true
-    useTrailingCommaOnDeclarationSite: true
+    # useTrailingCommaOnDeclarationSite: If the 'android' ruleset property is set to true, the default is 'false', otherwise 'true'.
   TryCatchFinallySpacing:
     active: true
     autoCorrect: true
@@ -351,4 +351,4 @@ formatting:
     active: true
     autoCorrect: true
     indentSize: 4
-    maxLineLength: 120
+    # maxLineLength: If the 'android' ruleset property is set to true, the default is '100', otherwise '120'.
