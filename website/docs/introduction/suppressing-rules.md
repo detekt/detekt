@@ -47,6 +47,6 @@ object AClassWithLongLines {
 }
 ```
 
-Several rules in the [`ktlint`](/docs/rules/formatting) ruleset also have a "first party" counterpart. For instance you can use the [`MaxLineLength`](/docs/rules/style#maxlinelength) rule instead from the [`style`](/docs/rules/style) ruleset.
+Several rules in the [`ktlint`](../rules/ktlint) ruleset also have a "first party" counterpart. For instance you can use the [`MaxLineLength`](../rules/style#maxlinelength) rule instead from the [`style`](../rules/style) ruleset.
 
 For those rules, you can suppress the inspection also locally (on top of an expression, function, class, etc.).
