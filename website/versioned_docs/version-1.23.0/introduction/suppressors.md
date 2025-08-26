@@ -16,7 +16,7 @@ UnusedPrivateMember:
     - 'Preview'
 ```
 
-Now, if an issue is found under a code that is annotated with `@Preview` that issue will be suppressed. This example is really handy if you use [Jetpack Compose](/docs/introduction/compose), for example.
+Now, if an issue is found under a code that is annotated with `@Preview` that issue will be suppressed. This example is really handy if you use [Jetpack Compose](compose.md), for example.
 
 ## Available `Suppressor`s
 
