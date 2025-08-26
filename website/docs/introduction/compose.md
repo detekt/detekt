@@ -103,7 +103,7 @@ private fun FooLazyColumnPreview() { // Violation for FooLazyColumnPreview()
 
 ### TooManyFunctions for Compose
 
-See [TooManyFunctions](../rules/complexity.md/#toomanyfunctions).
+See [TooManyFunctions](../rules/complexity/#toomanyfunctions).
 
 detekt may flag files with many composable preview functions, i.e. those marked with `@Preview`, 
 as having too many functions. Since preview functions do not contribute to complexity, this might not be
