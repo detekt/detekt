@@ -35,7 +35,7 @@ Some rules like `TooManyFunctions` can only be suppressed by using a file level 
 
 Please note that rules inside the [`ktlint`](../rules/ktlint) ruleset can only be suppressed at **the file level**.
 
-Rules inside this ruleset are wrappers around KtLint rules, and we don't have the same reporting capabilities that we offer for first party rules. For example, you can suppress the [MaximumLineLength](/docs/rules/formatting#maximumlinelength) rule only in your entire file with:
+Rules inside this ruleset are wrappers around KtLint rules, and we don't have the same reporting capabilities that we offer for first party rules. For example, you can suppress the [MaximumLineLength](../rules/ktlint#maximumlinelength) rule only in your entire file with:
 
 ```kotlin
 @file:Suppress("MaximumLineLength")
