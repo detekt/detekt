@@ -12,22 +12,15 @@ class TestDetektion(
     vararg issues: Issue,
     override val rules: List<RuleInstance> = emptyList(),
     metrics: List<ProjectMetric> = emptyList(),
-    notifications: List<Notification> = emptyList(),
 ) : Detektion, UserDataHolderBase() {
 
     override val issues: List<Issue> = issues.toList()
     override val metrics: Collection<ProjectMetric> get() = _metrics
-    override val notifications: List<Notification> get() = _notifications
 
     private val _metrics = metrics.toMutableList()
-    private val _notifications = notifications.toMutableList()
 
     fun <V> removeData(key: Key<V>) {
         putUserData(key, null)
-    }
-
-    override fun add(notification: Notification) {
-        _notifications.add(notification)
     }
 
     override fun add(projectMetric: ProjectMetric) {

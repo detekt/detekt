@@ -2,6 +2,7 @@ package dev.detekt.core.reporting.console
 
 import dev.detekt.api.testfixtures.TestDetektion
 import dev.detekt.core.NL
+import dev.detekt.core.reporting.NotificationsKey
 import dev.detekt.core.util.SimpleNotification
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -12,7 +13,9 @@ class NotificationReportSpec {
 
     @Test
     fun `reports two notifications`() {
-        val detektion = TestDetektion(notifications = listOf(SimpleNotification("test"), SimpleNotification("test")))
+        val detektion = TestDetektion().apply {
+            putUserData(NotificationsKey, listOf(SimpleNotification("test"), SimpleNotification("test")))
+        }
         assertThat(subject.render(detektion)).isEqualTo("test${NL}test")
     }
 

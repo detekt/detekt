@@ -14,16 +14,11 @@ data class DetektResult(
 ) : Detektion, UserDataHolderBase() {
 
     private val _notifications = ArrayList<Notification>()
-    override val notifications: Collection<Notification> = _notifications
 
     private val _metrics = ArrayList<ProjectMetric>()
     override val metrics: Collection<ProjectMetric> = _metrics
 
     override fun add(projectMetric: ProjectMetric) {
         _metrics.add(projectMetric)
-    }
-
-    override fun add(notification: Notification) {
-        _notifications.add(notification)
     }
 }

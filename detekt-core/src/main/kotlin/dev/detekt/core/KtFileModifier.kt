@@ -5,6 +5,7 @@ import dev.detekt.api.Detektion
 import dev.detekt.api.FileProcessListener
 import dev.detekt.api.Notification
 import dev.detekt.api.modifiedText
+import dev.detekt.core.reporting.NotificationsKey
 import dev.detekt.psi.absolutePath
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
@@ -18,7 +19,8 @@ class KtFileModifier : FileProcessListener {
         files.filter { it.modifiedText != null }
             .forEach { ktFile ->
                 val path = ktFile.absolutePath()
-                result.add(ModificationNotification(path))
+                val notifications = result.getUserData(NotificationsKey)?.toMutableList() ?: mutableListOf()
+                result.putUserData(NotificationsKey, notifications + ModificationNotification(path))
                 path.writeText(ktFile.unnormalizeContent())
                 // reset modification text after writing as the PsiFile may be reused in tests or an IDE session
                 ktFile.modifiedText = null

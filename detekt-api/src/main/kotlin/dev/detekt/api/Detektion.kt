@@ -9,13 +9,7 @@ import com.intellij.openapi.util.UserDataHolder
 interface Detektion : UserDataHolder {
     val issues: List<Issue>
     val rules: List<RuleInstance>
-    val notifications: Collection<Notification>
     val metrics: Collection<ProjectMetric>
-
-    /**
-     * Stores a notification in the result.
-     */
-    fun add(notification: Notification)
 
     /**
      * Stores a metric calculated for the whole project in the result.

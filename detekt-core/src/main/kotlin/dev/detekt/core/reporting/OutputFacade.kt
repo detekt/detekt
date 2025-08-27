@@ -1,6 +1,8 @@
 package dev.detekt.core.reporting
 
+import com.intellij.openapi.util.Key
 import dev.detekt.api.Detektion
+import dev.detekt.api.Notification
 import dev.detekt.api.getOrNull
 import dev.detekt.core.ProcessingSettings
 import dev.detekt.core.util.SimpleNotification
@@ -38,8 +40,14 @@ class OutputFacade(
             val filePath = reports[defaultReportMapping(report)]?.path
             if (filePath != null) {
                 report.write(filePath, result)
-                result.add(SimpleNotification("Successfully generated ${report.id} at ${filePath.toUri()}"))
+                val notifications = result.getUserData(NotificationsKey)?.toMutableList() ?: mutableListOf()
+                result.putUserData(
+                    NotificationsKey,
+                    notifications + SimpleNotification("Successfully generated ${report.id} at ${filePath.toUri()}")
+                )
             }
         }
     }
 }
+
+val NotificationsKey = Key<List<Notification>>("dev.detekt.notification")
