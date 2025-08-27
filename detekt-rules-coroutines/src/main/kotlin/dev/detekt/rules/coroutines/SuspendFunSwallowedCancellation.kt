@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.rules.coroutines
+package dev.detekt.rules.coroutines
 
 import com.intellij.psi.PsiElement
 import dev.detekt.api.Config
@@ -6,7 +6,7 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.rules.coroutines.utils.CoroutineCallableIds
+import dev.detekt.rules.coroutines.utils.CoroutineCallableIds
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaCompoundVariableAccessCall
