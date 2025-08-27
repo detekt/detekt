@@ -1,7 +1,7 @@
 package dev.detekt.rules.performance
 
 import dev.detekt.api.Config
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
 import org.junit.jupiter.api.Test
 
@@ -106,7 +106,8 @@ class UnnecessaryPartOfBinaryExpressionSpec {
         """.trimIndent()
 
         val findings = UnnecessaryPartOfBinaryExpression(Config.empty).lint(code)
-        assertThat(findings).hasSize(1).hasTextLocations("baz && baz")
+        assertThat(findings).singleElement()
+            .hasTextLocation("baz && baz")
     }
 
     @Test

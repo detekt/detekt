@@ -1,10 +1,10 @@
 package dev.detekt.rules.performance
 
 import dev.detekt.api.Config
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.KotlinCoreEnvironmentTest
 import dev.detekt.test.utils.KotlinEnvironmentContainer
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
@@ -23,8 +23,8 @@ class SpreadOperatorSpec(val env: KotlinEnvironmentContainer) {
             val testVal = foo(xs = *xsArray)
         """.trimIndent()
         val actual = subject.lintWithContext(env, code)
-        assertThat(actual).hasSize(1)
-        assertThat(actual.first().message).isEqualTo(errorMessage)
+        assertThat(actual).singleElement()
+            .hasMessage(errorMessage)
     }
 
     @Test
@@ -35,8 +35,8 @@ class SpreadOperatorSpec(val env: KotlinEnvironmentContainer) {
             val testVal = foo(*xsArray)
         """.trimIndent()
         val actual = subject.lintWithContext(env, code)
-        assertThat(actual).hasSize(1)
-        assertThat(actual.first().message).isEqualTo(errorMessage)
+        assertThat(actual).singleElement()
+            .hasMessage(errorMessage)
     }
 
     @Test

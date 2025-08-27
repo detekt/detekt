@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import dev.detekt.test.TestConfig
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.KotlinCoreEnvironmentTest
 import dev.detekt.test.utils.KotlinEnvironmentContainer
@@ -53,7 +53,12 @@ class ForbiddenNamedParamSpec(val env: KotlinEnvironmentContainer) {
             TestConfig(METHODS to listOf("kotlin.io.println"))
         ).lintWithContext(env, code)
         assertThat(findings).hasSize(3)
-        assertThat(findings).hasTextLocations(17 to 38, 43 to 63, 68 to 90)
+        assertThat(findings).element(0)
+            .hasTextLocation(17 to 38)
+        assertThat(findings).element(1)
+            .hasTextLocation(43 to 63)
+        assertThat(findings).element(2)
+            .hasTextLocation(68 to 90)
     }
 
     @Test
@@ -76,11 +81,16 @@ class ForbiddenNamedParamSpec(val env: KotlinEnvironmentContainer) {
             )
         ).lintWithContext(env, code)
         assertThat(findings).hasSize(3)
-        assertThat(findings).hasTextLocations(17 to 38, 43 to 63, 68 to 90)
-        assertThat(findings[0]).hasMessage(
-            "The method `kotlin.io.println` has been forbidden from using named param: " +
-                "As it is self explanatory"
-        )
+        assertThat(findings).element(0)
+            .hasTextLocation(17 to 38)
+            .hasMessage(
+                "The method `kotlin.io.println` has been forbidden from using named param: " +
+                    "As it is self explanatory"
+            )
+        assertThat(findings).element(1)
+            .hasTextLocation(43 to 63)
+        assertThat(findings).element(2)
+            .hasTextLocation(68 to 90)
     }
 
     @Test
@@ -137,8 +147,8 @@ class ForbiddenNamedParamSpec(val env: KotlinEnvironmentContainer) {
         val findings = ForbiddenNamedParam(
             TestConfig(METHODS to listOf("kotlin.math.atan2(kotlin.Double, kotlin.Double)"))
         ).lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings[0]).hasSourceLocation(3, 16)
+        assertThat(findings).singleElement()
+            .hasStartSourceLocation(3, 16)
     }
 
     @Test
@@ -170,7 +180,8 @@ class ForbiddenNamedParamSpec(val env: KotlinEnvironmentContainer) {
         val methodName = "com.example.arrayMethod(kotlin.Array)"
         val findings = ForbiddenNamedParam(TestConfig(METHODS to listOf(methodName)))
             .lintWithContext(env, code)
-        assertThat(findings).singleElement().hasStartSourceLocation(6, 13)
+        assertThat(findings).singleElement()
+            .hasStartSourceLocation(6, 13)
     }
 
     @Test
@@ -187,7 +198,8 @@ class ForbiddenNamedParamSpec(val env: KotlinEnvironmentContainer) {
         val methodName = "com.example.varargMethod(vararg kotlin.Any)"
         val findings = ForbiddenNamedParam(TestConfig(METHODS to listOf(methodName)))
             .lintWithContext(env, code)
-        assertThat(findings).singleElement().hasStartSourceLocation(6, 13)
+        assertThat(findings).singleElement()
+            .hasStartSourceLocation(6, 13)
     }
 
     @Test
@@ -210,7 +222,8 @@ class ForbiddenNamedParamSpec(val env: KotlinEnvironmentContainer) {
             "com.example.TestClass.Companion.staticMethod(kotlin.Int)"
         val findings = ForbiddenNamedParam(TestConfig(METHODS to listOf(methodName)))
             .lintWithContext(env, code)
-        assertThat(findings).singleElement().hasStartSourceLocation(11, 15)
+        assertThat(findings).singleElement()
+            .hasStartSourceLocation(11, 15)
     }
 
     @Test

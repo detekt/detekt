@@ -3,6 +3,11 @@ public final class dev/detekt/psi/AllowedExceptionNamePatternKt {
 }
 
 public final class dev/detekt/psi/AnnotationExcluder {
+	public fun <init> (Lorg/jetbrains/kotlin/psi/KtFile;Ljava/util/List;)V
+	public final fun shouldExclude (Ljava/util/List;)Z
+}
+
+public final class dev/detekt/psi/AnnotationExcluderBindingContext {
 	public fun <init> (Lorg/jetbrains/kotlin/psi/KtFile;Ljava/util/List;Lorg/jetbrains/kotlin/resolve/BindingContext;)V
 	public final fun shouldExclude (Ljava/util/List;)Z
 }

@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import dev.detekt.api.Config
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -18,7 +18,8 @@ class RangeUntilInsteadOfRangeToSpec {
             }
         """.trimIndent()
         val findings = subject.lint(code)
-        assertThat(findings).singleElement().hasMessage("`..` call can be replaced with `..<`")
+        assertThat(findings).singleElement()
+            .hasMessage("`..` call can be replaced with `..<`")
     }
 
     @Test
@@ -69,6 +70,7 @@ class RangeUntilInsteadOfRangeToSpec {
     fun `reports for 'rangeTo'`() {
         val code = "val r = 0.rangeTo(10 - 1)"
         val findings = subject.lint(code)
-        assertThat(findings).singleElement().hasMessage("`rangeTo` call can be replaced with `..<`")
+        assertThat(findings).singleElement()
+            .hasMessage("`rangeTo` call can be replaced with `..<`")
     }
 }

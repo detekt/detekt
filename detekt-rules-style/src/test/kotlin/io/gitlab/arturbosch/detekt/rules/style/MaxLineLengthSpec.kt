@@ -2,11 +2,11 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import dev.detekt.api.Config
 import dev.detekt.test.TestConfig
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.assertj.core.api.Assertions.assertThat as doAssert
 
 private const val MAX_LINE_LENGTH = "maxLineLength"
 private const val EXCLUDE_PACKAGE_STATEMENTS = "excludePackageStatements"
@@ -109,8 +109,8 @@ class MaxLineLengthSpec {
             val rule = MaxLineLength(Config.empty)
 
             val findings = rule.lint(code)
-            val locations = findings.map { it.entity.signature.substringAfterLast('$') }
-            doAssert(locations).allSatisfy { doAssert(it).isNotBlank() }
+            assertThat(findings).hasSize(3)
+                .allSatisfy { assertThat(it.entity.signature.substringAfterLast('$')).isNotBlank() }
         }
 
         @Test
@@ -424,7 +424,10 @@ class MaxLineLengthSpec {
             """.trimIndent()
         )
         assertThat(findings).hasSize(2)
-        assertThat(findings).hasTextLocations(40 to 97, 98 to 157)
+        assertThat(findings).element(0)
+            .hasTextLocation(40 to 97)
+        assertThat(findings).element(1)
+            .hasTextLocation(98 to 157)
     }
 
     @Test
@@ -443,8 +446,8 @@ class MaxLineLengthSpec {
                 // that is the right length
             """.trimIndent()
         )
-        assertThat(findings).hasSize(1)
-        assertThat(findings).hasTextLocations(22 to 96)
+        assertThat(findings).singleElement()
+            .hasTextLocation(22 to 96)
     }
 
     @Test
@@ -477,11 +480,13 @@ class MaxLineLengthSpec {
                 }
             """.trimIndent()
         )
-        assertThat(findings).hasTextLocations(
-            "    project.tasks.register(\"veryVeryVeryVeryVeryVeryLongName\${part}WithSuffix1\")",
-            "    project.tasks.register(\"veryVeryVeryVeryVeryVeryLongName\${part}WithSuffix2\") {",
-            "        .register(\"veryVeryVeryVeryVeryVeryLongName\${part}WithSuffix3\") {",
-        )
+        assertThat(findings).hasSize(3)
+        assertThat(findings).element(0)
+            .hasTextLocation("    project.tasks.register(\"veryVeryVeryVeryVeryVeryLongName\${part}WithSuffix1\")")
+        assertThat(findings).element(1)
+            .hasTextLocation("    project.tasks.register(\"veryVeryVeryVeryVeryVeryLongName\${part}WithSuffix2\") {")
+        assertThat(findings).element(2)
+            .hasTextLocation("        .register(\"veryVeryVeryVeryVeryVeryLongName\${part}WithSuffix3\") {")
     }
 
     @Nested

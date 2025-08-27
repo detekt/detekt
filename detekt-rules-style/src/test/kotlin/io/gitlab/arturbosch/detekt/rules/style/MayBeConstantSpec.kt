@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import dev.detekt.api.Config
 import dev.detekt.api.SourceLocation
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -87,9 +87,8 @@ class MayBeConstantSpec {
                 val x = 1
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings).hasSize(1).hasStartSourceLocations(
-                SourceLocation(1, 5)
-            )
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(SourceLocation(1, 5))
         }
 
         @Test
@@ -98,9 +97,8 @@ class MayBeConstantSpec {
                 @JvmField val x = 1
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings).hasSize(1).hasStartSourceLocations(
-                SourceLocation(1, 15)
-            )
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(SourceLocation(1, 15))
         }
 
         @Test
@@ -111,9 +109,8 @@ class MayBeConstantSpec {
                 }
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings).hasSize(1).hasStartSourceLocations(
-                SourceLocation(2, 19)
-            )
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(SourceLocation(2, 19))
         }
 
         @Test
@@ -126,9 +123,8 @@ class MayBeConstantSpec {
                 }
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings).hasSize(1).hasStartSourceLocations(
-                SourceLocation(3, 13)
-            )
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(SourceLocation(3, 13))
         }
     }
 
@@ -143,9 +139,8 @@ class MayBeConstantSpec {
                 }
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings).hasSize(1).hasStartSourceLocations(
-                SourceLocation(3, 9)
-            )
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(SourceLocation(3, 9))
         }
 
         @Test
@@ -159,9 +154,8 @@ class MayBeConstantSpec {
                 }
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings).hasSize(1).hasStartSourceLocations(
-                SourceLocation(4, 13)
-            )
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(SourceLocation(4, 13))
         }
 
         @Test
@@ -173,9 +167,8 @@ class MayBeConstantSpec {
                 }
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings).hasSize(1).hasStartSourceLocations(
-                SourceLocation(3, 9)
-            )
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(SourceLocation(3, 9))
         }
 
         @Test
@@ -187,9 +180,8 @@ class MayBeConstantSpec {
                 }
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings).hasSize(1).hasStartSourceLocations(
-                SourceLocation(3, 9)
-            )
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(SourceLocation(3, 9))
         }
 
         @Test
@@ -203,9 +195,8 @@ class MayBeConstantSpec {
                 }
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings).hasSize(1).hasStartSourceLocations(
-                SourceLocation(5, 9)
-            )
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(SourceLocation(5, 9))
         }
 
         @Test
@@ -217,9 +208,8 @@ class MayBeConstantSpec {
                 }
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings).hasSize(1).hasStartSourceLocations(
-                SourceLocation(3, 17)
-            )
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(SourceLocation(3, 17))
         }
     }
 
@@ -361,11 +351,13 @@ class MayBeConstantSpec {
                 }
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings).hasSize(3).hasStartSourceLocations(
-                SourceLocation(4, 13),
-                SourceLocation(7, 17),
-                SourceLocation(11, 13)
-            )
+            assertThat(findings).hasSize(3)
+            assertThat(findings).element(0)
+                .hasStartSourceLocation(4, 13)
+            assertThat(findings).element(1)
+                .hasStartSourceLocation(7, 17)
+            assertThat(findings).element(2)
+                .hasStartSourceLocation(11, 13)
         }
     }
 }

@@ -1,7 +1,7 @@
 package dev.detekt.rules.documentation
 
 import dev.detekt.api.Config
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -35,10 +35,11 @@ class DeprecatedBlockTagSpec {
 
         @Test
         fun `correct message`() {
-            assertThat(subject.lint(code)).singleElement().hasMessage(
-                "@deprecated tag block does not properly report " +
-                    "deprecation in Kotlin, use @Deprecated annotation instead"
-            )
+            assertThat(subject.lint(code)).singleElement()
+                .hasMessage(
+                    "@deprecated tag block does not properly report " +
+                        "deprecation in Kotlin, use @Deprecated annotation instead"
+                )
         }
     }
 

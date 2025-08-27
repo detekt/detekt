@@ -1,7 +1,7 @@
 package dev.detekt.rules.ruleauthors
 
 import dev.detekt.api.Config
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
 import org.junit.jupiter.api.Test
 
@@ -54,8 +54,9 @@ internal class UseEntityAtNameSpec {
             }
         """.trimIndent()
         val findings = rule.lint(code, compile = false)
-        assertThat(findings).singleElement().hasMessage("Recommended to use Entity.atName(element) instead.")
-        assertThat(findings).hasTextLocations("from")
+        assertThat(findings).singleElement()
+            .hasMessage("Recommended to use Entity.atName(element) instead.")
+            .hasTextLocation("from")
     }
 
     @Test
@@ -71,8 +72,9 @@ internal class UseEntityAtNameSpec {
             }
         """.trimIndent()
         val findings = rule.lint(code, compile = false)
-        assertThat(findings).singleElement().hasMessage("Recommended to use Entity.atName(element) instead.")
-        assertThat(findings).hasTextLocations("from")
+        assertThat(findings).singleElement()
+            .hasMessage("Recommended to use Entity.atName(element) instead.")
+            .hasTextLocation("from")
     }
 
     @Test
@@ -88,8 +90,9 @@ internal class UseEntityAtNameSpec {
             }
         """.trimIndent()
         val findings = rule.lint(code, compile = false)
-        assertThat(findings).singleElement().hasMessage("Recommended to use Entity.atName(element) instead.")
-        assertThat(findings).hasTextLocations("from")
+        assertThat(findings).singleElement()
+            .hasMessage("Recommended to use Entity.atName(element) instead.")
+            .hasTextLocation("from")
     }
 
     @Test
@@ -110,7 +113,7 @@ internal class UseEntityAtNameSpec {
         val findings = rule.lint(code, compile = false)
         assertThat(findings).singleElement()
             .hasMessage("Recommended to use Entity.atName(element.getStrictParentOfType<KtClass>()) instead.")
-        assertThat(findings).hasTextLocations("from")
+            .hasTextLocation("from")
     }
 
     @Test
@@ -127,8 +130,9 @@ internal class UseEntityAtNameSpec {
             }
         """.trimIndent()
         val findings = rule.lint(code, compile = false)
-        assertThat(findings).singleElement().hasMessage("Recommended to use Entity.atName(element) instead.")
-        assertThat(findings).hasTextLocations("from")
+        assertThat(findings).singleElement()
+            .hasMessage("Recommended to use Entity.atName(element) instead.")
+            .hasTextLocation("from")
     }
 
     @Test

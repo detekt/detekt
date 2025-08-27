@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import dev.detekt.api.Config
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
@@ -161,6 +161,22 @@ class UnusedParameterSpec {
 
             assertThat(subject.lint(code)).hasSize(1)
         }
+
+        @Test
+        fun `does not report single parameters if they used in guard clause`() {
+            val code = """
+                fun function(used: Boolean) {
+                    val a = '1'.digitToInt() + 1
+                    val c = false
+                    when (a) {
+                        1 if used -> Unit
+                        2 -> if (c) Unit else Unit
+                    }
+                }
+            """.trimIndent()
+
+            assertThat(subject.lint(code)).isEmpty()
+        }
     }
 
     @Nested
@@ -182,8 +198,8 @@ class UnusedParameterSpec {
 
             val lint = subject.lint(code)
 
-            assertThat(lint).hasSize(1)
-            assertThat(lint[0].message).isEqualTo("Function parameter `unusedWithoutAnnotation` is unused.")
+            assertThat(lint).singleElement()
+                .hasMessage("Function parameter `unusedWithoutAnnotation` is unused.")
         }
 
         @Test
@@ -248,7 +264,8 @@ class UnusedParameterSpec {
 
             val lint = subject.lint(code)
 
-            assertThat(lint.first().message).startsWith("Function parameter")
+            assertThat(lint).singleElement()
+                .hasMessage("Function parameter `unused` is unused.")
         }
     }
 
@@ -306,7 +323,8 @@ class UnusedParameterSpec {
                     ) = 1
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).singleElement().hasStartSourceLocation(6, 9)
+            assertThat(subject.lint(code)).singleElement()
+                .hasStartSourceLocation(6, 9)
         }
     }
 
@@ -323,7 +341,8 @@ class UnusedParameterSpec {
                     println(modifier)
                 }
             """.trimIndent()
-            assertThat(subject.lint(code)).singleElement().hasStartSourceLocation(1, 9)
+            assertThat(subject.lint(code)).singleElement()
+                .hasStartSourceLocation(1, 9)
         }
 
         @Test

@@ -1,7 +1,7 @@
 package dev.detekt.rules.empty
 
 import dev.detekt.api.Config
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
 import org.junit.jupiter.api.Test
 
@@ -51,8 +51,8 @@ class EmptyClassBlockSpec {
     fun `reports the empty object body`() {
         val code = "object SomeObject {}"
         val findings = subject.lint(code)
-        assertThat(findings).hasSize(1)
-        assertThat(findings).hasTextLocations(18 to 20)
+        assertThat(findings).singleElement()
+            .hasTextLocation(18 to 20)
     }
 
     @Test

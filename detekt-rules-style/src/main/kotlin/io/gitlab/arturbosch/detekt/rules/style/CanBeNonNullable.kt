@@ -5,23 +5,28 @@ import dev.detekt.api.Config
 import dev.detekt.api.DetektVisitor
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
-import dev.detekt.api.RequiresFullAnalysis
+import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.psi.isAbstract
 import dev.detekt.psi.isNonNullCheck
 import dev.detekt.psi.isNullCheck
+import dev.detekt.psi.isNullable
 import dev.detekt.psi.isOpen
 import dev.detekt.psi.isOverride
-import org.jetbrains.kotlin.descriptors.CallableDescriptor
-import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
-import org.jetbrains.kotlin.descriptors.PropertyDescriptor
-import org.jetbrains.kotlin.descriptors.ValueParameterDescriptor
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.singleVariableAccessCall
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaFunctionSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaVariableSymbol
+import org.jetbrains.kotlin.analysis.api.types.KaTypeNullability
+import org.jetbrains.kotlin.analysis.api.types.KaTypeParameterType
+import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtExpression
@@ -51,14 +56,7 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
 import org.jetbrains.kotlin.psi.psiUtil.forEachDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.isFirstStatement
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.smartcasts.getKotlinTypeForComparison
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
-import org.jetbrains.kotlin.resolve.calls.util.getType
-import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
-import org.jetbrains.kotlin.types.KotlinType
-import org.jetbrains.kotlin.types.TypeUtils
-import org.jetbrains.kotlin.types.isNullable
+import org.jetbrains.kotlin.util.OperatorNameConventions
 
 /**
  * This rule inspects variables marked as nullable and reports which could be
@@ -130,7 +128,7 @@ class CanBeNonNullable(config: Config) :
         config,
         "Variable can be changed to non-nullable, as it is never set to null."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)
@@ -140,22 +138,22 @@ class CanBeNonNullable(config: Config) :
 
     @Suppress("TooManyFunctions")
     private inner class ParameterCheckVisitor : DetektVisitor() {
-        private val nullableParams = mutableMapOf<DeclarationDescriptor, NullableParam>()
+        private val nullableParams = mutableMapOf<KaVariableSymbol, NullableParam>()
 
         override fun visitNamedFunction(function: KtNamedFunction) {
             if (function.isOverride()) {
                 return
             }
 
-            val candidateDescriptors = mutableSetOf<DeclarationDescriptor>()
+            val candidateDescriptors = mutableSetOf<KaVariableSymbol>()
             function.valueParameters.asSequence()
                 .filter {
                     it.typeReference?.typeElement is KtNullableType
                 }
                 .mapNotNull { parameter ->
-                    bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, parameter]?.let {
-                        it to parameter
-                    }
+                    analyze(parameter) {
+                        parameter.symbol
+                    } to parameter
                 }
                 .forEach { (descriptor, param) ->
                     candidateDescriptors.add(descriptor)
@@ -169,7 +167,7 @@ class CanBeNonNullable(config: Config) :
                     ?.toList()
                     .orEmpty()
                 if (children.size == 1) {
-                    children.first().determineSingleExpression(candidateDescriptors)
+                    children.first().determineSingleExpression()
                 } else {
                     INELIGIBLE_SINGLE_EXPRESSION
                 }
@@ -189,7 +187,8 @@ class CanBeNonNullable(config: Config) :
                 // * The containing function only consists of a single non-null check on
                 //   the param, either via an if/when check or with a safe-qualified expression.
                 .filter {
-                    val onlyNonNullCheck = validSingleChildExpression && it.isNonNullChecked && !it.isNullChecked
+                    val onlyNonNullCheck =
+                        validSingleChildExpression && it.isNonNullChecked && !it.isNullChecked
                     it.isNonNullForced || it.isNullCheckReturnsUnit || onlyNonNullCheck
                 }
                 .forEach { nullableParam ->
@@ -203,11 +202,16 @@ class CanBeNonNullable(config: Config) :
         }
 
         override fun visitCallExpression(expression: KtCallExpression) {
-            val calleeName = expression.calleeExpression
-                .getResolvedCall(bindingContext)
-                ?.resultingDescriptor
-                ?.name
-                ?.toString()
+            val calleeName = expression.calleeExpression?.let {
+                analyze(it) {
+                    it.resolveToCall()
+                        ?.singleFunctionCallOrNull()
+                        ?.symbol
+                        ?.callableId
+                        ?.callableName
+                        ?.asString()
+                }
+            }
             // Check for whether a call to `checkNonNull()` or `requireNonNull()` has
             // been made.
             if (calleeName == REQUIRE_NOT_NULL_NAME || calleeName == CHECK_NOT_NULL_NAME) {
@@ -233,9 +237,15 @@ class CanBeNonNullable(config: Config) :
             val nullCheckedDescriptor = expression.subjectExpression
                 ?.collectDescendantsOfType<KtNameReferenceExpression>()
                 .orEmpty()
-                .mapNotNull { it.getResolvedCall(bindingContext) }
-                .filter { callDescriptor -> callDescriptor.resultingDescriptor.returnType?.isNullable() == true }
-                .mapNotNull { callDescriptor -> callDescriptor.resultingDescriptor as? ValueParameterDescriptor }
+                .mapNotNull {
+                    analyze(it) {
+                        it.resolveToCall()?.singleVariableAccessCall()
+                    }
+                }
+                .filter { callDescriptor ->
+                    callDescriptor.symbol.returnType.nullability != KaTypeNullability.NON_NULLABLE
+                }
+                .map { callDescriptor -> callDescriptor.symbol }
             val whenConditions = expression.entries.flatMap { it.conditions.asList() }
             if (nullCheckedDescriptor.isNotEmpty()) {
                 whenConditions.evaluateSubjectWhenExpression(expression, nullCheckedDescriptor)
@@ -275,12 +285,15 @@ class CanBeNonNullable(config: Config) :
         }
 
         override fun visitDotQualifiedExpression(expression: KtDotQualifiedExpression) {
-            val isExtensionForNullable = expression.getResolvedCall(bindingContext)
-                ?.resultingDescriptor
-                ?.extensionReceiverParameter
-                ?.type
-                ?.isMarkedNullable
-            if (isExtensionForNullable == true) {
+            val isExtensionForNullable = analyze(expression) {
+                expression.resolveToCall()
+                    ?.singleFunctionCallOrNull()
+                    ?.symbol
+                    ?.receiverParameter
+                    ?.returnType
+                    ?.nullability != KaTypeNullability.NON_NULLABLE
+            }
+            if (isExtensionForNullable) {
                 expression.receiverExpression
                     .getRootExpression()
                     ?.let { rootExpression ->
@@ -310,21 +323,16 @@ class CanBeNonNullable(config: Config) :
             return receiverExpression
         }
 
-        private fun KtExpression?.determineSingleExpression(candidateDescriptors: Set<DeclarationDescriptor>): Boolean =
+        private fun KtExpression?.determineSingleExpression(): Boolean =
             when (this) {
                 is KtReturnExpression -> INELIGIBLE_SINGLE_EXPRESSION
                 is KtIfExpression -> ELIGIBLE_SINGLE_EXPRESSION
-                is KtDotQualifiedExpression -> {
-                    this.getRootExpression()
-                        .getResolvedCall(bindingContext)
-                        ?.resultingDescriptor
-                        ?.let(candidateDescriptors::contains) == true
-                }
+                is KtDotQualifiedExpression -> INELIGIBLE_SINGLE_EXPRESSION
                 is KtCallExpression -> INELIGIBLE_SINGLE_EXPRESSION
                 else -> ELIGIBLE_SINGLE_EXPRESSION
             }
 
-        private fun KtElement?.getNonNullChecks(parentOperatorToken: IElementType?): List<CallableDescriptor>? =
+        private fun KtElement?.getNonNullChecks(parentOperatorToken: IElementType?): List<KaVariableSymbol>? =
             when (this) {
                 is KtBinaryExpression -> evaluateBinaryExpression(parentOperatorToken)
                 is KtIsExpression -> evaluateIsExpression()
@@ -351,10 +359,10 @@ class CanBeNonNullable(config: Config) :
         // any function params have been checked for being a non-nullable type.
         private fun KtBinaryExpression.evaluateBinaryExpression(
             parentOperatorToken: IElementType?,
-        ): List<CallableDescriptor> {
+        ): List<KaVariableSymbol> {
             val leftExpression = left?.let { KtPsiUtil.safeDeparenthesize(it) }
             val rightExpression = right?.let { KtPsiUtil.safeDeparenthesize(it) }
-            val nonNullChecks = mutableListOf<CallableDescriptor>()
+            val nonNullChecks = mutableListOf<KaVariableSymbol>()
 
             if (isNullCheck()) {
                 getDescriptor(leftExpression, rightExpression)
@@ -369,17 +377,26 @@ class CanBeNonNullable(config: Config) :
             return nonNullChecks
         }
 
-        private fun getDescriptor(leftExpression: KtElement?, rightExpression: KtElement?): CallableDescriptor? =
+        private fun getDescriptor(
+            leftExpression: KtElement?,
+            rightExpression: KtElement?,
+        ): KaVariableSymbol? =
             when {
                 leftExpression is KtNameReferenceExpression -> leftExpression
                 rightExpression is KtNameReferenceExpression -> rightExpression
                 else -> null
-            }?.getResolvedCall(bindingContext)
-                ?.resultingDescriptor
+            }?.let {
+                analyze(it) {
+                    it.resolveToCall()?.singleVariableAccessCall()?.symbol
+                }
+            }
 
-        private fun KtIsExpression.evaluateIsExpression(): List<CallableDescriptor> {
-            val descriptor = this.leftHandSide.getResolvedCall(bindingContext)?.resultingDescriptor
-                ?: return emptyList()
+        private fun KtIsExpression.evaluateIsExpression(): List<KaVariableSymbol> {
+            val descriptor = analyze(this.leftHandSide) {
+                this@evaluateIsExpression.leftHandSide.resolveToCall()
+                    ?.singleVariableAccessCall()
+                    ?.symbol
+            } ?: return emptyList()
             return if (isNullableCheck(typeReference, isNegated)) {
                 nullableParams[descriptor]?.let { it.isNullChecked = true }
                 emptyList()
@@ -390,7 +407,7 @@ class CanBeNonNullable(config: Config) :
 
         private fun List<KtWhenCondition>.evaluateSubjectWhenExpression(
             expression: KtWhenExpression,
-            subjectDescriptors: List<CallableDescriptor>,
+            subjectDescriptors: List<KaVariableSymbol>,
         ) {
             var isNonNullChecked = false
             var isNullChecked = false
@@ -401,6 +418,7 @@ class CanBeNonNullable(config: Config) :
                             isNullChecked = true
                         }
                     }
+
                     is KtWhenConditionIsPattern -> {
                         if (isNullableCheck(whenCondition.typeReference, whenCondition.isNegated)) {
                             isNullChecked = true
@@ -426,21 +444,25 @@ class CanBeNonNullable(config: Config) :
         }
 
         private fun isNullableCheck(typeReference: KtTypeReference?, isNegated: Boolean): Boolean {
-            val isNullable = typeReference.isNullable(bindingContext)
+            typeReference ?: return false
+            val isNullable = analyze(typeReference) {
+                typeReference.type.nullability.isNullable
+            }
             return (isNullable && !isNegated) || (!isNullable && isNegated)
         }
 
         private fun KtExpression?.isValidElseExpression(): Boolean =
             this != null && this !is KtIfExpression && this !is KtWhenExpression
 
-        private fun KtTypeReference?.isNullable(bindingContext: BindingContext): Boolean =
-            this?.let { bindingContext[BindingContext.TYPE, it] }?.isMarkedNullable == true
-
-        private fun updateNullableParam(expression: KtExpression, updateCallback: (NullableParam) -> Unit) {
-            expression.getResolvedCall(bindingContext)
-                ?.resultingDescriptor
-                ?.let { nullableParams[it] }
-                ?.let(updateCallback)
+        private fun updateNullableParam(
+            expression: KtExpression,
+            updateCallback: (NullableParam) -> Unit,
+        ) {
+            analyze(expression) {
+                expression.resolveToCall()?.singleVariableAccessCall()?.let {
+                    nullableParams[it.symbol]
+                }?.let(updateCallback)
+            }
         }
     }
 
@@ -487,9 +509,15 @@ class CanBeNonNullable(config: Config) :
         override fun visitBinaryExpression(expression: KtBinaryExpression) {
             if (expression.operationToken == KtTokens.EQ) {
                 val fqName = expression.left
-                    ?.getResolvedCall(bindingContext)
-                    ?.resultingDescriptor
-                    ?.fqNameOrNull()
+                    ?.let {
+                        analyze(it) {
+                            it.resolveToCall()
+                                ?.singleVariableAccessCall()
+                                ?.symbol
+                                ?.callableId
+                                ?.asSingleFqName()
+                        }
+                    }
                 if (
                     fqName != null &&
                     candidateProps.containsKey(fqName) &&
@@ -504,67 +532,74 @@ class CanBeNonNullable(config: Config) :
             super.visitBinaryExpression(expression)
         }
 
-        /**
-         * Determines whether a type is nullable and can be made non-nullable; for most properties
-         * this is simply whether they are nullable, but for type parameters they can only be made
-         * non-nullable when explicitly marked nullable.
-         *
-         * Note that [KotlinType.isNullable] for type parameter types is true unless it inherits
-         * from a non-nullable type, e.g.:
-         * - nullable: <T> or <T : Any?>
-         * - non-nullable: <T : Any>
-         * But even if T is nullable, a property `val t: T` cannot be made into a non-nullable type.
-         */
-        private fun KotlinType.isNullableAndCanBeNonNullable(): Boolean =
-            if (TypeUtils.isTypeParameter(this)) isMarkedNullable else isNullable()
-
         private fun KtProperty.isCandidate(): Boolean {
             if (isOpen() || isAbstract() || containingClass()?.isInterface() == true) return false
+            val propertyType = this.typeReference ?: return false
 
-            val type = getKotlinTypeForComparison(bindingContext)
-            if (type?.isNullableAndCanBeNonNullable() != true) return false
+            analyze(propertyType) {
+                if (propertyType.type.nullability != KaTypeNullability.NULLABLE) return false
+            }
 
             val isSetToNonNullable = initializer?.isNullableType() != true &&
                 getter?.isNullableType() != true &&
                 delegate?.returnsNullable() != true
-            val cannotSetViaNonPrivateMeans = !isVar || (isPrivate() || (setter?.isPrivate() == true))
+            val cannotSetViaNonPrivateMeans =
+                !isVar || (isPrivate() || (setter?.isPrivate() == true))
             return isSetToNonNullable && cannotSetViaNonPrivateMeans
         }
 
         private fun KtPropertyDelegate?.returnsNullable(): Boolean {
-            val property = this?.parent as? KtProperty ?: return false
-            val propertyDescriptor =
-                bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, property] as? PropertyDescriptor
-            return propertyDescriptor?.getter?.let {
-                bindingContext[BindingContext.DELEGATED_PROPERTY_RESOLVED_CALL, it]
-                    ?.resultingDescriptor
-                    ?.returnType
-                    ?.isNullable() == true
-            } ?: false
+            val delegate = this ?: return true
+            return analyze(delegate) {
+                val functionSymbol = delegate
+                    .mainReference
+                    ?.resolveToSymbols()
+                    ?.filterIsInstance<KaFunctionSymbol>()
+                    ?.firstOrNull {
+                        it.callableId?.callableName == OperatorNameConventions.GET_VALUE
+                    }
+                functionSymbol?.run {
+                    if (returnType is KaTypeParameterType) {
+                        // todo<k2> ignoring some case which in pre k2 was passing as earlier
+                        //  using BindingContext.DELEGATED_PROPERTY_RESOLVED_CALL we were able to
+                        //  get the actual type of the implementation
+                        returnType.canBeNull
+                    } else {
+                        returnType.nullability != KaTypeNullability.NON_NULLABLE
+                    }
+                } ?: true
+            }
         }
 
         private fun KtExpression?.isNullableType(): Boolean =
             when (this) {
-                is KtConstantExpression -> {
-                    this.text == "null"
-                }
-                is KtIfExpression -> {
-                    this.then.isNullableType() || this.`else`.isNullableType()
-                }
                 is KtPropertyAccessor -> {
-                    (initializer?.getType(bindingContext)?.isNullable() == true) ||
-                        (
-                            bodyExpression
-                                ?.collectDescendantsOfType<KtReturnExpression>()
-                                ?.any { it.returnedExpression.isNullableType() } == true
-                            )
+                    if (initializer != null) {
+                        initializer?.let { initializer ->
+                            analyze(initializer) { initializer.isNullable(true) }
+                        } ?: true
+                    } else {
+                        bodyExpression
+                            ?.collectDescendantsOfType<KtReturnExpression>()
+                            ?.any { it.returnedExpression.isNullableType() } == true
+                    }
                 }
+
                 else -> {
                     // only consider types which can be made non-nullable as nullable to warn on
                     // cases where a field has declared type `T?` but is only assigned as `T`; here
                     // `T` should not be considered nullable to enforce that the field could be
                     // declared as just `T`
-                    this?.getType(bindingContext)?.isNullableAndCanBeNonNullable() == true
+                    this?.let {
+                        analyze(it) {
+                            val expressionType = it.expressionType
+                            if (expressionType is KaTypeParameterType) {
+                                expressionType.isMarkedNullable
+                            } else {
+                                this@isNullableType.isNullable(true)
+                            }
+                        }
+                    } ?: true
                 }
             }
     }

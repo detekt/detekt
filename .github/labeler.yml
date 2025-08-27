@@ -34,7 +34,7 @@ documentation:
 
 formatting:
   - changed-files:
-      - any-glob-to-any-file: ["detekt-formatting/src/**/*"]
+      - any-glob-to-any-file: ["detekt-rules-ktlint-wrapper/src/**/*"]
 
 gradle-plugin:
   - changed-files:
@@ -52,7 +52,7 @@ reports:
   - changed-files:
       - any-glob-to-any-file:
           [
-            "detekt-core/src/main/kotlin/io/gitlab/arturbosch/detekt/core/reporting/**/*",
+            "detekt-core/src/main/kotlin/dev/detekt/core/reporting/**/*",
           ]
 
 rules:
@@ -75,5 +75,5 @@ suppressors:
   - changed-files:
       - any-glob-to-any-file:
           [
-            "detekt-core/src/main/kotlin/io/gitlab/arturbosch/detekt/core/suppressors/**/*",
+            "detekt-core/src/main/kotlin/dev/detekt/core/suppressors/**/*",
           ]

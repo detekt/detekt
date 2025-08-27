@@ -6,8 +6,6 @@ plugins {
 }
 
 nexusPublishing {
-    packageGroup = "io.gitlab.arturbosch"
-
     repositories {
         create("sonatype") {
             nexusUrl = uri("https://ossrh-staging-api.central.sonatype.com/service/local/")
@@ -59,7 +57,7 @@ dependencies {
     releaseArtifacts(project(":detekt-compiler-plugin")) {
         targetConfiguration = "shadow" // com.github.jengelman.gradle.plugins.shadow.ShadowBasePlugin.CONFIGURATION_NAME
     }
-    releaseArtifacts(project(":detekt-formatting")) {
+    releaseArtifacts(project(":detekt-rules-ktlint-wrapper")) {
         targetConfiguration = Dependency.DEFAULT_CONFIGURATION
         isTransitive = false
     }

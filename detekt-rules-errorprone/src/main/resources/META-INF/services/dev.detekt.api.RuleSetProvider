@@ -1,1 +1,1 @@
-io.gitlab.arturbosch.detekt.rules.bugs.PotentialBugProvider
+dev.detekt.rules.bugs.PotentialBugProvider

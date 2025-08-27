@@ -83,11 +83,11 @@ See [reporting](introduction/reporting) docs for more details on configuring rep
 
 ### Adding more rule sets
 
-detekt itself provides a wrapper over [ktlint](https://github.com/pinterest/ktlint) as the `formatting` rule set
+detekt itself provides a wrapper over [ktlint](https://github.com/pinterest/ktlint) as the `ktlint` rule set
 which can be easily added to the Gradle configuration:
 
 ```gradle
 dependencies {
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:[detekt_version]")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-rules-ktlint-wrapper:[detekt_version]")
 }
 ```

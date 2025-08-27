@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import dev.detekt.api.Config
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -18,13 +18,16 @@ class ModifierOrderSpec {
         @Test
         fun `should report incorrectly ordered modifiers`() {
             subject.lint(bad1).let {
-                assertThat(it).singleElement().hasMessage("Modifier order should be: internal data")
+                assertThat(it).singleElement()
+                    .hasMessage("Modifier order should be: internal data")
             }
             subject.lint(bad2, compile = false).let {
-                assertThat(it).singleElement().hasMessage("Modifier order should be: private actual")
+                assertThat(it).singleElement()
+                    .hasMessage("Modifier order should be: private actual")
             }
             subject.lint(bad3, compile = false).let {
-                assertThat(it).singleElement().hasMessage("Modifier order should be: expect annotation")
+                assertThat(it).singleElement()
+                    .hasMessage("Modifier order should be: expect annotation")
             }
         }
 

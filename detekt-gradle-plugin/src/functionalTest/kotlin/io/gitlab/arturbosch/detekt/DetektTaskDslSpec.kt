@@ -467,7 +467,7 @@ class DetektTaskDslSpec {
     inner class `with an additional plugin` {
         private val config = """
             dependencies {
-               detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:$defaultDetektVersion")
+               detektPlugins("dev.detekt:ktlint-wrapper:$defaultDetektVersion")
             }
         """.trimIndent()
         private val builder = kotlin().dryRun()
@@ -480,8 +480,8 @@ class DetektTaskDslSpec {
         }
 
         @Test
-        fun `adds the formatting lib to the project dependencies`() {
-            assertThat(result.output).contains("io.gitlab.arturbosch.detekt:detekt-formatting:$defaultDetektVersion")
+        fun `adds the ktlint-wrapper lib to the project dependencies`() {
+            assertThat(result.output).contains("dev.detekt:ktlint-wrapper:$defaultDetektVersion")
         }
     }
 
@@ -505,7 +505,7 @@ class DetektTaskDslSpec {
 
         @Test
         fun `adds the custom detekt version to the dependencies`() {
-            assertThat(result.output).contains("io.gitlab.arturbosch.detekt:detekt-cli:$customVersion")
+            assertThat(result.output).contains("dev.detekt:detekt-cli:$customVersion")
         }
     }
 

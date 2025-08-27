@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import dev.detekt.api.Config
 import dev.detekt.api.SourceLocation
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.KotlinCoreEnvironmentTest
 import dev.detekt.test.utils.KotlinEnvironmentContainer
@@ -290,7 +290,8 @@ class UnusedPrivateFunctionSpec(val env: KotlinEnvironmentContainer) {
 
             val lint = subject.lintWithContext(env, code)
 
-            assertThat(lint.first().message).startsWith("Private function")
+            assertThat(lint).singleElement()
+                .hasMessage("Private function `unusedFunction` is unused.")
         }
     }
 
@@ -314,8 +315,8 @@ class UnusedPrivateFunctionSpec(val env: KotlinEnvironmentContainer) {
 
             val findings = subject.lintWithContext(env, code)
 
-            assertThat(findings).hasSize(1)
-            assertThat(findings[0].message).isEqualTo("Private function `foo` is unused.")
+            assertThat(findings).singleElement()
+                .hasMessage("Private function `foo` is unused.")
         }
 
         @Test
@@ -439,11 +440,8 @@ class UnusedPrivateFunctionSpec(val env: KotlinEnvironmentContainer) {
                         val answer = A(1, 1)
                     }
                 """.trimIndent()
-                assertThat(subject.lintWithContext(env, code))
-                    .hasSize(1)
-                    .hasStartSourceLocations(
-                        SourceLocation(3, 30)
-                    )
+                assertThat(subject.lintWithContext(env, code)).singleElement()
+                    .hasStartSourceLocation(SourceLocation(3, 30))
             }
 
             @Test
@@ -455,11 +453,8 @@ class UnusedPrivateFunctionSpec(val env: KotlinEnvironmentContainer) {
                     fun answer() = A()(9)
                     val answer = answer()
                 """.trimIndent()
-                assertThat(subject.lintWithContext(env, code))
-                    .hasSize(1)
-                    .hasStartSourceLocations(
-                        SourceLocation(3, 24)
-                    )
+                assertThat(subject.lintWithContext(env, code)).singleElement()
+                    .hasStartSourceLocation(SourceLocation(3, 24))
             }
 
             @Test
@@ -472,11 +467,8 @@ class UnusedPrivateFunctionSpec(val env: KotlinEnvironmentContainer) {
                     fun answer() = A()(nullableInt)
                     val answer = answer()
                 """.trimIndent()
-                assertThat(subject.lintWithContext(env, code))
-                    .hasSize(1)
-                    .hasStartSourceLocations(
-                        SourceLocation(2, 24)
-                    )
+                assertThat(subject.lintWithContext(env, code)).singleElement()
+                    .hasStartSourceLocation(SourceLocation(2, 24))
             }
 
             @Test
@@ -691,9 +683,8 @@ class UnusedPrivateFunctionSpec(val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
-            assertThat(findings).hasSize(1).hasStartSourceLocations(
-                SourceLocation(3, 30),
-            )
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(SourceLocation(3, 30),)
         }
     }
 
@@ -927,7 +918,8 @@ class UnusedPrivateFunctionSpec(val env: KotlinEnvironmentContainer) {
                     private fun foo() = 1
                 }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code)).singleElement().hasStartSourceLocation(5, 17)
+            assertThat(subject.lintWithContext(env, code)).singleElement()
+                .hasStartSourceLocation(5, 17)
         }
     }
 }

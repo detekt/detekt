@@ -6,10 +6,10 @@ import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.RequiresFullAnalysis
 import dev.detekt.api.Rule
 import dev.detekt.api.RuleSet
+import dev.detekt.core.suppressors.isSuppressedBy
 import dev.detekt.test.utils.KotlinAnalysisApiEngine
 import dev.detekt.test.utils.KotlinEnvironmentContainer
 import dev.detekt.test.utils.compileContentForTest
-import io.gitlab.arturbosch.detekt.core.suppressors.isSuppressedBy
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.cli.jvm.config.javaSourceRoots
 import org.jetbrains.kotlin.config.LanguageVersionSettings
@@ -40,6 +40,7 @@ fun Rule.lint(
     }
     val ktFile = compileContentForTest(content)
     return visitFile(ktFile, languageVersionSettings = languageVersionSettings).filterSuppressed(this)
+        .sortedWith(findingComparator)
 }
 
 fun <T> T.lintWithContext(
@@ -63,6 +64,7 @@ fun <T> T.lintWithContext(
     setBindingContext(environment.createBindingContext(listOf(ktFile) + additionalKtFiles))
 
     return visitFile(ktFile, languageVersionSettings).filterSuppressed(this)
+        .sortedWith(findingComparator)
 }
 
 fun <T> T.lintWithContext(
@@ -78,7 +80,7 @@ fun <T> T.lintWithContext(
         javaSourceRoots = environment.configuration.javaSourceRoots.map(::Path),
         allowCompilationErrors = allowCompilationErrors
     )
-    return visitFile(ktFile, languageVersionSettings).filterSuppressed(this)
+    return visitFile(ktFile, languageVersionSettings).filterSuppressed(this).sortedWith(findingComparator)
 }
 
 fun Rule.lint(
@@ -92,6 +94,7 @@ fun Rule.lint(
         "${this.ruleName} requires Analysis Api so you should use lintWithContext instead of lint"
     }
     return visitFile(ktFile, languageVersionSettings = languageVersionSettings).filterSuppressed(this)
+        .sortedWith(findingComparator)
 }
 
 private fun List<Finding>.filterSuppressed(rule: Rule): List<Finding> =
@@ -103,3 +106,5 @@ private val Rule.aliases: Set<String> get() = config.valueOrDefault(Config.ALIAS
 
 private fun RuntimeException.isNoMatchingOutputFiles() =
     message?.contains("Compilation produced no matching output files") == true
+
+private val findingComparator = compareBy<Finding>({ it.location.source }, { it.location.endSource })

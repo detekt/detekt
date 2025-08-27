@@ -10,8 +10,6 @@ include("detekt-api")
 include("detekt-cli")
 include("detekt-compiler-plugin")
 include("detekt-core")
-include("detekt-formatting")
-include("detekt-formatting:ktlint-repackage")
 include("detekt-generator")
 includeBuild("detekt-gradle-plugin")
 include("detekt-kotlin-analysis-api")
@@ -30,12 +28,15 @@ include("detekt-rules-documentation")
 include("detekt-rules-empty")
 include("detekt-rules-errorprone")
 include("detekt-rules-exceptions")
+include("detekt-rules-ktlint-wrapper")
+include("detekt-rules-ktlint-wrapper:ktlint-repackage")
 include("detekt-rules-libraries")
 include("detekt-rules-naming")
 include("detekt-rules-performance")
 include("detekt-rules-ruleauthors")
 include("detekt-rules-style")
 include("detekt-test")
+include("detekt-test-assertj")
 include("detekt-test-utils")
 include("detekt-tooling")
 include("detekt-utils")
@@ -44,12 +45,12 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
 
 plugins {
-    id("com.gradle.develocity") version "4.1"
+    id("com.gradle.develocity") version "4.1.1"
     id("com.gradle.common-custom-user-data-gradle-plugin") version "2.3"
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
     id("com.autonomousapps.build-health") version "2.19.0"
     // Kotlin plugin must be added to classpath to support build-health analysis
-    id("org.jetbrains.kotlin.jvm") version "2.2.0" apply false
+    id("org.jetbrains.kotlin.jvm") version "2.2.10" apply false
 }
 
 val isCiBuild = providers.environmentVariable("CI").isPresent

@@ -38,7 +38,7 @@ class RuleCollectorSpec {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = ["Rule", "FormattingRule", "EmptyRule"])
+    @ValueSource(strings = ["Rule", "KtlintRule", "EmptyRule"])
     fun `throws when a class extends Rule but has no valid documentation`(rule: String) {
         val code = "class SomeRandomClass : $rule"
         assertThatExceptionOfType(InvalidDocumentationException::class.java)
