@@ -1,10 +1,12 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import dev.detekt.api.Config
-import dev.detekt.test.assertThat
+import dev.detekt.api.Finding
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.KotlinCoreEnvironmentTest
 import dev.detekt.test.utils.KotlinEnvironmentContainer
+import org.assertj.core.api.Assertions.tuple
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -460,5 +462,170 @@ class UnnecessaryInnerClassSpec(val env: KotlinEnvironmentContainer) {
         """.trimIndent()
 
         assertThat(subject.lintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
+    fun `#7598 - does not report inner using class param in instance variable`() {
+        val code = """
+            class A(val input: Int) {
+               inner class B() {
+                  val c = C()
+               }
+            
+               inner class C() {
+                  val processedInput = input + 1
+               }
+            }
+        """.trimIndent()
+
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
+    fun `#7598 - does not report inner using class param in init block`() {
+        val code = """
+            class A(val input: Int) {
+                inner class B() {
+                    val c = C()
+                }
+        
+                inner class C() {
+                    init {
+                        val processedInput = input + 1
+                    }
+                }
+            }
+        """.trimIndent()
+
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
+
+    @Nested
+    inner class `inner reffering other inner class` {
+        @Test
+        fun `reports with nested empty classes`() {
+            val code = """
+                class A {
+                    inner class B {
+                        inner class C
+                    }
+                }
+            """.trimIndent()
+
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings)
+                .hasSize(2)
+                .map(Finding::message)
+                .contains(
+                    tuple("Class 'C' does not require `inner` keyword."),
+                    tuple("Class 'B' does not require `inner` keyword."),
+                )
+        }
+
+        @Test
+        fun `reports when only outer ctor is used`() {
+            val code = """
+                class A {
+                    inner class B {
+                        val a = A()
+                    }
+                }
+            """.trimIndent()
+
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+        }
+
+        @Test
+        fun `does not report when inner class refers other inner class which is required`() {
+            val code = """
+                class A {
+                    val foo = "BAR"
+                    inner class B {
+                        val c = C()
+                    }
+    
+                    inner class C(val fizz: String = foo)
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report when inner class refers other inner class in init block`() {
+            val code = """
+                class A {
+                    val foo = "BAR"
+                    inner class B {
+                        init {
+                            val c = C()
+                        }
+                    }
+    
+                    inner class C(val fizz: String = foo)
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report when inner class which refers other inner class C which refers inner class D which is required`() {
+            val code = """
+                class A {
+                    val foo = "BAR"
+                    inner class B {
+                        val c = C()
+                    }
+    
+                    inner class C {
+                        val d = D()
+                    }
+    
+                    inner class D(val fizz: String = foo)
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report when inner class refers empty inner class`() {
+            val code = """
+                class A {
+                    val foo = "BAR"
+                    inner class B {
+                        val c = C()
+                    }
+    
+                    inner class C
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code)).singleElement()
+                .hasMessage("Class 'C' does not require `inner` keyword.")
+        }
+
+        @Test
+        fun `does report when nested usage of inner class for not required grand parent inner class`() {
+            val code = """
+                class A {
+                    // this inner is not required as C and D can be internally access the each other
+                    // constructors
+                    inner class B {
+                        inner class C {
+                            val d = D()
+                        }
+    
+                        inner class D {
+                            val c = C()
+                        }
+                    }
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        }
     }
 }

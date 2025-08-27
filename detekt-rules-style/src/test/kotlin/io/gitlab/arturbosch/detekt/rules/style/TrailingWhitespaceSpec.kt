@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import dev.detekt.api.Config
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -16,28 +16,32 @@ class TrailingWhitespaceSpec {
         fun `reports a line just with a whitespace`() {
             val code = " "
             val findings = subject.lint(code)
-            assertThat(findings).hasTextLocations(0 to 1)
+            assertThat(findings).singleElement()
+                .hasTextLocation(0 to 1)
         }
 
         @Test
         fun `reports a commented line with a whitespace at the end`() {
             val code = "// A comment "
             val findings = subject.lint(code)
-            assertThat(findings).hasTextLocations(12 to 13)
+            assertThat(findings).singleElement()
+                .hasTextLocation(12 to 13)
         }
 
         @Test
         fun `reports a class declaration with a whitespace at the end`() {
             val code = "  class TrailingWhitespacePositive { \n  }"
             val findings = subject.lint(code)
-            assertThat(findings).hasTextLocations(36 to 37)
+            assertThat(findings).singleElement()
+                .hasTextLocation(36 to 37)
         }
 
         @Test
         fun `reports a print statement with a tab at the end`() {
             val code = "fun test() {\n\t\tprintln(\"A message\")\t\n}"
             val findings = subject.lint(code)
-            assertThat(findings).hasTextLocations(35 to 36)
+            assertThat(findings).singleElement()
+                .hasTextLocation(35 to 36)
         }
     }
 

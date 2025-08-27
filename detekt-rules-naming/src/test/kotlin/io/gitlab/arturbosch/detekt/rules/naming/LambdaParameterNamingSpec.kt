@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
 import dev.detekt.api.Config
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
 import org.junit.jupiter.api.Test
 
@@ -12,9 +12,8 @@ class LambdaParameterNamingSpec {
         val code = """
             val a: (String) -> Unit = { HELLO_THERE -> Unit }
         """.trimIndent()
-        assertThat(LambdaParameterNaming(Config.empty).lint(code))
-            .hasSize(1)
-            .hasTextLocations("HELLO_THERE")
+        assertThat(LambdaParameterNaming(Config.empty).lint(code)).singleElement()
+            .hasTextLocation("HELLO_THERE")
     }
 
     @Test
@@ -22,9 +21,12 @@ class LambdaParameterNamingSpec {
         val code = """
             val a: (String, Int) -> Unit = { HI, HELLO_THERE -> Unit }
         """.trimIndent()
-        assertThat(LambdaParameterNaming(Config.empty).lint(code))
-            .hasSize(2)
-            .hasTextLocations("HI", "HELLO_THERE")
+        val findings = LambdaParameterNaming(Config.empty).lint(code)
+        assertThat(findings).hasSize(2)
+        assertThat(findings).element(0)
+            .hasTextLocation("HI")
+        assertThat(findings).element(1)
+            .hasTextLocation("HELLO_THERE")
     }
 
     @Test
@@ -78,9 +80,8 @@ class LambdaParameterNamingSpec {
             data class Bar(val a: String)
             val a: (Bar) -> Unit = { (HELLO_THERE) -> Unit }
         """.trimIndent()
-        assertThat(LambdaParameterNaming(Config.empty).lint(code))
-            .hasSize(1)
-            .hasTextLocations("HELLO_THERE")
+        assertThat(LambdaParameterNaming(Config.empty).lint(code)).singleElement()
+            .hasTextLocation("HELLO_THERE")
     }
 
     @Test
@@ -89,9 +90,12 @@ class LambdaParameterNamingSpec {
             data class Bar(val a: String, val b: String)
             val a: (Bar) -> Unit = { (HI, HELLO_THERE) -> Unit }
         """.trimIndent()
-        assertThat(LambdaParameterNaming(Config.empty).lint(code))
-            .hasSize(2)
-            .hasTextLocations("HI", "HELLO_THERE")
+        val findings = LambdaParameterNaming(Config.empty).lint(code)
+        assertThat(findings).hasSize(2)
+        assertThat(findings).element(0)
+            .hasTextLocation("HI")
+        assertThat(findings).element(1)
+            .hasTextLocation("HELLO_THERE")
     }
 
     @Test

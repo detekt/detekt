@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import dev.detekt.test.TestConfig
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -394,7 +394,8 @@ class StringShouldBeRawStringSpec {
         """.trimIndent()
         val subject = StringShouldBeRawString(TestConfig(MAX_ESCAPED_CHARACTER_COUNT to 0))
         val findings = subject.lint(code)
-        assertThat(findings).singleElement().hasSourceLocation(5, 13)
+        assertThat(findings).singleElement()
+            .hasStartSourceLocation(5, 13)
     }
 
     @Test

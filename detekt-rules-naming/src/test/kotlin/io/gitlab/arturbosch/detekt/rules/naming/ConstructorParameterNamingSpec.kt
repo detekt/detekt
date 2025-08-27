@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
 import dev.detekt.api.Config
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -39,7 +39,8 @@ class ConstructorParameterNamingSpec {
         val code = """
             class C(val PARAM: String)
         """.trimIndent()
-        assertThat(ConstructorParameterNaming(Config.empty).lint(code)).hasTextLocations(8 to 25)
+        assertThat(ConstructorParameterNaming(Config.empty).lint(code)).singleElement()
+            .hasTextLocation(8 to 25)
     }
 
     @Test

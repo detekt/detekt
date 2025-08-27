@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import dev.detekt.api.Config
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.KotlinCoreEnvironmentTest
 import dev.detekt.test.utils.KotlinEnvironmentContainer
@@ -24,7 +24,7 @@ class UseOrEmptySpec(val env: KotlinEnvironmentContainer) {
             val findings = subject.lintWithContext(env, code)
             assertThat(findings).singleElement()
                 .hasMessage("This '?: emptyList()' can be replaced with 'orEmpty()' call")
-            assertThat(findings).singleElement().hasStartSourceLocation(2, 13)
+                .hasStartSourceLocation(2, 13)
         }
 
         @Test

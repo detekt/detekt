@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
 import dev.detekt.api.Config
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.KotlinCoreEnvironmentTest
 import dev.detekt.test.utils.KotlinEnvironmentContainer
@@ -62,8 +62,7 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinEnvironmentContainer) {
             val code = """data class O (var isDefault: Int)"""
             val findings = subject.lintWithContext(env, code)
 
-            assertThat(findings).hasSize(1)
-            assertThat(findings.first())
+            assertThat(findings).singleElement()
                 .hasMessage("Non-boolean properties shouldn't start with 'is' prefix. Actual type of isDefault: Int")
         }
 

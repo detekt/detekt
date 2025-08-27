@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
 import dev.detekt.api.Config
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.KotlinCoreEnvironmentTest
 import dev.detekt.test.utils.KotlinEnvironmentContainer
@@ -32,7 +32,8 @@ class NoNameShadowingSpec(val env: KotlinEnvironmentContainer) {
             }
         """.trimIndent()
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).singleElement().hasMessage("Name shadowed: j")
+        assertThat(findings).singleElement()
+            .hasMessage("Name shadowed: j")
     }
 
     @Test
@@ -44,7 +45,8 @@ class NoNameShadowingSpec(val env: KotlinEnvironmentContainer) {
             }
         """.trimIndent()
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).singleElement().hasMessage("Name shadowed: k")
+        assertThat(findings).singleElement()
+            .hasMessage("Name shadowed: k")
     }
 
     @Test
@@ -58,7 +60,8 @@ class NoNameShadowingSpec(val env: KotlinEnvironmentContainer) {
             }
         """.trimIndent()
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).singleElement().hasMessage("Name shadowed: it")
+        assertThat(findings).singleElement()
+            .hasMessage("Name shadowed: it")
     }
 
     @Test

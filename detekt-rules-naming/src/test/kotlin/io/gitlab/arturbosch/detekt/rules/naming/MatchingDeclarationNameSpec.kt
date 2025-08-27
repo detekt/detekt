@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.naming
 import com.intellij.psi.PsiFile
 import dev.detekt.api.Config
 import dev.detekt.test.TestConfig
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
 import dev.detekt.test.utils.compileContentForTest
 import dev.detekt.test.utils.internal.FakePsiFile
@@ -156,14 +156,16 @@ class MatchingDeclarationNameSpec {
         fun `should not pass for object declaration`() {
             val ktFile = compileContentForTest("object O", filename = "Objects.kt")
             val findings = MatchingDeclarationName(Config.empty).lint(ktFile)
-            assertThat(findings).singleElement().hasStartSourceLocation(1, 8)
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(1, 8)
         }
 
         @Test
         fun `should not pass for class declaration with name and unknown suffix`() {
             val ktFile = compileContentForTest("class C", filename = "Object.mySuffix.kt")
             val findings = MatchingDeclarationName(Config.empty).lint(ktFile)
-            assertThat(findings).singleElement().hasStartSourceLocation(1, 7)
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(1, 7)
         }
 
         @Test
@@ -173,14 +175,16 @@ class MatchingDeclarationNameSpec {
                 filename = "Objects.kt"
             )
             val findings = MatchingDeclarationName(Config.empty).lint(ktFile)
-            assertThat(findings).singleElement().hasStartSourceLocation(1, 45)
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(1, 45)
         }
 
         @Test
         fun `should not pass for class declaration`() {
             val ktFile = compileContentForTest("class C", filename = "Classes.kt")
             val findings = MatchingDeclarationName(Config.empty).lint(ktFile)
-            assertThat(findings).singleElement().hasStartSourceLocation(1, 7)
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(1, 7)
         }
 
         @Test
@@ -194,14 +198,16 @@ class MatchingDeclarationNameSpec {
                 filename = "ClassUtils.kt"
             )
             val findings = MatchingDeclarationName(Config.empty).lint(ktFile)
-            assertThat(findings).singleElement().hasStartSourceLocation(1, 7)
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(1, 7)
         }
 
         @Test
         fun `should not pass for interface declaration`() {
             val ktFile = compileContentForTest("interface I", filename = "Not_I.kt")
             val findings = MatchingDeclarationName(Config.empty).lint(ktFile)
-            assertThat(findings).singleElement().hasStartSourceLocation(1, 11)
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(1, 11)
         }
 
         @Test
@@ -215,7 +221,8 @@ class MatchingDeclarationNameSpec {
                 filename = "E.kt"
             )
             val findings = MatchingDeclarationName(Config.empty).lint(ktFile)
-            assertThat(findings).singleElement().hasStartSourceLocation(1, 12)
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(1, 12)
         }
 
         @Test
@@ -242,14 +249,16 @@ class MatchingDeclarationNameSpec {
             val findings = MatchingDeclarationName(
                 TestConfig("mustBeFirst" to "false")
             ).lint(ktFile)
-            assertThat(findings).singleElement().hasStartSourceLocation(3, 7)
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(3, 7)
         }
 
         @Test
         fun `should not pass for class declaration and name with common suffix`() {
             val ktFile = compileContentForTest("class C", filename = "C.common.kt")
             val findings = MatchingDeclarationName(Config.empty).lint(ktFile)
-            assertThat(findings).singleElement().hasStartSourceLocation(1, 7)
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(1, 7)
         }
 
         @Test
@@ -258,7 +267,8 @@ class MatchingDeclarationNameSpec {
             val findings = MatchingDeclarationName(
                 TestConfig("multiplatformTargets" to emptyList<String>())
             ).lint(ktFile)
-            assertThat(findings).singleElement().hasStartSourceLocation(1, 14)
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(1, 14)
         }
     }
 

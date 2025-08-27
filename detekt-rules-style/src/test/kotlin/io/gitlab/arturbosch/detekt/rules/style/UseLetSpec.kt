@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import dev.detekt.api.Config
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.Test
@@ -39,7 +39,8 @@ class UseLetSpec {
                         val shouldFail = (isNonNullCheck && rightIsNull) || (isNullCheck && leftIsNull)
                         val findings = subject.lint(expr)
                         if (shouldFail) {
-                            assertThat(findings).singleElement().hasMessage(subject.description)
+                            assertThat(findings).singleElement()
+                                .hasMessage(subject.description)
                         } else {
                             assertThat(findings).isEmpty()
                         }

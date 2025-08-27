@@ -3,11 +3,10 @@ package io.gitlab.arturbosch.detekt.rules.style
 import dev.detekt.api.Config
 import dev.detekt.api.SourceLocation
 import dev.detekt.test.TestConfig
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.KotlinCoreEnvironmentTest
 import dev.detekt.test.utils.KotlinEnvironmentContainer
-import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -45,6 +44,25 @@ class UnusedPrivatePropertySpec(val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
             assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        }
+
+        @Test
+        fun `does not reports when used in guard clause`() {
+            val code = """
+                class Test {
+                    private val used = true
+                
+                    fun use() {
+                        val a = '1'.digitToInt() + 1
+                        val c = false
+                        when (a) {
+                            1 if used -> Unit
+                            2      -> if (c) Unit else Unit
+                        }
+                    }
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -330,12 +348,12 @@ class UnusedPrivatePropertySpec(val env: KotlinEnvironmentContainer) {
                 private const val unusedTopLevelConst = 1
                 private val unusedTopLevelVal = usedTopLevelVal
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true))
-                .hasSize(2)
-                .hasStartSourceLocations(
-                    SourceLocation(2, 19),
-                    SourceLocation(3, 13),
-                )
+            val findings = subject.lintWithContext(env, code, allowCompilationErrors = true)
+            assertThat(findings).hasSize(2)
+            assertThat(findings).element(0)
+                .hasStartSourceLocation(2, 19)
+            assertThat(findings).element(1)
+                .hasStartSourceLocation(3, 13)
         }
 
         @Test
@@ -360,9 +378,8 @@ class UnusedPrivatePropertySpec(val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code))
-                .hasSize(1)
-                .hasStartSourceLocations(SourceLocation(1, 13))
+            assertThat(subject.lintWithContext(env, code)).singleElement()
+                .hasStartSourceLocation(SourceLocation(1, 13))
         }
 
         @Test
@@ -404,13 +421,12 @@ class UnusedPrivatePropertySpec(val env: KotlinEnvironmentContainer) {
                     class Foo(private val value: Int)
                 }
             """.trimIndent()
-
-            assertThat(subject.lintWithContext(env, code))
-                .hasSize(2)
-                .hasStartSourceLocations(
-                    SourceLocation(2, 27),
-                    SourceLocation(6, 27)
-                )
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings).hasSize(2)
+            assertThat(findings).element(0)
+                .hasStartSourceLocation(2, 27)
+            assertThat(findings).element(1)
+                .hasStartSourceLocation(6, 27)
         }
 
         @Test
@@ -427,12 +443,12 @@ class UnusedPrivatePropertySpec(val env: KotlinEnvironmentContainer) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code))
-                .hasSize(2)
-                .hasStartSourceLocations(
-                    SourceLocation(2, 17),
-                    SourceLocation(6, 25)
-                )
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings).hasSize(2)
+            assertThat(findings).element(0)
+                .hasStartSourceLocation(2, 17)
+            assertThat(findings).element(1)
+                .hasStartSourceLocation(6, 25)
         }
 
         @Test
@@ -483,8 +499,8 @@ class UnusedPrivatePropertySpec(val env: KotlinEnvironmentContainer) {
 
             val lint = subject.lintWithContext(env, code)
 
-            assertThat(lint).hasSize(1)
-            assertThat(lint[0].message).isEqualTo("Private property `bar` is unused.")
+            assertThat(lint).singleElement()
+                .hasMessage("Private property `bar` is unused.")
         }
 
         @Test
@@ -539,8 +555,8 @@ class UnusedPrivatePropertySpec(val env: KotlinEnvironmentContainer) {
 
             val lint = subject.lintWithContext(env, code)
 
-            assertThat(lint).hasSize(1)
-            assertThat(lint[0].message).isEqualTo("Private property `bar` is unused.")
+            assertThat(lint).singleElement()
+                .hasMessage("Private property `bar` is unused.")
         }
 
         @Test
@@ -587,7 +603,8 @@ class UnusedPrivatePropertySpec(val env: KotlinEnvironmentContainer) {
                     private val foo = 1
                 }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code)).singleElement().hasStartSourceLocation(5, 17)
+            assertThat(subject.lintWithContext(env, code)).singleElement()
+                .hasStartSourceLocation(5, 17)
         }
     }
 

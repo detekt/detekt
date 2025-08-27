@@ -1,9 +1,9 @@
 package dev.detekt.test
 
 import dev.detekt.api.Config
+import dev.detekt.core.config.YamlConfig
 import dev.detekt.test.utils.resource
 import dev.detekt.utils.openSafeStream
-import io.gitlab.arturbosch.detekt.core.config.YamlConfig
 import org.intellij.lang.annotations.Language
 import java.io.StringReader
 

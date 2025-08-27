@@ -7,7 +7,7 @@ version = "$kotlinVersion-$detektVersion"
 
 plugins {
     id("module")
-    id("com.gradleup.shadow") version "9.0.1"
+    id("com.gradleup.shadow") version "9.0.2"
     id("de.undercouch.download") version "5.6.0"
 }
 
@@ -18,10 +18,11 @@ kotlin {
 }
 
 dependencies {
+    api(projects.detektApi)
+    api(projects.detektTooling)
+
     compileOnly(libs.kotlin.compiler)
 
-    implementation(projects.detektApi)
-    implementation(projects.detektTooling)
     runtimeOnly(projects.detektCore)
     runtimeOnly(projects.detektRules)
 

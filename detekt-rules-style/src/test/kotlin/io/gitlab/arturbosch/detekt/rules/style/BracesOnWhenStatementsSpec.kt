@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 import dev.detekt.api.Config
 import dev.detekt.api.TextLocation
 import dev.detekt.test.TestConfig
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
 import io.gitlab.arturbosch.detekt.rules.style.BracesOnWhenStatements.BracePolicy
 import io.gitlab.arturbosch.detekt.rules.style.BracesOnWhenStatementsSpec.Companion.NOT_RELEVANT
@@ -1289,10 +1289,11 @@ class BracesOnWhenStatementsSpec {
             val findings = lint("fun f() { $code }", compile = false)
             // Offset text locations by the above prefix, it results in 0-indexed locations.
             val offset = 10
-            assertThat(findings)
-                .hasTextLocations(
-                    *(locations.map { it.first + offset to it.second + offset }).toTypedArray()
-                )
+            locations.map { it.first + offset to it.second + offset }
+                .forEachIndexed { position, textPosition ->
+                    assertThat(findings).element(position)
+                        .hasTextLocation(textPosition)
+                }
         }
 
         /**

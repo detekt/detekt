@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import dev.detekt.api.Config
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -16,7 +16,8 @@ class UnnecessaryAnnotationUseSiteTargetSpec {
             
             annotation class Asdf
         """.trimIndent()
-        assertThat(UnnecessaryAnnotationUseSiteTarget(Config.empty).lint(code)).hasTextLocations("param:")
+        assertThat(UnnecessaryAnnotationUseSiteTarget(Config.empty).lint(code)).singleElement()
+            .hasTextLocation("param:")
     }
 
     @Test
@@ -27,7 +28,8 @@ class UnnecessaryAnnotationUseSiteTargetSpec {
             
             annotation class Asdf
         """.trimIndent()
-        assertThat(UnnecessaryAnnotationUseSiteTarget(Config.empty).lint(code)).hasTextLocations("param:")
+        assertThat(UnnecessaryAnnotationUseSiteTarget(Config.empty).lint(code)).singleElement()
+            .hasTextLocation("param:")
     }
 
     @Test
@@ -62,7 +64,8 @@ class UnnecessaryAnnotationUseSiteTargetSpec {
             
             annotation class Asdf
         """.trimIndent()
-        assertThat(UnnecessaryAnnotationUseSiteTarget(Config.empty).lint(code)).hasTextLocations("property:")
+        assertThat(UnnecessaryAnnotationUseSiteTarget(Config.empty).lint(code)).singleElement()
+            .hasTextLocation("property:")
     }
 
     @Test
@@ -73,6 +76,7 @@ class UnnecessaryAnnotationUseSiteTargetSpec {
             
             annotation class Asdf
         """.trimIndent()
-        assertThat(UnnecessaryAnnotationUseSiteTarget(Config.empty).lint(code)).hasTextLocations("property:")
+        assertThat(UnnecessaryAnnotationUseSiteTarget(Config.empty).lint(code)).singleElement()
+            .hasTextLocation("property:")
     }
 }

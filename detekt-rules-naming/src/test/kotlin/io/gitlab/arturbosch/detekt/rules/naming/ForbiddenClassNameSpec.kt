@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
 import dev.detekt.test.TestConfig
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 private const val FORBIDDEN_NAME = "forbiddenName"
@@ -16,10 +16,8 @@ class ForbiddenClassNameSpec {
             class Provider {} // violation
             class Holder
         """.trimIndent()
-        assertThat(
-            ForbiddenClassName(TestConfig(FORBIDDEN_NAME to listOf("Manager", "Provider")))
-                .lint(code)
-        ).hasSize(2)
+        assertThat(ForbiddenClassName(TestConfig(FORBIDDEN_NAME to listOf("Manager", "Provider"))).lint(code))
+            .hasSize(2)
     }
 
     @Test
@@ -29,20 +27,15 @@ class ForbiddenClassNameSpec {
             class Provider {} // violation
             class Holder
         """.trimIndent()
-        assertThat(
-            ForbiddenClassName(TestConfig(FORBIDDEN_NAME to listOf("manager", "Provider")))
-                .lint(code)
-        ).singleElement()
+        assertThat(ForbiddenClassName(TestConfig(FORBIDDEN_NAME to listOf("manager", "Provider"))).lint(code))
+            .singleElement()
             .matches { it.message == "Class name Provider is forbidden as it matches: Provider" }
     }
 
     @Test
     fun `should report a class that starts with a forbidden name`() {
         val code = "class TestProvider {}"
-        assertThat(
-            ForbiddenClassName(TestConfig(FORBIDDEN_NAME to listOf("Test*")))
-                .lint(code)
-        ).hasSize(1)
+        assertThat(ForbiddenClassName(TestConfig(FORBIDDEN_NAME to listOf("Test*"))).lint(code)).hasSize(1)
     }
 
     @Test
@@ -65,8 +58,8 @@ class ForbiddenClassNameSpec {
         """.trimIndent()
         val actual = ForbiddenClassName(TestConfig(FORBIDDEN_NAME to listOf("Test*", "*Manager", "Provider")))
             .lint(code)
-        assertThat(actual.first().message)
-            .isEqualTo("Class name TestManager is forbidden as it matches: Test.*, .*Manager")
+        assertThat(actual).singleElement()
+            .hasMessage("Class name TestManager is forbidden as it matches: Test.*, .*Manager")
     }
 
     /**
@@ -78,9 +71,6 @@ class ForbiddenClassNameSpec {
         val code = """
             class TestManagerUtil {}
         """.trimIndent()
-        assertThat(
-            ForbiddenClassName(TestConfig(FORBIDDEN_NAME to listOf("Manager")))
-                .lint(code)
-        ).isEmpty()
+        assertThat(ForbiddenClassName(TestConfig(FORBIDDEN_NAME to listOf("Manager"))).lint(code)).isEmpty()
     }
 }

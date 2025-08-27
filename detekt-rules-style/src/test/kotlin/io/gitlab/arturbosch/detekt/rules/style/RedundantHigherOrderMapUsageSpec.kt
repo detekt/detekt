@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import dev.detekt.api.Config
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.KotlinCoreEnvironmentTest
 import dev.detekt.test.utils.KotlinEnvironmentContainer
@@ -24,8 +24,10 @@ class RedundantHigherOrderMapUsageSpec(val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
-            assertThat(findings).singleElement().hasMessage("This 'map' call can be removed.")
-            assertThat(findings).singleElement().hasStartSourceLocation(4, 10)
+            assertThat(findings).singleElement()
+                .hasMessage("This 'map' call can be removed.")
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(4, 10)
         }
 
         @Test
@@ -45,7 +47,8 @@ class RedundantHigherOrderMapUsageSpec(val env: KotlinEnvironmentContainer) {
             val findings = subject.lintWithContext(env, code)
             assertThat(findings).singleElement()
                 .hasMessage("This 'map' call can be replaced with 'onEach' or 'forEach'.")
-            assertThat(findings).singleElement().hasStartSourceLocation(5, 10)
+            assertThat(findings).singleElement()
+                .hasStartSourceLocation(5, 10)
         }
 
         @Test
@@ -170,7 +173,8 @@ class RedundantHigherOrderMapUsageSpec(val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
-            assertThat(findings).singleElement().hasMessage("This 'map' call can be replaced with 'toList'.")
+            assertThat(findings).singleElement()
+                .hasMessage("This 'map' call can be replaced with 'toList'.")
         }
     }
 

@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.naming
 
 import dev.detekt.api.Config
 import dev.detekt.test.TestConfig
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
 import org.junit.jupiter.api.Test
 
@@ -72,6 +72,7 @@ class EnumNamingSpec {
             }
         """.trimIndent()
         val findings = EnumNaming(Config.empty).lint(code)
-        assertThat(findings).hasTextLocations(26 to 34)
+        assertThat(findings).singleElement()
+            .hasTextLocation(26 to 34)
     }
 }

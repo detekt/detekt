@@ -12,10 +12,10 @@ java-compile-toolchain = "17"
 [libraries]
 # This version of AGP is used for testing and should be updated when new AGP versions are released to ensure detekt's
 # Gradle plugin remains compatible.
-android-gradle-plugin = { module = "com.android.tools.build:gradle", version = "8.12.0" }
+android-gradle-plugin = { module = "com.android.tools.build:gradle", version = "8.12.1" }
 binaryCompatibilityValidator-plugin = { module = "org.jetbrains.kotlinx.binary-compatibility-validator:org.jetbrains.kotlinx.binary-compatibility-validator.gradle.plugin", version = "0.18.1" }
 breadmoirai-githubRelease-plugin = { module = "com.github.breadmoirai:github-release", version = "2.5.2" }
-develocity-plugin = { module = "com.gradle.develocity:com.gradle.develocity.gradle.plugin", version = "4.1" }
+develocity-plugin = { module = "com.gradle.develocity:com.gradle.develocity.gradle.plugin", version = "4.1.1" }
 dokka-plugin = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version = "2.0.0" }
 gradleNexus-publish-plugin = { module = "io.github.gradle-nexus:publish-plugin", version = "2.0.0" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -33,7 +33,6 @@ kotlin-compiler = { module = "org.jetbrains.kotlin:kotlin-compiler", version.ref
 kotlin-gradlePluginApi = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin-api", version.ref = "kotlin" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 kotlin-scriptingJvm = { module = "org.jetbrains.kotlin:kotlin-scripting-jvm", version.ref = "kotlin" }
-kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
 kotlinx-coroutinesCore = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlinx-serializationCore = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version = "1.9.0" }
 kotlinx-coroutinesTest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }

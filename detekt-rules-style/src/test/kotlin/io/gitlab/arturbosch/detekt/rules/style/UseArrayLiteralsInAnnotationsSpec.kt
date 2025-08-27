@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import dev.detekt.api.Config
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -53,9 +53,8 @@ class UseArrayLiteralsInAnnotationsSpec {
             annotation class Test(val s: Array<String> = arrayOf("a", "b"))
         """.trimIndent()
         val findings = subject.lint(code)
-        assertThat(findings)
-            .hasSize(1)
-            .hasTextLocations(45 to 62)
+        assertThat(findings).singleElement()
+            .hasTextLocation(45 to 62)
     }
 
     @Test

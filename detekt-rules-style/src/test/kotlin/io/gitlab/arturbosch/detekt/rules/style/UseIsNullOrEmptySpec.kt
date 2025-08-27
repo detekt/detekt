@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import dev.detekt.api.Config
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.KotlinCoreEnvironmentTest
 import dev.detekt.test.utils.KotlinEnvironmentContainer
@@ -24,10 +24,9 @@ class UseIsNullOrEmptySpec(val env: KotlinEnvironmentContainer) {
                     }
                 """.trimIndent()
                 val findings = subject.lintWithContext(env, code)
-                assertThat(findings).singleElement().hasMessage(
-                    "This 'x == null || x.isEmpty()' can be replaced with 'isNullOrEmpty()' call"
-                )
-                assertThat(findings).singleElement().hasStartSourceLocation(2, 9)
+                assertThat(findings).singleElement()
+                    .hasMessage("This 'x == null || x.isEmpty()' can be replaced with 'isNullOrEmpty()' call")
+                    .hasStartSourceLocation(2, 9)
             }
 
             @Test

@@ -4,12 +4,13 @@ plugins {
 
 dependencies {
     api(projects.detektApi)
-    api(projects.detektParser)
     api(projects.detektTooling)
+    api(libs.kotlin.compiler)
     implementation(projects.detektKotlinAnalysisApiStandalone)
     implementation(libs.snakeyaml.engine)
     implementation(libs.kotlin.reflect)
     implementation(projects.detektMetrics)
+    implementation(projects.detektParser)
     implementation(projects.detektPsiUtils)
     implementation(projects.detektUtils)
 
@@ -18,6 +19,7 @@ dependencies {
     testImplementation(projects.detektReportMd)
     testImplementation(projects.detektReportXml)
     testImplementation(projects.detektTest)
+    testImplementation(projects.detektTestUtils)
     testImplementation(testFixtures(projects.detektApi))
     testImplementation(libs.classgraph)
     testImplementation(libs.assertj.core)
