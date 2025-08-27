@@ -6,6 +6,7 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.rules.coroutines.utils.CoroutineCallableIds
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaCompoundVariableAccessCall
@@ -14,7 +15,6 @@ import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
 import org.jetbrains.kotlin.analysis.api.types.symbol
-import org.jetbrains.kotlin.builtins.StandardNames.COROUTINES_PACKAGE_FQ_NAME
 import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.FqName
@@ -268,7 +268,7 @@ class SuspendFunSwallowedCancellation(config: Config) :
                 resolveToCall()
                     ?.successfulCallOrNull<KaCallableMemberCall<*, *>>()
                     ?.symbol
-                    ?.callableId == COROUTINE_CONTEXT_CALLABLE_ID
+                    ?.callableId == CoroutineCallableIds.CoroutineContextCallableId
             }
         }
 
@@ -365,11 +365,6 @@ class SuspendFunSwallowedCancellation(config: Config) :
             "java.lang.IllegalStateException", // JVM
             "java.lang.RuntimeException", // JVM
             "java.lang.Exception", // JVM
-        )
-
-        private val COROUTINE_CONTEXT_CALLABLE_ID = CallableId(
-            packageName = COROUTINES_PACKAGE_FQ_NAME,
-            callableName = Name.identifier("coroutineContext")
         )
     }
 }

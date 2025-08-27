@@ -4,13 +4,18 @@ import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
-import dev.detekt.api.RequiresFullAnalysis
+import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
-import org.jetbrains.kotlin.descriptors.FunctionDescriptor
-import org.jetbrains.kotlin.descriptors.Modality
-import org.jetbrains.kotlin.descriptors.PropertyDescriptor
-import org.jetbrains.kotlin.descriptors.VariableDescriptorWithAccessors
-import org.jetbrains.kotlin.descriptors.accessors
+import dev.detekt.psi.isOpen
+import io.gitlab.arturbosch.detekt.rules.coroutines.utils.CoroutineCallableIds
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
+import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
+import org.jetbrains.kotlin.analysis.api.resolution.KaVariableAccessCall
+import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
+import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -20,14 +25,6 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.BindingContext.DECLARATION_TO_DESCRIPTOR
-import org.jetbrains.kotlin.resolve.BindingContext.DELEGATED_PROPERTY_RESOLVED_CALL
-import org.jetbrains.kotlin.resolve.BindingContext.LOOP_RANGE_HAS_NEXT_RESOLVED_CALL
-import org.jetbrains.kotlin.resolve.BindingContext.LOOP_RANGE_ITERATOR_RESOLVED_CALL
-import org.jetbrains.kotlin.resolve.BindingContext.LOOP_RANGE_NEXT_RESOLVED_CALL
-import org.jetbrains.kotlin.resolve.calls.util.getResolvedCall
-import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 
 /*
  * Based on code from Kotlin project:
@@ -58,18 +55,22 @@ class RedundantSuspendModifier(config: Config) :
         config,
         "The `suspend` modifier is only needed for functions that contain suspending calls."
     ),
-    RequiresFullAnalysis {
+    RequiresAnalysisApi {
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         val suspendModifier = function.modifierList?.getModifier(KtTokens.SUSPEND_KEYWORD) ?: return
         if (!function.hasBody()) return
         if (function.hasModifier(KtTokens.OVERRIDE_KEYWORD) || function.hasModifier(KtTokens.ACTUAL_KEYWORD)) return
 
-        val descriptor = bindingContext[BindingContext.FUNCTION, function] ?: return
-        if (descriptor.modality == Modality.OPEN) return
+        if (function.isOpen()) return
 
         if (!function.anyDescendantOfType<KtExpression> { it.hasSuspendCalls() }) {
-            report(Finding(Entity.from(suspendModifier), "Function has redundant `suspend` modifier."))
+            report(
+                Finding(
+                    Entity.from(suspendModifier),
+                    "Function has redundant `suspend` modifier."
+                )
+            )
         }
     }
 
@@ -91,35 +92,29 @@ class RedundantSuspendModifier(config: Config) :
 
         return when (this) {
             is KtForExpression -> {
-                val iteratorResolvedCall = bindingContext[LOOP_RANGE_ITERATOR_RESOLVED_CALL, loopRange]
-                val loopRangeHasNextResolvedCall = bindingContext[LOOP_RANGE_HAS_NEXT_RESOLVED_CALL, loopRange]
-                val loopRangeNextResolvedCall = bindingContext[LOOP_RANGE_NEXT_RESOLVED_CALL, loopRange]
-                listOf(iteratorResolvedCall, loopRangeHasNextResolvedCall, loopRangeNextResolvedCall).any {
-                    it?.resultingDescriptor?.isSuspend == true
+                analyze(this) {
+                    this@hasSuspendCalls.mainReference?.run {
+                        resolveToSymbols()
+                            .filterIsInstance<KaNamedFunctionSymbol>()
+                            .any { it.isSuspend }
+                    } ?: false
                 }
             }
-            is KtProperty -> {
-                if (hasDelegateExpression()) {
-                    val variableDescriptor =
-                        bindingContext[DECLARATION_TO_DESCRIPTOR, this] as? VariableDescriptorWithAccessors
-                    val accessors = variableDescriptor?.accessors.orEmpty()
-                    accessors.any { accessor ->
-                        val delegatedFunctionDescriptor =
-                            bindingContext[DELEGATED_PROPERTY_RESOLVED_CALL, accessor]?.resultingDescriptor
-                        delegatedFunctionDescriptor?.isSuspend == true
-                    }
-                } else {
-                    false
-                }
-            }
+
             else -> {
-                val resolvedCall = getResolvedCall(bindingContext)
-                if ((resolvedCall?.resultingDescriptor as? FunctionDescriptor)?.isSuspend == true) {
-                    true
-                } else {
-                    val propertyDescriptor = resolvedCall?.resultingDescriptor as? PropertyDescriptor
-                    val s = propertyDescriptor?.fqNameSafe?.asString()
-                    s?.startsWith("kotlin.coroutines.") == true && s.endsWith(".coroutineContext")
+                analyze(this) {
+                    val call = this@hasSuspendCalls.resolveToCall()
+                        ?.successfulCallOrNull<KaCallableMemberCall<*, *>>()
+                        ?: return false
+                    when (call) {
+                        is KaFunctionCall -> {
+                            (call.symbol as? KaNamedFunctionSymbol)?.isSuspend == true
+                        }
+
+                        is KaVariableAccessCall -> {
+                            call.symbol.callableId == CoroutineCallableIds.CoroutineContextCallableId
+                        }
+                    }
                 }
             }
         }

@@ -99,7 +99,7 @@ class RedundantSuspendModifierSpec(val env: KotlinEnvironmentContainer) {
                 actual suspend fun bar() {}
             }
         """.trimIndent()
-        assertThat(subject.lintWithContext(env, code, compile = false)).isEmpty()
+        assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true)).isEmpty()
     }
 
     @Test
@@ -148,6 +148,16 @@ class RedundantSuspendModifierSpec(val env: KotlinEnvironmentContainer) {
                 foo()
             }
             suspend fun  String.baz() = foo()
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
+    fun `does not report when coroutineContext is used`() {
+        val code = """
+            suspend fun a() {
+                kotlin.coroutines.coroutineContext
+            }
         """.trimIndent()
         assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
