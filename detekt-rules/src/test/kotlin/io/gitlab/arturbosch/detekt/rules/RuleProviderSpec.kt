@@ -11,9 +11,9 @@ import dev.detekt.rules.documentation.CommentSmellProvider
 import dev.detekt.rules.empty.EmptyCodeProvider
 import dev.detekt.rules.exceptions.ExceptionsProvider
 import dev.detekt.rules.performance.PerformanceProvider
+import dev.detekt.rules.style.StyleGuideProvider
 import io.github.classgraph.ClassGraph
 import io.gitlab.arturbosch.detekt.rules.naming.NamingProvider
-import io.gitlab.arturbosch.detekt.rules.style.StyleGuideProvider
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.lang.reflect.Modifier
@@ -53,7 +53,7 @@ private val ruleMap: Map<Class<out DefaultRuleSetProvider>, String> = mapOf(
     NamingProvider::class.java to "io.gitlab.arturbosch.detekt.rules.naming",
     PerformanceProvider::class.java to "dev.detekt.rules.performance",
     PotentialBugProvider::class.java to "io.gitlab.arturbosch.detekt.rules.bugs",
-    StyleGuideProvider::class.java to "io.gitlab.arturbosch.detekt.rules.style",
+    StyleGuideProvider::class.java to "dev.detekt.rules.style",
     CoroutinesProvider::class.java to "dev.detekt.rules.coroutines"
 )
 
