@@ -12,7 +12,7 @@ Relevant rule sets and their configuration options for Compose styles & usage. T
 
 ### FunctionNaming for Compose
 
-See [FunctionNaming](/docs/rules/naming#functionnaming).
+See [FunctionNaming](../rules/naming.md#functionnaming).
 
 `@Composable` functions that return `Unit` are named using `PascalCase`. detekt may see this as a violation:
 
@@ -29,7 +29,7 @@ Choose _either_ of the following options:
 
 ### TopLevelPropertyNaming for Compose
 
-See [TopLevelPropertyNaming](/docs/rules/naming#toplevelpropertynaming).
+See [TopLevelPropertyNaming](../rules/naming.md#toplevelpropertynaming).
 
 Compose guidelines prescribe `CamelCase` for top-level constants.
 
@@ -52,7 +52,7 @@ private val FooPadding = 16.dp
 
 ### LongParameterList for Compose
 
-See [LongParameterList](/docs/rules/complexity#longparameterlist).
+See [LongParameterList](../rules/complexity.md#longparameterlist).
 
 Composables may boast more than the typical number of function arguments (albeit mostly with default values). For example, see [OutlinedTextField](https://cs.android.com/androidx/platform/frameworks/support/+/androidx-main:compose/material/material/src/commonMain/kotlin/androidx/compose/material/OutlinedTextField.kt;l=133?q=OutlinedTextFieldLayout&ss=androidx%2Fplatform%2Fframeworks%2Fsupport:compose%2F).
 
@@ -63,7 +63,7 @@ Composables may boast more than the typical number of function arguments (albeit
 
 ### MagicNumber for Compose
 
-See [MagicNumber](/docs/rules/style#magicnumber).
+See [MagicNumber](../rules/style.md#magicnumber).
 
 Class/companion object/top-level properties that declare objects such as `Color(0xFFEA6D7E)` may be considered violations if they don't specify the named parameter (i.e. `Color(color = 0xFFEA6D7E)`).
 
@@ -85,7 +85,7 @@ class Foo {
 
 ### UnusedPrivateMember for Compose
 
-See [UnusedPrivateMember](/docs/rules/style#unusedprivatemember).
+See [UnusedPrivateMember](../rules/style.md#unusedprivatemember).
 
 detekt may see composable preview functions, i.e. those marked with `@Preview`, as unused.
 
@@ -103,7 +103,7 @@ private fun FooLazyColumnPreview() { // Violation for FooLazyColumnPreview()
 * 
 ### TooManyFunctions for Compose
 
-See [TooManyFunctions](/docs/rules/complexity/#toomanyfunctions).
+See [TooManyFunctions](../rules/complexity.md#toomanyfunctions).
 
 detekt may flag files with many composable preview functions, i.e. those marked with `@Preview`, 
 as having too many functions. Since preview functions do not contribute to complexity, this might not be
