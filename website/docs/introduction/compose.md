@@ -83,9 +83,9 @@ class Foo {
 
 * Set `ignorePropertyDeclaration = true`, `ignoreCompanionObjectPropertyDeclaration = true` (default)
 
-### UnusedPrivateMember for Compose
+### UnusedPrivateFunction for Compose
 
-See [UnusedPrivateMember](../rules/style.md#unusedprivatemember).
+See [UnusedPrivateFunction](../rules/style.md#unusedprivatefunction).
 
 detekt may see composable preview functions, i.e. those marked with `@Preview`, as unused.
 
