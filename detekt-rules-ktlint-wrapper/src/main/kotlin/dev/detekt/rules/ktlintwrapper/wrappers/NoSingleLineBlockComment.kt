@@ -8,14 +8,14 @@ import dev.detekt.api.Config
 import dev.detekt.api.Configuration
 import dev.detekt.api.config
 import dev.detekt.api.internal.AutoCorrectable
-import dev.detekt.rules.ktlintwrapper.FormattingRule
+import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
  * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#no-single-line-block-comment) for documentation.
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "1.23.0")
-class NoSingleLineBlockComment(config: Config) : FormattingRule(
+class NoSingleLineBlockComment(config: Config) : KtlintRule(
     config,
     "Reports single block line comments"
 ) {

@@ -9,8 +9,8 @@ import org.junit.jupiter.params.provider.MethodSource
 
 class WrapperSmokeTestSpec {
     @ParameterizedTest(name = "for rule: {0}")
-    @MethodSource("formattingRules")
-    fun `smoke test`(subject: FormattingRule) {
+    @MethodSource("ktlintRules")
+    fun `smoke test`(subject: KtlintRule) {
         val result = subject.lint(
             """
                 fun main() {
@@ -23,10 +23,10 @@ class WrapperSmokeTestSpec {
         assertThat(result).isEmpty()
     }
 
-    fun formattingRules(): List<FormattingRule> =
+    fun ktlintRules(): List<KtlintRule> =
         ClassGraph()
             .acceptPackages("dev.detekt.rules.ktlintwrapper.wrappers")
             .scan()
-            .use { scanResult -> scanResult.getSubclasses(FormattingRule::class.java).loadClasses() }
-            .map { it.getDeclaredConstructor(Config::class.java).newInstance(Config.empty) as FormattingRule }
+            .use { scanResult -> scanResult.getSubclasses(KtlintRule::class.java).loadClasses() }
+            .map { it.getDeclaredConstructor(Config::class.java).newInstance(Config.empty) as KtlintRule }
 }

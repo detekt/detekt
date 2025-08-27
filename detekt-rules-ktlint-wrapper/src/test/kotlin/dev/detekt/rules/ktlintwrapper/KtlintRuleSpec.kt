@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test
 import kotlin.io.path.Path
 import kotlin.io.path.absolute
 
-class FormattingRuleSpec {
+class KtlintRuleSpec {
 
     private lateinit var subject: NoLineBreakBeforeAssignment
 
@@ -24,7 +24,7 @@ class FormattingRuleSpec {
     }
 
     @Nested
-    inner class `formatting rules can be suppressed` {
+    inner class `ktlint rules can be suppressed` {
 
         @Test
         fun `support suppression on node level`() {
@@ -41,7 +41,7 @@ class FormattingRuleSpec {
     }
 
     @Nested
-    inner class `formatting rules have a signature` {
+    inner class `ktlint rules have a signature` {
 
         @Test
         fun `in a file without package name`() {
@@ -72,7 +72,7 @@ class FormattingRuleSpec {
     }
 
     @Test
-    fun `#3063_ formatting issues have an absolute path`() {
+    fun `#3063_ ktlint issues have an absolute path`() {
         val expectedPath = Path("src/test/resources/configTests/chain-wrapping-before.kt").absolute()
 
         val rule = ChainWrapping(Config.empty)

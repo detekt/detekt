@@ -28,14 +28,14 @@ import java.nio.file.Path
 /**
  * Rule to detect formatting violations.
  */
-abstract class FormattingRule(config: Config, description: String) : Rule(config, description) {
+abstract class KtlintRule(config: Config, description: String) : Rule(config, description) {
 
     abstract val wrapping: StandardRule
 
     protected val codeStyle: String
         get() = config.valueOrNull("code_style")
-            ?: config.parent?.let { FormattingProvider.code_style.value(it) }
-            ?: FormattingProvider.code_style.defaultValue
+            ?: config.parent?.let { KtlintWrapperProvider.code_style.value(it) }
+            ?: KtlintWrapperProvider.code_style.defaultValue
 
     private lateinit var positionByOffset: (offset: Int) -> Pair<Int, Int>
     private lateinit var root: KtFile

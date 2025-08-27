@@ -8,7 +8,7 @@ import dev.detekt.api.Config
 import dev.detekt.api.Configuration
 import dev.detekt.api.configWithAndroidVariants
 import dev.detekt.api.internal.AutoCorrectable
-import dev.detekt.rules.ktlintwrapper.FormattingRule
+import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
  * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#import-ordering) for documentation.
@@ -17,7 +17,7 @@ import dev.detekt.rules.ktlintwrapper.FormattingRule
  */
 @ActiveByDefault(since = "1.19.0")
 @AutoCorrectable(since = "1.0.0")
-class ImportOrdering(config: Config) : FormattingRule(
+class ImportOrdering(config: Config) : KtlintRule(
     config,
     "Detects imports in non default order"
 ) {
