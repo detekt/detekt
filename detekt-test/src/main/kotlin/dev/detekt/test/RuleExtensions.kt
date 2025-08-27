@@ -72,6 +72,7 @@ fun <T> T.lintWithContext(
     @Language("kotlin") content: String,
     @Language("kotlin") vararg dependencyContents: String,
     allowCompilationErrors: Boolean = false,
+    languageVersionSettings: LanguageVersionSettings = environment.configuration.languageVersionSettings,
 ): List<Finding> where T : Rule, T : RequiresAnalysisApi {
     val ktFile = KotlinAnalysisApiEngine.compile(
         code = content,
@@ -79,8 +80,7 @@ fun <T> T.lintWithContext(
         javaSourceRoots = environment.configuration.javaSourceRoots.map(::Path),
         allowCompilationErrors = allowCompilationErrors
     )
-    return visitFile(ktFile, environment.configuration.languageVersionSettings).filterSuppressed(this)
-        .sortedWith(findingComparator)
+    return visitFile(ktFile, languageVersionSettings).filterSuppressed(this).sortedWith(findingComparator)
 }
 
 fun Rule.lint(
