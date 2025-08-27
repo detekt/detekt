@@ -31,11 +31,10 @@ class SuspendFunInFinallySectionSpec(private val env: KotlinEnvironmentContainer
         """.trimIndent()
 
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).hasSize(2)
-        assertThat(findings).element(0)
-            .hasTextLocation("test".find(1)(code))
-        assertThat(findings).element(1)
-            .hasTextLocation("test".find(2)(code))
+        assertThat(findings).satisfiesExactlyInAnyOrder(
+            { assertThat(it).hasTextLocation("test".find(1)(code)) },
+            { assertThat(it).hasTextLocation("test".find(2)(code)) },
+        )
     }
 
     @Test
@@ -82,11 +81,10 @@ class SuspendFunInFinallySectionSpec(private val env: KotlinEnvironmentContainer
         """.trimIndent()
 
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).hasSize(2)
-        assertThat(findings).element(0)
-            .hasTextLocation("withContext".find(1)(code))
-        assertThat(findings).element(1)
-            .hasTextLocation("test".find(1)(code))
+        assertThat(findings).satisfiesExactlyInAnyOrder(
+            { assertThat(it).hasTextLocation("withContext".find(1)(code)) },
+            { assertThat(it).hasTextLocation("test".find(1)(code)) },
+        )
     }
 
     @Test
@@ -137,13 +135,11 @@ class SuspendFunInFinallySectionSpec(private val env: KotlinEnvironmentContainer
             suspend fun test() { yield() }
         """.trimIndent()
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).hasSize(3)
-        assertThat(findings).element(0)
-            .hasTextLocation("wrapper".find(2)(code))
-        assertThat(findings).element(1)
-            .hasTextLocation("test".find(1)(code))
-        assertThat(findings).element(2)
-            .hasTextLocation("block".find(2)(code))
+        assertThat(findings).satisfiesExactlyInAnyOrder(
+            { assertThat(it).hasTextLocation("wrapper".find(2)(code)) },
+            { assertThat(it).hasTextLocation("test".find(1)(code)) },
+            { assertThat(it).hasTextLocation("block".find(2)(code)) },
+        )
     }
 
     companion object {

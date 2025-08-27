@@ -423,11 +423,10 @@ class MaxLineLengthSpec {
                 // that is the right length
             """.trimIndent()
         )
-        assertThat(findings).hasSize(2)
-        assertThat(findings).element(0)
-            .hasTextLocation(40 to 97)
-        assertThat(findings).element(1)
-            .hasTextLocation(98 to 157)
+        assertThat(findings).satisfiesExactlyInAnyOrder(
+            { assertThat(it).hasTextLocation(40 to 97) },
+            { assertThat(it).hasTextLocation(98 to 157) },
+        )
     }
 
     @Test
@@ -480,13 +479,23 @@ class MaxLineLengthSpec {
                 }
             """.trimIndent()
         )
-        assertThat(findings).hasSize(3)
-        assertThat(findings).element(0)
-            .hasTextLocation("    project.tasks.register(\"veryVeryVeryVeryVeryVeryLongName\${part}WithSuffix1\")")
-        assertThat(findings).element(1)
-            .hasTextLocation("    project.tasks.register(\"veryVeryVeryVeryVeryVeryLongName\${part}WithSuffix2\") {")
-        assertThat(findings).element(2)
-            .hasTextLocation("        .register(\"veryVeryVeryVeryVeryVeryLongName\${part}WithSuffix3\") {")
+        assertThat(findings).satisfiesExactlyInAnyOrder(
+            {
+                assertThat(it).hasTextLocation(
+                    "    project.tasks.register(\"veryVeryVeryVeryVeryVeryLongName\${part}WithSuffix1\")"
+                )
+            },
+            {
+                assertThat(it).hasTextLocation(
+                    "    project.tasks.register(\"veryVeryVeryVeryVeryVeryLongName\${part}WithSuffix2\") {"
+                )
+            },
+            {
+                assertThat(it).hasTextLocation(
+                    "        .register(\"veryVeryVeryVeryVeryVeryLongName\${part}WithSuffix3\") {"
+                )
+            },
+        )
     }
 
     @Nested

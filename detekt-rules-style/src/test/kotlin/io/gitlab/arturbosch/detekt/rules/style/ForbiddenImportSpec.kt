@@ -59,11 +59,10 @@ class ForbiddenImportSpec {
     fun reportKotlinWildcardImports2() {
         val config = TestConfig(IMPORTS to listOf(ValueWithReason("kotlin.*", "I'm just joking!").toConfig()))
         val findings = ForbiddenImport(config).lint(code, compile = false)
-        assertThat(findings).hasSize(2)
-        assertThat(findings).element(0)
-            .hasMessage("The import `kotlin.jvm.JvmField` has been forbidden: I'm just joking!")
-        assertThat(findings).element(1)
-            .hasMessage("The import `kotlin.SinceKotlin` has been forbidden: I'm just joking!")
+        assertThat(findings).satisfiesExactlyInAnyOrder(
+            { assertThat(it).hasMessage("The import `kotlin.jvm.JvmField` has been forbidden: I'm just joking!") },
+            { assertThat(it).hasMessage("The import `kotlin.SinceKotlin` has been forbidden: I'm just joking!") },
+        )
     }
 
     @Test
@@ -126,10 +125,12 @@ class ForbiddenImportSpec {
     fun `should report import when it matches the forbidden pattern`() {
         val findings = ForbiddenImport(TestConfig(FORBIDDEN_PATTERNS to "net.*R|com.*expiremental"))
             .lint(code, compile = false)
-        assertThat(findings).hasSize(2)
-        assertThat(findings).element(0)
-            .hasMessage("The import `net.example.R.dimen` has been forbidden in the detekt config.")
-        assertThat(findings).element(1)
-            .hasMessage("The import `net.example.R.dimension` has been forbidden in the detekt config.")
+        assertThat(findings).satisfiesExactlyInAnyOrder(
+            { assertThat(it).hasMessage("The import `net.example.R.dimen` has been forbidden in the detekt config.") },
+            {
+                assertThat(it)
+                    .hasMessage("The import `net.example.R.dimension` has been forbidden in the detekt config.")
+            },
+        )
     }
 }

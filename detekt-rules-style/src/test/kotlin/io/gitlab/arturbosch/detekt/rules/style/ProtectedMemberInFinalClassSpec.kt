@@ -75,11 +75,10 @@ class ProtectedMemberInFinalClassSpec {
                 }
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings).hasSize(2)
-            assertThat(findings).element(0)
-                .hasStartSourceLocation(2, 5)
-            assertThat(findings).element(1)
-                .hasStartSourceLocation(3, 9)
+            assertThat(findings).satisfiesExactlyInAnyOrder(
+                { assertThat(it).hasStartSourceLocation(2, 5) },
+                { assertThat(it).hasStartSourceLocation(3, 9) },
+            )
         }
 
         @Test
@@ -94,13 +93,11 @@ class ProtectedMemberInFinalClassSpec {
                 }
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings).hasSize(3)
-            assertThat(findings).element(0)
-                .hasStartSourceLocation(2, 5)
-            assertThat(findings).element(1)
-                .hasStartSourceLocation(2, 5)
-            assertThat(findings).element(2)
-                .hasStartSourceLocation(4, 13)
+            assertThat(findings).satisfiesExactlyInAnyOrder(
+                { assertThat(it).hasStartSourceLocation(2, 5) },
+                { assertThat(it).hasStartSourceLocation(2, 5) },
+                { assertThat(it).hasStartSourceLocation(4, 13) },
+            )
         }
 
         @Test

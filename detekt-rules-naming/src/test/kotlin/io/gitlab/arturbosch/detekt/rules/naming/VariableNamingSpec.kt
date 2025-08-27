@@ -58,13 +58,11 @@ class VariableNamingSpec {
             }
         """.trimIndent()
         val findings = VariableNaming(Config.empty).lint(code)
-        assertThat(findings).hasSize(3)
-        assertThat(findings).element(0)
-            .hasStartSourceLocation(2, 17)
-        assertThat(findings).element(1)
-            .hasStartSourceLocation(3, 9)
-        assertThat(findings).element(2)
-            .hasStartSourceLocation(4, 9)
+        assertThat(findings).satisfiesExactlyInAnyOrder(
+            { assertThat(it).hasStartSourceLocation(2, 17) },
+            { assertThat(it).hasStartSourceLocation(3, 9) },
+            { assertThat(it).hasStartSourceLocation(4, 9) },
+        )
     }
 
     @Test

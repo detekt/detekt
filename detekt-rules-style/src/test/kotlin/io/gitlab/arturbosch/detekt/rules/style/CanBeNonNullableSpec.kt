@@ -243,11 +243,10 @@ class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
-            assertThat(findings).hasSize(2)
-            assertThat(findings).element(0)
-                .hasStartSourceLocation(8, 5)
-            assertThat(findings).element(1)
-                .hasStartSourceLocation(16, 5)
+            assertThat(findings).satisfiesExactlyInAnyOrder(
+                { assertThat(it).hasStartSourceLocation(8, 5) },
+                { assertThat(it).hasStartSourceLocation(16, 5) },
+            )
         }
 
         @Test

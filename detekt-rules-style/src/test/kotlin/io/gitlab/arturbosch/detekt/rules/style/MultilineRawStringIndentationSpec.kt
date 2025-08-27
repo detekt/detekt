@@ -35,11 +35,10 @@ class MultilineRawStringIndentationSpec {
                 $TQ.trimIndent()
             """.trimIndent()
             val findings = subject.lint(code)
-            assertThat(findings).hasSize(2)
-            assertThat(findings).element(0)
-                .hasTextLocation("Hello world!")
-            assertThat(findings).element(1)
-                .hasTextLocation("How are you?")
+            assertThat(findings).satisfiesExactlyInAnyOrder(
+                { assertThat(it).hasTextLocation("Hello world!") },
+                { assertThat(it).hasTextLocation("How are you?") },
+            )
         }
 
         @Test

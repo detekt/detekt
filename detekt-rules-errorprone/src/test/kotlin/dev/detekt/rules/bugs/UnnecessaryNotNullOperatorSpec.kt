@@ -44,11 +44,10 @@ class UnnecessaryNotNullOperatorSpec(private val env: KotlinEnvironmentContainer
                 val b = a!!.plus(42)!!
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
-            assertThat(findings).hasSize(2)
-            assertThat(findings).element(0)
-                .hasTextLocation(18 to 21)
-            assertThat(findings).element(1)
-                .hasTextLocation(18 to 32)
+            assertThat(findings).satisfiesExactlyInAnyOrder(
+                { assertThat(it).hasTextLocation(18 to 21) },
+                { assertThat(it).hasTextLocation(18 to 32) },
+            )
         }
     }
 
