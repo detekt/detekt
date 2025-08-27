@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.rules.coroutines.utils
+package dev.detekt.rules.coroutines.utils
 
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.types.KaType

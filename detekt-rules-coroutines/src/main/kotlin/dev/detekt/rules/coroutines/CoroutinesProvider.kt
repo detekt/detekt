@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.rules.coroutines
+package dev.detekt.rules.coroutines
 
 import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.RuleSet

@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.rules.coroutines
+package dev.detekt.rules.coroutines
 
 import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.Config
@@ -6,7 +6,7 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.rules.coroutines.utils.CoroutineClassIds
+import dev.detekt.rules.coroutines.utils.CoroutineClassIds
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtNamedFunction

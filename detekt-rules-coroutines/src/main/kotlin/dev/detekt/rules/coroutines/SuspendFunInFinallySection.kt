@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.rules.coroutines
+package dev.detekt.rules.coroutines
 
 import com.intellij.psi.PsiElement
 import dev.detekt.api.Config
