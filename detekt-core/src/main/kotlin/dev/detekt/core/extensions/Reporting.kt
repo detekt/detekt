@@ -1,8 +1,8 @@
 package dev.detekt.core.extensions
 
 import dev.detekt.api.Detektion
+import dev.detekt.api.Issue
 import dev.detekt.api.ReportingExtension
-import dev.detekt.core.DelegatingResult
 import dev.detekt.core.ProcessingSettings
 
 fun handleReportingExtensions(settings: ProcessingSettings, initialResult: Detektion): Detektion {
@@ -15,3 +15,8 @@ fun handleReportingExtensions(settings: ProcessingSettings, initialResult: Detek
     extensions.forEach { it.onFinalResult(finalResult) }
     return finalResult
 }
+
+private class DelegatingResult(
+    result: Detektion,
+    override val issues: List<Issue>,
+) : Detektion by result
