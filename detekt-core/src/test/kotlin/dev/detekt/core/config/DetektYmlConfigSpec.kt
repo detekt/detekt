@@ -31,7 +31,7 @@ class DetektYmlConfigSpec {
         arguments("naming", "io.gitlab.arturbosch.detekt.rules.naming"),
         arguments("performance", "dev.detekt.rules.performance"),
         arguments("potential-bugs", "dev.detekt.rules.bugs"),
-        arguments("style", "io.gitlab.arturbosch.detekt.rules.style"),
+        arguments("style", "dev.detekt.rules.style"),
     )
 
     @ParameterizedTest
