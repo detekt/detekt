@@ -177,7 +177,6 @@ public final class dev/detekt/api/Location$Companion {
 public abstract interface class dev/detekt/api/Notification {
 	public abstract fun getLevel ()Ldev/detekt/api/Notification$Level;
 	public abstract fun getMessage ()Ljava/lang/String;
-	public fun isError ()Z
 }
 
 public final class dev/detekt/api/Notification$Level : java/lang/Enum {
