@@ -12,6 +12,6 @@ class ProjectCognitiveComplexityProcessorSpec {
         val detektion = ProjectCognitiveComplexityProcessor()
             .invoke(compileContentForTest(complexClass))
 
-        assertThat(detektion.getUserData(CognitiveComplexity.KEY)).isEqualTo(50)
+        assertThat(detektion.userData[CognitiveComplexity.KEY.toString()]).isEqualTo(50)
     }
 }
