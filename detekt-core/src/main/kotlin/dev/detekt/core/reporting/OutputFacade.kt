@@ -9,6 +9,7 @@ import dev.detekt.tooling.api.spec.ReportsSpec
 
 class OutputFacade(
     private val settings: ProcessingSettings,
+    private val showReports: Boolean,
 ) {
 
     private val reports: Map<String, ReportsSpec.Report> =
@@ -39,7 +40,9 @@ class OutputFacade(
             val filePath = reports[defaultReportMapping(report)]?.path
             if (filePath != null) {
                 report.write(filePath, result)
-                result.add(Notification("Successfully generated ${report.id} at ${filePath.toUri()}", Level.Error))
+                if (showReports) {
+                    result.add(Notification("Successfully generated ${report.id} at ${filePath.toUri()}", Level.Error))
+                }
             }
         }
     }
