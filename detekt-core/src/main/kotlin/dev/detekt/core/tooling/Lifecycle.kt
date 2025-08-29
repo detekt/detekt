@@ -60,7 +60,7 @@ internal interface Lifecycle {
 
         return measure(Phase.Reporting) {
             val finalResult = handleReportingExtensions(settings, result)
-            OutputFacade(settings).run(finalResult)
+            OutputFacade(settings, true).run(finalResult)
             finalResult
         }
     }
