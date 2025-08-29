@@ -24,11 +24,7 @@ class TestDetektion(
     private val _notifications = notifications.toMutableList()
 
     fun <V> removeData(key: Key<V>) {
-        putUserData(key, null)
-    }
-
-    fun <V> putUserData(key: Key<V>, value: V?) {
-        userData[key.toString()] = value
+        userData[key.toString()] = null
     }
 
     override fun add(notification: Notification) {

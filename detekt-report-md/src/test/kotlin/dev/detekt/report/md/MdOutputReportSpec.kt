@@ -228,19 +228,20 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
             "Issue message 3",
             suppressReasons = listOf("suppress")
         ),
-    ).also {
-        it.putUserData(complexityKey, 10)
-        it.putUserData(CognitiveComplexity.KEY, 10)
-        it.putUserData(sourceLinesKey, 20)
-        it.putUserData(logicalLinesKey, 10)
-        it.putUserData(commentLinesKey, 2)
-        it.putUserData(linesKey, 2222)
-    }
+    )
 }
 
 private fun createMdDetektion(vararg issues: Issue) = TestDetektion(
     *issues,
-    metrics = listOf(ProjectMetric("M1", 10_000), ProjectMetric("M2", 2))
+    metrics = listOf(ProjectMetric("M1", 10_000), ProjectMetric("M2", 2)),
+    userData = mapOf(
+        complexityKey.toString() to 10,
+        CognitiveComplexity.KEY.toString() to 10,
+        sourceLinesKey.toString() to 20,
+        logicalLinesKey.toString() to 10,
+        commentLinesKey.toString() to 2,
+        linesKey.toString() to 2222,
+    )
 )
 
 private fun issues(): Array<Issue> {
