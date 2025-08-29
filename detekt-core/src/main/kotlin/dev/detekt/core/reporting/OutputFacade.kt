@@ -3,7 +3,6 @@ package dev.detekt.core.reporting
 import dev.detekt.api.Detektion
 import dev.detekt.api.getOrNull
 import dev.detekt.core.ProcessingSettings
-import dev.detekt.core.util.SimpleNotification
 import dev.detekt.tooling.api.spec.ReportsSpec
 
 class OutputFacade(
@@ -40,7 +39,7 @@ class OutputFacade(
             if (filePath != null) {
                 report.write(filePath, result)
                 if (showReports) {
-                    result.add(SimpleNotification("Successfully generated ${report.id} at ${filePath.toUri()}"))
+                    settings.outputChannel.appendLine("Successfully generated ${report.id} at ${filePath.toUri()}")
                 }
             }
         }
