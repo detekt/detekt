@@ -140,6 +140,7 @@ dependencies {
         }
     }
 
+    compileOnly("io.gitlab.arturbosch.detekt:detekt-api:1.23.8")
     // We use this published version of the detekt-formatting to self analyse this project.
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.8")
 }
