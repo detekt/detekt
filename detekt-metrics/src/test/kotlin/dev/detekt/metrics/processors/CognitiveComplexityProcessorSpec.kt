@@ -27,13 +27,13 @@ private class MetricProcessorTester(
     private val result: Detektion = TestDetektion(),
 ) {
 
-    fun <T : Any> test(processor: AbstractProcessor, key: Key<T>): T {
+    fun <T : Any> test(processor: AbstractProcessor, key: Key<T>): Int {
         with(processor) {
             onStart(listOf(file))
             onProcess(file)
             onProcessComplete(file, emptyList())
             onFinish(listOf(file), result)
         }
-        return checkNotNull(result.getUserData(key))
+        return checkNotNull(result.userData[key.toString()] as Int)
     }
 }
