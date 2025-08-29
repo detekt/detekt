@@ -8,10 +8,8 @@ import dev.detekt.core.ProcessingSettings
 fun handleReportingExtensions(settings: ProcessingSettings, initialResult: Detektion): Detektion {
     val extensions = loadExtensions<ReportingExtension>(settings)
     extensions.forEach { it.onRawResult(initialResult) }
-    val finalResult = extensions.fold(initialResult) { acc, extension ->
-        val intermediateValue = extension.transformIssues(acc.issues)
-        if (intermediateValue === acc.issues) acc else DelegatingResult(acc, intermediateValue)
-    }
+    val finalIssues = extensions.fold(initialResult.issues) { acc, extension -> extension.transformIssues(acc) }
+    val finalResult = DelegatingResult(initialResult, finalIssues)
     extensions.forEach { it.onFinalResult(finalResult) }
     return finalResult
 }
