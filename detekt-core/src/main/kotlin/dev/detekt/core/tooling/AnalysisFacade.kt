@@ -32,16 +32,12 @@ class AnalysisFacade(
         }
 
     internal fun runAnalysis(createLifecycle: (ProcessingSettings) -> Lifecycle): AnalysisResult = spec.withSettings {
-        val result = runCatching { createLifecycle(this).analyze() }
-        when (val error = result.exceptionOrNull()) {
-            null -> {
-                val container = checkNotNull(result.getOrNull()) { "Result should not be null at this point." }
-                DefaultAnalysisResult(container, checkFailurePolicy(container))
-            }
-
-            is InvalidConfig -> DefaultAnalysisResult(null, error)
-            else -> DefaultAnalysisResult(null, UnexpectedError(error))
-        }
+        runCatching { createLifecycle(this).analyze() }.fold(
+            onSuccess = { detektion -> DefaultAnalysisResult(detektion, checkFailurePolicy(detektion)) },
+            onFailure = { error ->
+                DefaultAnalysisResult(null, if (error is InvalidConfig) error else UnexpectedError(error))
+            },
+        )
     }
 
     private fun checkFailurePolicy(result: Detektion): DetektError? {
