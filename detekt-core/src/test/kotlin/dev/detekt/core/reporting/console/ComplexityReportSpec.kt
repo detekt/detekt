@@ -1,5 +1,6 @@
 package dev.detekt.core.reporting.console
 
+import com.intellij.openapi.util.Key
 import dev.detekt.api.testfixtures.TestDetektion
 import dev.detekt.api.testfixtures.createIssue
 import dev.detekt.api.testfixtures.createRuleInstance
@@ -11,19 +12,22 @@ import dev.detekt.metrics.processors.logicalLinesKey
 import dev.detekt.metrics.processors.sourceLinesKey
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import kotlin.collections.mapKeys
 
 class ComplexityReportSpec {
 
     @Test
     fun `successfully generates a complexity report`() {
-        val detektion = createDetektion().apply {
-            putUserData(complexityKey, 2)
-            putUserData(CognitiveComplexity.KEY, 2)
-            putUserData(linesKey, 10)
-            putUserData(sourceLinesKey, 6)
-            putUserData(logicalLinesKey, 5)
-            putUserData(commentLinesKey, 4)
-        }
+        val detektion = createDetektion(
+            mapOf(
+                complexityKey to 2,
+                CognitiveComplexity.KEY to 2,
+                linesKey to 10,
+                sourceLinesKey to 6,
+                logicalLinesKey to 5,
+                commentLinesKey to 4,
+            )
+        )
         assertThat(ComplexityReport().render(detektion)).isEqualTo(
             """
                 Complexity Report:
@@ -50,4 +54,9 @@ class ComplexityReportSpec {
     }
 }
 
-private fun createDetektion() = TestDetektion(createIssue(createRuleInstance(ruleSetId = "Key")))
+private fun createDetektion(
+    userData: Map<Key<*>, Any> = emptyMap(),
+) = TestDetektion(
+    createIssue(createRuleInstance(ruleSetId = "Key")),
+    userData = userData.mapKeys { (key, _) -> key.toString() },
+)
