@@ -13,7 +13,7 @@ import java.nio.file.Path
 import kotlin.io.path.createParentDirectories
 import kotlin.io.path.writeText
 
-class OutputFacade(private val settings: ProcessingSettings) {
+class OutputFacade(private val settings: ProcessingSettings, private val showReports: Boolean) {
     private val reports: Map<String, ReportsSpec.Report> = settings.spec.reportsSpec.reports.associateBy { it.type }
 
     init {
@@ -48,7 +48,9 @@ class OutputFacade(private val settings: ProcessingSettings) {
             val filePath = reports[report.id]?.path
             if (filePath != null) {
                 report.write(filePath, result)
-                result.add(Notification("Successfully generated ${report.id} at ${filePath.toUri()}", Level.Error))
+                if (showReports) {
+                    result.add(Notification("Successfully generated ${report.id} at ${filePath.toUri()}", Level.Error))
+                }
             }
         }
     }
