@@ -41,7 +41,6 @@ class DetektAndroidSpec {
                     "detekt-baseline.xml",
                     "detekt-baseline-release.xml",
                     "detekt-baseline-debug.xml",
-                    "detekt-baseline-releaseUnitTest.xml",
                     "detekt-baseline-debugUnitTest.xml",
                     "detekt-baseline-debugAndroidTest.xml"
                 )
@@ -79,9 +78,6 @@ class DetektAndroidSpec {
         fun appDetektTest() {
             gradleRunner.runTasksAndCheckResult(":app:detektTest") { buildResult ->
                 assertThat(buildResult.output).containsPattern(
-                    """--baseline \S*[/\\]detekt-baseline-releaseUnitTest.xml """
-                )
-                assertThat(buildResult.output).containsPattern(
                     """--baseline \S*[/\\]detekt-baseline-debugUnitTest.xml """
                 )
                 assertThat(buildResult.output).containsPattern(
@@ -103,7 +99,6 @@ class DetektAndroidSpec {
                     .containsExactlyInAnyOrder(
                         ":app:detektDebugAndroidTest",
                         ":app:detektDebugUnitTest",
-                        ":app:detektReleaseUnitTest",
                         ":app:detektTest",
                     )
             }
@@ -172,7 +167,6 @@ class DetektAndroidSpec {
                     "detekt-baseline.xml",
                     "detekt-baseline-release.xml",
                     "detekt-baseline-debug.xml",
-                    "detekt-baseline-releaseUnitTest.xml",
                     "detekt-baseline-debugUnitTest.xml",
                     "detekt-baseline-debugAndroidTest.xml"
                 )
@@ -206,9 +200,6 @@ class DetektAndroidSpec {
         fun libDetektTest() {
             gradleRunner.runTasksAndCheckResult(":lib:detektTest") { buildResult ->
                 assertThat(buildResult.output).containsPattern(
-                    """--baseline \S*[/\\]detekt-baseline-releaseUnitTest.xml """
-                )
-                assertThat(buildResult.output).containsPattern(
                     """--baseline \S*[/\\]detekt-baseline-debugUnitTest.xml """
                 )
                 assertThat(buildResult.output).containsPattern(
@@ -222,7 +213,6 @@ class DetektAndroidSpec {
                     .containsExactlyInAnyOrder(
                         ":lib:detektDebugAndroidTest",
                         ":lib:detektDebugUnitTest",
-                        ":lib:detektReleaseUnitTest",
                         ":lib:detektTest",
                     )
             }
@@ -245,7 +235,6 @@ class DetektAndroidSpec {
                     "detekt-baseline.xml",
                     "detekt-baseline-release.xml",
                     "detekt-baseline-debug.xml",
-                    "detekt-baseline-releaseUnitTest.xml",
                     "detekt-baseline-debugUnitTest.xml",
                     "detekt-baseline-debugAndroidTest.xml"
                 )
@@ -269,7 +258,6 @@ class DetektAndroidSpec {
                     "detekt-baseline.xml",
                     "detekt-baseline-release.xml",
                     "detekt-baseline-debug.xml",
-                    "detekt-baseline-releaseUnitTest.xml",
                     "detekt-baseline-debugUnitTest.xml",
                     "detekt-baseline-debugAndroidTest.xml"
                 )
@@ -324,7 +312,6 @@ class DetektAndroidSpec {
                     .containsExactlyInAnyOrder(
                         ":android_lib:detektDebugAndroidTest",
                         ":android_lib:detektDebugUnitTest",
-                        ":android_lib:detektReleaseUnitTest",
                         ":android_lib:detektTest",
                     )
             }
@@ -376,11 +363,9 @@ class DetektAndroidSpec {
                     .containsExactlyInAnyOrder(
                         ":lib:detektOldHarryDebugAndroidTest",
                         ":lib:detektOldHarryDebugUnitTest",
-                        ":lib:detektOldHarryReleaseUnitTest",
                         ":lib:detektTest",
                         ":lib:detektYoungHarryDebugAndroidTest",
                         ":lib:detektYoungHarryDebugUnitTest",
-                        ":lib:detektYoungHarryReleaseUnitTest",
                     )
             }
         }
@@ -399,7 +384,7 @@ class DetektAndroidSpec {
                     ANDROID_BLOCK_WITH_FLAVOR,
                     """
                         detekt {
-                            ignoredBuildTypes = listOf("release")
+                            ignoredBuildTypes = listOf("debug")
                         }
                     """.trimIndent(),
                 ),
@@ -418,12 +403,12 @@ class DetektAndroidSpec {
                     .filteredOn { it.startsWith(":lib:detekt") }
                     .containsExactlyInAnyOrder(
                         ":lib:detektMain",
-                        ":lib:detektOldHarryDebug",
-                        ":lib:detektYoungHarryDebug",
-                    )
-                    .doesNotContain(
                         ":lib:detektOldHarryRelease",
                         ":lib:detektYoungHarryRelease",
+                    )
+                    .doesNotContain(
+                        ":lib:detektOldHarryDebug",
+                        ":lib:detektYoungHarryDebug",
                     )
             }
         }
@@ -434,16 +419,12 @@ class DetektAndroidSpec {
             gradleRunner.runTasksAndCheckResult(":lib:detektTest") { buildResult ->
                 assertThat(buildResult.tasks.map { it.path })
                     .filteredOn { it.startsWith(":lib:detekt") }
-                    .containsExactlyInAnyOrder(
+                    .containsExactly(":lib:detektTest")
+                    .doesNotContain(
                         ":lib:detektOldHarryDebugAndroidTest",
                         ":lib:detektOldHarryDebugUnitTest",
-                        ":lib:detektTest",
                         ":lib:detektYoungHarryDebugAndroidTest",
                         ":lib:detektYoungHarryDebugUnitTest",
-                    )
-                    .doesNotContain(
-                        ":lib:detektOldHarryReleaseUnitTest",
-                        ":lib:detektYoungHarryReleaseUnitTest",
                     )
             }
         }
@@ -501,10 +482,8 @@ class DetektAndroidSpec {
                         ":lib:detektOldHarryDebugAndroidTest",
                         ":lib:detektOldHarryDebugUnitTest",
                         ":lib:detektTest",
-                        ":lib:detektYoungHarryReleaseUnitTest",
                     )
                     .doesNotContain(
-                        ":lib:detektOldHarryReleaseUnitTest",
                         ":lib:detektYoungHarryDebugAndroidTest",
                         ":lib:detektYoungHarryDebugUnitTest",
                     )
@@ -563,13 +542,11 @@ class DetektAndroidSpec {
                     .containsExactlyInAnyOrder(
                         ":lib:detektOldHarryDebugAndroidTest",
                         ":lib:detektOldHarryDebugUnitTest",
-                        ":lib:detektOldHarryReleaseUnitTest",
                         ":lib:detektTest",
                     )
                     .doesNotContain(
                         ":lib:detektYoungHarryDebugAndroidTest",
                         ":lib:detektYoungHarryDebugUnitTest",
-                        ":lib:detektYoungHarryReleaseUnitTest",
                     )
             }
         }
