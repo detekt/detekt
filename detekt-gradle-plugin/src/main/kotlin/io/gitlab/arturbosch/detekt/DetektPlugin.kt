@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt
 
+import dev.detekt.detekt_gradle_plugin.BuildConfig
 import dev.detekt.gradle.plugin.CONFIGURATION_DETEKT_PLUGINS
 import dev.detekt.gradle.plugin.DetektBasePlugin
 import dev.detekt.gradle.plugin.DetektBasePlugin.Companion.CONFIG_DIR_NAME
@@ -160,11 +161,7 @@ internal fun ProviderFactory.isWorkerApiEnabled(): Boolean =
     gradleProperty("detekt.use.worker.api").getOrElse("false") == "true"
 
 @Incubating
-fun getSupportedKotlinVersion(): String =
-    DetektPlugin::class.java.classLoader.getResources("META-INF/MANIFEST.MF")
-        .asSequence()
-        .mapNotNull { runCatching { readVersion(it) }.getOrNull() }
-        .first()
+fun getSupportedKotlinVersion(): String = BuildConfig.KOTLIN_IMPLEMENTATION_VERSION
 
 private fun readVersion(resource: URL): String? = resource.openConnection()
     .apply { useCaches = false }

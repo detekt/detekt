@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt
 
+import dev.detekt.detekt_gradle_plugin.BuildConfig
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType
-import io.gitlab.arturbosch.detekt.extensions.loadDetektVersion
 import io.gitlab.arturbosch.detekt.testkit.DslTestBuilder.Companion.kotlin
 import io.gitlab.arturbosch.detekt.testkit.ProjectLayout
 import org.assertj.core.api.Assertions.assertThat
@@ -14,7 +14,7 @@ import org.junit.jupiter.params.provider.EnumSource
 
 class DetektTaskDslSpec {
 
-    val defaultDetektVersion = loadDetektVersion(DetektTaskDslSpec::class.java.classLoader)
+    val defaultDetektVersion = BuildConfig.DETEKT_VERSION
 
     @Nested
     inner class `without detekt config` {

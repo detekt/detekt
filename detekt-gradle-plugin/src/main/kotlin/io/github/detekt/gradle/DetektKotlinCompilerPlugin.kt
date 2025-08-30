@@ -1,5 +1,6 @@
 package io.github.detekt.gradle
 
+import dev.detekt.detekt_gradle_plugin.BuildConfig
 import dev.detekt.gradle.plugin.CONFIGURATION_DETEKT_PLUGINS
 import dev.detekt.gradle.plugin.DetektBasePlugin
 import dev.detekt.gradle.plugin.DetektBasePlugin.Companion.DETEKT_EXTENSION
@@ -20,7 +21,6 @@ import java.io.File
 import java.io.ObjectOutputStream
 import java.security.MessageDigest
 import java.util.Base64
-import java.util.Properties
 
 class DetektKotlinCompilerPlugin : KotlinCompilerPluginSupportPlugin {
 
@@ -94,37 +94,8 @@ class DetektKotlinCompilerPlugin : KotlinCompilerPluginSupportPlugin {
 
     override fun getCompilerPluginId(): String = "detekt-compiler-plugin"
 
-    override fun getPluginArtifact(): SubpluginArtifact {
-        // Other Gradle plugins can also have a versions.properties.
-        val distinctVersions = this::class
-            .java
-            .classLoader
-            .getResources("detekt-versions.properties")
-            .toList()
-            .mapNotNull { versions ->
-                Properties().run {
-                    val inputStream = versions.openConnection()
-                        /*
-                         * Due to https://bugs.openjdk.java.net/browse/JDK-6947916 and https://bugs.openjdk.java.net/browse/JDK-8155607,
-                         * it is necessary to disallow caches to maintain stability on JDK 8 and 11 (and possibly more).
-                         * Otherwise, simultaneous invocations of detekt in the same VM can fail spuriously. A similar bug is referenced in
-                         * https://github.com/detekt/detekt/issues/3396. The performance regression is likely unnoticeable.
-                         * Due to https://github.com/detekt/detekt/issues/4332 it is included for all JDKs.
-                         */
-                        .apply { useCaches = false }
-                        .getInputStream()
-                    load(inputStream)
-                    getProperty("detektCompilerPluginVersion")
-                }
-            }
-            .distinct()
-        val version = distinctVersions.singleOrNull() ?: error(
-            "You're importing two detekt compiler plugins which have different versions. " +
-                "(${distinctVersions.joinToString()}) Make sure to align the versions."
-        )
-
-        return SubpluginArtifact("io.github.detekt", "detekt-compiler-plugin", version)
-    }
+    override fun getPluginArtifact(): SubpluginArtifact =
+        SubpluginArtifact("io.github.detekt", "detekt-compiler-plugin", BuildConfig.DETEKT_COMPILER_PLUGIN_VERSION)
 
     override fun isApplicable(kotlinCompilation: KotlinCompilation<*>): Boolean =
         kotlinCompilation.platformType in setOf(KotlinPlatformType.jvm, KotlinPlatformType.androidJvm)

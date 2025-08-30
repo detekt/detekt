@@ -1,5 +1,6 @@
 package dev.detekt.gradle.plugin
 
+import dev.detekt.detekt_gradle_plugin.BuildConfig
 import dev.detekt.gradle.plugin.internal.mapExplicitArgMode
 import dev.detekt.gradle.plugin.internal.rootProjectDirectoryCompat
 import io.gitlab.arturbosch.detekt.Detekt
@@ -7,7 +8,6 @@ import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import io.gitlab.arturbosch.detekt.DetektPlugin
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import io.gitlab.arturbosch.detekt.extensions.FailOnSeverity
-import io.gitlab.arturbosch.detekt.extensions.loadDetektVersion
 import io.gitlab.arturbosch.detekt.internal.addVariantName
 import io.gitlab.arturbosch.detekt.internal.existingVariantOrBaseFile
 import io.gitlab.arturbosch.detekt.internal.setCreateBaselineTaskDefaults
@@ -26,7 +26,7 @@ class DetektBasePlugin : Plugin<Project> {
         val extension = project.extensions.create(DETEKT_EXTENSION, DetektExtension::class.java)
 
         with(extension) {
-            toolVersion.convention(loadDetektVersion(DetektExtension::class.java.classLoader))
+            toolVersion.convention(BuildConfig.DETEKT_VERSION)
             ignoreFailures.convention(DEFAULT_IGNORE_FAILURES)
             failOnSeverity.convention(DEFAULT_FAIL_ON_SEVERITY)
             source.setFrom(

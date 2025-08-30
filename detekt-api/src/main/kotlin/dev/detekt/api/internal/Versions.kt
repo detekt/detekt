@@ -4,6 +4,7 @@ import dev.detekt.api.Extension
 import dev.detekt.utils.openSafeStream
 import java.net.URL
 import java.util.jar.Manifest
+import dev.detekt.detekt_api.BuildConfig
 
 /**
  * Returns the name of the running OS.
@@ -18,12 +19,12 @@ fun whichJava(): String = System.getProperty("java.runtime.version")
 /**
  * Returns the version of Kotlin that detekt was compiled with
  */
-fun whichKotlin(): String = getManifestValue("KotlinImplementationVersion")
+fun whichKotlin(): String = BuildConfig.KOTLIN_IMPLEMENTATION_VERSION
 
 /**
  * Returns the bundled detekt version.
  */
-fun whichDetekt(): String = getManifestValue("DetektVersion")
+fun whichDetekt(): String = BuildConfig.DETEKT_VERSION
 
 private fun getManifestValue(key: String): String {
     fun readVersion(resource: URL): String? = resource.openSafeStream()
