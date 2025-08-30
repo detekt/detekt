@@ -15,8 +15,6 @@ import org.gradle.api.Incubating
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.provider.ProviderFactory
-import java.net.URL
-import java.util.jar.Manifest
 
 class DetektPlugin : Plugin<Project> {
 
@@ -162,8 +160,3 @@ internal fun ProviderFactory.isWorkerApiEnabled(): Boolean =
 
 @Incubating
 fun getSupportedKotlinVersion(): String = BuildConfig.KOTLIN_IMPLEMENTATION_VERSION
-
-private fun readVersion(resource: URL): String? = resource.openConnection()
-    .apply { useCaches = false }
-    .getInputStream()
-    .use { Manifest(it).mainAttributes.getValue("KotlinImplementationVersion") }
