@@ -139,9 +139,8 @@ dependencies {
             attribute(GradlePluginApiVersion.GRADLE_PLUGIN_API_VERSION_ATTRIBUTE, objects.named("7.6.3"))
         }
     }
-
+    // We use those published version of detekt artifacts to self analyse this project and produce a Problem API report
     compileOnly("io.gitlab.arturbosch.detekt:detekt-api:1.23.8")
-    // We use this published version of the detekt-formatting to self analyse this project.
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.8")
 }
 
