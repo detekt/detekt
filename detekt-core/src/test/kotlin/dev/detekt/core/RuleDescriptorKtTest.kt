@@ -13,6 +13,7 @@ import dev.detekt.api.Severity.Info
 import dev.detekt.api.Severity.Warning
 import dev.detekt.api.config
 import dev.detekt.api.internal.DefaultRuleSetProvider
+import dev.detekt.api.internal.whichDetekt
 import dev.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
@@ -391,7 +392,7 @@ private fun createRuleInstance(id: String, active: Boolean, url: String?, severi
         if (id.startsWith("AnotherRule")) {
             URI("https://example.org/")
         } else {
-            URI("https://detekt.dev/docs/1.6.0/rules/custom#${id.substringBefore("/").lowercase()}")
+            URI("https://detekt.dev/docs/${whichDetekt()}/rules/custom#${id.substringBefore("/").lowercase()}")
         }
     } else {
         url?.let(::URI)

@@ -1,5 +1,6 @@
 package dev.detekt.cli.runners
 
+import dev.detekt.api.internal.whichDetekt
 import dev.detekt.test.utils.StringPrintStream
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -12,6 +13,6 @@ class VersionPrinterSpec {
 
         VersionPrinter(printStream).execute()
 
-        assertThat(printStream.toString()).contains("1.6.0")
+        assertThat(printStream.toString()).contains(whichDetekt())
     }
 }

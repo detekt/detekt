@@ -1,3 +1,0 @@
-Manifest-Version: 1.0
-DetektVersion: 1.6.0
-KotlinImplementationVersion: @kotlinVersion@
