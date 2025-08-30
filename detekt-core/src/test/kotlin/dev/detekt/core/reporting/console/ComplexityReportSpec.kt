@@ -1,9 +1,8 @@
 package dev.detekt.core.reporting.console
 
-import dev.detekt.api.Detektion
+import dev.detekt.api.testfixtures.TestDetektion
 import dev.detekt.api.testfixtures.createIssue
 import dev.detekt.api.testfixtures.createRuleInstance
-import dev.detekt.core.DetektResult
 import dev.detekt.metrics.CognitiveComplexity
 import dev.detekt.metrics.processors.commentLinesKey
 import dev.detekt.metrics.processors.complexityKey
@@ -51,7 +50,4 @@ class ComplexityReportSpec {
     }
 }
 
-private fun createDetektion(): Detektion = DetektResult(
-    issues = listOf(createIssue(createRuleInstance(ruleSetId = "Key"))),
-    rules = emptyList(),
-)
+private fun createDetektion() = TestDetektion(createIssue(createRuleInstance(ruleSetId = "Key")))

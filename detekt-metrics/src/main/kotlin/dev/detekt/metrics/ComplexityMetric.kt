@@ -10,11 +10,11 @@ import dev.detekt.metrics.processors.sourceLinesKey
 
 class ComplexityMetric(detektion: Detektion) {
 
-    val mcc = detektion.getUserData(complexityKey)
-    val cognitiveComplexity = detektion.getUserData(CognitiveComplexity.KEY)
-    val loc = detektion.getUserData(linesKey)
-    val sloc = detektion.getUserData(sourceLinesKey)
-    val lloc = detektion.getUserData(logicalLinesKey)
-    val cloc = detektion.getUserData(commentLinesKey)
+    val mcc = detektion.userData[complexityKey.toString()] as Int?
+    val cognitiveComplexity = detektion.userData[CognitiveComplexity.KEY.toString()] as Int?
+    val loc = detektion.userData[linesKey.toString()] as Int?
+    val sloc = detektion.userData[sourceLinesKey.toString()] as Int?
+    val lloc = detektion.userData[logicalLinesKey.toString()] as Int?
+    val cloc = detektion.userData[commentLinesKey.toString()] as Int?
     val issuesCount = detektion.issues.count { !it.suppressed }
 }
