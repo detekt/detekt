@@ -18,5 +18,4 @@ class ProjectCLOCProcessorSpec {
 
         assertThat(detektion.getUserData(commentLinesKey)).isEqualTo(35)
     }
-
 }

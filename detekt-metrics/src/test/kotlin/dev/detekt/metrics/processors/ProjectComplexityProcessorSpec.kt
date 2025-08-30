@@ -18,5 +18,4 @@ class ProjectComplexityProcessorSpec {
 
         assertThat(detektion.getUserData(complexityKey)).isEqualTo(45)
     }
-
 }

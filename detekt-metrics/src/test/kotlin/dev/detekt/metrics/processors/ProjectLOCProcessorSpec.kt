@@ -18,5 +18,4 @@ class ProjectLOCProcessorSpec {
 
         assertThat(detektion.getUserData(linesKey)).isEqualTo(190)
     }
-
 }

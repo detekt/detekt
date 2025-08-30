@@ -18,5 +18,4 @@ class ProjectLLOCProcessorSpec {
 
         assertThat(detektion.getUserData(logicalLinesKey)).isEqualTo(102)
     }
-
 }
