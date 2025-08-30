@@ -118,7 +118,6 @@ public final class io/gitlab/arturbosch/detekt/DetektPluginKt {
 
 public final class io/gitlab/arturbosch/detekt/ProblemsApiConsoleReport : io/gitlab/arturbosch/detekt/api/ConsoleReport {
 	public fun <init> (Lorg/gradle/api/problems/ProblemReporter;Ljava/lang/String;)V
-	public synthetic fun <init> (Lorg/gradle/api/problems/ProblemReporter;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun getId ()Ljava/lang/String;
 	public fun getPriority ()I
 	public fun render (Lio/gitlab/arturbosch/detekt/api/Detektion;)Ljava/lang/String;
