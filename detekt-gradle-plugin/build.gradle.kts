@@ -196,22 +196,6 @@ signing {
 }
 
 tasks {
-    val writeDetektVersionProperties by registering(WriteProperties::class) {
-        description = "Write the properties file with the detekt version to be used by the plugin."
-        encoding = "UTF-8"
-        destinationFile = layout.buildDirectory.file("detekt-versions.properties")
-        property("detektVersion", project.version)
-        property("detektCompilerPluginVersion", project.version)
-    }
-
-    processResources {
-        from(writeDetektVersionProperties)
-    }
-
-    processTestResources {
-        from(writeDetektVersionProperties)
-    }
-
     // Manually inject dependency to gradle-testkit since the default injected plugin classpath is from `main.runtime`.
     pluginUnderTestMetadata {
         pluginClasspath.from(testKitRuntimeOnly)
