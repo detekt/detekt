@@ -116,6 +116,12 @@ public final class io/gitlab/arturbosch/detekt/DetektPluginKt {
 	public static final fun getSupportedKotlinVersion ()Ljava/lang/String;
 }
 
+public final class io/gitlab/arturbosch/detekt/ProblemsApiConsoleReport : io/gitlab/arturbosch/detekt/api/ConsoleReport {
+	public fun <init> (Lorg/gradle/api/problems/ProblemReporter;Ljava/lang/String;)V
+	public fun getId ()Ljava/lang/String;
+	public fun getPriority ()I
+	public fun render (Lio/gitlab/arturbosch/detekt/api/Detektion;)Ljava/lang/String;
+}
 public abstract class io/gitlab/arturbosch/detekt/extensions/CustomDetektReport {
 	public fun <init> ()V
 	public abstract fun getOutputLocation ()Lorg/gradle/api/file/RegularFileProperty;
