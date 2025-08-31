@@ -1,1 +1,1 @@
-dev.detekt.rules.coroutines.CoroutinesProvider
+io.gitlab.arturbosch.detekt.rules.coroutines.CoroutinesProvider

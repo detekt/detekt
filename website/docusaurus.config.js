@@ -11,7 +11,6 @@ const config = {
   url: "https://detekt.dev/",
   baseUrl: "/",
   onBrokenLinks: "throw",
-  onBrokenAnchors: "throw",
   onBrokenMarkdownLinks: "throw",
   onDuplicateRoutes: "throw",
   favicon: "/img/favicon.svg",

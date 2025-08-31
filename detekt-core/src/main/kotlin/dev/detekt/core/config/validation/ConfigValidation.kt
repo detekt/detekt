@@ -116,6 +116,3 @@ internal fun Notification.renderMessage(): String =
         Level.Warning -> message.yellow()
         Level.Info -> message
     }
-
-private val Notification.isError: Boolean
-    get() = level == Level.Error

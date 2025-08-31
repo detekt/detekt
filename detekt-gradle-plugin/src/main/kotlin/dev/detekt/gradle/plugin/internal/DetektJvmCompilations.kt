@@ -1,6 +1,6 @@
 package dev.detekt.gradle.plugin.internal
 
-import dev.detekt.gradle.extensions.DetektExtension
+import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.Project
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 

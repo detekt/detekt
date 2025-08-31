@@ -57,7 +57,7 @@ dependencies {
     releaseArtifacts(project(":detekt-compiler-plugin")) {
         targetConfiguration = "shadow" // com.github.jengelman.gradle.plugins.shadow.ShadowBasePlugin.CONFIGURATION_NAME
     }
-    releaseArtifacts(project(":detekt-rules-ktlint-wrapper")) {
+    releaseArtifacts(project(":detekt-formatting")) {
         targetConfiguration = Dependency.DEFAULT_CONFIGURATION
         isTransitive = false
     }
@@ -116,14 +116,4 @@ tasks.register("publishToMavenLocal") {
         }
     }
     dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":publishToMavenLocal"))
-}
-
-tasks.register("publishToSonatype") {
-    description = "Publish all the projects to Sonatype"
-    subprojects {
-        if (this.plugins.hasPlugin("packaging")) {
-            dependsOn(tasks.named("publishToSonatype"))
-        }
-    }
-    dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":publishToSonatype"))
 }

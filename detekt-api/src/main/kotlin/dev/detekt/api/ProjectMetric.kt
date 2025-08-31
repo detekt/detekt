@@ -1,11 +1,8 @@
 package dev.detekt.api
 
-import dev.drewhamilton.poko.Poko
-
 /**
  * Anything that can be expressed as a numeric value for projects.
  */
-@Poko
 open class ProjectMetric(
     val type: String,
     val value: Int,

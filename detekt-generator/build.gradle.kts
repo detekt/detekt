@@ -51,7 +51,7 @@ val documentationDir = "$rootDir/website/docs/rules"
 val configDir = "$rootDir/detekt-core/src/main/resources"
 val defaultConfigFile = "$configDir/default-detekt-config.yml"
 val deprecationFile = "$configDir/deprecation.properties"
-val ktlintWrapperConfigFile = "$rootDir/detekt-rules-ktlint-wrapper/src/main/resources/config/config.yml"
+val formattingConfigFile = "$rootDir/detekt-formatting/src/main/resources/config/config.yml"
 val librariesConfigFile = "$rootDir/detekt-rules-libraries/src/main/resources/config/config.yml"
 val ruleauthorsConfigFile = "$rootDir/detekt-rules-ruleauthors/src/main/resources/config/config.yml"
 
@@ -73,7 +73,7 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
     group = "documentation"
 
     val ruleModules = rootProject.subprojects.asSequence()
-        .filter { "rules" in it.name }
+        .filter { "rules" in it.name || it.name == "detekt-formatting" }
         .filterNot { it.name == "detekt-rules" }
         .flatMap { it.sourceSets.main.get().kotlin.srcDirs }
         .filter { it.exists() }
@@ -88,7 +88,7 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
     outputs.dir(documentationDir)
     outputs.file(defaultConfigFile)
     outputs.file(deprecationFile)
-    outputs.file(ktlintWrapperConfigFile)
+    outputs.file(formattingConfigFile)
     outputs.file(librariesConfigFile)
     outputs.file(ruleauthorsConfigFile)
 
@@ -105,13 +105,13 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
     )
 }
 
-val generatedKtlintWrapperConfig by configurations.consumable("generatedKtlintWrapperConfig")
+val generatedFormattingConfig by configurations.consumable("generatedFormattingConfig")
 val generatedLibrariesConfig by configurations.consumable("generatedLibrariesConfig")
 val generatedRuleauthorsConfig by configurations.consumable("generatedRuleauthorsConfig")
 val generatedCoreConfig by configurations.consumable("generatedCoreConfig")
 
 artifacts {
-    add(generatedKtlintWrapperConfig.name, file(ktlintWrapperConfigFile)) {
+    add(generatedFormattingConfig.name, file(formattingConfigFile)) {
         builtBy(generateDocumentation)
     }
     add(generatedLibrariesConfig.name, file(librariesConfigFile)) {
@@ -136,7 +136,7 @@ val verifyGeneratorOutput by tasks.registering(Exec::class) {
         "diff",
         "--quiet",
         defaultConfigFile,
-        ktlintWrapperConfigFile,
+        formattingConfigFile,
         librariesConfigFile,
         ruleauthorsConfigFile,
         deprecationFile,
