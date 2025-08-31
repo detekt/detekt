@@ -198,10 +198,12 @@ public abstract class dev/detekt/api/OutputReport : dev/detekt/api/Extension {
 public class dev/detekt/api/ProjectMetric {
 	public fun <init> (Ljava/lang/String;IIZI)V
 	public synthetic fun <init> (Ljava/lang/String;IIZIILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun equals (Ljava/lang/Object;)Z
 	public final fun getConversionFactor ()I
 	public final fun getPriority ()I
 	public final fun getType ()Ljava/lang/String;
 	public final fun getValue ()I
+	public fun hashCode ()I
 	public final fun isDouble ()Z
 	public fun toString ()Ljava/lang/String;
 }

@@ -6,9 +6,9 @@ import dev.detekt.api.ProjectMetric
 import dev.detekt.api.internal.whichDetekt
 import dev.detekt.api.testfixtures.TestDetektion
 import dev.detekt.api.testfixtures.TestSetupContext
-import dev.detekt.api.testfixtures.createEntity
 import dev.detekt.api.testfixtures.createIssue
-import dev.detekt.api.testfixtures.createLocation
+import dev.detekt.api.testfixtures.createIssueEntity
+import dev.detekt.api.testfixtures.createIssueLocation
 import dev.detekt.api.testfixtures.createRuleInstance
 import dev.detekt.metrics.CognitiveComplexity
 import dev.detekt.metrics.processors.commentLinesKey
@@ -157,14 +157,14 @@ class HtmlOutputReportSpec {
 }
 
 private fun createTestDetektionWithMultipleSmells(): Detektion {
-    val entity1 = createEntity(
-        location = createLocation("src/main/com/sample/Sample1.kt", position = 11 to 1, text = 10..14),
+    val entity1 = createIssueEntity(
+        location = createIssueLocation("src/main/com/sample/Sample1.kt", position = 11 to 1, text = 10..14),
     )
-    val entity2 = createEntity(
-        location = createLocation("src/main/com/sample/Sample2.kt", position = 22 to 2, text = 10..14),
+    val entity2 = createIssueEntity(
+        location = createIssueLocation("src/main/com/sample/Sample2.kt", position = 22 to 2, text = 10..14),
     )
-    val entity3 = createEntity(
-        location = createLocation("src/main/com/sample/Sample3.kt", position = 33 to 3, text = 10..14),
+    val entity3 = createIssueEntity(
+        location = createIssueLocation("src/main/com/sample/Sample3.kt", position = 33 to 3, text = 10..14),
     )
 
     return TestDetektion(
@@ -193,10 +193,10 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
 }
 
 private fun issues(): Array<Issue> {
-    val entity1 = createEntity(location = createLocation("src/main/com/sample/Sample1.kt", position = 11 to 5))
-    val entity2 = createEntity(location = createLocation("src/main/com/sample/Sample1.kt", position = 22 to 2))
-    val entity3 = createEntity(location = createLocation("src/main/com/sample/Sample1.kt", position = 11 to 2))
-    val entity4 = createEntity(location = createLocation("src/main/com/sample/Sample2.kt", position = 1 to 1))
+    val entity1 = createIssueEntity(createIssueLocation("src/main/com/sample/Sample1.kt", position = 11 to 5))
+    val entity2 = createIssueEntity(createIssueLocation("src/main/com/sample/Sample1.kt", position = 22 to 2))
+    val entity3 = createIssueEntity(createIssueLocation("src/main/com/sample/Sample1.kt", position = 11 to 2))
+    val entity4 = createIssueEntity(createIssueLocation("src/main/com/sample/Sample2.kt", position = 1 to 1))
 
     return arrayOf(
         createIssue(createRuleInstance("rule_a", "RuleSet1"), entity1),
