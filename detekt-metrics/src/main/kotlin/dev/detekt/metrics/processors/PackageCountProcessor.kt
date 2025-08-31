@@ -1,38 +1,46 @@
 package dev.detekt.metrics.processors
 
-import com.intellij.openapi.util.Key
-import dev.detekt.api.DetektVisitor
 import dev.detekt.api.Detektion
 import dev.detekt.api.FileProcessListener
 import dev.detekt.api.ProjectMetric
 import org.jetbrains.kotlin.psi.KtFile
+import kotlin.concurrent.atomics.AtomicReference
+import kotlin.concurrent.atomics.ExperimentalAtomicApi
 
+@OptIn(ExperimentalAtomicApi::class)
 class PackageCountProcessor : FileProcessListener {
-
-    private val visitor = PackageCountVisitor()
-    private val key = numberOfPackagesKey
+    private val packages: AtomicSet<String> = AtomicSet(emptySet())
 
     override val id: String = "PackageCountProcessor"
 
+    override fun onStart(files: List<KtFile>) {
+        packages.store(emptySet())
+    }
+
     override fun onProcess(file: KtFile) {
-        file.accept(visitor)
+        packages.add(file.packageFqName.toString())
     }
 
     override fun onFinish(files: List<KtFile>, result: Detektion) {
-        val count = files
-            .mapNotNull { it.getUserData(key) }
-            .distinct()
-            .size
-        result.add(ProjectMetric(key.toString(), count))
+        result.add(ProjectMetric("number of packages", packages.count()))
     }
 }
 
-val numberOfPackagesKey = Key<String>("number of packages")
+@ExperimentalAtomicApi
+class AtomicSet<T>(initialValue: Set<T>) {
+    val reference = AtomicReference<Set<T>>(initialValue)
 
-class PackageCountVisitor : DetektVisitor() {
-
-    override fun visitKtFile(file: KtFile) {
-        val packageName = file.packageFqName.toString()
-        file.putUserData(numberOfPackagesKey, packageName)
+    fun store(value: Set<T>) {
+        reference.store(value)
     }
+
+    fun add(value: T) {
+        var success: Boolean
+        do {
+            val set = reference.load()
+            success = reference.compareAndSet(set, set + value)
+        } while (!success)
+    }
+
+    fun count() = reference.load().count()
 }
