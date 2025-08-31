@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
 import dev.detekt.test.TestConfig
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
 import org.junit.jupiter.api.Test
 

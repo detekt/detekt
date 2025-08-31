@@ -39,6 +39,10 @@ inline fun YamlNode.keyValue(comment: String = "", keyValue: () -> Pair<String, 
     }
 }
 
+fun YamlNode.comment(comment: String = "") {
+    append("# $comment")
+}
+
 fun YamlNode.list(name: String, list: List<String>) {
     if (list.isEmpty()) {
         keyValue { name to EMPTY_LIST }
@@ -84,6 +88,7 @@ private fun String.ensureQuoted(): String =
             endsWith(SINGLE_QUOTE) ||
             startsWith(DOUBLE_QUOTE) &&
             endsWith(DOUBLE_QUOTE) -> this
+
         else -> quoted()
     }
 

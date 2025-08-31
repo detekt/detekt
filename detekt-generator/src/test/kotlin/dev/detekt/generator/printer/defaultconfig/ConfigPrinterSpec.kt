@@ -29,7 +29,7 @@ class ConfigPrinterSpec {
                 conf3:
                   - 'a'
                   - 'b'
-                conf5: 120
+                # conf5: If the 'android' ruleset property is set to true, the default is '100', otherwise '120'.
               EqualsNull:
                 active: false
               NoUnitKeyword:

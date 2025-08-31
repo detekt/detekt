@@ -1,7 +1,7 @@
 package dev.detekt.rules.exceptions
 
 import dev.detekt.api.Config
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
 import org.junit.jupiter.api.Test
 
@@ -202,8 +202,9 @@ class RethrowCaughtExceptionSpec {
             }
         """.trimIndent()
         val result = subject.lint(code)
-        assertThat(result).hasSize(2)
-        assertThat(result).element(0).hasSourceLocation(4, 9)
-        assertThat(result).element(1).hasSourceLocation(7, 9)
+        assertThat(result).satisfiesExactlyInAnyOrder(
+            { assertThat(it).hasStartSourceLocation(4, 9) },
+            { assertThat(it).hasStartSourceLocation(7, 9) },
+        )
     }
 }

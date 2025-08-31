@@ -15,7 +15,7 @@ Prefer splitting up complex methods into smaller methods that are in turn easier
 Smaller methods can also be named much clearer which leads to improved readability of the code.
 
 This rule measures and restricts the complexity of the method through the [Cognitive Complexity metric of Sonasource](https://www.sonarsource.com/docs/CognitiveComplexity.pdf).
-Which improves McCabe's Cyclomatic Complexity (see [CyclomaticComplexMethod](/docs/rules/complexity#cyclomaticcomplexmethod)) considering the programmer's mental model.
+Which improves McCabe's Cyclomatic Complexity (see [CyclomaticComplexMethod](complexity.md#cyclomaticcomplexmethod)) considering the programmer's mental model.
 
 Similar to cyclomatic complexity, it is a mathematical model that increases +1 complexity for flow control statements,
 but increases additional complexity when the statements are deeply nested.

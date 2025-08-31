@@ -1,0 +1,25 @@
+public final class dev/detekt/test/assertj/FindingAssert : org/assertj/core/api/AbstractAssert {
+	public fun <init> (Ldev/detekt/api/Finding;)V
+	public final fun getActual ()Ldev/detekt/api/Finding;
+	public final fun hasEndSourceLocation (II)Ldev/detekt/test/assertj/FindingAssert;
+	public final fun hasEndSourceLocation (Ldev/detekt/api/SourceLocation;)Ldev/detekt/test/assertj/FindingAssert;
+	public final fun hasMessage (Ljava/lang/String;)Ldev/detekt/test/assertj/FindingAssert;
+	public final fun hasStartSourceLocation (II)Ldev/detekt/test/assertj/FindingAssert;
+	public final fun hasStartSourceLocation (Ldev/detekt/api/SourceLocation;)Ldev/detekt/test/assertj/FindingAssert;
+	public final fun hasTextLocation (Ldev/detekt/api/TextLocation;)Ldev/detekt/test/assertj/FindingAssert;
+	public final fun hasTextLocation (Ljava/lang/String;)Ldev/detekt/test/assertj/FindingAssert;
+	public final fun hasTextLocation (Lkotlin/Pair;)Ldev/detekt/test/assertj/FindingAssert;
+	public final fun noSuppress ()Ldev/detekt/test/assertj/FindingAssert;
+}
+
+public final class dev/detekt/test/assertj/FindingsAssert : org/assertj/core/api/AbstractListAssert {
+	public fun <init> (Ljava/util/List;)V
+	public synthetic fun newAbstractIterableAssert (Ljava/lang/Iterable;)Lorg/assertj/core/api/AbstractIterableAssert;
+	public synthetic fun toAssert (Ljava/lang/Object;Ljava/lang/String;)Lorg/assertj/core/api/AbstractAssert;
+}
+
+public final class dev/detekt/test/assertj/FindingsAssertionsKt {
+	public static final fun assertThat (Ldev/detekt/api/Finding;)Ldev/detekt/test/assertj/FindingAssert;
+	public static final fun assertThat (Ljava/util/List;)Ldev/detekt/test/assertj/FindingsAssert;
+}
+

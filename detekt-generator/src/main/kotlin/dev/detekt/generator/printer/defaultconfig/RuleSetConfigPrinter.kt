@@ -6,6 +6,7 @@ import dev.detekt.generator.collection.Rule
 import dev.detekt.generator.collection.RuleSetPage
 import dev.detekt.generator.collection.RuleSetProvider
 import dev.detekt.utils.YamlNode
+import dev.detekt.utils.comment
 import dev.detekt.utils.keyValue
 import dev.detekt.utils.node
 
@@ -51,5 +52,16 @@ internal fun YamlNode.printRule(rule: Rule) {
 internal fun YamlNode.printConfiguration(configuration: Configuration) {
     if (configuration.isDeprecated()) return
 
-    configuration.defaultValue.printAsYaml(configuration.name, this)
+    val hasDeviatingAndroidDefault = configuration.defaultAndroidValue != null &&
+        configuration.defaultValue != configuration.defaultAndroidValue
+
+    if (hasDeviatingAndroidDefault) {
+        val description =
+            "If the 'android' ruleset property is set to true, " +
+                "the default is '${configuration.defaultAndroidValue.getPlainValue()}', " +
+                "otherwise '${configuration.defaultValue.getPlainValue()}'."
+        comment("${configuration.name}: $description")
+    } else {
+        configuration.defaultValue.printAsYaml(configuration.name, this)
+    }
 }

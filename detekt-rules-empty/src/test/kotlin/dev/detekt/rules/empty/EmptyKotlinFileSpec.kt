@@ -1,7 +1,7 @@
 package dev.detekt.rules.empty
 
 import dev.detekt.api.Config
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
 import org.junit.jupiter.api.Test
 
@@ -12,7 +12,7 @@ class EmptyKotlinFileSpec {
     fun `reports empty if file is blank`() {
         val code = ""
         assertThat(subject.lint(code)).singleElement()
-            .hasSourceLocation(1, 1)
+            .hasStartSourceLocation(1, 1)
     }
 
     @Test
@@ -21,7 +21,7 @@ class EmptyKotlinFileSpec {
             package my.packagee
         """.trimIndent()
         assertThat(subject.lint(codeWithPackageStatement)).singleElement()
-            .hasSourceLocation(1, 1)
+            .hasStartSourceLocation(1, 1)
     }
 
     @Test
