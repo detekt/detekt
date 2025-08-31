@@ -1,17 +1,16 @@
 package dev.detekt.gradle.plugin
 
 import dev.detekt.detekt_gradle_plugin.BuildConfig
+import dev.detekt.gradle.Detekt
+import dev.detekt.gradle.DetektCreateBaselineTask
+import dev.detekt.gradle.extensions.DetektExtension
+import dev.detekt.gradle.extensions.FailOnSeverity
+import dev.detekt.gradle.internal.addVariantName
+import dev.detekt.gradle.internal.existingVariantOrBaseFile
+import dev.detekt.gradle.internal.setCreateBaselineTaskDefaults
+import dev.detekt.gradle.internal.setDetektTaskDefaults
 import dev.detekt.gradle.plugin.internal.mapExplicitArgMode
 import dev.detekt.gradle.plugin.internal.rootProjectDirectoryCompat
-import io.gitlab.arturbosch.detekt.Detekt
-import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
-import io.gitlab.arturbosch.detekt.DetektPlugin
-import io.gitlab.arturbosch.detekt.extensions.DetektExtension
-import io.gitlab.arturbosch.detekt.extensions.FailOnSeverity
-import io.gitlab.arturbosch.detekt.internal.addVariantName
-import io.gitlab.arturbosch.detekt.internal.existingVariantOrBaseFile
-import io.gitlab.arturbosch.detekt.internal.setCreateBaselineTaskDefaults
-import io.gitlab.arturbosch.detekt.internal.setDetektTaskDefaults
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.ReportingBasePlugin
