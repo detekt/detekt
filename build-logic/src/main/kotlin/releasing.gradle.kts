@@ -117,3 +117,13 @@ tasks.register("publishToMavenLocal") {
     }
     dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":publishToMavenLocal"))
 }
+
+tasks.register("publishToSonatype") {
+    description = "Publish all the projects to Sonatype"
+    subprojects {
+        if (this.plugins.hasPlugin("packaging")) {
+            dependsOn(tasks.named("publishToSonatype"))
+        }
+    }
+    dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":publishToSonatype"))
+}
