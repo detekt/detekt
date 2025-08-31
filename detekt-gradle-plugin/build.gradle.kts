@@ -2,6 +2,8 @@
 // https://github.com/gradle/gradle/issues/21285
 @file:Suppress("StringLiteralDuplication")
 
+import io.gitlab.arturbosch.detekt.Detekt
+import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import org.jetbrains.kotlin.buildtools.api.ExperimentalBuildToolsApi
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 
@@ -220,6 +222,13 @@ tasks {
     register<PluginUnderTestMetadata>("gradleMinVersionPluginUnderTestMetadata") {
         pluginClasspath.setFrom(sourceSets.main.get().output, testKitGradleMinVersionRuntimeOnly)
         outputDirectory = layout.buildDirectory.dir(name)
+    }
+
+    withType<Detekt>().configureEach {
+        exclude("dev/detekt/detekt_gradle_plugin/BuildConfig.kt")
+    }
+    withType<DetektCreateBaselineTask>().configureEach {
+        exclude("dev/detekt/detekt_gradle_plugin/BuildConfig.kt")
     }
 
     withType<Test>().configureEach {
