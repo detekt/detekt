@@ -5,12 +5,10 @@ module:detekt-api
 dev.detekt.api
 dev.detekt.api.internal
 module:detekt-gradle-plugin
+dev.detekt.gradle
+dev.detekt.gradle.extensions
 dev.detekt.gradle.plugin
-io.github.detekt.gradle
-io.github.detekt.gradle.extensions
-io.gitlab.arturbosch.detekt
-io.gitlab.arturbosch.detekt.extensions
-io.gitlab.arturbosch.detekt.report
+dev.detekt.gradle.report
 module:detekt-psi-utils
 dev.detekt.psi
 module:detekt-test
