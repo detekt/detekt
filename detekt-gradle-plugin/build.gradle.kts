@@ -17,6 +17,7 @@ plugins {
     id("org.jetbrains.dokka") version "2.0.0"
     id("signing")
     id("com.github.gmazzo.buildconfig") version "5.6.7"
+    id("io.github.gradle-nexus.publish-plugin") version "2.0.0"
 }
 
 repositories {
@@ -31,6 +32,17 @@ buildConfig {
     buildConfigField("DETEKT_VERSION", project.version.toString())
     buildConfigField("DETEKT_COMPILER_PLUGIN_VERSION", project.version.toString())
     buildConfigField("KOTLIN_IMPLEMENTATION_VERSION", libs.versions.kotlin.get())
+}
+
+nexusPublishing {
+    repositories {
+        create("sonatype") {
+            nexusUrl = uri("https://ossrh-staging-api.central.sonatype.com/service/local/")
+            snapshotRepositoryUrl = uri("https://central.sonatype.com/repository/maven-snapshots/")
+            username = providers.environmentVariable("ORG_GRADLE_PROJECT_SONATYPE_USERNAME")
+            password = providers.environmentVariable("ORG_GRADLE_PROJECT_SONATYPE_PASSWORD")
+        }
+    }
 }
 
 detekt {
