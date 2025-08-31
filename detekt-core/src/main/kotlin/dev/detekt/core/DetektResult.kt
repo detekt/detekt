@@ -7,7 +7,8 @@ import dev.detekt.api.Notification
 import dev.detekt.api.ProjectMetric
 import dev.detekt.api.RuleInstance
 
-class DetektResult(
+@Suppress("DataClassShouldBeImmutable")
+data class DetektResult(
     override val issues: List<Issue>,
     override val rules: List<RuleInstance>,
 ) : Detektion, UserDataHolderBase() {

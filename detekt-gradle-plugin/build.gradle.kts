@@ -16,7 +16,6 @@ plugins {
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.18.1"
     id("org.jetbrains.dokka") version "2.0.0"
     id("signing")
-    id("io.github.gradle-nexus.publish-plugin") version "2.0.0"
 }
 
 repositories {
@@ -26,17 +25,6 @@ repositories {
 
 group = "dev.detekt"
 version = Versions.currentOrSnapshot()
-
-nexusPublishing {
-    repositories {
-        create("sonatype") {
-            nexusUrl = uri("https://ossrh-staging-api.central.sonatype.com/service/local/")
-            snapshotRepositoryUrl = uri("https://central.sonatype.com/repository/maven-snapshots/")
-            username = providers.environmentVariable("ORG_GRADLE_PROJECT_SONATYPE_USERNAME")
-            password = providers.environmentVariable("ORG_GRADLE_PROJECT_SONATYPE_PASSWORD")
-        }
-    }
-}
 
 detekt {
     source.from("src/functionalTest/kotlin")
@@ -166,11 +154,11 @@ gradlePlugin {
         }
         create("detektPlugin") {
             id = "dev.detekt"
-            implementationClass = "dev.detekt.gradle.plugin.DetektPlugin"
+            implementationClass = "io.gitlab.arturbosch.detekt.DetektPlugin"
         }
         create("detektCompilerPlugin") {
             id = "dev.detekt.gradle.compiler-plugin"
-            implementationClass = "dev.detekt.gradle.plugin.DetektKotlinCompilerPlugin"
+            implementationClass = "io.github.detekt.gradle.DetektKotlinCompilerPlugin"
         }
         configureEach {
             displayName = "Static code analysis for Kotlin"

@@ -1,7 +1,7 @@
 package dev.detekt.rules.bugs
 
 import dev.detekt.api.Config
-import dev.detekt.test.assertj.assertThat
+import dev.detekt.test.assertThat
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.KotlinCoreEnvironmentTest
 import dev.detekt.test.utils.KotlinEnvironmentContainer
@@ -44,10 +44,8 @@ class UnnecessaryNotNullOperatorSpec(private val env: KotlinEnvironmentContainer
                 val b = a!!.plus(42)!!
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
-            assertThat(findings).satisfiesExactlyInAnyOrder(
-                { assertThat(it).hasTextLocation(18 to 21) },
-                { assertThat(it).hasTextLocation(18 to 32) },
-            )
+            assertThat(findings).hasSize(2)
+            assertThat(findings).hasTextLocations(18 to 21, 18 to 32)
         }
     }
 

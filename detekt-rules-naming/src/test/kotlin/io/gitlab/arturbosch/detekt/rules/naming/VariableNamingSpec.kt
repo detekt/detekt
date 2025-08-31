@@ -1,8 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
 import dev.detekt.api.Config
+import dev.detekt.api.SourceLocation
 import dev.detekt.test.TestConfig
-import dev.detekt.test.assertj.assertThat
+import dev.detekt.test.assertThat
 import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.junit.jupiter.api.Nested
@@ -57,12 +58,12 @@ class VariableNamingSpec {
                 val camel_Case_Property = 5
             }
         """.trimIndent()
-        val findings = VariableNaming(Config.empty).lint(code)
-        assertThat(findings).satisfiesExactlyInAnyOrder(
-            { assertThat(it).hasStartSourceLocation(2, 17) },
-            { assertThat(it).hasStartSourceLocation(3, 9) },
-            { assertThat(it).hasStartSourceLocation(4, 9) },
-        )
+        assertThat(VariableNaming(Config.empty).lint(code))
+            .hasStartSourceLocations(
+                SourceLocation(2, 17),
+                SourceLocation(3, 9),
+                SourceLocation(4, 9)
+            )
     }
 
     @Test

@@ -10,5 +10,6 @@ dependencies {
     implementation(projects.detektKotlinAnalysisApiStandalone)
     implementation(projects.detektUtils)
     implementation(libs.kotlin.reflect)
+    compileOnly(libs.assertj.core)
     implementation(projects.detektCore)
 }
