@@ -16,6 +16,6 @@ class ProjectLLOCProcessorSpec {
             compileContentForTest(complexClass),
         )
 
-        assertThat(detektion.getUserData(logicalLinesKey)).isEqualTo(102)
+        assertThat(detektion.userData[logicalLinesKey.toString()]).isEqualTo(102)
     }
 }

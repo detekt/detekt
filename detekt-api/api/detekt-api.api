@@ -70,13 +70,14 @@ public class dev/detekt/api/DetektVisitor : org/jetbrains/kotlin/psi/KtTreeVisit
 	public fun <init> ()V
 }
 
-public abstract interface class dev/detekt/api/Detektion : com/intellij/openapi/util/UserDataHolder {
+public abstract interface class dev/detekt/api/Detektion {
 	public abstract fun add (Ldev/detekt/api/Notification;)V
 	public abstract fun add (Ldev/detekt/api/ProjectMetric;)V
 	public abstract fun getIssues ()Ljava/util/List;
 	public abstract fun getMetrics ()Ljava/util/Collection;
 	public abstract fun getNotifications ()Ljava/util/Collection;
 	public abstract fun getRules ()Ljava/util/List;
+	public abstract fun getUserData ()Ljava/util/Map;
 }
 
 public final class dev/detekt/api/Entity {
