@@ -1,5 +1,9 @@
 package dev.detekt.gradle
 
+import dev.detekt.detekt_gradle_plugin.BuildConfig
+import dev.detekt.gradle.extensions.DetektReportType
+import dev.detekt.gradle.testkit.DslTestBuilder.Companion.kotlin
+import dev.detekt.gradle.testkit.ProjectLayout
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.TaskOutcome
 import org.junit.jupiter.api.DisplayName
