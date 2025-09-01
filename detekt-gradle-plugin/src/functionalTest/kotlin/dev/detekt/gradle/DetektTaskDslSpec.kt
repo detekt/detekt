@@ -1,7 +1,7 @@
 package dev.detekt.gradle
 
+import dev.detekt.detekt_gradle_plugin.BuildConfig
 import dev.detekt.gradle.extensions.DetektReportType
-import dev.detekt.gradle.extensions.loadDetektVersion
 import dev.detekt.gradle.testkit.DslTestBuilder.Companion.kotlin
 import dev.detekt.gradle.testkit.ProjectLayout
 import org.assertj.core.api.Assertions.assertThat
@@ -14,7 +14,7 @@ import org.junit.jupiter.params.provider.EnumSource
 
 class DetektTaskDslSpec {
 
-    val defaultDetektVersion = loadDetektVersion(DetektTaskDslSpec::class.java.classLoader)
+    val defaultDetektVersion = BuildConfig.DETEKT_VERSION
 
     @Nested
     inner class `without detekt config` {

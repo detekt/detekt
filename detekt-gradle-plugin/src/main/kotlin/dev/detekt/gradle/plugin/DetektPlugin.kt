@@ -1,5 +1,6 @@
 package dev.detekt.gradle.plugin
 
+import dev.detekt.detekt_gradle_plugin.BuildConfig
 import dev.detekt.gradle.Detekt
 import dev.detekt.gradle.DetektCreateBaselineTask
 import dev.detekt.gradle.DetektGenerateConfigTask
@@ -15,8 +16,6 @@ import org.gradle.api.Incubating
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.provider.ProviderFactory
-import java.net.URL
-import java.util.jar.Manifest
 
 class DetektPlugin : Plugin<Project> {
 
@@ -161,13 +160,4 @@ internal fun ProviderFactory.isWorkerApiEnabled(): Boolean =
     gradleProperty("detekt.use.worker.api").getOrElse("false") == "true"
 
 @Incubating
-fun getSupportedKotlinVersion(): String =
-    DetektPlugin::class.java.classLoader.getResources("META-INF/MANIFEST.MF")
-        .asSequence()
-        .mapNotNull { runCatching { readVersion(it) }.getOrNull() }
-        .first()
-
-private fun readVersion(resource: URL): String? = resource.openConnection()
-    .apply { useCaches = false }
-    .getInputStream()
-    .use { Manifest(it).mainAttributes.getValue("KotlinImplementationVersion") }
+fun getSupportedKotlinVersion(): String = BuildConfig.KOTLIN_IMPLEMENTATION_VERSION

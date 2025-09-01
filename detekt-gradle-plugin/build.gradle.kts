@@ -2,6 +2,8 @@
 // https://github.com/gradle/gradle/issues/21285
 @file:Suppress("StringLiteralDuplication")
 
+import io.gitlab.arturbosch.detekt.Detekt
+import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import org.jetbrains.kotlin.buildtools.api.ExperimentalBuildToolsApi
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 
@@ -16,6 +18,7 @@ plugins {
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.18.1"
     id("org.jetbrains.dokka") version "2.0.0"
     id("signing")
+    id("com.github.gmazzo.buildconfig") version "5.6.7"
     id("io.github.gradle-nexus.publish-plugin") version "2.0.0"
 }
 
@@ -26,6 +29,12 @@ repositories {
 
 group = "dev.detekt"
 version = Versions.currentOrSnapshot()
+
+buildConfig {
+    buildConfigField("DETEKT_VERSION", project.version.toString())
+    buildConfigField("DETEKT_COMPILER_PLUGIN_VERSION", project.version.toString())
+    buildConfigField("KOTLIN_IMPLEMENTATION_VERSION", libs.versions.kotlin.get())
+}
 
 nexusPublishing {
     repositories {
@@ -201,22 +210,6 @@ signing {
 }
 
 tasks {
-    val writeDetektVersionProperties by registering(WriteProperties::class) {
-        description = "Write the properties file with the detekt version to be used by the plugin."
-        encoding = "UTF-8"
-        destinationFile = layout.buildDirectory.file("detekt-versions.properties")
-        property("detektVersion", project.version)
-        property("detektCompilerPluginVersion", project.version)
-    }
-
-    processResources {
-        from(writeDetektVersionProperties)
-    }
-
-    processTestResources {
-        from(writeDetektVersionProperties)
-    }
-
     // Manually inject dependency to gradle-testkit since the default injected plugin classpath is from `main.runtime`.
     pluginUnderTestMetadata {
         pluginClasspath.from(testKitRuntimeOnly)
@@ -229,6 +222,13 @@ tasks {
     register<PluginUnderTestMetadata>("gradleMinVersionPluginUnderTestMetadata") {
         pluginClasspath.setFrom(sourceSets.main.get().output, testKitGradleMinVersionRuntimeOnly)
         outputDirectory = layout.buildDirectory.dir(name)
+    }
+
+    withType<Detekt>().configureEach {
+        exclude("dev/detekt/detekt_gradle_plugin/BuildConfig.kt")
+    }
+    withType<DetektCreateBaselineTask>().configureEach {
+        exclude("dev/detekt/detekt_gradle_plugin/BuildConfig.kt")
     }
 
     withType<Test>().configureEach {

@@ -1,14 +1,17 @@
+import dev.detekt.gradle.Detekt
+import dev.detekt.gradle.DetektCreateBaselineTask
+
 plugins {
     id("module")
     id("public-api")
     id("java-test-fixtures")
     id("dev.drewhamilton.poko") version "0.19.3"
+    id("com.github.gmazzo.buildconfig") version "5.6.7"
 }
 
 dependencies {
     api(libs.kotlin.compiler)
     api(projects.detektKotlinAnalysisApi)
-    implementation(projects.detektUtils)
 
     testImplementation(projects.detektTest)
     testImplementation(projects.detektTestUtils)
@@ -20,6 +23,20 @@ dependencies {
 
 detekt {
     config.from("config/detekt.yml")
+}
+
+buildConfig {
+    buildConfigField("DETEKT_VERSION", Versions.DETEKT)
+    buildConfigField("KOTLIN_IMPLEMENTATION_VERSION", libs.versions.kotlin.get())
+}
+
+tasks {
+    withType<Detekt>().configureEach {
+        exclude("dev/detekt/detekt_api/BuildConfig.kt")
+    }
+    withType<DetektCreateBaselineTask>().configureEach {
+        exclude("dev/detekt/detekt_api/BuildConfig.kt")
+    }
 }
 
 val javaComponent = components["java"] as AdhocComponentWithVariants
