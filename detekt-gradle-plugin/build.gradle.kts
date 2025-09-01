@@ -282,3 +282,9 @@ dependencyAnalysis {
         }
     }
 }
+
+tasks {
+    withType<PublishToMavenRepository>().configureEach {
+        notCompatibleWithConfigurationCache("https://github.com/detekt/detekt/issues/8484")
+    }
+}
