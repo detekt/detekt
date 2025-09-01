@@ -25,7 +25,7 @@ internal fun Project.registerJvmCompilationDetektTask(
 
         detektTask.setSource(siblingTask.sources)
         detektTask.classpath.conventionCompat(compilation.output.classesDirs, siblingTask.libraries)
-        detektTask.friendPaths.conventionCompat(siblingTask.friendPaths)
+        detektTask.friendPaths.conventionCompat(compilation.output.classesDirs, siblingTask.friendPaths)
         detektTask.apiVersion.convention(siblingTask.compilerOptions.apiVersion.map { it.version })
         detektTask.languageVersion.convention(siblingTask.compilerOptions.languageVersion.map { it.version })
         /* Note: jvmTarget convention is also set in setDetektTaskDefaults. There may be a race between setting it here
@@ -69,7 +69,7 @@ internal fun Project.registerJvmCompilationCreateBaselineTask(
 
         createBaselineTask.setSource(siblingTask.sources)
         createBaselineTask.classpath.conventionCompat(compilation.output.classesDirs, siblingTask.libraries)
-        createBaselineTask.friendPaths.conventionCompat(siblingTask.friendPaths)
+        createBaselineTask.friendPaths.conventionCompat(compilation.output.classesDirs, siblingTask.friendPaths)
         createBaselineTask.apiVersion.convention(siblingTask.compilerOptions.apiVersion.map { it.version })
         createBaselineTask.languageVersion.convention(siblingTask.compilerOptions.languageVersion.map { it.version })
         /* Note: jvmTarget convention is also set in setCreateBaselineTaskDefaults. There may be a race between setting

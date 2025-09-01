@@ -16,6 +16,6 @@ class ProjectCLOCProcessorSpec {
             compileContentForTest(complexClass),
         )
 
-        assertThat(detektion.getUserData(commentLinesKey)).isEqualTo(35)
+        assertThat(detektion.userData[commentLinesKey.toString()]).isEqualTo(35)
     }
 }
