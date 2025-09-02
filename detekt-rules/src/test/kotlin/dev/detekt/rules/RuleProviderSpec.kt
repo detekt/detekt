@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.rules
+package dev.detekt.rules
 
 import dev.detekt.api.Config
 import dev.detekt.api.Rule
