@@ -1,9 +1,9 @@
 package dev.detekt.metrics
 
+import com.intellij.openapi.util.Key
 import dev.detekt.api.Detektion
 import dev.detekt.api.testfixtures.TestDetektion
 import dev.detekt.api.testfixtures.createIssue
-import dev.detekt.api.testfixtures.removeData
 import dev.detekt.metrics.processors.commentLinesKey
 import dev.detekt.metrics.processors.cyclomaticComplexityKey
 import dev.detekt.metrics.processors.linesKey
@@ -61,13 +61,13 @@ internal class ComplexityReportGeneratorSpec {
 
         @Test
         fun `returns null for missing mcc`() {
-            detektion.removeData(cyclomaticComplexityKey)
+            val detektion = detektion.removeData(cyclomaticComplexityKey)
             assertThat(generateComplexityReport(detektion)).isNull()
         }
 
         @Test
         fun `returns null for missing lloc`() {
-            detektion.removeData(logicalLinesKey)
+            val detektion = detektion.removeData(logicalLinesKey)
             assertThat(generateComplexityReport(detektion)).isNull()
 
             detektion.userData[logicalLinesKey.toString()] = 0
@@ -76,7 +76,7 @@ internal class ComplexityReportGeneratorSpec {
 
         @Test
         fun `returns null for missing sloc`() {
-            detektion.removeData(sourceLinesKey)
+            val detektion = detektion.removeData(sourceLinesKey)
             assertThat(generateComplexityReport(detektion)).isNull()
 
             detektion.userData[sourceLinesKey.toString()] = 0
@@ -85,7 +85,7 @@ internal class ComplexityReportGeneratorSpec {
 
         @Test
         fun `returns null for missing cloc`() {
-            detektion.removeData(cyclomaticComplexityKey)
+            val detektion = detektion.removeData(cyclomaticComplexityKey)
             assertThat(generateComplexityReport(detektion)).isNull()
         }
     }
@@ -96,3 +96,12 @@ private fun generateComplexityReport(detektion: Detektion): List<String>? {
     val generator = ComplexityReportGenerator(complexityMetric)
     return generator.generate()
 }
+
+private fun <V> Detektion.removeData(key: Key<V>): Detektion =
+    Detektion(
+        issues = issues,
+        rules = rules,
+        notifications = notifications,
+        metrics = metrics,
+        userData = userData.toMutableMap().apply { remove(key.toString()) },
+    )

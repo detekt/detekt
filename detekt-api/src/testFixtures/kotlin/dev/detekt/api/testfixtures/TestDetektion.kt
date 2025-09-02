@@ -1,6 +1,5 @@
 package dev.detekt.api.testfixtures
 
-import com.intellij.openapi.util.Key
 import dev.detekt.api.Detektion
 import dev.detekt.api.Issue
 import dev.detekt.api.Notification
@@ -22,7 +21,3 @@ fun TestDetektion(
         metrics = metrics,
         userData = userData.toMutableMap()
     )
-
-fun <V> Detektion.removeData(key: Key<V>) {
-    userData.remove(key.toString())
-}
