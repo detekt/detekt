@@ -31,7 +31,6 @@ dependencies {
 }
 
 shadow {
-    // We don't need to publish the shadowed variant in the Java component.
     addShadowVariantIntoJavaComponent = false
 }
 
