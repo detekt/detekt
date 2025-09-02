@@ -10,10 +10,10 @@ import dev.detekt.rules.coroutines.CoroutinesProvider
 import dev.detekt.rules.documentation.CommentSmellProvider
 import dev.detekt.rules.empty.EmptyCodeProvider
 import dev.detekt.rules.exceptions.ExceptionsProvider
+import dev.detekt.rules.naming.NamingProvider
 import dev.detekt.rules.performance.PerformanceProvider
 import dev.detekt.rules.style.StyleGuideProvider
 import io.github.classgraph.ClassGraph
-import io.gitlab.arturbosch.detekt.rules.naming.NamingProvider
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.lang.reflect.Modifier

@@ -1,1 +1,1 @@
-io.gitlab.arturbosch.detekt.rules.naming.NamingProvider
+dev.detekt.rules.naming.NamingProvider
