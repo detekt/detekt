@@ -35,5 +35,5 @@ interface FileProcessListener : Extension {
      *
      * This method is called before any [ReportingExtension].
      */
-    fun onFinish(files: List<KtFile>, result: Detektion) {}
+    fun onFinish(files: List<KtFile>, result: Detektion): Detektion = result
 }

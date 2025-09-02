@@ -8,10 +8,11 @@ abstract class AbstractProjectMetricProcessor : AbstractProcessor() {
 
     val type: String get() = key.toString()
 
-    override fun onFinish(files: List<KtFile>, result: Detektion) {
+    override fun onFinish(files: List<KtFile>, result: Detektion): Detektion {
         val count = files
             .mapNotNull { it.getUserData(key) }
             .sum()
         result.add(ProjectMetric(type, count))
+        return result
     }
 }
