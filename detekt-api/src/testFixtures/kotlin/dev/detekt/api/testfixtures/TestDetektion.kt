@@ -11,17 +11,16 @@ import dev.detekt.api.RuleInstance
 fun TestDetektion(
     vararg issues: Issue,
     rules: List<RuleInstance> = emptyList(),
-    metrics: List<ProjectMetric> = emptyList(),
     notifications: List<Notification> = emptyList(),
+    metrics: List<ProjectMetric> = emptyList(),
     userData: Map<String, Any> = emptyMap(),
 ): Detektion = Detektion(
-    issues.toList(),
-    rules,
-).apply {
-    metrics.forEach { add(it) }
-    notifications.forEach { add(it) }
-    this.userData.putAll(userData)
-}
+    issues = issues.toList(),
+    rules = rules,
+    notifications = notifications,
+    metrics = metrics,
+    userData = userData.toMutableMap()
+)
 
 fun <V> Detektion.removeData(key: Key<V>) {
     userData.remove(key.toString())

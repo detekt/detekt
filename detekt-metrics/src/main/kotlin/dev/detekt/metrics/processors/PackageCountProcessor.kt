@@ -23,8 +23,7 @@ class PackageCountProcessor : FileProcessListener {
             .mapNotNull { it.getUserData(key) }
             .distinct()
             .size
-        result.add(ProjectMetric(key.toString(), count))
-        return result
+        return result.plus(ProjectMetric(key.toString(), count))
     }
 }
 

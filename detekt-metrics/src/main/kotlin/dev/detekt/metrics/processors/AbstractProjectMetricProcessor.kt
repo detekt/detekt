@@ -12,7 +12,6 @@ abstract class AbstractProjectMetricProcessor : AbstractProcessor() {
         val count = files
             .mapNotNull { it.getUserData(key) }
             .sum()
-        result.add(ProjectMetric(type, count))
-        return result
+        return result.plus(ProjectMetric(type, count))
     }
 }
