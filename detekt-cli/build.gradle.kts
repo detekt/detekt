@@ -1,7 +1,7 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
-    id("com.gradleup.shadow") version "9.0.2"
+    id("com.gradleup.shadow") version "9.1.0"
     id("module")
     id("application")
 }
@@ -44,9 +44,9 @@ dependencies {
     pluginsJar(projects.detektRulesRuleauthors)
 }
 
-val javaComponent = components["java"] as AdhocComponentWithVariants
-javaComponent.withVariantsFromConfiguration(configurations["shadowRuntimeElements"]) {
-    skip()
+shadow {
+    // We don't need to publish the shadowed variant in the Java component.
+    addShadowVariantIntoJavaComponent = false
 }
 
 publishing {

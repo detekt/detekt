@@ -7,7 +7,7 @@ version = "$kotlinVersion-$detektVersion"
 
 plugins {
     id("module")
-    id("com.gradleup.shadow") version "9.0.2"
+    id("com.gradleup.shadow") version "9.1.0"
     id("de.undercouch.download") version "5.6.0"
 }
 
@@ -30,9 +30,9 @@ dependencies {
     testImplementation(libs.kctfork.core)
 }
 
-val javaComponent = components["java"] as AdhocComponentWithVariants
-javaComponent.withVariantsFromConfiguration(configurations["shadowRuntimeElements"]) {
-    skip()
+shadow {
+    // We don't need to publish the shadowed variant in the Java component.
+    addShadowVariantIntoJavaComponent = false
 }
 
 publishing {
