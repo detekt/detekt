@@ -7,7 +7,6 @@ import dev.detekt.api.Notification
 import dev.detekt.api.modifiedText
 import dev.detekt.psi.absolutePath
 import org.jetbrains.kotlin.psi.KtFile
-import java.nio.file.Path
 import kotlin.io.path.writeText
 
 class KtFileModifier : FileProcessListener {
@@ -18,7 +17,7 @@ class KtFileModifier : FileProcessListener {
         files.filter { it.modifiedText != null }
             .forEach { ktFile ->
                 val path = ktFile.absolutePath()
-                result.add(ModificationNotification(path))
+                result.add(Notification("File $path was modified.", Notification.Level.Info))
                 path.writeText(ktFile.unnormalizeContent())
                 // reset modification text after writing as the PsiFile may be reused in tests or an IDE session
                 ktFile.modifiedText = null
@@ -32,11 +31,4 @@ class KtFileModifier : FileProcessListener {
                 "Line separator was not automatically detected. This is unexpected."
             }
         )
-}
-
-private class ModificationNotification(path: Path) : Notification {
-
-    override val message: String = "File $path was modified."
-    override val level: Notification.Level = Notification.Level.Info
-    override fun toString(): String = message
 }

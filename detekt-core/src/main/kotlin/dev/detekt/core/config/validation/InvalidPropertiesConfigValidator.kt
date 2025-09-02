@@ -1,9 +1,9 @@
 package dev.detekt.core.config.validation
 
 import dev.detekt.api.Notification
+import dev.detekt.api.Notification.Level
 import dev.detekt.core.config.YamlConfig
 import dev.detekt.core.extractRuleName
-import dev.detekt.core.util.SimpleNotification
 
 internal class InvalidPropertiesConfigValidator(
     private val baseline: YamlConfig,
@@ -83,18 +83,19 @@ internal class InvalidPropertiesConfigValidator(
     companion object {
 
         internal fun propertyDoesNotExists(prop: String): Notification =
-            SimpleNotification(
+            Notification(
                 "Property '$prop' is misspelled or does not exist. " +
-                    "This error may also indicate a detekt plugin is necessary to handle the '$prop' key."
+                    "This error may also indicate a detekt plugin is necessary to handle the '$prop' key.",
+                Level.Error
             )
 
         internal fun nestedConfigurationExpected(prop: String): Notification =
-            SimpleNotification("Nested config expected for '$prop'.")
+            Notification("Nested config expected for '$prop'.", Level.Error)
 
         internal fun unexpectedNestedConfiguration(prop: String): Notification =
-            SimpleNotification("Unexpected nested config for '$prop'.")
+            Notification("Unexpected nested config for '$prop'.", Level.Error)
 
         internal fun propertyShouldBeAnArray(prop: String): Notification =
-            SimpleNotification("Property '$prop' should be a YAML array instead of a String.")
+            Notification("Property '$prop' should be a YAML array instead of a String.", Level.Error)
     }
 }

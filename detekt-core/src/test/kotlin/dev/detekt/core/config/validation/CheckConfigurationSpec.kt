@@ -3,12 +3,12 @@ package dev.detekt.core.config.validation
 import dev.detekt.api.Config
 import dev.detekt.api.ConfigValidator
 import dev.detekt.api.Notification
+import dev.detekt.api.Notification.Level
 import dev.detekt.api.RuleSet
 import dev.detekt.api.RuleSetProvider
 import dev.detekt.core.createNullLoggingSpec
 import dev.detekt.core.createProcessingSettings
 import dev.detekt.core.tooling.getDefaultConfiguration
-import dev.detekt.core.util.SimpleNotification
 import dev.detekt.test.utils.createTempDirectoryForTest
 import dev.detekt.test.yamlConfigFromContent
 import dev.detekt.tooling.api.InvalidConfig
@@ -130,7 +130,7 @@ class SampleConfigValidator : ConfigValidator {
                 .subConfig("TooManyFunctions")
                 .valueOrNull<Boolean>("active")
         }.onFailure {
-            result.add(SimpleNotification("'active' property must be of type boolean."))
+            result.add(Notification("'active' property must be of type boolean.", Level.Error))
         }
         return result
     }

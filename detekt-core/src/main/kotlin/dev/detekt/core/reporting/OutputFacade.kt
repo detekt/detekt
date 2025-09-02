@@ -1,9 +1,10 @@
 package dev.detekt.core.reporting
 
 import dev.detekt.api.Detektion
+import dev.detekt.api.Notification
+import dev.detekt.api.Notification.Level
 import dev.detekt.api.getOrNull
 import dev.detekt.core.ProcessingSettings
-import dev.detekt.core.util.SimpleNotification
 import dev.detekt.tooling.api.spec.ReportsSpec
 
 class OutputFacade(
@@ -38,7 +39,7 @@ class OutputFacade(
             val filePath = reports[defaultReportMapping(report)]?.path
             if (filePath != null) {
                 report.write(filePath, result)
-                result.add(SimpleNotification("Successfully generated ${report.id} at ${filePath.toUri()}"))
+                result.add(Notification("Successfully generated ${report.id} at ${filePath.toUri()}", Level.Error))
             }
         }
     }
