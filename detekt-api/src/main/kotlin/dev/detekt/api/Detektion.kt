@@ -9,11 +9,13 @@ class Detektion(
     val rules: List<RuleInstance>,
     val notifications: List<Notification> = emptyList(),
     val metrics: List<ProjectMetric> = emptyList(),
-    val userData: MutableMap<String, Any> = mutableMapOf(),
+    val userData: Map<String, Any> = emptyMap(),
 ) {
     fun plus(projectMetric: ProjectMetric): Detektion = this.copy(metrics = metrics + projectMetric)
 
     fun plus(notification: Notification): Detektion = this.copy(notifications = notifications + notification)
+
+    fun plus(userData: Pair<String, Any>): Detektion = this.copy(userData = this.userData.plus(userData))
 
     private fun copy(
         issues: List<Issue> = this.issues,
@@ -21,5 +23,5 @@ class Detektion(
         notifications: List<Notification> = this.notifications,
         metrics: List<ProjectMetric> = this.metrics,
         userData: Map<String, Any> = this.userData,
-    ) = Detektion(issues, rules, notifications, metrics, userData.toMutableMap())
+    ) = Detektion(issues, rules, notifications, metrics, userData)
 }

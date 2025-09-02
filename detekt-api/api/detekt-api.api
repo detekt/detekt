@@ -80,6 +80,7 @@ public final class dev/detekt/api/Detektion {
 	public final fun getUserData ()Ljava/util/Map;
 	public final fun plus (Ldev/detekt/api/Notification;)Ldev/detekt/api/Detektion;
 	public final fun plus (Ldev/detekt/api/ProjectMetric;)Ldev/detekt/api/Detektion;
+	public final fun plus (Lkotlin/Pair;)Ldev/detekt/api/Detektion;
 }
 
 public final class dev/detekt/api/Entity {

@@ -67,19 +67,19 @@ internal class ComplexityReportGeneratorSpec {
 
         @Test
         fun `returns null for missing lloc`() {
-            val detektion = detektion.removeData(logicalLinesKey)
+            var detektion = detektion.removeData(logicalLinesKey)
             assertThat(generateComplexityReport(detektion)).isNull()
 
-            detektion.userData[logicalLinesKey.toString()] = 0
+            detektion = detektion.plus(logicalLinesKey.toString() to 0)
             assertThat(generateComplexityReport(detektion)).isNull()
         }
 
         @Test
         fun `returns null for missing sloc`() {
-            val detektion = detektion.removeData(sourceLinesKey)
+            var detektion = detektion.removeData(sourceLinesKey)
             assertThat(generateComplexityReport(detektion)).isNull()
 
-            detektion.userData[sourceLinesKey.toString()] = 0
+            detektion = detektion.plus(sourceLinesKey.toString() to 0)
             assertThat(generateComplexityReport(detektion)).isNull()
         }
 

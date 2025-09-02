@@ -19,7 +19,6 @@ abstract class AbstractProcessor : FileProcessListener {
         val count = files
             .mapNotNull { it.getUserData(key) }
             .sum()
-        result.userData[key.toString()] = count
-        return result
+        return result.plus(key.toString() to count)
     }
 }
