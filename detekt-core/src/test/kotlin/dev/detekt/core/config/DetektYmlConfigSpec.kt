@@ -28,7 +28,7 @@ class DetektYmlConfigSpec {
         arguments("comments", "dev.detekt.rules.documentation"),
         arguments("empty-blocks", "dev.detekt.rules.empty"),
         arguments("exceptions", "dev.detekt.rules.exceptions"),
-        arguments("naming", "io.gitlab.arturbosch.detekt.rules.naming"),
+        arguments("naming", "dev.detekt.rules.naming"),
         arguments("performance", "dev.detekt.rules.performance"),
         arguments("potential-bugs", "dev.detekt.rules.bugs"),
         arguments("style", "dev.detekt.rules.style"),
