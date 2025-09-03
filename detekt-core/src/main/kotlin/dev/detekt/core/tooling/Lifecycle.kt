@@ -16,6 +16,7 @@ import dev.detekt.core.rules.createRuleProviders
 import dev.detekt.core.util.PerformanceMonitor.Phase
 import dev.detekt.core.util.getOrCreateMonitor
 import dev.detekt.parser.DetektMessageCollector
+import dev.detekt.parser.GenerateBindingContextOptions
 import dev.detekt.parser.generateBindingContext
 import dev.detekt.tooling.api.AnalysisMode
 import org.jetbrains.kotlin.analysis.api.analyze
@@ -74,7 +75,12 @@ internal class DefaultLifecycle(
     override val bindingProvider: (files: List<KtFile>) -> BindingContext =
         {
             if (settings.spec.projectSpec.analysisMode == AnalysisMode.full) {
-                val collector = DetektMessageCollector(CompilerMessageSeverity.ERROR, settings::debug, settings::info)
+                val collector = DetektMessageCollector(
+                    minSeverity = CompilerMessageSeverity.ERROR,
+                    debugPrinter = settings::debug,
+                    warningPrinter = settings::info,
+                    isDebugEnabled = settings.spec.loggingSpec.debug
+                )
 
                 it.forEach { file: KtFile ->
                     analyze(file) {
@@ -102,11 +108,14 @@ internal class DefaultLifecycle(
                 collector.printIssuesCountIfAny(k2Mode = true)
 
                 generateBindingContext(
-                    settings.project,
-                    settings.configuration,
-                    it,
-                    settings::debug,
-                    settings::info
+                    project = settings.project,
+                    configuration = settings.configuration,
+                    files = it,
+                    options = GenerateBindingContextOptions(
+                        debugPrinter = settings::debug,
+                        warningPrinter = settings::info,
+                        isDebugEnabled = settings.spec.loggingSpec.debug,
+                    ),
                 )
             } else {
                 BindingContext.EMPTY
