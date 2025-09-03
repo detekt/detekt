@@ -10,7 +10,6 @@ import dev.detekt.core.config.YamlConfig
 import dev.detekt.core.extensions.loadExtensions
 import dev.detekt.core.reporting.red
 import dev.detekt.core.reporting.yellow
-import dev.detekt.core.util.SimpleNotification
 import dev.detekt.tooling.api.InvalidConfig
 
 /**
@@ -99,10 +98,7 @@ private fun validateYamlConfig(
         .flatMap { it.validate(configToValidate) }
         .map { notification ->
             notification.transformIf(warningsAsErrors && notification.level == Level.Warning) {
-                SimpleNotification(
-                    message = notification.message,
-                    level = Level.Error
-                )
+                Notification(notification.message, Level.Error)
             }
         }
 }

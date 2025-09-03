@@ -5,7 +5,6 @@ import dev.detekt.api.Notification
 import dev.detekt.api.RuleSet
 import dev.detekt.api.RuleSetProvider
 import dev.detekt.core.config.YamlConfig
-import dev.detekt.core.util.SimpleNotification
 import java.util.ServiceLoader
 
 internal class MissingRulesConfigValidator(
@@ -54,13 +53,13 @@ internal class MissingRulesConfigValidator(
     }
 
     private fun ruleMissing(ruleName: String, ruleSetName: RuleSet.Id): Notification =
-        SimpleNotification(
+        Notification(
             "Rule '$ruleName' from the '$ruleSetName' rule set is missing in the configuration.",
             Notification.Level.Warning,
         )
 
     private fun ruleSetMissing(ruleSetName: RuleSet.Id): Notification =
-        SimpleNotification(
+        Notification(
             "Rule set '$ruleSetName' is missing in the configuration.",
             Notification.Level.Warning,
         )
