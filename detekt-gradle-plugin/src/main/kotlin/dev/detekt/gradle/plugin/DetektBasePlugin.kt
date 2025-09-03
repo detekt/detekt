@@ -1,10 +1,10 @@
 package dev.detekt.gradle.plugin
 
+import dev.detekt.detekt_gradle_plugin.BuildConfig
 import dev.detekt.gradle.Detekt
 import dev.detekt.gradle.DetektCreateBaselineTask
 import dev.detekt.gradle.extensions.DetektExtension
 import dev.detekt.gradle.extensions.FailOnSeverity
-import dev.detekt.gradle.extensions.loadDetektVersion
 import dev.detekt.gradle.internal.addVariantName
 import dev.detekt.gradle.internal.existingVariantOrBaseFile
 import dev.detekt.gradle.internal.setCreateBaselineTaskDefaults
@@ -25,7 +25,7 @@ class DetektBasePlugin : Plugin<Project> {
         val extension = project.extensions.create(DETEKT_EXTENSION, DetektExtension::class.java)
 
         with(extension) {
-            toolVersion.convention(loadDetektVersion(DetektExtension::class.java.classLoader))
+            toolVersion.convention(BuildConfig.DETEKT_VERSION)
             ignoreFailures.convention(DEFAULT_IGNORE_FAILURES)
             failOnSeverity.convention(DEFAULT_FAIL_ON_SEVERITY)
             source.setFrom(
