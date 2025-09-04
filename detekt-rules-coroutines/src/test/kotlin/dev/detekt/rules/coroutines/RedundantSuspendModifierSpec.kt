@@ -178,6 +178,36 @@ class RedundantSuspendModifierSpec(val env: KotlinEnvironmentContainer) {
     }
 
     @Test
+    fun `does not report if a suspending get operator function is called`() {
+        val code = """
+            class Foo {
+                suspend operator fun get(ms: Long): Unit = kotlinx.coroutines.delay(ms)
+            }
+
+            suspend fun bar() {
+                val foo = Foo()
+                foo[1234L]
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
+    fun `does not report if a suspending set operator function is called`() {
+        val code = """
+            class Foo {
+                suspend operator fun set(key: String, value: Long): Unit = kotlinx.coroutines.delay(value)
+            }
+
+            suspend fun bar() {
+                val foo = Foo()
+                foo["key"] = 1234L
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
     fun `does not report if a suspending lambda is called`() {
         val code = """
             suspend fun bar(foo: suspend () -> Unit) {
