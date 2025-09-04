@@ -76,14 +76,16 @@ class RedundantSuspendModifier(config: Config) :
 
     private fun KtExpression.isValidCandidateExpression(): Boolean =
         when (this) {
-            is KtOperationReferenceExpression, is KtForExpression, is KtProperty, is KtNameReferenceExpression -> true
+            is KtOperationReferenceExpression,
+            is KtForExpression,
+            is KtProperty,
+            is KtNameReferenceExpression,
+            is KtCallExpression
+                -> true
+
             else -> {
                 val parent = parent
-                if (parent is KtCallExpression && parent.calleeExpression == this) {
-                    true
-                } else {
-                    this is KtCallExpression && this.calleeExpression is KtCallExpression
-                }
+                parent is KtCallExpression && parent.calleeExpression == this
             }
         }
 
@@ -113,6 +115,7 @@ class RedundantSuspendModifier(config: Config) :
 
                         is KaVariableAccessCall -> {
                             call.symbol.callableId == CoroutineCallableIds.CoroutineContextCallableId
+                                || call.symbol.returnType.isSuspendFunctionType
                         }
                     }
                 }

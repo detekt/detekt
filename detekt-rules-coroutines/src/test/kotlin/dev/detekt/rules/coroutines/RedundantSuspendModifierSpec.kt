@@ -165,14 +165,22 @@ class RedundantSuspendModifierSpec(val env: KotlinEnvironmentContainer) {
     @Test
     fun `does not report if a suspending invoke operator function is called`() {
         val code = """
-            import kotlinx.coroutines.delay
-
             class Foo {
-                suspend operator fun invoke() = delay(123)
+                suspend operator fun invoke(ms: Long): Unit = kotlinx.coroutines.delay(ms)
             }
 
             suspend fun bar() {
                 val foo = Foo()
+                foo(1234L)
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
+    fun `does not report if a suspending lambda is called`() {
+        val code = """
+            suspend fun bar(foo: suspend () -> Unit) {
                 foo()
             }
         """.trimIndent()
