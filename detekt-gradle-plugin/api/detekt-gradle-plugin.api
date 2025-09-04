@@ -110,8 +110,8 @@ public abstract class dev/detekt/gradle/extensions/DetektReport {
 }
 
 public final class dev/detekt/gradle/extensions/DetektReportType : java/lang/Enum {
-    public static final field CHECKSTYLE Ldev/detekt/gradle/extensions/DetektReportType;
-    public static final field HTML Ldev/detekt/gradle/extensions/DetektReportType;
+	public static final field CHECKSTYLE Ldev/detekt/gradle/extensions/DetektReportType;
+	public static final field HTML Ldev/detekt/gradle/extensions/DetektReportType;
 	public static final field MD Ldev/detekt/gradle/extensions/DetektReportType;
 	public static final field SARIF Ldev/detekt/gradle/extensions/DetektReportType;
 	public final fun getExtension ()Ljava/lang/String;
@@ -124,7 +124,7 @@ public class dev/detekt/gradle/extensions/DetektReports {
 	public fun <init> (Lorg/gradle/api/model/ObjectFactory;)V
 	public final fun checkstyle (Lorg/gradle/api/Action;)V
 	public final fun custom (Lorg/gradle/api/Action;)V
-	public fun getCheckstyle ()Lio/gitlab/arturbosch/detekt/extensions/DetektReport;
+	public fun getCheckstyle ()Ldev/detekt/gradle/extensions/DetektReport;
 	public fun getCustom ()Ljava/util/List;
 	public fun getHtml ()Ldev/detekt/gradle/extensions/DetektReport;
 	public fun getMd ()Ldev/detekt/gradle/extensions/DetektReport;
@@ -149,6 +149,7 @@ public class dev/detekt/gradle/extensions/KotlinCompileTaskDetektExtension {
 	public final fun getAllRules ()Lorg/gradle/api/provider/Property;
 	public final fun getBaseline ()Lorg/gradle/api/file/RegularFileProperty;
 	public final fun getBuildUponDefaultConfig ()Lorg/gradle/api/provider/Property;
+	public final fun getCheckstyle ()Ldev/detekt/gradle/extensions/DetektCompilerPluginReport;
 	public final fun getConfig ()Lorg/gradle/api/file/ConfigurableFileCollection;
 	public final fun getDebug ()Lorg/gradle/api/provider/Property;
 	public final fun getDisableDefaultRuleSets ()Lorg/gradle/api/provider/Property;
@@ -157,7 +158,6 @@ public class dev/detekt/gradle/extensions/KotlinCompileTaskDetektExtension {
 	public final fun getParallel ()Lorg/gradle/api/provider/Property;
 	public final fun getReports ()Lorg/gradle/api/NamedDomainObjectContainer;
 	public final fun getSarif ()Ldev/detekt/gradle/extensions/DetektCompilerPluginReport;
-	public final fun getXml ()Ldev/detekt/gradle/extensions/DetektCompilerPluginReport;
 	public final fun isEnabled ()Lorg/gradle/api/provider/Property;
 }
 
