@@ -3,6 +3,7 @@ package dev.detekt.metrics
 import dev.detekt.api.Detektion
 import dev.detekt.api.testfixtures.TestDetektion
 import dev.detekt.api.testfixtures.createIssue
+import dev.detekt.api.testfixtures.removeData
 import dev.detekt.metrics.processors.commentLinesKey
 import dev.detekt.metrics.processors.complexityKey
 import dev.detekt.metrics.processors.linesKey
@@ -15,7 +16,7 @@ import org.junit.jupiter.api.Test
 
 internal class ComplexityReportGeneratorSpec {
 
-    private lateinit var detektion: TestDetektion
+    private lateinit var detektion: Detektion
 
     @BeforeEach
     fun setupMocks() {

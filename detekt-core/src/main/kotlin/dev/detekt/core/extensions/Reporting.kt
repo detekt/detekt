@@ -9,12 +9,16 @@ fun handleReportingExtensions(settings: ProcessingSettings, initialResult: Detek
     val extensions = loadExtensions<ReportingExtension>(settings)
     extensions.forEach { it.onRawResult(initialResult) }
     val finalIssues = extensions.fold(initialResult.issues) { acc, extension -> extension.transformIssues(acc) }
-    val finalResult = DelegatingResult(initialResult, finalIssues)
+    val finalResult = initialResult.copy(issues = finalIssues)
     extensions.forEach { it.onFinalResult(finalResult) }
     return finalResult
 }
 
-private class DelegatingResult(
-    result: Detektion,
-    override val issues: List<Issue>,
-) : Detektion by result
+private fun Detektion.copy(issues: List<Issue> = this.issues): Detektion = Detektion(
+    issues = issues,
+    rules = rules,
+).also { copy ->
+    metrics.forEach { copy.add(it) }
+    notifications.forEach { copy.add(it) }
+    copy.userData.putAll(userData)
+}
