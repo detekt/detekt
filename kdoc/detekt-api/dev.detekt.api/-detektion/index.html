@@ -94,11 +94,30 @@
   <div class="breadcrumbs"><a href="../../index.html">detekt-api</a><span class="delimiter">/</span><a href="../index.html">dev.detekt.api</a><span class="delimiter">/</span><span class="current">Detektion</span></div>
   <div class="cover ">
     <h1 class="cover"><span><span>Detektion</span></span></h1>
-    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">interface </span><a href="index.html">Detektion</a></div><p class="paragraph">Storage for all kinds of findings and additional information which needs to be transferred from the detekt engine to the user.</p></div></div>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">Detektion</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>issues<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-issue/index.html">Issue</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>rules<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-rule-instance/index.html">RuleInstance</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div><p class="paragraph">Storage for all kinds of findings and additional information which needs to be transferred from the detekt engine to the user.</p></div></div>
   </div>
   <div class="tabbedcontent">
     <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
     <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="">Constructors</h2>
+        <div class="table"><a data-name="598758404%2FConstructors%2F-473829336" anchor-label="Detektion" id="598758404%2FConstructors%2F-473829336" data-filterable-set=":detekt-api/main"></a>
+          <div class="table-row" data-togglable="CONSTRUCTOR" data-filterable-current=":detekt-api/main" data-filterable-set=":detekt-api/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-detektion.html"><span><span>Detektion</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="598758404%2FConstructors%2F-473829336"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">issues<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-issue/index.html">Issue</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">rules<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-rule-instance/index.html">RuleInstance</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div data-togglable="PROPERTY">
         <h2 class="">Properties</h2>
         <div class="table"><a data-name="922485778%2FProperties%2F-473829336" anchor-label="issues" id="922485778%2FProperties%2F-473829336" data-filterable-set=":detekt-api/main"></a>
@@ -111,7 +130,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="issues.html">issues</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-issue/index.html">Issue</a><span class="token operator">&gt;</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="issues.html">issues</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-issue/index.html">Issue</a><span class="token operator">&gt;</span></div></div></div>
                 </div>
               </div>
             </div>
@@ -126,7 +145,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="metrics.html">metrics</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-collection/index.html">Collection</a><span class="token operator">&lt;</span><a href="../-project-metric/index.html">ProjectMetric</a><span class="token operator">&gt;</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="metrics.html">metrics</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-collection/index.html">Collection</a><span class="token operator">&lt;</span><a href="../-project-metric/index.html">ProjectMetric</a><span class="token operator">&gt;</span></div></div></div>
                 </div>
               </div>
             </div>
@@ -141,7 +160,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="notifications.html">notifications</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-collection/index.html">Collection</a><span class="token operator">&lt;</span><a href="../-notification/index.html">Notification</a><span class="token operator">&gt;</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="notifications.html">notifications</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-collection/index.html">Collection</a><span class="token operator">&lt;</span><a href="../-notification/index.html">Notification</a><span class="token operator">&gt;</span></div></div></div>
                 </div>
               </div>
             </div>
@@ -156,7 +175,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="rules.html">rules</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-rule-instance/index.html">RuleInstance</a><span class="token operator">&gt;</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="rules.html">rules</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-rule-instance/index.html">RuleInstance</a><span class="token operator">&gt;</span></div></div></div>
                 </div>
               </div>
             </div>
@@ -171,7 +190,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">val </span><a href="user-data.html">userData</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-map/index.html">MutableMap</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt;</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="user-data.html">userData</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-map/index.html">MutableMap</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt;</span></div></div></div>
                 </div>
               </div>
             </div>
@@ -190,7 +209,7 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="add.html"><span class="token function">add</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">notification<span class="token operator">: </span><a href="../-notification/index.html">Notification</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Stores a notification in the result.</p></div><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">fun </span><a href="add.html"><span class="token function">add</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">projectMetric<span class="token operator">: </span><a href="../-project-metric/index.html">ProjectMetric</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Stores a metric calculated for the whole project in the result.</p></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="add.html"><span class="token function">add</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">notification<span class="token operator">: </span><a href="../-notification/index.html">Notification</a></span></span><span class="token punctuation">)</span></div><div class="symbol monospace"><span class="token keyword">fun </span><a href="add.html"><span class="token function">add</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">projectMetric<span class="token operator">: </span><a href="../-project-metric/index.html">ProjectMetric</a></span></span><span class="token punctuation">)</span></div></div></div>
                 </div>
               </div>
             </div>
