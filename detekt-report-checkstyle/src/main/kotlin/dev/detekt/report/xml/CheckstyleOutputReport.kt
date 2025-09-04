@@ -3,7 +3,6 @@ package dev.detekt.report.xml
 import dev.detekt.api.Detektion
 import dev.detekt.api.Issue
 import dev.detekt.api.OutputReport
-import dev.detekt.api.internal.BuiltInOutputReport
 import dev.detekt.api.suppressed
 import java.util.Locale
 import kotlin.io.path.invariantSeparatorsPathString
@@ -11,11 +10,8 @@ import kotlin.io.path.invariantSeparatorsPathString
 /**
  * Contains rule violations in an XML format. The report follows the structure of a Checkstyle report.
  */
-class CheckstyleOutputReport : BuiltInOutputReport, OutputReport {
-
-    override val id: String = "CheckstyleOutputReport"
-    override val reportId: String = "checkstyle"
-    override val ending = "xml"
+class CheckstyleOutputReport : OutputReport {
+    override val id: String = "checkstyle"
 
     private val Issue.severityLabel: String
         get() = severity.name.lowercase(Locale.US)
