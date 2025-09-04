@@ -253,10 +253,6 @@ tasks {
     ideaModule {
         notCompatibleWithConfigurationCache("https://github.com/gradle/gradle/issues/13480")
     }
-
-    publishPlugins {
-        notCompatibleWithConfigurationCache("https://github.com/gradle/gradle/issues/21283")
-    }
 }
 
 // Skip publishing of test fixture API & runtime variants
