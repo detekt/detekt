@@ -22,7 +22,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
 data class GenerateBindingContextOptions(
     val debugPrinter: (() -> String) -> Unit,
     val warningPrinter: (String) -> Unit,
-    val isDebugEnabled: Boolean = false,
+    val isDebugEnabled: Boolean,
 )
 
 fun generateBindingContext(
@@ -81,7 +81,7 @@ class DetektMessageCollector(
     private val minSeverity: CompilerMessageSeverity,
     private val debugPrinter: (() -> String) -> Unit,
     private val warningPrinter: (String) -> Unit,
-    private val isDebugEnabled: Boolean = false,
+    private val isDebugEnabled: Boolean,
 ) : MessageCollector by MessageCollector.NONE {
     private var messages = 0
 

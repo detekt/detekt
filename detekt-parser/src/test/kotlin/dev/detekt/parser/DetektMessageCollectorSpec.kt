@@ -20,6 +20,7 @@ class DetektMessageCollectorSpec {
             minSeverity = CompilerMessageSeverity.INFO,
             debugPrinter = debugPrinter,
             warningPrinter = warningPrinter,
+            isDebugEnabled = false,
         )
     }
 
