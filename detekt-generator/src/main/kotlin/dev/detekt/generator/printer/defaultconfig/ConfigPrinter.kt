@@ -71,9 +71,9 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
         output-reports:
           active: true
           exclude:
-          # - 'CheckstyleOutputReport'
-          # - 'HtmlOutputReport'
-          # - 'MdOutputReport'
+          # - 'checkstyle'
+          # - 'html'
+          # - 'md'
           # - 'sarif'
     """.trimIndent()
 }
