@@ -7,31 +7,22 @@ import dev.detekt.api.Notification
 import dev.detekt.api.ProjectMetric
 import dev.detekt.api.RuleInstance
 
-class TestDetektion(
+@Suppress("FunctionNaming")
+fun TestDetektion(
     vararg issues: Issue,
-    override val rules: List<RuleInstance> = emptyList(),
+    rules: List<RuleInstance> = emptyList(),
     metrics: List<ProjectMetric> = emptyList(),
     notifications: List<Notification> = emptyList(),
     userData: Map<String, Any> = emptyMap(),
-) : Detektion {
+): Detektion = Detektion(
+    issues.toList(),
+    rules,
+).apply {
+    metrics.forEach { add(it) }
+    notifications.forEach { add(it) }
+    this.userData.putAll(userData)
+}
 
-    override val issues: List<Issue> = issues.toList()
-    override val metrics: Collection<ProjectMetric> get() = _metrics
-    override val notifications: List<Notification> get() = _notifications
-    override val userData: MutableMap<String, Any> = userData.toMutableMap()
-
-    private val _metrics = metrics.toMutableList()
-    private val _notifications = notifications.toMutableList()
-
-    fun <V> removeData(key: Key<V>) {
-        userData.remove(key.toString())
-    }
-
-    override fun add(notification: Notification) {
-        _notifications.add(notification)
-    }
-
-    override fun add(projectMetric: ProjectMetric) {
-        _metrics.add(projectMetric)
-    }
+fun <V> Detektion.removeData(key: Key<V>) {
+    userData.remove(key.toString())
 }

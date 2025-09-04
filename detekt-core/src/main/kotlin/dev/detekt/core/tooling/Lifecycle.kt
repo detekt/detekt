@@ -5,7 +5,6 @@ import dev.detekt.api.Detektion
 import dev.detekt.api.FileProcessListener
 import dev.detekt.api.RuleSetProvider
 import dev.detekt.core.Analyzer
-import dev.detekt.core.DetektResult
 import dev.detekt.core.FileProcessorLocator
 import dev.detekt.core.ProcessingSettings
 import dev.detekt.core.config.validation.checkConfiguration
@@ -55,7 +54,7 @@ internal interface Lifecycle {
             val analyzer = Analyzer(settings, rules.filter { it.ruleInstance.active }, processors, bindingContext)
             processors.forEach { it.onStart(filesToAnalyze) }
             val issues = analyzer.run(filesToAnalyze)
-            val detektion: Detektion = DetektResult(issues, rules.map { it.ruleInstance })
+            val detektion = Detektion(issues, rules.map { it.ruleInstance })
             processors.fold(detektion) { acc, processor -> processor.onFinish(filesToAnalyze, acc) }
         }
 

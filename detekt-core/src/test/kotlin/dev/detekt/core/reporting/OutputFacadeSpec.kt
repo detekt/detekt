@@ -1,10 +1,10 @@
 package dev.detekt.core.reporting
 
+import dev.detekt.api.testfixtures.TestDetektion
 import dev.detekt.api.testfixtures.createIssue
 import dev.detekt.api.testfixtures.createIssueEntity
 import dev.detekt.api.testfixtures.createIssueLocation
 import dev.detekt.api.testfixtures.createRuleInstance
-import dev.detekt.core.DetektResult
 import dev.detekt.core.createNullLoggingSpec
 import dev.detekt.core.tooling.withSettings
 import dev.detekt.report.html.HtmlOutputReport
@@ -23,14 +23,11 @@ class OutputFacadeSpec {
     fun `Running the output facade with multiple reports`() {
         val printStream = StringPrintStream()
         val inputPath: Path = resourceAsPath("/cases")
-        val defaultResult = DetektResult(
-            issues = listOf(
-                createIssue(
-                    createRuleInstance(ruleSetId = "Key"),
-                    createIssueEntity(createIssueLocation("TestFile.kt"))
-                )
+        val defaultResult = TestDetektion(
+            createIssue(
+                createRuleInstance(ruleSetId = "Key"),
+                createIssueEntity(createIssueLocation("TestFile.kt"))
             ),
-            rules = emptyList(),
         )
         val htmlOutputPath = createTempFileForTest("detekt", ".html")
         val xmlOutputPath = createTempFileForTest("detekt", ".xml")

@@ -7,7 +7,7 @@ import dev.detekt.tooling.api.AnalysisResult
 import dev.detekt.tooling.api.DetektCli
 import dev.detekt.tooling.api.UnexpectedError
 import dev.detekt.tooling.internal.DefaultAnalysisResult
-import dev.detekt.tooling.internal.EmptyContainer
+import dev.detekt.tooling.internal.emptyContainer
 
 class CliRunner : DetektCli {
 
@@ -25,7 +25,7 @@ class CliRunner : DetektCli {
 
         return if (specialRunner != null) {
             runCatching { specialRunner.execute() }
-                .map { DefaultAnalysisResult(EmptyContainer) }
+                .map { DefaultAnalysisResult(emptyContainer()) }
                 .getOrElse { DefaultAnalysisResult(null, UnexpectedError(it)) }
         } else {
             Runner(arguments, outputChannel, errorChannel).call()
