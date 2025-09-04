@@ -27,10 +27,6 @@ class TestDetektion(
         userData.remove(key.toString())
     }
 
-    fun <V : Any> putUserData(key: Key<V>, value: V) {
-        userData[key.toString()] = value
-    }
-
     override fun add(notification: Notification) {
         _notifications.add(notification)
     }
