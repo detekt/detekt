@@ -472,6 +472,46 @@ class UnnamedParameterUseSpec(private val env: KotlinEnvironmentContainer) {
     }
 
     @Test
+    fun `does not report for lambda invocation - #8601`() {
+        val code = """
+            class OnboardingPhoneNumberNavigator(
+                private val onNavigateToRequestPin: (String, String) -> Unit,
+            ) {
+                fun navigateToRequestPin(
+                    country: String,
+                    phoneNumber: String,
+                ) {
+                    onNavigateToRequestPin(country, phoneNumber)
+                }
+            }
+        """.trimIndent()
+
+        assertThat(
+            getSubject(allowAdjacentDifferentTypeParams = true).lintWithContext(env, code)
+        ).isEmpty()
+    }
+
+    @Test
+    fun `does not report for lambda invocation with named param`() {
+        val code = """
+            class OnboardingPhoneNumberNavigator(
+                private val onNavigateToRequestPin: (country: String, phoneNumber: String) -> Unit,
+            ) {
+                fun navigateToRequestPin(
+                    country: String,
+                    phoneNumber: String,
+                ) {
+                    onNavigateToRequestPin(country, phoneNumber)
+                }
+            }
+        """.trimIndent()
+
+        assertThat(
+            getSubject(allowAdjacentDifferentTypeParams = true).lintWithContext(env, code)
+        ).isEmpty()
+    }
+
+    @Test
     fun `does report class constructor is called without name`() {
         val code = """
             class A(x: Int, y: Int)
