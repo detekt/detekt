@@ -71,14 +71,16 @@ public class dev/detekt/api/DetektVisitor : org/jetbrains/kotlin/psi/KtTreeVisit
 }
 
 public final class dev/detekt/api/Detektion {
-	public fun <init> (Ljava/util/List;Ljava/util/List;)V
-	public final fun add (Ldev/detekt/api/Notification;)V
-	public final fun add (Ldev/detekt/api/ProjectMetric;)V
+	public fun <init> (Ljava/util/List;Ljava/util/List;Ljava/util/List;Ljava/util/List;Ljava/util/Map;)V
+	public synthetic fun <init> (Ljava/util/List;Ljava/util/List;Ljava/util/List;Ljava/util/List;Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun getIssues ()Ljava/util/List;
-	public final fun getMetrics ()Ljava/util/Collection;
-	public final fun getNotifications ()Ljava/util/Collection;
+	public final fun getMetrics ()Ljava/util/List;
+	public final fun getNotifications ()Ljava/util/List;
 	public final fun getRules ()Ljava/util/List;
 	public final fun getUserData ()Ljava/util/Map;
+	public final fun plus (Ldev/detekt/api/Notification;)Ldev/detekt/api/Detektion;
+	public final fun plus (Ldev/detekt/api/ProjectMetric;)Ldev/detekt/api/Detektion;
+	public final fun plus (Lkotlin/Pair;)Ldev/detekt/api/Detektion;
 }
 
 public final class dev/detekt/api/Entity {

@@ -12,17 +12,16 @@ import dev.detekt.report.md.MdOutputReport
 import dev.detekt.report.xml.XmlOutputReport
 import dev.detekt.test.utils.StringPrintStream
 import dev.detekt.test.utils.createTempFileForTest
-import dev.detekt.test.utils.resourceAsPath
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Test
-import java.nio.file.Path
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 
 class OutputFacadeSpec {
 
-    @Test
-    fun `Running the output facade with multiple reports`() {
+    @ParameterizedTest
+    @ValueSource(booleans = [true, false])
+    fun `Running the output facade with multiple reports`(showReports: Boolean) {
         val printStream = StringPrintStream()
-        val inputPath: Path = resourceAsPath("/cases")
         val defaultResult = TestDetektion(
             createIssue(
                 createRuleInstance(ruleSetId = "Key"),
@@ -34,9 +33,6 @@ class OutputFacadeSpec {
         val mdOutputPath = createTempFileForTest("detekt", ".md")
 
         val spec = createNullLoggingSpec {
-            project {
-                inputPaths = listOf(inputPath)
-            }
             reports {
                 report { "html" to htmlOutputPath }
                 report { "xml" to xmlOutputPath }
@@ -47,12 +43,21 @@ class OutputFacadeSpec {
             }
         }
 
-        spec.withSettings { OutputFacade(this).run(defaultResult) }
+        spec.withSettings { OutputFacade(this, showReports).run(defaultResult) }
 
-        assertThat(printStream.toString()).contains(
+        val expected = listOf(
             "Successfully generated ${XmlOutputReport().id} at ${xmlOutputPath.toUri()}",
             "Successfully generated ${HtmlOutputReport().id} at ${htmlOutputPath.toUri()}",
             "Successfully generated ${MdOutputReport().id} at ${mdOutputPath.toUri()}"
         )
+
+        if (showReports) {
+            assertThat(printStream.toString()).contains(expected)
+        } else {
+            assertThat(printStream.toString()).doesNotContain(expected)
+        }
+        assertThat(xmlOutputPath).isNotEmptyFile()
+        assertThat(htmlOutputPath).isNotEmptyFile()
+        assertThat(mdOutputPath).isNotEmptyFile()
     }
 }
