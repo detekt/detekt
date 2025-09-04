@@ -7,6 +7,7 @@ import dev.detekt.core.createProcessingSettings
 import dev.detekt.core.tooling.withSettings
 import dev.detekt.report.html.HtmlOutputReport
 import dev.detekt.report.md.MdOutputReport
+import dev.detekt.report.sarif.SarifOutputReport
 import dev.detekt.report.xml.CheckstyleOutputReport
 import dev.detekt.test.utils.resourceAsPath
 import dev.detekt.tooling.dsl.ReportsSpecBuilder
@@ -27,11 +28,12 @@ class OutputReportsSpec {
             report { reportUnderTest to Path("/tmp/path3") }
             report { "html" to Path("D:_Gradle\\xxx\\xxx\\build\\reports\\detekt\\detekt.html") }
             report { "md" to Path("/tmp/path4") }
+            report { "sarif" to Path("/tmp/path5") }
         }.build().reports.toList()
 
         @Test
         fun `should parse multiple report entries`() {
-            assertThat(reports).hasSize(4)
+            assertThat(reports).hasSize(5)
         }
 
         @Test
@@ -62,6 +64,13 @@ class OutputReportsSpec {
             val mdReport = reports[3]
             assertThat(mdReport.type).isEqualTo(defaultReportMapping(MdOutputReport()))
             assertThat(mdReport.path).isEqualTo(Path("/tmp/path4"))
+        }
+
+        @Test
+        fun `it should properly parse Sarif report entry`() {
+            val sarifReport = reports[4]
+            assertThat(sarifReport.type).isEqualTo(defaultReportMapping(SarifOutputReport()))
+            assertThat(sarifReport.path).isEqualTo(Path("/tmp/path5"))
         }
 
         @Nested
