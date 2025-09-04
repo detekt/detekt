@@ -94,7 +94,7 @@ class DetektReportMergeSpec {
                 ${builder.gradleSubprojectsApplyPlugins.reIndent(1)}
             
                 checkstyleReportMerge {
-                    input.from(tasks.withType<dev.detekt.gradle.Detekt>().map { it.reports.xml.outputLocation })
+                    input.from(tasks.withType<dev.detekt.gradle.Detekt>().map { it.reports.checkstyle.outputLocation })
                 }
             }
         """.trimIndent()
