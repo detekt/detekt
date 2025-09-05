@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.sample.extensions
 
-import io.gitlab.arturbosch.detekt.api.Config
+import dev.detekt.api.Config
 import io.gitlab.arturbosch.detekt.sample.extensions.rules.TooManyFunctions
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
