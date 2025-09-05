@@ -1,7 +1,7 @@
 package dev.detekt.core.suppressors
 
 import dev.detekt.test.createBindingContext
-import dev.detekt.test.utils.KotlinCoreEnvironmentTest
+import dev.detekt.test.junit.KotlinCoreEnvironmentTest
 import dev.detekt.test.utils.KotlinEnvironmentContainer
 import dev.detekt.test.utils.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
