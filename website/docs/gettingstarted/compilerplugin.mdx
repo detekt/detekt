@@ -8,7 +8,7 @@ summary:
 sidebar_position: 7
 ---
 
-You can integrate detekt in your project using the Detekt Compiler Plugin instead of the classic [Detekt Gradle Plugin](/docs/gettingstarted/gradle). Detekt offers a compiler plugin for K1 which allows you to run detekt as part of the Kotlin compilation process using [type resolution](/docs/gettingstarted/type-resolution). This allows you to run detekt on your code without having separate tasks to invoke and results in much faster execution of detekt, especially if you use type resolution with the Gradle plugin.
+You can integrate detekt in your project using the Detekt Compiler Plugin instead of the classic [Detekt Gradle Plugin](gradle.mdx). Detekt offers a compiler plugin for K1 which allows you to run detekt as part of the Kotlin compilation process using [type resolution](type-resolution.md). This allows you to run detekt on your code without having separate tasks to invoke and results in much faster execution of detekt, especially if you use type resolution with the Gradle plugin.
 
 :::caution
 
@@ -67,7 +67,7 @@ Moreover, detekt reports can be configured at the Kotlin Compilation tasks level
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
     detekt {
         reports {
-            xml.enabled.set(true)
+            checkstyle.enabled.set(true)
             md.enabled.set(false)
             create("custom") {
                 enabled.set(false)
@@ -137,7 +137,7 @@ disableDefaultRuleSets=<true|false> # Disables all default detekt rulesets.
 parallel=<true|false> # Enables parallel compilation and analysis of source files.
 rootPath=<path> # Root path used to relativize paths when using exclude patterns.
 excludes=<base64-encoded globs> # A base64-encoded list of the globs used to exclude paths from scanning.
-report=<report-id:path> # Generates a report for given 'report-id' and stores it on given 'path'. Available 'report-id' values: 'xml', 'html'.
+report=<report-id:path> # Generates a report for given 'report-id' and stores it on given 'path'. Available 'report-id' values: 'checkstyle', 'html'.
 ```
 
 ## Known Issues

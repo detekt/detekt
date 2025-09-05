@@ -25,13 +25,18 @@ const sidebars = {
       items: [
         {
           type: "link",
+          label: "2.x Changelog",
+          href: "/changelog-2.0.0",
+        },
+        {
+          type: "link",
           label: "1.x Changelog",
           href: "/changelog",
         },
         {
           type: "link",
           label: "0.x Changelog",
-          href: "/changelog-pre-stable",
+          href: "/changelog-rc",
         },
       ],
     },

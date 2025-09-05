@@ -120,6 +120,7 @@ class UnnamedParameterUse(config: Config) :
         analyze(expression) {
             val call = expression.resolveToCall()?.singleFunctionCallOrNull() ?: return
             val symbol = call.symbol
+            if (!symbol.hasStableParameterNames) return
             if (symbol.origin.let { it == KaSymbolOrigin.JAVA_SOURCE || it == KaSymbolOrigin.JAVA_LIBRARY }) return
             if (ignoreFunctionCall.any { it.match(symbol) }) return
 

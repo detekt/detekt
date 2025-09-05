@@ -8,7 +8,7 @@ summary:
 sidebar_position: 2
 ---
 
-detekt requires **Gradle 6.8.3** or higher. We, however, recommend using the version of Gradle that is [listed in this table](/docs/introduction/compatibility).
+detekt requires **Gradle 6.8.3** or higher. We, however, recommend using the version of Gradle that is [listed in this table](../introduction/compatibility.md).
 
 ## <a name="tasks">Available plugin tasks</a>
 
@@ -18,7 +18,7 @@ The Detekt Gradle Plugin will generate multiple tasks:
 `detekt` closure. 
   - By default, the standard rule set without any ignore list is executed on sources files located
    in `src/main/java`, `src/test/java`, `src/main/kotlin` and `src/test/kotlin`.
-  - Reports are automatically generated in xml,
+  - Reports are automatically generated in checkstyle(xml),
    html, md, and sarif format and can be found in `build/reports/detekt/detekt.[xml|html|md|sarif]` respectively.
   - Please note that the `detekt` task is automatically run when executing `gradle check`.
   - You may specify Gradle task CLI option for auto correction, such as `gradle detekt --auto-correct`.
@@ -322,9 +322,9 @@ Report output can be customized for each task. The DSL is the same in both Groov
 ```kotlin
 tasks.named("detekt").configure {
     reports {
-        // Enable/Disable XML report (default: true)
-        xml.required.set(true)
-        xml.outputLocation.set(file("build/reports/detekt.xml"))
+        // Enable/Disable checkstyle report (default: true)
+        checkstyle.required.set(true)
+        checkstyle.outputLocation.set(file("build/reports/detekt.xml"))
         // Enable/Disable HTML report (default: true)
         html.required.set(true)
         html.outputLocation.set(file("build/reports/detekt.html"))
@@ -441,7 +441,7 @@ tasks.register(name: myDetekt, type: io.gitlab.arturbosch.detekt.Detekt) {
     config.setFrom(files("$rootDir/config.yml"))
     debug = true
     reports {
-        xml {
+        checkstyle {
             destination = file("build/reports/mydetekt.xml")
         }
         html.destination = file("build/reports/mydetekt.html")
@@ -462,7 +462,7 @@ tasks.register<io.gitlab.arturbosch.detekt.Detekt>("myDetekt") {
     config.setFrom(files("$rootDir/config.yml"))
     debug.set(true)
     reports {
-        xml {
+        checkstyle {
             destination = file("build/reports/mydetekt.xml")
         }
         html.destination = file("build/reports/mydetekt.html")
@@ -500,7 +500,7 @@ tasks.named("check").configure {
 }
 ```
 
-Instead of disabling detekt for the check task, you may want to use the [baseline feature](/docs/introduction/baseline).
+Instead of disabling detekt for the check task, you may want to use the [baseline feature](../introduction/baseline.md).
 
 ## <a name="idea">Integrating detekt inside your IntelliJ IDEA</a>
 

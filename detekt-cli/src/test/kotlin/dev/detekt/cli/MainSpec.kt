@@ -12,7 +12,7 @@ import dev.detekt.tooling.api.InvalidConfig
 import dev.detekt.tooling.api.IssuesFound
 import dev.detekt.tooling.api.UnexpectedError
 import dev.detekt.tooling.internal.DefaultAnalysisResult
-import dev.detekt.tooling.internal.EmptyContainer
+import dev.detekt.tooling.internal.emptyContainer
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -84,7 +84,7 @@ class MainSpec {
 
         @Test
         fun `returns zero on no error`() {
-            assertThat(DefaultAnalysisResult(EmptyContainer, null).exitCode()).isEqualTo(0)
+            assertThat(DefaultAnalysisResult(emptyContainer(), null).exitCode()).isEqualTo(0)
         }
 
         @Test

@@ -1,24 +1,26 @@
 package dev.detekt.api
 
-import com.intellij.openapi.util.UserDataHolder
-
 /**
  * Storage for all kinds of findings and additional information
  * which needs to be transferred from the detekt engine to the user.
  */
-interface Detektion : UserDataHolder {
-    val issues: List<Issue>
-    val rules: List<RuleInstance>
-    val notifications: Collection<Notification>
-    val metrics: Collection<ProjectMetric>
+class Detektion(
+    val issues: List<Issue>,
+    val rules: List<RuleInstance>,
+) {
+    private val _notifications = mutableListOf<Notification>()
+    val notifications: Collection<Notification> = _notifications
 
-    /**
-     * Stores a notification in the result.
-     */
-    fun add(notification: Notification)
+    private val _metrics = mutableListOf<ProjectMetric>()
+    val metrics: Collection<ProjectMetric> = _metrics
 
-    /**
-     * Stores a metric calculated for the whole project in the result.
-     */
-    fun add(projectMetric: ProjectMetric)
+    val userData: MutableMap<String, Any> = mutableMapOf()
+
+    fun add(projectMetric: ProjectMetric) {
+        _metrics.add(projectMetric)
+    }
+
+    fun add(notification: Notification) {
+        _notifications.add(notification)
+    }
 }

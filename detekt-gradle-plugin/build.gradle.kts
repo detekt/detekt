@@ -2,6 +2,8 @@
 // https://github.com/gradle/gradle/issues/21285
 @file:Suppress("StringLiteralDuplication")
 
+import io.gitlab.arturbosch.detekt.Detekt
+import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import org.jetbrains.kotlin.buildtools.api.ExperimentalBuildToolsApi
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 
@@ -10,12 +12,14 @@ plugins {
     id("java-gradle-plugin")
     id("java-test-fixtures")
     id("idea")
-    id("com.gradle.plugin-publish") version "1.3.1"
+    id("com.gradle.plugin-publish") version "2.0.0"
     // We use this published version of the detekt plugin to self analyse this project.
     id("io.gitlab.arturbosch.detekt") version "1.23.8"
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.18.1"
     id("org.jetbrains.dokka") version "2.0.0"
     id("signing")
+    id("com.github.gmazzo.buildconfig") version "5.6.7"
+    id("io.github.gradle-nexus.publish-plugin") version "2.0.0"
 }
 
 repositories {
@@ -25,6 +29,23 @@ repositories {
 
 group = "dev.detekt"
 version = Versions.currentOrSnapshot()
+
+buildConfig {
+    buildConfigField("DETEKT_VERSION", project.version.toString())
+    buildConfigField("DETEKT_COMPILER_PLUGIN_VERSION", project.version.toString())
+    buildConfigField("KOTLIN_IMPLEMENTATION_VERSION", libs.versions.kotlin.get())
+}
+
+nexusPublishing {
+    repositories {
+        create("sonatype") {
+            nexusUrl = uri("https://ossrh-staging-api.central.sonatype.com/service/local/")
+            snapshotRepositoryUrl = uri("https://central.sonatype.com/repository/maven-snapshots/")
+            username = providers.environmentVariable("ORG_GRADLE_PROJECT_SONATYPE_USERNAME")
+            password = providers.environmentVariable("ORG_GRADLE_PROJECT_SONATYPE_PASSWORD")
+        }
+    }
+}
 
 detekt {
     source.from("src/functionalTest/kotlin")
@@ -154,11 +175,11 @@ gradlePlugin {
         }
         create("detektPlugin") {
             id = "dev.detekt"
-            implementationClass = "io.gitlab.arturbosch.detekt.DetektPlugin"
+            implementationClass = "dev.detekt.gradle.plugin.DetektPlugin"
         }
         create("detektCompilerPlugin") {
             id = "dev.detekt.gradle.compiler-plugin"
-            implementationClass = "io.github.detekt.gradle.DetektKotlinCompilerPlugin"
+            implementationClass = "dev.detekt.gradle.plugin.DetektKotlinCompilerPlugin"
         }
         configureEach {
             displayName = "Static code analysis for Kotlin"
@@ -189,22 +210,6 @@ signing {
 }
 
 tasks {
-    val writeDetektVersionProperties by registering(WriteProperties::class) {
-        description = "Write the properties file with the detekt version to be used by the plugin."
-        encoding = "UTF-8"
-        destinationFile = layout.buildDirectory.file("detekt-versions.properties")
-        property("detektVersion", project.version)
-        property("detektCompilerPluginVersion", project.version)
-    }
-
-    processResources {
-        from(writeDetektVersionProperties)
-    }
-
-    processTestResources {
-        from(writeDetektVersionProperties)
-    }
-
     // Manually inject dependency to gradle-testkit since the default injected plugin classpath is from `main.runtime`.
     pluginUnderTestMetadata {
         pluginClasspath.from(testKitRuntimeOnly)
@@ -217,6 +222,13 @@ tasks {
     register<PluginUnderTestMetadata>("gradleMinVersionPluginUnderTestMetadata") {
         pluginClasspath.setFrom(sourceSets.main.get().output, testKitGradleMinVersionRuntimeOnly)
         outputDirectory = layout.buildDirectory.dir(name)
+    }
+
+    withType<Detekt>().configureEach {
+        exclude("dev/detekt/detekt_gradle_plugin/BuildConfig.kt")
+    }
+    withType<DetektCreateBaselineTask>().configureEach {
+        exclude("dev/detekt/detekt_gradle_plugin/BuildConfig.kt")
     }
 
     withType<Test>().configureEach {
@@ -241,10 +253,6 @@ tasks {
     ideaModule {
         notCompatibleWithConfigurationCache("https://github.com/gradle/gradle/issues/13480")
     }
-
-    publishPlugins {
-        notCompatibleWithConfigurationCache("https://github.com/gradle/gradle/issues/21283")
-    }
 }
 
 // Skip publishing of test fixture API & runtime variants
@@ -268,5 +276,11 @@ dependencyAnalysis {
             includeDependency("org.junit.jupiter:junit-jupiter-api")
             includeDependency("org.junit.jupiter:junit-jupiter-params")
         }
+    }
+}
+
+tasks {
+    withType<PublishToMavenRepository>().configureEach {
+        notCompatibleWithConfigurationCache("https://github.com/detekt/detekt/issues/8484")
     }
 }

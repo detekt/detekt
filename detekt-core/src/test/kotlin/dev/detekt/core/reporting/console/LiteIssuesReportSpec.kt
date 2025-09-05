@@ -3,7 +3,7 @@ package dev.detekt.core.reporting.console
 import dev.detekt.api.testfixtures.TestDetektion
 import dev.detekt.api.testfixtures.TestSetupContext
 import dev.detekt.api.testfixtures.createIssue
-import dev.detekt.api.testfixtures.createLocation
+import dev.detekt.api.testfixtures.createIssueLocation
 import dev.detekt.api.testfixtures.createRuleInstance
 import dev.detekt.core.reporting.SuppressedIssueAssert
 import org.assertj.core.api.Assertions.assertThat
@@ -17,7 +17,7 @@ class LiteIssuesReportSpec {
 
     @Test
     fun `reports non-empty issues`() {
-        val location = createLocation()
+        val location = createIssueLocation()
         val detektion = TestDetektion(
             createIssue(createRuleInstance("SpacingAfterPackageDeclaration/id"), location),
             createIssue(createRuleInstance("UnnecessarySafeCall"), location),

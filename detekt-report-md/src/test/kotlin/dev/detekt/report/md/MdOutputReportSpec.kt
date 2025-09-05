@@ -6,9 +6,9 @@ import dev.detekt.api.ProjectMetric
 import dev.detekt.api.internal.whichDetekt
 import dev.detekt.api.testfixtures.TestDetektion
 import dev.detekt.api.testfixtures.TestSetupContext
-import dev.detekt.api.testfixtures.createEntity
 import dev.detekt.api.testfixtures.createIssue
-import dev.detekt.api.testfixtures.createLocation
+import dev.detekt.api.testfixtures.createIssueEntity
+import dev.detekt.api.testfixtures.createIssueLocation
 import dev.detekt.api.testfixtures.createRuleInstance
 import dev.detekt.metrics.CognitiveComplexity
 import dev.detekt.metrics.processors.commentLinesKey
@@ -196,14 +196,14 @@ class MdOutputReportSpec {
 }
 
 private fun createTestDetektionWithMultipleSmells(): Detektion {
-    val entity1 = createEntity(
-        location = createLocation(path = "src/main/com/sample/Sample1.kt", position = 9 to 17, text = 17..20),
+    val entity1 = createIssueEntity(
+        location = createIssueLocation(path = "src/main/com/sample/Sample1.kt", position = 9 to 17, text = 17..20),
     )
-    val entity2 = createEntity(
-        location = createLocation(path = "src/main/com/sample/Sample2.kt", position = 13 to 17),
+    val entity2 = createIssueEntity(
+        location = createIssueLocation(path = "src/main/com/sample/Sample2.kt", position = 13 to 17),
     )
-    val entity3 = createEntity(
-        location = createLocation(path = "src/main/com/sample/Sample3.kt", position = 14 to 16),
+    val entity3 = createIssueEntity(
+        location = createIssueLocation(path = "src/main/com/sample/Sample3.kt", position = 14 to 16),
     )
 
     return createMdDetektion(
@@ -228,27 +228,27 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
             "Issue message 3",
             suppressReasons = listOf("suppress")
         ),
-    ).also {
-        it.putUserData(complexityKey, 10)
-        it.putUserData(CognitiveComplexity.KEY, 10)
-        it.putUserData(sourceLinesKey, 20)
-        it.putUserData(logicalLinesKey, 10)
-        it.putUserData(commentLinesKey, 2)
-        it.putUserData(linesKey, 2222)
-    }
+    )
 }
 
-private fun createMdDetektion(vararg issues: Issue): Detektion =
-    TestDetektion(
-        *issues,
-        metrics = listOf(ProjectMetric("M1", 10_000), ProjectMetric("M2", 2))
+private fun createMdDetektion(vararg issues: Issue) = TestDetektion(
+    *issues,
+    metrics = listOf(ProjectMetric("M1", 10_000), ProjectMetric("M2", 2)),
+    userData = mapOf(
+        complexityKey.toString() to 10,
+        CognitiveComplexity.KEY.toString() to 10,
+        sourceLinesKey.toString() to 20,
+        logicalLinesKey.toString() to 10,
+        commentLinesKey.toString() to 2,
+        linesKey.toString() to 2222,
     )
+)
 
 private fun issues(): Array<Issue> {
-    val entity1 = createEntity(location = createLocation("src/main/com/sample/Sample1.kt", position = 11 to 5))
-    val entity2 = createEntity(location = createLocation("src/main/com/sample/Sample1.kt", position = 22 to 2))
-    val entity3 = createEntity(location = createLocation("src/main/com/sample/Sample1.kt", position = 11 to 2))
-    val entity4 = createEntity(location = createLocation("src/main/com/sample/Sample2.kt", position = 1 to 1))
+    val entity1 = createIssueEntity(createIssueLocation("src/main/com/sample/Sample1.kt", position = 11 to 5))
+    val entity2 = createIssueEntity(createIssueLocation("src/main/com/sample/Sample1.kt", position = 22 to 2))
+    val entity3 = createIssueEntity(createIssueLocation("src/main/com/sample/Sample1.kt", position = 11 to 2))
+    val entity4 = createIssueEntity(createIssueLocation("src/main/com/sample/Sample2.kt", position = 1 to 1))
 
     return arrayOf(
         createIssue(createRuleInstance("rule_a", "RuleSet1"), entity1),

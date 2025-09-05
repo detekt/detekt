@@ -70,13 +70,15 @@ public class dev/detekt/api/DetektVisitor : org/jetbrains/kotlin/psi/KtTreeVisit
 	public fun <init> ()V
 }
 
-public abstract interface class dev/detekt/api/Detektion : com/intellij/openapi/util/UserDataHolder {
-	public abstract fun add (Ldev/detekt/api/Notification;)V
-	public abstract fun add (Ldev/detekt/api/ProjectMetric;)V
-	public abstract fun getIssues ()Ljava/util/List;
-	public abstract fun getMetrics ()Ljava/util/Collection;
-	public abstract fun getNotifications ()Ljava/util/Collection;
-	public abstract fun getRules ()Ljava/util/List;
+public final class dev/detekt/api/Detektion {
+	public fun <init> (Ljava/util/List;Ljava/util/List;)V
+	public final fun add (Ldev/detekt/api/Notification;)V
+	public final fun add (Ldev/detekt/api/ProjectMetric;)V
+	public final fun getIssues ()Ljava/util/List;
+	public final fun getMetrics ()Ljava/util/Collection;
+	public final fun getNotifications ()Ljava/util/Collection;
+	public final fun getRules ()Ljava/util/List;
+	public final fun getUserData ()Ljava/util/Map;
 }
 
 public final class dev/detekt/api/Entity {
@@ -103,7 +105,7 @@ public abstract interface class dev/detekt/api/Extension {
 }
 
 public abstract interface class dev/detekt/api/FileProcessListener : dev/detekt/api/Extension {
-	public fun onFinish (Ljava/util/List;Ldev/detekt/api/Detektion;)V
+	public fun onFinish (Ljava/util/List;Ldev/detekt/api/Detektion;)Ldev/detekt/api/Detektion;
 	public fun onProcess (Lorg/jetbrains/kotlin/psi/KtFile;)V
 	public fun onProcessComplete (Lorg/jetbrains/kotlin/psi/KtFile;Ljava/util/List;)V
 	public fun onStart (Ljava/util/List;)V
@@ -174,10 +176,13 @@ public final class dev/detekt/api/Location$Companion {
 	public static synthetic fun from$default (Ldev/detekt/api/Location$Companion;Lcom/intellij/psi/PsiElement;IILjava/lang/Object;)Ldev/detekt/api/Location;
 }
 
-public abstract interface class dev/detekt/api/Notification {
-	public abstract fun getLevel ()Ldev/detekt/api/Notification$Level;
-	public abstract fun getMessage ()Ljava/lang/String;
-	public fun isError ()Z
+public final class dev/detekt/api/Notification {
+	public fun <init> (Ljava/lang/String;Ldev/detekt/api/Notification$Level;)V
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getLevel ()Ldev/detekt/api/Notification$Level;
+	public final fun getMessage ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
 public final class dev/detekt/api/Notification$Level : java/lang/Enum {
@@ -199,10 +204,12 @@ public abstract class dev/detekt/api/OutputReport : dev/detekt/api/Extension {
 public class dev/detekt/api/ProjectMetric {
 	public fun <init> (Ljava/lang/String;IIZI)V
 	public synthetic fun <init> (Ljava/lang/String;IIZIILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun equals (Ljava/lang/Object;)Z
 	public final fun getConversionFactor ()I
 	public final fun getPriority ()I
 	public final fun getType ()Ljava/lang/String;
 	public final fun getValue ()I
+	public fun hashCode ()I
 	public final fun isDouble ()Z
 	public fun toString ()Ljava/lang/String;
 }

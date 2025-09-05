@@ -15,10 +15,11 @@ abstract class AbstractProcessor : FileProcessListener {
         file.accept(visitor)
     }
 
-    override fun onFinish(files: List<KtFile>, result: Detektion) {
+    override fun onFinish(files: List<KtFile>, result: Detektion): Detektion {
         val count = files
             .mapNotNull { it.getUserData(key) }
             .sum()
-        result.putUserData(key, count)
+        result.userData[key.toString()] = count
+        return result
     }
 }
