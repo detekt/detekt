@@ -2,7 +2,7 @@
 <html class="no-js">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
-    <title>getXml</title>
+    <title>reportId</title>
 <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">    <script>var pathToRoot = "../../../";</script>
     <script>document.documentElement.classList.replace("no-js","js");</script>
     <script>const storage = localStorage.getItem("dokka-dark-mode")
@@ -45,7 +45,7 @@
         </div>
         <div class="navigation-controls">
         <div class="filter-section filter-section_loading" id="filter-section">
-                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":/main">jvm</button>
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":detekt-api/main">jvm</button>
             <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
                 <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
                 <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox">
@@ -56,7 +56,7 @@
                     </div>
                         <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
                             <label class="checkbox">
-                                <input type="checkbox" class="checkbox--input" id=":/main" data-filter=":/main">
+                                <input type="checkbox" class="checkbox--input" id=":detekt-api/main" data-filter=":detekt-api/main">
                                 <span class="checkbox--icon"></span>
                                 jvm
                             </label>
@@ -90,12 +90,12 @@
                 </div>
             </div>
             <div id="main">
-<div class="main-content" data-page-type="member" id="content" pageids="detekt-gradle-plugin::dev.detekt.gradle.extensions/KotlinCompileTaskDetektExtension/getXml/#/PointingToDeclaration//-251573632">
-  <div class="breadcrumbs"><a href="../../index.html">detekt-gradle-plugin</a><span class="delimiter">/</span><a href="../index.html">dev.detekt.gradle.extensions</a><span class="delimiter">/</span><a href="index.html">KotlinCompileTaskDetektExtension</a><span class="delimiter">/</span><span class="current">getXml</span></div>
+<div class="main-content" data-page-type="member" id="content" pageids="detekt-api::dev.detekt.api.internal/BuiltInOutputReport/reportId/#/PointingToDeclaration//-473829336">
+  <div class="breadcrumbs"><a href="../../index.html">detekt-api</a><span class="delimiter">/</span><a href="../index.html">dev.detekt.api.internal</a><span class="delimiter">/</span><a href="index.html">BuiltInOutputReport</a><span class="delimiter">/</span><span class="current">reportId</span></div>
   <div class="cover ">
-    <h1 class="cover"><span>get</span><wbr><span><span>Xml</span></span></h1>
+    <h1 class="cover"><span>report</span><wbr><span><span>Id</span></span></h1>
   </div>
-  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="get-xml.html"><span class="token function">getXml</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-detekt-compiler-plugin-report/index.html">DetektCompilerPluginReport</a></div></div></div>
+  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-api/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">val </span><a href="report-id.html">reportId</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span></div><p class="paragraph">The reportId allows you to specify a custom report name for your <a href="../../dev.detekt.api/-output-report/index.html">dev.detekt.api.OutputReport</a> if it differs from the default ending determined by the <a href="../../dev.detekt.api/-output-report/ending.html">dev.detekt.api.OutputReport.ending</a>. For instance, a "Checkstyle" report might need a .xml extension file, but report id will be <code class="lang-kotlin">checkstyle</code></p></div></div>
 </div>
     <div class="footer">
         <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
