@@ -2,7 +2,7 @@
 id: migration
 title: "Migration guide to 2.0.0"
 keywords: [migration]
-sidebar_position: 13
+sidebar_position: 80
 ---
 
 This is a **work-in-progress** migration guide from detekt 1.x to detekt 2.x. If you find issues with your migration while

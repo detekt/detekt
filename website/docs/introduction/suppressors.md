@@ -2,7 +2,7 @@
 id: suppressors
 title: "Suppressors"
 keywords: [suppressing, issues, smells]
-sidebar_position: 8
+sidebar_position: 60
 ---
 
 The `Suppressor`s are a tool that you can use to customize the reports of detekt. They allow you to (surprise) suppress some issues detected by some rules, and they can be applied to any rule.
