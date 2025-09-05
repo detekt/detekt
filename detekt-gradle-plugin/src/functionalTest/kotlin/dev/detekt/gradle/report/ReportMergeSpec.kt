@@ -49,7 +49,7 @@ class ReportMergeSpec {
             
                 plugins.withType<dev.detekt.gradle.plugin.DetektPlugin> {
                     tasks.withType<dev.detekt.gradle.Detekt>().configureEach {
-                        reportMerge.configure { input.from(reports.xml.outputLocation) }
+                        reportMerge.configure { input.from(reports.checkstyle.outputLocation) }
                     }
                 }
             }
@@ -158,7 +158,7 @@ class ReportMergeSpec {
             
                 plugins.withType<dev.detekt.gradle.plugin.DetektPlugin> {
                     tasks.withType<dev.detekt.gradle.Detekt>().configureEach {
-                        reportMerge.configure { input.from(reports.xml.outputLocation) }
+                        reportMerge.configure { input.from(reports.checkstyle.outputLocation) }
                     }
                 }
             }

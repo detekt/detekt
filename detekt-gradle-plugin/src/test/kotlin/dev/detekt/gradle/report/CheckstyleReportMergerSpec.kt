@@ -6,7 +6,7 @@ import java.io.File
 
 private const val TAB = "\t"
 
-class XmlReportMergerSpec {
+class CheckstyleReportMergerSpec {
 
     @Test
     fun `passes for no overlapping errors`() {
@@ -35,7 +35,7 @@ class XmlReportMergerSpec {
             )
         }
         val output = File.createTempFile("output", "xml")
-        XmlReportMerger.merge(setOf(file1, file2), output)
+        CheckstyleReportMerger.merge(setOf(file1, file2), output)
 
         val expectedText = """
             <?xml version="1.0" encoding="UTF-8"?><checkstyle version="4.3">
@@ -67,7 +67,7 @@ class XmlReportMergerSpec {
             writeText(text)
         }
         val output = File.createTempFile("output", "xml")
-        XmlReportMerger.merge(setOf(file1, file2), output)
+        CheckstyleReportMerger.merge(setOf(file1, file2), output)
 
         val expectedText = """
             <?xml version="1.0" encoding="UTF-8"?><checkstyle version="4.3">
@@ -109,7 +109,7 @@ class XmlReportMergerSpec {
             )
         }
         val output = File.createTempFile("output", "xml")
-        XmlReportMerger.merge(setOf(file1, file2), output)
+        CheckstyleReportMerger.merge(setOf(file1, file2), output)
 
         val expectedText = """
             <?xml version="1.0" encoding="UTF-8"?><checkstyle version="4.3">

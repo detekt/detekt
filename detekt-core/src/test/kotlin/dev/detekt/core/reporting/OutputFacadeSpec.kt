@@ -9,7 +9,8 @@ import dev.detekt.core.createNullLoggingSpec
 import dev.detekt.core.tooling.withSettings
 import dev.detekt.report.html.HtmlOutputReport
 import dev.detekt.report.md.MdOutputReport
-import dev.detekt.report.xml.XmlOutputReport
+import dev.detekt.report.sarif.SarifOutputReport
+import dev.detekt.report.xml.CheckstyleOutputReport
 import dev.detekt.test.utils.StringPrintStream
 import dev.detekt.test.utils.createTempFileForTest
 import org.assertj.core.api.Assertions.assertThat
@@ -29,12 +30,14 @@ class OutputFacadeSpec {
         val htmlOutputPath = createTempFileForTest("detekt", ".html")
         val xmlOutputPath = createTempFileForTest("detekt", ".xml")
         val mdOutputPath = createTempFileForTest("detekt", ".md")
+        val sarifOutputPath = createTempFileForTest("detekt", ".sarif")
 
         val spec = createNullLoggingSpec {
             reports {
                 report { "html" to htmlOutputPath }
-                report { "xml" to xmlOutputPath }
+                report { "checkstyle" to xmlOutputPath }
                 report { "md" to mdOutputPath }
+                report { "sarif" to sarifOutputPath }
             }
             logging {
                 outputChannel = printStream
@@ -44,9 +47,10 @@ class OutputFacadeSpec {
         spec.withSettings { OutputFacade(this).run(defaultResult) }
 
         assertThat(printStream.toString()).contains(
-            "Successfully generated ${XmlOutputReport().id} at ${xmlOutputPath.toUri()}",
+            "Successfully generated ${CheckstyleOutputReport().id} at ${xmlOutputPath.toUri()}",
             "Successfully generated ${HtmlOutputReport().id} at ${htmlOutputPath.toUri()}",
-            "Successfully generated ${MdOutputReport().id} at ${mdOutputPath.toUri()}"
+            "Successfully generated ${MdOutputReport().id} at ${mdOutputPath.toUri()}",
+            "Successfully generated ${SarifOutputReport().id} at ${sarifOutputPath.toUri()}",
         )
         assertThat(xmlOutputPath).isNotEmptyFile()
         assertThat(htmlOutputPath).isNotEmptyFile()

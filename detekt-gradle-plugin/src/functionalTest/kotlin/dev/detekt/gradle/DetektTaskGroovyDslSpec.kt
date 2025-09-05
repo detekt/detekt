@@ -61,7 +61,7 @@ class DetektTaskGroovyDslSpec {
                 autoCorrect = false
                 basePath = projectDir.absolutePath
                 reports {
-                    xml {
+                    checkstyle {
                         required.set(true)
                         outputLocation.set(file("build/reports/mydetekt.xml"))
                     }

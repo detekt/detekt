@@ -81,20 +81,20 @@ class DetektReportMergeSpec {
 
     @Test
     @Suppress("LongMethod")
-    fun `XML merge is configured correctly for multi module project`() {
+    fun `Checkstyle merge is configured correctly for multi module project`() {
         val builder = DslTestBuilder.kotlin()
         val buildFileContent = """
             ${builder.gradlePlugins.reIndent()}
             
-            val xmlReportMerge by tasks.registering(dev.detekt.gradle.report.ReportMergeTask::class) {
+            val checkstyleReportMerge by tasks.registering(dev.detekt.gradle.report.ReportMergeTask::class) {
                 output.set(project.layout.buildDirectory.file("reports/detekt/merge.xml"))
             }
             
             subprojects {
                 ${builder.gradleSubprojectsApplyPlugins.reIndent(1)}
             
-                xmlReportMerge {
-                    input.from(tasks.withType<dev.detekt.gradle.Detekt>().map { it.reports.xml.outputLocation })
+                checkstyleReportMerge {
+                    input.from(tasks.withType<dev.detekt.gradle.Detekt>().map { it.reports.checkstyle.outputLocation })
                 }
             }
         """.trimIndent()
@@ -126,7 +126,7 @@ class DetektReportMergeSpec {
             disableIP = true,
         )
         gradleRunner.setupProject()
-        gradleRunner.runTasksAndExpectFailure("detekt", "xmlReportMerge", "--continue") { result ->
+        gradleRunner.runTasksAndExpectFailure("detekt", "checkstyleReportMerge", "--continue") { result ->
             assertThat(result.output).contains("FAILURE: Build completed with 2 failures.")
             assertThat(result.output).containsIgnoringWhitespaces(
                 """

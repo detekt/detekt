@@ -7,7 +7,7 @@ import dev.detekt.core.createProcessingSettings
 import dev.detekt.core.tooling.withSettings
 import dev.detekt.report.html.HtmlOutputReport
 import dev.detekt.report.md.MdOutputReport
-import dev.detekt.report.xml.XmlOutputReport
+import dev.detekt.report.xml.CheckstyleOutputReport
 import dev.detekt.test.utils.resourceAsPath
 import dev.detekt.tooling.dsl.ReportsSpecBuilder
 import org.assertj.core.api.Assertions.assertThat
@@ -23,7 +23,7 @@ class OutputReportsSpec {
 
         private val reportUnderTest = TestOutputReport::class.java.simpleName
         private val reports = ReportsSpecBuilder().apply {
-            report { "xml" to Path("/tmp/path1") }
+            report { "checkstyle" to Path("/tmp/path1") }
             report { reportUnderTest to Path("/tmp/path3") }
             report { "html" to Path("D:_Gradle\\xxx\\xxx\\build\\reports\\detekt\\detekt.html") }
             report { "md" to Path("/tmp/path4") }
@@ -35,10 +35,10 @@ class OutputReportsSpec {
         }
 
         @Test
-        fun `it should properly parse XML report entry`() {
-            val xmlReport = reports[0]
-            assertThat(xmlReport.type).isEqualTo(defaultReportMapping(XmlOutputReport()))
-            assertThat(xmlReport.path).isEqualTo(Path("/tmp/path1"))
+        fun `it should properly parse Checkstyle report entry`() {
+            val checkstyleReport = reports[0]
+            assertThat(checkstyleReport.type).isEqualTo(defaultReportMapping(CheckstyleOutputReport()))
+            assertThat(checkstyleReport.path).isEqualTo(Path("/tmp/path1"))
         }
 
         @Test

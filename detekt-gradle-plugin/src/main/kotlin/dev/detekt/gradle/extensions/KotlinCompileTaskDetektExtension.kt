@@ -13,7 +13,7 @@ open class KotlinCompileTaskDetektExtension(project: Project) {
         project.container(DetektCompilerPluginReport::class.java)
 
     init {
-        reports.create("xml")
+        reports.create("checkstyle")
         reports.create("html")
         reports.create("sarif")
     }
@@ -31,7 +31,7 @@ open class KotlinCompileTaskDetektExtension(project: Project) {
     val config: ConfigurableFileCollection = objects.fileCollection()
     val excludes: SetProperty<String> = objects.setProperty(String::class.java)
 
-    fun getXml(): DetektCompilerPluginReport = reports.getByName("xml")
+    fun getCheckstyle(): DetektCompilerPluginReport = reports.getByName("checkstyle")
     fun getHtml(): DetektCompilerPluginReport = reports.getByName("html")
     fun getSarif(): DetektCompilerPluginReport = reports.getByName("sarif")
 }
