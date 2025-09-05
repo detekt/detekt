@@ -67,7 +67,7 @@ Then we need to configure `detekt` task and change its `source` from the entire 
 files that have been staged by git. Paste following into your project's `build.gradle.kts`:
 
 ```kotlin
-tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+tasks.withType<dev.detekt.gradle.Detekt>().configureEach {
     if (project.hasProperty("precommit")) {
         val rootDir = project.rootDir
         val projectDir = projectDir

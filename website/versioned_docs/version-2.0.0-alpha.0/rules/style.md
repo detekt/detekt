@@ -3126,7 +3126,7 @@ When suppressing an issue of WildcardImport in the baseline file, make sure to s
 #### Noncompliant Code:
 
 ```kotlin
-import io.gitlab.arturbosch.detekt.*
+import dev.detekt.detekt.*
 
 class DetektElements {
     val element1 = DetektElement1()
@@ -3137,8 +3137,8 @@ class DetektElements {
 #### Compliant Code:
 
 ```kotlin
-import io.gitlab.arturbosch.detekt.DetektElement1
-import io.gitlab.arturbosch.detekt.DetektElement2
+import dev.detekt.DetektElement1
+import dev.detekt.DetektElement2
 
 class DetektElements {
     val element1 = DetektElement1()
