@@ -25,6 +25,13 @@ fun KtLambdaExpression.implicitParameter(bindingContext: BindingContext): ValueP
         firstParameter(bindingContext)
     }
 
+fun KtLambdaExpression.implicitParameterOrNull(): KaValueParameterSymbol? =
+    if (valueParameters.isNotEmpty()) {
+        null
+    } else {
+        firstParameterOrNull()
+    }
+
 fun KtLambdaExpression.hasImplicitParameterReference(
     implicitParameter: ValueParameterDescriptor,
     bindingContext: BindingContext,
