@@ -25,6 +25,10 @@ import org.jetbrains.kotlin.psi.psiUtil.isInsideOf
  * Using `return` statements in `finally` blocks can discard and hide exceptions that are thrown in the `try` block.
  * Furthermore, this rule reports values from `finally` blocks, if the corresponding `try` is used as an expression.
  *
+ * If your `try` block is inlined into the expression body and implicitly returns Unit, this rule will not raise a
+ * finding because no value will be returned to the caller, and the contents of the finally block will still be run
+ * as expected.
+ *
  * <noncompliant>
  * fun foo() {
  *     try {
@@ -44,6 +48,15 @@ import org.jetbrains.kotlin.psi.psiUtil.isInsideOf
  *   "f"
  * }
  * </noncompliant>
+ *
+ * <compliant>
+ * fun bar(thing: Thing): Unit = try {
+ *   thing.doSomethingReturningUnit()
+ * } finally {
+ *   // Any exceptions will still be propagated, but the Unit-returning cleanup function will be called first
+ *   thing.cleanUp()
+ * }
+ * </compliant>
  */
 @ActiveByDefault(since = "1.16.0")
 class ReturnFromFinally(config: Config) :
@@ -62,7 +75,11 @@ class ReturnFromFinally(config: Config) :
         val finallyBlock = expression.finallyBlock ?: return
 
         analyze(expression) {
-            if (expression.isUsedAsExpression && finallyBlock.typeEqualsTo(expression.expressionType)) {
+            if (
+                expression.isUsedAsExpression &&
+                finallyBlock.typeEqualsTo(expression.expressionType) &&
+                finallyBlock.returnsNonUnitType()
+            ) {
                 report(
                     Finding(
                         entity = Entity.from(finallyBlock),
@@ -104,5 +121,9 @@ class ReturnFromFinally(config: Config) :
         return analyze(finalExpression) {
             finalExpression.expressionType == type
         }
+    }
+
+    private fun KtFinallySection.returnsNonUnitType(): Boolean = analyze(finalExpression) {
+        finalExpression.expressionType?.isUnitType == false
     }
 }
