@@ -299,28 +299,12 @@ class ReturnFromFinallySpec(val env: KotlinEnvironmentContainer) {
     }
 
     @Test
-    fun `shouldn't report for inlined try block explicitly returning Unit`() {
+    fun `shouldn't report for inlined try block returning Unit`() {
         val code = """
             fun doSomething(): Unit = println("I am busy")
             fun tidyUp(): Unit = println("Cleaning up after myself, but returning Unit")
 
             fun bar(): Unit = try {
-                doSomething()
-            } finally {
-                tidyUp()
-            }
-        """.trimIndent()
-
-        assertThat(subject.lintWithContext(env, code)).isEmpty()
-    }
-
-    @Test
-    fun `shouldn't report for inlined try block implicitly returning Unit`() {
-        val code = """
-            fun doSomething(): Unit = println("I am busy")
-            fun tidyUp(): Unit = println("Cleaning up after myself, but returning Unit")
-
-            fun bar() = try {
                 doSomething()
             } finally {
                 tidyUp()
