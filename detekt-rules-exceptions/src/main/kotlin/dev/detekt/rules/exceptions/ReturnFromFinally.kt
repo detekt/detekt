@@ -34,7 +34,15 @@ import org.jetbrains.kotlin.psi.psiUtil.isInsideOf
  *     }
  * }
  *
- * val a: String = try { "s" } catch (e: Exception) { "e" } finally { "f" }
+ * val a: String = try {
+ *   "s"
+ * } catch (e: Exception) {
+ *   "e"
+ * } finally {
+ *   // Implies assigning "f" to variable a, but the exception gets propagated first.
+ *   // Misleading and not immediately obvious, this gets flagged!
+ *   "f"
+ * }
  * </noncompliant>
  */
 @ActiveByDefault(since = "1.16.0")
@@ -57,9 +65,8 @@ class ReturnFromFinally(config: Config) :
             if (expression.isUsedAsExpression && finallyBlock.typeEqualsTo(expression.expressionType)) {
                 report(
                     Finding(
-                        entity = Entity.Companion.from(finallyBlock),
-                        message = "Contents of the finally block do not affect " +
-                            "the result of the expression."
+                        entity = Entity.from(finallyBlock),
+                        message = "Contents of the finally block do not affect the result of the expression."
                     )
                 )
             }
