@@ -12,4 +12,5 @@ dependencies {
     testImplementation(projects.detektTestAssertj)
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.assertj.core)
+    testImplementation(testFixtures(projects.detektPsiUtils))
 }
