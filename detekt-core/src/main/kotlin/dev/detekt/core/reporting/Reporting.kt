@@ -10,10 +10,10 @@ internal fun defaultReportMapping(report: OutputReport) =
 
 internal fun printIssues(issues: Map<String, List<Issue>>, basePath: Path): String =
     buildString {
-        issues.forEach { (key, issues) ->
+        issues.forEach { (key, nestedIssues) ->
             append(key)
             append("\n")
-            issues.forEach {
+            nestedIssues.forEach {
                 append("\t")
                 append(it.detailed(basePath).yellow())
                 append("\n")
