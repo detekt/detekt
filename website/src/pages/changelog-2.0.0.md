@@ -279,6 +279,7 @@ This is an initial alpha release of Detekt 2.0.0.
 - Changed name of rule from SpacingBetweenPackageAndImports to SpacingAfterPackageDeclaration - [#6133](https://github.com/detekt/detekt/pull/6133)
 - Changed name of rule from MayBeConst to MayBeConstant - [#6132](https://github.com/detekt/detekt/pull/6132)
 - Changed name of rule from FunctionMaxLength to FunctionNameMaxLength - [#6131](https://github.com/detekt/detekt/pull/6131)
+- Changed name of rule from UntilInsteadOfRangeTo to RangeUntilInsteadOfRangeTo - [#6369](https://github.com/detekt/detekt/pull/6369)
 
 ### Changes
 
@@ -652,7 +653,6 @@ This is an initial alpha release of Detekt 2.0.0.
 - Work with deprecations in a type safe manner - [#6382](https://github.com/detekt/detekt/pull/6382)
 - OutdatedDocumentation - Detect param which private property documented as property - [#6372](https://github.com/detekt/detekt/pull/6372)
 - Fixes false positive of trailing whitespaces in kdoc - [#6370](https://github.com/detekt/detekt/pull/6370)
-- Suggest `..<` instead of `until` - [#6369](https://github.com/detekt/detekt/pull/6369)
 - Check format extension function in ImplicitDefaultLocale - [#6368](https://github.com/detekt/detekt/pull/6368)
 - Fix false +ve when lambda is un-inferrable - [#6367](https://github.com/detekt/detekt/pull/6367)
 - NullableToStringCall: fix false negative in lambda - [#6352](https://github.com/detekt/detekt/pull/6352)
