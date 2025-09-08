@@ -19,7 +19,7 @@ import org.jetbrains.kotlin.gradle.plugin.KotlinBasePlugin
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetContainer
 
 class DetektBasePlugin : Plugin<Project> {
-    var sourceSetListenerConfigured = false
+    private var sourceSetListenerConfigured = false
 
     override fun apply(project: Project) {
         project.pluginManager.apply(ReportingBasePlugin::class.java)
