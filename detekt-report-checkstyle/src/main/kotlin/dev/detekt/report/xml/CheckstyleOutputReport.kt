@@ -12,7 +12,7 @@ import kotlin.io.path.invariantSeparatorsPathString
  * Contains rule violations in an XML format. The report follows the structure of a Checkstyle report.
  * See: https://detekt.dev/configurations.html#output-reports
  */
-class CheckstyleOutputReport : BuiltInOutputReport, OutputReport() {
+class CheckstyleOutputReport : BuiltInOutputReport, OutputReport {
 
     override val id: String = "CheckstyleOutputReport"
     override val reportId: String = "checkstyle"
