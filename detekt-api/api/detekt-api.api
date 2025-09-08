@@ -194,8 +194,7 @@ public final class dev/detekt/api/Notification$Level : java/lang/Enum {
 	public static fun values ()[Ldev/detekt/api/Notification$Level;
 }
 
-public abstract class dev/detekt/api/OutputReport : dev/detekt/api/Extension {
-	public fun <init> ()V
+public abstract interface class dev/detekt/api/OutputReport : dev/detekt/api/Extension {
 	public abstract fun getEnding ()Ljava/lang/String;
 	public abstract fun render (Ldev/detekt/api/Detektion;)Ljava/lang/String;
 }
