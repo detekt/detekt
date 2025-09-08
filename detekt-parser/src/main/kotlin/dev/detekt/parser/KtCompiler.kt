@@ -3,6 +3,7 @@ package dev.detekt.parser
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFileManager
 import com.intellij.pom.PomModel
+import com.intellij.pom.tree.TreeAspect
 import com.intellij.psi.util.PsiUtilCore
 import org.jetbrains.kotlin.analysis.api.standalone.buildStandaloneAnalysisAPISession
 import org.jetbrains.kotlin.cli.common.CliModuleVisibilityManagerImpl
@@ -30,7 +31,8 @@ open class KtCompiler(
 }
 
 private fun createDefaultAnalysisAPISession() = buildStandaloneAnalysisAPISession {
-    registerProjectService(PomModel::class.java, DetektPomModel)
+    registerProjectService(TreeAspect::class.java)
+    registerProjectService(PomModel::class.java, DetektPomModel(project))
 
     // Required until BindingContext usage is fully removed
     registerProjectService(ModuleVisibilityManager::class.java, CliModuleVisibilityManagerImpl(true))
