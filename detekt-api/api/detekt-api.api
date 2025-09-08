@@ -198,7 +198,6 @@ public abstract class dev/detekt/api/OutputReport : dev/detekt/api/Extension {
 	public fun <init> ()V
 	public abstract fun getEnding ()Ljava/lang/String;
 	public abstract fun render (Ldev/detekt/api/Detektion;)Ljava/lang/String;
-	public final fun write (Ljava/nio/file/Path;Ldev/detekt/api/Detektion;)V
 }
 
 public class dev/detekt/api/ProjectMetric {
