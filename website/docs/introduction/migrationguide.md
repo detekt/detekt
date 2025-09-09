@@ -30,6 +30,10 @@ You need to change it to:
 id("dev.detekt") version "[detekt_version]"
 ```
 
+### Module rename
+
+The formatting module was renamed from `detekt-formatting` to `detekt-rules-ktlint-wrapper`.
+
 ## Rule author guide
 
 ### Dependency coordinates and imports
