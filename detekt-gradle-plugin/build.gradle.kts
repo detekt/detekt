@@ -171,20 +171,20 @@ gradlePlugin {
     plugins {
         create("detektBasePlugin") {
             id = "dev.detekt.gradle.base"
-            displayName = "Static code analysis for Kotlin v2 - Base Plugin"
-            description = "Static code analysis for Kotlin v2 - Base Plugin"
+            displayName = "Static code analysis for Kotlin - Base Plugin"
+            description = "Static code analysis for Kotlin - Base Plugin"
             implementationClass = "dev.detekt.gradle.plugin.DetektBasePlugin"
         }
         create("detektPlugin") {
             id = "dev.detekt"
-            displayName = "Static code analysis for Kotlin v2"
-            description = "Static code analysis for Kotlin v2"
+            displayName = "Static code analysis for Kotlin"
+            description = "Static code analysis for Kotlin"
             implementationClass = "dev.detekt.gradle.plugin.DetektPlugin"
         }
         create("detektCompilerPlugin") {
             id = "dev.detekt.gradle.compiler-plugin"
-            displayName = "Static code analysis for Kotlin v2 - Compiler Plugin"
-            description = "Static code analysis for Kotlin v2 - Compiler Plugin"
+            displayName = "Static code analysis for Kotlin - Compiler Plugin"
+            description = "Static code analysis for Kotlin - Compiler Plugin"
             implementationClass = "dev.detekt.gradle.plugin.DetektKotlinCompilerPlugin"
         }
         configureEach {
