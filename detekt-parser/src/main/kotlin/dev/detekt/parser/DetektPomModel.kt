@@ -26,11 +26,9 @@ class DetektPomModel(project: Project) : UserDataHolderBase(), PomModel {
         pomTransaction.run()
     }
 
-    override fun <T : PomModelAspect> getModelAspect(aspect: Class<T>): T? =
-        if (aspect == treeAspect::class.java) {
-            @Suppress("UNCHECKED_CAST")
-            treeAspect as T
-        } else {
-            null
-        }
+    override fun <T : PomModelAspect> getModelAspect(aspect: Class<T>): T {
+        check(aspect == treeAspect::class.java) { "The only PomModelAspect type supported is TreeAspect" }
+        @Suppress("UNCHECKED_CAST")
+        return treeAspect as T
+    }
 }
