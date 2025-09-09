@@ -240,9 +240,10 @@ class NoNameShadowingSpec(val env: KotlinEnvironmentContainer) {
             }
         """.trimIndent()
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).hasSize(2)
-        assertThat(findings[0]).hasMessage("Name shadowed: a")
-        assertThat(findings[1]).hasMessage("Name shadowed: b")
+        assertThat(findings).hasSize(2).satisfiesExactly(
+            { assertThat(it).hasMessage("Name shadowed: a") },
+            { assertThat(it).hasMessage("Name shadowed: b") },
+        )
     }
 
     @Test
@@ -263,9 +264,10 @@ class NoNameShadowingSpec(val env: KotlinEnvironmentContainer) {
             }
         """.trimIndent()
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).hasSize(2)
-        assertThat(findings[0]).hasMessage("Name shadowed: a")
-        assertThat(findings[1]).hasMessage("Name shadowed: b")
+        assertThat(findings).hasSize(2).satisfiesExactly(
+            { assertThat(it).hasMessage("Name shadowed: a") },
+            { assertThat(it).hasMessage("Name shadowed: b") },
+        )
     }
 
     @Nested
@@ -355,9 +357,10 @@ class NoNameShadowingSpec(val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
-            assertThat(findings).hasSize(2)
-            assertThat(findings[0]).hasMessage("Name shadowed: a")
-            assertThat(findings[1]).hasMessage("Name shadowed: b")
+            assertThat(findings).hasSize(2).satisfiesExactly(
+                { assertThat(it).hasMessage("Name shadowed: a") },
+                { assertThat(it).hasMessage("Name shadowed: b") },
+            )
         }
 
         @Test

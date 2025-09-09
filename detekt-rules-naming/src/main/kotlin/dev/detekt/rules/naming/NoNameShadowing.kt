@@ -158,10 +158,7 @@ class NoNameShadowing(config: Config) :
                 }
         if (matched) {
             report(
-                Finding(
-                    Entity.from(declarationNameIdentifier),
-                    "Name shadowed: $declarationName"
-                )
+                Finding(Entity.from(declarationNameIdentifier), "Name shadowed: $declarationName")
             )
         }
     }
