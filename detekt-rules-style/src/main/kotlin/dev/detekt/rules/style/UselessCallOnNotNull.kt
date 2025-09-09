@@ -64,7 +64,7 @@ class UselessCallOnNotNull(config: Config) :
         if (calleeText !in uselessCallNames) return
 
         analyze(expression) {
-            if (expression.receiverExpression.expressionType?.isMarkedNullable == true) return
+            if (expression.receiverExpression.expressionType?.isNullable == true) return
 
             val callableId = expression.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId ?: return
             val conversion = uselessCallFqNames[callableId] ?: return
