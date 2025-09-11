@@ -4,13 +4,14 @@
 .idea
 !.idea/icon.svg
 .kotlin
+local.properties
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 /hs_err_pid*
 
 /build
 */build/
-/detekt-formatting/ktlint-repackage/build/
+/detekt-rules-ktlint-wrapper/ktlint-repackage/build/
 
 *.jar
 !gradle-wrapper.jar

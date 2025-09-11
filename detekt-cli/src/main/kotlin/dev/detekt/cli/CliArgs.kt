@@ -107,9 +107,9 @@ class CliArgs {
         converter = ReportPathConverter::class,
         description = "Generates a report for given 'report-id' and stores it on given 'path'. " +
             "Entry should consist of: [report-id:path]. " +
-            "Available 'report-id' values: 'xml', 'html', 'md', 'sarif'. " +
+            "Available 'report-id' values: 'checkstyle', 'html', 'md', 'sarif'. " +
             "These can also be used in combination with each other " +
-            "e.g. '-r html:reports/detekt.html -r xml:reports/detekt.xml'"
+            "e.g. '-r html:reports/detekt.html -r checkstyle:reports/detekt.xml'"
     )
     var reportPaths: List<ReportPath> = emptyList()
 
@@ -156,7 +156,7 @@ class CliArgs {
         description = "Allow rules to auto correct code if they support it. " +
             "The default rule sets do NOT support auto correcting and won't change any line in the users code base. " +
             "However custom rules can be written to support auto correcting. " +
-            "The additional 'formatting' rule set, added with '--plugins', does support it and needs this flag."
+            "The additional 'ktlint' rule set, added with '--plugins', does support it and needs this flag."
     )
     var autoCorrect: Boolean = false
 

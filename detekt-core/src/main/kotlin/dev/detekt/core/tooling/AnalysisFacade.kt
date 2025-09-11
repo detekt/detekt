@@ -2,6 +2,7 @@ package dev.detekt.core.tooling
 
 import dev.detekt.api.Detektion
 import dev.detekt.core.ProcessingSettings
+import dev.detekt.core.config.FailurePolicyResult
 import dev.detekt.core.config.check
 import dev.detekt.tooling.api.AnalysisResult
 import dev.detekt.tooling.api.Detekt
@@ -32,31 +33,22 @@ class AnalysisFacade(
         }
 
     internal fun runAnalysis(createLifecycle: (ProcessingSettings) -> Lifecycle): AnalysisResult = spec.withSettings {
-        val result = runCatching { createLifecycle(this).analyze() }
-        when (val error = result.exceptionOrNull()) {
-            null -> {
-                val container = checkNotNull(result.getOrNull()) { "Result should not be null at this point." }
-                DefaultAnalysisResult(container, checkFailurePolicy(container))
-            }
-
-            is InvalidConfig -> DefaultAnalysisResult(null, error)
-            else -> DefaultAnalysisResult(null, UnexpectedError(error))
-        }
+        runCatching { createLifecycle(this).analyze() }.fold(
+            onSuccess = { detektion -> DefaultAnalysisResult(detektion, checkFailurePolicy(detektion)) },
+            onFailure = { error ->
+                DefaultAnalysisResult(null, if (error is InvalidConfig) error else UnexpectedError(error))
+            },
+        )
     }
 
-    private fun checkFailurePolicy(result: Detektion): DetektError? {
+    private fun checkFailurePolicy(detektion: Detektion): DetektError? {
         if (spec.baselineSpec.shouldCreateDuringAnalysis) {
             return null // never fail the build as on next run all current issues are suppressed via the baseline
         }
 
-        val error = runCatching {
-            spec.rulesSpec.failurePolicy.check(result)
-        }.exceptionOrNull()
-
-        return when {
-            error is IssuesFound -> error
-            error != null -> UnexpectedError(error)
-            else -> null
+        return when (val result = spec.rulesSpec.failurePolicy.check(detektion)) {
+            is FailurePolicyResult.Fail -> IssuesFound(result.message)
+            FailurePolicyResult.Ok -> null
         }
     }
 }

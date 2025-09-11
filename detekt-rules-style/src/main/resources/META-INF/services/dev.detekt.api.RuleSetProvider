@@ -1,1 +1,1 @@
-io.gitlab.arturbosch.detekt.rules.style.StyleGuideProvider
+dev.detekt.rules.style.StyleGuideProvider

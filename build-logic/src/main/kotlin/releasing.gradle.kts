@@ -32,15 +32,7 @@ githubRelease {
     draft = true
     prerelease = true
     targetCommitish = "main"
-    body =
-        provider {
-            var changelog = project.file("website/src/pages/changelog.md").readText()
-            val nextNonBetaVersion = version
-            val sectionStart = "#### $nextNonBetaVersion"
-            changelog = changelog.substring(changelog.indexOf(sectionStart))
-            changelog = changelog.substring(0, changelog.indexOf("#### 1.", changelog.indexOf(sectionStart) + 1))
-            changelog.trim()
-        }
+    body = "Detekt Release Body"
     releaseAssets.setFrom(releaseAssetFiles)
 }
 
@@ -57,7 +49,7 @@ dependencies {
     releaseArtifacts(project(":detekt-compiler-plugin")) {
         targetConfiguration = "shadow" // com.github.jengelman.gradle.plugins.shadow.ShadowBasePlugin.CONFIGURATION_NAME
     }
-    releaseArtifacts(project(":detekt-formatting")) {
+    releaseArtifacts(project(":detekt-rules-ktlint-wrapper")) {
         targetConfiguration = Dependency.DEFAULT_CONFIGURATION
         isTransitive = false
     }
@@ -109,11 +101,19 @@ tasks {
 }
 
 tasks.register("publishToMavenLocal") {
-    description = "Publish all the projects to Maven Local"
-    subprojects {
-        if (this.plugins.hasPlugin("packaging")) {
-            dependsOn(tasks.named("publishToMavenLocal"))
-        }
-    }
+    description = "Publish included builds to Maven Local"
     dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":publishToMavenLocal"))
+}
+
+tasks.register("publishToSonatype") {
+    description = "Publish included builds to Sonatype"
+    dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":publishToSonatype"))
+}
+
+tasks.named("closeSonatypeStagingRepository").configure {
+    dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":closeSonatypeStagingRepository"))
+}
+
+tasks.named("releaseSonatypeStagingRepository").configure {
+    dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":releaseSonatypeStagingRepository"))
 }

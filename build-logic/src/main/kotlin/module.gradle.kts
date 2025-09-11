@@ -16,14 +16,6 @@ tasks.withType<AbstractArchiveTask>().configureEach {
     isReproducibleFileOrder = true
 }
 
-// Add attributes to JAR manifest, to be used at runtime
-tasks.withType<Jar>().configureEach {
-    manifest {
-        attributes(mapOf("DetektVersion" to Versions.DETEKT))
-        attributes(mapOf("KotlinImplementationVersion" to versionCatalog.findVersion("kotlin").get().requiredVersion))
-    }
-}
-
 val versionCatalog = versionCatalogs.named("libs")
 
 jacoco.toolVersion = versionCatalog.findVersion("jacoco").get().requiredVersion
@@ -35,11 +27,7 @@ tasks.withType<Test>().configureEach {
     val compileTestSnippets = providers.gradleProperty("compile-test-snippets").orNull.toBoolean()
     systemProperty("compile-test-snippets", compileTestSnippets)
 
-    if (compileTestSnippets) {
-        maxHeapSize = "3g"
-    } else {
-        maxHeapSize = "2g"
-    }
+    maxHeapSize = "3g"
 
     testLogging {
         // set options for log level LIFECYCLE

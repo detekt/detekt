@@ -3,6 +3,7 @@ package dev.detekt.metrics
 import dev.detekt.api.Detektion
 import dev.detekt.api.testfixtures.TestDetektion
 import dev.detekt.api.testfixtures.createIssue
+import dev.detekt.api.testfixtures.removeData
 import dev.detekt.metrics.processors.commentLinesKey
 import dev.detekt.metrics.processors.complexityKey
 import dev.detekt.metrics.processors.linesKey
@@ -15,12 +16,22 @@ import org.junit.jupiter.api.Test
 
 internal class ComplexityReportGeneratorSpec {
 
-    private lateinit var detektion: TestDetektion
+    private lateinit var detektion: Detektion
 
     @BeforeEach
     fun setupMocks() {
-        detektion = TestDetektion(createIssue("test"), createIssue("test2", suppressReasons = listOf("suppress")))
-            .withTestData()
+        detektion = TestDetektion(
+            createIssue("test"),
+            createIssue("test2", suppressReasons = listOf("suppress")),
+            userData = mapOf(
+                complexityKey.toString() to 2,
+                CognitiveComplexity.KEY.toString() to 2,
+                linesKey.toString() to 1000,
+                sourceLinesKey.toString() to 6,
+                logicalLinesKey.toString() to 5,
+                commentLinesKey.toString() to 4,
+            )
+        )
     }
 
     @Nested
@@ -59,7 +70,7 @@ internal class ComplexityReportGeneratorSpec {
             detektion.removeData(logicalLinesKey)
             assertThat(generateComplexityReport(detektion)).isNull()
 
-            detektion.putUserData(logicalLinesKey, 0)
+            detektion.userData[logicalLinesKey.toString()] = 0
             assertThat(generateComplexityReport(detektion)).isNull()
         }
 
@@ -68,7 +79,7 @@ internal class ComplexityReportGeneratorSpec {
             detektion.removeData(sourceLinesKey)
             assertThat(generateComplexityReport(detektion)).isNull()
 
-            detektion.putUserData(sourceLinesKey, 0)
+            detektion.userData[sourceLinesKey.toString()] = 0
             assertThat(generateComplexityReport(detektion)).isNull()
         }
 
@@ -78,16 +89,6 @@ internal class ComplexityReportGeneratorSpec {
             assertThat(generateComplexityReport(detektion)).isNull()
         }
     }
-}
-
-private fun TestDetektion.withTestData(): TestDetektion {
-    putUserData(complexityKey, 2)
-    putUserData(CognitiveComplexity.KEY, 2)
-    putUserData(linesKey, 1000)
-    putUserData(sourceLinesKey, 6)
-    putUserData(logicalLinesKey, 5)
-    putUserData(commentLinesKey, 4)
-    return this
 }
 
 private fun generateComplexityReport(detektion: Detektion): List<String>? {

@@ -117,9 +117,9 @@ For example, from above `detekt.sh`
 
 ## Only run on staged files - CLI
 
-It is also possible to use [the CLI](/docs/gettingstarted/cli) to create a hook that only runs on staged files. This has the advantage of speedier execution by avoiding the warm-up time of the gradle daemon.
+It is also possible to use [the CLI](cli.mdx) to create a hook that only runs on staged files. This has the advantage of speedier execution by avoiding the warm-up time of the gradle daemon.
 
-Please note, however, that a handful of checks requiring [type resolution](/docs/gettingstarted/type-resolution) will not work correctly with this approach. If you do adopt a partial CLI hook, it is recommended that you still implement a full `detekt` check as part of your CI pipeline.
+Please note, however, that a handful of checks requiring [type resolution](type-resolution.md) will not work correctly with this approach. If you do adopt a partial CLI hook, it is recommended that you still implement a full `detekt` check as part of your CI pipeline.
 
 This example has been put together using [pre-commit](https://pre-commit.com/), but the same principle can be applied to any kind of hook. 
 

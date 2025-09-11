@@ -71,7 +71,7 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
         output-reports:
           active: true
           exclude:
-          # - 'XmlOutputReport'
+          # - 'CheckstyleOutputReport'
           # - 'HtmlOutputReport'
           # - 'MdOutputReport'
           # - 'sarif'

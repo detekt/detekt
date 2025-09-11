@@ -12,7 +12,7 @@ import org.assertj.core.api.AbstractListAssert
 fun assertThat(findings: List<Finding>) = FindingsAssert(findings)
 
 @CheckReturnValue
-fun assertThat(finding: Finding) = FindingAssert(finding)
+fun assertThat(finding: Finding?) = FindingAssert(finding)
 
 class FindingsAssert(actual: List<Finding>) :
     AbstractListAssert<FindingsAssert, List<Finding>, Finding, FindingAssert>(actual, FindingsAssert::class.java) {
@@ -27,29 +27,35 @@ class FindingsAssert(actual: List<Finding>) :
 class FindingAssert(val actual: Finding?) : AbstractAssert<FindingAssert, Finding>(actual, FindingAssert::class.java) {
 
     fun hasMessage(expectedMessage: String) = apply {
-        if (expectedMessage.isNotBlank() && actual?.message.isNullOrBlank()) {
-            failWithMessage("Expected message <$expectedMessage> but finding has no message")
-        }
-
-        if (!actual?.message?.trim().equals(expectedMessage.trim(), ignoreCase = true)) {
-            failWithMessage("Expected message <$expectedMessage> but actual message was <${actual?.message}>")
+        isNotNull()
+        actual!!
+        if (actual.message != expectedMessage) {
+            throw failureWithActualExpected(
+                actual.message,
+                expectedMessage,
+                """Expected message "$expectedMessage" but actual message was "${actual.message}"""",
+            )
         }
     }
 
     fun noSuppress() = apply {
-        if (actual == null) {
-            failWithMessage("Expect no null")
-        } else if (actual.suppressReasons.isNotEmpty()) {
-            failWithMessage("Expect no suppressions but ${actual.suppressReasons} was found")
+        isNotNull()
+        actual!!
+        if (actual.suppressReasons.isNotEmpty()) {
+            throw failureWithActualExpected(
+                actual.suppressReasons,
+                emptyList<String>(),
+                "Expect no suppressions but ${actual.suppressReasons} was found",
+            )
         }
     }
 
-    fun hasStartSourceLocation(line: Int, column: Int) = apply {
-        hasStartSourceLocation(SourceLocation(line, column))
-    }
+    fun hasStartSourceLocation(line: Int, column: Int) = hasStartSourceLocation(SourceLocation(line, column))
 
     fun hasStartSourceLocation(expected: SourceLocation) = apply {
-        val actual = actual!!.location.source
+        isNotNull()
+        actual!!
+        val actual = actual.location.source
         if (actual != expected) {
             throw failureWithActualExpected(
                 actual,
@@ -59,12 +65,12 @@ class FindingAssert(val actual: Finding?) : AbstractAssert<FindingAssert, Findin
         }
     }
 
-    fun hasEndSourceLocation(line: Int, column: Int) = apply {
-        hasEndSourceLocation(SourceLocation(line, column))
-    }
+    fun hasEndSourceLocation(line: Int, column: Int) = hasEndSourceLocation(SourceLocation(line, column))
 
     fun hasEndSourceLocation(expected: SourceLocation) = apply {
-        val actual = actual!!.location.endSource
+        isNotNull()
+        actual!!
+        val actual = actual.location.endSource
         if (actual != expected) {
             throw failureWithActualExpected(
                 actual,
@@ -74,12 +80,12 @@ class FindingAssert(val actual: Finding?) : AbstractAssert<FindingAssert, Findin
         }
     }
 
-    fun hasTextLocation(expected: Pair<Int, Int>) = apply {
-        hasTextLocation(TextLocation(expected.first, expected.second))
-    }
+    fun hasTextLocation(expected: Pair<Int, Int>) = hasTextLocation(TextLocation(expected.first, expected.second))
 
     fun hasTextLocation(expected: TextLocation) = apply {
-        val actual = actual!!.location.text
+        isNotNull()
+        actual!!
+        val actual = actual.location.text
         if (actual != expected) {
             throw failureWithActualExpected(
                 actual,
@@ -90,17 +96,15 @@ class FindingAssert(val actual: Finding?) : AbstractAssert<FindingAssert, Findin
     }
 
     fun hasTextLocation(expected: String) = apply {
-        val code = actual!!.entity.ktElement.containingKtFile.text
+        isNotNull()
+        actual!!
+        val code = actual.entity.ktElement.containingFile.text
 
         val index = code.indexOf(expected)
-        if (index < 0) {
-            failWithMessage("The snippet \"$expected\" doesn't exist in the code")
-        } else {
-            if (code.indexOf(expected, index + 1) >= 0) {
-                failWithMessage("The snippet \"$expected\" appears multiple times in the code")
-            }
+        require(index >= 0) { """The snippet "$expected" doesn't exist in the code""" }
+        require(code.indexOf(expected, index + 1) < 0) {
+            """The snippet "$expected" appears multiple times in the code"""
         }
-
         hasTextLocation(TextLocation(index, index + expected.length))
     }
 }

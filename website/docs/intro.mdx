@@ -14,10 +14,10 @@ summary:
 - Highly configurable rule sets.
 - Generate baselines to suppress existing issues for legacy projects while making sure no new issues are introduced.
 - Suppress issues in source files using `@Suppress` annotations.
-- Support for different report formats: HTML, Markdown, [SARIF](https://sarifweb.azurewebsites.net/), XML (Checkstyle) and custom reports.
-- [Extend detekt](introduction/extensions) with custom rule sets and reports.
+- Support for different report formats: HTML, Markdown, [SARIF](https://sarifweb.azurewebsites.net/), Checkstyle(XML) and custom reports.
+- [Extend detekt](introduction/extensions.md) with custom rule sets and reports.
 - Complexity reports based on lines of code, cyclomatic complexity and number of code smells.
-- First party integration with Gradle with our [Gradle plugin](/gettingstarted/gradle.mdx).
+- First party integration with Gradle with our [Gradle plugin](gettingstarted/gradle.mdx).
 - A community of [third party plugins](https://github.com/topics/detekt-plugin) that adds more rules and features to detekt.
 
 ### Quick Start with Gradle
@@ -59,7 +59,7 @@ To enable/disable detekt reports use the `withType` method to set defaults for a
 // Kotlin DSL
 tasks.withType<Detekt>().configureEach {
     reports {
-        xml.required.set(true)
+        checkstyle.required.set(true)
         html.required.set(true)
         sarif.required.set(true)
         md.required.set(true)
@@ -71,7 +71,7 @@ tasks.withType<Detekt>().configureEach {
 // Groovy DSL
 tasks.withType(Detekt).configureEach {
     reports {
-        xml.required.set(true)
+        checkstyle.required.set(true)
         html.required.set(true)
         sarif.required.set(true)
         md.required.set(true)
@@ -79,15 +79,15 @@ tasks.withType(Detekt).configureEach {
 }
 ```
 
-See [reporting](introduction/reporting) docs for more details on configuring reports.
+See [reporting](introduction/reporting.md) docs for more details on configuring reports.
 
 ### Adding more rule sets
 
-detekt itself provides a wrapper over [ktlint](https://github.com/pinterest/ktlint) as the `formatting` rule set
+detekt itself provides a wrapper over [ktlint](https://github.com/pinterest/ktlint) as the `ktlint` rule set
 which can be easily added to the Gradle configuration:
 
 ```gradle
 dependencies {
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:[detekt_version]")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-rules-ktlint-wrapper:[detekt_version]")
 }
 ```

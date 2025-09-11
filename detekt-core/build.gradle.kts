@@ -18,6 +18,7 @@ dependencies {
     testImplementation(projects.detektReportHtml)
     testImplementation(projects.detektReportMd)
     testImplementation(projects.detektReportXml)
+    testImplementation(projects.detektReportSarif)
     testImplementation(projects.detektTest)
     testImplementation(projects.detektTestUtils)
     testImplementation(testFixtures(projects.detektApi))

@@ -28,11 +28,10 @@ class LongMethodSpec {
         """.trimIndent()
         val findings = subject.lint(code)
 
-        assertThat(findings).hasSize(2)
-        assertThat(findings).element(0)
-            .hasTextLocation("longMethod")
-        assertThat(findings).element(1)
-            .hasTextLocation("nestedLongMethod")
+        assertThat(findings).satisfiesExactlyInAnyOrder(
+            { assertThat(it).hasTextLocation("longMethod") },
+            { assertThat(it).hasTextLocation("nestedLongMethod") },
+        )
     }
 
     @Test
@@ -129,11 +128,10 @@ class LongMethodSpec {
 
         val findings = subject.lint(code)
 
-        assertThat(findings).hasSize(2)
-        assertThat(findings).element(0)
-            .hasTextLocation("longMethod")
-        assertThat(findings).element(1)
-            .hasTextLocation("nestedLongMethod")
+        assertThat(findings).satisfiesExactlyInAnyOrder(
+            { assertThat(it).hasTextLocation("longMethod") },
+            { assertThat(it).hasTextLocation("nestedLongMethod") },
+        )
     }
 
     @Test

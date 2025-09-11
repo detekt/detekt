@@ -1,6 +1,6 @@
-import io.gitlab.arturbosch.detekt.Detekt
-import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
-import io.gitlab.arturbosch.detekt.report.ReportMergeTask
+import dev.detekt.gradle.Detekt
+import dev.detekt.gradle.DetektCreateBaselineTask
+import dev.detekt.gradle.report.ReportMergeTask
 
 plugins {
     id("releasing")
@@ -52,7 +52,7 @@ allprojects {
 
     dependencies {
         detekt(project(":detekt-cli"))
-        detektPlugins(project(":detekt-formatting"))
+        detektPlugins(project(":detekt-rules-ktlint-wrapper"))
         detektPlugins(project(":detekt-rules-libraries"))
         detektPlugins(project(":detekt-rules-ruleauthors"))
     }
@@ -60,7 +60,7 @@ allprojects {
     tasks.withType<Detekt>().configureEach {
         jvmTarget = "1.8"
         reports {
-            xml.required = true
+            checkstyle.required = true
             html.required = true
             sarif.required = true
             md.required = true

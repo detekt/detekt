@@ -75,7 +75,7 @@ detekt {
 tasks.withType<Detekt>().configureEach {
     reports {
         html.required.set(true) // observe findings in your browser with structure and code snippets
-        xml.required.set(true) // checkstyle like format mainly for integrations like Jenkins
+        checkstyle.required.set(true) // checkstyle(xml) like format mainly for integrations like Jenkins
         sarif.required.set(true) // standardized SARIF format (https://sarifweb.azurewebsites.net/) to support integrations with GitHub Code Scanning
         md.required.set(true) // simple Markdown format
     }
@@ -110,9 +110,10 @@ If you want to use a SNAPSHOT version, you can find more info on [this documenta
 
 Gradle 6.8.3+ is the minimum requirement. However, the recommended versions together with the other tools recommended versions are:
 
-| Detekt Version | Gradle   | Kotlin   | AGP     | Java Target Level | JDK Max Version |
-|----------------|----------|----------|---------|-------------------|-----------------|
-| `1.23.8`       | `8.12.1` | `2.0.21` | `8.8.1` | `1.8`             | `21`            |
+| Detekt Version  | Gradle   | Kotlin   | AGP      | Java Target Level | JDK Max Version |
+|-----------------|----------|----------|----------|-------------------|-----------------|
+| `2.0.0-alpha.0` | `8.13.0` | `2.2.10` | `8.13.0` | `1.8`             | `21`            |
+| `1.23.8`        | `8.12.1` | `2.0.21` | `8.8.1`  | `1.8`             | `21`            |
 
 The list of [recommended versions for previous detekt version is listed here](https://detekt.dev/compatibility.html).
 
@@ -122,12 +123,12 @@ Java 17 or higher is required to build detekt.
 
 ### Adding more rule sets
 
-detekt itself provides a wrapper over [ktlint](https://github.com/pinterest/ktlint) as the `formatting` rule set
+detekt itself provides a wrapper over [ktlint](https://github.com/pinterest/ktlint) as the `ktlint` rule set
 which can be easily added to the Gradle configuration:
 
 ```kotlin
 dependencies {
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:[version]")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-rules-ktlint-wrapper:[version]")
 }
 ```
 
