@@ -7,11 +7,6 @@ public final class dev/detekt/psi/AnnotationExcluder {
 	public final fun shouldExclude (Ljava/util/List;)Z
 }
 
-public final class dev/detekt/psi/AnnotationExcluderBindingContext {
-	public fun <init> (Lorg/jetbrains/kotlin/psi/KtFile;Ljava/util/List;Lorg/jetbrains/kotlin/resolve/BindingContext;)V
-	public final fun shouldExclude (Ljava/util/List;)Z
-}
-
 public abstract class dev/detekt/psi/FunctionMatcher {
 	public static final field Companion Ldev/detekt/psi/FunctionMatcher$Companion;
 	public abstract fun match (Lorg/jetbrains/kotlin/analysis/api/symbols/KaCallableSymbol;)Z
