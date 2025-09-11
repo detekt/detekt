@@ -6,6 +6,7 @@ import com.intellij.openapi.Disposable
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Disposer
 import com.intellij.pom.PomModel
+import com.intellij.pom.tree.TreeAspect
 import dev.detekt.parser.DetektPomModel
 import dev.detekt.parser.createCompilerConfiguration
 import dev.detekt.tooling.api.spec.CompilerSpec
@@ -73,7 +74,8 @@ internal class EnvironmentFacade(
 
     private val analysisSession = buildStandaloneAnalysisAPISession(disposable) {
         // Required for autocorrect support
-        registerProjectService(PomModel::class.java, DetektPomModel)
+        registerProjectService(TreeAspect::class.java)
+        registerProjectService(PomModel::class.java, DetektPomModel(project))
 
         // Required by K1 compiler setup
         registerProjectService(CodeAnalyzerInitializer::class.java, CliTraceHolder(project))

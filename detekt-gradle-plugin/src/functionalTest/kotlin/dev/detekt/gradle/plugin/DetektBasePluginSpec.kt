@@ -82,6 +82,40 @@ class DetektBasePluginSpec {
         gradleRunner.checkTask("androidTest")
     }
 
+    @Test
+    fun `generates source set tasks when multiple plugins of type KotlinBasePlugin are applied #8613`() {
+        val gradleRunner = DslGradleRunner(
+            projectLayout = ProjectLayout(
+                numberOfSourceFilesInRootPerSourceDir = 1,
+                srcDirs = listOf(
+                    "src/main/kotlin",
+                    "src/test/kotlin",
+                ),
+            ),
+            buildFileName = "build.gradle.kts",
+            mainBuildFileContent = """
+                plugins {
+                    id("dev.detekt")
+                    kotlin("jvm") // This plugin has type KotlinBasePlugin
+                }
+            
+                // This plugin also has type KotlinBasePlugin
+                apply<org.jetbrains.kotlin.gradle.plugin.KotlinBaseApiPlugin>()
+            
+                repositories {
+                    mavenLocal()
+                    mavenCentral()
+                }
+            """.trimIndent(),
+            dryRun = true,
+        ).also {
+            it.setupProject()
+        }
+
+        gradleRunner.checkTask("main")
+        gradleRunner.checkTask("test")
+    }
+
     @Nested
     inner class `generates source set tasks for KMP project` {
         val gradleRunner = DslGradleRunner(
