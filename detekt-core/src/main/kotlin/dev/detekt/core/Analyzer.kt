@@ -101,7 +101,7 @@ internal class Analyzer(
 
 private fun List<Finding>.filterSuppressedFindings(rule: Rule, bindingContext: BindingContext): List<Finding> {
     val analysisMode = if (bindingContext == BindingContext.EMPTY) AnalysisMode.light else AnalysisMode.full
-    val suppressors = buildSuppressors(rule, bindingContext, analysisMode)
+    val suppressors = buildSuppressors(rule, analysisMode)
     return if (suppressors.isNotEmpty()) {
         filter { finding -> !suppressors.any { suppressor -> suppressor.shouldSuppress(finding) } }
     } else {
