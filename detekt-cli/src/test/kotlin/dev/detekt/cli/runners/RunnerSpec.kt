@@ -3,6 +3,7 @@ package dev.detekt.cli.runners
 import dev.detekt.cli.parseArguments
 import dev.detekt.test.utils.NullPrintStream
 import dev.detekt.test.utils.StringPrintStream
+import dev.detekt.test.utils.createTempFileForTest
 import dev.detekt.test.utils.resourceAsPath
 import dev.detekt.tooling.api.InvalidConfig
 import dev.detekt.tooling.api.IssuesFound
@@ -15,24 +16,26 @@ import org.junit.jupiter.api.Test
 import java.io.PrintStream
 import java.nio.file.Path
 import kotlin.io.path.absolutePathString
+import kotlin.io.path.deleteExisting
 
 class RunnerSpec {
 
     val inputPath = resourceAsPath("cases/Poko.kt")
 
-    @Nested
-    inner class `executes the runner with create baseline` {
+    @Test
+    fun `executes the runner with create baseline`() {
+        val baseline = createTempFileForTest("baseline", ".xml").also { it.deleteExisting() }
+        executeDetekt(
+            "--input",
+            inputPath.toString(),
+            "--config-resource",
+            "/configs/valid-config.yml",
+            "--baseline",
+            baseline.toString(),
+            "--create-baseline",
+        )
 
-        @Test
-        fun `should not throw`() {
-            executeDetekt(
-                "--input",
-                inputPath.toString(),
-                "--baseline",
-                resourceAsPath("configs/baseline-empty.xml").toString(),
-                "--create-baseline",
-            )
-        }
+        assertThat(baseline).content().contains("<SmellBaseline>")
     }
 
     @Nested
