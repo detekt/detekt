@@ -3,7 +3,7 @@ id: compatibility
 title: "Compatibility Table"
 keywords: [detekt, kotlin, gradle, compatibility, android] 
 summary: This page lists the version of the Gradle plugins have been used to build detekt.
-sidebar_position: 11
+sidebar_position: 90
 ---
 
 ## Detekt Support Commitment
