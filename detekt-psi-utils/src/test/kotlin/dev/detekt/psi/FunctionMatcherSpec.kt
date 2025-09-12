@@ -258,11 +258,11 @@ class FunctionMatcherSpec(private val env: KotlinEnvironmentContainer) {
         @DisplayName("When lambdas foo(() -> kotlin.String)")
         @ParameterizedTest(name = "in case {0} it return {1}")
         @CsvSource(
-            "fun foo(a: () -> String),          true",
-            "fun foo(a: () -> Unit),            true",
-            "fun foo(a: (String) -> String),    false",
-            "fun foo(a: (String) -> Unit),      false",
-            "fun foo(a: (Int) -> Unit),         false",
+            "fun foo(a: () -> String) {},          true",
+            "fun foo(a: () -> Unit) {},            true",
+            "fun foo(a: (String) -> String) {},    false",
+            "fun foo(a: (String) -> Unit) {},      false",
+            "fun foo(a: (Int) -> Unit) {},         false",
         )
         fun `When foo(() - kotlin#String)`(code: String, result: Boolean) {
             val (function, bindingContext) = buildKtFunction(env, code)
@@ -273,11 +273,11 @@ class FunctionMatcherSpec(private val env: KotlinEnvironmentContainer) {
         @DisplayName("When lambdas foo((kotlin.String) -> Unit)")
         @ParameterizedTest(name = "in case {0} it return {1}")
         @CsvSource(
-            "fun foo(a: () -> String),          false",
-            "fun foo(a: () -> Unit),            false",
-            "fun foo(a: (String) -> String),    true",
-            "fun foo(a: (String) -> Unit),      true",
-            "fun foo(a: (Int) -> Unit),         true",
+            "fun foo(a: () -> String) {},          false",
+            "fun foo(a: () -> Unit) {},            false",
+            "fun foo(a: (String) -> String) {},    true",
+            "fun foo(a: (String) -> Unit) {},      true",
+            "fun foo(a: (Int) -> Unit) {},         true",
         )
         fun `When foo((kotlin#String) - Unit)`(code: String, result: Boolean) {
             val (function, bindingContext) = buildKtFunction(env, code)
@@ -288,11 +288,11 @@ class FunctionMatcherSpec(private val env: KotlinEnvironmentContainer) {
         @DisplayName("When extension functions foo(kotlin.String)")
         @ParameterizedTest(name = "in case {0} it return {1}")
         @CsvSource(
-            "fun String.foo(),              true",
-            "fun foo(a: String),            true",
-            "fun Int.foo(),                 false",
-            "fun String.foo(a: Int),        false",
-            "'fun foo(a: String, ba: Int)', false",
+            "fun String.foo() {},              true",
+            "fun foo(a: String) {},            true",
+            "fun Int.foo() {},                 false",
+            "fun String.foo(a: Int) {},        false",
+            "'fun foo(a: String, ba: Int) {}', false",
         )
         fun `When foo(kotlin#String)`(code: String, result: Boolean) {
             val (function, bindingContext) = buildKtFunction(env, code)
@@ -303,11 +303,11 @@ class FunctionMatcherSpec(private val env: KotlinEnvironmentContainer) {
         @DisplayName("When extension functions foo(kotlin.String, kotlin.Int)")
         @ParameterizedTest(name = "in case {0} it return {1}")
         @CsvSource(
-            "fun String.foo(),              false",
-            "fun foo(a: String),            false",
-            "fun Int.foo(),                 false",
-            "fun String.foo(a: Int),        true",
-            "'fun foo(a: String, ba: Int)', true",
+            "fun String.foo() {},              false",
+            "fun foo(a: String) {},            false",
+            "fun Int.foo() {},                 false",
+            "fun String.foo(a: Int) {},        true",
+            "'fun foo(a: String, ba: Int) {}', true",
         )
         fun `When foo(kotlin#String, kotlin#Int)`(code: String, result: Boolean) {
             val (function, bindingContext) = buildKtFunction(env, code)
@@ -318,11 +318,11 @@ class FunctionMatcherSpec(private val env: KotlinEnvironmentContainer) {
         @DisplayName("When generics foo(T, U)")
         @ParameterizedTest(name = "in case {0} it return {1}")
         @CsvSource(
-            "'fun <T, U> foo(a: T, b: U)',      true",
-            "'fun <T, U> foo(a: U, b: T)',      false",
-            "'fun <T, U> foo(a: String, b: U)', false",
-            "'fun <T, U> T.foo(a: U)',          true",
-            "'fun <T, U> U.foo(a: T)',          false",
+            "'fun <T, U> foo(a: T, b: U) {}',      true",
+            "'fun <T, U> foo(a: U, b: T) {}',      false",
+            "'fun <T, U> foo(a: String, b: U) {}', false",
+            "'fun <T, U> T.foo(a: U) {}',          true",
+            "'fun <T, U> U.foo(a: T) {}',          false",
         )
         fun `When foo(T, U)`(code: String, result: Boolean) {
             val (function, bindingContext) = buildKtFunction(env, code)
@@ -343,8 +343,12 @@ class FunctionMatcherSpec(private val env: KotlinEnvironmentContainer) {
             "'fun <V> bar(p1: V, p2: T)', class BarClass<T>, 'io.github.detekt.BarClass.bar(V, T)', true",
             "fun bar(), class BarClass, io.github.detekt.BarClass.bar(kotlin.String), false",
             "fun bar(p: String), class BarClass, io.github.detekt.BarClass.bar(kotlin.Int), false",
-            "fun bar(p: T), class BarClass, io.github.detekt.BarClass.bar(T), false",
-            "fun T.bar(), class BarClass, io.github.detekt.BarClass.bar(T), false",
+            "fun bar(p: T), class BarClass<T>, io.github.detekt.BarClass.bar(T), true",
+            "fun T.bar(), class BarClass<T>, io.github.detekt.BarClass.bar(T), true",
+            "fun <T> bar(p: T), class BarClass, io.github.detekt.BarClass.bar(T), true",
+            "fun <T> T.bar(), class BarClass, io.github.detekt.BarClass.bar(T), true",
+            "fun <F> bar(p: F), class BarClass, io.github.detekt.BarClass.bar(T), false",
+            "fun <F> F.bar(), class BarClass, io.github.detekt.BarClass.bar(T), false",
             "'fun <V> bar(p1: V, p2: T)', class BarClass<T>, 'io.github.detekt.BarClass.bar(T, V)', false",
         )
         fun `When function signature is fully qualified and declaration is enclosed into class`(
