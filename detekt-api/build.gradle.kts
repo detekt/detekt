@@ -13,12 +13,13 @@ dependencies {
     api(libs.kotlin.compiler)
     api(projects.detektKotlinAnalysisApi)
 
+    testImplementation(testFixtures(projects.detektPsiUtils))
     testImplementation(projects.detektTest)
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.assertj.core)
 
+    testFixturesImplementation(testFixtures(projects.detektPsiUtils))
     testFixturesApi(libs.kotlin.compiler)
-    testFixturesApi(projects.detektTestUtils)
 }
 
 detekt {
