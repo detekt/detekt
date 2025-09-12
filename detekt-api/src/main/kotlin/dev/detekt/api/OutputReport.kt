@@ -11,11 +11,6 @@ import kotlin.io.path.writeText
 abstract class OutputReport : Extension {
 
     /**
-     * Supported ending of this report type.
-     */
-    abstract val ending: String
-
-    /**
      * Renders result and writes it to the given [filePath].
      */
     fun write(filePath: Path, detektion: Detektion) {
