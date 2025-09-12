@@ -46,7 +46,7 @@ sidebar_position: 4
             </executions>
             <dependencies>
                 <dependency>
-                    <groupId>io.gitlab.arturbosch.detekt</groupId>
+                    <groupId>dev.detekt</groupId>
                     <artifactId>detekt-cli</artifactId>
                     <version>[detekt_version]</version>
                 </dependency>

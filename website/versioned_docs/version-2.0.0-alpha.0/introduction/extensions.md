@@ -15,8 +15,8 @@ So it is possible to define rules/rule sets and enhance _detekt_ with your own f
 
 :::caution Attention
 
-You need a `resources/META-INF/services/io.gitlab.arturbosch.detekt.api.RuleSetProvider` file which 
-has as content the fully qualified name of your `RuleSetProvider` e.g. `io.gitlab.arturbosch.detekt.sample.extensions.SampleProvider`.
+You need a `resources/META-INF/services/dev.detekt.api.RuleSetProvider` file which 
+has as content the fully qualified name of your `RuleSetProvider` e.g. `dev.detekt.sample.extensions.SampleProvider`.
 
 :::
 
@@ -25,7 +25,7 @@ develop your own custom rules. Another option is to clone the provided [detekt/d
 
 :::note
 
-It's important that the dependency of `io.gitlab.arturbosch.detekt:detekt-api` is configured as `compileOnly` (as in the examples).
+It's important that the dependency of `dev.detekt:detekt-api` is configured as `compileOnly` (as in the examples).
 You can read more information about this [here](https://github.com/detekt/detekt/issues/7883).
 
 :::
@@ -125,7 +125,7 @@ config:
 
 ##### <a name="testing">Testing your rules</a>
 
-To test your rules, add the dependency on `detekt-test` to your project: `testCompile "io.gitlab.arturbosch.detekt:detekt-test:$version"`.
+To test your rules, add the dependency on `detekt-test` to your project: `testCompile "dev.detekt:detekt-test:$version"`.
 
 The easiest way to detect issues with your newly created rule is to use the `lint` extension function:
 - `Rule.lint(StringContent/Path/KtFile): List<Finding>`
@@ -164,8 +164,8 @@ class NumberOfLoopsProcessor : FileProcessListener {
 }
 ```
 
-To let detekt know about the new processor, we specify a `resources/META-INF/services/io.gitlab.arturbosch.detekt.api.FileProcessListener` file 
-with the full qualify name of our processor as the content: `io.gitlab.arturbosch.detekt.sample.extensions.processors.NumberOfLoopsProcessor`.
+To let detekt know about the new processor, we specify a `resources/META-INF/services/dev.detekt.api.FileProcessListener` file 
+with the full qualify name of our processor as the content: `dev.detekt.sample.extensions.processors.NumberOfLoopsProcessor`.
 
 
 To test the code we use the `detekt-test` module and write a JUnit 5 testcase.
@@ -229,7 +229,7 @@ To enable it, we add the published dependency to `detekt` via the `detektPlugins
 
 ```kotlin
 dependencies {
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-rules-ktlint-wrapper:[detekt_version]")
+    detektPlugins("dev.detekt:detekt-rules-ktlint-wrapper:[detekt_version]")
 }
 ```
 
