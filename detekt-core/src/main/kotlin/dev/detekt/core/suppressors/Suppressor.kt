@@ -2,7 +2,6 @@ package dev.detekt.core.suppressors
 
 import dev.detekt.api.Finding
 import dev.detekt.api.Rule
-import org.jetbrains.kotlin.resolve.BindingContext
 
 fun interface Suppressor {
     /**
@@ -11,8 +10,8 @@ fun interface Suppressor {
     fun shouldSuppress(finding: Finding): Boolean
 }
 
-internal fun buildSuppressors(rule: Rule, bindingContext: BindingContext): List<Suppressor> =
+internal fun buildSuppressors(rule: Rule): List<Suppressor> =
     listOfNotNull(
         annotationSuppressorFactory(rule),
-        functionSuppressorFactory(rule, bindingContext),
+        functionSuppressorFactory(rule),
     )
