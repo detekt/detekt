@@ -343,8 +343,12 @@ class FunctionMatcherSpec(private val env: KotlinEnvironmentContainer) {
             "'fun <V> bar(p1: V, p2: T)', class BarClass<T>, 'io.github.detekt.BarClass.bar(V, T)', true",
             "fun bar(), class BarClass, io.github.detekt.BarClass.bar(kotlin.String), false",
             "fun bar(p: String), class BarClass, io.github.detekt.BarClass.bar(kotlin.Int), false",
-            "fun bar(p: T), class BarClass, io.github.detekt.BarClass.bar(T), false",
-            "fun T.bar(), class BarClass, io.github.detekt.BarClass.bar(T), false",
+            "fun bar(p: T), class BarClass<T>, io.github.detekt.BarClass.bar(T), true",
+            "fun T.bar(), class BarClass<T>, io.github.detekt.BarClass.bar(T), true",
+            "fun <T> bar(p: T), class BarClass, io.github.detekt.BarClass.bar(T), true",
+            "fun <T> T.bar(), class BarClass, io.github.detekt.BarClass.bar(T), true",
+            "fun <F> bar(p: F), class BarClass, io.github.detekt.BarClass.bar(T), false",
+            "fun <F> F.bar(), class BarClass, io.github.detekt.BarClass.bar(T), false",
             "'fun <V> bar(p1: V, p2: T)', class BarClass<T>, 'io.github.detekt.BarClass.bar(T, V)', false",
         )
         fun `When function signature is fully qualified and declaration is enclosed into class`(
