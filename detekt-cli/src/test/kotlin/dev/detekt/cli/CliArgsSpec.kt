@@ -1,6 +1,7 @@
 package dev.detekt.cli
 
 import dev.detekt.api.Severity
+import dev.detekt.test.utils.NullPrintStream
 import dev.detekt.test.utils.resourceAsPath
 import dev.detekt.tooling.api.AnalysisMode
 import dev.detekt.tooling.api.spec.RulesSpec.FailurePolicy.FailOnSeverity
@@ -442,3 +443,5 @@ internal class CliArgsSpec {
             .withMessage("Value passed to --jdk-home must be a directory.")
     }
 }
+
+private fun CliArgs.toSpec() = createSpec(NullPrintStream(), NullPrintStream())
