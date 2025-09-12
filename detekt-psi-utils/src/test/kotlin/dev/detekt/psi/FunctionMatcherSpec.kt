@@ -1,6 +1,5 @@
 package dev.detekt.psi
 
-import dev.detekt.test.createBindingContext
 import dev.detekt.test.junit.KotlinCoreEnvironmentTest
 import dev.detekt.test.utils.KotlinEnvironmentContainer
 import dev.detekt.test.utils.compileContentForTest
@@ -8,7 +7,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.findFunctionByName
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
@@ -106,9 +104,9 @@ class FunctionMatcherSpec(private val env: KotlinEnvironmentContainer) {
             "'fun compare(hello: String, world: Int) = Unit',  false",
         )
         fun `When toString`(code: String, result: Boolean) {
-            val (function, bindingContext) = buildKtFunction(env, code)
+            val function = buildKtFunction(env, code)
             val methodSignature = FunctionMatcher.fromFunctionSignature("toString")
-            assertThat(methodSignature.match(function, bindingContext)).isEqualTo(result)
+            assertThat(methodSignature.match(function)).isEqualTo(result)
         }
 
         @DisplayName("When toString")
@@ -124,9 +122,9 @@ class FunctionMatcherSpec(private val env: KotlinEnvironmentContainer) {
             "'fun compare(hello: String, world: Int) = Unit',  false",
         )
         fun `When toString without package`(code: String, result: Boolean) {
-            val (function, bindingContext) = buildKtFunction(env, code, false)
+            val function = buildKtFunction(env, code, false)
             val methodSignature = FunctionMatcher.fromFunctionSignature("toString")
-            assertThat(methodSignature.match(function, bindingContext)).isEqualTo(result)
+            assertThat(methodSignature.match(function)).isEqualTo(result)
         }
 
         @DisplayName("When toString()")
@@ -142,9 +140,9 @@ class FunctionMatcherSpec(private val env: KotlinEnvironmentContainer) {
             "'fun compare(hello: String, world: Int) = Unit',  false",
         )
         fun `When toString()`(code: String, result: Boolean) {
-            val (function, bindingContext) = buildKtFunction(env, code)
+            val function = buildKtFunction(env, code)
             val methodSignature = FunctionMatcher.fromFunctionSignature("toString()")
-            assertThat(methodSignature.match(function, bindingContext)).isEqualTo(result)
+            assertThat(methodSignature.match(function)).isEqualTo(result)
         }
 
         @DisplayName("When toString(kotlin.String)")
@@ -160,9 +158,9 @@ class FunctionMatcherSpec(private val env: KotlinEnvironmentContainer) {
             "'fun compare(hello: String, world: Int) = Unit',  false",
         )
         fun `When toString(kotlin#String)`(code: String, result: Boolean) {
-            val (function, bindingContext) = buildKtFunction(env, code)
+            val function = buildKtFunction(env, code)
             val methodSignature = FunctionMatcher.fromFunctionSignature("toString(kotlin.String)")
-            assertThat(methodSignature.match(function, bindingContext)).isEqualTo(result)
+            assertThat(methodSignature.match(function)).isEqualTo(result)
         }
 
         @DisplayName("When toString(vararg String)")
@@ -178,9 +176,9 @@ class FunctionMatcherSpec(private val env: KotlinEnvironmentContainer) {
             "'fun compare(hello: String, world: Int) = Unit',  false",
         )
         fun `When toString(vararg kotlin#String)`(code: String, result: Boolean) {
-            val (function, bindingContext) = buildKtFunction(env, code)
+            val function = buildKtFunction(env, code)
             val methodSignature = FunctionMatcher.fromFunctionSignature("toString(vararg kotlin.String)")
-            assertThat(methodSignature.match(function, bindingContext)).isEqualTo(result)
+            assertThat(methodSignature.match(function)).isEqualTo(result)
         }
 
         @DisplayName("When toString(kotlin.Int)")
@@ -196,9 +194,9 @@ class FunctionMatcherSpec(private val env: KotlinEnvironmentContainer) {
             "'fun compare(hello: String, world: Int) = Unit',  false",
         )
         fun `When toString(kotlin#Int)`(code: String, result: Boolean) {
-            val (function, bindingContext) = buildKtFunction(env, code)
+            val function = buildKtFunction(env, code)
             val methodSignature = FunctionMatcher.fromFunctionSignature("toString(kotlin.Int)")
-            assertThat(methodSignature.match(function, bindingContext)).isEqualTo(result)
+            assertThat(methodSignature.match(function)).isEqualTo(result)
         }
 
         @DisplayName("When toString(kotlin.String, kotlin.Int)")
@@ -214,9 +212,9 @@ class FunctionMatcherSpec(private val env: KotlinEnvironmentContainer) {
             "'fun compare(hello: String, world: Int) = Unit',  false",
         )
         fun `When toString(kotlin#String, kotlin#Int)`(code: String, result: Boolean) {
-            val (function, bindingContext) = buildKtFunction(env, code)
+            val function = buildKtFunction(env, code)
             val methodSignature = FunctionMatcher.fromFunctionSignature("toString(kotlin.String, kotlin.Int)")
-            assertThat(methodSignature.match(function, bindingContext)).isEqualTo(result)
+            assertThat(methodSignature.match(function)).isEqualTo(result)
         }
 
         @DisplayName("When toString(String)")
@@ -232,9 +230,9 @@ class FunctionMatcherSpec(private val env: KotlinEnvironmentContainer) {
             "'fun compare(hello: String, world: Int) = Unit',  false",
         )
         fun `When toString(String)`(code: String, result: Boolean) {
-            val (function, bindingContext) = buildKtFunction(env, code)
+            val function = buildKtFunction(env, code)
             val methodSignature = FunctionMatcher.fromFunctionSignature("toString(String)")
-            assertThat(methodSignature.match(function, bindingContext)).isEqualTo(result)
+            assertThat(methodSignature.match(function)).isEqualTo(result)
         }
 
         @DisplayName("When toString(String)")
@@ -250,9 +248,9 @@ class FunctionMatcherSpec(private val env: KotlinEnvironmentContainer) {
             "'fun compare(hello: String, world: Int) = Unit',  false",
         )
         fun `When toString(String) without package`(code: String, result: Boolean) {
-            val (function, bindingContext) = buildKtFunction(env, code, false)
+            val function = buildKtFunction(env, code, false)
             val methodSignature = FunctionMatcher.fromFunctionSignature("toString(String)")
-            assertThat(methodSignature.match(function, bindingContext)).isEqualTo(result)
+            assertThat(methodSignature.match(function)).isEqualTo(result)
         }
 
         @DisplayName("When lambdas foo(() -> kotlin.String)")
@@ -265,9 +263,9 @@ class FunctionMatcherSpec(private val env: KotlinEnvironmentContainer) {
             "fun foo(a: (Int) -> Unit) {},         false",
         )
         fun `When foo(() - kotlin#String)`(code: String, result: Boolean) {
-            val (function, bindingContext) = buildKtFunction(env, code)
+            val function = buildKtFunction(env, code)
             val methodSignature = FunctionMatcher.fromFunctionSignature("foo(() -> kotlin.String)")
-            assertThat(methodSignature.match(function, bindingContext)).isEqualTo(result)
+            assertThat(methodSignature.match(function)).isEqualTo(result)
         }
 
         @DisplayName("When lambdas foo((kotlin.String) -> Unit)")
@@ -280,9 +278,9 @@ class FunctionMatcherSpec(private val env: KotlinEnvironmentContainer) {
             "fun foo(a: (Int) -> Unit) {},         true",
         )
         fun `When foo((kotlin#String) - Unit)`(code: String, result: Boolean) {
-            val (function, bindingContext) = buildKtFunction(env, code)
+            val function = buildKtFunction(env, code)
             val methodSignature = FunctionMatcher.fromFunctionSignature("foo((kotlin.String) -> Unit)")
-            assertThat(methodSignature.match(function, bindingContext)).isEqualTo(result)
+            assertThat(methodSignature.match(function)).isEqualTo(result)
         }
 
         @DisplayName("When extension functions foo(kotlin.String)")
@@ -295,9 +293,9 @@ class FunctionMatcherSpec(private val env: KotlinEnvironmentContainer) {
             "'fun foo(a: String, ba: Int) {}', false",
         )
         fun `When foo(kotlin#String)`(code: String, result: Boolean) {
-            val (function, bindingContext) = buildKtFunction(env, code)
+            val function = buildKtFunction(env, code)
             val methodSignature = FunctionMatcher.fromFunctionSignature("foo(kotlin.String)")
-            assertThat(methodSignature.match(function, bindingContext)).isEqualTo(result)
+            assertThat(methodSignature.match(function)).isEqualTo(result)
         }
 
         @DisplayName("When extension functions foo(kotlin.String, kotlin.Int)")
@@ -310,9 +308,9 @@ class FunctionMatcherSpec(private val env: KotlinEnvironmentContainer) {
             "'fun foo(a: String, ba: Int) {}', true",
         )
         fun `When foo(kotlin#String, kotlin#Int)`(code: String, result: Boolean) {
-            val (function, bindingContext) = buildKtFunction(env, code)
+            val function = buildKtFunction(env, code)
             val methodSignature = FunctionMatcher.fromFunctionSignature("foo(kotlin.String, kotlin.Int)")
-            assertThat(methodSignature.match(function, bindingContext)).isEqualTo(result)
+            assertThat(methodSignature.match(function)).isEqualTo(result)
         }
 
         @DisplayName("When generics foo(T, U)")
@@ -325,9 +323,9 @@ class FunctionMatcherSpec(private val env: KotlinEnvironmentContainer) {
             "'fun <T, U> U.foo(a: T) {}',          false",
         )
         fun `When foo(T, U)`(code: String, result: Boolean) {
-            val (function, bindingContext) = buildKtFunction(env, code)
+            val function = buildKtFunction(env, code)
             val methodSignature = FunctionMatcher.fromFunctionSignature("foo(T, U)")
-            assertThat(methodSignature.match(function, bindingContext)).isEqualTo(result)
+            assertThat(methodSignature.match(function)).isEqualTo(result)
         }
 
         @ParameterizedTest
@@ -364,14 +362,14 @@ class FunctionMatcherSpec(private val env: KotlinEnvironmentContainer) {
                     $classSignature {
                         $functionSignature {}
                     }
-                """.trimIndent()
+                """.trimIndent(),
+                env,
             )
-            val bindingContext = env.createBindingContext(listOf(ktFile))
             val function = ktFile.findChildByClass(KtClass::class.java)!!
                 .findFunctionByName("bar") as KtNamedFunction
 
             val methodSignature = FunctionMatcher.fromFunctionSignature(pattern)
-            assertThat(methodSignature.match(function, bindingContext)).isEqualTo(result)
+            assertThat(methodSignature.match(function)).isEqualTo(result)
         }
     }
 }
@@ -386,13 +384,13 @@ private fun buildKtFunction(
     environment: KotlinEnvironmentContainer,
     code: String,
     includePackage: Boolean = true,
-): Pair<KtNamedFunction, BindingContext> {
+): KtNamedFunction {
     val ktFile = compileContentForTest(
         """
             ${if (includePackage) "package io.github.detekt" else ""}
             $code
-        """.trimIndent()
+        """.trimIndent(),
+        environment
     )
-    val bindingContext = environment.createBindingContext(listOf(ktFile))
-    return ktFile.findChildByClass(KtNamedFunction::class.java)!! to bindingContext
+    return ktFile.findChildByClass(KtNamedFunction::class.java)!!
 }
