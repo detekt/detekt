@@ -3,8 +3,10 @@ package dev.detekt.core.reporting
 import dev.detekt.api.Detektion
 import dev.detekt.api.Notification
 import dev.detekt.api.Notification.Level
+import dev.detekt.api.OutputReport
 import dev.detekt.api.getOrNull
 import dev.detekt.core.ProcessingSettings
+import dev.detekt.core.extensions.loadExtensions
 import dev.detekt.tooling.api.spec.ReportsSpec
 
 class OutputFacade(
@@ -34,7 +36,7 @@ class OutputFacade(
     }
 
     private fun handleOutputReports(result: Detektion) {
-        val extensions = OutputReportLocator(settings).load()
+        val extensions = loadExtensions<OutputReport>(settings)
         for (report in extensions) {
             val filePath = reports[defaultReportMapping(report)]?.path
             if (filePath != null) {

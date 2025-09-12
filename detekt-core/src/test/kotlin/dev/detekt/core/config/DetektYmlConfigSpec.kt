@@ -15,7 +15,6 @@ class DetektYmlConfigSpec {
         "config",
         "processors",
         "console-reports",
-        "output-reports"
     )
 
     private val config: YamlConfig = YamlConfig.load(
