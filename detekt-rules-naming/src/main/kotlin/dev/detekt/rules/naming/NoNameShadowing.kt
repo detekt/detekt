@@ -17,7 +17,6 @@ import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassInitializer
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtDeclaration
-import org.jetbrains.kotlin.psi.KtDestructuringDeclaration
 import org.jetbrains.kotlin.psi.KtDestructuringDeclarationEntry
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtFunction
@@ -62,29 +61,18 @@ import org.jetbrains.kotlin.psi.psiUtil.hasInnerModifier
  *
  */
 @ActiveByDefault(since = "1.21.0")
-class NoNameShadowing(config: Config) :
-    Rule(
-        config,
-        "Disallow shadowing variable declarations."
-    ),
-    RequiresAnalysisApi {
+class NoNameShadowing(
+    config: Config,
+) : Rule(config, "Disallow shadowing variable declarations."), RequiresAnalysisApi {
 
     override fun visitProperty(property: KtProperty) {
         super.visitProperty(property)
-        checkNameShadowing(
-            property,
-            property,
-            property.accessibleClasses,
-        )
+        checkNameShadowing(property, property)
     }
 
     override fun visitDestructuringDeclarationEntry(multiDeclarationEntry: KtDestructuringDeclarationEntry) {
         super.visitDestructuringDeclarationEntry(multiDeclarationEntry)
-        checkNameShadowing(
-            multiDeclarationEntry,
-            multiDeclarationEntry.parent as KtDestructuringDeclaration,
-            multiDeclarationEntry.accessibleClasses,
-        )
+        checkNameShadowing(multiDeclarationEntry, multiDeclarationEntry.parent)
     }
 
     override fun visitParameter(parameter: KtParameter) {
@@ -101,65 +89,51 @@ class NoNameShadowing(config: Config) :
                     } else {
                         it
                     }
-                },
-            parameter.accessibleClasses,
+                }
+                ?: return,
         )
     }
 
-    @Suppress("CyclomaticComplexMethod")
     private fun checkNameShadowing(
         declaration: KtNamedDeclaration,
-        parentToSkipSearchFrom: PsiElement?,
-        accessibleClasses: List<KtClassOrObject>,
+        parentToSkipSearchFrom: PsiElement,
     ) {
-        parentToSkipSearchFrom ?: return
         val declarationNameIdentifier = declaration.nameIdentifier ?: return
         val declarationName = declarationNameIdentifier.text
-        val matched =
-            parentToSkipSearchFrom
-                .parents(false)
-                .filter {
-                    it is KtClass || it is KtFunction || it is KtLambdaExpression
-                }
-                .any { parent ->
-                    when (parent) {
-                        is KtClass -> {
-                            parent.isParentElementAccessible(accessibleClasses) &&
-                                parent
-                                    .primaryConstructor
-                                    ?.valueParameters
-                                    .orEmpty()
-                                    .filter {
-                                        declaration.parentOfType<KtClassInitializer>(false) != null &&
-                                            // only accessible when declaration is in the same class
-                                            declaration.getParentOfType<KtClass>(true) == parent
-                                    }
-                                    .any { it.name == declarationName }
-                        }
-
-                        is KtFunction -> {
-                            parent.isParentElementAccessible(accessibleClasses) &&
-                                parent.valueParameters.any { it.name == declarationName }
-                        }
-
-                        is KtLambdaExpression -> {
-                            parent.isParentElementAccessible(accessibleClasses) &&
-                                if (parent.valueParameters.isNotEmpty()) {
-                                    parent.valueParameters.any { it.name == declarationName }
-                                } else {
-                                    parent.implicitParameterOrNull() != null &&
-                                        declarationName ==
-                                        StandardNames.IMPLICIT_LAMBDA_PARAMETER_NAME.asString()
-                                }
-                        }
-
-                        else -> false
+        val matched = parentToSkipSearchFrom.parents(false)
+            .filterIsInstance<KtElement>()
+            .any { parent ->
+                parent.isParentElementAccessible(declaration.accessibleClasses) && when (parent) {
+                    is KtClass -> {
+                        parent.primaryConstructor
+                            ?.valueParameters
+                            .orEmpty()
+                            .filter {
+                                declaration.parentOfType<KtClassInitializer>(false) != null &&
+                                    // only accessible when declaration is in the same class
+                                    declaration.getParentOfType<KtClass>(true) == parent
+                            }
+                            .any { it.name == declarationName }
                     }
+
+                    is KtFunction -> {
+                        parent.valueParameters.any { it.name == declarationName }
+                    }
+
+                    is KtLambdaExpression -> {
+                        if (parent.valueParameters.isNotEmpty()) {
+                            parent.valueParameters.any { it.name == declarationName }
+                        } else {
+                            parent.implicitParameterOrNull() != null &&
+                                declarationName == StandardNames.IMPLICIT_LAMBDA_PARAMETER_NAME.asString()
+                        }
+                    }
+
+                    else -> false
                 }
+            }
         if (matched) {
-            report(
-                Finding(Entity.from(declarationNameIdentifier), "Name shadowed: $declarationName")
-            )
+            report(Finding(Entity.from(declarationNameIdentifier), "Name shadowed: $declarationName"))
         }
     }
 
@@ -172,12 +146,7 @@ class NoNameShadowing(config: Config) :
         if (lambdaExpression.hasImplicitParameterReference() &&
             lambdaExpression.hasParentImplicitParameterLambda()
         ) {
-            report(
-                Finding(
-                    Entity.from(lambdaExpression),
-                    "Name shadowed: implicit lambda parameter 'it'"
-                )
-            )
+            report(Finding(Entity.from(lambdaExpression), "Name shadowed: implicit lambda parameter 'it'"))
         }
     }
 
