@@ -6,6 +6,7 @@ import dev.detekt.api.Notification.Level
 import dev.detekt.api.getOrNull
 import dev.detekt.core.ProcessingSettings
 import dev.detekt.tooling.api.spec.ReportsSpec
+import java.nio.file.Path
 
 class OutputFacade(
     private val settings: ProcessingSettings,
@@ -15,6 +16,15 @@ class OutputFacade(
         settings.getOrNull<Collection<ReportsSpec.Report>>(DETEKT_OUTPUT_REPORT_PATHS_KEY)
             ?.associateBy { it.type }
             .orEmpty()
+
+    init {
+        reports.values.groupBy { it.path }
+            .forEach { (path: Path, reports: List<ReportsSpec.Report>) ->
+                check(reports.count() == 1) {
+                    "The path $path is defined in multiple reports: ${reports.map { it.type }}"
+                }
+            }
+    }
 
     fun run(result: Detektion) {
         // Always run output reports first.
