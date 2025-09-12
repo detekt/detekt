@@ -54,7 +54,7 @@ class RunnerSpec {
 
             @Test
             fun `writes no build related output to output printer`() {
-                assertThat(outPrintStream.toString()).doesNotContain("A failure - [test]")
+                assertThat(outPrintStream.toString()).isEmpty()
             }
 
             @Test
