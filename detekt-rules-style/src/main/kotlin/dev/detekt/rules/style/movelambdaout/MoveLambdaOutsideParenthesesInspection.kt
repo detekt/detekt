@@ -44,18 +44,20 @@ private fun KtCallExpression.canMoveLambdaOutsideParentheses(): Boolean {
             val candidate =
                 callee.resolveToCall()?.successfulCallOrNull<KaCallableMemberCall<*, *>>()
                     ?: return false
-            val params = when (candidate) {
+            val paramsType = when (candidate) {
                 is KaFunctionCall -> {
-                    candidate.symbol.valueParameters.map { it.returnType }
+                    val params = candidate.symbol.valueParameters
+                    if (params.lastOrNull()?.isVararg != false) return false
+                    params.map { it.returnType }
                 }
 
                 is KaVariableAccessCall -> {
                     (candidate.symbol.returnType as? KaFunctionType)?.parameterTypes.orEmpty()
                 }
             }
-            val lastParamType = params.lastOrNull() ?: return false
+            val lastParamType = paramsType.lastOrNull() ?: return false
             return lastParamType.isFunctionOrSuspendingFunctionOrGenericType &&
-                params.count { it.isFunctionOrSuspendingFunctionOrGenericType } ==
+                paramsType.count { it.isFunctionOrSuspendingFunctionOrGenericType } ==
                 lambdaArgumentCount + referenceArgumentCount
         }
     }

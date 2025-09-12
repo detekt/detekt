@@ -327,4 +327,16 @@ class UnnecessaryBracesAroundTrailingLambdaSpec(val env: KotlinEnvironmentContai
         val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
+
+    @Test
+    fun `does not report when lambdas is vararg - #8638`() {
+        val code = """
+            fun foo(vararg mappers: () -> Unit) = mappers.map { it() }
+            fun test() {
+                foo({})
+            }
+        """.trimIndent()
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).isEmpty()
+    }
 }
