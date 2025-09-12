@@ -45,29 +45,6 @@ fun Rule.lint(
 fun <T> T.lintWithContext(
     environment: KotlinEnvironmentContainer,
     @Language("kotlin") content: String,
-    @Language("kotlin") vararg additionalContents: String,
-    languageVersionSettings: LanguageVersionSettings = environment.configuration.languageVersionSettings,
-    compile: Boolean = true,
-): List<Finding> where T : Rule, T : RequiresFullAnalysis {
-    if (compile && shouldCompileTestSnippets) {
-        try {
-            KotlinAnalysisApiEngine.compile(content)
-        } catch (ex: RuntimeException) {
-            if (!ex.isNoMatchingOutputFiles()) throw ex
-        }
-    }
-    val ktFile = compileContentForTest(content)
-    val additionalKtFiles = additionalContents.mapIndexed { index, additionalContent ->
-        compileContentForTest(additionalContent, "AdditionalTest$index.kt")
-    }
-    setBindingContext(environment.createBindingContext(listOf(ktFile) + additionalKtFiles))
-
-    return visitFile(ktFile, languageVersionSettings).filterSuppressed(this)
-}
-
-fun <T> T.lintWithContext(
-    environment: KotlinEnvironmentContainer,
-    @Language("kotlin") content: String,
     @Language("kotlin") vararg dependencyContents: String,
     allowCompilationErrors: Boolean = false,
     languageVersionSettings: LanguageVersionSettings = environment.configuration.languageVersionSettings,
