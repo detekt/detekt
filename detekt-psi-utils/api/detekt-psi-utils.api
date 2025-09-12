@@ -50,8 +50,6 @@ public final class dev/detekt/psi/KtFilesKt {
 public final class dev/detekt/psi/KtLambdaExpressionKt {
 	public static final fun firstParameterOrNull (Lorg/jetbrains/kotlin/psi/KtLambdaExpression;)Lorg/jetbrains/kotlin/analysis/api/symbols/KaValueParameterSymbol;
 	public static final fun hasImplicitParameterReference (Lorg/jetbrains/kotlin/psi/KtLambdaExpression;)Z
-	public static final fun hasImplicitParameterReference (Lorg/jetbrains/kotlin/psi/KtLambdaExpression;Lorg/jetbrains/kotlin/descriptors/ValueParameterDescriptor;Lorg/jetbrains/kotlin/resolve/BindingContext;)Z
-	public static final fun implicitParameter (Lorg/jetbrains/kotlin/psi/KtLambdaExpression;Lorg/jetbrains/kotlin/resolve/BindingContext;)Lorg/jetbrains/kotlin/descriptors/ValueParameterDescriptor;
 	public static final fun implicitParameterOrNull (Lorg/jetbrains/kotlin/psi/KtLambdaExpression;)Lorg/jetbrains/kotlin/analysis/api/symbols/KaValueParameterSymbol;
 }
 
