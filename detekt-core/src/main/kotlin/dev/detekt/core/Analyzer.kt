@@ -94,14 +94,14 @@ internal class Analyzer(
                 .filterNot {
                     it.entity.ktElement.isSuppressedBy(ruleInstance.id, rule.aliases, ruleInstance.ruleSetId)
                 }
-                .filterSuppressedFindings(rule, bindingContext)
+                .filterSuppressedFindings(rule)
                 .map { it.toIssue(ruleInstance, ruleInstance.severity, settings.spec.projectSpec.basePath) }
         }
     }
 }
 
-private fun List<Finding>.filterSuppressedFindings(rule: Rule, bindingContext: BindingContext): List<Finding> {
-    val suppressors = buildSuppressors(rule, bindingContext)
+private fun List<Finding>.filterSuppressedFindings(rule: Rule): List<Finding> {
+    val suppressors = buildSuppressors(rule)
     return if (suppressors.isNotEmpty()) {
         filter { finding -> !suppressors.any { suppressor -> suppressor.shouldSuppress(finding) } }
     } else {
