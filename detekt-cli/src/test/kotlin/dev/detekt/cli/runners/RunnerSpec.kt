@@ -28,9 +28,9 @@ class RunnerSpec {
         fun `should not throw`() {
             executeDetekt(
                 "--input",
-                inputPath,
+                inputPath.toString(),
                 "--baseline",
-                resourceAsPath("configs/baseline-empty.xml"),
+                resourceAsPath("configs/baseline-empty.xml").toString(),
                 "--create-baseline",
             )
         }
@@ -49,7 +49,7 @@ class RunnerSpec {
 
             @BeforeEach
             fun setUp() {
-                executeDetekt("--input", path, out = outPrintStream, err = errPrintStream)
+                executeDetekt("--input", path.toString(), out = outPrintStream, err = errPrintStream)
             }
 
             @Test
@@ -71,7 +71,7 @@ class RunnerSpec {
                 assertThatThrownBy {
                     executeDetekt(
                         "--input",
-                        inputPath,
+                        inputPath.toString(),
                         "--config-resource",
                         "/configs/valid-config.yml",
                         out = outPrintStream,
@@ -103,7 +103,7 @@ class RunnerSpec {
             assertThatThrownBy {
                 executeDetekt(
                     "--input",
-                    path,
+                    path.toString(),
                     "--config-resource",
                     "/configs/invalid-config.yml"
                 )
@@ -116,7 +116,7 @@ class RunnerSpec {
             assertThatThrownBy {
                 executeDetekt(
                     "--input",
-                    path,
+                    path.toString(),
                     "--config-resource",
                     "/configs/invalid-configs.yml"
                 )
@@ -129,7 +129,7 @@ class RunnerSpec {
             assertThatCode {
                 executeDetekt(
                     "--input",
-                    path,
+                    path.toString(),
                     "--config-resource",
                     "/configs/invalid-config_no-validation.yml"
                 )
@@ -141,7 +141,7 @@ class RunnerSpec {
             assertThatCode {
                 executeDetekt(
                     "--input",
-                    path,
+                    path.toString(),
                     "--config-resource",
                     "/configs/deprecated-property.yml"
                 )
@@ -157,7 +157,7 @@ class RunnerSpec {
             assertThatThrownBy {
                 executeDetekt(
                     "--input",
-                    inputPath,
+                    inputPath.toString(),
                     "--run-rule",
                     "test:TestRule",
                     "--config-resource",
@@ -195,10 +195,10 @@ class RunnerSpec {
 
         private val config = resourceAsPath("/configs/ktlint-config.yml")
 
-        private val args = arrayOf<Any>(
+        private val args = arrayOf(
             "--auto-correct",
             "--config",
-            config,
+            config.toString(),
             "--input",
         )
 
@@ -210,7 +210,7 @@ class RunnerSpec {
             val inputPath = resourceAsPath("/autocorrect/CompliantSample.kt")
 
             assertThatCode {
-                executeDetekt(*args.plus(inputPath), out = outPrintStream, err = errPrintStream)
+                executeDetekt(*args.plus(inputPath.toString()), out = outPrintStream, err = errPrintStream)
             }.doesNotThrowAnyException()
 
             assertThat(errPrintStream.toString()).isEmpty()
@@ -222,7 +222,7 @@ class RunnerSpec {
         fun `succeeds with --autocorrect with single autocorrectable fix`() {
             val inputPath = resourceAsPath("/autocorrect/SingleRule.kt")
 
-            executeDetekt(*args.plus(inputPath), out = outPrintStream, err = errPrintStream)
+            executeDetekt(*args.plus(inputPath.toString()), out = outPrintStream, err = errPrintStream)
 
             assertThat(errPrintStream.toString()).isEmpty()
             assertThat(inputPath).content().isEqualToNormalizingNewlines(
@@ -239,7 +239,7 @@ class RunnerSpec {
         fun `succeeds with --autocorrect with multiple autocorrectable fixes`() {
             val inputPath = resourceAsPath("/autocorrect/MultipleRules.kt")
 
-            executeDetekt(*args.plus(inputPath), out = outPrintStream, err = errPrintStream)
+            executeDetekt(*args.plus(inputPath.toString()), out = outPrintStream, err = errPrintStream)
 
             assertThat(errPrintStream.toString()).isEmpty()
             assertThat(inputPath).content().isEqualToNormalizingNewlines(
@@ -265,7 +265,7 @@ class RunnerSpec {
         fun `keeps LF line endings after autocorrect`() {
             val inputPath = resourceAsPath("/autocorrect/SingleRuleLF.kt")
 
-            executeDetekt(*args.plus(inputPath), out = outPrintStream, err = errPrintStream)
+            executeDetekt(*args.plus(inputPath.toString()), out = outPrintStream, err = errPrintStream)
 
             assertThat(errPrintStream.toString()).isEmpty()
             assertThat(inputPath).content().isEqualTo("class Test {\n\n}\n")
@@ -275,7 +275,7 @@ class RunnerSpec {
         fun `keeps CRLF line endings after autocorrect`() {
             val inputPath = resourceAsPath("/autocorrect/SingleRuleCRLF.kt")
 
-            executeDetekt(*args.plus(inputPath), out = outPrintStream, err = errPrintStream)
+            executeDetekt(*args.plus(inputPath.toString()), out = outPrintStream, err = errPrintStream)
 
             assertThat(errPrintStream.toString()).isEmpty()
             assertThat(inputPath).content().isEqualTo("class Test {\r\n\r\n}\r\n")
@@ -290,7 +290,7 @@ class RunnerSpec {
             assertThatCode {
                 executeDetekt(
                     "--input",
-                    path,
+                    path.toString(),
                     "-Xcontext-receivers",
                     "-opt-in=org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi",
                 )
@@ -306,9 +306,9 @@ class RunnerSpec {
 }
 
 private fun executeDetekt(
-    vararg args: Any,
+    vararg args: String,
     out: PrintStream = NullPrintStream(),
     err: PrintStream = NullPrintStream(),
 ) {
-    Runner(parseArguments(args.map { it.toString() }.toTypedArray()), out, err).execute()
+    Runner(parseArguments(args), out, err).execute()
 }
