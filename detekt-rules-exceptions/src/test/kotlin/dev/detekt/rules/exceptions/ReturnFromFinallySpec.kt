@@ -279,4 +279,38 @@ class ReturnFromFinallySpec(val env: KotlinEnvironmentContainer) {
             assertThat(finding).hasSize(1)
         }
     }
+
+    @Test
+    fun `should report for inlined try block returning a non-Unit type`() {
+        val code = """
+            fun tidyUpButReturnInt(): Int {
+                println("Tidying up...")
+                return 3
+            }
+            
+            fun foo(): Int = try {
+                1 + 2
+            } finally {
+                tidyUpButReturnInt()
+            }
+        """.trimIndent()
+
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
+    fun `shouldn't report for inlined try block returning Unit`() {
+        val code = """
+            fun doSomething(): Unit = println("I am busy")
+            fun tidyUp(): Unit = println("Cleaning up after myself, but returning Unit")
+
+            fun bar(): Unit = try {
+                doSomething()
+            } finally {
+                tidyUp()
+            }
+        """.trimIndent()
+
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
 }

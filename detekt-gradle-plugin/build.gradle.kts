@@ -18,7 +18,7 @@ plugins {
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.18.1"
     id("org.jetbrains.dokka") version "2.0.0"
     id("signing")
-    id("com.github.gmazzo.buildconfig") version "5.6.7"
+    id("com.github.gmazzo.buildconfig") version "5.6.8"
     id("io.github.gradle-nexus.publish-plugin") version "2.0.0"
 }
 
@@ -171,19 +171,23 @@ gradlePlugin {
     plugins {
         create("detektBasePlugin") {
             id = "dev.detekt.gradle.base"
+            displayName = "Static code analysis for Kotlin v2 - Base Plugin"
+            description = "Static code analysis for Kotlin v2 - Base Plugin"
             implementationClass = "dev.detekt.gradle.plugin.DetektBasePlugin"
         }
         create("detektPlugin") {
             id = "dev.detekt"
+            displayName = "Static code analysis for Kotlin v2"
+            description = "Static code analysis for Kotlin v2"
             implementationClass = "dev.detekt.gradle.plugin.DetektPlugin"
         }
         create("detektCompilerPlugin") {
             id = "dev.detekt.gradle.compiler-plugin"
+            displayName = "Static code analysis for Kotlin v2 - Compiler Plugin"
+            description = "Static code analysis for Kotlin v2 - Compiler Plugin"
             implementationClass = "dev.detekt.gradle.plugin.DetektKotlinCompilerPlugin"
         }
         configureEach {
-            displayName = "Static code analysis for Kotlin"
-            description = "Static code analysis for Kotlin"
             tags = listOf("kotlin", "detekt", "code-analysis", "linter", "codesmells", "android")
         }
     }

@@ -1,7 +1,7 @@
 package dev.detekt.cli.runners
 
-import dev.detekt.cli.executeDetekt
 import dev.detekt.cli.parseArguments
+import dev.detekt.test.utils.NullPrintStream
 import dev.detekt.test.utils.StringPrintStream
 import dev.detekt.test.utils.resourceAsPath
 import dev.detekt.tooling.api.InvalidConfig
@@ -13,6 +13,7 @@ import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import java.io.PrintStream
 import java.nio.file.Path
 import kotlin.io.path.absolutePathString
 
@@ -27,9 +28,9 @@ class RunnerSpec {
         fun `should not throw`() {
             executeDetekt(
                 "--input",
-                inputPath.toString(),
+                inputPath,
                 "--baseline",
-                resourceAsPath("configs/baseline-empty.xml").toString(),
+                resourceAsPath("configs/baseline-empty.xml"),
                 "--create-baseline",
             )
         }
@@ -48,9 +49,7 @@ class RunnerSpec {
 
             @BeforeEach
             fun setUp() {
-                val args = parseArguments(arrayOf("--input", path.toString()))
-
-                Runner(args, outPrintStream, errPrintStream).execute()
+                executeDetekt("--input", path, out = outPrintStream, err = errPrintStream)
             }
 
             @Test
@@ -69,16 +68,16 @@ class RunnerSpec {
 
             @BeforeEach
             fun setUp() {
-                val args = parseArguments(
-                    arrayOf(
+                assertThatThrownBy {
+                    executeDetekt(
                         "--input",
-                        inputPath.toString(),
+                        inputPath,
                         "--config-resource",
-                        "/configs/valid-config.yml"
+                        "/configs/valid-config.yml",
+                        out = outPrintStream,
+                        err = errPrintStream,
                     )
-                )
-
-                assertThatThrownBy { Runner(args, outPrintStream, errPrintStream).execute() }
+                }
                     .isExactlyInstanceOf(IssuesFound::class.java)
             }
 
@@ -104,7 +103,7 @@ class RunnerSpec {
             assertThatThrownBy {
                 executeDetekt(
                     "--input",
-                    path.toString(),
+                    path,
                     "--config-resource",
                     "/configs/invalid-config.yml"
                 )
@@ -117,7 +116,7 @@ class RunnerSpec {
             assertThatThrownBy {
                 executeDetekt(
                     "--input",
-                    path.toString(),
+                    path,
                     "--config-resource",
                     "/configs/invalid-configs.yml"
                 )
@@ -130,7 +129,7 @@ class RunnerSpec {
             assertThatCode {
                 executeDetekt(
                     "--input",
-                    path.toString(),
+                    path,
                     "--config-resource",
                     "/configs/invalid-config_no-validation.yml"
                 )
@@ -142,7 +141,7 @@ class RunnerSpec {
             assertThatCode {
                 executeDetekt(
                     "--input",
-                    path.toString(),
+                    path,
                     "--config-resource",
                     "/configs/deprecated-property.yml"
                 )
@@ -158,7 +157,7 @@ class RunnerSpec {
             assertThatThrownBy {
                 executeDetekt(
                     "--input",
-                    inputPath.toString(),
+                    inputPath,
                     "--run-rule",
                     "test:TestRule",
                     "--config-resource",
@@ -196,10 +195,10 @@ class RunnerSpec {
 
         private val config = resourceAsPath("/configs/ktlint-config.yml")
 
-        private val args = arrayOf(
+        private val args = arrayOf<Any>(
             "--auto-correct",
             "--config",
-            config.toString(),
+            config,
             "--input",
         )
 
@@ -211,7 +210,7 @@ class RunnerSpec {
             val inputPath = resourceAsPath("/autocorrect/CompliantSample.kt")
 
             assertThatCode {
-                Runner(parseArguments(args + inputPath.toString()), outPrintStream, errPrintStream).execute()
+                executeDetekt(*args.plus(inputPath), out = outPrintStream, err = errPrintStream)
             }.doesNotThrowAnyException()
 
             assertThat(errPrintStream.toString()).isEmpty()
@@ -223,7 +222,7 @@ class RunnerSpec {
         fun `succeeds with --autocorrect with single autocorrectable fix`() {
             val inputPath = resourceAsPath("/autocorrect/SingleRule.kt")
 
-            Runner(parseArguments(args + inputPath.toString()), outPrintStream, errPrintStream).execute()
+            executeDetekt(*args.plus(inputPath), out = outPrintStream, err = errPrintStream)
 
             assertThat(errPrintStream.toString()).isEmpty()
             assertThat(inputPath).content().isEqualToNormalizingNewlines(
@@ -240,7 +239,7 @@ class RunnerSpec {
         fun `succeeds with --autocorrect with multiple autocorrectable fixes`() {
             val inputPath = resourceAsPath("/autocorrect/MultipleRules.kt")
 
-            Runner(parseArguments(args + inputPath.toString()), outPrintStream, errPrintStream).execute()
+            executeDetekt(*args.plus(inputPath), out = outPrintStream, err = errPrintStream)
 
             assertThat(errPrintStream.toString()).isEmpty()
             assertThat(inputPath).content().isEqualToNormalizingNewlines(
@@ -266,7 +265,7 @@ class RunnerSpec {
         fun `keeps LF line endings after autocorrect`() {
             val inputPath = resourceAsPath("/autocorrect/SingleRuleLF.kt")
 
-            Runner(parseArguments(args + inputPath.toString()), outPrintStream, errPrintStream).execute()
+            executeDetekt(*args.plus(inputPath), out = outPrintStream, err = errPrintStream)
 
             assertThat(errPrintStream.toString()).isEmpty()
             assertThat(inputPath).content().isEqualTo("class Test {\n\n}\n")
@@ -276,7 +275,7 @@ class RunnerSpec {
         fun `keeps CRLF line endings after autocorrect`() {
             val inputPath = resourceAsPath("/autocorrect/SingleRuleCRLF.kt")
 
-            Runner(parseArguments(args + inputPath.toString()), outPrintStream, errPrintStream).execute()
+            executeDetekt(*args.plus(inputPath), out = outPrintStream, err = errPrintStream)
 
             assertThat(errPrintStream.toString()).isEmpty()
             assertThat(inputPath).content().isEqualTo("class Test {\r\n\r\n}\r\n")
@@ -291,7 +290,7 @@ class RunnerSpec {
             assertThatCode {
                 executeDetekt(
                     "--input",
-                    path.toString(),
+                    path,
                     "-Xcontext-receivers",
                     "-opt-in=org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi",
                 )
@@ -304,4 +303,12 @@ class RunnerSpec {
                 .isThrownBy { executeDetekt("--unknown-to-us-all") }
         }
     }
+}
+
+private fun executeDetekt(
+    vararg args: Any,
+    out: PrintStream = NullPrintStream(),
+    err: PrintStream = NullPrintStream(),
+) {
+    Runner(parseArguments(args.map { it.toString() }.toTypedArray()), out, err).execute()
 }

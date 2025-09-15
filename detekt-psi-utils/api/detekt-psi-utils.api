@@ -7,11 +7,6 @@ public final class dev/detekt/psi/AnnotationExcluder {
 	public final fun shouldExclude (Ljava/util/List;)Z
 }
 
-public final class dev/detekt/psi/AnnotationExcluderBindingContext {
-	public fun <init> (Lorg/jetbrains/kotlin/psi/KtFile;Ljava/util/List;Lorg/jetbrains/kotlin/resolve/BindingContext;)V
-	public final fun shouldExclude (Ljava/util/List;)Z
-}
-
 public abstract class dev/detekt/psi/FunctionMatcher {
 	public static final field Companion Ldev/detekt/psi/FunctionMatcher$Companion;
 	public abstract fun match (Lorg/jetbrains/kotlin/analysis/api/symbols/KaCallableSymbol;)Z
@@ -30,7 +25,6 @@ public final class dev/detekt/psi/IsPartOfUtilsKt {
 public final class dev/detekt/psi/JunkKt {
 	public static final fun companionObject (Lorg/jetbrains/kotlin/psi/KtClass;)Lorg/jetbrains/kotlin/psi/KtObjectDeclaration;
 	public static final fun receiverIsUsed (Lorg/jetbrains/kotlin/psi/KtCallExpression;)Z
-	public static final fun receiverIsUsed (Lorg/jetbrains/kotlin/psi/KtCallExpression;Lorg/jetbrains/kotlin/resolve/BindingContext;)Z
 }
 
 public final class dev/detekt/psi/KtAnnotatedExtensionsKt {
@@ -44,9 +38,7 @@ public final class dev/detekt/psi/KtBinaryExpressionKt {
 
 public final class dev/detekt/psi/KtCallExpressionKt {
 	public static final fun isCalling (Lorg/jetbrains/kotlin/psi/KtCallExpression;Ljava/util/List;)Z
-	public static final fun isCalling (Lorg/jetbrains/kotlin/psi/KtCallExpression;Ljava/util/List;Lorg/jetbrains/kotlin/resolve/BindingContext;)Z
 	public static final fun isCalling (Lorg/jetbrains/kotlin/psi/KtCallExpression;Lorg/jetbrains/kotlin/name/CallableId;)Z
-	public static final fun isCalling (Lorg/jetbrains/kotlin/psi/KtCallExpression;Lorg/jetbrains/kotlin/name/FqName;Lorg/jetbrains/kotlin/resolve/BindingContext;)Z
 	public static final fun isCallingWithNonNullCheckArgument (Lorg/jetbrains/kotlin/psi/KtCallExpression;Lorg/jetbrains/kotlin/name/CallableId;)Z
 }
 
@@ -56,11 +48,9 @@ public final class dev/detekt/psi/KtFilesKt {
 }
 
 public final class dev/detekt/psi/KtLambdaExpressionKt {
-	public static final fun firstParameter (Lorg/jetbrains/kotlin/psi/KtLambdaExpression;Lorg/jetbrains/kotlin/resolve/BindingContext;)Lorg/jetbrains/kotlin/descriptors/ValueParameterDescriptor;
 	public static final fun firstParameterOrNull (Lorg/jetbrains/kotlin/psi/KtLambdaExpression;)Lorg/jetbrains/kotlin/analysis/api/symbols/KaValueParameterSymbol;
 	public static final fun hasImplicitParameterReference (Lorg/jetbrains/kotlin/psi/KtLambdaExpression;)Z
-	public static final fun hasImplicitParameterReference (Lorg/jetbrains/kotlin/psi/KtLambdaExpression;Lorg/jetbrains/kotlin/descriptors/ValueParameterDescriptor;Lorg/jetbrains/kotlin/resolve/BindingContext;)Z
-	public static final fun implicitParameter (Lorg/jetbrains/kotlin/psi/KtLambdaExpression;Lorg/jetbrains/kotlin/resolve/BindingContext;)Lorg/jetbrains/kotlin/descriptors/ValueParameterDescriptor;
+	public static final fun implicitParameterOrNull (Lorg/jetbrains/kotlin/psi/KtLambdaExpression;)Lorg/jetbrains/kotlin/analysis/api/symbols/KaValueParameterSymbol;
 }
 
 public final class dev/detekt/psi/KtModifierListKt {
@@ -82,15 +72,12 @@ public final class dev/detekt/psi/KtModifierListKt {
 
 public final class dev/detekt/psi/KtValueArgumentKt {
 	public static final fun isEmptyOrSingleStringArgument (Ljava/util/List;)Z
-	public static final fun isEmptyOrSingleStringArgument (Ljava/util/List;Lorg/jetbrains/kotlin/resolve/BindingContext;)Z
 	public static final fun isString (Lorg/jetbrains/kotlin/psi/KtValueArgument;)Z
-	public static final fun isString (Lorg/jetbrains/kotlin/psi/KtValueArgument;Lorg/jetbrains/kotlin/resolve/BindingContext;)Z
 }
 
 public final class dev/detekt/psi/MethodSignatureKt {
 	public static final fun hasCorrectEqualsParameter (Lorg/jetbrains/kotlin/psi/KtFunction;)Z
 	public static final fun hasImplicitUnitReturnType (Lorg/jetbrains/kotlin/psi/KtNamedFunction;)Z
-	public static final fun hasImplicitUnitReturnType (Lorg/jetbrains/kotlin/psi/KtNamedFunction;Lorg/jetbrains/kotlin/resolve/BindingContext;)Z
 	public static final fun isEqualsFunction (Lorg/jetbrains/kotlin/psi/KtFunction;)Z
 	public static final fun isHashCodeFunction (Lorg/jetbrains/kotlin/psi/KtFunction;)Z
 	public static final fun isJvmFinalizeFunction (Lorg/jetbrains/kotlin/psi/KtNamedFunction;)Z

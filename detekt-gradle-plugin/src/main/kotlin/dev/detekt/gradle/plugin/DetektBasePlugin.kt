@@ -19,6 +19,8 @@ import org.jetbrains.kotlin.gradle.plugin.KotlinBasePlugin
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetContainer
 
 class DetektBasePlugin : Plugin<Project> {
+    private var sourceSetListenerConfigured = false
+
     override fun apply(project: Project) {
         project.pluginManager.apply(ReportingBasePlugin::class.java)
 
@@ -73,6 +75,10 @@ class DetektBasePlugin : Plugin<Project> {
 
     private fun Project.registerSourceSetTasks(extension: DetektExtension) {
         project.plugins.withType(KotlinBasePlugin::class.java) {
+            if (sourceSetListenerConfigured) return@withType
+
+            sourceSetListenerConfigured = true
+
             project.extensions.getByType(KotlinSourceSetContainer::class.java)
                 .sourceSets
                 .all { sourceSet ->
