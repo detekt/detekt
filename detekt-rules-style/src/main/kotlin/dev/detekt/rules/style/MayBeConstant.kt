@@ -88,15 +88,14 @@ class MayBeConstant(config: Config) : Rule(
     }
 
     private fun KtProperty.canBeConst(): Boolean {
-        if (cannotBeConstant() || isInObject() || isJvmField()) {
+        if (cannotBeConstant() || isInObject() || hasAnnotation()) {
             return false
         }
         return this.initializer?.isConstantExpression() == true
     }
 
-    private fun KtProperty.isJvmField(): Boolean {
-        val isJvmField = annotationEntries.any { it.text == "@JvmField" }
-        return annotationEntries.isNotEmpty() && !isJvmField
+    private fun KtProperty.hasAnnotation(): Boolean {
+        return annotationEntries.isNotEmpty()
     }
 
     private fun KtProperty.cannotBeConstant(): Boolean =

@@ -92,25 +92,15 @@ class MayBeConstantSpec {
         }
 
         @Test
-        fun `is a simple JvmField val`() {
-            val code = """
-                @JvmField val x = 1
-            """.trimIndent()
-            val findings = subject.lint(code)
-            assertThat(findings).singleElement()
-                .hasStartSourceLocation(SourceLocation(1, 15))
-        }
-
-        @Test
         fun `is a field in an object`() {
             val code = """
                 object Test {
-                    @JvmField val test = "Test"
+                    val test = "Test"
                 }
             """.trimIndent()
             val findings = subject.lint(code)
             assertThat(findings).singleElement()
-                .hasStartSourceLocation(SourceLocation(2, 19))
+                .hasStartSourceLocation(SourceLocation(2, 9))
         }
 
         @Test
@@ -190,13 +180,12 @@ class MayBeConstantSpec {
                 object Something {
                     const val a = 0
                 
-                    @JvmField
                     val b = a + 1
                 }
             """.trimIndent()
             val findings = subject.lint(code)
             assertThat(findings).singleElement()
-                .hasStartSourceLocation(SourceLocation(5, 9))
+                .hasStartSourceLocation(SourceLocation(4, 9))
         }
 
         @Test
@@ -231,7 +220,10 @@ class MayBeConstantSpec {
 
         @Test
         fun `has a getter`() {
-            val code = "val withGetter get() = 42"
+            val code = """
+                val withGetter
+                get() = 42
+            """.trimIndent()
             val findings = subject.lint(code)
             assertThat(findings).isEmpty()
         }
@@ -244,9 +236,29 @@ class MayBeConstantSpec {
         }
 
         @Test
+        fun `is a simple JvmField val`() {
+            val code = """
+                @JvmField val x = 1
+            """.trimIndent()
+            val findings = subject.lint(code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
         fun `is a JvmField in a class`() {
             val code = """
                 class Test {
+                    @JvmField val a = 3
+                }
+            """.trimIndent()
+            val findings = subject.lint(code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `is a JvmField in an object`() {
+            val code = """
+                object Test {
                     @JvmField val a = 3
                 }
             """.trimIndent()
