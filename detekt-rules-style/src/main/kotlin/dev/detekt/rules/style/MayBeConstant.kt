@@ -94,9 +94,7 @@ class MayBeConstant(config: Config) : Rule(
         return this.initializer?.isConstantExpression() == true
     }
 
-    private fun KtProperty.hasAnnotation(): Boolean {
-        return annotationEntries.isNotEmpty()
-    }
+    private fun KtProperty.hasAnnotation(): Boolean = annotationEntries.isNotEmpty()
 
     private fun KtProperty.cannotBeConstant(): Boolean =
         isLocal ||
