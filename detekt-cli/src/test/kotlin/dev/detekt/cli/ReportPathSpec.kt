@@ -40,7 +40,7 @@ class ReportPathSpec {
         fun `fails when the path is malformed`() {
             assertThatIllegalArgumentException()
                 .isThrownBy { ReportPath.from("test:a*a") }
-                .withMessage("* character not allowed: a*a")
+                .withMessage("Illegal char <*> at index 1: a*a")
         }
     }
 
