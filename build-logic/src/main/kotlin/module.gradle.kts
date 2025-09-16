@@ -1,8 +1,6 @@
 import com.gradle.develocity.agent.gradle.test.DevelocityTestConfiguration
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.tasks.UsesKotlinJavaToolchain
 
 plugins {
     id("packaging")
@@ -61,7 +59,7 @@ tasks.withType<Test>().configureEach {
     }
 }
 
-val jvmTargetVersion = versionCatalog.findVersion("jvm-target").get().requiredVersion
+//val jvmTargetVersion = versionCatalog.findVersion("jvm-target").get().requiredVersion
 
 kotlin {
     compilerOptions {
@@ -72,24 +70,44 @@ kotlin {
     }
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>().configureEach {
-    compilerOptions {
-        jvmTarget = JvmTarget.fromTarget(jvmTargetVersion)
-    }
+//tasks.withType<JavaCompile>().configureEach {
+//    options.release = 8
+//}
+
+kotlin {
+    jvmToolchain(17)
+//    compilerOptions {
+//        jvmTarget = JvmTarget.fromTarget(jvmTargetVersion)
+//    }
 }
 
-val javaLauncher = javaToolchains.launcherFor {
-    languageVersion = JavaLanguageVersion.of(versionCatalog.findVersion("java-compile-toolchain").get().requiredVersion)
-}
-
-project.tasks.withType<UsesKotlinJavaToolchain>().configureEach {
-    kotlinJavaToolchain.toolchain.use(javaLauncher)
-}
+//tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>().configureEach {
+//    compilerOptions {
+//        jvmTarget = JvmTarget.fromTarget(jvmTargetVersion)
+//    }
+//}
+//
+//val javaLauncher = javaToolchains.launcherFor {
+//    languageVersion = JavaLanguageVersion.of(versionCatalog.findVersion("java-compile-toolchain").get().requiredVersion)
+//}
+//
+//project.tasks.withType<UsesKotlinJavaToolchain>().configureEach {
+//    kotlinJavaToolchain.toolchain.use(javaLauncher)
+//}
 
 testing {
     suites {
         withType<JvmTestSuite> {
             useJUnitJupiter(versionCatalog.findVersion("junit").get().requiredVersion)
+//            targets {
+//                all {
+//                    testTask {
+//                        javaLauncher = javaToolchains.launcherFor {
+//                            languageVersion = JavaLanguageVersion.of(17)
+//                        }
+//                    }
+//                }
+//            }
         }
     }
 }
@@ -97,8 +115,8 @@ testing {
 java {
     withSourcesJar()
     withJavadocJar()
-    sourceCompatibility = JavaVersion.toVersion(jvmTargetVersion)
-    targetCompatibility = JavaVersion.toVersion(jvmTargetVersion)
+//    sourceCompatibility = JavaVersion.toVersion(jvmTargetVersion)
+//    targetCompatibility = JavaVersion.toVersion(jvmTargetVersion)
     consistentResolution {
         useCompileClasspathVersions()
     }

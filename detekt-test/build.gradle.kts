@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
     id("module")
     id("public-api")
@@ -15,12 +13,14 @@ dependencies {
     implementation(projects.detektCore)
 }
 
-java {
-    targetCompatibility = JavaVersion.VERSION_17
-}
-
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>().configureEach {
-    compilerOptions {
-        jvmTarget = JvmTarget.JVM_17
-    }
-}
+//tasks.test {
+//    javaLauncher = javaToolchains.launcherFor {
+//        languageVersion = JavaLanguageVersion.of(17)
+//    }
+//}
+//
+//tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>().configureEach {
+//    compilerOptions {
+//        jvmTarget = JvmTarget.fromTarget("17")
+//    }
+//}
