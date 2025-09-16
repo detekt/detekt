@@ -149,6 +149,8 @@ dependencies {
     compileOnly(libs.android.gradleApi)
     compileOnly(libs.kotlin.gradle.plugin)
     compileOnly(libs.kotlin.gradlePluginApi)
+    compileOnly(libs.jetbrains.annotations)
+
     implementation(libs.sarif4k)
     testFixturesCompileOnly(libs.jetbrains.annotations)
 
