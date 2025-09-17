@@ -3,7 +3,7 @@ public final class dev/detekt/psi/AllowedExceptionNamePatternKt {
 }
 
 public final class dev/detekt/psi/AnnotationExcluder {
-	public fun <init> (Lorg/jetbrains/kotlin/psi/KtFile;Ljava/util/List;)V
+	public fun <init> (Lorg/jetbrains/kotlin/psi/KtFile;Ljava/util/List;Z)V
 	public final fun shouldExclude (Ljava/util/List;)Z
 }
 
