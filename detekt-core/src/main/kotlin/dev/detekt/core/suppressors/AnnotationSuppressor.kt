@@ -13,14 +13,14 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  * @config ignoreAnnotated: List<String> The annotations can be defined just by its name or with its fully qualified
  * name. If you don't run detekt with type solving the fully qualified name does not work.
  */
-internal fun annotationSuppressorFactory(rule: Rule): Suppressor? {
+internal fun annotationSuppressorFactory(rule: Rule, analysisApi: Boolean): Suppressor? {
     val annotations = rule.config.valueOrDefault("ignoreAnnotated", emptyList<String>()).map {
         it.qualifiedNameGlobToRegex()
     }
     return if (annotations.isNotEmpty()) {
         Suppressor { finding ->
             val element = finding.entity.ktElement
-            element.isAnnotatedWith(AnnotationExcluder(element.containingKtFile, annotations))
+            element.isAnnotatedWith(AnnotationExcluder(element.containingKtFile, annotations, analysisApi))
         }
     } else {
         null

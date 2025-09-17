@@ -6,7 +6,6 @@ import org.jetbrains.kotlin.analysis.api.types.KaClassType
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtTypeReference
-import org.jetbrains.kotlin.utils.KotlinExceptionWithAttachments
 
 /**
  * Primary use case for an AnnotationExcluder is to decide if a KtElement should be
@@ -16,6 +15,7 @@ import org.jetbrains.kotlin.utils.KotlinExceptionWithAttachments
 class AnnotationExcluder(
     root: KtFile,
     private val excludes: List<Regex>,
+    private val analysisApi: Boolean,
 ) {
 
     private val fullQualifiedNameGuesser = FullQualifiedNameGuesser(root)
@@ -28,7 +28,7 @@ class AnnotationExcluder(
         annotations.any { annotation -> annotation.typeReference?.let { isExcluded(it) } ?: false }
 
     private fun isExcluded(annotation: KtTypeReference): Boolean {
-        val fqName = annotation.fqNameOrNull()
+        val fqName = if (analysisApi) annotation.fqNameOrNull() else null
         val possibleNames = if (fqName == null) {
             fullQualifiedNameGuesser.getFullQualifiedName(annotation.text.toString())
                 .map { it.getPackage() to it }
@@ -69,18 +69,10 @@ private fun String.getPackage(): String {
         .joinToString(".")
 }
 
-private fun KtTypeReference.fqNameOrNull(): Pair<String, String>? = try {
-    analyze(this) {
-        val type = type as? KaClassType ?: return null
-        val classId = type.symbol.classId ?: return null
-        classId.packageFqName.toString() to classId.relativeClassName.toString()
-    }
-} catch (ex: KotlinExceptionWithAttachments) {
-    if (ex.message == "Cannot find a KaModule for the VirtualFile") {
-        null
-    } else {
-        throw ex
-    }
+private fun KtTypeReference.fqNameOrNull(): Pair<String, String>? = analyze(this) {
+    val type = type as? KaClassType ?: return null
+    val classId = type.symbol.classId ?: return null
+    classId.packageFqName.toString() to classId.relativeClassName.toString()
 }
 
 private operator fun Iterable<Regex>.contains(a: String?): Boolean {
