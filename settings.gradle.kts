@@ -48,7 +48,7 @@ plugins {
     id("com.gradle.develocity") version "4.2"
     id("com.gradle.common-custom-user-data-gradle-plugin") version "2.4.0"
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
-    id("com.autonomousapps.build-health") version "3.0.3"
+    id("com.autonomousapps.build-health") version "3.0.4"
     // Kotlin plugin must be added to classpath to support build-health analysis
     id("org.jetbrains.kotlin.jvm") version "2.2.10" apply false
 }
