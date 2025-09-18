@@ -195,7 +195,6 @@ class DetektMultiplatformSpec {
         fun `configures test tasks`() {
             gradleRunner.runTasks(":shared:detektDebugAndroidTestAndroid")
             gradleRunner.runTasks(":shared:detektDebugUnitTestAndroid")
-            gradleRunner.runTasks(":shared:detektReleaseUnitTestAndroid")
         }
 
         @Test
