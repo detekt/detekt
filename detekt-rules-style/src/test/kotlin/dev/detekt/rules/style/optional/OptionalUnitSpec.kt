@@ -3,8 +3,8 @@ package dev.detekt.rules.style.optional
 import dev.detekt.api.Config
 import dev.detekt.api.Finding
 import dev.detekt.test.FakeLanguageVersionSettings
+import dev.detekt.test.junit.KotlinCoreEnvironmentTest
 import dev.detekt.test.lintWithContext
-import dev.detekt.test.utils.KotlinCoreEnvironmentTest
 import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.config.ExplicitApiMode
