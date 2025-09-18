@@ -228,15 +228,11 @@ public abstract interface class dev/detekt/api/ReportingExtension : dev/detekt/a
 public abstract interface class dev/detekt/api/RequiresAnalysisApi {
 }
 
-public abstract interface class dev/detekt/api/RequiresFullAnalysis {
-}
-
 public class dev/detekt/api/Rule : dev/detekt/api/DetektVisitor {
 	protected field languageVersionSettings Lorg/jetbrains/kotlin/config/LanguageVersionSettings;
 	public fun <init> (Ldev/detekt/api/Config;Ljava/lang/String;Ljava/net/URI;)V
 	public synthetic fun <init> (Ldev/detekt/api/Config;Ljava/lang/String;Ljava/net/URI;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public final fun getAutoCorrect ()Z
-	public final fun getBindingContext (Ldev/detekt/api/RequiresFullAnalysis;)Lorg/jetbrains/kotlin/resolve/BindingContext;
 	public final fun getConfig ()Ldev/detekt/api/Config;
 	public final fun getDescription ()Ljava/lang/String;
 	protected final fun getLanguageVersionSettings ()Lorg/jetbrains/kotlin/config/LanguageVersionSettings;
@@ -245,7 +241,6 @@ public class dev/detekt/api/Rule : dev/detekt/api/DetektVisitor {
 	protected fun postVisit (Lorg/jetbrains/kotlin/psi/KtFile;)V
 	protected fun preVisit (Lorg/jetbrains/kotlin/psi/KtFile;)V
 	public final fun report (Ldev/detekt/api/Finding;)V
-	public final fun setBindingContext (Lorg/jetbrains/kotlin/resolve/BindingContext;)V
 	protected final fun setLanguageVersionSettings (Lorg/jetbrains/kotlin/config/LanguageVersionSettings;)V
 	public fun visit (Lorg/jetbrains/kotlin/psi/KtFile;)V
 	public final fun visitFile (Lorg/jetbrains/kotlin/psi/KtFile;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;)Ljava/util/List;

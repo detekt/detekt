@@ -730,7 +730,7 @@ class RuleCollectorSpec {
                 /**
                  * description
                  */
-                class SomeRandomClass : Rule, RequiresFullAnalysis
+                class SomeRandomClass : Rule, RequiresAnalysisApi
             """.trimIndent()
             val items = subject.run(code)
             assertThat(items[0].requiresFullAnalysis).isTrue()
@@ -743,7 +743,7 @@ class RuleCollectorSpec {
                  * description
                  */
 
-                class SomeRandomClass : Rule(), dev.detekt.api.RequiresFullAnalysis
+                class SomeRandomClass : Rule(), dev.detekt.api.RequiresAnalysisApi
             """.trimIndent()
             val items = subject.run(code)
             assertThat(items[0].requiresFullAnalysis).isTrue()

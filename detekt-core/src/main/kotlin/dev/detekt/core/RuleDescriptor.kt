@@ -2,7 +2,6 @@ package dev.detekt.core
 
 import dev.detekt.api.Config
 import dev.detekt.api.RequiresAnalysisApi
-import dev.detekt.api.RequiresFullAnalysis
 import dev.detekt.api.Rule
 import dev.detekt.api.RuleInstance
 import dev.detekt.api.RuleName
@@ -52,7 +51,7 @@ private fun RuleSet.getRules(
             val rule = ruleProvider(Config.empty)
             val ruleConfig = config.subConfig(ruleId)
             val active = config.isActiveOrDefault(true) && ruleConfig.isActiveOrDefault(false)
-            val executable = fullAnalysis || (rule !is RequiresFullAnalysis && rule !is RequiresAnalysisApi)
+            val executable = fullAnalysis || rule !is RequiresAnalysisApi
             if (active && !executable) {
                 log { "The rule '$ruleId' requires type resolution but it was run without it." }
             }
