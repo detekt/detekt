@@ -20,7 +20,7 @@ class AnnotationExcluderSpec {
     @CsvFileSource(resources = ["/annotation_excluder.csv"])
     fun `all cases`(exclusion: String, annotation: String, shouldExclude: Boolean) {
         val (file, ktAnnotation) = createKtFile(annotation, enableAnalysisApi = false)
-        val excluder = AnnotationExcluder(file, listOf(exclusion.toRegex()))
+        val excluder = AnnotationExcluder(file, listOf(exclusion.toRegex()), false)
 
         assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isEqualTo(shouldExclude)
     }
@@ -31,7 +31,7 @@ class AnnotationExcluderSpec {
     @CsvFileSource(resources = ["/annotation_excluder.csv"])
     fun `all cases - AnalysisAPI`(exclusion: String, annotation: String, shouldExclude: Boolean) {
         val (file, ktAnnotation) = createKtFile(annotation, enableAnalysisApi = true)
-        val excluder = AnnotationExcluder(file, listOf(exclusion.toRegex()))
+        val excluder = AnnotationExcluder(file, listOf(exclusion.toRegex()), true)
 
         assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isEqualTo(shouldExclude)
     }
@@ -41,7 +41,7 @@ class AnnotationExcluderSpec {
         @Test
         fun `should not exclude when the annotation was not found`() {
             val (file, ktAnnotation) = createKtFile("@Component", enableAnalysisApi = false)
-            val excluder = AnnotationExcluder(file, listOf("SinceKotlin".toRegex()))
+            val excluder = AnnotationExcluder(file, listOf("SinceKotlin".toRegex()), false)
 
             assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isFalse()
         }
@@ -49,7 +49,7 @@ class AnnotationExcluderSpec {
         @Test
         fun `should not exclude when no annotations should be excluded`() {
             val (file, ktAnnotation) = createKtFile("@Component", enableAnalysisApi = false)
-            val excluder = AnnotationExcluder(file, emptyList())
+            val excluder = AnnotationExcluder(file, emptyList(), false)
 
             assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isFalse()
         }
@@ -57,7 +57,7 @@ class AnnotationExcluderSpec {
         @Test
         fun `should also exclude an annotation that is not imported`() {
             val (file, ktAnnotation) = createKtFile("@SinceKotlin", enableAnalysisApi = false)
-            val excluder = AnnotationExcluder(file, listOf("SinceKotlin".toRegex()))
+            val excluder = AnnotationExcluder(file, listOf("SinceKotlin".toRegex()), false)
 
             assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isTrue()
         }
@@ -72,7 +72,7 @@ class AnnotationExcluderSpec {
             @Test
             fun `incorrect without Analysis API`() {
                 val (file, ktAnnotation) = createKtFile("@Deprecated", enableAnalysisApi = false)
-                val excluder = AnnotationExcluder(file, listOf("foo\\.Deprecated".toRegex()))
+                val excluder = AnnotationExcluder(file, listOf("foo\\.Deprecated".toRegex()), false)
 
                 assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isTrue()
             }
@@ -80,7 +80,7 @@ class AnnotationExcluderSpec {
             @Test
             fun `correct with Analysis API`() {
                 val (file, ktAnnotation) = createKtFile("@Deprecated(\"\")", enableAnalysisApi = true)
-                val excluder = AnnotationExcluder(file, listOf("foo\\.Deprecated".toRegex()))
+                val excluder = AnnotationExcluder(file, listOf("foo\\.Deprecated".toRegex()), true)
 
                 assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isFalse()
             }
@@ -106,7 +106,7 @@ class AnnotationExcluderSpec {
             fun `incorrect without Analysis API`() {
                 val file = compileContentForTest(code)
                 val ktAnnotation = file.annotationEntry()
-                val excluder = AnnotationExcluder(file, listOf("Hello\\.World".toRegex()))
+                val excluder = AnnotationExcluder(file, listOf("Hello\\.World".toRegex()), false)
 
                 assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isTrue()
             }
@@ -116,7 +116,7 @@ class AnnotationExcluderSpec {
             fun `correct with Analysis API`() {
                 val file = KotlinAnalysisApiEngine.compile(code, listOf(helloWorldAnnotationsCode))
                 val ktAnnotation = file.annotationEntry()
-                val excluder = AnnotationExcluder(file, listOf("Hello\\.World".toRegex()))
+                val excluder = AnnotationExcluder(file, listOf("Hello\\.World".toRegex()), true)
 
                 assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isFalse()
             }
@@ -142,11 +142,11 @@ class AnnotationExcluderSpec {
             fun `incorrect without Analysis API`() {
                 val file = compileContentForTest(file)
                 val ktAnnotation = file.annotationEntry()
-                val excluder = AnnotationExcluder(file, listOf("foo\\.World".toRegex()))
+                val excluder = AnnotationExcluder(file, listOf("foo\\.World".toRegex()), false)
 
                 assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isTrue()
 
-                val excluder2 = AnnotationExcluder(file, listOf("com\\.hello\\.World".toRegex()))
+                val excluder2 = AnnotationExcluder(file, listOf("com\\.hello\\.World".toRegex()), false)
 
                 assertThat(excluder2.shouldExclude(listOf(ktAnnotation))).isTrue()
             }
@@ -155,11 +155,11 @@ class AnnotationExcluderSpec {
             fun `correct with Analysis API`() {
                 val file = KotlinAnalysisApiEngine.compile(file, listOf(helloWorldAnnotationsKtFile))
                 val ktAnnotation = file.annotationEntry()
-                val excluder = AnnotationExcluder(file, listOf("foo\\.World".toRegex()))
+                val excluder = AnnotationExcluder(file, listOf("foo\\.World".toRegex()), true)
 
                 assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isFalse()
 
-                val excluder2 = AnnotationExcluder(file, listOf("com\\.hello\\.World".toRegex()))
+                val excluder2 = AnnotationExcluder(file, listOf("com\\.hello\\.World".toRegex()), true)
 
                 assertThat(excluder2.shouldExclude(listOf(ktAnnotation))).isTrue()
             }

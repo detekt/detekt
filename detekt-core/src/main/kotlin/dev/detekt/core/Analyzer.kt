@@ -16,17 +16,17 @@ import dev.detekt.core.suppressors.buildSuppressors
 import dev.detekt.core.suppressors.isSuppressedBy
 import dev.detekt.core.util.shouldAnalyzeFile
 import dev.detekt.psi.absolutePath
+import dev.detekt.tooling.api.AnalysisMode
 import org.jetbrains.kotlin.config.LanguageVersionSettings
 import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.resolve.BindingContext
 import java.nio.file.Path
 
 internal class Analyzer(
     private val settings: ProcessingSettings,
     private val rules: List<RuleDescriptor>,
     private val processors: List<FileProcessListener>,
-    private val bindingContext: BindingContext,
+    private val analysisMode: AnalysisMode,
 ) {
     fun run(ktFiles: Collection<KtFile>): List<Issue> {
         val languageVersionSettings = settings.configuration.languageVersionSettings
@@ -92,14 +92,14 @@ internal class Analyzer(
                 .filterNot {
                     it.entity.ktElement.isSuppressedBy(ruleInstance.id, rule.aliases, ruleInstance.ruleSetId)
                 }
-                .filterSuppressedFindings(rule, bindingContext)
+                .filterSuppressedFindings(rule, analysisMode)
                 .map { it.toIssue(ruleInstance, ruleInstance.severity, settings.spec.projectSpec.basePath) }
         }
     }
 }
 
-private fun List<Finding>.filterSuppressedFindings(rule: Rule, bindingContext: BindingContext): List<Finding> {
-    val suppressors = buildSuppressors(rule, bindingContext)
+private fun List<Finding>.filterSuppressedFindings(rule: Rule, analysisMode: AnalysisMode): List<Finding> {
+    val suppressors = buildSuppressors(rule, analysisMode)
     return if (suppressors.isNotEmpty()) {
         filter { finding -> !suppressors.any { suppressor -> suppressor.shouldSuppress(finding) } }
     } else {
