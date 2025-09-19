@@ -57,7 +57,11 @@ publishing {
 
 tasks {
     shadowJar {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         mergeServiceFiles()
+        filesMatching("META-INF/services/**") {
+            duplicatesStrategy = DuplicatesStrategy.INCLUDE
+        }
     }
 
     shadowDistZip {
