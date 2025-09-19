@@ -15,7 +15,7 @@ import org.jetbrains.kotlin.psi.KtTypeReference
 class AnnotationExcluder(
     root: KtFile,
     private val excludes: List<Regex>,
-    private val analysisApi: Boolean,
+    private val fullAnalysis: Boolean,
 ) {
 
     private val fullQualifiedNameGuesser = FullQualifiedNameGuesser(root)
@@ -28,7 +28,7 @@ class AnnotationExcluder(
         annotations.any { annotation -> annotation.typeReference?.let { isExcluded(it) } ?: false }
 
     private fun isExcluded(annotation: KtTypeReference): Boolean {
-        val fqName = if (analysisApi) annotation.fqNameOrNull() else null
+        val fqName = if (fullAnalysis) annotation.fqNameOrNull() else null
         val possibleNames = if (fqName == null) {
             fullQualifiedNameGuesser.getFullQualifiedName(annotation.text.toString())
                 .map { it.getPackage() to it }
