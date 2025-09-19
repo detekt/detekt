@@ -15,7 +15,7 @@ java-compile-toolchain = "17"
 android-gradle-plugin = { module = "com.android.tools.build:gradle", version = "8.13.0" }
 binaryCompatibilityValidator-plugin = { module = "org.jetbrains.kotlinx.binary-compatibility-validator:org.jetbrains.kotlinx.binary-compatibility-validator.gradle.plugin", version = "0.18.1" }
 breadmoirai-githubRelease-plugin = { module = "com.github.breadmoirai:github-release", version = "2.5.2" }
-develocity-plugin = { module = "com.gradle.develocity:com.gradle.develocity.gradle.plugin", version = "4.1.1" }
+develocity-plugin = { module = "com.gradle.develocity:com.gradle.develocity.gradle.plugin", version = "4.2" }
 dokka-plugin = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version = "2.0.0" }
 gradleNexus-publish-plugin = { module = "io.github.gradle-nexus:publish-plugin", version = "2.0.0" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -23,7 +23,7 @@ kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 # This represents the oldest AGP version that is supported by detekt.
 # This should only be updated when updating the minimum version supported by detekt's Gradle plugin.
 android-gradleApi = { module = "com.android.tools.build:gradle-api", version = "7.3.1" }
-assertj-core = { module = "org.assertj:assertj-core", version = "3.27.4" }
+assertj-core = { module = "org.assertj:assertj-core", version = "3.27.5" }
 classgraph = { module = "io.github.classgraph:classgraph", version = "4.8.181" }
 jcommander = { module = "org.jcommander:jcommander", version = "1.85" }
 jetbrains-annotations = { module = "org.jetbrains:annotations", version = "26.0.2-1" }
