@@ -13,7 +13,6 @@ import dev.detekt.tooling.api.UnexpectedError
 import dev.detekt.tooling.api.spec.ProcessingSpec
 import dev.detekt.tooling.internal.DefaultAnalysisResult
 import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.resolve.BindingContext
 
 class AnalysisFacade(
     private val spec: ProcessingSpec,
@@ -23,13 +22,9 @@ class AnalysisFacade(
         DefaultLifecycle(spec.getDefaultConfiguration(), it)
     }
 
-    override fun run(files: Collection<KtFile>, bindingContext: BindingContext): AnalysisResult =
+    override fun run(files: Collection<KtFile>): AnalysisResult =
         runAnalysis {
-            DefaultLifecycle(
-                spec.getDefaultConfiguration(),
-                it,
-                bindingProvider = { bindingContext }
-            )
+            DefaultLifecycle(spec.getDefaultConfiguration(), it)
         }
 
     internal fun runAnalysis(createLifecycle: (ProcessingSettings) -> Lifecycle): AnalysisResult = spec.withSettings {

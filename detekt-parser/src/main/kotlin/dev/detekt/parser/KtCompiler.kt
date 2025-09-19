@@ -6,8 +6,6 @@ import com.intellij.pom.PomModel
 import com.intellij.pom.tree.TreeAspect
 import com.intellij.psi.util.PsiUtilCore
 import org.jetbrains.kotlin.analysis.api.standalone.buildStandaloneAnalysisAPISession
-import org.jetbrains.kotlin.cli.common.CliModuleVisibilityManagerImpl
-import org.jetbrains.kotlin.load.kotlin.ModuleVisibilityManager
 import org.jetbrains.kotlin.platform.jvm.JvmPlatforms
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
@@ -33,9 +31,6 @@ open class KtCompiler(
 private fun createDefaultAnalysisAPISession() = buildStandaloneAnalysisAPISession {
     registerProjectService(TreeAspect::class.java)
     registerProjectService(PomModel::class.java, DetektPomModel(project))
-
-    // Required until BindingContext usage is fully removed
-    registerProjectService(ModuleVisibilityManager::class.java, CliModuleVisibilityManagerImpl(true))
 
     buildKtModuleProvider {
         platform = JvmPlatforms.defaultJvmPlatform

@@ -15,6 +15,7 @@ import dev.detekt.api.config
 import dev.detekt.api.internal.DefaultRuleSetProvider
 import dev.detekt.api.internal.whichDetekt
 import dev.detekt.test.yamlConfigFromContent
+import dev.detekt.tooling.api.AnalysisMode
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.assertj.core.api.ThrowingConsumer
@@ -33,10 +34,10 @@ class RuleDescriptorKtTest {
     private val log: (() -> String) -> Unit = { message -> stringBuilder.appendLine(message.invoke()) }
 
     @ParameterizedTest
-    @ValueSource(booleans = [true, false])
-    fun emptyConfigReturnsNoRule(fullAnalysis: Boolean) {
+    @EnumSource
+    fun emptyConfigReturnsNoRule(analysisMode: AnalysisMode) {
         val rules = getRules(
-            fullAnalysis,
+            analysisMode,
             listOf(TestDefaultRuleSetProvider()),
             Config.empty,
             log,
@@ -48,7 +49,7 @@ class RuleDescriptorKtTest {
     @Test
     fun returns4RulesAndIgnoreUnknownRule() {
         val rules = getRules(
-            true,
+            AnalysisMode.full,
             listOf(TestDefaultRuleSetProvider()),
             yamlConfigFromContent(
                 """
@@ -81,7 +82,7 @@ class RuleDescriptorKtTest {
     @Test
     fun doesntCrashWhenConfigHasWrongType() {
         val rules = getRules(
-            true,
+            AnalysisMode.full,
             listOf(TestDefaultRuleSetProvider()),
             yamlConfigFromContent(
                 """
@@ -115,7 +116,7 @@ class RuleDescriptorKtTest {
     @Test
     fun `when fullAnalysis is disabled the rules that require full analysis are inactive`() {
         val rules = getRules(
-            false,
+            AnalysisMode.light,
             listOf(TestDefaultRuleSetProvider()),
             yamlConfigFromContent(
                 """
@@ -149,7 +150,7 @@ class RuleDescriptorKtTest {
     @Test
     fun `when fullAnalysis is disabled but the rule is disabled we log nothing`() {
         val rules = getRules(
-            false,
+            AnalysisMode.light,
             listOf(TestDefaultRuleSetProvider()),
             yamlConfigFromContent(
                 """
@@ -171,7 +172,7 @@ class RuleDescriptorKtTest {
     @Test
     fun whenRuleSetIsInactiveReturnsAllRuleAreDisabled() {
         val rules = getRules(
-            false,
+            AnalysisMode.light,
             listOf(TestDefaultRuleSetProvider()),
             yamlConfigFromContent(
                 """
@@ -207,7 +208,7 @@ class RuleDescriptorKtTest {
         @Test
         fun whenRuleSetIsInactiveReturnsAllRuleAreDisabled() {
             val rules = getRules(
-                false,
+                AnalysisMode.light,
                 listOf(TestCustomRuleSetProvider()),
                 yamlConfigFromContent(
                     """
@@ -240,7 +241,7 @@ class RuleDescriptorKtTest {
         @ValueSource(strings = ["warning", "WARNING", "wArNiNg"])
         fun ignoreCase(candidate: String) {
             val rules = getRules(
-                false,
+                AnalysisMode.light,
                 listOf(TestDefaultRuleSetProvider()),
                 yamlConfigFromContent(
                     """
@@ -270,7 +271,7 @@ class RuleDescriptorKtTest {
         @EnumSource(Severity::class)
         fun supportsAll(severity: Severity) {
             val rules = getRules(
-                false,
+                AnalysisMode.light,
                 listOf(TestDefaultRuleSetProvider()),
                 yamlConfigFromContent(
                     """
@@ -300,7 +301,7 @@ class RuleDescriptorKtTest {
         fun unknownSeverityThrows() {
             assertThatThrownBy {
                 getRules(
-                    false,
+                    AnalysisMode.light,
                     listOf(TestDefaultRuleSetProvider()),
                     yamlConfigFromContent(
                         """
@@ -323,7 +324,7 @@ class RuleDescriptorKtTest {
         @Test
         fun severityOnRuleSet() {
             val rules = getRules(
-                false,
+                AnalysisMode.light,
                 listOf(TestDefaultRuleSetProvider()),
                 yamlConfigFromContent(
                     """
