@@ -34,9 +34,6 @@ private fun createDefaultAnalysisAPISession() = buildStandaloneAnalysisAPISessio
     registerProjectService(TreeAspect::class.java)
     registerProjectService(PomModel::class.java, DetektPomModel(project))
 
-    // Required until BindingContext usage is fully removed
-    registerProjectService(ModuleVisibilityManager::class.java, CliModuleVisibilityManagerImpl(true))
-
     buildKtModuleProvider {
         platform = JvmPlatforms.defaultJvmPlatform
     }

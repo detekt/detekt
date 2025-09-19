@@ -1,7 +1,6 @@
 package dev.detekt.tooling.api
 
 import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * Instance of detekt.
@@ -14,5 +13,5 @@ interface Detekt {
     fun run(): AnalysisResult
 
     // Used by detekt-compiler-plugin
-    fun run(files: Collection<KtFile>, bindingContext: BindingContext): AnalysisResult
+    fun run(files: Collection<KtFile>): AnalysisResult
 }
