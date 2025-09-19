@@ -16,6 +16,7 @@ import dev.detekt.core.suppressors.buildSuppressors
 import dev.detekt.core.suppressors.isSuppressedBy
 import dev.detekt.core.util.shouldAnalyzeFile
 import dev.detekt.psi.absolutePath
+import dev.detekt.tooling.api.AnalysisMode
 import org.jetbrains.kotlin.config.LanguageVersionSettings
 import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
@@ -99,7 +100,8 @@ internal class Analyzer(
 }
 
 private fun List<Finding>.filterSuppressedFindings(rule: Rule, bindingContext: BindingContext): List<Finding> {
-    val suppressors = buildSuppressors(rule, bindingContext, bindingContext != BindingContext.EMPTY)
+    val analysisMode = if (bindingContext == BindingContext.EMPTY) AnalysisMode.light else AnalysisMode.full
+    val suppressors = buildSuppressors(rule, bindingContext, analysisMode)
     return if (suppressors.isNotEmpty()) {
         filter { finding -> !suppressors.any { suppressor -> suppressor.shouldSuppress(finding) } }
     } else {
