@@ -56,13 +56,9 @@ class CompositeConfigSpec {
     fun `should fail with a meaningful exception when boolean property is invalid`() {
         val config = compositeConfig.subConfig("style").subConfig("LargeClass")
 
-        val expectedErrorMessage = "Value \"truuu\" set for config parameter \"style > LargeClass > active\" " +
-            "is not of required type Boolean"
-
-        assertThatThrownBy {
-            config.valueOrDefault("active", true)
-        }.isInstanceOf(IllegalStateException::class.java)
-            .hasMessageContaining(expectedErrorMessage)
+        assertThatThrownBy { config.valueOrDefault("active", true) }
+            .isInstanceOf(IllegalArgumentException::class.java)
+            .hasMessageContaining("The string doesn't represent a boolean value: truuu")
     }
 
     @Nested

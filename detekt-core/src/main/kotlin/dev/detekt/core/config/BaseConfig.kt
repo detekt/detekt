@@ -4,8 +4,6 @@ import dev.detekt.api.Config
 import dev.detekt.api.Config.Companion.CONFIG_SEPARATOR
 import kotlin.reflect.KClass
 
-private val ALLOWED_BOOL_VALUES = setOf("true", "false")
-
 private fun Config.keySequence(key: String): String =
     if (parentPath == null) key else "$parentPath $CONFIG_SEPARATOR $key"
 
@@ -58,13 +56,7 @@ private fun getDefaultName(className: String): String = if (className == "EmptyL
 
 fun tryParseBasedOnDefault(result: String, defaultResult: Any): Any = when (defaultResult) {
     is Int -> result.toInt()
-    is Boolean ->
-        if (result in ALLOWED_BOOL_VALUES) {
-            result.toBoolean()
-        } else {
-            throw ClassCastException()
-        }
-
+    is Boolean -> result.toBooleanStrict()
     is Double -> result.toDouble()
     is String -> result
     else -> throw ClassCastException()

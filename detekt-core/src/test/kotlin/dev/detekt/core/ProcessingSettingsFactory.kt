@@ -1,7 +1,6 @@
 package dev.detekt.core
 
 import dev.detekt.api.Config
-import dev.detekt.core.reporting.DETEKT_OUTPUT_REPORT_PATHS_KEY
 import dev.detekt.test.utils.NullPrintStream
 import dev.detekt.test.utils.resourceAsPath
 import dev.detekt.tooling.api.spec.ProcessingSpec
@@ -41,11 +40,12 @@ fun createProcessingSettings(
         execution {
             executorService = DirectExecutor() // run in the same thread
         }
+        reports {
+            reports.addAll(reportPaths)
+        }
         init.invoke(this)
     }
-    return ProcessingSettings(spec, config).apply {
-        register(DETEKT_OUTPUT_REPORT_PATHS_KEY, reportPaths)
-    }
+    return ProcessingSettings(spec, config)
 }
 
 fun createNullLoggingSpec(

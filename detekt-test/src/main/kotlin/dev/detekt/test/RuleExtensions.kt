@@ -3,7 +3,6 @@ package dev.detekt.test
 import dev.detekt.api.Config
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
-import dev.detekt.api.RequiresFullAnalysis
 import dev.detekt.api.Rule
 import dev.detekt.api.RuleSet
 import dev.detekt.core.suppressors.isSuppressedBy
@@ -25,9 +24,6 @@ fun Rule.lint(
     languageVersionSettings: LanguageVersionSettings = FakeLanguageVersionSettings(),
     compile: Boolean = true,
 ): List<Finding> {
-    require(this !is RequiresFullAnalysis) {
-        "${this.ruleName} requires full analysis so you should use lintWithContext instead of lint"
-    }
     require(this !is RequiresAnalysisApi) {
         "${this.ruleName} requires Analysis API so you should use lintWithContext instead of lint"
     }
@@ -62,9 +58,6 @@ fun Rule.lint(
     ktFile: KtFile,
     languageVersionSettings: LanguageVersionSettings = FakeLanguageVersionSettings(),
 ): List<Finding> {
-    require(this !is RequiresFullAnalysis) {
-        "${this.ruleName} requires full analysis so you should use lintWithContext instead of lint"
-    }
     require(this !is RequiresAnalysisApi) {
         "${this.ruleName} requires Analysis Api so you should use lintWithContext instead of lint"
     }

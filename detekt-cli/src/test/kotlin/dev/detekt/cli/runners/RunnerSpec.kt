@@ -3,6 +3,7 @@ package dev.detekt.cli.runners
 import dev.detekt.cli.parseArguments
 import dev.detekt.test.utils.NullPrintStream
 import dev.detekt.test.utils.StringPrintStream
+import dev.detekt.test.utils.createTempFileForTest
 import dev.detekt.test.utils.resourceAsPath
 import dev.detekt.tooling.api.InvalidConfig
 import dev.detekt.tooling.api.IssuesFound
@@ -10,86 +11,81 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode
 import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.assertj.core.api.Assertions.assertThatThrownBy
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.io.PrintStream
 import java.nio.file.Path
 import kotlin.io.path.absolutePathString
+import kotlin.io.path.deleteExisting
 
 class RunnerSpec {
 
     val inputPath = resourceAsPath("cases/Poko.kt")
 
-    @Nested
-    inner class `executes the runner with create baseline` {
+    @Test
+    fun `executes the runner with create baseline`() {
+        val baseline = createTempFileForTest("baseline", ".xml").also { it.deleteExisting() }
+        executeDetekt(
+            "--input",
+            inputPath.toString(),
+            "--config-resource",
+            "/configs/valid-config.yml",
+            "--baseline",
+            baseline.toString(),
+            "--create-baseline",
+        )
 
-        @Test
-        fun `should not throw`() {
-            executeDetekt(
-                "--input",
-                inputPath.toString(),
-                "--baseline",
-                resourceAsPath("configs/baseline-empty.xml").toString(),
-                "--create-baseline",
-            )
-        }
+        assertThat(baseline).content().contains("<SmellBaseline>")
     }
 
     @Nested
     inner class `customize output and error printers` {
+        @Test
+        fun `Default configuration without issues`() {
+            val path = resourceAsPath("cases/CleanPoko.kt")
+            val outPrintStream = StringPrintStream()
+            val errPrintStream = StringPrintStream()
 
-        private val outPrintStream = StringPrintStream()
-        private val errPrintStream = StringPrintStream()
+            executeDetekt("--input", path.toString(), out = outPrintStream, err = errPrintStream)
 
-        @Nested
-        inner class `execute with default config without issues` {
-
-            val path: Path = resourceAsPath("/cases/CleanPoko.kt")
-
-            @BeforeEach
-            fun setUp() {
-                executeDetekt("--input", path.toString(), out = outPrintStream, err = errPrintStream)
-            }
-
-            @Test
-            fun `writes no build related output to output printer`() {
-                assertThat(outPrintStream.toString()).doesNotContain("A failure - [test]")
-            }
-
-            @Test
-            fun `does not write anything to error printer`() {
-                assertThat(errPrintStream.toString()).isEmpty()
-            }
+            assertThat(outPrintStream.toString()).isEmpty()
+            assertThat(errPrintStream.toString()).isEmpty()
         }
 
-        @Nested
-        inner class `execute with issues` {
+        @Test
+        fun `Default configuration with issues`() {
+            val path = resourceAsPath("cases/Poko.kt")
+            val outPrintStream = StringPrintStream()
+            val errPrintStream = StringPrintStream()
 
-            @BeforeEach
-            fun setUp() {
-                assertThatThrownBy {
-                    executeDetekt(
-                        "--input",
-                        inputPath.toString(),
-                        "--config-resource",
-                        "/configs/valid-config.yml",
-                        out = outPrintStream,
-                        err = errPrintStream,
-                    )
-                }
-                    .isExactlyInstanceOf(IssuesFound::class.java)
+            assertThatThrownBy {
+                executeDetekt("--input", path.toString(), out = outPrintStream, err = errPrintStream)
             }
+                .isExactlyInstanceOf(IssuesFound::class.java)
 
-            @Test
-            fun `writes output to output printer`() {
-                assertThat(outPrintStream.toString()).contains("A failure [TestRule]")
-            }
+            assertThat(outPrintStream.toString()).contains(path.toString())
+            assertThat(errPrintStream.toString()).isEmpty()
+        }
 
-            @Test
-            fun `does not write anything to error printer`() {
-                assertThat(errPrintStream.toString()).isEmpty()
+        @Test
+        fun `With issues the output is only on outPrint`() {
+            val outPrintStream = StringPrintStream()
+            val errPrintStream = StringPrintStream()
+
+            assertThatThrownBy {
+                executeDetekt(
+                    "--input",
+                    inputPath.toString(),
+                    "--config-resource",
+                    "/configs/valid-config.yml",
+                    out = outPrintStream,
+                    err = errPrintStream,
+                )
             }
+                .isExactlyInstanceOf(IssuesFound::class.java)
+
+            assertThat(outPrintStream.toString()).contains("A failure [TestRule]")
+            assertThat(errPrintStream.toString()).isEmpty()
         }
     }
 
