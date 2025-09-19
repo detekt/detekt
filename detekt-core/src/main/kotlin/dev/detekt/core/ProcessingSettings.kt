@@ -11,6 +11,7 @@ import dev.detekt.core.settings.ExtensionFacade
 import dev.detekt.core.settings.LoggingAware
 import dev.detekt.core.settings.LoggingFacade
 import dev.detekt.core.settings.PropertiesFacade
+import dev.detekt.core.util.PerformanceMonitor
 import dev.detekt.tooling.api.spec.ConfigSpec
 import dev.detekt.tooling.api.spec.ProcessingSpec
 import org.jetbrains.kotlin.utils.closeQuietly
@@ -30,6 +31,7 @@ import java.nio.file.Path
 class ProcessingSettings(
     val spec: ProcessingSpec,
     override val config: Config,
+    val monitor: PerformanceMonitor,
 ) : AutoCloseable,
     Closeable,
     LoggingAware by LoggingFacade(spec.loggingSpec),

@@ -10,7 +10,6 @@ import dev.detekt.core.config.DisabledAutoCorrectConfig
 import dev.detekt.core.config.YamlConfig
 import dev.detekt.core.config.validation.DeprecatedRule
 import dev.detekt.core.config.validation.loadDeprecations
-import dev.detekt.core.util.MONITOR_PROPERTY_KEY
 import dev.detekt.core.util.PerformanceMonitor
 import dev.detekt.core.util.PerformanceMonitor.Phase
 import dev.detekt.tooling.api.spec.ProcessingSpec
@@ -22,10 +21,9 @@ internal fun <R> ProcessingSpec.withSettings(execute: ProcessingSettings.() -> R
         workaroundConfiguration(loadConfiguration())
     }
     val settings = monitor.measure(Phase.CreateSettings) {
-        ProcessingSettings(this, configuration).apply {
+        ProcessingSettings(this, configuration, monitor).apply {
             baselineSpec.path?.let { register(DETEKT_BASELINE_PATH_KEY, it) }
             register(DETEKT_BASELINE_CREATION_KEY, baselineSpec.shouldCreateDuringAnalysis)
-            register(MONITOR_PROPERTY_KEY, monitor)
         }
     }
     val result = settings.use { execute(it) }
