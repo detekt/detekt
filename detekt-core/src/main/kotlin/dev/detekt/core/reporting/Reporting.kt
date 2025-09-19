@@ -21,8 +21,6 @@ internal fun printIssues(issues: Map<String, List<Issue>>, basePath: Path): Stri
         }
     }
 
-const val DETEKT_OUTPUT_REPORT_PATHS_KEY = "detekt.output.report.paths.key"
-
 private const val REPORT_MESSAGE_SIZE_LIMIT = 80
 private val messageReplacementRegex = Regex("\\s+")
 
