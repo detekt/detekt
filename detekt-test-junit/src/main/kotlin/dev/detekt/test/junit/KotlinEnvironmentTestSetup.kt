@@ -1,7 +1,5 @@
 package dev.detekt.test.junit
 
-import com.intellij.openapi.Disposable
-import com.intellij.openapi.util.Disposer
 import dev.detekt.test.utils.KotlinEnvironmentContainer
 import dev.detekt.test.utils.createEnvironment
 import dev.detekt.test.utils.resourceAsPath
@@ -33,19 +31,15 @@ internal class KotlinEnvironmentResolver : ParameterResolver {
     override fun resolveParameter(parameterContext: ParameterContext, extensionContext: ExtensionContext): Any =
         extensionContext.wrapper.env
 
-    private fun createNewWrapper(extensionContext: ExtensionContext): KotlinCoreEnvironmentWrapper {
-        val disposable = Disposer.newDisposable()
-        return KotlinCoreEnvironmentWrapper(
+    private fun createNewWrapper(extensionContext: ExtensionContext): KotlinCoreEnvironmentWrapper =
+        KotlinCoreEnvironmentWrapper(
             createEnvironment(
-                disposable,
                 additionalRootPaths = checkNotNull(
                     classpathFromClassloader(Thread.currentThread().contextClassLoader)
                 ) { "We should always have a classpath" },
                 additionalJavaSourceRootPaths = extensionContext.additionalJavaSourcePaths(),
             ),
-            disposable,
         )
-    }
 
     companion object {
         private val NAMESPACE = ExtensionContext.Namespace.create("KotlinCoreEnvironment")
@@ -58,14 +52,4 @@ internal class KotlinEnvironmentResolver : ParameterResolver {
     }
 }
 
-private class KotlinCoreEnvironmentWrapper(
-    val env: KotlinEnvironmentContainer,
-    private val disposable: Disposable,
-) :
-    @Suppress("DEPRECATION")
-    ExtensionContext.Store.CloseableResource,
-    AutoCloseable {
-    override fun close() {
-        Disposer.dispose(disposable)
-    }
-}
+private class KotlinCoreEnvironmentWrapper(val env: KotlinEnvironmentContainer)
