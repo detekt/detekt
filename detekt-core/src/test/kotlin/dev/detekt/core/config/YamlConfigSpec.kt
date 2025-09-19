@@ -114,9 +114,9 @@ class YamlConfigSpec {
 
         @Test
         fun `only accepts true and false boolean values`() {
-            assertThatIllegalStateException()
+            assertThatIllegalArgumentException()
                 .isThrownBy { config.valueOrDefault("bool", false) }
-                .withMessage("""Value "fasle" set for config parameter "bool" is not of required type Boolean.""")
+                .withMessage("""The string doesn't represent a boolean value: fasle""")
         }
 
         @Test
