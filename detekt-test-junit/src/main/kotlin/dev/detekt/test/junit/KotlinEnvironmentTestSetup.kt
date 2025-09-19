@@ -18,27 +18,25 @@ annotation class KotlinCoreEnvironmentTest(
 )
 
 internal class KotlinEnvironmentResolver : ParameterResolver {
-    private val ExtensionContext.wrapper: KotlinCoreEnvironmentWrapper
+    private val ExtensionContext.env: KotlinEnvironmentContainer
         get() = getStore(NAMESPACE).getOrComputeIfAbsent(
             WRAPPER_KEY,
             { _ -> createNewWrapper(this) },
-            KotlinCoreEnvironmentWrapper::class.java
+            KotlinEnvironmentContainer::class.java,
         )
 
     override fun supportsParameter(parameterContext: ParameterContext, extensionContext: ExtensionContext): Boolean =
         parameterContext.parameter.type == KotlinEnvironmentContainer::class.java
 
     override fun resolveParameter(parameterContext: ParameterContext, extensionContext: ExtensionContext): Any =
-        extensionContext.wrapper.env
+        extensionContext.env
 
-    private fun createNewWrapper(extensionContext: ExtensionContext): KotlinCoreEnvironmentWrapper =
-        KotlinCoreEnvironmentWrapper(
-            createEnvironment(
-                additionalRootPaths = checkNotNull(
-                    classpathFromClassloader(Thread.currentThread().contextClassLoader)
-                ) { "We should always have a classpath" },
-                additionalJavaSourceRootPaths = extensionContext.additionalJavaSourcePaths(),
-            ),
+    private fun createNewWrapper(extensionContext: ExtensionContext): KotlinEnvironmentContainer =
+        createEnvironment(
+            additionalRootPaths = checkNotNull(
+                classpathFromClassloader(Thread.currentThread().contextClassLoader)
+            ) { "We should always have a classpath" },
+            additionalJavaSourceRootPaths = extensionContext.additionalJavaSourcePaths(),
         )
 
     companion object {
@@ -51,5 +49,3 @@ internal class KotlinEnvironmentResolver : ParameterResolver {
         }
     }
 }
-
-private class KotlinCoreEnvironmentWrapper(val env: KotlinEnvironmentContainer)

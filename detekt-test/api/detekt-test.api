@@ -7,10 +7,6 @@ public final class dev/detekt/test/FindingExtensionsKt {
 	public static final fun getLocation (Ldev/detekt/api/Finding;)Ldev/detekt/api/Location;
 }
 
-public final class dev/detekt/test/KotlinCoreEnvironmentExtensionsKt {
-	public static final fun createBindingContext (Ldev/detekt/test/utils/KotlinEnvironmentContainer;Ljava/util/List;)Lorg/jetbrains/kotlin/resolve/BindingContext;
-}
-
 public final class dev/detekt/test/ResourcesKt {
 	public static final fun yamlConfig (Ljava/lang/String;)Ldev/detekt/api/Config;
 	public static final fun yamlConfigFromContent (Ljava/lang/String;)Ldev/detekt/api/Config;
