@@ -2,6 +2,7 @@ package dev.detekt.core.suppressors
 
 import dev.detekt.api.Rule
 import dev.detekt.psi.AnnotationExcluder
+import dev.detekt.tooling.api.AnalysisMode
 import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
@@ -13,14 +14,16 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  * @config ignoreAnnotated: List<String> The annotations can be defined just by its name or with its fully qualified
  * name. If you don't run detekt with type solving the fully qualified name does not work.
  */
-internal fun annotationSuppressorFactory(rule: Rule): Suppressor? {
+internal fun annotationSuppressorFactory(rule: Rule, analysisMode: AnalysisMode): Suppressor? {
     val annotations = rule.config.valueOrDefault("ignoreAnnotated", emptyList<String>()).map {
         it.qualifiedNameGlobToRegex()
     }
     return if (annotations.isNotEmpty()) {
         Suppressor { finding ->
             val element = finding.entity.ktElement
-            element.isAnnotatedWith(AnnotationExcluder(element.containingKtFile, annotations))
+            element.isAnnotatedWith(
+                AnnotationExcluder(element.containingKtFile, annotations, analysisMode == AnalysisMode.full),
+            )
         }
     } else {
         null
