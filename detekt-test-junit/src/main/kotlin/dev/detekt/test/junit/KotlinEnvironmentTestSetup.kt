@@ -20,30 +20,31 @@ annotation class KotlinCoreEnvironmentTest(
 )
 
 internal class KotlinEnvironmentResolver : ParameterResolver {
-    private var ExtensionContext.wrapper: KotlinCoreEnvironmentWrapper?
-        get() = getStore(NAMESPACE)[WRAPPER_KEY, KotlinCoreEnvironmentWrapper::class.java]
-        set(value) = getStore(NAMESPACE).put(WRAPPER_KEY, value)
+    private val ExtensionContext.wrapper: KotlinCoreEnvironmentWrapper
+        get() = getStore(NAMESPACE).getOrComputeIfAbsent(
+            WRAPPER_KEY,
+            { _ -> createNewWrapper(this) },
+            KotlinCoreEnvironmentWrapper::class.java
+        )
 
     override fun supportsParameter(parameterContext: ParameterContext, extensionContext: ExtensionContext): Boolean =
         parameterContext.parameter.type == KotlinEnvironmentContainer::class.java
 
-    override fun resolveParameter(parameterContext: ParameterContext, extensionContext: ExtensionContext): Any {
-        var closeableWrapper = extensionContext.wrapper
-        if (closeableWrapper == null) {
-            val disposable = Disposer.newDisposable()
-            closeableWrapper = KotlinCoreEnvironmentWrapper(
-                createEnvironment(
-                    disposable,
-                    additionalRootPaths = checkNotNull(
-                        classpathFromClassloader(Thread.currentThread().contextClassLoader)
-                    ) { "We should always have a classpath" },
-                    additionalJavaSourceRootPaths = extensionContext.additionalJavaSourcePaths(),
-                ),
+    override fun resolveParameter(parameterContext: ParameterContext, extensionContext: ExtensionContext): Any =
+        extensionContext.wrapper.env
+
+    private fun createNewWrapper(extensionContext: ExtensionContext): KotlinCoreEnvironmentWrapper {
+        val disposable = Disposer.newDisposable()
+        return KotlinCoreEnvironmentWrapper(
+            createEnvironment(
                 disposable,
-            )
-            extensionContext.wrapper = closeableWrapper
-        }
-        return closeableWrapper.env
+                additionalRootPaths = checkNotNull(
+                    classpathFromClassloader(Thread.currentThread().contextClassLoader)
+                ) { "We should always have a classpath" },
+                additionalJavaSourceRootPaths = extensionContext.additionalJavaSourcePaths(),
+            ),
+            disposable,
+        )
     }
 
     companion object {
