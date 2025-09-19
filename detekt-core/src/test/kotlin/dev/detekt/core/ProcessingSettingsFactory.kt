@@ -1,6 +1,7 @@
 package dev.detekt.core
 
 import dev.detekt.api.Config
+import dev.detekt.core.util.PerformanceMonitor
 import dev.detekt.test.utils.NullPrintStream
 import dev.detekt.test.utils.resourceAsPath
 import dev.detekt.tooling.api.spec.ProcessingSpec
@@ -45,7 +46,7 @@ fun createProcessingSettings(
         }
         init.invoke(this)
     }
-    return ProcessingSettings(spec, config)
+    return ProcessingSettings(spec, config, PerformanceMonitor())
 }
 
 fun createNullLoggingSpec(

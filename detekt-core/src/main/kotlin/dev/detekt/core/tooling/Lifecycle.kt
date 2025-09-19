@@ -13,7 +13,6 @@ import dev.detekt.core.getRules
 import dev.detekt.core.reporting.OutputFacade
 import dev.detekt.core.rules.createRuleProviders
 import dev.detekt.core.util.PerformanceMonitor.Phase
-import dev.detekt.core.util.getOrCreateMonitor
 import dev.detekt.parser.DetektMessageCollector
 import dev.detekt.parser.GenerateBindingContextOptions
 import dev.detekt.parser.generateBindingContext
@@ -35,7 +34,7 @@ internal interface Lifecycle {
     val processorsProvider: () -> List<FileProcessListener>
     val ruleSetsProvider: () -> List<RuleSetProvider>
 
-    private fun <R> measure(phase: Phase, block: () -> R): R = settings.getOrCreateMonitor().measure(phase, block)
+    private fun <R> measure(phase: Phase, block: () -> R): R = settings.monitor.measure(phase, block)
 
     fun analyze(): Detektion {
         measure(Phase.ValidateConfig) { checkConfiguration(settings, baselineConfig) }
