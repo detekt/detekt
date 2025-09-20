@@ -21,7 +21,7 @@ When adding a custom issue to the xml file, make sure the `RuleID` should be sel
   </ManuallySuppressedIssues>
   <CurrentIssues>
     <ID>NestedBlockDepth:Indentation.kt$Indentation$override fun procedure(node: ASTNode)</ID>
-    <ID>TooManyFunctions:LargeClass.kt$io.gitlab.arturbosch.detekt.rules.complexity.LargeClass.kt</ID>
+    <ID>TooManyFunctions:LargeClass.kt$dev.detekt.rules.complexity.LargeClass.kt</ID>
     <ID>ComplexMethod:DetektExtension.kt$DetektExtension$fun convertToArguments(): MutableList&lt;String&gt;</ID>
   </CurrentIssues>
 </SmellBaseline>
@@ -55,7 +55,7 @@ subprojects {
     }
 }
 
-task detektProjectBaseline(type: io.gitlab.arturbosch.detekt.DetektCreateBaselineTask) {
+task detektProjectBaseline(type: dev.detekt.gradle.DetektCreateBaselineTask) {
     description = "Overrides current baseline."
     ignoreFailures.set(true)
     parallel.set(true)

@@ -26,7 +26,7 @@ Apply the following configuration to your Gradle project build file:
 
 ```kotlin
 plugins {
-    id("io.gitlab.arturbosch.detekt") version("[detekt_version]")
+    id("dev.detekt") version("[detekt_version]")
 }
 
 repositories {
@@ -88,6 +88,6 @@ which can be easily added to the Gradle configuration:
 
 ```gradle
 dependencies {
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-rules-ktlint-wrapper:[detekt_version]")
+    detektPlugins("dev.detekt:detekt-rules-ktlint-wrapper:[detekt_version]")
 }
 ```

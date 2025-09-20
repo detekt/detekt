@@ -19,7 +19,7 @@ import org.jetbrains.kotlin.psi.KtImportDirective
  * When suppressing an issue of WildcardImport in the baseline file, make sure to suppress the corresponding NoWildcardImports issue.
  *
  * <noncompliant>
- * import io.gitlab.arturbosch.detekt.*
+ * import dev.detekt.*
  *
  * class DetektElements {
  *     val element1 = DetektElement1()
@@ -28,8 +28,8 @@ import org.jetbrains.kotlin.psi.KtImportDirective
  * </noncompliant>
  *
  * <compliant>
- * import io.gitlab.arturbosch.detekt.DetektElement1
- * import io.gitlab.arturbosch.detekt.DetektElement2
+ * import dev.detekt.DetektElement1
+ * import dev.detekt.DetektElement2
  *
  * class DetektElements {
  *     val element1 = DetektElement1()
