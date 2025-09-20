@@ -11,11 +11,6 @@ plugins {
     id("jacoco")
 }
 
-tasks.withType<AbstractArchiveTask>().configureEach {
-    isPreserveFileTimestamps = false
-    isReproducibleFileOrder = true
-}
-
 val versionCatalog = versionCatalogs.named("libs")
 
 jacoco.toolVersion = versionCatalog.findVersion("jacoco").get().requiredVersion
