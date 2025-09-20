@@ -21,9 +21,7 @@ public final class dev/detekt/test/RuleExtensionsKt {
 	public static final fun lint (Ldev/detekt/api/Rule;Lorg/jetbrains/kotlin/psi/KtFile;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;)Ljava/util/List;
 	public static synthetic fun lint$default (Ldev/detekt/api/Rule;Ljava/lang/String;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;ZILjava/lang/Object;)Ljava/util/List;
 	public static synthetic fun lint$default (Ldev/detekt/api/Rule;Lorg/jetbrains/kotlin/psi/KtFile;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;ILjava/lang/Object;)Ljava/util/List;
-	public static final fun lintWithContext (Ldev/detekt/api/Rule;Ldev/detekt/test/utils/KotlinEnvironmentContainer;Ljava/lang/String;[Ljava/lang/String;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;Z)Ljava/util/List;
 	public static final fun lintWithContext (Ldev/detekt/api/Rule;Ldev/detekt/test/utils/KotlinEnvironmentContainer;Ljava/lang/String;[Ljava/lang/String;ZLorg/jetbrains/kotlin/config/LanguageVersionSettings;)Ljava/util/List;
-	public static synthetic fun lintWithContext$default (Ldev/detekt/api/Rule;Ldev/detekt/test/utils/KotlinEnvironmentContainer;Ljava/lang/String;[Ljava/lang/String;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;ZILjava/lang/Object;)Ljava/util/List;
 	public static synthetic fun lintWithContext$default (Ldev/detekt/api/Rule;Ldev/detekt/test/utils/KotlinEnvironmentContainer;Ljava/lang/String;[Ljava/lang/String;ZLorg/jetbrains/kotlin/config/LanguageVersionSettings;ILjava/lang/Object;)Ljava/util/List;
 }
 

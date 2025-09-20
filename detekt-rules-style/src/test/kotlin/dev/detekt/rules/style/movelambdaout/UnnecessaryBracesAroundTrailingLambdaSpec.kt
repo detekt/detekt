@@ -2,8 +2,8 @@ package dev.detekt.rules.style.movelambdaout
 
 import dev.detekt.api.Config
 import dev.detekt.test.assertj.assertThat
+import dev.detekt.test.junit.KotlinCoreEnvironmentTest
 import dev.detekt.test.lintWithContext
-import dev.detekt.test.utils.KotlinCoreEnvironmentTest
 import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.junit.jupiter.api.Test
 
@@ -320,6 +320,18 @@ class UnnecessaryBracesAroundTrailingLambdaSpec(val env: KotlinEnvironmentContai
     fun `does not report when last parameter is vararg - #6593`() {
         val code = """
             fun foo(f: () -> Unit, vararg x: Unit) = f()
+            fun test() {
+                foo({})
+            }
+        """.trimIndent()
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `does not report when lambdas is vararg - #8638`() {
+        val code = """
+            fun foo(vararg mappers: () -> Unit) = mappers.map { it() }
             fun test() {
                 foo({})
             }

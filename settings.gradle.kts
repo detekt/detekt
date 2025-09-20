@@ -20,7 +20,7 @@ include("detekt-psi-utils")
 include("detekt-report-html")
 include("detekt-report-md")
 include("detekt-report-sarif")
-include("detekt-report-xml")
+include("detekt-report-checkstyle")
 include("detekt-rules")
 include("detekt-rules-complexity")
 include("detekt-rules-coroutines")
@@ -37,6 +37,7 @@ include("detekt-rules-ruleauthors")
 include("detekt-rules-style")
 include("detekt-test")
 include("detekt-test-assertj")
+include("detekt-test-junit")
 include("detekt-test-utils")
 include("detekt-tooling")
 include("detekt-utils")
@@ -45,10 +46,10 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
 
 plugins {
-    id("com.gradle.develocity") version "4.1.1"
-    id("com.gradle.common-custom-user-data-gradle-plugin") version "2.3"
+    id("com.gradle.develocity") version "4.2"
+    id("com.gradle.common-custom-user-data-gradle-plugin") version "2.4.0"
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
-    id("com.autonomousapps.build-health") version "2.19.0"
+    id("com.autonomousapps.build-health") version "3.0.4"
     // Kotlin plugin must be added to classpath to support build-health analysis
     id("org.jetbrains.kotlin.jvm") version "2.2.10" apply false
 }

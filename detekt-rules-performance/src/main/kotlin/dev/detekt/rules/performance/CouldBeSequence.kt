@@ -7,9 +7,10 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.api.config
-import dev.detekt.psi.isCalling
-import org.jetbrains.kotlin.name.CallableId
-import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
+import org.jetbrains.kotlin.analysis.api.resolution.singleCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.name.StandardClassIds
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -46,13 +47,13 @@ class CouldBeSequence(config: Config) :
 
         if (visitedCallExpressions.contains(expression)) return
 
-        if (!expression.isCallingAnyOf(operationsCallableIds)) return
+        if (!expression.isCallingKotlinCollectionFunPresentInSequence()) return
 
         var counter = 1
         var nextCall = expression.nextChainedCall()
-        while (counter <= allowedOperations && nextCall != null) {
+        while (nextCall != null) {
             visitedCallExpressions += nextCall
-            if (!nextCall.isCallingAnyOf(operationsCallableIds)) {
+            if (!nextCall.isCallingKotlinCollectionFunPresentInSequence()) {
                 break
             }
 
@@ -66,29 +67,17 @@ class CouldBeSequence(config: Config) :
         }
     }
 
+    private fun KtExpression.isCallingKotlinCollectionFunPresentInSequence(): Boolean = analyze(this) {
+        val callableId = resolveToCall()
+            ?.singleCallOrNull<KaCallableMemberCall<*, *>>()
+            ?.symbol
+            ?.callableId
+        callableId?.packageName == StandardClassIds.BASE_COLLECTIONS_PACKAGE &&
+            findTopLevelCallables(StandardClassIds.BASE_SEQUENCES_PACKAGE, callableId.callableName).any()
+    }
+
     private fun KtExpression.nextChainedCall(): KtExpression? {
         val expression = this.getQualifiedExpressionForSelectorOrThis()
         return expression.getQualifiedExpressionForReceiver()?.selectorExpression
-    }
-
-    private fun KtExpression.isCallingAnyOf(callableIds: List<CallableId>): Boolean {
-        val callExpression = this as? KtCallExpression ?: return false
-        val calleeText = callExpression.calleeExpression?.text
-        val candidates = callableIds.filter { it.callableName.asString() == calleeText }
-
-        return candidates.isNotEmpty() && callExpression.isCalling(candidates)
-    }
-
-    companion object {
-        private val operationsCallableIds = listOf(
-            CallableId(StandardClassIds.BASE_COLLECTIONS_PACKAGE, Name.identifier("filter")),
-            CallableId(StandardClassIds.BASE_COLLECTIONS_PACKAGE, Name.identifier("filterIndexed")),
-            CallableId(StandardClassIds.BASE_COLLECTIONS_PACKAGE, Name.identifier("map")),
-            CallableId(StandardClassIds.BASE_COLLECTIONS_PACKAGE, Name.identifier("mapIndexed")),
-            CallableId(StandardClassIds.BASE_COLLECTIONS_PACKAGE, Name.identifier("flatMap")),
-            CallableId(StandardClassIds.BASE_COLLECTIONS_PACKAGE, Name.identifier("flatMapIndexed")),
-            CallableId(StandardClassIds.BASE_COLLECTIONS_PACKAGE, Name.identifier("reduce")),
-            CallableId(StandardClassIds.BASE_COLLECTIONS_PACKAGE, Name.identifier("zip"))
-        )
     }
 }

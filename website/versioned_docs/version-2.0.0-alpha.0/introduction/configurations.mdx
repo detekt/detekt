@@ -1,0 +1,213 @@
+---
+id: configurations
+title: "detekt Configuration File"
+keywords: [config, configuration, yaml]
+permalink: configurations.html
+sidebar_position: 3
+---
+
+import { DefaultConfigurationFile } from "./../../../src/components/ConfigurationFile"
+
+_detekt_ uses a [YAML style configuration](https://yaml.org/spec/1.2/spec.html) file for various things:
+
+- rule set and rule properties
+- build failure
+- console reports
+- output reports
+- processors
+
+See the <DefaultConfigurationFile /> file for all defined configuration options and their default values. 
+
+_Note:_ When using a custom config file, the default values are ignored unless you also set the `--build-upon-default-config` flag.
+
+## Config validation
+
+If config validation is enabled, _detekt_ will verify that your configuration file is structured correctly and all first party rule sets, rules and configuration options are valid and not marked as deprecated.
+
+```yaml
+config:
+  validation: true
+  warningsAsErrors: false
+  excludes: ''
+```
+
+Invalid or deprecated rules and configuration options are by default printed as warnings unless `warningsAsErrors` is set to `true`.
+
+_Note:_ Custom rules sets are excluded from config validation by default.
+
+If you have extended _detekt_ and rely on a custom properties, you will need to exclude those from config validation by adding their paths to the `excludes` attribute. Multiple values are separated by comma and `.*` can be used as a wildcard (e.g. `propA,build>.*>propB`).
+
+## Rule sets and rules
+
+_detekt_ allows easily to just pick the rules you want and configure them the way you like.
+For example if you want to allow up to 20 functions inside a Kotlin file instead of the default threshold, write:
+
+```yaml
+complexity:
+  TooManyFunctions:
+    thresholdInFiles: 20
+```
+
+To read about all supported rule sets and rules, use the side navigation `Rule Sets`.
+
+### Path Filters / Excludes / Includes
+
+Fine grained path filters can be defined for each rule or rule set through globbing patterns.
+This gives the user more freedom in analyzing only specific files
+and rule authors the ability to write *library only* rules.
+
+```yaml
+complexity:
+  TooManyFunctions:
+    ...
+    excludes: ['**/internal/**']
+    includes: ['**/internal/util/NeedsToBeChecked.kt']
+```
+
+In case you want to apply the same filters for different rules, you can use
+[YAML anchors and aliases](https://yaml.org/spec/1.2/spec.html#id2785586) to reapply previously defined paths.
+
+```yaml
+naming:
+  ClassNaming:
+    ...
+    excludes: &testFolders
+      - '**/test/**'
+      - '**/androidTest/**'
+  ConstructorParameterNaming:
+    ...
+    excludes: *testFolders
+```
+
+### Severity
+
+By default, all findings have a severity of `error` but is possible to configure the severity of each rule to fit
+your CI policy with respects to errors. You may specify the severity level in the config file at the rule or ruleset
+level:
+
+```yaml
+empty-blocks:
+    active: true
+    severity: error
+    EmptyCatchBlock:
+        active: true
+        severity: info
+```
+
+The severity will be computed in the priority order:
+
+- Severity of the rule if exists
+- Severity of the parent ruleset if exists
+- Default severity: error
+
+### Aliases
+
+Each rule can have a list of aliases. Those aliases will be used as new identifiers for that rule so they can be used
+to suppress the rules of that function with a different name in the annotations `@Suppress`. This is handy when you use
+more analysis tools than detekt. In those cases there can be rules that overlap. In those cases you can set an alias
+with the name of the other rule. This way you will only need to suppress the issue once instead of once per analysis
+tool. Example:
+
+```yaml
+complexity:
+  CyclomaticComplexMethod:
+    active: true
+    aliases: ['ComplexMethod']
+```
+
+By default detekt gives some default aliases to avoid repetition with the kotlin compiler or with IntelliJ. If you find
+collisions with one of those you can open an issue because, probably, we will update the default configuration so
+everyone can benefit from it.
+
+## Build failure
+
+_detekt_ will fail your build if there is at least one issue with a severity of error. You can lower that threshold
+or completely disable build failures by using the `failOnSeverity` setting. Details can be found in the
+[gradle](../gettingstarted/gradle.mdx) and the [cli](../gettingstarted/cli.mdx) sections.
+
+## Console Reports
+
+Uncomment the reports you don't care about.
+
+```yaml
+console-reports:
+  active: true
+  exclude:
+  #  - 'ProjectStatisticsReport'
+  #  - 'ComplexityReport'
+  #  - 'NotificationReport'
+  #  - 'FindingsReport'
+  #  - 'FileBasedFindingsReport'
+  #  - 'LiteFindingsReport'
+```
+
+**ProjectStatisticsReport** contains metrics and statistics concerning the analyzed project sorted by priority.
+
+**ComplexityReport** contains metrics concerning the analyzed code. 
+For instance the source lines of code and the McCabe complexity are calculated.
+
+**NotificationReport** contains notifications reported by the detekt analyzer similar to push notifications. 
+It's simply a way of alerting users to information that they have opted-in to.
+
+**FindingsReport** contains all rule violations in a list format grouped by ruleset.
+
+**FileBasedFindingsReport** is similar to the FindingsReport shown above. 
+The rule violations are grouped by file location.
+
+## Output Reports
+
+Uncomment the reports you don't care about. The detailed description can be found in [reporting](reporting.md).
+
+```yaml
+output-reports:
+  active: true
+  exclude:
+  #  - 'HtmlOutputReport'
+  #  - 'XmlOutputReport'
+  #  - 'sarif'
+  #  - 'MdOutputReport'
+```
+
+
+## Processors
+
+Count processors are used to calculate project metrics.
+For example, when all count processors are enabled, a detekt html report might look like this:
+
+![Processor metrics in html report](/img/tutorial/processor_metrics_in_html_report.png)
+
+The `'DetektProgressListener'` processor shows a progress indicator in stdout while a detekt process is running.
+
+Uncomment the processors you don't care about.
+
+```yaml
+processors:
+    active: true
+    exclude:
+        - 'DetektProgressListener'
+        # - 'KtFileCountProcessor'
+        # - 'PackageCountProcessor'
+        # - 'ClassCountProcessor'
+        # - 'FunctionCountProcessor'
+        # - 'PropertyCountProcessor'
+        # - 'ProjectComplexityProcessor'
+        # - 'ProjectCognitiveComplexityProcessor'
+        # - 'ProjectLLOCProcessor'
+        # - 'ProjectCLOCProcessor'
+        # - 'ProjectLOCProcessor'
+        # - 'ProjectSLOCProcessor'
+        # - 'LicenseHeaderLoaderExtension'
+```
+
+## Config JSON Schema
+
+A JSON Schema for the config file is available on: [json.schemastore.org/detekt-1.22.0.json](https://json.schemastore.org/detekt-1.22.0.json).
+
+You can configure your IDE (e.g. IntelliJ or Android Studio have built-in support)
+to use that schema to give you **autocompletion** capabilities on your config file.
+More details on the IntelliJ support are available
+[on this page](https://www.jetbrains.com/help/ruby/yaml.html#remote_json).
+
+![JSON Schema validator on IntelliJ](/img/tutorial/json_schema_validator_intellij.png)
+
+The JSON Schema is currently not automatically generated. It can be updated manually [on this repository](https://github.com/SchemaStore/schemastore).

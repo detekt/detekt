@@ -2,7 +2,7 @@ package dev.detekt.core
 
 import dev.detekt.api.Config
 import dev.detekt.api.Configuration
-import dev.detekt.api.RequiresFullAnalysis
+import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.api.RuleInstance
 import dev.detekt.api.RuleSet
@@ -59,7 +59,7 @@ class RuleDescriptorKtTest {
                         active: true
                       AnotherRule:
                         active: false
-                      RequiresFullAnalysisRule:
+                      RequiresAnalysisApiRule:
                         active: true
                       UnknownRule:
                         active: true
@@ -73,7 +73,7 @@ class RuleDescriptorKtTest {
                 RuleDescriptionMatcher(::OneRule, configActive, true),
                 RuleDescriptionMatcher(::OneRule, configActive, true, "OneRule/foo"),
                 RuleDescriptionMatcher(::AnotherRule, configInactive, false),
-                RuleDescriptionMatcher(::RequiresFullAnalysisRule, configActive, true),
+                RuleDescriptionMatcher(::RequiresAnalysisApiRule, configActive, true),
             )
         assertThat(stringBuilder.toString()).isEmpty()
     }
@@ -93,7 +93,7 @@ class RuleDescriptorKtTest {
                         active: true
                       AnotherRule:
                         active: false
-                      RequiresFullAnalysisRule:
+                      RequiresAnalysisApiRule:
                         active: true
                       UnknownRule:
                         active: true
@@ -107,7 +107,7 @@ class RuleDescriptorKtTest {
                 RuleDescriptionMatcher(::OneRule, configActive + ("aConfiguration" to "abc"), true),
                 RuleDescriptionMatcher(::OneRule, configActive, true, "OneRule/foo"),
                 RuleDescriptionMatcher(::AnotherRule, configInactive, false),
-                RuleDescriptionMatcher(::RequiresFullAnalysisRule, configActive, true),
+                RuleDescriptionMatcher(::RequiresAnalysisApiRule, configActive, true),
             )
         assertThat(stringBuilder.toString()).isEmpty()
     }
@@ -126,7 +126,7 @@ class RuleDescriptorKtTest {
                         active: true
                       AnotherRule:
                         active: true
-                      RequiresFullAnalysisRule:
+                      RequiresAnalysisApiRule:
                         active: true
                       UnknownRule:
                         active: true
@@ -140,10 +140,10 @@ class RuleDescriptorKtTest {
                 RuleDescriptionMatcher(::OneRule, configActive, true),
                 RuleDescriptionMatcher(::OneRule, configActive, true, "OneRule/foo"),
                 RuleDescriptionMatcher(::AnotherRule, configActive, true),
-                RuleDescriptionMatcher(::RequiresFullAnalysisRule, configActive, false),
+                RuleDescriptionMatcher(::RequiresAnalysisApiRule, configActive, false),
             )
         assertThat(stringBuilder.toString())
-            .isEqualTo("The rule 'RequiresFullAnalysisRule' requires type resolution but it was run without it.\n")
+            .isEqualTo("The rule 'RequiresAnalysisApiRule' requires type resolution but it was run without it.\n")
     }
 
     @Test
@@ -154,7 +154,7 @@ class RuleDescriptorKtTest {
             yamlConfigFromContent(
                 """
                     custom:
-                      RequiresFullAnalysisRule:
+                      RequiresAnalysisApiRule:
                         active: false
                 """.trimIndent()
             ),
@@ -163,7 +163,7 @@ class RuleDescriptorKtTest {
 
         assertThat(rules)
             .satisfiesExactlyInAnyOrder(
-                RuleDescriptionMatcher(::RequiresFullAnalysisRule, configInactive, false),
+                RuleDescriptionMatcher(::RequiresAnalysisApiRule, configInactive, false),
             )
         assertThat(stringBuilder.toString()).isEmpty()
     }
@@ -184,7 +184,7 @@ class RuleDescriptorKtTest {
                       AnotherRule:
                         active: true
                         maxLine: 30
-                      RequiresFullAnalysisRule:
+                      RequiresAnalysisApiRule:
                         active: true
                 """.trimIndent()
             ),
@@ -196,7 +196,7 @@ class RuleDescriptorKtTest {
                 RuleDescriptionMatcher(::OneRule, configActive, false),
                 RuleDescriptionMatcher(::OneRule, configActive, false, "OneRule/foo"),
                 RuleDescriptionMatcher(::AnotherRule, configActive + ("maxLine" to 30), false),
-                RuleDescriptionMatcher(::RequiresFullAnalysisRule, configActive, false),
+                RuleDescriptionMatcher(::RequiresAnalysisApiRule, configActive, false),
             )
         assertThat(stringBuilder.toString()).isEmpty()
     }
@@ -404,12 +404,12 @@ private fun createRuleInstance(id: String, active: Boolean, url: String?, severi
 
 private class TestDefaultRuleSetProvider : DefaultRuleSetProvider {
     override val ruleSetId = RuleSet.Id("custom")
-    override fun instance() = RuleSet(ruleSetId, listOf(::OneRule, ::AnotherRule, ::RequiresFullAnalysisRule))
+    override fun instance() = RuleSet(ruleSetId, listOf(::OneRule, ::AnotherRule, ::RequiresAnalysisApiRule))
 }
 
 private class TestCustomRuleSetProvider : RuleSetProvider {
     override val ruleSetId = RuleSet.Id("custom")
-    override fun instance() = RuleSet(ruleSetId, listOf(::OneRule, ::AnotherRule, ::RequiresFullAnalysisRule))
+    override fun instance() = RuleSet(ruleSetId, listOf(::OneRule, ::AnotherRule, ::RequiresAnalysisApiRule))
 }
 
 private class OneRule(config: Config) : Rule(config, "OneRuleDescription") {
@@ -420,6 +420,6 @@ private class OneRule(config: Config) : Rule(config, "OneRuleDescription") {
 
 private class AnotherRule(config: Config) : Rule(config, "AnotherRuleDescription", URI("https://example.org/"))
 
-private class RequiresFullAnalysisRule(
+private class RequiresAnalysisApiRule(
     config: Config,
-) : Rule(config, "RequiresFullAnalysisRuleDescription"), RequiresFullAnalysis
+) : Rule(config, "RequiresAnalysisApiRuleDescription"), RequiresAnalysisApi

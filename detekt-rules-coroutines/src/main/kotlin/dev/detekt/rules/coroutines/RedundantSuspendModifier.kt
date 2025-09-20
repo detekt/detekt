@@ -17,6 +17,7 @@ import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
 import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.lexer.KtTokens
+import org.jetbrains.kotlin.psi.KtArrayAccessExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtForExpression
@@ -75,17 +76,12 @@ class RedundantSuspendModifier(config: Config) :
     }
 
     private fun KtExpression.isValidCandidateExpression(): Boolean =
-        when (this) {
-            is KtOperationReferenceExpression, is KtForExpression, is KtProperty, is KtNameReferenceExpression -> true
-            else -> {
-                val parent = parent
-                if (parent is KtCallExpression && parent.calleeExpression == this) {
-                    true
-                } else {
-                    this is KtCallExpression && this.calleeExpression is KtCallExpression
-                }
-            }
-        }
+        this is KtOperationReferenceExpression ||
+            this is KtForExpression ||
+            this is KtProperty ||
+            this is KtNameReferenceExpression ||
+            this is KtCallExpression ||
+            this is KtArrayAccessExpression // for get() operator function calls
 
     private fun KtExpression.hasSuspendCalls(): Boolean {
         if (!isValidCandidateExpression()) return false

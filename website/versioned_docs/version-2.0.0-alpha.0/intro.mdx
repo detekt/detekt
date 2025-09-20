@@ -1,0 +1,93 @@
+---
+title: "Welcome"
+keywords: [detekt, static, analysis, code, kotlin]
+sidebar_position: 1
+summary:
+---
+
+![detekt logo](/img/logo.svg "detekt logo")
+![detekt in action](/img/tutorial/detekt_in_action.png "detekt in action")
+
+### Features
+
+- Code smell analysis for your [Kotlin](https://kotlinlang.org/) projects.
+- Highly configurable rule sets.
+- Generate baselines to suppress existing issues for legacy projects while making sure no new issues are introduced.
+- Suppress issues in source files using `@Suppress` annotations.
+- Support for different report formats: HTML, Markdown, [SARIF](https://sarifweb.azurewebsites.net/), XML (Checkstyle) and custom reports.
+- [Extend detekt](introduction/extensions.md) with custom rule sets and reports.
+- Complexity reports based on lines of code, cyclomatic complexity and number of code smells.
+- First party integration with Gradle with our [Gradle plugin](gettingstarted/gradle.mdx).
+- A community of [third party plugins](https://github.com/topics/detekt-plugin) that adds more rules and features to detekt.
+
+### Quick Start with Gradle
+
+Apply the following configuration to your Gradle project build file:
+
+```kotlin
+plugins {
+    id("io.gitlab.arturbosch.detekt") version("[detekt_version]")
+}
+
+repositories {
+    mavenCentral()
+}
+```
+
+You can find what is the **latest version of detekt** in the [release notes](/changelog).
+
+Once you have set up detekt in your project, simply run `gradlew detekt`.
+
+To change the default behaviour of detekt rules, first generate yourself a detekt configuration file by running
+`gradlew detektGenerateConfig` task and applying any changes to the generated file.
+
+Don't forget to reference the newly generated config inside the `detekt { }` closure. Optionally, it is possible to
+slim down the configuration file to only the changes from the default configuration, by applying the
+`buildUponDefaultConfig` option:
+
+```kotlin
+detekt {
+    toolVersion = "[detekt_version]"
+    config.setFrom(file("config/detekt/detekt.yml"))
+    buildUponDefaultConfig = true
+}
+```
+
+To enable/disable detekt reports use the `withType` method to set defaults for all detekt tasks at once:
+
+```kotlin
+// Kotlin DSL
+tasks.withType<Detekt>().configureEach {
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+        sarif.required.set(true)
+        md.required.set(true)
+    }
+}
+```
+
+```groovy
+// Groovy DSL
+tasks.withType(Detekt).configureEach {
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+        sarif.required.set(true)
+        md.required.set(true)
+    }
+}
+```
+
+See [reporting](introduction/reporting.md) docs for more details on configuring reports.
+
+### Adding more rule sets
+
+detekt itself provides a wrapper over [ktlint](https://github.com/pinterest/ktlint) as the `ktlint` rule set
+which can be easily added to the Gradle configuration:
+
+```gradle
+dependencies {
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-rules-ktlint-wrapper:[detekt_version]")
+}
+```

@@ -12,13 +12,13 @@ plugins {
     id("java-gradle-plugin")
     id("java-test-fixtures")
     id("idea")
-    id("com.gradle.plugin-publish") version "1.3.1"
+    id("com.gradle.plugin-publish") version "2.0.0"
     // We use this published version of the detekt plugin to self analyse this project.
     id("io.gitlab.arturbosch.detekt") version "1.23.8"
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.18.1"
     id("org.jetbrains.dokka") version "2.0.0"
     id("signing")
-    id("com.github.gmazzo.buildconfig") version "5.6.7"
+    id("com.github.gmazzo.buildconfig") version "5.6.8"
     id("io.github.gradle-nexus.publish-plugin") version "2.0.0"
 }
 
@@ -149,6 +149,8 @@ dependencies {
     compileOnly(libs.android.gradleApi)
     compileOnly(libs.kotlin.gradle.plugin)
     compileOnly(libs.kotlin.gradlePluginApi)
+    compileOnly(libs.jetbrains.annotations)
+
     implementation(libs.sarif4k)
     testFixturesCompileOnly(libs.jetbrains.annotations)
 
@@ -171,19 +173,23 @@ gradlePlugin {
     plugins {
         create("detektBasePlugin") {
             id = "dev.detekt.gradle.base"
+            displayName = "Static code analysis for Kotlin v2 - Base Plugin"
+            description = "Static code analysis for Kotlin v2 - Base Plugin"
             implementationClass = "dev.detekt.gradle.plugin.DetektBasePlugin"
         }
         create("detektPlugin") {
             id = "dev.detekt"
+            displayName = "Static code analysis for Kotlin v2"
+            description = "Static code analysis for Kotlin v2"
             implementationClass = "dev.detekt.gradle.plugin.DetektPlugin"
         }
         create("detektCompilerPlugin") {
             id = "dev.detekt.gradle.compiler-plugin"
+            displayName = "Static code analysis for Kotlin v2 - Compiler Plugin"
+            description = "Static code analysis for Kotlin v2 - Compiler Plugin"
             implementationClass = "dev.detekt.gradle.plugin.DetektKotlinCompilerPlugin"
         }
         configureEach {
-            displayName = "Static code analysis for Kotlin"
-            description = "Static code analysis for Kotlin"
             tags = listOf("kotlin", "detekt", "code-analysis", "linter", "codesmells", "android")
         }
     }
@@ -252,10 +258,6 @@ tasks {
 
     ideaModule {
         notCompatibleWithConfigurationCache("https://github.com/gradle/gradle/issues/13480")
-    }
-
-    publishPlugins {
-        notCompatibleWithConfigurationCache("https://github.com/gradle/gradle/issues/21283")
     }
 }
 

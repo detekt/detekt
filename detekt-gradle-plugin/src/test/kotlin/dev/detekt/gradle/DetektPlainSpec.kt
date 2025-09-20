@@ -73,7 +73,7 @@ class DetektPlainSpec {
             val argumentString = detektTask.arguments.joinToString(" ")
 
             assertThat(argumentString).containsPattern("""--baseline \S*[/\\]detekt-baseline.xml """)
-            assertThat(argumentString).contains("--report xml:")
+            assertThat(argumentString).contains("--report checkstyle:")
             assertThat(argumentString).contains("--report sarif:")
             assertThat(argumentString).doesNotContain("--report md:")
             assertThat(argumentString).doesNotContain("--classpath")

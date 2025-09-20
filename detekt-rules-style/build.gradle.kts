@@ -11,6 +11,7 @@ dependencies {
     testImplementation(projects.detektApi)
     testImplementation(projects.detektTest)
     testImplementation(projects.detektTestAssertj)
+    testImplementation(projects.detektTestJunit)
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.assertj.core)
 }

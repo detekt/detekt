@@ -33,7 +33,7 @@ dependencies {
     runtimeOnly(projects.detektReportHtml)
     runtimeOnly(projects.detektReportMd)
     runtimeOnly(projects.detektReportSarif)
-    runtimeOnly(projects.detektReportXml)
+    runtimeOnly(projects.detektReportCheckstyle)
 
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.assertj.core)
@@ -56,7 +56,11 @@ publishing {
 
 tasks {
     shadowJar {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         mergeServiceFiles()
+        filesMatching("META-INF/services/**") {
+            duplicatesStrategy = DuplicatesStrategy.INCLUDE
+        }
     }
 
     shadowDistZip {
