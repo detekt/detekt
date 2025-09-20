@@ -14,6 +14,7 @@ import dev.detekt.report.xml.CheckstyleOutputReport
 import dev.detekt.test.utils.StringPrintStream
 import dev.detekt.test.utils.createTempFileForTest
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatCode
 import org.junit.jupiter.api.Test
 
 class OutputFacadeSpec {
@@ -55,5 +56,66 @@ class OutputFacadeSpec {
         assertThat(xmlOutputPath).isNotEmptyFile()
         assertThat(htmlOutputPath).isNotEmptyFile()
         assertThat(mdOutputPath).isNotEmptyFile()
+    }
+
+    @Test
+    fun `two reports can't have the same path`() {
+        val printStream = StringPrintStream()
+        val defaultResult = TestDetektion(
+            createIssue(
+                createRuleInstance(ruleSetId = "Key"),
+                createIssueEntity(createIssueLocation("TestFile.kt"))
+            ),
+        )
+        val htmlOutputPath = createTempFileForTest("detekt", ".html")
+        val mdOutputPath = createTempFileForTest("detekt", ".md")
+
+        val spec = createNullLoggingSpec {
+            reports {
+                report { "html" to htmlOutputPath }
+                report { "checkstyle" to htmlOutputPath }
+                report { "md" to mdOutputPath }
+            }
+            logging {
+                outputChannel = printStream
+            }
+        }
+
+        assertThatCode {
+            spec.withSettings { OutputFacade(this).run(defaultResult) }
+        }
+            .isInstanceOf(IllegalStateException::class.java)
+            .hasMessage("The path $htmlOutputPath is defined in multiple reports: [html, checkstyle]")
+    }
+
+    @Test
+    fun `three reports can't have the same path`() {
+        val printStream = StringPrintStream()
+        val defaultResult = TestDetektion(
+            createIssue(
+                createRuleInstance(ruleSetId = "Key"),
+                createIssueEntity(createIssueLocation("TestFile.kt"))
+            ),
+        )
+        val htmlOutputPath = createTempFileForTest("detekt", ".html")
+        val sarifOutputPath = createTempFileForTest("detekt", ".sarif")
+
+        val spec = createNullLoggingSpec {
+            reports {
+                report { "html" to htmlOutputPath }
+                report { "checkstyle" to htmlOutputPath }
+                report { "md" to htmlOutputPath }
+                report { "sarif" to sarifOutputPath }
+            }
+            logging {
+                outputChannel = printStream
+            }
+        }
+
+        assertThatCode {
+            spec.withSettings { OutputFacade(this).run(defaultResult) }
+        }
+            .isInstanceOf(IllegalStateException::class.java)
+            .hasMessage("The path $htmlOutputPath is defined in multiple reports: [html, checkstyle, md]")
     }
 }
