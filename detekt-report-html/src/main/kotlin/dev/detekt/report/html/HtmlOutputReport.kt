@@ -48,7 +48,7 @@ private const val PLACEHOLDER_DATE = "@@@date@@@"
  * Contains rule violations and metrics formatted in a human friendly way, so that it can be inspected in a web browser.
  * See: https://detekt.dev/configurations.html#output-reports
  */
-class HtmlOutputReport : BuiltInOutputReport, OutputReport() {
+class HtmlOutputReport : BuiltInOutputReport, OutputReport {
 
     override val id: String = "HtmlOutputReport"
     override val ending = "html"

@@ -14,7 +14,7 @@ import io.github.detekt.sarif4k.Version
 
 const val SRCROOT = "%SRCROOT%"
 
-class SarifOutputReport : BuiltInOutputReport, OutputReport() {
+class SarifOutputReport : BuiltInOutputReport, OutputReport {
 
     override val ending: String = "sarif"
     override val id: String = "sarif"
