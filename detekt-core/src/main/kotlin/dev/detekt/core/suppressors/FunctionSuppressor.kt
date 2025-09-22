@@ -2,6 +2,7 @@ package dev.detekt.core.suppressors
 
 import dev.detekt.api.Rule
 import dev.detekt.psi.FunctionMatcher
+import dev.detekt.tooling.api.AnalysisMode
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
@@ -19,12 +20,12 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  * *Note:* you need to write all the types with fully qualified names e.g. `org.example.foo(kotlin.String)`. It
  * is important to add `kotlin.String`. Just adding `String` will not work.
  */
-internal fun functionSuppressorFactory(rule: Rule): Suppressor? {
+internal fun functionSuppressorFactory(rule: Rule, analysisMode: AnalysisMode): Suppressor? {
     val functionMatchers = rule.config.valueOrDefault("ignoreFunction", emptyList<String>())
         .map(FunctionMatcher::fromFunctionSignature)
     return if (functionMatchers.isNotEmpty()) {
         Suppressor { finding ->
-            functionSuppressor(finding.entity.ktElement, functionMatchers)
+            functionSuppressor(finding.entity.ktElement, functionMatchers, analysisMode)
         }
     } else {
         null
@@ -34,11 +35,12 @@ internal fun functionSuppressorFactory(rule: Rule): Suppressor? {
 private fun functionSuppressor(
     element: KtElement,
     functionMatchers: List<FunctionMatcher>,
-): Boolean = element.isInFunctionNamed(functionMatchers)
+    analysisMode: AnalysisMode,
+): Boolean = element.isInFunctionNamed(functionMatchers, analysisMode == AnalysisMode.full)
 
-private fun KtElement.isInFunctionNamed(functionMatchers: List<FunctionMatcher>): Boolean =
-    if (this is KtNamedFunction && functionMatchers.any { it.match(this) }) {
+private fun KtElement.isInFunctionNamed(functionMatchers: List<FunctionMatcher>, fullAnalysis: Boolean): Boolean =
+    if (this is KtNamedFunction && functionMatchers.any { it.match(this, fullAnalysis) }) {
         true
     } else {
-        getStrictParentOfType<KtNamedFunction>()?.isInFunctionNamed(functionMatchers) ?: false
+        getStrictParentOfType<KtNamedFunction>()?.isInFunctionNamed(functionMatchers, fullAnalysis) ?: false
     }

@@ -17,7 +17,7 @@ sealed class FunctionMatcher {
 
     abstract fun match(callableDescriptor: CallableDescriptor): Boolean
 
-    abstract fun match(function: KtNamedFunction): Boolean
+    abstract fun match(function: KtNamedFunction, fullAnalysis: Boolean): Boolean
 
     abstract fun match(symbol: KaCallableSymbol): Boolean
 
@@ -27,7 +27,7 @@ sealed class FunctionMatcher {
         override fun match(callableDescriptor: CallableDescriptor): Boolean =
             callableDescriptor.fqNameSafe.asString() == fullyQualifiedName
 
-        override fun match(function: KtNamedFunction): Boolean =
+        override fun match(function: KtNamedFunction, fullAnalysis: Boolean): Boolean =
             function.name == fullyQualifiedName ||
                 function.fqName?.asString() == fullyQualifiedName
 
@@ -60,7 +60,8 @@ sealed class FunctionMatcher {
             return encounteredParamTypes == parameters
         }
 
-        override fun match(function: KtNamedFunction): Boolean {
+        override fun match(function: KtNamedFunction, fullAnalysis: Boolean): Boolean {
+            if (!fullAnalysis) return false
             if (function.name != fullyQualifiedName && function.fqName?.asString() != fullyQualifiedName) return false
 
             val encounteredParameters = buildList {

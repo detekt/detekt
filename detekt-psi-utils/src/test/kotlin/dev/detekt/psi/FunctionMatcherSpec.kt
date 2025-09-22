@@ -106,7 +106,7 @@ class FunctionMatcherSpec(private val env: KotlinEnvironmentContainer) {
         fun `When toString`(code: String, result: Boolean) {
             val function = buildKtFunction(env, code)
             val methodSignature = FunctionMatcher.fromFunctionSignature("toString")
-            assertThat(methodSignature.match(function)).isEqualTo(result)
+            assertThat(methodSignature.match(function, fullAnalysis = true)).isEqualTo(result)
         }
 
         @DisplayName("When toString")
@@ -124,7 +124,7 @@ class FunctionMatcherSpec(private val env: KotlinEnvironmentContainer) {
         fun `When toString without package`(code: String, result: Boolean) {
             val function = buildKtFunction(env, code, false)
             val methodSignature = FunctionMatcher.fromFunctionSignature("toString")
-            assertThat(methodSignature.match(function)).isEqualTo(result)
+            assertThat(methodSignature.match(function, fullAnalysis = true)).isEqualTo(result)
         }
 
         @DisplayName("When toString()")
@@ -142,7 +142,7 @@ class FunctionMatcherSpec(private val env: KotlinEnvironmentContainer) {
         fun `When toString()`(code: String, result: Boolean) {
             val function = buildKtFunction(env, code)
             val methodSignature = FunctionMatcher.fromFunctionSignature("toString()")
-            assertThat(methodSignature.match(function)).isEqualTo(result)
+            assertThat(methodSignature.match(function, fullAnalysis = true)).isEqualTo(result)
         }
 
         @DisplayName("When toString(kotlin.String)")
@@ -160,7 +160,7 @@ class FunctionMatcherSpec(private val env: KotlinEnvironmentContainer) {
         fun `When toString(kotlin#String)`(code: String, result: Boolean) {
             val function = buildKtFunction(env, code)
             val methodSignature = FunctionMatcher.fromFunctionSignature("toString(kotlin.String)")
-            assertThat(methodSignature.match(function)).isEqualTo(result)
+            assertThat(methodSignature.match(function, fullAnalysis = true)).isEqualTo(result)
         }
 
         @DisplayName("When toString(vararg String)")
@@ -178,7 +178,7 @@ class FunctionMatcherSpec(private val env: KotlinEnvironmentContainer) {
         fun `When toString(vararg kotlin#String)`(code: String, result: Boolean) {
             val function = buildKtFunction(env, code)
             val methodSignature = FunctionMatcher.fromFunctionSignature("toString(vararg kotlin.String)")
-            assertThat(methodSignature.match(function)).isEqualTo(result)
+            assertThat(methodSignature.match(function, fullAnalysis = true)).isEqualTo(result)
         }
 
         @DisplayName("When toString(kotlin.Int)")
@@ -196,7 +196,7 @@ class FunctionMatcherSpec(private val env: KotlinEnvironmentContainer) {
         fun `When toString(kotlin#Int)`(code: String, result: Boolean) {
             val function = buildKtFunction(env, code)
             val methodSignature = FunctionMatcher.fromFunctionSignature("toString(kotlin.Int)")
-            assertThat(methodSignature.match(function)).isEqualTo(result)
+            assertThat(methodSignature.match(function, fullAnalysis = true)).isEqualTo(result)
         }
 
         @DisplayName("When toString(kotlin.String, kotlin.Int)")
@@ -214,7 +214,7 @@ class FunctionMatcherSpec(private val env: KotlinEnvironmentContainer) {
         fun `When toString(kotlin#String, kotlin#Int)`(code: String, result: Boolean) {
             val function = buildKtFunction(env, code)
             val methodSignature = FunctionMatcher.fromFunctionSignature("toString(kotlin.String, kotlin.Int)")
-            assertThat(methodSignature.match(function)).isEqualTo(result)
+            assertThat(methodSignature.match(function, fullAnalysis = true)).isEqualTo(result)
         }
 
         @DisplayName("When toString(String)")
@@ -232,7 +232,7 @@ class FunctionMatcherSpec(private val env: KotlinEnvironmentContainer) {
         fun `When toString(String)`(code: String, result: Boolean) {
             val function = buildKtFunction(env, code)
             val methodSignature = FunctionMatcher.fromFunctionSignature("toString(String)")
-            assertThat(methodSignature.match(function)).isEqualTo(result)
+            assertThat(methodSignature.match(function, fullAnalysis = true)).isEqualTo(result)
         }
 
         @DisplayName("When toString(String)")
@@ -250,7 +250,7 @@ class FunctionMatcherSpec(private val env: KotlinEnvironmentContainer) {
         fun `When toString(String) without package`(code: String, result: Boolean) {
             val function = buildKtFunction(env, code, false)
             val methodSignature = FunctionMatcher.fromFunctionSignature("toString(String)")
-            assertThat(methodSignature.match(function)).isEqualTo(result)
+            assertThat(methodSignature.match(function, fullAnalysis = true)).isEqualTo(result)
         }
 
         @DisplayName("When lambdas foo(() -> kotlin.String)")
@@ -265,7 +265,7 @@ class FunctionMatcherSpec(private val env: KotlinEnvironmentContainer) {
         fun `When foo(() - kotlin#String)`(code: String, result: Boolean) {
             val function = buildKtFunction(env, code)
             val methodSignature = FunctionMatcher.fromFunctionSignature("foo(() -> kotlin.String)")
-            assertThat(methodSignature.match(function)).isEqualTo(result)
+            assertThat(methodSignature.match(function, fullAnalysis = true)).isEqualTo(result)
         }
 
         @DisplayName("When lambdas foo((kotlin.String) -> Unit)")
@@ -280,7 +280,7 @@ class FunctionMatcherSpec(private val env: KotlinEnvironmentContainer) {
         fun `When foo((kotlin#String) - Unit)`(code: String, result: Boolean) {
             val function = buildKtFunction(env, code)
             val methodSignature = FunctionMatcher.fromFunctionSignature("foo((kotlin.String) -> Unit)")
-            assertThat(methodSignature.match(function)).isEqualTo(result)
+            assertThat(methodSignature.match(function, fullAnalysis = true)).isEqualTo(result)
         }
 
         @DisplayName("When extension functions foo(kotlin.String)")
@@ -295,7 +295,7 @@ class FunctionMatcherSpec(private val env: KotlinEnvironmentContainer) {
         fun `When foo(kotlin#String)`(code: String, result: Boolean) {
             val function = buildKtFunction(env, code)
             val methodSignature = FunctionMatcher.fromFunctionSignature("foo(kotlin.String)")
-            assertThat(methodSignature.match(function)).isEqualTo(result)
+            assertThat(methodSignature.match(function, fullAnalysis = true)).isEqualTo(result)
         }
 
         @DisplayName("When extension functions foo(kotlin.String, kotlin.Int)")
@@ -310,7 +310,7 @@ class FunctionMatcherSpec(private val env: KotlinEnvironmentContainer) {
         fun `When foo(kotlin#String, kotlin#Int)`(code: String, result: Boolean) {
             val function = buildKtFunction(env, code)
             val methodSignature = FunctionMatcher.fromFunctionSignature("foo(kotlin.String, kotlin.Int)")
-            assertThat(methodSignature.match(function)).isEqualTo(result)
+            assertThat(methodSignature.match(function, fullAnalysis = true)).isEqualTo(result)
         }
 
         @DisplayName("When generics foo(T, U)")
@@ -325,7 +325,7 @@ class FunctionMatcherSpec(private val env: KotlinEnvironmentContainer) {
         fun `When foo(T, U)`(code: String, result: Boolean) {
             val function = buildKtFunction(env, code)
             val methodSignature = FunctionMatcher.fromFunctionSignature("foo(T, U)")
-            assertThat(methodSignature.match(function)).isEqualTo(result)
+            assertThat(methodSignature.match(function, fullAnalysis = true)).isEqualTo(result)
         }
 
         @ParameterizedTest
@@ -369,7 +369,7 @@ class FunctionMatcherSpec(private val env: KotlinEnvironmentContainer) {
                 .findFunctionByName("bar") as KtNamedFunction
 
             val methodSignature = FunctionMatcher.fromFunctionSignature(pattern)
-            assertThat(methodSignature.match(function)).isEqualTo(result)
+            assertThat(methodSignature.match(function, fullAnalysis = true)).isEqualTo(result)
         }
     }
 }
