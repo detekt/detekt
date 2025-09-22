@@ -255,10 +255,6 @@ tasks {
             testing.suites.named("functionalTestMinSupportedGradle"),
         )
     }
-
-    ideaModule {
-        notCompatibleWithConfigurationCache("https://github.com/gradle/gradle/issues/13480")
-    }
 }
 
 // Skip publishing of test fixture API & runtime variants
@@ -282,11 +278,5 @@ dependencyAnalysis {
             includeDependency("org.junit.jupiter:junit-jupiter-api")
             includeDependency("org.junit.jupiter:junit-jupiter-params")
         }
-    }
-}
-
-tasks {
-    withType<PublishToMavenRepository>().configureEach {
-        notCompatibleWithConfigurationCache("https://github.com/detekt/detekt/issues/8484")
     }
 }
