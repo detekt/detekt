@@ -4,10 +4,11 @@ plugins {
 }
 
 dependencies {
+    api(libs.kotlin.compiler)
+
     implementation(projects.detektKotlinAnalysisApi)
     implementation(projects.detektKotlinAnalysisApiStandalone)
     implementation(projects.detektParser)
-    implementation(libs.kotlin.scriptingJvm)
     implementation(libs.kotlinx.coroutinesCore)
     implementation(libs.kotlinx.coroutinesTest)
 

@@ -9,5 +9,4 @@ dependencies {
     implementation(projects.detektKotlinAnalysisApiStandalone)
     implementation(libs.kotlin.compiler)
     implementation(libs.kotlin.scriptingJvm)
-    implementation(libs.kotlinx.coroutinesCore)
 }

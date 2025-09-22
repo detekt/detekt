@@ -18,7 +18,7 @@ dependencies {
     testImplementation(libs.assertj.core)
 
     testFixturesApi(libs.kotlin.compiler)
-    testFixturesApi(projects.detektTestUtils)
+    testFixturesImplementation(projects.detektTestUtils)
 }
 
 detekt {
