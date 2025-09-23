@@ -14,8 +14,6 @@ import dev.detekt.core.reporting.OutputFacade
 import dev.detekt.core.rules.createRuleProviders
 import dev.detekt.core.util.PerformanceMonitor.Phase
 import dev.detekt.parser.DetektMessageCollector
-import dev.detekt.parser.GenerateBindingContextOptions
-import dev.detekt.parser.generateBindingContext
 import dev.detekt.tooling.api.AnalysisMode
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.components.KaDiagnosticCheckerFilter
@@ -24,13 +22,12 @@ import org.jetbrains.kotlin.cli.common.messages.CompilerMessageLocationWithRange
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity
 import org.jetbrains.kotlin.diagnostics.DiagnosticUtils.getLineAndColumnRangeInPsiFile
 import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.resolve.BindingContext
 
 internal interface Lifecycle {
 
     val baselineConfig: Config
     val settings: ProcessingSettings
-    val bindingProvider: (files: List<KtFile>) -> BindingContext
+    val bindingProvider: (files: List<KtFile>) -> Unit
     val processorsProvider: () -> List<FileProcessListener>
     val ruleSetsProvider: () -> List<RuleSetProvider>
 
@@ -39,10 +36,11 @@ internal interface Lifecycle {
     fun analyze(): Detektion {
         measure(Phase.ValidateConfig) { checkConfiguration(settings, baselineConfig) }
         val filesToAnalyze = measure(Phase.Parsing) { settings.ktFiles }
-        val bindingContext = measure(Phase.Binding) { bindingProvider.invoke(filesToAnalyze) }
+        measure(Phase.Binding) { bindingProvider.invoke(filesToAnalyze) }
+        val analysisMode = settings.spec.projectSpec.analysisMode
         val (processors, rules) = measure(Phase.LoadingExtensions) {
             val rules = getRules(
-                fullAnalysis = bindingContext != BindingContext.EMPTY,
+                analysisMode = analysisMode,
                 ruleSetProviders = ruleSetsProvider.invoke(),
                 config = settings.config,
                 log = settings::debug,
@@ -51,7 +49,7 @@ internal interface Lifecycle {
         }
 
         val result = measure(Phase.Analyzer) {
-            val analyzer = Analyzer(settings, rules.filter { it.ruleInstance.active }, processors, bindingContext)
+            val analyzer = Analyzer(settings, rules.filter { it.ruleInstance.active }, processors, analysisMode)
             processors.forEach { it.onStart(filesToAnalyze) }
             val issues = analyzer.run(filesToAnalyze)
             val detektion = Detektion(issues, rules.map { it.ruleInstance })
@@ -69,7 +67,7 @@ internal interface Lifecycle {
 internal class DefaultLifecycle(
     override val baselineConfig: Config,
     override val settings: ProcessingSettings,
-    override val bindingProvider: (files: List<KtFile>) -> BindingContext =
+    override val bindingProvider: (files: List<KtFile>) -> Unit =
         {
             if (settings.spec.projectSpec.analysisMode == AnalysisMode.full) {
                 val collector = DetektMessageCollector(
@@ -96,26 +94,13 @@ internal class DefaultLifecycle(
                             collector.report(
                                 diagnostic.severity.toCompilerMessageSeverity(),
                                 diagnostic.defaultMessage,
-                                location
+                                location,
                             )
                         }
                     }
                 }
 
-                collector.printIssuesCountIfAny(k2Mode = true)
-
-                generateBindingContext(
-                    project = settings.project,
-                    configuration = settings.configuration,
-                    files = it,
-                    options = GenerateBindingContextOptions(
-                        debugPrinter = settings::debug,
-                        warningPrinter = settings::info,
-                        isDebugEnabled = settings.spec.loggingSpec.debug,
-                    ),
-                )
-            } else {
-                BindingContext.EMPTY
+                collector.printIssuesCountIfAny()
             }
         },
     override val processorsProvider: () -> List<FileProcessListener> =

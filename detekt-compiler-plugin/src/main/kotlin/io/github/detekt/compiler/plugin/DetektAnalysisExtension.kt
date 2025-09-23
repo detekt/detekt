@@ -36,7 +36,7 @@ class DetektAnalysisExtension(
         }
         log.info("Running detekt on module '${module.name.asString()}'")
         excludedFiles.forEach { log.info("File excluded by filter: ${it.virtualFilePath}") }
-        DetektService(log, spec).analyze(includedFiles, bindingTrace.bindingContext)
+        DetektService(log, spec).analyze(includedFiles)
         return null
     }
 }
