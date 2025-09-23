@@ -20,8 +20,8 @@ annotation class KotlinCoreEnvironmentTest(
 internal class KotlinEnvironmentResolver : ParameterResolver {
     private val ExtensionContext.env: KotlinEnvironmentContainer
         get() = getStore(NAMESPACE).getOrComputeIfAbsent(
-            WRAPPER_KEY,
-            { _ -> createNewWrapper(this) },
+            ENV_KEY,
+            { _ -> createNewContainer(this) },
             KotlinEnvironmentContainer::class.java,
         )
 
@@ -31,7 +31,7 @@ internal class KotlinEnvironmentResolver : ParameterResolver {
     override fun resolveParameter(parameterContext: ParameterContext, extensionContext: ExtensionContext): Any =
         extensionContext.env
 
-    private fun createNewWrapper(extensionContext: ExtensionContext): KotlinEnvironmentContainer =
+    private fun createNewContainer(extensionContext: ExtensionContext): KotlinEnvironmentContainer =
         createEnvironment(
             additionalRootPaths = checkNotNull(
                 classpathFromClassloader(Thread.currentThread().contextClassLoader)
@@ -41,7 +41,7 @@ internal class KotlinEnvironmentResolver : ParameterResolver {
 
     companion object {
         private val NAMESPACE = ExtensionContext.Namespace.create("KotlinCoreEnvironment")
-        private const val WRAPPER_KEY = "wrapper"
+        private const val ENV_KEY = "env"
         private fun ExtensionContext.additionalJavaSourcePaths(): List<File> {
             val annotation = requiredTestClass.annotations
                 .find { it is KotlinCoreEnvironmentTest } as? KotlinCoreEnvironmentTest ?: return emptyList()
