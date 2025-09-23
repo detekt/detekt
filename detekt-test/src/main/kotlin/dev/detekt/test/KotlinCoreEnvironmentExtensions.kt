@@ -24,6 +24,7 @@ fun KotlinEnvironmentContainer.createBindingContext(files: List<KtFile>): Bindin
         configuration.languageVersionSettings
     )
 
+    @Suppress("DEPRECATION")
     return TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration(
         project,
         files,
