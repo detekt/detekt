@@ -5,7 +5,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     kotlin("jvm") // Plugin can be removed when KspLibraryModuleBuilder is retired. Blocked by https://youtrack.jetbrains.com/issue/KT-71706
     id("packaging")
-    id("com.gradleup.shadow") version "9.1.0"
+    id("com.gradleup.shadow") version "9.2.1"
 }
 
 dependencies {
