@@ -1,7 +1,5 @@
 package dev.detekt.test.junit
 
-import com.intellij.openapi.Disposable
-import com.intellij.openapi.util.Disposer
 import dev.detekt.test.utils.KotlinEnvironmentContainer
 import dev.detekt.test.utils.createEnvironment
 import dev.detekt.test.utils.resourceAsPath
@@ -20,52 +18,34 @@ annotation class KotlinCoreEnvironmentTest(
 )
 
 internal class KotlinEnvironmentResolver : ParameterResolver {
-    private val ExtensionContext.wrapper: KotlinCoreEnvironmentWrapper
+    private val ExtensionContext.env: KotlinEnvironmentContainer
         get() = getStore(NAMESPACE).getOrComputeIfAbsent(
-            WRAPPER_KEY,
-            { _ -> createNewWrapper(this) },
-            KotlinCoreEnvironmentWrapper::class.java
+            ENV_KEY,
+            { _ -> createNewContainer(this) },
+            KotlinEnvironmentContainer::class.java,
         )
 
     override fun supportsParameter(parameterContext: ParameterContext, extensionContext: ExtensionContext): Boolean =
         parameterContext.parameter.type == KotlinEnvironmentContainer::class.java
 
     override fun resolveParameter(parameterContext: ParameterContext, extensionContext: ExtensionContext): Any =
-        extensionContext.wrapper.env
+        extensionContext.env
 
-    private fun createNewWrapper(extensionContext: ExtensionContext): KotlinCoreEnvironmentWrapper {
-        val disposable = Disposer.newDisposable()
-        return KotlinCoreEnvironmentWrapper(
-            createEnvironment(
-                disposable,
-                additionalRootPaths = checkNotNull(
-                    classpathFromClassloader(Thread.currentThread().contextClassLoader)
-                ) { "We should always have a classpath" },
-                additionalJavaSourceRootPaths = extensionContext.additionalJavaSourcePaths(),
-            ),
-            disposable,
+    private fun createNewContainer(extensionContext: ExtensionContext): KotlinEnvironmentContainer =
+        createEnvironment(
+            additionalRootPaths = checkNotNull(
+                classpathFromClassloader(Thread.currentThread().contextClassLoader)
+            ) { "We should always have a classpath" },
+            additionalJavaSourceRootPaths = extensionContext.additionalJavaSourcePaths(),
         )
-    }
 
     companion object {
         private val NAMESPACE = ExtensionContext.Namespace.create("KotlinCoreEnvironment")
-        private const val WRAPPER_KEY = "wrapper"
+        private const val ENV_KEY = "env"
         private fun ExtensionContext.additionalJavaSourcePaths(): List<File> {
             val annotation = requiredTestClass.annotations
                 .find { it is KotlinCoreEnvironmentTest } as? KotlinCoreEnvironmentTest ?: return emptyList()
             return annotation.additionalJavaSourcePaths.map { resourceAsPath(it).toFile() }
         }
-    }
-}
-
-private class KotlinCoreEnvironmentWrapper(
-    val env: KotlinEnvironmentContainer,
-    private val disposable: Disposable,
-) :
-    @Suppress("DEPRECATION")
-    ExtensionContext.Store.CloseableResource,
-    AutoCloseable {
-    override fun close() {
-        Disposer.dispose(disposable)
     }
 }
