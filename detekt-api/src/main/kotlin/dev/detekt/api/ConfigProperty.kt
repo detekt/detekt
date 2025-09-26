@@ -5,7 +5,7 @@ import kotlin.reflect.KProperty
 import kotlin.reflect.KProperty0
 
 /**
- * Creates a delegated read-only property that can be used in [ConfigAware] objects. The name of the property is the
+ * Creates a delegated read-only property that can be used in [Rule] objects. The name of the property is the
  * key that is used during configuration lookup. The value of the property is evaluated only once.
  *
  * @param defaultValue the value that the property evaluates to when there is no key with the name of the property in
@@ -16,7 +16,7 @@ fun <T : Any> config(
 ): ReadOnlyProperty<Rule, T> = config(defaultValue) { it }
 
 /**
- * Creates a delegated read-only property that can be used in [ConfigAware] objects. The name of the property is the
+ * Creates a delegated read-only property that can be used in [Rule] objects. The name of the property is the
  * key that is used during configuration lookup. The value of the property is evaluated and transformed only once.
  *
  * @param defaultValue the value that the property evaluates to when there is no key with the name of the property in
@@ -30,7 +30,7 @@ fun <T : Any, U : Any> config(
 ): ReadOnlyProperty<Rule, U> = TransformedConfigProperty(defaultValue, transformer)
 
 /**
- * Creates a delegated read-only property that can be used in [ConfigAware] objects. The name of the property is the
+ * Creates a delegated read-only property that can be used in [Rule] objects. The name of the property is the
  * key that is used during configuration lookup. If there is no such property, the value of the
  * supplied [fallbackProperty] is also considered before using the [defaultValue].
  * The value of the property is evaluated only once.
@@ -49,7 +49,7 @@ fun <T : Any> configWithFallback(
 ): ReadOnlyProperty<Rule, T> = configWithFallback(fallbackProperty, defaultValue) { it }
 
 /**
- * Creates a delegated read-only property that can be used in [ConfigAware] objects. The name of the property is the
+ * Creates a delegated read-only property that can be used in [Rule] objects. The name of the property is the
  * key that is used during configuration lookup. If there is no such property, the value of the
  * supplied [fallbackProperty] is also considered before using the [defaultValue].
  * The value of the property is evaluated and transformed only once.
@@ -72,7 +72,7 @@ fun <T : Any, U : Any> configWithFallback(
     FallbackConfigProperty(fallbackProperty, defaultValue, transformer)
 
 /**
- * Creates a delegated read-only property that can be used in [ConfigAware] objects. The name of the property is the
+ * Creates a delegated read-only property that can be used in [Rule] objects. The name of the property is the
  * key that is used during configuration lookup. The value of the property is evaluated only once.
  *
  * @param defaultValue the value that the property evaluates to when there is no key with the name of the property in
@@ -87,7 +87,7 @@ fun <T : Any> configWithAndroidVariants(
 ): ReadOnlyProperty<Rule, T> = configWithAndroidVariants(defaultValue, defaultAndroidValue) { it }
 
 /**
- * Creates a delegated read-only property that can be used in [ConfigAware] objects. The name of the property is the
+ * Creates a delegated read-only property that can be used in [Rule] objects. The name of the property is the
  * key that is used during configuration lookup. The value of the property is evaluated and transformed only once.
  *
  * @param defaultValue the value that the property evaluates to when there is no key with the name of the property in
