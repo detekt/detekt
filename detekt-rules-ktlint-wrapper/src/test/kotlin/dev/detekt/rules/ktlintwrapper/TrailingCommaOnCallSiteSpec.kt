@@ -105,7 +105,7 @@ class TrailingCommaOnCallSiteSpec {
 
         @Test
         fun `trailing commas are discouraged on android`() {
-            val rulesetConfig = TestConfig("android" to true)
+            val rulesetConfig = TestConfig("code_style" to "android_studio")
             val ruleConfig = TestConfig(parent = rulesetConfig)
 
             val findings = TrailingCommaOnCallSite(ruleConfig).lint(code)
@@ -114,7 +114,7 @@ class TrailingCommaOnCallSiteSpec {
 
         @Test
         fun `trailing commas are required on non-android in multiline statements`() {
-            val rulesetConfig = TestConfig("android" to false)
+            val rulesetConfig = TestConfig("code_style" to "intellij_idea")
             val ruleConfig = TestConfig(parent = rulesetConfig)
 
             val findings = TrailingCommaOnCallSite(ruleConfig).lint(code)
