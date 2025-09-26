@@ -181,7 +181,7 @@ private class TransformedConfigPropertyWithAndroidVariants<T : Any, U : Any>(
         val rulesetConfig = requireNotNull(thisRef.config.parent) {
             "A rule that uses the 'configWithAndroidVariants' property delegate must have a parent config."
         }
-        val isAndroid = getValueOrDefault(rulesetConfig, "android", false)
+        val isAndroid = getValueOrDefault(rulesetConfig, "code_style", "") == "android_studio"
         val value = if (isAndroid) defaultAndroidValue else defaultValue
         return transform(getValueOrDefault(thisRef.config, property.name, value))
     }
