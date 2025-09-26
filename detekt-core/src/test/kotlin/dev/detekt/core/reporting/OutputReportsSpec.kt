@@ -21,10 +21,9 @@ class OutputReportsSpec {
     @Nested
     inner class `arguments for spec` {
 
-        private val reportUnderTest = TestOutputReport::class.java.simpleName
         private val reports = ReportsSpecBuilder().apply {
             report { "checkstyle" to Path("/tmp/path1") }
-            report { reportUnderTest to Path("/tmp/path3") }
+            report { "yml" to Path("/tmp/path3") }
             report { "html" to Path("D:_Gradle\\xxx\\xxx\\build\\reports\\detekt\\detekt.html") }
             report { "md" to Path("/tmp/path4") }
         }.build().reports.toList()
@@ -37,21 +36,21 @@ class OutputReportsSpec {
         @Test
         fun `it should properly parse Checkstyle report entry`() {
             val checkstyleReport = reports[0]
-            assertThat(checkstyleReport.type).isEqualTo(defaultReportMapping(CheckstyleOutputReport()))
+            assertThat(checkstyleReport.type).isEqualTo(CheckstyleOutputReport().id)
             assertThat(checkstyleReport.path).isEqualTo(Path("/tmp/path1"))
         }
 
         @Test
         fun `it should properly parse custom report entry`() {
             val customReport = reports[1]
-            assertThat(customReport.type).isEqualTo(reportUnderTest)
+            assertThat(customReport.type).isEqualTo(TestOutputReport().id)
             assertThat(customReport.path).isEqualTo(Path("/tmp/path3"))
         }
 
         @Test
         fun `it should properly parse HTML report entry`() {
             val htmlReport = reports[2]
-            assertThat(htmlReport.type).isEqualTo(defaultReportMapping(HtmlOutputReport()))
+            assertThat(htmlReport.type).isEqualTo(HtmlOutputReport().id)
             assertThat(htmlReport.path).isEqualTo(
                 Path("D:_Gradle\\xxx\\xxx\\build\\reports\\detekt\\detekt.html")
             )
@@ -60,7 +59,7 @@ class OutputReportsSpec {
         @Test
         fun `it should properly parse MD report entry`() {
             val mdReport = reports[3]
-            assertThat(mdReport.type).isEqualTo(defaultReportMapping(MdOutputReport()))
+            assertThat(mdReport.type).isEqualTo(MdOutputReport().id)
             assertThat(mdReport.path).isEqualTo(Path("/tmp/path4"))
         }
 
@@ -68,7 +67,7 @@ class OutputReportsSpec {
         inner class `default report ids` {
 
             private val extensions = createProcessingSettings().use { OutputReportLocator(it).load() }
-            private val extensionsIds = extensions.mapTo(HashSet()) { defaultReportMapping(it) }
+            private val extensionsIds = extensions.mapTo(HashSet()) { it.id }
 
             @Test
             fun `should be able to convert to output reports`() {
@@ -79,18 +78,7 @@ class OutputReportsSpec {
             fun `should recognize custom output format`() {
                 assertThat(reports).haveExactly(
                     1,
-                    Condition(
-                        { it.type == reportUnderTest },
-                        "Corresponds exactly to the test output report."
-                    )
-                )
-
-                assertThat(extensions).haveExactly(
-                    1,
-                    Condition(
-                        { it is TestOutputReport && it.ending == "yml" },
-                        "Is exactly the test output report."
-                    )
+                    Condition({ it.type == "yml" }, "Corresponds exactly to the test output report.")
                 )
             }
         }
@@ -116,8 +104,7 @@ class OutputReportsSpec {
 
 class TestOutputReport : OutputReport {
 
-    override val id: String = "TestOutputReport"
-    override val ending: String = "yml"
+    override val id: String = "yml"
 
     override fun render(detektion: Detektion) = throw UnsupportedOperationException("not implemented")
 }
