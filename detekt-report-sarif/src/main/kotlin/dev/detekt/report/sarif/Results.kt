@@ -23,7 +23,7 @@ internal fun Severity.toResultLevel() = when (this) {
 private fun Issue.toResult(): io.github.detekt.sarif4k.Result =
     io.github.detekt.sarif4k.Result(
         ruleID = "detekt.${ruleInstance.ruleSetId}.${ruleInstance.id}",
-        level = severity.toResultLevel(),
+        level = if (severity != ruleInstance.severity) severity.toResultLevel() else null,
         locations = (listOf(location) + references.map { it.location }).map { it.toLocation() }.distinct(),
         message = Message(text = message),
         partialFingerprints = mapOf(

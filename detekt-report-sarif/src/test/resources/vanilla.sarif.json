@@ -5,7 +5,6 @@
     {
       "results": [
         {
-          "level": "error",
           "locations": [
             {
               "physicalLocation": {
@@ -31,7 +30,6 @@
           "ruleId": "detekt.RuleSet1.TestSmellA"
         },
         {
-          "level": "warning",
           "locations": [
             {
               "physicalLocation": {
