@@ -14,12 +14,14 @@ import dev.detekt.report.xml.CheckstyleOutputReport
 import dev.detekt.test.utils.StringPrintStream
 import dev.detekt.test.utils.createTempFileForTest
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 
 class OutputFacadeSpec {
 
-    @Test
-    fun `Running the output facade with multiple reports`() {
+    @ParameterizedTest
+    @ValueSource(booleans = [true, false])
+    fun `Running the output facade with multiple reports`(showReports: Boolean) {
         val printStream = StringPrintStream()
         val defaultResult = TestDetektion(
             createIssue(
@@ -44,14 +46,20 @@ class OutputFacadeSpec {
             }
         }
 
-        spec.withSettings { OutputFacade(this).run(defaultResult) }
+        spec.withSettings { OutputFacade(this, showReports).run(defaultResult) }
 
-        assertThat(printStream.toString()).contains(
+        val expected = listOf(
             "Successfully generated ${CheckstyleOutputReport().id} at ${xmlOutputPath.toUri()}",
             "Successfully generated ${HtmlOutputReport().id} at ${htmlOutputPath.toUri()}",
             "Successfully generated ${MdOutputReport().id} at ${mdOutputPath.toUri()}",
             "Successfully generated ${SarifOutputReport().id} at ${sarifOutputPath.toUri()}",
         )
+
+        if (showReports) {
+            assertThat(printStream.toString()).contains(expected)
+        } else {
+            assertThat(printStream.toString()).doesNotContain(expected)
+        }
         assertThat(xmlOutputPath).isNotEmptyFile()
         assertThat(htmlOutputPath).isNotEmptyFile()
         assertThat(mdOutputPath).isNotEmptyFile()

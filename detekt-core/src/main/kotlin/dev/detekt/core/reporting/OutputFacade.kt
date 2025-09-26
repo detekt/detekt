@@ -1,8 +1,6 @@
 package dev.detekt.core.reporting
 
 import dev.detekt.api.Detektion
-import dev.detekt.api.Notification
-import dev.detekt.api.Notification.Level
 import dev.detekt.api.OutputReport
 import dev.detekt.core.ProcessingSettings
 import dev.detekt.tooling.api.spec.ReportsSpec
@@ -12,12 +10,11 @@ import kotlin.io.path.writeText
 
 class OutputFacade(
     private val settings: ProcessingSettings,
+    private val showReports: Boolean,
 ) {
     private val reports: Map<String, ReportsSpec.Report> = settings.spec.reportsSpec.reports.associateBy { it.type }
 
     fun run(result: Detektion) {
-        // Always run output reports first.
-        // They produce notifications which may get printed on the console.
         handleOutputReports(result)
         handleConsoleReports(result)
     }
@@ -38,7 +35,9 @@ class OutputFacade(
             val filePath = reports[defaultReportMapping(report)]?.path
             if (filePath != null) {
                 report.write(filePath, result)
-                result.add(Notification("Successfully generated ${report.id} at ${filePath.toUri()}", Level.Error))
+                if (showReports) {
+                    settings.outputChannel.appendLine("Successfully generated ${report.id} at ${filePath.toUri()}")
+                }
             }
         }
     }
