@@ -12,3 +12,15 @@ dependencies {
     implementation(libs.kotlin.reflect)
     implementation(projects.detektCore)
 }
+
+//tasks.test {
+//    javaLauncher = javaToolchains.launcherFor {
+//        languageVersion = JavaLanguageVersion.of(17)
+//    }
+//}
+//
+//tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>().configureEach {
+//    compilerOptions {
+//        jvmTarget = JvmTarget.fromTarget("17")
+//    }
+//}
