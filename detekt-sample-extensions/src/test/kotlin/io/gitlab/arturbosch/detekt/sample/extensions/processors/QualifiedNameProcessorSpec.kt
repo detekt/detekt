@@ -1,14 +1,8 @@
 package io.gitlab.arturbosch.detekt.sample.extensions.processors
 
-import io.github.detekt.test.utils.compileContentForTest
-import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.Notification
-import io.gitlab.arturbosch.detekt.api.ProjectMetric
+import dev.detekt.api.Detektion
+import dev.detekt.test.utils.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.com.intellij.openapi.util.Key
-import org.jetbrains.kotlin.com.intellij.util.keyFMap.KeyFMap
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.junit.jupiter.api.Test
 
 class QualifiedNameProcessorSpec {
@@ -17,34 +11,16 @@ class QualifiedNameProcessorSpec {
     fun fqNamesOfTestFiles() {
         val ktFile = compileContentForTest(code)
         val processor = QualifiedNameProcessor()
-        processor.onProcess(ktFile, BindingContext.EMPTY)
-        processor.onFinish(listOf(ktFile), result, BindingContext.EMPTY)
+        processor.onProcess(ktFile)
+        val result = processor.onFinish(listOf(ktFile), Detektion(emptyList(), emptyList()))
 
-        val data = result.getData(fqNamesKey)
+        val data = result.userData[fqNamesKey.toString()] as Set<*>?
         assertThat(data).contains(
             "io.gitlab.arturbosch.detekt.sample.Foo",
             "io.gitlab.arturbosch.detekt.sample.Bar",
             "io.gitlab.arturbosch.detekt.sample.Bla"
         )
     }
-}
-
-private val result = object : Detektion {
-
-    override val findings: Map<String, List<Finding>> = emptyMap()
-    override val notifications: Collection<Notification> = emptyList()
-    override val metrics: Collection<ProjectMetric> = emptyList()
-
-    private var userData = KeyFMap.EMPTY_MAP
-    override fun <V> getData(key: Key<V>): V? = userData[key]
-
-    override fun <V> addData(key: Key<V>, value: V) {
-        userData = userData.plus(key, requireNotNull(value))
-    }
-
-    override fun add(notification: Notification): Unit = throw UnsupportedOperationException("not implemented")
-
-    override fun add(projectMetric: ProjectMetric): Unit = throw UnsupportedOperationException("not implemented")
 }
 
 private val code = """
