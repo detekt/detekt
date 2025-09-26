@@ -8,6 +8,17 @@ class Detektion(
     val issues: List<Issue>,
     val rules: List<RuleInstance>,
 ) {
+    init {
+        val notReportedRules = issues.map { it.ruleInstance }.distinct().minus(rules.toSet())
+        require(notReportedRules.isEmpty()) {
+            if (notReportedRules.size == 1) {
+                "The rule ${notReportedRules.single().id} was not reported as having been executed"
+            } else {
+                "The rules ${notReportedRules.map { it.id }} were not reported as having been executed"
+            }
+        }
+    }
+
     private val _notifications = mutableListOf<Notification>()
     val notifications: Collection<Notification> = _notifications
 
