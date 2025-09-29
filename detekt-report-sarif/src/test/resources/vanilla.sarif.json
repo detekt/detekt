@@ -28,7 +28,7 @@
           "partialFingerprints": {
             "signature/v1": "fe05bcdcdc4928012781a5f1a2a77cbb5398e106"
           },
-          "ruleId": "detekt.RuleSet1.TestSmellA/id"
+          "ruleId": "detekt.RuleSet1.TestSmellA"
         },
         {
           "level": "warning",
@@ -54,7 +54,7 @@
           "partialFingerprints": {
             "signature/v1": "b802f384302cb24fbab0a44997e820bf2e8507bb"
           },
-          "ruleId": "detekt.RuleSet2.TestSmellB/id"
+          "ruleId": "detekt.RuleSet2.TestSmellB"
         },
         {
           "level": "note",
@@ -123,6 +123,18 @@
               "helpUri": "http://example.org/TestSmellC",
               "id": "detekt.RuleSet2.TestSmellC",
               "name": "TestSmellC",
+              "shortDescription": {
+                "text": "Description C"
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "enabled": false,
+                "level": "error"
+              },
+              "helpUri": "http://example.org/TestSmellC",
+              "id": "detekt.RuleSet2.TestSmellC/id",
+              "name": "TestSmellC/id",
               "shortDescription": {
                 "text": "Description C"
               }

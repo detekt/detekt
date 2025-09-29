@@ -8,7 +8,6 @@ import dev.detekt.api.testfixtures.TestSetupContext
 import dev.detekt.api.testfixtures.createIssue
 import dev.detekt.api.testfixtures.createIssueEntity
 import dev.detekt.api.testfixtures.createIssueLocation
-import dev.detekt.api.testfixtures.createRuleInstance
 import dev.detekt.test.utils.readResourceContent
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -18,9 +17,10 @@ class SarifOutputReportSpec {
 
     @Test
     fun `renders multiple issues`() {
+        val rules = createRuleInstances()
         val result = TestDetektion(
             createIssue(
-                ruleInstance = createRuleInstance("TestSmellA/id", "RuleSet1"),
+                ruleInstance = rules[0],
                 entity = createIssueEntity(
                     signature = "one",
                     location = createIssueLocation(position = 1 to 1, endPosition = 2 to 3),
@@ -28,7 +28,7 @@ class SarifOutputReportSpec {
                 severity = Severity.Error
             ),
             createIssue(
-                ruleInstance = createRuleInstance("TestSmellD/id", "RuleSet1"),
+                ruleInstance = rules[4],
                 entity = createIssueEntity(
                     signature = "two",
                     location = createIssueLocation(position = 1 to 1, endPosition = 2 to 3),
@@ -37,7 +37,7 @@ class SarifOutputReportSpec {
                 suppressReasons = listOf("suppress")
             ),
             createIssue(
-                ruleInstance = createRuleInstance("TestSmellB/id", "RuleSet2"),
+                ruleInstance = rules[1],
                 entity = createIssueEntity(
                     signature = "three",
                     location = createIssueLocation(position = 3 to 5, endPosition = 3 to 5),
@@ -45,7 +45,7 @@ class SarifOutputReportSpec {
                 severity = Severity.Warning
             ),
             createIssue(
-                ruleInstance = createRuleInstance("TestSmellC/id", "RuleSet2"),
+                ruleInstance = rules[3],
                 entity = createIssueEntity(
                     signature = "four",
                     location = createIssueLocation(position = 2 to 1, endPosition = 3 to 1),
@@ -88,6 +88,14 @@ private fun createRuleInstances() = listOf(
         url = URI("http://example.org/TestSmellC"),
         description = "Description C",
         severity = Severity.Info,
+        active = false,
+    ),
+    RuleInstance(
+        id = "TestSmellC/id",
+        ruleSetId = RuleSet.Id("RuleSet2"),
+        url = URI("http://example.org/TestSmellC"),
+        description = "Description C",
+        severity = Severity.Error,
         active = false,
     ),
     RuleInstance(
