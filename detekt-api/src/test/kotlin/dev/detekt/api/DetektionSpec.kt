@@ -2,7 +2,7 @@ package dev.detekt.api
 
 import dev.detekt.api.testfixtures.createIssue
 import dev.detekt.api.testfixtures.createRuleInstance
-import org.assertj.core.api.Assertions.assertThatExceptionOfType
+import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.junit.jupiter.api.Test
 
 class DetektionSpec {
@@ -36,7 +36,7 @@ class DetektionSpec {
 
     @Test
     fun `fail with an issue with an unknown rule`() {
-        assertThatExceptionOfType(IllegalArgumentException::class.java)
+        assertThatIllegalArgumentException()
             .isThrownBy {
                 Detektion(
                     listOf(
@@ -52,7 +52,7 @@ class DetektionSpec {
 
     @Test
     fun `fail with more than one issue with an unknown rule`() {
-        assertThatExceptionOfType(IllegalArgumentException::class.java)
+        assertThatIllegalArgumentException()
             .isThrownBy {
                 Detektion(
                     listOf(
