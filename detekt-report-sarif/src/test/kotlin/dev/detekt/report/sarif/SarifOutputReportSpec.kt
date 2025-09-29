@@ -33,7 +33,7 @@ class SarifOutputReportSpec {
                     signature = "two",
                     location = createIssueLocation(position = 1 to 1, endPosition = 2 to 3),
                 ),
-                severity = Severity.Error,
+                severity = Severity.Info,
                 suppressReasons = listOf("suppress")
             ),
             createIssue(
