@@ -22,11 +22,6 @@ plugins {
     id("io.github.gradle-nexus.publish-plugin") version "2.0.0"
 }
 
-repositories {
-    mavenCentral()
-    google()
-}
-
 group = "dev.detekt"
 version = Versions.currentOrSnapshot()
 
