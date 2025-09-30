@@ -97,7 +97,6 @@ public final class dev/detekt/psi/ThrowExtensionsKt {
 }
 
 public final class dev/detekt/psi/TypeUtilsKt {
-	public static final fun fqNameOrNull (Lorg/jetbrains/kotlin/types/KotlinType;)Lorg/jetbrains/kotlin/name/FqName;
 	public static final fun isNullable (Lorg/jetbrains/kotlin/psi/KtExpression;Z)Z
 }
 
