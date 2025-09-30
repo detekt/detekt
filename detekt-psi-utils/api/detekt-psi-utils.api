@@ -10,7 +10,6 @@ public final class dev/detekt/psi/AnnotationExcluder {
 public abstract class dev/detekt/psi/FunctionMatcher {
 	public static final field Companion Ldev/detekt/psi/FunctionMatcher$Companion;
 	public abstract fun match (Lorg/jetbrains/kotlin/analysis/api/symbols/KaCallableSymbol;)Z
-	public abstract fun match (Lorg/jetbrains/kotlin/descriptors/CallableDescriptor;)Z
 	public abstract fun match (Lorg/jetbrains/kotlin/psi/KtNamedFunction;Z)Z
 }
 
