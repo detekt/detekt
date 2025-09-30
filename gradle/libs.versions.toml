@@ -1,7 +1,7 @@
 [versions]
 coroutines = "1.10.2"
 jacoco = "0.8.13"
-junit = "5.14.0"
+junit = "6.0.0"
 kotlin = "2.2.10"
 ktlint = "1.7.1"
 slf4j = "2.0.17"
