@@ -40,12 +40,12 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest ]
-        jdk: [ 17, 21 ]
+        jdk: [ 17, 21, 25 ]
         include:
           - os: windows-latest
-            jdk: 21
+            jdk: 25
           - os: macos-latest
-            jdk: 21
+            jdk: 25
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout Repo
