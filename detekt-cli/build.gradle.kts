@@ -1,5 +1,3 @@
-import org.apache.tools.ant.filters.ReplaceTokens
-
 plugins {
     id("com.gradleup.shadow") version "9.2.2"
     id("module")
@@ -69,12 +67,6 @@ tasks {
     shadowDistTar { enabled = false }
     distZip { enabled = false }
     distTar { enabled = false }
-
-    processTestResources {
-        inputs.property("kotlin-version", libs.versions.kotlin.get())
-        filter<ReplaceTokens>("tokens" to mapOf("kotlinVersion" to inputs.properties["kotlin-version"]))
-        filteringCharset = "UTF-8"
-    }
 
     val runWithHelpFlag by registering(JavaExec::class) {
         outputs.upToDateWhen { true }
