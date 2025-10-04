@@ -48,8 +48,6 @@ public final class dev/detekt/api/Config$InvalidConfigurationError : java/lang/R
 public final class dev/detekt/api/ConfigPropertyKt {
 	public static final fun config (Ljava/lang/Object;)Lkotlin/properties/ReadOnlyProperty;
 	public static final fun config (Ljava/lang/Object;Lkotlin/jvm/functions/Function1;)Lkotlin/properties/ReadOnlyProperty;
-	public static final fun configWithAndroidVariants (Ljava/lang/Object;Ljava/lang/Object;)Lkotlin/properties/ReadOnlyProperty;
-	public static final fun configWithAndroidVariants (Ljava/lang/Object;Ljava/lang/Object;Lkotlin/jvm/functions/Function1;)Lkotlin/properties/ReadOnlyProperty;
 	public static final fun configWithFallback (Lkotlin/reflect/KProperty0;Ljava/lang/Object;)Lkotlin/properties/ReadOnlyProperty;
 	public static final fun configWithFallback (Lkotlin/reflect/KProperty0;Ljava/lang/Object;Lkotlin/jvm/functions/Function1;)Lkotlin/properties/ReadOnlyProperty;
 }
