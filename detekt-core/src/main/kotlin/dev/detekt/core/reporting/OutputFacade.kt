@@ -5,6 +5,7 @@ import dev.detekt.api.Notification
 import dev.detekt.api.Notification.Level
 import dev.detekt.api.OutputReport
 import dev.detekt.core.ProcessingSettings
+import dev.detekt.core.extensions.loadExtensions
 import dev.detekt.tooling.api.spec.ReportsSpec
 import java.nio.file.Path
 import kotlin.io.path.createParentDirectories
@@ -42,7 +43,7 @@ class OutputFacade(
     }
 
     private fun handleOutputReports(result: Detektion) {
-        val extensions = OutputReportLocator(settings).load()
+        val extensions = loadExtensions<OutputReport>(settings)
         for (report in extensions) {
             val filePath = reports[defaultReportMapping(report)]?.path
             if (filePath != null) {
