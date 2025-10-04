@@ -7,8 +7,17 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode = RepositoriesMode.FAIL_ON_PROJECT_REPOS
     repositories {
+        exclusiveContent {
+            forRepository {
+                google()
+            }
+            filter {
+                includeGroupAndSubgroups("com.android")
+                includeGroup("androidx.databinding")
+                includeGroup("com.google.testing.platform")
+            }
+        }
         mavenCentral()
-        google()
     }
 
     versionCatalogs {
