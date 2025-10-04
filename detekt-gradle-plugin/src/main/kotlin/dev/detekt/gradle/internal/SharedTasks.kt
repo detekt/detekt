@@ -11,7 +11,7 @@ import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.jvm.toolchain.JavaToolchainService
 
 internal fun Project.setDetektTaskDefaults(extension: DetektExtension) {
-    tasks.withType(Detekt::class.java) {
+    tasks.withType(Detekt::class.java).configureEach {
         project.plugins.withType(JavaBasePlugin::class.java) { _ ->
             val toolchain = project.extensions.getByType(JavaPluginExtension::class.java).toolchain
 
@@ -42,7 +42,7 @@ internal fun Project.setDetektTaskDefaults(extension: DetektExtension) {
 }
 
 internal fun Project.setCreateBaselineTaskDefaults(extension: DetektExtension) {
-    tasks.withType(DetektCreateBaselineTask::class.java) {
+    tasks.withType(DetektCreateBaselineTask::class.java).configureEach {
         project.plugins.withType(JavaBasePlugin::class.java) { _ ->
             val toolchain = project.extensions.getByType(JavaPluginExtension::class.java).toolchain
 
