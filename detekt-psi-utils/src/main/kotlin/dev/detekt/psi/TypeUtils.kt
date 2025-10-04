@@ -32,7 +32,7 @@ fun KtExpression.isNullable(shouldConsiderPlatformTypeAsNullable: Boolean): Bool
         return if (expressionType?.hasFlexibleNullability == true && !shouldConsiderPlatformTypeAsNullable) {
             false
         } else {
-            expressionType?.canBeNull == true
+            expressionType?.isNullable == true
         }
     }
 }
