@@ -3,7 +3,7 @@ id: reporting
 title: "Reporting"
 keywords: [reporting]
 summary: This page describes each reporting format and explains how to leverage them.
-sidebar_position: 4
+sidebar_position: 20
 ---
 
 ## Formats
