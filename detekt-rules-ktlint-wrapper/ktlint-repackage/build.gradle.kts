@@ -5,7 +5,8 @@ plugins {
 
 dependencies {
     runtimeOnly(libs.ktlint.rulesetStandard) {
-        exclude(group = "org.jetbrains.kotlin")
+        exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib")
+        exclude(group = "org.jetbrains.kotlin", module = "kotlin-compiler-embeddable")
     }
 }
 
