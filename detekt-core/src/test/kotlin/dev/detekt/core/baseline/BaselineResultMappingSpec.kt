@@ -16,7 +16,7 @@ import kotlin.io.path.deleteIfExists
 
 class BaselineResultMappingSpec {
     @TempDir lateinit var dir: Path
-    lateinit var baselineFile: Path
+    private lateinit var baselineFile: Path
     private val existingBaselineFile = resourceAsPath("/baseline_feature/valid-baseline.xml")
     private val issues = listOf(
         createIssue(
