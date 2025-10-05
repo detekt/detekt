@@ -8,7 +8,7 @@ import dev.detekt.api.testfixtures.createRuleInstance
 import dev.detekt.core.createNullLoggingSpec
 import dev.detekt.core.tooling.withSettings
 import dev.detekt.report.html.HtmlOutputReport
-import dev.detekt.report.md.MdOutputReport
+import dev.detekt.report.markdown.MdOutputReport
 import dev.detekt.report.sarif.SarifOutputReport
 import dev.detekt.report.xml.CheckstyleOutputReport
 import dev.detekt.test.utils.StringPrintStream
@@ -37,7 +37,7 @@ class OutputFacadeSpec {
             reports {
                 report { "html" to htmlOutputPath }
                 report { "checkstyle" to xmlOutputPath }
-                report { "md" to mdOutputPath }
+                report { "markdown" to mdOutputPath }
                 report { "sarif" to sarifOutputPath }
             }
             logging {
@@ -74,7 +74,7 @@ class OutputFacadeSpec {
             reports {
                 report { "html" to htmlOutputPath }
                 report { "checkstyle" to htmlOutputPath }
-                report { "md" to mdOutputPath }
+                report { "markdown" to mdOutputPath }
             }
             logging {
                 outputChannel = printStream
@@ -104,7 +104,7 @@ class OutputFacadeSpec {
             reports {
                 report { "html" to htmlOutputPath }
                 report { "checkstyle" to htmlOutputPath }
-                report { "md" to htmlOutputPath }
+                report { "markdown" to htmlOutputPath }
                 report { "sarif" to sarifOutputPath }
             }
             logging {
@@ -116,6 +116,6 @@ class OutputFacadeSpec {
             spec.withSettings { OutputFacade(this).run(defaultResult) }
         }
             .isInstanceOf(IllegalStateException::class.java)
-            .hasMessage("The path $htmlOutputPath is defined in multiple reports: [html, checkstyle, md]")
+            .hasMessage("The path $htmlOutputPath is defined in multiple reports: [html, checkstyle, markdown]")
     }
 }

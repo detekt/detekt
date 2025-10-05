@@ -1,4 +1,4 @@
-package dev.detekt.report.md
+package dev.detekt.report.markdown
 
 import dev.detekt.api.Detektion
 import dev.detekt.api.Issue

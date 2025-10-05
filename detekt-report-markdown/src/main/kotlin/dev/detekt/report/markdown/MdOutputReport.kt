@@ -1,4 +1,4 @@
-package dev.detekt.report.md
+package dev.detekt.report.markdown
 
 import dev.detekt.api.Detektion
 import dev.detekt.api.Issue
@@ -40,6 +40,7 @@ private const val EXTRA_LINES_IN_SNIPPET = 3
  */
 class MdOutputReport : BuiltInOutputReport, OutputReport {
     override val id: String = "MdOutputReport"
+    override val reportId: String = "markdown"
     override val ending: String = "md"
 
     private lateinit var basePath: Path

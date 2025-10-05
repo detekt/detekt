@@ -23,7 +23,7 @@ class DetektJvmSpec {
             }
             tasks.withType(Detekt::class.java).configureEach {
                 it.reports { reports ->
-                    reports.md.required.set(false)
+                    reports.markdown.required.set(false)
                 }
             }
             tasks.named("detektTest", Detekt::class.java) {
