@@ -27,6 +27,4 @@ fun main(args: Array<String>) {
     } else {
         generator.execute()
     }
-    // We need an explicit call here due to https://youtrack.jetbrains.com/issue/KT-73127/Analysis-API-standalone-mode-keeps-its-process-alive
-    exitProcess(0)
 }
