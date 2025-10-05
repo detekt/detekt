@@ -13,7 +13,7 @@ import java.nio.file.Path
 import kotlin.io.path.copyTo
 
 class BaselineResultMappingSpec {
-    @TempDir lateinit var dir: Path
+    @TempDir private lateinit var dir: Path
     private lateinit var baselineFile: Path
     private val existingBaselineFile = resourceAsPath("/baseline_feature/valid-baseline.xml")
     private val issues = listOf(

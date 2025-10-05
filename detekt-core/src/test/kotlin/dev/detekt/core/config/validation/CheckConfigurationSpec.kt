@@ -18,7 +18,7 @@ import java.nio.file.Path
 
 class CheckConfigurationSpec {
 
-    @TempDir lateinit var testDir: Path
+    @TempDir private lateinit var testDir: Path
     private val spec = createNullLoggingSpec {}
 
     @Test
