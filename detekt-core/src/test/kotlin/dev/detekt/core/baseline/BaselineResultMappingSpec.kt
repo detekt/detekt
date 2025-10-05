@@ -6,13 +6,11 @@ import dev.detekt.api.testfixtures.createIssueEntity
 import dev.detekt.api.testfixtures.createRuleInstance
 import dev.detekt.test.utils.resourceAsPath
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
 import java.nio.file.Path
 import kotlin.io.path.copyTo
-import kotlin.io.path.deleteIfExists
 
 class BaselineResultMappingSpec {
     @TempDir lateinit var dir: Path
@@ -40,11 +38,6 @@ class BaselineResultMappingSpec {
     @BeforeEach
     fun setup() {
         baselineFile = dir.resolve("baseline.xml")
-    }
-
-    @AfterEach
-    fun tearDown() {
-        baselineFile.deleteIfExists()
     }
 
     @Test
