@@ -9,7 +9,6 @@ import dev.detekt.psi.firstParameterOrNull
 import dev.detekt.psi.isCalling
 import dev.detekt.psi.receiverIsUsed
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.builtins.StandardNames.IMPLICIT_LAMBDA_PARAMETER_NAME
 import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.FqName
@@ -102,7 +101,7 @@ private fun canBeReplacedWithCall(lambdaExpr: KtLambdaExpression?): Boolean {
 
     val lambdaParameter = lambdaExpr.valueParameters.singleOrNull()
     val lambdaParameterNames = if (lambdaParameter == null) {
-        listOf(IMPLICIT_LAMBDA_PARAMETER_NAME)
+        listOf(Name.identifier("it"))
     } else {
         lambdaParameter.destructuringDeclaration?.entries.orEmpty()
             .plus(lambdaParameter)
