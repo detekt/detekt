@@ -5,7 +5,7 @@ import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.Rule
-import org.jetbrains.kotlin.builtins.StandardNames.IMPLICIT_LAMBDA_PARAMETER_NAME
+import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 
 /**
@@ -36,7 +36,7 @@ class ExplicitItLambdaMultipleParameters(
     override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
         super.visitLambdaExpression(lambdaExpression)
         val parameterNames = lambdaExpression.valueParameters.map { it.nameAsName }
-        if (IMPLICIT_LAMBDA_PARAMETER_NAME in parameterNames && parameterNames.size > 1) {
+        if (Name.identifier("it") in parameterNames && parameterNames.size > 1) {
             report(
                 Finding(
                     Entity.from(lambdaExpression),

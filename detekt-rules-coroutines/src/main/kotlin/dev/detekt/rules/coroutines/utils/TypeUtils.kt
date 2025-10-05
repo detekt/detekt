@@ -3,9 +3,9 @@ package dev.detekt.rules.coroutines.utils
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.types.KaType
 import org.jetbrains.kotlin.analysis.api.types.symbol
-import org.jetbrains.kotlin.builtins.StandardNames
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.ClassId
+import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
 
 context(session: KaSession)
@@ -35,7 +35,7 @@ internal object CoroutineClassIds {
 
 internal object CoroutineCallableIds {
     val CoroutineContextCallableId = CallableId(
-        packageName = StandardNames.COROUTINES_PACKAGE_FQ_NAME,
+        packageName = FqName("kotlin.coroutines"),
         callableName = Name.identifier("coroutineContext")
     )
 }

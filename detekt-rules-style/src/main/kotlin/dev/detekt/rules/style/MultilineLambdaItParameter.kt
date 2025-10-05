@@ -6,7 +6,7 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.psi.hasImplicitParameterReference
-import org.jetbrains.kotlin.builtins.StandardNames.IMPLICIT_LAMBDA_PARAMETER_NAME
+import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 
 /**
@@ -72,7 +72,7 @@ class MultilineLambdaItParameter(config: Config) :
         if (!lambdaExpression.isMultiline()) return
 
         val parameterNames = lambdaExpression.valueParameters.map { it.nameAsName }
-        if (IMPLICIT_LAMBDA_PARAMETER_NAME in parameterNames) {
+        if (Name.identifier("it") in parameterNames) {
             // Explicit `it`
             report(
                 Finding(
