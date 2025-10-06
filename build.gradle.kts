@@ -63,7 +63,7 @@ allprojects {
             checkstyle.required = true
             html.required = true
             sarif.required = true
-            md.required = true
+            markdown.required = true
         }
         basePath = rootDir.absolutePath
     }
