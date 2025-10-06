@@ -725,7 +725,7 @@ private val ANDROID_BLOCK_WITH_VIEW_BINDING = """
 private val DETEKT_REPORTS_BLOCK = """
     tasks.withType<dev.detekt.gradle.Detekt>().configureEach {
         reports {
-            md.required.set(false)
+            markdown.required.set(false)
         }
     }
 """.trimIndent()
