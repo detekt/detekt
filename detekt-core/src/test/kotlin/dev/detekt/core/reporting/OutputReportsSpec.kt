@@ -6,7 +6,7 @@ import dev.detekt.core.createNullLoggingSpec
 import dev.detekt.core.createProcessingSettings
 import dev.detekt.core.tooling.withSettings
 import dev.detekt.report.html.HtmlOutputReport
-import dev.detekt.report.markdown.MdOutputReport
+import dev.detekt.report.markdown.MarkdownOutputReport
 import dev.detekt.report.xml.CheckstyleOutputReport
 import dev.detekt.test.utils.resourceAsPath
 import dev.detekt.tooling.dsl.ReportsSpecBuilder
@@ -60,7 +60,7 @@ class OutputReportsSpec {
         @Test
         fun `it should properly parse Markdown report entry`() {
             val markdownReport = reports[3]
-            assertThat(markdownReport.type).isEqualTo(defaultReportMapping(MdOutputReport()))
+            assertThat(markdownReport.type).isEqualTo(defaultReportMapping(MarkdownOutputReport()))
             assertThat(markdownReport.path).isEqualTo(Path("/tmp/path4"))
         }
 

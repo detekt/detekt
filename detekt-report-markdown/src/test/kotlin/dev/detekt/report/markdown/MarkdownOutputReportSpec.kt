@@ -21,12 +21,12 @@ import org.junit.jupiter.api.Test
 import kotlin.io.path.Path
 import kotlin.io.path.absolute
 
-class MdOutputReportSpec {
+class MarkdownOutputReportSpec {
     private val basePath = Path("src/test/resources").absolute()
-    private val mdReport = MdOutputReport().apply { init(TestSetupContext(basePath = basePath)) }
+    private val markdownReport = MarkdownOutputReport().apply { init(TestSetupContext(basePath = basePath)) }
     private val detektion = createTestDetektionWithMultipleSmells()
     private val detektVersion = whichDetekt()
-    private val result = mdReport.render(detektion)
+    private val result = markdownReport.render(detektion)
         .replace("""\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d UTC""".toRegex(), "2024-07-21 21:34:16 UTC")
 
     @Suppress("LongMethod")
@@ -138,7 +138,7 @@ class MdOutputReportSpec {
 
     @Test
     fun `contains zero issues`() {
-        val result = mdReport.render(TestDetektion())
+        val result = markdownReport.render(TestDetektion())
 
         assertThat(result).contains("Issues (0)")
     }
@@ -188,8 +188,8 @@ class MdOutputReportSpec {
         val firstDetektion = createMdDetektion(*issues)
         val secondDetektion = createMdDetektion(*reversedIssues)
 
-        val firstReport = mdReport.render(firstDetektion)
-        val secondReport = mdReport.render(secondDetektion)
+        val firstReport = markdownReport.render(firstDetektion)
+        val secondReport = markdownReport.render(secondDetektion)
 
         assertThat(firstReport).isEqualTo(secondReport)
     }

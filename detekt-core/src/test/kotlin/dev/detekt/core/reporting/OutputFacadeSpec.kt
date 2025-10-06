@@ -8,7 +8,7 @@ import dev.detekt.api.testfixtures.createRuleInstance
 import dev.detekt.core.createNullLoggingSpec
 import dev.detekt.core.tooling.withSettings
 import dev.detekt.report.html.HtmlOutputReport
-import dev.detekt.report.markdown.MdOutputReport
+import dev.detekt.report.markdown.MarkdownOutputReport
 import dev.detekt.report.sarif.SarifOutputReport
 import dev.detekt.report.xml.CheckstyleOutputReport
 import dev.detekt.test.utils.StringPrintStream
@@ -30,14 +30,14 @@ class OutputFacadeSpec {
         )
         val htmlOutputPath = createTempFileForTest("detekt", ".html")
         val xmlOutputPath = createTempFileForTest("detekt", ".xml")
-        val mdOutputPath = createTempFileForTest("detekt", ".md")
+        val markdownOutputPath = createTempFileForTest("detekt", ".md")
         val sarifOutputPath = createTempFileForTest("detekt", ".sarif")
 
         val spec = createNullLoggingSpec {
             reports {
                 report { "html" to htmlOutputPath }
                 report { "checkstyle" to xmlOutputPath }
-                report { "markdown" to mdOutputPath }
+                report { "markdown" to markdownOutputPath }
                 report { "sarif" to sarifOutputPath }
             }
             logging {
@@ -50,12 +50,12 @@ class OutputFacadeSpec {
         assertThat(printStream.toString()).contains(
             "Successfully generated ${CheckstyleOutputReport().id} at ${xmlOutputPath.toUri()}",
             "Successfully generated ${HtmlOutputReport().id} at ${htmlOutputPath.toUri()}",
-            "Successfully generated ${MdOutputReport().id} at ${mdOutputPath.toUri()}",
+            "Successfully generated ${MarkdownOutputReport().id} at ${markdownOutputPath.toUri()}",
             "Successfully generated ${SarifOutputReport().id} at ${sarifOutputPath.toUri()}",
         )
         assertThat(xmlOutputPath).isNotEmptyFile()
         assertThat(htmlOutputPath).isNotEmptyFile()
-        assertThat(mdOutputPath).isNotEmptyFile()
+        assertThat(markdownOutputPath).isNotEmptyFile()
     }
 
     @Test
@@ -68,13 +68,13 @@ class OutputFacadeSpec {
             ),
         )
         val htmlOutputPath = createTempFileForTest("detekt", ".html")
-        val mdOutputPath = createTempFileForTest("detekt", ".md")
+        val markdownOutputPath = createTempFileForTest("detekt", ".md")
 
         val spec = createNullLoggingSpec {
             reports {
                 report { "html" to htmlOutputPath }
                 report { "checkstyle" to htmlOutputPath }
-                report { "markdown" to mdOutputPath }
+                report { "markdown" to markdownOutputPath }
             }
             logging {
                 outputChannel = printStream
