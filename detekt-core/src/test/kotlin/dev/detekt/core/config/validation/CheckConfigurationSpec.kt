@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
 import java.nio.file.Path
 
-class CheckConfigurationSpec(@param:TempDir private val testDir: Path) {
+class CheckConfigurationSpec(@TempDir private val testDir: Path) {
 
     private val spec = createNullLoggingSpec {}
 
