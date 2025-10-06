@@ -17,9 +17,9 @@ val detektCliClasspath by configurations.resolvable("detektCliClasspath") {
 
 dependencies {
     implementation(libs.kotlin.compiler)
-    implementation(projects.detektParser)
     implementation(projects.detektApi)
-    implementation(projects.detektPsiUtils)
+    implementation(projects.detektKotlinAnalysisApi)
+    implementation(projects.detektKotlinAnalysisApiStandalone)
     detektCli(projects.detektCli)
     implementation(projects.detektUtils)
     implementation(libs.jcommander)
