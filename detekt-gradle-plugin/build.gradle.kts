@@ -2,8 +2,8 @@
 // https://github.com/gradle/gradle/issues/21285
 @file:Suppress("StringLiteralDuplication")
 
-import io.gitlab.arturbosch.detekt.Detekt
-import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
+import dev.detekt.gradle.Detekt
+import dev.detekt.gradle.DetektCreateBaselineTask
 import org.jetbrains.kotlin.buildtools.api.ExperimentalBuildToolsApi
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 
@@ -14,7 +14,7 @@ plugins {
     id("idea")
     id("com.gradle.plugin-publish") version "2.0.0"
     // We use this published version of the detekt plugin to self analyse this project.
-    id("io.gitlab.arturbosch.detekt") version "1.23.8"
+    id("dev.detekt") version "2.0.0-alpha.0"
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.18.1"
     id("org.jetbrains.dokka") version "2.0.0"
     id("signing")
@@ -158,8 +158,8 @@ dependencies {
         }
     }
 
-    // We use this published version of the detekt-formatting to self analyse this project.
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.8")
+    // We use this published version of the detekt-rules-ktlint-wrapper to self analyse this project.
+    detektPlugins("dev.detekt:detekt-rules-ktlint-wrapper:2.0.0-alpha.0")
 }
 
 gradlePlugin {

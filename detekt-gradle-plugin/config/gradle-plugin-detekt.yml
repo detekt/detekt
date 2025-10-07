@@ -29,7 +29,7 @@ style:
     excludes: ["**/test/**", "**/*Test.kt", "**/*Spec.kt"]
     excludeCommentStatements: true
 
-formatting:
+ktlint:
   active: true
   MaximumLineLength:
     active: false
