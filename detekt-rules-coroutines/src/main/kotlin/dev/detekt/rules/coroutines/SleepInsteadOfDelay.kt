@@ -21,7 +21,6 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtProperty
-import org.jetbrains.kotlin.psi.KtPsiUtil
 import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfTypes
@@ -97,11 +96,10 @@ class SleepInsteadOfDelay(config: Config) :
     private fun getNearestParentForSuspension(psiElement: PsiElement): PsiElement? {
         fun KtValueArgument.isNearestParentForSuspension(): Boolean {
             val parent = this.getParentOfTypes(true, KtCallExpression::class.java) ?: return false
-            val argumentExpression = this.getArgumentExpression()?.let { KtPsiUtil.deparenthesize(it) }
             with(session) {
                 val functionCall = parent.resolveToCall()?.singleFunctionCallOrNull() ?: return false
                 val functionSymbol = functionCall.symbol as? KaNamedFunctionSymbol ?: return false
-                val parameterSymbol = functionCall.argumentMapping[argumentExpression]?.symbol ?: return false
+                val parameterSymbol = functionCall.argumentMapping[getArgumentExpression()]?.symbol ?: return false
                 return functionSymbol.isInline.not() || parameterSymbol.isNoinline || parameterSymbol.isCrossinline
             }
         }
@@ -131,7 +129,7 @@ class SleepInsteadOfDelay(config: Config) :
     context(session: KaSession)
     private fun KtValueArgument.isSuspendAllowed(): Boolean {
         val parent = this.getParentOfTypes(true, KtCallExpression::class.java) ?: return false
-        val argumentExpression = this.getArgumentExpression()?.let { KtPsiUtil.safeDeparenthesize(it) } ?: return false
+        val argumentExpression = this.getArgumentExpression() ?: return false
         with(session) {
             val parameter = parent.resolveToCall()?.singleFunctionCallOrNull()?.argumentMapping[argumentExpression]
             return parameter?.returnType?.isSuspendFunctionType == true

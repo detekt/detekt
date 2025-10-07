@@ -281,4 +281,13 @@ class UselessCallOnNotNullSpec(val env: KotlinEnvironmentContainer) {
         assertThat(findings).singleElement()
             .hasMessage("Replace setOfNotNull with setOf")
     }
+
+    @Test
+    fun `does not report when calling isNullOrBlank on flexible string`() {
+        val code = """
+            val flexibleString = System.getProperty("propertyName")
+            val isFlexibleStringNullOrBlank = flexibleString.isNullOrBlank()
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
 }
