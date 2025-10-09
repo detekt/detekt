@@ -18,33 +18,6 @@ import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 
 /**
  * This rule checks whether overriding methods invoke the super method when the super method has a specific annotation.
- *
- * <noncompliant>
- * open class ParentClass {
- *     @CallSuper
- *     open fun someMethod(arg: Int) {
- *     }
- * }
- * class MyClass : ParentClass() {
- *     override fun someMethod(arg: Int) {
- *         doSomething()
- *     }
- * }
- * </noncompliant>
- *
- * <compliant>
- * open class ParentClass {
- *     @CallSuper
- *     open fun someMethod(arg: Int) {
- *     }
- * }
- * class MyClass : ParentClass() {
- *     override fun someMethod(arg: Int) {
- *         super.someMethod(arg)
- *         doSomething()
- *     }
- * }
- * </compliant>
  */
 class MissingSuperCall(config: Config) :
     Rule(
