@@ -38,6 +38,7 @@ kotlinx-serializationCore = { module = "org.jetbrains.kotlinx:kotlinx-serializat
 kotlinx-coroutinesTest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 kotlinx-html = { module = "org.jetbrains.kotlinx:kotlinx-html-jvm", version = "0.12.0" }
 ktlint-rulesetStandard = { module = "com.pinterest.ktlint:ktlint-ruleset-standard", version.ref = "ktlint"  }
+opentest4j = { module = "org.opentest4j:opentest4j", version = "1.3.0" }
 sarif4k = { module = "io.github.detekt.sarif4k:sarif4k", version = "0.6.0" }
 semver4j = { module = "org.semver4j:semver4j", version = "6.0.0" }
 slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
