@@ -1,6 +1,5 @@
-package dev.detekt.parser
+package dev.detekt.test.utils
 
-import dev.detekt.test.utils.resourceAsPath
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
@@ -8,12 +7,12 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import kotlin.io.path.Path
 
-class KtCompilerSpec {
+class KtTestCompilerSpec {
     @Nested
     inner class `Kotlin Compiler` {
 
         val path = resourceAsPath("/cases")
-        private val ktCompiler = KtCompiler()
+        private val ktCompiler = KtTestCompiler
 
         @Test
         fun `Kotlin file with LF line separators has extra user data`() {
