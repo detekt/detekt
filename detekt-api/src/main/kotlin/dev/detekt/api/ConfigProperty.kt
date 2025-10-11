@@ -71,40 +71,6 @@ fun <T : Any, U : Any> configWithFallback(
 ): ReadOnlyProperty<Rule, U> =
     FallbackConfigProperty(fallbackProperty, defaultValue, transformer)
 
-/**
- * Creates a delegated read-only property that can be used in [Rule] objects. The name of the property is the
- * key that is used during configuration lookup. The value of the property is evaluated only once.
- *
- * @param defaultValue the value that the property evaluates to when there is no key with the name of the property in
- * the config. Although [T] is defined as [Any], only [String], [Int], [Boolean] and [List<String>] are supported.
- * @param defaultAndroidValue the value that the property evaluates to when there is no key with the name of the
- * property in the config and there is a configuration property in the rule set named "android" that is set to
- * <code>true</code>.
- */
-fun <T : Any> configWithAndroidVariants(
-    defaultValue: T,
-    defaultAndroidValue: T,
-): ReadOnlyProperty<Rule, T> = configWithAndroidVariants(defaultValue, defaultAndroidValue) { it }
-
-/**
- * Creates a delegated read-only property that can be used in [Rule] objects. The name of the property is the
- * key that is used during configuration lookup. The value of the property is evaluated and transformed only once.
- *
- * @param defaultValue the value that the property evaluates to when there is no key with the name of the property in
- * the config. Although [T] is defined as [Any], only [String], [Int], [Boolean] and [List<String>] are supported.
- * @param defaultAndroidValue the value that the property evaluates to when there is no key with the name of the
- * property in the config and there is a configuration property in the rule set named "android" that is set to
- * <code>true</code>.
- * @param transformer a function that transforms the value from the configuration (or the default) into its final
- * value.
- */
-fun <T : Any, U : Any> configWithAndroidVariants(
-    defaultValue: T,
-    defaultAndroidValue: T,
-    transformer: (T) -> U,
-): ReadOnlyProperty<Rule, U> =
-    TransformedConfigPropertyWithAndroidVariants(defaultValue, defaultAndroidValue, transformer)
-
 private fun <T : Any> getValueOrDefault(config: Config, propertyName: String, defaultValue: T): T {
     @Suppress("UNCHECKED_CAST")
     return when (defaultValue) {
@@ -170,21 +136,6 @@ private abstract class MemoizedConfigProperty<U : Any> : ReadOnlyProperty<Rule, 
         value ?: doGetValue(thisRef, property).also { value = it }
 
     abstract fun doGetValue(thisRef: Rule, property: KProperty<*>): U
-}
-
-private class TransformedConfigPropertyWithAndroidVariants<T : Any, U : Any>(
-    private val defaultValue: T,
-    private val defaultAndroidValue: T,
-    private val transform: (T) -> U,
-) : MemoizedConfigProperty<U>() {
-    override fun doGetValue(thisRef: Rule, property: KProperty<*>): U {
-        val rulesetConfig = requireNotNull(thisRef.config.parent) {
-            "A rule that uses the 'configWithAndroidVariants' property delegate must have a parent config."
-        }
-        val isAndroid = getValueOrDefault(rulesetConfig, "code_style", "") == "android_studio"
-        val value = if (isAndroid) defaultAndroidValue else defaultValue
-        return transform(getValueOrDefault(thisRef.config, property.name, value))
-    }
 }
 
 private class TransformedConfigProperty<T : Any, U : Any>(
