@@ -227,7 +227,7 @@ class DetektTaskDslSpec {
                     sarif {
                         required.set(false)
                     }
-                    md {
+                    markdown {
                         required.set(false)
                     }
                 }

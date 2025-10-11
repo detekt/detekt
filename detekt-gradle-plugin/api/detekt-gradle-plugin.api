@@ -112,7 +112,7 @@ public abstract class dev/detekt/gradle/extensions/DetektReport {
 public final class dev/detekt/gradle/extensions/DetektReportType : java/lang/Enum {
 	public static final field CHECKSTYLE Ldev/detekt/gradle/extensions/DetektReportType;
 	public static final field HTML Ldev/detekt/gradle/extensions/DetektReportType;
-	public static final field MD Ldev/detekt/gradle/extensions/DetektReportType;
+	public static final field MARKDOWN Ldev/detekt/gradle/extensions/DetektReportType;
 	public static final field SARIF Ldev/detekt/gradle/extensions/DetektReportType;
 	public final fun getExtension ()Ljava/lang/String;
 	public final fun getReportId ()Ljava/lang/String;
@@ -127,11 +127,11 @@ public class dev/detekt/gradle/extensions/DetektReports {
 	public fun getCheckstyle ()Ldev/detekt/gradle/extensions/DetektReport;
 	public fun getCustom ()Ljava/util/List;
 	public fun getHtml ()Ldev/detekt/gradle/extensions/DetektReport;
-	public fun getMd ()Ldev/detekt/gradle/extensions/DetektReport;
+	public fun getMarkdown ()Ldev/detekt/gradle/extensions/DetektReport;
 	public final fun getObjects ()Lorg/gradle/api/model/ObjectFactory;
 	public fun getSarif ()Ldev/detekt/gradle/extensions/DetektReport;
 	public final fun html (Lorg/gradle/api/Action;)V
-	public final fun md (Lorg/gradle/api/Action;)V
+	public final fun markdown (Lorg/gradle/api/Action;)V
 	public final fun sarif (Lorg/gradle/api/Action;)V
 }
 

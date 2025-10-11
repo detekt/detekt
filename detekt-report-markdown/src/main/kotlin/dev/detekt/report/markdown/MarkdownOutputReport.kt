@@ -1,4 +1,4 @@
-package dev.detekt.report.md
+package dev.detekt.report.markdown
 
 import dev.detekt.api.Detektion
 import dev.detekt.api.Issue
@@ -38,8 +38,9 @@ private const val EXTRA_LINES_IN_SNIPPET = 3
  * Contains rule violations in Markdown format report.
  * [See](https://detekt.dev/docs/introduction/configurations/#output-reports)
  */
-class MdOutputReport : BuiltInOutputReport, OutputReport {
-    override val id: String = "MdOutputReport"
+class MarkdownOutputReport : BuiltInOutputReport, OutputReport {
+    override val id: String = "MarkdownOutputReport"
+    override val reportId: String = "markdown"
     override val ending: String = "md"
 
     private lateinit var basePath: Path

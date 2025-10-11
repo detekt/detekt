@@ -1,5 +1,4 @@
 import dev.detekt.gradle.Detekt
-import dev.detekt.gradle.DetektCreateBaselineTask
 import dev.detekt.gradle.report.ReportMergeTask
 
 plugins {
@@ -58,20 +57,16 @@ allprojects {
     }
 
     tasks.withType<Detekt>().configureEach {
-        jvmTarget = "1.8"
         reports {
             checkstyle.required = true
             html.required = true
             sarif.required = true
-            md.required = true
+            markdown.required = true
         }
         basePath = rootDir.absolutePath
     }
     detektReportMergeSarif {
         input.from(tasks.withType<Detekt>().map { it.reports.sarif.outputLocation })
-    }
-    tasks.withType<DetektCreateBaselineTask>().configureEach {
-        jvmTarget = "1.8"
     }
 }
 
