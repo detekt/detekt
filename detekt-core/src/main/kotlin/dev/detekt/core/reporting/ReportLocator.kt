@@ -2,7 +2,6 @@ package dev.detekt.core.reporting
 
 import dev.detekt.api.ConsoleReport
 import dev.detekt.api.Extension
-import dev.detekt.api.OutputReport
 import dev.detekt.core.ProcessingSettings
 import dev.detekt.core.extensions.loadExtensions
 import dev.detekt.core.util.isActiveOrDefault
@@ -27,10 +26,4 @@ internal class ConsoleReportLocator(settings: ProcessingSettings) :
     ReportLocator<ConsoleReport>("console-reports", settings) {
 
     override fun loadReports(): List<ConsoleReport> = loadExtensions(settings) { it.id !in excludes }
-}
-
-internal class OutputReportLocator(settings: ProcessingSettings) :
-    ReportLocator<OutputReport>("output-reports", settings) {
-
-    override fun loadReports(): List<OutputReport> = loadExtensions(settings) { it.id !in excludes }
 }

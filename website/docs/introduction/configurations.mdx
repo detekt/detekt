@@ -154,21 +154,6 @@ It's simply a way of alerting users to information that they have opted-in to.
 **FileBasedFindingsReport** is similar to the FindingsReport shown above. 
 The rule violations are grouped by file location.
 
-## Output Reports
-
-Uncomment the reports you don't care about. The detailed description can be found in [reporting](reporting.md).
-
-```yaml
-output-reports:
-  active: true
-  exclude:
-  #  - 'HtmlOutputReport'
-  #  - 'CheckstyleOutputReport'
-  #  - 'sarif'
-  #  - 'MarkdownOutputReport'
-```
-
-
 ## Processors
 
 Count processors are used to calculate project metrics.

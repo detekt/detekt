@@ -52,12 +52,6 @@ class ConfigPrinterSpec {
     }
 
     @Test
-    fun `prints default report configuration`() {
-        assertThat(yamlString).contains("output-reports:")
-        assertThat(yamlString).contains("console-reports:")
-    }
-
-    @Test
     fun `omits deprecated ruleset properties`() {
         assertThat(yamlString).doesNotContain("deprecatedSimpleConfig")
         assertThat(yamlString).doesNotContain("deprecatedListConfig")

@@ -36,7 +36,6 @@ private const val EXTRA_LINES_IN_SNIPPET = 3
 
 /**
  * Contains rule violations in Markdown format report.
- * [See](https://detekt.dev/docs/introduction/configurations/#output-reports)
  */
 class MarkdownOutputReport : BuiltInOutputReport, OutputReport {
     override val id: String = "MarkdownOutputReport"

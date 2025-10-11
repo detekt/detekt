@@ -32,14 +32,6 @@ console-reports:
      - 'FileBasedIssuesReport'
   #  - 'LiteIssuesReport'
 
-output-reports:
-  active: true
-  exclude:
-  # - 'CheckstyleOutputReport'
-  # - 'HtmlOutputReport'
-  # - 'MarkdownOutputReport'
-  # - 'sarif'
-
 comments:
   active: true
   AbsentOrWrongFileLicense:

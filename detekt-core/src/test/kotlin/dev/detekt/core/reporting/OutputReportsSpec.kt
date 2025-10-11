@@ -4,6 +4,7 @@ import dev.detekt.api.Detektion
 import dev.detekt.api.OutputReport
 import dev.detekt.core.createNullLoggingSpec
 import dev.detekt.core.createProcessingSettings
+import dev.detekt.core.extensions.loadExtensions
 import dev.detekt.core.tooling.withSettings
 import dev.detekt.report.html.HtmlOutputReport
 import dev.detekt.report.markdown.MarkdownOutputReport
@@ -67,7 +68,7 @@ class OutputReportsSpec {
         @Nested
         inner class `default report ids` {
 
-            private val extensions = createProcessingSettings().use { OutputReportLocator(it).load() }
+            private val extensions = createProcessingSettings().use { loadExtensions<OutputReport>(it) }
             private val extensionsIds = extensions.mapTo(HashSet()) { defaultReportMapping(it) }
 
             @Test
