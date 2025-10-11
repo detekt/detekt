@@ -226,9 +226,11 @@ tasks {
     }
 
     withType<Detekt>().configureEach {
+        jvmTarget = "1.8" // Remove when detekt updated to 2.0.0-alpha.1 or higher (see #8755)
         exclude("dev/detekt/detekt_gradle_plugin/BuildConfig.kt")
     }
     withType<DetektCreateBaselineTask>().configureEach {
+        jvmTarget = "1.8" // Remove when detekt updated to 2.0.0-alpha.1 or higher (see #8755)
         exclude("dev/detekt/detekt_gradle_plugin/BuildConfig.kt")
     }
 
