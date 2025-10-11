@@ -226,9 +226,11 @@ tasks {
     }
 
     withType<Detekt>().configureEach {
+        jvmTarget = "1.8"
         exclude("dev/detekt/detekt_gradle_plugin/BuildConfig.kt")
     }
     withType<DetektCreateBaselineTask>().configureEach {
+        jvmTarget = "1.8"
         exclude("dev/detekt/detekt_gradle_plugin/BuildConfig.kt")
     }
 
