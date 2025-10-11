@@ -3,7 +3,6 @@ package dev.detekt.cli.runners
 import dev.detekt.cli.parseArguments
 import dev.detekt.test.utils.NullPrintStream
 import dev.detekt.test.utils.StringPrintStream
-import dev.detekt.test.utils.createTempFileForTest
 import dev.detekt.test.utils.resourceAsPath
 import dev.detekt.tooling.api.InvalidConfig
 import dev.detekt.tooling.api.IssuesFound
@@ -13,18 +12,18 @@ import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.io.TempDir
 import java.io.PrintStream
 import java.nio.file.Path
 import kotlin.io.path.absolutePathString
-import kotlin.io.path.deleteExisting
 
 class RunnerSpec {
 
     val inputPath = resourceAsPath("cases/Poko.kt")
 
     @Test
-    fun `executes the runner with create baseline`() {
-        val baseline = createTempFileForTest("baseline", ".xml").also { it.deleteExisting() }
+    fun `executes the runner with create baseline`(@TempDir tempDir: Path) {
+        val baseline = tempDir.resolve("baseline.xml")
         executeDetekt(
             "--input",
             inputPath.toString(),

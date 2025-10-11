@@ -35,7 +35,7 @@ object KotlinAnalysisApiEngine {
     private lateinit var sourceModule: KaModule
     private val targetPlatform = JvmPlatforms.defaultJvmPlatform
     private val configuration = CompilerConfiguration()
-    private val target = KaCompilerTarget.Jvm(false)
+    private val target = KaCompilerTarget.Jvm(isTestMode = false, compiledClassHandler = null, debuggerExtension = null)
 
     /**
      * Compiles a given code string using Kotlin's Analysis API.

@@ -1,20 +1,20 @@
 package dev.detekt.tooling.api
 
 import dev.detekt.api.Config
-import dev.detekt.test.utils.createTempFileForTest
 import dev.detekt.tooling.api.spec.ExtensionId
 import dev.detekt.tooling.api.spec.ExtensionsSpec
 import org.assertj.core.api.Assertions.assertThatCode
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.io.TempDir
 import java.nio.file.Path
 
 class DefaultConfigurationProviderSpec {
 
     @Test
-    fun `loads first found instance`() {
+    fun `loads first found instance`(@TempDir tempDir: Path) {
         assertThatCode {
             DefaultConfigurationProvider.load(Spec)
-                .copy(createTempFileForTest("test", "test"))
+                .copy(tempDir.resolve("test.test"))
         }.doesNotThrowAnyException()
     }
 }

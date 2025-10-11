@@ -7,11 +7,6 @@ public final class dev/detekt/test/utils/CompileExtensionsKt {
 	public static final fun compileForTest (Ljava/nio/file/Path;)Lorg/jetbrains/kotlin/psi/KtFile;
 }
 
-public final class dev/detekt/test/utils/FileExtensionKt {
-	public static final fun createTempDirectoryForTest (Ljava/lang/String;)Ljava/nio/file/Path;
-	public static final fun createTempFileForTest (Ljava/lang/String;Ljava/lang/String;)Ljava/nio/file/Path;
-}
-
 public final class dev/detekt/test/utils/KotlinAnalysisApiEngine {
 	public static final field INSTANCE Ldev/detekt/test/utils/KotlinAnalysisApiEngine;
 	public final fun compile (Ljava/lang/String;Ljava/util/List;Ljava/util/List;Z)Lorg/jetbrains/kotlin/psi/KtFile;

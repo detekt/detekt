@@ -19,7 +19,6 @@ import org.jetbrains.kotlin.analysis.api.resolution.singleVariableAccessCall
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaFunctionSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaVariableSymbol
-import org.jetbrains.kotlin.analysis.api.types.KaTypeNullability
 import org.jetbrains.kotlin.analysis.api.types.KaTypeParameterType
 import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.lexer.KtTokens
@@ -239,13 +238,15 @@ class CanBeNonNullable(config: Config) :
                 .orEmpty()
                 .mapNotNull {
                     analyze(it) {
-                        it.resolveToCall()?.singleVariableAccessCall()
+                        it.resolveToCall()?.singleVariableAccessCall()?.symbol?.createPointer()
                     }
                 }
-                .filter { callDescriptor ->
-                    callDescriptor.symbol.returnType.nullability != KaTypeNullability.NON_NULLABLE
+                .filter { kaVariableSymbolPointer ->
+                    analyze(expression) {
+                        kaVariableSymbolPointer.restoreSymbol()?.returnType?.isMarkedNullable != false
+                    }
                 }
-                .map { callDescriptor -> callDescriptor.symbol }
+                .mapNotNull { callDescriptor -> analyze(expression) { callDescriptor.restoreSymbol() } }
             val whenConditions = expression.entries.flatMap { it.conditions.asList() }
             if (nullCheckedDescriptor.isNotEmpty()) {
                 whenConditions.evaluateSubjectWhenExpression(expression, nullCheckedDescriptor)
@@ -291,7 +292,7 @@ class CanBeNonNullable(config: Config) :
                     ?.symbol
                     ?.receiverParameter
                     ?.returnType
-                    ?.nullability != KaTypeNullability.NON_NULLABLE
+                    ?.isMarkedNullable != false
             }
             if (isExtensionForNullable) {
                 expression.receiverExpression
@@ -446,7 +447,7 @@ class CanBeNonNullable(config: Config) :
         private fun isNullableCheck(typeReference: KtTypeReference?, isNegated: Boolean): Boolean {
             typeReference ?: return false
             val isNullable = analyze(typeReference) {
-                typeReference.type.nullability.isNullable
+                typeReference.type.isMarkedNullable
             }
             return (isNullable && !isNegated) || (!isNullable && isNegated)
         }
@@ -537,7 +538,7 @@ class CanBeNonNullable(config: Config) :
             val propertyType = this.typeReference ?: return false
 
             analyze(propertyType) {
-                if (propertyType.type.nullability != KaTypeNullability.NULLABLE) return false
+                if (!propertyType.type.isMarkedNullable) return false
             }
 
             val isSetToNonNullable = initializer?.isNullableType() != true &&
@@ -563,9 +564,9 @@ class CanBeNonNullable(config: Config) :
                         // todo<k2> ignoring some case which in pre k2 was passing as earlier
                         //  using BindingContext.DELEGATED_PROPERTY_RESOLVED_CALL we were able to
                         //  get the actual type of the implementation
-                        returnType.canBeNull
+                        returnType.isNullable
                     } else {
-                        returnType.nullability != KaTypeNullability.NON_NULLABLE
+                        returnType.isMarkedNullable
                     }
                 } ?: true
             }

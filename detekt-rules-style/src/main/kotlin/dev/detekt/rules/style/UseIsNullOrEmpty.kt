@@ -79,7 +79,7 @@ class UseIsNullOrEmpty(config: Config) :
         }?.takeIf {
             analyze(it) {
                 val expressionType = it.expressionType
-                expressionType?.nullability?.isNullable == true || expressionType?.hasFlexibleNullability == true
+                expressionType?.isMarkedNullable == true || expressionType?.hasFlexibleNullability == true
             }
         }
     }

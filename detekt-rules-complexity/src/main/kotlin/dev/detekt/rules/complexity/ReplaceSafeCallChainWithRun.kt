@@ -56,7 +56,7 @@ class ReplaceSafeCallChainWithRun(config: Config) :
         while (receiver is KtSafeQualifiedExpression) {
             val canBeNull = analyze(receiver) {
                 val call = receiver.resolveToCall()?.successfulCallOrNull<KaCallableMemberCall<*, *>>()
-                call != null && call.partiallyAppliedSymbol.signature.returnType.canBeNull
+                call != null && call.partiallyAppliedSymbol.signature.returnType.isNullable
             }
             if (canBeNull) break
             counter++

@@ -64,7 +64,7 @@ class CastNullableToNonNullableType(config: Config) :
 
     private fun KtTypeReference.isNullable(): Boolean {
         analyze(this) {
-            return type.canBeNull
+            return type.isNullable
         }
     }
 }

@@ -12,15 +12,16 @@ import dev.detekt.report.markdown.MarkdownOutputReport
 import dev.detekt.report.sarif.SarifOutputReport
 import dev.detekt.report.xml.CheckstyleOutputReport
 import dev.detekt.test.utils.StringPrintStream
-import dev.detekt.test.utils.createTempFileForTest
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.io.TempDir
+import java.nio.file.Path
 
 class OutputFacadeSpec {
 
     @Test
-    fun `Running the output facade with multiple reports`() {
+    fun `Running the output facade with multiple reports`(@TempDir tempDir: Path) {
         val printStream = StringPrintStream()
         val defaultResult = TestDetektion(
             createIssue(
@@ -28,10 +29,10 @@ class OutputFacadeSpec {
                 createIssueEntity(createIssueLocation("TestFile.kt"))
             ),
         )
-        val htmlOutputPath = createTempFileForTest("detekt", ".html")
-        val xmlOutputPath = createTempFileForTest("detekt", ".xml")
-        val markdownOutputPath = createTempFileForTest("detekt", ".md")
-        val sarifOutputPath = createTempFileForTest("detekt", ".sarif")
+        val htmlOutputPath = tempDir.resolve("detekt.html")
+        val xmlOutputPath = tempDir.resolve("detekt.xml")
+        val markdownOutputPath = tempDir.resolve("detekt.md")
+        val sarifOutputPath = tempDir.resolve("detekt.sarif")
 
         val spec = createNullLoggingSpec {
             reports {
@@ -59,7 +60,7 @@ class OutputFacadeSpec {
     }
 
     @Test
-    fun `two reports can't have the same path`() {
+    fun `two reports can't have the same path`(@TempDir tempDir: Path) {
         val printStream = StringPrintStream()
         val defaultResult = TestDetektion(
             createIssue(
@@ -67,8 +68,8 @@ class OutputFacadeSpec {
                 createIssueEntity(createIssueLocation("TestFile.kt"))
             ),
         )
-        val htmlOutputPath = createTempFileForTest("detekt", ".html")
-        val markdownOutputPath = createTempFileForTest("detekt", ".md")
+        val htmlOutputPath = tempDir.resolve("detekt.html")
+        val markdownOutputPath = tempDir.resolve("detekt.md")
 
         val spec = createNullLoggingSpec {
             reports {
@@ -89,7 +90,7 @@ class OutputFacadeSpec {
     }
 
     @Test
-    fun `three reports can't have the same path`() {
+    fun `three reports can't have the same path`(@TempDir tempDir: Path) {
         val printStream = StringPrintStream()
         val defaultResult = TestDetektion(
             createIssue(
@@ -97,8 +98,8 @@ class OutputFacadeSpec {
                 createIssueEntity(createIssueLocation("TestFile.kt"))
             ),
         )
-        val htmlOutputPath = createTempFileForTest("detekt", ".html")
-        val sarifOutputPath = createTempFileForTest("detekt", ".sarif")
+        val htmlOutputPath = tempDir.resolve("detekt.html")
+        val sarifOutputPath = tempDir.resolve("detekt.sarif")
 
         val spec = createNullLoggingSpec {
             reports {

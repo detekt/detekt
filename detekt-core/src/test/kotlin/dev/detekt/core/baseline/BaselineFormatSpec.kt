@@ -1,6 +1,5 @@
 package dev.detekt.core.baseline
 
-import dev.detekt.test.utils.createTempFileForTest
 import dev.detekt.test.utils.resourceAsPath
 import dev.detekt.tooling.api.BaselineProvider
 import org.assertj.core.api.Assertions.assertThat
@@ -8,6 +7,8 @@ import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.io.TempDir
+import java.nio.file.Path
 import kotlin.io.path.readText
 
 class BaselineFormatSpec {
@@ -21,12 +22,12 @@ class BaselineFormatSpec {
         }
 
         @Test
-        fun `reads and writes baselines`() {
+        fun `reads and writes baselines`(@TempDir tempDir: Path) {
             val provider = BaselineProvider.load()
             val path = resourceAsPath("/baseline_feature/valid-baseline.xml")
 
             val referenceBaseline = provider.read(path)
-            val tempFile = createTempFileForTest("baseline1", ".xml")
+            val tempFile = tempDir.resolve("baseline1.xml")
             provider.write(tempFile, referenceBaseline)
             val actualBaseline = provider.read(path)
 
@@ -72,8 +73,8 @@ class BaselineFormatSpec {
         private val savedBaseline = DefaultBaseline(setOf("4", "2", "2"), setOf("1", "2", "3"))
 
         @Test
-        fun `has a new line at the end of the written baseline file`() {
-            val tempFile = createTempFileForTest("baseline1", ".xml")
+        fun `has a new line at the end of the written baseline file`(@TempDir tempDir: Path) {
+            val tempFile = tempDir.resolve("baseline1.xml")
 
             val format = BaselineFormat()
             format.write(tempFile, savedBaseline)
@@ -83,8 +84,8 @@ class BaselineFormatSpec {
         }
 
         @Test
-        fun `asserts that the saved and loaded baseline files are equal`() {
-            val tempFile = createTempFileForTest("baseline-saved", ".xml")
+        fun `asserts that the saved and loaded baseline files are equal`(@TempDir tempDir: Path) {
+            val tempFile = tempDir.resolve("baseline-saved.xml")
 
             val format = BaselineFormat()
             format.write(tempFile, savedBaseline)
