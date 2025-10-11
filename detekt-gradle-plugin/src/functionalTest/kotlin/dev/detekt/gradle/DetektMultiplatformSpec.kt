@@ -388,7 +388,7 @@ private val KMM_PLUGIN_BLOCK = """
 @Language("gradle.kts")
 private val DETEKT_BLOCK = """
     tasks.withType<dev.detekt.gradle.Detekt>().configureEach {
-        reports.md.required.set(false)
+        reports.markdown.required.set(false)
     }
 """.trimIndent()
 
