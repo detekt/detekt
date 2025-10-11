@@ -23,6 +23,11 @@ kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 # This represents the oldest AGP version that is supported by detekt.
 # This should only be updated when updating the minimum version supported by detekt's Gradle plugin.
 android-gradleApi = { module = "com.android.tools.build:gradle-api", version = "7.3.1" }
+
+# This represents the oldest Kotlin version that is supported by detekt.
+# This should only be updated when updating the minimum version supported by detekt's Gradle plugin.
+kotlin-gradlePluginApi = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin-api", version = "2.1.0" }
+
 assertj-core = { module = "org.assertj:assertj-core", version = "3.27.6" }
 classgraph = { module = "io.github.classgraph:classgraph", version = "4.8.184" }
 jcommander = { module = "org.jcommander:jcommander", version = "1.85" }
@@ -30,7 +35,6 @@ jetbrains-annotations = { module = "org.jetbrains:annotations", version = "26.0.
 junit-jupiterApi = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 kctfork-core = { module = "dev.zacsweers.kctfork:core", version = "0.10.0" }
 kotlin-compiler = { module = "org.jetbrains.kotlin:kotlin-compiler", version.ref = "kotlin" }
-kotlin-gradlePluginApi = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin-api", version.ref = "kotlin" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 kotlin-scriptingJvm = { module = "org.jetbrains.kotlin:kotlin-scripting-jvm", version.ref = "kotlin" }
 kotlinx-coroutinesCore = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
