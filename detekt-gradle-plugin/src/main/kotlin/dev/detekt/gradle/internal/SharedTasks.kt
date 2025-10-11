@@ -8,7 +8,7 @@ import org.gradle.api.Project
 import org.gradle.api.plugins.JavaBasePlugin
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.jvm.toolchain.JavaToolchainService
-import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmExtension
 
 internal fun Project.setDetektTaskDefaults(extension: DetektExtension) {
     tasks.withType(Detekt::class.java).configureEach {
@@ -22,7 +22,7 @@ internal fun Project.setDetektTaskDefaults(extension: DetektExtension) {
         }
 
         project.plugins.withId("org.jetbrains.kotlin.jvm") { _ ->
-            val compilerOptions = project.extensions.getByType(KotlinJvmProjectExtension::class.java).compilerOptions
+            val compilerOptions = project.extensions.getByType(KotlinJvmExtension::class.java).compilerOptions
 
             it.jvmTarget.convention(compilerOptions.jvmTarget.map { jvmTarget -> jvmTarget.target })
         }
@@ -54,7 +54,7 @@ internal fun Project.setCreateBaselineTaskDefaults(extension: DetektExtension) {
         }
 
         project.plugins.withId("org.jetbrains.kotlin.jvm") { _ ->
-            val compilerOptions = project.extensions.getByType(KotlinJvmProjectExtension::class.java).compilerOptions
+            val compilerOptions = project.extensions.getByType(KotlinJvmExtension::class.java).compilerOptions
 
             it.jvmTarget.convention(compilerOptions.jvmTarget.map { jvmTarget -> jvmTarget.target })
         }

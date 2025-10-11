@@ -140,7 +140,6 @@ val testKitGradleMinVersionRuntimeOnly by configurations.registering
 
 dependencies {
     compileOnly(libs.android.gradleApi)
-    compileOnly(libs.kotlin.gradle.plugin)
     compileOnly(libs.kotlin.gradlePluginApi)
     compileOnly(libs.jetbrains.annotations)
 

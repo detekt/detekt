@@ -9,7 +9,7 @@ import dev.detekt.gradle.plugin.DetektPlugin
 import org.gradle.api.Project
 import org.gradle.api.provider.Provider
 import org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode
-import org.jetbrains.kotlin.gradle.dsl.kotlinExtension
+import org.jetbrains.kotlin.gradle.dsl.KotlinBaseExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
 import org.jetbrains.kotlin.gradle.plugin.KotlinTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
@@ -101,6 +101,7 @@ internal fun Project.registerJvmCompilationCreateBaselineTask(
 
 internal fun Project.mapExplicitArgMode(): Provider<String> =
     provider {
+        val kotlinExtension = extensions.getByType(KotlinBaseExtension::class.java)
         when (kotlinExtension.explicitApi) {
             ExplicitApiMode.Strict -> "strict"
             ExplicitApiMode.Warning -> "warning"
