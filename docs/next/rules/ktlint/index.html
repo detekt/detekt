@@ -10,7 +10,7 @@
 
 
 <link rel="search" type="application/opensearchdescription+xml" title="detekt" href="/opensearch.xml"><link rel="stylesheet" href="/assets/css/styles.7f312c80.css">
-<script src="/assets/js/runtime~main.264cea6b.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.2bab8c07.js" defer="defer"></script>
 <script src="/assets/js/main.169aac30.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -440,7 +440,10 @@ from the standard rules, make sure to enable just one. The pro of this rule is t
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="multilineexpressionwrapping">MultilineExpressionWrapping<a href="#multilineexpressionwrapping" class="hash-link" aria-label="Direct link to MultilineExpressionWrapping" title="Direct link to MultilineExpressionWrapping" translate="no">​</a></h3>
 <p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#multiline-expression-wrapping" target="_blank" rel="noopener noreferrer">ktlint docs</a> for
 documentation.</p>
-<p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
+<p>Although this is a standard rule it is not enabled by default like other standard ktlint rules. ktlint only enables
+this rule when the rule is explicitly enabled or if the code style is set to ktlint_official. detekt uses
+intellij_idea by default.</p>
+<p><strong>Active by default</strong>: No</p>
 <h4 class="anchor anchorWithStickyNavbar_LWe7" id="configuration-options-28">Configuration options:<a href="#configuration-options-28" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
 <ul>
 <li>
