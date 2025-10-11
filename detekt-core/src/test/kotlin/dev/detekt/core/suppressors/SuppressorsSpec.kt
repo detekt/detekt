@@ -8,7 +8,6 @@ import dev.detekt.test.TestConfig
 import dev.detekt.test.utils.compileContentForTest
 import dev.detekt.tooling.api.AnalysisMode
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.junit.jupiter.api.Test
 
 class SuppressorsSpec {
@@ -36,7 +35,7 @@ class SuppressorsSpec {
     @Test
     fun `A finding that should be suppressed`() {
         val rule = ARule(TestConfig("ignoreAnnotated" to listOf("Composable")))
-        val suppress = buildSuppressors(rule, BindingContext.EMPTY, AnalysisMode.light)
+        val suppress = buildSuppressors(rule, AnalysisMode.light)
             .fold(false) { acc, suppressor -> acc || suppressor.shouldSuppress(noIgnorableFinding) }
 
         assertThat(suppress).isFalse()
@@ -45,7 +44,7 @@ class SuppressorsSpec {
     @Test
     fun `A finding that should not be suppressed`() {
         val rule = ARule(TestConfig("ignoreAnnotated" to listOf("Composable")))
-        val suppress = buildSuppressors(rule, BindingContext.EMPTY, AnalysisMode.light)
+        val suppress = buildSuppressors(rule, AnalysisMode.light)
             .fold(false) { acc, suppressor -> acc || suppressor.shouldSuppress(ignorableFinding) }
 
         assertThat(suppress).isTrue()

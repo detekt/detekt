@@ -6,7 +6,7 @@ import dev.detekt.core.createNullLoggingSpec
 import dev.detekt.core.createProcessingSettings
 import dev.detekt.core.tooling.withSettings
 import dev.detekt.report.html.HtmlOutputReport
-import dev.detekt.report.md.MdOutputReport
+import dev.detekt.report.markdown.MarkdownOutputReport
 import dev.detekt.report.xml.CheckstyleOutputReport
 import dev.detekt.test.utils.resourceAsPath
 import dev.detekt.tooling.dsl.ReportsSpecBuilder
@@ -26,7 +26,7 @@ class OutputReportsSpec {
             report { "checkstyle" to Path("/tmp/path1") }
             report { reportUnderTest to Path("/tmp/path3") }
             report { "html" to Path("D:_Gradle\\xxx\\xxx\\build\\reports\\detekt\\detekt.html") }
-            report { "md" to Path("/tmp/path4") }
+            report { "markdown" to Path("/tmp/path4") }
         }.build().reports.toList()
 
         @Test
@@ -58,10 +58,10 @@ class OutputReportsSpec {
         }
 
         @Test
-        fun `it should properly parse MD report entry`() {
-            val mdReport = reports[3]
-            assertThat(mdReport.type).isEqualTo(defaultReportMapping(MdOutputReport()))
-            assertThat(mdReport.path).isEqualTo(Path("/tmp/path4"))
+        fun `it should properly parse Markdown report entry`() {
+            val markdownReport = reports[3]
+            assertThat(markdownReport.type).isEqualTo(defaultReportMapping(MarkdownOutputReport()))
+            assertThat(markdownReport.path).isEqualTo(Path("/tmp/path4"))
         }
 
         @Nested

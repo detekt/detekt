@@ -1,13 +1,13 @@
 package dev.detekt.generator
 
 import dev.detekt.generator.collection.DetektCollector
-import dev.detekt.parser.KtCompiler
+import org.jetbrains.kotlin.analysis.api.standalone.buildStandaloneAnalysisAPISession
+import org.jetbrains.kotlin.analysis.project.structure.builder.buildKtSourceModule
+import org.jetbrains.kotlin.platform.jvm.JvmPlatforms
 import org.jetbrains.kotlin.psi.KtFile
 import java.io.PrintStream
-import java.nio.file.Files
 import java.nio.file.Path
-import kotlin.io.path.extension
-import kotlin.streams.asSequence
+import kotlin.io.path.Path
 import kotlin.time.measureTime
 
 class Generator(
@@ -21,10 +21,22 @@ class Generator(
     private val printer = DetektPrinter(documentationPath, configPath)
 
     fun execute() {
-        val parser = KtCompiler()
         val time = measureTime {
-            val ktFiles = inputPaths
-                .flatMap { parseAll(parser, it) }
+            val session = buildStandaloneAnalysisAPISession {
+                buildKtModuleProvider {
+                    val targetPlatform = JvmPlatforms.defaultJvmPlatform
+                    platform = targetPlatform
+                    addModule(
+                        buildKtSourceModule {
+                            addSourceRoots(inputPaths)
+                            platform = targetPlatform
+                            moduleName = "source"
+                        }
+                    )
+                }
+            }
+
+            val ktFiles = session.modulesWithFiles.values.flatten().map { it as KtFile }
 
             ktFiles.forEach(collector::visit)
 
@@ -35,29 +47,35 @@ class Generator(
     }
 
     fun executeCustomRuleConfig() {
-        val parser = KtCompiler()
         val time = measureTime {
-            inputPaths
-                .map { parseAll(parser, it.resolve("src/main/kotlin/")) to it }
-                .forEach { (list: Collection<KtFile>, folder: Path) ->
-                    val collector = DetektCollector(textReplacements)
-                    list.forEach { file ->
-                        collector.visit(file)
+            val session = buildStandaloneAnalysisAPISession {
+                buildKtModuleProvider {
+                    val targetPlatform = JvmPlatforms.defaultJvmPlatform
+                    platform = targetPlatform
+                    inputPaths.forEach {
+                        addModule(
+                            buildKtSourceModule {
+                                addSourceRoot(it.resolve("src/main/kotlin/"))
+                                platform = targetPlatform
+                                moduleName = it.toString()
+                            }
+                        )
                     }
-                    printer.printCustomRuleConfig(
-                        collector.items,
-                        folder.resolve("src/main/resources/config/")
-                    )
                 }
+            }
+
+            session.modulesWithFiles.forEach { (sourceModule, files) ->
+                val collector = DetektCollector(textReplacements)
+                files.forEach { file ->
+                    collector.visit(file as KtFile)
+                }
+                printer.printCustomRuleConfig(
+                    collector.items,
+                    Path(sourceModule.name).resolve("src/main/resources/config/")
+                )
+            }
         }
 
         outPrinter.println("\nGenerated custom rules config in $time.")
     }
 }
-
-private fun parseAll(parser: KtCompiler, root: Path): Collection<KtFile> =
-    Files.walk(root)
-        .asSequence()
-        .filter { it.extension == "kt" }
-        .map { parser.compile(it) }
-        .toList()

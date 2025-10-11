@@ -16,10 +16,10 @@ import dev.detekt.metrics.processors.complexityKey
 import dev.detekt.metrics.processors.linesKey
 import dev.detekt.metrics.processors.logicalLinesKey
 import dev.detekt.metrics.processors.sourceLinesKey
-import dev.detekt.test.utils.createTempFileForTest
 import dev.detekt.test.utils.readResourceContent
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.io.TempDir
 import java.nio.file.Path
 import kotlin.io.path.Path
 import kotlin.io.path.absolute
@@ -136,24 +136,26 @@ class HtmlOutputReportSpec {
     }
 
     @Test
-    fun `asserts that the generated HTML is the same as expected`() {
+    fun `asserts that the generated HTML is the same as expected`(@TempDir tempDir: Path) {
         val expectedString = readResourceContent("HtmlOutputFormatTest.html")
-        val expected = createTempFileForTest("expected-report", ".html").apply { writeText(expectedString) }
+        val expected = tempDir.resolve("expected-report.html").apply { writeText(expectedString) }
 
         val result = htmlReport.render(createTestDetektionWithMultipleSmells())
             .replace(generatedRegex, REPLACEMENT)
-        val actual = createTempFileForTest("actual-report", ".html").apply { writeText(result) }
+        val actual = tempDir.resolve("actual-report.html").apply { writeText(result) }
 
         assertThat(actual).hasSameTextualContentAs(expected)
     }
 
     @Test
-    fun `asserts that the generated HTML is the same even if we change the order of the issues`() {
+    fun `asserts that the generated HTML is the same even if we change the order of the issues`(
+        @TempDir tempDir: Path,
+    ) {
         val issues = issues()
         val reversedIssues = issues.reversedArray()
 
-        val firstReport = createReportWithIssues(*issues)
-        val secondReport = createReportWithIssues(*reversedIssues)
+        val firstReport = createReportWithIssues(tempDir, *issues)
+        val secondReport = createReportWithIssues(tempDir, *reversedIssues)
 
         assertThat(firstReport).hasSameTextualContentAs(secondReport)
     }
@@ -218,12 +220,12 @@ private fun issues(): Array<Issue> {
 private val generatedRegex = """^generated\swith.*$""".toRegex(RegexOption.MULTILINE)
 private const val REPLACEMENT = "generated with..."
 
-private fun createReportWithIssues(vararg issues: Issue): Path {
+private fun createReportWithIssues(tempDir: Path, vararg issues: Issue): Path {
     val htmlReport = HtmlOutputReport().apply { init(TestSetupContext()) }
     val detektion = TestDetektion(*issues)
     var result = htmlReport.render(detektion)
     result = generatedRegex.replace(result, REPLACEMENT)
-    val reportPath = createTempFileForTest("report", ".html")
+    val reportPath = tempDir.resolve("report.html")
     reportPath.writeText(result)
     return reportPath
 }

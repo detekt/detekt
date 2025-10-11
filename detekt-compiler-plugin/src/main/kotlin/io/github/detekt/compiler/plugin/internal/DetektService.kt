@@ -7,17 +7,15 @@ import dev.detekt.tooling.api.UnexpectedError
 import dev.detekt.tooling.api.spec.ProcessingSpec
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.resolve.BindingContext
 
 internal class DetektService(
     private val log: MessageCollector,
     private val spec: ProcessingSpec,
 ) {
 
-    @Suppress("ForbiddenComment")
-    fun analyze(files: Collection<KtFile>, context: BindingContext) {
+    fun analyze(files: Collection<KtFile>) {
         val detekt = DetektProvider.load().get(spec)
-        val result = detekt.run(files, context)
+        val result = detekt.run(files)
         log.info("${files.size} files analyzed")
         result.container?.let { log.reportIssues(it) }
         log.info("Success?: ${result.error == null}")

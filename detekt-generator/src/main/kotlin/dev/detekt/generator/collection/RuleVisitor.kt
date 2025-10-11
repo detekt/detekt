@@ -2,7 +2,6 @@ package dev.detekt.generator.collection
 
 import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.Alias
-import dev.detekt.api.DetektVisitor
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.internal.AutoCorrectable
 import dev.detekt.generator.collection.exception.InvalidDocumentationException
@@ -10,10 +9,11 @@ import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtSuperTypeList
+import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
 import org.jetbrains.kotlin.psi.psiUtil.containingClass
 import org.jetbrains.kotlin.psi.psiUtil.getSuperNames
 
-internal class RuleVisitor(textReplacements: Map<String, String>) : DetektVisitor() {
+internal class RuleVisitor(textReplacements: Map<String, String>) : KtTreeVisitorVoid() {
 
     val containsRule
         get() = classesMap.any { it.value }

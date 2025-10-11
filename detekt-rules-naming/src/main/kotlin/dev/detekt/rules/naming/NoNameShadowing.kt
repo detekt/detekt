@@ -12,7 +12,7 @@ import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.psi.hasImplicitParameterReference
 import dev.detekt.psi.implicitParameterOrNull
-import org.jetbrains.kotlin.builtins.StandardNames
+import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassInitializer
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -125,7 +125,7 @@ class NoNameShadowing(
                             parent.valueParameters.any { it.name == declarationName }
                         } else {
                             parent.implicitParameterOrNull() != null &&
-                                declarationName == StandardNames.IMPLICIT_LAMBDA_PARAMETER_NAME.asString()
+                                declarationName == Name.identifier("it").asString()
                         }
                     }
 

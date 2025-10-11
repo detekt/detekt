@@ -552,8 +552,8 @@ class ConfigPropertySpec {
     @Nested
     inner class `With android variant` {
 
-        private val androidRulesetConfig = TestConfig("android" to true)
-        private val nonAndroidRulesetConfig = TestConfig("android" to false)
+        private val androidRulesetConfig = TestConfig("code_style" to "android_studio")
+        private val nonAndroidRulesetConfig = TestConfig("code_style" to "intellij_idea")
         private val androidUndefinedRulesetConfig = TestConfig()
 
         @Test

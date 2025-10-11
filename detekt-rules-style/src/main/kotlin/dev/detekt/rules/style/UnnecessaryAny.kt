@@ -17,7 +17,6 @@ import org.jetbrains.kotlin.analysis.api.symbols.KaDeclarationSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaDestructuringDeclarationSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaVariableSymbol
-import org.jetbrains.kotlin.builtins.StandardNames
 import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.CallableId
@@ -209,7 +208,7 @@ class UnnecessaryAny(config: Config) :
         if (this == null) return false
         with(session) {
             val symbol = resolveToCall()?.singleFunctionCallOrNull()?.symbol as? KaNamedFunctionSymbol ?: return false
-            return symbol.name == StandardNames.EQUALS_NAME &&
+            return symbol.name == Name.identifier("equals") &&
                 symbol.returnType.isBooleanType &&
                 symbol.valueParameters.singleOrNull()?.returnType?.let { it.isAnyType && it.isMarkedNullable } == true
         }

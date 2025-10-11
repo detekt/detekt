@@ -1,11 +1,12 @@
 package dev.detekt.core.tooling
 
 import dev.detekt.core.createNullLoggingSpec
-import dev.detekt.test.utils.createTempFileForTest
 import dev.detekt.test.utils.resourceAsPath
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.io.TempDir
+import java.nio.file.Path
 import kotlin.io.path.readText
 
 class DefaultConfigProviderSpec {
@@ -22,8 +23,8 @@ class DefaultConfigProviderSpec {
         }
 
         @Test
-        fun copies() {
-            val path = createTempFileForTest("test", "test")
+        fun copies(@TempDir tempDir: Path) {
+            val path = tempDir.resolve("test.test")
             DefaultConfigProvider().apply { init(extensionsSpec) }.copy(path)
 
             assertThat(path)
@@ -48,8 +49,8 @@ class DefaultConfigProviderSpec {
         }
 
         @Test
-        fun copies() {
-            val path = createTempFileForTest("test", "test")
+        fun copies(@TempDir tempDir: Path) {
+            val path = tempDir.resolve("test.test")
             DefaultConfigProvider().apply { init(extensionsSpec) }.copy(path)
 
             val actual = path.readText()

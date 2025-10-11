@@ -10,8 +10,8 @@ import dev.detekt.api.Rule
 import dev.detekt.api.config
 import dev.detekt.rules.style.UnnecessaryParentheses.Companion.childToUnclearPrecedenceParentsMapping
 import org.jetbrains.kotlin.KtNodeTypes
+import org.jetbrains.kotlin.lang.BinaryOperationPrecedence
 import org.jetbrains.kotlin.lexer.KtTokens
-import org.jetbrains.kotlin.parsing.KotlinExpressionParsing.Precedence
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
 import org.jetbrains.kotlin.psi.KtConstantExpression
@@ -83,41 +83,41 @@ class UnnecessaryParentheses(config: Config) : Rule(
         /**
          * Map from operators to a set of other operators between which precedence can be unclear.
          *
-         * This is built from a mapping of [Precedence] to other, greater, [Precedence](s) which should be considered
-         * unclear when mixed as child binary expressions.
+         * This is built from a mapping of [BinaryOperationPrecedence] to other, greater, [BinaryOperationPrecedence](s)
+         * which should be considered unclear when mixed as child binary expressions.
          */
         @Suppress("CommentOverPrivateProperty")
         private val childToUnclearPrecedenceParentsMapping: Map<IElementType, Set<IElementType>> = arrayOf(
-            Precedence.ELVIS to arrayOf(
-                Precedence.EQUALITY, // (a ?: b) == c
-                Precedence.COMPARISON, // (a ?: b) > c
-                Precedence.IN_OR_IS, // (a ?: b) in c
+            BinaryOperationPrecedence.ELVIS to arrayOf(
+                BinaryOperationPrecedence.EQUALITY, // (a ?: b) == c
+                BinaryOperationPrecedence.COMPARISON, // (a ?: b) > c
+                BinaryOperationPrecedence.IN_OR_IS, // (a ?: b) in c
             ),
-            Precedence.SIMPLE_NAME to arrayOf(
-                Precedence.ELVIS, // a ?: (b to c)
-                Precedence.SIMPLE_NAME, // (a to b) to c
+            BinaryOperationPrecedence.INFIX to arrayOf(
+                BinaryOperationPrecedence.ELVIS, // a ?: (b to c)
+                BinaryOperationPrecedence.INFIX, // (a to b) to c
             ),
-            Precedence.MULTIPLICATIVE to arrayOf(
-                Precedence.ADDITIVE, // (a * b) + c
-                Precedence.RANGE, // (a / b)..(c * d)
+            BinaryOperationPrecedence.MULTIPLICATIVE to arrayOf(
+                BinaryOperationPrecedence.ADDITIVE, // (a * b) + c
+                BinaryOperationPrecedence.RANGE, // (a / b)..(c * d)
                 // taken from https://github.com/JetBrains/intellij-kotlin/commit/70cd07bcffe701da0fd8c803abceef2b5c67ab9c
-                Precedence.ELVIS, // a ?: (b * c)
+                BinaryOperationPrecedence.ELVIS, // a ?: (b * c)
             ),
             // (a + b)..(c + d)
-            Precedence.ADDITIVE to arrayOf(
-                Precedence.RANGE,
+            BinaryOperationPrecedence.ADDITIVE to arrayOf(
+                BinaryOperationPrecedence.RANGE,
                 // taken from https://github.com/JetBrains/intellij-kotlin/commit/70cd07bcffe701da0fd8c803abceef2b5c67ab9c
-                Precedence.ELVIS // a ?: (b + c)
+                BinaryOperationPrecedence.ELVIS // a ?: (b + c)
             ),
             // (a && b) || c
-            Precedence.CONJUNCTION to arrayOf(Precedence.DISJUNCTION),
+            BinaryOperationPrecedence.CONJUNCTION to arrayOf(BinaryOperationPrecedence.DISJUNCTION),
         )
             .onEach { (child, parents) ->
                 parents.forEach { check(child <= it) }
             }
             .flatMap { (child, parents) ->
-                child.operations.types.map { childOp ->
-                    childOp to parents.flatMapTo(mutableSetOf()) { parentOp -> parentOp.operations.types.toList() }
+                child.tokens.map { childOp ->
+                    childOp to parents.flatMapTo(mutableSetOf()) { parentOp -> parentOp.tokens.toList() }
                 }
             }
             .toMap()

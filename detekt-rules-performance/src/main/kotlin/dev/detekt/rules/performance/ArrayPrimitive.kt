@@ -8,9 +8,10 @@ import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
-import org.jetbrains.kotlin.builtins.PrimitiveType
+import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.name.StandardClassIds
 import org.jetbrains.kotlin.name.StandardClassIds.BASE_KOTLIN_PACKAGE
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
@@ -66,20 +67,15 @@ class ArrayPrimitive(config: Config) :
     }
 
     private fun reportArrayPrimitives(typeReference: KtTypeReference) {
-        typeReference.collectDescendantsOfType<KtTypeReference> { isArrayPrimitive(it) }
+        typeReference.collectDescendantsOfType<KtTypeReference> { it.isArrayPrimitive() }
             .forEach { report(Finding(Entity.from(it), description)) }
     }
 
-    private fun isArrayPrimitive(it: KtTypeReference): Boolean {
-        if (it.text?.startsWith("Array<") == true) {
-            val genericTypeArguments = it.typeElement?.typeArgumentsAsTypes
-            return genericTypeArguments?.singleOrNull()?.let { primitiveTypes.contains(it.text) } == true
-        }
-        return false
+    private fun KtTypeReference.isArrayPrimitive(): Boolean = analyze(this) {
+        type.symbol?.classId == StandardClassIds.Array && type.arrayElementType?.isPrimitive == true
     }
 
     companion object {
-        private val primitiveTypes = PrimitiveType.entries.map { it.typeName.asString() }
         private val factoryMethodFqNames = listOf(
             CallableId(BASE_KOTLIN_PACKAGE, Name.identifier("arrayOf")),
             CallableId(BASE_KOTLIN_PACKAGE, Name.identifier("emptyArray"))

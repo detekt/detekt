@@ -37,7 +37,7 @@ output-reports:
   exclude:
   # - 'CheckstyleOutputReport'
   # - 'HtmlOutputReport'
-  # - 'MdOutputReport'
+  # - 'MarkdownOutputReport'
   # - 'sarif'
 
 comments:

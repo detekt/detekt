@@ -10,7 +10,7 @@ import dev.detekt.api.RuleInstance
 @Suppress("FunctionNaming")
 fun TestDetektion(
     vararg issues: Issue,
-    rules: List<RuleInstance> = emptyList(),
+    rules: List<RuleInstance> = issues.map { it.ruleInstance },
     metrics: List<ProjectMetric> = emptyList(),
     notifications: List<Notification> = emptyList(),
     userData: Map<String, Any> = emptyMap(),

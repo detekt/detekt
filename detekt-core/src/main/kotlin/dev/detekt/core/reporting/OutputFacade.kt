@@ -15,6 +15,15 @@ class OutputFacade(
 ) {
     private val reports: Map<String, ReportsSpec.Report> = settings.spec.reportsSpec.reports.associateBy { it.type }
 
+    init {
+        reports.values.groupBy { it.path }
+            .forEach { (path: Path, reports: List<ReportsSpec.Report>) ->
+                check(reports.count() == 1) {
+                    "The path $path is defined in multiple reports: ${reports.map { it.type }}"
+                }
+            }
+    }
+
     fun run(result: Detektion) {
         // Always run output reports first.
         // They produce notifications which may get printed on the console.

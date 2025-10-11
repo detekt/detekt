@@ -1,7 +1,7 @@
 import java.io.ByteArrayOutputStream
 
 plugins {
-    id("com.gradleup.shadow") version "9.1.0"
+    id("com.gradleup.shadow") version "9.2.2"
     id("module")
     id("application")
 }
@@ -17,9 +17,9 @@ val detektCliClasspath by configurations.resolvable("detektCliClasspath") {
 
 dependencies {
     implementation(libs.kotlin.compiler)
-    implementation(projects.detektParser)
     implementation(projects.detektApi)
-    implementation(projects.detektPsiUtils)
+    implementation(projects.detektKotlinAnalysisApi)
+    implementation(projects.detektKotlinAnalysisApiStandalone)
     detektCli(projects.detektCli)
     implementation(projects.detektUtils)
     implementation(libs.jcommander)

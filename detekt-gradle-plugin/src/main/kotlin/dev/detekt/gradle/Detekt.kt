@@ -182,7 +182,7 @@ abstract class Detekt @Inject constructor(
             DefaultReportArgument(reports.checkstyle),
             DefaultReportArgument(reports.html),
             DefaultReportArgument(reports.sarif),
-            DefaultReportArgument(reports.md),
+            DefaultReportArgument(reports.markdown),
             DebugArgument(debug.get()),
             ParallelArgument(parallel.get()),
             BuildUponDefaultConfigArgument(buildUponDefaultConfig.get()),

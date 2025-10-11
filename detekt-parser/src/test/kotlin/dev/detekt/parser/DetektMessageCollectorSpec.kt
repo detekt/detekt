@@ -38,7 +38,7 @@ class DetektMessageCollectorSpec {
 
         @Test
         fun `adds up to the message count`() {
-            subject.printIssuesCountIfAny(k2Mode = true)
+            subject.printIssuesCountIfAny()
 
             assertThat(warningPrinter.messages).contains(
                 """
@@ -63,7 +63,7 @@ class DetektMessageCollectorSpec {
 
         @Test
         fun `adds up to the message count`() {
-            subject.printIssuesCountIfAny(k2Mode = true)
+            subject.printIssuesCountIfAny()
 
             assertThat(warningPrinter.messages).contains(
                 """
@@ -111,9 +111,9 @@ class DetektMessageCollectorSpec {
 
         @Test
         fun `prints header without suggestion`() {
-            subject.printIssuesCountIfAny(k2Mode = false)
+            subject.printIssuesCountIfAny()
             assertThat(warningPrinter.messages).containsExactly(
-                "There were 1 compiler errors found during legacy compiler analysis. This affects accuracy of reporting."
+                "There were 1 compiler errors found during analysis. This affects accuracy of reporting."
             )
         }
     }

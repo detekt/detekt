@@ -24,11 +24,11 @@ buildscript {
     }
   }
   dependencies {
-    classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:main-SNAPSHOT"
+    classpath "dev.detekt:detekt-gradle-plugin:main-SNAPSHOT"
   }
 }
 
-apply plugin: "io.gitlab.arturbosch.detekt"
+apply plugin: "dev.detekt"
 
 allprojects {
   repositories {
@@ -47,7 +47,7 @@ If you're using the `plugins{}` block to apply detekt, you should update your `b
 
 ```groovy
 plugins {
-  id("io.gitlab.arturbosch.detekt") version "main-SNAPSHOT"
+  id("dev.detekt") version "main-SNAPSHOT"
 }
 
 allprojects {
@@ -65,8 +65,8 @@ Plus you need to update the `settings.gradle` file as follows:
 pluginManagement {
     resolutionStrategy {
         eachPlugin {
-            if (requested.id.id == "io.gitlab.arturbosch.detekt") {
-                useModule("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:${requested.version}")
+            if (requested.id.id == "dev.detekt") {
+                useModule("dev.detekt:detekt-gradle-plugin:${requested.version}")
             }
         }
     }
