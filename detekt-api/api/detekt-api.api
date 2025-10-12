@@ -193,7 +193,6 @@ public final class dev/detekt/api/Notification$Level : java/lang/Enum {
 }
 
 public abstract interface class dev/detekt/api/OutputReport : dev/detekt/api/Extension {
-	public abstract fun getEnding ()Ljava/lang/String;
 	public abstract fun render (Ldev/detekt/api/Detektion;)Ljava/lang/String;
 }
 

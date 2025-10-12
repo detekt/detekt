@@ -8,7 +8,6 @@ import dev.detekt.api.RuleInstance
 import dev.detekt.api.RuleSet
 import dev.detekt.api.SetupContext
 import dev.detekt.api.TextLocation
-import dev.detekt.api.internal.BuiltInOutputReport
 import dev.detekt.api.internal.whichDetekt
 import dev.detekt.api.suppressed
 import dev.detekt.metrics.ComplexityReportGenerator
@@ -47,10 +46,8 @@ private const val PLACEHOLDER_DATE = "@@@date@@@"
 /**
  * Contains rule violations and metrics formatted in a human friendly way, so that it can be inspected in a web browser.
  */
-class HtmlOutputReport : BuiltInOutputReport, OutputReport {
-
-    override val id: String = "HtmlOutputReport"
-    override val ending = "html"
+class HtmlOutputReport : OutputReport {
+    override val id: String = "html"
 
     private lateinit var basePath: Path
     override fun init(context: SetupContext) {

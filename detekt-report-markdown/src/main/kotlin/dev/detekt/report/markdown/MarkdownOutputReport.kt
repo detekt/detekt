@@ -7,7 +7,6 @@ import dev.detekt.api.ProjectMetric
 import dev.detekt.api.RuleInstance
 import dev.detekt.api.SetupContext
 import dev.detekt.api.SourceLocation
-import dev.detekt.api.internal.BuiltInOutputReport
 import dev.detekt.api.internal.whichDetekt
 import dev.detekt.api.suppressed
 import dev.detekt.metrics.ComplexityReportGenerator
@@ -37,10 +36,8 @@ private const val EXTRA_LINES_IN_SNIPPET = 3
 /**
  * Contains rule violations in Markdown format report.
  */
-class MarkdownOutputReport : BuiltInOutputReport, OutputReport {
-    override val id: String = "MarkdownOutputReport"
-    override val reportId: String = "markdown"
-    override val ending: String = "md"
+class MarkdownOutputReport : OutputReport {
+    override val id: String = "markdown"
 
     private lateinit var basePath: Path
     override fun init(context: SetupContext) {
