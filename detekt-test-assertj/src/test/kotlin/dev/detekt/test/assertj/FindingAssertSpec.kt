@@ -125,8 +125,28 @@ class FindingAssertSpec {
                 assertThatThrownBy { FindingAssert(finding).hasStartSourceLocation(SourceLocation(2, 5)) }
                     .isInstanceOfAssertionFailedError()
                     .hasMessage("Expected start source location to be 2:5 but was 1:1")
-                    .hasActual(SourceLocation(1, 1))
-                    .hasExpected(SourceLocation(2, 5))
+                    .hasActual(
+                        """
+                            📍fun test() {
+                                val a = 1
+                                val b = 2
+                                fun foo() {
+                                    val b = 2
+                                }
+                            }
+                        """.trimIndent()
+                    )
+                    .hasExpected(
+                        """
+                            fun test() {
+                                📍val a = 1
+                                val b = 2
+                                fun foo() {
+                                    val b = 2
+                                }
+                            }
+                        """.trimIndent()
+                    )
             }
 
             @Test
@@ -134,8 +154,54 @@ class FindingAssertSpec {
                 assertThatThrownBy { FindingAssert(finding).hasStartSourceLocation(2, 5) }
                     .isInstanceOfAssertionFailedError()
                     .hasMessage("Expected start source location to be 2:5 but was 1:1")
-                    .hasActual(SourceLocation(1, 1))
-                    .hasExpected(SourceLocation(2, 5))
+                    .hasActual(
+                        """
+                            📍fun test() {
+                                val a = 1
+                                val b = 2
+                                fun foo() {
+                                    val b = 2
+                                }
+                            }
+                        """.trimIndent()
+                    )
+                    .hasExpected(
+                        """
+                            fun test() {
+                                📍val a = 1
+                                val b = 2
+                                fun foo() {
+                                    val b = 2
+                                }
+                            }
+                        """.trimIndent()
+                    )
+            }
+
+            @Test
+            fun `hasStartSourceLocation failing when expected line doesn't even exist`() {
+                assertThatThrownBy { FindingAssert(finding).hasStartSourceLocation(SourceLocation(20, 1)) }
+                    .isInstanceOf(IndexOutOfBoundsException::class.java)
+                    .hasMessage("The line 20 doesn't exist in the file. The file has 7 lines")
+            }
+
+            @Test
+            fun `hasStartSourceLocationInt failing when expected column doesn't even exist`() {
+                assertThatThrownBy { FindingAssert(finding).hasStartSourceLocation(1, 20) }
+                    .isInstanceOf(IndexOutOfBoundsException::class.java)
+                    .hasMessage("The column 20 doesn't exist in the line 1. The line has 13 columns")
+            }
+
+            @Test
+            fun `hasStartSourceLocation failing when expected line is the last one`() {
+                assertThatThrownBy { FindingAssert(finding).hasStartSourceLocation(SourceLocation(7, 1)) }
+                    .isInstanceOf(AssertionError::class.java)
+            }
+
+            @Test
+            fun `hasStartSourceLocationInt failing when expected column is the last one`() {
+                assertThatThrownBy { FindingAssert(finding).hasStartSourceLocation(1, 13) }
+                    .isInstanceOf(AssertionError::class.java)
             }
         }
 
@@ -170,8 +236,28 @@ class FindingAssertSpec {
                 assertThatThrownBy { FindingAssert(finding).hasEndSourceLocation(SourceLocation(2, 14)) }
                     .isInstanceOfAssertionFailedError()
                     .hasMessage("Expected end source location to be 2:14 but was 1:11")
-                    .hasActual(SourceLocation(1, 11))
-                    .hasExpected(SourceLocation(2, 14))
+                    .hasActual(
+                        """
+                            fun test()📍 {
+                                val a = 1
+                                val b = 2
+                                fun foo() {
+                                    val b = 2
+                                }
+                            }
+                        """.trimIndent()
+                    )
+                    .hasExpected(
+                        """
+                            fun test() {
+                                val a = 1📍
+                                val b = 2
+                                fun foo() {
+                                    val b = 2
+                                }
+                            }
+                        """.trimIndent()
+                    )
             }
 
             @Test
@@ -179,8 +265,54 @@ class FindingAssertSpec {
                 assertThatThrownBy { FindingAssert(finding).hasEndSourceLocation(2, 14) }
                     .isInstanceOfAssertionFailedError()
                     .hasMessage("Expected end source location to be 2:14 but was 1:11")
-                    .hasActual(SourceLocation(1, 11))
-                    .hasExpected(SourceLocation(2, 14))
+                    .hasActual(
+                        """
+                            fun test()📍 {
+                                val a = 1
+                                val b = 2
+                                fun foo() {
+                                    val b = 2
+                                }
+                            }
+                        """.trimIndent()
+                    )
+                    .hasExpected(
+                        """
+                            fun test() {
+                                val a = 1📍
+                                val b = 2
+                                fun foo() {
+                                    val b = 2
+                                }
+                            }
+                        """.trimIndent()
+                    )
+            }
+
+            @Test
+            fun `hasEndSourceLocation failing when expected line doesn't even exist`() {
+                assertThatThrownBy { FindingAssert(finding).hasEndSourceLocation(SourceLocation(20, 1)) }
+                    .isInstanceOf(IndexOutOfBoundsException::class.java)
+                    .hasMessage("The line 20 doesn't exist in the file. The file has 7 lines")
+            }
+
+            @Test
+            fun `hasEndSourceLocationInt failing when expected column doesn't even exist`() {
+                assertThatThrownBy { FindingAssert(finding).hasEndSourceLocation(1, 20) }
+                    .isInstanceOf(IndexOutOfBoundsException::class.java)
+                    .hasMessage("The column 20 doesn't exist in the line 1. The line has 13 columns")
+            }
+
+            @Test
+            fun `hasEndSourceLocation failing when expected line is the last one`() {
+                assertThatThrownBy { FindingAssert(finding).hasEndSourceLocation(SourceLocation(7, 1)) }
+                    .isInstanceOf(AssertionError::class.java)
+            }
+
+            @Test
+            fun `hasEndSourceLocationInt failing when expected column is the last one`() {
+                assertThatThrownBy { FindingAssert(finding).hasEndSourceLocation(1, 13) }
+                    .isInstanceOf(AssertionError::class.java)
             }
         }
     }

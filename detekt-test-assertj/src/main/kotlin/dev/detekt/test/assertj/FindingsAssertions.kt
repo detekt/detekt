@@ -57,9 +57,11 @@ class FindingAssert(val actual: Finding?) : AbstractAssert<FindingAssert, Findin
         actual!!
         val actual = actual.location.source
         if (actual != expected) {
+            val code = this.actual.entity.ktElement.containingFile.text
+            assertSourceLocationInRange(code, expected)
             throw failureWithActualExpected(
-                actual,
-                expected,
+                code.addPinAt(actual),
+                code.addPinAt(expected),
                 "Expected start source location to be $expected but was $actual"
             )
         }
@@ -72,9 +74,11 @@ class FindingAssert(val actual: Finding?) : AbstractAssert<FindingAssert, Findin
         actual!!
         val actual = actual.location.endSource
         if (actual != expected) {
+            val code = this.actual.entity.ktElement.containingFile.text
+            assertSourceLocationInRange(code, expected)
             throw failureWithActualExpected(
-                actual,
-                expected,
+                code.addPinAt(actual),
+                code.addPinAt(expected),
                 "Expected end source location to be $expected but was $actual"
             )
         }
@@ -111,3 +115,23 @@ class FindingAssert(val actual: Finding?) : AbstractAssert<FindingAssert, Findin
 
 private val Finding.location: Location
     get() = entity.location
+
+private fun String.addPinAt(sourceLocation: SourceLocation): String = lines().toMutableList().apply {
+    val line = this[sourceLocation.line - 1]
+    this[sourceLocation.line - 1] = line.replaceRange(sourceLocation.column - 1, sourceLocation.column - 1, "📍")
+}.joinToString("\n")
+
+@Suppress("NOTHING_TO_INLINE") // avoid noise in the Stacktrace
+private inline fun assertSourceLocationInRange(code: String, sourceLocation: SourceLocation) {
+    val lines = code.lines()
+    if (sourceLocation.line - 1 >= lines.count()) {
+        throw IndexOutOfBoundsException(
+            "The line ${sourceLocation.line} doesn't exist in the file. The file has ${lines.count()} lines"
+        )
+    }
+    if (sourceLocation.column - 1 > lines[sourceLocation.line - 1].count()) {
+        throw IndexOutOfBoundsException(
+            "The column ${sourceLocation.column} doesn't exist in the line ${sourceLocation.line}. The line has ${lines[sourceLocation.line - 1].count() + 1} columns"
+        )
+    }
+}
