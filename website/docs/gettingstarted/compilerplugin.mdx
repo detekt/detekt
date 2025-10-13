@@ -68,7 +68,7 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
     detekt {
         reports {
             checkstyle.enabled.set(true)
-            md.enabled.set(false)
+            markdown.enabled.set(false)
             create("custom") {
                 enabled.set(false)
             }

@@ -48,8 +48,6 @@ public final class dev/detekt/api/Config$InvalidConfigurationError : java/lang/R
 public final class dev/detekt/api/ConfigPropertyKt {
 	public static final fun config (Ljava/lang/Object;)Lkotlin/properties/ReadOnlyProperty;
 	public static final fun config (Ljava/lang/Object;Lkotlin/jvm/functions/Function1;)Lkotlin/properties/ReadOnlyProperty;
-	public static final fun configWithAndroidVariants (Ljava/lang/Object;Ljava/lang/Object;)Lkotlin/properties/ReadOnlyProperty;
-	public static final fun configWithAndroidVariants (Ljava/lang/Object;Ljava/lang/Object;Lkotlin/jvm/functions/Function1;)Lkotlin/properties/ReadOnlyProperty;
 	public static final fun configWithFallback (Lkotlin/reflect/KProperty0;Ljava/lang/Object;)Lkotlin/properties/ReadOnlyProperty;
 	public static final fun configWithFallback (Lkotlin/reflect/KProperty0;Ljava/lang/Object;Lkotlin/jvm/functions/Function1;)Lkotlin/properties/ReadOnlyProperty;
 }
@@ -195,7 +193,6 @@ public final class dev/detekt/api/Notification$Level : java/lang/Enum {
 }
 
 public abstract interface class dev/detekt/api/OutputReport : dev/detekt/api/Extension {
-	public abstract fun getEnding ()Ljava/lang/String;
 	public abstract fun render (Ldev/detekt/api/Detektion;)Ljava/lang/String;
 }
 

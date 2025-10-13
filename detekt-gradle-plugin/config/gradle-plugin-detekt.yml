@@ -29,9 +29,25 @@ style:
     excludes: ["**/test/**", "**/*Test.kt", "**/*Spec.kt"]
     excludeCommentStatements: true
 
-formatting:
+ktlint:
   active: true
+  BlankLineBeforeDeclaration:
+    active: false
+  ChainMethodContinuation:
+    active: false
+  ClassSignature:
+    active: false
+  FunctionSignature:
+    active: false
   MaximumLineLength:
+    active: false
+  MultilineExpressionWrapping:
+    active: false
+  NoEmptyFirstLineInClassBody:
+    active: false
+  StringTemplateIndent:
+    active: false
+  TrailingCommaOnCallSite:
     active: false
   TrailingCommaOnDeclarationSite:
     active: true

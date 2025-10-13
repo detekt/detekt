@@ -84,8 +84,6 @@ ktlint:
     excludes: ['**/*.kts']
   MaximumLineLength:
     active: false
-  MultilineExpressionWrapping:
-    active: false
   NoEmptyFirstLineInClassBody:
     active: false
   SpacingAroundSquareBrackets:

@@ -166,7 +166,7 @@ ktlint:
     autoCorrect: true
     indentSize: 4
   MultilineExpressionWrapping:
-    active: true
+    active: false
     autoCorrect: true
     indentSize: 4
     functionBodyExpressionWrapping: 'multiline'

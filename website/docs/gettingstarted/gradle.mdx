@@ -331,9 +331,9 @@ tasks.named("detekt").configure {
         // Enable/Disable SARIF report (default: false)
         sarif.required.set(true)
         sarif.outputLocation.set(file("build/reports/detekt.sarif"))
-        // Enable/Disable MD report (default: false)
-        md.required.set(true)
-        md.outputLocation.set(file("build/reports/detekt.md"))
+        // Enable/Disable Markdown report (default: false)
+        markdown.required.set(true)
+        markdown.outputLocation.set(file("build/reports/detekt.md"))
         custom {
             // The simple class name of your custom report.
             reportId = "CustomJsonReport"

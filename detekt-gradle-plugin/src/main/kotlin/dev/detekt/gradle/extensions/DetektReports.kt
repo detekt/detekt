@@ -2,7 +2,7 @@ package dev.detekt.gradle.extensions
 
 import dev.detekt.gradle.extensions.DetektReportType.CHECKSTYLE
 import dev.detekt.gradle.extensions.DetektReportType.HTML
-import dev.detekt.gradle.extensions.DetektReportType.MD
+import dev.detekt.gradle.extensions.DetektReportType.MARKDOWN
 import dev.detekt.gradle.extensions.DetektReportType.SARIF
 import org.gradle.api.Action
 import org.gradle.api.model.ObjectFactory
@@ -23,7 +23,7 @@ open class DetektReports @Inject constructor(@get:Internal val objects: ObjectFa
     open val sarif: DetektReport = objects.newInstance(DetektReport::class.java, SARIF)
 
     @get:Nested
-    open val md: DetektReport = objects.newInstance(DetektReport::class.java, MD)
+    open val markdown: DetektReport = objects.newInstance(DetektReport::class.java, MARKDOWN)
 
     @get:Nested
     open val custom = mutableListOf<CustomDetektReport>()
@@ -34,7 +34,7 @@ open class DetektReports @Inject constructor(@get:Internal val objects: ObjectFa
 
     fun sarif(action: Action<in DetektReport>): Unit = action.execute(sarif)
 
-    fun md(action: Action<in DetektReport>): Unit = action.execute(md)
+    fun markdown(action: Action<in DetektReport>): Unit = action.execute(markdown)
 
     fun custom(action: Action<in CustomDetektReport>): Unit = action.execute(createAndAddCustomReport())
 

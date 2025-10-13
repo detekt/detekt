@@ -29,7 +29,7 @@ dependencies {
     runtimeOnly(projects.detektCore)
     runtimeOnly(projects.detektRules)
     runtimeOnly(projects.detektReportHtml)
-    runtimeOnly(projects.detektReportMd)
+    runtimeOnly(projects.detektReportMarkdown)
     runtimeOnly(projects.detektReportSarif)
     runtimeOnly(projects.detektReportCheckstyle)
 

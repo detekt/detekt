@@ -115,7 +115,7 @@ class DetektPlugin : Plugin<Project> {
                 report.required.convention(DEFAULT_REPORT_ENABLED_VALUE)
                 report.outputLocation.convention(extension.reportsDir.file("$reportName.html"))
             }
-            task.reports.md { report ->
+            task.reports.markdown { report ->
                 report.required.convention(DEFAULT_REPORT_ENABLED_VALUE)
                 report.outputLocation.convention(extension.reportsDir.file("$reportName.md"))
             }

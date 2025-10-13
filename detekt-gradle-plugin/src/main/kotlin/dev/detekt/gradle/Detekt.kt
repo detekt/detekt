@@ -75,12 +75,12 @@ abstract class Detekt @Inject constructor(
 
     @get:InputFiles // Why not InputFile? See https://github.com/gradle/gradle/issues/2016
     @get:Optional
-    @get:PathSensitive(PathSensitivity.RELATIVE)
+    @get:PathSensitive(PathSensitivity.NONE)
     abstract val baseline: RegularFileProperty
 
     @get:InputFiles
     @get:Optional
-    @get:PathSensitive(PathSensitivity.RELATIVE)
+    @get:PathSensitive(PathSensitivity.NONE)
     abstract val config: ConfigurableFileCollection
 
     @get:Classpath
@@ -182,7 +182,7 @@ abstract class Detekt @Inject constructor(
             DefaultReportArgument(reports.checkstyle),
             DefaultReportArgument(reports.html),
             DefaultReportArgument(reports.sarif),
-            DefaultReportArgument(reports.md),
+            DefaultReportArgument(reports.markdown),
             DebugArgument(debug.get()),
             ParallelArgument(parallel.get()),
             BuildUponDefaultConfigArgument(buildUponDefaultConfig.get()),
