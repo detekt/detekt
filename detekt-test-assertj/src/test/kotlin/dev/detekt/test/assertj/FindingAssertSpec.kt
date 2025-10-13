@@ -360,8 +360,8 @@ class FindingAssertSpec {
             assertThatThrownBy { FindingAssert(finding).hasTextLocation(TextLocation(17, 26)) }
                 .isInstanceOfAssertionFailedError()
                 .hasMessage("Expected text location to be 17:26 but was 0:10")
-                .hasActual(TextLocation(0, 10))
-                .hasExpected(TextLocation(17, 26))
+                .hasActual("fun test()")
+                .hasExpected("val a = 1")
         }
 
         @Test
@@ -369,8 +369,8 @@ class FindingAssertSpec {
             assertThatThrownBy { FindingAssert(finding).hasTextLocation(17 to 26) }
                 .isInstanceOfAssertionFailedError()
                 .hasMessage("Expected text location to be 17:26 but was 0:10")
-                .hasActual(TextLocation(0, 10))
-                .hasExpected(TextLocation(17, 26))
+                .hasActual("fun test()")
+                .hasExpected("val a = 1")
         }
 
         @Test
@@ -378,8 +378,8 @@ class FindingAssertSpec {
             assertThatThrownBy { FindingAssert(finding).hasTextLocation("val a = 1") }
                 .isInstanceOfAssertionFailedError()
                 .hasMessage("Expected text location to be 17:26 but was 0:10")
-                .hasActual(TextLocation(0, 10))
-                .hasExpected(TextLocation(17, 26))
+                .hasActual("fun test()")
+                .hasExpected("val a = 1")
         }
 
         @Test
@@ -394,6 +394,58 @@ class FindingAssertSpec {
             assertThatThrownBy { FindingAssert(finding).hasTextLocation("val b = 2") }
                 .isInstanceOf(IllegalArgumentException::class.java)
                 .hasMessage("""The snippet "val b = 2" appears multiple times in the code""")
+        }
+
+        @Test
+        fun `hasTextLocation failing when expected start doesn't even exist`() {
+            assertThatThrownBy { FindingAssert(finding).hasTextLocation(TextLocation(100, 150)) }
+                .isInstanceOf(IndexOutOfBoundsException::class.java)
+                .hasMessage("The character 100 doesn't exist in the file. The file has 82 characters")
+        }
+
+        @Test
+        fun `hasTextLocationInt failing when expected start doesn't even exist`() {
+            assertThatThrownBy { FindingAssert(finding).hasTextLocation(100 to 150) }
+                .isInstanceOf(IndexOutOfBoundsException::class.java)
+                .hasMessage("The character 100 doesn't exist in the file. The file has 82 characters")
+        }
+
+        @Test
+        fun `hasTextLocation failing when expected start is the last one`() {
+            assertThatThrownBy { FindingAssert(finding).hasTextLocation(TextLocation(82, 82)) }
+                .isInstanceOf(AssertionError::class.java)
+        }
+
+        @Test
+        fun `hasTextLocationInt failing when expected start is the last one`() {
+            assertThatThrownBy { FindingAssert(finding).hasTextLocation(82 to 82) }
+                .isInstanceOf(AssertionError::class.java)
+        }
+
+        @Test
+        fun `hasTextLocation failing when expected end doesn't even exist`() {
+            assertThatThrownBy { FindingAssert(finding).hasTextLocation(TextLocation(0, 100)) }
+                .isInstanceOf(IndexOutOfBoundsException::class.java)
+                .hasMessage("The character 100 doesn't exist in the file. The file has 82 characters")
+        }
+
+        @Test
+        fun `hasTextLocationInt failing when expected end doesn't even exist`() {
+            assertThatThrownBy { FindingAssert(finding).hasTextLocation(0 to 100) }
+                .isInstanceOf(IndexOutOfBoundsException::class.java)
+                .hasMessage("The character 100 doesn't exist in the file. The file has 82 characters")
+        }
+
+        @Test
+        fun `hasTextLocation failing when expected end is the last one`() {
+            assertThatThrownBy { FindingAssert(finding).hasTextLocation(TextLocation(0, 82)) }
+                .isInstanceOf(AssertionError::class.java)
+        }
+
+        @Test
+        fun `hasTextLocationInt failing when expected end is the last one`() {
+            assertThatThrownBy { FindingAssert(finding).hasTextLocation(0 to 82) }
+                .isInstanceOf(AssertionError::class.java)
         }
     }
 }
