@@ -1,22 +1,22 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <title>dev.detekt.psi</title>
-<link href="../../images/logo-icon.svg" rel="icon" type="image/svg">    <script>var pathToRoot = "../../";</script>
-    <script>document.documentElement.classList.replace("no-js","js");</script>
+<link href="../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
     <script>const storage = localStorage.getItem("dokka-dark-mode")
-    if (storage == null) {
+      if (storage == null) {
         const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
         if (osDarkSchemePreferred === true) {
-            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
         }
-    } else {
+      } else {
         const savedDarkMode = JSON.parse(storage)
-        if(savedDarkMode === true) {
-            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
         }
-    }
+      }
     </script>
 <script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
 <script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script>
@@ -24,19 +24,17 @@
 <link href="../../styles/main.css" rel="Stylesheet">
 <link href="../../styles/prism.css" rel="Stylesheet">
 <link href="../../styles/logo-styles.css" rel="Stylesheet">
-<link href="../../styles/font-jb-sans-auto.css" rel="Stylesheet">
 <link href="../../ui-kit/ui-kit.min.css" rel="Stylesheet">
-<script type="text/javascript" src="../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../scripts/safe-local-storage_blocking.js"></script>
 <script type="text/javascript" src="../../scripts/navigation-loader.js" async></script>
 <script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script>
 <script type="text/javascript" src="../../scripts/main.js" defer></script>
 <script type="text/javascript" src="../../scripts/prism.js" async></script>
-<script type="text/javascript" src="../../ui-kit/ui-kit.min.js" defer></script>
-<script type="text/javascript" src="../../scripts/symbol-parameters-wrapper_deferred.js" defer></script></head>
+<script type="text/javascript" src="../../ui-kit/ui-kit.min.js" defer></script></head>
 <body>
-    <div class="root">
-    <nav class="navigation theme-dark" id="navigation-wrapper">
-<a class="library-name--link" href="../../index.html">
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../index.html" tabindex="1">
                     detekt
             </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
         </button>
@@ -44,13 +42,13 @@
         <div class="library-version" id="library-version">2.0.0-alpha.0
         </div>
         <div class="navigation-controls">
-        <div class="filter-section filter-section_loading" id="filter-section">
-                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":detekt-psi-utils/main">jvm</button>
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true" data-filter=":detekt-psi-utils/main">jvm</button>
             <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
                 <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
-                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox">
-                    <div class="dropdown--header"><span>Platform filter</span>
-                        <button class="button" data-role="dropdown-toggle" aria-label="Close platform filter">
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
                             <i class="ui-kit-icon ui-kit-icon_cross"></i>
                         </button>
                     </div>
@@ -64,32 +62,34 @@
                 </ul>
                 <div class="dropdown--overlay"></div>
             </div>
-        </div>
+        </ul>
             <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
             </button>
             <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
                 API
             </div>
         </div>
-    </nav>
-        <div id="container">
-            <div class="sidebar" id="leftColumn">
-                <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
-                    <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox">
-                        <div class="dropdown--header">
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
                             <span>
                                     detekt
                             </span>
-                            <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
-                                <i class="ui-kit-icon ui-kit-icon_cross"></i>
-                            </button>
-                        </div>
-                        <div class="sidebar--inner" id="sideMenu"></div>
-                    </ul>
-                    <div class="dropdown--overlay"></div>
-                </div>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
             </div>
-            <div id="main">
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
 <div class="main-content" data-page-type="package" id="content" pageids="detekt-psi-utils::dev.detekt.psi////PointingToDeclaration//-878000200">
   <div class="breadcrumbs"><a href="../index.html">detekt-psi-utils</a><span class="delimiter">/</span><span class="current">dev.detekt.psi</span></div>
   <div class="cover ">
@@ -99,9 +99,9 @@
     <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button><button class="section-tab" data-togglable="FUNCTION,EXTENSION_FUNCTION">Functions</button><button class="section-tab" data-togglable="PROPERTY,EXTENSION_PROPERTY">Properties</button></div>
     <div class="tabs-section-body">
       <div data-togglable="TYPE">
-        <h2 class="">Types</h2>
+        <h2 class="tableheader">Types</h2>
         <div class="table"><a data-name="-16422489%2FClasslikes%2F-878000200" anchor-label="AnnotationExcluder" id="-16422489%2FClasslikes%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="-annotation-excluder/index.html"><span>Annotation</span><wbr><span><span>Excluder</span></span></a></div>
@@ -116,7 +116,7 @@
             </div>
           </div>
 <a data-name="1336830618%2FClasslikes%2F-878000200" anchor-label="FunctionMatcher" id="1336830618%2FClasslikes%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="-function-matcher/index.html"><span>Function</span><wbr><span><span>Matcher</span></span></a></div>
@@ -133,9 +133,9 @@
         </div>
       </div>
       <div data-togglable="EXTENSION_PROPERTY">
-        <h2 class="">Properties</h2>
+        <h2 class="tableheader">Properties</h2>
         <div class="table"><a data-name="146953301%2FProperties%2F-878000200" anchor-label="arguments" id="146953301%2FProperties%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="arguments.html"><span><span>arguments</span></span></a></div>
@@ -152,9 +152,9 @@
         </div>
       </div>
       <div data-togglable="EXTENSION_FUNCTION">
-        <h2 class="">Functions</h2>
+        <h2 class="tableheader">Functions</h2>
         <div class="table"><a data-name="-640002600%2FFunctions%2F-878000200" anchor-label="absolutePath" id="-640002600%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="absolute-path.html"><span>absolute</span><wbr><span><span>Path</span></span></a></div>
@@ -169,7 +169,7 @@
             </div>
           </div>
 <a data-name="802876794%2FFunctions%2F-878000200" anchor-label="companionObject" id="802876794%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="companion-object.html"><span>companion</span><wbr><span><span>Object</span></span></a></div>
@@ -178,13 +178,13 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-psi-utils/main"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.jetbrains.kotlin.psi/KtClass///PointingToDeclaration/">KtClass</span><span class="token punctuation">.</span><a href="companion-object.html"><span class="token function">companionObject</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="/<Error class: unknown class>///PointingToDeclaration/">&lt;Error class: unknown class&gt;</span></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-psi-utils/main"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.jetbrains.kotlin.psi/KtClass///PointingToDeclaration/">KtClass</span><span class="token punctuation">.</span><a href="companion-object.html"><span class="token function">companionObject</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.jetbrains.kotlin.psi/KtObjectDeclaration///PointingToDeclaration/">KtObjectDeclaration</span><span class="token operator">?</span></div></div></div>
                 </div>
               </div>
             </div>
           </div>
 <a data-name="-613109175%2FFunctions%2F-878000200" anchor-label="firstParameterOrNull" id="-613109175%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="first-parameter-or-null.html"><span>first</span><wbr><span>Parameter</span><wbr><span>Or</span><wbr><span><span>Null</span></span></a></div>
@@ -198,12 +198,12 @@
               </div>
             </div>
           </div>
-<a data-name="-2144652232%2FFunctions%2F-878000200" anchor-label="hasAnnotation" id="-2144652232%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+<a data-name="731064360%2FFunctions%2F-878000200" anchor-label="hasAnnotation" id="731064360%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="has-annotation.html"><span>has</span><wbr><span><span>Annotation</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2144652232%2FFunctions%2F-878000200"></span>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="731064360%2FFunctions%2F-878000200"></span>
                     <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
                   </span></span></div>
               <div>
@@ -214,7 +214,7 @@
             </div>
           </div>
 <a data-name="-1180393055%2FFunctions%2F-878000200" anchor-label="hasCorrectEqualsParameter" id="-1180393055%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="has-correct-equals-parameter.html"><span>has</span><wbr><span>Correct</span><wbr><span>Equals</span><wbr><span><span>Parameter</span></span></a></div>
@@ -229,7 +229,7 @@
             </div>
           </div>
 <a data-name="701342863%2FFunctions%2F-878000200" anchor-label="hasImplicitParameterReference" id="701342863%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="has-implicit-parameter-reference.html"><span>has</span><wbr><span>Implicit</span><wbr><span>Parameter</span><wbr><span><span>Reference</span></span></a></div>
@@ -244,7 +244,7 @@
             </div>
           </div>
 <a data-name="1805115441%2FFunctions%2F-878000200" anchor-label="hasImplicitUnitReturnType" id="1805115441%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="has-implicit-unit-return-type.html"><span>has</span><wbr><span>Implicit</span><wbr><span>Unit</span><wbr><span>Return</span><wbr><span><span>Type</span></span></a></div>
@@ -259,7 +259,7 @@
             </div>
           </div>
 <a data-name="-1151587108%2FFunctions%2F-878000200" anchor-label="implicitParameterOrNull" id="-1151587108%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="implicit-parameter-or-null.html"><span>implicit</span><wbr><span>Parameter</span><wbr><span>Or</span><wbr><span><span>Null</span></span></a></div>
@@ -274,7 +274,7 @@
             </div>
           </div>
 <a data-name="721370663%2FFunctions%2F-878000200" anchor-label="isAbstract" id="721370663%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="is-abstract.html"><span>is</span><wbr><span><span>Abstract</span></span></a></div>
@@ -289,7 +289,7 @@
             </div>
           </div>
 <a data-name="-529519941%2FFunctions%2F-878000200" anchor-label="isActual" id="-529519941%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="is-actual.html"><span>is</span><wbr><span><span>Actual</span></span></a></div>
@@ -304,7 +304,7 @@
             </div>
           </div>
 <a data-name="-810796404%2FFunctions%2F-878000200" anchor-label="isAllowedExceptionName" id="-810796404%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="is-allowed-exception-name.html"><span>is</span><wbr><span>Allowed</span><wbr><span>Exception</span><wbr><span><span>Name</span></span></a></div>
@@ -319,7 +319,7 @@
             </div>
           </div>
 <a data-name="1946727320%2FFunctions%2F-878000200" anchor-label="isCalling" id="1946727320%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="is-calling.html"><span>is</span><wbr><span><span>Calling</span></span></a></div>
@@ -328,13 +328,13 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-psi-utils/main"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.jetbrains.kotlin.psi/KtCallExpression///PointingToDeclaration/">KtCallExpression</span><span class="token punctuation">.</span><a href="is-calling.html"><span class="token function">isCalling</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">callableIds<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.jetbrains.kotlin.name/CallableId///PointingToDeclaration/">CallableId</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="/<Error class: unknown class>///PointingToDeclaration/">&lt;Error class: unknown class&gt;</span></div><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.jetbrains.kotlin.psi/KtCallExpression///PointingToDeclaration/">KtCallExpression</span><span class="token punctuation">.</span><a href="is-calling.html"><span class="token function">isCalling</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">callableId<span class="token operator">: </span><span data-unresolved-link="org.jetbrains.kotlin.name/CallableId///PointingToDeclaration/">CallableId</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-psi-utils/main"><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.jetbrains.kotlin.psi/KtCallExpression///PointingToDeclaration/">KtCallExpression</span><span class="token punctuation">.</span><a href="is-calling.html"><span class="token function">isCalling</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">callableIds<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><span data-unresolved-link="org.jetbrains.kotlin.name/CallableId///PointingToDeclaration/">CallableId</span><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="symbol monospace"><span class="token keyword">fun </span><span data-unresolved-link="org.jetbrains.kotlin.psi/KtCallExpression///PointingToDeclaration/">KtCallExpression</span><span class="token punctuation">.</span><a href="is-calling.html"><span class="token function">isCalling</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">callableId<span class="token operator">: </span><span data-unresolved-link="org.jetbrains.kotlin.name/CallableId///PointingToDeclaration/">CallableId</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
                 </div>
               </div>
             </div>
           </div>
 <a data-name="880180715%2FFunctions%2F-878000200" anchor-label="isCallingWithNonNullCheckArgument" id="880180715%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="is-calling-with-non-null-check-argument.html"><span>is</span><wbr><span>Calling</span><wbr><span>With</span><wbr><span>Non</span><wbr><span>Null</span><wbr><span>Check</span><wbr><span><span>Argument</span></span></a></div>
@@ -349,7 +349,7 @@
             </div>
           </div>
 <a data-name="-1142277147%2FFunctions%2F-878000200" anchor-label="isConstant" id="-1142277147%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="is-constant.html"><span>is</span><wbr><span><span>Constant</span></span></a></div>
@@ -364,7 +364,7 @@
             </div>
           </div>
 <a data-name="-1754058877%2FFunctions%2F-878000200" anchor-label="isEmptyOrSingleStringArgument" id="-1754058877%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="is-empty-or-single-string-argument.html"><span>is</span><wbr><span>Empty</span><wbr><span>Or</span><wbr><span>Single</span><wbr><span>String</span><wbr><span><span>Argument</span></span></a></div>
@@ -379,7 +379,7 @@
             </div>
           </div>
 <a data-name="741380340%2FFunctions%2F-878000200" anchor-label="isEnclosedByConditionalStatement" id="741380340%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="is-enclosed-by-conditional-statement.html"><span>is</span><wbr><span>Enclosed</span><wbr><span>By</span><wbr><span>Conditional</span><wbr><span><span>Statement</span></span></a></div>
@@ -394,7 +394,7 @@
             </div>
           </div>
 <a data-name="2047851680%2FFunctions%2F-878000200" anchor-label="isEqualsFunction" id="2047851680%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="is-equals-function.html"><span>is</span><wbr><span>Equals</span><wbr><span><span>Function</span></span></a></div>
@@ -409,7 +409,7 @@
             </div>
           </div>
 <a data-name="-2101076651%2FFunctions%2F-878000200" anchor-label="isExceptionOfType" id="-2101076651%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="is-exception-of-type.html"><span>is</span><wbr><span>Exception</span><wbr><span>Of</span><wbr><span><span>Type</span></span></a></div>
@@ -418,13 +418,13 @@
                   </span></span></div>
               <div>
                 <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-psi-utils/main"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="is-exception-of-type.html">T</a><span class="token operator"> : </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Exception.html">Exception</a><span class="token operator">&gt; </span><span data-unresolved-link="org.jetbrains.kotlin.psi/KtThrowExpression///PointingToDeclaration/">KtThrowExpression</span><span class="token punctuation">.</span><a href="is-exception-of-type.html"><span class="token function">isExceptionOfType</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-psi-utils/main"><div class="symbol monospace"><span class="token keyword">inline </span><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="is-exception-of-type.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-exception/index.html">Exception</a><span class="token operator">&gt; </span><span data-unresolved-link="org.jetbrains.kotlin.psi/KtThrowExpression///PointingToDeclaration/">KtThrowExpression</span><span class="token punctuation">.</span><a href="is-exception-of-type.html"><span class="token function">isExceptionOfType</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
                 </div>
               </div>
             </div>
           </div>
 <a data-name="653051600%2FFunctions%2F-878000200" anchor-label="isExpect" id="653051600%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="is-expect.html"><span>is</span><wbr><span><span>Expect</span></span></a></div>
@@ -439,7 +439,7 @@
             </div>
           </div>
 <a data-name="-1816693730%2FFunctions%2F-878000200" anchor-label="isExternal" id="-1816693730%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="is-external.html"><span>is</span><wbr><span><span>External</span></span></a></div>
@@ -454,7 +454,7 @@
             </div>
           </div>
 <a data-name="-891613828%2FFunctions%2F-878000200" anchor-label="isHashCodeFunction" id="-891613828%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="is-hash-code-function.html"><span>is</span><wbr><span>Hash</span><wbr><span>Code</span><wbr><span><span>Function</span></span></a></div>
@@ -469,7 +469,7 @@
             </div>
           </div>
 <a data-name="2106428429%2FFunctions%2F-878000200" anchor-label="isIllegalArgumentException" id="2106428429%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="is-illegal-argument-exception.html"><span>is</span><wbr><span>Illegal</span><wbr><span>Argument</span><wbr><span><span>Exception</span></span></a></div>
@@ -484,7 +484,7 @@
             </div>
           </div>
 <a data-name="-1481082015%2FFunctions%2F-878000200" anchor-label="isIllegalStateException" id="-1481082015%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="is-illegal-state-exception.html"><span>is</span><wbr><span>Illegal</span><wbr><span>State</span><wbr><span><span>Exception</span></span></a></div>
@@ -499,7 +499,7 @@
             </div>
           </div>
 <a data-name="1207040144%2FFunctions%2F-878000200" anchor-label="isInline" id="1207040144%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="is-inline.html"><span>is</span><wbr><span><span>Inline</span></span></a></div>
@@ -514,7 +514,7 @@
             </div>
           </div>
 <a data-name="34187372%2FFunctions%2F-878000200" anchor-label="isInternal" id="34187372%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="is-internal.html"><span>is</span><wbr><span><span>Internal</span></span></a></div>
@@ -529,7 +529,7 @@
             </div>
           </div>
 <a data-name="680557713%2FFunctions%2F-878000200" anchor-label="isJvmFinalizeFunction" id="680557713%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="is-jvm-finalize-function.html"><span>is</span><wbr><span>Jvm</span><wbr><span>Finalize</span><wbr><span><span>Function</span></span></a></div>
@@ -544,7 +544,7 @@
             </div>
           </div>
 <a data-name="-1975691757%2FFunctions%2F-878000200" anchor-label="isLateinit" id="-1975691757%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="is-lateinit.html"><span>is</span><wbr><span><span>Lateinit</span></span></a></div>
@@ -559,7 +559,7 @@
             </div>
           </div>
 <a data-name="-824709749%2FFunctions%2F-878000200" anchor-label="isMainFunction" id="-824709749%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="is-main-function.html"><span>is</span><wbr><span>Main</span><wbr><span><span>Function</span></span></a></div>
@@ -574,7 +574,7 @@
             </div>
           </div>
 <a data-name="1733752574%2FFunctions%2F-878000200" anchor-label="isNonNullCheck" id="1733752574%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="is-non-null-check.html"><span>is</span><wbr><span>Non</span><wbr><span>Null</span><wbr><span><span>Check</span></span></a></div>
@@ -589,7 +589,7 @@
             </div>
           </div>
 <a data-name="179434575%2FFunctions%2F-878000200" anchor-label="isNullable" id="179434575%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="is-nullable.html"><span>is</span><wbr><span><span>Nullable</span></span></a></div>
@@ -604,7 +604,7 @@
             </div>
           </div>
 <a data-name="1871191903%2FFunctions%2F-878000200" anchor-label="isNullCheck" id="1871191903%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="is-null-check.html"><span>is</span><wbr><span>Null</span><wbr><span><span>Check</span></span></a></div>
@@ -619,7 +619,7 @@
             </div>
           </div>
 <a data-name="-1645672961%2FFunctions%2F-878000200" anchor-label="isOpen" id="-1645672961%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="is-open.html"><span>is</span><wbr><span><span>Open</span></span></a></div>
@@ -634,7 +634,7 @@
             </div>
           </div>
 <a data-name="1932728037%2FFunctions%2F-878000200" anchor-label="isOperator" id="1932728037%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="is-operator.html"><span>is</span><wbr><span><span>Operator</span></span></a></div>
@@ -649,7 +649,7 @@
             </div>
           </div>
 <a data-name="-133358403%2FFunctions%2F-878000200" anchor-label="isOverride" id="-133358403%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="is-override.html"><span>is</span><wbr><span><span>Override</span></span></a></div>
@@ -664,7 +664,7 @@
             </div>
           </div>
 <a data-name="-116805561%2FFunctions%2F-878000200" anchor-label="isPartOf" id="-116805561%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="is-part-of.html"><span>is</span><wbr><span>Part</span><wbr><span><span>Of</span></span></a></div>
@@ -679,7 +679,7 @@
             </div>
           </div>
 <a data-name="1170179576%2FFunctions%2F-878000200" anchor-label="isPartOfString" id="1170179576%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="is-part-of-string.html"><span>is</span><wbr><span>Part</span><wbr><span>Of</span><wbr><span><span>String</span></span></a></div>
@@ -694,7 +694,7 @@
             </div>
           </div>
 <a data-name="1169087751%2FFunctions%2F-878000200" anchor-label="isProtected" id="1169087751%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="is-protected.html"><span>is</span><wbr><span><span>Protected</span></span></a></div>
@@ -709,7 +709,7 @@
             </div>
           </div>
 <a data-name="-529691097%2FFunctions%2F-878000200" anchor-label="isPublicNotOverridden" id="-529691097%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="is-public-not-overridden.html"><span>is</span><wbr><span>Public</span><wbr><span>Not</span><wbr><span><span>Overridden</span></span></a></div>
@@ -724,7 +724,7 @@
             </div>
           </div>
 <a data-name="-1560912952%2FFunctions%2F-878000200" anchor-label="isString" id="-1560912952%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="is-string.html"><span>is</span><wbr><span><span>String</span></span></a></div>
@@ -739,7 +739,7 @@
             </div>
           </div>
 <a data-name="1171739929%2FFunctions%2F-878000200" anchor-label="lastArgumentMatchesKotlinReferenceUrlSyntax" id="1171739929%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="last-argument-matches-kotlin-reference-url-syntax.html"><span>last</span><wbr><span>Argument</span><wbr><span>Matches</span><wbr><span>Kotlin</span><wbr><span>Reference</span><wbr><span>Url</span><wbr><span><span>Syntax</span></span></a></div>
@@ -754,7 +754,7 @@
             </div>
           </div>
 <a data-name="103332908%2FFunctions%2F-878000200" anchor-label="lastArgumentMatchesMarkdownUrlSyntax" id="103332908%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="last-argument-matches-markdown-url-syntax.html"><span>last</span><wbr><span>Argument</span><wbr><span>Matches</span><wbr><span>Markdown</span><wbr><span>Url</span><wbr><span><span>Syntax</span></span></a></div>
@@ -769,7 +769,7 @@
             </div>
           </div>
 <a data-name="518049688%2FFunctions%2F-878000200" anchor-label="lastArgumentMatchesUrl" id="518049688%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="last-argument-matches-url.html"><span>last</span><wbr><span>Argument</span><wbr><span>Matches</span><wbr><span><span>Url</span></span></a></div>
@@ -784,7 +784,7 @@
             </div>
           </div>
 <a data-name="-1481974029%2FFunctions%2F-878000200" anchor-label="receiverIsUsed" id="-1481974029%2FFunctions%2F-878000200" data-filterable-set=":detekt-psi-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-psi-utils/main" data-filterable-set=":detekt-psi-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="receiver-is-used.html"><span>receiver</span><wbr><span>Is</span><wbr><span><span>Used</span></span></a></div>
@@ -804,17 +804,21 @@
   </div>
 </div>
     <div class="footer">
-        <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
-        <span>© 2025 Copyright</span>
-        <span class="pull-right">
-            <span>Generated by </span>
-            <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
-                <span>dokka</span>
-            </a>
-        </span>
-    </div>
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2025 Copyright</div>
+                </div>
             </div>
         </div>
     </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

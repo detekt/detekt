@@ -1,22 +1,22 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
     <title>FakeKtElement</title>
-<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">    <script>var pathToRoot = "../../../";</script>
-    <script>document.documentElement.classList.replace("no-js","js");</script>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
     <script>const storage = localStorage.getItem("dokka-dark-mode")
-    if (storage == null) {
+      if (storage == null) {
         const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
         if (osDarkSchemePreferred === true) {
-            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
         }
-    } else {
+      } else {
         const savedDarkMode = JSON.parse(storage)
-        if(savedDarkMode === true) {
-            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
         }
-    }
+      }
     </script>
 <script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
 <script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
@@ -24,19 +24,17 @@
 <link href="../../../styles/main.css" rel="Stylesheet">
 <link href="../../../styles/prism.css" rel="Stylesheet">
 <link href="../../../styles/logo-styles.css" rel="Stylesheet">
-<link href="../../../styles/font-jb-sans-auto.css" rel="Stylesheet">
 <link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
-<script type="text/javascript" src="../../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../../scripts/safe-local-storage_blocking.js"></script>
 <script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
 <script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
 <script type="text/javascript" src="../../../scripts/main.js" defer></script>
 <script type="text/javascript" src="../../../scripts/prism.js" async></script>
-<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer></script>
-<script type="text/javascript" src="../../../scripts/symbol-parameters-wrapper_deferred.js" defer></script></head>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer></script></head>
 <body>
-    <div class="root">
-    <nav class="navigation theme-dark" id="navigation-wrapper">
-<a class="library-name--link" href="../../../index.html">
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../../index.html" tabindex="1">
                     detekt
             </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
         </button>
@@ -44,13 +42,13 @@
         <div class="library-version" id="library-version">2.0.0-alpha.0
         </div>
         <div class="navigation-controls">
-        <div class="filter-section filter-section_loading" id="filter-section">
-                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":detekt-test-utils/main">jvm</button>
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true" data-filter=":detekt-test-utils/main">jvm</button>
             <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
                 <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
-                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox">
-                    <div class="dropdown--header"><span>Platform filter</span>
-                        <button class="button" data-role="dropdown-toggle" aria-label="Close platform filter">
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
                             <i class="ui-kit-icon ui-kit-icon_cross"></i>
                         </button>
                     </div>
@@ -64,32 +62,34 @@
                 </ul>
                 <div class="dropdown--overlay"></div>
             </div>
-        </div>
+        </ul>
             <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
             </button>
             <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
                 API
             </div>
         </div>
-    </nav>
-        <div id="container">
-            <div class="sidebar" id="leftColumn">
-                <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
-                    <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox">
-                        <div class="dropdown--header">
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
                             <span>
                                     detekt
                             </span>
-                            <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
-                                <i class="ui-kit-icon ui-kit-icon_cross"></i>
-                            </button>
-                        </div>
-                        <div class="sidebar--inner" id="sideMenu"></div>
-                    </ul>
-                    <div class="dropdown--overlay"></div>
-                </div>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
             </div>
-            <div id="main">
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
 <div class="main-content" data-page-type="classlike" id="content" pageids="detekt-test-utils::dev.detekt.test.utils.internal/FakeKtElement///PointingToDeclaration//1643042966">
   <div class="breadcrumbs"><a href="../../index.html">detekt-test-utils</a><span class="delimiter">/</span><a href="../index.html">dev.detekt.test.utils.internal</a><span class="delimiter">/</span><span class="current">FakeKtElement</span></div>
   <div class="cover ">
@@ -100,9 +100,9 @@
     <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
     <div class="tabs-section-body">
       <div data-togglable="CONSTRUCTOR">
-        <h2 class="">Constructors</h2>
+        <h2 class="tableheader">Constructors</h2>
         <div class="table"><a data-name="2096972883%2FConstructors%2F1643042966" anchor-label="FakeKtElement" id="2096972883%2FConstructors%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-togglable="CONSTRUCTOR" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-togglable="CONSTRUCTOR" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="-fake-kt-element.html"><span>Fake</span><wbr><span>Kt</span><wbr><span><span>Element</span></span></a></div>
@@ -118,10 +118,509 @@
           </div>
         </div>
       </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="1920756986%2FProperties%2F1643042966" anchor-label="children" id="1920756986%2FProperties%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="children.html"><span><span>children</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1920756986%2FProperties%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="children.html">children</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span data-unresolved-link="com.intellij.psi/PsiElement///PointingToDeclaration/">PsiElement</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="425830191%2FProperties%2F1643042966" anchor-label="containingFile" id="425830191%2FProperties%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="containing-file.html"><span>containing</span><wbr><span><span>File</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="425830191%2FProperties%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="containing-file.html">containingFile</a><span class="token operator">: </span><span data-unresolved-link="com.intellij.psi/PsiFile///PointingToDeclaration/">PsiFile</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1497295558%2FProperties%2F1643042966" anchor-label="containingKtFile" id="1497295558%2FProperties%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="containing-kt-file.html"><span>containing</span><wbr><span>Kt</span><wbr><span><span>File</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1497295558%2FProperties%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="containing-kt-file.html">containingKtFile</a><span class="token operator">: </span><span data-unresolved-link="org.jetbrains.kotlin.psi/KtFile///PointingToDeclaration/">KtFile</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1861511954%2FProperties%2F1643042966" anchor-label="context" id="1861511954%2FProperties%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="context.html"><span><span>context</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1861511954%2FProperties%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="context.html">context</a><span class="token operator">: </span><span data-unresolved-link="com.intellij.psi/PsiElement///PointingToDeclaration/">PsiElement</span><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1372292173%2FProperties%2F1643042966" anchor-label="firstChild" id="1372292173%2FProperties%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="first-child.html"><span>first</span><wbr><span><span>Child</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1372292173%2FProperties%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="first-child.html">firstChild</a><span class="token operator">: </span><span data-unresolved-link="com.intellij.psi/PsiElement///PointingToDeclaration/">PsiElement</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-25270760%2FProperties%2F1643042966" anchor-label="isPhysical" id="-25270760%2FProperties%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="is-physical.html"><span>is</span><wbr><span><span>Physical</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-25270760%2FProperties%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="is-physical.html">isPhysical</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-285407953%2FProperties%2F1643042966" anchor-label="isValid" id="-285407953%2FProperties%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="is-valid.html"><span>is</span><wbr><span><span>Valid</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-285407953%2FProperties%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="is-valid.html">isValid</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1583253649%2FProperties%2F1643042966" anchor-label="isWritable" id="-1583253649%2FProperties%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="is-writable.html"><span>is</span><wbr><span><span>Writable</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1583253649%2FProperties%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="is-writable.html">isWritable</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1386758719%2FProperties%2F1643042966" anchor-label="language" id="-1386758719%2FProperties%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="language.html"><span><span>language</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1386758719%2FProperties%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="language.html">language</a><span class="token operator">: </span><span data-unresolved-link="com.intellij.lang/Language///PointingToDeclaration/">Language</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1783753595%2FProperties%2F1643042966" anchor-label="lastChild" id="1783753595%2FProperties%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="last-child.html"><span>last</span><wbr><span><span>Child</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1783753595%2FProperties%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="last-child.html">lastChild</a><span class="token operator">: </span><span data-unresolved-link="com.intellij.psi/PsiElement///PointingToDeclaration/">PsiElement</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="672738004%2FProperties%2F1643042966" anchor-label="manager" id="672738004%2FProperties%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="manager.html"><span><span>manager</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="672738004%2FProperties%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="manager.html">manager</a><span class="token operator">: </span><span data-unresolved-link="com.intellij.psi/PsiManager///PointingToDeclaration/">PsiManager</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1620562926%2FProperties%2F1643042966" anchor-label="name" id="1620562926%2FProperties%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="name.html"><span><span>name</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1620562926%2FProperties%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="name.html">name</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1180959641%2FProperties%2F1643042966" anchor-label="navigationElement" id="1180959641%2FProperties%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="navigation-element.html"><span>navigation</span><wbr><span><span>Element</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1180959641%2FProperties%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="navigation-element.html">navigationElement</a><span class="token operator">: </span><span data-unresolved-link="com.intellij.psi/PsiElement///PointingToDeclaration/">PsiElement</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1863444878%2FProperties%2F1643042966" anchor-label="nextSibling" id="-1863444878%2FProperties%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="next-sibling.html"><span>next</span><wbr><span><span>Sibling</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1863444878%2FProperties%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="next-sibling.html">nextSibling</a><span class="token operator">: </span><span data-unresolved-link="com.intellij.psi/PsiElement///PointingToDeclaration/">PsiElement</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2010340265%2FProperties%2F1643042966" anchor-label="node" id="-2010340265%2FProperties%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="node.html"><span><span>node</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2010340265%2FProperties%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="node.html">node</a><span class="token operator">: </span><span data-unresolved-link="com.intellij.lang/ASTNode///PointingToDeclaration/">ASTNode</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1064613802%2FProperties%2F1643042966" anchor-label="originalElement" id="-1064613802%2FProperties%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="original-element.html"><span>original</span><wbr><span><span>Element</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1064613802%2FProperties%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="original-element.html">originalElement</a><span class="token operator">: </span><span data-unresolved-link="com.intellij.psi/PsiElement///PointingToDeclaration/">PsiElement</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="612353860%2FProperties%2F1643042966" anchor-label="ownDeclarations" id="612353860%2FProperties%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-fake-psi-file/index.html#612353860%2FProperties%2F1643042966"><span>own</span><wbr><span><span>Declarations</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="612353860%2FProperties%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@get:</span><span data-unresolved-link="org.jetbrains.annotations/ApiStatus.Experimental///PointingToDeclaration/"><span class="token annotation builtin">ApiStatus.Experimental</span></span></div><div class="block"><span class="token annotation builtin">@get:</span><span data-unresolved-link="org.jetbrains.annotations/ApiStatus.OverrideOnly///PointingToDeclaration/"><span class="token annotation builtin">ApiStatus.OverrideOnly</span></span></div><div class="block"><span class="token annotation builtin">@get:</span><span data-unresolved-link="org.jetbrains.annotations/NotNull///PointingToDeclaration/"><span class="token annotation builtin">NotNull</span></span></div></div><span class="token keyword">open </span><span class="token keyword">val </span><a href="../-fake-psi-file/index.html#612353860%2FProperties%2F1643042966">ownDeclarations</a><span class="token operator">: </span><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.jetbrains.annotations/NotNull///PointingToDeclaration/"><span class="token annotation builtin">NotNull</span></span>&nbsp;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-collection/index.html">Collection</a><span class="token operator">&lt;</span><span class="token keyword">out </span><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.jetbrains.annotations/NotNull///PointingToDeclaration/"><span class="token annotation builtin">NotNull</span></span>&nbsp;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1676974635%2FProperties%2F1643042966" anchor-label="ownReferences" id="-1676974635%2FProperties%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-fake-psi-file/index.html#-1676974635%2FProperties%2F1643042966"><span>own</span><wbr><span><span>References</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1676974635%2FProperties%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@get:</span><span data-unresolved-link="org.jetbrains.annotations/ApiStatus.Experimental///PointingToDeclaration/"><span class="token annotation builtin">ApiStatus.Experimental</span></span></div><div class="block"><span class="token annotation builtin">@get:</span><span data-unresolved-link="org.jetbrains.annotations/ApiStatus.OverrideOnly///PointingToDeclaration/"><span class="token annotation builtin">ApiStatus.OverrideOnly</span></span></div><div class="block"><span class="token annotation builtin">@get:</span><span data-unresolved-link="org.jetbrains.annotations/NotNull///PointingToDeclaration/"><span class="token annotation builtin">NotNull</span></span></div></div><span class="token keyword">open </span><span class="token keyword">val </span><a href="../-fake-psi-file/index.html#-1676974635%2FProperties%2F1643042966">ownReferences</a><span class="token operator">: </span><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.jetbrains.annotations/NotNull///PointingToDeclaration/"><span class="token annotation builtin">NotNull</span></span>&nbsp;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-collection/index.html">Collection</a><span class="token operator">&lt;</span><span class="token keyword">out </span><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.jetbrains.annotations/NotNull///PointingToDeclaration/"><span class="token annotation builtin">NotNull</span></span>&nbsp;</span><span data-unresolved-link="com.intellij.model.psi/PsiSymbolReference///PointingToDeclaration/">PsiSymbolReference</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="553414575%2FProperties%2F1643042966" anchor-label="parent" id="553414575%2FProperties%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="parent.html"><span><span>parent</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="553414575%2FProperties%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="parent.html">parent</a><span class="token operator">: </span><span data-unresolved-link="com.intellij.psi/PsiElement///PointingToDeclaration/">PsiElement</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-533585345%2FProperties%2F1643042966" anchor-label="presentation" id="-533585345%2FProperties%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="presentation.html"><span><span>presentation</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-533585345%2FProperties%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="presentation.html">presentation</a><span class="token operator">: </span><span data-unresolved-link="com.intellij.navigation/ItemPresentation///PointingToDeclaration/">ItemPresentation</span><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="616705458%2FProperties%2F1643042966" anchor-label="prevSibling" id="616705458%2FProperties%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="prev-sibling.html"><span>prev</span><wbr><span><span>Sibling</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="616705458%2FProperties%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="prev-sibling.html">prevSibling</a><span class="token operator">: </span><span data-unresolved-link="com.intellij.psi/PsiElement///PointingToDeclaration/">PsiElement</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1208574184%2FProperties%2F1643042966" anchor-label="project" id="1208574184%2FProperties%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="project.html"><span><span>project</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1208574184%2FProperties%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="project.html">project</a><span class="token operator">: </span><span data-unresolved-link="com.intellij.openapi.project/Project///PointingToDeclaration/">Project</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="324030958%2FProperties%2F1643042966" anchor-label="psiOrParent" id="324030958%2FProperties%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="psi-or-parent.html"><span>psi</span><wbr><span>Or</span><wbr><span><span>Parent</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="324030958%2FProperties%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="psi-or-parent.html">psiOrParent</a><span class="token operator">: </span><span data-unresolved-link="org.jetbrains.kotlin.psi/KtElement///PointingToDeclaration/">KtElement</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="36777974%2FProperties%2F1643042966" anchor-label="reference" id="36777974%2FProperties%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="reference.html"><span><span>reference</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="36777974%2FProperties%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="reference.html">reference</a><span class="token operator">: </span><span data-unresolved-link="com.intellij.psi/PsiReference///PointingToDeclaration/">PsiReference</span><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1588595311%2FProperties%2F1643042966" anchor-label="references" id="-1588595311%2FProperties%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="references.html"><span><span>references</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1588595311%2FProperties%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="references.html">references</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span data-unresolved-link="com.intellij.psi/PsiReference///PointingToDeclaration/">PsiReference</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1245675857%2FProperties%2F1643042966" anchor-label="resolveScope" id="1245675857%2FProperties%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="resolve-scope.html"><span>resolve</span><wbr><span><span>Scope</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1245675857%2FProperties%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="resolve-scope.html">resolveScope</a><span class="token operator">: </span><span data-unresolved-link="com.intellij.psi.search/GlobalSearchScope///PointingToDeclaration/">GlobalSearchScope</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-617280643%2FProperties%2F1643042966" anchor-label="startOffsetInParent" id="-617280643%2FProperties%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="start-offset-in-parent.html"><span>start</span><wbr><span>Offset</span><wbr><span>In</span><wbr><span><span>Parent</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-617280643%2FProperties%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="start-offset-in-parent.html">startOffsetInParent</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1376590964%2FProperties%2F1643042966" anchor-label="text" id="-1376590964%2FProperties%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="text.html"><span><span>text</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1376590964%2FProperties%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="text.html">text</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="857749510%2FProperties%2F1643042966" anchor-label="textLength" id="857749510%2FProperties%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="text-length.html"><span>text</span><wbr><span><span>Length</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="857749510%2FProperties%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="text-length.html">textLength</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="742677241%2FProperties%2F1643042966" anchor-label="textOffset" id="742677241%2FProperties%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="text-offset.html"><span>text</span><wbr><span><span>Offset</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="742677241%2FProperties%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="text-offset.html">textOffset</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1944596177%2FProperties%2F1643042966" anchor-label="textRange" id="1944596177%2FProperties%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="text-range.html"><span>text</span><wbr><span><span>Range</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1944596177%2FProperties%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="text-range.html">textRange</a><span class="token operator">: </span><span data-unresolved-link="com.intellij.openapi.util/TextRange///PointingToDeclaration/">TextRange</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="707949636%2FProperties%2F1643042966" anchor-label="textRangeInParent" id="707949636%2FProperties%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-fake-psi-file/index.html#707949636%2FProperties%2F1643042966"><span>text</span><wbr><span>Range</span><wbr><span>In</span><wbr><span><span>Parent</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="707949636%2FProperties%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@get:</span><span data-unresolved-link="org.jetbrains.annotations/Contract///PointingToDeclaration/"><span class="token annotation builtin">Contract</span></span><span class="token punctuation">(</span><span>pure<span class="token operator"> = </span><span class="breakable-word"><span class="token boolean">true</span></span></span><wbr><span class="token punctuation">)</span></div><div class="block"><span class="token annotation builtin">@get:</span><span data-unresolved-link="org.jetbrains.annotations/NotNull///PointingToDeclaration/"><span class="token annotation builtin">NotNull</span></span></div></div><span class="token keyword">open </span><span class="token keyword">val </span><a href="../-fake-psi-file/index.html#707949636%2FProperties%2F1643042966">textRangeInParent</a><span class="token operator">: </span><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.jetbrains.annotations/NotNull///PointingToDeclaration/"><span class="token annotation builtin">NotNull</span></span>&nbsp;</span><span data-unresolved-link="com.intellij.openapi.util/TextRange///PointingToDeclaration/">TextRange</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="726618540%2FProperties%2F1643042966" anchor-label="useScope" id="726618540%2FProperties%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="use-scope.html"><span>use</span><wbr><span><span>Scope</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="726618540%2FProperties%2F1643042966"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="use-scope.html">useScope</a><span class="token operator">: </span><span data-unresolved-link="com.intellij.psi.search/SearchScope///PointingToDeclaration/">SearchScope</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div data-togglable="FUNCTION">
-        <h2 class="">Functions</h2>
+        <h2 class="tableheader">Functions</h2>
         <div class="table"><a data-name="989137063%2FFunctions%2F1643042966" anchor-label="accept" id="989137063%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="accept.html"><span><span>accept</span></span></a></div>
@@ -136,7 +635,7 @@
             </div>
           </div>
 <a data-name="-1107363427%2FFunctions%2F1643042966" anchor-label="acceptChildren" id="-1107363427%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="accept-children.html"><span>accept</span><wbr><span><span>Children</span></span></a></div>
@@ -151,7 +650,7 @@
             </div>
           </div>
 <a data-name="-1489029542%2FFunctions%2F1643042966" anchor-label="add" id="-1489029542%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="add.html"><span><span>add</span></span></a></div>
@@ -166,7 +665,7 @@
             </div>
           </div>
 <a data-name="877657004%2FFunctions%2F1643042966" anchor-label="addAfter" id="877657004%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="add-after.html"><span>add</span><wbr><span><span>After</span></span></a></div>
@@ -181,7 +680,7 @@
             </div>
           </div>
 <a data-name="-2047797425%2FFunctions%2F1643042966" anchor-label="addBefore" id="-2047797425%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="add-before.html"><span>add</span><wbr><span><span>Before</span></span></a></div>
@@ -196,7 +695,7 @@
             </div>
           </div>
 <a data-name="-1524590398%2FFunctions%2F1643042966" anchor-label="addRange" id="-1524590398%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="add-range.html"><span>add</span><wbr><span><span>Range</span></span></a></div>
@@ -211,7 +710,7 @@
             </div>
           </div>
 <a data-name="-966922454%2FFunctions%2F1643042966" anchor-label="addRangeAfter" id="-966922454%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="add-range-after.html"><span>add</span><wbr><span>Range</span><wbr><span><span>After</span></span></a></div>
@@ -226,7 +725,7 @@
             </div>
           </div>
 <a data-name="86629809%2FFunctions%2F1643042966" anchor-label="addRangeBefore" id="86629809%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="add-range-before.html"><span>add</span><wbr><span>Range</span><wbr><span><span>Before</span></span></a></div>
@@ -241,7 +740,7 @@
             </div>
           </div>
 <a data-name="1809482144%2FFunctions%2F1643042966" anchor-label="canNavigate" id="1809482144%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="can-navigate.html"><span>can</span><wbr><span><span>Navigate</span></span></a></div>
@@ -256,7 +755,7 @@
             </div>
           </div>
 <a data-name="1142465738%2FFunctions%2F1643042966" anchor-label="canNavigateToSource" id="1142465738%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="can-navigate-to-source.html"><span>can</span><wbr><span>Navigate</span><wbr><span>To</span><wbr><span><span>Source</span></span></a></div>
@@ -271,7 +770,7 @@
             </div>
           </div>
 <a data-name="1775173370%2FFunctions%2F1643042966" anchor-label="checkAdd" id="1775173370%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="check-add.html"><span>check</span><wbr><span><span>Add</span></span></a></div>
@@ -286,7 +785,7 @@
             </div>
           </div>
 <a data-name="870878830%2FFunctions%2F1643042966" anchor-label="checkDelete" id="870878830%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="check-delete.html"><span>check</span><wbr><span><span>Delete</span></span></a></div>
@@ -301,7 +800,7 @@
             </div>
           </div>
 <a data-name="-1769661884%2FFunctions%2F1643042966" anchor-label="copy" id="-1769661884%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="copy.html"><span><span>copy</span></span></a></div>
@@ -316,7 +815,7 @@
             </div>
           </div>
 <a data-name="1829823950%2FFunctions%2F1643042966" anchor-label="delete" id="1829823950%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="delete.html"><span><span>delete</span></span></a></div>
@@ -331,7 +830,7 @@
             </div>
           </div>
 <a data-name="1026234674%2FFunctions%2F1643042966" anchor-label="deleteChildRange" id="1026234674%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="delete-child-range.html"><span>delete</span><wbr><span>Child</span><wbr><span><span>Range</span></span></a></div>
@@ -346,7 +845,7 @@
             </div>
           </div>
 <a data-name="-872186647%2FFunctions%2F1643042966" anchor-label="findElementAt" id="-872186647%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="find-element-at.html"><span>find</span><wbr><span>Element</span><wbr><span><span>At</span></span></a></div>
@@ -361,7 +860,7 @@
             </div>
           </div>
 <a data-name="-786364742%2FFunctions%2F1643042966" anchor-label="findReferenceAt" id="-786364742%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="find-reference-at.html"><span>find</span><wbr><span>Reference</span><wbr><span><span>At</span></span></a></div>
@@ -376,7 +875,7 @@
             </div>
           </div>
 <a data-name="-1055965684%2FFunctions%2F1643042966" anchor-label="getChildren" id="-1055965684%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="get-children.html"><span>get</span><wbr><span><span>Children</span></span></a></div>
@@ -391,7 +890,7 @@
             </div>
           </div>
 <a data-name="1627644609%2FFunctions%2F1643042966" anchor-label="getContainingFile" id="1627644609%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="get-containing-file.html"><span>get</span><wbr><span>Containing</span><wbr><span><span>File</span></span></a></div>
@@ -406,7 +905,7 @@
             </div>
           </div>
 <a data-name="1094748632%2FFunctions%2F1643042966" anchor-label="getContainingKtFile" id="1094748632%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="get-containing-kt-file.html"><span>get</span><wbr><span>Containing</span><wbr><span>Kt</span><wbr><span><span>File</span></span></a></div>
@@ -421,7 +920,7 @@
             </div>
           </div>
 <a data-name="-451268672%2FFunctions%2F1643042966" anchor-label="getContext" id="-451268672%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="get-context.html"><span>get</span><wbr><span><span>Context</span></span></a></div>
@@ -436,7 +935,7 @@
             </div>
           </div>
 <a data-name="-1927842674%2FFunctions%2F1643042966" anchor-label="getCopyableUserData" id="-1927842674%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="get-copyable-user-data.html"><span>get</span><wbr><span>Copyable</span><wbr><span>User</span><wbr><span><span>Data</span></span></a></div>
@@ -451,7 +950,7 @@
             </div>
           </div>
 <a data-name="1190025439%2FFunctions%2F1643042966" anchor-label="getFirstChild" id="1190025439%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="get-first-child.html"><span>get</span><wbr><span>First</span><wbr><span><span>Child</span></span></a></div>
@@ -466,7 +965,7 @@
             </div>
           </div>
 <a data-name="-709132560%2FFunctions%2F1643042966" anchor-label="getIcon" id="-709132560%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="get-icon.html"><span>get</span><wbr><span><span>Icon</span></span></a></div>
@@ -481,7 +980,7 @@
             </div>
           </div>
 <a data-name="-68514093%2FFunctions%2F1643042966" anchor-label="getLanguage" id="-68514093%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="get-language.html"><span>get</span><wbr><span><span>Language</span></span></a></div>
@@ -496,7 +995,7 @@
             </div>
           </div>
 <a data-name="-300335959%2FFunctions%2F1643042966" anchor-label="getLastChild" id="-300335959%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="get-last-child.html"><span>get</span><wbr><span>Last</span><wbr><span><span>Child</span></span></a></div>
@@ -511,7 +1010,7 @@
             </div>
           </div>
 <a data-name="-1640042622%2FFunctions%2F1643042966" anchor-label="getManager" id="-1640042622%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="get-manager.html"><span>get</span><wbr><span><span>Manager</span></span></a></div>
@@ -526,7 +1025,7 @@
             </div>
           </div>
 <a data-name="1263664640%2FFunctions%2F1643042966" anchor-label="getName" id="1263664640%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="get-name.html"><span>get</span><wbr><span><span>Name</span></span></a></div>
@@ -541,7 +1040,7 @@
             </div>
           </div>
 <a data-name="1586906823%2FFunctions%2F1643042966" anchor-label="getNavigationElement" id="1586906823%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="get-navigation-element.html"><span>get</span><wbr><span>Navigation</span><wbr><span><span>Element</span></span></a></div>
@@ -556,7 +1055,7 @@
             </div>
           </div>
 <a data-name="1076220960%2FFunctions%2F1643042966" anchor-label="getNextSibling" id="1076220960%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="get-next-sibling.html"><span>get</span><wbr><span>Next</span><wbr><span><span>Sibling</span></span></a></div>
@@ -571,7 +1070,7 @@
             </div>
           </div>
 <a data-name="1927728745%2FFunctions%2F1643042966" anchor-label="getNode" id="1927728745%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="get-node.html"><span>get</span><wbr><span><span>Node</span></span></a></div>
@@ -586,7 +1085,7 @@
             </div>
           </div>
 <a data-name="1831894788%2FFunctions%2F1643042966" anchor-label="getOriginalElement" id="1831894788%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="get-original-element.html"><span>get</span><wbr><span>Original</span><wbr><span><span>Element</span></span></a></div>
@@ -600,38 +1099,8 @@
               </div>
             </div>
           </div>
-<a data-name="1732016110%2FFunctions%2F1643042966" anchor-label="getOwnDeclarations" id="1732016110%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="../-fake-psi-file/index.html#1732016110%2FFunctions%2F1643042966"><span>get</span><wbr><span>Own</span><wbr><span><span>Declarations</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1732016110%2FFunctions%2F1643042966"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="org.jetbrains.annotations/ApiStatus.Experimental///PointingToDeclaration/"><span class="token annotation builtin">ApiStatus.Experimental</span></span></div><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="org.jetbrains.annotations/ApiStatus.OverrideOnly///PointingToDeclaration/"><span class="token annotation builtin">ApiStatus.OverrideOnly</span></span></div><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="org.jetbrains.annotations/NotNull///PointingToDeclaration/"><span class="token annotation builtin">NotNull</span></span></div></div><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../-fake-psi-file/index.html#1732016110%2FFunctions%2F1643042966"><span class="token function">getOwnDeclarations</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.jetbrains.annotations/NotNull///PointingToDeclaration/"><span class="token annotation builtin">NotNull</span></span>&nbsp;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-collection/index.html">MutableCollection</a><span class="token operator">&lt;</span><span class="token keyword">out </span><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.jetbrains.annotations/NotNull///PointingToDeclaration/"><span class="token annotation builtin">NotNull</span></span>&nbsp;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt;</span></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
-<a data-name="1957705983%2FFunctions%2F1643042966" anchor-label="getOwnReferences" id="1957705983%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="../-fake-psi-file/index.html#1957705983%2FFunctions%2F1643042966"><span>get</span><wbr><span>Own</span><wbr><span><span>References</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1957705983%2FFunctions%2F1643042966"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="org.jetbrains.annotations/ApiStatus.Experimental///PointingToDeclaration/"><span class="token annotation builtin">ApiStatus.Experimental</span></span></div><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="org.jetbrains.annotations/ApiStatus.OverrideOnly///PointingToDeclaration/"><span class="token annotation builtin">ApiStatus.OverrideOnly</span></span></div><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="org.jetbrains.annotations/NotNull///PointingToDeclaration/"><span class="token annotation builtin">NotNull</span></span></div></div><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../-fake-psi-file/index.html#1957705983%2FFunctions%2F1643042966"><span class="token function">getOwnReferences</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.jetbrains.annotations/NotNull///PointingToDeclaration/"><span class="token annotation builtin">NotNull</span></span>&nbsp;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-collection/index.html">MutableCollection</a><span class="token operator">&lt;</span><span class="token keyword">out </span><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.jetbrains.annotations/NotNull///PointingToDeclaration/"><span class="token annotation builtin">NotNull</span></span>&nbsp;</span><span data-unresolved-link="com.intellij.model.psi/PsiSymbolReference///PointingToDeclaration/">PsiSymbolReference</span><span class="token operator">&gt;</span></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
 <a data-name="1171545409%2FFunctions%2F1643042966" anchor-label="getParent" id="1171545409%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="get-parent.html"><span>get</span><wbr><span><span>Parent</span></span></a></div>
@@ -646,7 +1115,7 @@
             </div>
           </div>
 <a data-name="401742417%2FFunctions%2F1643042966" anchor-label="getPresentation" id="401742417%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="get-presentation.html"><span>get</span><wbr><span><span>Presentation</span></span></a></div>
@@ -661,7 +1130,7 @@
             </div>
           </div>
 <a data-name="-738596000%2FFunctions%2F1643042966" anchor-label="getPrevSibling" id="-738596000%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="get-prev-sibling.html"><span>get</span><wbr><span>Prev</span><wbr><span><span>Sibling</span></span></a></div>
@@ -676,7 +1145,7 @@
             </div>
           </div>
 <a data-name="-1104206442%2FFunctions%2F1643042966" anchor-label="getProject" id="-1104206442%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="get-project.html"><span>get</span><wbr><span><span>Project</span></span></a></div>
@@ -691,7 +1160,7 @@
             </div>
           </div>
 <a data-name="-1031270500%2FFunctions%2F1643042966" anchor-label="getPsiOrParent" id="-1031270500%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="get-psi-or-parent.html"><span>get</span><wbr><span>Psi</span><wbr><span>Or</span><wbr><span><span>Parent</span></span></a></div>
@@ -706,7 +1175,7 @@
             </div>
           </div>
 <a data-name="-2047311580%2FFunctions%2F1643042966" anchor-label="getReference" id="-2047311580%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="get-reference.html"><span>get</span><wbr><span><span>Reference</span></span></a></div>
@@ -721,7 +1190,7 @@
             </div>
           </div>
 <a data-name="-1770862045%2FFunctions%2F1643042966" anchor-label="getReferences" id="-1770862045%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="get-references.html"><span>get</span><wbr><span><span>References</span></span></a></div>
@@ -736,7 +1205,7 @@
             </div>
           </div>
 <a data-name="-2113963677%2FFunctions%2F1643042966" anchor-label="getResolveScope" id="-2113963677%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="get-resolve-scope.html"><span>get</span><wbr><span>Resolve</span><wbr><span><span>Scope</span></span></a></div>
@@ -751,7 +1220,7 @@
             </div>
           </div>
 <a data-name="-1344062677%2FFunctions%2F1643042966" anchor-label="getStartOffsetInParent" id="-1344062677%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="get-start-offset-in-parent.html"><span>get</span><wbr><span>Start</span><wbr><span>Offset</span><wbr><span>In</span><wbr><span><span>Parent</span></span></a></div>
@@ -766,7 +1235,7 @@
             </div>
           </div>
 <a data-name="-1733489250%2FFunctions%2F1643042966" anchor-label="getText" id="-1733489250%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="get-text.html"><span>get</span><wbr><span><span>Text</span></span></a></div>
@@ -781,7 +1250,7 @@
             </div>
           </div>
 <a data-name="675482776%2FFunctions%2F1643042966" anchor-label="getTextLength" id="675482776%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="get-text-length.html"><span>get</span><wbr><span>Text</span><wbr><span><span>Length</span></span></a></div>
@@ -796,7 +1265,7 @@
             </div>
           </div>
 <a data-name="560410507%2FFunctions%2F1643042966" anchor-label="getTextOffset" id="560410507%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="get-text-offset.html"><span>get</span><wbr><span>Text</span><wbr><span><span>Offset</span></span></a></div>
@@ -811,7 +1280,7 @@
             </div>
           </div>
 <a data-name="-139493377%2FFunctions%2F1643042966" anchor-label="getTextRange" id="-139493377%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="get-text-range.html"><span>get</span><wbr><span>Text</span><wbr><span><span>Range</span></span></a></div>
@@ -825,23 +1294,8 @@
               </div>
             </div>
           </div>
-<a data-name="-1333419410%2FFunctions%2F1643042966" anchor-label="getTextRangeInParent" id="-1333419410%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
-            <div class="main-subrow keyValue ">
-              <div class=""><span class="inline-flex">
-                  <div><a href="../-fake-psi-file/index.html#-1333419410%2FFunctions%2F1643042966"><span>get</span><wbr><span>Text</span><wbr><span>Range</span><wbr><span>In</span><wbr><span><span>Parent</span></span></a></div>
-<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1333419410%2FFunctions%2F1643042966"></span>
-                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
-                  </span></span></div>
-              <div>
-                <div class="title">
-                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":detekt-test-utils/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="org.jetbrains.annotations/Contract///PointingToDeclaration/"><span class="token annotation builtin">Contract</span></span><span class="token punctuation">(</span><span>pure<span class="token operator"> = </span><span class="breakable-word"><span class="token boolean">true</span></span></span><wbr><span class="token punctuation">)</span></div><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="org.jetbrains.annotations/NotNull///PointingToDeclaration/"><span class="token annotation builtin">NotNull</span></span></div></div><span class="token keyword">open </span><span class="token keyword">fun </span><a href="../-fake-psi-file/index.html#-1333419410%2FFunctions%2F1643042966"><span class="token function">getTextRangeInParent</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><span><span class="token annotation builtin">@</span><span data-unresolved-link="org.jetbrains.annotations/NotNull///PointingToDeclaration/"><span class="token annotation builtin">NotNull</span></span>&nbsp;</span><span data-unresolved-link="com.intellij.openapi.util/TextRange///PointingToDeclaration/">TextRange</span></div></div></div>
-                </div>
-              </div>
-            </div>
-          </div>
 <a data-name="1580162781%2FFunctions%2F1643042966" anchor-label="getUserData" id="1580162781%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="get-user-data.html"><span>get</span><wbr><span>User</span><wbr><span><span>Data</span></span></a></div>
@@ -856,7 +1310,7 @@
             </div>
           </div>
 <a data-name="2044863166%2FFunctions%2F1643042966" anchor-label="getUseScope" id="2044863166%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="get-use-scope.html"><span>get</span><wbr><span>Use</span><wbr><span><span>Scope</span></span></a></div>
@@ -871,7 +1325,7 @@
             </div>
           </div>
 <a data-name="-1109963373%2FFunctions%2F1643042966" anchor-label="isEquivalentTo" id="-1109963373%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="is-equivalent-to.html"><span>is</span><wbr><span>Equivalent</span><wbr><span><span>To</span></span></a></div>
@@ -886,7 +1340,7 @@
             </div>
           </div>
 <a data-name="-25270760%2FFunctions%2F1643042966" anchor-label="isPhysical" id="-25270760%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="is-physical.html"><span>is</span><wbr><span><span>Physical</span></span></a></div>
@@ -901,7 +1355,7 @@
             </div>
           </div>
 <a data-name="-285407953%2FFunctions%2F1643042966" anchor-label="isValid" id="-285407953%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="is-valid.html"><span>is</span><wbr><span><span>Valid</span></span></a></div>
@@ -916,7 +1370,7 @@
             </div>
           </div>
 <a data-name="-1583253649%2FFunctions%2F1643042966" anchor-label="isWritable" id="-1583253649%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="is-writable.html"><span>is</span><wbr><span><span>Writable</span></span></a></div>
@@ -931,7 +1385,7 @@
             </div>
           </div>
 <a data-name="1229017869%2FFunctions%2F1643042966" anchor-label="navigate" id="1229017869%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="navigate.html"><span><span>navigate</span></span></a></div>
@@ -946,7 +1400,7 @@
             </div>
           </div>
 <a data-name="-222690418%2FFunctions%2F1643042966" anchor-label="navigationRequest" id="-222690418%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="../-fake-psi-file/index.html#-222690418%2FFunctions%2F1643042966"><span>navigation</span><wbr><span><span>Request</span></span></a></div>
@@ -961,7 +1415,7 @@
             </div>
           </div>
 <a data-name="2084480822%2FFunctions%2F1643042966" anchor-label="processDeclarations" id="2084480822%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="process-declarations.html"><span>process</span><wbr><span><span>Declarations</span></span></a></div>
@@ -976,7 +1430,7 @@
             </div>
           </div>
 <a data-name="610931471%2FFunctions%2F1643042966" anchor-label="putCopyableUserData" id="610931471%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="put-copyable-user-data.html"><span>put</span><wbr><span>Copyable</span><wbr><span>User</span><wbr><span><span>Data</span></span></a></div>
@@ -991,7 +1445,7 @@
             </div>
           </div>
 <a data-name="-2112637024%2FFunctions%2F1643042966" anchor-label="putUserData" id="-2112637024%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="put-user-data.html"><span>put</span><wbr><span>User</span><wbr><span><span>Data</span></span></a></div>
@@ -1006,7 +1460,7 @@
             </div>
           </div>
 <a data-name="61771501%2FFunctions%2F1643042966" anchor-label="replace" id="61771501%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="replace.html"><span><span>replace</span></span></a></div>
@@ -1021,7 +1475,7 @@
             </div>
           </div>
 <a data-name="1806429138%2FFunctions%2F1643042966" anchor-label="textContains" id="1806429138%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="text-contains.html"><span>text</span><wbr><span><span>Contains</span></span></a></div>
@@ -1036,7 +1490,7 @@
             </div>
           </div>
 <a data-name="-1728506986%2FFunctions%2F1643042966" anchor-label="textMatches" id="-1728506986%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="text-matches.html"><span>text</span><wbr><span><span>Matches</span></span></a></div>
@@ -1051,7 +1505,7 @@
             </div>
           </div>
 <a data-name="583251270%2FFunctions%2F1643042966" anchor-label="textToCharArray" id="583251270%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="text-to-char-array.html"><span>text</span><wbr><span>To</span><wbr><span>Char</span><wbr><span><span>Array</span></span></a></div>
@@ -1066,7 +1520,7 @@
             </div>
           </div>
 <a data-name="-2106368723%2FFunctions%2F1643042966" anchor-label="toString" id="-2106368723%2FFunctions%2F1643042966" data-filterable-set=":detekt-test-utils/main"></a>
-          <div class="table-row" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
+          <div class="table-row table-row_content" data-filterable-current=":detekt-test-utils/main" data-filterable-set=":detekt-test-utils/main">
             <div class="main-subrow keyValue ">
               <div class=""><span class="inline-flex">
                   <div><a href="to-string.html"><span>to</span><wbr><span><span>String</span></span></a></div>
@@ -1086,17 +1540,21 @@
   </div>
 </div>
     <div class="footer">
-        <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
-        <span>© 2025 Copyright</span>
-        <span class="pull-right">
-            <span>Generated by </span>
-            <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
-                <span>dokka</span>
-            </a>
-        </span>
-    </div>
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>© 2025 Copyright</div>
+                </div>
             </div>
         </div>
     </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
