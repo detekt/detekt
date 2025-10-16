@@ -55,9 +55,7 @@ dokka {
     }
 
     dokkaSourceSets.configureEach {
-        // Using `set` instead of simple property assignment to work around this Gradle 9 incompatibility: https://github.com/Kotlin/dokka/issues/4096
-        apiVersion.set("1.4")
-        modulePath = "detekt-gradle-plugin"
+        apiVersion = "1.4"
 
         externalDocumentationLinks {
             create("gradle") {
