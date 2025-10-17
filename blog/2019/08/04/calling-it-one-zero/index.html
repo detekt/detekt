@@ -2,16 +2,16 @@
 <html lang="en" dir="ltr" class="blog-wrapper blog-post-page plugin-blog plugin-id-default" data-has-hydrated="false">
 <head>
 <meta charset="UTF-8">
-<meta name="generator" content="Docusaurus v3.9.1">
+<meta name="generator" content="Docusaurus v3.9.2">
 <title data-rh="true">Calling it One Zero | detekt</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://detekt.dev/blog/2019/08/04/calling-it-one-zero"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docusaurus_tag" content="default"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docsearch:docusaurus_tag" content="default"><meta data-rh="true" property="og:title" content="Calling it One Zero | detekt"><meta data-rh="true" name="description" content="Today we are announcing the 1.0 release of detekt, a static code analysis tool for Kotlin."><meta data-rh="true" property="og:description" content="Today we are announcing the 1.0 release of detekt, a static code analysis tool for Kotlin."><meta data-rh="true" property="og:type" content="article"><meta data-rh="true" property="article:published_time" content="2019-08-04T00:00:00.000Z"><meta data-rh="true" property="article:tag" content="news"><link data-rh="true" rel="icon" href="/img/favicon.svg"><link data-rh="true" rel="canonical" href="https://detekt.dev/blog/2019/08/04/calling-it-one-zero"><link data-rh="true" rel="alternate" href="https://detekt.dev/blog/2019/08/04/calling-it-one-zero" hreflang="en"><link data-rh="true" rel="alternate" href="https://detekt.dev/blog/2019/08/04/calling-it-one-zero" hreflang="x-default"><link data-rh="true" rel="preconnect" href="https://5PZNXB7M3G-dsn.algolia.net" crossorigin="anonymous"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","@id":"https://detekt.dev/blog/2019/08/04/calling-it-one-zero","mainEntityOfPage":"https://detekt.dev/blog/2019/08/04/calling-it-one-zero","url":"https://detekt.dev/blog/2019/08/04/calling-it-one-zero","headline":"Calling it One Zero","name":"Calling it One Zero","description":"Today we are announcing the 1.0 release of detekt, a static code analysis tool for Kotlin.","datePublished":"2019-08-04T00:00:00.000Z","author":[],"keywords":[],"isPartOf":{"@type":"Blog","@id":"https://detekt.dev/blog","name":"Blog"}}</script><link rel="alternate" type="application/rss+xml" href="/blog/rss.xml" title="detekt RSS Feed">
 <link rel="alternate" type="application/atom+xml" href="/blog/atom.xml" title="detekt Atom Feed">
 
 
 
 
-<link rel="search" type="application/opensearchdescription+xml" title="detekt" href="/opensearch.xml"><link rel="stylesheet" href="/assets/css/styles.7f312c80.css">
-<script src="/assets/js/runtime~main.d879c0fa.js" defer="defer"></script>
-<script src="/assets/js/main.169aac30.js" defer="defer"></script>
+<link rel="search" type="application/opensearchdescription+xml" title="detekt" href="/opensearch.xml"><link rel="stylesheet" href="/assets/css/styles.274b461d.css">
+<script src="/assets/js/runtime~main.c71af6df.js" defer="defer"></script>
+<script src="/assets/js/main.ab72e4d5.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
 <svg style="display: none;"><defs>
@@ -22,18 +22,18 @@ It operates on the abstract syntax tree provided by the Kotlin compiler and find
 programming flaws like unused or too complex constructs. Think of it as <em>pmd</em> or <em>checkstyle</em> but for Kotlin.</p>
 <p><strong>1.0</strong> offers the following features:</p>
 <ul>
-<li>Code smell analysis for your Kotlin projects</li>
-<li>Complexity reports based on lines of code, cyclomatic complexity and amount of code smells</li>
-<li>Highly configurable rule sets</li>
-<li>Suppression of findings with Kotlin&#x27;s <code>@Suppress</code> and Java&#x27;s <code>@SuppressWarnings</code> annotations</li>
-<li>Specification of quality gates which will break your build</li>
-<li>Code Smell baseline for legacy projects</li>
-<li><a href="/docs/gettingstarted/gradle">Gradle plugin</a> for code analysis via Gradle builds</li>
-<li>Gradle tasks to use local <code>IntelliJ</code> distribution for formatting and inspecting Kotlin code</li>
-<li><a href="https://github.com/arturbosch/sonar-kotlin" target="_blank" rel="noopener noreferrer">SonarQube integration</a></li>
-<li>Extensibility by enabling incorporation of personal rule sets, <code>FileProcessListener&#x27;s</code> and <code>OutputReport&#x27;s</code></li>
-<li><a href="https://github.com/detekt/detekt-intellij-plugin" target="_blank" rel="noopener noreferrer">IntelliJ integration</a></li>
-<li>Unofficial <a href="https://github.com/Ozsie/detekt-maven-plugin" target="_blank" rel="noopener noreferrer">Maven plugin</a> by <a href="https://github.com/Ozsie" target="_blank" rel="noopener noreferrer">Ozsie</a></li>
+<li class="">Code smell analysis for your Kotlin projects</li>
+<li class="">Complexity reports based on lines of code, cyclomatic complexity and amount of code smells</li>
+<li class="">Highly configurable rule sets</li>
+<li class="">Suppression of findings with Kotlin&#x27;s <code>@Suppress</code> and Java&#x27;s <code>@SuppressWarnings</code> annotations</li>
+<li class="">Specification of quality gates which will break your build</li>
+<li class="">Code Smell baseline for legacy projects</li>
+<li class=""><a class="" href="/docs/gettingstarted/gradle">Gradle plugin</a> for code analysis via Gradle builds</li>
+<li class="">Gradle tasks to use local <code>IntelliJ</code> distribution for formatting and inspecting Kotlin code</li>
+<li class=""><a href="https://github.com/arturbosch/sonar-kotlin" target="_blank" rel="noopener noreferrer" class="">SonarQube integration</a></li>
+<li class="">Extensibility by enabling incorporation of personal rule sets, <code>FileProcessListener&#x27;s</code> and <code>OutputReport&#x27;s</code></li>
+<li class=""><a href="https://github.com/detekt/detekt-intellij-plugin" target="_blank" rel="noopener noreferrer" class="">IntelliJ integration</a></li>
+<li class="">Unofficial <a href="https://github.com/Ozsie/detekt-maven-plugin" target="_blank" rel="noopener noreferrer" class="">Maven plugin</a> by <a href="https://github.com/Ozsie" target="_blank" rel="noopener noreferrer" class="">Ozsie</a></li>
 </ul>
 <p>Here are some metrics describing detekt&#x27;s lifespan so far:</p>
 <p><img decoding="async" loading="lazy" alt="lifespan" src="/assets/images/1-lifespan-b89210c1bdb421987179e6da2646ff37.png" width="816" height="323" class="img_ev3q"></p>
@@ -53,13 +53,13 @@ As most of the downloads are bound to be CI, it is hard to calculate the actual 
 <p><img decoding="async" loading="lazy" alt="numbers" src="/assets/images/4-bintray-percent-46d42d5abfba0157bd16dc6f6077e3c0.png" width="1151" height="533" class="img_ev3q"></p>
 <p>What I also noticed is the high number of &quot;early adopters&quot; in the Kotlin world (or just detekt).</p>
 <ul>
-<li>RC09 was released in Sep 2018</li>
-<li>RC10 was released in Nov 2018</li>
-<li>RC11 was released in Nov 2018</li>
-<li>RC12 was released in Dec 2018</li>
-<li>RC14 was released in Feb 2019</li>
-<li>RC15 was released in Jun 2019</li>
-<li>RC16 was released in Jun 2019</li>
+<li class="">RC09 was released in Sep 2018</li>
+<li class="">RC10 was released in Nov 2018</li>
+<li class="">RC11 was released in Nov 2018</li>
+<li class="">RC12 was released in Dec 2018</li>
+<li class="">RC14 was released in Feb 2019</li>
+<li class="">RC15 was released in Jun 2019</li>
+<li class="">RC16 was released in Jun 2019</li>
 </ul>
 <p><strong>65%</strong> of users are on a version published in 2019. But we clearly lost some users in the older versions due to breaking changes in RC13 and RC15.
 We are excited to see how many users will jump on the 1.x.x release train and how these numbers will look like.</p>
@@ -67,8 +67,8 @@ We are excited to see how many users will jump on the 1.x.x release train and ho
 <p><img decoding="async" loading="lazy" alt="numbers" src="/assets/images/5-bintray-world-b0ef653e07203593d6fec23013825ec8.png" width="1166" height="644" class="img_ev3q"></p>
 <p>References:</p>
 <ul>
-<li><a href="https://bintray.com/arturbosch/code-analysis/detekt#statistics" target="_blank" rel="noopener noreferrer">https://bintray.com/arturbosch/code-analysis/detekt#statistics</a></li>
-<li><a href="https://github.com/detekt/detekt/graphs/contributors" target="_blank" rel="noopener noreferrer">https://github.com/detekt/detekt/graphs/contributors</a></li>
-</ul></div><footer class="docusaurus-mt-lg"><div class="row margin-top--sm theme-blog-footer-edit-meta-row"><div class="col"><b>Tags:</b><ul class="tags_jXut padding--none margin-left--sm"><li class="tag_QGVx"><a rel="tag" class="tag_zVej tagRegular_sFm0" href="/blog/tags/news">news</a></li></ul></div></div><div class="row margin-top--sm theme-blog-footer-edit-meta-row"><div class="col"><a href="https://github.com/detekt/detekt/edit/main/website/blog/2019-08-04-calling-it-one-zero.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="pagination-nav docusaurus-mt-lg" aria-label="Blog post page navigation"><a class="pagination-nav__link pagination-nav__link--prev" href="/blog/2019/08/14/custom-console-reports"><div class="pagination-nav__sublabel">Newer post</div><div class="pagination-nav__label">Howto: make detekt silent</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/blog/2019/06/29/using-detekt-snapshots"><div class="pagination-nav__sublabel">Older post</div><div class="pagination-nav__label">Howto: using snapshot releases of detekt</div></a></nav></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Docs</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/docs/gettingstarted/gradle">Getting Started with Gradle</a></li><li class="footer__item"><a class="footer__link-item" href="/docs/gettingstarted/cli">Getting Started with the CLI</a></li><li class="footer__item"><a class="footer__link-item" href="/docs/rules/comments">Rules Documentation</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Community</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://kotlinlang.slack.com/archives/C88E12QH4" target="_blank" rel="noopener noreferrer" class="footer__link-item">Slack<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://stackoverflow.com/questions/tagged/detekt" target="_blank" rel="noopener noreferrer" class="footer__link-item">Stack Overflow<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">More</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/blog">Blog</a></li><li class="footer__item"><a href="https://github.com/detekt/detekt" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://detekt.dev/kdoc" target="_blank" rel="noopener noreferrer" class="footer__link-item">KDoc<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2025 detekt team - Built with Docusaurus.</div></div></div></footer></div>
+<li class=""><a href="https://bintray.com/arturbosch/code-analysis/detekt#statistics" target="_blank" rel="noopener noreferrer" class="">https://bintray.com/arturbosch/code-analysis/detekt#statistics</a></li>
+<li class=""><a href="https://github.com/detekt/detekt/graphs/contributors" target="_blank" rel="noopener noreferrer" class="">https://github.com/detekt/detekt/graphs/contributors</a></li>
+</ul></div><footer class="docusaurus-mt-lg"><div class="row margin-top--sm theme-blog-footer-edit-meta-row"><div class="col"><b>Tags:</b><ul class="tags_jXut padding--none margin-left--sm"><li class="tag_QGVx"><a rel="tag" class="tag_zVej tagRegular_sFm0" href="/blog/tags/news">news</a></li></ul></div></div><div class="row margin-top--sm theme-blog-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href="https://github.com/detekt/detekt/edit/main/website/blog/2019-08-04-calling-it-one-zero.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="pagination-nav docusaurus-mt-lg" aria-label="Blog post page navigation"><a class="pagination-nav__link pagination-nav__link--prev" href="/blog/2019/08/14/custom-console-reports"><div class="pagination-nav__sublabel">Newer post</div><div class="pagination-nav__label">Howto: make detekt silent</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/blog/2019/06/29/using-detekt-snapshots"><div class="pagination-nav__sublabel">Older post</div><div class="pagination-nav__label">Howto: using snapshot releases of detekt</div></a></nav></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Docs</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/docs/gettingstarted/gradle">Getting Started with Gradle</a></li><li class="footer__item"><a class="footer__link-item" href="/docs/gettingstarted/cli">Getting Started with the CLI</a></li><li class="footer__item"><a class="footer__link-item" href="/docs/rules/comments">Rules Documentation</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Community</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://kotlinlang.slack.com/archives/C88E12QH4" target="_blank" rel="noopener noreferrer" class="footer__link-item">Slack<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://stackoverflow.com/questions/tagged/detekt" target="_blank" rel="noopener noreferrer" class="footer__link-item">Stack Overflow<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">More</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/blog">Blog</a></li><li class="footer__item"><a href="https://github.com/detekt/detekt" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://detekt.dev/kdoc" target="_blank" rel="noopener noreferrer" class="footer__link-item">KDoc<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2025 detekt team - Built with Docusaurus.</div></div></div></footer></div>
 </body>
 </html>
