@@ -95,7 +95,7 @@ class OutputReportsSpec {
                 }
             }
 
-            val extensions = spec.withSettings { ConsoleReportLocator(this).load() }
+            val extensions = spec.withSettings { loadConsoleReport(this) }
 
             assertThat(extensions).isEmpty()
         }

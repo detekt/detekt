@@ -1,11 +1,13 @@
 package dev.detekt.core.reporting
 
+import dev.detekt.api.ConsoleReport
 import dev.detekt.api.Detektion
 import dev.detekt.api.Notification
 import dev.detekt.api.Notification.Level
 import dev.detekt.api.OutputReport
 import dev.detekt.core.ProcessingSettings
 import dev.detekt.core.extensions.loadExtensions
+import dev.detekt.core.util.isActiveOrDefault
 import dev.detekt.tooling.api.spec.ReportsSpec
 import java.nio.file.Path
 import kotlin.io.path.createParentDirectories
@@ -33,7 +35,7 @@ class OutputFacade(
     }
 
     private fun handleConsoleReports(result: Detektion) {
-        val extensions = ConsoleReportLocator(settings).load()
+        val extensions = loadConsoleReport(settings)
         for (extension in extensions) {
             val output = extension.render(result)
             if (!output.isNullOrBlank()) {
@@ -61,5 +63,16 @@ private fun OutputReport.write(filePath: Path, detektion: Detektion) {
     val reportData = render(detektion)
     if (reportData != null) {
         filePath.createParentDirectories().writeText(reportData)
+    }
+}
+
+internal fun loadConsoleReport(settings: ProcessingSettings): List<ConsoleReport> {
+    val config = settings.config.subConfig("console-reports")
+    val isActive = config.isActiveOrDefault(true)
+    return if (!isActive) {
+        emptyList()
+    } else {
+        val excludes = config.valueOrDefault("exclude", emptyList<String>()).toSet()
+        loadExtensions(settings) { it.id !in excludes }
     }
 }
