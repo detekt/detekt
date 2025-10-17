@@ -5,11 +5,11 @@ import com.android.build.api.variant.Variant
 import dev.detekt.gradle.extensions.DetektExtension
 import dev.detekt.gradle.plugin.DetektPlugin
 import org.gradle.api.Project
-import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
+import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidExtension
 
 internal object DetektAndroidCompilations {
     fun registerTasks(project: Project, extension: DetektExtension) {
-        project.extensions.getByType(KotlinAndroidProjectExtension::class.java).target.compilations.all { compilation ->
+        project.extensions.getByType(KotlinAndroidExtension::class.java).target.compilations.all { compilation ->
             project.registerJvmCompilationDetektTask(extension, compilation)
             project.registerJvmCompilationCreateBaselineTask(extension, compilation)
         }
