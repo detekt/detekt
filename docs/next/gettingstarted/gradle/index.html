@@ -10,7 +10,7 @@
 
 
 <link rel="search" type="application/opensearchdescription+xml" title="detekt" href="/opensearch.xml"><link rel="stylesheet" href="/assets/css/styles.7f312c80.css">
-<script src="/assets/js/runtime~main.51b9c34e.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.d879c0fa.js" defer="defer"></script>
 <script src="/assets/js/main.169aac30.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -97,7 +97,7 @@ or when implementing a custom detekt task with the <code>classpath</code> and <c
 Gradle is running with (shown by the <code>./gradlew --version</code> command). This can be an issue if the Gradle JDK and the
 project JDK doesn&#x27;t match e.g. if Gradle runs under Java 8 but the project uses classes only available in Java 9 or
 higher. Setting <code>jdkHome</code> to the Java 9 JDK path will allow for more correct analysis.</p>
-<p><code>jdkHome</code> and <code>jvmTarget</code> are set automatically when applying a toolchain using either
+<p><code>jdkHome</code> is set automatically when applying a toolchain using either
 <a href="https://docs.gradle.org/current/userguide/toolchains.html" target="_blank" rel="noopener noreferrer"><code>java</code></a> or
 <a href="https://kotlinlang.org/docs/gradle.html#gradle-java-toolchains-support" target="_blank" rel="noopener noreferrer"><code>kotlin</code></a>.</p>
 <p>More information on type resolution are available on the <a href="/docs/next/gettingstarted/type-resolution">type resolution</a> page.</p>
