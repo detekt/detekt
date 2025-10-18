@@ -2,7 +2,6 @@ package dev.detekt.core.config.validation
 
 import dev.detekt.api.Notification
 import dev.detekt.core.config.YamlConfig
-import dev.detekt.core.util.SimpleNotification
 
 internal class DeprecatedPropertiesConfigValidator(
     private val deprecatedProperties: Set<DeprecatedProperty>,
@@ -31,7 +30,7 @@ internal class DeprecatedPropertiesConfigValidator(
         foundProperty: DeprecatedProperty,
     ): Notification {
         val propertyPath = foundProperty.asPath()
-        return SimpleNotification(
+        return Notification(
             "Property '$propertyPath' is deprecated. ${foundProperty.description}.",
             Notification.Level.Warning,
         )

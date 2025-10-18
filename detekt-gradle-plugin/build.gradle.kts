@@ -2,6 +2,8 @@
 // https://github.com/gradle/gradle/issues/21285
 @file:Suppress("StringLiteralDuplication")
 
+import dev.detekt.gradle.Detekt
+import dev.detekt.gradle.DetektCreateBaselineTask
 import org.jetbrains.kotlin.buildtools.api.ExperimentalBuildToolsApi
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 
@@ -10,21 +12,35 @@ plugins {
     id("java-gradle-plugin")
     id("java-test-fixtures")
     id("idea")
-    id("com.gradle.plugin-publish") version "1.3.1"
+    id("com.gradle.plugin-publish") version "2.0.0"
     // We use this published version of the detekt plugin to self analyse this project.
-    id("io.gitlab.arturbosch.detekt") version "1.23.8"
+    id("dev.detekt") version "2.0.0-alpha.0"
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.18.1"
-    id("org.jetbrains.dokka") version "2.0.0"
+    id("org.jetbrains.dokka") version "2.1.0"
     id("signing")
-}
-
-repositories {
-    mavenCentral()
-    google()
+    id("com.github.gmazzo.buildconfig") version "5.7.0"
+    id("io.github.gradle-nexus.publish-plugin") version "2.0.0"
 }
 
 group = "dev.detekt"
 version = Versions.currentOrSnapshot()
+
+buildConfig {
+    buildConfigField("DETEKT_VERSION", project.version.toString())
+    buildConfigField("DETEKT_COMPILER_PLUGIN_VERSION", project.version.toString())
+    buildConfigField("KOTLIN_IMPLEMENTATION_VERSION", libs.versions.kotlin.get())
+}
+
+nexusPublishing {
+    repositories {
+        create("sonatype") {
+            nexusUrl = uri("https://ossrh-staging-api.central.sonatype.com/service/local/")
+            snapshotRepositoryUrl = uri("https://central.sonatype.com/repository/maven-snapshots/")
+            username = providers.environmentVariable("ORG_GRADLE_PROJECT_SONATYPE_USERNAME")
+            password = providers.environmentVariable("ORG_GRADLE_PROJECT_SONATYPE_PASSWORD")
+        }
+    }
+}
 
 detekt {
     source.from("src/functionalTest/kotlin")
@@ -39,9 +55,7 @@ dokka {
     }
 
     dokkaSourceSets.configureEach {
-        // Using `set` instead of simple property assignment to work around this Gradle 9 incompatibility: https://github.com/Kotlin/dokka/issues/4096
-        apiVersion.set("1.4")
-        modulePath = "detekt-gradle-plugin"
+        apiVersion = "1.4"
 
         externalDocumentationLinks {
             create("gradle") {
@@ -128,6 +142,8 @@ dependencies {
     compileOnly(libs.android.gradleApi)
     compileOnly(libs.kotlin.gradle.plugin)
     compileOnly(libs.kotlin.gradlePluginApi)
+    compileOnly(libs.jetbrains.annotations)
+
     implementation(libs.sarif4k)
     testFixturesCompileOnly(libs.jetbrains.annotations)
 
@@ -139,9 +155,9 @@ dependencies {
             attribute(GradlePluginApiVersion.GRADLE_PLUGIN_API_VERSION_ATTRIBUTE, objects.named("7.6.3"))
         }
     }
-    // We use those published version of detekt artifacts to self analyse this project and produce a Problem API report
-    compileOnly("io.gitlab.arturbosch.detekt:detekt-api:1.23.8")
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.8")
+
+    // We use this published version of the detekt-rules-ktlint-wrapper to self analyse this project.
+    detektPlugins("dev.detekt:detekt-rules-ktlint-wrapper:2.0.0-alpha.0")
 }
 
 gradlePlugin {
@@ -150,19 +166,23 @@ gradlePlugin {
     plugins {
         create("detektBasePlugin") {
             id = "dev.detekt.gradle.base"
+            displayName = "Static code analysis for Kotlin v2 - Base Plugin"
+            description = "Static code analysis for Kotlin v2 - Base Plugin"
             implementationClass = "dev.detekt.gradle.plugin.DetektBasePlugin"
         }
         create("detektPlugin") {
             id = "dev.detekt"
-            implementationClass = "io.gitlab.arturbosch.detekt.DetektPlugin"
+            displayName = "Static code analysis for Kotlin v2"
+            description = "Static code analysis for Kotlin v2"
+            implementationClass = "dev.detekt.gradle.plugin.DetektPlugin"
         }
         create("detektCompilerPlugin") {
             id = "dev.detekt.gradle.compiler-plugin"
-            implementationClass = "io.github.detekt.gradle.DetektKotlinCompilerPlugin"
+            displayName = "Static code analysis for Kotlin v2 - Compiler Plugin"
+            description = "Static code analysis for Kotlin v2 - Compiler Plugin"
+            implementationClass = "dev.detekt.gradle.plugin.DetektKotlinCompilerPlugin"
         }
         configureEach {
-            displayName = "Static code analysis for Kotlin"
-            description = "Static code analysis for Kotlin"
             tags = listOf("kotlin", "detekt", "code-analysis", "linter", "codesmells", "android")
         }
     }
@@ -189,22 +209,6 @@ signing {
 }
 
 tasks {
-    val writeDetektVersionProperties by registering(WriteProperties::class) {
-        description = "Write the properties file with the detekt version to be used by the plugin."
-        encoding = "UTF-8"
-        destinationFile = layout.buildDirectory.file("detekt-versions.properties")
-        property("detektVersion", project.version)
-        property("detektCompilerPluginVersion", project.version)
-    }
-
-    processResources {
-        from(writeDetektVersionProperties)
-    }
-
-    processTestResources {
-        from(writeDetektVersionProperties)
-    }
-
     // Manually inject dependency to gradle-testkit since the default injected plugin classpath is from `main.runtime`.
     pluginUnderTestMetadata {
         pluginClasspath.from(testKitRuntimeOnly)
@@ -217,6 +221,15 @@ tasks {
     register<PluginUnderTestMetadata>("gradleMinVersionPluginUnderTestMetadata") {
         pluginClasspath.setFrom(sourceSets.main.get().output, testKitGradleMinVersionRuntimeOnly)
         outputDirectory = layout.buildDirectory.dir(name)
+    }
+
+    withType<Detekt>().configureEach {
+        jvmTarget = "1.8" // Remove when detekt updated to 2.0.0-alpha.1 or higher (see #8755)
+        exclude("dev/detekt/detekt_gradle_plugin/BuildConfig.kt")
+    }
+    withType<DetektCreateBaselineTask>().configureEach {
+        jvmTarget = "1.8" // Remove when detekt updated to 2.0.0-alpha.1 or higher (see #8755)
+        exclude("dev/detekt/detekt_gradle_plugin/BuildConfig.kt")
     }
 
     withType<Test>().configureEach {
@@ -236,14 +249,6 @@ tasks {
             testing.suites.named("functionalTest"),
             testing.suites.named("functionalTestMinSupportedGradle"),
         )
-    }
-
-    ideaModule {
-        notCompatibleWithConfigurationCache("https://github.com/gradle/gradle/issues/13480")
-    }
-
-    publishPlugins {
-        notCompatibleWithConfigurationCache("https://github.com/gradle/gradle/issues/21283")
     }
 }
 

@@ -1,7 +1,7 @@
 package dev.detekt.rules.complexity
 
 import dev.detekt.test.TestConfig
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
 import org.junit.jupiter.api.Test
 
@@ -28,8 +28,10 @@ class LongMethodSpec {
         """.trimIndent()
         val findings = subject.lint(code)
 
-        assertThat(findings).hasSize(2)
-        assertThat(findings).hasTextLocations("longMethod", "nestedLongMethod")
+        assertThat(findings).satisfiesExactlyInAnyOrder(
+            { assertThat(it).hasTextLocation("longMethod") },
+            { assertThat(it).hasTextLocation("nestedLongMethod") },
+        )
     }
 
     @Test
@@ -126,9 +128,10 @@ class LongMethodSpec {
 
         val findings = subject.lint(code)
 
-        assertThat(findings)
-            .hasSize(2)
-            .hasTextLocations("longMethod", "nestedLongMethod")
+        assertThat(findings).satisfiesExactlyInAnyOrder(
+            { assertThat(it).hasTextLocation("longMethod") },
+            { assertThat(it).hasTextLocation("nestedLongMethod") },
+        )
     }
 
     @Test

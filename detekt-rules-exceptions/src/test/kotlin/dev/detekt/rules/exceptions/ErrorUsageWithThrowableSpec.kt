@@ -1,9 +1,9 @@
 package dev.detekt.rules.exceptions
 
 import dev.detekt.api.Config
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
+import dev.detekt.test.junit.KotlinCoreEnvironmentTest
 import dev.detekt.test.lintWithContext
-import dev.detekt.test.utils.KotlinCoreEnvironmentTest
 import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.junit.jupiter.api.Test
 
@@ -25,7 +25,7 @@ class ErrorUsageWithThrowableSpec(private val env: KotlinEnvironmentContainer) {
         """.trimIndent()
         val findings = subject.lintWithContext(env, code)
         assertThat(findings).singleElement()
-            .hasSourceLocation(6, 15)
+            .hasStartSourceLocation(6, 15)
     }
 
     @Test

@@ -2,9 +2,9 @@ package dev.detekt.rules.bugs
 
 import dev.detekt.api.Config
 import dev.detekt.test.TestConfig
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
+import dev.detekt.test.junit.KotlinCoreEnvironmentTest
 import dev.detekt.test.lintWithContext
-import dev.detekt.test.utils.KotlinCoreEnvironmentTest
 import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -469,6 +469,46 @@ class UnnamedParameterUseSpec(private val env: KotlinEnvironmentContainer) {
         assertThat(
             getSubject(allowAdjacentDifferentTypeParams = true).lintWithContext(env, code)
         ).hasSize(1)
+    }
+
+    @Test
+    fun `does not report for lambda invocation - #8601`() {
+        val code = """
+            class OnboardingPhoneNumberNavigator(
+                private val onNavigateToRequestPin: (String, String) -> Unit,
+            ) {
+                fun navigateToRequestPin(
+                    country: String,
+                    phoneNumber: String,
+                ) {
+                    onNavigateToRequestPin(country, phoneNumber)
+                }
+            }
+        """.trimIndent()
+
+        assertThat(
+            getSubject(allowAdjacentDifferentTypeParams = true).lintWithContext(env, code)
+        ).isEmpty()
+    }
+
+    @Test
+    fun `does not report for lambda invocation with named param`() {
+        val code = """
+            class OnboardingPhoneNumberNavigator(
+                private val onNavigateToRequestPin: (country: String, phoneNumber: String) -> Unit,
+            ) {
+                fun navigateToRequestPin(
+                    country: String,
+                    phoneNumber: String,
+                ) {
+                    onNavigateToRequestPin(country, phoneNumber)
+                }
+            }
+        """.trimIndent()
+
+        assertThat(
+            getSubject(allowAdjacentDifferentTypeParams = true).lintWithContext(env, code)
+        ).isEmpty()
     }
 
     @Test

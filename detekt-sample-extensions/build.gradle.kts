@@ -1,15 +1,12 @@
 plugins {
-    kotlin("jvm") version "2.2.10"
-}
-
-repositories {
-    mavenCentral()
+    kotlin("jvm") version "2.2.20"
 }
 
 dependencies {
-    compileOnly("io.gitlab.arturbosch.detekt:detekt-api:1.23.8")
-    testImplementation("io.gitlab.arturbosch.detekt:detekt-test:1.23.8")
-    testImplementation("org.assertj:assertj-core:3.27.4")
+    compileOnly("dev.detekt:detekt-api:2.0.0-alpha.0")
+    testImplementation("dev.detekt:detekt-test:2.0.0-alpha.0")
+    testImplementation("dev.detekt:detekt-test-assertj:2.0.0-alpha.0")
+    testImplementation("org.assertj:assertj-core:3.27.6")
 }
 
 testing {

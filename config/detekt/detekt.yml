@@ -64,7 +64,7 @@ exceptions:
   ThrowingNewInstanceOfSameException:
     active: true
 
-formatting:
+ktlint:
   active: true
   autoCorrect: true
   BlankLineBeforeDeclaration:
@@ -83,8 +83,6 @@ formatting:
     active: true
     excludes: ['**/*.kts']
   MaximumLineLength:
-    active: false
-  MultilineExpressionWrapping:
     active: false
   NoEmptyFirstLineInClassBody:
     active: false
@@ -278,7 +276,7 @@ style:
     active: true
     ignoreAnnotated: ['Nested']
   UnusedImport:
-    active: false # formatting already have this rule enabled
+    active: false # ktlint already have this rule enabled
   UseAnyOrNoneInsteadOfFind:
     active: true
   UseCheckOrError:

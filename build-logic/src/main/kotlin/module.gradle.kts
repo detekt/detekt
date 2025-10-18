@@ -11,19 +11,6 @@ plugins {
     id("jacoco")
 }
 
-tasks.withType<AbstractArchiveTask>().configureEach {
-    isPreserveFileTimestamps = false
-    isReproducibleFileOrder = true
-}
-
-// Add attributes to JAR manifest, to be used at runtime
-tasks.withType<Jar>().configureEach {
-    manifest {
-        attributes(mapOf("DetektVersion" to Versions.DETEKT))
-        attributes(mapOf("KotlinImplementationVersion" to versionCatalog.findVersion("kotlin").get().requiredVersion))
-    }
-}
-
 val versionCatalog = versionCatalogs.named("libs")
 
 jacoco.toolVersion = versionCatalog.findVersion("jacoco").get().requiredVersion
@@ -35,11 +22,7 @@ tasks.withType<Test>().configureEach {
     val compileTestSnippets = providers.gradleProperty("compile-test-snippets").orNull.toBoolean()
     systemProperty("compile-test-snippets", compileTestSnippets)
 
-    if (compileTestSnippets) {
-        maxHeapSize = "3g"
-    } else {
-        maxHeapSize = "2g"
-    }
+    maxHeapSize = "3g"
 
     testLogging {
         // set options for log level LIFECYCLE
@@ -74,6 +57,7 @@ tasks.withType<Test>().configureEach {
 }
 
 val jvmTargetVersion = versionCatalog.findVersion("jvm-target").get().requiredVersion
+val jvmMajorVersion = jvmTargetVersion.toIntOrNull() ?: 8
 
 kotlin {
     compilerOptions {
@@ -102,6 +86,29 @@ testing {
     suites {
         withType<JvmTestSuite> {
             useJUnitJupiter(versionCatalog.findVersion("junit").get().requiredVersion)
+        }
+    }
+}
+
+// Pretend JUnit targets JVM 8. Required while detekt itself targets JVM 8 while JUnit 6 targets JVM 17.
+dependencies {
+    components {
+        setOf(
+            "org.junit.jupiter:junit-jupiter",
+            "org.junit.jupiter:junit-jupiter-api",
+            "org.junit.jupiter:junit-jupiter-engine",
+            "org.junit.jupiter:junit-jupiter-params",
+            "org.junit.platform:junit-platform-commons",
+            "org.junit.platform:junit-platform-engine",
+            "org.junit.platform:junit-platform-launcher",
+        ).forEach {
+            withModule(it) {
+                allVariants {
+                    attributes {
+                        attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, jvmMajorVersion)
+                    }
+                }
+            }
         }
     }
 }

@@ -123,7 +123,7 @@ everyone can benefit from it.
 
 _detekt_ will fail your build if there is at least one issue with a severity of error. You can lower that threshold
 or completely disable build failures by using the `failOnSeverity` setting. Details can be found in the
-[gradle](/docs/gettingstarted/gradle) and the [cli](/docs/gettingstarted/cli) sections.
+[gradle](../gettingstarted/gradle.mdx) and the [cli](../gettingstarted/cli.mdx) sections.
 
 ## Console Reports
 
@@ -153,21 +153,6 @@ It's simply a way of alerting users to information that they have opted-in to.
 
 **FileBasedFindingsReport** is similar to the FindingsReport shown above. 
 The rule violations are grouped by file location.
-
-## Output Reports
-
-Uncomment the reports you don't care about. The detailed description can be found in [reporting](reporting.md).
-
-```yaml
-output-reports:
-  active: true
-  exclude:
-  #  - 'HtmlOutputReport'
-  #  - 'XmlOutputReport'
-  #  - 'sarif'
-  #  - 'MdOutputReport'
-```
-
 
 ## Processors
 

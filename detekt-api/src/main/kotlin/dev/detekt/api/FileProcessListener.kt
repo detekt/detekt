@@ -3,10 +3,8 @@ package dev.detekt.api
 import org.jetbrains.kotlin.psi.KtFile
 
 /**
- * Gather additional metrics about the analyzed kotlin file.
+ * Gather additional metrics about the analyzed Kotlin file.
  * Pay attention to the thread policy of each function!
- *
- * A bindingContext != BindingContext.EMPTY is only available if Kotlin compiler settings are used.
  */
 @Suppress("EmptyFunctionBlock")
 interface FileProcessListener : Extension {
@@ -35,5 +33,5 @@ interface FileProcessListener : Extension {
      *
      * This method is called before any [ReportingExtension].
      */
-    fun onFinish(files: List<KtFile>, result: Detektion) {}
+    fun onFinish(files: List<KtFile>, result: Detektion): Detektion = result
 }

@@ -4,14 +4,8 @@ import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.components.KaDiagnosticCheckerFilter
 import org.jetbrains.kotlin.analysis.api.fir.diagnostics.KaFirDiagnostic
-import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
-import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
-import org.jetbrains.kotlin.types.KotlinType
-import org.jetbrains.kotlin.types.TypeUtils
-
-fun KotlinType.fqNameOrNull(): FqName? = TypeUtils.getClassDescriptor(this)?.fqNameOrNull()
 
 /**
  * Return if overall expression is nullable or not nullable
@@ -38,7 +32,7 @@ fun KtExpression.isNullable(shouldConsiderPlatformTypeAsNullable: Boolean): Bool
         return if (expressionType?.hasFlexibleNullability == true && !shouldConsiderPlatformTypeAsNullable) {
             false
         } else {
-            expressionType?.canBeNull == true
+            expressionType?.isNullable == true
         }
     }
 }

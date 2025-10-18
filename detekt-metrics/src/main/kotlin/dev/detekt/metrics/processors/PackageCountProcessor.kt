@@ -18,12 +18,13 @@ class PackageCountProcessor : FileProcessListener {
         file.accept(visitor)
     }
 
-    override fun onFinish(files: List<KtFile>, result: Detektion) {
+    override fun onFinish(files: List<KtFile>, result: Detektion): Detektion {
         val count = files
             .mapNotNull { it.getUserData(key) }
             .distinct()
             .size
         result.add(ProjectMetric(key.toString(), count))
+        return result
     }
 }
 

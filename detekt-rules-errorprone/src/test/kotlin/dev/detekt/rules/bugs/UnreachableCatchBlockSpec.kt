@@ -1,10 +1,9 @@
 package dev.detekt.rules.bugs
 
 import dev.detekt.api.Config
-import dev.detekt.api.SourceLocation
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
+import dev.detekt.test.junit.KotlinCoreEnvironmentTest
 import dev.detekt.test.lintWithContext
-import dev.detekt.test.utils.KotlinCoreEnvironmentTest
 import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.junit.jupiter.api.Test
 
@@ -54,10 +53,9 @@ class UnreachableCatchBlockSpec(private val env: KotlinEnvironmentContainer) {
             }
         """.trimIndent()
         val findings = subject.lintWithContext(env, code)
-        assertThat(findings).hasSize(2)
-        assertThat(findings).hasStartSourceLocations(
-            SourceLocation(4, 7),
-            SourceLocation(5, 7)
+        assertThat(findings).satisfiesExactlyInAnyOrder(
+            { assertThat(it).hasStartSourceLocation(4, 7) },
+            { assertThat(it).hasStartSourceLocation(5, 7) },
         )
     }
 

@@ -208,7 +208,7 @@ class OutdatedDocumentation(config: Config) : Rule(
             doc.sortedBy { it.name }.zip(element.sortedBy { it.name })
         }
 
-        return zippedElements.all { (doc, element) -> declarationMatches(doc, element) }
+        return zippedElements.all { (docItr, elementItr) -> declarationMatches(docItr, elementItr) }
     }
 
     private fun declarationMatches(doc: Declaration, element: Declaration): Boolean =

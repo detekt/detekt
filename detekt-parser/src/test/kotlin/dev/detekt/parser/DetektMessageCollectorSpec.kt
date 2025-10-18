@@ -15,10 +15,12 @@ class DetektMessageCollectorSpec {
     @BeforeEach
     fun setupFakesAndSubject() {
         debugPrinter.messages.clear()
+        warningPrinter.messages.clear()
         subject = DetektMessageCollector(
             minSeverity = CompilerMessageSeverity.INFO,
             debugPrinter = debugPrinter,
             warningPrinter = warningPrinter,
+            isDebugEnabled = false,
         )
     }
 
@@ -36,7 +38,7 @@ class DetektMessageCollectorSpec {
 
         @Test
         fun `adds up to the message count`() {
-            subject.printIssuesCountIfAny(k2Mode = true)
+            subject.printIssuesCountIfAny()
 
             assertThat(warningPrinter.messages).contains(
                 """
@@ -61,7 +63,7 @@ class DetektMessageCollectorSpec {
 
         @Test
         fun `adds up to the message count`() {
-            subject.printIssuesCountIfAny(k2Mode = true)
+            subject.printIssuesCountIfAny()
 
             assertThat(warningPrinter.messages).contains(
                 """
@@ -90,6 +92,30 @@ class DetektMessageCollectorSpec {
         subject.printIssuesCountIfAny()
 
         assertThat(warningPrinter.messages).isEmpty()
+    }
+
+    @Nested
+    inner class `debug enabled omits suggestion` {
+        @BeforeEach
+        fun setUp() {
+            debugPrinter.messages.clear()
+            warningPrinter.messages.clear()
+            subject = DetektMessageCollector(
+                minSeverity = CompilerMessageSeverity.INFO,
+                debugPrinter = debugPrinter,
+                warningPrinter = warningPrinter,
+                isDebugEnabled = true,
+            )
+            subject.report(CompilerMessageSeverity.ERROR, "boom", null)
+        }
+
+        @Test
+        fun `prints header without suggestion`() {
+            subject.printIssuesCountIfAny()
+            assertThat(warningPrinter.messages).containsExactly(
+                "There were 1 compiler errors found during analysis. This affects accuracy of reporting."
+            )
+        }
     }
 
     class FakePrinter : (() -> String) -> Unit {

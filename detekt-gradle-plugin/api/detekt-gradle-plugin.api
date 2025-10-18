@@ -1,45 +1,4 @@
-public final class dev/detekt/gradle/plugin/DetektBasePlugin : org/gradle/api/Plugin {
-	public fun <init> ()V
-	public synthetic fun apply (Ljava/lang/Object;)V
-	public fun apply (Lorg/gradle/api/Project;)V
-}
-
-public final class io/github/detekt/gradle/DetektKotlinCompilerPlugin : org/jetbrains/kotlin/gradle/plugin/KotlinCompilerPluginSupportPlugin {
-	public fun <init> ()V
-	public synthetic fun apply (Ljava/lang/Object;)V
-	public fun apply (Lorg/gradle/api/Project;)V
-	public fun applyToCompilation (Lorg/jetbrains/kotlin/gradle/plugin/KotlinCompilation;)Lorg/gradle/api/provider/Provider;
-	public fun getCompilerPluginId ()Ljava/lang/String;
-	public fun getPluginArtifact ()Lorg/jetbrains/kotlin/gradle/plugin/SubpluginArtifact;
-	public fun getPluginArtifactForNative ()Lorg/jetbrains/kotlin/gradle/plugin/SubpluginArtifact;
-	public fun isApplicable (Lorg/jetbrains/kotlin/gradle/plugin/KotlinCompilation;)Z
-}
-
-public class io/github/detekt/gradle/extensions/DetektCompilerPluginReport {
-	public fun <init> (Ljava/lang/String;Lorg/gradle/api/model/ObjectFactory;)V
-	public final fun getDestination ()Lorg/gradle/api/file/RegularFileProperty;
-	public final fun getEnabled ()Lorg/gradle/api/provider/Property;
-	public final fun getName ()Ljava/lang/String;
-}
-
-public class io/github/detekt/gradle/extensions/KotlinCompileTaskDetektExtension {
-	public fun <init> (Lorg/gradle/api/Project;)V
-	public final fun getAllRules ()Lorg/gradle/api/provider/Property;
-	public final fun getBaseline ()Lorg/gradle/api/file/RegularFileProperty;
-	public final fun getBuildUponDefaultConfig ()Lorg/gradle/api/provider/Property;
-	public final fun getConfig ()Lorg/gradle/api/file/ConfigurableFileCollection;
-	public final fun getDebug ()Lorg/gradle/api/provider/Property;
-	public final fun getDisableDefaultRuleSets ()Lorg/gradle/api/provider/Property;
-	public final fun getExcludes ()Lorg/gradle/api/provider/SetProperty;
-	public final fun getHtml ()Lio/github/detekt/gradle/extensions/DetektCompilerPluginReport;
-	public final fun getParallel ()Lorg/gradle/api/provider/Property;
-	public final fun getReports ()Lorg/gradle/api/NamedDomainObjectContainer;
-	public final fun getSarif ()Lio/github/detekt/gradle/extensions/DetektCompilerPluginReport;
-	public final fun getXml ()Lio/github/detekt/gradle/extensions/DetektCompilerPluginReport;
-	public final fun isEnabled ()Lorg/gradle/api/provider/Property;
-}
-
-public abstract class io/gitlab/arturbosch/detekt/Detekt : org/gradle/api/tasks/SourceTask {
+public abstract class dev/detekt/gradle/Detekt : org/gradle/api/tasks/SourceTask {
 	public fun <init> (Lorg/gradle/api/model/ObjectFactory;Lorg/gradle/workers/WorkerExecutor;Lorg/gradle/api/provider/ProviderFactory;)V
 	public final fun check ()V
 	public abstract fun getAllRules ()Lorg/gradle/api/provider/Property;
@@ -65,12 +24,12 @@ public abstract class io/gitlab/arturbosch/detekt/Detekt : org/gradle/api/tasks/
 	public abstract fun getOptIn ()Lorg/gradle/api/provider/ListProperty;
 	public abstract fun getParallel ()Lorg/gradle/api/provider/Property;
 	public abstract fun getPluginClasspath ()Lorg/gradle/api/file/ConfigurableFileCollection;
-	public fun getReports ()Lio/gitlab/arturbosch/detekt/extensions/DetektReports;
+	public fun getReports ()Ldev/detekt/gradle/extensions/DetektReports;
 	public fun getSource ()Lorg/gradle/api/file/FileTree;
 	public final fun reports (Lorg/gradle/api/Action;)V
 }
 
-public abstract class io/gitlab/arturbosch/detekt/DetektCreateBaselineTask : org/gradle/api/tasks/SourceTask {
+public abstract class dev/detekt/gradle/DetektCreateBaselineTask : org/gradle/api/tasks/SourceTask {
 	public fun <init> (Lorg/gradle/workers/WorkerExecutor;Lorg/gradle/api/provider/ProviderFactory;)V
 	public final fun baseline ()V
 	public abstract fun getAllRules ()Lorg/gradle/api/provider/Property;
@@ -98,7 +57,7 @@ public abstract class io/gitlab/arturbosch/detekt/DetektCreateBaselineTask : org
 	public fun getSource ()Lorg/gradle/api/file/FileTree;
 }
 
-public abstract class io/gitlab/arturbosch/detekt/DetektGenerateConfigTask : org/gradle/api/DefaultTask {
+public abstract class dev/detekt/gradle/DetektGenerateConfigTask : org/gradle/api/DefaultTask {
 	public fun <init> (Lorg/gradle/workers/WorkerExecutor;Lorg/gradle/api/provider/ProviderFactory;)V
 	public final fun generateConfig ()V
 	public abstract fun getConfigFile ()Lorg/gradle/api/file/RegularFileProperty;
@@ -106,23 +65,14 @@ public abstract class io/gitlab/arturbosch/detekt/DetektGenerateConfigTask : org
 	public abstract fun getPluginClasspath ()Lorg/gradle/api/file/ConfigurableFileCollection;
 }
 
-public final class io/gitlab/arturbosch/detekt/DetektPlugin : org/gradle/api/Plugin {
-	public fun <init> ()V
-	public synthetic fun apply (Ljava/lang/Object;)V
-	public fun apply (Lorg/gradle/api/Project;)V
-}
-
-public final class io/gitlab/arturbosch/detekt/DetektPluginKt {
-	public static final fun getSupportedKotlinVersion ()Ljava/lang/String;
-}
-
-public final class io/gitlab/arturbosch/detekt/ProblemsApiConsoleReport : io/gitlab/arturbosch/detekt/api/ConsoleReport {
+public final class dev/detekt/gradle/ProblemsApiConsoleReport : dev/detekt/api/ConsoleReport {
 	public fun <init> (Lorg/gradle/api/problems/ProblemReporter;Ljava/lang/String;)V
 	public fun getId ()Ljava/lang/String;
 	public fun getPriority ()I
-	public fun render (Lio/gitlab/arturbosch/detekt/api/Detektion;)Ljava/lang/String;
+	public fun render (Ldev/detekt/api/Detektion;)Ljava/lang/String;
 }
-public abstract class io/gitlab/arturbosch/detekt/extensions/CustomDetektReport {
+
+public abstract class dev/detekt/gradle/extensions/CustomDetektReport {
 	public fun <init> ()V
 	public abstract fun getOutputLocation ()Lorg/gradle/api/file/RegularFileProperty;
 	public abstract fun getReportId ()Ljava/lang/String;
@@ -130,7 +80,14 @@ public abstract class io/gitlab/arturbosch/detekt/extensions/CustomDetektReport 
 	public fun toString ()Ljava/lang/String;
 }
 
-public abstract interface class io/gitlab/arturbosch/detekt/extensions/DetektExtension {
+public class dev/detekt/gradle/extensions/DetektCompilerPluginReport {
+	public fun <init> (Ljava/lang/String;Lorg/gradle/api/model/ObjectFactory;)V
+	public final fun getDestination ()Lorg/gradle/api/file/RegularFileProperty;
+	public final fun getEnabled ()Lorg/gradle/api/provider/Property;
+	public final fun getName ()Ljava/lang/String;
+}
+
+public abstract interface class dev/detekt/gradle/extensions/DetektExtension {
 	public abstract fun getAllRules ()Lorg/gradle/api/provider/Property;
 	public abstract fun getAutoCorrect ()Lorg/gradle/api/provider/Property;
 	public abstract fun getBasePath ()Lorg/gradle/api/file/DirectoryProperty;
@@ -151,50 +108,94 @@ public abstract interface class io/gitlab/arturbosch/detekt/extensions/DetektExt
 	public abstract fun getToolVersion ()Lorg/gradle/api/provider/Property;
 }
 
-public abstract class io/gitlab/arturbosch/detekt/extensions/DetektReport {
-	public fun <init> (Lio/gitlab/arturbosch/detekt/extensions/DetektReportType;)V
+public abstract class dev/detekt/gradle/extensions/DetektReport {
+	public fun <init> (Ldev/detekt/gradle/extensions/DetektReportType;)V
 	public abstract fun getOutputLocation ()Lorg/gradle/api/file/RegularFileProperty;
 	public abstract fun getRequired ()Lorg/gradle/api/provider/Property;
-	public final fun getType ()Lio/gitlab/arturbosch/detekt/extensions/DetektReportType;
+	public final fun getType ()Ldev/detekt/gradle/extensions/DetektReportType;
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class io/gitlab/arturbosch/detekt/extensions/DetektReportType : java/lang/Enum {
-	public static final field HTML Lio/gitlab/arturbosch/detekt/extensions/DetektReportType;
-	public static final field MD Lio/gitlab/arturbosch/detekt/extensions/DetektReportType;
-	public static final field SARIF Lio/gitlab/arturbosch/detekt/extensions/DetektReportType;
-	public static final field XML Lio/gitlab/arturbosch/detekt/extensions/DetektReportType;
+public final class dev/detekt/gradle/extensions/DetektReportType : java/lang/Enum {
+	public static final field CHECKSTYLE Ldev/detekt/gradle/extensions/DetektReportType;
+	public static final field HTML Ldev/detekt/gradle/extensions/DetektReportType;
+	public static final field MARKDOWN Ldev/detekt/gradle/extensions/DetektReportType;
+	public static final field SARIF Ldev/detekt/gradle/extensions/DetektReportType;
 	public final fun getExtension ()Ljava/lang/String;
 	public final fun getReportId ()Ljava/lang/String;
-	public static fun valueOf (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/extensions/DetektReportType;
-	public static fun values ()[Lio/gitlab/arturbosch/detekt/extensions/DetektReportType;
+	public static fun valueOf (Ljava/lang/String;)Ldev/detekt/gradle/extensions/DetektReportType;
+	public static fun values ()[Ldev/detekt/gradle/extensions/DetektReportType;
 }
 
-public class io/gitlab/arturbosch/detekt/extensions/DetektReports {
+public class dev/detekt/gradle/extensions/DetektReports {
 	public fun <init> (Lorg/gradle/api/model/ObjectFactory;)V
+	public final fun checkstyle (Lorg/gradle/api/Action;)V
 	public final fun custom (Lorg/gradle/api/Action;)V
+	public fun getCheckstyle ()Ldev/detekt/gradle/extensions/DetektReport;
 	public fun getCustom ()Ljava/util/List;
-	public fun getHtml ()Lio/gitlab/arturbosch/detekt/extensions/DetektReport;
-	public fun getMd ()Lio/gitlab/arturbosch/detekt/extensions/DetektReport;
+	public fun getHtml ()Ldev/detekt/gradle/extensions/DetektReport;
+	public fun getMarkdown ()Ldev/detekt/gradle/extensions/DetektReport;
 	public final fun getObjects ()Lorg/gradle/api/model/ObjectFactory;
-	public fun getSarif ()Lio/gitlab/arturbosch/detekt/extensions/DetektReport;
-	public fun getXml ()Lio/gitlab/arturbosch/detekt/extensions/DetektReport;
+	public fun getSarif ()Ldev/detekt/gradle/extensions/DetektReport;
 	public final fun html (Lorg/gradle/api/Action;)V
-	public final fun md (Lorg/gradle/api/Action;)V
+	public final fun markdown (Lorg/gradle/api/Action;)V
 	public final fun sarif (Lorg/gradle/api/Action;)V
-	public final fun xml (Lorg/gradle/api/Action;)V
 }
 
-public final class io/gitlab/arturbosch/detekt/extensions/FailOnSeverity : java/lang/Enum {
-	public static final field Error Lio/gitlab/arturbosch/detekt/extensions/FailOnSeverity;
-	public static final field Info Lio/gitlab/arturbosch/detekt/extensions/FailOnSeverity;
-	public static final field Never Lio/gitlab/arturbosch/detekt/extensions/FailOnSeverity;
-	public static final field Warning Lio/gitlab/arturbosch/detekt/extensions/FailOnSeverity;
-	public static fun valueOf (Ljava/lang/String;)Lio/gitlab/arturbosch/detekt/extensions/FailOnSeverity;
-	public static fun values ()[Lio/gitlab/arturbosch/detekt/extensions/FailOnSeverity;
+public final class dev/detekt/gradle/extensions/FailOnSeverity : java/lang/Enum {
+	public static final field Error Ldev/detekt/gradle/extensions/FailOnSeverity;
+	public static final field Info Ldev/detekt/gradle/extensions/FailOnSeverity;
+	public static final field Never Ldev/detekt/gradle/extensions/FailOnSeverity;
+	public static final field Warning Ldev/detekt/gradle/extensions/FailOnSeverity;
+	public static fun valueOf (Ljava/lang/String;)Ldev/detekt/gradle/extensions/FailOnSeverity;
+	public static fun values ()[Ldev/detekt/gradle/extensions/FailOnSeverity;
 }
 
-public abstract class io/gitlab/arturbosch/detekt/report/ReportMergeTask : org/gradle/api/DefaultTask {
+public class dev/detekt/gradle/extensions/KotlinCompileTaskDetektExtension {
+	public fun <init> (Lorg/gradle/api/Project;)V
+	public final fun getAllRules ()Lorg/gradle/api/provider/Property;
+	public final fun getBaseline ()Lorg/gradle/api/file/RegularFileProperty;
+	public final fun getBuildUponDefaultConfig ()Lorg/gradle/api/provider/Property;
+	public final fun getCheckstyle ()Ldev/detekt/gradle/extensions/DetektCompilerPluginReport;
+	public final fun getConfig ()Lorg/gradle/api/file/ConfigurableFileCollection;
+	public final fun getDebug ()Lorg/gradle/api/provider/Property;
+	public final fun getDisableDefaultRuleSets ()Lorg/gradle/api/provider/Property;
+	public final fun getExcludes ()Lorg/gradle/api/provider/SetProperty;
+	public final fun getHtml ()Ldev/detekt/gradle/extensions/DetektCompilerPluginReport;
+	public final fun getParallel ()Lorg/gradle/api/provider/Property;
+	public final fun getReports ()Lorg/gradle/api/NamedDomainObjectContainer;
+	public final fun getSarif ()Ldev/detekt/gradle/extensions/DetektCompilerPluginReport;
+	public final fun isEnabled ()Lorg/gradle/api/provider/Property;
+}
+
+public final class dev/detekt/gradle/plugin/DetektBasePlugin : org/gradle/api/Plugin {
+	public fun <init> ()V
+	public synthetic fun apply (Ljava/lang/Object;)V
+	public fun apply (Lorg/gradle/api/Project;)V
+}
+
+public final class dev/detekt/gradle/plugin/DetektKotlinCompilerPlugin : org/jetbrains/kotlin/gradle/plugin/KotlinCompilerPluginSupportPlugin {
+	public fun <init> ()V
+	public synthetic fun apply (Ljava/lang/Object;)V
+	public fun apply (Lorg/gradle/api/Project;)V
+	public fun applyToCompilation (Lorg/jetbrains/kotlin/gradle/plugin/KotlinCompilation;)Lorg/gradle/api/provider/Provider;
+	public fun getCompilerPluginId ()Ljava/lang/String;
+	public fun getPluginArtifact ()Lorg/jetbrains/kotlin/gradle/plugin/SubpluginArtifact;
+	public fun getPluginArtifactForNative ()Lorg/jetbrains/kotlin/gradle/plugin/SubpluginArtifact;
+	public fun isApplicable (Lorg/jetbrains/kotlin/gradle/plugin/KotlinCompilation;)Z
+}
+
+public final class dev/detekt/gradle/plugin/DetektPlugin : org/gradle/api/Plugin {
+	public fun <init> ()V
+	public synthetic fun apply (Ljava/lang/Object;)V
+	public fun apply (Lorg/gradle/api/Project;)V
+}
+
+public final class dev/detekt/gradle/plugin/DetektPluginKt {
+	public static final fun getSupportedKotlinVersion ()Ljava/lang/String;
+}
+
+public abstract class dev/detekt/gradle/report/ReportMergeTask : org/gradle/api/DefaultTask {
 	public fun <init> ()V
 	public abstract fun getInput ()Lorg/gradle/api/file/ConfigurableFileCollection;
 	public abstract fun getOutput ()Lorg/gradle/api/file/RegularFileProperty;

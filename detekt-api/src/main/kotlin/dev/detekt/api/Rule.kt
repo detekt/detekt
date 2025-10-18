@@ -4,7 +4,6 @@ import dev.detekt.api.internal.validateIdentifier
 import dev.drewhamilton.poko.Poko
 import org.jetbrains.kotlin.config.LanguageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.resolve.BindingContext
 import java.net.URI
 
 /**
@@ -32,11 +31,6 @@ open class Rule(
     open val ruleName: RuleName get() = RuleName(javaClass.simpleName)
 
     protected lateinit var languageVersionSettings: LanguageVersionSettings
-    private lateinit var _bindingContext: BindingContext
-
-    @Suppress("UnusedReceiverParameter")
-    val RequiresFullAnalysis.bindingContext: BindingContext
-        get() = _bindingContext
 
     val autoCorrect: Boolean
         get() = config.valueOrDefault(Config.AUTO_CORRECT_KEY, false) &&
@@ -47,10 +41,6 @@ open class Rule(
     /**
      * Before starting visiting kotlin elements, a check is performed if this rule should be triggered.
      * Pre- and post-visit-hooks are executed before/after the visiting process.
-     * BindingContext holds the result of the semantic analysis of the source code by the Kotlin compiler. Rules that
-     * rely on symbols and types being resolved can use the BindingContext for this analysis. Note that detekt must
-     * receive the correct compile classpath for the code being analyzed otherwise the default value
-     * [BindingContext.EMPTY] will be used and it will not be possible for detekt to resolve types or symbols.
      */
     fun visitFile(
         root: KtFile,
@@ -93,10 +83,6 @@ open class Rule(
      */
     fun report(finding: Finding) {
         findings.add(finding)
-    }
-
-    fun setBindingContext(bindingContext: BindingContext) {
-        _bindingContext = bindingContext
     }
 }
 

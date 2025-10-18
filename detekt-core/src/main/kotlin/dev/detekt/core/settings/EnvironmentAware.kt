@@ -6,6 +6,7 @@ import com.intellij.openapi.Disposable
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Disposer
 import com.intellij.pom.PomModel
+import com.intellij.pom.tree.TreeAspect
 import dev.detekt.parser.DetektPomModel
 import dev.detekt.parser.createCompilerConfiguration
 import dev.detekt.tooling.api.spec.CompilerSpec
@@ -15,9 +16,7 @@ import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.projectStructure.KaSourceModule
 import org.jetbrains.kotlin.analysis.api.standalone.buildStandaloneAnalysisAPISession
 import org.jetbrains.kotlin.analysis.project.structure.builder.buildKtSourceModule
-import org.jetbrains.kotlin.cli.common.CliModuleVisibilityManagerImpl
 import org.jetbrains.kotlin.cli.common.config.kotlinSourceRoots
-import org.jetbrains.kotlin.cli.jvm.compiler.CliTraceHolder
 import org.jetbrains.kotlin.cli.jvm.config.jvmClasspathRoots
 import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
@@ -26,10 +25,8 @@ import org.jetbrains.kotlin.config.friendPaths
 import org.jetbrains.kotlin.config.jdkHome
 import org.jetbrains.kotlin.config.jvmTarget
 import org.jetbrains.kotlin.config.languageVersionSettings
-import org.jetbrains.kotlin.load.kotlin.ModuleVisibilityManager
 import org.jetbrains.kotlin.platform.jvm.JvmPlatforms
 import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.resolve.CodeAnalyzerInitializer
 import java.io.Closeable
 import java.io.File
 import java.io.OutputStream
@@ -73,13 +70,8 @@ internal class EnvironmentFacade(
 
     private val analysisSession = buildStandaloneAnalysisAPISession(disposable) {
         // Required for autocorrect support
-        registerProjectService(PomModel::class.java, DetektPomModel)
-
-        // Required by K1 compiler setup
-        registerProjectService(CodeAnalyzerInitializer::class.java, CliTraceHolder(project))
-        registerProjectService(ModuleVisibilityManager::class.java, CliModuleVisibilityManagerImpl(true))
-        val moduleVisibilityManager = ModuleVisibilityManager.SERVICE.getInstance(project)
-        configuration.friendPaths.forEach(moduleVisibilityManager::addFriendPath)
+        registerProjectService(TreeAspect::class.java)
+        registerProjectService(PomModel::class.java, DetektPomModel(project))
 
         configuration.putIfAbsent(CommonConfigurationKeys.MODULE_NAME, "<no module name provided>")
 

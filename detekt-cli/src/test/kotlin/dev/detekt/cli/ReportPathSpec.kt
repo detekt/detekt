@@ -33,12 +33,14 @@ class ReportPathSpec {
         fun `fails when the path is empty`() {
             assertThatIllegalArgumentException()
                 .isThrownBy { ReportPath.from("test:") }
+                .withMessage("The path of the report must not be empty (kind - test)")
         }
 
         @Test
         fun `fails when the path is malformed`() {
             assertThatIllegalArgumentException()
                 .isThrownBy { ReportPath.from("test:a*a") }
+                .withMessage("Illegal char <*> at index 1: a*a")
         }
     }
 
@@ -63,12 +65,14 @@ class ReportPathSpec {
         fun `fails when the path is empty`() {
             assertThatIllegalArgumentException()
                 .isThrownBy { ReportPath.from("test:") }
+                .withMessage("The path of the report must not be empty (kind - test)")
         }
 
         @Test
         fun `fails when the path is malformed`() {
             assertThatIllegalArgumentException()
                 .isThrownBy { ReportPath.from("test:a${0.toChar()}a") }
+                .withMessage("Nul character not allowed: a\u0000a")
         }
     }
 
@@ -99,12 +103,14 @@ class ReportPathSpec {
         fun `fails when the kind is empty`() {
             assertThatIllegalArgumentException()
                 .isThrownBy { ReportPath.from(":/tmp/anything") }
+                .withMessage("The kind of report must not be empty (path - /tmp/anything)")
         }
 
         @Test
         fun `fails when part size is illegal`() {
             assertThatIllegalStateException()
                 .isThrownBy { ReportPath.from("") }
+                .withMessage("Input '' must consist of two parts for Unix OSs or three for Windows (report-id:path).")
         }
     }
 }

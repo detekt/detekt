@@ -11,7 +11,7 @@ jobs:
       issues: write
       pull-requests: write
     steps:
-      - uses: actions/stale@5bef64f19d7facfb25b37b414482c7164d639639 # v9
+      - uses: actions/stale@5f858e3efba33a5ca4407a664cc011ad407f2008 # v10
         with:
           repo-token: ${{ secrets.DETEKT_CI_GITHUB_USER_TOKEN }}
           days-before-stale: 90
@@ -24,7 +24,7 @@ jobs:
           exempt-issue-labels: help wanted, good first issue, never gets stale, blocked
           exempt-pr-labels: help wanted, good first issue, never gets stale, blocked
           exempt-milestones: 2.0.0
-      - uses: actions/stale@5bef64f19d7facfb25b37b414482c7164d639639 # v9
+      - uses: actions/stale@5f858e3efba33a5ca4407a664cc011ad407f2008 # v10
         with:
           repo-token: ${{ secrets.DETEKT_CI_GITHUB_USER_TOKEN }}
           days-before-stale: 30

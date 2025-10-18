@@ -2,19 +2,18 @@ package dev.detekt.generator.collection
 
 import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.Alias
-import dev.detekt.api.DetektVisitor
 import dev.detekt.api.RequiresAnalysisApi
-import dev.detekt.api.RequiresFullAnalysis
 import dev.detekt.api.internal.AutoCorrectable
 import dev.detekt.generator.collection.exception.InvalidDocumentationException
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtSuperTypeList
+import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
 import org.jetbrains.kotlin.psi.psiUtil.containingClass
 import org.jetbrains.kotlin.psi.psiUtil.getSuperNames
 
-internal class RuleVisitor(textReplacements: Map<String, String>) : DetektVisitor() {
+internal class RuleVisitor(textReplacements: Map<String, String>) : KtTreeVisitorVoid() {
 
     val containsRule
         get() = classesMap.any { it.value }
@@ -28,8 +27,7 @@ internal class RuleVisitor(textReplacements: Map<String, String>) : DetektVisito
     private val configurationCollector = ConfigurationCollector()
     private val classesMap = mutableMapOf<String, Boolean>()
     private var deprecationMessage: String? = null
-    private val fullAnalysisInterfaces =
-        setOf(RequiresFullAnalysis::class.simpleName, RequiresAnalysisApi::class.simpleName)
+    private val fullAnalysisInterface = RequiresAnalysisApi::class.simpleName
 
     fun getRule(): Rule {
         if (documentationCollector.description.isEmpty()) {
@@ -98,7 +96,7 @@ internal class RuleVisitor(textReplacements: Map<String, String>) : DetektVisito
 
         autoCorrect = classOrObject.isAnnotatedWith(AutoCorrectable::class)
         requiresFullAnalysis = classOrObject.superTypeListEntries
-            .any { it.text.substringAfterLast(".") in fullAnalysisInterfaces }
+            .any { it.text.substringAfterLast(".") == fullAnalysisInterface }
         deprecationMessage = classOrObject.firstAnnotationParameterOrNull(Deprecated::class)
 
         documentationCollector.setClass(classOrObject)
@@ -126,12 +124,12 @@ internal class RuleVisitor(textReplacements: Map<String, String>) : DetektVisito
     companion object {
         private val ruleClasses = listOf(
             // These references are stringly-typed to prevent dependency cycle:
-            // This class requires FormattingRule,
-            // which needs detekt-formatting.jar,
-            // which needs :detekt-formatting:processResources task output,
+            // This class requires KtlintRule,
+            // which needs detekt-rules-ktlint-wrapper.jar,
+            // which needs :detekt-rules-ktlint-wrapper:processResources task output,
             // which needs output of this class.
             "Rule", // dev.detekt.api.Rule
-            "FormattingRule", // dev.detekt.rules.ktlintwrapper.wrappers.FormattingRule
+            "KtlintRule", // dev.detekt.rules.ktlintwrapper.KtlintRule
             "EmptyRule", // dev.detekt.rules.empty.EmptyRule
         )
     }

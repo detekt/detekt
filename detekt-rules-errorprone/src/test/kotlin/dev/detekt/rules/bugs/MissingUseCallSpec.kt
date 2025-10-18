@@ -2,9 +2,9 @@
 
 package dev.detekt.rules.bugs
 
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
+import dev.detekt.test.junit.KotlinCoreEnvironmentTest
 import dev.detekt.test.lintWithContext
-import dev.detekt.test.utils.KotlinCoreEnvironmentTest
 import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -41,7 +41,7 @@ class MissingUseCallSpec(private val env: KotlinEnvironmentContainer) {
         """.trimIndent()
         val findings = subject.lintWithContext(env, code)
         assertThat(findings).singleElement()
-            .hasSourceLocation(2, 23)
+            .hasStartSourceLocation(2, 23)
     }
 
     @Test

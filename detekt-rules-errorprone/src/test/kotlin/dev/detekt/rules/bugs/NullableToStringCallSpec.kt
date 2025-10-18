@@ -1,9 +1,9 @@
 package dev.detekt.rules.bugs
 
 import dev.detekt.api.Config
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
+import dev.detekt.test.junit.KotlinCoreEnvironmentTest
 import dev.detekt.test.lintWithContext
-import dev.detekt.test.utils.KotlinCoreEnvironmentTest
 import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.junit.jupiter.api.Test
 
@@ -74,13 +74,11 @@ class NullableToStringCallSpec(private val env: KotlinEnvironmentContainer) {
             }
         """.trimIndent()
         val actual = subject.lintWithContext(env, code)
-        assertThat(actual).hasSize(3)
-        assertThat(actual).element(0)
-            .hasMessage("This call 'foo.a.toString()' may return the string \"null\".")
-        assertThat(actual).element(1)
-            .hasMessage("This call 'foo.bar().toString()' may return the string \"null\".")
-        assertThat(actual).element(2)
-            .hasMessage("This call 'baz().toString()' may return the string \"null\".")
+        assertThat(actual).satisfiesExactlyInAnyOrder(
+            { assertThat(it).hasMessage("This call 'foo.a.toString()' may return the string \"null\".") },
+            { assertThat(it).hasMessage("This call 'foo.bar().toString()' may return the string \"null\".") },
+            { assertThat(it).hasMessage("This call 'baz().toString()' may return the string \"null\".") },
+        )
     }
 
     @Test
@@ -98,13 +96,11 @@ class NullableToStringCallSpec(private val env: KotlinEnvironmentContainer) {
             }
         """.trimIndent()
         val actual = subject.lintWithContext(env, code)
-        assertThat(actual).hasSize(3)
-        assertThat(actual).element(0)
-            .hasMessage("This call '\${foo.a}' may return the string \"null\".")
-        assertThat(actual).element(1)
-            .hasMessage("This call '\${foo.bar()}' may return the string \"null\".")
-        assertThat(actual).element(2)
-            .hasMessage("This call '\${baz()}' may return the string \"null\".")
+        assertThat(actual).satisfiesExactlyInAnyOrder(
+            { assertThat(it).hasMessage("This call '\${foo.a}' may return the string \"null\".") },
+            { assertThat(it).hasMessage("This call '\${foo.bar()}' may return the string \"null\".") },
+            { assertThat(it).hasMessage("This call '\${baz()}' may return the string \"null\".") },
+        )
     }
 
     @Test

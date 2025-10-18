@@ -43,7 +43,7 @@ public final class dev/detekt/tooling/api/DefaultConfigurationProvider$Companion
 
 public abstract interface class dev/detekt/tooling/api/Detekt {
 	public abstract fun run ()Ldev/detekt/tooling/api/AnalysisResult;
-	public abstract fun run (Ljava/util/Collection;Lorg/jetbrains/kotlin/resolve/BindingContext;)Ldev/detekt/tooling/api/AnalysisResult;
+	public abstract fun run (Ljava/util/Collection;)Ldev/detekt/tooling/api/AnalysisResult;
 }
 
 public abstract interface class dev/detekt/tooling/api/DetektCli {

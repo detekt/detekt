@@ -4,7 +4,6 @@ import dev.detekt.api.Config
 import dev.detekt.api.Detektion
 import dev.detekt.api.OutputReport
 import dev.detekt.api.SetupContext
-import dev.detekt.api.internal.BuiltInOutputReport
 import io.github.detekt.sarif4k.Run
 import io.github.detekt.sarif4k.SarifSchema210
 import io.github.detekt.sarif4k.SarifSerializer
@@ -14,9 +13,7 @@ import io.github.detekt.sarif4k.Version
 
 const val SRCROOT = "%SRCROOT%"
 
-class SarifOutputReport : BuiltInOutputReport, OutputReport() {
-
-    override val ending: String = "sarif"
+class SarifOutputReport : OutputReport {
     override val id: String = "sarif"
 
     private lateinit var config: Config

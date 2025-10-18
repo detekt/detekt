@@ -1,7 +1,7 @@
 package dev.detekt.gradle.plugin
 
-import io.gitlab.arturbosch.detekt.testkit.DslGradleRunner
-import io.gitlab.arturbosch.detekt.testkit.ProjectLayout
+import dev.detekt.gradle.testkit.DslGradleRunner
+import dev.detekt.gradle.testkit.ProjectLayout
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -80,6 +80,40 @@ class DetektBasePluginSpec {
         gradleRunner.checkTask("debug")
         gradleRunner.checkTask("test")
         gradleRunner.checkTask("androidTest")
+    }
+
+    @Test
+    fun `generates source set tasks when multiple plugins of type KotlinBasePlugin are applied #8613`() {
+        val gradleRunner = DslGradleRunner(
+            projectLayout = ProjectLayout(
+                numberOfSourceFilesInRootPerSourceDir = 1,
+                srcDirs = listOf(
+                    "src/main/kotlin",
+                    "src/test/kotlin",
+                ),
+            ),
+            buildFileName = "build.gradle.kts",
+            mainBuildFileContent = """
+                plugins {
+                    id("dev.detekt")
+                    kotlin("jvm") // This plugin has type KotlinBasePlugin
+                }
+            
+                // This plugin also has type KotlinBasePlugin
+                apply<org.jetbrains.kotlin.gradle.plugin.KotlinBaseApiPlugin>()
+            
+                repositories {
+                    mavenLocal()
+                    mavenCentral()
+                }
+            """.trimIndent(),
+            dryRun = true,
+        ).also {
+            it.setupProject()
+        }
+
+        gradleRunner.checkTask("main")
+        gradleRunner.checkTask("test")
     }
 
     @Nested
@@ -175,9 +209,9 @@ class DetektBasePluginSpec {
         runTasksAndCheckResult(":detekt${sourceSetTaskName}SourceSet") { buildResult ->
             assertThat(buildResult.output)
                 .containsPattern("""--input \S*[/\\]src[/\\]$sourceSetTaskName[/\\]kotlin""")
-            val xmlReportFile = projectFile("build/reports/detekt/${sourceSetTaskName}SourceSet.xml")
+            val checkstyleReportFile = projectFile("build/reports/detekt/${sourceSetTaskName}SourceSet.xml")
             val sarifReportFile = projectFile("build/reports/detekt/${sourceSetTaskName}SourceSet.sarif")
-            assertThat(buildResult.output).contains("--report xml:$xmlReportFile")
+            assertThat(buildResult.output).contains("--report checkstyle:$checkstyleReportFile")
             assertThat(buildResult.output).contains("--report sarif:$sarifReportFile")
         }
     }

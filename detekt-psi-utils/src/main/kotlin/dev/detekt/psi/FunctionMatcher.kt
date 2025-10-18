@@ -1,34 +1,24 @@
 package dev.detekt.psi
 
+import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.symbols.KaCallableSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaConstructorSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaFunctionSymbol
 import org.jetbrains.kotlin.analysis.api.types.KaType
 import org.jetbrains.kotlin.analysis.api.types.symbol
-import org.jetbrains.kotlin.descriptors.CallableDescriptor
 import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.psi.KtTypeReference
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.components.isVararg
-import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
-import org.jetbrains.kotlin.types.KotlinType
-import org.jetbrains.kotlin.types.typeUtil.isTypeParameter
 
 sealed class FunctionMatcher {
 
-    abstract fun match(callableDescriptor: CallableDescriptor): Boolean
-
-    abstract fun match(function: KtNamedFunction, bindingContext: BindingContext): Boolean
+    abstract fun match(function: KtNamedFunction, fullAnalysis: Boolean): Boolean
 
     abstract fun match(symbol: KaCallableSymbol): Boolean
 
     internal data class NameOnly(
         private val fullyQualifiedName: String,
     ) : FunctionMatcher() {
-        override fun match(callableDescriptor: CallableDescriptor): Boolean =
-            callableDescriptor.fqNameSafe.asString() == fullyQualifiedName
 
-        override fun match(function: KtNamedFunction, bindingContext: BindingContext): Boolean =
+        override fun match(function: KtNamedFunction, fullAnalysis: Boolean): Boolean =
             function.name == fullyQualifiedName ||
                 function.fqName?.asString() == fullyQualifiedName
 
@@ -41,44 +31,24 @@ sealed class FunctionMatcher {
         private val fullyQualifiedName: String,
         private val parameters: List<String>,
     ) : FunctionMatcher() {
-        override fun match(callableDescriptor: CallableDescriptor): Boolean {
-            val descriptor = callableDescriptor.original
-            if (descriptor.fqNameSafe.asString() != fullyQualifiedName) return false
 
-            val encounteredParamTypes = buildList {
-                addIfNotNull(descriptor.extensionReceiverParameter?.run { type.getSignatureParameter() })
-                addAll(
-                    descriptor.valueParameters.map {
-                        if (it.isVararg) {
-                            "vararg ${requireNotNull(it.varargElementType).getSignatureParameter()}"
-                        } else {
-                            it.type.getSignatureParameter()
-                        }
-                    }
-                )
-            }
-
-            return encounteredParamTypes == parameters
-        }
-
-        override fun match(function: KtNamedFunction, bindingContext: BindingContext): Boolean {
-            if (bindingContext == BindingContext.EMPTY) return false
+        override fun match(function: KtNamedFunction, fullAnalysis: Boolean): Boolean {
+            if (!fullAnalysis) return false
             if (function.name != fullyQualifiedName && function.fqName?.asString() != fullyQualifiedName) return false
 
             val encounteredParameters = buildList {
-                fun KtTypeReference.getSignatureParameter() =
-                    bindingContext[BindingContext.TYPE, this]?.getSignatureParameter()
-
-                addIfNotNull(function.receiverTypeReference?.getSignatureParameter())
-                addAll(
-                    function.valueParameters.map {
-                        if (it.isVarArg) {
-                            "vararg ${it.typeReference?.getSignatureParameter()}"
-                        } else {
-                            it.typeReference?.getSignatureParameter()
+                analyze(function) {
+                    addIfNotNull(function.receiverTypeReference?.run { type.asFqNameString() })
+                    addAll(
+                        function.valueParameters.map {
+                            if (it.isVarArg) {
+                                "vararg ${it.returnType.arrayElementType?.asFqNameString()}"
+                            } else {
+                                it.returnType.asFqNameString()
+                            }
                         }
-                    }
-                )
+                    )
+                }
             }
 
             return encounteredParameters == parameters
@@ -132,13 +102,6 @@ sealed class FunctionMatcher {
 private fun <T> MutableCollection<T>.addIfNotNull(t: T) {
     if (t != null) add(t)
 }
-
-private fun KotlinType.getSignatureParameter(): String? =
-    if (isTypeParameter()) {
-        toString()
-    } else {
-        fqNameOrNull()?.toString()
-    }
 
 // Extracted from: https://stackoverflow.com/a/16108347/842697
 private fun String.splitParams(): List<String> {

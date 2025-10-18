@@ -2,9 +2,9 @@ package dev.detekt.rules.bugs
 
 import dev.detekt.api.Config
 import dev.detekt.test.TestConfig
-import dev.detekt.test.assertThat
+import dev.detekt.test.assertj.assertThat
+import dev.detekt.test.junit.KotlinCoreEnvironmentTest
 import dev.detekt.test.lintWithContext
-import dev.detekt.test.utils.KotlinCoreEnvironmentTest
 import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -958,7 +958,7 @@ class IgnoredReturnValueSpec {
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
             assertThat(findings).singleElement()
-                .hasSourceLocation(6, 5)
+                .hasStartSourceLocation(6, 5)
                 .hasMessage("The call flowOfChecked is returning a value that is ignored.")
         }
 
@@ -1095,7 +1095,7 @@ class IgnoredReturnValueSpec {
             val findings = subject.lintWithContext(env, code)
 
             assertThat(findings).singleElement()
-                .hasSourceLocation(line = 4, column = 5)
+                .hasStartSourceLocation(line = 4, column = 5)
                 .hasMessage("The call flowOf is returning a value that is ignored.")
         }
 
@@ -1112,7 +1112,7 @@ class IgnoredReturnValueSpec {
             val findings = subject.lintWithContext(env, code)
 
             assertThat(findings).singleElement()
-                .hasSourceLocation(line = 5, column = 10)
+                .hasStartSourceLocation(line = 5, column = 10)
                 .hasMessage("The call onEach is returning a value that is ignored.")
         }
 
@@ -1156,7 +1156,7 @@ class IgnoredReturnValueSpec {
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
             assertThat(findings).singleElement()
-                .hasSourceLocation(6, 5)
+                .hasStartSourceLocation(6, 5)
                 .hasMessage("The call returnsALambda is returning a value that is ignored.")
         }
 
@@ -1174,7 +1174,7 @@ class IgnoredReturnValueSpec {
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
             assertThat(findings).singleElement()
-                .hasSourceLocation(6, 5)
+                .hasStartSourceLocation(6, 5)
                 .hasMessage("The call returnsALambda is returning a value that is ignored.")
         }
 

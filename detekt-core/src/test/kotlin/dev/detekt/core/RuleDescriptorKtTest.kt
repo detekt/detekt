@@ -2,7 +2,7 @@ package dev.detekt.core
 
 import dev.detekt.api.Config
 import dev.detekt.api.Configuration
-import dev.detekt.api.RequiresFullAnalysis
+import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.api.RuleInstance
 import dev.detekt.api.RuleSet
@@ -13,7 +13,9 @@ import dev.detekt.api.Severity.Info
 import dev.detekt.api.Severity.Warning
 import dev.detekt.api.config
 import dev.detekt.api.internal.DefaultRuleSetProvider
+import dev.detekt.api.internal.whichDetekt
 import dev.detekt.test.yamlConfigFromContent
+import dev.detekt.tooling.api.AnalysisMode
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.assertj.core.api.ThrowingConsumer
@@ -32,10 +34,10 @@ class RuleDescriptorKtTest {
     private val log: (() -> String) -> Unit = { message -> stringBuilder.appendLine(message.invoke()) }
 
     @ParameterizedTest
-    @ValueSource(booleans = [true, false])
-    fun emptyConfigReturnsNoRule(fullAnalysis: Boolean) {
+    @EnumSource
+    fun emptyConfigReturnsNoRule(analysisMode: AnalysisMode) {
         val rules = getRules(
-            fullAnalysis,
+            analysisMode,
             listOf(TestDefaultRuleSetProvider()),
             Config.empty,
             log,
@@ -47,7 +49,7 @@ class RuleDescriptorKtTest {
     @Test
     fun returns4RulesAndIgnoreUnknownRule() {
         val rules = getRules(
-            true,
+            AnalysisMode.full,
             listOf(TestDefaultRuleSetProvider()),
             yamlConfigFromContent(
                 """
@@ -58,7 +60,7 @@ class RuleDescriptorKtTest {
                         active: true
                       AnotherRule:
                         active: false
-                      RequiresFullAnalysisRule:
+                      RequiresAnalysisApiRule:
                         active: true
                       UnknownRule:
                         active: true
@@ -72,7 +74,7 @@ class RuleDescriptorKtTest {
                 RuleDescriptionMatcher(::OneRule, configActive, true),
                 RuleDescriptionMatcher(::OneRule, configActive, true, "OneRule/foo"),
                 RuleDescriptionMatcher(::AnotherRule, configInactive, false),
-                RuleDescriptionMatcher(::RequiresFullAnalysisRule, configActive, true),
+                RuleDescriptionMatcher(::RequiresAnalysisApiRule, configActive, true),
             )
         assertThat(stringBuilder.toString()).isEmpty()
     }
@@ -80,7 +82,7 @@ class RuleDescriptorKtTest {
     @Test
     fun doesntCrashWhenConfigHasWrongType() {
         val rules = getRules(
-            true,
+            AnalysisMode.full,
             listOf(TestDefaultRuleSetProvider()),
             yamlConfigFromContent(
                 """
@@ -92,7 +94,7 @@ class RuleDescriptorKtTest {
                         active: true
                       AnotherRule:
                         active: false
-                      RequiresFullAnalysisRule:
+                      RequiresAnalysisApiRule:
                         active: true
                       UnknownRule:
                         active: true
@@ -106,7 +108,7 @@ class RuleDescriptorKtTest {
                 RuleDescriptionMatcher(::OneRule, configActive + ("aConfiguration" to "abc"), true),
                 RuleDescriptionMatcher(::OneRule, configActive, true, "OneRule/foo"),
                 RuleDescriptionMatcher(::AnotherRule, configInactive, false),
-                RuleDescriptionMatcher(::RequiresFullAnalysisRule, configActive, true),
+                RuleDescriptionMatcher(::RequiresAnalysisApiRule, configActive, true),
             )
         assertThat(stringBuilder.toString()).isEmpty()
     }
@@ -114,7 +116,7 @@ class RuleDescriptorKtTest {
     @Test
     fun `when fullAnalysis is disabled the rules that require full analysis are inactive`() {
         val rules = getRules(
-            false,
+            AnalysisMode.light,
             listOf(TestDefaultRuleSetProvider()),
             yamlConfigFromContent(
                 """
@@ -125,7 +127,7 @@ class RuleDescriptorKtTest {
                         active: true
                       AnotherRule:
                         active: true
-                      RequiresFullAnalysisRule:
+                      RequiresAnalysisApiRule:
                         active: true
                       UnknownRule:
                         active: true
@@ -139,21 +141,21 @@ class RuleDescriptorKtTest {
                 RuleDescriptionMatcher(::OneRule, configActive, true),
                 RuleDescriptionMatcher(::OneRule, configActive, true, "OneRule/foo"),
                 RuleDescriptionMatcher(::AnotherRule, configActive, true),
-                RuleDescriptionMatcher(::RequiresFullAnalysisRule, configActive, false),
+                RuleDescriptionMatcher(::RequiresAnalysisApiRule, configActive, false),
             )
         assertThat(stringBuilder.toString())
-            .isEqualTo("The rule 'RequiresFullAnalysisRule' requires type resolution but it was run without it.\n")
+            .isEqualTo("The rule 'RequiresAnalysisApiRule' requires type resolution but it was run without it.\n")
     }
 
     @Test
     fun `when fullAnalysis is disabled but the rule is disabled we log nothing`() {
         val rules = getRules(
-            false,
+            AnalysisMode.light,
             listOf(TestDefaultRuleSetProvider()),
             yamlConfigFromContent(
                 """
                     custom:
-                      RequiresFullAnalysisRule:
+                      RequiresAnalysisApiRule:
                         active: false
                 """.trimIndent()
             ),
@@ -162,7 +164,7 @@ class RuleDescriptorKtTest {
 
         assertThat(rules)
             .satisfiesExactlyInAnyOrder(
-                RuleDescriptionMatcher(::RequiresFullAnalysisRule, configInactive, false),
+                RuleDescriptionMatcher(::RequiresAnalysisApiRule, configInactive, false),
             )
         assertThat(stringBuilder.toString()).isEmpty()
     }
@@ -170,7 +172,7 @@ class RuleDescriptorKtTest {
     @Test
     fun whenRuleSetIsInactiveReturnsAllRuleAreDisabled() {
         val rules = getRules(
-            false,
+            AnalysisMode.light,
             listOf(TestDefaultRuleSetProvider()),
             yamlConfigFromContent(
                 """
@@ -183,7 +185,7 @@ class RuleDescriptorKtTest {
                       AnotherRule:
                         active: true
                         maxLine: 30
-                      RequiresFullAnalysisRule:
+                      RequiresAnalysisApiRule:
                         active: true
                 """.trimIndent()
             ),
@@ -195,7 +197,7 @@ class RuleDescriptorKtTest {
                 RuleDescriptionMatcher(::OneRule, configActive, false),
                 RuleDescriptionMatcher(::OneRule, configActive, false, "OneRule/foo"),
                 RuleDescriptionMatcher(::AnotherRule, configActive + ("maxLine" to 30), false),
-                RuleDescriptionMatcher(::RequiresFullAnalysisRule, configActive, false),
+                RuleDescriptionMatcher(::RequiresAnalysisApiRule, configActive, false),
             )
         assertThat(stringBuilder.toString()).isEmpty()
     }
@@ -206,7 +208,7 @@ class RuleDescriptorKtTest {
         @Test
         fun whenRuleSetIsInactiveReturnsAllRuleAreDisabled() {
             val rules = getRules(
-                false,
+                AnalysisMode.light,
                 listOf(TestCustomRuleSetProvider()),
                 yamlConfigFromContent(
                     """
@@ -239,7 +241,7 @@ class RuleDescriptorKtTest {
         @ValueSource(strings = ["warning", "WARNING", "wArNiNg"])
         fun ignoreCase(candidate: String) {
             val rules = getRules(
-                false,
+                AnalysisMode.light,
                 listOf(TestDefaultRuleSetProvider()),
                 yamlConfigFromContent(
                     """
@@ -269,7 +271,7 @@ class RuleDescriptorKtTest {
         @EnumSource(Severity::class)
         fun supportsAll(severity: Severity) {
             val rules = getRules(
-                false,
+                AnalysisMode.light,
                 listOf(TestDefaultRuleSetProvider()),
                 yamlConfigFromContent(
                     """
@@ -299,7 +301,7 @@ class RuleDescriptorKtTest {
         fun unknownSeverityThrows() {
             assertThatThrownBy {
                 getRules(
-                    false,
+                    AnalysisMode.light,
                     listOf(TestDefaultRuleSetProvider()),
                     yamlConfigFromContent(
                         """
@@ -322,7 +324,7 @@ class RuleDescriptorKtTest {
         @Test
         fun severityOnRuleSet() {
             val rules = getRules(
-                false,
+                AnalysisMode.light,
                 listOf(TestDefaultRuleSetProvider()),
                 yamlConfigFromContent(
                     """
@@ -391,7 +393,7 @@ private fun createRuleInstance(id: String, active: Boolean, url: String?, severi
         if (id.startsWith("AnotherRule")) {
             URI("https://example.org/")
         } else {
-            URI("https://detekt.dev/docs/1.6.0/rules/custom#${id.substringBefore("/").lowercase()}")
+            URI("https://detekt.dev/docs/${whichDetekt()}/rules/custom#${id.substringBefore("/").lowercase()}")
         }
     } else {
         url?.let(::URI)
@@ -403,12 +405,12 @@ private fun createRuleInstance(id: String, active: Boolean, url: String?, severi
 
 private class TestDefaultRuleSetProvider : DefaultRuleSetProvider {
     override val ruleSetId = RuleSet.Id("custom")
-    override fun instance() = RuleSet(ruleSetId, listOf(::OneRule, ::AnotherRule, ::RequiresFullAnalysisRule))
+    override fun instance() = RuleSet(ruleSetId, listOf(::OneRule, ::AnotherRule, ::RequiresAnalysisApiRule))
 }
 
 private class TestCustomRuleSetProvider : RuleSetProvider {
     override val ruleSetId = RuleSet.Id("custom")
-    override fun instance() = RuleSet(ruleSetId, listOf(::OneRule, ::AnotherRule, ::RequiresFullAnalysisRule))
+    override fun instance() = RuleSet(ruleSetId, listOf(::OneRule, ::AnotherRule, ::RequiresAnalysisApiRule))
 }
 
 private class OneRule(config: Config) : Rule(config, "OneRuleDescription") {
@@ -419,6 +421,6 @@ private class OneRule(config: Config) : Rule(config, "OneRuleDescription") {
 
 private class AnotherRule(config: Config) : Rule(config, "AnotherRuleDescription", URI("https://example.org/"))
 
-private class RequiresFullAnalysisRule(
+private class RequiresAnalysisApiRule(
     config: Config,
-) : Rule(config, "RequiresFullAnalysisRuleDescription"), RequiresFullAnalysis
+) : Rule(config, "RequiresAnalysisApiRuleDescription"), RequiresAnalysisApi

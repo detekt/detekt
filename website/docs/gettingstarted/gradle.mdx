@@ -8,7 +8,7 @@ summary:
 sidebar_position: 2
 ---
 
-detekt requires **Gradle 6.8.3** or higher. We, however, recommend using the version of Gradle that is [listed in this table](/docs/introduction/compatibility).
+detekt requires **Gradle 6.8.3** or higher. We, however, recommend using the version of Gradle that is [listed in this table](../introduction/compatibility.md).
 
 ## <a name="tasks">Available plugin tasks</a>
 
@@ -18,7 +18,7 @@ The Detekt Gradle Plugin will generate multiple tasks:
 `detekt` closure. 
   - By default, the standard rule set without any ignore list is executed on sources files located
    in `src/main/java`, `src/test/java`, `src/main/kotlin` and `src/test/kotlin`.
-  - Reports are automatically generated in xml,
+  - Reports are automatically generated in checkstyle(xml),
    html, md, and sarif format and can be found in `build/reports/detekt/detekt.[xml|html|md|sarif]` respectively.
   - Please note that the `detekt` task is automatically run when executing `gradle check`.
   - You may specify Gradle task CLI option for auto correction, such as `gradle detekt --auto-correct`.
@@ -64,7 +64,7 @@ Using the plugins DSL:
 
 ```groovy
 plugins {
-    id "io.gitlab.arturbosch.detekt" version "[detekt_version]"
+    id "dev.detekt" version "[detekt_version]"
 }
 
 repositories {
@@ -76,7 +76,7 @@ repositories {
 
 ```kotlin
 plugins {
-    id("io.gitlab.arturbosch.detekt") version "[detekt_version]"
+    id("dev.detekt") version "[detekt_version]"
 }
 
 repositories {
@@ -94,11 +94,11 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:[detekt_version]"
+        classpath "dev.detekt:detekt-gradle-plugin:[detekt_version]"
     }
 }
 
-apply plugin: "io.gitlab.arturbosch.detekt"
+apply plugin: "dev.detekt"
 
 repositories {
     mavenCentral()
@@ -113,11 +113,11 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:[detekt_version]")
+        classpath("dev.detekt:detekt-gradle-plugin:[detekt_version]")
     }
 }
 
-apply(plugin = "io.gitlab.arturbosch.detekt")
+apply(plugin = "dev.detekt")
 
 repositories {
     mavenCentral()
@@ -147,7 +147,7 @@ buildscript {
 plugins {
     id "com.android.application"
     id "org.jetbrains.kotlin.android" version "<kotlin_version>"
-    id "io.gitlab.arturbosch.detekt" version "[detekt_version]"
+    id "dev.detekt" version "[detekt_version]"
 }
 
 repositories {
@@ -172,7 +172,7 @@ buildscript {
 plugins {
     id("com.android.application")
     kotlin("android") version "<kotlin_version>"
-    id("io.gitlab.arturbosch.detekt") version "[detekt_version]"
+    id("dev.detekt") version "[detekt_version]"
 }
 
 repositories {
@@ -229,7 +229,7 @@ detekt {
     // If set ot `Never`, the task will not fail regardless of the number of issues and their severities.
     // If `ignoreFailures` is set to `true`, the value of this property is ignored.
     // Defaults to `Error`
-    failOnSeverity = io.gitlab.arturbosch.detekt.extensions.FailOnSeverity.Error
+    failOnSeverity = dev.detekt.gradle.extensions.FailOnSeverity.Error
     
     // Android: Don't create tasks for the specified build types (e.g. "release")
     ignoredBuildTypes = ["release"]
@@ -290,7 +290,7 @@ detekt {
     // If set ot `Never`, the task will not fail regardless of the number of issues and their severities.
     // If `ignoreFailures` is set to `true`, the value of this property is ignored.
     // Defaults to `Error`
-    failOnSeverity = io.gitlab.arturbosch.detekt.extensions.FailOnSeverity.Error
+    failOnSeverity = dev.detekt.gradle.extensions.FailOnSeverity.Error
 
     // Android: Don't create tasks for the specified build types (e.g. "release")
     ignoredBuildTypes = listOf("release")
@@ -322,18 +322,18 @@ Report output can be customized for each task. The DSL is the same in both Groov
 ```kotlin
 tasks.named("detekt").configure {
     reports {
-        // Enable/Disable XML report (default: true)
-        xml.required.set(true)
-        xml.outputLocation.set(file("build/reports/detekt.xml"))
+        // Enable/Disable checkstyle report (default: true)
+        checkstyle.required.set(true)
+        checkstyle.outputLocation.set(file("build/reports/detekt.xml"))
         // Enable/Disable HTML report (default: true)
         html.required.set(true)
         html.outputLocation.set(file("build/reports/detekt.html"))
         // Enable/Disable SARIF report (default: false)
         sarif.required.set(true)
         sarif.outputLocation.set(file("build/reports/detekt.sarif"))
-        // Enable/Disable MD report (default: false)
-        md.required.set(true)
-        md.outputLocation.set(file("build/reports/detekt.md"))
+        // Enable/Disable Markdown report (default: false)
+        markdown.required.set(true)
+        markdown.outputLocation.set(file("build/reports/detekt.md"))
         custom {
             // The simple class name of your custom report.
             reportId = "CustomJsonReport"
@@ -353,7 +353,7 @@ Gradle is running with (shown by the `./gradlew --version` command). This can be
 project JDK doesn't match e.g. if Gradle runs under Java 8 but the project uses classes only available in Java 9 or
 higher. Setting `jdkHome` to the Java 9 JDK path will allow for more correct analysis.
 
-`jdkHome` and `jvmTarget` are set automatically when applying a toolchain using either
+`jdkHome` is set automatically when applying a toolchain using either
 [`java`](https://docs.gradle.org/current/userguide/toolchains.html) or
 [`kotlin`](https://kotlinlang.org/docs/gradle.html#gradle-java-toolchains-support).
 
@@ -362,11 +362,11 @@ More information on type resolution are available on the [type resolution](type-
 #### Groovy DSL
 
 ```groovy
-tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
+tasks.withType(dev.detekt.gradle.Detekt).configureEach {
     jvmTarget = '1.8'
     jdkHome.set(file('path/to/jdkHome'))
 }
-tasks.withType(io.gitlab.arturbosch.detekt.DetektCreateBaselineTask).configureEach {
+tasks.withType(dev.detekt.gradle.DetektCreateBaselineTask).configureEach {
     jvmTarget = '1.8'
     jdkHome.set(file('path/to/jdkHome'))
 }
@@ -375,11 +375,11 @@ tasks.withType(io.gitlab.arturbosch.detekt.DetektCreateBaselineTask).configureEa
 #### Kotlin DSL
 
 ```kotlin
-tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+tasks.withType<dev.detekt.gradle.Detekt>().configureEach {
     jvmTarget.set("1.8")
     jdkHome.set(file("path/to/jdkHome"))
 }
-tasks.withType<io.gitlab.arturbosch.detekt.DetektCreateBaselineTask>().configureEach {
+tasks.withType<dev.detekt.gradle.DetektCreateBaselineTask>().configureEach {
     jvmTarget.set("1.8")
     jdkHome.set(file("path/to/jdkHome"))
 }
@@ -398,12 +398,12 @@ detekt {
     ...
 }
 
-tasks.withType(io.gitlab.arturbosch.detekt.Detekt).configureEach {
+tasks.withType(dev.detekt.gradle.Detekt).configureEach {
     // include("**/special/package/**") // only analyze a sub package inside src/main/kotlin
     exclude("**/special/package/internal/**") // but exclude our legacy internal package
 }
 
-tasks.withType(io.gitlab.arturbosch.detekt.DetektCreateBaselineTask).configureEach {
+tasks.withType(dev.detekt.gradle.DetektCreateBaselineTask).configureEach {
     // include("**/special/package/**") // only analyze a sub package inside src/main/kotlin
     exclude("**/special/package/internal/**") // but exclude our legacy internal package
 }
@@ -416,12 +416,12 @@ detekt {
     ...
 }
 
-tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+tasks.withType<dev.detekt.gradle.Detekt>().configureEach {
     // include("**/special/package/**") // only analyze a sub package inside src/main/kotlin
     exclude("**/special/package/internal/**") // but exclude our legacy internal package
 }
 
-tasks.withType<io.gitlab.arturbosch.detekt.DetektCreateBaselineTask>().configureEach {
+tasks.withType<dev.detekt.gradle.DetektCreateBaselineTask>().configureEach {
     // include("**/special/package/**") // only analyze a sub package inside src/main/kotlin
     exclude("**/special/package/internal/**") // but exclude our legacy internal package
 }
@@ -435,13 +435,13 @@ uses the type `Detekt`.
 #### Groovy DSL
 
 ```groovy
-tasks.register(name: myDetekt, type: io.gitlab.arturbosch.detekt.Detekt) {
+tasks.register(name: myDetekt, type: dev.detekt.gradle.Detekt) {
     description = "Runs a custom detekt build."
     setSource(files("src/main/kotlin", "src/test/kotlin"))
     config.setFrom(files("$rootDir/config.yml"))
     debug = true
     reports {
-        xml {
+        checkstyle {
             destination = file("build/reports/mydetekt.xml")
         }
         html.destination = file("build/reports/mydetekt.html")
@@ -456,13 +456,13 @@ tasks.register(name: myDetekt, type: io.gitlab.arturbosch.detekt.Detekt) {
 #### Kotlin DSL
 
 ```kotlin
-tasks.register<io.gitlab.arturbosch.detekt.Detekt>("myDetekt") {
+tasks.register<dev.detekt.gradle.Detekt>("myDetekt") {
     description = "Runs a custom detekt build."
     setSource(files("src/main/kotlin", "src/test/kotlin"))
     config.setFrom(files("$rootDir/config.yml"))
     debug.set(true)
     reports {
-        xml {
+        checkstyle {
             destination = file("build/reports/mydetekt.xml")
         }
         html.destination = file("build/reports/mydetekt.html")
@@ -500,7 +500,7 @@ tasks.named("check").configure {
 }
 ```
 
-Instead of disabling detekt for the check task, you may want to use the [baseline feature](/docs/introduction/baseline).
+Instead of disabling detekt for the check task, you may want to use the [baseline feature](../introduction/baseline.md).
 
 ## <a name="idea">Integrating detekt inside your IntelliJ IDEA</a>
 
@@ -528,7 +528,7 @@ configurations (e.g. by [Spring Dependency Management Plugin](https://docs.sprin
 configurations.all {
     resolutionStrategy.eachDependency {
         if (requested.group == "org.jetbrains.kotlin") {
-            useVersion(io.gitlab.arturbosch.detekt.getSupportedKotlinVersion())
+            useVersion(dev.detekt.gradle.getSupportedKotlinVersion())
         }
     }
 }

@@ -9,7 +9,7 @@ sidebar_position: 4
 ## Formats
 
 In addition to the CLI output, detekt supports 4 different types of output reporting formats.
-You can refer to [CLI](/docs/gettingstarted/cli) or [Gradle](/docs/gettingstarted/gradle) to find
+You can refer to [CLI](../gettingstarted/cli.mdx) or [Gradle](../gettingstarted/gradle.mdx) to find
 out how to configure these report formats.
 
 ### HTML
@@ -17,9 +17,8 @@ HTML is a human-readable format that can be open through browser. It includes di
 and complexity reports of this run, in addition to the findings with detailed descriptions and
 report. Check out the example: ![HTML report](/img/tutorial/html.png)
 
-### XML
-XML is a machine-readable format that can be integrated with CI tools. It is compatible with
-[Checkstyle](https://checkstyle.sourceforge.io/) output.
+### CHECKSTYLE
+[Checkstyle](https://checkstyle.sourceforge.io/) is a machine-readable xml format that can be integrated with CI tools.
 
 ### SARIF
 [SARIF](https://sarifweb.azurewebsites.net/) is a standard format for the output of 
@@ -51,7 +50,7 @@ detekt {
 ```
 
 Note that this option only affects file paths in those formats for machine consumers,
-namely XML and SARIF.
+namely Checkstyle and SARIF.
 
 ## Merging reports
 
@@ -66,23 +65,23 @@ The machine-readable report formats support report merging.
 Detekt Gradle Plugin is not opinionated in how merging is set up and respects each project's build logic, especially 
 the merging makes most sense in a multi-module project. In this spirit, only Gradle tasks are provided.
 
-At the moment, merging XML and SARIF are supported. You can refer to the sample build script below and 
+At the moment, merging Checkstyle and SARIF are supported. You can refer to the sample build script below and 
 run `./gradlew detekt reportMerge --continue` to execute detekt tasks and merge the corresponding reports.
 
 ### Groovy DSL
 ```groovy
-tasks.register("reportMerge", io.gitlab.arturbosch.detekt.report.ReportMergeTask) {
+tasks.register("reportMerge", dev.detekt.gradle.report.ReportMergeTask) {
   output = project.layout.buildDirectory.file("reports/detekt/merge.xml") // or "reports/detekt/merge.sarif"
 }
 
 subprojects {
   detekt {
-    reports.xml.required.set(true)
+    reports.checkstyle.required.set(true)
     // reports.sarif.required.set(true)
   }
 
   reportMerge.configure {
-    input.from(tasks.withType(io.gitlab.arturbosch.detekt.Detekt).collect { it.reports.xml.outputLocation }) // or sarif.outputLocation
+    input.from(tasks.withType(dev.detekt.gradle.Detekt).collect { it.reports.checkstyle.outputLocation }) // or sarif.outputLocation
   }
 }
 ```
@@ -90,18 +89,18 @@ subprojects {
 ### Kotlin DSL
 
 ```kotlin
-val reportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.ReportMergeTask::class) { 
+val reportMerge by tasks.registering(dev.detekt.gradle.report.ReportMergeTask::class) { 
   output.set(rootProject.layout.buildDirectory.file("reports/detekt/merge.xml")) // or "reports/detekt/merge.sarif"
 }
 
 subprojects {
   detekt {
-    reports.xml.required.set(true)
+    reports.checkstyle.required.set(true)
     // reports.sarif.required.set(true)
   }
 
   reportMerge {
-    input.from(tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().map { it.reports.xml.outputLocation }) // or sarif.outputLocation
+    input.from(tasks.withType<dev.detekt.gradle.Detekt>().map { it.reports.checkstyle.outputLocation }) // or sarif.outputLocation
   }
 }
 ```

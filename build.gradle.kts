@@ -1,17 +1,17 @@
-import io.gitlab.arturbosch.detekt.Detekt
-import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
-import io.gitlab.arturbosch.detekt.report.ReportMergeTask
+import dev.detekt.gradle.Detekt
+import dev.detekt.gradle.report.ReportMergeTask
 
 plugins {
     id("releasing")
     id("dev.detekt")
-    id("org.jetbrains.dokka") version "2.0.0"
+    id("org.jetbrains.dokka") version "2.1.0"
 }
 
 dependencies {
     dokka(projects.detektApi)
     dokka(projects.detektPsiUtils)
     dokka(projects.detektTest)
+    dokka(projects.detektTestAssertj)
     dokka(projects.detektTestUtils)
     dokka(projects.detektTooling)
     dokka("dev.detekt:detekt-gradle-plugin")
@@ -51,26 +51,22 @@ allprojects {
 
     dependencies {
         detekt(project(":detekt-cli"))
-        detektPlugins(project(":detekt-formatting"))
+        detektPlugins(project(":detekt-rules-ktlint-wrapper"))
         detektPlugins(project(":detekt-rules-libraries"))
         detektPlugins(project(":detekt-rules-ruleauthors"))
     }
 
     tasks.withType<Detekt>().configureEach {
-        jvmTarget = "1.8"
         reports {
-            xml.required = true
+            checkstyle.required = true
             html.required = true
             sarif.required = true
-            md.required = true
+            markdown.required = true
         }
         basePath = rootDir.absolutePath
     }
     detektReportMergeSarif {
         input.from(tasks.withType<Detekt>().map { it.reports.sarif.outputLocation })
-    }
-    tasks.withType<DetektCreateBaselineTask>().configureEach {
-        jvmTarget = "1.8"
     }
 }
 

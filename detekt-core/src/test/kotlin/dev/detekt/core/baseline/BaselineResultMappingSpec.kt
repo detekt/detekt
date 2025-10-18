@@ -1,45 +1,45 @@
 package dev.detekt.core.baseline
 
 import dev.detekt.api.testfixtures.TestSetupContext
-import dev.detekt.api.testfixtures.createEntity
 import dev.detekt.api.testfixtures.createIssue
+import dev.detekt.api.testfixtures.createIssueEntity
 import dev.detekt.api.testfixtures.createRuleInstance
-import dev.detekt.test.utils.createTempDirectoryForTest
 import dev.detekt.test.utils.resourceAsPath
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.io.TempDir
 import java.nio.file.Path
 import kotlin.io.path.copyTo
-import kotlin.io.path.deleteIfExists
 
 class BaselineResultMappingSpec {
-
-    private val dir = createTempDirectoryForTest("baseline_format")
-    private val baselineFile = dir.resolve("baseline.xml")
+    @TempDir
+    @Suppress("VarCouldBeVal")
+    private lateinit var dir: Path
+    private lateinit var baselineFile: Path
     private val existingBaselineFile = resourceAsPath("/baseline_feature/valid-baseline.xml")
     private val issues = listOf(
         createIssue(
             ruleInstance = createRuleInstance("SomeIssue", "RuleSet"),
-            entity = createEntity(signature = "SomeSignature"),
+            entity = createIssueEntity(signature = "SomeSignature"),
         ),
         createIssue(
             ruleId = "LongParameterList",
-            entity = createEntity(signature = "Signature")
+            entity = createIssueEntity(signature = "Signature")
         ),
         createIssue(
             ruleId = "LongMethod",
-            entity = createEntity(signature = "Signature")
+            entity = createIssueEntity(signature = "Signature")
         ),
         createIssue(
             ruleId = "FeatureEnvy",
-            entity = createEntity(signature = "Signature")
+            entity = createIssueEntity(signature = "Signature")
         ),
     )
 
-    @AfterEach
-    fun tearDown() {
-        baselineFile.deleteIfExists()
+    @BeforeEach
+    fun setup() {
+        baselineFile = dir.resolve("baseline.xml")
     }
 
     @Test

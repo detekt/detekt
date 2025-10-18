@@ -6,9 +6,9 @@ import dev.detekt.api.ProjectMetric
 import dev.detekt.api.internal.whichDetekt
 import dev.detekt.api.testfixtures.TestDetektion
 import dev.detekt.api.testfixtures.TestSetupContext
-import dev.detekt.api.testfixtures.createEntity
 import dev.detekt.api.testfixtures.createIssue
-import dev.detekt.api.testfixtures.createLocation
+import dev.detekt.api.testfixtures.createIssueEntity
+import dev.detekt.api.testfixtures.createIssueLocation
 import dev.detekt.api.testfixtures.createRuleInstance
 import dev.detekt.metrics.CognitiveComplexity
 import dev.detekt.metrics.processors.commentLinesKey
@@ -16,10 +16,10 @@ import dev.detekt.metrics.processors.complexityKey
 import dev.detekt.metrics.processors.linesKey
 import dev.detekt.metrics.processors.logicalLinesKey
 import dev.detekt.metrics.processors.sourceLinesKey
-import dev.detekt.test.utils.createTempFileForTest
 import dev.detekt.test.utils.readResourceContent
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.io.TempDir
 import java.nio.file.Path
 import kotlin.io.path.Path
 import kotlin.io.path.absolute
@@ -113,13 +113,16 @@ class HtmlOutputReportSpec {
 
     @Test
     fun `renders the complexity report correctly`() {
-        val detektion = TestDetektion()
-        detektion.putUserData(complexityKey, 10)
-        detektion.putUserData(CognitiveComplexity.KEY, 10)
-        detektion.putUserData(sourceLinesKey, 20)
-        detektion.putUserData(logicalLinesKey, 10)
-        detektion.putUserData(commentLinesKey, 2)
-        detektion.putUserData(linesKey, 2222)
+        val detektion = TestDetektion(
+            userData = mapOf(
+                complexityKey.toString() to 10,
+                CognitiveComplexity.KEY.toString() to 10,
+                sourceLinesKey.toString() to 20,
+                logicalLinesKey.toString() to 10,
+                commentLinesKey.toString() to 2,
+                linesKey.toString() to 2222,
+            )
+        )
         val result = htmlReport.render(detektion)
         assertThat(result).contains("<li>2,222 lines of code (loc)</li>")
         assertThat(result).contains("<li>20 source lines of code (sloc)</li>")
@@ -133,38 +136,40 @@ class HtmlOutputReportSpec {
     }
 
     @Test
-    fun `asserts that the generated HTML is the same as expected`() {
+    fun `asserts that the generated HTML is the same as expected`(@TempDir tempDir: Path) {
         val expectedString = readResourceContent("HtmlOutputFormatTest.html")
-        val expected = createTempFileForTest("expected-report", ".html").apply { writeText(expectedString) }
+        val expected = tempDir.resolve("expected-report.html").apply { writeText(expectedString) }
 
         val result = htmlReport.render(createTestDetektionWithMultipleSmells())
             .replace(generatedRegex, REPLACEMENT)
-        val actual = createTempFileForTest("actual-report", ".html").apply { writeText(result) }
+        val actual = tempDir.resolve("actual-report.html").apply { writeText(result) }
 
         assertThat(actual).hasSameTextualContentAs(expected)
     }
 
     @Test
-    fun `asserts that the generated HTML is the same even if we change the order of the issues`() {
+    fun `asserts that the generated HTML is the same even if we change the order of the issues`(
+        @TempDir tempDir: Path,
+    ) {
         val issues = issues()
         val reversedIssues = issues.reversedArray()
 
-        val firstReport = createReportWithIssues(*issues)
-        val secondReport = createReportWithIssues(*reversedIssues)
+        val firstReport = createReportWithIssues(tempDir, *issues)
+        val secondReport = createReportWithIssues(tempDir, *reversedIssues)
 
         assertThat(firstReport).hasSameTextualContentAs(secondReport)
     }
 }
 
 private fun createTestDetektionWithMultipleSmells(): Detektion {
-    val entity1 = createEntity(
-        location = createLocation("src/main/com/sample/Sample1.kt", position = 11 to 1, text = 10..14),
+    val entity1 = createIssueEntity(
+        location = createIssueLocation("src/main/com/sample/Sample1.kt", position = 11 to 1, text = 10..14),
     )
-    val entity2 = createEntity(
-        location = createLocation("src/main/com/sample/Sample2.kt", position = 22 to 2, text = 10..14),
+    val entity2 = createIssueEntity(
+        location = createIssueLocation("src/main/com/sample/Sample2.kt", position = 22 to 2, text = 10..14),
     )
-    val entity3 = createEntity(
-        location = createLocation("src/main/com/sample/Sample3.kt", position = 33 to 3, text = 10..14),
+    val entity3 = createIssueEntity(
+        location = createIssueLocation("src/main/com/sample/Sample3.kt", position = 33 to 3, text = 10..14),
     )
 
     return TestDetektion(
@@ -193,10 +198,10 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
 }
 
 private fun issues(): Array<Issue> {
-    val entity1 = createEntity(location = createLocation("src/main/com/sample/Sample1.kt", position = 11 to 5))
-    val entity2 = createEntity(location = createLocation("src/main/com/sample/Sample1.kt", position = 22 to 2))
-    val entity3 = createEntity(location = createLocation("src/main/com/sample/Sample1.kt", position = 11 to 2))
-    val entity4 = createEntity(location = createLocation("src/main/com/sample/Sample2.kt", position = 1 to 1))
+    val entity1 = createIssueEntity(createIssueLocation("src/main/com/sample/Sample1.kt", position = 11 to 5))
+    val entity2 = createIssueEntity(createIssueLocation("src/main/com/sample/Sample1.kt", position = 22 to 2))
+    val entity3 = createIssueEntity(createIssueLocation("src/main/com/sample/Sample1.kt", position = 11 to 2))
+    val entity4 = createIssueEntity(createIssueLocation("src/main/com/sample/Sample2.kt", position = 1 to 1))
 
     return arrayOf(
         createIssue(createRuleInstance("rule_a", "RuleSet1"), entity1),
@@ -215,12 +220,12 @@ private fun issues(): Array<Issue> {
 private val generatedRegex = """^generated\swith.*$""".toRegex(RegexOption.MULTILINE)
 private const val REPLACEMENT = "generated with..."
 
-private fun createReportWithIssues(vararg issues: Issue): Path {
+private fun createReportWithIssues(tempDir: Path, vararg issues: Issue): Path {
     val htmlReport = HtmlOutputReport().apply { init(TestSetupContext()) }
     val detektion = TestDetektion(*issues)
     var result = htmlReport.render(detektion)
     result = generatedRegex.replace(result, REPLACEMENT)
-    val reportPath = createTempFileForTest("report", ".html")
+    val reportPath = tempDir.resolve("report.html")
     reportPath.writeText(result)
     return reportPath
 }

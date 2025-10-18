@@ -1,10 +1,9 @@
 package dev.detekt.generator.collection
 
 import dev.detekt.api.ActiveByDefault
-import dev.detekt.api.DetektVisitor
 import dev.detekt.api.internal.DefaultRuleSetProvider
 import dev.detekt.generator.collection.exception.InvalidDocumentationException
-import dev.detekt.psi.isOverride
+import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtAnnotatedExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCallableReferenceExpression
@@ -15,6 +14,7 @@ import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.KtSuperTypeList
+import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
 import org.jetbrains.kotlin.psi.psiUtil.containingClass
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import dev.detekt.api.Configuration as ConfigAnnotation
@@ -51,7 +51,7 @@ private val SUPPORTED_PROVIDERS = setOf(
     DefaultRuleSetProvider::class.simpleName,
 )
 
-private class RuleSetProviderVisitor : DetektVisitor() {
+private class RuleSetProviderVisitor : KtTreeVisitorVoid() {
     var containsRuleSetProvider = false
     private var name: String = ""
     private var description: String = ""
@@ -101,7 +101,11 @@ private class RuleSetProviderVisitor : DetektVisitor() {
         super.visitProperty(property)
         if (!containsRuleSetProvider) return
 
-        if (property.isOverride() && property.name != null && property.name == PROPERTY_RULE_SET_ID) {
+        if (
+            property.hasModifier(KtTokens.OVERRIDE_KEYWORD) &&
+            property.name != null &&
+            property.name == PROPERTY_RULE_SET_ID
+        ) {
             val initializer = (property.initializer as? KtDotQualifiedExpression)
             val argument = (initializer?.lastChild as? KtCallExpression)?.valueArguments
                 ?.single()
