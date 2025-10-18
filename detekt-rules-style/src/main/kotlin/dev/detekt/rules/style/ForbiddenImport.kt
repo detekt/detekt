@@ -13,7 +13,7 @@ import org.jetbrains.kotlin.psi.KtImportDirective
 /**
  * Reports all imports that are forbidden.
  *
- * This rule allows to set a list of forbidden [imports].
+ * This rule allows to set a list of forbidden [forbiddenImports].
  * This can be used to discourage the use of unstable, experimental or deprecated APIs.
  *
  * <noncompliant>
@@ -27,40 +27,42 @@ class ForbiddenImport(config: Config) : Rule(
         "and hence you might want to mark it as forbidden in order to get warned about the usage."
 ) {
 
-    @Configuration("imports which should not be used")
-    private val imports: List<Forbidden> by config(valuesWithReason()) { list ->
+    @Configuration(
+        "List of imports, specified as glob patterns, that are forbidden. " +
+            "It is recommended to also specify a reason."
+    )
+    private val forbiddenImports: List<Forbidden> by config(valuesWithReason()) { list ->
         list.map { Forbidden(it.value.simplePatternToRegex(), it.reason) }
     }
 
-    @Configuration("reports imports which match the specified regular expression. For example `net.*R`.")
-    private val forbiddenPatterns: Regex by config("", String::toRegex)
+    @Configuration(
+        "List of imports, specified as glob patterns, to explicitly allow. " +
+            "Use this to specify exceptions to the forbidden imports."
+    )
+    private val allowedImports: List<Regex> by config(emptyList<String>()) { list ->
+        list.map { it.simplePatternToRegex() }
+    }
 
     override fun visitImportDirective(importDirective: KtImportDirective) {
         super.visitImportDirective(importDirective)
 
-        val import = importDirective.importedFqName?.asString().orEmpty()
+        val import = importDirective.importedFqName?.asString() ?: return
+        val forbidden = forbiddenImports.find { it.import.matches(import) } ?: return
 
-        val forbidden = imports.find { it.import.matches(import) }
-        val reason = if (forbidden != null) {
-            if (forbidden.reason != null) {
-                "The import `$import` has been forbidden: ${forbidden.reason}"
-            } else {
-                defaultReason(import)
-            }
-        } else {
-            if (containsForbiddenPattern(import)) defaultReason(import) else null
+        if (importIsExplicitlyAllowed(import)) {
+            return
         }
+        val reason = forbidden.reason?.let { "The import `$import` has been forbidden: ${forbidden.reason}" }
+            ?: defaultReason(import)
 
-        if (reason != null) {
-            report(Finding(Entity.from(importDirective), reason))
-        }
+        report(Finding(Entity.from(importDirective), reason))
     }
 
     private fun defaultReason(forbiddenImport: String): String =
         "The import `$forbiddenImport` has been forbidden in the detekt config."
 
-    private fun containsForbiddenPattern(import: String): Boolean =
-        forbiddenPatterns.pattern.isNotEmpty() && forbiddenPatterns.containsMatchIn(import)
+    private fun importIsExplicitlyAllowed(import: String): Boolean =
+        allowedImports.any { it.matches(import) }
 }
 
 private data class Forbidden(val import: Regex, val reason: String?)
