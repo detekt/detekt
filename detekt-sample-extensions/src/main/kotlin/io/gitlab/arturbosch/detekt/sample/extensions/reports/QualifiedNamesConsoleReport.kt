@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.sample.extensions.reports
 
-import io.gitlab.arturbosch.detekt.api.ConsoleReport
-import io.gitlab.arturbosch.detekt.api.Detektion
+import dev.detekt.api.ConsoleReport
+import dev.detekt.api.Detektion
 
-class QualifiedNamesConsoleReport : ConsoleReport() {
-
+class QualifiedNamesConsoleReport : ConsoleReport {
+    override val id = "QualifiedNamesConsoleReport"
     override fun render(detektion: Detektion): String? = qualifiedNamesReport(detektion)
 }
