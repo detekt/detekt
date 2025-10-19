@@ -9,9 +9,29 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.condition.EnabledIf
+import org.junit.jupiter.params.Parameter
+import org.junit.jupiter.params.ParameterizedClass
+import org.junit.jupiter.params.provider.CsvSource
 
 @EnabledIf("dev.detekt.gradle.DetektAndroidSpecKt#isAndroidSdkInstalled")
+@ParameterizedClass
+@CsvSource(
+    // android.builtInKotlin, useBuiltInKotlinPlugin
+    "false, false", // Opt out of AGP built in Kotlin https://developer.android.com/build/migrate-to-built-in-kotlin#opt-out-of-built-in-kotlin
+    "true, false", // Default in AGP 9 - enable AGP built in Kotlin https://developer.android.com/build/migrate-to-built-in-kotlin#enable-built-in-kotlin
+    "false, true", // Enable AGP built in Kotlin with module-by-module migration plugin https://developer.android.com/build/migrate-to-built-in-kotlin#module-by-module-migration
+    "true, true", // Enable AGP built in Kotlin using both plugin and project-wide property
+)
 class DetektAndroidSpec {
+
+    @Parameter(0)
+    var builtInKotlinPropertyEnabled: String = "no-op"
+
+    @Parameter(1)
+    var applyBuiltInKotlinPlugin: String = "no-op"
+
+    val agpBuiltInKotlinUsed
+        get() = builtInKotlinPropertyEnabled.toBooleanStrict() || applyBuiltInKotlinPlugin.toBooleanStrict()
 
     @Nested
     inner class `configures android tasks for android application` {
@@ -23,7 +43,7 @@ class DetektAndroidSpec {
                 numberOfSourceFilesPerSourceDir = 1,
                 numberOfFindings = 1,
                 buildFileContent = joinGradleBlocks(
-                    APP_PLUGIN_BLOCK,
+                    appPluginBlock,
                     ANDROID_BLOCK,
                     DETEKT_REPORTS_BLOCK,
                 ),
@@ -113,7 +133,7 @@ class DetektAndroidSpec {
                 numberOfSourceFilesPerSourceDir = 1,
                 numberOfFindings = 1,
                 buildFileContent = joinGradleBlocks(
-                    APP_PLUGIN_BLOCK,
+                    appPluginBlock,
                     ANDROID_BLOCK,
                     DETEKT_REPORTS_BLOCK,
                 ),
@@ -158,7 +178,7 @@ class DetektAndroidSpec {
                 numberOfSourceFilesPerSourceDir = 1,
                 numberOfFindings = 1,
                 buildFileContent = joinGradleBlocks(
-                    LIB_PLUGIN_BLOCK,
+                    libPluginBlock,
                     ANDROID_BLOCK,
                     DETEKT_REPORTS_BLOCK,
                 ),
@@ -261,7 +281,7 @@ class DetektAndroidSpec {
                 numberOfSourceFilesPerSourceDir = 1,
                 numberOfFindings = 1,
                 buildFileContent = joinGradleBlocks(
-                    LIB_PLUGIN_BLOCK,
+                    libPluginBlock,
                     ANDROID_BLOCK,
                     DETEKT_REPORTS_BLOCK,
                     """
@@ -344,7 +364,7 @@ class DetektAndroidSpec {
                 numberOfSourceFilesPerSourceDir = 1,
                 numberOfFindings = 1,
                 buildFileContent = joinGradleBlocks(
-                    LIB_PLUGIN_BLOCK,
+                    libPluginBlock,
                     ANDROID_BLOCK_WITH_FLAVOR,
                     DETEKT_REPORTS_BLOCK,
                 ),
@@ -397,7 +417,7 @@ class DetektAndroidSpec {
                 numberOfSourceFilesPerSourceDir = 1,
                 numberOfFindings = 1,
                 buildFileContent = joinGradleBlocks(
-                    LIB_PLUGIN_BLOCK,
+                    libPluginBlock,
                     ANDROID_BLOCK_WITH_FLAVOR,
                     """
                         detekt {
@@ -456,7 +476,7 @@ class DetektAndroidSpec {
                 numberOfSourceFilesPerSourceDir = 1,
                 numberOfFindings = 1,
                 buildFileContent = joinGradleBlocks(
-                    LIB_PLUGIN_BLOCK,
+                    libPluginBlock,
                     ANDROID_BLOCK_WITH_FLAVOR,
                     """
                         detekt {
@@ -517,7 +537,7 @@ class DetektAndroidSpec {
                 numberOfSourceFilesPerSourceDir = 1,
                 numberOfFindings = 1,
                 buildFileContent = joinGradleBlocks(
-                    LIB_PLUGIN_BLOCK,
+                    libPluginBlock,
                     ANDROID_BLOCK_WITH_FLAVOR,
                     """
                         detekt {
@@ -578,7 +598,7 @@ class DetektAndroidSpec {
                     numberOfSourceFilesPerSourceDir = 0,
                     numberOfFindings = 0,
                     buildFileContent = joinGradleBlocks(
-                        APP_PLUGIN_BLOCK,
+                        appPluginBlock,
                         ANDROID_BLOCK_WITH_VIEW_BINDING,
                     ),
                     srcDirs = listOf("src/main/java"),
@@ -609,6 +629,58 @@ class DetektAndroidSpec {
             }
         }
     }
+
+    private val appPluginBlock: String
+        @Language("gradle.kts")
+        get() = """
+            plugins {
+                id("com.android.application")
+                ${if (!agpBuiltInKotlinUsed) """kotlin("android")""" else "" }
+                ${if (applyBuiltInKotlinPlugin.toBooleanStrict()) """id("com.android.experimental.built-in-kotlin")""" else "" }
+                id("dev.detekt")
+            }
+            kotlin {
+                compilerOptions {
+                    jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8
+                }
+            }
+        """.trimIndent()
+
+    private val libPluginBlock: String
+        @Language("gradle.kts")
+        get() = """
+            plugins {
+                id("com.android.library")
+                ${if (!agpBuiltInKotlinUsed) """kotlin("android")""" else "" }
+                ${if (applyBuiltInKotlinPlugin.toBooleanStrict()) """id("com.android.experimental.built-in-kotlin")""" else "" }
+                id("dev.detekt")
+            }
+            kotlin {
+                compilerOptions {
+                    jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8
+                }
+            }
+        """.trimIndent()
+
+    private fun createGradleRunnerAndSetupProject(projectLayout: ProjectLayout, dryRun: Boolean = true) =
+        DslGradleRunner(
+            projectLayout = projectLayout,
+            buildFileName = "build.gradle.kts",
+            gradleProperties = mapOf(
+                "android.builtInKotlin" to builtInKotlinPropertyEnabled,
+                "android.newDsl" to agpBuiltInKotlinUsed.toString(),
+            ),
+            settingsContent = """
+            dependencyResolutionManagement {
+                repositories {
+                    mavenLocal()
+                    mavenCentral()
+                    google()
+                }
+            }
+            """.trimIndent(),
+            dryRun = dryRun,
+        ).also { it.setupProject() }
 }
 
 /**
@@ -622,34 +694,6 @@ internal fun isAndroidSdkInstalled() =
 internal val manifestContent = """
     <!--suppress XmlUnusedNamespaceDeclaration -->
     <manifest xmlns:android="http://schemas.android.com/apk/res/android"/>
-""".trimIndent()
-
-@Language("gradle.kts")
-private val APP_PLUGIN_BLOCK = """
-    plugins {
-        id("com.android.application")
-        kotlin("android")
-        id("dev.detekt")
-    }
-    kotlin {
-        compilerOptions {
-            jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8
-        }
-    }
-""".trimIndent()
-
-@Language("gradle.kts")
-private val LIB_PLUGIN_BLOCK = """
-    plugins {
-        id("com.android.library")
-        kotlin("android")
-        id("dev.detekt")
-    }
-    kotlin {
-        compilerOptions {
-            jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8
-        }
-    }
 """.trimIndent()
 
 @Language("gradle.kts")
@@ -746,19 +790,3 @@ private val SAMPLE_ACTIVITY_USING_VIEW_BINDING = """
     }
     
 """.trimIndent() // Last line to prevent NewLineAtEndOfFile.
-
-private fun createGradleRunnerAndSetupProject(projectLayout: ProjectLayout, dryRun: Boolean = true) =
-    DslGradleRunner(
-        projectLayout = projectLayout,
-        buildFileName = "build.gradle.kts",
-        settingsContent = """
-            dependencyResolutionManagement {
-                repositories {
-                    mavenLocal()
-                    mavenCentral()
-                    google()
-                }
-            }
-        """.trimIndent(),
-        dryRun = dryRun,
-    ).also { it.setupProject() }
