@@ -1,4 +1,5 @@
 [versions]
+agp = "9.0.0-alpha13"
 coroutines = "1.10.2"
 jacoco = "0.8.14"
 junit = "6.0.0"
@@ -12,7 +13,9 @@ java-compile-toolchain = "17"
 [libraries]
 # This version of AGP is used for testing and should be updated when new AGP versions are released to ensure detekt's
 # Gradle plugin remains compatible.
-android-gradle-plugin = { module = "com.android.tools.build:gradle", version = "9.0.0-alpha13" }
+android-gradle-plugin = { module = "com.android.tools.build:gradle", version.ref = "agp" }
+android-gradle-builtInKotlin-plugin = { module = "com.android.experimental.built-in-kotlin:com.android.experimental.built-in-kotlin.gradle.plugin", version.ref = "agp" }
+
 binaryCompatibilityValidator-plugin = { module = "org.jetbrains.kotlinx.binary-compatibility-validator:org.jetbrains.kotlinx.binary-compatibility-validator.gradle.plugin", version = "0.18.1" }
 breadmoirai-githubRelease-plugin = { module = "com.github.breadmoirai:github-release", version = "2.5.2" }
 develocity-plugin = { module = "com.gradle.develocity:com.gradle.develocity.gradle.plugin", version = "4.2.2" }
