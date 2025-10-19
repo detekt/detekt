@@ -65,6 +65,21 @@ class DetektPlugin : Plugin<Project> {
             DetektAndroidCompilations.registerTasks(project, extension)
             DetektAndroidCompilations.linkTasks(project, extension)
         }
+
+        plugins.withId("com.android.experimental.built-in-kotlin") {
+            DetektAndroidCompilations.registerTasks(project, extension)
+            DetektAndroidCompilations.linkTasks(project, extension)
+        }
+
+//        plugins.withId("com.android.base") {
+//            val androidComponentsExtension = extensions.getByType(AndroidComponentsExtension::class.java)
+//            val builtInKotlin = providers.gradleProperty("android.builtInKotlin").getOrElse("true").toBooleanStrict()
+//
+//            if (androidComponentsExtension.pluginVersion >= AndroidPluginVersion(9, 0).alpha(3) && builtInKotlin) {
+//                DetektAndroidCompilations.registerTasks(project, extension)
+//                DetektAndroidCompilations.linkTasks(project, extension)
+//            }
+//        }
     }
 
     private fun Project.registerDetektPlainTask(extension: DetektExtension) {

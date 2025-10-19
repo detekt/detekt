@@ -9,9 +9,26 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.condition.EnabledIf
+import org.junit.jupiter.params.Parameter
+import org.junit.jupiter.params.ParameterizedClass
+import org.junit.jupiter.params.provider.CsvSource
 
 @EnabledIf("dev.detekt.gradle.DetektAndroidSpecKt#isAndroidSdkInstalled")
+@ParameterizedClass
+@CsvSource(
+    // android.builtInKotlin, android.newDsl
+    "false, false", // Uses Kotlin Android plugin and old DSL
+    "true, false", // Uses AGP build in Kotlin support available from AGP 9.x with old DSL
+    "true, true", // Uses AGP build in Kotlin support available from AGP 9.x with new DSL
+    // "false, true" - invalid, see https://youtrack.jetbrains.com/projects/KT/issues/KT-80785
+)
 class DetektAndroidSpec {
+
+    @Parameter(0)
+    var builtInKotlin: String = "no-op"
+
+    @Parameter(1)
+    var newDsl: String = "no-op"
 
     @Nested
     inner class `configures android tasks for android application` {
@@ -609,6 +626,58 @@ class DetektAndroidSpec {
             }
         }
     }
+
+    private fun createGradleRunnerAndSetupProject(
+        projectLayout: ProjectLayout,
+        dryRun: Boolean = true,
+    ) = DslGradleRunner(
+        projectLayout = projectLayout,
+        buildFileName = "build.gradle.kts",
+        gradleProperties = mapOf(
+            "android.builtInKotlin" to builtInKotlin,
+            "android.newDsl" to newDsl,
+        ),
+        settingsContent = """
+        dependencyResolutionManagement {
+            repositories {
+                mavenLocal()
+                mavenCentral()
+                google()
+            }
+        }
+    """.trimIndent(),
+        dryRun = dryRun,
+    ).also { it.setupProject() }
+
+    private val APP_PLUGIN_BLOCK: String
+        @Language("gradle.kts")
+        get() = """
+            plugins {
+                id("com.android.application")
+                ${if (!builtInKotlin.toBooleanStrict()) { """kotlin("android")""" } else """id("com.android.experimental.built-in-kotlin")""" }
+                id("dev.detekt")
+            }
+            kotlin {
+                compilerOptions {
+                    jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8
+                }
+            }
+        """.trimIndent()
+
+    private val LIB_PLUGIN_BLOCK: String
+        @Language("gradle.kts")
+        get() = """
+            plugins {
+                id("com.android.library")
+                ${if (!builtInKotlin.toBooleanStrict()) { """kotlin("android")""" } else """id("com.android.experimental.built-in-kotlin")""" }
+                id("dev.detekt")
+            }
+            kotlin {
+                compilerOptions {
+                    jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8
+                }
+            }
+        """.trimIndent()
 }
 
 /**
@@ -622,34 +691,6 @@ internal fun isAndroidSdkInstalled() =
 internal val manifestContent = """
     <!--suppress XmlUnusedNamespaceDeclaration -->
     <manifest xmlns:android="http://schemas.android.com/apk/res/android"/>
-""".trimIndent()
-
-@Language("gradle.kts")
-private val APP_PLUGIN_BLOCK = """
-    plugins {
-        id("com.android.application")
-        kotlin("android")
-        id("dev.detekt")
-    }
-    kotlin {
-        compilerOptions {
-            jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8
-        }
-    }
-""".trimIndent()
-
-@Language("gradle.kts")
-private val LIB_PLUGIN_BLOCK = """
-    plugins {
-        id("com.android.library")
-        kotlin("android")
-        id("dev.detekt")
-    }
-    kotlin {
-        compilerOptions {
-            jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8
-        }
-    }
 """.trimIndent()
 
 @Language("gradle.kts")
@@ -746,21 +787,3 @@ private val SAMPLE_ACTIVITY_USING_VIEW_BINDING = """
     }
     
 """.trimIndent() // Last line to prevent NewLineAtEndOfFile.
-
-private fun createGradleRunnerAndSetupProject(
-    projectLayout: ProjectLayout,
-    dryRun: Boolean = true,
-) = DslGradleRunner(
-    projectLayout = projectLayout,
-    buildFileName = "build.gradle.kts",
-    settingsContent = """
-        dependencyResolutionManagement {
-            repositories {
-                mavenLocal()
-                mavenCentral()
-                google()
-            }
-        }
-    """.trimIndent(),
-    dryRun = dryRun,
-).also { it.setupProject() }
