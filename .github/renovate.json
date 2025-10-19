@@ -5,7 +5,8 @@
     "dependencies"
   ],
   "ignoreDeps": [
-    "com.android.tools.build:gradle-api"
+    "com.android.tools.build:gradle-api",
+    "org.junit.jupiter:junit-jupiter-api"
   ],
   "extends": [
     "config:recommended",
@@ -18,7 +19,7 @@
         "https://repo.maven.apache.org/maven2",
         "https://plugins.gradle.org/m2/",
         "https://dl.google.com/android/maven2/"
-      ],
+      ]
     },
     {
       "groupName": "Develocity",

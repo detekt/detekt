@@ -1,19 +1,19 @@
 package io.gitlab.arturbosch.detekt.sample.extensions
 
-import io.gitlab.arturbosch.detekt.api.Config
+import dev.detekt.api.Config
+import dev.detekt.test.assertj.assertThat
+import dev.detekt.test.lint
 import io.gitlab.arturbosch.detekt.sample.extensions.rules.TooManyFunctions
-import io.gitlab.arturbosch.detekt.test.lint
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class TooManyFunctionsSpec {
-
     private val subject = TooManyFunctions(Config.empty)
 
     @Test
     fun `it should find one file with too many functions`() {
         val findings = subject.lint(code)
-        assertThat(findings).hasSize(1)
+        assertThat(findings).singleElement()
+            .hasMessage("The file Test.kt has 16 function declarations. Threshold is specified with 10.")
     }
 }
 
