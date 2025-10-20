@@ -7,6 +7,9 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.api.config
+import dev.detekt.api.valuesWithReason
+import dev.detekt.psi.FunctionMatcher
+import dev.detekt.psi.FunctionMatcher.Companion.fromFunctionSignature
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
@@ -39,6 +42,26 @@ class NamedArguments(config: Config) :
     @Configuration("The allowed number of arguments for a function.")
     private val allowedArguments: Int by config(defaultValue = 3)
 
+    @Configuration(
+        "List of fully qualified method signatures for which this rule be ignored " +
+            "Methods can be defined without full signature (i.e. `java.time.LocalDate.now`) which will report " +
+            "calls of all methods with this name or with full signature " +
+            "(i.e. `java.time.LocalDate(java.time.Clock)`) which would report only call " +
+            "with this concrete signature. If you want to add an extension function like " +
+            "`fun String.hello(a: Int)` you should add the receiver parameter as the first parameter like this: " +
+            "`hello(kotlin.String, kotlin.Int)`. To add constructor calls you need to define them with `<init>`, " +
+            "for example `java.util.Date.<init>`. To add calls involving type parameters, omit them, for example " +
+            "`fun hello(args: Array<Any>)` is referred to as simply `hello(kotlin.Array)`. To add calls " +
+            "involving varargs for example `fun hello(vararg args: String)` you need to define it like " +
+            "`hello(vararg String)`. To add methods from the companion object reference the Companion class, for " +
+            "example as `TestClass.Companion.hello()` (even if it is marked `@JvmStatic`)."
+    )
+    private val ignoreMethods: List<ForbiddenMethod> by config(
+        valuesWithReason()
+    ) { list ->
+        list.map { ForbiddenMethod(fromFunctionSignature(it.value), it.reason) }
+    }
+
     @Configuration("ignores when argument values are the same as the parameter names")
     private val ignoreArgumentsMatchingNames: Boolean by config(defaultValue = false)
 
@@ -57,6 +80,7 @@ class NamedArguments(config: Config) :
     private fun KtCallExpression.canNameArguments(): Boolean =
         analyze(this) {
             val functionCall = resolveToCall()?.singleFunctionCallOrNull() ?: return false
+            if (ignoreMethods.any { it.value.match(functionCall.symbol) }) return false
             if (!functionCall.symbol.hasStableParameterNames) return false
 
             val unnamedArguments = valueArguments.mapNotNull { argument ->
@@ -75,4 +99,6 @@ class NamedArguments(config: Config) :
                 unnamedArguments.count { (argument, _) -> argument.isSpread } <= 1 &&
                 unnamedArguments.all { (argument, parameter) -> argument.isSpread || !parameter.symbol.isVararg }
         }
+
+    internal data class ForbiddenMethod(val value: FunctionMatcher, val reason: String?)
 }
