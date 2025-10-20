@@ -16,13 +16,13 @@ import org.jetbrains.kotlin.psi.KtProperty
  * name. If this property is inside a bigger class, it makes sense to refactor and split up the class. This can
  * increase readability and make the documentation obsolete.
  */
-class CommentOverPrivateProperty(config: Config) : Rule(
+class DocumentationOverPrivateProperty(config: Config) : Rule(
     config,
     "Private properties should be named in a self-explanatory manner without the need for a  comment."
 ) {
 
     override fun visitProperty(property: KtProperty) {
-        if (property.hasCommentInPrivateMember()) {
+        if (property.hasKDocInPrivateMember()) {
             report(Finding(Entity.atName(property), description))
         }
     }
