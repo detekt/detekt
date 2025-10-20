@@ -230,6 +230,16 @@ internal class RuleSetConfigPrinterTest {
                 """.trimIndent()
                 assertThat(actual).isEqualTo(expected)
             }
+
+            @Test
+            fun `android default values`() {
+                val given = configurationTemplate.copy(defaultAndroidValue = DefaultValue.of(2))
+                val actual = yaml { printConfiguration(given) }
+                val expected = """
+                    # name: If the 'code_style' ruleset property is set to 'android', the default is '2', otherwise '1'.
+                """.trimIndent()
+                assertThat(actual).isEqualTo(expected)
+            }
         }
     }
 }
