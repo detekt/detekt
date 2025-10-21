@@ -1,9 +1,7 @@
 package dev.detekt.rules.performance
 
 import dev.detekt.api.Config
-import dev.detekt.test.junit.KotlinCoreEnvironmentTest
-import dev.detekt.test.lintWithContext
-import dev.detekt.test.utils.KotlinEnvironmentContainer
+import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -11,8 +9,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 
-@KotlinCoreEnvironmentTest
-class UnnecessaryInitOnArraySpec(val env: KotlinEnvironmentContainer) {
+class UnnecessaryInitOnArraySpec {
 
     val subject = UnnecessaryInitOnArray(Config.empty)
 
@@ -20,21 +17,21 @@ class UnnecessaryInitOnArraySpec(val env: KotlinEnvironmentContainer) {
     @MethodSource("defaultValueTestCases")
     fun casesWithDefaultValues(arrayType: String, defaultValue: String) {
         val code = "val a = $arrayType(10) { $defaultValue }"
-        assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @ParameterizedTest(name = "does not report {0} without lambda")
     @MethodSource("arrayTypes")
     fun casesWithoutInit(arrayType: String) {
         val code = "val a = $arrayType(10)"
-        assertThat(subject.lintWithContext(env, code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @ParameterizedTest(name = "does not report {0} with lambda returning non-default value")
     @MethodSource("nonDefaultValueTestCases")
     fun casesWithoutDefaultValues(arrayType: String, nonDefaultValue: String) {
         val code = "val a = $arrayType(10) { $nonDefaultValue }"
-        assertThat(subject.lintWithContext(env, code)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Nested
@@ -47,7 +44,7 @@ class UnnecessaryInitOnArraySpec(val env: KotlinEnvironmentContainer) {
                     0
                 }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -59,7 +56,7 @@ class UnnecessaryInitOnArraySpec(val env: KotlinEnvironmentContainer) {
                     0
                 }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -69,7 +66,7 @@ class UnnecessaryInitOnArraySpec(val env: KotlinEnvironmentContainer) {
                     println(""); 0
                 }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -81,7 +78,7 @@ class UnnecessaryInitOnArraySpec(val env: KotlinEnvironmentContainer) {
                     0
                 }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
     }
 
@@ -92,7 +89,7 @@ class UnnecessaryInitOnArraySpec(val env: KotlinEnvironmentContainer) {
             val code = """
                 val a = ArrayList<Int>(10)
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -100,7 +97,7 @@ class UnnecessaryInitOnArraySpec(val env: KotlinEnvironmentContainer) {
             val code = """
                 val a = IntArray(10) { it }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -108,7 +105,7 @@ class UnnecessaryInitOnArraySpec(val env: KotlinEnvironmentContainer) {
             val code = """
                 val a = IntArray(10) { it * 2 }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -117,7 +114,7 @@ class UnnecessaryInitOnArraySpec(val env: KotlinEnvironmentContainer) {
                 val defaultValue = 0
                 val a = IntArray(10) { defaultValue }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
     }
 
@@ -128,7 +125,7 @@ class UnnecessaryInitOnArraySpec(val env: KotlinEnvironmentContainer) {
             val b = FloatArray(10) { 0F }
             val c = BooleanArray(10) { false }
         """.trimIndent()
-        assertThat(subject.lintWithContext(env, code)).hasSize(3)
+        assertThat(subject.lint(code)).hasSize(3)
     }
 
     @Test
@@ -138,7 +135,7 @@ class UnnecessaryInitOnArraySpec(val env: KotlinEnvironmentContainer) {
                 return IntArray(10) { 0 }
             }
         """.trimIndent()
-        assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -148,7 +145,7 @@ class UnnecessaryInitOnArraySpec(val env: KotlinEnvironmentContainer) {
                 val array = IntArray(10) { 0 }
             }
         """.trimIndent()
-        assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     companion object {

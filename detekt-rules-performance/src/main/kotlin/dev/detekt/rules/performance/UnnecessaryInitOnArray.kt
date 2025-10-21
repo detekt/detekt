@@ -3,15 +3,10 @@ package dev.detekt.rules.performance
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
-import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
-import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
-import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
-import org.jetbrains.kotlin.analysis.api.resolution.symbol
-import org.jetbrains.kotlin.analysis.api.symbols.name
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtLambdaExpression
+import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 
 /**
  * Flags array constructors that use lambda builders returning the same default value when
@@ -49,8 +44,7 @@ class UnnecessaryInitOnArray(config: Config) :
         config,
         "Flags array constructors that use lambda builders returning the same default value when the " +
             "default initialization would produce the same result."
-    ),
-    RequiresAnalysisApi {
+    ) {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
@@ -71,12 +65,9 @@ class UnnecessaryInitOnArray(config: Config) :
         }
     }
 
-    private fun getArrayClassNameOrNull(expression: KtCallExpression): String? = analyze(expression) {
-        val constructorCall =
-            expression.resolveToCall()?.successfulCallOrNull<KaCallableMemberCall<*, *>>() ?: return null
-        val constructorSymbol = constructorCall.symbol
-        val className = (constructorSymbol.name ?: constructorSymbol.containingSymbol?.name)?.asString()
-        return@analyze if (className in arrayTypeDefaultPatterns.keys) {
+    private fun getArrayClassNameOrNull(expression: KtCallExpression): String? {
+        val className = expression.getCallNameExpression()?.getReferencedName()
+        return if (className in arrayTypeDefaultPatterns.keys) {
             className
         } else {
             null
