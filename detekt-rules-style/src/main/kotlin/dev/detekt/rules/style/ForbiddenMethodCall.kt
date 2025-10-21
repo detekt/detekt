@@ -16,7 +16,9 @@ import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaCompoundAccessCall
 import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaPropertyAccessorSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaPropertySymbol
+import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCallableReferenceExpression
@@ -25,7 +27,6 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
 import org.jetbrains.kotlin.psi.KtPostfixExpression
 import org.jetbrains.kotlin.psi.KtPrefixExpression
-import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.isDotSelector
 import org.jetbrains.kotlin.resolve.calls.util.asCallableReferenceExpression
 import org.jetbrains.kotlin.resolve.calls.util.getCalleeExpressionIfAny
@@ -154,9 +155,13 @@ class ForbiddenMethodCall(config: Config) :
     internal data class ForbiddenMethod(val value: FunctionMatcher, val reason: String?)
 }
 
-private fun getPropertyAccessorSymbol(appliedSymbol: KaPropertySymbol, expression: KtExpression) =
-    when (expression.parent) {
-        is KtBinaryExpression -> appliedSymbol.setter
-        is KtProperty -> appliedSymbol.getter
-        else -> null
+private fun getPropertyAccessorSymbol(
+    appliedSymbol: KaPropertySymbol,
+    expression: KtExpression,
+): KaPropertyAccessorSymbol? {
+    val parent = expression.parent
+    return when {
+        parent is KtBinaryExpression && parent.operationToken == KtTokens.EQ -> appliedSymbol.setter
+        else -> appliedSymbol.getter
     }
+}
