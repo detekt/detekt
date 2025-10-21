@@ -16,7 +16,7 @@ plugins {
     // We use this published version of the detekt plugin to self analyse this project.
     id("dev.detekt") version "2.0.0-alpha.0"
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.18.1"
-    id("org.jetbrains.dokka") version "2.0.0"
+    id("org.jetbrains.dokka") version "2.1.0"
     id("signing")
     id("com.github.gmazzo.buildconfig") version "5.7.0"
     id("io.github.gradle-nexus.publish-plugin") version "2.0.0"
@@ -55,9 +55,7 @@ dokka {
     }
 
     dokkaSourceSets.configureEach {
-        // Using `set` instead of simple property assignment to work around this Gradle 9 incompatibility: https://github.com/Kotlin/dokka/issues/4096
-        apiVersion.set("1.4")
-        modulePath = "detekt-gradle-plugin"
+        apiVersion = "1.4"
 
         externalDocumentationLinks {
             create("gradle") {
@@ -225,9 +223,11 @@ tasks {
     }
 
     withType<Detekt>().configureEach {
+        jvmTarget = "1.8" // Remove when detekt updated to 2.0.0-alpha.1 or higher (see #8755)
         exclude("dev/detekt/detekt_gradle_plugin/BuildConfig.kt")
     }
     withType<DetektCreateBaselineTask>().configureEach {
+        jvmTarget = "1.8" // Remove when detekt updated to 2.0.0-alpha.1 or higher (see #8755)
         exclude("dev/detekt/detekt_gradle_plugin/BuildConfig.kt")
     }
 

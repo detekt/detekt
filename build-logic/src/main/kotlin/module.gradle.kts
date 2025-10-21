@@ -57,6 +57,7 @@ tasks.withType<Test>().configureEach {
 }
 
 val jvmTargetVersion = versionCatalog.findVersion("jvm-target").get().requiredVersion
+val jvmMajorVersion = jvmTargetVersion.toIntOrNull() ?: 8
 
 kotlin {
     compilerOptions {
@@ -85,6 +86,29 @@ testing {
     suites {
         withType<JvmTestSuite> {
             useJUnitJupiter(versionCatalog.findVersion("junit").get().requiredVersion)
+        }
+    }
+}
+
+// Pretend JUnit targets JVM 8. Required while detekt itself targets JVM 8 while JUnit 6 targets JVM 17.
+dependencies {
+    components {
+        setOf(
+            "org.junit.jupiter:junit-jupiter",
+            "org.junit.jupiter:junit-jupiter-api",
+            "org.junit.jupiter:junit-jupiter-engine",
+            "org.junit.jupiter:junit-jupiter-params",
+            "org.junit.platform:junit-platform-commons",
+            "org.junit.platform:junit-platform-engine",
+            "org.junit.platform:junit-platform-launcher",
+        ).forEach {
+            withModule(it) {
+                allVariants {
+                    attributes {
+                        attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, jvmMajorVersion)
+                    }
+                }
+            }
         }
     }
 }

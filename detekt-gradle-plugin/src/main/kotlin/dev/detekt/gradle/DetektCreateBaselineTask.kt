@@ -68,7 +68,7 @@ abstract class DetektCreateBaselineTask @Inject constructor(
 
     @get:InputFiles
     @get:Optional
-    @get:PathSensitive(PathSensitivity.RELATIVE)
+    @get:PathSensitive(PathSensitivity.NONE)
     abstract val config: ConfigurableFileCollection
 
     @get:Classpath
