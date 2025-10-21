@@ -4,14 +4,19 @@ import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.symbols.KaCallableSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaConstructorSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaFunctionSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaPropertyGetterSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaPropertySetterSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaPropertySymbol
 import org.jetbrains.kotlin.analysis.api.types.KaType
 import org.jetbrains.kotlin.analysis.api.types.symbol
+import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 sealed class FunctionMatcher {
 
     abstract fun match(function: KtNamedFunction, fullAnalysis: Boolean): Boolean
 
+    abstract fun match(propertySymbol: KaPropertySymbol?, symbol: KaCallableSymbol): Boolean
     abstract fun match(symbol: KaCallableSymbol): Boolean
 
     internal data class NameOnly(
@@ -21,6 +26,18 @@ sealed class FunctionMatcher {
         override fun match(function: KtNamedFunction, fullAnalysis: Boolean): Boolean =
             function.name == fullyQualifiedName ||
                 function.fqName?.asString() == fullyQualifiedName
+
+        override fun match(
+            propertySymbol: KaPropertySymbol?,
+            symbol: KaCallableSymbol,
+        ): Boolean = if (propertySymbol != null) {
+            getNameForGetterOrSetter(
+                propertySymbol,
+                symbol
+            ) == fullyQualifiedName
+        } else {
+            match(symbol)
+        }
 
         override fun match(symbol: KaCallableSymbol): Boolean = symbol.asFqNameString() == fullyQualifiedName
 
@@ -54,10 +71,28 @@ sealed class FunctionMatcher {
             return encounteredParameters == parameters
         }
 
+        override fun match(
+            propertySymbol: KaPropertySymbol?,
+            symbol: KaCallableSymbol,
+        ): Boolean = if (propertySymbol != null) {
+            getNameForGetterOrSetter(
+                propertySymbol,
+                symbol
+            ) == fullyQualifiedName
+        } else {
+            match(symbol)
+        }
+
         override fun match(symbol: KaCallableSymbol): Boolean {
             if (symbol.asFqNameString() != fullyQualifiedName) return false
 
             symbol as KaFunctionSymbol
+            val encounteredParamTypes = getParams(symbol)
+
+            return encounteredParamTypes == parameters
+        }
+
+        private fun getParams(symbol: KaFunctionSymbol): List<String?> {
             val encounteredParamTypes = buildList {
                 addIfNotNull(symbol.receiverParameter?.returnType?.asFqNameString())
                 addAll(
@@ -70,8 +105,7 @@ sealed class FunctionMatcher {
                     }
                 )
             }
-
-            return encounteredParamTypes == parameters
+            return encounteredParamTypes
         }
 
         override fun toString(): String = "$fullyQualifiedName(${parameters.joinToString()})"
@@ -94,6 +128,33 @@ sealed class FunctionMatcher {
                 }
             } catch (ex: Exception) {
                 throw IllegalStateException("$methodSignature doesn't match a method signature", ex)
+            }
+        }
+
+        @Suppress("ReturnCount")
+        fun getNameForGetterOrSetter(propertySymbol: KaPropertySymbol, symbol: KaCallableSymbol): String? {
+            if (symbol.callableId != null) {
+                // if we have callable id the don't need to construct custom name
+                return symbol.asFqNameString()
+            }
+            val callableId = propertySymbol.callableId ?: return null
+            val propertyName = callableId.callableName.asString()
+            if (propertyName.isEmpty()) return null
+            val capitalPropertyName = propertyName[0].uppercaseChar() + propertyName.substring(1)
+            // many cases and some are experimental
+            @Suppress("ElseCaseInsteadOfExhaustiveWhen")
+            return when (symbol) {
+                is KaPropertyGetterSymbol -> {
+                    callableId.copy(Name.identifier("get$capitalPropertyName")).asSingleFqName().asString()
+                }
+
+                is KaPropertySetterSymbol -> {
+                    callableId.copy(Name.identifier("set$capitalPropertyName")).asSingleFqName().asString()
+                }
+
+                else -> {
+                    null
+                }
             }
         }
     }

@@ -14,6 +14,8 @@ import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.resolution.KaCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaCompoundAccessCall
+import org.jetbrains.kotlin.analysis.api.resolution.KaCompoundArrayAccessCall
+import org.jetbrains.kotlin.analysis.api.resolution.KaCompoundVariableAccessCall
 import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaPropertyAccessorSymbol
@@ -115,32 +117,45 @@ class ForbiddenMethodCall(config: Config) :
         check(expression.callableReference)
     }
 
+    @Suppress("CyclomaticComplexMethod", "ComplexCondition")
     private fun check(expression: KtExpression) {
         analyze(expression) {
             val call = expression.resolveToCall()
                 ?: expression.asCallableReferenceExpression()?.resolveToCall()
                 ?: return
 
+            val successfulCall = call.successfulCallOrNull<KaCall>() ?: return
+
             sequence {
-                val symbol = when (val symbol = call.successfulCallOrNull<KaCall>()) {
+                val symbol = when (successfulCall) {
                     is KaCallableMemberCall<*, *> -> {
-                        val appliedSymbol = symbol.partiallyAppliedSymbol.symbol
-                        if (appliedSymbol is KaPropertySymbol && expression !is KtOperationReferenceExpression) {
-                            getPropertyAccessorSymbol(appliedSymbol, expression)
-                        } else {
-                            appliedSymbol
+                        val expressionSymbol = successfulCall.partiallyAppliedSymbol.symbol
+                        sequenceOf(expressionSymbol).plus(expressionSymbol.allOverriddenSymbols).map {
+                            if (
+                                it is KaPropertySymbol &&
+                                (it.hasSetter || it.hasGetter) &&
+                                expression !is KtOperationReferenceExpression
+                            ) {
+                                it to getPropertyAccessorSymbol(it, expression)
+                            } else {
+                                null to it
+                            }
                         }
                     }
 
-                    is KaCompoundAccessCall -> symbol.compoundOperation.operationPartiallyAppliedSymbol.symbol
+                    is KaCompoundAccessCall -> sequenceOf(
+                        null to successfulCall.compoundOperation.operationPartiallyAppliedSymbol.symbol
+                    )
 
-                    else -> null
+                    is KaCompoundArrayAccessCall -> null
+                    is KaCompoundVariableAccessCall -> null
                 } ?: return@sequence
 
-                yield(symbol)
-                yieldAll(symbol.allOverriddenSymbols)
-            }.forEach { symbol ->
-                methods.find { it.value.match(symbol) }?.let { forbidden ->
+                yieldAll(symbol)
+            }.forEach { (expressionPropertySymbol, symbol) ->
+                methods.find { method ->
+                    symbol?.let { method.value.match(expressionPropertySymbol, symbol) } == true
+                }?.let { forbidden ->
                     val message = if (forbidden.reason != null) {
                         "The method `${forbidden.value}` has been forbidden: ${forbidden.reason}"
                     } else {
