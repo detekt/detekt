@@ -14,9 +14,13 @@ import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.resolution.KaCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaCompoundAccessCall
+import org.jetbrains.kotlin.analysis.api.resolution.KaCompoundArrayAccessCall
+import org.jetbrains.kotlin.analysis.api.resolution.KaCompoundVariableAccessCall
 import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaPropertyAccessorSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaPropertySymbol
+import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCallableReferenceExpression
@@ -25,7 +29,6 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
 import org.jetbrains.kotlin.psi.KtPostfixExpression
 import org.jetbrains.kotlin.psi.KtPrefixExpression
-import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.isDotSelector
 import org.jetbrains.kotlin.resolve.calls.util.asCallableReferenceExpression
 import org.jetbrains.kotlin.resolve.calls.util.getCalleeExpressionIfAny
@@ -114,32 +117,45 @@ class ForbiddenMethodCall(config: Config) :
         check(expression.callableReference)
     }
 
+    @Suppress("CyclomaticComplexMethod", "ComplexCondition")
     private fun check(expression: KtExpression) {
         analyze(expression) {
             val call = expression.resolveToCall()
                 ?: expression.asCallableReferenceExpression()?.resolveToCall()
                 ?: return
 
+            val successfulCall = call.successfulCallOrNull<KaCall>() ?: return
+
             sequence {
-                val symbol = when (val symbol = call.successfulCallOrNull<KaCall>()) {
+                val symbol = when (successfulCall) {
                     is KaCallableMemberCall<*, *> -> {
-                        val appliedSymbol = symbol.partiallyAppliedSymbol.symbol
-                        if (appliedSymbol is KaPropertySymbol && expression !is KtOperationReferenceExpression) {
-                            getPropertyAccessorSymbol(appliedSymbol, expression)
-                        } else {
-                            appliedSymbol
+                        val expressionSymbol = successfulCall.partiallyAppliedSymbol.symbol
+                        sequenceOf(expressionSymbol).plus(expressionSymbol.allOverriddenSymbols).map {
+                            if (
+                                it is KaPropertySymbol &&
+                                (it.hasSetter || it.hasGetter) &&
+                                expression !is KtOperationReferenceExpression
+                            ) {
+                                it to getPropertyAccessorSymbol(it, expression)
+                            } else {
+                                null to it
+                            }
                         }
                     }
 
-                    is KaCompoundAccessCall -> symbol.compoundOperation.operationPartiallyAppliedSymbol.symbol
+                    is KaCompoundAccessCall -> sequenceOf(
+                        null to successfulCall.compoundOperation.operationPartiallyAppliedSymbol.symbol
+                    )
 
-                    else -> null
+                    is KaCompoundArrayAccessCall -> null
+                    is KaCompoundVariableAccessCall -> null
                 } ?: return@sequence
 
-                yield(symbol)
-                yieldAll(symbol.allOverriddenSymbols)
-            }.forEach { symbol ->
-                methods.find { it.value.match(symbol) }?.let { forbidden ->
+                yieldAll(symbol)
+            }.forEach { (expressionPropertySymbol, symbol) ->
+                methods.find { method ->
+                    symbol?.let { method.value.match(expressionPropertySymbol, symbol) } == true
+                }?.let { forbidden ->
                     val message = if (forbidden.reason != null) {
                         "The method `${forbidden.value}` has been forbidden: ${forbidden.reason}"
                     } else {
@@ -154,9 +170,13 @@ class ForbiddenMethodCall(config: Config) :
     internal data class ForbiddenMethod(val value: FunctionMatcher, val reason: String?)
 }
 
-private fun getPropertyAccessorSymbol(appliedSymbol: KaPropertySymbol, expression: KtExpression) =
-    when (expression.parent) {
-        is KtBinaryExpression -> appliedSymbol.setter
-        is KtProperty -> appliedSymbol.getter
-        else -> null
+private fun getPropertyAccessorSymbol(
+    appliedSymbol: KaPropertySymbol,
+    expression: KtExpression,
+): KaPropertyAccessorSymbol? {
+    val parent = expression.parent
+    return when {
+        parent is KtBinaryExpression && parent.operationToken == KtTokens.EQ -> appliedSymbol.setter
+        else -> appliedSymbol.getter
     }
+}
