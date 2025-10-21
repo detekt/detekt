@@ -157,7 +157,7 @@ dependencies {
     }
 
     // We use this published version of the detekt-rules-ktlint-wrapper to self analyse this project.
-    detektPlugins("dev.detekt:detekt-rules-ktlint-wrapper:2.0.0-alpha.0")
+    detektPlugins("dev.detekt:detekt-rules-ktlint-wrapper:2.0.0-alpha.1")
 }
 
 gradlePlugin {
