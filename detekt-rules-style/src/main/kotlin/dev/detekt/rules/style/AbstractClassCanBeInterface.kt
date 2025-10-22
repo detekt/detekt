@@ -53,14 +53,8 @@ class AbstractClassCanBeInterface(config: Config) :
     ),
     RequiresAnalysisApi {
 
-    private val noConcreteMember = "An abstract class without a concrete member can be refactored to an interface."
 
     override fun visitClass(klass: KtClass) {
-        check(klass)
-        super.visitClass(klass)
-    }
-
-    private fun check(klass: KtClass) {
         val nameIdentifier = klass.nameIdentifier ?: return
         if (klass.isInterface() || !klass.isAbstract()) return
         val members = klass.members()
@@ -69,9 +63,11 @@ class AbstractClassCanBeInterface(config: Config) :
                 members.isNotEmpty() -> checkMembers(klass, members, nameIdentifier)
                 hasInheritedMember(klass, isAbstract = true) && isAnyParentAbstract(klass) -> return
                 !klass.hasConstructorParameter() ->
-                    report(Finding(Entity.from(nameIdentifier), noConcreteMember))
+                    report(Finding(Entity.from(nameIdentifier), NO_CONCRETE_MEMBER))
             }
         }
+
+        super.visitClass(klass)
     }
 
     private fun KaSession.checkMembers(
@@ -86,7 +82,7 @@ class AbstractClassCanBeInterface(config: Config) :
             abstractMembers.any { it.isInternal() || it.isProtected() } || klass.hasConstructorParameter() ->
                 Unit
             concreteMembers.isEmpty() && !hasInheritedMember(klass, isAbstract = false) ->
-                report(Finding(Entity.from(nameIdentifier), noConcreteMember))
+                report(Finding(Entity.from(nameIdentifier), NO_CONCRETE_MEMBER))
         }
     }
 
@@ -109,4 +105,8 @@ class AbstractClassCanBeInterface(config: Config) :
         (klass.symbol as? KaClassSymbol)
             ?.superTypes
             ?.all { (it.symbol as? KaClassSymbol)?.classKind == KaClassKind.INTERFACE } == false
+
+    internal companion object {
+        const val NO_CONCRETE_MEMBER = "An abstract class without a concrete member can be refactored to an interface."
+    }
 }

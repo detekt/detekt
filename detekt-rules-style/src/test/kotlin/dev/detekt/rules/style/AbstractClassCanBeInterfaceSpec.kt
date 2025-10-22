@@ -1,6 +1,7 @@
 package dev.detekt.rules.style
 
 import dev.detekt.api.Config
+import dev.detekt.rules.style.AbstractClassCanBeInterface.Companion.NO_CONCRETE_MEMBER
 import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.junit.KotlinCoreEnvironmentTest
 import dev.detekt.test.lintWithContext
@@ -14,8 +15,6 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
 
     @Nested
     inner class `abstract classes with no concrete members` {
-        val message = "An abstract class without a concrete member can be refactored to an interface."
-
         @Test
         fun `reports an abstract class with no concrete member`() {
             val code = """
@@ -27,7 +26,7 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
             assertThat(findings).singleElement()
-                .hasMessage(message)
+                .hasMessage(NO_CONCRETE_MEMBER)
                 .hasStartSourceLocation(1, 16)
         }
 
@@ -38,7 +37,7 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
                 val code = "abstract class A"
                 val findings = subject.lintWithContext(env, code)
                 assertThat(findings).singleElement()
-                    .hasMessage(message)
+                    .hasMessage(NO_CONCRETE_MEMBER)
                     .hasStartSourceLocation(1, 16)
             }
 
@@ -47,7 +46,7 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
                 val code = "abstract class A()"
                 val findings = subject.lintWithContext(env, code)
                 assertThat(findings).singleElement()
-                    .hasMessage(message)
+                    .hasMessage(NO_CONCRETE_MEMBER)
             }
 
             @Test
@@ -55,7 +54,7 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
                 val code = "abstract class A {}"
                 val findings = subject.lintWithContext(env, code)
                 assertThat(findings).singleElement()
-                    .hasMessage(message)
+                    .hasMessage(NO_CONCRETE_MEMBER)
             }
 
             @Test
@@ -63,7 +62,7 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
                 val code = "abstract class A() {}"
                 val findings = subject.lintWithContext(env, code)
                 assertThat(findings).singleElement()
-                    .hasMessage(message)
+                    .hasMessage(NO_CONCRETE_MEMBER)
             }
 
             @Test
@@ -76,7 +75,7 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
                 """.trimIndent()
                 val findings = subject.lintWithContext(env, code)
                 assertThat(findings).singleElement()
-                    .hasMessage(message)
+                    .hasMessage(NO_CONCRETE_MEMBER)
             }
 
             @Test
@@ -166,9 +165,6 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
 
     @Nested
     inner class `abstract classes with no abstract members` {
-
-        val message = "An abstract class without an abstract member can be refactored to a concrete class."
-
         @Test
         fun `does not report no abstract members in abstract class`() {
             val code = """
