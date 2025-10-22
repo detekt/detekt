@@ -112,6 +112,7 @@ Gradle 6.8.3+ is the minimum requirement. However, the recommended versions toge
 
 | Detekt Version  | Gradle   | Kotlin   | AGP      | Java Target Level | JDK Max Version |
 |-----------------|----------|----------|----------|-------------------|-----------------|
+| `2.0.0-alpha.1` | `9.1.0`  | `2.2.20` | `8.13.0` | `1.8`             | `25`            |
 | `2.0.0-alpha.0` | `8.13.0` | `2.2.10` | `8.13.0` | `1.8`             | `21`            |
 | `1.23.8`        | `8.12.1` | `2.0.21` | `8.8.1`  | `1.8`             | `21`            |
 

@@ -10,7 +10,7 @@
 -r
 html:./build/detekt-report.html
 -r
-xml:./build/detekt-report.xml
+checkstyle:./build/detekt-report.xml
 -r
 sarif:./build/detekt-report.sarif
 -bp

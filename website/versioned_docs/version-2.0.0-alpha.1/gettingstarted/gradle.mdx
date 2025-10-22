@@ -1,0 +1,538 @@
+---
+title: "Run detekt using the Detekt Gradle Plugin"
+keywords: [detekt, static, analysis, code, kotlin]
+sidebar: 
+permalink: gradle.html
+folder: gettingstarted
+summary:
+sidebar_position: 2
+---
+
+detekt requires **Gradle 6.8.3** or higher. We, however, recommend using the version of Gradle that is [listed in this table](../introduction/compatibility.md).
+
+## <a name="tasks">Available plugin tasks</a>
+
+The Detekt Gradle Plugin will generate multiple tasks:
+
+- `detekt` - Runs a detekt analysis and complexity report on your source files. Configure the analysis inside the 
+`detekt` closure. 
+  - By default, the standard rule set without any ignore list is executed on sources files located
+   in `src/main/java`, `src/test/java`, `src/main/kotlin` and `src/test/kotlin`.
+  - Reports are automatically generated in checkstyle(xml),
+   html, md, and sarif format and can be found in `build/reports/detekt/detekt.[xml|html|md|sarif]` respectively.
+  - Please note that the `detekt` task is automatically run when executing `gradle check`.
+  - You may specify Gradle task CLI option for auto correction, such as `gradle detekt --auto-correct`.
+- `detektGenerateConfig` - Generates a default detekt configuration file into your project directory.
+- `detektBaseline` - Similar to `detekt`, but creates a finding baseline. Further detekt runs will only feature new findings not in this list.
+
+In addition to these standard tasks, the plugin will also generate a set of tasks that have
+[type resolution](type-resolution.md) enabled. This happens for both, pure JVM projects and Android projects that have
+the Android Gradle Plugin applied:
+
+- `detektMain` - Similar to `detekt`, but runs only on the `main` source set
+  (Android: all production source sets)
+- `detektTest` - Similar to `detekt`, but runs only on the `test` source set
+  (Android: all JVM and Android Test source sets)
+- `detektBaselineMain` - Similar to `detektBaseline`, but creates a baseline only for the `main` source set 
+  (Android: multiple baselines for all production source sets)
+- `detektBaselineTest` - Similar to `detektBaseline`, but creates a baseline only for the `test` source set
+  (Android: multiple baselines for all JVM and Android Test source sets)
+- Android-only: `detekt<Variant>` - Similar to `detekt`, but runs only on the specific (test) build variant
+- Android-only: `detektBaseline<Variant>` - Similar to `detektBaseline`, but creates a baseline only for the
+  specific (test) build variant
+  
+Baseline files that are generated for these specific source sets / build variants contain the name of the source set /
+the name of the build variant in their name, unless otherwise configured, such as `detekt-main.xml` or 
+`detekt-productionDebug.xml`.
+
+If both, a `detekt-main.xml` and a `detekt.xml` baseline file exists in place, the more specific one - `detekt-main.xml` -
+takes precedence when the `detektMain` task is executed, likewise for Android variant-specific baseline files.
+
+_NOTE:_ When analyzing Android projects that make use of specific code generators, such as Data Binding, Kotlin synthetic
+view accessors or else, you might see warnings output while detekt runs. This is due to the inability to gather the
+complete compile classpath from the Android Gradle Plugin ([upstream ticket](https://issuetracker.google.com/issues/158777988))
+and can safely be ignored.
+
+Use the Groovy or Kotlin DSL of Gradle to apply the Detekt Gradle Plugin. You can further configure the Plugin
+using the detekt closure as described [here](#options-for-detekt-configuration-closure).
+
+### <a name="gradle">Configuration</a>
+
+Using the plugins DSL:
+
+#### Groovy DSL
+
+```groovy
+plugins {
+    id "dev.detekt" version "[detekt_version]"
+}
+
+repositories {
+    mavenCentral()
+}
+```
+
+#### Kotlin DSL
+
+```kotlin
+plugins {
+    id("dev.detekt") version "[detekt_version]"
+}
+
+repositories {
+    mavenCentral()
+}
+```
+
+Using legacy plugin application (`buildscript{}`):
+
+#### Groovy DSL
+
+```groovy
+buildscript {
+    repositories {
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath "dev.detekt:detekt-gradle-plugin:[detekt_version]"
+    }
+}
+
+apply plugin: "dev.detekt"
+
+repositories {
+    mavenCentral()
+}
+```
+
+#### Kotlin DSL
+
+```kotlin
+buildscript {
+    repositories {
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath("dev.detekt:detekt-gradle-plugin:[detekt_version]")
+    }
+}
+
+apply(plugin = "dev.detekt")
+
+repositories {
+    mavenCentral()
+}
+```
+
+### <a name="gradleandroid">Configuration for Android projects</a>
+
+When using Android make sure to have detekt configured in the app/module level `build.gradle` file.
+
+You can configure the plugin in the same way as indicated above.
+
+#### Groovy DSL
+
+```groovy
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:<agp_version>"
+    }
+}
+
+plugins {
+    id "com.android.application"
+    id "org.jetbrains.kotlin.android" version "<kotlin_version>"
+    id "dev.detekt" version "[detekt_version]"
+}
+
+repositories {
+    mavenCentral()
+}
+```
+
+#### Kotlin DSL
+
+```kotlin
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath("com.android.tools.build:gradle:<agp_version>")
+    }
+}
+
+plugins {
+    id("com.android.application")
+    kotlin("android") version "<kotlin_version>"
+    id("dev.detekt") version "[detekt_version]"
+}
+
+repositories {
+    mavenCentral()
+}
+```
+
+### <a name="closure">Options for detekt configuration closure</a>
+
+#### Groovy DSL
+
+```groovy
+detekt {
+    // Version of detekt that will be used. When unspecified the latest detekt
+    // version found will be used. Override to stay on the same version.
+    toolVersion = "[detekt_version]"
+    
+    // The directories where detekt looks for source files. 
+    // Defaults to `files("src/main/java", "src/test/java", "src/main/kotlin", "src/test/kotlin")`.
+    source = files(
+        "src/main/kotlin",
+        "gensrc/main/kotlin"
+    )
+    
+    // Builds the AST in parallel. Rules are always executed in parallel. 
+    // Can lead to speedups in larger projects. `false` by default.
+    parallel = false
+    
+    // Define the detekt configuration(s) you want to use. 
+    // Defaults to the default detekt configuration.
+    config.setFrom("path/to/config.yml")
+    
+    // Applies the config files on top of detekt's default config file. `false` by default.
+    buildUponDefaultConfig = false
+    
+    // Turns on all the rules. `false` by default.
+    allRules = false
+    
+    // Specifying a baseline file. All findings stored in this file in subsequent runs of detekt.
+    baseline = file("path/to/baseline.xml")
+    
+    // Disables all default detekt rulesets and will only run detekt with custom rules
+    // defined in plugins passed in with `detektPlugins` configuration. `false` by default.
+    disableDefaultRuleSets = false
+    
+    // Adds debug output during task execution. `false` by default.
+    debug = false                                         
+    
+    // If set to `true` the build does not fail when there are any issues.
+    // Defaults to `false`.
+    ignoreFailures = false
+
+    // The build fails when there is at least one issue with this severity (or above).
+    // If set ot `Never`, the task will not fail regardless of the number of issues and their severities.
+    // If `ignoreFailures` is set to `true`, the value of this property is ignored.
+    // Defaults to `Error`
+    failOnSeverity = dev.detekt.gradle.extensions.FailOnSeverity.Error
+    
+    // Android: Don't create tasks for the specified build types (e.g. "release")
+    ignoredBuildTypes = ["release"]
+    
+    // Android: Don't create tasks for the specified build flavor (e.g. "production")
+    ignoredFlavors = ["production"]
+    
+    // Android: Don't create tasks for the specified build variants (e.g. "productionRelease")
+    ignoredVariants = ["productionRelease"]
+    
+    // Specify the base path for file paths in the formatted reports. 
+    // If not set, all file paths reported will be absolute file path.
+    basePath = projectDir
+}
+```
+
+#### Kotlin DSL
+
+```kotlin
+detekt {
+    // Version of detekt that will be used. When unspecified the latest detekt
+    // version found will be used. Override to stay on the same version.
+    toolVersion = "[detekt_version]"
+    
+    // The directories where detekt looks for source files. 
+    // Defaults to `files("src/main/java", "src/test/java", "src/main/kotlin", "src/test/kotlin")`.
+    source.setFrom("src/main/java", "src/main/kotlin")
+    
+    // Builds the AST in parallel. Rules are always executed in parallel. 
+    // Can lead to speedups in larger projects. `false` by default.
+    parallel = false
+    
+    // Define the detekt configuration(s) you want to use. 
+    // Defaults to the default detekt configuration.
+    config.setFrom("path/to/config.yml")
+    
+    // Applies the config files on top of detekt's default config file. `false` by default.
+    buildUponDefaultConfig = false
+    
+    // Turns on all the rules. `false` by default.
+    allRules = false
+    
+    // Specifying a baseline file. All findings stored in this file in subsequent runs of detekt.
+    baseline = file("path/to/baseline.xml")
+    
+    // Disables all default detekt rulesets and will only run detekt with custom rules
+    // defined in plugins passed in with `detektPlugins` configuration. `false` by default.
+    disableDefaultRuleSets = false
+    
+    // Adds debug output during task execution. `false` by default.
+    debug = false                                         
+    
+    // If set to `true` the build does not fail when there are any issues.
+    // Defaults to `false`.
+    ignoreFailures = false
+
+    // The build fails when there is at least one issue with this severity (or above).
+    // If set ot `Never`, the task will not fail regardless of the number of issues and their severities.
+    // If `ignoreFailures` is set to `true`, the value of this property is ignored.
+    // Defaults to `Error`
+    failOnSeverity = dev.detekt.gradle.extensions.FailOnSeverity.Error
+
+    // Android: Don't create tasks for the specified build types (e.g. "release")
+    ignoredBuildTypes = listOf("release")
+    
+    // Android: Don't create tasks for the specified build flavor (e.g. "production")
+    ignoredFlavors = listOf("production")
+    
+    // Android: Don't create tasks for the specified build variants (e.g. "productionRelease")
+    ignoredVariants = listOf("productionRelease")
+    
+    // Specify the base path for file paths in the formatted reports. 
+    // If not set, all file paths reported will be absolute file path.
+    basePath.set(projectDir)
+}
+```
+
+### <a name="gradle-properties">Options for detekt Gradle properties</a>
+
+```groovy
+// If set to true, enables Gradle Worker API for Detekt tasks. `false` by default.
+// See the doc for the Worker API at https://docs.gradle.org/8.1/userguide/worker_api.html
+detekt.use.worker.api = false
+```
+
+### Reports
+
+Report output can be customized for each task. The DSL is the same in both Groovy and Kotlin:
+
+```kotlin
+tasks.named("detekt").configure {
+    reports {
+        // Enable/Disable checkstyle report (default: true)
+        checkstyle.required.set(true)
+        checkstyle.outputLocation.set(file("build/reports/detekt.xml"))
+        // Enable/Disable HTML report (default: true)
+        html.required.set(true)
+        html.outputLocation.set(file("build/reports/detekt.html"))
+        // Enable/Disable SARIF report (default: false)
+        sarif.required.set(true)
+        sarif.outputLocation.set(file("build/reports/detekt.sarif"))
+        // Enable/Disable Markdown report (default: false)
+        markdown.required.set(true)
+        markdown.outputLocation.set(file("build/reports/detekt.md"))
+        custom {
+            // The simple class name of your custom report.
+            reportId = "CustomJsonReport"
+            outputLocation.set(file("build/reports/detekt.json"))
+        }
+    }
+}
+```
+
+### Using Type Resolution
+
+Type resolution works only for [predefined tasks listed above](#available-plugin-tasks)
+or when implementing a custom detekt task with the `classpath` and `jvmTarget` properties present.
+
+`jdkHome` is also available as an input. When this is unset, analysis is performed using the JDK classes of the JDK that
+Gradle is running with (shown by the `./gradlew --version` command). This can be an issue if the Gradle JDK and the
+project JDK doesn't match e.g. if Gradle runs under Java 8 but the project uses classes only available in Java 9 or
+higher. Setting `jdkHome` to the Java 9 JDK path will allow for more correct analysis.
+
+`jdkHome` is set automatically when applying a toolchain using either
+[`java`](https://docs.gradle.org/current/userguide/toolchains.html) or
+[`kotlin`](https://kotlinlang.org/docs/gradle.html#gradle-java-toolchains-support).
+
+More information on type resolution are available on the [type resolution](type-resolution.md) page.
+
+#### Groovy DSL
+
+```groovy
+tasks.withType(dev.detekt.gradle.Detekt).configureEach {
+    jvmTarget = '1.8'
+    jdkHome.set(file('path/to/jdkHome'))
+}
+tasks.withType(dev.detekt.gradle.DetektCreateBaselineTask).configureEach {
+    jvmTarget = '1.8'
+    jdkHome.set(file('path/to/jdkHome'))
+}
+```
+
+#### Kotlin DSL
+
+```kotlin
+tasks.withType<dev.detekt.gradle.Detekt>().configureEach {
+    jvmTarget.set("1.8")
+    jdkHome.set(file("path/to/jdkHome"))
+}
+tasks.withType<dev.detekt.gradle.DetektCreateBaselineTask>().configureEach {
+    jvmTarget.set("1.8")
+    jdkHome.set(file("path/to/jdkHome"))
+}
+```
+
+### <a name="excluding">Leveraging Gradle's SourceTask - Excluding and including source files</a>
+
+A detekt task extends the Gradle `SourceTask` to be only scheduled when watched source files are changed.
+It also allows to match files that should be excluded from the analysis.
+To do this introduce a query on detekt tasks and define include and exclude patterns outside the detekt closure:
+
+#### Groovy DSL
+
+```groovy
+detekt {
+    ...
+}
+
+tasks.withType(dev.detekt.gradle.Detekt).configureEach {
+    // include("**/special/package/**") // only analyze a sub package inside src/main/kotlin
+    exclude("**/special/package/internal/**") // but exclude our legacy internal package
+}
+
+tasks.withType(dev.detekt.gradle.DetektCreateBaselineTask).configureEach {
+    // include("**/special/package/**") // only analyze a sub package inside src/main/kotlin
+    exclude("**/special/package/internal/**") // but exclude our legacy internal package
+}
+```
+
+#### Kotlin DSL
+
+```kotlin
+detekt {
+    ...
+}
+
+tasks.withType<dev.detekt.gradle.Detekt>().configureEach {
+    // include("**/special/package/**") // only analyze a sub package inside src/main/kotlin
+    exclude("**/special/package/internal/**") // but exclude our legacy internal package
+}
+
+tasks.withType<dev.detekt.gradle.DetektCreateBaselineTask>().configureEach {
+    // include("**/special/package/**") // only analyze a sub package inside src/main/kotlin
+    exclude("**/special/package/internal/**") // but exclude our legacy internal package
+}
+```
+
+### <a name="customdetekttask">Defining custom detekt task</a>
+
+Custom tasks for alternative configurations or different source sets can be defined by creating a custom task that
+uses the type `Detekt`.
+
+#### Groovy DSL
+
+```groovy
+tasks.register(name: myDetekt, type: dev.detekt.gradle.Detekt) {
+    description = "Runs a custom detekt build."
+    setSource(files("src/main/kotlin", "src/test/kotlin"))
+    config.setFrom(files("$rootDir/config.yml"))
+    debug = true
+    reports {
+        checkstyle {
+            destination = file("build/reports/mydetekt.xml")
+        }
+        html.destination = file("build/reports/mydetekt.html")
+    }
+    include '**/*.kt'
+    include '**/*.kts'
+    exclude 'resources/'
+    exclude 'build/'
+}
+```
+
+#### Kotlin DSL
+
+```kotlin
+tasks.register<dev.detekt.gradle.Detekt>("myDetekt") {
+    description = "Runs a custom detekt build."
+    setSource(files("src/main/kotlin", "src/test/kotlin"))
+    config.setFrom(files("$rootDir/config.yml"))
+    debug.set(true)
+    reports {
+        checkstyle {
+            destination = file("build/reports/mydetekt.xml")
+        }
+        html.destination = file("build/reports/mydetekt.html")
+    }
+    include("**/*.kt")
+    include("**/*.kts")
+    exclude("resources/")
+    exclude("build/")
+}
+```
+
+### <a name="check-lifecycle">Disabling detekt from the check task</a>
+
+detekt tasks by default are verification tasks. They get executed whenever the Gradle check task gets executed.
+This aligns with the behavior of other code analysis plugins for Gradle.
+
+If you are adding detekt to an already long running project you may want to increase the code quality incrementally and therefore
+exclude detekt from the check task.
+
+#### Groovy DSL
+
+```groovy
+check.configure {
+    dependsOn = dependsOn.findAll { it.name != 'detekt' }
+}
+```
+
+#### Kotlin DSL
+
+```kotlin
+tasks.named("check").configure {
+    this.setDependsOn(this.dependsOn.filterNot {
+        it is TaskProvider<*> && it.name == "detekt"
+    })
+}
+```
+
+Instead of disabling detekt for the check task, you may want to use the [baseline feature](../introduction/baseline.md).
+
+## <a name="idea">Integrating detekt inside your IntelliJ IDEA</a>
+
+detekt comes with an [IntelliJ Plugin](https://plugins.jetbrains.com/plugin/10761-detekt) that you can install directly from the IDE. The plugin offers warning highlight directly inside the IDE as well as support for code formatting.
+
+The source code of the plugin is available here: [detekt/detekt-intellij-plugin](https://github.com/detekt/detekt-intellij-plugin)
+
+## <a name="dependencies">Gradle runtime dependencies</a>
+
+detekt is tightly coupled to the Kotlin compiler and requires a specific version to be available at runtime to perform
+its analysis.
+
+If detekt is run with an unexpected version of the Kotlin compiler on its classpath, you will see an error like this
+when you try to run detekt via Gradle:
+
+```
+detekt was compiled with Kotlin 1.8.0 but is currently running with 1.7.0
+```
+
+This happens when the version of `kotlin-compiler-embeddable` is overridden on detekt's classpath (in the `detekt`
+dependency configuration). This can happen when build scripts use things like this which override all dependency
+configurations (e.g. by [Spring Dependency Management Plugin](https://docs.spring.io/dependency-management-plugin/docs/current/reference/html/):
+
+```kotlin
+configurations.all {
+    resolutionStrategy.eachDependency {
+        if (requested.group == "org.jetbrains.kotlin") {
+            useVersion(dev.detekt.gradle.getSupportedKotlinVersion())
+        }
+    }
+}
+```
+
+If Kotlin dependencies are being aligned like this then exclude the `detekt` dependency configuration with something
+like `configurations.matching { it.name != "detekt" }.all`.
