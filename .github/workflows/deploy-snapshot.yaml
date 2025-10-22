@@ -23,7 +23,7 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5
         with:
-          java-version: 21.0.4 # Specific version to work around https://github.com/detekt/detekt/issues/8009
+          java-version: 25
           distribution: "temurin"
 
       - name: Setup Gradle

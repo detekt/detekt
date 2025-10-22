@@ -38,7 +38,7 @@ class FindingAssertSpec {
         fun `hasMessage with null value`() {
             assertThatThrownBy { FindingAssert(null).hasMessage("") }
                 .isExactlyInstanceOf(AssertionError::class.java)
-                .hasMessage("\nExpecting actual not to be null")
+                .hasMessage("${System.lineSeparator()}Expecting actual not to be null")
         }
 
         @Test
@@ -62,7 +62,7 @@ class FindingAssertSpec {
         fun `noSuppress with null value`() {
             assertThatThrownBy { FindingAssert(null).noSuppress() }
                 .isExactlyInstanceOf(AssertionError::class.java)
-                .hasMessage("\nExpecting actual not to be null")
+                .hasMessage("${System.lineSeparator()}Expecting actual not to be null")
         }
 
         @Test
@@ -100,14 +100,14 @@ class FindingAssertSpec {
             fun `hasStartSourceLocation with null value`() {
                 assertThatThrownBy { FindingAssert(null).hasStartSourceLocation(SourceLocation(1, 1)) }
                     .isExactlyInstanceOf(AssertionError::class.java)
-                    .hasMessage("\nExpecting actual not to be null")
+                    .hasMessage("${System.lineSeparator()}Expecting actual not to be null")
             }
 
             @Test
             fun `hasStartSourceLocationInt with null value`() {
                 assertThatThrownBy { FindingAssert(null).hasStartSourceLocation(1, 1) }
                     .isExactlyInstanceOf(AssertionError::class.java)
-                    .hasMessage("\nExpecting actual not to be null")
+                    .hasMessage("${System.lineSeparator()}Expecting actual not to be null")
             }
 
             @Test
@@ -211,14 +211,14 @@ class FindingAssertSpec {
             fun `hasEndSourceLocation with null value`() {
                 assertThatThrownBy { FindingAssert(null).hasEndSourceLocation(SourceLocation(1, 1)) }
                     .isExactlyInstanceOf(AssertionError::class.java)
-                    .hasMessage("\nExpecting actual not to be null")
+                    .hasMessage("${System.lineSeparator()}Expecting actual not to be null")
             }
 
             @Test
             fun `hasEndSourceLocationInt with null value`() {
                 assertThatThrownBy { FindingAssert(null).hasEndSourceLocation(1, 1) }
                     .isExactlyInstanceOf(AssertionError::class.java)
-                    .hasMessage("\nExpecting actual not to be null")
+                    .hasMessage("${System.lineSeparator()}Expecting actual not to be null")
             }
 
             @Test
@@ -323,21 +323,21 @@ class FindingAssertSpec {
         fun `hasTextLocation with null value`() {
             assertThatThrownBy { FindingAssert(null).hasTextLocation(TextLocation(1, 1)) }
                 .isExactlyInstanceOf(AssertionError::class.java)
-                .hasMessage("\nExpecting actual not to be null")
+                .hasMessage("${System.lineSeparator()}Expecting actual not to be null")
         }
 
         @Test
         fun `hasTextLocationPair with null value`() {
             assertThatThrownBy { FindingAssert(null).hasTextLocation(1 to 1) }
                 .isExactlyInstanceOf(AssertionError::class.java)
-                .hasMessage("\nExpecting actual not to be null")
+                .hasMessage("${System.lineSeparator()}Expecting actual not to be null")
         }
 
         @Test
         fun `hasTextLocationString with null value`() {
             assertThatThrownBy { FindingAssert(null).hasTextLocation("val a = 1") }
                 .isExactlyInstanceOf(AssertionError::class.java)
-                .hasMessage("\nExpecting actual not to be null")
+                .hasMessage("${System.lineSeparator()}Expecting actual not to be null")
         }
 
         @Test

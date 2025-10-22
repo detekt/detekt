@@ -157,7 +157,7 @@ dependencies {
     }
 
     // We use this published version of the detekt-rules-ktlint-wrapper to self analyse this project.
-    detektPlugins("dev.detekt:detekt-rules-ktlint-wrapper:2.0.0-alpha.0")
+    detektPlugins("dev.detekt:detekt-rules-ktlint-wrapper:2.0.0-alpha.1")
 }
 
 gradlePlugin {
@@ -224,9 +224,11 @@ tasks {
     }
 
     withType<Detekt>().configureEach {
+        jvmTarget = "1.8" // Remove when detekt updated to 2.0.0-alpha.1 or higher (see #8755)
         exclude("dev/detekt/detekt_gradle_plugin/BuildConfig.kt")
     }
     withType<DetektCreateBaselineTask>().configureEach {
+        jvmTarget = "1.8" // Remove when detekt updated to 2.0.0-alpha.1 or higher (see #8755)
         exclude("dev/detekt/detekt_gradle_plugin/BuildConfig.kt")
     }
 
