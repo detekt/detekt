@@ -544,6 +544,7 @@ style:
     active: true
   AbstractClassCanBeInterface:
     active: true
+    checkSealedClasses: false
   AlsoCouldBeApply:
     active: false
   BracesOnIfStatements:

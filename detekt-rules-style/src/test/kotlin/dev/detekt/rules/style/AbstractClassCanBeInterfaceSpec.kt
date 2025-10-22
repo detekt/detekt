@@ -2,6 +2,8 @@ package dev.detekt.rules.style
 
 import dev.detekt.api.Config
 import dev.detekt.rules.style.AbstractClassCanBeInterface.Companion.NO_CONCRETE_MEMBER
+import dev.detekt.rules.style.AbstractClassCanBeInterface.Companion.SEALED_NO_CONCRETE_MEMBER
+import dev.detekt.test.TestConfig
 import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.junit.KotlinCoreEnvironmentTest
 import dev.detekt.test.lintWithContext
@@ -302,6 +304,154 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
                 abstract class Test(val x: Int) : I
             """.trimIndent()
             assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+    }
+
+    @Nested
+    inner class SealedClasses {
+        private val checkSealedClasses = TestConfig("checkSealedClasses" to true)
+
+        @Test
+        fun `don't report a sealed class with no abstract members if config isn't enabled`() {
+            val code = """
+                sealed class Result {
+                    data class Success(val data: Int) : Result()
+                    data class Failure(val reason: String) : Result()
+                }
+            """.trimIndent()
+            val findings = AbstractClassCanBeInterface(Config.empty).lintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `report a sealed class with no abstract members`() {
+            val code = """
+                sealed class Result {
+                    data class Success(val data: Int) : Result()
+                    data class Failure(val reason: String) : Result()
+                }
+            """.trimIndent()
+            val findings = AbstractClassCanBeInterface(checkSealedClasses).lintWithContext(env, code)
+            assertThat(findings)
+                .singleElement()
+                .hasMessage(SEALED_NO_CONCRETE_MEMBER)
+        }
+
+        @Test
+        fun `don't report a sealed class with constructor params`() {
+            val code = """
+                sealed class Result(val value: Int) {
+                    data class Success(val data: Int) : Result(123)
+                    data class Failure(val reason: String) : Result(456)
+                }
+            """.trimIndent()
+            val findings = AbstractClassCanBeInterface(checkSealedClasses).lintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `report a sealed class with only abstract methods`() {
+            val code = """
+                sealed class Result {
+                    abstract fun x()
+                    data class Success(val data: Int) : Result() {
+                        override fun x() = println("success!")
+                    }
+                    data class Failure(val reason: String) : Result() {
+                        override fun x() = println("failure...")
+                    }
+                }
+            """.trimIndent()
+            val findings = AbstractClassCanBeInterface(checkSealedClasses).lintWithContext(env, code)
+            assertThat(findings)
+                .singleElement()
+                .hasMessage(SEALED_NO_CONCRETE_MEMBER)
+        }
+
+        @Test
+        fun `don't report a sealed class with open methods`() {
+            val code = """
+                sealed class Result {
+                    open fun x() = println("default") 
+                    data class Success(val data: Int) : Result() {
+                        override fun x() = println("success!")
+                    }
+                    data class Failure(val reason: String) : Result()
+                }
+            """.trimIndent()
+            val findings = AbstractClassCanBeInterface(checkSealedClasses).lintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `don't report a sealed class with final methods`() {
+            val code = """
+                sealed class Result {
+                    fun x() = println("final!") 
+                    data class Success(val data: Int) : Result()
+                    data class Failure(val reason: String) : Result()
+                }
+            """.trimIndent()
+            val findings = AbstractClassCanBeInterface(checkSealedClasses).lintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `report a sealed class with only abstract properties`() {
+            val code = """
+                sealed class Result {
+                    abstract val x: Int
+                    data class Success(val data: Int, override val x: Int) : Result()
+                    data class Failure(val reason: String) : Result() {
+                        override val x = 789
+                    }
+                }
+            """.trimIndent()
+            val findings = AbstractClassCanBeInterface(checkSealedClasses).lintWithContext(env, code)
+            assertThat(findings)
+                .singleElement()
+                .hasMessage(SEALED_NO_CONCRETE_MEMBER)
+        }
+
+        @Test
+        fun `don't report a sealed class with open properties`() {
+            val code = """
+                sealed class Result {
+                    open val x: Int = 123
+                    data class Success(val data: Int, override val x: Int) : Result()
+                    data class Failure(val reason: String) : Result()
+                }
+            """.trimIndent()
+            val findings = AbstractClassCanBeInterface(checkSealedClasses).lintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `don't report a sealed class with only final properties`() {
+            val code = """
+                sealed class Result {
+                    val x: Int = 123
+                    data class Success(val data: Int) : Result()
+                    data class Failure(val reason: String) : Result()
+                }
+            """.trimIndent()
+            val findings = AbstractClassCanBeInterface(checkSealedClasses).lintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `don't report a sealed interface`() {
+            val code = """
+                sealed interface Result {
+                    val x: Int
+                    data class Success(val data: Int, override val x: Int) : Result
+                    data class Failure(val reason: String) : Result {
+                        override val x = 789
+                    }
+                }
+            """.trimIndent()
+            val findings = AbstractClassCanBeInterface(checkSealedClasses).lintWithContext(env, code)
+            assertThat(findings).isEmpty()
         }
     }
 }
