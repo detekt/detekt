@@ -7,7 +7,7 @@ dependencies {
     compileOnly(projects.detektMetrics)
     implementation(projects.detektUtils)
     implementation(libs.kotlinx.html) {
-        exclude(group = "org.jetbrains.kotlin")
+        exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib")
     }
 
     testImplementation(libs.kotlin.compiler)

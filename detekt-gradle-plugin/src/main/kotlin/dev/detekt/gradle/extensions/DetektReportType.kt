@@ -5,7 +5,7 @@ enum class DetektReportType(val reportId: String, val extension: String) {
     CHECKSTYLE("checkstyle", "xml"),
     HTML("html", "html"),
     SARIF("sarif", "sarif"),
-    MD("md", "md"),
+    MARKDOWN("markdown", "md"),
     ;
 
     internal companion object {

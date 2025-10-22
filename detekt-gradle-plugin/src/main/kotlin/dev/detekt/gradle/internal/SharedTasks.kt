@@ -4,14 +4,14 @@ import dev.detekt.gradle.Detekt
 import dev.detekt.gradle.DetektCreateBaselineTask
 import dev.detekt.gradle.extensions.DetektExtension
 import dev.detekt.gradle.plugin.internal.conventionCompat
-import org.gradle.api.JavaVersion
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaBasePlugin
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.jvm.toolchain.JavaToolchainService
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 
 internal fun Project.setDetektTaskDefaults(extension: DetektExtension) {
-    tasks.withType(Detekt::class.java) {
+    tasks.withType(Detekt::class.java).configureEach {
         project.plugins.withType(JavaBasePlugin::class.java) { _ ->
             val toolchain = project.extensions.getByType(JavaPluginExtension::class.java).toolchain
 
@@ -19,11 +19,12 @@ internal fun Project.setDetektTaskDefaults(extension: DetektExtension) {
             val service = project.extensions.getByType(JavaToolchainService::class.java)
             val defaultLauncher = service.launcherFor(toolchain)
             it.jdkHome.convention(defaultLauncher.map { launcher -> launcher.metadata.installationPath })
-            it.jvmTarget.convention(
-                defaultLauncher.map { launcher ->
-                    JavaVersion.toVersion(launcher.metadata.languageVersion.asInt()).toString()
-                }
-            )
+        }
+
+        project.plugins.withId("org.jetbrains.kotlin.jvm") { _ ->
+            val compilerOptions = project.extensions.getByType(KotlinJvmProjectExtension::class.java).compilerOptions
+
+            it.jvmTarget.convention(compilerOptions.jvmTarget.map { jvmTarget -> jvmTarget.target })
         }
 
         it.debug.convention(extension.debug)
@@ -42,7 +43,7 @@ internal fun Project.setDetektTaskDefaults(extension: DetektExtension) {
 }
 
 internal fun Project.setCreateBaselineTaskDefaults(extension: DetektExtension) {
-    tasks.withType(DetektCreateBaselineTask::class.java) {
+    tasks.withType(DetektCreateBaselineTask::class.java).configureEach {
         project.plugins.withType(JavaBasePlugin::class.java) { _ ->
             val toolchain = project.extensions.getByType(JavaPluginExtension::class.java).toolchain
 
@@ -50,11 +51,12 @@ internal fun Project.setCreateBaselineTaskDefaults(extension: DetektExtension) {
             val service = project.extensions.getByType(JavaToolchainService::class.java)
             val defaultLauncher = service.launcherFor(toolchain)
             it.jdkHome.convention(defaultLauncher.map { launcher -> launcher.metadata.installationPath })
-            it.jvmTarget.convention(
-                defaultLauncher.map { launcher ->
-                    JavaVersion.toVersion(launcher.metadata.languageVersion.asInt()).toString()
-                }
-            )
+        }
+
+        project.plugins.withId("org.jetbrains.kotlin.jvm") { _ ->
+            val compilerOptions = project.extensions.getByType(KotlinJvmProjectExtension::class.java).compilerOptions
+
+            it.jvmTarget.convention(compilerOptions.jvmTarget.map { jvmTarget -> jvmTarget.target })
         }
 
         it.config.conventionCompat(project.provider { extension.config })

@@ -1,16 +1,17 @@
 package io.gitlab.arturbosch.detekt.sample.extensions.processors
 
-import io.gitlab.arturbosch.detekt.api.DetektVisitor
-import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.FileProcessListener
-import org.jetbrains.kotlin.com.intellij.openapi.util.Key
+import com.intellij.openapi.util.Key
+import dev.detekt.api.DetektVisitor
+import dev.detekt.api.Detektion
+import dev.detekt.api.FileProcessListener
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.resolve.BindingContext
 
 class QualifiedNameProcessor : FileProcessListener {
 
-    override fun onProcess(file: KtFile, bindingContext: BindingContext) {
+    override val id = "QualifiedNameProcessor"
+
+    override fun onProcess(file: KtFile) {
         val packageName = file.packageFqName.asString()
         val nameVisitor = ClassNameVisitor()
         file.accept(nameVisitor)
@@ -19,11 +20,13 @@ class QualifiedNameProcessor : FileProcessListener {
         file.putUserData(fqNamesKey, fqNames)
     }
 
-    override fun onFinish(files: List<KtFile>, result: Detektion, bindingContext: BindingContext) {
+    override fun onFinish(files: List<KtFile>, result: Detektion): Detektion {
         val fqNames = files
             .mapNotNull { it.getUserData(fqNamesKey) }
             .flatMapTo(HashSet()) { it }
-        result.addData(fqNamesKey, fqNames)
+
+        result.userData[fqNamesKey.toString()] = fqNames
+        return result
     }
 
     class ClassNameVisitor : DetektVisitor() {

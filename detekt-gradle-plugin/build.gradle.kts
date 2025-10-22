@@ -2,8 +2,8 @@
 // https://github.com/gradle/gradle/issues/21285
 @file:Suppress("StringLiteralDuplication")
 
-import io.gitlab.arturbosch.detekt.Detekt
-import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
+import dev.detekt.gradle.Detekt
+import dev.detekt.gradle.DetektCreateBaselineTask
 import org.jetbrains.kotlin.buildtools.api.ExperimentalBuildToolsApi
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 
@@ -14,17 +14,12 @@ plugins {
     id("idea")
     id("com.gradle.plugin-publish") version "2.0.0"
     // We use this published version of the detekt plugin to self analyse this project.
-    id("io.gitlab.arturbosch.detekt") version "1.23.8"
+    id("dev.detekt") version "2.0.0-alpha.0"
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.18.1"
-    id("org.jetbrains.dokka") version "2.0.0"
+    id("org.jetbrains.dokka") version "2.1.0"
     id("signing")
-    id("com.github.gmazzo.buildconfig") version "5.6.8"
+    id("com.github.gmazzo.buildconfig") version "5.7.0"
     id("io.github.gradle-nexus.publish-plugin") version "2.0.0"
-}
-
-repositories {
-    mavenCentral()
-    google()
 }
 
 group = "dev.detekt"
@@ -60,9 +55,7 @@ dokka {
     }
 
     dokkaSourceSets.configureEach {
-        // Using `set` instead of simple property assignment to work around this Gradle 9 incompatibility: https://github.com/Kotlin/dokka/issues/4096
-        apiVersion.set("1.4")
-        modulePath = "detekt-gradle-plugin"
+        apiVersion = "1.4"
 
         externalDocumentationLinks {
             create("gradle") {
@@ -149,6 +142,8 @@ dependencies {
     compileOnly(libs.android.gradleApi)
     compileOnly(libs.kotlin.gradle.plugin)
     compileOnly(libs.kotlin.gradlePluginApi)
+    compileOnly(libs.jetbrains.annotations)
+
     implementation(libs.sarif4k)
     testFixturesCompileOnly(libs.jetbrains.annotations)
 
@@ -161,8 +156,8 @@ dependencies {
         }
     }
 
-    // We use this published version of the detekt-formatting to self analyse this project.
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.8")
+    // We use this published version of the detekt-rules-ktlint-wrapper to self analyse this project.
+    detektPlugins("dev.detekt:detekt-rules-ktlint-wrapper:2.0.0-alpha.1")
 }
 
 gradlePlugin {
@@ -229,9 +224,11 @@ tasks {
     }
 
     withType<Detekt>().configureEach {
+        jvmTarget = "1.8" // Remove when detekt updated to 2.0.0-alpha.1 or higher (see #8755)
         exclude("dev/detekt/detekt_gradle_plugin/BuildConfig.kt")
     }
     withType<DetektCreateBaselineTask>().configureEach {
+        jvmTarget = "1.8" // Remove when detekt updated to 2.0.0-alpha.1 or higher (see #8755)
         exclude("dev/detekt/detekt_gradle_plugin/BuildConfig.kt")
     }
 
@@ -252,10 +249,6 @@ tasks {
             testing.suites.named("functionalTest"),
             testing.suites.named("functionalTestMinSupportedGradle"),
         )
-    }
-
-    ideaModule {
-        notCompatibleWithConfigurationCache("https://github.com/gradle/gradle/issues/13480")
     }
 }
 
@@ -280,11 +273,5 @@ dependencyAnalysis {
             includeDependency("org.junit.jupiter:junit-jupiter-api")
             includeDependency("org.junit.jupiter:junit-jupiter-params")
         }
-    }
-}
-
-tasks {
-    withType<PublishToMavenRepository>().configureEach {
-        notCompatibleWithConfigurationCache("https://github.com/detekt/detekt/issues/8484")
     }
 }

@@ -77,7 +77,7 @@ tasks.withType<Detekt>().configureEach {
         html.required.set(true) // observe findings in your browser with structure and code snippets
         checkstyle.required.set(true) // checkstyle(xml) like format mainly for integrations like Jenkins
         sarif.required.set(true) // standardized SARIF format (https://sarifweb.azurewebsites.net/) to support integrations with GitHub Code Scanning
-        md.required.set(true) // simple Markdown format
+        markdown.required.set(true) // simple Markdown format
     }
 }
 
@@ -112,6 +112,7 @@ Gradle 6.8.3+ is the minimum requirement. However, the recommended versions toge
 
 | Detekt Version  | Gradle   | Kotlin   | AGP      | Java Target Level | JDK Max Version |
 |-----------------|----------|----------|----------|-------------------|-----------------|
+| `2.0.0-alpha.1` | `9.1.0`  | `2.2.20` | `8.13.0` | `1.8`             | `25`            |
 | `2.0.0-alpha.0` | `8.13.0` | `2.2.10` | `8.13.0` | `1.8`             | `21`            |
 | `1.23.8`        | `8.12.1` | `2.0.21` | `8.8.1`  | `1.8`             | `21`            |
 

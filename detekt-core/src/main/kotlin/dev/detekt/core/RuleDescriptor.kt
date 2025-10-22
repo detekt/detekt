@@ -2,7 +2,6 @@ package dev.detekt.core
 
 import dev.detekt.api.Config
 import dev.detekt.api.RequiresAnalysisApi
-import dev.detekt.api.RequiresFullAnalysis
 import dev.detekt.api.Rule
 import dev.detekt.api.RuleInstance
 import dev.detekt.api.RuleName
@@ -12,6 +11,7 @@ import dev.detekt.api.Severity
 import dev.detekt.api.internal.DefaultRuleSetProvider
 import dev.detekt.api.internal.whichDetekt
 import dev.detekt.core.util.isActiveOrDefault
+import dev.detekt.tooling.api.AnalysisMode
 import java.net.URI
 
 internal data class RuleDescriptor(
@@ -21,7 +21,7 @@ internal data class RuleDescriptor(
 )
 
 internal fun getRules(
-    fullAnalysis: Boolean,
+    analysisMode: AnalysisMode,
     ruleSetProviders: List<RuleSetProvider>,
     config: Config,
     log: (() -> String) -> Unit,
@@ -36,12 +36,12 @@ internal fun getRules(
             } else {
                 { rule -> rule.url }
             }
-        ruleSetProvider.instance().getRules(ruleSetConfig, fullAnalysis, urlGenerator, log)
+        ruleSetProvider.instance().getRules(ruleSetConfig, analysisMode, urlGenerator, log)
     }
 
 private fun RuleSet.getRules(
     config: Config,
-    fullAnalysis: Boolean,
+    analysisMode: AnalysisMode,
     urlGenerator: (Rule) -> URI?,
     log: (() -> String) -> Unit,
 ): Sequence<RuleDescriptor> = config.subConfigKeys()
@@ -52,7 +52,10 @@ private fun RuleSet.getRules(
             val rule = ruleProvider(Config.empty)
             val ruleConfig = config.subConfig(ruleId)
             val active = config.isActiveOrDefault(true) && ruleConfig.isActiveOrDefault(false)
-            val executable = fullAnalysis || (rule !is RequiresFullAnalysis && rule !is RequiresAnalysisApi)
+            val executable = when (analysisMode) {
+                AnalysisMode.full -> true
+                AnalysisMode.light -> rule !is RequiresAnalysisApi
+            }
             if (active && !executable) {
                 log { "The rule '$ruleId' requires type resolution but it was run without it." }
             }

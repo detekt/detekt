@@ -19,13 +19,13 @@ import dev.detekt.test.utils.compileContentForTest
 import dev.detekt.test.utils.compileForTest
 import dev.detekt.test.utils.resourceAsPath
 import dev.detekt.test.yamlConfigFromContent
+import dev.detekt.tooling.api.AnalysisMode
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.elementsInRange
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
-import org.jetbrains.kotlin.resolve.BindingContext
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -465,12 +465,12 @@ internal fun Analyzer(
     settings: ProcessingSettings,
     vararg ruleDescriptors: RuleDescriptor,
     processors: List<FileProcessListener> = emptyList(),
-    bindingContext: BindingContext = BindingContext.EMPTY,
+    analysisMode: AnalysisMode = AnalysisMode.light,
 ): Analyzer = Analyzer(
     settings,
     ruleDescriptors.toList(),
     processors,
-    bindingContext
+    analysisMode,
 )
 
 internal fun createRuleDescriptor(

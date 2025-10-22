@@ -2,8 +2,8 @@ package dev.detekt.rules.style
 
 import dev.detekt.api.Config
 import dev.detekt.test.assertj.assertThat
+import dev.detekt.test.junit.KotlinCoreEnvironmentTest
 import dev.detekt.test.lintWithContext
-import dev.detekt.test.utils.KotlinCoreEnvironmentTest
 import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.junit.jupiter.api.Test
 
@@ -280,5 +280,14 @@ class UselessCallOnNotNullSpec(val env: KotlinEnvironmentContainer) {
         val findings = subject.lintWithContext(env, code)
         assertThat(findings).singleElement()
             .hasMessage("Replace setOfNotNull with setOf")
+    }
+
+    @Test
+    fun `does not report when calling isNullOrBlank on flexible string`() {
+        val code = """
+            val flexibleString = System.getProperty("propertyName")
+            val isFlexibleStringNullOrBlank = flexibleString.isNullOrBlank()
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 }

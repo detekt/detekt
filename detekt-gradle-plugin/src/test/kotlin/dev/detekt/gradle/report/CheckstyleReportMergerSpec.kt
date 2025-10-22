@@ -2,7 +2,8 @@ package dev.detekt.gradle.report
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import java.io.File
+import kotlin.io.path.createTempFile
+import kotlin.io.path.writeText
 
 private const val TAB = "\t"
 
@@ -10,7 +11,7 @@ class CheckstyleReportMergerSpec {
 
     @Test
     fun `passes for no overlapping errors`() {
-        val file1 = File.createTempFile("detekt1", "xml").apply {
+        val file1 = createTempFile("detekt1", "xml").apply {
             writeText(
                 """
                     <?xml version="1.0" encoding="utf-8"?>
@@ -22,7 +23,7 @@ class CheckstyleReportMergerSpec {
                 """.trimIndent()
             )
         }
-        val file2 = File.createTempFile("detekt2", "xml").apply {
+        val file2 = createTempFile("detekt2", "xml").apply {
             writeText(
                 """
                     <?xml version="1.0" encoding="utf-8"?>
@@ -34,8 +35,8 @@ class CheckstyleReportMergerSpec {
                 """.trimIndent()
             )
         }
-        val output = File.createTempFile("output", "xml")
-        CheckstyleReportMerger.merge(setOf(file1, file2), output)
+        val output = createTempFile("output", "xml")
+        CheckstyleReportMerger.merge(setOf(file1.toFile(), file2.toFile()), output.toFile())
 
         val expectedText = """
             <?xml version="1.0" encoding="UTF-8"?><checkstyle version="4.3">
@@ -47,7 +48,7 @@ class CheckstyleReportMergerSpec {
               </file>
             </checkstyle>
         """.trimIndent()
-        assertThat(output.readText()).isEqualToIgnoringNewLines(expectedText)
+        assertThat(output).content().isEqualToIgnoringNewLines(expectedText)
     }
 
     @Test
@@ -60,14 +61,14 @@ class CheckstyleReportMergerSpec {
             </file>
             </checkstyle>
         """.trimIndent()
-        val file1 = File.createTempFile("detekt1", "xml").apply {
+        val file1 = createTempFile("detekt1", "xml").apply {
             writeText(text)
         }
-        val file2 = File.createTempFile("detekt2", "xml").apply {
+        val file2 = createTempFile("detekt2", "xml").apply {
             writeText(text)
         }
-        val output = File.createTempFile("output", "xml")
-        CheckstyleReportMerger.merge(setOf(file1, file2), output)
+        val output = createTempFile("output", "xml")
+        CheckstyleReportMerger.merge(setOf(file1.toFile(), file2.toFile()), output.toFile())
 
         val expectedText = """
             <?xml version="1.0" encoding="UTF-8"?><checkstyle version="4.3">
@@ -76,12 +77,12 @@ class CheckstyleReportMergerSpec {
               </file>
             </checkstyle>
         """.trimIndent()
-        assertThat(output.readText()).isEqualToIgnoringNewLines(expectedText)
+        assertThat(output).content().isEqualToIgnoringNewLines(expectedText)
     }
 
     @Test
     fun `passes for some overlapping errors`() {
-        val file1 = File.createTempFile("detekt1", "xml").apply {
+        val file1 = createTempFile("detekt1", "xml").apply {
             writeText(
                 """
                     <?xml version="1.0" encoding="utf-8"?>
@@ -96,7 +97,7 @@ class CheckstyleReportMergerSpec {
                 """.trimIndent()
             )
         }
-        val file2 = File.createTempFile("detekt2", "xml").apply {
+        val file2 = createTempFile("detekt2", "xml").apply {
             writeText(
                 """
                     <?xml version="1.0" encoding="utf-8"?>
@@ -108,8 +109,8 @@ class CheckstyleReportMergerSpec {
                 """.trimIndent()
             )
         }
-        val output = File.createTempFile("output", "xml")
-        CheckstyleReportMerger.merge(setOf(file1, file2), output)
+        val output = createTempFile("output", "xml")
+        CheckstyleReportMerger.merge(setOf(file1.toFile(), file2.toFile()), output.toFile())
 
         val expectedText = """
             <?xml version="1.0" encoding="UTF-8"?><checkstyle version="4.3">
@@ -121,6 +122,6 @@ class CheckstyleReportMergerSpec {
               </file>
             </checkstyle>
         """.trimIndent()
-        assertThat(output.readText()).isEqualToIgnoringNewLines(expectedText)
+        assertThat(output).content().isEqualToIgnoringNewLines(expectedText)
     }
 }

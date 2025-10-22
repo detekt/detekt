@@ -8,8 +8,8 @@ import dev.detekt.api.Alias
 import dev.detekt.api.Config
 import dev.detekt.api.Configuration
 import dev.detekt.api.config
-import dev.detekt.api.configWithAndroidVariants
 import dev.detekt.rules.ktlintwrapper.KtlintRule
+import dev.detekt.rules.ktlintwrapper.configWithAndroidVariants
 
 /**
  * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#max-line-length) for documentation.

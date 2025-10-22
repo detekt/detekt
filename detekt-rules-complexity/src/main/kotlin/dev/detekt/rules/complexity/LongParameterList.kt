@@ -57,7 +57,7 @@ class LongParameterList(config: Config) :
     private lateinit var annotationExcluder: AnnotationExcluder
 
     override fun visitKtFile(file: KtFile) {
-        annotationExcluder = AnnotationExcluder(file, ignoreAnnotatedParameter)
+        annotationExcluder = AnnotationExcluder(file, ignoreAnnotatedParameter, true)
         super.visitKtFile(file)
     }
 
