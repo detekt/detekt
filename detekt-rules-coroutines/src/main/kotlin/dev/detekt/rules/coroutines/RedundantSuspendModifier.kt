@@ -15,6 +15,7 @@ import org.jetbrains.kotlin.analysis.api.resolution.KaVariableAccessCall
 import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolModality
 import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtArrayAccessExpression
@@ -64,6 +65,8 @@ class RedundantSuspendModifier(config: Config) :
         if (function.hasModifier(KtTokens.OVERRIDE_KEYWORD) || function.hasModifier(KtTokens.ACTUAL_KEYWORD)) return
 
         if (function.isOpen()) return
+
+        if (analyze(function) { function.symbol.modality } == KaSymbolModality.OPEN) return
 
         if (!function.anyDescendantOfType<KtExpression> { it.hasSuspendCalls() }) {
             report(
