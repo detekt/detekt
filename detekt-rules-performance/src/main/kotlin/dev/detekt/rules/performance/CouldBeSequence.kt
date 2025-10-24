@@ -15,6 +15,7 @@ import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.name.StandardClassIds
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForReceiver
 import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelectorOrThis
 
@@ -68,14 +69,19 @@ class CouldBeSequence(config: Config) :
         }
     }
 
-    private fun KtExpression.isCallingCollectionFunPresentInSequenceReturningSequence(): Boolean = analyze(this) {
-        val callableId = resolveToCall()
-            ?.singleCallOrNull<KaCallableMemberCall<*, *>>()
-            ?.symbol
-            ?.callableId
-        callableId?.packageName == StandardClassIds.BASE_COLLECTIONS_PACKAGE &&
-            findTopLevelCallables(StandardClassIds.BASE_SEQUENCES_PACKAGE, callableId.callableName)
-                .any { it.returnType.symbol?.classId?.asFqNameString() == SEQUENCE_CLASS_STR }
+    private fun KtExpression.isCallingCollectionFunPresentInSequenceReturningSequence(): Boolean {
+        ((this as? KtCallExpression)?.getCallNameExpression()?.getReferencedName())?.let {
+            if (it in listOfAllowedFunFromCollections) return false
+        }
+        return analyze(this) {
+            val callableId = resolveToCall()
+                ?.singleCallOrNull<KaCallableMemberCall<*, *>>()
+                ?.symbol
+                ?.callableId
+            callableId?.packageName == StandardClassIds.BASE_COLLECTIONS_PACKAGE &&
+                findTopLevelCallables(StandardClassIds.BASE_SEQUENCES_PACKAGE, callableId.callableName)
+                    .any { it.returnType.symbol?.classId?.asFqNameString() == SEQUENCE_CLASS_STR }
+        }
     }
 
     private fun KtExpression.nextChainedCall(): KtExpression? {
@@ -85,5 +91,6 @@ class CouldBeSequence(config: Config) :
 
     companion object {
         private const val SEQUENCE_CLASS_STR = "kotlin.sequences.Sequence"
+        private val listOfAllowedFunFromCollections = listOf("asSequence")
     }
 }

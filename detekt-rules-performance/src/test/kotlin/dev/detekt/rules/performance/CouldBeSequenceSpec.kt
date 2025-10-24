@@ -214,4 +214,15 @@ class CouldBeSequenceSpec(val env: KotlinEnvironmentContainer) {
         """.trimIndent()
         assertThat(subject.lintWithContext(env, code)).hasSize(1)
     }
+
+    @Test
+    fun `using asSequence after allowed number of operations should not trigger rule - #8776`() {
+        val code = """
+            fun foo() = listOf<String?>("bar")
+                .mapIndexed { index, it ->  it?.let { it + "_" + index } }
+                .filterNotNull()
+                .asSequence()
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
 }
