@@ -1,6 +1,6 @@
 package dev.detekt.cli
 
-import dev.detekt.api.RuleSet
+import dev.detekt.api.RuleSetId
 import dev.detekt.tooling.api.spec.ProcessingSpec
 import dev.detekt.tooling.api.spec.RulesSpec
 import dev.detekt.tooling.api.spec.RulesSpec.RunPolicy.DisableDefaultRuleSets
@@ -100,5 +100,5 @@ private fun CliArgs.toRunPolicy(): RulesSpec.RunPolicy {
     val parts = runRule?.split(":")
         ?: return if (disableDefaultRuleSets) DisableDefaultRuleSets else NoRestrictions
     require(parts.size == 2) { "Pattern 'RuleSetId:RuleName' expected." }
-    return RulesSpec.RunPolicy.RestrictToSingleRule(RuleSet.Id(parts[0]), parts[1])
+    return RulesSpec.RunPolicy.RestrictToSingleRule(RuleSetId(parts[0]), parts[1])
 }

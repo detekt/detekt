@@ -10,7 +10,7 @@ import dev.detekt.api.Finding
 import dev.detekt.api.Issue
 import dev.detekt.api.Rule
 import dev.detekt.api.RuleInstance
-import dev.detekt.api.RuleSet
+import dev.detekt.api.RuleSetId
 import dev.detekt.api.Severity
 import dev.detekt.api.SourceLocation
 import dev.detekt.api.TextLocation
@@ -137,7 +137,7 @@ class AnalyzerSpec {
                     Issue(
                         ruleInstance = RuleInstance(
                             id = "MaxLineLength",
-                            ruleSetId = RuleSet.Id("custom"),
+                            ruleSetId = RuleSetId("custom"),
                             url = URI("https://example.org/"),
                             description = "TestDescription",
                             severity = Severity.Error,
@@ -481,7 +481,7 @@ internal fun createRuleDescriptor(
     config,
     RuleInstance(
         id = provider(Config.empty).javaClass.simpleName,
-        ruleSetId = RuleSet.Id("custom"),
+        ruleSetId = RuleSetId("custom"),
         url = URI("https://example.org/"),
         description = "TestDescription",
         severity = Severity.Error,

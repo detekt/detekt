@@ -1,7 +1,7 @@
 package dev.detekt.core.suppressors
 
 import dev.detekt.api.RuleName
-import dev.detekt.api.RuleSet
+import dev.detekt.api.RuleSetId
 import dev.detekt.core.extractRuleName
 import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
@@ -16,7 +16,7 @@ private val FORBIDDEN_SUPPRESS_NAME = RuleName("ForbiddenSuppress")
  * Checks if this psi element is suppressed by @Suppress or @SuppressWarnings annotations.
  * If this element cannot have annotations, the first annotative parent is searched.
  */
-fun KtElement.isSuppressedBy(id: String, aliases: Set<String>, ruleSetId: RuleSet.Id? = null): Boolean {
+fun KtElement.isSuppressedBy(id: String, aliases: Set<String>, ruleSetId: RuleSetId? = null): Boolean {
     val acceptedSuppressionIds = mutableSetOf(id, "ALL", "all", "All")
     if (ruleSetId != null) {
         acceptedSuppressionIds.addAll(listOf(ruleSetId.value, "$ruleSetId.$id", "$ruleSetId:$id"))

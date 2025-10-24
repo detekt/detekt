@@ -46,7 +46,7 @@ val Issue.suppressed: Boolean
 @Poko
 class RuleInstance(
     val id: String,
-    val ruleSetId: RuleSet.Id,
+    val ruleSetId: RuleSetId,
     val url: URI?,
     val description: String,
     val severity: Severity,

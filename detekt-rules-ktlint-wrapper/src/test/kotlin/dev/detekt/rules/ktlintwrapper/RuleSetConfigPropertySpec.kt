@@ -1,6 +1,7 @@
 package dev.detekt.rules.ktlintwrapper
 
 import dev.detekt.api.RuleSet
+import dev.detekt.api.RuleSetId
 import dev.detekt.api.RuleSetProvider
 import dev.detekt.test.TestConfig
 import org.assertj.core.api.Assertions.assertThat
@@ -54,7 +55,7 @@ class RuleSetConfigPropertySpec {
 }
 
 private class TestRuleSetProvider : RuleSetProvider {
-    override val ruleSetId = RuleSet.Id("testRuleSetId")
+    override val ruleSetId = RuleSetId("testRuleSetId")
 
     override fun instance(): RuleSet = RuleSet(ruleSetId, emptyList())
 
