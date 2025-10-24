@@ -3,7 +3,7 @@ id: compose
 title: "Configuration for Compose"
 keywords: [compose, config, configuration, jetpack-compose, rules]
 summary: This page describes each reporting format and explains how to leverage them.
-sidebar_position: 5
+sidebar_position: 30
 ---
 
 Relevant rule sets and their configuration options for Compose styles & usage. The following are being used as reference for Compose usage:
