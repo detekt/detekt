@@ -8,7 +8,7 @@ data class ReportPath(val kind: String, val path: Path) {
     companion object {
         private const val NUM_OF_PARTS_UNIX = 2
         private const val NUM_OF_PARTS_WINDOWS = 3
-        private const val REPORT_PATH_SEPARATOR = ":"
+        private const val REPORT_PATH_SEPARATOR = " "
 
         fun from(input: String): ReportPath {
             val parts = input.split(REPORT_PATH_SEPARATOR)
@@ -17,7 +17,7 @@ data class ReportPath(val kind: String, val path: Path) {
                 NUM_OF_PARTS_UNIX -> parts[1]
                 NUM_OF_PARTS_WINDOWS -> parts.slice(1..<partsSize).joinToString(REPORT_PATH_SEPARATOR)
                 else -> error(
-                    "Input '$input' must consist of two parts for Unix OSs or three for Windows (report-id:path)."
+                    "Input '$input' must consist of two parts for Unix OSs or three for Windows (report-id path)."
                 )
             }
 

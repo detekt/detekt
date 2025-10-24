@@ -61,9 +61,9 @@ class DetektAndroidSpec {
                 assertThat(buildResult.output).containsPattern("""--input \S*[/\\]app[/\\]src[/\\]debug[/\\]java""")
                 assertThat(buildResult.output).containsPattern("""--input \S*[/\\]app[/\\]src[/\\]main[/\\]kotlin""")
                 assertThat(buildResult.output).containsPattern("""--input \S*[/\\]app[/\\]src[/\\]debug[/\\]kotlin""")
-                assertThat(buildResult.output).contains("--report checkstyle:")
-                assertThat(buildResult.output).contains("--report sarif:")
-                assertThat(buildResult.output).doesNotContain("--report md:")
+                assertThat(buildResult.output).contains("--report checkstyle ")
+                assertThat(buildResult.output).contains("--report sarif ")
+                assertThat(buildResult.output).doesNotContain("--report md ")
                 assertThat(buildResult.tasks.map { it.path })
                     .filteredOn { it.startsWith(":app:detekt") }
                     .containsExactlyInAnyOrder(
@@ -95,9 +95,9 @@ class DetektAndroidSpec {
                 assertThat(buildResult.output).containsPattern(
                     """--input \S*[/\\]app[/\\]src[/\\]androidTest[/\\]kotlin"""
                 )
-                assertThat(buildResult.output).contains("--report checkstyle:")
-                assertThat(buildResult.output).contains("--report sarif:")
-                assertThat(buildResult.output).doesNotContain("--report md:")
+                assertThat(buildResult.output).contains("--report checkstyle ")
+                assertThat(buildResult.output).contains("--report sarif ")
+                assertThat(buildResult.output).doesNotContain("--report md ")
                 assertThat(buildResult.tasks.map { it.path })
                     .filteredOn { it.startsWith(":app:detekt") }
                     .containsExactlyInAnyOrder(
@@ -188,9 +188,9 @@ class DetektAndroidSpec {
             gradleRunner.runTasksAndCheckResult(":lib:detektMain") { buildResult ->
                 assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-release.xml """)
                 assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-debug.xml """)
-                assertThat(buildResult.output).contains("--report checkstyle:")
-                assertThat(buildResult.output).contains("--report sarif:")
-                assertThat(buildResult.output).doesNotContain("--report md:")
+                assertThat(buildResult.output).contains("--report checkstyle ")
+                assertThat(buildResult.output).contains("--report sarif ")
+                assertThat(buildResult.output).doesNotContain("--report md ")
                 assertThat(buildResult.tasks.map { it.path })
                     .filteredOn { it.startsWith(":lib:detekt") }
                     .containsExactlyInAnyOrder(
@@ -214,9 +214,9 @@ class DetektAndroidSpec {
                 assertThat(buildResult.output).containsPattern(
                     """--baseline \S*[/\\]detekt-baseline-debugAndroidTest.xml """
                 )
-                assertThat(buildResult.output).contains("--report checkstyle:")
-                assertThat(buildResult.output).contains("--report sarif:")
-                assertThat(buildResult.output).doesNotContain("--report md:")
+                assertThat(buildResult.output).contains("--report checkstyle ")
+                assertThat(buildResult.output).contains("--report sarif ")
+                assertThat(buildResult.output).doesNotContain("--report md ")
                 assertThat(buildResult.tasks.map { it.path })
                     .filteredOn { it.startsWith(":lib:detekt") }
                     .containsExactlyInAnyOrder(
@@ -306,9 +306,9 @@ class DetektAndroidSpec {
                 assertThat(buildResult.output).contains("Configuration cache")
                 assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-release.xml """)
                 assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-debug.xml """)
-                assertThat(buildResult.output).contains("--report checkstyle:")
-                assertThat(buildResult.output).contains("--report sarif:")
-                assertThat(buildResult.output).doesNotContain("--report md:")
+                assertThat(buildResult.output).contains("--report checkstyle ")
+                assertThat(buildResult.output).contains("--report sarif ")
+                assertThat(buildResult.output).doesNotContain("--report md ")
                 assertThat(buildResult.tasks.map { it.path })
                     .filteredOn { it.startsWith(":android_lib:detekt") }
                     .containsExactlyInAnyOrder(
@@ -333,9 +333,9 @@ class DetektAndroidSpec {
                 assertThat(buildResult.output).containsPattern(
                     """--baseline \S*[/\\]detekt-baseline-debugAndroidTest.xml """
                 )
-                assertThat(buildResult.output).contains("--report checkstyle:")
-                assertThat(buildResult.output).contains("--report sarif:")
-                assertThat(buildResult.output).doesNotContain("--report md:")
+                assertThat(buildResult.output).contains("--report checkstyle ")
+                assertThat(buildResult.output).contains("--report sarif ")
+                assertThat(buildResult.output).doesNotContain("--report md ")
                 assertThat(buildResult.tasks.map { it.path })
                     .filteredOn { it.startsWith(":android_lib:detekt") }
                     .containsExactlyInAnyOrder(
