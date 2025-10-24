@@ -11,6 +11,7 @@ import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.singleCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.name.StandardClassIds
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -47,13 +48,13 @@ class CouldBeSequence(config: Config) :
 
         if (visitedCallExpressions.contains(expression)) return
 
-        if (!expression.isCallingKotlinCollectionFunPresentInSequence()) return
+        if (!expression.isCallingCollectionFunPresentInSequenceReturningSequence()) return
 
         var counter = 1
         var nextCall = expression.nextChainedCall()
         while (nextCall != null) {
             visitedCallExpressions += nextCall
-            if (!nextCall.isCallingKotlinCollectionFunPresentInSequence()) {
+            if (!nextCall.isCallingCollectionFunPresentInSequenceReturningSequence()) {
                 break
             }
 
@@ -67,17 +68,22 @@ class CouldBeSequence(config: Config) :
         }
     }
 
-    private fun KtExpression.isCallingKotlinCollectionFunPresentInSequence(): Boolean = analyze(this) {
+    private fun KtExpression.isCallingCollectionFunPresentInSequenceReturningSequence(): Boolean = analyze(this) {
         val callableId = resolveToCall()
             ?.singleCallOrNull<KaCallableMemberCall<*, *>>()
             ?.symbol
             ?.callableId
         callableId?.packageName == StandardClassIds.BASE_COLLECTIONS_PACKAGE &&
-            findTopLevelCallables(StandardClassIds.BASE_SEQUENCES_PACKAGE, callableId.callableName).any()
+            findTopLevelCallables(StandardClassIds.BASE_SEQUENCES_PACKAGE, callableId.callableName)
+                .any { it.returnType.symbol?.classId?.asFqNameString() == SEQUENCE_CLASS_STR }
     }
 
     private fun KtExpression.nextChainedCall(): KtExpression? {
         val expression = this.getQualifiedExpressionForSelectorOrThis()
         return expression.getQualifiedExpressionForReceiver()?.selectorExpression
+    }
+
+    companion object {
+        private const val SEQUENCE_CLASS_STR = "kotlin.sequences.Sequence"
     }
 }
