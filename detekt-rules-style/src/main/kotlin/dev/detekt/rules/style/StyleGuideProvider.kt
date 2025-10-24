@@ -2,6 +2,7 @@ package dev.detekt.rules.style
 
 import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.RuleSet
+import dev.detekt.api.RuleSetId
 import dev.detekt.api.internal.DefaultRuleSetProvider
 import dev.detekt.rules.style.movelambdaout.UnnecessaryBracesAroundTrailingLambda
 import dev.detekt.rules.style.optional.MandatoryBracesLoops
@@ -15,7 +16,7 @@ import dev.detekt.rules.style.optional.OptionalUnit
 @ActiveByDefault(since = "1.0.0")
 class StyleGuideProvider : DefaultRuleSetProvider {
 
-    override val ruleSetId = RuleSet.Id("style")
+    override val ruleSetId = RuleSetId("style")
 
     @Suppress("LongMethod")
     override fun instance(): RuleSet = RuleSet(

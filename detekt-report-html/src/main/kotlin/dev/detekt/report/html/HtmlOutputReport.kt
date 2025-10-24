@@ -5,7 +5,7 @@ import dev.detekt.api.Issue
 import dev.detekt.api.OutputReport
 import dev.detekt.api.ProjectMetric
 import dev.detekt.api.RuleInstance
-import dev.detekt.api.RuleSet
+import dev.detekt.api.RuleSetId
 import dev.detekt.api.SetupContext
 import dev.detekt.api.TextLocation
 import dev.detekt.api.internal.whichDetekt
@@ -103,7 +103,7 @@ class HtmlOutputReport : OutputReport {
             }
     }
 
-    private fun FlowContent.renderGroup(group: RuleSet.Id, issues: List<Issue>) {
+    private fun FlowContent.renderGroup(group: RuleSetId, issues: List<Issue>) {
         h3 { text("$group: %,d".format(Locale.ROOT, issues.size)) }
 
         issues

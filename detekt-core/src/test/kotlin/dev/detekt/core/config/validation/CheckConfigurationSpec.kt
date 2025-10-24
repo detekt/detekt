@@ -5,6 +5,7 @@ import dev.detekt.api.ConfigValidator
 import dev.detekt.api.Notification
 import dev.detekt.api.Notification.Level
 import dev.detekt.api.RuleSet
+import dev.detekt.api.RuleSetId
 import dev.detekt.api.RuleSetProvider
 import dev.detekt.core.createNullLoggingSpec
 import dev.detekt.core.createProcessingSettings
@@ -117,7 +118,7 @@ class CheckConfigurationSpec {
 
 class SampleRuleProvider : RuleSetProvider {
 
-    override val ruleSetId = RuleSet.Id("sample-rule-set")
+    override val ruleSetId = RuleSetId("sample-rule-set")
 
     override fun instance() = RuleSet(ruleSetId, emptyList())
 }

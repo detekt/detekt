@@ -217,9 +217,9 @@ public final class dev/detekt/tooling/api/spec/RulesSpec$RunPolicy$NoRestriction
 }
 
 public final class dev/detekt/tooling/api/spec/RulesSpec$RunPolicy$RestrictToSingleRule : dev/detekt/tooling/api/spec/RulesSpec$RunPolicy {
-	public fun <init> (Ldev/detekt/api/RuleSet$Id;Ljava/lang/String;)V
+	public fun <init> (Ldev/detekt/api/RuleSetId;Ljava/lang/String;)V
 	public final fun getRuleId ()Ljava/lang/String;
-	public final fun getRuleSetId ()Ldev/detekt/api/RuleSet$Id;
+	public final fun getRuleSetId ()Ldev/detekt/api/RuleSetId;
 }
 
 public final class dev/detekt/tooling/dsl/BaselineSpecBuilder : dev/detekt/tooling/dsl/Builder {

@@ -4,7 +4,7 @@ import dev.detekt.api.Config
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
-import dev.detekt.api.RuleSet
+import dev.detekt.api.RuleSetId
 import dev.detekt.core.suppressors.isSuppressedBy
 import dev.detekt.test.utils.KotlinAnalysisApiEngine
 import dev.detekt.test.utils.KotlinEnvironmentContainer
@@ -66,7 +66,7 @@ fun Rule.lint(
 
 private fun List<Finding>.filterSuppressed(rule: Rule): List<Finding> =
     filterNot {
-        it.entity.ktElement.isSuppressedBy(rule.ruleName.value, rule.aliases, RuleSet.Id("NoARuleSetId"))
+        it.entity.ktElement.isSuppressedBy(rule.ruleName.value, rule.aliases, RuleSetId("NoARuleSetId"))
     }
 
 private val Rule.aliases: Set<String> get() = config.valueOrDefault(Config.ALIASES_KEY, emptyList<String>()).toSet()

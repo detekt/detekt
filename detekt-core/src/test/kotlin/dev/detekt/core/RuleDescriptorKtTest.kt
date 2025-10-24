@@ -6,6 +6,7 @@ import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.api.RuleInstance
 import dev.detekt.api.RuleSet
+import dev.detekt.api.RuleSetId
 import dev.detekt.api.RuleSetProvider
 import dev.detekt.api.Severity
 import dev.detekt.api.Severity.Error
@@ -388,7 +389,7 @@ private val configInactive = mapOf("active" to false)
 
 private fun createRuleInstance(id: String, active: Boolean, url: String?, severity: Severity) = RuleInstance(
     id,
-    RuleSet.Id("custom"),
+    RuleSetId("custom"),
     if (url == "default") {
         if (id.startsWith("AnotherRule")) {
             URI("https://example.org/")
@@ -404,12 +405,12 @@ private fun createRuleInstance(id: String, active: Boolean, url: String?, severi
 )
 
 private class TestDefaultRuleSetProvider : DefaultRuleSetProvider {
-    override val ruleSetId = RuleSet.Id("custom")
+    override val ruleSetId = RuleSetId("custom")
     override fun instance() = RuleSet(ruleSetId, listOf(::OneRule, ::AnotherRule, ::RequiresAnalysisApiRule))
 }
 
 private class TestCustomRuleSetProvider : RuleSetProvider {
-    override val ruleSetId = RuleSet.Id("custom")
+    override val ruleSetId = RuleSetId("custom")
     override fun instance() = RuleSet(ruleSetId, listOf(::OneRule, ::AnotherRule, ::RequiresAnalysisApiRule))
 }
 

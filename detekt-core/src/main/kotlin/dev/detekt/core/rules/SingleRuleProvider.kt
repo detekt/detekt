@@ -2,10 +2,11 @@ package dev.detekt.core.rules
 
 import dev.detekt.api.RuleName
 import dev.detekt.api.RuleSet
+import dev.detekt.api.RuleSetId
 import dev.detekt.api.RuleSetProvider
 
 internal class SingleRuleProvider private constructor(
-    override val ruleSetId: RuleSet.Id,
+    override val ruleSetId: RuleSetId,
     private val ruleSet: RuleSet,
 ) : RuleSetProvider {
 

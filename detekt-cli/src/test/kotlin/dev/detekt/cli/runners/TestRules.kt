@@ -6,12 +6,13 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.Rule
 import dev.detekt.api.RuleSet
+import dev.detekt.api.RuleSetId
 import dev.detekt.api.RuleSetProvider
 import dev.detekt.api.config
 import org.jetbrains.kotlin.psi.KtClass
 
 class TestProvider : RuleSetProvider {
-    override val ruleSetId = RuleSet.Id("test")
+    override val ruleSetId = RuleSetId("test")
     override fun instance(): RuleSet = RuleSet(
         ruleSetId,
         listOf(

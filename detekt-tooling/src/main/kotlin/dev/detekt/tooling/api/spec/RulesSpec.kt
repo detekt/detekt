@@ -1,6 +1,6 @@
 package dev.detekt.tooling.api.spec
 
-import dev.detekt.api.RuleSet
+import dev.detekt.api.RuleSetId
 import dev.detekt.api.Severity
 
 interface RulesSpec {
@@ -61,6 +61,6 @@ interface RulesSpec {
         /**
          * Run a single rule.
          */
-        class RestrictToSingleRule(val ruleSetId: RuleSet.Id, val ruleId: String) : RunPolicy()
+        class RestrictToSingleRule(val ruleSetId: RuleSetId, val ruleId: String) : RunPolicy()
     }
 }

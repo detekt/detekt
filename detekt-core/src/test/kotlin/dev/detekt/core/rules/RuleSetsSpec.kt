@@ -1,7 +1,7 @@
 package dev.detekt.core.rules
 
 import dev.detekt.api.RuleName
-import dev.detekt.api.RuleSet
+import dev.detekt.api.RuleSetId
 import dev.detekt.core.createNullLoggingSpec
 import dev.detekt.core.tooling.withSettings
 import dev.detekt.test.utils.resourceAsPath
@@ -51,7 +51,7 @@ class RuleSetsSpec {
     @ValueSource(strings = ["MagicNumber", "MagicNumber/id"])
     fun `only loads the provider with the selected rule`(ruleId: String) {
         val providers = createNullLoggingSpec {
-            rules { runPolicy = RestrictToSingleRule(RuleSet.Id("style"), ruleId) }
+            rules { runPolicy = RestrictToSingleRule(RuleSetId("style"), ruleId) }
         }
             .withSettings { createRuleProviders() }
 
@@ -66,7 +66,7 @@ class RuleSetsSpec {
     fun `throws when rule set doesn't exist`(ruleId: String) {
         assertThatThrownBy {
             createNullLoggingSpec {
-                rules { runPolicy = RestrictToSingleRule(RuleSet.Id("foo"), ruleId) }
+                rules { runPolicy = RestrictToSingleRule(RuleSetId("foo"), ruleId) }
             }
                 .withSettings { createRuleProviders() }
         }
@@ -79,11 +79,11 @@ class RuleSetsSpec {
      * When any breaking change in 'detekt-api' is done, this test will break.
      *
      * The procedure to repair this test is:
-     *  1. 'gradle build -x test publishToMavenLocal'
-     *  2. 'gradle build' again to let the 'sample' project pick up the new api changes.
-     *  3. 'cp detekt-sample-extensions/build/libs/detekt-sample-extensions-<version>.jar
-     *          detekt-core/src/test/resources/sample-rule-set.jar'
-     *  4. Now 'gradle build' should be green again.
+     *  1. 'gradle publishToMavenLocal'
+     *  2. add `mavenLocal()` as the first repository in `detekt-sample-extensions/settings.gradle.kts`
+     *  3. 'gradle -pdetekt-sample-extensions build' again to let the 'sample' project pick up the new api changes. (fix whatever you need until it passes)
+     *  4. 'cp detekt-sample-extensions/build/libs/detekt-sample-extensions.jar detekt-core/src/test/resources/sample-rule-set.jar'
+     *  5. Now 'gradle build' should be green again.
      */
     @Test
     fun `loads custom rule sets through jars`() {

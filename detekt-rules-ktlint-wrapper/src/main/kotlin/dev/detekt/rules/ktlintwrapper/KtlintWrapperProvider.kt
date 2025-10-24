@@ -2,11 +2,11 @@ package dev.detekt.rules.ktlintwrapper
 
 import com.pinterest.ktlint.rule.engine.core.api.Rule
 import com.pinterest.ktlint.rule.engine.core.api.RuleId
-import com.pinterest.ktlint.rule.engine.core.api.RuleSetId
 import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.Config
 import dev.detekt.api.Configuration
 import dev.detekt.api.RuleSet
+import dev.detekt.api.RuleSetId
 import dev.detekt.api.RuleSetProvider
 import dev.detekt.rules.ktlintwrapper.wrappers.AnnotationOnSeparateLine
 import dev.detekt.rules.ktlintwrapper.wrappers.AnnotationSpacing
@@ -107,6 +107,7 @@ import dev.detekt.rules.ktlintwrapper.wrappers.ValueArgumentComment
 import dev.detekt.rules.ktlintwrapper.wrappers.ValueParameterComment
 import dev.detekt.rules.ktlintwrapper.wrappers.WhenEntryBracing
 import dev.detekt.rules.ktlintwrapper.wrappers.Wrapping
+import com.pinterest.ktlint.rule.engine.core.api.RuleSetId as KtlintRuleSetId
 
 /**
  * This rule set provides wrappers for rules implemented by ktlint - https://ktlint.github.io/.
@@ -122,7 +123,7 @@ import dev.detekt.rules.ktlintwrapper.wrappers.Wrapping
 @ActiveByDefault(since = "1.0.0")
 class KtlintWrapperProvider : RuleSetProvider {
 
-    override val ruleSetId = RuleSet.Id("ktlint")
+    override val ruleSetId = RuleSetId("ktlint")
 
     @Suppress("LongMethod")
     override fun instance() = RuleSet(
@@ -291,7 +292,7 @@ private fun defaultRuleOrderComparator() =
     compareBy<Pair<(Config) -> KtlintRule, KtlintRule>> { (_, rule) ->
         if (rule.runAsLateAsPossible) 1 else 0
     }.thenBy { (_, rule) ->
-        if (rule.wrappingRuleId.ruleSetId == RuleSetId.STANDARD) 0 else 1
+        if (rule.wrappingRuleId.ruleSetId == KtlintRuleSetId.STANDARD) 0 else 1
     }.thenBy { (_, rule) -> rule.wrappingRuleId.value }
 
 internal val KtlintRule.wrappingRuleId
