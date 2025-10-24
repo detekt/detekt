@@ -2,6 +2,7 @@ package dev.detekt.rules.naming
 
 import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.RuleSet
+import dev.detekt.api.RuleSetId
 import dev.detekt.api.internal.DefaultRuleSetProvider
 
 /**
@@ -10,7 +11,7 @@ import dev.detekt.api.internal.DefaultRuleSetProvider
 @ActiveByDefault(since = "1.0.0")
 class NamingProvider : DefaultRuleSetProvider {
 
-    override val ruleSetId = RuleSet.Id("naming")
+    override val ruleSetId = RuleSetId("naming")
 
     override fun instance(): RuleSet = RuleSet(
         ruleSetId,

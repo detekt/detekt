@@ -2,6 +2,7 @@ package dev.detekt.rules.coroutines
 
 import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.RuleSet
+import dev.detekt.api.RuleSetId
 import dev.detekt.api.internal.DefaultRuleSetProvider
 
 /**
@@ -10,7 +11,7 @@ import dev.detekt.api.internal.DefaultRuleSetProvider
 @ActiveByDefault(since = "1.4.0")
 class CoroutinesProvider : DefaultRuleSetProvider {
 
-    override val ruleSetId = RuleSet.Id("coroutines")
+    override val ruleSetId = RuleSetId("coroutines")
 
     override fun instance(): RuleSet = RuleSet(
         ruleSetId,

@@ -2,6 +2,7 @@ package dev.detekt.rules.ruleauthors
 
 import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.RuleSet
+import dev.detekt.api.RuleSetId
 import dev.detekt.api.RuleSetProvider
 
 /**
@@ -16,7 +17,7 @@ import dev.detekt.api.RuleSetProvider
 @ActiveByDefault("1.22.0")
 class RuleAuthorsProvider : RuleSetProvider {
 
-    override val ruleSetId = RuleSet.Id("ruleauthors")
+    override val ruleSetId = RuleSetId("ruleauthors")
 
     override fun instance() = RuleSet(
         ruleSetId,

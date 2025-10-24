@@ -9,7 +9,7 @@ class RuleSetSpec {
     @ParameterizedTest(name = "should allow RuleSet with name {0}")
     @MethodSource("getValidNames")
     fun shouldAllowValidNames(ruleSetId: String) {
-        assertThatCode { RuleSet(RuleSet.Id(ruleSetId), emptyList()) }.doesNotThrowAnyException()
+        assertThatCode { RuleSet(RuleSetId(ruleSetId), emptyList()) }.doesNotThrowAnyException()
     }
 
     @ParameterizedTest(name = "should not allow RuleSet with name {0}")
@@ -17,7 +17,7 @@ class RuleSetSpec {
     fun shouldNotAllowInvalidNames(ruleSetId: String) {
         assertThatExceptionOfType(IllegalArgumentException::class.java).isThrownBy {
             RuleSet(
-                RuleSet.Id(ruleSetId),
+                RuleSetId(ruleSetId),
                 emptyList()
             )
         }.withMessageStartingWith("id '$ruleSetId' must match")

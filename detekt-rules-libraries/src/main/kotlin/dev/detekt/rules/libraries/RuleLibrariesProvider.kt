@@ -2,6 +2,7 @@ package dev.detekt.rules.libraries
 
 import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.RuleSet
+import dev.detekt.api.RuleSetId
 import dev.detekt.api.RuleSetProvider
 
 /**
@@ -16,7 +17,7 @@ import dev.detekt.api.RuleSetProvider
 @ActiveByDefault("1.16.0")
 class RuleLibrariesProvider : RuleSetProvider {
 
-    override val ruleSetId = RuleSet.Id("libraries")
+    override val ruleSetId = RuleSetId("libraries")
 
     override fun instance() = RuleSet(
         ruleSetId,
