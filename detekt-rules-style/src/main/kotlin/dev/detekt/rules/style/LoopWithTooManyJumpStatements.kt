@@ -74,7 +74,7 @@ class LoopWithTooManyJumpStatements(config: Config) : Rule(
 /**
  * For some reason not all keyword properties are exposed on [KtLoopExpression] subclasses, so we have to do it manually.
  */
-@Suppress("CommentOverPrivateProperty")
+@Suppress("DocumentationOverPrivateProperty")
 private val KtLoopExpression.keyword: PsiElement?
     get() =
         when (this) {
