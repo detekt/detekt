@@ -118,7 +118,10 @@ java {
     withJavadocJar()
     sourceCompatibility = JavaVersion.toVersion(jvmTargetVersion)
     targetCompatibility = JavaVersion.toVersion(jvmTargetVersion)
-    consistentResolution {
-        useCompileClasspathVersions()
+    if (project.name != "detekt-gradle-plugin") {
+        // DGP uses different versions of kotlin-gradle-api in test runtime and compile time
+        consistentResolution {
+            useCompileClasspathVersions()
+        }
     }
 }
