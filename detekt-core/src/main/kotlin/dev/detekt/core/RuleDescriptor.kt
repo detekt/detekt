@@ -6,6 +6,7 @@ import dev.detekt.api.Rule
 import dev.detekt.api.RuleInstance
 import dev.detekt.api.RuleName
 import dev.detekt.api.RuleSet
+import dev.detekt.api.RuleSetId
 import dev.detekt.api.RuleSetProvider
 import dev.detekt.api.Severity
 import dev.detekt.api.internal.DefaultRuleSetProvider
@@ -74,7 +75,7 @@ private fun RuleSet.getRules(
         }
     }
 
-private fun generateDefaultUrl(ruleSetId: RuleSet.Id, ruleName: RuleName) =
+private fun generateDefaultUrl(ruleSetId: RuleSetId, ruleName: RuleName) =
     URI("https://detekt.dev/docs/${whichDetekt()}/rules/${ruleSetId.value.lowercase()}#${ruleName.value.lowercase()}")
 
 private val externalFirstPartyRuleSets = setOf(

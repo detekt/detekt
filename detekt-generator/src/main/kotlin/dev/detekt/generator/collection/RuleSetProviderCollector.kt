@@ -8,7 +8,6 @@ import org.jetbrains.kotlin.psi.KtAnnotatedExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCallableReferenceExpression
 import org.jetbrains.kotlin.psi.KtClass
-import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtProperty
@@ -106,8 +105,7 @@ private class RuleSetProviderVisitor : KtTreeVisitorVoid() {
             property.name != null &&
             property.name == PROPERTY_RULE_SET_ID
         ) {
-            val initializer = (property.initializer as? KtDotQualifiedExpression)
-            val argument = (initializer?.lastChild as? KtCallExpression)?.valueArguments
+            val argument = (property.initializer as? KtCallExpression)?.valueArguments
                 ?.single()
                 ?.getArgumentExpression()
             name = (argument as? KtStringTemplateExpression)?.entries?.get(0)?.text
