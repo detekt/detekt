@@ -57,7 +57,7 @@ internal fun YamlNode.printConfiguration(configuration: Configuration) {
 
     if (hasDeviatingAndroidDefault) {
         val description =
-            "If the 'android' ruleset property is set to true, " +
+            "If the 'code_style' ruleset property is set to 'android', " +
                 "the default is '${configuration.defaultAndroidValue.getPlainValue()}', " +
                 "otherwise '${configuration.defaultValue.getPlainValue()}'."
         comment("${configuration.name}: $description")
