@@ -1,5 +1,7 @@
 package dev.detekt.gradle.plugin
 
+import com.android.build.api.AndroidPluginVersion
+import com.android.build.api.variant.AndroidComponentsExtension
 import dev.detekt.detekt_gradle_plugin.BuildConfig
 import dev.detekt.gradle.Detekt
 import dev.detekt.gradle.DetektCreateBaselineTask
@@ -61,25 +63,33 @@ class DetektPlugin : Plugin<Project> {
     }
 
     private fun Project.registerDetektAndroidTasks(extension: DetektExtension) {
+        fun builtInPropertyEnabled(): Boolean {
+            val builtInKotlinEnabledByDefault = extensions.getByType(AndroidComponentsExtension::class.java).pluginVersion >= AndroidPluginVersion(9, 0).alpha(3)
+            return providers.gradleProperty("android.builtInKotlin").getOrElse(builtInKotlinEnabledByDefault.toString()).toBooleanStrict()
+        }
+
         plugins.withId("kotlin-android") {
             DetektAndroidCompilations.registerTasks(project, extension)
             DetektAndroidCompilations.linkTasks(project, extension)
         }
 
         plugins.withId("com.android.experimental.built-in-kotlin") {
-            DetektAndroidCompilations.registerTasks(project, extension)
-            DetektAndroidCompilations.linkTasks(project, extension)
+            if (!pluginManager.hasPlugin("com.android.base")) {
+                DetektAndroidCompilations.registerTasks(project, extension)
+                DetektAndroidCompilations.linkTasks(project, extension)
+            }
+            if (pluginManager.hasPlugin("com.android.base") && !builtInPropertyEnabled()) {
+                DetektAndroidCompilations.registerTasks(project, extension)
+                DetektAndroidCompilations.linkTasks(project, extension)
+            }
         }
 
-//        plugins.withId("com.android.base") {
-//            val androidComponentsExtension = extensions.getByType(AndroidComponentsExtension::class.java)
-//            val builtInKotlin = providers.gradleProperty("android.builtInKotlin").getOrElse("true").toBooleanStrict()
-//
-//            if (androidComponentsExtension.pluginVersion >= AndroidPluginVersion(9, 0).alpha(3) && builtInKotlin) {
-//                DetektAndroidCompilations.registerTasks(project, extension)
-//                DetektAndroidCompilations.linkTasks(project, extension)
-//            }
-//        }
+        plugins.withId("com.android.base") {
+            if (builtInPropertyEnabled()) {
+                DetektAndroidCompilations.registerTasks(project, extension)
+                DetektAndroidCompilations.linkTasks(project, extension)
+            }
+        }
     }
 
     private fun Project.registerDetektPlainTask(extension: DetektExtension) {

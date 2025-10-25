@@ -16,19 +16,22 @@ import org.junit.jupiter.params.provider.CsvSource
 @EnabledIf("dev.detekt.gradle.DetektAndroidSpecKt#isAndroidSdkInstalled")
 @ParameterizedClass
 @CsvSource(
-    // android.builtInKotlin, android.newDsl
-    "false, false", // Uses Kotlin Android plugin and old DSL
-    "true, false", // Uses AGP build in Kotlin support available from AGP 9.x with old DSL
-    "true, true", // Uses AGP build in Kotlin support available from AGP 9.x with new DSL
-    // "false, true" - invalid, see https://youtrack.jetbrains.com/projects/KT/issues/KT-80785
+    // android.builtInKotlin, useBuiltInKotlinPlugin
+    "false, false", // Opt out of AGP built in Kotlin https://developer.android.com/build/migrate-to-built-in-kotlin#opt-out-of-built-in-kotlin
+    "true, false", // Default in AGP 9 - enable AGP built in Kotlin https://developer.android.com/build/migrate-to-built-in-kotlin#enable-built-in-kotlin
+    "false, true", // Enable AGP built in Kotlin with module-by-module migration plugin https://developer.android.com/build/migrate-to-built-in-kotlin#module-by-module-migration
+    "true, true", // Enable AGP built in Kotlin using both plugin and project-wide property
 )
 class DetektAndroidSpec {
 
     @Parameter(0)
-    var builtInKotlin: String = "no-op"
+    var builtInKotlinPropertyEnabled: String = "no-op"
 
     @Parameter(1)
-    var newDsl: String = "no-op"
+    var applyBuiltInKotlinPlugin: String = "no-op"
+
+    val agpBuiltInKotlinUsed
+        get() = builtInKotlinPropertyEnabled.toBooleanStrict() || applyBuiltInKotlinPlugin.toBooleanStrict()
 
     @Nested
     inner class `configures android tasks for android application` {
@@ -634,8 +637,8 @@ class DetektAndroidSpec {
         projectLayout = projectLayout,
         buildFileName = "build.gradle.kts",
         gradleProperties = mapOf(
-            "android.builtInKotlin" to builtInKotlin,
-            "android.newDsl" to newDsl,
+            "android.builtInKotlin" to builtInKotlinPropertyEnabled,
+            "android.newDsl" to agpBuiltInKotlinUsed.toString(),
         ),
         settingsContent = """
         dependencyResolutionManagement {
@@ -654,7 +657,8 @@ class DetektAndroidSpec {
         get() = """
             plugins {
                 id("com.android.application")
-                ${if (!builtInKotlin.toBooleanStrict()) { """kotlin("android")""" } else """id("com.android.experimental.built-in-kotlin")""" }
+                ${if (!agpBuiltInKotlinUsed) """kotlin("android")""" else """"""}
+                ${if (applyBuiltInKotlinPlugin.toBooleanStrict()) { """id("com.android.experimental.built-in-kotlin")""" } else { """""" }}
                 id("dev.detekt")
             }
             kotlin {
@@ -669,7 +673,8 @@ class DetektAndroidSpec {
         get() = """
             plugins {
                 id("com.android.library")
-                ${if (!builtInKotlin.toBooleanStrict()) { """kotlin("android")""" } else """id("com.android.experimental.built-in-kotlin")""" }
+                ${if (!agpBuiltInKotlinUsed) """kotlin("android")""" else """"""}
+                ${if (applyBuiltInKotlinPlugin.toBooleanStrict()) { """id("com.android.experimental.built-in-kotlin")""" } else { """""" }}
                 id("dev.detekt")
             }
             kotlin {
