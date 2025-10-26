@@ -43,7 +43,7 @@ class DetektAndroidSpec {
                 numberOfSourceFilesPerSourceDir = 1,
                 numberOfFindings = 1,
                 buildFileContent = joinGradleBlocks(
-                    APP_PLUGIN_BLOCK,
+                    appPluginBlock,
                     ANDROID_BLOCK,
                     DETEKT_REPORTS_BLOCK,
                 ),
@@ -133,7 +133,7 @@ class DetektAndroidSpec {
                 numberOfSourceFilesPerSourceDir = 1,
                 numberOfFindings = 1,
                 buildFileContent = joinGradleBlocks(
-                    APP_PLUGIN_BLOCK,
+                    appPluginBlock,
                     ANDROID_BLOCK,
                     DETEKT_REPORTS_BLOCK,
                 ),
@@ -178,7 +178,7 @@ class DetektAndroidSpec {
                 numberOfSourceFilesPerSourceDir = 1,
                 numberOfFindings = 1,
                 buildFileContent = joinGradleBlocks(
-                    LIB_PLUGIN_BLOCK,
+                    libPluginBlock,
                     ANDROID_BLOCK,
                     DETEKT_REPORTS_BLOCK,
                 ),
@@ -281,7 +281,7 @@ class DetektAndroidSpec {
                 numberOfSourceFilesPerSourceDir = 1,
                 numberOfFindings = 1,
                 buildFileContent = joinGradleBlocks(
-                    LIB_PLUGIN_BLOCK,
+                    libPluginBlock,
                     ANDROID_BLOCK,
                     DETEKT_REPORTS_BLOCK,
                     """
@@ -364,7 +364,7 @@ class DetektAndroidSpec {
                 numberOfSourceFilesPerSourceDir = 1,
                 numberOfFindings = 1,
                 buildFileContent = joinGradleBlocks(
-                    LIB_PLUGIN_BLOCK,
+                    libPluginBlock,
                     ANDROID_BLOCK_WITH_FLAVOR,
                     DETEKT_REPORTS_BLOCK,
                 ),
@@ -417,7 +417,7 @@ class DetektAndroidSpec {
                 numberOfSourceFilesPerSourceDir = 1,
                 numberOfFindings = 1,
                 buildFileContent = joinGradleBlocks(
-                    LIB_PLUGIN_BLOCK,
+                    libPluginBlock,
                     ANDROID_BLOCK_WITH_FLAVOR,
                     """
                         detekt {
@@ -476,7 +476,7 @@ class DetektAndroidSpec {
                 numberOfSourceFilesPerSourceDir = 1,
                 numberOfFindings = 1,
                 buildFileContent = joinGradleBlocks(
-                    LIB_PLUGIN_BLOCK,
+                    libPluginBlock,
                     ANDROID_BLOCK_WITH_FLAVOR,
                     """
                         detekt {
@@ -537,7 +537,7 @@ class DetektAndroidSpec {
                 numberOfSourceFilesPerSourceDir = 1,
                 numberOfFindings = 1,
                 buildFileContent = joinGradleBlocks(
-                    LIB_PLUGIN_BLOCK,
+                    libPluginBlock,
                     ANDROID_BLOCK_WITH_FLAVOR,
                     """
                         detekt {
@@ -598,7 +598,7 @@ class DetektAndroidSpec {
                     numberOfSourceFilesPerSourceDir = 0,
                     numberOfFindings = 0,
                     buildFileContent = joinGradleBlocks(
-                        APP_PLUGIN_BLOCK,
+                        appPluginBlock,
                         ANDROID_BLOCK_WITH_VIEW_BINDING,
                     ),
                     srcDirs = listOf("src/main/java"),
@@ -648,17 +648,17 @@ class DetektAndroidSpec {
                 google()
             }
         }
-    """.trimIndent(),
+        """.trimIndent(),
         dryRun = dryRun,
     ).also { it.setupProject() }
 
-    private val APP_PLUGIN_BLOCK: String
+    private val appPluginBlock: String
         @Language("gradle.kts")
         get() = """
             plugins {
                 id("com.android.application")
-                ${if (!agpBuiltInKotlinUsed) """kotlin("android")""" else """"""}
-                ${if (applyBuiltInKotlinPlugin.toBooleanStrict()) { """id("com.android.experimental.built-in-kotlin")""" } else { """""" }}
+                ${if (!agpBuiltInKotlinUsed) """kotlin("android")""" else "" }
+                ${if (applyBuiltInKotlinPlugin.toBooleanStrict()) """id("com.android.experimental.built-in-kotlin")""" else "" }
                 id("dev.detekt")
             }
             kotlin {
@@ -668,13 +668,13 @@ class DetektAndroidSpec {
             }
         """.trimIndent()
 
-    private val LIB_PLUGIN_BLOCK: String
+    private val libPluginBlock: String
         @Language("gradle.kts")
         get() = """
             plugins {
                 id("com.android.library")
-                ${if (!agpBuiltInKotlinUsed) """kotlin("android")""" else """"""}
-                ${if (applyBuiltInKotlinPlugin.toBooleanStrict()) { """id("com.android.experimental.built-in-kotlin")""" } else { """""" }}
+                ${if (!agpBuiltInKotlinUsed) """kotlin("android")""" else "" }
+                ${if (applyBuiltInKotlinPlugin.toBooleanStrict()) """id("com.android.experimental.built-in-kotlin")""" else "" }
                 id("dev.detekt")
             }
             kotlin {

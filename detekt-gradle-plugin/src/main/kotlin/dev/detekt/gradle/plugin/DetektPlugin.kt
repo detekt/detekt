@@ -64,8 +64,14 @@ class DetektPlugin : Plugin<Project> {
 
     private fun Project.registerDetektAndroidTasks(extension: DetektExtension) {
         fun builtInPropertyEnabled(): Boolean {
-            val builtInKotlinEnabledByDefault = extensions.getByType(AndroidComponentsExtension::class.java).pluginVersion >= AndroidPluginVersion(9, 0).alpha(3)
-            return providers.gradleProperty("android.builtInKotlin").getOrElse(builtInKotlinEnabledByDefault.toString()).toBooleanStrict()
+            @Suppress("MagicNumber")
+            val builtInKotlinEnabledByDefault = extensions
+                .getByType(AndroidComponentsExtension::class.java)
+                .pluginVersion >= AndroidPluginVersion(major = 9, minor = 0).alpha(3)
+            return providers
+                .gradleProperty("android.builtInKotlin")
+                .getOrElse(builtInKotlinEnabledByDefault.toString())
+                .toBooleanStrict()
         }
 
         plugins.withId("kotlin-android") {
