@@ -662,6 +662,48 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
         }
 
         @Test
+        fun `should report property getters call used without property`() {
+            val code = """
+                fun foo() = run {
+                    val calendar = java.util.Calendar.getInstance()
+                    calendar.firstDayOfWeek
+                }
+            """.trimIndent()
+            val findings = ForbiddenMethodCall(
+                TestConfig(METHODS to listOf("java.util.Calendar.getFirstDayOfWeek"))
+            ).lintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+        }
+
+        @Test
+        fun `should not report property getters call with binary expression when setter is configured`() {
+            val code = """
+                fun foo() = run {
+                    val calendar = java.util.Calendar.getInstance()
+                    calendar.firstDayOfWeek * 2
+                }
+            """.trimIndent()
+            val findings = ForbiddenMethodCall(
+                TestConfig(METHODS to listOf("java.util.Calendar.setFirstDayOfWeek"))
+            ).lintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `should report property getters call with binary expression`() {
+            val code = """
+                fun foo() = run {
+                    val calendar = java.util.Calendar.getInstance()
+                    calendar.firstDayOfWeek * 2
+                }
+            """.trimIndent()
+            val findings = ForbiddenMethodCall(
+                TestConfig(METHODS to listOf("java.util.Calendar.getFirstDayOfWeek"))
+            ).lintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+        }
+
+        @Test
         fun `should report property getter and setter call`() {
             val code = """
                 import java.util.Calendar

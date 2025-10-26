@@ -29,7 +29,7 @@ class ConfigPrinterSpec {
                 conf3:
                   - 'a'
                   - 'b'
-                # conf5: If the 'android' ruleset property is set to true, the default is '100', otherwise '120'.
+                # conf5: If the 'code_style' ruleset property is set to 'android', the default is '100', otherwise '120'.
               EqualsNull:
                 active: false
               NoUnitKeyword:
@@ -49,12 +49,6 @@ class ConfigPrinterSpec {
     @Test
     fun `prints default processor configuration`() {
         assertThat(yamlString).contains("processors:")
-    }
-
-    @Test
-    fun `prints default report configuration`() {
-        assertThat(yamlString).contains("output-reports:")
-        assertThat(yamlString).contains("console-reports:")
     }
 
     @Test

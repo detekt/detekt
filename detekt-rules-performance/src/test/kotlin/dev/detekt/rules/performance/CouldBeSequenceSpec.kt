@@ -187,4 +187,42 @@ class CouldBeSequenceSpec(val env: KotlinEnvironmentContainer) {
         """.trimIndent()
         assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
+
+    @Test
+    fun `terminating operator should not be sequence`() {
+        val code = """
+            fun main() {
+                listOf(1, 2, 3)
+                    .groupBy { "test" }
+                    .map { (a, b) -> a to b }
+                    .filter { (0..1).random() == 1  }
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
+    fun `long list after terminal operation should be reported`() {
+        val code = """
+            fun main() {
+                listOf(1, 2, 3)
+                    .groupBy { "test" }
+                    .map { (a, b) -> a to b }
+                    .filter { (0..1).random() == 1  }
+                    .take(2)
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
+    fun `using asSequence after allowed number of operations should not trigger rule - #8776`() {
+        val code = """
+            fun foo() = listOf<String?>("bar")
+                .mapIndexed { index, it ->  it?.let { it + "_" + index } }
+                .filterNotNull()
+                .asSequence()
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
 }

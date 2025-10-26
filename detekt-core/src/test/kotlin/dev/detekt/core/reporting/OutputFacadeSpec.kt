@@ -8,7 +8,7 @@ import dev.detekt.api.testfixtures.createRuleInstance
 import dev.detekt.core.createNullLoggingSpec
 import dev.detekt.core.tooling.withSettings
 import dev.detekt.report.html.HtmlOutputReport
-import dev.detekt.report.md.MdOutputReport
+import dev.detekt.report.markdown.MarkdownOutputReport
 import dev.detekt.report.sarif.SarifOutputReport
 import dev.detekt.report.xml.CheckstyleOutputReport
 import dev.detekt.test.utils.StringPrintStream
@@ -31,14 +31,14 @@ class OutputFacadeSpec {
         )
         val htmlOutputPath = tempDir.resolve("detekt.html")
         val xmlOutputPath = tempDir.resolve("detekt.xml")
-        val mdOutputPath = tempDir.resolve("detekt.md")
+        val markdownOutputPath = tempDir.resolve("detekt.md")
         val sarifOutputPath = tempDir.resolve("detekt.sarif")
 
         val spec = createNullLoggingSpec {
             reports {
                 report { "html" to htmlOutputPath }
                 report { "checkstyle" to xmlOutputPath }
-                report { "md" to mdOutputPath }
+                report { "markdown" to markdownOutputPath }
                 report { "sarif" to sarifOutputPath }
             }
             logging {
@@ -51,12 +51,12 @@ class OutputFacadeSpec {
         assertThat(printStream.toString()).contains(
             "Successfully generated ${CheckstyleOutputReport().id} at ${xmlOutputPath.toUri()}",
             "Successfully generated ${HtmlOutputReport().id} at ${htmlOutputPath.toUri()}",
-            "Successfully generated ${MdOutputReport().id} at ${mdOutputPath.toUri()}",
+            "Successfully generated ${MarkdownOutputReport().id} at ${markdownOutputPath.toUri()}",
             "Successfully generated ${SarifOutputReport().id} at ${sarifOutputPath.toUri()}",
         )
         assertThat(xmlOutputPath).isNotEmptyFile()
         assertThat(htmlOutputPath).isNotEmptyFile()
-        assertThat(mdOutputPath).isNotEmptyFile()
+        assertThat(markdownOutputPath).isNotEmptyFile()
     }
 
     @Test
@@ -69,13 +69,13 @@ class OutputFacadeSpec {
             ),
         )
         val htmlOutputPath = tempDir.resolve("detekt.html")
-        val mdOutputPath = tempDir.resolve("detekt.md")
+        val markdownOutputPath = tempDir.resolve("detekt.md")
 
         val spec = createNullLoggingSpec {
             reports {
                 report { "html" to htmlOutputPath }
                 report { "checkstyle" to htmlOutputPath }
-                report { "md" to mdOutputPath }
+                report { "markdown" to markdownOutputPath }
             }
             logging {
                 outputChannel = printStream
@@ -105,7 +105,7 @@ class OutputFacadeSpec {
             reports {
                 report { "html" to htmlOutputPath }
                 report { "checkstyle" to htmlOutputPath }
-                report { "md" to htmlOutputPath }
+                report { "markdown" to htmlOutputPath }
                 report { "sarif" to sarifOutputPath }
             }
             logging {
@@ -117,6 +117,6 @@ class OutputFacadeSpec {
             spec.withSettings { OutputFacade(this).run(defaultResult) }
         }
             .isInstanceOf(IllegalStateException::class.java)
-            .hasMessage("The path $htmlOutputPath is defined in multiple reports: [html, checkstyle, md]")
+            .hasMessage("The path $htmlOutputPath is defined in multiple reports: [html, checkstyle, markdown]")
     }
 }

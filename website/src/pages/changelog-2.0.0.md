@@ -12,6 +12,78 @@ Detekt 2.0.0 is still in alpha. While it's stable enough to use in your projects
 
 :::
 
+## 2.0.0-alpha.1 - 2025-10-21
+
+This is an alpha release of Detekt 2.0.0. Is built against Kotlin 2.2.20, Gradle 9.1.0 and is tested against JDK 25.
+
+### Breaking Changes
+
+- Replace detekt-test-utils file extensions with JUnit's TempDir extension - [#8725](https://github.com/detekt/detekt/pull/8725)
+- Remove unused KotlinType.fqNameOrNull - [#8711](https://github.com/detekt/detekt/pull/8711)
+- Remove K1 compiler support from FunctionMatcher - [#8710](https://github.com/detekt/detekt/pull/8710)
+- Move `configWithAndroidVariants` from `detekt-api` to `detekt-rules-ktlint-wrapper` - [#8697](https://github.com/detekt/detekt/pull/8697)
+- Simplify `KotlinEnvironmentContainer` - [#8678](https://github.com/detekt/detekt/pull/8678)
+- Remove unused RequiresFullAnalysis version of lintWithContext test helper - [#8661](https://github.com/detekt/detekt/pull/8661)
+- Delete unused `bindingContext` using methods for `firstParameter` - [#8659](https://github.com/detekt/detekt/pull/8659)
+- Remove `output-report` config - [#8650](https://github.com/detekt/detekt/pull/8650)
+- Remove K1 version of some psi-utils functions - [#8630](https://github.com/detekt/detekt/pull/8630)
+- Reduce the api of OutputReport - [#8623](https://github.com/detekt/detekt/pull/8623)
+
+### Changelog
+
+- Add comment in `deprecation.properties` - [#8781](https://github.com/detekt/detekt/pull/8781)
+- Ignore directory and file paths for config and baseline inputs when checking up to date status - [#8759](https://github.com/detekt/detekt/pull/8759)
+- Set default jvmTarget using compilerOptions from kotlin extension - [#8755](https://github.com/detekt/detekt/pull/8755)
+- Don't enable MultilineExpressionWrapping by default - [#8751](https://github.com/detekt/detekt/pull/8751)
+- Rename `md` report to `markdown` - [#8735](https://github.com/detekt/detekt/pull/8735)
+- Remove use of org.jetbrains.kotlin.builtins.* - [#8732](https://github.com/detekt/detekt/pull/8732)
+- Simplify ArrayPrimitive implementation using Analysis API - [#8731](https://github.com/detekt/detekt/pull/8731)
+- Remove KtCompiler from detekt-parser - [#8728](https://github.com/detekt/detekt/pull/8728)
+- Use Analysis API in detekt-generator - [#8727](https://github.com/detekt/detekt/pull/8727)
+- Add missing configureEach when configuring detekt task defaults - [#8723](https://github.com/detekt/detekt/pull/8723)
+- Remove K1 project services from project setup - [#8712](https://github.com/detekt/detekt/pull/8712)
+- [Sarif] don't add severity in results when it is the same as the rule - [#8701](https://github.com/detekt/detekt/pull/8701)
+- Enforce that all reported issue has its rule inside `Detektion.rules` - [#8700](https://github.com/detekt/detekt/pull/8700)
+- Read `code_style` instead of `android` - [#8696](https://github.com/detekt/detekt/pull/8696)
+- Fix duplication strategy for shadow jar - [#8683](https://github.com/detekt/detekt/pull/8683)
+- Remove `BindingContext` - [#8675](https://github.com/detekt/detekt/pull/8675)
+- Rename `detekt-report-xml` to `detekt-report-checkstyle` - [#8656](https://github.com/detekt/detekt/pull/8656)
+- Ensure that two reports doesn't have the same path - [#8652](https://github.com/detekt/detekt/pull/8652)
+- Fix false +ve when lambda itself is vararg - [#8642](https://github.com/detekt/detekt/pull/8642)
+- Add module rename section to migration guide - [#8631](https://github.com/detekt/detekt/pull/8631)
+- Don't force specific file extensions for OutputReports - [#8624](https://github.com/detekt/detekt/pull/8624)
+- Remove use of ReflectionFactory to setup DetektPomModel - [#8619](https://github.com/detekt/detekt/pull/8619)
+- Ensure SourceSet-based tasks are registered once - [#8618](https://github.com/detekt/detekt/pull/8618)
+- Fix documentation references to old coordinates or packages - [#8614](https://github.com/detekt/detekt/pull/8614)
+- Handle returning Unit from finally blocks in `ReturnFromFinally` - [#8609](https://github.com/detekt/detekt/pull/8609)
+- Fix RedundantSuspendModifier bugs - [#8605](https://github.com/detekt/detekt/pull/8605)
+- Filter when `hasStableParameterNames` is true(this means that named p… - [#8604](https://github.com/detekt/detekt/pull/8604)
+- fix: don't show debug suggestion when debug is already enabled - [#8588](https://github.com/detekt/detekt/pull/8588)
+- Rename `xml` report to `checkstyle` - [#8505](https://github.com/detekt/detekt/pull/8505)
+- Migrate `AnnotationSuppressor` to Analysis API - [#8423](https://github.com/detekt/detekt/pull/8423)
+- Create :detekt-test-junit - [#8389](https://github.com/detekt/detekt/pull/8389)
+
+### Dependency Updates
+
+- Use JUnit 5 dependency for detekt-test-junit - [#8771](https://github.com/detekt/detekt/pull/8771)
+- chore(deps): update plugin org.jetbrains.kotlin.jvm to v2.2.20 - [#8738](https://github.com/detekt/detekt/pull/8738)
+- chore(deps): update plugin dev.drewhamilton.poko to v0.20.0 - [#8645](https://github.com/detekt/detekt/pull/8645)
+- Improve error messages of `hasXXSourceLocation` - [#8517](https://github.com/detekt/detekt/pull/8517)
+- Improve error messages of `hasTextLocation` - [#8516](https://github.com/detekt/detekt/pull/8516)
+- Kotlin 2.2.20 - [#8302](https://github.com/detekt/detekt/pull/8302)
+- Update to JUnit 6 - [#8238](https://github.com/detekt/detekt/pull/8238)
+
+### Housekeeping & Refactorings
+
+- Update DGP to use detekt 2.0.0-alpha.0 - [#8752](https://github.com/detekt/detekt/pull/8752)
+- Remove `get_analysis_projects.kts` - [#8698](https://github.com/detekt/detekt/pull/8698)
+- Remove `ReportLocator` - [#8651](https://github.com/detekt/detekt/pull/8651)
+- detekt-sample-extensions to 2.0 - [#8359](https://github.com/detekt/detekt/pull/8359)
+
+### Contributors
+
+We would like to thank the following contributors that made this release possible: [@3flex](https://github.com/3flex), [@BraisGabin](https://github.com/BraisGabin), [@Copilot](https://github.com/Copilot), [@CziSKY](https://github.com/CziSKY), [@atulgpt](https://github.com/atulgpt), [@jonapoul](https://github.com/jonapoul), [@marschwar](https://github.com/marschwar), [@mikaelreiersolmoen](https://github.com/mikaelreiersolmoen)
+
 ## 2.0.0-alpha.0 - 2025-09-04
 
 This is an initial alpha release of Detekt 2.0.0.
@@ -876,5 +948,7 @@ This is an initial alpha release of Detekt 2.0.0.
 ### Contributors
 
 We would like to thank the following contributors that made this release possible: [@3flex](https://github.com/3flex), [@BraisGabin](https://github.com/BraisGabin), [@ErdoganSeref](https://github.com/ErdoganSeref), [@GeorgCantor](https://github.com/GeorgCantor), [@Goooler](https://github.com/Goooler), [@Gosunet](https://github.com/Gosunet), [@Hexcles](https://github.com/Hexcles), [@JordanLongstaff](https://github.com/JordanLongstaff), [@LeoColman](https://github.com/LeoColman), [@MaximSysoev](https://github.com/MaximSysoev), [@Nava2](https://github.com/Nava2), [@PStrelchenko](https://github.com/PStrelchenko), [@PhilippNowak96](https://github.com/PhilippNowak96), [@PoisonedYouth](https://github.com/PoisonedYouth), [@TWiStErRob](https://github.com/TWiStErRob), [@VirtualParticle](https://github.com/VirtualParticle), [@VovaStelmashchuk](https://github.com/VovaStelmashchuk), [@arturbosch](https://github.com/arturbosch), [@atulgpt](https://github.com/atulgpt), [@baseballyama](https://github.com/baseballyama), [@bmuschko](https://github.com/bmuschko), [@bomiyr](https://github.com/bomiyr), [@bric3](https://github.com/bric3), [@brunoescalona](https://github.com/brunoescalona), [@chao2zhang](https://github.com/chao2zhang), [@cortinico](https://github.com/cortinico), [@dzirbel](https://github.com/dzirbel), [@eygraber](https://github.com/eygraber), [@hirokinoue](https://github.com/hirokinoue), [@hudson155](https://github.com/hudson155), [@ilim-ablyaev](https://github.com/ilim-ablyaev), [@inorichi](https://github.com/inorichi), [@kkocel](https://github.com/kkocel), [@lexa-diky](https://github.com/lexa-diky), [@marschwar](https://github.com/marschwar), [@matejdro](https://github.com/matejdro), [@mdemianova](https://github.com/mdemianova), [@mgroth0](https://github.com/mgroth0), [@neugartf](https://github.com/neugartf), [@noar-t](https://github.com/noar-t), [@pablobaxter](https://github.com/pablobaxter), [@paolorotolo](https://github.com/paolorotolo), [@psuzn](https://github.com/psuzn), [@rhazarian](https://github.com/rhazarian), [@rmarquis](https://github.com/rmarquis), [@robholmes](https://github.com/robholmes), [@schalkms](https://github.com/schalkms), [@segunfamisa](https://github.com/segunfamisa), [@severn-everett](https://github.com/severn-everett), [@stellingsimon](https://github.com/stellingsimon), [@t-kameyama](https://github.com/t-kameyama), [@tfcporciuncula](https://github.com/tfcporciuncula), [@xouabita](https://github.com/xouabita).
+
+-----
 
 See all issues at: [2.0.0](https://github.com/detekt/detekt/milestone/42)

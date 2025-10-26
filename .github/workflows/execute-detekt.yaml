@@ -25,7 +25,7 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5
         with:
-          java-version: 21.0.4 # Specific version to work around https://github.com/detekt/detekt/issues/8009
+          java-version: 25
           distribution: 'temurin'
 
       - name: Setup Gradle
@@ -49,7 +49,7 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5
         with:
-          java-version: 21.0.4 # Specific version to work around https://github.com/detekt/detekt/issues/8009
+          java-version: 25
           distribution: 'temurin'
 
       - name: Setup Gradle
@@ -61,7 +61,7 @@ jobs:
         run: ./gradlew detektMain detektTest detektFunctionalTest detektTestFixtures detektFunctionalTestMinSupportedGradle detektReportMergeSarif --continue
 
       - name: Upload SARIF to GitHub using the upload-sarif action
-        uses: github/codeql-action/upload-sarif@e296a935590eb16afc0c0108289f68c87e2a89a5 # v4
+        uses: github/codeql-action/upload-sarif@4e94bd11f71e507f7f87df81788dff88d1dacbfb # v4
         if: success() || failure()
         with:
           sarif_file: build/reports/detekt/merge.sarif.json

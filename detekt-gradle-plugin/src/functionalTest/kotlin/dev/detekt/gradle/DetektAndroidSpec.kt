@@ -237,7 +237,24 @@ class DetektAndroidSpec {
                 numberOfSourceFilesPerSourceDir = 1,
                 numberOfFindings = 1,
                 buildFileContent = joinGradleBlocks(
-                    KOTLIN_ONLY_LIB_PLUGIN_BLOCK,
+                    """
+                    plugins {
+                        kotlin("jvm")
+                        id("dev.detekt")
+                    }
+
+                    java {
+                        sourceCompatibility = JavaVersion.VERSION_11
+                        targetCompatibility = JavaVersion.VERSION_11
+                    }
+
+                    kotlin {
+                        compilerOptions {
+                            jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
+                        }
+                    }
+
+                    """.trimIndent(),
                     DETEKT_REPORTS_BLOCK,
                 ),
                 srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java"),
@@ -659,14 +676,6 @@ private val LIB_PLUGIN_BLOCK = """
 """.trimIndent()
 
 @Language("gradle.kts")
-private val KOTLIN_ONLY_LIB_PLUGIN_BLOCK = """
-    plugins {
-        kotlin("jvm")
-        id("dev.detekt")
-    }
-""".trimIndent()
-
-@Language("gradle.kts")
 private val ANDROID_BLOCK = """
     android {
         compileSdk = 34
@@ -725,7 +734,7 @@ private val ANDROID_BLOCK_WITH_VIEW_BINDING = """
 private val DETEKT_REPORTS_BLOCK = """
     tasks.withType<dev.detekt.gradle.Detekt>().configureEach {
         reports {
-            md.required.set(false)
+            markdown.required.set(false)
         }
     }
 """.trimIndent()

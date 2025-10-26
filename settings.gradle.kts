@@ -18,7 +18,7 @@ include("detekt-metrics")
 include("detekt-parser")
 include("detekt-psi-utils")
 include("detekt-report-html")
-include("detekt-report-md")
+include("detekt-report-markdown")
 include("detekt-report-sarif")
 include("detekt-report-checkstyle")
 include("detekt-rules")
@@ -46,12 +46,12 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
 
 plugins {
-    id("com.gradle.develocity") version "4.2.1"
+    id("com.gradle.develocity") version "4.2.2"
     id("com.gradle.common-custom-user-data-gradle-plugin") version "2.4.0"
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
-    id("com.autonomousapps.build-health") version "3.1.0"
+    id("com.autonomousapps.build-health") version "3.3.0"
     // Kotlin plugin must be added to classpath to support build-health analysis
-    id("org.jetbrains.kotlin.jvm") version "2.2.20" apply false
+    id("org.jetbrains.kotlin.jvm") version "2.2.21" apply false
 }
 
 val isCiBuild = providers.environmentVariable("CI").isPresent

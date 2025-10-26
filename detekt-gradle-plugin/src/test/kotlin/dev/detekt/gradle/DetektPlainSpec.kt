@@ -59,7 +59,7 @@ class DetektPlainSpec {
                 tasks.withType(Detekt::class.java).configureEach {
                     it.reports { reports ->
                         reports.sarif.required.set(true)
-                        reports.md.required.set(false)
+                        reports.markdown.required.set(false)
                     }
                 }
             },
