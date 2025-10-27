@@ -186,7 +186,7 @@ style:
     excludes: ['**/detekt-rules-style/**/ForbiddenComment.kt']
   ForbiddenImport:
     active: true
-    imports:
+    forbiddenImports:
       - value: 'org.assertj.core.api.Assertions'
         reason: 'Import Assertions.assertThat instead.'
       - value: 'org.junit.jupiter.api.Assertions*'
