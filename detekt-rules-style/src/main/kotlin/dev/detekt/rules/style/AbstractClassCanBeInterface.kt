@@ -3,12 +3,10 @@ package dev.detekt.rules.style
 import com.intellij.psi.PsiElement
 import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.Config
-import dev.detekt.api.Configuration
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
-import dev.detekt.api.config
 import dev.detekt.psi.isAbstract
 import dev.detekt.psi.isInternal
 import dev.detekt.psi.isProtected
@@ -24,9 +22,8 @@ import org.jetbrains.kotlin.psi.psiUtil.isAbstract
 
 /**
  * This rule inspects `abstract` classes. In case an `abstract class` does not define any
- * `abstract` members, it should instead be refactored into an interface. By default this will only check `abstract`
- * classes, but with the `checkSealedClasses` config parameter set to `true` it will also check for potential
- * `sealed class` to `sealed interface` migrations.
+ * `abstract` members, it should instead be refactored into an interface. It will also check for potential migrations
+ * from `sealed class` to `sealed interface`, using the same rules.
  *
  * <noncompliant>
  * abstract class OnlyAbstractMembersInAbstractClass { // violation: no concrete members
@@ -35,9 +32,9 @@ import org.jetbrains.kotlin.psi.psiUtil.isAbstract
  * }
  *
  * sealed class ScreenState { // violation - no concrete members
- *     data class Success(val data: Int) : ScreenState
- *     data class Failure(val reason: String : ScreenState
- *     object Empty : ScreenState
+ *     data class Success(val data: Int) : ScreenState()
+ *     data class Failure(val reason: String : ScreenState()
+ *     data object Empty : ScreenState()
  * }
  * </noncompliant>
  * <compliant>
@@ -61,7 +58,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isAbstract
  * sealed interface SealedInterface {
  *     data class Success(val data: Int) : SealedInterface
  *     data class Failure(val reason: String : SealedInterface
- *     object Empty : SealedInterface
+ *     data object Empty : SealedInterface
  * }
  * </compliant>
  */
@@ -72,9 +69,6 @@ class AbstractClassCanBeInterface(config: Config) :
         "An abstract class is unnecessary. May be refactored to an interface."
     ),
     RequiresAnalysisApi {
-
-    @Configuration("Whether sealed classes should be considered as potential sealed interfaces")
-    private val checkSealedClasses: Boolean by config(defaultValue = false)
 
     override fun visitClass(klass: KtClass) {
         val nameIdentifier = klass.nameIdentifier ?: return
@@ -101,7 +95,7 @@ class AbstractClassCanBeInterface(config: Config) :
 
     private fun shouldCheck(klass: KtClass): Boolean = when {
         klass.isInterface() -> false
-        klass.isSealed() && checkSealedClasses -> true
+        klass.isSealed() -> true
         else -> klass.isAbstract()
     }
 

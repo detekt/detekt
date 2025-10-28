@@ -3,7 +3,6 @@ package dev.detekt.rules.style
 import dev.detekt.api.Config
 import dev.detekt.rules.style.AbstractClassCanBeInterface.Companion.NO_CONCRETE_MEMBER
 import dev.detekt.rules.style.AbstractClassCanBeInterface.Companion.SEALED_NO_CONCRETE_MEMBER
-import dev.detekt.test.TestConfig
 import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.junit.KotlinCoreEnvironmentTest
 import dev.detekt.test.lintWithContext
@@ -309,20 +308,6 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
 
     @Nested
     inner class SealedClasses {
-        private val checkSealedClasses = TestConfig("checkSealedClasses" to true)
-
-        @Test
-        fun `don't report a sealed class with no abstract members if config isn't enabled`() {
-            val code = """
-                sealed class Result {
-                    data class Success(val data: Int) : Result()
-                    data class Failure(val reason: String) : Result()
-                }
-            """.trimIndent()
-            val findings = AbstractClassCanBeInterface(Config.empty).lintWithContext(env, code)
-            assertThat(findings).isEmpty()
-        }
-
         @Test
         fun `report a sealed class with no abstract members`() {
             val code = """
@@ -331,7 +316,7 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
                     data class Failure(val reason: String) : Result()
                 }
             """.trimIndent()
-            val findings = AbstractClassCanBeInterface(checkSealedClasses).lintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings)
                 .singleElement()
                 .hasMessage(SEALED_NO_CONCRETE_MEMBER)
@@ -345,7 +330,7 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
                     data class Failure(val reason: String) : Result(456)
                 }
             """.trimIndent()
-            val findings = AbstractClassCanBeInterface(checkSealedClasses).lintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -362,7 +347,7 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
                     }
                 }
             """.trimIndent()
-            val findings = AbstractClassCanBeInterface(checkSealedClasses).lintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings)
                 .singleElement()
                 .hasMessage(SEALED_NO_CONCRETE_MEMBER)
@@ -379,7 +364,7 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
                     data class Failure(val reason: String) : Result()
                 }
             """.trimIndent()
-            val findings = AbstractClassCanBeInterface(checkSealedClasses).lintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -392,7 +377,7 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
                     data class Failure(val reason: String) : Result()
                 }
             """.trimIndent()
-            val findings = AbstractClassCanBeInterface(checkSealedClasses).lintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -407,7 +392,7 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
                     }
                 }
             """.trimIndent()
-            val findings = AbstractClassCanBeInterface(checkSealedClasses).lintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings)
                 .singleElement()
                 .hasMessage(SEALED_NO_CONCRETE_MEMBER)
@@ -422,7 +407,7 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
                     data class Failure(val reason: String) : Result()
                 }
             """.trimIndent()
-            val findings = AbstractClassCanBeInterface(checkSealedClasses).lintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -435,7 +420,7 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
                     data class Failure(val reason: String) : Result()
                 }
             """.trimIndent()
-            val findings = AbstractClassCanBeInterface(checkSealedClasses).lintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
 
@@ -450,7 +435,7 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
                     }
                 }
             """.trimIndent()
-            val findings = AbstractClassCanBeInterface(checkSealedClasses).lintWithContext(env, code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
     }
