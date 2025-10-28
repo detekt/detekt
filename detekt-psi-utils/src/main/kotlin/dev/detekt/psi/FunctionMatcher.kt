@@ -8,6 +8,7 @@ import org.jetbrains.kotlin.analysis.api.types.KaType
 import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
+@Suppress("AbstractClassCanBeInterface")
 sealed class FunctionMatcher {
 
     abstract fun match(function: KtNamedFunction, fullAnalysis: Boolean): Boolean

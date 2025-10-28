@@ -10,6 +10,8 @@ internal fun RulesSpec.FailurePolicy.check(result: Detektion): FailurePolicyResu
     is RulesSpec.FailurePolicy.FailOnSeverity -> result.checkForIssuesWithSeverity(minSeverity)
 }
 
+// Suppression here because running gradle :detekt-core:detektMain causes NoClassDefFoundError otherwise.
+@Suppress("AbstractClassCanBeInterface")
 sealed class FailurePolicyResult {
     data object Ok : FailurePolicyResult()
     data class Fail(val message: String) : FailurePolicyResult()

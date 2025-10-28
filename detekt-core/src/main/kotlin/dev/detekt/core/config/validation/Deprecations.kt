@@ -3,6 +3,8 @@ package dev.detekt.core.config.validation
 import dev.detekt.utils.openSafeStream
 import java.util.Properties
 
+// Suppression here because running gradle :detekt-core:detektMain causes NoClassDefFoundError otherwise.
+@Suppress("AbstractClassCanBeInterface")
 internal sealed class Deprecation
 internal data class DeprecatedRule(
     val ruleSetId: String,
