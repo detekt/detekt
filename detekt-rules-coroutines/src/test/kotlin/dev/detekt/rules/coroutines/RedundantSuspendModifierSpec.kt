@@ -63,10 +63,50 @@ class RedundantSuspendModifierSpec(val env: KotlinEnvironmentContainer) {
     }
 
     @Test
-    fun `does not report suspend function without body`() {
+    fun `does not report suspend function in interface without body`() {
         val code = """
             interface SuspendInterface {
                 suspend fun empty()
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
+    fun `does not report suspend function in interface with body - #8800`() {
+        val code = """
+            interface Interface {
+                suspend fun foo(): Int = 0
+            }
+            
+            class Impl : Interface {
+                override suspend fun foo(): Int {
+                    kotlinx.coroutines.delay(1000)
+                    return 1
+                }
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
+    fun `does not report abstract suspend function in abstract class`() {
+        val code = """
+            abstract class BaseClass {
+                abstract suspend fun bar(): Int
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
+    fun `does not report abstract suspend function in sealed class`() {
+        val code = """
+            sealed class SealedClass {
+                abstract suspend fun bar(): Int
+                class Subclass : SealedClass() {
+                    override suspend fun bar(): Int = 0
+                }
             }
         """.trimIndent()
         assertThat(subject.lintWithContext(env, code)).isEmpty()

@@ -38,6 +38,12 @@
       "matchPackageNames": [
         "dev.drewhamilton.poko:**"
       ]
+    },
+    {
+      "groupName": "detekt",
+      "matchPackageNames": [
+        "dev.detekt:**"
+      ]
     }
   ]
 }
