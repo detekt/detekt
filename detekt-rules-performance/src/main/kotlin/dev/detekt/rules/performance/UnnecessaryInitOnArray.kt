@@ -49,28 +49,20 @@ class UnnecessaryInitOnArray(config: Config) :
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
 
-        val arrayClassName = getArrayClassNameOrNull(expression) ?: return
+        val className = expression.getCallNameExpression()?.getReferencedName() ?: return
+        if (className in arrayTypeDefaultPatterns.keys) {
+            val lambdaArgument = expression.valueArguments
+                .mapNotNull { it.getArgumentExpression() }
+                .filterIsInstance<KtLambdaExpression>()
+                .firstOrNull()
+                ?: return
 
-        val lambdaArgument = expression.valueArguments
-            .mapNotNull { it.getArgumentExpression() }
-            .filterIsInstance<KtLambdaExpression>()
-            .firstOrNull()
-            ?: return
+            if (hasSideEffects(lambdaArgument)) return
 
-        if (hasSideEffects(lambdaArgument)) return
-
-        if (returnsDefaultValue(lambdaArgument, arrayClassName)) {
-            val message = "Unnecessary lambda builder returning default value. Use constructor without lambda."
-            report(Finding(Entity.from(expression), message))
-        }
-    }
-
-    private fun getArrayClassNameOrNull(expression: KtCallExpression): String? {
-        val className = expression.getCallNameExpression()?.getReferencedName()
-        return if (className in arrayTypeDefaultPatterns.keys) {
-            className
-        } else {
-            null
+            if (returnsDefaultValue(lambdaArgument, className)) {
+                val message = "Unnecessary lambda builder returning default value. Use constructor without lambda."
+                report(Finding(Entity.from(expression), message))
+            }
         }
     }
 
