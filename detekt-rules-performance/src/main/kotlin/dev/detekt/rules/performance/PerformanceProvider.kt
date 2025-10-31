@@ -21,6 +21,7 @@ class PerformanceProvider : DefaultRuleSetProvider {
             ::UnnecessaryTypeCasting,
             ::ArrayPrimitive,
             ::CouldBeSequence,
+            ::UnnecessaryInitOnArray,
             ::UnnecessaryPartOfBinaryExpression,
         )
     )
