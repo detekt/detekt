@@ -1,7 +1,5 @@
 package dev.detekt.core.settings
 
-import com.google.devtools.ksp.standalone.buildKspLibraryModule
-import com.google.devtools.ksp.standalone.buildKspSdkModule
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Disposer
@@ -15,6 +13,8 @@ import dev.detekt.tooling.api.spec.ProjectSpec
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.projectStructure.KaSourceModule
 import org.jetbrains.kotlin.analysis.api.standalone.buildStandaloneAnalysisAPISession
+import org.jetbrains.kotlin.analysis.project.structure.builder.buildKtLibraryModule
+import org.jetbrains.kotlin.analysis.project.structure.builder.buildKtSdkModule
 import org.jetbrains.kotlin.analysis.project.structure.builder.buildKtSourceModule
 import org.jetbrains.kotlin.cli.common.config.kotlinSourceRoots
 import org.jetbrains.kotlin.cli.jvm.config.jvmClasspathRoots
@@ -81,7 +81,7 @@ internal class EnvironmentFacade(
             platform = targetPlatform
 
             val jdk = configuration.jdkHome?.let { jdkHome ->
-                buildKspSdkModule {
+                buildKtSdkModule {
                     addBinaryRootsFromJdkHome(jdkHome.toPath(), isJre = false)
                     platform = targetPlatform
                     libraryName = "jdk"
@@ -89,7 +89,7 @@ internal class EnvironmentFacade(
             }
 
             val friends = configuration.friendPaths.map {
-                buildKspLibraryModule {
+                buildKtLibraryModule {
                     platform = targetPlatform
                     addBinaryRoot(Path(it))
                     libraryName = UUID.randomUUID().toString()
@@ -97,7 +97,7 @@ internal class EnvironmentFacade(
             }
 
             val dependencies = configuration.jvmClasspathRoots.map {
-                buildKspLibraryModule {
+                buildKtLibraryModule {
                     platform = targetPlatform
                     addBinaryRoot(it.toPath())
                     libraryName = "regulardependencies"
