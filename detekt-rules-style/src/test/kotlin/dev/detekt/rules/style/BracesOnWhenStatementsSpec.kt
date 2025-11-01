@@ -29,7 +29,7 @@ import org.junit.jupiter.api.TestFactory
 @Suppress(
     "ClassName",
     "LongMethod",
-    "CommentOverPrivateProperty"
+    "DocumentationOverPrivateProperty"
 )
 class BracesOnWhenStatementsSpec {
 

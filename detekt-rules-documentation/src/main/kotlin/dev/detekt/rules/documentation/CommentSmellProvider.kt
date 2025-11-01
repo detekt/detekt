@@ -16,8 +16,8 @@ class CommentSmellProvider : DefaultRuleSetProvider {
     override fun instance(): RuleSet = RuleSet(
         ruleSetId,
         listOf(
-            ::CommentOverPrivateFunction,
-            ::CommentOverPrivateProperty,
+            ::DocumentationOverPrivateFunction,
+            ::DocumentationOverPrivateProperty,
             ::DeprecatedBlockTag,
             ::EndOfSentenceFormat,
             ::OutdatedDocumentation,

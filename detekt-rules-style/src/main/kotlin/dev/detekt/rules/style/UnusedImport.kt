@@ -70,7 +70,7 @@ class UnusedImport(config: Config) :
          * mapped to their text. String matches to such references shouldn't be marked as unused
          * imports since they could match the unknown value being imported.
          */
-        @Suppress("CommentOverPrivateProperty")
+        @Suppress("DocumentationOverPrivateProperty")
         private val unresolvedNamedReferencesAsString: Set<String> by lazy {
             namedReferences.mapNotNullTo(mutableSetOf()) {
                 if (it.fqNameOrNull() == null) it.text.trim('`') else null
