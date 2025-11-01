@@ -1,6 +1,6 @@
 package dev.detekt.core.suppressors
 
-import dev.detekt.api.RuleSet
+import dev.detekt.api.RuleSetId
 import dev.detekt.test.utils.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtClass
@@ -17,7 +17,7 @@ import org.junit.jupiter.params.provider.ValueSource
 class SuppressionsSpec {
 
     private fun KtElement.isSuppressedBy(): Boolean =
-        isSuppressedBy("RuleName", setOf("alias1", "alias2"), RuleSet.Id("RuleSetId"))
+        isSuppressedBy("RuleName", setOf("alias1", "alias2"), RuleSetId("RuleSetId"))
 
     @Nested
     inner class DifferentSuppressLocation {
