@@ -12,7 +12,7 @@ import org.jetbrains.kotlin.gradle.plugin.KotlinCompilerPluginSupportPlugin
 import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType
 import org.jetbrains.kotlin.gradle.plugin.SubpluginArtifact
 import org.jetbrains.kotlin.gradle.plugin.SubpluginOption
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.ObjectOutputStream
@@ -26,7 +26,7 @@ class DetektKotlinCompilerPlugin : KotlinCompilerPluginSupportPlugin {
 
         val extension = target.extensions.getByType(DetektExtension::class.java)
 
-        target.tasks.withType(KotlinCompile::class.java).configureEach { task ->
+        target.tasks.withType(KotlinJvmCompile::class.java).configureEach { task ->
             task.extensions.create(DETEKT_EXTENSION, KotlinCompileTaskDetektExtension::class.java, target).apply {
                 isEnabled.convention(extension.enableCompilerPlugin)
                 baseline.convention(extension.baseline)
