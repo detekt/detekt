@@ -28,6 +28,11 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
+// https://gradleup.com/shadow/publishing/#publishing-the-shadowed-gradle-plugins
+tasks.shadowJar {
+    archiveClassifier = ""
+}
+
 val javaComponent = components["java"] as AdhocComponentWithVariants
 javaComponent.withVariantsFromConfiguration(configurations["apiElements"]) {
     skip()
