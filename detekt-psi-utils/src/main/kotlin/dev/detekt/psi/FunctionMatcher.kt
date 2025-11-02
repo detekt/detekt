@@ -8,10 +8,76 @@ import org.jetbrains.kotlin.analysis.api.types.KaType
 import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
-sealed interface FunctionMatcher {
-    fun match(function: KtNamedFunction, fullAnalysis: Boolean): Boolean
+// Suppression to avoid affecting API
+@Suppress("AbstractClassCanBeInterface")
+sealed class FunctionMatcher {
 
-    fun match(symbol: KaCallableSymbol): Boolean
+    abstract fun match(function: KtNamedFunction, fullAnalysis: Boolean): Boolean
+
+    abstract fun match(symbol: KaCallableSymbol): Boolean
+
+    internal data class NameOnly(
+        private val fullyQualifiedName: String,
+    ) : FunctionMatcher() {
+
+        override fun match(function: KtNamedFunction, fullAnalysis: Boolean): Boolean =
+            function.name == fullyQualifiedName ||
+                function.fqName?.asString() == fullyQualifiedName
+
+        override fun match(symbol: KaCallableSymbol): Boolean = symbol.asFqNameString() == fullyQualifiedName
+
+        override fun toString(): String = fullyQualifiedName
+    }
+
+    internal data class WithParameters(
+        private val fullyQualifiedName: String,
+        private val parameters: List<String>,
+    ) : FunctionMatcher() {
+
+        override fun match(function: KtNamedFunction, fullAnalysis: Boolean): Boolean {
+            if (!fullAnalysis) return false
+            if (function.name != fullyQualifiedName && function.fqName?.asString() != fullyQualifiedName) return false
+
+            val encounteredParameters = buildList {
+                analyze(function) {
+                    addIfNotNull(function.receiverTypeReference?.run { type.asFqNameString() })
+                    addAll(
+                        function.valueParameters.map {
+                            if (it.isVarArg) {
+                                "vararg ${it.returnType.arrayElementType?.asFqNameString()}"
+                            } else {
+                                it.returnType.asFqNameString()
+                            }
+                        }
+                    )
+                }
+            }
+
+            return encounteredParameters == parameters
+        }
+
+        override fun match(symbol: KaCallableSymbol): Boolean {
+            if (symbol.asFqNameString() != fullyQualifiedName) return false
+
+            symbol as KaFunctionSymbol
+            val encounteredParamTypes = buildList {
+                addIfNotNull(symbol.receiverParameter?.returnType?.asFqNameString())
+                addAll(
+                    symbol.valueParameters.map { value ->
+                        if (value.isVararg) {
+                            "vararg ${value.returnType.asFqNameString()}"
+                        } else {
+                            value.returnType.asFqNameString()
+                        }
+                    }
+                )
+            }
+
+            return encounteredParamTypes == parameters
+        }
+
+        override fun toString(): String = "$fullyQualifiedName(${parameters.joinToString()})"
+    }
 
     companion object {
         fun fromFunctionSignature(methodSignature: String): FunctionMatcher {
@@ -33,69 +99,6 @@ sealed interface FunctionMatcher {
             }
         }
     }
-}
-
-internal data class NameOnly(
-    private val fullyQualifiedName: String,
-) : FunctionMatcher {
-
-    override fun match(function: KtNamedFunction, fullAnalysis: Boolean): Boolean =
-        function.name == fullyQualifiedName ||
-            function.fqName?.asString() == fullyQualifiedName
-
-    override fun match(symbol: KaCallableSymbol): Boolean = symbol.asFqNameString() == fullyQualifiedName
-
-    override fun toString(): String = fullyQualifiedName
-}
-
-internal data class WithParameters(
-    private val fullyQualifiedName: String,
-    private val parameters: List<String>,
-) : FunctionMatcher {
-
-    override fun match(function: KtNamedFunction, fullAnalysis: Boolean): Boolean {
-        if (!fullAnalysis) return false
-        if (function.name != fullyQualifiedName && function.fqName?.asString() != fullyQualifiedName) return false
-
-        val encounteredParameters = buildList {
-            analyze(function) {
-                addIfNotNull(function.receiverTypeReference?.run { type.asFqNameString() })
-                addAll(
-                    function.valueParameters.map {
-                        if (it.isVarArg) {
-                            "vararg ${it.returnType.arrayElementType?.asFqNameString()}"
-                        } else {
-                            it.returnType.asFqNameString()
-                        }
-                    }
-                )
-            }
-        }
-
-        return encounteredParameters == parameters
-    }
-
-    override fun match(symbol: KaCallableSymbol): Boolean {
-        if (symbol.asFqNameString() != fullyQualifiedName) return false
-
-        symbol as KaFunctionSymbol
-        val encounteredParamTypes = buildList {
-            addIfNotNull(symbol.receiverParameter?.returnType?.asFqNameString())
-            addAll(
-                symbol.valueParameters.map { value ->
-                    if (value.isVararg) {
-                        "vararg ${value.returnType.asFqNameString()}"
-                    } else {
-                        value.returnType.asFqNameString()
-                    }
-                }
-            )
-        }
-
-        return encounteredParamTypes == parameters
-    }
-
-    override fun toString(): String = "$fullyQualifiedName(${parameters.joinToString()})"
 }
 
 private fun <T> MutableCollection<T>.addIfNotNull(t: T) {

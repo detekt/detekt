@@ -7,7 +7,7 @@ public final class dev/detekt/psi/AnnotationExcluder {
 	public final fun shouldExclude (Ljava/util/List;)Z
 }
 
-public abstract interface class dev/detekt/psi/FunctionMatcher {
+public abstract class dev/detekt/psi/FunctionMatcher {
 	public static final field Companion Ldev/detekt/psi/FunctionMatcher$Companion;
 	public abstract fun match (Lorg/jetbrains/kotlin/analysis/api/symbols/KaCallableSymbol;)Z
 	public abstract fun match (Lorg/jetbrains/kotlin/psi/KtNamedFunction;Z)Z
