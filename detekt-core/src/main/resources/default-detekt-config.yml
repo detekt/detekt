@@ -38,11 +38,11 @@ comments:
     active: false
     licenseTemplateFile: 'license.template'
     licenseTemplateIsRegex: false
-  CommentOverPrivateFunction:
-    active: false
-  CommentOverPrivateProperty:
-    active: false
   DeprecatedBlockTag:
+    active: false
+  DocumentationOverPrivateFunction:
+    active: false
+  DocumentationOverPrivateProperty:
     active: false
   EndOfSentenceFormat:
     active: false

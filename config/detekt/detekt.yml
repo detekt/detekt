@@ -1,5 +1,5 @@
 comments:
-  CommentOverPrivateProperty:
+  DocumentationOverPrivateProperty:
     active: true
   UndocumentedPublicClass:
     active: true
