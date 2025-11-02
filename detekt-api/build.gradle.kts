@@ -6,7 +6,7 @@ plugins {
     id("public-api")
     id("java-test-fixtures")
     id("dev.drewhamilton.poko") version "0.20.1"
-    id("com.github.gmazzo.buildconfig") version "5.7.0"
+    id("com.github.gmazzo.buildconfig") version "5.7.1"
 }
 
 dependencies {
