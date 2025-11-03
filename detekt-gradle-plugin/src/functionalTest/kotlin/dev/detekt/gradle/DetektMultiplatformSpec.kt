@@ -145,24 +145,21 @@ class DetektMultiplatformSpec {
                         """
                             plugins {
                                 kotlin("multiplatform")
-                                id("com.android.library")
+                                id("com.android.kotlin.multiplatform.library")
                                 id("dev.detekt")
                             }
-                            android {
-                                compileSdk = 34
-                                namespace = "dev.detekt.app"
-                                sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-                                buildTypes {
-                                    release {
-                                    }
-                                    debug {
-                                    }
-                                }
-                            }
                             kotlin {
-                                androidTarget {
-                                    compilerOptions {
-                                        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8
+                                androidLibrary {
+                                    compileSdk = 34
+                                    namespace = "dev.detekt.app"
+                                    
+                                    withHostTestBuilder {}
+                                    withDeviceTestBuilder {}
+                                    
+                                    compilations.configureEach {
+                                        compilerOptions.configure {
+                                            jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8
+                                        }
                                     }
                                 }
                             }
@@ -187,26 +184,20 @@ class DetektMultiplatformSpec {
 
         @Test
         fun `configures baseline task`() {
-            gradleRunner.runTasks(":shared:detektBaselineDebugAndroid")
-            gradleRunner.runTasks(":shared:detektBaselineReleaseAndroid")
+            gradleRunner.runTasks(":shared:detektBaselineMainAndroid")
         }
 
         @Test
         fun `configures test tasks`() {
-            gradleRunner.runTasks(":shared:detektDebugAndroidTestAndroid")
-            gradleRunner.runTasks(":shared:detektDebugUnitTestAndroid")
+            gradleRunner.runTasks(":shared:detektDeviceTestAndroid")
+            gradleRunner.runTasks(":shared:detektHostTestAndroid")
         }
 
         @Test
         fun `configures detekt task with type resolution`() {
-            gradleRunner.runTasksAndCheckResult(":shared:detektDebugAndroid") {
-                assertThat(it.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-debug.xml """)
-                assertThat(it.output).containsPattern("""--report checkstyle:\S*[/\\]debugAndroid.xml""")
-                assertDetektWithClasspath(it)
-            }
-            gradleRunner.runTasksAndCheckResult(":shared:detektReleaseAndroid") {
-                assertThat(it.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-release.xml """)
-                assertThat(it.output).containsPattern("""--report checkstyle:\S*[/\\]releaseAndroid.xml""")
+            gradleRunner.runTasksAndCheckResult(":shared:detektMainAndroid") {
+                assertThat(it.output).containsPattern("""--baseline \S*[/\\]detekt-baseline.xml """)
+                assertThat(it.output).containsPattern("""--report checkstyle:\S*[/\\]mainAndroid.xml""")
                 assertDetektWithClasspath(it)
             }
         }
