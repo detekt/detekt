@@ -86,7 +86,7 @@ class UnnecessaryParentheses(config: Config) : Rule(
          * This is built from a mapping of [BinaryOperationPrecedence] to other, greater, [BinaryOperationPrecedence](s)
          * which should be considered unclear when mixed as child binary expressions.
          */
-        @Suppress("CommentOverPrivateProperty")
+        @Suppress("DocumentationOverPrivateProperty")
         private val childToUnclearPrecedenceParentsMapping: Map<IElementType, Set<IElementType>> = arrayOf(
             BinaryOperationPrecedence.ELVIS to arrayOf(
                 BinaryOperationPrecedence.EQUALITY, // (a ?: b) == c

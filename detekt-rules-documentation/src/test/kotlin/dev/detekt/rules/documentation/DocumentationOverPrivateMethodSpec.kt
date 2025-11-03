@@ -5,8 +5,8 @@ import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class CommentOverPrivateMethodSpec {
-    val subject = CommentOverPrivateFunction(Config.empty)
+class DocumentationOverPrivateMethodSpec {
+    val subject = DocumentationOverPrivateFunction(Config.empty)
 
     @Test
     fun `reports private method with a comment`() {
