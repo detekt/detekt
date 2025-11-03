@@ -30,7 +30,7 @@ junit-jupiterApi = { module = "org.junit.jupiter:junit-jupiter-api", version = "
 
 # This represents the oldest Kotlin version that is supported by detekt's Gradle plugin.
 # This should only be updated when updating the minimum version supported by detekt's Gradle plugin.
-kotlin-gradlePluginApi = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin-api", version = "2.1.0" }
+kotlin-gradlePluginApi = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin-api", version = "2.2.21" }
 
 assertj-core = { module = "org.assertj:assertj-core", version = "3.27.6" }
 classgraph = { module = "io.github.classgraph:classgraph", version = "4.8.184" }
