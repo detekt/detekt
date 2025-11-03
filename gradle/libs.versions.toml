@@ -61,5 +61,9 @@ kotlin-analysisApiImplBase = { module = "org.jetbrains.kotlin:analysis-api-impl-
 # Can likely be removed in future - https://youtrack.jetbrains.com/issue/KT-73751/Analysis-API-Caffeine-dependency
 caffeine = { module = "com.github.ben-manes.caffeine:caffeine", version = "2.9.3" }
 
+# Add dummy lib references so Renovate auto updates the version. Only the version number is referenced in build scripts so Renovate will ignore these otherwise.
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
+jacoco = { module = "org.jacoco:org.jacoco.agent", version.ref = "jacoco" }
+
 [plugins]
 # Do not declare plugins here - see https://github.com/detekt/detekt/pull/7088.
