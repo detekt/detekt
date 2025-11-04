@@ -6,6 +6,7 @@
   ],
   "ignoreDeps": [
     "com.android.tools.build:gradle-api",
+    "org.jetbrains.kotlin:kotlin-gradle-plugin-api",
     "org.junit.jupiter:junit-jupiter-api"
   ],
   "extends": [
