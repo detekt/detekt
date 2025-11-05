@@ -2,6 +2,7 @@ package dev.detekt.rules.empty
 
 import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.RuleSet
+import dev.detekt.api.RuleSetId
 import dev.detekt.api.internal.DefaultRuleSetProvider
 
 /**
@@ -11,7 +12,7 @@ import dev.detekt.api.internal.DefaultRuleSetProvider
 @ActiveByDefault(since = "1.0.0")
 class EmptyCodeProvider : DefaultRuleSetProvider {
 
-    override val ruleSetId = RuleSet.Id("empty-blocks")
+    override val ruleSetId = RuleSetId("empty-blocks")
 
     override fun instance(): RuleSet = RuleSet(
         ruleSetId,

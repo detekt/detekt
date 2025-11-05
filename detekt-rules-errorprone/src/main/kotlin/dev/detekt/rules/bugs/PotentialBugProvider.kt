@@ -2,6 +2,7 @@ package dev.detekt.rules.bugs
 
 import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.RuleSet
+import dev.detekt.api.RuleSetId
 import dev.detekt.api.internal.DefaultRuleSetProvider
 
 /**
@@ -10,7 +11,7 @@ import dev.detekt.api.internal.DefaultRuleSetProvider
 @ActiveByDefault(since = "1.0.0")
 class PotentialBugProvider : DefaultRuleSetProvider {
 
-    override val ruleSetId = RuleSet.Id("potential-bugs")
+    override val ruleSetId = RuleSetId("potential-bugs")
 
     override fun instance(): RuleSet = RuleSet(
         ruleSetId,

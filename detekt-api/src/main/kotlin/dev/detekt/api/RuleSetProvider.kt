@@ -12,7 +12,7 @@ interface RuleSetProvider {
      * Every rule set must be pre-configured with an ID to validate if this rule set
      * must be created for current analysis.
      */
-    val ruleSetId: RuleSet.Id
+    val ruleSetId: RuleSetId
 
     /**
      * This function must be implemented to provide custom rule sets.

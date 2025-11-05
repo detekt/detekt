@@ -4,6 +4,7 @@ import dev.detekt.api.Config
 import dev.detekt.api.Rule
 import dev.detekt.api.RuleName
 import dev.detekt.api.RuleSet
+import dev.detekt.api.RuleSetId
 import dev.detekt.api.RuleSetProvider
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
@@ -35,7 +36,7 @@ class SingleRuleProviderSpec {
 }
 
 private class CustomRuleSetProvider : RuleSetProvider {
-    override val ruleSetId = RuleSet.Id("custom")
+    override val ruleSetId = RuleSetId("custom")
     override fun instance() = RuleSet(
         ruleSetId,
         listOf(::CustomRule1, ::CustomRule2)

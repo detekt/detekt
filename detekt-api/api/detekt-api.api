@@ -242,12 +242,12 @@ public class dev/detekt/api/Rule : dev/detekt/api/DetektVisitor {
 }
 
 public final class dev/detekt/api/RuleInstance {
-	public fun <init> (Ljava/lang/String;Ldev/detekt/api/RuleSet$Id;Ljava/net/URI;Ljava/lang/String;Ldev/detekt/api/Severity;Z)V
+	public fun <init> (Ljava/lang/String;Ldev/detekt/api/RuleSetId;Ljava/net/URI;Ljava/lang/String;Ldev/detekt/api/Severity;Z)V
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getActive ()Z
 	public final fun getDescription ()Ljava/lang/String;
 	public final fun getId ()Ljava/lang/String;
-	public final fun getRuleSetId ()Ldev/detekt/api/RuleSet$Id;
+	public final fun getRuleSetId ()Ldev/detekt/api/RuleSetId;
 	public final fun getSeverity ()Ldev/detekt/api/Severity;
 	public final fun getUrl ()Ljava/net/URI;
 	public fun hashCode ()I
@@ -264,16 +264,16 @@ public final class dev/detekt/api/RuleName {
 
 public final class dev/detekt/api/RuleSet {
 	public static final field Companion Ldev/detekt/api/RuleSet$Companion;
-	public fun <init> (Ldev/detekt/api/RuleSet$Id;Ljava/util/Map;)V
-	public final fun getId ()Ldev/detekt/api/RuleSet$Id;
+	public fun <init> (Ldev/detekt/api/RuleSetId;Ljava/util/Map;)V
+	public final fun getId ()Ldev/detekt/api/RuleSetId;
 	public final fun getRules ()Ljava/util/Map;
 }
 
 public final class dev/detekt/api/RuleSet$Companion {
-	public final fun invoke (Ldev/detekt/api/RuleSet$Id;Ljava/util/List;)Ldev/detekt/api/RuleSet;
+	public final fun invoke (Ldev/detekt/api/RuleSetId;Ljava/util/List;)Ldev/detekt/api/RuleSet;
 }
 
-public final class dev/detekt/api/RuleSet$Id {
+public final class dev/detekt/api/RuleSetId {
 	public fun <init> (Ljava/lang/String;)V
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getValue ()Ljava/lang/String;
@@ -282,7 +282,7 @@ public final class dev/detekt/api/RuleSet$Id {
 }
 
 public abstract interface class dev/detekt/api/RuleSetProvider {
-	public abstract fun getRuleSetId ()Ldev/detekt/api/RuleSet$Id;
+	public abstract fun getRuleSetId ()Ldev/detekt/api/RuleSetId;
 	public abstract fun instance ()Ldev/detekt/api/RuleSet;
 }
 

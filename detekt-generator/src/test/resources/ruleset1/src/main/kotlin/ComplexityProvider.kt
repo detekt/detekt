@@ -10,7 +10,7 @@ import dev.detekt.api.internal.DefaultRuleSetProvider
 @ActiveByDefault(since = "1.0.0")
 class ComplexityProvider : DefaultRuleSetProvider {
 
-    override val ruleSetId = RuleSet.Id("complexity")
+    override val ruleSetId = RuleSetId("complexity")
 
     override fun instance(): RuleSet = RuleSet(
         ruleSetId,

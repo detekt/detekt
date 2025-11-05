@@ -1,7 +1,7 @@
 package dev.detekt.report.sarif
 
 import dev.detekt.api.RuleInstance
-import dev.detekt.api.RuleSet
+import dev.detekt.api.RuleSetId
 import dev.detekt.api.Severity
 import dev.detekt.api.testfixtures.TestDetektion
 import dev.detekt.api.testfixtures.TestSetupContext
@@ -68,7 +68,7 @@ class SarifOutputReportSpec {
 private fun createRuleInstances() = listOf(
     RuleInstance(
         id = "TestSmellA",
-        ruleSetId = RuleSet.Id("RuleSet1"),
+        ruleSetId = RuleSetId("RuleSet1"),
         url = URI("http://example.org/TestSmellA"),
         description = "Description A",
         severity = Severity.Error,
@@ -76,7 +76,7 @@ private fun createRuleInstances() = listOf(
     ),
     RuleInstance(
         id = "TestSmellB",
-        ruleSetId = RuleSet.Id("RuleSet2"),
+        ruleSetId = RuleSetId("RuleSet2"),
         url = URI("http://example.org/TestSmellB"),
         description = "Description B",
         severity = Severity.Warning,
@@ -84,7 +84,7 @@ private fun createRuleInstances() = listOf(
     ),
     RuleInstance(
         id = "TestSmellC",
-        ruleSetId = RuleSet.Id("RuleSet2"),
+        ruleSetId = RuleSetId("RuleSet2"),
         url = URI("http://example.org/TestSmellC"),
         description = "Description C",
         severity = Severity.Info,
@@ -92,7 +92,7 @@ private fun createRuleInstances() = listOf(
     ),
     RuleInstance(
         id = "TestSmellC/id",
-        ruleSetId = RuleSet.Id("RuleSet2"),
+        ruleSetId = RuleSetId("RuleSet2"),
         url = URI("http://example.org/TestSmellC"),
         description = "Description C",
         severity = Severity.Error,
@@ -100,7 +100,7 @@ private fun createRuleInstances() = listOf(
     ),
     RuleInstance(
         id = "TestSmellD",
-        ruleSetId = RuleSet.Id("RuleSet2"),
+        ruleSetId = RuleSetId("RuleSet2"),
         url = null,
         description = "Description D",
         severity = Severity.Error,

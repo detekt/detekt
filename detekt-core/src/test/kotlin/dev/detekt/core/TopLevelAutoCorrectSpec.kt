@@ -5,6 +5,7 @@ import dev.detekt.api.Detektion
 import dev.detekt.api.FileProcessListener
 import dev.detekt.api.Rule
 import dev.detekt.api.RuleSet
+import dev.detekt.api.RuleSetId
 import dev.detekt.api.RuleSetProvider
 import dev.detekt.core.tooling.AnalysisFacade
 import dev.detekt.core.tooling.DefaultLifecycle
@@ -70,6 +71,6 @@ private class DeleteAnnotationsRule(config: Config) : Rule(config, "") {
 }
 
 private class TopLevelAutoCorrectProvider : RuleSetProvider {
-    override val ruleSetId = RuleSet.Id("test-rule-set")
+    override val ruleSetId = RuleSetId("test-rule-set")
     override fun instance() = RuleSet(ruleSetId, listOf(::DeleteAnnotationsRule))
 }

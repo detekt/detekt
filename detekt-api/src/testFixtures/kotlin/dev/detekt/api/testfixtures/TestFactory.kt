@@ -5,7 +5,7 @@ import dev.detekt.api.Finding
 import dev.detekt.api.Issue
 import dev.detekt.api.Location
 import dev.detekt.api.RuleInstance
-import dev.detekt.api.RuleSet
+import dev.detekt.api.RuleSetId
 import dev.detekt.api.Severity
 import dev.detekt.api.SourceLocation
 import dev.detekt.api.TextLocation
@@ -81,7 +81,7 @@ fun createRuleInstance(
     active: Boolean = true,
 ): RuleInstance = RuleInstance(
     id = id,
-    ruleSetId = RuleSet.Id(ruleSetId),
+    ruleSetId = RuleSetId(ruleSetId),
     url = url?.let(::URI),
     description = description,
     severity = severity,
