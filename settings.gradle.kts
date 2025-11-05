@@ -92,6 +92,14 @@ dependencyResolutionManagement {
                 includeModuleByRegex("org.jetbrains.kotlin", ".*-for-ide")
             }
         }
+        exclusiveContent {
+            forRepository {
+                google()
+            }
+            filter {
+                includeGroupAndSubgroups("com.android")
+            }
+        }
         mavenCentral()
     }
 }
