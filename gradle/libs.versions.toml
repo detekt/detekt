@@ -51,7 +51,7 @@ semver4j = { module = "org.semver4j:semver4j", version = "6.0.0" }
 slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 slf4j-nop = { module = "org.slf4j:slf4j-nop", version.ref = "slf4j" }
 slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j" }
-snakeyaml-engine = { module = "org.snakeyaml:snakeyaml-engine", version = "2.10" }
+snakeyaml-engine = { module = "org.snakeyaml:snakeyaml-engine", version = "3.0" }
 
 # Kotlin Analysis API artifacts
 kotlin-analysisApiPlatformInterface = { module = "org.jetbrains.kotlin:analysis-api-platform-interface-for-ide", version.ref = "kotlin" }
