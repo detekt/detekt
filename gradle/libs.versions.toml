@@ -3,7 +3,7 @@ coroutines = "1.10.2"
 jacoco = "0.8.14"
 junit = "6.0.1"
 kotlin = "2.2.21"
-ktlint = "1.7.1"
+ktlint = "1.8.0"
 slf4j = "2.0.17"
 
 jvm-target = "1.8"
