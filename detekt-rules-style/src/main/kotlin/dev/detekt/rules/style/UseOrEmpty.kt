@@ -87,10 +87,12 @@ class UseOrEmpty(config: Config) :
                 if (emptyFunction == null && factoryFunction == null) return false
                 analyze(this) {
                     val callableId = resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId ?: return false
-                    return callableId == emptyFunction || callableId == factoryFunction && valueArguments.isEmpty()
+                    return callableId == emptyFunction || (callableId == factoryFunction && valueArguments.isEmpty())
                 }
             }
+
             is KtStringTemplateExpression -> return entries.isEmpty()
+
             else -> return false
         }
     }

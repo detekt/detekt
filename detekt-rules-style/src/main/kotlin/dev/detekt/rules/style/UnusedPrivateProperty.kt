@@ -185,7 +185,7 @@ private class UnusedPrivatePropertyVisitor(private val allowedNames: Regex) : De
                     val psi = it.psi ?: return@forEach
                     when {
                         psi is KtProperty && psi.isTopLevel -> usedTopLevelProperties.add(psi)
-                        psi is KtProperty || psi is KtParameter && psi.hasValOrVar() -> usedClassProperties.add(psi)
+                        psi is KtProperty || (psi is KtParameter && psi.hasValOrVar()) -> usedClassProperties.add(psi)
                         else -> usedConstructorParameters.add(psi)
                     }
                 }

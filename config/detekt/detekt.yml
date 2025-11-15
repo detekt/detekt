@@ -67,10 +67,6 @@ exceptions:
 ktlint:
   active: true
   autoCorrect: true
-  BlankLineBeforeDeclaration:
-    active: false
-  ChainMethodContinuation:
-    active: false
   ClassSignature:
     active: false
   EnumEntryNameCase:
@@ -80,15 +76,8 @@ ktlint:
   FunctionSignature:
     active: false
   Kdoc:
-    active: true
     excludes: ['**/*.kts']
   MaximumLineLength:
-    active: false
-  NoEmptyFirstLineInClassBody:
-    active: false
-  SpacingAroundSquareBrackets:
-    active: true
-  StringTemplateIndent:
     active: false
   TrailingCommaOnCallSite:
     active: false
