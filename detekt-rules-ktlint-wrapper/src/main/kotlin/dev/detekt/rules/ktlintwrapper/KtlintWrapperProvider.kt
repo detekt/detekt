@@ -135,6 +135,7 @@ class KtlintWrapperProvider : RuleSetProvider {
             ::ArgumentListWrapping,
             ::BackingPropertyNaming,
             ::BinaryExpressionWrapping,
+            ::BlankLineBetweenWhenConditions,
             ::BlockCommentInitialStarAlignment,
             ::ChainWrapping,
             ::ClassName,
@@ -159,8 +160,10 @@ class KtlintWrapperProvider : RuleSetProvider {
             ::FunctionTypeReferenceSpacing,
             ::ImportOrdering,
             ::Indentation,
+            ::Kdoc,
             ::KdocWrapping,
             ::MaximumLineLength,
+            ::MixedConditionOperators,
             ::ModifierListSpacing,
             ::ModifierOrdering,
             ::MultiLineIfElse,
@@ -196,6 +199,7 @@ class KtlintWrapperProvider : RuleSetProvider {
             ::SpacingAroundOperators,
             ::SpacingAroundParens,
             ::SpacingAroundRangeOperator,
+            ::SpacingAroundSquareBrackets,
             ::SpacingAroundUnaryOperator,
             ::SpacingBetweenDeclarationsWithAnnotations,
             ::SpacingBetweenDeclarationsWithComments,
@@ -227,11 +231,8 @@ class KtlintWrapperProvider : RuleSetProvider {
             ::TryCatchFinallySpacing,
             ::WhenEntryBracing,
             // Wrappers for experimental rules. Disabled by default.
-            ::BlankLineBetweenWhenConditions,
+            // Check ktlint rules that implement com.pinterest.ktlint.rule.engine.core.api.Rule.Experimental
             ::ExpressionOperandWrapping,
-            ::Kdoc,
-            ::MixedConditionOperators,
-            ::SpacingAroundSquareBrackets,
         ).sorted()
     )
 
