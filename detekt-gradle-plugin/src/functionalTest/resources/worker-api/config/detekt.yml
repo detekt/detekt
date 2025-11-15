@@ -1,0 +1,11 @@
+potential-bugs:
+  UnreachableCode:
+    active: true
+
+coroutines:
+  RedundantSuspendModifier:
+    active: true
+
+style:
+  MagicNumber:
+    active: false
