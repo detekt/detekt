@@ -204,8 +204,8 @@ class KtlintWrapperProvider : RuleSetProvider {
             ::StatementWrapping,
             ::StringTemplate,
             ::ThenSpacing,
-            ::TrailingCommaOnCallSite, // standard rule but not enabled by default
-            ::TrailingCommaOnDeclarationSite, // standard rule but not enabled by default
+            ::TrailingCommaOnCallSite,
+            ::TrailingCommaOnDeclarationSite,
             ::TypeArgumentComment,
             ::TypeArgumentListSpacing,
             ::TypeParameterComment,
