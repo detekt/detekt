@@ -46,9 +46,10 @@ class Deprecation(config: Config) :
     }
 
     @OptIn(KaExperimentalApi::class)
-    private fun deprecationDiagnostic(element: KtElement): KaFirDiagnostic.Deprecation? = analyze(element) {
-        element
-            .diagnostics(KaDiagnosticCheckerFilter.ONLY_COMMON_CHECKERS)
-            .firstNotNullOfOrNull { it as? KaFirDiagnostic.Deprecation }
-    }
+    private fun deprecationDiagnostic(element: KtElement): KaFirDiagnostic.Deprecation? =
+        analyze(element) {
+            element
+                .diagnostics(KaDiagnosticCheckerFilter.ONLY_COMMON_CHECKERS)
+                .firstNotNullOfOrNull { it as? KaFirDiagnostic.Deprecation }
+        }
 }

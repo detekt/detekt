@@ -142,22 +142,24 @@ class TooManyFunctions(config: Config) : Rule(
         super.visitObjectDeclaration(declaration)
     }
 
-    private fun calcFunctions(classOrObject: KtClassOrObject): Int = classOrObject.body
-        ?.run {
-            declarations
-                .filterIsInstance<KtNamedFunction>()
-                .count { !isIgnoredFunction(it) }
-        }
-        ?: 0
+    private fun calcFunctions(classOrObject: KtClassOrObject): Int =
+        classOrObject.body
+            ?.run {
+                declarations
+                    .filterIsInstance<KtNamedFunction>()
+                    .count { !isIgnoredFunction(it) }
+            }
+            ?: 0
 
-    private fun isIgnoredFunction(function: KtNamedFunction): Boolean = when {
-        ignoreDeprecated && function.hasAnnotation(DEPRECATED) -> true
-        ignorePrivate && function.isPrivate() -> true
-        ignoreInternal && function.isInternal() -> true
-        ignoreOverridden && function.isOverride() -> true
-        ignoreAnnotatedFunctions.any { function.hasAnnotation(it) } -> true
-        else -> false
-    }
+    private fun isIgnoredFunction(function: KtNamedFunction): Boolean =
+        when {
+            ignoreDeprecated && function.hasAnnotation(DEPRECATED) -> true
+            ignorePrivate && function.isPrivate() -> true
+            ignoreInternal && function.isInternal() -> true
+            ignoreOverridden && function.isOverride() -> true
+            ignoreAnnotatedFunctions.any { function.hasAnnotation(it) } -> true
+            else -> false
+        }
 
     companion object {
         const val DEFAULT_THRESHOLD = 11

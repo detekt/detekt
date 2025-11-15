@@ -35,14 +35,15 @@ internal fun <R> ProcessingSpec.withSettings(execute: ProcessingSettings.() -> R
     return result
 }
 
-internal fun ProcessingSpec.loadConfiguration(): Config = with(configSpec) {
-    return when {
-        configPaths.isNotEmpty() -> configPaths.map { YamlConfig.load(it) }
-        resources.isNotEmpty() -> resources.map { it.openSafeStream().reader().use(YamlConfig::load) }
-        else -> listOf(Config.empty)
+internal fun ProcessingSpec.loadConfiguration(): Config =
+    with(configSpec) {
+        return when {
+            configPaths.isNotEmpty() -> configPaths.map { YamlConfig.load(it) }
+            resources.isNotEmpty() -> resources.map { it.openSafeStream().reader().use(YamlConfig::load) }
+            else -> listOf(Config.empty)
+        }
+            .reduce { composite, config -> CompositeConfig(config, composite) }
     }
-        .reduce { composite, config -> CompositeConfig(config, composite) }
-}
 
 private fun ProcessingSpec.workaroundConfiguration(config: Config): Config {
     var declaredConfig: Config = config

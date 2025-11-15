@@ -135,8 +135,7 @@ internal class EnvironmentFacade(
     }
 }
 
-internal fun CompilerSpec.classpathEntries(): List<String> =
-    classpath?.split(File.pathSeparator).orEmpty()
+internal fun CompilerSpec.classpathEntries(): List<String> = classpath?.split(File.pathSeparator).orEmpty()
 
 private object NullPrintStream : PrintStream(
     object : OutputStream() {

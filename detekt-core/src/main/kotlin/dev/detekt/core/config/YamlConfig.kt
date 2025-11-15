@@ -49,11 +49,12 @@ class YamlConfig internal constructor(
     }
 
     @Suppress("MagicNumber")
-    override fun toString() = """
-        YamlConfig(
-            ${properties.toPrettyString(recursive = 1).indentCompat(12).trim()},
-        )
-    """.trimIndent()
+    override fun toString() =
+        """
+            YamlConfig(
+                ${properties.toPrettyString(recursive = 1).indentCompat(12).trim()},
+            )
+        """.trimIndent()
 
     override fun validate(baseline: Config, excludePatterns: Set<Regex>): List<Notification> =
         validateConfig(this, baseline, excludePatterns)
@@ -80,23 +81,25 @@ class YamlConfig internal constructor(
          *
          * Note the reader will be consumed and closed.
          */
-        fun load(reader: Reader): Config = reader.buffered().use { bufferedReader ->
-            val map: Map<*, *>? = runCatching {
+        fun load(reader: Reader): Config =
+            reader.buffered().use { bufferedReader ->
+                val map: Map<*, *>? = runCatching {
+                    @Suppress("UNCHECKED_CAST")
+                    createYamlLoad().loadFromReader(bufferedReader) as Map<String, *>?
+                }.getOrElse { throw Config.InvalidConfigurationError(it) }
                 @Suppress("UNCHECKED_CAST")
-                createYamlLoad().loadFromReader(bufferedReader) as Map<String, *>?
-            }.getOrElse { throw Config.InvalidConfigurationError(it) }
-            @Suppress("UNCHECKED_CAST")
-            YamlConfig(map.orEmpty() as Map<String, Any>, null, null)
-        }
+                YamlConfig(map.orEmpty() as Map<String, Any>, null, null)
+            }
 
-        private fun createYamlLoad() = Load(
-            LoadSettings.builder()
-                .setAllowDuplicateKeys(false)
-                .setAllowRecursiveKeys(false)
-                .setCodePointLimit(YAML_DOC_LIMIT)
-                .setMaxAliasesForCollections(ALIASES_LIMIT)
-                .build()
-        )
+        private fun createYamlLoad() =
+            Load(
+                LoadSettings.builder()
+                    .setAllowDuplicateKeys(false)
+                    .setAllowRecursiveKeys(false)
+                    .setCodePointLimit(YAML_DOC_LIMIT)
+                    .setMaxAliasesForCollections(ALIASES_LIMIT)
+                    .build()
+            )
     }
 }
 

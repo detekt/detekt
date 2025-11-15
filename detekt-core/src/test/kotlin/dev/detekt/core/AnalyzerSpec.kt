@@ -337,10 +337,7 @@ class AnalyzerSpec {
             }
         }
 
-        private fun isPathChecked(
-            path: String,
-            config: Config,
-        ): Boolean {
+        private fun isPathChecked(path: String, config: Config): Boolean {
             val root = resourceAsPath("include_exclude")
             val pathToCheck = resourceAsPath("include_exclude").resolve(path)
 
@@ -466,28 +463,27 @@ internal fun Analyzer(
     vararg ruleDescriptors: RuleDescriptor,
     processors: List<FileProcessListener> = emptyList(),
     analysisMode: AnalysisMode = AnalysisMode.light,
-): Analyzer = Analyzer(
-    settings,
-    ruleDescriptors.toList(),
-    processors,
-    analysisMode,
-)
+): Analyzer =
+    Analyzer(
+        settings,
+        ruleDescriptors.toList(),
+        processors,
+        analysisMode,
+    )
 
-internal fun createRuleDescriptor(
-    provider: (Config) -> Rule,
-    config: Config,
-) = RuleDescriptor(
-    provider,
-    config,
-    RuleInstance(
-        id = provider(Config.empty).javaClass.simpleName,
-        ruleSetId = RuleSetId("custom"),
-        url = URI("https://example.org/"),
-        description = "TestDescription",
-        severity = Severity.Error,
-        active = true,
-    ),
-)
+internal fun createRuleDescriptor(provider: (Config) -> Rule, config: Config) =
+    RuleDescriptor(
+        provider,
+        config,
+        RuleInstance(
+            id = provider(Config.empty).javaClass.simpleName,
+            ruleSetId = RuleSetId("custom"),
+            url = URI("https://example.org/"),
+            description = "TestDescription",
+            severity = Severity.Error,
+            active = true,
+        ),
+    )
 
 // The @receiver:Language("yaml") does nothing because of this bug on IntelliJ
 // https://youtrack.jetbrains.com/issue/KTIJ-5643/Language-injection-does-not-work-for-extension-receivers

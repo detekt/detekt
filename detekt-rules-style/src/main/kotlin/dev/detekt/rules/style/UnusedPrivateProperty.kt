@@ -192,16 +192,14 @@ private class UnusedPrivatePropertyVisitor(private val allowedNames: Regex) : De
         }
     }
 
-    private fun KtConstructor<*>.isExpectClassConstructor() =
-        containingClassOrObject?.isExpect() == true
+    private fun KtConstructor<*>.isExpectClassConstructor() = containingClassOrObject?.isExpect() == true
 
     private fun KtConstructor<*>.isDataOrValueClassConstructor(): Boolean {
         val parent = parent as? KtClass ?: return false
         return parent.isData() || parent.isValue() || parent.isInline()
     }
 
-    fun KaSymbol.isPrivateProperty() =
-        this is KaPropertySymbol && this.visibility == KaSymbolVisibility.PRIVATE
+    fun KaSymbol.isPrivateProperty() = this is KaPropertySymbol && this.visibility == KaSymbolVisibility.PRIVATE
 
     context(session: KaSession)
     fun KaSymbol.isConstructorParameter(): Boolean {

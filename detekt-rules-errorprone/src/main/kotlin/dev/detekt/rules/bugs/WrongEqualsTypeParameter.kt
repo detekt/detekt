@@ -57,6 +57,5 @@ class WrongEqualsTypeParameter(config: Config) : Rule(
         }
     }
 
-    private fun KtNamedFunction.hasWrongEqualsSignature() =
-        valueParameters.size == 1 && !hasCorrectEqualsParameter()
+    private fun KtNamedFunction.hasWrongEqualsSignature() = valueParameters.size == 1 && !hasCorrectEqualsParameter()
 }

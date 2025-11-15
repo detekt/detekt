@@ -88,13 +88,14 @@ class UselessPostfixExpression(config: Config) : Rule(
             ?.forEach { checkPostfixExpression(it, leftIdentifierText) }
     }
 
-    private fun KtExpression.asPostFixExpression() = if (this is KtPostfixExpression &&
-        (operationToken === PLUSPLUS || operationToken === MINUSMINUS)
-    ) {
-        this
-    } else {
-        null
-    }
+    private fun KtExpression.asPostFixExpression() =
+        if (this is KtPostfixExpression &&
+            (operationToken === PLUSPLUS || operationToken === MINUSMINUS)
+        ) {
+            this
+        } else {
+            null
+        }
 
     private fun checkPostfixExpression(postfixExpression: KtPostfixExpression, leftIdentifierText: String?) {
         if (leftIdentifierText == postfixExpression.firstChild?.text) {

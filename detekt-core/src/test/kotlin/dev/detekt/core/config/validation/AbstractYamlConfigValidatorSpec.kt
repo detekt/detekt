@@ -42,10 +42,7 @@ internal class AbstractYamlConfigValidatorSpec {
 
         lateinit var validationSettings: ValidationSettings
 
-        override fun validate(
-            configToValidate: YamlConfig,
-            settings: ValidationSettings,
-        ): Collection<Notification> {
+        override fun validate(configToValidate: YamlConfig, settings: ValidationSettings): Collection<Notification> {
             validationSettings = settings
             return emptyList()
         }

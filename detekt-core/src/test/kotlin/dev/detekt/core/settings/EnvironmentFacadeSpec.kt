@@ -21,8 +21,9 @@ class EnvironmentFacadeSpec {
     }
 }
 
-private fun testSettings(classpath: String) = createProcessingSettings {
-    compiler {
-        this.classpath = classpath
+private fun testSettings(classpath: String) =
+    createProcessingSettings {
+        compiler {
+            this.classpath = classpath
+        }
     }
-}

@@ -7,9 +7,10 @@ import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 
-fun KtLambdaExpression.firstParameterOrNull(): KaValueParameterSymbol? = analyze(this) {
-    functionLiteral.symbol.valueParameters.singleOrNull()
-}
+fun KtLambdaExpression.firstParameterOrNull(): KaValueParameterSymbol? =
+    analyze(this) {
+        functionLiteral.symbol.valueParameters.singleOrNull()
+    }
 
 fun KtLambdaExpression.implicitParameterOrNull(): KaValueParameterSymbol? =
     if (valueParameters.isNotEmpty()) {

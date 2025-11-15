@@ -37,17 +37,18 @@ class ProcessingSpecBuilder : Builder<ProcessingSpec> {
     fun project(init: ProjectSpecBuilder.() -> Unit): Unit = init(project)
     fun reports(init: ReportsSpecBuilder.() -> Unit): Unit = init(reports)
 
-    override fun build(): ProcessingSpec = ProcessingModel(
-        baseline.build(),
-        compiler.build(),
-        config.build(),
-        execution.build(),
-        extensions.build(),
-        issues.build(),
-        logging.build(),
-        project.build(),
-        reports.build()
-    )
+    override fun build(): ProcessingSpec =
+        ProcessingModel(
+            baseline.build(),
+            compiler.build(),
+            config.build(),
+            execution.build(),
+            extensions.build(),
+            issues.build(),
+            logging.build(),
+            project.build(),
+            reports.build()
+        )
 }
 
 private data class ProcessingModel(

@@ -88,9 +88,8 @@ private fun KtCallExpression.isEligible(): Boolean =
         else -> true
     }
 
-internal fun shouldReportUnnecessaryBracesAroundTrailingLambda(
-    element: KtCallExpression,
-) = element.canMoveLambdaOutsideParentheses()
+internal fun shouldReportUnnecessaryBracesAroundTrailingLambda(element: KtCallExpression) =
+    element.canMoveLambdaOutsideParentheses()
 
 private fun KtCallExpression.getLastLambdaExpression(): KtLambdaExpression? {
     if (lambdaArguments.isNotEmpty()) return null

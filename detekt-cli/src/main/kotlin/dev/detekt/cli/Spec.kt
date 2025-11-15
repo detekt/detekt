@@ -90,11 +90,12 @@ private fun Path.isKotlinFile() = extension in KT_ENDINGS
 
 private val KT_ENDINGS = setOf("kt", "kts")
 
-private fun asPatterns(rawValue: String): List<String> = rawValue.trim()
-    .splitToSequence(",", ";")
-    .filter { it.isNotBlank() }
-    .map { it.trim() }
-    .toList()
+private fun asPatterns(rawValue: String): List<String> =
+    rawValue.trim()
+        .splitToSequence(",", ";")
+        .filter { it.isNotBlank() }
+        .map { it.trim() }
+        .toList()
 
 private fun CliArgs.toRunPolicy(): RulesSpec.RunPolicy {
     val parts = runRule?.split(":")
