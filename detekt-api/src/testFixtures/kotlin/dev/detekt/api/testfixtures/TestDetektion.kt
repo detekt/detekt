@@ -14,14 +14,15 @@ fun TestDetektion(
     metrics: List<ProjectMetric> = emptyList(),
     notifications: List<Notification> = emptyList(),
     userData: Map<String, Any> = emptyMap(),
-): Detektion = Detektion(
-    issues.toList(),
-    rules,
-).apply {
-    metrics.forEach { add(it) }
-    notifications.forEach { add(it) }
-    this.userData.putAll(userData)
-}
+): Detektion =
+    Detektion(
+        issues.toList(),
+        rules,
+    ).apply {
+        metrics.forEach { add(it) }
+        notifications.forEach { add(it) }
+        this.userData.putAll(userData)
+    }
 
 fun <V> Detektion.removeData(key: Key<V>) {
     userData.remove(key.toString())

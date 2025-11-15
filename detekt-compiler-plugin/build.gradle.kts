@@ -112,11 +112,12 @@ val testPluginKotlinc by tasks.registering(Task::class) {
     }
 }
 
-private fun String.toArg() = if (org.apache.tools.ant.taskdefs.condition.Os.isFamily("windows")) {
-    "\"$this\""
-} else {
-    this
-}
+private fun String.toArg() =
+    if (org.apache.tools.ant.taskdefs.condition.Os.isFamily("windows")) {
+        "\"$this\""
+    } else {
+        this
+    }
 
 tasks.check {
     dependsOn(testPluginKotlinc)
