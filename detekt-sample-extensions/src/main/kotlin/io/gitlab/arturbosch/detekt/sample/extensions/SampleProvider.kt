@@ -9,11 +9,12 @@ class SampleProvider : RuleSetProvider {
 
     override val ruleSetId = RuleSet.Id("sample")
 
-    override fun instance(): RuleSet = RuleSet(
-        ruleSetId,
-        listOf(
-            ::TooManyFunctions,
-            ::TooManyFunctionsTwo,
+    override fun instance(): RuleSet =
+        RuleSet(
+            ruleSetId,
+            listOf(
+                ::TooManyFunctions,
+                ::TooManyFunctionsTwo,
+            )
         )
-    )
 }
