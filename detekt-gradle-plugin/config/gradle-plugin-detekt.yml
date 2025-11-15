@@ -49,8 +49,6 @@ ktlint:
     active: false
   TrailingCommaOnCallSite:
     active: false
-  TrailingCommaOnDeclarationSite:
-    active: true
 
 potential-bugs:
   DoubleMutabilityForCollection:

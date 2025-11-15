@@ -90,8 +90,6 @@ ktlint:
     active: false
   TrailingCommaOnCallSite:
     active: false
-  TrailingCommaOnDeclarationSite:
-    active: true
   ValueArgumentComment:
     active: false
 
