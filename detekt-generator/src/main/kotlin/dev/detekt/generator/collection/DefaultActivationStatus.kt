@@ -2,15 +2,15 @@ package dev.detekt.generator.collection
 
 import dev.detekt.generator.collection.exception.InvalidDocumentationException
 
-sealed class DefaultActivationStatus {
-    abstract val active: Boolean
+sealed interface DefaultActivationStatus {
+    val active: Boolean
 }
 
-data object Inactive : DefaultActivationStatus() {
+data object Inactive : DefaultActivationStatus {
     override val active = false
 }
 
-data class Active(val since: String) : DefaultActivationStatus() {
+data class Active(val since: String) : DefaultActivationStatus {
     override val active = true
 
     init {
