@@ -75,14 +75,25 @@ internal class DefaultCliInvoker(
     ) {
         try {
             val loader = classLoaderCache.getOrCreate(classpath)
-            val clazz = loader.loadClass("dev.detekt.cli.Main")
-            val runner = clazz.getMethod(
-                "buildRunner",
-                Array<String>::class.java,
-                PrintStream::class.java,
-                PrintStream::class.java
-            ).invoke(null, arguments.toTypedArray(), System.out, System.err)
-            runner::class.java.getMethod("execute").invoke(runner)
+
+            // Set thread context classloader for ServiceLoader compatibility in worker processes.
+            // The Analysis API uses ServiceLoader which defaults to the context classloader.
+            val currentThread = Thread.currentThread()
+            val originalClassLoader = currentThread.contextClassLoader
+            try {
+                currentThread.contextClassLoader = loader
+
+                val clazz = loader.loadClass("dev.detekt.cli.Main")
+                val runner = clazz.getMethod(
+                    "buildRunner",
+                    Array<String>::class.java,
+                    PrintStream::class.java,
+                    PrintStream::class.java
+                ).invoke(null, arguments.toTypedArray(), System.out, System.err)
+                runner::class.java.getMethod("execute").invoke(runner)
+            } finally {
+                currentThread.contextClassLoader = originalClassLoader
+            }
         } catch (reflectionWrapper: InvocationTargetException) {
             processResult(reflectionWrapper.targetException.message, reflectionWrapper, ignoreFailures)
         }
