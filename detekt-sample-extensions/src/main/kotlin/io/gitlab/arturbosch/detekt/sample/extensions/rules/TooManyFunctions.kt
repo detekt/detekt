@@ -10,9 +10,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 /**
  * This is a sample rule reporting too many functions inside a file.
  */
-class TooManyFunctions(
-    config: Config,
-) : Rule(config, "This rule reports a file with an excessive function count.") {
+class TooManyFunctions(config: Config) : Rule(config, "This rule reports a file with an excessive function count.") {
 
     private var amount: Int = 0
 
