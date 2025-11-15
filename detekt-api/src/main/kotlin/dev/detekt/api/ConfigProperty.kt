@@ -11,9 +11,7 @@ import kotlin.reflect.KProperty0
  * @param defaultValue the value that the property evaluates to when there is no key with the name of the property in
  * the config. Although [T] is defined as [Any], only [String], [Int], [Boolean] and [List<String>] are supported.
  */
-fun <T : Any> config(
-    defaultValue: T,
-): ReadOnlyProperty<Rule, T> = config(defaultValue) { it }
+fun <T : Any> config(defaultValue: T): ReadOnlyProperty<Rule, T> = config(defaultValue) { it }
 
 /**
  * Creates a delegated read-only property that can be used in [Rule] objects. The name of the property is the
@@ -24,10 +22,8 @@ fun <T : Any> config(
  * @param transformer a function that transforms the value from the configuration (or the default) into its final
  * value. A typical use case for this is a conversion from a [String] into a [Regex].
  */
-fun <T : Any, U : Any> config(
-    defaultValue: T,
-    transformer: (T) -> U,
-): ReadOnlyProperty<Rule, U> = TransformedConfigProperty(defaultValue, transformer)
+fun <T : Any, U : Any> config(defaultValue: T, transformer: (T) -> U): ReadOnlyProperty<Rule, U> =
+    TransformedConfigProperty(defaultValue, transformer)
 
 /**
  * Creates a delegated read-only property that can be used in [Rule] objects. The name of the property is the
@@ -43,10 +39,8 @@ fun <T : Any, U : Any> config(
  * @param defaultValue the value that the property evaluates to when there is no key with the name of the property in
  * the config. Although [T] is defined as [Any], only [String], [Int], [Boolean] and [List<String>] are supported.
  */
-fun <T : Any> configWithFallback(
-    fallbackProperty: KProperty0<T>,
-    defaultValue: T,
-): ReadOnlyProperty<Rule, T> = configWithFallback(fallbackProperty, defaultValue) { it }
+fun <T : Any> configWithFallback(fallbackProperty: KProperty0<T>, defaultValue: T): ReadOnlyProperty<Rule, T> =
+    configWithFallback(fallbackProperty, defaultValue) { it }
 
 /**
  * Creates a delegated read-only property that can be used in [Rule] objects. The name of the property is the
@@ -68,8 +62,7 @@ fun <T : Any, U : Any> configWithFallback(
     fallbackProperty: KProperty0<U>,
     defaultValue: T,
     transformer: (T) -> U,
-): ReadOnlyProperty<Rule, U> =
-    FallbackConfigProperty(fallbackProperty, defaultValue, transformer)
+): ReadOnlyProperty<Rule, U> = FallbackConfigProperty(fallbackProperty, defaultValue, transformer)
 
 private fun <T : Any> getValueOrDefault(config: Config, propertyName: String, defaultValue: T): T {
     @Suppress("UNCHECKED_CAST")

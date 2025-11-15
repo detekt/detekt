@@ -146,24 +146,26 @@ class ClassOrdering(config: Config) : Rule(
     )
 }
 
-private fun KtDeclaration.toDescription(): String = when {
-    this is KtProperty -> "property `$name`"
-    this is KtClassInitializer -> "initializer blocks"
-    this is KtSecondaryConstructor -> "secondary constructor"
-    this is KtNamedFunction -> "method `$name()`"
-    this is KtObjectDeclaration && isCompanion() -> "companion object"
-    else -> ""
-}
+private fun KtDeclaration.toDescription(): String =
+    when {
+        this is KtProperty -> "property `$name`"
+        this is KtClassInitializer -> "initializer blocks"
+        this is KtSecondaryConstructor -> "secondary constructor"
+        this is KtNamedFunction -> "method `$name()`"
+        this is KtObjectDeclaration && isCompanion() -> "companion object"
+        else -> ""
+    }
 
 @Suppress("MagicNumber")
-private fun KtDeclaration.toSection(): Section? = when {
-    this is KtProperty -> Section(0)
-    this is KtClassInitializer -> Section(0)
-    this is KtSecondaryConstructor -> Section(1)
-    this is KtNamedFunction -> Section(2)
-    this is KtObjectDeclaration && isCompanion() -> Section(3)
-    else -> null // For declarations not relevant for ordering, such as nested classes.
-}
+private fun KtDeclaration.toSection(): Section? =
+    when {
+        this is KtProperty -> Section(0)
+        this is KtClassInitializer -> Section(0)
+        this is KtSecondaryConstructor -> Section(1)
+        this is KtNamedFunction -> Section(2)
+        this is KtObjectDeclaration && isCompanion() -> Section(3)
+        else -> null // For declarations not relevant for ordering, such as nested classes.
+    }
 
 @Suppress("MagicNumber")
 private class Section(val priority: Int) : Comparable<Section> {
@@ -172,13 +174,14 @@ private class Section(val priority: Int) : Comparable<Section> {
         require(priority in 0..3)
     }
 
-    fun toDescription(): String = when (priority) {
-        0 -> "property declarations and initializer blocks"
-        1 -> "secondary constructors"
-        2 -> "method declarations"
-        3 -> "companion object"
-        else -> ""
-    }
+    fun toDescription(): String =
+        when (priority) {
+            0 -> "property declarations and initializer blocks"
+            1 -> "secondary constructors"
+            2 -> "method declarations"
+            3 -> "companion object"
+            else -> ""
+        }
 
     override fun compareTo(other: Section): Int = priority.compareTo(other.priority)
 }

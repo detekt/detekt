@@ -73,35 +73,38 @@ class HtmlOutputReport : OutputReport {
         return "${OffsetDateTime.now(ZoneOffset.UTC).format(formatter)} UTC"
     }
 
-    private fun renderMetrics(metrics: Collection<ProjectMetric>) = createHTML().div {
-        ul {
-            metrics.forEach {
-                li { text("%,d ${it.type}".format(Locale.ROOT, it.value)) }
+    private fun renderMetrics(metrics: Collection<ProjectMetric>) =
+        createHTML().div {
+            ul {
+                metrics.forEach {
+                    li { text("%,d ${it.type}".format(Locale.ROOT, it.value)) }
+                }
             }
         }
-    }
 
-    private fun renderComplexity(complexityReport: List<String>) = createHTML().div {
-        ul {
-            complexityReport.forEach {
-                li { text(it.trim()) }
+    private fun renderComplexity(complexityReport: List<String>) =
+        createHTML().div {
+            ul {
+                complexityReport.forEach {
+                    li { text(it.trim()) }
+                }
             }
         }
-    }
 
-    private fun renderIssues(issues: List<Issue>) = createHTML().div {
-        val total = issues.count()
+    private fun renderIssues(issues: List<Issue>) =
+        createHTML().div {
+            val total = issues.count()
 
-        text("Total: %,d".format(Locale.ROOT, total))
+            text("Total: %,d".format(Locale.ROOT, total))
 
-        issues
-            .groupBy { it.ruleInstance.ruleSetId }
-            .toList()
-            .sortedBy { (group, _) -> group.value }
-            .forEach { (group, groupIssues) ->
-                renderGroup(group, groupIssues)
-            }
-    }
+            issues
+                .groupBy { it.ruleInstance.ruleSetId }
+                .toList()
+                .sortedBy { (group, _) -> group.value }
+                .forEach { (group, groupIssues) ->
+                    renderGroup(group, groupIssues)
+                }
+        }
 
     private fun FlowContent.renderGroup(group: RuleSetId, issues: List<Issue>) {
         h3 { text("$group: %,d".format(Locale.ROOT, issues.size)) }
@@ -173,10 +176,8 @@ class HtmlOutputReport : OutputReport {
 }
 
 @HtmlTagMarker
-private fun FlowOrInteractiveContent.summary(
-    classes: String,
-    block: SUMMARY.() -> Unit = {},
-): Unit = SUMMARY(attributesMapOf("class", classes), consumer).visit(block)
+private fun FlowOrInteractiveContent.summary(classes: String, block: SUMMARY.() -> Unit = {}): Unit =
+    SUMMARY(attributesMapOf("class", classes), consumer).visit(block)
 
 private class SUMMARY(
     initialAttributes: Map<String, String>,

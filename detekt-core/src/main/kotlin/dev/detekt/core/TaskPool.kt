@@ -8,8 +8,7 @@ import java.util.concurrent.Executors
 typealias Task<T> = CompletableFuture<T>
 typealias TaskList<T> = List<CompletableFuture<T>>
 
-fun <T> TaskPool.task(block: () -> T): Task<T> =
-    CompletableFuture.supplyAsync({ block() }, this)
+fun <T> TaskPool.task(block: () -> T): Task<T> = CompletableFuture.supplyAsync({ block() }, this)
 
 fun <T> Task<T>.recover(block: (Throwable) -> T?): Task<T?> = this.exceptionally(block)
 

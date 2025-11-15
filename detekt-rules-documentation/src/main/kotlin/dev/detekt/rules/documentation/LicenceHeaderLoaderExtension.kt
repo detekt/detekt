@@ -38,13 +38,15 @@ class LicenceHeaderLoaderExtension : FileProcessListener {
             return comments.isActive() && ruleConfig.isActive()
         }
 
-        fun getPathToTemplate(): String = config.subConfig("comments")
-            .subConfig(RULE_NAME)
-            .valueOrDefault(PARAM_LICENSE_TEMPLATE_FILE, DEFAULT_LICENSE_TEMPLATE_FILE)
+        fun getPathToTemplate(): String =
+            config.subConfig("comments")
+                .subConfig(RULE_NAME)
+                .valueOrDefault(PARAM_LICENSE_TEMPLATE_FILE, DEFAULT_LICENSE_TEMPLATE_FILE)
 
-        fun isRegexTemplate(): Boolean = config.subConfig("comments")
-            .subConfig(RULE_NAME)
-            .valueOrDefault(PARAM_LICENSE_TEMPLATE_IS_REGEX, DEFAULT_LICENSE_TEMPLATE_IS_REGEX)
+        fun isRegexTemplate(): Boolean =
+            config.subConfig("comments")
+                .subConfig(RULE_NAME)
+                .valueOrDefault(PARAM_LICENSE_TEMPLATE_IS_REGEX, DEFAULT_LICENSE_TEMPLATE_IS_REGEX)
 
         fun loadLicence(dir: Path): String {
             val templateFile = dir.resolve(getPathToTemplate())

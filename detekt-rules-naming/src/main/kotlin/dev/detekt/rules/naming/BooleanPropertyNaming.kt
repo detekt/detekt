@@ -62,10 +62,7 @@ class BooleanPropertyNaming(config: Config) :
         }
     }
 
-    private fun reportFinding(
-        declaration: KtCallableDeclaration,
-        name: String,
-    ): Finding {
+    private fun reportFinding(declaration: KtCallableDeclaration, name: String): Finding {
         val description = "Boolean property name should match a $allowedPattern pattern."
         return Finding(
             Entity.atName(declaration),
@@ -73,11 +70,13 @@ class BooleanPropertyNaming(config: Config) :
         )
     }
 
-    private fun KtCallableDeclaration.isKotlinBooleanType(): Boolean = analyze(this) {
-        returnType.isBooleanType
-    }
+    private fun KtCallableDeclaration.isKotlinBooleanType(): Boolean =
+        analyze(this) {
+            returnType.isBooleanType
+        }
 
-    private fun KtCallableDeclaration.isJavaBooleanType(): Boolean = analyze(this) {
-        returnType.isClassType(ClassId(FqName("java.lang"), Name.identifier("Boolean")))
-    }
+    private fun KtCallableDeclaration.isJavaBooleanType(): Boolean =
+        analyze(this) {
+            returnType.isClassType(ClassId(FqName("java.lang"), Name.identifier("Boolean")))
+        }
 }

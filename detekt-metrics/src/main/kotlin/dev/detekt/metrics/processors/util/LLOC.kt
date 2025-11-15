@@ -5,11 +5,8 @@ object LLOC {
     private val comments = arrayOf("//", "/*", "*/", "*")
     private val escapes = arrayOf("import", "package")
 
-    fun analyze(
-        lines: List<String>,
-        isCommentMode: Boolean = false,
-        isFullMode: Boolean = false,
-    ): Int = LLOCCounter(lines, isCommentMode, isFullMode).run()
+    fun analyze(lines: List<String>, isCommentMode: Boolean = false, isFullMode: Boolean = false): Int =
+        LLOCCounter(lines, isCommentMode, isFullMode).run()
 
     private class LLOCCounter(
         private val lines: List<String>,

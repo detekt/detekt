@@ -59,8 +59,9 @@ class NullableBooleanCheck(config: Config) :
 
     private fun KtExpression.isBooleanConstant() = node.elementType == KtNodeTypes.BOOLEAN_CONSTANT
 
-    private fun KtExpression.isNullableBoolean() = analyze(this) {
-        val type = expressionType
-        type?.isBooleanType == true && type.isMarkedNullable
-    }
+    private fun KtExpression.isNullableBoolean() =
+        analyze(this) {
+            val type = expressionType
+            type?.isBooleanType == true && type.isMarkedNullable
+        }
 }

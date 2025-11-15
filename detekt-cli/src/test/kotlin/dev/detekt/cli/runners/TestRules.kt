@@ -13,13 +13,14 @@ import org.jetbrains.kotlin.psi.KtClass
 
 class TestProvider : RuleSetProvider {
     override val ruleSetId = RuleSetId("test")
-    override fun instance(): RuleSet = RuleSet(
-        ruleSetId,
-        listOf(
-            ::TestRule,
-            ::TestRuleWithDeprecation,
+    override fun instance(): RuleSet =
+        RuleSet(
+            ruleSetId,
+            listOf(
+                ::TestRule,
+                ::TestRuleWithDeprecation,
+            )
         )
-    )
 }
 
 internal class TestRule(config: Config) : Rule(config, "A failure") {

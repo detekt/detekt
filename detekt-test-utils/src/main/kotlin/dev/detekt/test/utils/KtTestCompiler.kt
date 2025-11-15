@@ -39,11 +39,12 @@ internal object KtTestCompiler {
     }
 }
 
-private fun createDefaultAnalysisAPISession() = buildStandaloneAnalysisAPISession {
-    registerProjectService(TreeAspect::class.java)
-    registerProjectService(PomModel::class.java, DetektPomModel(project))
+private fun createDefaultAnalysisAPISession() =
+    buildStandaloneAnalysisAPISession {
+        registerProjectService(TreeAspect::class.java)
+        registerProjectService(PomModel::class.java, DetektPomModel(project))
 
-    buildKtModuleProvider {
-        platform = JvmPlatforms.defaultJvmPlatform
+        buildKtModuleProvider {
+            platform = JvmPlatforms.defaultJvmPlatform
+        }
     }
-}

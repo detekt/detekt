@@ -110,9 +110,8 @@ class ReturnFromFinally(config: Config) :
         return blockExpression.isInsideOf(targetFunctionBodyExpressionStatements)
     }
 
-    private fun canFilterLabeledExpression(
-        returnStmt: KtReturnExpression,
-    ): Boolean = !ignoreLabeled || returnStmt.labeledExpression == null
+    private fun canFilterLabeledExpression(returnStmt: KtReturnExpression): Boolean =
+        !ignoreLabeled || returnStmt.labeledExpression == null
 
     private fun KtFinallySection.typeEqualsTo(type: KaType?): Boolean {
         val finallyExpression = finalExpression
@@ -123,7 +122,8 @@ class ReturnFromFinally(config: Config) :
         }
     }
 
-    private fun KtFinallySection.returnsNonUnitType(): Boolean = analyze(finalExpression) {
-        finalExpression.expressionType?.isUnitType == false
-    }
+    private fun KtFinallySection.returnsNonUnitType(): Boolean =
+        analyze(finalExpression) {
+            finalExpression.expressionType?.isUnitType == false
+        }
 }
