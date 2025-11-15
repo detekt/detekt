@@ -632,6 +632,122 @@ class DetektAndroidSpec {
             }
         }
     }
+
+    @Nested
+    inner class `configures android tasks with test fixtures enabled` {
+        val projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 0).apply {
+            addSubmodule(
+                name = "lib",
+                numberOfSourceFilesPerSourceDir = 1,
+                numberOfFindings = 1,
+                buildFileContent = joinGradleBlocks(
+                    LIB_PLUGIN_BLOCK,
+                    ANDROID_BLOCK,
+                    ANDROID_TEST_FIXTURES_BLOCK,
+                    DETEKT_REPORTS_BLOCK,
+                ),
+                srcDirs = listOf(
+                    "src/main/java",
+                    "src/debug/java",
+                    "src/test/java",
+                    "src/androidTest/java",
+                    "src/testFixtures/java"
+                )
+            )
+        }
+        val gradleRunner = createGradleRunnerAndSetupProject(projectLayout).also {
+            it.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent)
+            it.writeProjectFile(
+                "gradle.properties",
+                "android.experimental.enableTestFixturesKotlinSupport=true"
+            )
+        }
+
+        @Test
+        @DisplayName("task :lib:detektTest does not fail when testFixtures are enabled")
+        fun `detektTest should not depend on testFixtures tasks`() {
+            gradleRunner.runTasksAndCheckResult(":lib:detektTest") { buildResult ->
+                assertThat(buildResult.tasks.map { it.path })
+                    .filteredOn { it.startsWith(":lib:detekt") }
+                    .containsExactlyInAnyOrder(
+                        ":lib:detektDebugAndroidTest",
+                        ":lib:detektDebugUnitTest",
+                        ":lib:detektReleaseUnitTest",
+                        ":lib:detektTest",
+                    )
+                    .doesNotContain(
+                        ":lib:detektDebugTestFixtures",
+                        ":lib:detektReleaseTestFixtures"
+                    )
+            }
+        }
+
+        @Test
+        @DisplayName("task :lib:detektMain does not fail when testFixtures are enabled")
+        fun `detektMain should work with testFixtures enabled`() {
+            gradleRunner.runTasksAndCheckResult(":lib:detektMain") { buildResult ->
+                assertThat(buildResult.tasks.map { it.path })
+                    .filteredOn { it.startsWith(":lib:detekt") }
+                    .containsExactlyInAnyOrder(
+                        ":lib:detektDebug",
+                        ":lib:detektMain",
+                        ":lib:detektRelease",
+                    )
+            }
+        }
+
+        @Test
+        @DisplayName("baseline tasks do not fail when testFixtures are enabled")
+        fun `baseline tasks should work with testFixtures`() {
+            gradleRunner.runTasksAndCheckResult(":lib:detektBaselineTest") { buildResult ->
+                assertThat(buildResult.tasks.map { it.path })
+                    .filteredOn { it.startsWith(":lib:detektBaseline") }
+                    .containsExactlyInAnyOrder(
+                        ":lib:detektBaselineDebugAndroidTest",
+                        ":lib:detektBaselineDebugUnitTest",
+                        ":lib:detektBaselineReleaseUnitTest",
+                        ":lib:detektBaselineTest",
+                    )
+                    .doesNotContain(
+                        ":lib:detektBaselineDebugTestFixtures",
+                        ":lib:detektBaselineReleaseTestFixtures"
+                    )
+            }
+        }
+
+        @Test
+        @DisplayName("works with both testFixtures and product flavors")
+        fun `should handle testFixtures with flavors`() {
+            val projectWithFlavors = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 0).apply {
+                addSubmodule(
+                    name = "lib",
+                    numberOfSourceFilesPerSourceDir = 1,
+                    numberOfFindings = 1,
+                    buildFileContent = joinGradleBlocks(
+                        LIB_PLUGIN_BLOCK,
+                        ANDROID_BLOCK_WITH_FLAVOR,
+                        ANDROID_TEST_FIXTURES_BLOCK,
+                        DETEKT_REPORTS_BLOCK,
+                    ),
+                    srcDirs = listOf("src/main/java", "src/testFixtures/java")
+                )
+            }
+            val runner = createGradleRunnerAndSetupProject(projectWithFlavors).also {
+                it.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent)
+                it.writeProjectFile(
+                    "gradle.properties",
+                    "android.experimental.enableTestFixturesKotlinSupport=true"
+                )
+            }
+
+            runner.runTasksAndCheckResult(":lib:detektTest") { buildResult ->
+                val testFixturesTasks = buildResult.tasks
+                    .map { it.path }
+                    .filter { it.startsWith(":lib:detekt") && it.contains("TestFixtures") }
+                assertThat(testFixturesTasks).isEmpty()
+            }
+        }
+    }
 }
 
 /**
@@ -726,6 +842,15 @@ private val ANDROID_BLOCK_WITH_VIEW_BINDING = """
         compileOptions {
             sourceCompatibility = JavaVersion.VERSION_1_8
             targetCompatibility = JavaVersion.VERSION_1_8
+        }
+    }
+""".trimIndent()
+
+@Language("gradle.kts")
+private val ANDROID_TEST_FIXTURES_BLOCK = """
+    android {
+        testFixtures {
+            enable = true
         }
     }
 """.trimIndent()

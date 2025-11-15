@@ -58,14 +58,20 @@ internal object DetektAndroidCompilations {
                     mainBaselineTaskProvider.configure {
                         it.dependsOn(DetektPlugin.BASELINE_TASK_NAME + variant.name.capitalize())
                     }
-                    variant.nestedComponents.forEach { testVariant ->
-                        testTaskProvider.configure {
-                            it.dependsOn(DetektPlugin.DETEKT_TASK_NAME + testVariant.name.capitalize())
+                    // Filter out testFixtures components as they may not have corresponding Kotlin compilations.
+                    // TestFixtures support is experimental (android.experimental.enableTestFixturesKotlinSupport)
+                    // and detekt tasks are only registered for compilations available in KotlinAndroidExtension.
+                    // See: https://github.com/detekt/detekt/issues/8835
+                    variant.nestedComponents
+                        .filterNot { it.name.contains("TestFixtures", ignoreCase = true) }
+                        .forEach { testVariant ->
+                            testTaskProvider.configure {
+                                it.dependsOn(DetektPlugin.DETEKT_TASK_NAME + testVariant.name.capitalize())
+                            }
+                            testBaselineTaskProvider.configure {
+                                it.dependsOn(DetektPlugin.BASELINE_TASK_NAME + testVariant.name.capitalize())
+                            }
                         }
-                        testBaselineTaskProvider.configure {
-                            it.dependsOn(DetektPlugin.BASELINE_TASK_NAME + testVariant.name.capitalize())
-                        }
-                    }
                 }
             }
         }
