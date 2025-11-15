@@ -1,6 +1,7 @@
 package dev.detekt.generator.printer
 
 import dev.detekt.generator.collection.Configuration
+import dev.detekt.generator.collection.TextReplacementMacro
 import dev.detekt.utils.bold
 import dev.detekt.utils.code
 import dev.detekt.utils.crossOut
@@ -11,6 +12,7 @@ import dev.detekt.utils.list
 import dev.detekt.utils.markdown
 
 internal object ConfigurationsPrinter : DocumentationPrinter<List<Configuration>> {
+    private val macroProcessor = TextReplacementMacro()
 
     override fun print(item: List<Configuration>): String {
         if (item.isEmpty()) return ""
@@ -25,6 +27,7 @@ internal object ConfigurationsPrinter : DocumentationPrinter<List<Configuration>
                     } else {
                         "(default: ${code { defaultValues }})"
                     }
+                    val expandedDescription = macroProcessor.expand(it.description)
                     if (it.isDeprecated()) {
                         item {
                             crossOut { code { it.name } } + " " + defaultString
@@ -35,7 +38,7 @@ internal object ConfigurationsPrinter : DocumentationPrinter<List<Configuration>
                             code { it.name } + " " + defaultString
                         }
                     }
-                    description { it.description }
+                    description { expandedDescription }
                 }
             }
         }
