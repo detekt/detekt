@@ -16,10 +16,8 @@ import dev.detekt.rules.ktlintwrapper.configWithAndroidVariants
  */
 @ActiveByDefault(since = "1.23.0")
 @AutoCorrectable(since = "1.22.0")
-class FunctionReturnTypeSpacing(config: Config) : KtlintRule(
-    config,
-    "Checks the spacing between colon and return type."
-) {
+class FunctionReturnTypeSpacing(config: Config) :
+    KtlintRule(config, "Checks the spacing between colon and return type.") {
 
     override val wrapping = FunctionReturnTypeSpacingRule()
 

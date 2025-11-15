@@ -16,10 +16,8 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "2.0.0")
-class StatementWrapping(config: Config) : KtlintRule(
-    config,
-    "Block body statements must be placed on a different line than the braces of the body block."
-) {
+class StatementWrapping(config: Config) :
+    KtlintRule(config, "Block body statements must be placed on a different line than the braces of the body block.") {
 
     override val wrapping = StatementWrappingRule()
 

@@ -4,10 +4,7 @@ package dev.detekt.api
  * Storage for all kinds of findings and additional information
  * which needs to be transferred from the detekt engine to the user.
  */
-class Detektion(
-    val issues: List<Issue>,
-    val rules: List<RuleInstance>,
-) {
+class Detektion(val issues: List<Issue>, val rules: List<RuleInstance>) {
     init {
         val notReportedRules = issues.map { it.ruleInstance }.distinct().minus(rules.toSet())
         require(notReportedRules.isEmpty()) {

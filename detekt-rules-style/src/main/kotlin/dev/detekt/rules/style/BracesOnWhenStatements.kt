@@ -154,10 +154,7 @@ import org.jetbrains.kotlin.psi.psiUtil.siblings
  *
  *  </compliant>
  */
-class BracesOnWhenStatements(config: Config) : Rule(
-    config,
-    "Braces do not comply with the specified policy"
-) {
+class BracesOnWhenStatements(config: Config) : Rule(config, "Braces do not comply with the specified policy") {
 
     @Configuration("single-line braces policy")
     private val singleLine: BracePolicy by config("necessary") { BracePolicy.getValue(it) }

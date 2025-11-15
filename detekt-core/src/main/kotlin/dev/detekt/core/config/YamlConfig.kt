@@ -23,7 +23,8 @@ class YamlConfig internal constructor(
     val properties: Map<String, Any>,
     override val parentPath: String?,
     override val parent: Config?,
-) : Config, ValidatableConfiguration {
+) : Config,
+    ValidatableConfiguration {
 
     override fun subConfig(key: String): Config {
         @Suppress("UNCHECKED_CAST")

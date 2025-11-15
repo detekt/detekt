@@ -21,11 +21,12 @@ import java.util.IdentityHashMap
  * Extract parts of the functionality of long methods into separate, smaller methods.
  */
 @ActiveByDefault(since = "1.0.0")
-class LongMethod(config: Config) : Rule(
-    config,
-    "One method should have one responsibility. Long methods tend to handle many things at once. " +
-        "Prefer smaller methods to make them easier to understand."
-) {
+class LongMethod(config: Config) :
+    Rule(
+        config,
+        "One method should have one responsibility. Long methods tend to handle many things at once. " +
+            "Prefer smaller methods to make them easier to understand."
+    ) {
 
     @Configuration("number of lines in a method that are allowed at maximum")
     private val allowedLines: Int by config(defaultValue = 60)

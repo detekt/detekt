@@ -29,10 +29,8 @@ import org.jetbrains.kotlin.utils.addIfNotNull
  * </compliant>
  *
  */
-class UnnecessaryPartOfBinaryExpression(config: Config) : Rule(
-    config,
-    "Detects unnecessary checks in binary expressions."
-) {
+class UnnecessaryPartOfBinaryExpression(config: Config) :
+    Rule(config, "Detects unnecessary checks in binary expressions.") {
 
     override fun visitBinaryExpression(expression: KtBinaryExpression) {
         super.visitBinaryExpression(expression)

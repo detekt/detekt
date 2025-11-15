@@ -1,9 +1,6 @@
 package dev.detekt.tooling.api
 
-sealed class DetektError(
-    message: String?,
-    cause: Throwable? = null,
-) : RuntimeException(message, cause)
+sealed class DetektError(message: String?, cause: Throwable? = null) : RuntimeException(message, cause)
 
 class IssuesFound(message: String) : DetektError(message)
 

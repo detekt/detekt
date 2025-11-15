@@ -71,8 +71,6 @@ ktlint:
     active: false
   ChainMethodContinuation:
     active: false
-  ClassSignature:
-    active: false
   Filename:
     active: false
   FunctionSignature:

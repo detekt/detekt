@@ -57,10 +57,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
  * </compliant>
  */
 @ActiveByDefault(since = "1.16.0")
-class RethrowCaughtException(config: Config) : Rule(
-    config,
-    "Do not rethrow a caught exception of the same type."
-) {
+class RethrowCaughtException(config: Config) : Rule(config, "Do not rethrow a caught exception of the same type.") {
 
     override fun visitTryExpression(tryExpr: KtTryExpression) {
         val catchClauses = tryExpr.getChildrenOfType<KtCatchClause>()

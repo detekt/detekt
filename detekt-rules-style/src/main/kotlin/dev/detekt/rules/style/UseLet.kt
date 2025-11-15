@@ -27,10 +27,8 @@ import org.jetbrains.kotlin.psi.KtPsiUtil
  * x?.let { y }
  * </compliant>
  */
-class UseLet(config: Config) : Rule(
-    config,
-    "Use `?.let {}` instead of if/else with a null block when checking for nullable values"
-) {
+class UseLet(config: Config) :
+    Rule(config, "Use `?.let {}` instead of if/else with a null block when checking for nullable values") {
 
     private fun isExpressionNull(branch: KtExpression?): Boolean {
         val statement = when (branch) {

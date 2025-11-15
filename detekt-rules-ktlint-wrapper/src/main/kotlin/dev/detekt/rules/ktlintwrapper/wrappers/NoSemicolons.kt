@@ -11,10 +11,7 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  */
 @ActiveByDefault(since = "1.0.0")
 @AutoCorrectable(since = "1.0.0")
-class NoSemicolons(config: Config) : KtlintRule(
-    config,
-    "Detects semicolons"
-) {
+class NoSemicolons(config: Config) : KtlintRule(config, "Detects semicolons") {
 
     override val wrapping = NoSemicolonsRule()
 }

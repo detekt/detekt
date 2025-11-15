@@ -11,10 +11,7 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  */
 @ActiveByDefault(since = "1.0.0")
 @AutoCorrectable(since = "1.0.0")
-class CommentSpacing(config: Config) : KtlintRule(
-    config,
-    "Checks if comments have the right spacing"
-) {
+class CommentSpacing(config: Config) : KtlintRule(config, "Checks if comments have the right spacing") {
 
     override val wrapping = CommentSpacingRule()
 }
