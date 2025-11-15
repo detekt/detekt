@@ -76,12 +76,9 @@ ktlint:
   FunctionSignature:
     active: false
   Kdoc:
-    active: true
     excludes: ['**/*.kts']
   MaximumLineLength:
     active: false
-  SpacingAroundSquareBrackets:
-    active: true
   TrailingCommaOnCallSite:
     active: false
   TrailingCommaOnDeclarationSite:
