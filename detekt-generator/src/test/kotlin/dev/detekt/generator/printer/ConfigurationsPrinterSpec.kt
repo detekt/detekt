@@ -101,4 +101,74 @@ internal class ConfigurationsPrinterSpec {
             assertThat(actual).contains("""~~``configName``~~""")
         }
     }
+
+    @Nested
+    inner class MacroExpansion {
+        @Test
+        fun `print expands macros in configuration description`() {
+            // GIVEN
+            val config = Configuration(
+                name = "methods",
+                description = "List of methods. {{FUNCTION_MATCHER_DOCS}}",
+                defaultValue = DefaultValue.of(emptyList<String>()),
+                defaultAndroidValue = null,
+                deprecated = null
+            )
+
+            // WHEN
+            val actual = ConfigurationsPrinter.print(listOf(config))
+
+            // THEN
+            assertThat(actual)
+                .doesNotContain("{{FUNCTION_MATCHER_DOCS}}")
+                .contains("Methods can be defined without full signature")
+                .contains("java.time.LocalDate.now")
+        }
+
+        @Test
+        fun `print preserves non-macro descriptions`() {
+            // GIVEN
+            val config = Configuration(
+                name = "normalConfig",
+                description = "This is a normal description without macros",
+                defaultValue = DefaultValue.of(true),
+                defaultAndroidValue = null,
+                deprecated = null
+            )
+
+            // WHEN
+            val actual = ConfigurationsPrinter.print(listOf(config))
+
+            // THEN
+            assertThat(actual).contains("This is a normal description without macros")
+        }
+
+        @Test
+        fun `print handles multiple configurations with same macro`() {
+            // GIVEN
+            val config1 = Configuration(
+                name = "methods1",
+                description = "First: {{FUNCTION_MATCHER_DOCS}}",
+                defaultValue = DefaultValue.of(emptyList<String>()),
+                defaultAndroidValue = null,
+                deprecated = null
+            )
+            val config2 = Configuration(
+                name = "methods2",
+                description = "Second: {{FUNCTION_MATCHER_DOCS}}",
+                defaultValue = DefaultValue.of(emptyList<String>()),
+                defaultAndroidValue = null,
+                deprecated = null
+            )
+
+            // WHEN
+            val actual = ConfigurationsPrinter.print(listOf(config1, config2))
+
+            // THEN
+            assertThat(actual).doesNotContain("{{FUNCTION_MATCHER_DOCS}}")
+            // Both should have expanded text
+            val matchCount = actual.split("Methods can be defined").size - 1
+            assertThat(matchCount).isEqualTo(2)
+        }
+    }
 }
