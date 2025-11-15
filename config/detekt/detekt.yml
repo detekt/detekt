@@ -92,8 +92,6 @@ ktlint:
     active: false
   TrailingCommaOnDeclarationSite:
     active: true
-  ValueArgumentComment:
-    active: false
 
 naming:
   ClassNaming:
