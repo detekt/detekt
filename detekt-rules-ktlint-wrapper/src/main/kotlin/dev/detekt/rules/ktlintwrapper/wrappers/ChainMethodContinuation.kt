@@ -5,7 +5,6 @@ import com.pinterest.ktlint.rule.engine.core.api.editorconfig.INDENT_SIZE_PROPER
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.MAX_LINE_LENGTH_PROPERTY
 import com.pinterest.ktlint.ruleset.standard.rules.ChainMethodContinuationRule
 import com.pinterest.ktlint.ruleset.standard.rules.ChainMethodContinuationRule.Companion.FORCE_MULTILINE_WHEN_CHAIN_OPERATOR_COUNT_GREATER_OR_EQUAL_THAN_PROPERTY
-import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.Config
 import dev.detekt.api.Configuration
 import dev.detekt.api.config
@@ -17,7 +16,6 @@ import dev.detekt.rules.ktlintwrapper.configWithAndroidVariants
  * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#chain-method-continuation)
  * for documentation.
  */
-@ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "2.0.0")
 class ChainMethodContinuation(config: Config) : KtlintRule(
     config,
