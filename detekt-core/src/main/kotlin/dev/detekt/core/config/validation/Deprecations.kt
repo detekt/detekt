@@ -4,11 +4,7 @@ import dev.detekt.utils.openSafeStream
 import java.util.Properties
 
 internal sealed class Deprecation
-internal data class DeprecatedRule(
-    val ruleSetId: String,
-    val ruleName: String,
-    val description: String,
-) : Deprecation()
+internal data class DeprecatedRule(val ruleSetId: String, val ruleName: String, val description: String) : Deprecation()
 
 internal data class DeprecatedProperty(
     val ruleSetId: String,

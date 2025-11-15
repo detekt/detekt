@@ -52,10 +52,8 @@ import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
  * </compliant>
  */
 @ActiveByDefault(since = "1.21.0")
-class UselessPostfixExpression(config: Config) : Rule(
-    config,
-    "The incremented or decremented value is unused. This value is replaced with the original value."
-) {
+class UselessPostfixExpression(config: Config) :
+    Rule(config, "The incremented or decremented value is unused. This value is replaced with the original value.") {
 
     var properties = emptySet<String?>()
 

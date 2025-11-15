@@ -15,10 +15,8 @@ import org.jetbrains.kotlin.psi.KtPackageDirective
  */
 @ActiveByDefault(since = "1.0.0")
 @Alias("PackageName")
-class PackageNaming(config: Config) : Rule(
-    config,
-    "Package names should follow the naming convention set in detekt's configuration."
-) {
+class PackageNaming(config: Config) :
+    Rule(config, "Package names should follow the naming convention set in detekt's configuration.") {
 
     @Configuration("naming pattern")
     private val packagePattern: Regex by config("""[a-z]+(\.[a-z][A-Za-z0-9]*)*""") { it.toRegex() }

@@ -17,10 +17,7 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
  * </noncompliant>
  */
 @ActiveByDefault(since = "1.2.0")
-class UnnecessaryInheritance(config: Config) : Rule(
-    config,
-    "The extended super type is unnecessary."
-) {
+class UnnecessaryInheritance(config: Config) : Rule(config, "The extended super type is unnecessary.") {
 
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
         for (superEntry in classOrObject.superTypeListEntries) {

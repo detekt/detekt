@@ -27,12 +27,8 @@ import org.jetbrains.kotlin.psi.KtLambdaExpression
  * </compliant>
  */
 @ActiveByDefault(since = "1.21.0")
-class ExplicitItLambdaMultipleParameters(
-    config: Config,
-) : Rule(
-    config,
-    "Declaring lambda parameters as `it` is inappropriate.",
-) {
+class ExplicitItLambdaMultipleParameters(config: Config) :
+    Rule(config, "Declaring lambda parameters as `it` is inappropriate.") {
     override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
         super.visitLambdaExpression(lambdaExpression)
         val parameterNames = lambdaExpression.valueParameters.map { it.nameAsName }

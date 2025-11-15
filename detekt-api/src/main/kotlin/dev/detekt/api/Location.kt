@@ -14,12 +14,7 @@ import kotlin.io.path.Path
 /**
  * Specifies a position within a source code fragment.
  */
-class Location(
-    val source: SourceLocation,
-    val endSource: SourceLocation,
-    val text: TextLocation,
-    val path: Path,
-) {
+class Location(val source: SourceLocation, val endSource: SourceLocation, val text: TextLocation, val path: Path) {
     override fun toString(): String = "Location(source=$source, endSource=$endSource, text=$text, path=$path)"
 
     companion object {

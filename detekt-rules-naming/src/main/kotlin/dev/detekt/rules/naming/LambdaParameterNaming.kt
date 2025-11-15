@@ -13,10 +13,8 @@ import org.jetbrains.kotlin.psi.KtParameter
 /**
  * Reports lambda parameter names that do not follow the specified naming convention.
  */
-class LambdaParameterNaming(config: Config) : Rule(
-    config,
-    "Lambda parameter names should follow the naming convention set in detekt's configuration."
-) {
+class LambdaParameterNaming(config: Config) :
+    Rule(config, "Lambda parameter names should follow the naming convention set in detekt's configuration.") {
 
     @Configuration("naming pattern")
     private val parameterPattern: Regex by config("[a-z][A-Za-z0-9]*|_", String::toRegex)

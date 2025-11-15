@@ -11,9 +11,7 @@ import org.junit.jupiter.api.Test
 private const val ADDITIONAL_OPERATOR_SET = "additionalOperatorSet"
 
 @KotlinCoreEnvironmentTest
-class UnusedImportSpec(
-    val env: KotlinEnvironmentContainer,
-) {
+class UnusedImportSpec(val env: KotlinEnvironmentContainer) {
     val subject = UnusedImport(Config.empty)
 
     @Test

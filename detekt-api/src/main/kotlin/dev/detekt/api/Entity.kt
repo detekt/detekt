@@ -10,11 +10,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 /**
  * Stores information about a specific code fragment.
  */
-class Entity(
-    val signature: String,
-    val location: Location,
-    val ktElement: KtElement,
-) {
+class Entity(val signature: String, val location: Location, val ktElement: KtElement) {
     override fun toString(): String = "Entity(signature=$signature, location=$location, ktElement=$ktElement)"
 
     companion object {

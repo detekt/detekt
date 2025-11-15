@@ -15,10 +15,7 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  */
 @ActiveByDefault(since = "1.23.0")
 @AutoCorrectable(since = "1.20.0")
-class KdocWrapping(config: Config) : KtlintRule(
-    config,
-    "Reports mis-indented code"
-) {
+class KdocWrapping(config: Config) : KtlintRule(config, "Reports mis-indented code") {
 
     override val wrapping = KdocWrappingRule()
 

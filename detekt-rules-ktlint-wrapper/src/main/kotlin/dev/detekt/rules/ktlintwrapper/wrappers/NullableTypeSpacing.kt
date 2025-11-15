@@ -12,10 +12,7 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  */
 @ActiveByDefault(since = "1.23.0")
 @AutoCorrectable(since = "1.22.0")
-class NullableTypeSpacing(config: Config) : KtlintRule(
-    config,
-    "Ensure no spaces in nullable type."
-) {
+class NullableTypeSpacing(config: Config) : KtlintRule(config, "Ensure no spaces in nullable type.") {
 
     override val wrapping = NullableTypeSpacingRule()
 }

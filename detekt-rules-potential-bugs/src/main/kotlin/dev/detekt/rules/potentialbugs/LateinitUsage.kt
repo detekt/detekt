@@ -24,11 +24,12 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
  * }
  * </noncompliant>
  */
-class LateinitUsage(config: Config) : Rule(
-    config,
-    "Usage of `lateinit` detected. Using `lateinit` for property initialization " +
-        "is error prone, try using constructor injection or delegation."
-) {
+class LateinitUsage(config: Config) :
+    Rule(
+        config,
+        "Usage of `lateinit` detected. Using `lateinit` for property initialization " +
+            "is error prone, try using constructor injection or delegation."
+    ) {
 
     @Configuration("Allows you to disable the rule for a list of classes")
     private val ignoreOnClassesPattern: Regex by config("", String::toRegex)

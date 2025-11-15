@@ -17,10 +17,10 @@ fun <T> awaitAll(tasks: TaskList<T>) = tasks.map { it.join() }
 /**
  * An [ExecutorService] with auto close capabilities for non user managed thread pools.
  */
-class TaskPool private constructor(
-    private val service: ExecutorService,
-    private val shouldClose: Boolean,
-) : ExecutorService by service, AutoCloseable, Closeable {
+class TaskPool private constructor(private val service: ExecutorService, private val shouldClose: Boolean) :
+    ExecutorService by service,
+    AutoCloseable,
+    Closeable {
 
     constructor(executorService: ExecutorService?) : this(
         executorService ?: Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()),

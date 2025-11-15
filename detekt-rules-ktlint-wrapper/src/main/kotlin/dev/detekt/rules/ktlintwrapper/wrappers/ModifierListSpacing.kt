@@ -15,10 +15,8 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  */
 @ActiveByDefault(since = "1.23.0")
 @AutoCorrectable(since = "1.20.0")
-class ModifierListSpacing(config: Config) : KtlintRule(
-    config,
-    "Checks the spacing between the modifiers in and after the last modifier in a modifier list."
-) {
+class ModifierListSpacing(config: Config) :
+    KtlintRule(config, "Checks the spacing between the modifiers in and after the last modifier in a modifier list.") {
 
     override val wrapping = ModifierListSpacingRule()
 

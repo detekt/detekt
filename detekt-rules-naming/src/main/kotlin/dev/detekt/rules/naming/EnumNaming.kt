@@ -15,10 +15,8 @@ import org.jetbrains.kotlin.psi.KtEnumEntry
  */
 @ActiveByDefault(since = "1.0.0")
 @Alias("EnumEntryName")
-class EnumNaming(config: Config) : Rule(
-    config,
-    "Enum names should follow the naming convention set in detekt's configuration."
-) {
+class EnumNaming(config: Config) :
+    Rule(config, "Enum names should follow the naming convention set in detekt's configuration.") {
 
     @Configuration("naming pattern")
     private val enumEntryPattern: Regex by config("[A-Z][_a-zA-Z0-9]*") { it.toRegex() }

@@ -16,10 +16,8 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * Reports top level property names that do not follow the specified naming convention.
  */
 @ActiveByDefault(since = "1.0.0")
-class TopLevelPropertyNaming(config: Config) : Rule(
-    config,
-    "Top level property names should follow the naming convention set in detekt's configuration."
-) {
+class TopLevelPropertyNaming(config: Config) :
+    Rule(config, "Top level property names should follow the naming convention set in detekt's configuration.") {
 
     @Configuration("naming pattern")
     private val constantPattern: Regex by config("[A-Z][_A-Z0-9]*") { it.toRegex() }

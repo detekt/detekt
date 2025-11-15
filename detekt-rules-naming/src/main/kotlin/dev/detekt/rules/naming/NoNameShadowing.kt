@@ -61,9 +61,9 @@ import org.jetbrains.kotlin.psi.psiUtil.hasInnerModifier
  *
  */
 @ActiveByDefault(since = "1.21.0")
-class NoNameShadowing(
-    config: Config,
-) : Rule(config, "Disallow shadowing variable declarations."), RequiresAnalysisApi {
+class NoNameShadowing(config: Config) :
+    Rule(config, "Disallow shadowing variable declarations."),
+    RequiresAnalysisApi {
 
     override fun visitProperty(property: KtProperty) {
         super.visitProperty(property)

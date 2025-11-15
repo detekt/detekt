@@ -8,10 +8,7 @@ import dev.drewhamilton.poko.Poko
  * your kotlin file is a notification.
  */
 @Poko
-class Notification(
-    val message: String,
-    val level: Level,
-) {
+class Notification(val message: String, val level: Level) {
 
     /**
      * Level of severity of the notification

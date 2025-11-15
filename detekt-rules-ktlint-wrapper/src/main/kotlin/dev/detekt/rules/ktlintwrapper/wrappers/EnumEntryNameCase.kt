@@ -17,10 +17,8 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
 @AutoCorrectable(since = "1.4.0")
 @ActiveByDefault(since = "1.22.0")
 @Alias("EnumEntryName")
-class EnumEntryNameCase(config: Config) : KtlintRule(
-    config,
-    "Reports enum entries with names that don't meet standard conventions."
-) {
+class EnumEntryNameCase(config: Config) :
+    KtlintRule(config, "Reports enum entries with names that don't meet standard conventions.") {
 
     override val wrapping = EnumEntryNameCaseRule()
 

@@ -424,6 +424,6 @@ private class OneRule(config: Config) : Rule(config, "OneRuleDescription") {
 
 private class AnotherRule(config: Config) : Rule(config, "AnotherRuleDescription", URI("https://example.org/"))
 
-private class RequiresAnalysisApiRule(
-    config: Config,
-) : Rule(config, "RequiresAnalysisApiRuleDescription"), RequiresAnalysisApi
+private class RequiresAnalysisApiRule(config: Config) :
+    Rule(config, "RequiresAnalysisApiRuleDescription"),
+    RequiresAnalysisApi

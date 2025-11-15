@@ -16,10 +16,8 @@ import dev.detekt.rules.ktlintwrapper.configWithAndroidVariants
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "1.22.0")
-class ParameterListSpacing(config: Config) : KtlintRule(
-    config,
-    "Ensure consistent spacing inside the parameter list."
-) {
+class ParameterListSpacing(config: Config) :
+    KtlintRule(config, "Ensure consistent spacing inside the parameter list.") {
 
     override val wrapping = ParameterListSpacingRule()
 

@@ -156,13 +156,11 @@ internal data class DebugArgument(override val value: Boolean) : BoolCliArgument
 
 internal data class ParallelArgument(override val value: Boolean) : BoolCliArgument(value, PARALLEL_PARAMETER)
 
-internal data class DisableDefaultRuleSetArgument(
-    override val value: Boolean,
-) : BoolCliArgument(value, DISABLE_DEFAULT_RULESETS_PARAMETER)
+internal data class DisableDefaultRuleSetArgument(override val value: Boolean) :
+    BoolCliArgument(value, DISABLE_DEFAULT_RULESETS_PARAMETER)
 
-internal data class BuildUponDefaultConfigArgument(
-    override val value: Boolean,
-) : BoolCliArgument(value, BUILD_UPON_DEFAULT_CONFIG_PARAMETER)
+internal data class BuildUponDefaultConfigArgument(override val value: Boolean) :
+    BoolCliArgument(value, BUILD_UPON_DEFAULT_CONFIG_PARAMETER)
 
 internal data class AllRulesArgument(override val value: Boolean) : BoolCliArgument(value, ALL_RULES_PARAMETER)
 

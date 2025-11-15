@@ -8,12 +8,12 @@ fun <T : Throwable> AbstractThrowableAssert<*, T>.isInstanceOfAssertionFailedErr
     return AssertionFailedErrorAssert(actual() as AssertionFailedError)
 }
 
-class AssertionFailedErrorAssert(
-    actual: AssertionFailedError,
-) : AbstractThrowableAssert<AssertionFailedErrorAssert, AssertionFailedError>(
-    actual,
-    AssertionFailedErrorAssert::class.java
-) {
+class AssertionFailedErrorAssert(actual: AssertionFailedError) :
+    AbstractThrowableAssert<AssertionFailedErrorAssert, AssertionFailedError>(
+        actual,
+        AssertionFailedErrorAssert::class.java
+    ) {
+
     fun hasActual(actual: Any) =
         apply {
             if (this.actual.actual.ephemeralValue != actual) {

@@ -12,10 +12,8 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  */
 @ActiveByDefault(since = "1.23.0")
 @AutoCorrectable(since = "1.20.0")
-class UnnecessaryParenthesesBeforeTrailingLambda(config: Config) : KtlintRule(
-    config,
-    "Ensures there are no unnecessary parentheses before a trailing lambda"
-) {
+class UnnecessaryParenthesesBeforeTrailingLambda(config: Config) :
+    KtlintRule(config, "Ensures there are no unnecessary parentheses before a trailing lambda") {
 
     override val wrapping = UnnecessaryParenthesesBeforeTrailingLambdaRule()
 }

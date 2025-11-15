@@ -34,10 +34,8 @@ import org.jetbrains.kotlin.psi.KtEnumEntry
  * </compliant>
  */
 @ActiveByDefault(since = "1.16.0")
-class NestedClassesVisibility(config: Config) : Rule(
-    config,
-    "The explicit public modifier still results in an internal nested class."
-) {
+class NestedClassesVisibility(config: Config) :
+    Rule(config, "The explicit public modifier still results in an internal nested class.") {
 
     override fun visitClass(klass: KtClass) {
         if (!klass.isInterface() && klass.isTopLevel() && klass.isInternal()) {

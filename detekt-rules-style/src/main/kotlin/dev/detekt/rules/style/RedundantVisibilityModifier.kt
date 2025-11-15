@@ -40,10 +40,8 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * }
  * </compliant>
  */
-class RedundantVisibilityModifier(config: Config) : Rule(
-    config,
-    "Redundant visibility modifiers detected, which can be safely removed."
-) {
+class RedundantVisibilityModifier(config: Config) :
+    Rule(config, "Redundant visibility modifiers detected, which can be safely removed.") {
     private val classVisitor = ClassVisitor()
     private val childrenVisitor = ChildrenVisitor()
 

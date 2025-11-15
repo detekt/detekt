@@ -41,10 +41,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
  * </compliant>
  */
 @ActiveByDefault(since = "1.0.0")
-class ReturnCount(config: Config) : Rule(
-    config,
-    "Restrict the number of return statements in methods."
-) {
+class ReturnCount(config: Config) : Rule(config, "Restrict the number of return statements in methods.") {
 
     @Configuration("define the maximum number of return statements allowed per function")
     private val max: Int by config(2)

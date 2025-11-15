@@ -26,11 +26,12 @@ import java.util.Locale
  * const val DEFAULT_AMOUNT = 1_000_000
  * </compliant>
  */
-class UnderscoresInNumericLiterals(config: Config) : Rule(
-    config,
-    "Report missing or invalid underscores in base 10 numbers. Numeric literals " +
-        "should be underscore separated to increase readability."
-) {
+class UnderscoresInNumericLiterals(config: Config) :
+    Rule(
+        config,
+        "Report missing or invalid underscores in base 10 numbers. Numeric literals " +
+            "should be underscore separated to increase readability."
+    ) {
 
     @Configuration("Maximum number of consecutive digits that a numeric literal can have without using an underscore")
     private val acceptableLength: Int by config(4)

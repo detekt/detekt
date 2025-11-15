@@ -7,10 +7,9 @@ import dev.detekt.core.config.validation.validateConfig
 import dev.detekt.core.util.indentCompat
 
 @Suppress("UNCHECKED_CAST")
-class DisabledAutoCorrectConfig(
-    private val wrapped: Config,
-    override val parent: Config? = null,
-) : Config, ValidatableConfiguration {
+class DisabledAutoCorrectConfig(private val wrapped: Config, override val parent: Config? = null) :
+    Config,
+    ValidatableConfiguration {
 
     override val parentPath: String?
         get() = wrapped.parentPath

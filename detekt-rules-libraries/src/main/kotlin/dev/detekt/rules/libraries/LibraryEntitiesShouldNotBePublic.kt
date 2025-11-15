@@ -24,10 +24,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPublic
  * </compliant>
  */
 @ActiveByDefault(since = "1.16.0")
-class LibraryEntitiesShouldNotBePublic(config: Config) : Rule(
-    config,
-    "Library classes should not be public."
-) {
+class LibraryEntitiesShouldNotBePublic(config: Config) : Rule(config, "Library classes should not be public.") {
 
     override fun visitClass(klass: KtClass) {
         if (klass.isInner()) {

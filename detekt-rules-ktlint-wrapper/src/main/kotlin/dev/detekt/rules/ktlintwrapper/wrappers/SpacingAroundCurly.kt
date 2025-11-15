@@ -15,10 +15,7 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  */
 @ActiveByDefault(since = "1.0.0")
 @AutoCorrectable(since = "1.0.0")
-class SpacingAroundCurly(config: Config) : KtlintRule(
-    config,
-    "Reports spaces around curly braces"
-) {
+class SpacingAroundCurly(config: Config) : KtlintRule(config, "Reports spaces around curly braces") {
 
     override val wrapping = SpacingAroundCurlyRule()
 

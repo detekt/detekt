@@ -21,10 +21,8 @@ import org.jetbrains.kotlin.resolve.calls.util.isSingleUnderscore
  */
 @ActiveByDefault(since = "1.0.0")
 @Alias("PropertyName")
-class VariableNaming(config: Config) : Rule(
-    config,
-    "Variable names should follow the naming convention set in detekt's configuration."
-) {
+class VariableNaming(config: Config) :
+    Rule(config, "Variable names should follow the naming convention set in detekt's configuration.") {
 
     @Configuration("naming pattern")
     private val variablePattern: Regex by config("[a-z][A-Za-z0-9]*", String::toRegex)
