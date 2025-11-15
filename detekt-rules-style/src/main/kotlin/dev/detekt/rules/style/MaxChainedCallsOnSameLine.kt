@@ -72,7 +72,9 @@ class MaxChainedCallsOnSameLine(config: Config) :
                 receiverExpression.isReferenceToPackageOrClass() || callOnNewLine() -> 0
                 else -> receiverExpression.countChainedCalls() + 1
             }
+
             is KtUnaryExpression -> baseExpression?.countChainedCalls() ?: 0
+
             else -> 0
         }
 

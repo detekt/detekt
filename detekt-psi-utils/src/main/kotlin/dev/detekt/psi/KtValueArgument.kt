@@ -9,7 +9,7 @@ fun KtValueArgument.isString(): Boolean {
 
     analyze(argumentExpression) {
         val type = argumentExpression.expressionType
-        return argumentExpression is KtStringTemplateExpression || type != null && type.isStringType
+        return argumentExpression is KtStringTemplateExpression || (type != null && type.isStringType)
     }
 }
 

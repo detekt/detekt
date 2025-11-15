@@ -67,7 +67,9 @@ class AbstractClassCanBeInterface(config: Config) :
         analyze(klass) {
             when {
                 members.isNotEmpty() -> checkMembers(klass, members, nameIdentifier)
+
                 hasInheritedMember(klass, isAbstract = true) && isAnyParentAbstract(klass) -> return
+
                 !klass.hasConstructorParameter() ->
                     report(Finding(Entity.from(nameIdentifier), noConcreteMember))
             }
@@ -83,8 +85,10 @@ class AbstractClassCanBeInterface(config: Config) :
         when {
             abstractMembers.isEmpty() && !hasInheritedMember(klass, isAbstract = true) ->
                 Unit
+
             abstractMembers.any { it.isInternal() || it.isProtected() } || klass.hasConstructorParameter() ->
                 Unit
+
             concreteMembers.isEmpty() && !hasInheritedMember(klass, isAbstract = false) ->
                 report(Finding(Entity.from(nameIdentifier), noConcreteMember))
         }
@@ -99,6 +103,7 @@ class AbstractClassCanBeInterface(config: Config) :
     private fun KaSession.hasInheritedMember(klass: KtClass, isAbstract: Boolean): Boolean =
         when {
             klass.superTypeListEntries.isEmpty() -> false
+
             else -> {
                 (klass.symbol as? KaClassSymbol)?.memberScope?.declarations.orEmpty().any {
                     it.modality == KaSymbolModality.ABSTRACT == isAbstract

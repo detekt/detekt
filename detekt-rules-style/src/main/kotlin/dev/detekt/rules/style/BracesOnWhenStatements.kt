@@ -223,6 +223,7 @@ class BracesOnWhenStatements(config: Config) : Rule(config, "Braces do not compl
     private fun report(violator: KtWhenEntry, policy: BracePolicy) {
         val reported = when (policy) {
             BracePolicy.Consistent -> (violator.parent as KtWhenExpression).whenKeyword
+
             BracePolicy.Always,
             BracePolicy.Necessary,
             BracePolicy.Never,

@@ -135,8 +135,8 @@ class FunCoroutineLaunchesTraverseHelper {
             anyDescendantOfType<KtDotQualifiedExpression> {
                 val receiverType = it.receiverExpression.expressionType ?: return@anyDescendantOfType false
                 val calleeText = it.getCalleeExpressionIfAny()?.text ?: return@anyDescendantOfType false
-                receiverType.isCoroutineScope() && calleeText in listOf("launch", "async") ||
-                    receiverType.isCoroutinesFlow() && calleeText == "launchIn"
+                (receiverType.isCoroutineScope() && calleeText in listOf("launch", "async")) ||
+                    (receiverType.isCoroutinesFlow() && calleeText == "launchIn")
             }
         }
 }
