@@ -15,12 +15,7 @@ import java.lang.reflect.InvocationTargetException
 
 internal interface DetektInvoker {
 
-    fun invokeCli(
-        arguments: List<String>,
-        classpath: Set<File>,
-        taskName: String,
-        ignoreFailures: Boolean = false,
-    )
+    fun invokeCli(arguments: List<String>, classpath: Set<File>, taskName: String, ignoreFailures: Boolean = false)
 
     companion object {
 
@@ -67,12 +62,7 @@ internal class DefaultCliInvoker(
     private val classLoaderCache: ClassLoaderCache = GlobalClassLoaderCache,
 ) : DetektInvoker {
 
-    override fun invokeCli(
-        arguments: List<String>,
-        classpath: Set<File>,
-        taskName: String,
-        ignoreFailures: Boolean,
-    ) {
+    override fun invokeCli(arguments: List<String>, classpath: Set<File>, taskName: String, ignoreFailures: Boolean) {
         try {
             val loader = classLoaderCache.getOrCreate(classpath)
             val clazz = loader.loadClass("dev.detekt.cli.Main")
@@ -102,12 +92,7 @@ private fun processResult(message: String?, reflectionWrapper: Exception, ignore
 
 private class DryRunInvoker : DetektInvoker {
 
-    override fun invokeCli(
-        arguments: List<String>,
-        classpath: Set<File>,
-        taskName: String,
-        ignoreFailures: Boolean,
-    ) {
+    override fun invokeCli(arguments: List<String>, classpath: Set<File>, taskName: String, ignoreFailures: Boolean) {
         println("Invoking detekt with dry-run.")
         println("Task: $taskName")
         println("Arguments: ${arguments.joinToString(" ")}")

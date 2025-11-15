@@ -770,20 +770,18 @@ private val SAMPLE_ACTIVITY_USING_VIEW_BINDING = """
     
 """.trimIndent() // Last line to prevent NewLineAtEndOfFile.
 
-private fun createGradleRunnerAndSetupProject(
-    projectLayout: ProjectLayout,
-    dryRun: Boolean = true,
-) = DslGradleRunner(
-    projectLayout = projectLayout,
-    buildFileName = "build.gradle.kts",
-    settingsContent = """
-        dependencyResolutionManagement {
-            repositories {
-                mavenLocal()
-                mavenCentral()
-                google()
+private fun createGradleRunnerAndSetupProject(projectLayout: ProjectLayout, dryRun: Boolean = true) =
+    DslGradleRunner(
+        projectLayout = projectLayout,
+        buildFileName = "build.gradle.kts",
+        settingsContent = """
+            dependencyResolutionManagement {
+                repositories {
+                    mavenLocal()
+                    mavenCentral()
+                    google()
+                }
             }
-        }
-    """.trimIndent(),
-    dryRun = dryRun,
-).also { it.setupProject() }
+        """.trimIndent(),
+        dryRun = dryRun,
+    ).also { it.setupProject() }
