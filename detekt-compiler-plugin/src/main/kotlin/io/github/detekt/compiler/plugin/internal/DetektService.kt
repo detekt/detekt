@@ -8,10 +8,7 @@ import dev.detekt.tooling.api.spec.ProcessingSpec
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.psi.KtFile
 
-internal class DetektService(
-    private val log: MessageCollector,
-    private val spec: ProcessingSpec,
-) {
+internal class DetektService(private val log: MessageCollector, private val spec: ProcessingSpec) {
 
     fun analyze(files: Collection<KtFile>) {
         val detekt = DetektProvider.load().get(spec)

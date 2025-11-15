@@ -15,10 +15,8 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "1.23.0")
-class IfElseBracing(config: Config) : KtlintRule(
-    config,
-    "All branches must be wrapped in curly braces if any branches are wrapped."
-) {
+class IfElseBracing(config: Config) :
+    KtlintRule(config, "All branches must be wrapped in curly braces if any branches are wrapped.") {
 
     override val wrapping = IfElseBracingRule()
 

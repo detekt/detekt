@@ -11,10 +11,7 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  */
 @ActiveByDefault(since = "1.0.0")
 @AutoCorrectable(since = "1.0.0")
-class NoMultipleSpaces(config: Config) : KtlintRule(
-    config,
-    "Reports multiple space usages"
-) {
+class NoMultipleSpaces(config: Config) : KtlintRule(config, "Reports multiple space usages") {
 
     override val wrapping = NoMultipleSpacesRule()
 }

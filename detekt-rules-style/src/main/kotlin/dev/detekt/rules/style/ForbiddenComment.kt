@@ -86,10 +86,7 @@ import java.util.Locale
  * </noncompliant>
  */
 @ActiveByDefault(since = "1.0.0")
-class ForbiddenComment(config: Config) : Rule(
-    config,
-    "Flags a forbidden comment."
-) {
+class ForbiddenComment(config: Config) : Rule(config, "Flags a forbidden comment.") {
     @Configuration("forbidden comment string patterns")
     private val comments: List<Comment> by config(
         valuesWithReason(

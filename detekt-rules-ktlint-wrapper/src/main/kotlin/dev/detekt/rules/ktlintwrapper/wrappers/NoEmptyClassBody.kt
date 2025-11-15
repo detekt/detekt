@@ -14,10 +14,7 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  */
 @ActiveByDefault(since = "1.0.0")
 @AutoCorrectable(since = "1.0.0")
-class NoEmptyClassBody(config: Config) : KtlintRule(
-    config,
-    "Reports empty class bodies"
-) {
+class NoEmptyClassBody(config: Config) : KtlintRule(config, "Reports empty class bodies") {
 
     override val wrapping = NoEmptyClassBodyRule()
 }

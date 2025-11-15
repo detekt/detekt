@@ -25,9 +25,7 @@ internal fun Throwable.printStacktraceRecursively(logger: Appendable) {
     }
 }
 
-internal class LoggingFacade(
-    val spec: LoggingSpec,
-) : LoggingAware {
+internal class LoggingFacade(val spec: LoggingSpec) : LoggingAware {
 
     override val outputChannel: Appendable = spec.outputChannel
     override val errorChannel: Appendable = spec.errorChannel

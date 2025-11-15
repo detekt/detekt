@@ -11,10 +11,7 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  */
 @ActiveByDefault(since = "1.0.0")
 @AutoCorrectable(since = "1.0.0")
-class SpacingAroundRangeOperator(config: Config) : KtlintRule(
-    config,
-    "Reports spaces around range operator"
-) {
+class SpacingAroundRangeOperator(config: Config) : KtlintRule(config, "Reports spaces around range operator") {
 
     override val wrapping = SpacingAroundRangeOperatorRule()
 }

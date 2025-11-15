@@ -24,10 +24,11 @@ import org.jetbrains.kotlin.psi.psiUtil.forEachDescendantOfType
  * </noncompliant>
  */
 @ActiveByDefault(since = "1.16.0")
-class ThrowingExceptionFromFinally(config: Config) : Rule(
-    config,
-    "Do not throw an exception within a finally statement. This can discard exceptions and is confusing."
-) {
+class ThrowingExceptionFromFinally(config: Config) :
+    Rule(
+        config,
+        "Do not throw an exception within a finally statement. This can discard exceptions and is confusing."
+    ) {
 
     override fun visitFinallySection(finallySection: KtFinallySection) {
         finallySection.finalExpression.forEachDescendantOfType<KtThrowExpression> {

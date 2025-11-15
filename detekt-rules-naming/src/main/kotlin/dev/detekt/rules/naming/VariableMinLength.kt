@@ -13,10 +13,8 @@ import org.jetbrains.kotlin.resolve.calls.util.isSingleUnderscore
 /**
  * Reports when very short variable names are used.
  */
-class VariableMinLength(config: Config) : Rule(
-    config,
-    "Variable names should not be shorter than the minimum set in detekt's configuration."
-) {
+class VariableMinLength(config: Config) :
+    Rule(config, "Variable names should not be shorter than the minimum set in detekt's configuration.") {
 
     @Configuration("minimum name length")
     private val minimumVariableNameLength: Int by config(DEFAULT_MINIMUM_VARIABLE_NAME_LENGTH)

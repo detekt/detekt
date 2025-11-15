@@ -5,6 +5,4 @@ package dev.detekt.api
  */
 @Target(AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class Configuration(
-    val description: String,
-)
+annotation class Configuration(val description: String)

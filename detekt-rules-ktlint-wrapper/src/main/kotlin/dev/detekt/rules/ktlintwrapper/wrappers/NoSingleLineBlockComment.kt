@@ -15,10 +15,7 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "1.23.0")
-class NoSingleLineBlockComment(config: Config) : KtlintRule(
-    config,
-    "Reports single block line comments"
-) {
+class NoSingleLineBlockComment(config: Config) : KtlintRule(config, "Reports single block line comments") {
 
     override val wrapping = NoSingleLineBlockCommentRule()
 

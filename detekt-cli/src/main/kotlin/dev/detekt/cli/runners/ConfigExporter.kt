@@ -5,10 +5,7 @@ import dev.detekt.tooling.api.DefaultConfigurationProvider
 import dev.detekt.tooling.api.spec.ProcessingSpec
 import kotlin.io.path.absolute
 
-class ConfigExporter(
-    private val arguments: CliArgs,
-    private val outputPrinter: Appendable,
-) : Executable {
+class ConfigExporter(private val arguments: CliArgs, private val outputPrinter: Appendable) : Executable {
 
     override fun execute() {
         val configPath = arguments.generateConfig ?: error("Unexpected error generating config file")

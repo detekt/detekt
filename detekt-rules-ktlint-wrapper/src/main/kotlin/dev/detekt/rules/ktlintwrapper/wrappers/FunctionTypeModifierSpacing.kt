@@ -12,10 +12,8 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "2.0.0")
-class FunctionTypeModifierSpacing(config: Config) : KtlintRule(
-    config,
-    "Enforce a single whitespace between the modifier list and the function type."
-) {
+class FunctionTypeModifierSpacing(config: Config) :
+    KtlintRule(config, "Enforce a single whitespace between the modifier list and the function type.") {
 
     override val wrapping = FunctionTypeModifierSpacingRule()
 }

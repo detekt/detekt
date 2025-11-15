@@ -10,10 +10,8 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  * documentation.
  */
 @ActiveByDefault(since = "2.0.0")
-class ValueArgumentComment(config: Config) : KtlintRule(
-    config,
-    "Detect discouraged value argument comment locations."
-) {
+class ValueArgumentComment(config: Config) :
+    KtlintRule(config, "Detect discouraged value argument comment locations.") {
 
     override val wrapping = ValueArgumentCommentRule()
 }

@@ -52,10 +52,7 @@ import org.jetbrains.kotlin.psi.psiUtil.parents
  * val patRegex = """/^(\/[^\/]+){0,2}\/?$/gm"""
  * </compliant>
  */
-class StringShouldBeRawString(config: Config) : Rule(
-    config,
-    "The string can be converted to raw string."
-) {
+class StringShouldBeRawString(config: Config) : Rule(config, "The string can be converted to raw string.") {
 
     @Configuration("maximum escape characters allowed")
     private val maxEscapedCharacterCount by config(2)
