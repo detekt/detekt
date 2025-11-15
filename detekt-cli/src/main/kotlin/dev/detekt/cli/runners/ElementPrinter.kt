@@ -54,10 +54,11 @@ class ElementPrinter : DetektVisitor() {
             this is KtContainerNode
 
     companion object {
-        fun dump(file: KtFile): String = ElementPrinter().run {
-            sb.appendLine("0: " + file.javaClass.simpleName)
-            visitKtFile(file)
-            sb.toString()
-        }
+        fun dump(file: KtFile): String =
+            ElementPrinter().run {
+                sb.appendLine("0: " + file.javaClass.simpleName)
+                visitKtFile(file)
+                sb.toString()
+            }
     }
 }

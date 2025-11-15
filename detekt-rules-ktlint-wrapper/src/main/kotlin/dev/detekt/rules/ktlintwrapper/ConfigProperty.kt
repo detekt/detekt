@@ -15,10 +15,8 @@ import kotlin.reflect.KProperty
  * property in the config and there is a configuration property in the rule set named "android" that is set to
  * <code>true</code>.
  */
-internal fun <T : Any> configWithAndroidVariants(
-    defaultValue: T,
-    defaultAndroidValue: T,
-): ReadOnlyProperty<Rule, T> = configWithAndroidVariants(defaultValue, defaultAndroidValue) { it }
+internal fun <T : Any> configWithAndroidVariants(defaultValue: T, defaultAndroidValue: T): ReadOnlyProperty<Rule, T> =
+    configWithAndroidVariants(defaultValue, defaultAndroidValue) { it }
 
 /**
  * Creates a delegated read-only property that can be used in [Rule] objects. The name of the property is the

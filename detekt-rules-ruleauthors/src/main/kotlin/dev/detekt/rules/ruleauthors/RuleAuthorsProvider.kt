@@ -19,10 +19,11 @@ class RuleAuthorsProvider : RuleSetProvider {
 
     override val ruleSetId = RuleSetId("ruleauthors")
 
-    override fun instance() = RuleSet(
-        ruleSetId,
-        listOf(
-            ::UseEntityAtName,
+    override fun instance() =
+        RuleSet(
+            ruleSetId,
+            listOf(
+                ::UseEntityAtName,
+            )
         )
-    )
 }

@@ -61,8 +61,7 @@ class UndocumentedPublicProperty(config: Config) : Rule(
         }
     }
 
-    private fun KtNamedDeclaration.isUndocumented(comment: String?) =
-        comment == null || isNotReferenced(comment)
+    private fun KtNamedDeclaration.isUndocumented(comment: String?) = comment == null || isNotReferenced(comment)
 
     private fun KtNamedDeclaration.isNotReferenced(comment: String): Boolean {
         val name = nameAsSafeName

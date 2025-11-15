@@ -74,13 +74,14 @@ class ConfigurationCollector {
             ?: findDescendantOfType<KtStringTemplateExpression>()?.toDefaultValueIfLiteral()
     }
 
-    private fun KtProperty.parseConfigurationAnnotation(): Configuration? = when {
-        isAnnotatedWith(ConfigAnnotation::class) -> toConfiguration()
-        isInitializedWithConfigDelegate() -> invalidDocumentation {
-            "'$name' is using the config delegate but is not annotated with @Configuration"
+    private fun KtProperty.parseConfigurationAnnotation(): Configuration? =
+        when {
+            isAnnotatedWith(ConfigAnnotation::class) -> toConfiguration()
+            isInitializedWithConfigDelegate() -> invalidDocumentation {
+                "'$name' is using the config delegate but is not annotated with @Configuration"
+            }
+            else -> null
         }
-        else -> null
-    }
 
     private fun KtProperty.toConfiguration(): Configuration {
         if (!isInitializedWithConfigDelegate()) {
@@ -222,14 +223,11 @@ class ConfigurationCollector {
                 (constantsByName[it.text]?.getPlainValue() ?: it.text.withoutQuotes())
             }?.let { DefaultValue.of(it) }
 
-        fun KtElement.getListDeclarationOrNull(): KtCallExpression? =
-            findDescendantOfType { it.isListDeclaration() }
+        fun KtElement.getListDeclarationOrNull(): KtCallExpression? = findDescendantOfType { it.isListDeclaration() }
 
-        fun KtProperty.hasListDeclaration(): Boolean =
-            anyDescendantOfType<KtCallExpression> { it.isListDeclaration() }
+        fun KtProperty.hasListDeclaration(): Boolean = anyDescendantOfType<KtCallExpression> { it.isListDeclaration() }
 
-        fun KtCallExpression.isListDeclaration() =
-            referenceExpression()?.text in LIST_CREATORS
+        fun KtCallExpression.isListDeclaration() = referenceExpression()?.text in LIST_CREATORS
     }
 
     companion object {

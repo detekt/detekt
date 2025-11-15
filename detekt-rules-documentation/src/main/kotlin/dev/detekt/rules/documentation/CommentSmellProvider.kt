@@ -14,19 +14,20 @@ class CommentSmellProvider : DefaultRuleSetProvider {
 
     override val ruleSetId = RuleSetId("comments")
 
-    override fun instance(): RuleSet = RuleSet(
-        ruleSetId,
-        listOf(
-            ::DocumentationOverPrivateFunction,
-            ::DocumentationOverPrivateProperty,
-            ::DeprecatedBlockTag,
-            ::EndOfSentenceFormat,
-            ::OutdatedDocumentation,
-            ::UndocumentedPublicClass,
-            ::UndocumentedPublicFunction,
-            ::UndocumentedPublicProperty,
-            ::AbsentOrWrongFileLicense,
-            ::KDocReferencesNonPublicProperty
+    override fun instance(): RuleSet =
+        RuleSet(
+            ruleSetId,
+            listOf(
+                ::DocumentationOverPrivateFunction,
+                ::DocumentationOverPrivateProperty,
+                ::DeprecatedBlockTag,
+                ::EndOfSentenceFormat,
+                ::OutdatedDocumentation,
+                ::UndocumentedPublicClass,
+                ::UndocumentedPublicFunction,
+                ::UndocumentedPublicProperty,
+                ::AbsentOrWrongFileLicense,
+                ::KDocReferencesNonPublicProperty
+            )
         )
-    )
 }

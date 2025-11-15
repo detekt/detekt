@@ -92,10 +92,7 @@ class InjectDispatcher(config: Config) :
         return ctor != null && ctor.typeReference?.getTypeText() == receiverTypeFqn
     }
 
-    private fun KtSimpleNameExpression.isAFunctionParameter(
-        receiver: String,
-        receiverTypeFqn: String,
-    ): Boolean {
+    private fun KtSimpleNameExpression.isAFunctionParameter(receiver: String, receiverTypeFqn: String): Boolean {
         val enclosingFunction = getStrictParentOfType<KtNamedFunction>()
         val param = enclosingFunction?.valueParameters?.find { it.name == receiver }
         return param != null && param.typeReference?.getTypeText() == receiverTypeFqn

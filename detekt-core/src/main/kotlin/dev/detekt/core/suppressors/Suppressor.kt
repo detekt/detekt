@@ -11,7 +11,8 @@ fun interface Suppressor {
     fun shouldSuppress(finding: Finding): Boolean
 }
 
-internal fun buildSuppressors(rule: Rule, analysisMode: AnalysisMode): List<Suppressor> = listOfNotNull(
-    annotationSuppressorFactory(rule, analysisMode),
-    functionSuppressorFactory(rule, analysisMode),
-)
+internal fun buildSuppressors(rule: Rule, analysisMode: AnalysisMode): List<Suppressor> =
+    listOfNotNull(
+        annotationSuppressorFactory(rule, analysisMode),
+        functionSuppressorFactory(rule, analysisMode),
+    )

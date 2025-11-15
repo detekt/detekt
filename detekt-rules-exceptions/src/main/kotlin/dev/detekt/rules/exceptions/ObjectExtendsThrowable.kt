@@ -58,9 +58,10 @@ class ObjectExtendsThrowable(config: Config) :
         }
     }
 
-    private fun KtObjectDeclaration.isSubtypeOfThrowable(): Boolean = analyze(this) {
-        symbol.superTypes.any { it.isSubtypeOf(throwable) }
-    }
+    private fun KtObjectDeclaration.isSubtypeOfThrowable(): Boolean =
+        analyze(this) {
+            symbol.superTypes.any { it.isSubtypeOf(throwable) }
+        }
 
     private companion object {
         val throwable = ClassId.fromString("kotlin/Throwable")

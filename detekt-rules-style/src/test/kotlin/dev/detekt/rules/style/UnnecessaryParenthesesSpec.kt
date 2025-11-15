@@ -464,9 +464,7 @@ class UnnecessaryParenthesesSpec {
 
     @ParameterizedTest
     @MethodSource("cases")
-    fun `does report unnecessary parens in case of constant literal when using inc operator`(
-        testCase: RuleTestCase,
-    ) {
+    fun `does report unnecessary parens in case of constant literal when using inc operator`(testCase: RuleTestCase) {
         val code = """
             class Foo(var value: Int) {
                 operator fun inc() = Foo(value + 1)

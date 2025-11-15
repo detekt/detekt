@@ -436,184 +436,187 @@ class StringShouldBeRawStringSpec {
 
         @Suppress("LongMethod")
         @JvmStatic
-        fun getViolations() = listOf(
-            Arguments.of(""""\"[^\"\\\\\\n]*(?:\\\\.[^\"\\\\\\n]*)*\""""", 0, listOf("\\\\", "\\n", "\\\"")),
-            Arguments.of(
-                """
-                    "{\n" +
-                    "  \"window\": {\n" +
-                    "    \"title\": \"Sample Quantum With AI and ML Widget\",\n" +
-                    "    \"name\": \"main_window\",\n" +
-                    "    \"width\": 500,\n" +
-                    "    \"height\": 500\n" +
-                    "  }\n" +
-                    "}"
-                """.trimIndent(),
-                2,
-                listOf("\\n", "\\\""),
-            ),
-            Arguments.of(
-                """
+        fun getViolations() =
+            listOf(
+                Arguments.of(""""\"[^\"\\\\\\n]*(?:\\\\.[^\"\\\\\\n]*)*\""""", 0, listOf("\\\\", "\\n", "\\\"")),
+                Arguments.of(
+                    """
                         "{\n" +
-                    "  \"window\": {\n" +
-                    "    \"title\": \"Sample Quantum With AI and ML Widget\",\n" +
-                    "    \"name\": \"main_window\",\n" +
-                    "    \"width\": 500,\n" +
-                    "    \"height\": 500\n" +
-                    "  }\n" +
-                    "}"
-                """.trimIndent(),
-                2,
-                listOf("\\n", "\\\""),
-            ),
-            Arguments.of(
-                """
-                    |        "{\n" +
-                        |"  \"window\": {\n" +
-                      |  "    \"title\": \"Sample Quantum With AI and ML Widget\",\n" +
-                     |   "    \"name\": \"main_window\",\n" +
-                       | "    \"width\": 500,\n" +
-                      |  "    \"height\": 500\n" +
+                        "  \"window\": {\n" +
+                        "    \"title\": \"Sample Quantum With AI and ML Widget\",\n" +
+                        "    \"name\": \"main_window\",\n" +
+                        "    \"width\": 500,\n" +
+                        "    \"height\": 500\n" +
                         "  }\n" +
                         "}"
-                """.trimMargin(),
-                2,
-                listOf("\\n", "\\\""),
-            ),
-            Arguments.of(
-                """
-                    "abc" + 
-                    
-                    
-                    
-                    "efg" + 
-                    
-                    
-                    "\n\n\n"
-                """.trimIndent(),
-                0,
-                listOf("\\n")
-            ),
-            Arguments.of(""""In java new line char is \n"""", 0, listOf("\\n")),
-            Arguments.of("""("In java new line char is \n")""", 0, listOf("\\n")),
-            Arguments.of("""("\n") + ("\n") + ("\n")""", 0, listOf("\\n")),
-            Arguments.of("""("\n" + "\n") + ("\n" + "\n")""", 0, listOf("\\n")),
-            Arguments.of("""("\n") + ("\n") + ((("\n")))""", 0, listOf("\\n")),
-            Arguments.of("""("\n") + ((("\n"))) + ("\n")""", 0, listOf("\\n")),
-            Arguments.of("""((("\n"))) + ("\n") + ("\n")""", 0, listOf("\\n")),
-            Arguments.of(
-                """
-                                ("\n") + (
-                        ("\n") + ("\n")
-                    )
-                """.trimIndent(),
-                2,
-                listOf("\\n"),
-            ),
-            Arguments.of(
-                """
-                    (
-                        ("\n") + ("\n")
-                    )  + ("\n")
-                """.trimIndent(),
-                0,
-                listOf("\\n"),
-            ),
-            Arguments.of(""""\n \\".isEmpty()""", 0, listOf("\\n", "\\\\")),
-        )
+                    """.trimIndent(),
+                    2,
+                    listOf("\\n", "\\\""),
+                ),
+                Arguments.of(
+                    """
+                            "{\n" +
+                        "  \"window\": {\n" +
+                        "    \"title\": \"Sample Quantum With AI and ML Widget\",\n" +
+                        "    \"name\": \"main_window\",\n" +
+                        "    \"width\": 500,\n" +
+                        "    \"height\": 500\n" +
+                        "  }\n" +
+                        "}"
+                    """.trimIndent(),
+                    2,
+                    listOf("\\n", "\\\""),
+                ),
+                Arguments.of(
+                    """
+                        |        "{\n" +
+                            |"  \"window\": {\n" +
+                          |  "    \"title\": \"Sample Quantum With AI and ML Widget\",\n" +
+                         |   "    \"name\": \"main_window\",\n" +
+                           | "    \"width\": 500,\n" +
+                          |  "    \"height\": 500\n" +
+                            "  }\n" +
+                            "}"
+                    """.trimMargin(),
+                    2,
+                    listOf("\\n", "\\\""),
+                ),
+                Arguments.of(
+                    """
+                        "abc" + 
+                        
+                        
+                        
+                        "efg" + 
+                        
+                        
+                        "\n\n\n"
+                    """.trimIndent(),
+                    0,
+                    listOf("\\n")
+                ),
+                Arguments.of(""""In java new line char is \n"""", 0, listOf("\\n")),
+                Arguments.of("""("In java new line char is \n")""", 0, listOf("\\n")),
+                Arguments.of("""("\n") + ("\n") + ("\n")""", 0, listOf("\\n")),
+                Arguments.of("""("\n" + "\n") + ("\n" + "\n")""", 0, listOf("\\n")),
+                Arguments.of("""("\n") + ("\n") + ((("\n")))""", 0, listOf("\\n")),
+                Arguments.of("""("\n") + ((("\n"))) + ("\n")""", 0, listOf("\\n")),
+                Arguments.of("""((("\n"))) + ("\n") + ("\n")""", 0, listOf("\\n")),
+                Arguments.of(
+                    """
+                                    ("\n") + (
+                            ("\n") + ("\n")
+                        )
+                    """.trimIndent(),
+                    2,
+                    listOf("\\n"),
+                ),
+                Arguments.of(
+                    """
+                        (
+                            ("\n") + ("\n")
+                        )  + ("\n")
+                    """.trimIndent(),
+                    0,
+                    listOf("\\n"),
+                ),
+                Arguments.of(""""\n \\".isEmpty()""", 0, listOf("\\n", "\\\\")),
+            )
 
         @Suppress("LongMethod")
         @JvmStatic
-        fun getNonViolations() = listOf(
-            Arguments.of("""""${'"'}\t\t\t""${'"'}""", 0),
-            Arguments.of("""""${'"'}\\\""${'"'}""", 0),
-            Arguments.of("""""${'"'}Normal and long string""${'"'}""", 0),
-            Arguments.of("\"Normal and long string\"", 0),
-            Arguments.of("""""${'"'}In java new line char is \n""${'"'}""", 0),
-            Arguments.of("""""${'"'}This is point number ${'$'}i In java new line char is \n""${'"'}""", 0),
-            Arguments.of(
-                """
-                    ""${'"'}
-                    abc
-                    
-                    efg
-                    
-                    hij
-                    ""${'"'}
-                """.trimIndent(),
-                2
-            ),
-            Arguments.of(
-                """
-                    ""${'"'}
-                      {
-                          "window": {
-                            "title": "Sample Quantum With AI and ML Widget",
-                            "name": "main_window",
-                            "width": 500,
-                            "height": 500
+        fun getNonViolations() =
+            listOf(
+                Arguments.of("""""${'"'}\t\t\t""${'"'}""", 0),
+                Arguments.of("""""${'"'}\\\""${'"'}""", 0),
+                Arguments.of("""""${'"'}Normal and long string""${'"'}""", 0),
+                Arguments.of("\"Normal and long string\"", 0),
+                Arguments.of("""""${'"'}In java new line char is \n""${'"'}""", 0),
+                Arguments.of("""""${'"'}This is point number ${'$'}i In java new line char is \n""${'"'}""", 0),
+                Arguments.of(
+                    """
+                        ""${'"'}
+                        abc
+                        
+                        efg
+                        
+                        hij
+                        ""${'"'}
+                    """.trimIndent(),
+                    2
+                ),
+                Arguments.of(
+                    """
+                        ""${'"'}
+                          {
+                              "window": {
+                                "title": "Sample Quantum With AI and ML Widget",
+                                "name": "main_window",
+                                "width": 500,
+                                "height": 500
+                              }
                           }
-                      }
-                    ""${'"'}
-                """.trimIndent(),
-                0
-            ),
-            Arguments.of(
-                """
-                    "abc" + 
-                    
-                    
-                    
-                    "efg" + 
-                    
-                    
-                    "hij"
-                """.trimIndent(),
-                0
-            ),
-        )
+                        ""${'"'}
+                    """.trimIndent(),
+                    0
+                ),
+                Arguments.of(
+                    """
+                        "abc" + 
+                        
+                        
+                        
+                        "efg" + 
+                        
+                        
+                        "hij"
+                    """.trimIndent(),
+                    0
+                ),
+            )
 
         @Suppress("LongMethod")
         @JvmStatic
-        fun getNonViolationsDueToMaxEscapedCharacterCount() = listOf(
-            Arguments.of(""""\t\t\t"""", 3, listOf("\\t")),
-            Arguments.of(""""\\\\\\"""", 3, listOf("\\\\")),
-            Arguments.of(""" "abc" + "\n" + "efg" + "\n" + "hij\n"  """, 3, listOf("\\n")),
-            Arguments.of(""""\"[^\"\\\\\\n]*(?:\\\\.[^\"\\\\\\n]*)*\""""", 12, listOf("\\n", "\\\\", "\\\"")),
-            Arguments.of(""""In java new line char is \n"""", 1, listOf("\\n")),
-            Arguments.of(""""This is point number ${'$'}i In java new line char is \n"""", 1, listOf("\\n")),
-            Arguments.of(""" "abc" + "\n" + "efg" + "\n" + "hij"  """, 2, listOf("\\n")),
-            Arguments.of(
-                """
-                    "{\n" +
-                    "  \"window\": {\n" +
-                    "    \"title\": \"Sample Quantum With AI and ML Widget\",\n" +
-                    "    \"name\": \"main_window\",\n" +
-                    "    \"width\": 500,\n" +
-                    "    \"height\": 500\n" +
-                    "  }\n" +
-                    "}"
-                """.trimIndent(),
-                21,
-                listOf("\\n", "\\\""),
-            ),
-            Arguments.of("""("\n") + ("\n") + ("\n")""", 3, listOf("\\n")),
-            Arguments.of("""("\n") + ("\n") + ((("\n")))""", 3, listOf("\\n")),
-            Arguments.of(
-                """
-                                ("\n") + (
-                        ("\n") + ("\n")
-                    )
-                """.trimIndent(),
-                3,
-                listOf("\\n"),
-            ),
-            Arguments.of(""""\n + \n" + ""${'"'}\n\n""${'"'} + "\n + \n"""", 4, listOf("\\n")),
-            Arguments.of("""""${'"'}\n\n""${'"'} + "\n + \n" + "\n + \n"""", 4, listOf("\\n")),
-            Arguments.of(""""\n + \n" + "\n + \n" + ""${'"'}\n\n""${'"'}""", 4, listOf("\\n")),
-            Arguments.of(""""\n\n" + a + "\n"""", 3, listOf("\\n")),
-            Arguments.of(""""\n" + "\n\n" + a""", 3, listOf("\\n")),
-            Arguments.of("""a + "\n\n" + "\n\n"""", 4, listOf("\\n")),
-        )
+        fun getNonViolationsDueToMaxEscapedCharacterCount() =
+            listOf(
+                Arguments.of(""""\t\t\t"""", 3, listOf("\\t")),
+                Arguments.of(""""\\\\\\"""", 3, listOf("\\\\")),
+                Arguments.of(""" "abc" + "\n" + "efg" + "\n" + "hij\n"  """, 3, listOf("\\n")),
+                Arguments.of(""""\"[^\"\\\\\\n]*(?:\\\\.[^\"\\\\\\n]*)*\""""", 12, listOf("\\n", "\\\\", "\\\"")),
+                Arguments.of(""""In java new line char is \n"""", 1, listOf("\\n")),
+                Arguments.of(""""This is point number ${'$'}i In java new line char is \n"""", 1, listOf("\\n")),
+                Arguments.of(""" "abc" + "\n" + "efg" + "\n" + "hij"  """, 2, listOf("\\n")),
+                Arguments.of(
+                    """
+                        "{\n" +
+                        "  \"window\": {\n" +
+                        "    \"title\": \"Sample Quantum With AI and ML Widget\",\n" +
+                        "    \"name\": \"main_window\",\n" +
+                        "    \"width\": 500,\n" +
+                        "    \"height\": 500\n" +
+                        "  }\n" +
+                        "}"
+                    """.trimIndent(),
+                    21,
+                    listOf("\\n", "\\\""),
+                ),
+                Arguments.of("""("\n") + ("\n") + ("\n")""", 3, listOf("\\n")),
+                Arguments.of("""("\n") + ("\n") + ((("\n")))""", 3, listOf("\\n")),
+                Arguments.of(
+                    """
+                                    ("\n") + (
+                            ("\n") + ("\n")
+                        )
+                    """.trimIndent(),
+                    3,
+                    listOf("\\n"),
+                ),
+                Arguments.of(""""\n + \n" + ""${'"'}\n\n""${'"'} + "\n + \n"""", 4, listOf("\\n")),
+                Arguments.of("""""${'"'}\n\n""${'"'} + "\n + \n" + "\n + \n"""", 4, listOf("\\n")),
+                Arguments.of(""""\n + \n" + "\n + \n" + ""${'"'}\n\n""${'"'}""", 4, listOf("\\n")),
+                Arguments.of(""""\n\n" + a + "\n"""", 3, listOf("\\n")),
+                Arguments.of(""""\n" + "\n\n" + a""", 3, listOf("\\n")),
+                Arguments.of("""a + "\n\n" + "\n\n"""", 4, listOf("\\n")),
+            )
     }
 }

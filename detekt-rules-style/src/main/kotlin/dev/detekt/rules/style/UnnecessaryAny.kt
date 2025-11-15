@@ -197,11 +197,12 @@ class UnnecessaryAny(config: Config) :
     }
 
     context(session: KaSession)
-    private fun KtExpression.getItUsageCount(symbol: KaDeclarationSymbol) = with(session) {
-        collectDescendantsOfType<KtNameReferenceExpression>().count {
-            it.mainReference.resolveToSymbol() == symbol
+    private fun KtExpression.getItUsageCount(symbol: KaDeclarationSymbol) =
+        with(session) {
+            collectDescendantsOfType<KtNameReferenceExpression>().count {
+                it.mainReference.resolveToSymbol() == symbol
+            }
         }
-    }
 
     context(session: KaSession)
     private fun KtExpression?.isCallingEquals(): Boolean {

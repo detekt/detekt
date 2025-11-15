@@ -15,11 +15,12 @@ private data class Color(private val value: Byte) {
 }
 
 private val isColoredOutputSupported: Boolean = !SystemInfo.isWindows
-private fun String.colorized(color: Color) = if (isColoredOutputSupported) {
-    "${color.escapeSequence}$this${RESET.escapeSequence}"
-} else {
-    this
-}
+private fun String.colorized(color: Color) =
+    if (isColoredOutputSupported) {
+        "${color.escapeSequence}$this${RESET.escapeSequence}"
+    } else {
+        this
+    }
 
 fun String.red() = colorized(RED)
 fun String.yellow() = colorized(YELLOW)

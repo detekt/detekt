@@ -133,8 +133,8 @@ private fun KaCallableSymbol.asFqNameString() =
         callableId?.run { asSingleFqName().asString() } ?: returnType.asFqNameString()
     }
 
-private fun KaType.asFqNameString() = symbol?.classId?.asFqNameString()
-    ?: toString().replace('/', '.').removeSuffix("!")
+private fun KaType.asFqNameString() =
+    symbol?.classId?.asFqNameString() ?: toString().replace('/', '.').removeSuffix("!")
 
 private fun changeIfLambda(param: String): String? {
     val (paramsRaw, _) = splitLambda(param) ?: return null

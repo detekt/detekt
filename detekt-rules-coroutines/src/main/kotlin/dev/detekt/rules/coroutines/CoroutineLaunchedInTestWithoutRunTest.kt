@@ -70,9 +70,10 @@ class CoroutineLaunchedInTestWithoutRunTest(config: Config) :
     }
 
     context(session: KaSession)
-    private fun KtNamedFunction.runsInRunTestBlock(): Boolean = with(session) {
-        bodyExpression?.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId == RUN_TEST_CALLABLE_ID
-    }
+    private fun KtNamedFunction.runsInRunTestBlock(): Boolean =
+        with(session) {
+            bodyExpression?.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId == RUN_TEST_CALLABLE_ID
+        }
 
     companion object {
         private const val MESSAGE =
@@ -90,10 +91,7 @@ class FunCoroutineLaunchesTraverseHelper {
     fun isFunctionLaunchingCoroutines(initialFunction: KtNamedFunction): Boolean {
         val traversedFunctions = mutableSetOf<KtNamedFunction>()
 
-        fun checkFunctionAndSaveToCache(
-            function: KtNamedFunction,
-            parents: List<KtNamedFunction> = emptyList(),
-        ) {
+        fun checkFunctionAndSaveToCache(function: KtNamedFunction, parents: List<KtNamedFunction> = emptyList()) {
             val isLaunching = function.isLaunchingCoroutine()
             exploredFunctionsCache.putIfAbsent(function, isLaunching)
 
@@ -132,12 +130,13 @@ class FunCoroutineLaunchesTraverseHelper {
     }
 
     context(session: KaSession)
-    private fun KtNamedFunction.isLaunchingCoroutine() = with(session) {
-        anyDescendantOfType<KtDotQualifiedExpression> {
-            val receiverType = it.receiverExpression.expressionType ?: return@anyDescendantOfType false
-            val calleeText = it.getCalleeExpressionIfAny()?.text ?: return@anyDescendantOfType false
-            receiverType.isCoroutineScope() && calleeText in listOf("launch", "async") ||
-                receiverType.isCoroutinesFlow() && calleeText == "launchIn"
+    private fun KtNamedFunction.isLaunchingCoroutine() =
+        with(session) {
+            anyDescendantOfType<KtDotQualifiedExpression> {
+                val receiverType = it.receiverExpression.expressionType ?: return@anyDescendantOfType false
+                val calleeText = it.getCalleeExpressionIfAny()?.text ?: return@anyDescendantOfType false
+                receiverType.isCoroutineScope() && calleeText in listOf("launch", "async") ||
+                    receiverType.isCoroutinesFlow() && calleeText == "launchIn"
+            }
         }
-    }
 }

@@ -65,18 +65,16 @@ class AbstractClassCanBeConcreteClass(config: Config) :
         }
     }
 
-    private fun KtClass.checkMembers(
-        members: List<KtCallableDeclaration>,
-        nameIdentifier: PsiElement,
-    ) {
+    private fun KtClass.checkMembers(members: List<KtCallableDeclaration>, nameIdentifier: PsiElement) {
         val (abstractMembers, _) = members.partition { it.isAbstract() }
         if (abstractMembers.isEmpty() && !hasInheritedMember()) {
             report(Finding(Entity.from(nameIdentifier), noAbstractMember))
         }
     }
 
-    private fun KtClass.members() = body?.children?.filterIsInstance<KtCallableDeclaration>().orEmpty() +
-        primaryConstructor?.valueParameters?.filter { it.hasValOrVar() }.orEmpty()
+    private fun KtClass.members() =
+        body?.children?.filterIsInstance<KtCallableDeclaration>().orEmpty() +
+            primaryConstructor?.valueParameters?.filter { it.hasValOrVar() }.orEmpty()
 
     private fun KtClass.hasConstructorParameter() = primaryConstructor?.valueParameters?.isNotEmpty() == true
 

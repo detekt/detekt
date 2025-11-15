@@ -37,10 +37,11 @@ class SingleRuleProviderSpec {
 
 private class CustomRuleSetProvider : RuleSetProvider {
     override val ruleSetId = RuleSetId("custom")
-    override fun instance() = RuleSet(
-        ruleSetId,
-        listOf(::CustomRule1, ::CustomRule2)
-    )
+    override fun instance() =
+        RuleSet(
+            ruleSetId,
+            listOf(::CustomRule1, ::CustomRule2)
+        )
 }
 
 private class CustomRule1(config: Config) : Rule(config, "TestDescription")

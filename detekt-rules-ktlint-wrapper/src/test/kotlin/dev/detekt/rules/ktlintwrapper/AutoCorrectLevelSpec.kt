@@ -27,11 +27,7 @@ class AutoCorrectLevelSpec {
         "False,     True,      false",
         "False,     False,     false",
     )
-    fun autoCorrect(
-        ruleSet: AutoCorrectConfig,
-        rule: AutoCorrectConfig,
-        wasFormatted: Boolean,
-    ) {
+    fun autoCorrect(ruleSet: AutoCorrectConfig, rule: AutoCorrectConfig, wasFormatted: Boolean) {
         val config = yamlConfigFromContent(createConfig(ruleSet, rule))
 
         val (file, findings) = runRule(config)

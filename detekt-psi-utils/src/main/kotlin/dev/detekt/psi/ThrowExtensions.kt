@@ -7,11 +7,9 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
 import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 
-fun KtThrowExpression.isIllegalStateException() =
-    isExceptionOfType<IllegalStateException>()
+fun KtThrowExpression.isIllegalStateException() = isExceptionOfType<IllegalStateException>()
 
-fun KtThrowExpression.isIllegalArgumentException() =
-    isExceptionOfType<IllegalArgumentException>()
+fun KtThrowExpression.isIllegalArgumentException() = isExceptionOfType<IllegalArgumentException>()
 
 inline fun <reified T : Exception> KtThrowExpression.isExceptionOfType(): Boolean =
     findDescendantOfType<KtCallExpression>()?.firstChild?.text == T::class.java.simpleName

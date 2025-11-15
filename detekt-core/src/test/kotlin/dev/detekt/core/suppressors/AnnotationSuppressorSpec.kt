@@ -309,10 +309,11 @@ class AnnotationSuppressorSpec {
                 fun function() = Unit
             """.trimIndent()
 
-            fun getFile() = listOf(
-                Arguments.of(compileContentForTest(code), AnalysisMode.light),
-                Arguments.of(KotlinAnalysisApiEngine.compile(code, composableFiles), AnalysisMode.full),
-            )
+            fun getFile() =
+                listOf(
+                    Arguments.of(compileContentForTest(code), AnalysisMode.light),
+                    Arguments.of(KotlinAnalysisApiEngine.compile(code, composableFiles), AnalysisMode.full),
+                )
 
             @ParameterizedTest
             @MethodSource("getFile")

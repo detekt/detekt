@@ -57,8 +57,8 @@ class ConfigAssert(
             .isEqualTo(RuleName(clazz.simpleName))
     }
 
-    private fun getYmlRuleConfig() = config.subConfig(name) as? YamlConfig
-        ?: error("yaml config expected but got ${config.javaClass}")
+    private fun getYmlRuleConfig() =
+        config.subConfig(name) as? YamlConfig ?: error("yaml config expected but got ${config.javaClass}")
 
     private fun getRulesDefinedByRuleSet(): List<Rule> =
         getRuleSetProviderInPackageOrNull()

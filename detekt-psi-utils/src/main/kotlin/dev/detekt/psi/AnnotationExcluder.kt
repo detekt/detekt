@@ -69,11 +69,12 @@ private fun String.getPackage(): String {
         .joinToString(".")
 }
 
-private fun KtTypeReference.fqNameOrNull(): Pair<String, String>? = analyze(this) {
-    val type = type as? KaClassType ?: return null
-    val classId = type.symbol.classId ?: return null
-    classId.packageFqName.toString() to classId.relativeClassName.toString()
-}
+private fun KtTypeReference.fqNameOrNull(): Pair<String, String>? =
+    analyze(this) {
+        val type = type as? KaClassType ?: return null
+        val classId = type.symbol.classId ?: return null
+        classId.packageFqName.toString() to classId.relativeClassName.toString()
+    }
 
 private operator fun Iterable<Regex>.contains(a: String?): Boolean {
     if (a == null) return false

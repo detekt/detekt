@@ -93,18 +93,16 @@ class DoubleNegativeLambda(config: Config) : Rule(
             else -> false
         }
 
-    private fun formatMessage(
-        forbiddenChildren: List<KtExpression>,
-        negativeFunction: NegativeFunction,
-    ) = buildString {
-        append("Double negative through using ${forbiddenChildren.joinInBackTicks()} inside a ")
-        append("`${negativeFunction.simpleName}` lambda. ")
-        if (negativeFunction.recommendation != null) {
-            append(negativeFunction.recommendation)
-        } else {
-            append("Rewrite in the positive.")
+    private fun formatMessage(forbiddenChildren: List<KtExpression>, negativeFunction: NegativeFunction) =
+        buildString {
+            append("Double negative through using ${forbiddenChildren.joinInBackTicks()} inside a ")
+            append("`${negativeFunction.simpleName}` lambda. ")
+            if (negativeFunction.recommendation != null) {
+                append(negativeFunction.recommendation)
+            } else {
+                append("Rewrite in the positive.")
+            }
         }
-    }
 
     private fun List<KtExpression>.joinInBackTicks() = joinToString { "`${it.text}`" }
 

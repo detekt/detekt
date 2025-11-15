@@ -111,8 +111,7 @@ class UnnecessaryFilter(config: Config) :
         return null
     }
 
-    private fun KtExpression.parentProperty(): KtProperty? =
-        (parent as? KtProperty)?.takeIf { it.initializer == this }
+    private fun KtExpression.parentProperty(): KtProperty? = (parent as? KtProperty)?.takeIf { it.initializer == this }
 
     private fun KtExpression.parentReturn(): KtReturnExpression? =
         (parent as? KtReturnExpression)?.takeIf { it.returnedExpression == this }

@@ -28,8 +28,7 @@ fun KtNamedFunction.isJvmFinalizeFunction() =
         !this.isPrivate()
 
 private val knownAnys = setOf("Any?", "kotlin.Any?")
-fun KtFunction.hasCorrectEqualsParameter() =
-    this.valueParameters.singleOrNull()?.typeReference?.text in knownAnys
+fun KtFunction.hasCorrectEqualsParameter() = this.valueParameters.singleOrNull()?.typeReference?.text in knownAnys
 
 fun KtNamedFunction.isMainFunction() = hasMainSignature() && (this.isTopLevel || isMainInsideObject())
 

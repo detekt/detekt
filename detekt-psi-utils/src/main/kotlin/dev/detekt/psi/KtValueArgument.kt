@@ -13,5 +13,4 @@ fun KtValueArgument.isString(): Boolean {
     }
 }
 
-fun List<KtValueArgument>.isEmptyOrSingleStringArgument(): Boolean =
-    isEmpty() || singleOrNull()?.isString() == true
+fun List<KtValueArgument>.isEmptyOrSingleStringArgument(): Boolean = isEmpty() || singleOrNull()?.isString() == true

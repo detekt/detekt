@@ -90,8 +90,9 @@ class AbstractClassCanBeInterface(config: Config) :
         }
     }
 
-    private fun KtClass.members() = body?.children?.filterIsInstance<KtCallableDeclaration>().orEmpty() +
-        primaryConstructor?.valueParameters?.filter { it.hasValOrVar() }.orEmpty()
+    private fun KtClass.members() =
+        body?.children?.filterIsInstance<KtCallableDeclaration>().orEmpty() +
+            primaryConstructor?.valueParameters?.filter { it.hasValOrVar() }.orEmpty()
 
     private fun KtClass.hasConstructorParameter() = primaryConstructor?.valueParameters?.isNotEmpty() == true
 
