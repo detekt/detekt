@@ -95,6 +95,7 @@ import dev.detekt.rules.ktlintwrapper.wrappers.SpacingBetweenFunctionNameAndOpen
 import dev.detekt.rules.ktlintwrapper.wrappers.StatementWrapping
 import dev.detekt.rules.ktlintwrapper.wrappers.StringTemplate
 import dev.detekt.rules.ktlintwrapper.wrappers.StringTemplateIndent
+import dev.detekt.rules.ktlintwrapper.wrappers.ThenSpacing
 import dev.detekt.rules.ktlintwrapper.wrappers.TrailingCommaOnCallSite
 import dev.detekt.rules.ktlintwrapper.wrappers.TrailingCommaOnDeclarationSite
 import dev.detekt.rules.ktlintwrapper.wrappers.TryCatchFinallySpacing
@@ -202,6 +203,7 @@ class KtlintWrapperProvider : RuleSetProvider {
             ::SpacingBetweenFunctionNameAndOpeningParenthesis,
             ::StatementWrapping,
             ::StringTemplate,
+            ::ThenSpacing,
             ::TrailingCommaOnCallSite, // standard rule but not enabled by default
             ::TrailingCommaOnDeclarationSite, // standard rule but not enabled by default
             ::TypeArgumentComment,

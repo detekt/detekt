@@ -69,8 +69,6 @@ ktlint:
   autoCorrect: true
   ClassSignature:
     active: false
-  EnumEntryNameCase:
-    active: false
   Filename:
     active: false
   FunctionSignature:
