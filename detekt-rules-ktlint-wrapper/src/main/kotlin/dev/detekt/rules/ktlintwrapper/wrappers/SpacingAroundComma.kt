@@ -11,10 +11,7 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  */
 @ActiveByDefault(since = "1.0.0")
 @AutoCorrectable(since = "1.0.0")
-class SpacingAroundComma(config: Config) : KtlintRule(
-    config,
-    "Reports spaces around commas"
-) {
+class SpacingAroundComma(config: Config) : KtlintRule(config, "Reports spaces around commas") {
 
     override val wrapping = SpacingAroundCommaRule()
 }

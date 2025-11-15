@@ -17,10 +17,7 @@ import dev.detekt.rules.ktlintwrapper.configWithAndroidVariants
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "1.23.0")
-class ContextReceiverMapping(config: Config) : KtlintRule(
-    config,
-    "Reports mis-indented code"
-) {
+class ContextReceiverMapping(config: Config) : KtlintRule(config, "Reports mis-indented code") {
 
     override val wrapping = ContextReceiverWrappingRule()
 

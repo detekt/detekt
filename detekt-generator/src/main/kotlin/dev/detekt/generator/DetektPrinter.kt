@@ -12,10 +12,7 @@ import dev.detekt.utils.yaml
 import java.nio.file.Path
 import kotlin.io.path.Path
 
-class DetektPrinter(
-    private val documentationPath: Path?,
-    private val configPath: Path?,
-) {
+class DetektPrinter(private val documentationPath: Path?, private val configPath: Path?) {
 
     private val markdownWriter = MarkdownWriter(System.out)
     private val yamlWriter = YamlWriter(System.out)

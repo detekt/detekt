@@ -22,12 +22,13 @@ import org.jetbrains.kotlin.psi.psiUtil.isExtensionDeclaration
  *
  * Refactor these methods and try to use optional parameters instead to prevent some of the overloading.
  */
-class MethodOverloading(config: Config) : Rule(
-    config,
-    "Methods which are overloaded often might be harder to maintain. " +
-        "Furthermore, these methods are tightly coupled. " +
-        "Refactor these methods and try to use optional parameters."
-) {
+class MethodOverloading(config: Config) :
+    Rule(
+        config,
+        "Methods which are overloaded often might be harder to maintain. " +
+            "Furthermore, these methods are tightly coupled. " +
+            "Refactor these methods and try to use optional parameters."
+    ) {
 
     @Configuration("The allowed number of overloads for a method.")
     private val allowedOverloads: Int by config(defaultValue = 6)

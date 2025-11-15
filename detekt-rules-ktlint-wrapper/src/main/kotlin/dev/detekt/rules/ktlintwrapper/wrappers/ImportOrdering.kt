@@ -17,10 +17,7 @@ import dev.detekt.rules.ktlintwrapper.configWithAndroidVariants
  */
 @ActiveByDefault(since = "1.19.0")
 @AutoCorrectable(since = "1.0.0")
-class ImportOrdering(config: Config) : KtlintRule(
-    config,
-    "Detects imports in non default order"
-) {
+class ImportOrdering(config: Config) : KtlintRule(config, "Detects imports in non default order") {
 
     override val wrapping = ImportOrderingRule()
 

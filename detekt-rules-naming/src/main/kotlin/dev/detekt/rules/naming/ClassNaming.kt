@@ -15,10 +15,8 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
  */
 @ActiveByDefault(since = "1.0.0")
 @Alias("ClassName")
-class ClassNaming(config: Config) : Rule(
-    config,
-    "A class or object name should follow the naming convention set in detekt's configuration."
-) {
+class ClassNaming(config: Config) :
+    Rule(config, "A class or object name should follow the naming convention set in detekt's configuration.") {
 
     @Configuration("naming pattern")
     private val classPattern: Regex by config("[A-Z][a-zA-Z0-9]*") { it.toRegex() }

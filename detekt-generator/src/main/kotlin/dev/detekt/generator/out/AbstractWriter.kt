@@ -5,9 +5,7 @@ import java.nio.file.Path
 import kotlin.io.path.createParentDirectories
 import kotlin.io.path.writeText
 
-internal abstract class AbstractWriter(
-    private val outputPrinter: PrintStream,
-) {
+internal abstract class AbstractWriter(private val outputPrinter: PrintStream) {
 
     protected abstract val ending: String
 

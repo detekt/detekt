@@ -178,10 +178,8 @@ private fun FlowOrInteractiveContent.summary(
     block: SUMMARY.() -> Unit = {},
 ): Unit = SUMMARY(attributesMapOf("class", classes), consumer).visit(block)
 
-private class SUMMARY(
-    initialAttributes: Map<String, String>,
-    override val consumer: TagConsumer<*>,
-) : HTMLTag("summary", consumer, initialAttributes, null, false, false),
+private class SUMMARY(initialAttributes: Map<String, String>, override val consumer: TagConsumer<*>) :
+    HTMLTag("summary", consumer, initialAttributes, null, false, false),
     CommonAttributeGroupFacadeFlowInteractiveContent
 
 private fun TextLocation.length(): Int = end - start

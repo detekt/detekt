@@ -18,10 +18,7 @@ import org.jetbrains.kotlin.psi.psiUtil.parents
  * If the codebase should have documentation on all public functions enable this rule to enforce this.
  * Overridden functions are excluded by this rule.
  */
-class UndocumentedPublicFunction(config: Config) : Rule(
-    config,
-    "Public functions require documentation."
-) {
+class UndocumentedPublicFunction(config: Config) : Rule(config, "Public functions require documentation.") {
 
     @Configuration("if protected functions should be searched")
     private val searchProtectedFunction: Boolean by config(false)

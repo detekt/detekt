@@ -44,10 +44,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isProtected
  */
 @ActiveByDefault(since = "1.23.0")
 @Alias("UNUSED_PARAMETER", "unused")
-class UnusedParameter(config: Config) : Rule(
-    config,
-    "Function parameter is unused and should be removed."
-) {
+class UnusedParameter(config: Config) : Rule(config, "Function parameter is unused and should be removed.") {
 
     @Configuration("unused parameter names matching this regex are ignored")
     private val allowedNames: Regex by config("ignored|expected", String::toRegex)

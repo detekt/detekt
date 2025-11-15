@@ -25,10 +25,8 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * - __Nesting Level Increments__ - `if`, `when`, `for`, `while`, `do while`, `catch`, `nested function`
  * - __Additional Complexity Increments by Nesting Level__ - `if`, `when`, `for`, `while`, `do while`, `catch`
  */
-class CognitiveComplexMethod(config: Config) : Rule(
-    config,
-    "Prefer splitting up complex methods into smaller, easier to understand methods."
-) {
+class CognitiveComplexMethod(config: Config) :
+    Rule(config, "Prefer splitting up complex methods into smaller, easier to understand methods.") {
 
     @Configuration("Maximum Cognitive Complexity allowed for a method.")
     private val allowedComplexity: Int by config(defaultValue = 15)

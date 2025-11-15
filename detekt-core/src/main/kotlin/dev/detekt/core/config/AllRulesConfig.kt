@@ -11,7 +11,8 @@ internal data class AllRulesConfig(
     private val wrapped: Config,
     private val deprecatedRules: Set<DeprecatedRule>,
     override val parent: Config? = null,
-) : Config, ValidatableConfiguration {
+) : Config,
+    ValidatableConfiguration {
 
     override val parentPath: String?
         get() = wrapped.parentPath

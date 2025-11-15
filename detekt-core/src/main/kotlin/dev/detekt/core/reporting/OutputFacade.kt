@@ -13,9 +13,7 @@ import java.nio.file.Path
 import kotlin.io.path.createParentDirectories
 import kotlin.io.path.writeText
 
-class OutputFacade(
-    private val settings: ProcessingSettings,
-) {
+class OutputFacade(private val settings: ProcessingSettings) {
     private val reports: Map<String, ReportsSpec.Report> = settings.spec.reportsSpec.reports.associateBy { it.type }
 
     init {

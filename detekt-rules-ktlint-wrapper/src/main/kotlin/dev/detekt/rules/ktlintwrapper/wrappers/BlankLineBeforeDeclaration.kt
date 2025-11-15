@@ -10,11 +10,12 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  * documentation.
  */
 @AutoCorrectable(since = "2.0.0")
-class BlankLineBeforeDeclaration(config: Config) : KtlintRule(
-    config,
-    "A blank line is required before any class or function declaration, and before any list of top level or " +
-        "class properties."
-) {
+class BlankLineBeforeDeclaration(config: Config) :
+    KtlintRule(
+        config,
+        "A blank line is required before any class or function declaration, and before any list of top level or " +
+            "class properties."
+    ) {
 
     override val wrapping = BlankLineBeforeDeclarationRule()
 }

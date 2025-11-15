@@ -8,9 +8,7 @@ import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class UnnecessaryReversedSpec(
-    val env: KotlinEnvironmentContainer,
-) {
+class UnnecessaryReversedSpec(val env: KotlinEnvironmentContainer) {
     val subject = UnnecessaryReversed(Config.empty)
 
     @Test

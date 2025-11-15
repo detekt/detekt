@@ -29,10 +29,8 @@ import org.jetbrains.kotlin.psi.KtConstantExpression
  * </compliant>
  */
 @ActiveByDefault(since = "1.2.0")
-class InvalidRange(config: Config) : Rule(
-    config,
-    "If a for loops condition is false before the first iteration, the loop will never get executed."
-) {
+class InvalidRange(config: Config) :
+    Rule(config, "If a for loops condition is false before the first iteration, the loop will never get executed.") {
 
     override fun visitBinaryExpression(expression: KtBinaryExpression) {
         if (expression.isInvalidLoopRange()) {
