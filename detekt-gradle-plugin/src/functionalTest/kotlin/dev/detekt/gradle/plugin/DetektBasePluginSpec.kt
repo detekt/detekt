@@ -211,8 +211,8 @@ class DetektBasePluginSpec {
                 .containsPattern("""--input \S*[/\\]src[/\\]$sourceSetTaskName[/\\]kotlin""")
             val checkstyleReportFile = projectFile("build/reports/detekt/${sourceSetTaskName}SourceSet.xml")
             val sarifReportFile = projectFile("build/reports/detekt/${sourceSetTaskName}SourceSet.sarif")
-            assertThat(buildResult.output).contains("--report checkstyle:$checkstyleReportFile")
-            assertThat(buildResult.output).contains("--report sarif:$sarifReportFile")
+            assertThat(buildResult.output).contains("--report checkstyle $checkstyleReportFile")
+            assertThat(buildResult.output).contains("--report sarif $sarifReportFile")
         }
     }
 }
