@@ -67,10 +67,6 @@ exceptions:
 ktlint:
   active: true
   autoCorrect: true
-  BlankLineBeforeDeclaration:
-    active: false
-  ChainMethodContinuation:
-    active: false
   ClassSignature:
     active: false
   Filename:
@@ -82,16 +78,10 @@ ktlint:
     excludes: ['**/*.kts']
   MaximumLineLength:
     active: false
-  NoEmptyFirstLineInClassBody:
-    active: false
   SpacingAroundSquareBrackets:
     active: true
-  StringTemplateIndent:
-    active: false
   TrailingCommaOnCallSite:
     active: false
-  TrailingCommaOnDeclarationSite:
-    active: true
 
 naming:
   ClassNaming:
