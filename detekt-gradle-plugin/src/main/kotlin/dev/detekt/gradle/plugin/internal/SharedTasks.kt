@@ -24,8 +24,16 @@ internal fun Project.registerJvmCompilationDetektTask(
         val siblingTask = compilation.compileTaskProvider.get() as KotlinJvmCompile
 
         detektTask.setSource(siblingTask.sources)
-        detektTask.classpath.conventionCompat(compilation.output.classesDirs, siblingTask.libraries)
-        detektTask.friendPaths.conventionCompat(compilation.output.classesDirs, siblingTask.friendPaths)
+        // Filter out non-existent files to avoid NoSuchFileException warnings
+        // when jar task is disabled (e.g., for container-only modules)
+        detektTask.classpath.conventionCompat(
+            compilation.output.classesDirs.filter { it.exists() },
+            siblingTask.libraries.filter { it.exists() }
+        )
+        detektTask.friendPaths.conventionCompat(
+            compilation.output.classesDirs.filter { it.exists() },
+            siblingTask.friendPaths.filter { it.exists() }
+        )
         detektTask.apiVersion.convention(siblingTask.compilerOptions.apiVersion.map { it.version })
         detektTask.languageVersion.convention(siblingTask.compilerOptions.languageVersion.map { it.version })
         /* Note: jvmTarget convention is also set in setDetektTaskDefaults. There may be a race between setting it here
@@ -68,8 +76,16 @@ internal fun Project.registerJvmCompilationCreateBaselineTask(
         val siblingTask = compilation.compileTaskProvider.get() as KotlinJvmCompile
 
         createBaselineTask.setSource(siblingTask.sources)
-        createBaselineTask.classpath.conventionCompat(compilation.output.classesDirs, siblingTask.libraries)
-        createBaselineTask.friendPaths.conventionCompat(compilation.output.classesDirs, siblingTask.friendPaths)
+        // Filter out non-existent files to avoid NoSuchFileException warnings
+        // when jar task is disabled (e.g., for container-only modules)
+        createBaselineTask.classpath.conventionCompat(
+            compilation.output.classesDirs.filter { it.exists() },
+            siblingTask.libraries.filter { it.exists() }
+        )
+        createBaselineTask.friendPaths.conventionCompat(
+            compilation.output.classesDirs.filter { it.exists() },
+            siblingTask.friendPaths.filter { it.exists() }
+        )
         createBaselineTask.apiVersion.convention(siblingTask.compilerOptions.apiVersion.map { it.version })
         createBaselineTask.languageVersion.convention(siblingTask.compilerOptions.languageVersion.map { it.version })
         /* Note: jvmTarget convention is also set in setCreateBaselineTaskDefaults. There may be a race between setting
