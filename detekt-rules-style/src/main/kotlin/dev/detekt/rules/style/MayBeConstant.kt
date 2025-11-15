@@ -111,8 +111,7 @@ class MayBeConstant(config: Config) : Rule(
         !isTopLevel && containingClassOrObject !is KtObjectDeclaration
 
     private fun KtExpression.isConstantExpression(): Boolean =
-        this is KtStringTemplateExpression &&
-            !hasInterpolation() ||
+        (this is KtStringTemplateExpression && !hasInterpolation()) ||
             node.elementType == KtNodeTypes.BOOLEAN_CONSTANT ||
             node.elementType == KtNodeTypes.INTEGER_CONSTANT ||
             node.elementType == KtNodeTypes.CHARACTER_CONSTANT ||

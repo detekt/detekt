@@ -185,7 +185,7 @@ class MagicNumber(config: Config) : Rule(
     }
 
     private fun KtConstantExpression.isPartOfFunctionReturnConstant() =
-        parent is KtNamedFunction || parent is KtReturnExpression && parent.parent.children.size == 1
+        parent is KtNamedFunction || (parent is KtReturnExpression && parent.parent.children.size == 1)
 
     private fun KtConstantExpression.isPartOfConstructorOrFunctionConstant(): Boolean =
         parent is KtParameter &&

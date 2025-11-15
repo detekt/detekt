@@ -30,6 +30,7 @@ internal class BaselineHandler : DefaultHandler() {
                 }
                 content = ""
             }
+
             MANUALLY_SUPPRESSED_ISSUES, CURRENT_ISSUES -> current == null
         }
     }

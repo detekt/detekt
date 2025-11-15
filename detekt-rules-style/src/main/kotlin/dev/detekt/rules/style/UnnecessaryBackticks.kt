@@ -41,7 +41,9 @@ class UnnecessaryBackticks(config: Config) : Rule(
 
         return when {
             (!text.startsWith("`") || !text.endsWith("`")) -> false
+
             (!unquoted.isIdentifier() || unquoted.isKeyword()) -> false
+
             else -> canPlaceAfterSimpleNameEntry(
                 getStrictParentOfType<KtSimpleNameStringTemplateEntry>()?.nextSibling
             )
