@@ -71,8 +71,6 @@ ktlint:
     active: false
   ChainMethodContinuation:
     active: false
-  EnumEntryNameCase:
-    active: false
   Filename:
     active: false
   FunctionSignature:

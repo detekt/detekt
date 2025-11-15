@@ -312,6 +312,9 @@ ktlint:
     active: true
     autoCorrect: true
     indentSize: 4
+  ThenSpacing:
+    active: true
+    autoCorrect: true
   TrailingCommaOnCallSite:
     active: true
     autoCorrect: true
