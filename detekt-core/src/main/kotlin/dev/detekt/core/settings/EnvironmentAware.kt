@@ -88,21 +88,25 @@ internal class EnvironmentFacade(
                 }
             }
 
-            val friends = configuration.friendPaths.map {
-                buildKspLibraryModule {
-                    platform = targetPlatform
-                    addBinaryRoot(Path(it))
-                    libraryName = UUID.randomUUID().toString()
+            val friends = configuration.friendPaths
+                .filter { File(it).exists() }
+                .map {
+                    buildKspLibraryModule {
+                        platform = targetPlatform
+                        addBinaryRoot(Path(it))
+                        libraryName = UUID.randomUUID().toString()
+                    }
                 }
-            }
 
-            val dependencies = configuration.jvmClasspathRoots.map {
-                buildKspLibraryModule {
-                    platform = targetPlatform
-                    addBinaryRoot(it.toPath())
-                    libraryName = "regulardependencies"
+            val dependencies = configuration.jvmClasspathRoots
+                .filter { it.exists() }
+                .map {
+                    buildKspLibraryModule {
+                        platform = targetPlatform
+                        addBinaryRoot(it.toPath())
+                        libraryName = "regulardependencies"
+                    }
                 }
-            }
 
             sourceModule = buildKtSourceModule {
                 addSourceRoots(configuration.kotlinSourceRoots.map { Path(it.path) })
