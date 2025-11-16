@@ -21,16 +21,13 @@ internal class BaselineHandler : DefaultHandler() {
     }
 
     override fun endElement(uri: String, localName: String, qName: String) {
-        when (qName) {
-            ID -> {
-                check(content.isNotBlank()) { "The content of the ID element must not be empty" }
-                when (current) {
-                    MANUALLY_SUPPRESSED_ISSUES -> manuallySuppressedIssues.add(content)
-                    CURRENT_ISSUES -> currentIssues.add(content)
-                }
-                content = ""
+        if (qName == ID) {
+            check(content.isNotBlank()) { "The content of the ID element must not be empty" }
+            when (current) {
+                MANUALLY_SUPPRESSED_ISSUES -> manuallySuppressedIssues.add(content)
+                CURRENT_ISSUES -> currentIssues.add(content)
             }
-            MANUALLY_SUPPRESSED_ISSUES, CURRENT_ISSUES -> current == null
+            content = ""
         }
     }
 
