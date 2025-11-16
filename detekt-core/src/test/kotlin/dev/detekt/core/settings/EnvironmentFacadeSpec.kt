@@ -19,6 +19,20 @@ class EnvironmentFacadeSpec {
             assertThat(it.spec.compilerSpec.classpathEntries()).hasSize(3)
         }
     }
+
+    @Test
+    fun `does not fail when classpath contains non-existent files`() {
+        val nonExistentPath = "/path/to/nonexistent.jar"
+        val mixedClasspath = when (File.pathSeparator) {
+            ":" -> "$nonExistentPath:/another/nonexistent.jar"
+            ";" -> """$nonExistentPath;C:\another\nonexistent.jar"""
+            else -> nonExistentPath
+        }
+
+        testSettings(mixedClasspath).use {
+            assertThat(it.spec.compilerSpec.classpathEntries()).isNotEmpty
+        }
+    }
 }
 
 private fun testSettings(classpath: String) = createProcessingSettings {
