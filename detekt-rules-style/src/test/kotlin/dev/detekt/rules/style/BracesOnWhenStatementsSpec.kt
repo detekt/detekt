@@ -48,22 +48,23 @@ class BracesOnWhenStatementsSpec {
     @Nested
     inner class specialTestCases {
         @TestFactory
-        fun `special when conditions`() = flag(
-            """
-                when (0) {
-                    1, 2 -> { println() }
-                    in 3..4 -> { println() }
-                    is Int -> { println() }
-                    5, 6, in 7..8, is Number -> { println() }
-                    else -> { println() }
-                }
-            """.trimIndent(),
-            "->"(1),
-            "->"(2),
-            "->"(3),
-            "->"(4),
-            "->"(5),
-        )
+        fun `special when conditions`() =
+            flag(
+                """
+                    when (0) {
+                        1, 2 -> { println() }
+                        in 3..4 -> { println() }
+                        is Int -> { println() }
+                        5, 6, in 7..8, is Number -> { println() }
+                        else -> { println() }
+                    }
+                """.trimIndent(),
+                "->"(1),
+                "->"(2),
+                "->"(3),
+                "->"(4),
+                "->"(5),
+            )
 
         private fun flag(code: String, vararg locations: (String) -> Pair<Int, Int>): DynamicNode {
             val validTopLevelCode = """

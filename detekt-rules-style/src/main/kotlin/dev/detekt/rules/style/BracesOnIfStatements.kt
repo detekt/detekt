@@ -244,8 +244,7 @@ class BracesOnIfStatements(config: Config) : Rule(
      * @see org.jetbrains.kotlin.KtNodeTypes.THEN
      * @see org.jetbrains.kotlin.KtNodeTypes.ELSE
      */
-    private fun KtExpression.parentIfCandidate(): PsiElement? =
-        this.parent.parent
+    private fun KtExpression.parentIfCandidate(): PsiElement? = this.parent.parent
 
     private fun isMultiStatement(expression: KtExpression): Boolean =
         expression is KtBlockExpression && expression.statements.size > 1
@@ -253,8 +252,7 @@ class BracesOnIfStatements(config: Config) : Rule(
     private fun policy(expression: KtExpression): BracePolicy =
         if (expression.textContains('\n')) multiLine else singleLine
 
-    private fun hasBraces(expression: KtExpression): Boolean =
-        expression is KtBlockExpression
+    private fun hasBraces(expression: KtExpression): Boolean = expression is KtBlockExpression
 
     enum class BracePolicy(val config: String) {
         Always("always"),

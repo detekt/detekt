@@ -25,29 +25,31 @@ class RuleSetSpec {
 
     companion object {
         @JvmStatic
-        fun getValidNames() = listOf(
-            "abc-def",
-            "abc-def",
-            "abc1-def",
-            "ab1c-def",
-            "abc1",
-            "abc-1",
-            "abc-def1",
-            "abc-de1f",
-            "abcDef",
-            "abcDef1",
-        )
+        fun getValidNames() =
+            listOf(
+                "abc-def",
+                "abc-def",
+                "abc1-def",
+                "ab1c-def",
+                "abc1",
+                "abc-1",
+                "abc-def1",
+                "abc-de1f",
+                "abcDef",
+                "abcDef1",
+            )
 
         @JvmStatic
-        fun getInvalidNames() = listOf(
-            "abc def",
-            "abc1 def",
-            "ab1c def",
-            "abc 1",
-            "abc-",
-            "abc-def-",
-            "-abcDef",
-            "1abcDef",
-        )
+        fun getInvalidNames() =
+            listOf(
+                "abc def",
+                "abc1 def",
+                "ab1c def",
+                "abc 1",
+                "abc-",
+                "abc-def-",
+                "-abcDef",
+                "1abcDef",
+            )
     }
 }

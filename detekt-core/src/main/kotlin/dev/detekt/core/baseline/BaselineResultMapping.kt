@@ -30,9 +30,7 @@ class BaselineResultMapping : ReportingExtension {
         return baselineFile?.let { issues.transformWithBaseline(it) } ?: issues
     }
 
-    private fun List<Issue>.transformWithBaseline(
-        baselinePath: Path,
-    ): List<Issue> {
+    private fun List<Issue>.transformWithBaseline(baselinePath: Path): List<Issue> {
         if (createBaseline) {
             createOrUpdate(baselinePath, this)
         }

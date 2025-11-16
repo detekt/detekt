@@ -53,11 +53,12 @@ class ConfigPropertySpec {
         assertThat(subject.configValue).isEqualTo(explicitlyConfiguredValue)
     }
 
-    fun rulesetConfigs(): List<Arguments.ArgumentSet> = listOf(
-        argumentSet("ruleset has android = true", androidRulesetConfig),
-        argumentSet("ruleset has android = false", nonAndroidRulesetConfig),
-        argumentSet("ruleset has no value for android property", androidUndefinedRulesetConfig)
-    )
+    fun rulesetConfigs(): List<Arguments.ArgumentSet> =
+        listOf(
+            argumentSet("ruleset has android = true", androidRulesetConfig),
+            argumentSet("ruleset has android = false", nonAndroidRulesetConfig),
+            argumentSet("ruleset has no value for android property", androidUndefinedRulesetConfig)
+        )
 
     private open class AndroidTestRule(rulesetConfig: Config, vararg ruleConfig: Pair<String, Any>) :
         Rule(TestConfig(parent = rulesetConfig, *ruleConfig), "description")

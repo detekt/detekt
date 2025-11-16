@@ -13,24 +13,25 @@ class ExceptionsProvider : DefaultRuleSetProvider {
 
     override val ruleSetId = RuleSetId("exceptions")
 
-    override fun instance(): RuleSet = RuleSet(
-        ruleSetId,
-        listOf(
-            ::TooGenericExceptionCaught,
-            ::ExceptionRaisedInUnexpectedLocation,
-            ::TooGenericExceptionThrown,
-            ::NotImplementedDeclaration,
-            ::PrintStackTrace,
-            ::InstanceOfCheckForException,
-            ::ThrowingExceptionsWithoutMessageOrCause,
-            ::ReturnFromFinally,
-            ::ThrowingExceptionFromFinally,
-            ::ThrowingExceptionInMain,
-            ::RethrowCaughtException,
-            ::ThrowingNewInstanceOfSameException,
-            ::SwallowedException,
-            ::ObjectExtendsThrowable,
-            ::ErrorUsageWithThrowable,
+    override fun instance(): RuleSet =
+        RuleSet(
+            ruleSetId,
+            listOf(
+                ::TooGenericExceptionCaught,
+                ::ExceptionRaisedInUnexpectedLocation,
+                ::TooGenericExceptionThrown,
+                ::NotImplementedDeclaration,
+                ::PrintStackTrace,
+                ::InstanceOfCheckForException,
+                ::ThrowingExceptionsWithoutMessageOrCause,
+                ::ReturnFromFinally,
+                ::ThrowingExceptionFromFinally,
+                ::ThrowingExceptionInMain,
+                ::RethrowCaughtException,
+                ::ThrowingNewInstanceOfSameException,
+                ::SwallowedException,
+                ::ObjectExtendsThrowable,
+                ::ErrorUsageWithThrowable,
+            )
         )
-    )
 }

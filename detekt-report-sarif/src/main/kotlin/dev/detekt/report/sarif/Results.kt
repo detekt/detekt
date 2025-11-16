@@ -14,11 +14,12 @@ import kotlin.io.path.invariantSeparatorsPathString
 internal fun toResults(issues: List<Issue>): List<io.github.detekt.sarif4k.Result> =
     issues.filterNot { it.suppressed }.map { it.toResult() }
 
-internal fun Severity.toResultLevel() = when (this) {
-    Severity.Error -> Level.Error
-    Severity.Warning -> Level.Warning
-    Severity.Info -> Level.Note
-}
+internal fun Severity.toResultLevel() =
+    when (this) {
+        Severity.Error -> Level.Error
+        Severity.Warning -> Level.Warning
+        Severity.Info -> Level.Note
+    }
 
 private fun Issue.toResult(): io.github.detekt.sarif4k.Result =
     io.github.detekt.sarif4k.Result(
@@ -47,7 +48,8 @@ private fun Issue.Location.toLocation(): io.github.detekt.sarif4k.Location =
         )
     )
 
-private fun String.sha1(): String = MessageDigest
-    .getInstance("SHA-1")
-    .digest(toByteArray())
-    .joinToString("") { it.toUByte().toString(radix = 16).padStart(2, '0') }
+private fun String.sha1(): String =
+    MessageDigest
+        .getInstance("SHA-1")
+        .digest(toByteArray())
+        .joinToString("") { it.toUByte().toString(radix = 16).padStart(2, '0') }

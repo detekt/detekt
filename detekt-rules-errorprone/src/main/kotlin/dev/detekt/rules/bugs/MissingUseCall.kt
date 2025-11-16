@@ -173,13 +173,14 @@ class MissingUseCall(config: Config = Config.empty) :
     }
 
     context(session: KaSession)
-    private fun KtQualifiedExpression.doesEndWithUse(): Boolean = with(session) {
-        receiverExpression.resolveToCall()?.successfulCallOrNull<KaCallableMemberCall<*, *>>()?.symbol?.let {
-            usedReferences.add(it)
+    private fun KtQualifiedExpression.doesEndWithUse(): Boolean =
+        with(session) {
+            receiverExpression.resolveToCall()?.successfulCallOrNull<KaCallableMemberCall<*, *>>()?.symbol?.let {
+                usedReferences.add(it)
+            }
+            selectorExpression?.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId
+                ?.asSingleFqName() in useFqNames
         }
-        selectorExpression?.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId
-            ?.asSingleFqName() in useFqNames
-    }
 
     context(session: KaSession)
     private fun KtElement?.isCloseableNotUsed(): Boolean {
@@ -264,9 +265,10 @@ class MissingUseCall(config: Config = Config.empty) :
 
     context(session: KaSession)
     private fun KtQualifiedExpression.firstCallableReceiverOrNull(): KtElement? {
-        fun KtExpression.isCallableExpression(): Boolean = with(session) {
-            resolveToCall()?.singleFunctionCallOrNull() != null
-        }
+        fun KtExpression.isCallableExpression(): Boolean =
+            with(session) {
+                resolveToCall()?.singleFunctionCallOrNull() != null
+            }
 
         var expression = receiverExpression
 

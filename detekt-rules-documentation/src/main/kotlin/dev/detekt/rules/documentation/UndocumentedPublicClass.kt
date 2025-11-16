@@ -52,9 +52,8 @@ class UndocumentedPublicClass(config: Config) : Rule(
         super.visitClass(klass)
     }
 
-    private fun requiresDocumentation(
-        klass: KtClass,
-    ) = klass.isTopLevel() || klass.isInnerClass() || klass.isNestedClass() || klass.isInnerInterface()
+    private fun requiresDocumentation(klass: KtClass) =
+        klass.isTopLevel() || klass.isInnerClass() || klass.isNestedClass() || klass.isInnerInterface()
 
     override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
         val isNonPublicCompanionWithoutNameOrDisabled = declaration.isDefaultCompanionObject() &&
@@ -99,13 +98,11 @@ class UndocumentedPublicClass(config: Config) : Rule(
             // the expected logic and narrows an edge-case.
             nameIdentifier?.text != "Companion"
 
-    private fun KtClass.isNestedClass() =
-        !isInterface() && !isTopLevel() && !isInner() && searchInNestedClass
+    private fun KtClass.isNestedClass() = !isInterface() && !isTopLevel() && !isInner() && searchInNestedClass
 
     private fun KtClass.isInnerClass() = !isInterface() && isInner() && searchInInnerClass
 
-    private fun KtClass.isInnerInterface() =
-        !isTopLevel() && isInterface() && searchInInnerInterface
+    private fun KtClass.isInnerInterface() = !isTopLevel() && isInterface() && searchInInnerInterface
 
     private fun KtClassOrObject.notEnumEntry() = this !is KtEnumEntry
 }

@@ -21,8 +21,5 @@ internal abstract class AbstractYamlConfigValidator : ConfigValidator {
         return validate(config, settings)
     }
 
-    abstract fun validate(
-        configToValidate: YamlConfig,
-        settings: ValidationSettings,
-    ): Collection<Notification>
+    abstract fun validate(configToValidate: YamlConfig, settings: ValidationSettings): Collection<Notification>
 }

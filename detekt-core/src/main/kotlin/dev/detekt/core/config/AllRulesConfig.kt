@@ -16,8 +16,7 @@ internal data class AllRulesConfig(
     override val parentPath: String?
         get() = wrapped.parentPath
 
-    override fun subConfig(key: String) =
-        AllRulesConfig(wrapped.subConfig(key), deprecatedRules, this)
+    override fun subConfig(key: String) = AllRulesConfig(wrapped.subConfig(key), deprecatedRules, this)
 
     override fun subConfigKeys(): Set<String> = wrapped.subConfigKeys()
 
@@ -41,10 +40,11 @@ internal data class AllRulesConfig(
     private fun DeprecatedRule.toPath() = "$ruleSetId > $ruleName"
 
     @Suppress("MagicNumber")
-    override fun toString() = """
-        AllRulesConfig(
-            wrapped=${wrapped.toString().indentCompat(12).trim()},
-            deprecatedRules=$deprecatedRules,
-        )
-    """.trimIndent()
+    override fun toString() =
+        """
+            AllRulesConfig(
+                wrapped=${wrapped.toString().indentCompat(12).trim()},
+                deprecatedRules=$deprecatedRules,
+            )
+        """.trimIndent()
 }
