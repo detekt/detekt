@@ -12,10 +12,7 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  * from the standard rules, make sure to enable just one.
  */
 @ActiveByDefault(since = "1.0.0")
-class Filename(config: Config) : KtlintRule(
-    config,
-    "Checks if top level class matches the filename"
-) {
+class Filename(config: Config) : KtlintRule(config, "Checks if top level class matches the filename") {
 
     override val wrapping = FilenameRule()
 }

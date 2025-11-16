@@ -18,10 +18,8 @@ import dev.detekt.rules.ktlintwrapper.configWithAndroidVariants
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "1.22.0")
-class FunctionSignature(config: Config) : KtlintRule(
-    config,
-    "Format signature to be single when possible, multiple lines otherwise."
-) {
+class FunctionSignature(config: Config) :
+    KtlintRule(config, "Format signature to be single when possible, multiple lines otherwise.") {
 
     override val wrapping = FunctionSignatureRule()
 

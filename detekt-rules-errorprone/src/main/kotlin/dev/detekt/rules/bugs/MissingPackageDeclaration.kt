@@ -9,10 +9,7 @@ import org.jetbrains.kotlin.psi.KtFile
 /**
  * Reports when the package declaration is missing.
  */
-class MissingPackageDeclaration(config: Config) : Rule(
-    config,
-    "Kotlin source files should define a package."
-) {
+class MissingPackageDeclaration(config: Config) : Rule(config, "Kotlin source files should define a package.") {
 
     override fun visitKtFile(file: KtFile) {
         if (file.packageDirective?.text.isNullOrBlank()) {

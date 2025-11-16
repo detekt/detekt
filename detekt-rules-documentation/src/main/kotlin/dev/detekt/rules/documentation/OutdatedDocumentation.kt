@@ -61,10 +61,8 @@ import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
  * </compliant>
  */
 @Suppress("TooManyFunctions")
-class OutdatedDocumentation(config: Config) : Rule(
-    config,
-    "KDoc comments should match the actual function or class signature"
-) {
+class OutdatedDocumentation(config: Config) :
+    Rule(config, "KDoc comments should match the actual function or class signature") {
 
     @Configuration("if type parameters should be matched")
     private val matchTypeParameters: Boolean by config(true)
@@ -225,10 +223,7 @@ class OutdatedDocumentation(config: Config) : Rule(
 
     private fun String?.toParamOrNull(): Declaration? = this?.let { Declaration(it, DeclarationType.PARAM) }
 
-    data class Declaration(
-        val name: String,
-        val type: DeclarationType,
-    )
+    data class Declaration(val name: String, val type: DeclarationType)
 
     enum class DeclarationType {
         PARAM,

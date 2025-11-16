@@ -42,11 +42,12 @@ import org.jetbrains.kotlin.psi.psiUtil.getSuperNames
  * </compliant>
  */
 @ActiveByDefault(since = "1.2.0")
-class IteratorNotThrowingNoSuchElementException(config: Config) : Rule(
-    config,
-    "The `next()` method of an `Iterator` implementation should throw a `NoSuchElementException` " +
-        "when there are no more elements to return."
-) {
+class IteratorNotThrowingNoSuchElementException(config: Config) :
+    Rule(
+        config,
+        "The `next()` method of an `Iterator` implementation should throw a `NoSuchElementException` " +
+            "when there are no more elements to return."
+    ) {
 
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
         if (classOrObject.getSuperNames().contains("Iterator")) {

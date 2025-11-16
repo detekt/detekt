@@ -14,10 +14,8 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  * for documentation.
  */
 @AutoCorrectable(since = "1.23.0")
-class NoEmptyFirstLineInClassBody(config: Config) : KtlintRule(
-    config,
-    "Disallow blank lines at start of a class body."
-) {
+class NoEmptyFirstLineInClassBody(config: Config) :
+    KtlintRule(config, "Disallow blank lines at start of a class body.") {
 
     override val wrapping = NoEmptyFirstLineInClassBodyRule()
 

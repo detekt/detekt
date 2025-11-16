@@ -14,10 +14,8 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  * documentation.
  */
 @AutoCorrectable(since = "1.23.0")
-class TryCatchFinallySpacing(config: Config) : KtlintRule(
-    config,
-    "Enforce consistent spacing in try-catch-finally blocks."
-) {
+class TryCatchFinallySpacing(config: Config) :
+    KtlintRule(config, "Enforce consistent spacing in try-catch-finally blocks.") {
 
     override val wrapping = TryCatchFinallySpacingRule()
 

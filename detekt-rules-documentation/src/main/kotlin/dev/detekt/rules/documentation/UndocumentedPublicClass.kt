@@ -21,10 +21,8 @@ import org.jetbrains.kotlin.psi.psiUtil.isPublic
  * By default, this rule also searches for nested and inner classes and objects. This default behavior can be changed
  * with the configuration options of this rule.
  */
-class UndocumentedPublicClass(config: Config) : Rule(
-    config,
-    "Public classes, interfaces and objects require documentation."
-) {
+class UndocumentedPublicClass(config: Config) :
+    Rule(config, "Public classes, interfaces and objects require documentation.") {
 
     @Configuration("if nested classes should be searched")
     private val searchInNestedClass: Boolean by config(true)

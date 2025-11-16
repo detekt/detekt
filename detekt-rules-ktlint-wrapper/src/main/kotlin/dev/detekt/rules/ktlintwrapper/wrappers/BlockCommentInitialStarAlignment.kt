@@ -12,10 +12,8 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  */
 @ActiveByDefault(since = "1.23.0")
 @AutoCorrectable(since = "1.20.0")
-class BlockCommentInitialStarAlignment(config: Config) : KtlintRule(
-    config,
-    "Detect the alignment of the initial star in a block comment."
-) {
+class BlockCommentInitialStarAlignment(config: Config) :
+    KtlintRule(config, "Detect the alignment of the initial star in a block comment.") {
 
     override val wrapping = BlockCommentInitialStarAlignmentRule()
 }

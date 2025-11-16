@@ -17,11 +17,7 @@ import java.net.URI
  *
  * @property url An url pointing to the documentation of this rule
  */
-open class Rule(
-    val config: Config,
-    val description: String,
-    val url: URI? = null,
-) : DetektVisitor() {
+open class Rule(val config: Config, val description: String, val url: URI? = null) : DetektVisitor() {
 
     /**
      * An id this rule is identified with.

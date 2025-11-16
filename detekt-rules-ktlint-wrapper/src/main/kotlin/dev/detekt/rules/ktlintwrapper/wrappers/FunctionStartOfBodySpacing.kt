@@ -12,10 +12,8 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  */
 @ActiveByDefault(since = "1.23.0")
 @AutoCorrectable(since = "1.22.0")
-class FunctionStartOfBodySpacing(config: Config) : KtlintRule(
-    config,
-    "Check for consistent spacing before start of function body."
-) {
+class FunctionStartOfBodySpacing(config: Config) :
+    KtlintRule(config, "Check for consistent spacing before start of function body.") {
 
     override val wrapping = FunctionStartOfBodySpacingRule()
 }

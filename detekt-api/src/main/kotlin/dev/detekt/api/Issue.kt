@@ -24,18 +24,11 @@ class Issue(
         get() = entity.location
 
     @Poko
-    class Entity(
-        val signature: String,
-        val location: Location,
-    )
+    class Entity(val signature: String, val location: Location)
 
     @Poko
-    class Location(
-        val source: SourceLocation,
-        val endSource: SourceLocation,
-        val text: TextLocation,
-        val path: Path,
-    ) : Comparable<Location> {
+    class Location(val source: SourceLocation, val endSource: SourceLocation, val text: TextLocation, val path: Path) :
+        Comparable<Location> {
         override fun compareTo(other: Location): Int = compareValuesBy(this, other, { it.path }, { it.source })
     }
 }

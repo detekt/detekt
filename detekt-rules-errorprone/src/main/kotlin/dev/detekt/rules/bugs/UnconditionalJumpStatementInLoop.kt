@@ -32,10 +32,8 @@ import org.jetbrains.kotlin.psi.psiUtil.siblings
  * }
  * </compliant>
  */
-class UnconditionalJumpStatementInLoop(config: Config) : Rule(
-    config,
-    "An unconditional jump statement in a loop is useless. The loop itself is only executed once."
-) {
+class UnconditionalJumpStatementInLoop(config: Config) :
+    Rule(config, "An unconditional jump statement in a loop is useless. The loop itself is only executed once.") {
 
     override fun visitLoopExpression(loopExpression: KtLoopExpression) {
         if (loopExpression.hasJumpStatements((loopExpression.parent as? KtLabeledExpression)?.getLabelName())) {

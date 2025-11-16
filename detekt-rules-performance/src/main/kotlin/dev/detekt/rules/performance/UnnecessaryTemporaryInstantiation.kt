@@ -22,10 +22,11 @@ import org.jetbrains.kotlin.psi.KtExpression
  * </compliant>
  */
 @ActiveByDefault(since = "1.0.0")
-class UnnecessaryTemporaryInstantiation(config: Config) : Rule(
-    config,
-    "Avoid temporary objects when converting primitive types to `String`."
-) {
+class UnnecessaryTemporaryInstantiation(config: Config) :
+    Rule(
+        config,
+        "Avoid temporary objects when converting primitive types to `String`."
+    ) {
 
     private val types: Set<String> = hashSetOf("Boolean", "Byte", "Short", "Integer", "Long", "Float", "Double")
 

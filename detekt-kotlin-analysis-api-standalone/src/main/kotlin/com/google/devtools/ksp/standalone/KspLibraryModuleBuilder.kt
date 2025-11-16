@@ -126,10 +126,8 @@ internal class LibraryRootsSearchScope(roots: List<VirtualFile>) : GlobalSearchS
 }
 
 @KtModuleBuilderDsl
-class KspSdkModuleBuilder(
-    coreApplicationEnvironment: CoreApplicationEnvironment,
-    project: Project,
-) : KspLibraryModuleBuilder(coreApplicationEnvironment, project) {
+class KspSdkModuleBuilder(coreApplicationEnvironment: CoreApplicationEnvironment, project: Project) :
+    KspLibraryModuleBuilder(coreApplicationEnvironment, project) {
     @OptIn(KaImplementationDetail::class)
     fun addBinaryRootsFromJdkHome(jdkHome: Path, isJre: Boolean) {
         val jdkRoots = LibraryUtils.findClassesFromJdkHome(jdkHome, isJre)

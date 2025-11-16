@@ -31,10 +31,7 @@ import org.jetbrains.kotlin.psi.KtNameReferenceExpression
  * </compliant>
  */
 @ActiveByDefault(since = "1.0.0")
-class SafeCast(config: Config) : Rule(
-    config,
-    "Prefer to use a safe cast instead of if-else-null."
-) {
+class SafeCast(config: Config) : Rule(config, "Prefer to use a safe cast instead of if-else-null.") {
 
     override fun visitIfExpression(expression: KtIfExpression) {
         val condition = expression.condition

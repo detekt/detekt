@@ -17,10 +17,7 @@ import dev.detekt.rules.ktlintwrapper.configWithAndroidVariants
  */
 @ActiveByDefault(since = "1.0.0")
 @AutoCorrectable(since = "1.0.0")
-class ParameterListWrapping(config: Config) : KtlintRule(
-    config,
-    "Detects mis-aligned parameter lists"
-) {
+class ParameterListWrapping(config: Config) : KtlintRule(config, "Detects mis-aligned parameter lists") {
 
     override val wrapping = ParameterListWrappingRule()
 

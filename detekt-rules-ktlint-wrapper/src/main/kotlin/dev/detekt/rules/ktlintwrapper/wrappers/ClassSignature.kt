@@ -19,10 +19,7 @@ import dev.detekt.rules.ktlintwrapper.configWithAndroidVariants
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "2.0.0")
-class ClassSignature(config: Config) : KtlintRule(
-    config,
-    "Ensure class signatures have a consistent format."
-) {
+class ClassSignature(config: Config) : KtlintRule(config, "Ensure class signatures have a consistent format.") {
 
     override val wrapping = ClassSignatureRule()
 
