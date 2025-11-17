@@ -857,6 +857,24 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
             ).lintWithContext(env, code)
             assertThat(findings).hasSize(2)
         }
+
+        @Test
+        fun `should report data class property call - #8826`() {
+            val code = """
+                package org.example
+
+                data class Something(val more: String)        
+                
+                fun main() {
+                    val something = Something("still")
+                    val more = something.more
+                }
+            """.trimIndent()
+            val findings = ForbiddenMethodCall(
+                TestConfig(METHODS to listOf("org.example.Something.getMore"))
+            ).lintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+        }
     }
 
     @Test
