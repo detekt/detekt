@@ -250,8 +250,6 @@ style:
     active: true
   UnderscoresInNumericLiterals:
     active: true
-  UnnecessaryAnnotationUseSiteTarget:
-    active: true
   UnnecessaryBackticks:
     active: true
   UnnecessaryFilter:
