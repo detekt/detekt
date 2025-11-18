@@ -130,8 +130,11 @@ class UnnecessaryParentheses(config: Config) : Rule(
             when (this) {
                 is KtBinaryExpression ->
                     operationReference.takeUnless { operationToken in KtTokens.ALL_ASSIGNMENTS }
+
                 is KtBinaryExpressionWithTypeRHS -> operationReference
+
                 is KtIsExpression -> operationReference
+
                 else -> null
             }?.getReferencedNameElementType()
 

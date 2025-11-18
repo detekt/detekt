@@ -172,6 +172,7 @@ class UnusedImport(config: Config) :
                 }
 
                 is KaCallableSymbol -> callableId?.asSingleFqName()
+
                 else -> null
             }
 
