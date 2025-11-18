@@ -1,5 +1,6 @@
 package dev.detekt.rules.style
 
+import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.Config
 import dev.detekt.api.Configuration
 import dev.detekt.api.DetektVisitor
@@ -31,6 +32,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isDotReceiver
  * Exempt from this rule are imports resulting from references to elements within KDoc and
  * from destructuring declarations (componentN imports).
  */
+@ActiveByDefault(since = "2.0.0")
 class UnusedImport(config: Config) :
     Rule(config, "Unused Imports are dead code and should be removed."),
     RequiresAnalysisApi {
