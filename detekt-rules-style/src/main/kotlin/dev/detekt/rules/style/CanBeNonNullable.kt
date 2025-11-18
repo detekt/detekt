@@ -562,7 +562,7 @@ class CanBeNonNullable(config: Config) :
                     } else {
                         returnType.isMarkedNullable
                     }
-                } ?: true
+                } != false
             }
         }
 
@@ -572,7 +572,7 @@ class CanBeNonNullable(config: Config) :
                     if (initializer != null) {
                         initializer?.let { initializer ->
                             analyze(initializer) { initializer.isNullable(true) }
-                        } ?: true
+                        } != false
                     } else {
                         bodyExpression
                             ?.collectDescendantsOfType<KtReturnExpression>()
@@ -594,7 +594,7 @@ class CanBeNonNullable(config: Config) :
                                 this@isNullableType.isNullable(true)
                             }
                         }
-                    } ?: true
+                    } != false
                 }
             }
     }

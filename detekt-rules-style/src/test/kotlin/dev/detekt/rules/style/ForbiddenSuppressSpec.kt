@@ -135,7 +135,7 @@ internal class ForbiddenSuppressSpec {
             assertThat(findings).singleElement()
                 .hasStartSourceLocation(1, 1)
                 .hasMessage(
-                    "Cannot @Suppress rules \"ARule\", \"BRule\" " +
+                    """Cannot @Suppress rules "ARule", "BRule" """ +
                         "due to the current configuration."
                 )
         }

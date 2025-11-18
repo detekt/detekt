@@ -25,7 +25,7 @@ class AnnotationExcluder(
      * which basically describes entries to exclude.
      */
     fun shouldExclude(annotations: List<KtAnnotationEntry>): Boolean =
-        annotations.any { annotation -> annotation.typeReference?.let { isExcluded(it) } ?: false }
+        annotations.any { annotation -> annotation.typeReference?.let { isExcluded(it) } == true }
 
     private fun isExcluded(annotation: KtTypeReference): Boolean {
         val fqName = if (fullAnalysis) annotation.fqNameOrNull() else null
