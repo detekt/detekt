@@ -2,6 +2,7 @@ package dev.detekt.rules.style
 
 import com.intellij.psi.PsiComment
 import com.intellij.psi.PsiWhiteSpace
+import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
@@ -26,6 +27,7 @@ import org.jetbrains.kotlin.psi.psiUtil.siblings
  * }
  * </compliant>
  */
+@ActiveByDefault(since = "2.0.0")
 class RedundantConstructorKeyword(config: Config) : Rule(
     config,
     "Redundant `constructor` modifier can be removed."

@@ -1,5 +1,6 @@
 package dev.detekt.rules.style
 
+import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.Config
 import dev.detekt.api.Configuration
 import dev.detekt.api.Entity
@@ -52,6 +53,7 @@ import org.jetbrains.kotlin.psi.psiUtil.parents
  * val patRegex = """/^(\/[^\/]+){0,2}\/?$/gm"""
  * </compliant>
  */
+@ActiveByDefault(since = "2.0.0")
 class StringShouldBeRawString(config: Config) : Rule(
     config,
     "The string can be converted to raw string."
