@@ -15,4 +15,4 @@ fun KtCallExpression.receiverIsUsed(): Boolean =
             (scopeOfApplyCall == null || scopeOfApplyCall is KtBlockExpression) &&
                 !analyze(it) { it.isUsedAsExpression }
             )
-    } ?: true
+    } != false
