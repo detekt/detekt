@@ -18,7 +18,7 @@ class BaselineResultMapping : ReportingExtension {
 
     override fun init(context: SetupContext) {
         baselineFile = context.getOrNull(DETEKT_BASELINE_PATH_KEY)
-        createBaseline = context.getOrNull(DETEKT_BASELINE_CREATION_KEY) ?: false
+        createBaseline = context.getOrNull<Boolean>(DETEKT_BASELINE_CREATION_KEY) == true
     }
 
     override fun transformIssues(issues: List<Issue>): List<Issue> {

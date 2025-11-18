@@ -77,8 +77,7 @@ class MandatoryBracesLoops(config: Config) :
             val hasNoBraces = expression.rightParenthesis
                 ?.siblings(forward = true, withItself = false)
                 ?.filterIsInstance<PsiWhiteSpace>()
-                ?.any { it.textContains('\n') }
-                ?: false
+                ?.any { it.textContains('\n') } == true
             if (hasNoBraces) {
                 report(Finding(Entity.from(expression.body ?: expression), description))
             }

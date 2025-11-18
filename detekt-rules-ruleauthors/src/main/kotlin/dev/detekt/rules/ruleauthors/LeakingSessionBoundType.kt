@@ -79,7 +79,7 @@ class LeakingSessionBoundType(config: Config = Config.empty) :
             if (classType.allSupertypes.any { (it as? KaClassType)?.classId in bannedReturnTypes }) return true
         }
         if (classType.classId in allowedWrapperTypes) return false
-        return classType.typeArguments.any { arg -> arg.type?.usesBannedType() ?: false }
+        return classType.typeArguments.any { arg -> arg.type?.usesBannedType() == true }
     }
 
     companion object {

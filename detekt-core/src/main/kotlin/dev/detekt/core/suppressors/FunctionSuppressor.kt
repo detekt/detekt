@@ -42,5 +42,5 @@ private fun KtElement.isInFunctionNamed(functionMatchers: List<FunctionMatcher>,
     if (this is KtNamedFunction && functionMatchers.any { it.match(this, fullAnalysis) }) {
         true
     } else {
-        getStrictParentOfType<KtNamedFunction>()?.isInFunctionNamed(functionMatchers, fullAnalysis) ?: false
+        getStrictParentOfType<KtNamedFunction>()?.isInFunctionNamed(functionMatchers, fullAnalysis) == true
     }

@@ -115,7 +115,7 @@ class MapGetWithNotNullAssertionOperator(config: Config) :
     private fun KaType.hasMapSuperType(): Boolean =
         (this.symbol as? KaNamedClassSymbol)?.superTypes?.any {
             (it.symbol?.classId == StandardClassIds.Map) || it.hasMapSuperType()
-        } ?: false
+        } == true
 
     private fun KaCallableSymbol.returnTypeName(): Name? = (this.returnType as? KaTypeParameterType)?.name
 }
