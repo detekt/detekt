@@ -284,10 +284,10 @@ class RunnerSpec {
             val path = resourceAsPath("/cases/CleanPoko.kt")
             assertThatCode {
                 executeDetekt(
-                    "--input",
-                    path.toString(),
                     "-Xcontext-receivers",
                     "-opt-in=org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi",
+                    "--input",
+                    path.toString(),
                 )
             }.doesNotThrowAnyException()
         }
