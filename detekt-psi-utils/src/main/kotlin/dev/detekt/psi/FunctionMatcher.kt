@@ -131,28 +131,25 @@ sealed class FunctionMatcher {
             }
         }
 
-        @Suppress("ReturnCount")
         fun getNameForGetterOrSetter(propertySymbol: KaPropertySymbol, symbol: KaCallableSymbol): String? {
-            if (symbol.callableId != null) {
-                // if we have callable id the don't need to construct custom name
-                return symbol.asFqNameString()
-            }
-            val callableId = propertySymbol.callableId ?: return null
-            val propertyName = callableId.callableName.asString()
-            if (propertyName.isEmpty()) return null
-            val capitalPropertyName = propertyName[0].uppercaseChar() + propertyName.substring(1)
-            // many cases and some are experimental
-            @Suppress("ElseCaseInsteadOfExhaustiveWhen")
-            return when (symbol) {
-                is KaPropertyGetterSymbol -> {
-                    callableId.copy(Name.identifier("get$capitalPropertyName")).asSingleFqName().asString()
-                }
-
-                is KaPropertySetterSymbol -> {
-                    callableId.copy(Name.identifier("set$capitalPropertyName")).asSingleFqName().asString()
-                }
-
-                else -> {
+            return if (symbol.callableId != null) {
+                // in case it is Java getter or setter then callableId id will be not null and can be used
+                symbol.asFqNameString()
+            } else {
+                // when it's a Kotlin property and getX and setX synthetic methods are only from Java side
+                val callableId = propertySymbol.callableId
+                val propertyName = callableId?.callableName?.asString()
+                if (propertyName.isNullOrEmpty()) return null
+                val capitalPropertyName = propertyName[0].uppercaseChar() + propertyName.substring(1)
+                if (symbol is KaPropertyGetterSymbol || symbol is KaPropertySetterSymbol) {
+                    val getterOrSetterName = if (symbol is KaPropertyGetterSymbol) "get" else "set"
+                    callableId
+                        .copy(
+                            Name.identifier("$getterOrSetterName$capitalPropertyName")
+                        )
+                        .asSingleFqName()
+                        .asString()
+                } else {
                     null
                 }
             }
