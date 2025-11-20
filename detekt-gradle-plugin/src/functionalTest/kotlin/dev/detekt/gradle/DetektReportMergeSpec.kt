@@ -72,7 +72,7 @@ class DetektReportMergeSpec {
             assertThat(projectFile("build/reports/detekt/detekt.sarif")).doesNotExist()
             assertThat(projectFile("build/reports/detekt/merge.sarif")).exists()
             assertThat(projectFile("build/reports/detekt/merge.sarif").readText())
-                .contains("\"ruleId\": \"detekt.style.MagicNumber\"")
+                .contains(""""ruleId": "detekt.style.MagicNumber"""")
             projectLayout.submodules.forEach {
                 assertThat(projectFile("${it.name}/build/reports/detekt/detekt.sarif")).exists()
             }
@@ -143,7 +143,7 @@ class DetektReportMergeSpec {
             assertThat(projectFile("build/reports/detekt/detekt.xml")).doesNotExist()
             assertThat(projectFile("build/reports/detekt/merge.xml")).exists()
             assertThat(projectFile("build/reports/detekt/merge.xml").readText())
-                .contains("<error column=\"31\" line=\"4\"")
+                .contains("""<error column="31" line="4"""")
             projectLayout.submodules.forEach {
                 assertThat(projectFile("${it.name}/build/reports/detekt/detekt.xml")).exists()
             }

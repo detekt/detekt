@@ -11,7 +11,12 @@ class ProjectStatisticsReportSpec {
 
     @Test
     fun `reports the project statistics`() {
-        val expected = "Project Statistics:\n\t- M2: 2\n\t- M1: 1\n"
+        val expected = """
+            Project Statistics:
+            	- M2: 2
+            	- M1: 1
+
+        """.trimIndent()
         val detektion = TestDetektion(
             metrics = listOf(ProjectMetric("M1", 1, priority = 1), ProjectMetric("M2", 2, priority = 2)),
         )
