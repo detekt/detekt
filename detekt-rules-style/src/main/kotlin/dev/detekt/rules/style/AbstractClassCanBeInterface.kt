@@ -22,13 +22,19 @@ import org.jetbrains.kotlin.psi.psiUtil.isAbstract
 
 /**
  * This rule inspects `abstract` classes. In case an `abstract class` does not define any
- * `abstract` members, it should instead be refactored into an interface.
+ * `abstract` members, it should instead be refactored into an interface. It will also check for potential migrations
+ * from `sealed class` to `sealed interface`, using the same rules.
  *
  * <noncompliant>
  * abstract class OnlyAbstractMembersInAbstractClass { // violation: no concrete members
- *
  *     abstract val i: Int
  *     abstract fun f()
+ * }
+ *
+ * sealed class ScreenState { // violation - no concrete members
+ *     data class Success(val data: Int) : ScreenState()
+ *     data class Failure(val reason: String : ScreenState()
+ *     data object Empty : ScreenState()
  * }
  * </noncompliant>
  * <compliant>
@@ -38,10 +44,21 @@ import org.jetbrains.kotlin.psi.psiUtil.isAbstract
  * }
  *
  * abstract class NonAbstractMembersInAbstractClass {
- *
  *     abstract val i: Int
  *     fun f() {
  *     }
+ * }
+ *
+ * sealed class SealedClass(val x: Int) {
+ *     data class Success(val data: Int) : SealedClass(123)
+ *     data class Failure(val reason: String : SealedClass(456)
+ *     object Empty : SealedClass(789)
+ * }
+ *
+ * sealed interface SealedInterface {
+ *     data class Success(val data: Int) : SealedInterface
+ *     data class Failure(val reason: String : SealedInterface
+ *     data object Empty : SealedInterface
  * }
  * </compliant>
  */
@@ -53,25 +70,33 @@ class AbstractClassCanBeInterface(config: Config) :
     ),
     RequiresAnalysisApi {
 
-    private val noConcreteMember = "An abstract class without a concrete member can be refactored to an interface."
-
     override fun visitClass(klass: KtClass) {
-        check(klass)
-        super.visitClass(klass)
-    }
-
-    private fun check(klass: KtClass) {
         val nameIdentifier = klass.nameIdentifier ?: return
-        if (klass.isInterface() || !klass.isAbstract()) return
+        if (!shouldCheck(klass)) return
+
         val members = klass.members()
         analyze(klass) {
             when {
-                members.isNotEmpty() -> checkMembers(klass, members, nameIdentifier)
-                hasInheritedMember(klass, isAbstract = true) && isAnyParentAbstract(klass) -> return
+                members.isNotEmpty() ->
+                    checkMembers(klass, members, nameIdentifier)
+
+                hasInheritedMember(klass, isAbstract = true) && isAnyParentAbstract(klass) ->
+                    return
+
                 !klass.hasConstructorParameter() ->
-                    report(Finding(Entity.from(nameIdentifier), noConcreteMember))
+                    report(Finding(Entity.from(nameIdentifier), klass.message()))
             }
         }
+
+        super.visitClass(klass)
+    }
+
+    private fun KtClass.message(): String = if (isSealed()) SEALED_NO_CONCRETE_MEMBER else NO_CONCRETE_MEMBER
+
+    private fun shouldCheck(klass: KtClass): Boolean = when {
+        klass.isInterface() -> false
+        klass.isSealed() -> true
+        else -> klass.isAbstract()
     }
 
     private fun KaSession.checkMembers(
@@ -83,10 +108,12 @@ class AbstractClassCanBeInterface(config: Config) :
         when {
             abstractMembers.isEmpty() && !hasInheritedMember(klass, isAbstract = true) ->
                 Unit
+
             abstractMembers.any { it.isInternal() || it.isProtected() } || klass.hasConstructorParameter() ->
                 Unit
+
             concreteMembers.isEmpty() && !hasInheritedMember(klass, isAbstract = false) ->
-                report(Finding(Entity.from(nameIdentifier), noConcreteMember))
+                report(Finding(Entity.from(nameIdentifier), klass.message()))
         }
     }
 
@@ -109,4 +136,11 @@ class AbstractClassCanBeInterface(config: Config) :
         (klass.symbol as? KaClassSymbol)
             ?.superTypes
             ?.all { (it.symbol as? KaClassSymbol)?.classKind == KaClassKind.INTERFACE } == false
+
+    internal companion object {
+        const val NO_CONCRETE_MEMBER = "An abstract class without a concrete member can be refactored to an interface."
+
+        const val SEALED_NO_CONCRETE_MEMBER =
+            "A sealed class without a concrete member can be refactored to a sealed interface."
+    }
 }
