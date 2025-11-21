@@ -132,8 +132,7 @@ class GithubMilestoneReport : CliktCommand() {
         val formattedContributors = ghContributors
             .filterNot { it == "renovate[bot]" || it == "Copilot" }
             .joinToString(", ") { "@$it" }
-        return "We would like to thank the following contributors that " +
-                "made this release possible: $formattedContributors"
+        return "We would like to thank the following contributors that made this release possible: $formattedContributors"
     }
 
     // formatting helpers
