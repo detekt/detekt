@@ -128,8 +128,9 @@ class GithubMilestoneReport : CliktCommand() {
     }
 
     private fun formatContributors(ghContributors: List<String>): String {
+        // make sure not to thank bots
         val formattedContributors = ghContributors
-            .filterNot { it == "renovate[bot]" }
+            .filterNot { it == "renovate[bot]" || it == "Copilot" }
             .joinToString(", ") { "@$it" }
         return "We would like to thank the following contributors that " +
             "made this release possible: $formattedContributors"
