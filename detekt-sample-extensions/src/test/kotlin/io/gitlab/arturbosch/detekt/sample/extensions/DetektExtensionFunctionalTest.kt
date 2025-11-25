@@ -1,3 +1,4 @@
+@file:Suppress("ImportOrdering")
 package io.gitlab.arturbosch.detekt.sample.extensions
 
 import java.io.File
