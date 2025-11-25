@@ -1,0 +1,6 @@
+sample:
+  TooManyFunctions:
+    active: false
+  TooManyFunctionsTwo:
+    active: true
+    threshold: 5
