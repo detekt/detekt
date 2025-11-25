@@ -1,1 +1,1 @@
-io.gitlab.arturbosch.detekt.sample.extensions.SampleProvider
+io.gitlab.arturbosch.detekt.sample.extensions.SampleProvider_someStuppidTypoHere_CompilationOk_OnlyRuntimeErrorDuringGradleDetektExecution
