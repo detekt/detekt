@@ -18,9 +18,5 @@ testing {
     }
 }
 
-kotlin {
-  jvmToolchain(21)
-}
-
 // crucial for functional tests because they use the jar as input!
 tasks.named("test") { dependsOn(tasks.named("jar")) }

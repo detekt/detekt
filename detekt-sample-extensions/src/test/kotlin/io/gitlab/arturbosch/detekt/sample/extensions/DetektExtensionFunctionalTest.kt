@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
  * will be copied to local file maven repo
  * and will be tested as a version 1.2.3 in this functional test.
  */
-const val fakeJarVersion = "1.2.3"
+const val FAKE_JAR_VERSION = "1.2.3"
 
 /**
  * Functional test for the Detekt extension.
@@ -25,19 +25,18 @@ const val fakeJarVersion = "1.2.3"
  * to 'cd' there during development and run `gradle detekt` directly to verify how the detekt
  * extension plugin works.
  */
+@Suppress("MaxLineLength", "ArgumentListWrapping")
 class DetektExtensionFunctionalTest {
 
-    /**
-     * Initializes test-wide properties before any tests are run.
-     *
-     * This block locates the single Detekt extension JAR file created by the `jar` task in the
-     * `build/libs` directory. It verifies that exactly one such JAR exists to ensure a clean and
-     * predictable test environment. The version is dynamically extracted from the JAR's filename and
-     * stored in `realJarVersion`, making the test setup robust against version changes.
-     *
-     * N.B. This means current functional test depends on "gradlew jar" result that is taken into
-     * account in the project's build.gradle.kts file.
-     */
+    // Initializes test-wide properties before any tests are run.
+    //
+    // This block locates the single Detekt extension JAR file created by the `jar` task in the
+    // `build/libs` directory. It verifies that exactly one such JAR exists to ensure a clean and
+    // predictable test environment. The version is dynamically extracted from the JAR's filename and
+    // stored in `realJarVersion`, making the test setup robust against version changes.
+    //
+    // N.B. This means current functional test depends on "gradlew jar" result that is taken into
+    // account in the project's build.gradle.kts file.
     init {
         val libsDir = File("build/libs")
         val files =
@@ -171,7 +170,7 @@ class DetektExtensionFunctionalTest {
         File("build/libs/detekt-sample-extensions.jar")
             .copyTo(
                 testProjectDir.resolve(
-                    "$testMavenRepoPath/$fakeJarVersion/detekt-sample-extension-$fakeJarVersion.jar"
+                    "$testMavenRepoPath/$FAKE_JAR_VERSION/detekt-sample-extension-$FAKE_JAR_VERSION.jar"
                 ),
                 overwrite = true
             )
