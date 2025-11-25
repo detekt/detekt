@@ -162,7 +162,6 @@ class DetektExtensionFunctionalTest {
      * @return The [File] object pointing to the root of the created temporary test project.
      */
     private fun setupGradleProject(testProject: String): File {
-        // val testProject = "functional-test-project-success-if-suppress-issues-with-default-config"
         val testProjectDir = File("build/$testProject")
         testProjectDir.mkdirs()
         File("src/test/resources/$testProject").copyRecursively(testProjectDir, true)
