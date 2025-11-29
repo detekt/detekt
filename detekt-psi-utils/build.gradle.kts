@@ -1,6 +1,7 @@
 plugins {
     id("module")
     id("public-api")
+    id("java-test-fixtures")
 }
 
 dependencies {
