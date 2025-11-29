@@ -103,6 +103,7 @@ private class UnusedVariableVisitor(private val allowedNames: Regex) : DetektVis
                     dcl.destructuringDeclaration
                         ?.entries
                         ?.forEach(::registerNewDeclaration)
+
                 dcl.isLoopParameter -> registerNewDeclaration(dcl)
             }
 
@@ -119,6 +120,7 @@ private class UnusedVariableVisitor(private val allowedNames: Regex) : DetektVis
                     listOfNotNull(expression.resolveToLocalVariableSymbol())
                 }
             }
+
             is KtCallExpression -> {
                 val arguments = expression.getChildrenOfType<KtValueArgumentList>().flatMap { it.arguments }
                 if (arguments.isNotEmpty()) {

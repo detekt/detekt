@@ -33,8 +33,11 @@ class ComplexityReportGenerator(private val complexityMetric: ComplexityMetric) 
                 complexityMetric.cloc,
                 complexityMetric.cognitiveComplexity
             ) -> true
+
             complexityMetric.lloc == null || complexityMetric.lloc == 0 -> true
+
             complexityMetric.sloc == null || complexityMetric.sloc == 0 -> true
+
             else -> {
                 numberOfFindings = complexityMetric.issuesCount
                 findingPerThousandLines = numberOfFindings * 1000 / complexityMetric.lloc

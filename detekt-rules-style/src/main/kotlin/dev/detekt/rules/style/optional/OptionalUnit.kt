@@ -75,8 +75,11 @@ class OptionalUnit(config: Config) :
                 .filter {
                     when {
                         it !is KtNameReferenceExpression || it.text != UNIT -> false
+
                         it != lastStatement -> true
+
                         !it.isUsedAsExpression -> true
+
                         else -> {
                             val prev =
                                 it.siblings(forward = false, withItself = false).firstIsInstanceOrNull<KtExpression>()

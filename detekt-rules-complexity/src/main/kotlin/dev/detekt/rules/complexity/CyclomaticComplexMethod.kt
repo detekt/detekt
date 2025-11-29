@@ -86,8 +86,10 @@ class CyclomaticComplexMethod(config: Config) : Rule(
             val statement = bodyExpression.statements.single()
             statement is KtWhenExpression || statement.returnsWhenExpression()
         }
+
         // the case where function-expression syntax is used: `fun test() = when { ... }`
         bodyExpression is KtWhenExpression -> true
+
         else -> false
     }
 
