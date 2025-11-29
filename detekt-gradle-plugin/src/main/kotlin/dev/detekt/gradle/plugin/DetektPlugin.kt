@@ -1,5 +1,7 @@
 package dev.detekt.gradle.plugin
 
+import com.android.build.api.AndroidPluginVersion
+import com.android.build.api.variant.AndroidComponentsExtension
 import dev.detekt.detekt_gradle_plugin.BuildConfig
 import dev.detekt.gradle.Detekt
 import dev.detekt.gradle.DetektCreateBaselineTask
@@ -61,9 +63,38 @@ class DetektPlugin : Plugin<Project> {
     }
 
     private fun Project.registerDetektAndroidTasks(extension: DetektExtension) {
+        fun builtInPropertyEnabled(): Boolean {
+            @Suppress("MagicNumber")
+            val builtInKotlinEnabledByDefault = extensions
+                .getByType(AndroidComponentsExtension::class.java)
+                .pluginVersion >= AndroidPluginVersion(major = 9, minor = 0).alpha(3)
+            return providers
+                .gradleProperty("android.builtInKotlin")
+                .getOrElse(builtInKotlinEnabledByDefault.toString())
+                .toBooleanStrict()
+        }
+
         plugins.withId("kotlin-android") {
             DetektAndroidCompilations.registerTasks(project, extension)
             DetektAndroidCompilations.linkTasks(project, extension)
+        }
+
+        plugins.withId("com.android.experimental.built-in-kotlin") {
+            if (!pluginManager.hasPlugin("com.android.base")) {
+                DetektAndroidCompilations.registerTasks(project, extension)
+                DetektAndroidCompilations.linkTasks(project, extension)
+            }
+            if (pluginManager.hasPlugin("com.android.base") && !builtInPropertyEnabled()) {
+                DetektAndroidCompilations.registerTasks(project, extension)
+                DetektAndroidCompilations.linkTasks(project, extension)
+            }
+        }
+
+        plugins.withId("com.android.base") {
+            if (builtInPropertyEnabled()) {
+                DetektAndroidCompilations.registerTasks(project, extension)
+                DetektAndroidCompilations.linkTasks(project, extension)
+            }
         }
     }
 
