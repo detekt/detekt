@@ -8,10 +8,14 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
+private const val IGNORE_METHODS = "ignoreMethods"
+private const val ALLOWED_ARGUMENTS = "allowedArguments"
+private const val IGNORE_ARGUMENT_MATCHING_NAME = "ignoreArgumentsMatchingNames"
+
 @KotlinCoreEnvironmentTest
 class NamedArgumentsSpec(val env: KotlinEnvironmentContainer) {
     private val defaultAllowedArguments = 2
-    private val defaultConfig = TestConfig("allowedArguments" to defaultAllowedArguments)
+    private val defaultConfig = TestConfig(ALLOWED_ARGUMENTS to defaultAllowedArguments)
     val subject = NamedArguments(defaultConfig)
 
     @Test
@@ -230,7 +234,7 @@ class NamedArgumentsSpec(val env: KotlinEnvironmentContainer) {
         @Nested
         inner class `ignoreArgumentsMatchingNames is true` {
             val subject =
-                NamedArguments(TestConfig("allowedArguments" to 2, "ignoreArgumentsMatchingNames" to true))
+                NamedArguments(TestConfig(ALLOWED_ARGUMENTS to 2, IGNORE_ARGUMENT_MATCHING_NAME to true))
 
             @Test
             fun `all arguments are the same as the parameter names`() {
@@ -298,6 +302,55 @@ class NamedArgumentsSpec(val env: KotlinEnvironmentContainer) {
                 val findings = subject.lintWithContext(env, code)
                 assertThat(findings).hasSize(1)
             }
+        }
+    }
+
+    @Nested
+    inner class IgnoreMethods {
+        private val subjectWithIgnoreMethods =
+            NamedArguments(
+                TestConfig(
+                    IGNORE_METHODS to listOf("kotlin.Pair.<init>"),
+                    ALLOWED_ARGUMENTS to 0
+                )
+            )
+
+        @Test
+        fun `does not report when method is ignored`() {
+            val code = """
+                fun main() {
+                    Pair(1, 2)
+                }
+            """.trimIndent()
+            val findings = subjectWithIgnoreMethods.lintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `does not report when method is ignored with multiple ignored methods configs present`() {
+            val code = """
+                fun main() {
+                    Pair(1, 2)
+                }
+            """.trimIndent()
+            val findings = NamedArguments(
+                TestConfig(
+                    IGNORE_METHODS to listOf("kotlin.Pair.<init>", "kotlin.Triple.<init>"),
+                    ALLOWED_ARGUMENTS to 0
+                )
+            ).lintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `does report when method is not ignored`() {
+            val code = """
+                fun main() {
+                    Triple(1, 2, 3)
+                }
+            """.trimIndent()
+            val findings = subjectWithIgnoreMethods.lintWithContext(env, code)
+            assertThat(findings).hasSize(1)
         }
     }
 }
