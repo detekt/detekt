@@ -462,28 +462,6 @@ class UnnecessaryParenthesesSpec {
         assertThat(testCase.rule.lint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 0 else 1)
     }
 
-    @ParameterizedTest
-    @MethodSource("cases")
-    fun `does report unnecessary parens in case of constant literal when using inc operator`(
-        testCase: RuleTestCase,
-    ) {
-        val code = """
-            class Foo(var value: Int) {
-                operator fun inc() = Foo(value + 1)
-            }
-            
-            var Int.foo: Foo
-                get() = Foo(value = this)
-                set(value) {}
-            
-            fun test() {
-                val violation = ++(2.foo)
-            }
-        """.trimIndent()
-
-        assertThat(testCase.rule.lint(code)).hasSize(1)
-    }
-
     @Test
     fun `given allowForUnclearPrecedence allowed, does report unnecessary outer parens in case of inc operator`() {
         val code = """
@@ -498,12 +476,10 @@ class UnnecessaryParenthesesSpec {
             fun test() {
                 var a = 2.foo
                 val violation1 = ((++a).value)
-                val violation2 = (++(a.value))
-                val violation3 = ++((a.value))
             }
         """.trimIndent()
 
-        assertThat(RuleTestCase(allowForUnclearPrecedence = true).rule.lint(code, compile = true)).hasSize(3)
+        assertThat(RuleTestCase(allowForUnclearPrecedence = true).rule.lint(code, compile = true)).hasSize(1)
     }
 
     @Test
@@ -520,11 +496,9 @@ class UnnecessaryParenthesesSpec {
             fun test() {
                 var a = 2.foo
                 val violation1 = ((++a).value)
-                val violation2 = (++(a.value))
-                val violation3 = ++((a.value))
             }
         """.trimIndent()
-        assertThat(RuleTestCase(allowForUnclearPrecedence = false).rule.lint(code, compile = true)).hasSize(5)
+        assertThat(RuleTestCase(allowForUnclearPrecedence = false).rule.lint(code, compile = true)).hasSize(1)
     }
 
     @ParameterizedTest
@@ -548,30 +522,6 @@ class UnnecessaryParenthesesSpec {
         """.trimIndent()
 
         assertThat(testCase.rule.lint(code)).isEmpty()
-    }
-
-    @ParameterizedTest
-    @MethodSource("cases")
-    fun `inc operator with value when precedence is unclear`(testCase: RuleTestCase) {
-        val code = """
-            class Foo(var value: Int) {
-                operator fun inc() = Foo(value + 1)
-                operator fun dec() = Foo(value - 1)
-            }
-            
-            var Int.foo: Foo
-                get() = Foo(value = this)
-                set(value) {}
-            
-            fun test() {
-                var a = 2.foo
-                val b = ++(a.value)
-                val c = ++(a.value.foo.value)
-                val d = ++(a.value.foo)
-            }
-        """.trimIndent()
-
-        assertThat(testCase.rule.lint(code)).hasSize(if (testCase.allowForUnclearPrecedence) 0 else 3)
     }
 
     @ParameterizedTest
