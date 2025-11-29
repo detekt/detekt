@@ -1,3 +1,5 @@
+@file:Suppress("StringShouldBeRawString")
+
 package dev.detekt.report.html
 
 import dev.detekt.api.Detektion

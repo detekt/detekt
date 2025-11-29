@@ -217,7 +217,7 @@ class MayBeConstantSpec {
     inner class `vals that cannot be constants` {
         @Test
         fun `does not report arrays`() {
-            val code = "val arr = arrayOf(\"a\", \"b\")"
+            val code = """val arr = arrayOf("a", "b")"""
             val findings = subject.lint(code)
             assertThat(findings).isEmpty()
         }
@@ -289,6 +289,7 @@ class MayBeConstantSpec {
 
         @Test
         fun `does not report interpolated strings`() {
+            @Suppress("StringShouldBeRawString")
             val innerCode = "\"\"\"object Test { val TEST = \"Test \$test_var\"}\"\"\""
             val classReference = "\${AnotherClass::class.java.name}"
             val staticReference = "\${AnotherClass.staticVariable}"

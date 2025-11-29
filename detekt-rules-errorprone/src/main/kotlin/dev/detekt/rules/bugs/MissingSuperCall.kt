@@ -1,5 +1,6 @@
 package dev.detekt.rules.bugs
 
+import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.Config
 import dev.detekt.api.Configuration
 import dev.detekt.api.Entity
@@ -46,6 +47,7 @@ import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
  * }
  * </compliant>
  */
+@ActiveByDefault(since = "2.0.0")
 class MissingSuperCall(config: Config) :
     Rule(
         config,
