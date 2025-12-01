@@ -34,8 +34,7 @@ class DetektExtensionFunctionalTest {
     //
     // This block locates the single Detekt extension JAR file created by the `jar` task in the
     // `build/libs` directory. It verifies that exactly one such JAR exists to ensure a clean and
-    // predictable test environment. The version is dynamically extracted from the JAR's filename and
-    // stored in `realJarVersion`, making the test setup robust against version changes.
+    // predictable test environment.
     //
     // N.B. This means current functional test depends on "gradlew jar" result that is taken into
     // account in the project's build.gradle.kts file.
@@ -154,7 +153,7 @@ class DetektExtensionFunctionalTest {
      * 3. Setting up a local Maven repository structure within the test project to use the same
      *    notation to specify dependency on detektPlugin in build.gradle.kts file as in real project.
      * 4. Copying the actual extension JAR (found by the `init` block) into this local Maven
-     *    repository, renaming it to a fixed, predictable version (`fakeJarVersion`). This allows the
+     *    repository, renaming it to a fixed, predictable version (`FAKE_JAR_VERSION`). This allows the
      *    test project's `build.gradle.kts` to resolve the dependency consistently.
      *
      * @param testProject The name of the test project directory under `src/test/resources` to use as
