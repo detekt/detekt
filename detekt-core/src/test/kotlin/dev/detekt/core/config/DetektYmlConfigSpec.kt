@@ -24,7 +24,7 @@ class DetektYmlConfigSpec {
     private fun ruleSetsNamesToPackage(): List<Arguments> = listOf(
         arguments("complexity", "dev.detekt.rules.complexity"),
         arguments("coroutines", "dev.detekt.rules.coroutines"),
-        arguments("comments", "dev.detekt.rules.documentation"),
+        arguments("comments", "dev.detekt.rules.comments"),
         arguments("empty-blocks", "dev.detekt.rules.emptyblocks"),
         arguments("exceptions", "dev.detekt.rules.exceptions"),
         arguments("naming", "dev.detekt.rules.naming"),
