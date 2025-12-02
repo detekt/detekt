@@ -26,7 +26,7 @@ class EntitySpec {
             val memberFunction = functions.first { it.name == "memberFun" }
 
             assertThat(Entity.atName(memberFunction).signature)
-                .isEqualTo("C\$private fun memberFun(): Int")
+                .isEqualTo($$"C$private fun memberFun: Int")
         }
 
         @Test
@@ -34,7 +34,7 @@ class EntitySpec {
             val topLevelFunction = functions.first { it.name == "topLevelFun" }
 
             assertThat(Entity.atName(topLevelFunction).signature)
-                .isEqualTo("fun topLevelFun(number: Int)")
+                .isEqualTo("fun topLevelFun")
         }
 
         @Test
@@ -43,7 +43,7 @@ class EntitySpec {
 
             assertThat(Entity.atName(memberFunction).toString())
                 .isEqualTo(
-                    "Entity(signature=C\$private fun memberFun(): Int, " +
+                    $$"Entity(signature=C$private fun memberFun: Int, " +
                         "location=Location(source=5:17, endSource=5:26, text=49:58, " +
                         "path=$path), " +
                         "ktElement=FUN)"
