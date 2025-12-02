@@ -97,7 +97,7 @@ class LongParameterList(config: Config) :
 
             report(
                 Finding(
-                    Entity.from(parameterList),
+                    Entity.from(parameterList, function),
                     "The $identifier($parameterPrint) has too many parameters. " +
                         "The current maximum allowed parameters are $maximumAllowedParameter."
                 )
