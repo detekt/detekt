@@ -1,5 +1,6 @@
 package dev.detekt.rules.exceptions
 
+import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
@@ -42,6 +43,7 @@ import org.jetbrains.kotlin.psi.KtExpression
  * }
  * </compliant>
  */
+@ActiveByDefault(since = "2.0.0")
 class ErrorUsageWithThrowable(config: Config) :
     Rule(
         config,

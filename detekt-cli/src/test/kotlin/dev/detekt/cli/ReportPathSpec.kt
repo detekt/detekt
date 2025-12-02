@@ -17,9 +17,9 @@ class ReportPathSpec {
     inner class `a Windows path` {
         @Test
         fun `parses a valid absolute path correctly`() {
-            val reportPath = ReportPath.from("test:C:\\tmp\\valid\\report")
+            val reportPath = ReportPath.from("""test:C:\tmp\valid\report""")
 
-            assertThat(reportPath.path).isEqualTo(Path("C:\\tmp\\valid\\report"))
+            assertThat(reportPath.path).isEqualTo(Path("""C:\tmp\valid\report"""))
         }
 
         @Test

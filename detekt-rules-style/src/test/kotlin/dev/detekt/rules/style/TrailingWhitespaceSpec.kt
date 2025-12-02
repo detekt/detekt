@@ -36,6 +36,7 @@ class TrailingWhitespaceSpec {
                 .hasTextLocation(36 to 37)
         }
 
+        @Suppress("StringShouldBeRawString")
         @Test
         fun `reports a print statement with a tab at the end`() {
             val code = "fun test() {\n\t\tprintln(\"A message\")\t\n}"

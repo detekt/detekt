@@ -263,6 +263,7 @@ class RunnerSpec {
             executeDetekt(*args.plus(inputPath.toString()), out = outPrintStream, err = errPrintStream)
 
             assertThat(errPrintStream.toString()).isEmpty()
+            @Suppress("StringShouldBeRawString")
             assertThat(inputPath).content().isEqualTo("class Test {\n\n}\n")
         }
 
@@ -273,6 +274,7 @@ class RunnerSpec {
             executeDetekt(*args.plus(inputPath.toString()), out = outPrintStream, err = errPrintStream)
 
             assertThat(errPrintStream.toString()).isEmpty()
+            @Suppress("StringShouldBeRawString")
             assertThat(inputPath).content().isEqualTo("class Test {\r\n\r\n}\r\n")
         }
     }

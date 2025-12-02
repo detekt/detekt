@@ -1,3 +1,5 @@
+@file:Suppress("MissingPackageDeclaration")
+
 object Versions {
 
     const val DETEKT: String = "2.0.0-alpha.1"
