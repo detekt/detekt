@@ -4,7 +4,6 @@ import dev.detekt.api.Config
 import dev.detekt.api.Rule
 import dev.detekt.api.RuleSetProvider
 import dev.detekt.api.internal.DefaultRuleSetProvider
-import dev.detekt.rules.bugs.PotentialBugProvider
 import dev.detekt.rules.comments.CommentSmellProvider
 import dev.detekt.rules.complexity.ComplexityProvider
 import dev.detekt.rules.coroutines.CoroutinesProvider
@@ -12,11 +11,13 @@ import dev.detekt.rules.emptyblocks.EmptyCodeProvider
 import dev.detekt.rules.exceptions.ExceptionsProvider
 import dev.detekt.rules.naming.NamingProvider
 import dev.detekt.rules.performance.PerformanceProvider
+import dev.detekt.rules.potentialbugs.PotentialBugProvider
 import dev.detekt.rules.style.StyleGuideProvider
 import io.github.classgraph.ClassGraph
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.lang.reflect.Modifier
+import kotlin.jvm.java
 
 class RuleProviderSpec {
 
