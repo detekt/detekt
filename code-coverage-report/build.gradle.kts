@@ -32,7 +32,7 @@ dependencies {
     jacocoAggregation(projects.detektRulesCoroutines)
     jacocoAggregation(projects.detektRulesComments)
     jacocoAggregation(projects.detektRulesEmptyBlocks)
-    jacocoAggregation(projects.detektRulesErrorprone)
+    jacocoAggregation(projects.detektRulesPotentialBugs)
     jacocoAggregation(projects.detektRulesExceptions)
     jacocoAggregation(projects.detektRulesKtlintWrapper)
     jacocoAggregation(projects.detektRulesLibraries)
