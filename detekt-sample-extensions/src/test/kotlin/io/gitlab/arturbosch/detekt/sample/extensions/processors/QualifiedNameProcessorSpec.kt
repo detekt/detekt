@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.sample.extensions.processors
 
 import dev.detekt.api.Detektion
-import dev.detekt.test.compileContentForTest
+import dev.detekt.test.utils.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
