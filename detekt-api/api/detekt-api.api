@@ -92,6 +92,7 @@ public final class dev/detekt/api/Entity$Companion {
 	public final fun atName (Lorg/jetbrains/kotlin/psi/KtNamedDeclaration;)Ldev/detekt/api/Entity;
 	public final fun atPackageOrFirstDecl (Lorg/jetbrains/kotlin/psi/KtFile;)Ldev/detekt/api/Entity;
 	public final fun from (Lcom/intellij/psi/PsiElement;I)Ldev/detekt/api/Entity;
+	public final fun from (Lcom/intellij/psi/PsiElement;Lcom/intellij/psi/PsiElement;)Ldev/detekt/api/Entity;
 	public final fun from (Lcom/intellij/psi/PsiElement;Ldev/detekt/api/Location;)Ldev/detekt/api/Entity;
 	public static synthetic fun from$default (Ldev/detekt/api/Entity$Companion;Lcom/intellij/psi/PsiElement;IILjava/lang/Object;)Ldev/detekt/api/Entity;
 }
