@@ -1,4 +1,4 @@
-package dev.detekt.test.utils
+package dev.detekt.test
 
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.text.StringUtilRt

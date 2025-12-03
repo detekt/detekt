@@ -1,4 +1,4 @@
-package dev.detekt.test.utils
+package dev.detekt.test
 
 import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector

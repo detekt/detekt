@@ -3,9 +3,9 @@ package dev.detekt.rules.ktlintwrapper
 import com.intellij.openapi.util.text.StringUtilRt
 import dev.detekt.api.Finding
 import dev.detekt.test.FakeLanguageVersionSettings
-import dev.detekt.test.utils.compileContentForTest
-import dev.detekt.test.utils.compileForTest
-import dev.detekt.test.utils.resource
+import dev.detekt.test.compileContentForTest
+import dev.detekt.test.compileForTest
+import dev.detekt.test.resource
 import org.intellij.lang.annotations.Language
 import java.io.File
 import kotlin.io.path.toPath

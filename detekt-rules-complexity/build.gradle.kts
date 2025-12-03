@@ -12,6 +12,6 @@ dependencies {
     testImplementation(projects.detektTest)
     testImplementation(projects.detektTestAssertj)
     testImplementation(projects.detektTestJunit)
-    testImplementation(projects.detektTestUtils)
+    testImplementation(projects.detektTest)
     testImplementation(libs.assertj.core)
 }

@@ -1,7 +1,7 @@
 package dev.detekt.core
 
 import dev.detekt.api.FileProcessListener
-import dev.detekt.test.utils.resourceAsPath
+import dev.detekt.test.resourceAsPath
 import dev.detekt.test.yamlConfigFromContent
 import io.github.classgraph.ClassGraph
 import org.assertj.core.api.Assertions.assertThat

@@ -1,7 +1,7 @@
 package dev.detekt.core.config
 
 import dev.detekt.api.Config
-import dev.detekt.test.utils.resourceAsPath
+import dev.detekt.test.resourceAsPath
 import dev.detekt.test.yamlConfig
 import dev.detekt.test.yamlConfigFromContent
 import dev.detekt.utils.getSafeResourceAsStream

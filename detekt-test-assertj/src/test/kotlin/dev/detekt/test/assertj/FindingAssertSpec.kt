@@ -5,8 +5,8 @@ import dev.detekt.api.TextLocation
 import dev.detekt.api.testfixtures.createEntity
 import dev.detekt.api.testfixtures.createFinding
 import dev.detekt.api.testfixtures.createLocation
-import dev.detekt.test.utils.internal.FakeKtElement
-import dev.detekt.test.utils.internal.FakePsiFile
+import dev.detekt.test.internal.FakeKtElement
+import dev.detekt.test.internal.FakePsiFile
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test

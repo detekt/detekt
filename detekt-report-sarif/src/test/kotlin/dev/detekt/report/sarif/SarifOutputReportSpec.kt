@@ -8,7 +8,7 @@ import dev.detekt.api.testfixtures.TestSetupContext
 import dev.detekt.api.testfixtures.createIssue
 import dev.detekt.api.testfixtures.createIssueEntity
 import dev.detekt.api.testfixtures.createIssueLocation
-import dev.detekt.test.utils.readResourceContent
+import dev.detekt.test.readResourceContent
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.net.URI

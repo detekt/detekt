@@ -1,7 +1,7 @@
 package dev.detekt.core.suppressors
 
 import dev.detekt.api.RuleSetId
-import dev.detekt.test.utils.compileContentForTest
+import dev.detekt.test.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtElement

@@ -1,7 +1,7 @@
 package dev.detekt.generator.printer
 
 import dev.detekt.generator.util.createRuleSetPage
-import dev.detekt.test.utils.resourceAsPath
+import dev.detekt.test.resourceAsPath
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import kotlin.io.path.readText

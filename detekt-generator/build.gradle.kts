@@ -24,7 +24,7 @@ dependencies {
     implementation(projects.detektUtils)
     implementation(libs.jcommander)
 
-    testImplementation(projects.detektTestUtils)
+    testImplementation(projects.detektTest)
     testImplementation(libs.assertj.core)
 }
 

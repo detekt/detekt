@@ -5,9 +5,9 @@ package dev.detekt.cli
 import dev.detekt.cli.runners.ConfigExporter
 import dev.detekt.cli.runners.Runner
 import dev.detekt.cli.runners.VersionPrinter
-import dev.detekt.test.utils.NullPrintStream
-import dev.detekt.test.utils.StringPrintStream
-import dev.detekt.test.utils.resourceAsPath
+import dev.detekt.test.NullPrintStream
+import dev.detekt.test.StringPrintStream
+import dev.detekt.test.resourceAsPath
 import dev.detekt.tooling.api.InvalidConfig
 import dev.detekt.tooling.api.IssuesFound
 import dev.detekt.tooling.api.UnexpectedError

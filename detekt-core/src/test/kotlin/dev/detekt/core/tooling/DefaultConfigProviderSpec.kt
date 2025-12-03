@@ -1,7 +1,7 @@
 package dev.detekt.core.tooling
 
 import dev.detekt.core.createNullLoggingSpec
-import dev.detekt.test.utils.resourceAsPath
+import dev.detekt.test.resourceAsPath
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test

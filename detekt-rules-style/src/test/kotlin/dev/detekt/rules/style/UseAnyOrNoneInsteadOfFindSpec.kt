@@ -1,10 +1,10 @@
 package dev.detekt.rules.style
 
 import dev.detekt.api.Config
+import dev.detekt.test.KotlinEnvironmentContainer
 import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.junit.KotlinCoreEnvironmentTest
 import dev.detekt.test.lintWithContext
-import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 

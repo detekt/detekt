@@ -1,4 +1,4 @@
-package dev.detekt.test.utils
+package dev.detekt.test
 
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.cli.jvm.config.javaSourceRoots

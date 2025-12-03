@@ -1,4 +1,4 @@
-package dev.detekt.test.utils
+package dev.detekt.test
 
 import com.google.devtools.ksp.standalone.buildKspLibraryModule
 import com.google.devtools.ksp.standalone.buildKspSdkModule

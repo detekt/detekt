@@ -4,7 +4,7 @@ import dev.detekt.api.RuleName
 import dev.detekt.api.RuleSetId
 import dev.detekt.core.createNullLoggingSpec
 import dev.detekt.core.tooling.withSettings
-import dev.detekt.test.utils.resourceAsPath
+import dev.detekt.test.resourceAsPath
 import dev.detekt.tooling.api.spec.RulesSpec.RunPolicy.DisableDefaultRuleSets
 import dev.detekt.tooling.api.spec.RulesSpec.RunPolicy.RestrictToSingleRule
 import org.assertj.core.api.Assertions.assertThat

@@ -6,9 +6,6 @@ import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.api.RuleSetId
 import dev.detekt.core.suppressors.isSuppressedBy
-import dev.detekt.test.utils.KotlinAnalysisApiEngine
-import dev.detekt.test.utils.KotlinEnvironmentContainer
-import dev.detekt.test.utils.compileContentForTest
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.cli.jvm.config.javaSourceRoots
 import org.jetbrains.kotlin.config.LanguageVersionSettings

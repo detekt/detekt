@@ -1,8 +1,8 @@
 package dev.detekt.core.util
 
 import dev.detekt.core.tooling.DefaultDetektProvider
-import dev.detekt.test.utils.StringPrintStream
-import dev.detekt.test.utils.resourceAsPath
+import dev.detekt.test.StringPrintStream
+import dev.detekt.test.resourceAsPath
 import dev.detekt.tooling.api.spec.ProcessingSpec
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

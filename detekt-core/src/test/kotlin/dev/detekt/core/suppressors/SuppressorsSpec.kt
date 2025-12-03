@@ -5,7 +5,7 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.Rule
 import dev.detekt.test.TestConfig
-import dev.detekt.test.utils.compileContentForTest
+import dev.detekt.test.compileContentForTest
 import dev.detekt.tooling.api.AnalysisMode
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

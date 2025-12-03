@@ -19,7 +19,6 @@ dependencies {
     testImplementation(projects.detektApi)
     testImplementation(projects.detektTest)
     testImplementation(projects.detektTestAssertj)
-    testImplementation(projects.detektTestUtils)
     testImplementation(libs.assertj.core)
     testImplementation(libs.classgraph)
 

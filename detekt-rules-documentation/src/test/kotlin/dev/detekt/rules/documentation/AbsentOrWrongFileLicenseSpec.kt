@@ -4,9 +4,9 @@ import dev.detekt.api.Config
 import dev.detekt.api.Finding
 import dev.detekt.api.testfixtures.TestSetupContext
 import dev.detekt.test.assertj.assertThat
+import dev.detekt.test.compileContentForTest
 import dev.detekt.test.lint
-import dev.detekt.test.utils.compileContentForTest
-import dev.detekt.test.utils.resourceAsPath
+import dev.detekt.test.resourceAsPath
 import dev.detekt.test.yamlConfig
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Nested

@@ -1,6 +1,6 @@
 package dev.detekt.api
 
-import dev.detekt.test.utils.compileContentForTest
+import dev.detekt.test.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtReturnExpression

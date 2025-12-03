@@ -4,9 +4,9 @@ import com.intellij.psi.PsiFile
 import dev.detekt.api.Config
 import dev.detekt.test.TestConfig
 import dev.detekt.test.assertj.assertThat
+import dev.detekt.test.compileContentForTest
+import dev.detekt.test.internal.FakePsiFile
 import dev.detekt.test.lint
-import dev.detekt.test.utils.compileContentForTest
-import dev.detekt.test.utils.internal.FakePsiFile
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test

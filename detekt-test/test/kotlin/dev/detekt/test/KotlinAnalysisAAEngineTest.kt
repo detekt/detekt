@@ -1,4 +1,4 @@
-package dev.detekt.test.utils
+package dev.detekt.test
 
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.RepeatedTest

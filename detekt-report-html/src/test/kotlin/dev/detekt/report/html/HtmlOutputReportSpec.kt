@@ -16,7 +16,7 @@ import dev.detekt.metrics.processors.complexityKey
 import dev.detekt.metrics.processors.linesKey
 import dev.detekt.metrics.processors.logicalLinesKey
 import dev.detekt.metrics.processors.sourceLinesKey
-import dev.detekt.test.utils.readResourceContent
+import dev.detekt.test.readResourceContent
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir

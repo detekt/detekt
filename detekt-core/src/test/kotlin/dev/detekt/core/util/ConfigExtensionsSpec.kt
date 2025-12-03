@@ -2,8 +2,8 @@ package dev.detekt.core.util
 
 import dev.detekt.api.Config
 import dev.detekt.test.TestConfig
-import dev.detekt.test.utils.compileForTest
-import dev.detekt.test.utils.resourceAsPath
+import dev.detekt.test.compileForTest
+import dev.detekt.test.resourceAsPath
 import dev.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
