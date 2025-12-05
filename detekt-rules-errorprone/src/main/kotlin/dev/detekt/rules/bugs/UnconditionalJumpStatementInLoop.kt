@@ -72,9 +72,7 @@ class UnconditionalJumpStatementInLoop(config: Config) : Rule(
     }
 
     private fun PsiElement.isJumpStatement(): Boolean =
-        this is KtReturnExpression &&
-            !isFollowedByElvisJump() &&
-            !isAfterConditionalJumpStatement() ||
+        (this is KtReturnExpression && !isFollowedByElvisJump() && !isAfterConditionalJumpStatement()) ||
             this is KtBreakExpression ||
             this is KtContinueExpression
 

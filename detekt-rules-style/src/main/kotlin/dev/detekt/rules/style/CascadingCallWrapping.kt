@@ -77,11 +77,13 @@ class CascadingCallWrapping(config: Config) : Rule(
                 lhs = receiverExpression
                 rhs = selectorExpression ?: return false
             }
+
             is KtBinaryExpression -> {
                 if (operationToken != KtTokens.ELVIS) return false
                 lhs = left ?: return false
                 rhs = right ?: return false
             }
+
             else -> return false
         }
 
@@ -108,6 +110,7 @@ class CascadingCallWrapping(config: Config) : Rule(
     private fun KtExpression.toErrorReportEntity(): Entity {
         return when (this) {
             is KtQualifiedExpression -> Entity.from(this.selectorExpression ?: this)
+
             is KtBinaryExpression -> {
                 val rhs = this.right ?: return Entity.from(this)
                 val operationSourceLocation = Location.from(operationReference).source
@@ -118,6 +121,7 @@ class CascadingCallWrapping(config: Config) : Rule(
                     Location(operationSourceLocation, rhsSourceLocation, textLocation, containingFile.absolutePath())
                 )
             }
+
             else -> Entity.from(this)
         }
     }

@@ -76,9 +76,11 @@ class ConfigurationCollector {
 
     private fun KtProperty.parseConfigurationAnnotation(): Configuration? = when {
         isAnnotatedWith(ConfigAnnotation::class) -> toConfiguration()
+
         isInitializedWithConfigDelegate() -> invalidDocumentation {
             "'$name' is using the config delegate but is not annotated with @Configuration"
         }
+
         else -> null
     }
 
