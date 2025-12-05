@@ -1,6 +1,6 @@
 package dev.detekt.metrics
 
-import dev.detekt.test.utils.compileContentForTest
+import dev.detekt.test.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test

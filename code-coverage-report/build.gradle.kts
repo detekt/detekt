@@ -40,7 +40,7 @@ dependencies {
     jacocoAggregation(projects.detektRulesPerformance)
     jacocoAggregation(projects.detektRulesRuleauthors)
     jacocoAggregation(projects.detektRulesStyle)
-    jacocoAggregation(projects.detektTestUtils)
+    jacocoAggregation(projects.detektTest)
     jacocoAggregation(projects.detektTooling)
     jacocoAggregation(projects.detektUtils)
 }

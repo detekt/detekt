@@ -1,3 +1,12 @@
+public final class dev/detekt/test/CompileExtensionsKt {
+	public static final fun compileContentForTest (Ljava/lang/String;Ldev/detekt/test/KotlinEnvironmentContainer;Ljava/lang/String;)Lorg/jetbrains/kotlin/psi/KtFile;
+	public static final fun compileContentForTest (Ljava/lang/String;Ljava/lang/String;)Lorg/jetbrains/kotlin/psi/KtFile;
+	public static final fun compileContentForTest (Ljava/lang/String;Ljava/nio/file/Path;)Lorg/jetbrains/kotlin/psi/KtFile;
+	public static synthetic fun compileContentForTest$default (Ljava/lang/String;Ldev/detekt/test/KotlinEnvironmentContainer;Ljava/lang/String;ILjava/lang/Object;)Lorg/jetbrains/kotlin/psi/KtFile;
+	public static synthetic fun compileContentForTest$default (Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lorg/jetbrains/kotlin/psi/KtFile;
+	public static final fun compileForTest (Ljava/nio/file/Path;)Lorg/jetbrains/kotlin/psi/KtFile;
+}
+
 public final class dev/detekt/test/FakeLanguageVersionSettingsKt {
 	public static final fun FakeLanguageVersionSettings (Lorg/jetbrains/kotlin/config/ExplicitApiMode;)Lorg/jetbrains/kotlin/config/LanguageVersionSettingsImpl;
 	public static synthetic fun FakeLanguageVersionSettings$default (Lorg/jetbrains/kotlin/config/ExplicitApiMode;ILjava/lang/Object;)Lorg/jetbrains/kotlin/config/LanguageVersionSettingsImpl;
@@ -7,7 +16,31 @@ public final class dev/detekt/test/FindingExtensionsKt {
 	public static final fun getLocation (Ldev/detekt/api/Finding;)Ldev/detekt/api/Location;
 }
 
+public final class dev/detekt/test/KotlinAnalysisApiEngine {
+	public static final field INSTANCE Ldev/detekt/test/KotlinAnalysisApiEngine;
+	public final fun compile (Ljava/lang/String;Ljava/util/List;Ljava/util/List;Z)Lorg/jetbrains/kotlin/psi/KtFile;
+	public static synthetic fun compile$default (Ldev/detekt/test/KotlinAnalysisApiEngine;Ljava/lang/String;Ljava/util/List;Ljava/util/List;ZILjava/lang/Object;)Lorg/jetbrains/kotlin/psi/KtFile;
+}
+
+public final class dev/detekt/test/KotlinEnvironmentContainer {
+	public fun <init> (Lorg/jetbrains/kotlin/config/CompilerConfiguration;)V
+	public final fun getConfiguration ()Lorg/jetbrains/kotlin/config/CompilerConfiguration;
+}
+
+public final class dev/detekt/test/KotlinEnvironmentContainerKt {
+	public static final fun createEnvironment (Ljava/util/List;Ljava/util/List;)Ldev/detekt/test/KotlinEnvironmentContainer;
+	public static synthetic fun createEnvironment$default (Ljava/util/List;Ljava/util/List;ILjava/lang/Object;)Ldev/detekt/test/KotlinEnvironmentContainer;
+}
+
+public final class dev/detekt/test/NullPrintStream : java/io/PrintStream {
+	public fun <init> ()V
+}
+
 public final class dev/detekt/test/ResourcesKt {
+	public static final fun readResourceContent (Ljava/lang/String;)Ljava/lang/String;
+	public static final fun resource (Ljava/lang/String;)Ljava/net/URI;
+	public static final fun resourceAsPath (Ljava/lang/String;)Ljava/nio/file/Path;
+	public static final fun resourceUrl (Ljava/lang/String;)Ljava/net/URL;
 	public static final fun yamlConfig (Ljava/lang/String;)Ldev/detekt/api/Config;
 	public static final fun yamlConfigFromContent (Ljava/lang/String;)Ldev/detekt/api/Config;
 }
@@ -17,8 +50,13 @@ public final class dev/detekt/test/RuleExtensionsKt {
 	public static final fun lint (Ldev/detekt/api/Rule;Lorg/jetbrains/kotlin/psi/KtFile;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;)Ljava/util/List;
 	public static synthetic fun lint$default (Ldev/detekt/api/Rule;Ljava/lang/String;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;ZILjava/lang/Object;)Ljava/util/List;
 	public static synthetic fun lint$default (Ldev/detekt/api/Rule;Lorg/jetbrains/kotlin/psi/KtFile;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;ILjava/lang/Object;)Ljava/util/List;
-	public static final fun lintWithContext (Ldev/detekt/api/Rule;Ldev/detekt/test/utils/KotlinEnvironmentContainer;Ljava/lang/String;[Ljava/lang/String;ZLorg/jetbrains/kotlin/config/LanguageVersionSettings;)Ljava/util/List;
-	public static synthetic fun lintWithContext$default (Ldev/detekt/api/Rule;Ldev/detekt/test/utils/KotlinEnvironmentContainer;Ljava/lang/String;[Ljava/lang/String;ZLorg/jetbrains/kotlin/config/LanguageVersionSettings;ILjava/lang/Object;)Ljava/util/List;
+	public static final fun lintWithContext (Ldev/detekt/api/Rule;Ldev/detekt/test/KotlinEnvironmentContainer;Ljava/lang/String;[Ljava/lang/String;ZLorg/jetbrains/kotlin/config/LanguageVersionSettings;)Ljava/util/List;
+	public static synthetic fun lintWithContext$default (Ldev/detekt/api/Rule;Ldev/detekt/test/KotlinEnvironmentContainer;Ljava/lang/String;[Ljava/lang/String;ZLorg/jetbrains/kotlin/config/LanguageVersionSettings;ILjava/lang/Object;)Ljava/util/List;
+}
+
+public final class dev/detekt/test/StringPrintStream : java/io/PrintStream {
+	public fun <init> ()V
+	public fun toString ()Ljava/lang/String;
 }
 
 public final class dev/detekt/test/TestConfig : dev/detekt/api/Config {

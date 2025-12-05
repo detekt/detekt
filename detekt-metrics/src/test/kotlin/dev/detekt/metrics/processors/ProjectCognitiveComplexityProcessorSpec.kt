@@ -1,7 +1,7 @@
 package dev.detekt.metrics.processors
 
 import dev.detekt.metrics.CognitiveComplexity
-import dev.detekt.test.utils.compileContentForTest
+import dev.detekt.test.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

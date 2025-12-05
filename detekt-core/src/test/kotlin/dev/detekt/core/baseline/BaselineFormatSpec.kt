@@ -1,6 +1,6 @@
 package dev.detekt.core.baseline
 
-import dev.detekt.test.utils.resourceAsPath
+import dev.detekt.test.resourceAsPath
 import dev.detekt.tooling.api.BaselineProvider
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalStateException

@@ -1,8 +1,8 @@
 package dev.detekt.psi
 
+import dev.detekt.test.KotlinEnvironmentContainer
+import dev.detekt.test.compileContentForTest
 import dev.detekt.test.junit.KotlinCoreEnvironmentTest
-import dev.detekt.test.utils.KotlinEnvironmentContainer
-import dev.detekt.test.utils.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNamedFunction
