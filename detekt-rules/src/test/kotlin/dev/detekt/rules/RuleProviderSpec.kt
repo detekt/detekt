@@ -8,7 +8,7 @@ import dev.detekt.rules.bugs.PotentialBugProvider
 import dev.detekt.rules.complexity.ComplexityProvider
 import dev.detekt.rules.coroutines.CoroutinesProvider
 import dev.detekt.rules.documentation.CommentSmellProvider
-import dev.detekt.rules.empty.EmptyCodeProvider
+import dev.detekt.rules.emptyblocks.EmptyCodeProvider
 import dev.detekt.rules.exceptions.ExceptionsProvider
 import dev.detekt.rules.naming.NamingProvider
 import dev.detekt.rules.performance.PerformanceProvider

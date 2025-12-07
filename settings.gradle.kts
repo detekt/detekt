@@ -25,7 +25,7 @@ include("detekt-rules")
 include("detekt-rules-complexity")
 include("detekt-rules-coroutines")
 include("detekt-rules-documentation")
-include("detekt-rules-empty")
+include("detekt-rules-empty-blocks")
 include("detekt-rules-errorprone")
 include("detekt-rules-exceptions")
 include("detekt-rules-ktlint-wrapper")
@@ -49,7 +49,7 @@ plugins {
     id("com.gradle.develocity") version "4.2.2"
     id("com.gradle.common-custom-user-data-gradle-plugin") version "2.4.0"
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
-    id("com.autonomousapps.build-health") version "3.4.1"
+    id("com.autonomousapps.build-health") version "3.5.1"
     // Kotlin plugin must be added to classpath to support build-health analysis
     id("org.jetbrains.kotlin.jvm") version "2.2.21" apply false
 }

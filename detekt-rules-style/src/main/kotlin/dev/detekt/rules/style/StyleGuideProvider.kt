@@ -50,7 +50,6 @@ class StyleGuideProvider : DefaultRuleSetProvider {
             ::SafeCast,
             ::AbstractClassCanBeConcreteClass,
             ::AbstractClassCanBeInterface,
-            ::UnnecessaryAnnotationUseSiteTarget,
             ::UnnecessaryParentheses,
             ::UnnecessaryInheritance,
             ::UnnecessaryInnerClass,

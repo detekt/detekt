@@ -67,13 +67,7 @@ exceptions:
 ktlint:
   active: true
   autoCorrect: true
-  BlankLineBeforeDeclaration:
-    active: false
-  ChainMethodContinuation:
-    active: false
   ClassSignature:
-    active: false
-  EnumEntryNameCase:
     active: false
   Filename:
     active: false
@@ -84,17 +78,9 @@ ktlint:
     excludes: ['**/*.kts']
   MaximumLineLength:
     active: false
-  NoEmptyFirstLineInClassBody:
-    active: false
   SpacingAroundSquareBrackets:
     active: true
-  StringTemplateIndent:
-    active: false
   TrailingCommaOnCallSite:
-    active: false
-  TrailingCommaOnDeclarationSite:
-    active: true
-  ValueArgumentComment:
     active: false
 
 naming:
@@ -263,8 +249,6 @@ style:
   TrimMultilineRawString:
     active: true
   UnderscoresInNumericLiterals:
-    active: true
-  UnnecessaryAnnotationUseSiteTarget:
     active: true
   UnnecessaryBackticks:
     active: true
