@@ -25,7 +25,7 @@ class DetektYmlConfigSpec {
         arguments("complexity", "dev.detekt.rules.complexity"),
         arguments("coroutines", "dev.detekt.rules.coroutines"),
         arguments("comments", "dev.detekt.rules.documentation"),
-        arguments("empty-blocks", "dev.detekt.rules.empty"),
+        arguments("empty-blocks", "dev.detekt.rules.emptyblocks"),
         arguments("exceptions", "dev.detekt.rules.exceptions"),
         arguments("naming", "dev.detekt.rules.naming"),
         arguments("performance", "dev.detekt.rules.performance"),

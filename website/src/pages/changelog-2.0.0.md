@@ -82,7 +82,7 @@ This is an alpha release of Detekt 2.0.0. Is built against Kotlin 2.2.20, Gradle
 
 ### Contributors
 
-We would like to thank the following contributors that made this release possible: [@3flex](https://github.com/3flex), [@BraisGabin](https://github.com/BraisGabin), [@Copilot](https://github.com/Copilot), [@CziSKY](https://github.com/CziSKY), [@atulgpt](https://github.com/atulgpt), [@jonapoul](https://github.com/jonapoul), [@marschwar](https://github.com/marschwar), [@mikaelreiersolmoen](https://github.com/mikaelreiersolmoen)
+We would like to thank the following contributors that made this release possible: [@3flex](https://github.com/3flex), [@BraisGabin](https://github.com/BraisGabin), [@CziSKY](https://github.com/CziSKY), [@atulgpt](https://github.com/atulgpt), [@jonapoul](https://github.com/jonapoul), [@marschwar](https://github.com/marschwar), [@mikaelreiersolmoen](https://github.com/mikaelreiersolmoen)
 
 ## 2.0.0-alpha.0 - 2025-09-04
 
