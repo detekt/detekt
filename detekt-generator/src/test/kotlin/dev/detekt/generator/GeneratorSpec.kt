@@ -8,40 +8,44 @@ import kotlin.io.path.Path
 import kotlin.io.path.readText
 
 class GeneratorSpec {
-    private val configPath = "src/main/resources/config/config.yml"
-    private val rulePath1 = "src/test/resources/ruleset1"
-    private val rulePath2 = "src/test/resources/ruleset2"
-
-    @BeforeAll
-    fun init() {
-        val args = arrayOf(
-            "--generate-custom-rule-config",
-            "--input",
-            "$rulePath1,$rulePath2",
-        )
-        main(args)
-    }
-
     @Test
     fun `config files generated successfully`() {
-        assertThat(Path(rulePath1, configPath)).exists()
-        assertThat(Path(rulePath2, configPath)).exists()
+        assertThat(Path(RULE_PATH1, CONFIG_PATH)).exists()
+        assertThat(Path(RULE_PATH2, CONFIG_PATH)).exists()
     }
 
     @Test
     fun `config files have their own content`() {
-        assertThat(Path(rulePath1, configPath).readText())
+        assertThat(Path(RULE_PATH1, CONFIG_PATH).readText())
             .contains("complexity:")
             .doesNotContain("coroutines:")
 
-        assertThat(Path(rulePath2, configPath).readText())
+        assertThat(Path(RULE_PATH2, CONFIG_PATH).readText())
             .contains("coroutines:")
             .doesNotContain("complexity:")
     }
 
-    @AfterAll
-    fun tearDown() {
-        Path(rulePath1, configPath).toFile().delete()
-        Path(rulePath2, configPath).toFile().delete()
+    companion object {
+        private const val CONFIG_PATH = "src/main/resources/config/config.yml"
+        private const val RULE_PATH1 = "src/test/resources/ruleset1"
+        private const val RULE_PATH2 = "src/test/resources/ruleset2"
+
+        @BeforeAll
+        @JvmStatic
+        fun init() {
+            val args = arrayOf(
+                "--generate-custom-rule-config",
+                "--input",
+                "$RULE_PATH1;$RULE_PATH2",
+            )
+            main(args)
+        }
+
+        @AfterAll
+        @JvmStatic
+        fun tearDown() {
+            Path(RULE_PATH1, CONFIG_PATH).toFile().delete()
+            Path(RULE_PATH2, CONFIG_PATH).toFile().delete()
+        }
     }
 }

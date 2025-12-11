@@ -95,7 +95,7 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
     mainClass = "dev.detekt.generator.Main"
     args = listOf(
         "--input",
-        ruleModules.joinToString(","),
+        ruleModules.joinToString(";"),
         "--documentation",
         documentationDir,
         "--config",
