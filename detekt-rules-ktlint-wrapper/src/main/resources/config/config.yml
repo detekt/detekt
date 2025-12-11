@@ -26,7 +26,7 @@ ktlint:
     active: false
     autoCorrect: true
   BlankLineBetweenWhenConditions:
-    active: false
+    active: true
     autoCorrect: true
     lineBreakAfterWhenEntries: true
   BlockCommentInitialStarAlignment:
@@ -142,7 +142,7 @@ ktlint:
     indentSize: 4
     indentWhenArrowOnNewLine: false
   Kdoc:
-    active: false
+    active: true
   KdocWrapping:
     active: true
     autoCorrect: true
@@ -153,7 +153,7 @@ ktlint:
     # maxLineLength: If the 'code_style' ruleset property is set to 'android', the default is '100', otherwise '120'.
     ignoreBackTickedIdentifier: false
   MixedConditionOperators:
-    active: false
+    active: true
   ModifierListSpacing:
     active: true
     autoCorrect: true
@@ -287,7 +287,7 @@ ktlint:
     active: true
     autoCorrect: true
   SpacingAroundSquareBrackets:
-    active: false
+    active: true
     autoCorrect: true
   SpacingAroundUnaryOperator:
     active: true

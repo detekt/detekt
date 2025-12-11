@@ -135,6 +135,7 @@ private class UnusedFunctionVisitor(private val allowedNames: Regex) : DetektVis
                     }
 
                     references.isEmpty() -> functions
+
                     else -> emptyList()
                 }
                 unusedFunctions.map {
@@ -186,8 +187,11 @@ private class UnusedFunctionVisitor(private val allowedNames: Regex) : DetektVis
         super.visitReferenceExpression(expression)
         val name = when (expression) {
             is KtOperationReferenceExpression -> expression.getReferencedName()
+
             is KtNameReferenceExpression -> expression.getReferencedName()
+
             is KtArrayAccessExpression -> ARRAY_GET_METHOD_NAME
+
             is KtCallExpression -> {
                 analyze(expression) {
                     val symbol = expression.resolveToCall()?.singleFunctionCallOrNull()?.symbol
