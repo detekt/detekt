@@ -285,6 +285,8 @@ style:
   WildcardImport:
     active: true
     excludeImports: []
+  StringShouldBeRawString:
+    active: false
 
 libraries:
   ForbiddenPublicDataClass:
