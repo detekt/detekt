@@ -141,7 +141,7 @@ style:
     singleLine: 'consistent'
     multiLine: 'consistent'
   CanBeNonNullable:
-    active: true
+    active: false
   CascadingCallWrapping:
     active: true
   ClassOrdering:
