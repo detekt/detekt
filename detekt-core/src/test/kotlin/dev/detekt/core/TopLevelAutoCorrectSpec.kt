@@ -9,10 +9,10 @@ import dev.detekt.api.RuleSetId
 import dev.detekt.api.RuleSetProvider
 import dev.detekt.core.tooling.AnalysisFacade
 import dev.detekt.core.tooling.DefaultLifecycle
-import dev.detekt.test.utils.NullPrintStream
-import dev.detekt.test.utils.readResourceContent
-import dev.detekt.test.utils.resourceAsPath
-import dev.detekt.test.utils.resourceUrl
+import dev.detekt.test.NullPrintStream
+import dev.detekt.test.readResourceContent
+import dev.detekt.test.resourceAsPath
+import dev.detekt.test.resourceUrl
 import dev.detekt.tooling.api.spec.ProcessingSpec
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtAnnotation

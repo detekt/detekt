@@ -2,11 +2,11 @@ package dev.detekt.rules.style
 
 import dev.detekt.api.Config
 import dev.detekt.api.SourceLocation
+import dev.detekt.test.KotlinEnvironmentContainer
 import dev.detekt.test.TestConfig
 import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.junit.KotlinCoreEnvironmentTest
 import dev.detekt.test.lintWithContext
-import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test

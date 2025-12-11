@@ -1,7 +1,7 @@
 package dev.detekt.cli.runners
 
-import dev.detekt.test.utils.compileForTest
-import dev.detekt.test.utils.resourceAsPath
+import dev.detekt.test.compileForTest
+import dev.detekt.test.resourceAsPath
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

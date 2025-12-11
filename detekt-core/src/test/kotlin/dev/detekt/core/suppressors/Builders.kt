@@ -7,7 +7,7 @@ import dev.detekt.api.Rule
 import dev.detekt.api.SourceLocation
 import dev.detekt.api.TextLocation
 import dev.detekt.test.TestConfig
-import dev.detekt.test.utils.compileContentForTest
+import dev.detekt.test.compileContentForTest
 import org.jetbrains.kotlin.psi.KtElement
 import kotlin.io.path.Path
 

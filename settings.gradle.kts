@@ -38,7 +38,6 @@ include("detekt-rules-style")
 include("detekt-test")
 include("detekt-test-assertj")
 include("detekt-test-junit")
-include("detekt-test-utils")
 include("detekt-tooling")
 include("detekt-utils")
 

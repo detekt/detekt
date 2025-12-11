@@ -1,9 +1,9 @@
 package dev.detekt.cli.runners
 
 import dev.detekt.cli.parseArguments
-import dev.detekt.test.utils.NullPrintStream
-import dev.detekt.test.utils.StringPrintStream
-import dev.detekt.test.utils.resourceAsPath
+import dev.detekt.test.NullPrintStream
+import dev.detekt.test.StringPrintStream
+import dev.detekt.test.resourceAsPath
 import dev.detekt.tooling.api.InvalidConfig
 import dev.detekt.tooling.api.IssuesFound
 import org.assertj.core.api.Assertions.assertThat

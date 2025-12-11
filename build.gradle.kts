@@ -12,7 +12,6 @@ dependencies {
     dokka(projects.detektPsiUtils)
     dokka(projects.detektTest)
     dokka(projects.detektTestAssertj)
-    dokka(projects.detektTestUtils)
     dokka(projects.detektTooling)
     dokka("dev.detekt:detekt-gradle-plugin")
 }
@@ -47,6 +46,7 @@ allprojects {
     detekt {
         buildUponDefaultConfig = true
         baseline = file("$rootDir/config/detekt/baseline.xml")
+        autoCorrect = true
     }
 
     dependencies {

@@ -15,9 +15,9 @@ import dev.detekt.api.Severity
 import dev.detekt.api.SourceLocation
 import dev.detekt.api.TextLocation
 import dev.detekt.api.config
-import dev.detekt.test.utils.compileContentForTest
-import dev.detekt.test.utils.compileForTest
-import dev.detekt.test.utils.resourceAsPath
+import dev.detekt.test.compileContentForTest
+import dev.detekt.test.compileForTest
+import dev.detekt.test.resourceAsPath
 import dev.detekt.test.yamlConfigFromContent
 import dev.detekt.tooling.api.AnalysisMode
 import org.assertj.core.api.Assertions.assertThat

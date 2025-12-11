@@ -1,4 +1,4 @@
-package dev.detekt.test.utils.internal
+package dev.detekt.test.internal
 
 import com.intellij.lang.ASTNode
 import com.intellij.lang.Language

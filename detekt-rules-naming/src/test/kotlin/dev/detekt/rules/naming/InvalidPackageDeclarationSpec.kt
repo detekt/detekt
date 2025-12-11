@@ -3,8 +3,8 @@ package dev.detekt.rules.naming
 import dev.detekt.api.Config
 import dev.detekt.test.TestConfig
 import dev.detekt.test.assertj.assertThat
+import dev.detekt.test.compileForTest
 import dev.detekt.test.lint
-import dev.detekt.test.utils.compileForTest
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import kotlin.io.path.Path

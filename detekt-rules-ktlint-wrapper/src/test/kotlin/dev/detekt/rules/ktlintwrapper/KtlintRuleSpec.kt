@@ -4,9 +4,9 @@ import dev.detekt.api.Config
 import dev.detekt.rules.ktlintwrapper.wrappers.ChainWrapping
 import dev.detekt.rules.ktlintwrapper.wrappers.NoLineBreakBeforeAssignment
 import dev.detekt.test.assertj.assertThat
+import dev.detekt.test.compileForTest
 import dev.detekt.test.lint
 import dev.detekt.test.location
-import dev.detekt.test.utils.compileForTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested

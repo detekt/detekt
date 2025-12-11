@@ -1,8 +1,8 @@
 package dev.detekt.cli
 
 import dev.detekt.api.Severity
-import dev.detekt.test.utils.NullPrintStream
-import dev.detekt.test.utils.resourceAsPath
+import dev.detekt.test.NullPrintStream
+import dev.detekt.test.resourceAsPath
 import dev.detekt.tooling.api.AnalysisMode
 import dev.detekt.tooling.api.spec.RulesSpec.FailurePolicy.FailOnSeverity
 import dev.detekt.tooling.api.spec.RulesSpec.FailurePolicy.NeverFail

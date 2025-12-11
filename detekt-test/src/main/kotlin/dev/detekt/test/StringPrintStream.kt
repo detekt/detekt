@@ -1,4 +1,4 @@
-package dev.detekt.test.utils
+package dev.detekt.test
 
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream

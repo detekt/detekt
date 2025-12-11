@@ -11,7 +11,7 @@ import dev.detekt.report.html.HtmlOutputReport
 import dev.detekt.report.markdown.MarkdownOutputReport
 import dev.detekt.report.sarif.SarifOutputReport
 import dev.detekt.report.xml.CheckstyleOutputReport
-import dev.detekt.test.utils.StringPrintStream
+import dev.detekt.test.StringPrintStream
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode
 import org.junit.jupiter.api.Test

@@ -8,7 +8,7 @@ dependencies {
     compileOnly(libs.assertj.core)
 
     testImplementation(testFixtures(projects.detektApi))
-    testImplementation(projects.detektTestUtils)
+    testImplementation(projects.detektTest)
     testImplementation(libs.assertj.core)
     testImplementation(libs.opentest4j)
 }

@@ -1,5 +1,6 @@
-package dev.detekt.test.utils
+package dev.detekt.test
 
+import dev.detekt.test.resourceAsPath
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.jetbrains.kotlin.psi.KtTreeVisitorVoid

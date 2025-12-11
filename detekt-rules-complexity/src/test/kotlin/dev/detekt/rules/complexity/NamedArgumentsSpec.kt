@@ -1,9 +1,9 @@
 package dev.detekt.rules.complexity
 
+import dev.detekt.test.KotlinEnvironmentContainer
 import dev.detekt.test.TestConfig
 import dev.detekt.test.junit.KotlinCoreEnvironmentTest
 import dev.detekt.test.lintWithContext
-import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test

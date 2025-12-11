@@ -33,7 +33,7 @@ dependencies {
     runtimeOnly(projects.detektReportSarif)
     runtimeOnly(projects.detektReportCheckstyle)
 
-    testImplementation(projects.detektTestUtils)
+    testImplementation(projects.detektTest)
     testImplementation(libs.assertj.core)
     testRuntimeOnly(projects.detektRulesKtlintWrapper)
 

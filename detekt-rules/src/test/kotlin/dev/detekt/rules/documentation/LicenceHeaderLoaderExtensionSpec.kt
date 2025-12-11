@@ -1,7 +1,7 @@
 package dev.detekt.rules.documentation
 
 import dev.detekt.api.testfixtures.TestSetupContext
-import dev.detekt.test.utils.resource
+import dev.detekt.test.resource
 import org.assertj.core.api.Assertions.assertThatCode
 import org.junit.jupiter.api.Test
 

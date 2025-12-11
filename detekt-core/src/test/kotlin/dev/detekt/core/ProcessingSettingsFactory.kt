@@ -2,8 +2,8 @@ package dev.detekt.core
 
 import dev.detekt.api.Config
 import dev.detekt.core.util.PerformanceMonitor
-import dev.detekt.test.utils.NullPrintStream
-import dev.detekt.test.utils.resourceAsPath
+import dev.detekt.test.NullPrintStream
+import dev.detekt.test.resourceAsPath
 import dev.detekt.tooling.api.spec.ProcessingSpec
 import dev.detekt.tooling.api.spec.ReportsSpec
 import dev.detekt.tooling.dsl.ProcessingSpecBuilder
