@@ -30,7 +30,7 @@ dependencies {
     jacocoAggregation(projects.detektReportMarkdown)
     jacocoAggregation(projects.detektRulesComplexity)
     jacocoAggregation(projects.detektRulesCoroutines)
-    jacocoAggregation(projects.detektRulesDocumentation)
+    jacocoAggregation(projects.detektRulesComments)
     jacocoAggregation(projects.detektRulesEmptyBlocks)
     jacocoAggregation(projects.detektRulesErrorprone)
     jacocoAggregation(projects.detektRulesExceptions)

@@ -5,9 +5,9 @@ import dev.detekt.api.Rule
 import dev.detekt.api.RuleSetProvider
 import dev.detekt.api.internal.DefaultRuleSetProvider
 import dev.detekt.rules.bugs.PotentialBugProvider
+import dev.detekt.rules.comments.CommentSmellProvider
 import dev.detekt.rules.complexity.ComplexityProvider
 import dev.detekt.rules.coroutines.CoroutinesProvider
-import dev.detekt.rules.documentation.CommentSmellProvider
 import dev.detekt.rules.emptyblocks.EmptyCodeProvider
 import dev.detekt.rules.exceptions.ExceptionsProvider
 import dev.detekt.rules.naming.NamingProvider
@@ -54,7 +54,7 @@ private val ruleMap: Map<Class<out DefaultRuleSetProvider>, String> = mapOf(
     PerformanceProvider::class.java to "dev.detekt.rules.performance",
     PotentialBugProvider::class.java to "io.gitlab.arturbosch.detekt.rules.bugs",
     StyleGuideProvider::class.java to "dev.detekt.rules.style",
-    CoroutinesProvider::class.java to "dev.detekt.rules.coroutines"
+    CoroutinesProvider::class.java to "dev.detekt.rules.coroutines",
 )
 
 private fun getRulesPackageNameForProvider(providerType: Class<out RuleSetProvider>): String {

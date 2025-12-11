@@ -5,7 +5,7 @@ plugins {
 dependencies {
     runtimeOnly(projects.detektRulesComplexity)
     runtimeOnly(projects.detektRulesCoroutines)
-    runtimeOnly(projects.detektRulesDocumentation)
+    runtimeOnly(projects.detektRulesComments)
     runtimeOnly(projects.detektRulesEmptyBlocks)
     runtimeOnly(projects.detektRulesErrorprone)
     runtimeOnly(projects.detektRulesExceptions)
@@ -16,7 +16,7 @@ dependencies {
     testImplementation(projects.detektTestUtils)
     testImplementation(projects.detektRulesComplexity)
     testImplementation(projects.detektRulesCoroutines)
-    testImplementation(projects.detektRulesDocumentation)
+    testImplementation(projects.detektRulesComments)
     testImplementation(projects.detektRulesEmptyBlocks)
     testImplementation(projects.detektRulesErrorprone)
     testImplementation(projects.detektRulesExceptions)
