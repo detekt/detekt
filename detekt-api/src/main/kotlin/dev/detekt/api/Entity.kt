@@ -45,7 +45,10 @@ class Entity(
          */
         fun from(element: PsiElement, location: Location): Entity = from(element, element, location)
 
-        private fun from(elementToReport: PsiElement, elementForSignature: PsiElement): Entity =
+        /**
+         * Use this factory method if for reporting more detailed info is required than for signature
+         */
+        fun from(elementToReport: PsiElement, elementForSignature: PsiElement): Entity =
             from(elementToReport, elementForSignature, Location.from(elementToReport))
 
         private fun from(

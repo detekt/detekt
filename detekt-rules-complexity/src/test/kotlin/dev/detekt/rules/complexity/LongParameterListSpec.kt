@@ -169,4 +169,69 @@ class LongParameterListSpec(private val env: KotlinEnvironmentContainer) {
             assertThat(rule.lintWithContext(env, code)).isEmpty()
         }
     }
+
+    @Nested
+    inner class Signatures {
+        @Test
+        fun `does not include the params in primary ctor`() {
+            val config = TestConfig("allowedConstructorParameters" to "1")
+            val rule = LongParameterList(config)
+            val code = "class LongCtor(a: Int, b: Int)"
+            val result = rule.lintWithContext(env, code)
+            assertThat(result)
+                .first()
+                .hasStartSourceLocation(1, 15)
+                .hasEndSourceLocation(1, 31)
+            org.assertj.core.api.Assertions.assertThat(result[0].entity.signature).isEqualTo("LongCtor")
+        }
+
+        @Test
+        fun `does not include the params in secondary ctor`() {
+            val config = TestConfig("allowedConstructorParameters" to "1")
+            val rule = LongParameterList(config)
+            val code = """
+                class LongCtor {
+                    constructor(a: Int, b: Int)
+                }
+            """.trimIndent()
+            val result = rule.lintWithContext(env, code)
+            assertThat(result)
+                .first()
+                .hasStartSourceLocation(2, 16)
+                .hasEndSourceLocation(2, 32)
+            org.assertj.core.api.Assertions.assertThat(result[0].entity.signature).isEqualTo($$"LongCtor$constructor")
+        }
+
+        @Test
+        fun `does not include the params in class function`() {
+            val config = TestConfig("allowedFunctionParameters" to "1")
+            val rule = LongParameterList(config)
+            val code = """
+                class LongCtor {
+                    fun a(a: Int, b: Int) = a + b
+                }
+            """.trimIndent()
+            val result = rule.lintWithContext(env, code)
+            assertThat(result)
+                .first()
+                .hasStartSourceLocation(2, 10)
+                .hasEndSourceLocation(2, 26)
+            org.assertj.core.api.Assertions.assertThat(result[0].entity.signature).isEqualTo($$"LongCtor$fun a")
+        }
+
+        @Test
+        fun `does not include the params in top level function`() {
+            val config = TestConfig("allowedFunctionParameters" to "1")
+            val rule = LongParameterList(config)
+            val code = """
+                fun a(a: Int, b: Int) = a + b
+            """.trimIndent()
+            val result = rule.lintWithContext(env, code)
+            assertThat(result)
+                .first()
+                .hasStartSourceLocation(1, 6)
+                .hasEndSourceLocation(1, 22)
+            org.assertj.core.api.Assertions.assertThat(result[0].entity.signature).isEqualTo("fun a")
+        }
+    }
 }
