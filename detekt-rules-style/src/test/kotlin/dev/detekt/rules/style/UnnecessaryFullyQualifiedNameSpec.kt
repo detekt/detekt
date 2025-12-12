@@ -18,13 +18,13 @@ class UnnecessaryFullyQualifiedNameSpec {
         fun `reports fully qualified class names in return types`() {
             val code = """
                 class Test {
-                    fun method(): java.util.List<String> {
-                        return emptyList()
+                    fun method(): java.util.ArrayList<String> {
+                        return java.util.ArrayList()
                     }
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(2)
         }
 
         @Test
@@ -41,6 +41,10 @@ class UnnecessaryFullyQualifiedNameSpec {
         @Test
         fun `reports fully qualified names starting with non-standard packages`() {
             val code = """
+                package asdf.server.foo
+
+                class Bar
+
                 class Test {
                     val svc: asdf.server.foo.Bar = asdf.server.foo.Bar()
                 }
@@ -84,6 +88,14 @@ class UnnecessaryFullyQualifiedNameSpec {
         @Test
         fun `does not report method calls on objects with single dot`() {
             val code = """
+                object MyObject {
+                    fun doSomething() = "done"
+                }
+
+                object Helper {
+                    fun getValue() = 42
+                }
+
                 class Test {
                     fun method() {
                         val result = MyObject.doSomething()
@@ -101,13 +113,13 @@ class UnnecessaryFullyQualifiedNameSpec {
         @Test
         fun `does not report imports themselves`() {
             val code = """
-                import java.util.List
+                import java.util.ArrayList
                 import java.time.LocalDate
-                import com.example.MyService
+                import java.util.concurrent.TimeUnit
 
                 class Test {
-                    fun method(): List<String> {
-                        return emptyList()
+                    fun method(): ArrayList<String> {
+                        return ArrayList()
                     }
                 }
             """.trimIndent()
@@ -171,10 +183,10 @@ class UnnecessaryFullyQualifiedNameSpec {
         @Test
         fun `reports fully qualified names in annotations`() {
             val code = """
-                @org.springframework.stereotype.Component
+                @kotlin.Deprecated("Use NewClass instead")
                 class Test {
-                    @org.springframework.beans.factory.annotation.Autowired
-                    lateinit var service: Service
+                    @java.lang.SuppressWarnings("unchecked")
+                    fun method() {}
                 }
             """.trimIndent()
 
@@ -208,13 +220,13 @@ class UnnecessaryFullyQualifiedNameSpec {
             val code = """
                 class Test {
                     fun method() {
-                        val inner: com.example.Outer.Middle.Inner = com.example.Outer.Middle.Inner()
-                        val nested = org.example.Container.Nested.SubNested()
+                        val entry: java.util.AbstractMap.SimpleEntry<String, Int> = java.util.AbstractMap.SimpleEntry("key", 1)
+                        val immutableEntry: java.util.AbstractMap.SimpleImmutableEntry<String, Int> = java.util.AbstractMap.SimpleImmutableEntry("key", 2)
                     }
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(3)
+            assertThat(subject.lint(code)).hasSize(4)
         }
     }
 
@@ -242,14 +254,12 @@ class UnnecessaryFullyQualifiedNameSpec {
         fun `reports fully qualified names in generic type parameters`() {
             val code = """
                 class Test {
-                    fun method(): List<java.util.Map.Entry<String, Int>> {
-                        val map: java.util.HashMap<String, java.lang.Integer> = java.util.HashMap()
-                        return map.entries.toList()
-                    }
+                    val map: java.util.HashMap<String, java.lang.Integer> = java.util.HashMap()
+                    val list: java.util.ArrayList<java.lang.Double> = java.util.ArrayList()
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(4)
+            assertThat(subject.lint(code)).hasSize(6)
         }
     }
 
@@ -327,14 +337,14 @@ class UnnecessaryFullyQualifiedNameSpec {
                             println(list.size)
                         }
 
-                        val transformer: (java.lang.String) -> java.lang.Integer = { str ->
+                        val transformer: (java.lang.String) -> Int = { str ->
                             str.length
                         }
                     }
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(3)
+            assertThat(subject.lint(code)).hasSize(2)
         }
     }
 
@@ -535,10 +545,11 @@ class UnnecessaryFullyQualifiedNameSpec {
             val code = """
                 class Test {
                     fun method(vararg items: java.util.concurrent.Future<String>) {
-                        process(*items)
+                        println(items.size)
                     }
 
                     fun process(vararg values: java.lang.Number) {
+                        println(values.size)
                     }
                 }
             """.trimIndent()
@@ -565,17 +576,17 @@ class UnnecessaryFullyQualifiedNameSpec {
     @Nested
     inner class `constructor references` {
         @Test
-        fun `reports constructor references with fully qualified names`() {
+        fun `reports fully qualified names in callable reference types`() {
             val code = """
                 class Test {
                     fun method() {
-                        val factory: () -> java.util.List<String> = ::java.util.ArrayList
-                        val supplier = java.util.function.Supplier(::java.lang.StringBuilder)
+                        val factory: () -> java.util.ArrayList<String> = ::ArrayList
+                        val supplier: java.util.function.Supplier<String> = java.util.function.Supplier { "test" }
                     }
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(4)
+            assertThat(subject.lint(code)).hasSize(3)
         }
     }
 
@@ -618,6 +629,12 @@ class UnnecessaryFullyQualifiedNameSpec {
         @Test
         fun `does not report types with invalid identifier characters`() {
             val code = """
+                object `some-invalid` {
+                    object foo {
+                        class Bar
+                    }
+                }
+
                 class Test {
                     fun method() {
                         val x = `some-invalid`.foo.Bar()
@@ -631,8 +648,14 @@ class UnnecessaryFullyQualifiedNameSpec {
         @Test
         fun `does not report all-uppercase path segments`() {
             val code = """
+                class Outer {
+                    class Inner {
+                        class Nested
+                    }
+                }
+
                 class Test {
-                    val x: Outer.Inner.Nested = TODO()
+                    val x: Outer.Inner.Nested = Outer.Inner.Nested()
                 }
             """.trimIndent()
 

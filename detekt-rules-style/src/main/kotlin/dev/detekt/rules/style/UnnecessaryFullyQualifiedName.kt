@@ -186,9 +186,14 @@ class UnnecessaryFullyQualifiedName(config: Config) : Rule(
         receiverText: String,
         selectorText: String,
     ): Finding? {
-        if (!selectorText.contains('(')) return null
+        // Check for regular calls with () or SAM constructor calls with trailing lambda {}
+        if (!selectorText.contains('(') && !selectorText.contains('{')) return null
 
-        val functionOrClassName = selectorText.substringBefore('(')
+        val functionOrClassName = selectorText
+            .substringBefore('(')
+            .substringBefore('{')
+            .substringBefore(' ')
+            .trim()
         if (functionOrClassName.isEmpty()) return null
 
         if (functionOrClassName[0].isUpperCase()) {
