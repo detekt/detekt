@@ -578,4 +578,184 @@ class UnnecessaryFullyQualifiedNameSpec {
             assertThat(subject.lint(code)).hasSize(4)
         }
     }
+
+    @Nested
+    inner class `companion object and static property access` {
+        @Test
+        fun `reports fully qualified access to companion object properties`() {
+            val code = """
+                class Test {
+                    fun method() {
+                        val month = java.util.Calendar.JANUARY
+                        val field = java.lang.Integer.MAX_VALUE
+                    }
+                }
+            """.trimIndent()
+
+            assertThat(subject.lint(code)).hasSize(2)
+        }
+
+        @Test
+        fun `does not report simple companion object access`() {
+            val code = """
+                object MyConstants {
+                    const val VALUE = 42
+                }
+
+                class Test {
+                    fun method() {
+                        val v = MyConstants.VALUE
+                    }
+                }
+            """.trimIndent()
+
+            assertThat(subject.lint(code)).isEmpty()
+        }
+    }
+
+    @Nested
+    inner class `edge cases for validation` {
+        @Test
+        fun `does not report types with invalid identifier characters`() {
+            val code = """
+                class Test {
+                    fun method() {
+                        val x = `some-invalid`.foo.Bar()
+                    }
+                }
+            """.trimIndent()
+
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report all-uppercase path segments`() {
+            val code = """
+                class Test {
+                    val x: Outer.Inner.Nested = TODO()
+                }
+            """.trimIndent()
+
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report single segment paths`() {
+            val code = """
+                class Test {
+                    fun method() {
+                        val x = String.format("test")
+                    }
+                }
+            """.trimIndent()
+
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report expressions starting with numbers`() {
+            val code = """
+                class Test {
+                    fun method(): Int {
+                        return 123.toString().length
+                    }
+                }
+            """.trimIndent()
+
+            assertThat(subject.lint(code)).isEmpty()
+        }
+    }
+
+    @Nested
+    inner class `chained method calls` {
+        @Test
+        fun `does not report method chains on local variables`() {
+            val code = """
+                class Test {
+                    fun method() {
+                        val list = mutableListOf<String>()
+                        list.add("item").also { println(it) }
+                    }
+                }
+            """.trimIndent()
+
+            assertThat(subject.lint(code)).isEmpty()
+        }
+    }
+
+    @Nested
+    inner class `function calls with lowercase names` {
+        @Test
+        fun `does not report method calls on instances`() {
+            val code = """
+                class Test {
+                    fun method() {
+                        val obj = Object()
+                        obj.hashCode()
+                        obj.toString()
+                    }
+                }
+            """.trimIndent()
+
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report single-segment package qualified calls`() {
+            val code = """
+                class Test {
+                    fun method() {
+                        kotlin.run { println("test") }
+                    }
+                }
+            """.trimIndent()
+
+            assertThat(subject.lint(code)).isEmpty()
+        }
+    }
+
+    @Nested
+    inner class `empty and null selector expressions` {
+        @Test
+        fun `handles expressions with empty function names gracefully`() {
+            val code = """
+                class Test {
+                    fun method() {
+                        val x = java.lang.String()
+                    }
+                }
+            """.trimIndent()
+
+            assertThat(subject.lint(code)).hasSize(1)
+        }
+    }
+
+    @Nested
+    inner class `nested type qualifiers` {
+        @Test
+        fun `does not duplicate reports for nested qualified types`() {
+            val code = """
+                class Test {
+                    fun method(): java.util.Map.Entry<String, Int>? = null
+                }
+            """.trimIndent()
+
+            assertThat(subject.lint(code)).hasSize(1)
+        }
+
+        @Test
+        fun `reports the full type not the qualifier part`() {
+            val code = """
+                class Test {
+                    val entry: java.util.AbstractMap.SimpleEntry<String, String> = TODO()
+                }
+            """.trimIndent()
+
+            val findings = subject.lint(code)
+            assertThat(findings).hasSize(1)
+            assertThat(findings.first()).hasMessage(
+                "Fully qualified class name 'java.util.AbstractMap.SimpleEntry' can be replaced with an import."
+            )
+        }
+    }
 }
