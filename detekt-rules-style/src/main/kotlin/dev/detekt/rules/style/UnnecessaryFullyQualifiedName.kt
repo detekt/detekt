@@ -103,7 +103,7 @@ class UnnecessaryFullyQualifiedName(config: Config) : Rule(
         }
     }
 
-    @Suppress("ReturnCount", "CyclomaticComplexMethod", "LongMethod")
+    @Suppress("ReturnCount", "CyclomaticComplexMethod")
     override fun visitDotQualifiedExpression(expression: KtDotQualifiedExpression) {
         super.visitDotQualifiedExpression(expression)
 
@@ -113,16 +113,6 @@ class UnnecessaryFullyQualifiedName(config: Config) : Rule(
         // Skip if this expression is part of a larger dot-qualified expression to avoid duplicates
         val parent = expression.parent
         if (parent is KtDotQualifiedExpression && parent.receiverExpression == expression) {
-            return
-        }
-
-        // Skip if this is handled by visitUserType (i.e., this is part of a type)
-        if (expression.getParentOfType<KtUserType>(strict = false) != null) {
-            return
-        }
-
-        checkConstructorReference(expression)?.let { finding ->
-            report(finding)
             return
         }
 
@@ -137,20 +127,6 @@ class UnnecessaryFullyQualifiedName(config: Config) : Rule(
         checkConstructorOrFunctionCall(expression, receiverText, selectorText)?.let { finding ->
             report(finding)
         }
-    }
-
-    @Suppress("ReturnCount")
-    private fun checkConstructorReference(expression: KtDotQualifiedExpression): Finding? {
-        val fullText = expression.text
-        if (!fullText.startsWith("::")) return null
-
-        val classNamePart = fullText.substring(2)
-        if (!shouldReportAsFullyQualified(classNamePart)) return null
-
-        return Finding(
-            Entity.from(expression),
-            "Fully qualified constructor reference '$classNamePart' can be replaced with an import."
-        )
     }
 
     @Suppress("ReturnCount")
