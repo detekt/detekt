@@ -167,7 +167,7 @@ class UnnecessaryFullyQualifiedNameSpec {
     }
 
     @Nested
-    inner class `annotations` {
+    inner class Annotations {
         @Test
         fun `reports fully qualified names in annotations`() {
             val code = """
