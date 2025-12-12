@@ -138,8 +138,8 @@ class UnnecessaryFullyQualifiedName(config: Config) : Rule(
         if (!shouldReportAsFullyQualified(receiverText)) return null
 
         val receiverParts = receiverText.split('.')
-        val lastPart = receiverParts.lastOrNull() ?: return null
-        if (lastPart.isEmpty() || !lastPart[0].isUpperCase()) return null
+        val lastPart = receiverParts.last()
+        if (!lastPart[0].isUpperCase()) return null
 
         return if (selectorText.contains('(')) {
             val methodName = selectorText.substringBefore('(')
@@ -198,7 +198,6 @@ class UnnecessaryFullyQualifiedName(config: Config) : Rule(
 
         val baseType = typeText.substringBefore('<')
         val parts = baseType.split('.')
-        if (parts.size < 2) return false
 
         val validParts = parts.all { part ->
             part.isNotEmpty() &&
@@ -207,10 +206,10 @@ class UnnecessaryFullyQualifiedName(config: Config) : Rule(
         }
         if (!validParts) return false
 
-        val hasPackagePart = parts.any { it.isNotEmpty() && it[0].isLowerCase() }
-        val hasClassPart = parts.any { it.isNotEmpty() && it[0].isUpperCase() }
+        val hasPackagePart = parts.any { it[0].isLowerCase() }
+        val hasClassPart = parts.any { it[0].isUpperCase() }
 
-        return hasPackagePart && hasClassPart && !parts.all { it.isNotEmpty() && it[0].isUpperCase() }
+        return hasPackagePart && hasClassPart
     }
 
     private fun isInImportOrPackage(element: KtElement): Boolean =
@@ -220,15 +219,11 @@ class UnnecessaryFullyQualifiedName(config: Config) : Rule(
     private fun isInStringLiteral(element: KtElement): Boolean =
         element.getParentOfType<KtStringTemplateExpression>(strict = false) != null
 
-    @Suppress("ReturnCount")
     private fun isLikelyPackageQualifiedFunction(
         expression: KtDotQualifiedExpression,
         receiverText: String,
     ): Boolean {
         if (!receiverText.contains('.')) return false
-
-        val parts = receiverText.split('.')
-        if (parts.size < 2) return false
 
         var currentReceiver: KtExpression = expression.receiverExpression
 

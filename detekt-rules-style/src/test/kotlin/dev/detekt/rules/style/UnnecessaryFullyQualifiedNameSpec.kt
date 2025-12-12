@@ -159,6 +159,46 @@ class UnnecessaryFullyQualifiedNameSpec {
 
             assertThat(subject.lint(code)).isEmpty()
         }
+
+        @Test
+        fun `does not report fully qualified types in string interpolation`() {
+            val code = """
+                class Test {
+                    fun method() {
+                        val list: java.util.ArrayList<String> = java.util.ArrayList()
+                        val text = "${'$'}{java.util.ArrayList<String>()}"
+                    }
+                }
+            """.trimIndent()
+
+            assertThat(subject.lint(code)).hasSize(2)
+        }
+
+        @Test
+        fun `does not report class literals in string interpolation`() {
+            val code = """
+                class Test {
+                    fun method() {
+                        val text = "${'$'}{String::class}"
+                    }
+                }
+            """.trimIndent()
+
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report dot qualified expressions in string interpolation`() {
+            val code = """
+                class Test {
+                    fun method() {
+                        val text = "${'$'}{System.currentTimeMillis()}"
+                    }
+                }
+            """.trimIndent()
+
+            assertThat(subject.lint(code)).isEmpty()
+        }
     }
 
     @Nested
@@ -245,6 +285,37 @@ class UnnecessaryFullyQualifiedNameSpec {
             """.trimIndent()
 
             assertThat(subject.lint(code)).hasSize(3)
+        }
+
+        @Test
+        fun `does not report simple class literals`() {
+            val code = """
+                class Test {
+                    fun method() {
+                        val clazz = String::class
+                        val listClass = List::class
+                    }
+                }
+            """.trimIndent()
+
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report nested class literals without package`() {
+            val code = """
+                class Outer {
+                    class Inner
+                }
+
+                class Test {
+                    fun method() {
+                        val clazz = Outer.Inner::class
+                    }
+                }
+            """.trimIndent()
+
+            assertThat(subject.lint(code)).isEmpty()
         }
     }
 
@@ -681,6 +752,60 @@ class UnnecessaryFullyQualifiedNameSpec {
                 class Test {
                     fun method(): Int {
                         return 123.toString().length
+                    }
+                }
+            """.trimIndent()
+
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report calls on package paths ending with lowercase identifier`() {
+            val code = """
+                package foo.bar
+                object baz {
+                    fun doSomething() {}
+                }
+
+                class Test {
+                    fun method() {
+                        foo.bar.baz.doSomething()
+                    }
+                }
+            """.trimIndent()
+
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report function calls from unknown packages`() {
+            val code = """
+                package mycompany.utils
+                object helper {
+                    fun doSomething() {}
+                }
+
+                class Test {
+                    fun method() {
+                        mycompany.utils.helper.doSomething()
+                    }
+                }
+            """.trimIndent()
+
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report property access without method call`() {
+            val code = """
+                package foo
+                object bar {
+                    val value = 42
+                }
+
+                class Test {
+                    fun method() {
+                        val x = foo.bar.value
                     }
                 }
             """.trimIndent()
