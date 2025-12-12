@@ -61,7 +61,7 @@ jobs:
         run: ./gradlew detektMain detektTest detektFunctionalTest detektTestFixtures detektFunctionalTestMinSupportedGradle detektReportMergeSarif --continue
 
       - name: Upload SARIF to GitHub using the upload-sarif action
-        uses: github/codeql-action/upload-sarif@cf1bb45a277cb3c205638b2cd5c984db1c46a412 # v4
+        uses: github/codeql-action/upload-sarif@1b168cd39490f61582a9beae412bb7057a6b2c4e # v4
         if: success() || failure()
         with:
           sarif_file: build/reports/detekt/merge.sarif.json
