@@ -22,8 +22,8 @@ fun Config.valueOrDefaultInternal(
                         throw ClassCastException()
                     }
                     check(result.all { it is String }) {
-                        "Only lists of strings are supported. Value \"$result\" set " +
-                            "for config parameter \"${keySequence(key)}\" contains non-string values."
+                        """Only lists of strings are supported. Value "$result" set """ +
+                            """for config parameter "${keySequence(key)}" contains non-string values."""
                     }
                     result.map { it as String }
                 }
@@ -38,12 +38,12 @@ fun Config.valueOrDefaultInternal(
         }
     } catch (_: ClassCastException) {
         error(
-            "Value \"$result\" set for config parameter \"${keySequence(key)}\" is not of" +
+            """Value "$result" set for config parameter "${keySequence(key)}" is not of""" +
                 " required type ${default::class.simpleName?.let { getDefaultName(it) }}."
         )
     } catch (_: NumberFormatException) {
         error(
-            "Value \"$result\" set for config parameter \"${keySequence(key)}\" is not of" +
+            """Value "$result" set for config parameter "${keySequence(key)}" is not of""" +
                 " required type ${default::class.simpleName?.let { getDefaultName(it) }}."
         )
     }

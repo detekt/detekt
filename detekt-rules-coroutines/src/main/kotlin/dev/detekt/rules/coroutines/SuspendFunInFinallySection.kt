@@ -63,8 +63,7 @@ class SuspendFunInFinallySection(config: Config) :
     ) = analyze(expression) {
         val isSuspend = expression.resolveToCall()
             ?.successfulFunctionCallOrNull()
-            ?.isSuspendCall()
-            ?: false
+            ?.isSuspendCall() == true
         if (!isSuspend) return false
 
         val parentCalls = expression.parentCallsUpTo(topParent)
@@ -74,7 +73,7 @@ class SuspendFunInFinallySection(config: Config) :
     }
 
     private fun KaFunctionCall<*>.isSuspendCall() =
-        (symbol as? KaNamedFunctionSymbol)?.isSuspend ?: false
+        (symbol as? KaNamedFunctionSymbol)?.isSuspend == true
 
     private fun KtCallExpression.parentCallsUpTo(topParent: PsiElement) =
         generateSequence(this as PsiElement) { it.parent }
@@ -99,5 +98,5 @@ class SuspendFunInFinallySection(config: Config) :
                     ?.classId
                     ?.run { asSingleFqName().asString() } == "kotlinx.coroutines.NonCancellable"
             }
-        } ?: false
+        } == true
 }
