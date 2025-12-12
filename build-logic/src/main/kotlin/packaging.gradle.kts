@@ -53,6 +53,13 @@ publishing {
             scm {
                 url.set("https://github.com/detekt/detekt")
             }
+            distributionManagement {
+                relocation {
+                    groupId = "dev.detekt"
+                    version = "2.0.0"
+                    message = "groupId has been changed to match the detekt site"
+                }
+            }
         }
     }
 }
