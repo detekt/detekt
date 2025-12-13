@@ -19,7 +19,6 @@ import org.junit.jupiter.api.condition.EnabledOnOs
 import org.junit.jupiter.api.condition.OS
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
-import org.junit.jupiter.params.provider.ValueSource
 import java.nio.file.Path
 import kotlin.io.path.Path
 import kotlin.io.path.absolute
@@ -46,16 +45,19 @@ internal class CliArgsSpec {
             assertThat(spec.projectSpec.inputPaths).contains(pathCliArgsSpec)
         }
 
-        @ParameterizedTest
-        @ValueSource(
-            strings = [
-                "src/main,../detekt-core/src/test,build.gradle.kts",
-                "src/main;../detekt-core/src/test;build.gradle.kts",
-                "src/main,../detekt-core/src/test;build.gradle.kts",
-            ]
-        )
-        fun `when the input is defined it is passed to the spec`(param: String) {
-            val spec = parseArguments(arrayOf("--input", param)).toSpec()
+        @Test
+        fun `when the input separated by semicolon it is passed to the spec`() {
+            val spec = parseArguments(arrayOf("--input", "src/main;../detekt-core/src/test;build.gradle.kts")).toSpec()
+
+            assertThat(spec.projectSpec.inputPaths).contains(pathBuildGradle)
+            assertThat(spec.projectSpec.inputPaths).contains(pathCliArgs)
+            assertThat(spec.projectSpec.inputPaths).doesNotContain(pathCliArgsSpec)
+            assertThat(spec.projectSpec.inputPaths).contains(pathAnalyzer)
+        }
+
+        @Test
+        fun `when the input uses variable params it is passed to the spec`() {
+            val spec = parseArguments(arrayOf("--input", "src/main", "../detekt-core/src/test", "build.gradle.kts")).toSpec()
 
             assertThat(spec.projectSpec.inputPaths).contains(pathBuildGradle)
             assertThat(spec.projectSpec.inputPaths).contains(pathCliArgs)
@@ -85,7 +87,8 @@ internal class CliArgsSpec {
 
         @Nested
         inner class FilterInput {
-            private val input = arrayOf("--input", "src/main/../main/,../detekt-core/src/test,build.gradle.kts")
+            private val input = arrayOf("--input", "src/main/../main/;../detekt-core/src/test;build.gradle.kts")
+            private val inputsWithSpaces = arrayOf("--input", "src/main/../main/", "../detekt-core/src/test", "build.gradle.kts")
             private val pathMain = Path("src/main/kotlin/dev/detekt/cli/Main.kt").absolute()
 
             @Test
@@ -129,6 +132,16 @@ internal class CliArgsSpec {
             @Test
             fun `excludes in path normalized`() {
                 val spec = parseArguments(input + arrayOf("--excludes", "src/main/kotlin/**")).toSpec()
+
+                assertThat(spec.projectSpec.inputPaths).contains(pathBuildGradle)
+                assertThat(spec.projectSpec.inputPaths).doesNotContain(pathCliArgs)
+                assertThat(spec.projectSpec.inputPaths).doesNotContain(pathMain)
+                assertThat(spec.projectSpec.inputPaths).contains(pathAnalyzer)
+            }
+
+            @Test
+            fun `excludes in path normalized when input with spaces is used`() {
+                val spec = parseArguments(inputsWithSpaces + arrayOf("--excludes", "src/main/kotlin/**")).toSpec()
 
                 assertThat(spec.projectSpec.inputPaths).contains(pathBuildGradle)
                 assertThat(spec.projectSpec.inputPaths).doesNotContain(pathCliArgs)

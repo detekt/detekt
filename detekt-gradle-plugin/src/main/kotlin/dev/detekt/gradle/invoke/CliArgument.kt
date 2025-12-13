@@ -51,7 +51,7 @@ internal data class GenerateConfigArgument(val file: RegularFile) : CliArgument(
 }
 
 internal data class InputArgument(val fileCollection: FileCollection) : CliArgument() {
-    override fun toArgument() = listOf(INPUT_PARAMETER, fileCollection.joinToString(",") { it.absolutePath })
+    override fun toArgument() = listOf(INPUT_PARAMETER, fileCollection.joinToString(";") { it.absolutePath })
 }
 
 internal data class ClasspathArgument(val fileCollection: FileCollection) : CliArgument() {
@@ -99,7 +99,7 @@ internal data class BaselineArgumentOrEmpty(val baseline: RegularFile?) : CliArg
 internal data class DefaultReportArgument(val report: DetektReport) : CliArgument() {
     override fun toArgument(): List<String> =
         if (report.required.get()) {
-            listOf(REPORT_PARAMETER, "${report.type.reportId}:${report.outputLocation.get().asFile.absoluteFile}")
+            listOf(REPORT_PARAMETER, "${report.type.reportId} ${report.outputLocation.get().asFile.absoluteFile}")
         } else {
             emptyList()
         }
@@ -117,7 +117,7 @@ internal data class FriendPathArgs(val fileCollection: FileCollection) : CliArgu
     override fun toArgument() = if (!fileCollection.isEmpty) {
         listOf(
             FRIEND_PATHS_PARAMETER,
-            fileCollection.joinToString(",") { it.absolutePath }
+            fileCollection.joinToString(";") { it.absolutePath }
         )
     } else {
         emptyList()
@@ -141,7 +141,7 @@ internal data class ConfigArgument(val files: FileCollection) : CliArgument() {
     override fun toArgument() = if (files.isEmpty) {
         emptyList()
     } else {
-        listOf(CONFIG_PARAMETER, files.joinToString(",") { it.absolutePath })
+        listOf(CONFIG_PARAMETER, files.joinToString(";") { it.absolutePath })
     }
 }
 
@@ -169,7 +169,7 @@ internal data class OptInArguments(val list: List<String>) : CliArgument() {
     override fun toArgument() = if (list.isNotEmpty()) {
         listOf(
             OPT_IN_PARAMETER,
-            list.joinToString(",")
+            list.joinToString(";")
         )
     } else {
         emptyList()

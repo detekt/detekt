@@ -80,7 +80,7 @@ tasks {
         doNotTrackState("The entire root directory is read as the input source.")
         classpath = files(shadowJar)
         workingDir = rootDir
-        args = listOf("@./config/detekt/argsfile", "-p", pluginsJarFiles.files.joinToString(",") { it.path })
+        args = listOf("@./config/detekt/argsfile", "-p", pluginsJarFiles.files.joinToString(";") { it.path })
     }
 
     withType<Jar>().configureEach {

@@ -56,7 +56,7 @@ class ReportPathConverter : IStringConverter<ReportPath> {
 }
 
 class PathSplitter : IParameterSplitter {
-    override fun split(value: String): List<String> = value.split(',', ';')
+    override fun split(value: String): List<String> = value.split(CliArgs.SEPARATOR)
 }
 
 class PathValidator : IValueValidator<List<Path>> {

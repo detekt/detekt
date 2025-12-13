@@ -30,19 +30,19 @@ class DetektTaskDslSpec {
         @Test
         fun `enables checkstyle report to default location`() {
             val checkstyleReportFile = gradleRunner.projectFile("build/reports/detekt/detekt.xml")
-            assertThat(result.output).contains("--report checkstyle:$checkstyleReportFile")
+            assertThat(result.output).contains("--report checkstyle $checkstyleReportFile")
         }
 
         @Test
         fun `enables html report to default location`() {
             val htmlReportFile = gradleRunner.projectFile("build/reports/detekt/detekt.html")
-            assertThat(result.output).contains("--report html:$htmlReportFile")
+            assertThat(result.output).contains("--report html $htmlReportFile")
         }
 
         @Test
         fun `enables sarif report to default location`() {
             val sarifReportFile = gradleRunner.projectFile("build/reports/detekt/detekt.sarif")
-            assertThat(result.output).contains("--report sarif:$sarifReportFile")
+            assertThat(result.output).contains("--report sarif $sarifReportFile")
         }
 
         @Test
@@ -52,7 +52,7 @@ class DetektTaskDslSpec {
             val file2 = gradleRunner.projectFile("src/test/java/My1Root0Class.kt")
             val file3 = gradleRunner.projectFile("src/main/kotlin/My2Root0Class.kt")
             val file4 = gradleRunner.projectFile("src/test/kotlin/My3Root0Class.kt")
-            assertThat(result.output).contains("--input $file1,$file2,$file3,$file4 ")
+            assertThat(result.output).contains("--input $file1;$file2;$file3;$file4 ")
         }
     }
 
@@ -145,7 +145,7 @@ class DetektTaskDslSpec {
         fun `sets input parameter to absolute filenames of all source files`() {
             val file1 = gradleRunner.projectFile("$customSrc1/My0Root0Class.kt")
             val file2 = gradleRunner.projectFile("$customSrc2/My1Root0Class.kt")
-            val expectedInputParam = "--input $file1,$file2"
+            val expectedInputParam = "--input $file1;$file2"
             assertThat(result.output).contains(expectedInputParam)
         }
 
@@ -169,19 +169,19 @@ class DetektTaskDslSpec {
         @Test
         fun `configures checkstyle report to custom directory`() {
             val checkstyleReportFile = gradleRunner.projectFile("build/detekt-reports/detekt.xml")
-            assertThat(result.output).contains("--report checkstyle:$checkstyleReportFile")
+            assertThat(result.output).contains("--report checkstyle $checkstyleReportFile")
         }
 
         @Test
         fun `configures html report to custom directory`() {
             val htmlReportFile = gradleRunner.projectFile("build/detekt-reports/detekt.html")
-            assertThat(result.output).contains("--report html:$htmlReportFile")
+            assertThat(result.output).contains("--report html $htmlReportFile")
         }
 
         @Test
         fun `configures sarif report to custom directory`() {
             val sarifReportFile = gradleRunner.projectFile("build/detekt-reports/detekt.sarif")
-            assertThat(result.output).contains("--report sarif:$sarifReportFile")
+            assertThat(result.output).contains("--report sarif $sarifReportFile")
         }
     }
 
@@ -205,13 +205,13 @@ class DetektTaskDslSpec {
         @Test
         fun `configures checkstyle report to specific absolute filename`() {
             val checkstyleReportFile = gradleRunner.projectFile("build/xml-reports/custom-detekt.xml")
-            assertThat(result.output).contains("--report checkstyle:$checkstyleReportFile")
+            assertThat(result.output).contains("--report checkstyle $checkstyleReportFile")
         }
 
         @Test
         fun `configures html report to default name in custom directory`() {
             val htmlReportFile = gradleRunner.projectFile("build/detekt-reports/detekt.html")
-            assertThat(result.output).contains("--report html:$htmlReportFile")
+            assertThat(result.output).contains("--report html $htmlReportFile")
         }
     }
 
@@ -268,13 +268,13 @@ class DetektTaskDslSpec {
             @Test
             fun `configures custom xml report to absolute filename`() {
                 val xmlReportFile = gradleRunner.projectFile("build/reports/custom.xml")
-                assertThat(result.output).contains("--report customXml:$xmlReportFile")
+                assertThat(result.output).contains("--report customXml $xmlReportFile")
             }
 
             @Test
             fun `configures custom json report to absolute filename`() {
                 val xmlReportFile = gradleRunner.projectFile("build/reports/custom.json")
-                assertThat(result.output).contains("--report customJson:$xmlReportFile")
+                assertThat(result.output).contains("--report customJson $xmlReportFile")
             }
         }
 
@@ -559,19 +559,19 @@ class DetektTaskDslSpec {
         @Test
         fun `enables checkstyle report to specified location`() {
             val checkstyleReportFile = gradleRunner.projectFile("build/reports/mydetekt.xml")
-            assertThat(result.output).contains("--report checkstyle:$checkstyleReportFile")
+            assertThat(result.output).contains("--report checkstyle $checkstyleReportFile")
         }
 
         @Test
         fun `enables html report to specified location`() {
             val htmlReportFile = gradleRunner.projectFile("build/reports/mydetekt.html")
-            assertThat(result.output).contains("--report html:$htmlReportFile")
+            assertThat(result.output).contains("--report html $htmlReportFile")
         }
 
         @Test
         fun `enables sarif report to specified location`() {
             val sarifReportFile = gradleRunner.projectFile("build/reports/mydetekt.sarif")
-            assertThat(result.output).contains("--report sarif:$sarifReportFile")
+            assertThat(result.output).contains("--report sarif $sarifReportFile")
         }
 
         @Test
