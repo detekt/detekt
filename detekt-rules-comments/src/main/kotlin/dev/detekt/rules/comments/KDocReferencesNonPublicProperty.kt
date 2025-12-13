@@ -63,7 +63,7 @@ class KDocReferencesNonPublicProperty(config: Config) : Rule(
                     super.visitParameter(parameter)
                     klass.registerProperty(parameter)
                 }
-            }
+            },
         )
 
         val privateProperties = privatePropertiesByClass.remove(klass)
@@ -74,7 +74,7 @@ class KDocReferencesNonPublicProperty(config: Config) : Rule(
         for (privateProperty in privateProperties.orEmpty()) {
             val qualifiedName = privateProperty.qualifiedName()
             val matchesPublicProperty = publicPropertyNames.contains(qualifiedName)
-            if (!matchesPublicProperty && comment.contains("[$qualifiedName]")) {
+            if (!matchesPublicProperty && comment.contains("\\[${Regex.escape(qualifiedName)}](?!\\[.*])".toRegex())) {
                 report(privateProperty)
             }
         }
@@ -126,8 +126,8 @@ class KDocReferencesNonPublicProperty(config: Config) : Rule(
             Finding(
                 Entity.atName(property),
                 "The property ${property.nameAsSafeName} " +
-                    "is non-public and should not be referenced from KDoc comments."
-            )
+                    "is non-public and should not be referenced from KDoc comments.",
+            ),
         )
     }
 }
