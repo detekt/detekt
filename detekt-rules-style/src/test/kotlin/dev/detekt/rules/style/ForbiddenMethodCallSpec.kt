@@ -723,6 +723,160 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
         }
     }
 
+    @Nested
+    inner class `Kotlin property getter setter` {
+        @Test
+        fun `should report getter call`() {
+            val code = """                
+                fun foo() = "".length + mutableListOf<Int>().size
+            """.trimIndent()
+
+            val findings = ForbiddenMethodCall(
+                TestConfig(METHODS to listOf("kotlin.String.getLength()", "kotlin.collections.MutableList.size"))
+            ).lintWithContext(env, code)
+            assertThat(findings).hasSize(2)
+        }
+
+        @Test
+        fun `should report setter call`() {
+            val code = """
+                fun foo() {
+                    val state = kotlinx.coroutines.flow.MutableStateFlow(0)
+                    state.value = 1
+                }
+            """.trimIndent()
+            val findings = ForbiddenMethodCall(
+                TestConfig(METHODS to listOf("kotlinx.coroutines.flow.MutableStateFlow.setValue()"))
+            ).lintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+        }
+
+        @Test
+        fun `should report extension getter call`() {
+            val code = """                
+                fun main() {
+                    println('a'.code)
+                }
+            """.trimIndent()
+
+            val findings = ForbiddenMethodCall(
+                TestConfig(METHODS to listOf("kotlin.getCode(kotlin.Char)"))
+            ).lintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+        }
+
+        @Test
+        fun `should report custom extension setter call`() {
+            val code = """
+                private var MutableList<Int>.name: Any
+                    get() {
+                        TODO()
+                    }
+                    set(value) {}
+                fun foo() {
+                    mutableListOf<Int>().name = ""
+                    println(mutableListOf<Int>().name)
+                }
+            """.trimIndent()
+
+            val findings = ForbiddenMethodCall(
+                TestConfig(METHODS to listOf("setName(kotlin.collections.MutableList, kotlin.Any)"))
+            ).lintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+        }
+
+        @Test
+        fun `should report custom extension getter and setter call`() {
+            val code = """
+                private var MutableList<Int>.name: Any
+                    get() {
+                        TODO()
+                    }
+                    set(value) {}
+                fun foo() {
+                    mutableListOf<Int>().name = ""
+                    println(mutableListOf<Int>().name)
+                }
+            """.trimIndent()
+
+            val findings = ForbiddenMethodCall(
+                TestConfig(
+                    METHODS to listOf(
+                        "setName(kotlin.collections.MutableList, kotlin.Any)",
+                        "getName(kotlin.collections.MutableList)"
+                    )
+                )
+            ).lintWithContext(env, code)
+            assertThat(findings).hasSize(2)
+        }
+
+        @Test
+        fun `should report overridden getter and setter call`() {
+            val code = """
+                interface A {
+                    var a: Int
+                }
+                class B : A {
+                    override var a: Int
+                        get() = 0
+                        set(value) {}
+            
+                }
+                fun foo() = run {
+                    B().a = -1
+                    B().a
+                }
+            """.trimIndent()
+
+            val findings = ForbiddenMethodCall(
+                TestConfig(METHODS to listOf("B.setA(kotlin.Int)", "B.getA()"))
+            ).lintWithContext(env, code)
+            assertThat(findings).hasSize(2)
+        }
+
+        @Test
+        fun `should report overridden getter and setter call configured from interface`() {
+            val code = """
+                interface A {
+                    var a: Int
+                }
+                class B : A {
+                    override var a: Int
+                        get() = 0
+                        set(value) {}
+            
+                }
+                fun foo() = run {
+                    B().a = -1
+                    B().a
+                }
+            """.trimIndent()
+
+            val findings = ForbiddenMethodCall(
+                TestConfig(METHODS to listOf("A.setA(kotlin.Int)", "A.getA()"))
+            ).lintWithContext(env, code)
+            assertThat(findings).hasSize(2)
+        }
+
+        @Test
+        fun `should report data class property call - #8826`() {
+            val code = """
+                package org.example
+
+                data class Something(val more: String)        
+                
+                fun main() {
+                    val something = Something("still")
+                    val more = something.more
+                }
+            """.trimIndent()
+            val findings = ForbiddenMethodCall(
+                TestConfig(METHODS to listOf("org.example.Something.getMore"))
+            ).lintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+        }
+    }
+
     @Test
     fun `should report property setters call`() {
         val code = """

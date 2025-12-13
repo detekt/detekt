@@ -8,6 +8,7 @@ object RuleSetPagePrinter : DocumentationPrinter<RuleSetPage> {
 
     override fun print(item: RuleSetPage): String =
         markdown {
+            paragraph { "Rule Set ID: `${item.ruleSet.name}`" }
             if (item.ruleSet.description.isNotEmpty()) {
                 paragraph { item.ruleSet.description }
             } else {

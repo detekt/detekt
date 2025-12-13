@@ -21,18 +21,17 @@ class DetektYmlConfigSpec {
         Path("../detekt-core/src/main/resources/default-detekt-config.yml").absolute()
     ) as YamlConfig
 
-    private fun ruleSetsNamesToPackage(): List<Arguments> =
-        listOf(
-            arguments("complexity", "dev.detekt.rules.complexity"),
-            arguments("coroutines", "dev.detekt.rules.coroutines"),
-            arguments("comments", "dev.detekt.rules.documentation"),
-            arguments("empty-blocks", "dev.detekt.rules.empty"),
-            arguments("exceptions", "dev.detekt.rules.exceptions"),
-            arguments("naming", "dev.detekt.rules.naming"),
-            arguments("performance", "dev.detekt.rules.performance"),
-            arguments("potential-bugs", "dev.detekt.rules.bugs"),
-            arguments("style", "dev.detekt.rules.style"),
-        )
+    private fun ruleSetsNamesToPackage(): List<Arguments> = listOf(
+        arguments("complexity", "dev.detekt.rules.complexity"),
+        arguments("coroutines", "dev.detekt.rules.coroutines"),
+        arguments("comments", "dev.detekt.rules.documentation"),
+        arguments("empty-blocks", "dev.detekt.rules.empty"),
+        arguments("exceptions", "dev.detekt.rules.exceptions"),
+        arguments("naming", "dev.detekt.rules.naming"),
+        arguments("performance", "dev.detekt.rules.performance"),
+        arguments("potential-bugs", "dev.detekt.rules.bugs"),
+        arguments("style", "dev.detekt.rules.style"),
+    )
 
     @ParameterizedTest
     @MethodSource("ruleSetsNamesToPackage")
