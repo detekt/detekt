@@ -147,33 +147,34 @@ class ForbiddenMethodCall(config: Config) :
     private fun KaSession.getCallInfos(
         kaCall: KaCall,
         expression: KtExpression,
-    ): Sequence<Pair<KaPropertySymbol?, KaCallableSymbol?>> = sequence {
-        val symbols = when (kaCall) {
-            is KaCallableMemberCall<*, *> -> {
-                val expressionSymbol = kaCall.partiallyAppliedSymbol.symbol
-                sequenceOf(expressionSymbol).plus(expressionSymbol.allOverriddenSymbols).map {
-                    if (
-                        it is KaPropertySymbol &&
-                        it.isGetterOrSetter() &&
-                        expression !is KtOperationReferenceExpression
-                    ) {
-                        it to getPropertyAccessorSymbol(it, expression)
-                    } else {
-                        null to it
+    ): Sequence<Pair<KaPropertySymbol?, KaCallableSymbol?>> =
+        sequence {
+            val symbols = when (kaCall) {
+                is KaCallableMemberCall<*, *> -> {
+                    val expressionSymbol = kaCall.partiallyAppliedSymbol.symbol
+                    sequenceOf(expressionSymbol).plus(expressionSymbol.allOverriddenSymbols).map {
+                        if (
+                            it is KaPropertySymbol &&
+                            it.isGetterOrSetter() &&
+                            expression !is KtOperationReferenceExpression
+                        ) {
+                            it to getPropertyAccessorSymbol(it, expression)
+                        } else {
+                            null to it
+                        }
                     }
                 }
-            }
 
-            is KaCompoundAccessCall -> sequenceOf(
-                null to kaCall.compoundOperation.operationPartiallyAppliedSymbol.symbol
-            )
+                is KaCompoundAccessCall -> sequenceOf(
+                    null to kaCall.compoundOperation.operationPartiallyAppliedSymbol.symbol
+                )
 
-            is KaCompoundArrayAccessCall -> null
-            is KaCompoundVariableAccessCall -> null
-        } ?: return@sequence
+                is KaCompoundArrayAccessCall -> null
+                is KaCompoundVariableAccessCall -> null
+            } ?: return@sequence
 
-        yieldAll(symbols)
-    }
+            yieldAll(symbols)
+        }
 
     private fun KaPropertySymbol.isGetterOrSetter(): Boolean = hasSetter || hasGetter
 
