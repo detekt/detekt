@@ -40,6 +40,5 @@ class EmptyFunctionBlock(config: Config) : EmptyRule(config) {
         }
     }
 
-    private fun KtNamedFunction.isDefaultFunction() =
-        getParentOfType<KtClass>(true)?.isInterface() == true && hasBody()
+    private fun KtNamedFunction.isDefaultFunction() = getParentOfType<KtClass>(true)?.isInterface() == true && hasBody()
 }

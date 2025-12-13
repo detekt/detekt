@@ -14,24 +14,25 @@ class EmptyCodeProvider : DefaultRuleSetProvider {
 
     override val ruleSetId = RuleSetId("empty-blocks")
 
-    override fun instance(): RuleSet = RuleSet(
-        ruleSetId,
-        listOf(
-            ::EmptyCatchBlock,
-            ::EmptyClassBlock,
-            ::EmptyDefaultConstructor,
-            ::EmptyDoWhileBlock,
-            ::EmptyElseBlock,
-            ::EmptyFinallyBlock,
-            ::EmptyForBlock,
-            ::EmptyFunctionBlock,
-            ::EmptyIfBlock,
-            ::EmptyInitBlock,
-            ::EmptyKotlinFile,
-            ::EmptySecondaryConstructor,
-            ::EmptyTryBlock,
-            ::EmptyWhenBlock,
-            ::EmptyWhileBlock,
+    override fun instance(): RuleSet =
+        RuleSet(
+            ruleSetId,
+            listOf(
+                ::EmptyCatchBlock,
+                ::EmptyClassBlock,
+                ::EmptyDefaultConstructor,
+                ::EmptyDoWhileBlock,
+                ::EmptyElseBlock,
+                ::EmptyFinallyBlock,
+                ::EmptyForBlock,
+                ::EmptyFunctionBlock,
+                ::EmptyIfBlock,
+                ::EmptyInitBlock,
+                ::EmptyKotlinFile,
+                ::EmptySecondaryConstructor,
+                ::EmptyTryBlock,
+                ::EmptyWhenBlock,
+                ::EmptyWhileBlock,
+            )
         )
-    )
 }

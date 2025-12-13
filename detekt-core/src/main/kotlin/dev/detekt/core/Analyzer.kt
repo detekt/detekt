@@ -38,10 +38,7 @@ internal class Analyzer(
         }
     }
 
-    private fun runSync(
-        ktFiles: Collection<KtFile>,
-        languageVersionSettings: LanguageVersionSettings,
-    ): List<Issue> =
+    private fun runSync(ktFiles: Collection<KtFile>, languageVersionSettings: LanguageVersionSettings): List<Issue> =
         ktFiles.flatMap { file ->
             processors.forEach { it.onProcess(file) }
             val issues = runCatching { analyze(file, languageVersionSettings) }.fold(
@@ -52,10 +49,7 @@ internal class Analyzer(
             issues
         }
 
-    private fun runAsync(
-        ktFiles: Collection<KtFile>,
-        languageVersionSettings: LanguageVersionSettings,
-    ): List<Issue> {
+    private fun runAsync(ktFiles: Collection<KtFile>, languageVersionSettings: LanguageVersionSettings): List<Issue> {
         val service = settings.taskPool
         val tasks: TaskList<List<Issue>?> = ktFiles.map { file ->
             service.task {
@@ -68,10 +62,7 @@ internal class Analyzer(
         return awaitAll(tasks).filterNotNull().flatten()
     }
 
-    private fun analyze(
-        file: KtFile,
-        languageVersionSettings: LanguageVersionSettings,
-    ): List<Issue> {
+    private fun analyze(file: KtFile, languageVersionSettings: LanguageVersionSettings): List<Issue> {
         val (correctableRules, otherRules) = rules.asSequence()
             .filter { ruleDescriptor ->
                 ruleDescriptor.config.parent?.shouldAnalyzeFile(file, settings.spec.projectSpec.basePath) != false
@@ -118,17 +109,17 @@ private fun throwIllegalStateException(file: KtFile, error: Throwable): Nothing 
     throw IllegalStateException(message, error)
 }
 
-private fun Finding.toIssue(rule: RuleInstance, severity: Severity, basePath: Path): Issue = Issue(
-    ruleInstance = rule,
-    entity = entity.toIssue(basePath),
-    references = references.map { it.toIssue(basePath) },
-    message = message,
-    severity = severity,
-    suppressReasons = suppressReasons,
-)
+private fun Finding.toIssue(rule: RuleInstance, severity: Severity, basePath: Path): Issue =
+    Issue(
+        ruleInstance = rule,
+        entity = entity.toIssue(basePath),
+        references = references.map { it.toIssue(basePath) },
+        message = message,
+        severity = severity,
+        suppressReasons = suppressReasons,
+    )
 
-private fun Entity.toIssue(basePath: Path): Issue.Entity =
-    Issue.Entity(signature, location.toIssue(basePath))
+private fun Entity.toIssue(basePath: Path): Issue.Entity = Issue.Entity(signature, location.toIssue(basePath))
 
 private fun Location.toIssue(basePath: Path): Issue.Location =
     Issue.Location(source, endSource, text, basePath.relativize(path))

@@ -139,9 +139,10 @@ private class UnusedVariableVisitor(private val allowedNames: Regex) : DetektVis
     }
 
     context(session: KaSession)
-    private fun KtExpression.resolveToLocalVariableSymbol(): KaLocalVariableSymbol? = with(session) {
-        mainReference?.resolveToSymbol() as? KaLocalVariableSymbol
-    }
+    private fun KtExpression.resolveToLocalVariableSymbol(): KaLocalVariableSymbol? =
+        with(session) {
+            mainReference?.resolveToSymbol() as? KaLocalVariableSymbol
+        }
 
     private fun registerVariableUse(symbol: KaLocalVariableSymbol) {
         symbol.psi?.also {

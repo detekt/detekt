@@ -52,11 +52,12 @@ class ArrayPrimitive(config: Config) :
         }
     }
 
-    private fun KtCallExpression.returnsArrayPrimitive(): Boolean = analyze(this) {
-        val functionCall = resolveToCall()?.singleFunctionCallOrNull() ?: return false
-        val returnType = functionCall.partiallyAppliedSymbol.signature.returnType
-        return returnType.arrayElementType?.isPrimitive == true
-    }
+    private fun KtCallExpression.returnsArrayPrimitive(): Boolean =
+        analyze(this) {
+            val functionCall = resolveToCall()?.singleFunctionCallOrNull() ?: return false
+            val returnType = functionCall.partiallyAppliedSymbol.signature.returnType
+            return returnType.arrayElementType?.isPrimitive == true
+        }
 
     override fun visitNamedDeclaration(declaration: KtNamedDeclaration) {
         super.visitNamedDeclaration(declaration)
@@ -71,9 +72,10 @@ class ArrayPrimitive(config: Config) :
             .forEach { report(Finding(Entity.from(it), description)) }
     }
 
-    private fun KtTypeReference.isArrayPrimitive(): Boolean = analyze(this) {
-        type.symbol?.classId == StandardClassIds.Array && type.arrayElementType?.isPrimitive == true
-    }
+    private fun KtTypeReference.isArrayPrimitive(): Boolean =
+        analyze(this) {
+            type.symbol?.classId == StandardClassIds.Array && type.arrayElementType?.isPrimitive == true
+        }
 
     companion object {
         private val factoryMethodFqNames = listOf(

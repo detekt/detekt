@@ -61,8 +61,7 @@ class SpacingAfterPackageDeclaration(config: Config) : Rule(
         }
     }
 
-    private fun isPackageDeclaration(element: PsiElement?) =
-        element is KtPackageDirective && element.text.isNotEmpty()
+    private fun isPackageDeclaration(element: PsiElement?) = element is KtPackageDirective && element.text.isNotEmpty()
 
     private fun checkKtElementsDeclaration(importList: KtImportList) {
         val ktElement = importList.siblings(withItself = false).filterIsInstance<KtElement>().firstOrNull() ?: return

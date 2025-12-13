@@ -70,9 +70,10 @@ class ComplexInterface(config: Config) : Rule(
     }
 
     private fun calculateMembers(body: KtClassBody): Int {
-        fun PsiElement.considerPrivate() = includePrivateDeclarations ||
-            this is KtTypeParameterListOwner &&
-            !this.isPrivate()
+        fun PsiElement.considerPrivate() =
+            includePrivateDeclarations ||
+                this is KtTypeParameterListOwner &&
+                !this.isPrivate()
 
         fun countFunctions(psiElements: List<PsiElement>): Int {
             val functions = psiElements.filterIsInstance<KtNamedFunction>()

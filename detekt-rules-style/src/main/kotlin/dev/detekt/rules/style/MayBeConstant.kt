@@ -107,8 +107,7 @@ class MayBeConstant(config: Config) : Rule(
             isConstant() ||
             isOverride()
 
-    private fun KtProperty.isInObject() =
-        !isTopLevel && containingClassOrObject !is KtObjectDeclaration
+    private fun KtProperty.isInObject() = !isTopLevel && containingClassOrObject !is KtObjectDeclaration
 
     private fun KtExpression.isConstantExpression(): Boolean =
         this is KtStringTemplateExpression &&

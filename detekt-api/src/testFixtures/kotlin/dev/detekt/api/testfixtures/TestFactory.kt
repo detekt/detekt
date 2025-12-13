@@ -33,13 +33,14 @@ fun createIssue(
     message: String = "TestMessage",
     severity: Severity = Severity.Error,
     suppressReasons: List<String> = emptyList(),
-): Issue = createIssue(
-    ruleInstance = createRuleInstance(ruleId),
-    entity = entity,
-    message = message,
-    severity = severity,
-    suppressReasons = suppressReasons,
-)
+): Issue =
+    createIssue(
+        ruleInstance = createRuleInstance(ruleId),
+        entity = entity,
+        message = message,
+        severity = severity,
+        suppressReasons = suppressReasons,
+    )
 
 fun createIssue(
     ruleInstance: RuleInstance,
@@ -47,14 +48,15 @@ fun createIssue(
     message: String = "TestMessage",
     severity: Severity = Severity.Error,
     suppressReasons: List<String> = emptyList(),
-): Issue = Issue(
-    ruleInstance = ruleInstance,
-    entity = entity,
-    references = emptyList(),
-    message = message,
-    severity = severity,
-    suppressReasons = suppressReasons,
-)
+): Issue =
+    Issue(
+        ruleInstance = ruleInstance,
+        entity = entity,
+        references = emptyList(),
+        message = message,
+        severity = severity,
+        suppressReasons = suppressReasons,
+    )
 
 fun createIssue(
     ruleInstance: RuleInstance,
@@ -62,14 +64,15 @@ fun createIssue(
     message: String = "TestMessage",
     severity: Severity = Severity.Error,
     suppressReasons: List<String> = emptyList(),
-): Issue = Issue(
-    ruleInstance = ruleInstance,
-    entity = createIssueEntity(location),
-    references = emptyList(),
-    message = message,
-    severity = severity,
-    suppressReasons = suppressReasons,
-)
+): Issue =
+    Issue(
+        ruleInstance = ruleInstance,
+        entity = createIssueEntity(location),
+        references = emptyList(),
+        message = message,
+        severity = severity,
+        suppressReasons = suppressReasons,
+    )
 
 @Suppress("LongParameterList")
 fun createRuleInstance(
@@ -79,44 +82,48 @@ fun createRuleInstance(
     description: String = "Description ${id.substringBefore("/")}",
     severity: Severity = Severity.Error,
     active: Boolean = true,
-): RuleInstance = RuleInstance(
-    id = id,
-    ruleSetId = RuleSetId(ruleSetId),
-    url = url?.let(::URI),
-    description = description,
-    severity = severity,
-    active = active,
-)
+): RuleInstance =
+    RuleInstance(
+        id = id,
+        ruleSetId = RuleSetId(ruleSetId),
+        url = url?.let(::URI),
+        description = description,
+        severity = severity,
+        active = active,
+    )
 
 fun createEntity(
     location: Location = createLocation(),
     signature: String = "TestEntitySignature",
     ktElement: KtElement = FakeKtElement(),
-): Entity = Entity(
-    signature = signature,
-    location = location,
-    ktElement = ktElement,
-)
+): Entity =
+    Entity(
+        signature = signature,
+        location = location,
+        ktElement = ktElement,
+    )
 
 fun createLocation(
     source: Pair<Int, Int> = 1 to 1,
     endSource: Pair<Int, Int> = 1 to 1,
     text: IntRange = 0..0,
     path: Path = Path("TestFile.kt"),
-): Location = Location(
-    source = SourceLocation(source.first, source.second),
-    endSource = SourceLocation(endSource.first, endSource.second),
-    text = TextLocation(text.first, text.last),
-    path = path,
-)
+): Location =
+    Location(
+        source = SourceLocation(source.first, source.second),
+        endSource = SourceLocation(endSource.first, endSource.second),
+        text = TextLocation(text.first, text.last),
+        path = path,
+    )
 
 fun createIssueEntity(
     location: Issue.Location = createIssueLocation(),
     signature: String = "TestEntitySignature",
-): Issue.Entity = Issue.Entity(
-    signature = signature,
-    location = location,
-)
+): Issue.Entity =
+    Issue.Entity(
+        signature = signature,
+        location = location,
+    )
 
 fun createIssueLocation(
     path: String = "TestFile.kt",

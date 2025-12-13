@@ -45,23 +45,24 @@ class MarkdownOutputReport : OutputReport {
         basePath = context.basePath
     }
 
-    override fun render(detektion: Detektion) = markdown {
-        h1 { "detekt" }
+    override fun render(detektion: Detektion) =
+        markdown {
+            h1 { "detekt" }
 
-        h2 { "Metrics" }
-        renderMetrics(detektion.metrics)
+            h2 { "Metrics" }
+            renderMetrics(detektion.metrics)
 
-        h2 { "Complexity Report" }
-        renderComplexity(getComplexityMetrics(detektion))
+            h2 { "Complexity Report" }
+            renderComplexity(getComplexityMetrics(detektion))
 
-        renderIssues(detektion.issues.filterNot { it.suppressed }, basePath)
-        emptyLine()
+            renderIssues(detektion.issues.filterNot { it.suppressed }, basePath)
+            emptyLine()
 
-        paragraph {
-            val detektLink = link("detekt version ${renderVersion()}", "$DETEKT_WEBSITE_BASE_URL/")
-            "generated with $detektLink on ${renderDate()}"
+            paragraph {
+                val detektLink = link("detekt version ${renderVersion()}", "$DETEKT_WEBSITE_BASE_URL/")
+                "generated with $detektLink on ${renderDate()}"
+            }
         }
-    }
 
     private fun renderVersion(): String = whichDetekt()
 

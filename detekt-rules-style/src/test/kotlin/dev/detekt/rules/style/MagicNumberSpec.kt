@@ -622,14 +622,15 @@ class MagicNumberSpec {
     inner class `ignoring named arguments` {
         @Nested
         inner class `in constructor invocation` {
-            private fun code(numberString: String) = """
-                data class Model(
-                        val someVal: Int,
-                        val other: String = "default"
-                )
-                
-                var model = Model(someVal = $numberString)
-            """.trimIndent()
+            private fun code(numberString: String) =
+                """
+                    data class Model(
+                            val someVal: Int,
+                            val other: String = "default"
+                    )
+                    
+                    var model = Model(someVal = $numberString)
+                """.trimIndent()
 
             @Test
             fun `should not ignore int`() {
@@ -686,14 +687,15 @@ class MagicNumberSpec {
         @Nested
         inner class `Issue#659 - false-negative reporting on unnamed argument when ignore is true` {
 
-            private fun code(numberString: String) = """
-                data class Model(
-                        val someVal: Int,
-                        val other: String = "default"
-                )
-                
-                var model = Model($numberString)
-            """.trimIndent()
+            private fun code(numberString: String) =
+                """
+                    data class Model(
+                            val someVal: Int,
+                            val other: String = "default"
+                    )
+                    
+                    var model = Model($numberString)
+                """.trimIndent()
 
             @Test
             fun `should detect the argument by default`() {
@@ -703,11 +705,12 @@ class MagicNumberSpec {
 
         @Nested
         inner class `in function invocation` {
-            private fun code(number: Number) = """
-                fun tested(someVal: Int, other: String = "default") {}
-                
-                val t = tested(someVal = $number)
-            """.trimIndent()
+            private fun code(number: Number) =
+                """
+                    fun tested(someVal: Int, other: String = "default") {}
+                    
+                    val t = tested(someVal = $number)
+                """.trimIndent()
 
             @Test
             fun `should ignore int by default`() {
@@ -884,17 +887,18 @@ class MagicNumberSpec {
     inner class `a number as part of a range` {
 
         @Suppress("UnusedPrivateFunction")
-        private fun cases() = listOf(
-            "val range = 1..27",
-            "val range = -1..-27",
-            "val range = (1..27)",
-            "val range = 27 downTo 1",
-            "val range = 1 until 27 step 1",
-            "val range = -1 until -27 step 1",
-            "val inRange = 1 in 1..27",
-            "val inRange = (1 in 27 downTo 0 step 1)",
-            "val inRange = (1..27 step 1).last"
-        )
+        private fun cases() =
+            listOf(
+                "val range = 1..27",
+                "val range = -1..-27",
+                "val range = (1..27)",
+                "val range = 27 downTo 1",
+                "val range = 1 until 27 step 1",
+                "val range = -1 until -27 step 1",
+                "val inRange = 1 in 1..27",
+                "val inRange = (1 in 27 downTo 0 step 1)",
+                "val inRange = (1..27 step 1).last"
+            )
 
         @ParameterizedTest
         @MethodSource("cases")

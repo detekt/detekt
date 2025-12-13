@@ -12,10 +12,11 @@ class ExtensionsSpecBuilder : Builder<ExtensionsSpec> {
 
     private val disabledExtensions: MutableSet<ExtensionId> = mutableSetOf()
 
-    override fun build(): ExtensionsSpec = ExtensionsModel(
-        plugins,
-        disabledExtensions
-    )
+    override fun build(): ExtensionsSpec =
+        ExtensionsModel(
+            plugins,
+            disabledExtensions
+        )
 
     fun disableExtension(id: ExtensionId) {
         disabledExtensions.add(id)

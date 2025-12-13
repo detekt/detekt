@@ -238,19 +238,22 @@ abstract class Detekt @Inject constructor(
         }
     }
 
-    private fun convertCustomReportsToArguments(): List<CustomReportArgument> = reports.custom.map {
-        val reportId = it.reportId
-        val destination = it.outputLocation.asFile.orNull
+    private fun convertCustomReportsToArguments(): List<CustomReportArgument> =
+        reports.custom.map {
+            val reportId = it.reportId
+            val destination = it.outputLocation.asFile.orNull
 
-        checkNotNull(reportId) { "If a custom report is specified, the reportId must be present" }
-        check(!DetektReportType.isWellKnownReportId(reportId)) {
-            "The custom report reportId may not be same as one of the default reports"
+            checkNotNull(reportId) { "If a custom report is specified, the reportId must be present" }
+            check(!DetektReportType.isWellKnownReportId(reportId)) {
+                "The custom report reportId may not be same as one of the default reports"
+            }
+            checkNotNull(destination) { "If a custom report is specified, the destination must be present" }
+            check(!destination.isDirectory) {
+                "If a custom report is specified, the destination must be not a directory"
+            }
+
+            CustomReportArgument(reportId, objects.fileProperty().getOrElse { destination })
         }
-        checkNotNull(destination) { "If a custom report is specified, the destination must be present" }
-        check(!destination.isDirectory) { "If a custom report is specified, the destination must be not a directory" }
-
-        CustomReportArgument(reportId, objects.fileProperty().getOrElse { destination })
-    }
 }
 
 private const val DRY_RUN_PROPERTY = "detekt-dry-run"

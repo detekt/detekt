@@ -48,19 +48,25 @@ class ObjectLiteralToLambda(config: Config) :
     RequiresAnalysisApi {
 
     context(session: KaSession)
-    private fun KtExpression.containsThisReference(objectSymbol: KaClassSymbol) = with(session) {
-        anyDescendantOfType<KtThisExpression> {
-            it.expressionType?.symbol == objectSymbol
+    private fun KtExpression.containsThisReference(objectSymbol: KaClassSymbol) =
+        with(session) {
+            anyDescendantOfType<KtThisExpression> {
+                it.expressionType?.symbol == objectSymbol
+            }
         }
-    }
 
     context(session: KaSession)
-    private fun KtExpression.containsOwnMethodCall(objectSymbol: KaClassSymbol) = with(session) {
-        anyDescendantOfType<KtExpression> { expr ->
-            val symbol = expr.resolveToCall()?.singleCallOrNull<KaCallableMemberCall<*, *>>()?.partiallyAppliedSymbol
-            listOfNotNull(symbol?.dispatchReceiver, symbol?.extensionReceiver).any { it.type.symbol == objectSymbol }
+    private fun KtExpression.containsOwnMethodCall(objectSymbol: KaClassSymbol) =
+        with(session) {
+            anyDescendantOfType<KtExpression> { expr ->
+                val symbol =
+                    expr.resolveToCall()?.singleCallOrNull<KaCallableMemberCall<*, *>>()?.partiallyAppliedSymbol
+                listOfNotNull(
+                    symbol?.dispatchReceiver,
+                    symbol?.extensionReceiver
+                ).any { it.type.symbol == objectSymbol }
+            }
         }
-    }
 
     context(session: KaSession)
     private fun KtExpression.containsMethodOf(declaration: KtObjectDeclaration): Boolean {

@@ -20,8 +20,7 @@ fun KtlintRule.lint(@Language("kotlin") content: String, fileName: String = "Tes
 
 fun loadFile(resourceName: String) = compileForTest(resource(resourceName).toPath())
 
-fun loadFileContent(resourceName: String) =
-    StringUtilRt.convertLineSeparators(File(resource(resourceName)).readText())
+fun loadFileContent(resourceName: String) = StringUtilRt.convertLineSeparators(File(resource(resourceName)).readText())
 
 val contentAfterChainWrapping = """
     fun main() {

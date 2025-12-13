@@ -42,10 +42,7 @@ open class Rule(
      * Before starting visiting kotlin elements, a check is performed if this rule should be triggered.
      * Pre- and post-visit-hooks are executed before/after the visiting process.
      */
-    fun visitFile(
-        root: KtFile,
-        languageVersionSettings: LanguageVersionSettings,
-    ): List<Finding> {
+    fun visitFile(root: KtFile, languageVersionSettings: LanguageVersionSettings): List<Finding> {
         findings.clear()
         this.languageVersionSettings = languageVersionSettings
         preVisit(root)

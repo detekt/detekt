@@ -82,8 +82,7 @@ class FunctionOnlyReturningConstant(config: Config) : Rule(
             true
         }
 
-    private fun isNotExcluded(function: KtNamedFunction) =
-        function.name !in excludedFunctions
+    private fun isNotExcluded(function: KtNamedFunction) = function.name !in excludedFunctions
 
     private fun isReturningAConstant(function: KtNamedFunction) =
         isConstantExpression(function.bodyExpression) || returnsConstant(function)
