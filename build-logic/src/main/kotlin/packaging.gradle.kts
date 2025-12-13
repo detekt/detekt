@@ -53,6 +53,35 @@ publishing {
             scm {
                 url.set("https://github.com/detekt/detekt")
             }
+            distributionManagement {
+                val nameChanges = mapOf(
+                    "detekt-formatting" to "detekt-rules-ktlint-wrapper", // done in https://github.com/detekt/detekt/pull/8474
+                    "detekt-report-xml" to "detekt-report-checkstyle", // https://github.com/detekt/detekt/pull/8656
+                    "detekt-report-md" to "detekt-report-markdown", // https://github.com/detekt/detekt/pull/8735
+                    "detekt-rules-empty" to "detekt-rules-emptyblocks", // https://github.com/detekt/detekt/pull/8888
+                    "detekt-rules-documentation" to "detekt-rules-comments", // https://github.com/detekt/detekt/pull/8889
+                    "detekt-rules-errorprone" to "detekt-rules-potential-bugs", // https://github.com/detekt/detekt/pull/8887
+                )
+                val relocationExclusions = listOf(
+                    "detekt-report-txt", // https://github.com/detekt/detekt/pull/7470
+                    "detekt-sample-extensions",
+                )
+                if (project.name !in relocationExclusions) {
+                    val newArtifactName = if (project.name in nameChanges.keys) {
+                        nameChanges[project.name]
+                    } else {
+                        null
+                    }
+                    relocation {
+                        groupId = "dev.detekt"
+                        version = "2.0.0"
+                        if (newArtifactName != null) {
+                            artifactId = newArtifactName
+                        }
+                        message = "groupId has been changed to match the detekt website"
+                    }
+                }
+            }
         }
     }
 }
