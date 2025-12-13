@@ -4,7 +4,7 @@ plugins {
 }
 
 dependencies {
-    compileOnly(libs.junit.jupiterApi)
+    api(libs.junit.jupiterApi)
     implementation(projects.detektTestUtils)
     implementation(libs.kotlin.scriptingJvm)
 }
