@@ -45,6 +45,11 @@
       "matchPackageNames": [
         "dev.detekt:**"
       ]
+    },
+    {
+      "matchPackageNames": ["org.assertj:assertj-core"],
+      "matchCurrentValue": "3.27.4",
+      "enabled": false
     }
   ]
 }
