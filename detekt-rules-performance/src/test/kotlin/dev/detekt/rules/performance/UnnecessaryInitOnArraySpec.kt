@@ -150,44 +150,46 @@ class UnnecessaryInitOnArraySpec {
 
     companion object {
         @JvmStatic
-        fun defaultValueTestCases() = listOf(
-            Arguments.of("IntArray", "0"),
-            Arguments.of("IntArray", "0.toInt()"),
-            Arguments.of("UIntArray", "0u"),
-            Arguments.of("UIntArray", "0.toUInt()"),
-            Arguments.of("FloatArray", "0F"),
-            Arguments.of("FloatArray", "0.0F"),
-            Arguments.of("FloatArray", "0f"),
-            Arguments.of("FloatArray", "0.0f"),
-            Arguments.of("FloatArray", "0.toFloat()"),
-            Arguments.of("LongArray", "0L"),
-            Arguments.of("LongArray", "0.toLong()"),
-            Arguments.of("ULongArray", "0uL"),
-            Arguments.of("ULongArray", "0.toULong()"),
-            Arguments.of("BooleanArray", "false"),
-            Arguments.of("ByteArray", "0.toByte()"),
-            Arguments.of("ByteArray", "0"),
-            Arguments.of("UByteArray", "0.toUByte()"),
-            Arguments.of("UByteArray", "0u"),
-            Arguments.of("CharArray", "'\\u0000'"),
-            Arguments.of("CharArray", "'\u0000'"),
-            Arguments.of("CharArray", "0.toChar()")
-        )
+        fun defaultValueTestCases() =
+            listOf(
+                Arguments.of("IntArray", "0"),
+                Arguments.of("IntArray", "0.toInt()"),
+                Arguments.of("UIntArray", "0u"),
+                Arguments.of("UIntArray", "0.toUInt()"),
+                Arguments.of("FloatArray", "0F"),
+                Arguments.of("FloatArray", "0.0F"),
+                Arguments.of("FloatArray", "0f"),
+                Arguments.of("FloatArray", "0.0f"),
+                Arguments.of("FloatArray", "0.toFloat()"),
+                Arguments.of("LongArray", "0L"),
+                Arguments.of("LongArray", "0.toLong()"),
+                Arguments.of("ULongArray", "0uL"),
+                Arguments.of("ULongArray", "0.toULong()"),
+                Arguments.of("BooleanArray", "false"),
+                Arguments.of("ByteArray", "0.toByte()"),
+                Arguments.of("ByteArray", "0"),
+                Arguments.of("UByteArray", "0.toUByte()"),
+                Arguments.of("UByteArray", "0u"),
+                Arguments.of("CharArray", "'\\u0000'"),
+                Arguments.of("CharArray", "'\u0000'"),
+                Arguments.of("CharArray", "0.toChar()")
+            )
 
         @JvmStatic
         fun arrayTypes(): List<Arguments> = defaultValueTestCases().map { Arguments.of(it.get().first()) }
 
         @JvmStatic
-        fun nonDefaultValueTestCases() = listOf(
-            Arguments.of("IntArray", "1"),
-            Arguments.of("UIntArray", "1u"),
-            Arguments.of("LongArray", "1L"),
-            Arguments.of("ULongArray", "1uL"),
-            Arguments.of("BooleanArray", "true"),
-            Arguments.of("ByteArray", "1.toByte()"),
-            Arguments.of("UByteArray", "1.toUByte()"),
-            Arguments.of("DoubleArray", "1.0"),
-            Arguments.of("CharArray", "'A'")
-        )
+        fun nonDefaultValueTestCases() =
+            listOf(
+                Arguments.of("IntArray", "1"),
+                Arguments.of("UIntArray", "1u"),
+                Arguments.of("LongArray", "1L"),
+                Arguments.of("ULongArray", "1uL"),
+                Arguments.of("BooleanArray", "true"),
+                Arguments.of("ByteArray", "1.toByte()"),
+                Arguments.of("UByteArray", "1.toUByte()"),
+                Arguments.of("DoubleArray", "1.0"),
+                Arguments.of("CharArray", "'A'")
+            )
     }
 }
