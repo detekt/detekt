@@ -35,7 +35,7 @@ kotlin-gradlePluginApi = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin-a
 assertj-core = { module = "org.assertj:assertj-core", version = "3.27.6" }
 # This represents the oldest assertj version supported by detekt-test-assertj.
 # This should only be updated when updating the minimum version supported by detekt-test-assertj.
-# Any update of lowerbound of the version should also be reflected at renovavte.json to lock this version
+# Any update to the lower-bound version should also be reflected at renovate.json to lock this version.
 assertj-coreMinimum = { module = "org.assertj:assertj-core", version = { strictly = "[3.27.4,)", prefer = "3.27.6" } }
 classgraph = { module = "io.github.classgraph:classgraph", version = "4.8.184" }
 jcommander = { module = "org.jcommander:jcommander", version = "1.85" }
