@@ -49,10 +49,11 @@ class RangeUntilInsteadOfRangeTo(config: Config) : Rule(
         super.visitCallExpression(expression)
     }
 
-    private fun KtExpression?.isMinusOneExpression() = this is KtBinaryExpression &&
-        left != null &&
-        operationToken == KtTokens.MINUS &&
-        (right as? KtConstantExpression)?.text == "1"
+    private fun KtExpression?.isMinusOneExpression() =
+        this is KtBinaryExpression &&
+            left != null &&
+            operationToken == KtTokens.MINUS &&
+            (right as? KtConstantExpression)?.text == "1"
 
     private fun report(expression: KtExpression, rangeTo: String) {
         report(

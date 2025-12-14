@@ -27,5 +27,4 @@ fun Task.dependenciesAsPaths() = this.taskDependencies.getDependencies(this).map
 fun String.reIndent(level: Int = 0, baseIndent: Int = 3): String =
     this.replaceIndent("    ".repeat(baseIndent + level)).trim()
 
-fun joinGradleBlocks(@Language("gradle.kts") vararg blocks: String): String =
-    blocks.joinToString(separator = "\n\n")
+fun joinGradleBlocks(@Language("gradle.kts") vararg blocks: String): String = blocks.joinToString(separator = "\n\n")

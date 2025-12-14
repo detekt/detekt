@@ -19,23 +19,26 @@ class DisabledAutoCorrectConfig(
 
     override fun subConfigKeys(): Set<String> = wrapped.subConfigKeys()
 
-    override fun <T : Any> valueOrDefault(key: String, default: T): T = when (key) {
-        Config.AUTO_CORRECT_KEY -> false as T
-        else -> wrapped.valueOrDefault(key, default)
-    }
+    override fun <T : Any> valueOrDefault(key: String, default: T): T =
+        when (key) {
+            Config.AUTO_CORRECT_KEY -> false as T
+            else -> wrapped.valueOrDefault(key, default)
+        }
 
-    override fun <T : Any> valueOrNull(key: String): T? = when (key) {
-        Config.AUTO_CORRECT_KEY -> false as T
-        else -> wrapped.valueOrNull(key)
-    }
+    override fun <T : Any> valueOrNull(key: String): T? =
+        when (key) {
+            Config.AUTO_CORRECT_KEY -> false as T
+            else -> wrapped.valueOrNull(key)
+        }
 
     override fun validate(baseline: Config, excludePatterns: Set<Regex>): List<Notification> =
         validateConfig(wrapped, baseline, excludePatterns)
 
     @Suppress("MagicNumber")
-    override fun toString() = """
-        DisabledAutoCorrectConfig(
-            ${wrapped.toString().indentCompat(12).trim()},
-        )
-    """.trimIndent()
+    override fun toString() =
+        """
+            DisabledAutoCorrectConfig(
+                ${wrapped.toString().indentCompat(12).trim()},
+            )
+        """.trimIndent()
 }

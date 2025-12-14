@@ -77,9 +77,10 @@ class UnnecessaryReversed(config: Config) :
         )
     }
 
-    private fun KtCallExpression.callableId(): CallableId? = analyze(this) {
-        resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId
-    }
+    private fun KtCallExpression.callableId(): CallableId? =
+        analyze(this) {
+            resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId
+        }
 
     private fun KtExpression.getPrevCallInChainOrNull(): List<KtCallExpression> =
         parent.collectDescendantsOfType<KtCallExpression>()

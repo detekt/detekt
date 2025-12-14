@@ -28,9 +28,10 @@ private fun KtAnnotationEntry.firstParameterOrNull() =
         ?.text
         ?.withoutQuotes()
 
-internal fun String.withoutQuotes() = removeSurrounding(TRIPLE_QUOTES)
-    .removeSurrounding(SINGLE_QUOTES)
-    .replace(STRING_CONCAT_REGEX, "")
+internal fun String.withoutQuotes() =
+    removeSurrounding(TRIPLE_QUOTES)
+        .removeSurrounding(SINGLE_QUOTES)
+        .replace(STRING_CONCAT_REGEX, "")
 
 private const val SINGLE_QUOTES = "\""
 private const val TRIPLE_QUOTES = "\"\"\""

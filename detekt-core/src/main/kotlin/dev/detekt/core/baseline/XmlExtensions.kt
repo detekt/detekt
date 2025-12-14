@@ -31,14 +31,12 @@ internal inline fun XMLStreamWriter.document(
     writeEndDocument()
 }
 
-internal inline fun XMLStreamWriter.tag(
-    name: String,
-    init: XMLStreamWriter.() -> Unit,
-) = apply {
-    writeStartElement(name)
-    init()
-    writeEndElement()
-}
+internal inline fun XMLStreamWriter.tag(name: String, init: XMLStreamWriter.() -> Unit) =
+    apply {
+        writeStartElement(name)
+        init()
+        writeEndElement()
+    }
 
 internal fun XMLStreamWriter.tag(name: String, content: String) {
     tag(name) {

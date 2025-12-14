@@ -80,6 +80,5 @@ class ExpressionBodySyntax(config: Config) : Rule(
     private fun KtReturnExpression.containsReturnStmtsInNullableArguments(): Boolean =
         anyDescendantOfType<KtReturnExpression> { (it.parent as? KtBinaryExpression)?.operationToken == KtTokens.ELVIS }
 
-    private fun isLineWrapped(expression: KtExpression): Boolean =
-        expression.children.any { it.text.contains('\n') }
+    private fun isLineWrapped(expression: KtExpression): Boolean = expression.children.any { it.text.contains('\n') }
 }

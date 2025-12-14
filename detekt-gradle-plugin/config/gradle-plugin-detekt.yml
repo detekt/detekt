@@ -38,7 +38,7 @@ ktlint:
   ClassSignature:
     active: false
   FunctionSignature:
-    active: false
+    functionBodyExpressionWrapping: multiline
   MaximumLineLength:
     active: false
   MultilineExpressionWrapping:

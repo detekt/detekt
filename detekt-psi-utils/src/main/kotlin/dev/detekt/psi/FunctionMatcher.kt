@@ -27,17 +27,15 @@ sealed class FunctionMatcher {
             function.name == fullyQualifiedName ||
                 function.fqName?.asString() == fullyQualifiedName
 
-        override fun match(
-            propertySymbol: KaPropertySymbol?,
-            symbol: KaCallableSymbol,
-        ): Boolean = if (propertySymbol != null) {
-            getNameForGetterOrSetter(
-                propertySymbol,
-                symbol
-            ) == fullyQualifiedName
-        } else {
-            match(symbol)
-        }
+        override fun match(propertySymbol: KaPropertySymbol?, symbol: KaCallableSymbol): Boolean =
+            if (propertySymbol != null) {
+                getNameForGetterOrSetter(
+                    propertySymbol,
+                    symbol
+                ) == fullyQualifiedName
+            } else {
+                match(symbol)
+            }
 
         override fun match(symbol: KaCallableSymbol): Boolean = symbol.asFqNameString() == fullyQualifiedName
 
@@ -71,17 +69,12 @@ sealed class FunctionMatcher {
             return encounteredParameters == parameters
         }
 
-        override fun match(
-            propertySymbol: KaPropertySymbol?,
-            symbol: KaCallableSymbol,
-        ): Boolean = if (propertySymbol != null) {
-            getNameForGetterOrSetter(
-                propertySymbol,
-                symbol
-            ) == fullyQualifiedName
-        } else {
-            match(symbol)
-        }
+        override fun match(propertySymbol: KaPropertySymbol?, symbol: KaCallableSymbol): Boolean =
+            if (propertySymbol != null) {
+                getNameForGetterOrSetter(propertySymbol, symbol) == fullyQualifiedName
+            } else {
+                match(symbol)
+            }
 
         override fun match(symbol: KaCallableSymbol): Boolean {
             if (symbol.asFqNameString() != fullyQualifiedName) return false
@@ -191,8 +184,8 @@ private fun KaCallableSymbol.asFqNameString() =
         callableId?.run { asSingleFqName().asString() } ?: returnType.asFqNameString()
     }
 
-private fun KaType.asFqNameString() = symbol?.classId?.asFqNameString()
-    ?: toString().replace('/', '.').removeSuffix("!")
+private fun KaType.asFqNameString() =
+    symbol?.classId?.asFqNameString() ?: toString().replace('/', '.').removeSuffix("!")
 
 private fun changeIfLambda(param: String): String? {
     val (paramsRaw, _) = splitLambda(param) ?: return null

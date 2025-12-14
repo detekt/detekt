@@ -12,7 +12,6 @@ import dev.detekt.metrics.processors.logicalLinesKey
 import dev.detekt.metrics.processors.sourceLinesKey
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import kotlin.collections.mapKeys
 
 class ComplexityReportSpec {
 
@@ -54,9 +53,8 @@ class ComplexityReportSpec {
     }
 }
 
-private fun createDetektion(
-    userData: Map<Key<*>, Any> = emptyMap(),
-) = TestDetektion(
-    createIssue(createRuleInstance(ruleSetId = "Key")),
-    userData = userData.mapKeys { (key, _) -> key.toString() },
-)
+private fun createDetektion(userData: Map<Key<*>, Any> = emptyMap()) =
+    TestDetektion(
+        createIssue(createRuleInstance(ruleSetId = "Key")),
+        userData = userData.mapKeys { (key, _) -> key.toString() },
+    )

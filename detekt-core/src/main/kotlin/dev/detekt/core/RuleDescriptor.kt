@@ -26,8 +26,8 @@ internal fun getRules(
     ruleSetProviders: List<RuleSetProvider>,
     config: Config,
     log: (() -> String) -> Unit,
-): List<RuleDescriptor> = ruleSetProviders
-    .flatMap { ruleSetProvider ->
+): List<RuleDescriptor> =
+    ruleSetProviders.flatMap { ruleSetProvider ->
         val ruleSetConfig = config.subConfig(ruleSetProvider.ruleSetId.value)
         val urlGenerator: (Rule) -> URI? =
             if (ruleSetProvider is DefaultRuleSetProvider ||
@@ -45,35 +45,36 @@ private fun RuleSet.getRules(
     analysisMode: AnalysisMode,
     urlGenerator: (Rule) -> URI?,
     log: (() -> String) -> Unit,
-): Sequence<RuleDescriptor> = config.subConfigKeys()
-    .asSequence()
-    .mapNotNull { ruleId -> extractRuleName(ruleId)?.let { ruleName -> ruleId to ruleName } }
-    .mapNotNull { (ruleId, ruleName) ->
-        this.rules[ruleName]?.let { ruleProvider ->
-            val rule = ruleProvider(Config.empty)
-            val ruleConfig = config.subConfig(ruleId)
-            val active = config.isActiveOrDefault(true) && ruleConfig.isActiveOrDefault(false)
-            val executable = when (analysisMode) {
-                AnalysisMode.full -> true
-                AnalysisMode.light -> rule !is RequiresAnalysisApi
-            }
-            if (active && !executable) {
-                log { "The rule '$ruleId' requires type resolution but it was run without it." }
-            }
-            RuleDescriptor(
-                ruleProvider = ruleProvider,
-                config = ruleConfig,
-                ruleInstance = RuleInstance(
-                    id = ruleId,
-                    ruleSetId = id,
-                    url = urlGenerator(rule),
-                    description = rule.description,
-                    severity = ruleConfig.computeSeverity(),
-                    active = active && executable,
+): Sequence<RuleDescriptor> =
+    config.subConfigKeys()
+        .asSequence()
+        .mapNotNull { ruleId -> extractRuleName(ruleId)?.let { ruleName -> ruleId to ruleName } }
+        .mapNotNull { (ruleId, ruleName) ->
+            this.rules[ruleName]?.let { ruleProvider ->
+                val rule = ruleProvider(Config.empty)
+                val ruleConfig = config.subConfig(ruleId)
+                val active = config.isActiveOrDefault(true) && ruleConfig.isActiveOrDefault(false)
+                val executable = when (analysisMode) {
+                    AnalysisMode.full -> true
+                    AnalysisMode.light -> rule !is RequiresAnalysisApi
+                }
+                if (active && !executable) {
+                    log { "The rule '$ruleId' requires type resolution but it was run without it." }
+                }
+                RuleDescriptor(
+                    ruleProvider = ruleProvider,
+                    config = ruleConfig,
+                    ruleInstance = RuleInstance(
+                        id = ruleId,
+                        ruleSetId = id,
+                        url = urlGenerator(rule),
+                        description = rule.description,
+                        severity = ruleConfig.computeSeverity(),
+                        active = active && executable,
+                    )
                 )
-            )
+            }
         }
-    }
 
 private fun generateDefaultUrl(ruleSetId: RuleSetId, ruleName: RuleName) =
     URI("https://detekt.dev/docs/${whichDetekt()}/rules/${ruleSetId.value.lowercase()}#${ruleName.value.lowercase()}")
@@ -103,5 +104,4 @@ private fun parseToSeverity(severity: String): Severity {
         ?: error("'$severity' is not a valid Severity. Allowed values are ${Severity.entries}")
 }
 
-internal fun extractRuleName(key: String): RuleName? =
-    runCatching { RuleName(key.substringBefore("/")) }.getOrNull()
+internal fun extractRuleName(key: String): RuleName? = runCatching { RuleName(key.substringBefore("/")) }.getOrNull()

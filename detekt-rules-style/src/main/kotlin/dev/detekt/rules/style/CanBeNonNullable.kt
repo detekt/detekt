@@ -378,10 +378,7 @@ class CanBeNonNullable(config: Config) :
             return nonNullChecks
         }
 
-        private fun getDescriptor(
-            leftExpression: KtElement?,
-            rightExpression: KtElement?,
-        ): KaVariableSymbol? =
+        private fun getDescriptor(leftExpression: KtElement?, rightExpression: KtElement?): KaVariableSymbol? =
             when {
                 leftExpression is KtNameReferenceExpression -> leftExpression
                 rightExpression is KtNameReferenceExpression -> rightExpression
@@ -455,10 +452,7 @@ class CanBeNonNullable(config: Config) :
         private fun KtExpression?.isValidElseExpression(): Boolean =
             this != null && this !is KtIfExpression && this !is KtWhenExpression
 
-        private fun updateNullableParam(
-            expression: KtExpression,
-            updateCallback: (NullableParam) -> Unit,
-        ) {
+        private fun updateNullableParam(expression: KtExpression, updateCallback: (NullableParam) -> Unit) {
             analyze(expression) {
                 expression.resolveToCall()?.singleVariableAccessCall()?.let {
                     nullableParams[it.symbol]

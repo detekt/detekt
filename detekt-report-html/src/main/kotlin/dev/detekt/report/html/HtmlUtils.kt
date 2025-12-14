@@ -17,12 +17,7 @@ import java.util.Locale
 import kotlin.math.max
 import kotlin.math.min
 
-internal fun FlowContent.snippetCode(
-    id: String,
-    lines: Sequence<String>,
-    location: SourceLocation,
-    length: Int,
-) {
+internal fun FlowContent.snippetCode(id: String, lines: Sequence<String>, location: SourceLocation, length: Int) {
     try {
         pre {
             code {

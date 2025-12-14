@@ -189,8 +189,7 @@ class UnusedPrivateClass(config: Config) : Rule(
 
         // Without type resolution it is hard to tell if this is really a class or part of a package.
         // We use "first char is uppercase" as a heuristic in conjunction with "KtNameReferenceExpression"
-        private fun looksLikeAClassName(maybeClassName: String) =
-            maybeClassName.firstOrNull()?.isUpperCase() == true
+        private fun looksLikeAClassName(maybeClassName: String) = maybeClassName.firstOrNull()?.isUpperCase() == true
     }
 }
 

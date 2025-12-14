@@ -20,8 +20,7 @@ class Location(
     val text: TextLocation,
     val path: Path,
 ) {
-    override fun toString(): String =
-        "Location(source=$source, endSource=$endSource, text=$text, path=$path)"
+    override fun toString(): String = "Location(source=$source, endSource=$endSource, text=$text, path=$path)"
 
     companion object {
         /**
