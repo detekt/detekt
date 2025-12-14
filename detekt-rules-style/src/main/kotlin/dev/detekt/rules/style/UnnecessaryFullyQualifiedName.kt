@@ -19,6 +19,12 @@ import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
  * This rule reports unnecessary fully qualified class names and function calls.
  * The fully qualified names can be replaced with imports to make the code more readable.
  *
+ * The rule does not report:
+ * - Import statements
+ * - Package declarations
+ * - String literals
+ * - Nested class references without packages (e.g., Outer.Inner)
+ *
  * See [PMD UnnecessaryFullyQualifiedName](https://pmd.github.io/latest/pmd_rules_java_codestyle.html#unnecessaryfullyqualifiedname)
  * for a similar rule in the Java ecosystem.
  *
