@@ -228,7 +228,7 @@ class KDocReferencesNonPublicPropertySpec {
         val code = """
             import java.util.LinkedList
             /**
-             * This is wrapper which internally maintains a [list][LinkedList] variable
+             * This is a wrapper which internally maintains a [list][LinkedList] variable
              */
             class Test {
                 private var list: LinkedList<Int>? = null
@@ -238,10 +238,10 @@ class KDocReferencesNonPublicPropertySpec {
     }
 
     @Test
-    fun `does not report when ref is used with fully qualifies name same as private property`() {
+    fun `does not report when ref is used with fully qualified name same as private property`() {
         val code = """
             /**
-             * This is wrapper which internally maintains a [list][java.util.LinkedList] variable
+             * This is a wrapper which internally maintains a [list][java.util.LinkedList] variable
              */
             class Test {
                 private var list: java.util.LinkedList<Int>? = null
