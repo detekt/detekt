@@ -54,11 +54,18 @@ class UnnecessaryInnerClass(config: Config) :
         // to outer class members.
         super.visitClass(klass)
 
-        if (klass.isInner() && candidateClassToParentClasses.contains(klass)) {
+        val klassParent = candidateClassToParentClasses[klass]?.first()
+        @Suppress("ComplexCondition")
+        if (
+            klass.isInner() &&
+            candidateClassToParentClasses.containsKey(klass) &&
+            // parent is either not inner or if inner than can be non inner
+            (klassParent?.isInner() != true || candidateClassToParentClasses.containsKey(klassParent))
+        ) {
             report(
                 Finding(
                     Entity.Companion.from(klass),
-                    "Class '${klass.name}' does not require `inner` keyword."
+                    "Class '${klass.name}' does not require `inner` keyword.",
                 )
             )
             candidateClassToParentClasses.remove(klass)

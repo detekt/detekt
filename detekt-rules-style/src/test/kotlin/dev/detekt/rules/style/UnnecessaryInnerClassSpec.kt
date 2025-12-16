@@ -523,6 +523,23 @@ class UnnecessaryInnerClassSpec(val env: KotlinEnvironmentContainer) {
         }
 
         @Test
+        fun `reports with nested empty 4 classes`() {
+            val code = """
+                class A {
+                    inner class B {
+                        inner class C {
+                            inner class D
+                        }
+                    }
+                }
+            """.trimIndent()
+
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings)
+                .hasSize(3)
+        }
+
+        @Test
         fun `reports when only outer ctor is used`() {
             val code = """
                 class A {
@@ -627,5 +644,27 @@ class UnnecessaryInnerClassSpec(val env: KotlinEnvironmentContainer) {
 
             assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
+    }
+
+    @Test
+    fun `#8927 - does not inner class report when it's parent is inner class`() {
+        val code = """
+            class A {
+                fun computeExpensive(className: String) = className + "_1"
+                // this inner is required as using computeExpensive
+                inner class B {
+                    val bName by lazy { computeExpensive(B::class.java.name) }
+                    init {
+                        print(bName)
+                    }
+                    // if parent is inner then below class should be inner
+                    inner class C {
+                        val d = 9
+                    }
+                }
+            }
+        """.trimIndent()
+
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 }
