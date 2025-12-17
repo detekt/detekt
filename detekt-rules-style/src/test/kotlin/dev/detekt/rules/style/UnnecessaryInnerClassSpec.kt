@@ -651,7 +651,7 @@ class UnnecessaryInnerClassSpec(val env: KotlinEnvironmentContainer) {
         val code = """
             class A {
                 fun computeExpensive(className: String) = className + "_1"
-                // this inner is required as using computeExpensive
+                // this inner class is required due to the usage of computeExpensive()
                 inner class B {
                     val bName by lazy { computeExpensive(B::class.java.name) }
                     init {

@@ -59,7 +59,7 @@ class UnnecessaryInnerClass(config: Config) :
         if (
             klass.isInner() &&
             candidateClassToParentClasses.containsKey(klass) &&
-            // parent is either not inner or if inner than can be non inner
+            // parent class is either not inner or does not require to be inner 
             (klassParent?.isInner() != true || candidateClassToParentClasses.containsKey(klassParent))
         ) {
             report(
