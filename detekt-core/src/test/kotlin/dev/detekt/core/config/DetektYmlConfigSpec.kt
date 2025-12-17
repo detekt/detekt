@@ -30,7 +30,7 @@ class DetektYmlConfigSpec {
             arguments("exceptions", "dev.detekt.rules.exceptions"),
             arguments("naming", "dev.detekt.rules.naming"),
             arguments("performance", "dev.detekt.rules.performance"),
-            arguments("potential-bugs", "dev.detekt.rules.bugs"),
+            arguments("potential-bugs", "dev.detekt.rules.potentialbugs"),
             arguments("style", "dev.detekt.rules.style"),
         )
 
