@@ -141,7 +141,7 @@ style:
     singleLine: 'consistent'
     multiLine: 'consistent'
   CanBeNonNullable:
-    active: true
+    active: false
   CascadingCallWrapping:
     active: true
   ClassOrdering:
@@ -285,6 +285,8 @@ style:
   WildcardImport:
     active: true
     excludeImports: []
+  StringShouldBeRawString:
+    active: false
 
 libraries:
   ForbiddenPublicDataClass:
