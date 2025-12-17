@@ -65,7 +65,7 @@ class UnnecessaryInnerClass(config: Config) :
             report(
                 Finding(
                     Entity.Companion.from(klass),
-                    "Class '${klass.name}' does not require `inner` keyword.",
+                    "Class '${klass.name}' does not require `inner` keyword."
                 )
             )
             candidateClassToParentClasses.remove(klass)
