@@ -119,12 +119,13 @@ class SleepInsteadOfDelay(config: Config) :
     }
 
     context(session: KaSession)
-    private fun PsiElement.isSuspendAllowed(): Boolean = when (this) {
-        is KtValueArgument -> this.isSuspendAllowed()
-        is KtNamedFunction -> this.isSuspendAllowed()
-        is KtLambdaExpression -> this.isSuspendAllowed()
-        else -> false
-    }
+    private fun PsiElement.isSuspendAllowed(): Boolean =
+        when (this) {
+            is KtValueArgument -> this.isSuspendAllowed()
+            is KtNamedFunction -> this.isSuspendAllowed()
+            is KtLambdaExpression -> this.isSuspendAllowed()
+            else -> false
+        }
 
     context(session: KaSession)
     private fun KtValueArgument.isSuspendAllowed(): Boolean {

@@ -175,9 +175,10 @@ class UnusedImport(config: Config) :
                 else -> null
             }
 
-        private fun KtReferenceExpression.fqNameOrNull(): FqName? = analyze(this) {
-            mainReference.resolveToSymbol()?.fqNameForImport
-        }
+        private fun KtReferenceExpression.fqNameOrNull(): FqName? =
+            analyze(this) {
+                mainReference.resolveToSymbol()?.fqNameForImport
+            }
     }
 
     companion object {

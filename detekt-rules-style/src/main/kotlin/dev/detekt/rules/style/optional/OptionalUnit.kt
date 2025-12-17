@@ -136,8 +136,8 @@ class OptionalUnit(config: Config) :
         }
     }
 
-    private fun createMessage(function: KtNamedFunction) = "The function ${function.name} " +
-        "defines a return type of Unit. This is unnecessary and can safely be removed."
+    private fun createMessage(function: KtNamedFunction) =
+        "The function ${function.name} defines a return type of Unit. This is unnecessary and can safely be removed."
 
     private fun KtExpression.isGenericOrNothingType(): Boolean {
         analyze(this) {

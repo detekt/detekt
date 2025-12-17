@@ -14,20 +14,14 @@ internal class MissingRulesConfigValidator(
 
     override val id: String = "MissingRulesConfigValidator"
 
-    override fun validate(
-        configToValidate: YamlConfig,
-        settings: ValidationSettings,
-    ): Collection<Notification> {
+    override fun validate(configToValidate: YamlConfig, settings: ValidationSettings): Collection<Notification> {
         if (!settings.checkExhaustiveness) {
             return emptyList()
         }
         return ruleSetNames.flatMap { ruleSet -> validateRuleSet(ruleSet, configToValidate) }
     }
 
-    private fun validateRuleSet(
-        ruleSet: RuleSetId,
-        configToValidate: YamlConfig,
-    ): List<Notification> {
+    private fun validateRuleSet(ruleSet: RuleSetId, configToValidate: YamlConfig): List<Notification> {
         val ruleSetConfigToValidate = configToValidate.getSubMapOrNull(ruleSet)
         val ruleSetConfigFromBaseline = baseline.getSubMapOrNull(ruleSet)
         return when {

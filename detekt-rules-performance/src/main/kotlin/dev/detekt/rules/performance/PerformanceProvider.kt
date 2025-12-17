@@ -13,17 +13,18 @@ class PerformanceProvider : DefaultRuleSetProvider {
 
     override val ruleSetId = RuleSetId("performance")
 
-    override fun instance(): RuleSet = RuleSet(
-        ruleSetId,
-        listOf(
-            ::ForEachOnRange,
-            ::SpreadOperator,
-            ::UnnecessaryTemporaryInstantiation,
-            ::UnnecessaryTypeCasting,
-            ::ArrayPrimitive,
-            ::CouldBeSequence,
-            ::UnnecessaryInitOnArray,
-            ::UnnecessaryPartOfBinaryExpression,
+    override fun instance(): RuleSet =
+        RuleSet(
+            ruleSetId,
+            listOf(
+                ::ForEachOnRange,
+                ::SpreadOperator,
+                ::UnnecessaryInitOnArray,
+                ::UnnecessaryTemporaryInstantiation,
+                ::UnnecessaryTypeCasting,
+                ::ArrayPrimitive,
+                ::CouldBeSequence,
+                ::UnnecessaryPartOfBinaryExpression,
+            )
         )
-    )
 }

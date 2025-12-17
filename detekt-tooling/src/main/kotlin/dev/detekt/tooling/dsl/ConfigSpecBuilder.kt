@@ -13,12 +13,13 @@ class ConfigSpecBuilder : Builder<ConfigSpec> {
     var resources: Collection<URL> = emptyList()
     var configPaths: Collection<Path> = emptyList()
 
-    override fun build(): ConfigSpec = ConfigModel(
-        shouldValidateBeforeAnalysis,
-        useDefaultConfig,
-        resources,
-        configPaths
-    )
+    override fun build(): ConfigSpec =
+        ConfigModel(
+            shouldValidateBeforeAnalysis,
+            useDefaultConfig,
+            resources,
+            configPaths
+        )
 }
 
 private data class ConfigModel(

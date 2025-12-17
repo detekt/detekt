@@ -15,49 +15,52 @@ class CompilationAssert(private val result: JvmCompilationResult) :
     private val regex = "\\w+\\.kt:\\d+:\\d+ (\\w+): .*".toRegex()
     private val detektViolations = detektMessages.mapNotNull { line -> regex.find(line)?.groupValues?.get(1) }
 
-    fun passCompilation(expectedStatus: Boolean = true) = apply {
-        val expectedErrorCode = if (expectedStatus) OK else COMPILATION_ERROR
-        if (result.exitCode != expectedErrorCode) {
-            failWithActualExpectedAndMessage(
-                result.exitCode,
-                expectedErrorCode,
-                "Expected compilation to finish with code $expectedErrorCode but was ${actual.exitCode}.\n" +
-                    actual.messages,
-            )
+    fun passCompilation(expectedStatus: Boolean = true) =
+        apply {
+            val expectedErrorCode = if (expectedStatus) OK else COMPILATION_ERROR
+            if (result.exitCode != expectedErrorCode) {
+                failWithActualExpectedAndMessage(
+                    result.exitCode,
+                    expectedErrorCode,
+                    "Expected compilation to finish with code $expectedErrorCode but was ${actual.exitCode}.\n" +
+                        actual.messages,
+                )
+            }
         }
-    }
 
-    fun passDetekt(expectedStatus: Boolean = true) = apply {
-        // The status message is `i: Success?: false`
-        val status = detektMessages
-            .first { "Success?" in it }
-            .split(" ")
-            .last()
-            .trim()
-            .toBoolean()
+    fun passDetekt(expectedStatus: Boolean = true) =
+        apply {
+            // The status message is `i: Success?: false`
+            val status = detektMessages
+                .first { "Success?" in it }
+                .split(" ")
+                .last()
+                .trim()
+                .toBoolean()
 
-        if (status != expectedStatus) {
-            failWithActualExpectedAndMessage(
-                status,
-                expectedStatus,
-                "Expected detekt to finish with success status: $expectedStatus but was $status.\n" +
-                    actual.messages,
-            )
+            if (status != expectedStatus) {
+                failWithActualExpectedAndMessage(
+                    status,
+                    expectedStatus,
+                    "Expected detekt to finish with success status: $expectedStatus but was $status.\n" +
+                        actual.messages,
+                )
+            }
         }
-    }
 
     fun withNoViolations() = withViolations(0)
 
-    fun withViolations(expectedViolationNumber: Int) = apply {
-        if (detektViolations.size != expectedViolationNumber) {
-            failWithActualExpectedAndMessage(
-                detektViolations.size,
-                expectedViolationNumber,
-                "Expected detekt violations to be $expectedViolationNumber but was ${detektViolations.size}.\n" +
-                    actual.messages,
-            )
+    fun withViolations(expectedViolationNumber: Int) =
+        apply {
+            if (detektViolations.size != expectedViolationNumber) {
+                failWithActualExpectedAndMessage(
+                    detektViolations.size,
+                    expectedViolationNumber,
+                    "Expected detekt violations to be $expectedViolationNumber but was ${detektViolations.size}.\n" +
+                        actual.messages,
+                )
+            }
         }
-    }
 
     fun withRuleViolationInOrder(expectedRuleNames: List<String>) {
         if (detektViolations != expectedRuleNames) {

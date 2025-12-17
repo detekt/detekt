@@ -113,16 +113,16 @@ class NestedScopeFunctions(config: Config) :
         private fun KtCallExpression.isScopeFunction(): Boolean =
             callableSymbols()?.any { it.matchesScopeFunction() } ?: false
 
-        private fun KtCallExpression.callableSymbols() = analyze(this) {
-            resolveToCall()?.singleFunctionCallOrNull()?.let {
-                sequence {
-                    yield(it.symbol)
-                    yieldAll(it.symbol.allOverriddenSymbols)
+        private fun KtCallExpression.callableSymbols() =
+            analyze(this) {
+                resolveToCall()?.singleFunctionCallOrNull()?.let {
+                    sequence {
+                        yield(it.symbol)
+                        yieldAll(it.symbol.allOverriddenSymbols)
+                    }
                 }
             }
-        }
 
-        private fun KaCallableSymbol.matchesScopeFunction(): Boolean =
-            functions.any { it.match(this) }
+        private fun KaCallableSymbol.matchesScopeFunction(): Boolean = functions.any { it.match(this) }
     }
 }

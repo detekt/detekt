@@ -81,15 +81,16 @@ class CyclomaticComplexMethod(config: Config) : Rule(
         }
     }
 
-    private fun hasSingleWhenExpression(bodyExpression: KtExpression?): Boolean = when {
-        bodyExpression is KtBlockExpression && bodyExpression.statements.size == 1 -> {
-            val statement = bodyExpression.statements.single()
-            statement is KtWhenExpression || statement.returnsWhenExpression()
+    private fun hasSingleWhenExpression(bodyExpression: KtExpression?): Boolean =
+        when {
+            bodyExpression is KtBlockExpression && bodyExpression.statements.size == 1 -> {
+                val statement = bodyExpression.statements.single()
+                statement is KtWhenExpression || statement.returnsWhenExpression()
+            }
+            // the case where function-expression syntax is used: `fun test() = when { ... }`
+            bodyExpression is KtWhenExpression -> true
+            else -> false
         }
-        // the case where function-expression syntax is used: `fun test() = when { ... }`
-        bodyExpression is KtWhenExpression -> true
-        else -> false
-    }
 
     private fun KtExpression.returnsWhenExpression() =
         this is KtReturnExpression && this.returnedExpression is KtWhenExpression

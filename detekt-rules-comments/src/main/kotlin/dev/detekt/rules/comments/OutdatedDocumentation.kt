@@ -194,10 +194,7 @@ class OutdatedDocumentation(config: Config) : Rule(
         return primaryConstructor.isInternal() || primaryConstructor.isPrivate()
     }
 
-    private fun declarationsMatch(
-        doc: List<Declaration>,
-        element: List<Declaration>,
-    ): Boolean {
+    private fun declarationsMatch(doc: List<Declaration>, element: List<Declaration>): Boolean {
         if (doc.size != element.size) {
             return false
         }

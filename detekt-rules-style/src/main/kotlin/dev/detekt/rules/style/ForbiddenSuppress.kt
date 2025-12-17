@@ -66,22 +66,24 @@ class ForbiddenSuppress(config: Config) : Rule(
         }
     }
 
-    private fun List<String>.formatMessage(): String = if (size > 1) {
-        "rules "
-    } else {
-        "rule "
-    } + joinToString(", ") { "\"$it\"" }
-
-    private fun List<KtValueArgument>.filterForbiddenRules(): List<String> = mapNotNull { argument ->
-        val text = argument.findDescendantOfType<KtLiteralStringTemplateEntry>()?.text
-        if (text == "ForbiddenSuppress") {
-            null
-        } else if (rules.contains(text)) {
-            text
+    private fun List<String>.formatMessage(): String =
+        if (size > 1) {
+            "rules "
         } else {
-            null
+            "rule "
+        } + joinToString(", ") { "\"$it\"" }
+
+    private fun List<KtValueArgument>.filterForbiddenRules(): List<String> =
+        mapNotNull { argument ->
+            val text = argument.findDescendantOfType<KtLiteralStringTemplateEntry>()?.text
+            if (text == "ForbiddenSuppress") {
+                null
+            } else if (rules.contains(text)) {
+                text
+            } else {
+                null
+            }
         }
-    }
 
     private companion object {
         private const val KOTLIN_SUPPRESS = "Suppress"

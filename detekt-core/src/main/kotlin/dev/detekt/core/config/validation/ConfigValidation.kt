@@ -54,11 +54,7 @@ internal fun checkConfiguration(settings: ProcessingSettings, baseline: Config) 
     }
 }
 
-internal fun validateConfig(
-    config: Config,
-    baseline: Config,
-    excludePatterns: Set<Regex>,
-): List<Notification> {
+internal fun validateConfig(config: Config, baseline: Config, excludePatterns: Set<Regex>): List<Notification> {
     require(baseline != Config.empty) { "Cannot validate configuration based on an empty baseline config." }
     require(baseline is YamlConfig) {
         val yamlConfigClass = YamlConfig::class.simpleName
@@ -103,8 +99,7 @@ private fun validateYamlConfig(
         }
 }
 
-private fun <T> T.transformIf(condition: Boolean, transform: () -> T): T =
-    if (condition) transform() else this
+private fun <T> T.transformIf(condition: Boolean, transform: () -> T): T = if (condition) transform() else this
 
 internal fun Notification.renderMessage(): String =
     when (level) {

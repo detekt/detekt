@@ -13,24 +13,25 @@ class ComplexityProvider : DefaultRuleSetProvider {
 
     override val ruleSetId = RuleSetId("complexity")
 
-    override fun instance(): RuleSet = RuleSet(
-        ruleSetId,
-        listOf(
-            ::LongParameterList,
-            ::LongMethod,
-            ::LargeClass,
-            ::ComplexInterface,
-            ::CyclomaticComplexMethod,
-            ::CognitiveComplexMethod,
-            ::StringLiteralDuplication,
-            ::MethodOverloading,
-            ::NestedBlockDepth,
-            ::NestedScopeFunctions,
-            ::TooManyFunctions,
-            ::ComplexCondition,
-            ::LabeledExpression,
-            ::ReplaceSafeCallChainWithRun,
-            ::NamedArguments
+    override fun instance(): RuleSet =
+        RuleSet(
+            ruleSetId,
+            listOf(
+                ::LongParameterList,
+                ::LongMethod,
+                ::LargeClass,
+                ::ComplexInterface,
+                ::CyclomaticComplexMethod,
+                ::CognitiveComplexMethod,
+                ::StringLiteralDuplication,
+                ::MethodOverloading,
+                ::NestedBlockDepth,
+                ::NestedScopeFunctions,
+                ::TooManyFunctions,
+                ::ComplexCondition,
+                ::LabeledExpression,
+                ::ReplaceSafeCallChainWithRun,
+                ::NamedArguments
+            )
         )
-    )
 }

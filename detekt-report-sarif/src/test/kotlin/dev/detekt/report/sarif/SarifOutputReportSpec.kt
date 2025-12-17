@@ -65,45 +65,46 @@ class SarifOutputReportSpec {
     }
 }
 
-private fun createRuleInstances() = listOf(
-    RuleInstance(
-        id = "TestSmellA",
-        ruleSetId = RuleSetId("RuleSet1"),
-        url = URI("http://example.org/TestSmellA"),
-        description = "Description A",
-        severity = Severity.Error,
-        active = true,
-    ),
-    RuleInstance(
-        id = "TestSmellB",
-        ruleSetId = RuleSetId("RuleSet2"),
-        url = URI("http://example.org/TestSmellB"),
-        description = "Description B",
-        severity = Severity.Warning,
-        active = true,
-    ),
-    RuleInstance(
-        id = "TestSmellC",
-        ruleSetId = RuleSetId("RuleSet2"),
-        url = URI("http://example.org/TestSmellC"),
-        description = "Description C",
-        severity = Severity.Info,
-        active = false,
-    ),
-    RuleInstance(
-        id = "TestSmellC/id",
-        ruleSetId = RuleSetId("RuleSet2"),
-        url = URI("http://example.org/TestSmellC"),
-        description = "Description C",
-        severity = Severity.Error,
-        active = false,
-    ),
-    RuleInstance(
-        id = "TestSmellD",
-        ruleSetId = RuleSetId("RuleSet2"),
-        url = null,
-        description = "Description D",
-        severity = Severity.Error,
-        active = false,
-    ),
-)
+private fun createRuleInstances() =
+    listOf(
+        RuleInstance(
+            id = "TestSmellA",
+            ruleSetId = RuleSetId("RuleSet1"),
+            url = URI("http://example.org/TestSmellA"),
+            description = "Description A",
+            severity = Severity.Error,
+            active = true,
+        ),
+        RuleInstance(
+            id = "TestSmellB",
+            ruleSetId = RuleSetId("RuleSet2"),
+            url = URI("http://example.org/TestSmellB"),
+            description = "Description B",
+            severity = Severity.Warning,
+            active = true,
+        ),
+        RuleInstance(
+            id = "TestSmellC",
+            ruleSetId = RuleSetId("RuleSet2"),
+            url = URI("http://example.org/TestSmellC"),
+            description = "Description C",
+            severity = Severity.Info,
+            active = false,
+        ),
+        RuleInstance(
+            id = "TestSmellC/id",
+            ruleSetId = RuleSetId("RuleSet2"),
+            url = URI("http://example.org/TestSmellC"),
+            description = "Description C",
+            severity = Severity.Error,
+            active = false,
+        ),
+        RuleInstance(
+            id = "TestSmellD",
+            ruleSetId = RuleSetId("RuleSet2"),
+            url = null,
+            description = "Description D",
+            severity = Severity.Error,
+            active = false,
+        ),
+    )

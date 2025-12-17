@@ -180,10 +180,7 @@ class UnnamedParameterUse(config: Config) :
     }
 
     @Suppress("ReturnCount")
-    private fun KaSession.typeCanBeAssigned(
-        firstParam: KtValueArgument,
-        secondParam: KtValueArgument,
-    ): Boolean {
+    private fun KaSession.typeCanBeAssigned(firstParam: KtValueArgument, secondParam: KtValueArgument): Boolean {
         val param1Type = firstParam.getArgumentExpression()?.expressionType ?: return true
         val param2Type = secondParam.getArgumentExpression()?.expressionType ?: return true
         return param1Type.isSubtypeOf(param2Type) || param2Type.isSubtypeOf(param1Type)

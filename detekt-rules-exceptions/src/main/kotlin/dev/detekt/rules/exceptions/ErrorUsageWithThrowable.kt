@@ -59,14 +59,15 @@ class ErrorUsageWithThrowable(config: Config) :
         }
     }
 
-    private fun KtExpression.isThrowableSubtypeOfThrowable(): Boolean = analyze(this) {
-        val expressionType = expressionType ?: return false
-        sequence {
-            yield(expressionType)
-            yieldAll(expressionType.allSupertypes)
+    private fun KtExpression.isThrowableSubtypeOfThrowable(): Boolean =
+        analyze(this) {
+            val expressionType = expressionType ?: return false
+            sequence {
+                yield(expressionType)
+                yieldAll(expressionType.allSupertypes)
+            }
+                .any { type -> throwableTypes.any { type.isClassType(it) } }
         }
-            .any { type -> throwableTypes.any { type.isClassType(it) } }
-    }
 
     companion object {
         private val ERROR_CALLABLE_ID = CallableId(StandardClassIds.BASE_KOTLIN_PACKAGE, Name.identifier("error"))

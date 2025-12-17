@@ -703,322 +703,323 @@ class ForbiddenCommentSpec {
     inner class `comment getContent` {
 
         @Suppress("LongMethod", "UnusedPrivateFunction")
-        private fun getCommentsContentArguments() = listOf(
-            Arguments.of("// comment", "comment"),
-            Arguments.of("//  comment", " comment"),
-            Arguments.of("//comment", "comment"),
-            Arguments.of("// ", ""),
-            Arguments.of("//  ", " "),
-            Arguments.of("/* comment */", "comment"),
-            Arguments.of("/*  comment  */", " comment "),
-            Arguments.of("/* */", ""),
-            Arguments.of("/*  */", ""),
-            Arguments.of("/*comment*/", "comment"),
-            Arguments.of("/*** comment ***/", "** comment **"),
-            Arguments.of(
-                """
-                    /*
-                    * good
-                    * good
-                    */
-                """.trimIndent(),
-                """
-                    good
-                    good
-                    
-                """.trimIndent()
-            ),
-            Arguments.of(
-                """
-                    /*
-                    *bad
-                    * good
-                    */
-                """.trimIndent(),
-                """
-                    bad
-                    good
-                    
-                """.trimIndent()
-            ),
-            Arguments.of(
-                """
-                    /*
-                    *bad
-                    *   good
-                    */
-                """.trimIndent(),
-                """
-                    bad
-                      good
-                    
-                """.trimIndent()
-            ),
-            Arguments.of(
-                """
-                    /*
-                    comment
-                    * a
-                    * b
-                    * c*/
-                """.trimIndent(),
-                """
-                    comment
-                    a
-                    b
-                    c
-                """.trimIndent()
-            ),
-            Arguments.of(
-                """
-                    /*comment
-                    * a
-                    * b
-                    * c*/
-                """.trimIndent(),
-                """
-                    comment
-                    a
-                    b
-                    c
-                """.trimIndent()
-            ),
-            Arguments.of(
-                """
-                    /*  comment
-                    * a
-                    * b
-                    * c  */
-                """.trimIndent(),
-                """
-                     comment
-                    a
-                    b
-                    c 
-                """.trimIndent()
-            ),
-            Arguments.of(
-                """
-                    /*
-                     * good
-                     * good
-                     */
-                """.trimIndent(),
-                """
-                    good
-                    good
-                    
-                """.trimIndent()
-            ),
-            Arguments.of(
-                """
-                    /*
-                     *bad
-                     * good
-                     */
-                """.trimIndent(),
-                """
-                    bad
-                    good
-                    
-                """.trimIndent()
-            ),
-            Arguments.of(
-                """
-                    /*
-                     *bad
-                     *   good
-                     */
-                """.trimIndent(),
-                """
-                    bad
-                      good
-                    
-                """.trimIndent()
-            ),
-            Arguments.of(
-                """
-                    /*
-                       comment
-                     * a
-                     * b
-                     * c*/
-                """.trimIndent(),
-                """
-                      comment
-                    a
-                    b
-                    c
-                """.trimIndent()
-            ),
-            Arguments.of(
-                """
-                    /*comment
-                     * a
-                     * b
-                     * c*/
-                """.trimIndent(),
-                """
-                    comment
-                    a
-                    b
-                    c
-                """.trimIndent()
-            ),
-            Arguments.of(
-                """
-                    /*
-                    a
-                    b
-                    c
-                    */
-                """.trimIndent(),
-                """
-                    a
-                    b
-                    c
-                    
-                """.trimIndent()
-            ),
-            Arguments.of(
-                """
-                    /*
-                    a
-                    b
-
-                    c
-                    */
-                """.trimIndent(),
-                """
-                    a
-                    b
-
-                    c
-                    
-                """.trimIndent()
-            ),
-            Arguments.of(
-                """
-                    /*
-                    
-                    
-                    */
-                """.trimIndent(),
-                "".trimIndent()
-            ),
-            Arguments.of(
-                """
-                    /*
-                    
-                    a
-                    
-                    */
-                """.trimIndent(),
-                "a\n\n"
-            ),
-            Arguments.of(
-                """
-                    /*
-                    
-                    
-                     */
-                """.trimIndent(),
-                "".trimIndent()
-            ),
-            Arguments.of(
-                """
-                    /*
-                    
-                      a
-                    
-                     */
-                """.trimIndent(),
-                " a\n\n"
-            ),
-            Arguments.of(
-                """
-                     /*
-                    a
-                      b
+        private fun getCommentsContentArguments() =
+            listOf(
+                Arguments.of("// comment", "comment"),
+                Arguments.of("//  comment", " comment"),
+                Arguments.of("//comment", "comment"),
+                Arguments.of("// ", ""),
+                Arguments.of("//  ", " "),
+                Arguments.of("/* comment */", "comment"),
+                Arguments.of("/*  comment  */", " comment "),
+                Arguments.of("/* */", ""),
+                Arguments.of("/*  */", ""),
+                Arguments.of("/*comment*/", "comment"),
+                Arguments.of("/*** comment ***/", "** comment **"),
+                Arguments.of(
+                    """
+                        /*
+                        * good
+                        * good
+                        */
+                    """.trimIndent(),
+                    """
+                        good
+                        good
+                        
+                    """.trimIndent()
+                ),
+                Arguments.of(
+                    """
+                        /*
+                        *bad
+                        * good
+                        */
+                    """.trimIndent(),
+                    """
+                        bad
+                        good
+                        
+                    """.trimIndent()
+                ),
+                Arguments.of(
+                    """
+                        /*
+                        *bad
+                        *   good
+                        */
+                    """.trimIndent(),
+                    """
+                        bad
+                          good
+                        
+                    """.trimIndent()
+                ),
+                Arguments.of(
+                    """
+                        /*
+                        comment
+                        * a
+                        * b
+                        * c*/
+                    """.trimIndent(),
+                    """
+                        comment
+                        a
+                        b
                         c
-                      */
-                """.trimIndent(),
-                """
-                    a
-                      b
+                    """.trimIndent()
+                ),
+                Arguments.of(
+                    """
+                        /*comment
+                        * a
+                        * b
+                        * c*/
+                    """.trimIndent(),
+                    """
+                        comment
+                        a
+                        b
                         c
-                     
-                """.trimIndent()
-            ),
-            Arguments.of(
-                """
-                    /*
-                    
-                     * a
-                    
-                     */
-                """.trimIndent(),
-                "a\n\n"
-            ),
-            Arguments.of(
-                """
-                    /*
-                     * foo
-                     * bar
-                     * baz
-                    */
-                """.trimIndent(),
-                """
-                    foo
-                    bar
-                    baz
-                    
-                """.trimIndent()
-            ),
-            Arguments.of(
-                """
-                    /*
-                     * foo
-                    * bar
-                     * baz
-                     */
-                """.trimIndent(),
-                """
-                    foo
-                    bar
-                    baz
-                    
-                """.trimIndent()
-            ),
-            Arguments.of(
-                """
-                      /*
-
-                    a
-                     b
-                      c
-                       d
-                       *e
-                       * f
-                       *  g
-                         * h
-                        *   i
-                       */
-                """.trimIndent(),
-                """
-                    a
-                     b
-                      c
-                       d
-                    e
-                    f
-                     g
-                    h
-                      i
-                      
-                """.trimIndent()
-            ),
-        )
+                    """.trimIndent()
+                ),
+                Arguments.of(
+                    """
+                        /*  comment
+                        * a
+                        * b
+                        * c  */
+                    """.trimIndent(),
+                    """
+                         comment
+                        a
+                        b
+                        c 
+                    """.trimIndent()
+                ),
+                Arguments.of(
+                    """
+                        /*
+                         * good
+                         * good
+                         */
+                    """.trimIndent(),
+                    """
+                        good
+                        good
+                        
+                    """.trimIndent()
+                ),
+                Arguments.of(
+                    """
+                        /*
+                         *bad
+                         * good
+                         */
+                    """.trimIndent(),
+                    """
+                        bad
+                        good
+                        
+                    """.trimIndent()
+                ),
+                Arguments.of(
+                    """
+                        /*
+                         *bad
+                         *   good
+                         */
+                    """.trimIndent(),
+                    """
+                        bad
+                          good
+                        
+                    """.trimIndent()
+                ),
+                Arguments.of(
+                    """
+                        /*
+                           comment
+                         * a
+                         * b
+                         * c*/
+                    """.trimIndent(),
+                    """
+                          comment
+                        a
+                        b
+                        c
+                    """.trimIndent()
+                ),
+                Arguments.of(
+                    """
+                        /*comment
+                         * a
+                         * b
+                         * c*/
+                    """.trimIndent(),
+                    """
+                        comment
+                        a
+                        b
+                        c
+                    """.trimIndent()
+                ),
+                Arguments.of(
+                    """
+                        /*
+                        a
+                        b
+                        c
+                        */
+                    """.trimIndent(),
+                    """
+                        a
+                        b
+                        c
+                        
+                    """.trimIndent()
+                ),
+                Arguments.of(
+                    """
+                        /*
+                        a
+                        b
+    
+                        c
+                        */
+                    """.trimIndent(),
+                    """
+                        a
+                        b
+    
+                        c
+                        
+                    """.trimIndent()
+                ),
+                Arguments.of(
+                    """
+                        /*
+                        
+                        
+                        */
+                    """.trimIndent(),
+                    "".trimIndent()
+                ),
+                Arguments.of(
+                    """
+                        /*
+                        
+                        a
+                        
+                        */
+                    """.trimIndent(),
+                    "a\n\n"
+                ),
+                Arguments.of(
+                    """
+                        /*
+                        
+                        
+                         */
+                    """.trimIndent(),
+                    "".trimIndent()
+                ),
+                Arguments.of(
+                    """
+                        /*
+                        
+                          a
+                        
+                         */
+                    """.trimIndent(),
+                    " a\n\n"
+                ),
+                Arguments.of(
+                    """
+                         /*
+                        a
+                          b
+                            c
+                          */
+                    """.trimIndent(),
+                    """
+                        a
+                          b
+                            c
+                         
+                    """.trimIndent()
+                ),
+                Arguments.of(
+                    """
+                        /*
+                        
+                         * a
+                        
+                         */
+                    """.trimIndent(),
+                    "a\n\n"
+                ),
+                Arguments.of(
+                    """
+                        /*
+                         * foo
+                         * bar
+                         * baz
+                        */
+                    """.trimIndent(),
+                    """
+                        foo
+                        bar
+                        baz
+                        
+                    """.trimIndent()
+                ),
+                Arguments.of(
+                    """
+                        /*
+                         * foo
+                        * bar
+                         * baz
+                         */
+                    """.trimIndent(),
+                    """
+                        foo
+                        bar
+                        baz
+                        
+                    """.trimIndent()
+                ),
+                Arguments.of(
+                    """
+                          /*
+    
+                        a
+                         b
+                          c
+                           d
+                           *e
+                           * f
+                           *  g
+                             * h
+                            *   i
+                           */
+                    """.trimIndent(),
+                    """
+                        a
+                         b
+                          c
+                           d
+                        e
+                        f
+                         g
+                        h
+                          i
+                          
+                    """.trimIndent()
+                ),
+            )
 
         @ParameterizedTest(name = "Given {0} comment, getContent return {1}")
         @MethodSource("getCommentsContentArguments")

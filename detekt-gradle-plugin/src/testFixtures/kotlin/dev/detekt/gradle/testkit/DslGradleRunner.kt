@@ -125,10 +125,11 @@ constructor(
     private val Submodule.moduleRoot: File
         get() = File(rootDir, name).apply { mkdirs() }
 
-    fun buildProject(): Project = ProjectBuilder.builder()
-        .withProjectDir(rootDir)
-        .build()
-        .apply(projectScript)
+    fun buildProject(): Project =
+        ProjectBuilder.builder()
+            .withProjectDir(rootDir)
+            .build()
+            .apply(projectScript)
 
     private fun buildGradleRunner(tasks: List<String>): GradleRunner {
         val args = buildList {

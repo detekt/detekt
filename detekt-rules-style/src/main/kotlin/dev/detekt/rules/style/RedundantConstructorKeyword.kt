@@ -49,8 +49,9 @@ class RedundantConstructorKeyword(config: Config) : Rule(
 
     private fun KtPrimaryConstructor.hasNoModifier() = modifierList == null && !hasPreviousComment()
 
-    private fun KtPrimaryConstructor.hasPreviousComment(): Boolean = siblings(
-        forward = false,
-        withItself = false
-    ).takeWhile { it is PsiComment || it is PsiWhiteSpace }.any { it is PsiComment }
+    private fun KtPrimaryConstructor.hasPreviousComment(): Boolean =
+        siblings(
+            forward = false,
+            withItself = false
+        ).takeWhile { it is PsiComment || it is PsiWhiteSpace }.any { it is PsiComment }
 }

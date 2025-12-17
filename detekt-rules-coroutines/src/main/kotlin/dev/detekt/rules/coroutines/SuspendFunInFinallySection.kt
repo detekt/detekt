@@ -57,39 +57,37 @@ class SuspendFunInFinallySection(config: Config) :
         }
     }
 
-    private fun shouldReport(
-        expression: KtCallExpression,
-        topParent: KtFinallySection,
-    ) = analyze(expression) {
-        val isSuspend = expression.resolveToCall()
-            ?.successfulFunctionCallOrNull()
-            ?.isSuspendCall()
-            ?: false
-        if (!isSuspend) return false
+    private fun shouldReport(expression: KtCallExpression, topParent: KtFinallySection) =
+        analyze(expression) {
+            val isSuspend = expression.resolveToCall()
+                ?.successfulFunctionCallOrNull()
+                ?.isSuspendCall()
+                ?: false
+            if (!isSuspend) return false
 
-        val parentCalls = expression.parentCallsUpTo(topParent)
-        val withContextFun = parentCalls.findFunction("kotlinx.coroutines.withContext") ?: return true
-        val firstArgument = withContextFun.valueArguments.first()
-        !isNonCancellableArgument(firstArgument)
-    }
+            val parentCalls = expression.parentCallsUpTo(topParent)
+            val withContextFun = parentCalls.findFunction("kotlinx.coroutines.withContext") ?: return true
+            val firstArgument = withContextFun.valueArguments.first()
+            !isNonCancellableArgument(firstArgument)
+        }
 
-    private fun KaFunctionCall<*>.isSuspendCall() =
-        (symbol as? KaNamedFunctionSymbol)?.isSuspend ?: false
+    private fun KaFunctionCall<*>.isSuspendCall() = (symbol as? KaNamedFunctionSymbol)?.isSuspend ?: false
 
     private fun KtCallExpression.parentCallsUpTo(topParent: PsiElement) =
         generateSequence(this as PsiElement) { it.parent }
             .takeWhile { it != topParent }
             .filterIsInstance<KtCallExpression>()
 
-    private fun Sequence<KtCallExpression>.findFunction(fqName: String) = firstOrNull {
-        analyze(it) {
-            it.resolveToCall()
-                ?.successfulFunctionCallOrNull()
-                ?.symbol
-                ?.callableId
-                ?.run { asSingleFqName().asString() } == fqName
+    private fun Sequence<KtCallExpression>.findFunction(fqName: String) =
+        firstOrNull {
+            analyze(it) {
+                it.resolveToCall()
+                    ?.successfulFunctionCallOrNull()
+                    ?.symbol
+                    ?.callableId
+                    ?.run { asSingleFqName().asString() } == fqName
+            }
         }
-    }
 
     private fun isNonCancellableArgument(arg: KtValueArgument) =
         arg.getArgumentExpression()?.let { expression ->

@@ -94,10 +94,7 @@ class NoNameShadowing(
         )
     }
 
-    private fun checkNameShadowing(
-        declaration: KtNamedDeclaration,
-        parentToSkipSearchFrom: PsiElement,
-    ) {
+    private fun checkNameShadowing(declaration: KtNamedDeclaration, parentToSkipSearchFrom: PsiElement) {
         val declarationNameIdentifier = declaration.nameIdentifier ?: return
         val declarationName = declarationNameIdentifier.text
         val matched = parentToSkipSearchFrom.parents(false)

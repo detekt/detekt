@@ -61,8 +61,7 @@ class ForbiddenImport(config: Config) : Rule(
     private fun defaultReason(forbiddenImport: String): String =
         "The import `$forbiddenImport` has been forbidden in the detekt config."
 
-    private fun importIsExplicitlyAllowed(import: String): Boolean =
-        allowedImports.any { it.matches(import) }
+    private fun importIsExplicitlyAllowed(import: String): Boolean = allowedImports.any { it.matches(import) }
 }
 
 private data class Forbidden(val import: Regex, val reason: String?)

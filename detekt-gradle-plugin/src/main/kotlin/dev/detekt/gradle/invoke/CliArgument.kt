@@ -55,16 +55,17 @@ internal data class InputArgument(val fileCollection: FileCollection) : CliArgum
 }
 
 internal data class ClasspathArgument(val fileCollection: FileCollection) : CliArgument() {
-    override fun toArgument() = if (!fileCollection.isEmpty) {
-        listOf(
-            CLASSPATH_PARAMETER,
-            fileCollection.files.filter(File::exists).joinToString(File.pathSeparator) { it.absolutePath },
-            ANALYSIS_MODE,
-            "full",
-        )
-    } else {
-        listOf(ANALYSIS_MODE, "light")
-    }
+    override fun toArgument() =
+        if (!fileCollection.isEmpty) {
+            listOf(
+                CLASSPATH_PARAMETER,
+                fileCollection.files.filter(File::exists).joinToString(File.pathSeparator) { it.absolutePath },
+                ANALYSIS_MODE,
+                "full",
+            )
+        } else {
+            listOf(ANALYSIS_MODE, "light")
+        }
 }
 
 internal data class ApiVersionArgument(val apiVersion: String?) : CliArgument() {
@@ -114,14 +115,15 @@ internal data class FreeArgs(val args: List<String>) : CliArgument() {
 }
 
 internal data class FriendPathArgs(val fileCollection: FileCollection) : CliArgument() {
-    override fun toArgument() = if (!fileCollection.isEmpty) {
-        listOf(
-            FRIEND_PATHS_PARAMETER,
-            fileCollection.joinToString(",") { it.absolutePath }
-        )
-    } else {
-        emptyList()
-    }
+    override fun toArgument() =
+        if (!fileCollection.isEmpty) {
+            listOf(
+                FRIEND_PATHS_PARAMETER,
+                fileCollection.joinToString(",") { it.absolutePath }
+            )
+        } else {
+            emptyList()
+        }
 }
 
 internal data class BasePathArgument(val basePath: String?) : CliArgument() {
@@ -138,11 +140,12 @@ internal data class FailOnSeverityArgument(val ignoreFailures: Boolean, val minS
 
 internal data class ConfigArgument(val files: FileCollection) : CliArgument() {
 
-    override fun toArgument() = if (files.isEmpty) {
-        emptyList()
-    } else {
-        listOf(CONFIG_PARAMETER, files.joinToString(",") { it.absolutePath })
-    }
+    override fun toArgument() =
+        if (files.isEmpty) {
+            emptyList()
+        } else {
+            listOf(CONFIG_PARAMETER, files.joinToString(",") { it.absolutePath })
+        }
 }
 
 internal sealed class BoolCliArgument(open val value: Boolean, val configSwitch: String) : CliArgument() {
@@ -166,14 +169,15 @@ internal data class AllRulesArgument(override val value: Boolean) : BoolCliArgum
 internal data class AutoCorrectArgument(override val value: Boolean) : BoolCliArgument(value, AUTO_CORRECT_PARAMETER)
 
 internal data class OptInArguments(val list: List<String>) : CliArgument() {
-    override fun toArgument() = if (list.isNotEmpty()) {
-        listOf(
-            OPT_IN_PARAMETER,
-            list.joinToString(",")
-        )
-    } else {
-        emptyList()
-    }
+    override fun toArgument() =
+        if (list.isNotEmpty()) {
+            listOf(
+                OPT_IN_PARAMETER,
+                list.joinToString(",")
+            )
+        } else {
+            emptyList()
+        }
 }
 
 internal data class NoJdkArgument(override val value: Boolean) : BoolCliArgument(value, NO_JDK_PARAMETER)

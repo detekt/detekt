@@ -92,10 +92,11 @@ class CyclomaticComplexity(private val config: Config) : DetektVisitor() {
         super.visitTryExpression(expression)
     }
 
-    private fun KtCallExpression.isUsedForNesting(): Boolean = when (getCallNameExpression()?.text) {
-        in config.nestingFunctions -> true
-        else -> false
-    }
+    private fun KtCallExpression.isUsedForNesting(): Boolean =
+        when (getCallNameExpression()?.text) {
+            in config.nestingFunctions -> true
+            else -> false
+        }
 
     override fun visitCallExpression(expression: KtCallExpression) {
         if (!config.ignoreNestingFunctions && expression.isUsedForNesting()) {

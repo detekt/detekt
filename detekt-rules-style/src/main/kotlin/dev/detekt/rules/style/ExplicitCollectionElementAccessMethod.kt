@@ -78,9 +78,10 @@ class ExplicitCollectionElementAccessMethod(config: Config) :
         } && unusedReturnValue(expression)
 
     context(session: KaSession)
-    private fun KtCallExpression.getFunctionSymbol(): KaNamedFunctionSymbol? = with(session) {
-        resolveToCall()?.singleFunctionCallOrNull()?.symbol as? KaNamedFunctionSymbol
-    }
+    private fun KtCallExpression.getFunctionSymbol(): KaNamedFunctionSymbol? =
+        with(session) {
+            resolveToCall()?.singleFunctionCallOrNull()?.symbol as? KaNamedFunctionSymbol
+        }
 
     private fun canReplace(function: KaNamedFunctionSymbol): Boolean {
         // Can't use index operator when insufficient information is available to infer type variable.
@@ -120,6 +121,5 @@ class ExplicitCollectionElementAccessMethod(config: Config) :
             symbol.superTypes.asSequence().flatMap { it.allSupertypes }.any { it.symbol?.classId == mapClass }
     }
 
-    private fun unusedReturnValue(expression: KtCallExpression): Boolean =
-        expression.parent.parent is KtBlockExpression
+    private fun unusedReturnValue(expression: KtCallExpression): Boolean = expression.parent.parent is KtBlockExpression
 }

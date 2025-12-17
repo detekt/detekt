@@ -48,19 +48,21 @@ fun Config.valueOrDefaultInternal(
         )
     }
 
-private fun getDefaultName(className: String): String = if (className == "EmptyList") {
-    "List"
-} else {
-    className
-}
+private fun getDefaultName(className: String): String =
+    if (className == "EmptyList") {
+        "List"
+    } else {
+        className
+    }
 
-fun tryParseBasedOnDefault(result: String, defaultResult: Any): Any = when (defaultResult) {
-    is Int -> result.toInt()
-    is Boolean -> result.toBooleanStrict()
-    is Double -> result.toDouble()
-    is String -> result
-    else -> throw ClassCastException()
-}
+fun tryParseBasedOnDefault(result: String, defaultResult: Any): Any =
+    when (defaultResult) {
+        is Int -> result.toInt()
+        is Boolean -> result.toBooleanStrict()
+        is Double -> result.toDouble()
+        is String -> result
+        else -> throw ClassCastException()
+    }
 
 private val PRIMITIVES: Set<KClass<out Any>> = setOf(
     Int::class,

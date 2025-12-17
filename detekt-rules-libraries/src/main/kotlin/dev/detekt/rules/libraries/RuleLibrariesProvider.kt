@@ -19,12 +19,13 @@ class RuleLibrariesProvider : RuleSetProvider {
 
     override val ruleSetId = RuleSetId("libraries")
 
-    override fun instance() = RuleSet(
-        ruleSetId,
-        listOf(
-            ::ForbiddenPublicDataClass,
-            ::LibraryEntitiesShouldNotBePublic,
-            ::LibraryCodeMustSpecifyReturnType,
+    override fun instance() =
+        RuleSet(
+            ruleSetId,
+            listOf(
+                ::ForbiddenPublicDataClass,
+                ::LibraryEntitiesShouldNotBePublic,
+                ::LibraryCodeMustSpecifyReturnType,
+            )
         )
-    )
 }

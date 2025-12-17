@@ -47,11 +47,7 @@ fun main(args: Array<String>) {
         "io.github.detekt.tooling.api.DetektCli"
     )
 )
-fun buildRunner(
-    args: Array<String>,
-    outputPrinter: PrintStream,
-    errorPrinter: PrintStream,
-): Executable {
+fun buildRunner(args: Array<String>, outputPrinter: PrintStream, errorPrinter: PrintStream): Executable {
     check(KotlinCompilerVersion.VERSION == whichKotlin()) {
         """
             detekt was compiled with Kotlin ${whichKotlin()} but is currently running with ${KotlinCompilerVersion.VERSION}.
@@ -67,9 +63,10 @@ fun buildRunner(
 }
 
 @Suppress("detekt.MagicNumber")
-internal fun AnalysisResult.exitCode(): Int = when (error) {
-    is UnexpectedError -> 1
-    is IssuesFound -> 2
-    is InvalidConfig -> 3
-    null -> 0
-}
+internal fun AnalysisResult.exitCode(): Int =
+    when (error) {
+        is UnexpectedError -> 1
+        is IssuesFound -> 2
+        is InvalidConfig -> 3
+        null -> 0
+    }

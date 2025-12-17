@@ -72,7 +72,7 @@ ktlint:
   Filename:
     active: false
   FunctionSignature:
-    active: false
+    functionBodyExpressionWrapping: multiline
   Kdoc:
     active: true
     excludes: ['**/*.kts']
