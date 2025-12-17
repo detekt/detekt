@@ -18,8 +18,8 @@ class CheckstyleOutputReport : OutputReport {
 
     override fun render(detektion: Detektion): String {
         val lines = ArrayList<String>()
-        lines += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-        lines += "<checkstyle version=\"4.3\">"
+        lines += """<?xml version="1.0" encoding="UTF-8"?>"""
+        lines += """<checkstyle version="4.3">"""
 
         detektion.issues
             .filterNot { it.suppressed }
@@ -28,11 +28,11 @@ class CheckstyleOutputReport : OutputReport {
                 lines += "<file name=\"${filePath.invariantSeparatorsPathString.toXmlString()}\">"
                 issues.forEach {
                     lines += arrayOf(
-                        "\t<error line=\"${it.location.source.line.toXmlString()}\"",
-                        "column=\"${it.location.source.column.toXmlString()}\"",
-                        "severity=\"${it.severityLabel.toXmlString()}\"",
-                        "message=\"${it.message.toXmlString()}\"",
-                        "source=\"${"detekt.${it.ruleInstance.id.toXmlString()}"}\" />"
+                        """	<error line="${it.location.source.line.toXmlString()}"""",
+                        """column="${it.location.source.column.toXmlString()}"""",
+                        """severity="${it.severityLabel.toXmlString()}"""",
+                        """message="${it.message.toXmlString()}"""",
+                        """source="${"detekt.${it.ruleInstance.id.toXmlString()}"}" />"""
                     ).joinToString(separator = " ")
                 }
                 lines += "</file>"

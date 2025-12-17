@@ -56,7 +56,7 @@ class YamlConfigSpec {
                 val ignored = config.valueOrDefault("style", "")
             }
                 .withMessage(
-                    "Value \"{WildcardImport={active=true}, NoElseInWhenExpression={active=true}, MagicNumber={active=true, ignoreNumbers=[-1, 0, 1, 2]}}\" set for config parameter \"style\" is not of required type String."
+                    """Value "{WildcardImport={active=true}, NoElseInWhenExpression={active=true}, MagicNumber={active=true, ignoreNumbers=[-1, 0, 1, 2]}}" set for config parameter "style" is not of required type String."""
                 )
         }
 
@@ -127,7 +127,7 @@ class YamlConfigSpec {
                     .valueOrDefault("threshold", 6)
             }
                 .withMessage(
-                    "Value \"v5.7\" set for config parameter \"RuleSet > Rule > threshold\" is not of required type Int."
+                    """Value "v5.7" set for config parameter "RuleSet > Rule > threshold" is not of required type Int."""
                 )
         }
 
@@ -140,7 +140,7 @@ class YamlConfigSpec {
                     .valueOrDefault("active", 1)
             }
                 .withMessage(
-                    "Value \"[]\" set for config parameter \"RuleSet > Rule > active\" is not of required type Int."
+                    """Value "[]" set for config parameter "RuleSet > Rule > active" is not of required type Int."""
                 )
         }
 
@@ -150,7 +150,7 @@ class YamlConfigSpec {
                 config.valueOrDefaultInternal(key = "key", result = listOf(1, 2), default = listOf("1", "2"))
             }.withMessage(
                 "Only lists of strings are supported. " +
-                    "Value \"[1, 2]\" set for config parameter \"key\" contains non-string values."
+                    """Value "[1, 2]" set for config parameter "key" contains non-string values."""
             )
         }
 

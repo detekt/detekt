@@ -12,7 +12,7 @@ class CompilationAssert(private val result: JvmCompilationResult) :
 
     private val detektMessages = result.messages.split("\n").dropWhile { !(it.contains(Regex("KClass\\d.kt"))) }
 
-    private val regex = "\\w+\\.kt:\\d+:\\d+ (\\w+): .*".toRegex()
+    private val regex = """\w+\.kt:\d+:\d+ (\w+): .*""".toRegex()
     private val detektViolations = detektMessages.mapNotNull { line -> regex.find(line)?.groupValues?.get(1) }
 
     fun passCompilation(expectedStatus: Boolean = true) =

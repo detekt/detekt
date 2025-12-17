@@ -227,7 +227,7 @@ empty-blocks:
 exceptions:
   active: true
   ErrorUsageWithThrowable:
-    active: false
+    active: true
   ExceptionRaisedInUnexpectedLocation:
     active: true
     methodNames:
@@ -241,7 +241,7 @@ exceptions:
   NotImplementedDeclaration:
     active: false
   ObjectExtendsThrowable:
-    active: false
+    active: true
   PrintStackTrace:
     active: true
   RethrowCaughtException:
@@ -427,7 +427,7 @@ potential-bugs:
   CastToNullableType:
     active: false
   CharArrayToStringCall:
-    active: false
+    active: true
   Deprecation:
     active: false
     aliases: ['DEPRECATION']
@@ -497,7 +497,7 @@ potential-bugs:
     active: false
     excludes: ['**/*.kts']
   MissingSuperCall:
-    active: false
+    active: true
     mustInvokeSuperAnnotations:
       - 'androidx.annotation.CallSuper'
       - 'javax.annotation.OverridingMethodsMustInvokeSuper'
@@ -592,7 +592,7 @@ style:
   EqualsOnSignatureLine:
     active: false
   ExplicitCollectionElementAccessMethod:
-    active: false
+    active: true
   ExplicitItLambdaMultipleParameters:
     active: true
   ExplicitItLambdaParameter:
@@ -714,7 +714,7 @@ style:
   NoTabs:
     active: false
   NullableBooleanCheck:
-    active: false
+    active: true
   ObjectLiteralToLambda:
     active: true
   OptionalAbstractKeyword:
@@ -726,7 +726,7 @@ style:
   RangeUntilInsteadOfRangeTo:
     active: false
   RedundantConstructorKeyword:
-    active: false
+    active: true
   RedundantExplicitType:
     active: false
   RedundantHigherOrderMapUsage:
@@ -748,7 +748,7 @@ style:
   SpacingAfterPackageDeclaration:
     active: false
   StringShouldBeRawString:
-    active: false
+    active: true
     maxEscapedCharacterCount: 2
     ignoredCharacters: []
   ThrowsCount:
@@ -773,7 +773,7 @@ style:
   UnnecessaryBackticks:
     active: false
   UnnecessaryBracesAroundTrailingLambda:
-    active: false
+    active: true
   UnnecessaryFilter:
     active: true
   UnnecessaryInheritance:
@@ -788,7 +788,7 @@ style:
   UnnecessaryReversed:
     active: false
   UnusedImport:
-    active: false
+    active: true
     additionalOperatorSet: []
   UnusedParameter:
     active: true
@@ -821,7 +821,7 @@ style:
     active: false
     allowVars: false
   UseEmptyCounterpart:
-    active: false
+    active: true
   UseIfEmptyOrIfBlank:
     active: false
   UseIfInsteadOfWhen:

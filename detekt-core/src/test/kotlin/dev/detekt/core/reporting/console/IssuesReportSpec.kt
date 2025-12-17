@@ -58,6 +58,7 @@ class IssuesReportSpec {
                 createRuleInstance("LongRule", "Ruleset"),
                 message = "This is just a long message that should be truncated after a given threshold is reached.",
             ),
+            @Suppress("StringShouldBeRawString")
             createIssue(
                 createRuleInstance("MultilineRule", "Ruleset"),
                 message = "A multiline\n\r\tmessage.\t ",

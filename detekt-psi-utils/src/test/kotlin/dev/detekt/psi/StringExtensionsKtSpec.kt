@@ -44,6 +44,7 @@ internal class StringExtensionsKtSpec {
                 Arguments.of("""some other words [Label](www.foo.com)"""),
                 Arguments.of("""[Label with space](www.foo.com)"""),
                 Arguments.of("""[Label](www.foo.com "With title")"""),
+                @Suppress("StringShouldBeRawString")
                 Arguments.of("[Label with tabs](www.foo.com\t\"With\ttitle\"\t)"),
                 Arguments.of("""[Label](www.foo.com "With title")     """),
                 Arguments.of("""[Label](www.foo.com "With title" )"""),
