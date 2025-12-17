@@ -118,6 +118,6 @@ class StyleGuideProvider : DefaultRuleSetProvider {
                 ::DoubleNegativeExpression,
                 ::UnnecessaryReversed,
                 ::UnnecessaryFullyQualifiedName,
-                )
+            )
         )
 }
