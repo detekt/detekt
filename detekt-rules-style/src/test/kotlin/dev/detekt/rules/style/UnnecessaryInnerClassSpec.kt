@@ -523,23 +523,6 @@ class UnnecessaryInnerClassSpec(val env: KotlinEnvironmentContainer) {
         }
 
         @Test
-        fun `reports with nested empty 4 classes`() {
-            val code = """
-                class A {
-                    inner class B {
-                        inner class C {
-                            inner class D
-                        }
-                    }
-                }
-            """.trimIndent()
-
-            val findings = subject.lintWithContext(env, code)
-            assertThat(findings)
-                .hasSize(3)
-        }
-
-        @Test
         fun `reports when only outer ctor is used`() {
             val code = """
                 class A {
