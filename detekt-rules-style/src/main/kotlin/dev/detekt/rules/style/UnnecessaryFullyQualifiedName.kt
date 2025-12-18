@@ -225,10 +225,7 @@ class UnnecessaryFullyQualifiedName(config: Config) : Rule(
     private fun isInStringLiteral(element: KtElement): Boolean =
         element.getParentOfType<KtStringTemplateExpression>(strict = false) != null
 
-    private fun isLikelyPackageQualifiedFunction(
-        expression: KtDotQualifiedExpression,
-        receiverText: String,
-    ): Boolean {
+    private fun isLikelyPackageQualifiedFunction(expression: KtDotQualifiedExpression, receiverText: String): Boolean {
         if (!receiverText.contains('.')) return false
 
         var currentReceiver: KtExpression = expression.receiverExpression
