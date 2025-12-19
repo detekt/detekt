@@ -94,7 +94,6 @@ testing {
 dependencies {
     components {
         setOf(
-            "com.android.tools.build:builder-test-api",
             "com.android.tools.build:gradle-api",
             "org.junit.jupiter:junit-jupiter",
             "org.junit.jupiter:junit-jupiter-api",
