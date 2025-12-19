@@ -22,7 +22,7 @@ kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 
 # This represents the oldest AGP version that is supported by detekt.
 # This should only be updated when updating the minimum version supported by detekt's Gradle plugin.
-android-gradleApi = { module = "com.android.tools.build:gradle-api", version = "7.3.1" }
+android-gradleApi = { module = "com.android.tools.build:gradle-api", version = "8.2.2" }
 
 # This represents the oldest JUnit version supported by detekt-test-junit.
 # This should only be updated when updating the minimum version supported by detekt-test-junit.

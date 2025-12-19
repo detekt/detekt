@@ -90,10 +90,11 @@ testing {
     }
 }
 
-// Pretend JUnit targets JVM 8. Required while detekt itself targets JVM 8 while JUnit 6 targets JVM 17.
+// Pretend AGP API and JUnit targets JVM 8. Required while detekt itself targets JVM 8 while AGP API targets JVM 11 and JUnit 6 targets JVM 17.
 dependencies {
     components {
         setOf(
+            "com.android.tools.build:gradle-api",
             "org.junit.jupiter:junit-jupiter",
             "org.junit.jupiter:junit-jupiter-api",
             "org.junit.jupiter:junit-jupiter-engine",
