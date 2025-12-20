@@ -5,10 +5,9 @@ plugins {
 
 dependencies {
     compileOnly(projects.detektApi)
-    compileOnly(libs.assertj.core)
+    api(libs.assertj.coreMinimum)
 
     testImplementation(testFixtures(projects.detektApi))
     testImplementation(projects.detektTestUtils)
-    testImplementation(libs.assertj.core)
     testImplementation(libs.opentest4j)
 }
