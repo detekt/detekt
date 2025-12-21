@@ -57,7 +57,7 @@ class SuspendFunInFinallySection(config: Config) :
         }
     }
 
-    private fun shouldReport(expression: KtCallExpression, topParent: KtFinallySection) =
+    private fun shouldReport(expression: KtCallExpression, topParent: KtFinallySection): Boolean =
         analyze(expression) {
             val isSuspend = expression.resolveToCall()
                 ?.successfulFunctionCallOrNull()
