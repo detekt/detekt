@@ -12,6 +12,8 @@ class DetektCompilerPluginRegistrar : CompilerPluginRegistrar() {
 
     override val supportsK2 = false
 
+    override val pluginId = "dev.detekt"
+
     override fun ExtensionStorage.registerExtensions(configuration: CompilerConfiguration) {
         if (configuration.get(Keys.IS_ENABLED) == false) {
             return

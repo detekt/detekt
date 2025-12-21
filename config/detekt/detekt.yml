@@ -202,10 +202,6 @@ style:
       - 'java.lang.Class.getResourceAsStream'
       - 'java.lang.ClassLoader.getResourceAsStream'
       - 'kotlin.system.measureTimeMillis'
-      - value: 'org.jetbrains.kotlin.analysis.project.structure.builder.buildKtLibraryModule'
-        reason: 'Not performant due to KT-71706. Use buildKspLibraryModule instead.'
-      - value: 'org.jetbrains.kotlin.analysis.project.structure.builder.buildKtSdkModule'
-        reason: 'Not performant due to KT-71706. Use buildKspSdkModule instead.'
   ForbiddenVoid:
     active: true
     ignoreOverridden: true

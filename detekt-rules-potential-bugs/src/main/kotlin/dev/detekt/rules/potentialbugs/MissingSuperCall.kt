@@ -21,7 +21,7 @@ import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
  *
  * <noncompliant>
  * open class ParentClass {
- *     @CallSuper
+ *     @@CallSuper
  *     open fun someMethod(arg: Int) {
  *     }
  * }
@@ -34,7 +34,7 @@ import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
  *
  * <compliant>
  * open class ParentClass {
- *     @CallSuper
+ *     @@CallSuper
  *     open fun someMethod(arg: Int) {
  *     }
  * }

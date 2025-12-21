@@ -1,7 +1,5 @@
 package dev.detekt.test.utils
 
-import com.google.devtools.ksp.standalone.buildKspLibraryModule
-import com.google.devtools.ksp.standalone.buildKspSdkModule
 import com.intellij.openapi.util.Disposer
 import com.intellij.testFramework.LightVirtualFile
 import kotlinx.coroutines.CoroutineScope
@@ -17,6 +15,8 @@ import org.jetbrains.kotlin.analysis.api.diagnostics.KaDiagnosticWithPsi
 import org.jetbrains.kotlin.analysis.api.diagnostics.KaSeverity
 import org.jetbrains.kotlin.analysis.api.projectStructure.KaModule
 import org.jetbrains.kotlin.analysis.api.standalone.buildStandaloneAnalysisAPISession
+import org.jetbrains.kotlin.analysis.project.structure.builder.buildKtLibraryModule
+import org.jetbrains.kotlin.analysis.project.structure.builder.buildKtSdkModule
 import org.jetbrains.kotlin.analysis.project.structure.builder.buildKtSourceModule
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.diagnostics.PsiDiagnosticUtils
@@ -57,7 +57,7 @@ object KotlinAnalysisApiEngine {
                 platform = targetPlatform
 
                 val jdk = addModule(
-                    buildKspSdkModule {
+                    buildKtSdkModule {
                         addBinaryRootsFromJdkHome(Path(System.getProperty("java.home")), true)
                         platform = targetPlatform
                         libraryName = "sdk"
@@ -65,7 +65,7 @@ object KotlinAnalysisApiEngine {
                 )
 
                 val stdlib = addModule(
-                    buildKspLibraryModule {
+                    buildKtLibraryModule {
                         addBinaryRoot(File(CharRange::class.java.protectionDomain.codeSource.location.path).toPath())
                         platform = targetPlatform
                         libraryName = "stdlib"
@@ -73,7 +73,7 @@ object KotlinAnalysisApiEngine {
                 )
 
                 val coroutinesCore = addModule(
-                    buildKspLibraryModule {
+                    buildKtLibraryModule {
                         addBinaryRoot(kotlinxCoroutinesCorePath())
                         platform = targetPlatform
                         libraryName = "coroutines-core"
@@ -81,7 +81,7 @@ object KotlinAnalysisApiEngine {
                 )
 
                 val coroutinesTest = addModule(
-                    buildKspLibraryModule {
+                    buildKtLibraryModule {
                         addBinaryRoot(kotlinxCoroutinesTestPath())
                         platform = targetPlatform
                         libraryName = "coroutines-test"

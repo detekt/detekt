@@ -5,7 +5,7 @@ plugins {
     id("module")
     id("public-api")
     id("java-test-fixtures")
-    id("dev.drewhamilton.poko") version "0.20.2"
+    id("dev.drewhamilton.poko") version "0.21.0"
     id("com.github.gmazzo.buildconfig") version "6.0.6"
 }
 
