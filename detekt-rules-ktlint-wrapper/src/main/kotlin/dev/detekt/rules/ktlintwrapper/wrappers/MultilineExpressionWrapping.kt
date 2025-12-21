@@ -32,7 +32,7 @@ class MultilineExpressionWrapping(config: Config) :
 
     override fun overrideEditorConfigProperties(): Map<EditorConfigProperty<*>, String> =
         mapOf(
-            FUNCTION_BODY_EXPRESSION_WRAPPING_PROPERTY to functionBodyExpressionWrapping.toString(),
+            FUNCTION_BODY_EXPRESSION_WRAPPING_PROPERTY to functionBodyExpressionWrapping,
             INDENT_SIZE_PROPERTY to indentSize.toString(),
         )
 }
