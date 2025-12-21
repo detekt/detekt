@@ -64,6 +64,7 @@ kotlin {
     compilerOptions {
         jvmTarget = JvmTarget.fromTarget(jvmTargetVersion)
         progressiveMode = true
+        extraWarnings = true
         allWarningsAsErrors = providers.gradleProperty("warningsAsErrors").orNull.toBoolean()
         freeCompilerArgs.add("-Xcontext-parameters")
         if (project.name != "detekt-gradle-plugin") {
