@@ -92,7 +92,7 @@ class DetektKotlinCompilerPlugin : KotlinCompilerPluginSupportPlugin {
     override fun getCompilerPluginId(): String = "detekt-compiler-plugin"
 
     override fun getPluginArtifact(): SubpluginArtifact =
-        SubpluginArtifact("io.github.detekt", "detekt-compiler-plugin", BuildConfig.DETEKT_COMPILER_PLUGIN_VERSION)
+        SubpluginArtifact("dev.detekt", "detekt-compiler-plugin", BuildConfig.DETEKT_COMPILER_PLUGIN_VERSION)
 
     override fun isApplicable(kotlinCompilation: KotlinCompilation<*>): Boolean =
         kotlinCompilation.platformType in setOf(KotlinPlatformType.jvm, KotlinPlatformType.androidJvm)
