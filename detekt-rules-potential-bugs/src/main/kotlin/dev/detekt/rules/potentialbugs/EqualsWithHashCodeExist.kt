@@ -54,7 +54,7 @@ class EqualsWithHashCodeExist(config: Config) :
     private val queue = ArrayDeque<ViolationHolder>(MAXIMUM_EXPECTED_NESTED_CLASSES)
 
     private data class ViolationHolder(var equals: Boolean = false, var hashCode: Boolean = false) {
-        fun violation() = equals && !hashCode || !equals && hashCode
+        fun violation() = equals xor hashCode
     }
 
     override fun visitFile(file: PsiFile) {
