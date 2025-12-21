@@ -72,12 +72,9 @@ ktlint:
   FunctionSignature:
     functionBodyExpressionWrapping: multiline
   Kdoc:
-    active: true
     excludes: ['**/*.kts']
   MaximumLineLength:
     active: false
-  SpacingAroundSquareBrackets:
-    active: true
   TrailingCommaOnCallSite:
     active: false
 

@@ -68,7 +68,9 @@ private fun <T : Any> getValueOrDefault(config: Config, propertyName: String, de
     @Suppress("UNCHECKED_CAST")
     return when (defaultValue) {
         is ValuesWithReason -> config.getValuesWithReasonOrDefault(propertyName, defaultValue) as T
+
         is List<*> -> config.getListOrDefault(propertyName, defaultValue) as T
+
         is String,
         is Boolean,
         is Int,

@@ -66,7 +66,7 @@ class EqualsAlwaysReturnsTrueOrFalse(config: Config) :
 
     private fun isSingleReturnWithBooleanConstant(bodyExpression: KtExpression): Boolean {
         val returnExpressionsInBlock = bodyExpression.collectDescendantsOfType<KtReturnExpression> {
-            it.parent == bodyExpression || it.parent is KtAnnotatedExpression && it.parent.parent == bodyExpression
+            it.parent == bodyExpression || (it.parent is KtAnnotatedExpression && it.parent.parent == bodyExpression)
         }
         val lastValidReturnExpression = returnExpressionsInBlock.firstOrNull()?.returnedExpression
         val allReturnExpressions = bodyExpression.collectDescendantsOfType<KtReturnExpression>()

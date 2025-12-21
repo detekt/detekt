@@ -117,8 +117,10 @@ class UseIsNullOrEmpty(config: Config) :
         when {
             selector is KtCallExpression ->
                 if (!receiver.isCollectionOrArrayOrString() || !selector.isCalling(countFunctions)) return null
+
             selector.text == "size" ->
                 if (!receiver.isCollectionOrArray()) return null
+
             selector.text == "length" ->
                 if (!receiver.isString()) return null
         }

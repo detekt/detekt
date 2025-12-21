@@ -65,6 +65,7 @@ object KtLintLineColCalculator {
         private fun binarySearch(v: Int, l: Int, r: Int): Int =
             when {
                 l > r -> -1
+
                 else -> {
                     val i = l + (r - l) / 2
                     val s = segments[i]

@@ -81,6 +81,7 @@ private val KaType.isFunctionOrSuspendingFunctionOrGenericType: Boolean
 private fun KtCallExpression.isEligible(): Boolean =
     when {
         valueArguments.lastOrNull()?.isNamed() == true -> false
+
         valueArguments.count {
             it.getArgumentExpression()?.unpackFunctionLiteral() != null
         } > 1 -> false
