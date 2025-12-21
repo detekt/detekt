@@ -62,6 +62,7 @@ val jvmMajorVersion = jvmTargetVersion.toIntOrNull() ?: 8
 
 kotlin {
     compilerOptions {
+        jvmTarget = JvmTarget.fromTarget(jvmTargetVersion)
         progressiveMode = true
         allWarningsAsErrors = providers.gradleProperty("warningsAsErrors").orNull.toBoolean()
         freeCompilerArgs.add("-Xcontext-parameters")
