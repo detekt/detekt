@@ -12,11 +12,7 @@ import org.jetbrains.kotlin.psi.KtTypeReference
  * excluded from further analysis. This is done by checking if a special annotation
  * is present over the element.
  */
-class AnnotationExcluder(
-    root: KtFile,
-    private val excludes: List<Regex>,
-    private val fullAnalysis: Boolean,
-) {
+class AnnotationExcluder(root: KtFile, private val excludes: List<Regex>, private val fullAnalysis: Boolean) {
 
     private val fullQualifiedNameGuesser = FullQualifiedNameGuesser(root)
 

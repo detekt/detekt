@@ -28,10 +28,8 @@ import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
  * </noncompliant>
  */
 @ActiveByDefault(since = "1.16.0")
-class ExceptionRaisedInUnexpectedLocation(config: Config) : Rule(
-    config,
-    "This method is not expected to throw exceptions. This can cause weird behavior."
-) {
+class ExceptionRaisedInUnexpectedLocation(config: Config) :
+    Rule(config, "This method is not expected to throw exceptions. This can cause weird behavior.") {
 
     @Configuration("methods which should not throw exceptions")
     private val methodNames: List<String> by config(

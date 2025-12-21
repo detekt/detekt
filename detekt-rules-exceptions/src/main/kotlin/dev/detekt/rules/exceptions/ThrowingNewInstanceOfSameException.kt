@@ -36,10 +36,11 @@ import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
  * </compliant>
  */
 @ActiveByDefault(since = "1.16.0")
-class ThrowingNewInstanceOfSameException(config: Config) : Rule(
-    config,
-    "Avoid catch blocks that rethrow a caught exception wrapped inside a new instance of the same exception."
-) {
+class ThrowingNewInstanceOfSameException(config: Config) :
+    Rule(
+        config,
+        "Avoid catch blocks that rethrow a caught exception wrapped inside a new instance of the same exception."
+    ) {
 
     override fun visitCatchSection(catchClause: KtCatchClause) {
         val parameterName = catchClause.catchParameter?.name

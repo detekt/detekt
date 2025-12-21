@@ -14,10 +14,8 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  * documentation.
  */
 @AutoCorrectable(since = "2.0.0")
-class WhenEntryBracing(config: Config) : KtlintRule(
-    config,
-    "Enforce consistent usages of braces inside the when-statement."
-) {
+class WhenEntryBracing(config: Config) :
+    KtlintRule(config, "Enforce consistent usages of braces inside the when-statement.") {
 
     override val wrapping = WhenEntryBracing()
 

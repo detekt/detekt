@@ -56,10 +56,8 @@ import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
  * }
  * </compliant>
  */
-class UnnecessaryFullyQualifiedName(config: Config) : Rule(
-    config,
-    "Unnecessary fully qualified names make code harder to read. Use imports instead."
-) {
+class UnnecessaryFullyQualifiedName(config: Config) :
+    Rule(config, "Unnecessary fully qualified names make code harder to read. Use imports instead.") {
 
     override fun visitUserType(type: KtUserType) {
         super.visitUserType(type)

@@ -11,10 +11,7 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  */
 @AutoCorrectable(since = "1.16.0")
 @ActiveByDefault(since = "1.22.0")
-class SpacingAroundAngleBrackets(config: Config) : KtlintRule(
-    config,
-    "Reports spaces around angle brackets"
-) {
+class SpacingAroundAngleBrackets(config: Config) : KtlintRule(config, "Reports spaces around angle brackets") {
 
     override val wrapping = SpacingAroundAngleBracketsRule()
 }

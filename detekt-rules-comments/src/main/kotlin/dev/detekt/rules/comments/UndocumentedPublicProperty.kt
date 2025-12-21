@@ -21,10 +21,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPublic
  * If the codebase should have documentation on all public properties enable this rule to enforce this.
  * Overridden properties are excluded by this rule.
  */
-class UndocumentedPublicProperty(config: Config) : Rule(
-    config,
-    "Public properties require documentation."
-) {
+class UndocumentedPublicProperty(config: Config) : Rule(config, "Public properties require documentation.") {
 
     @Configuration("if protected functions should be searched")
     private val searchProtectedProperty: Boolean by config(false)

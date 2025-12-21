@@ -55,11 +55,12 @@ import org.jetbrains.kotlin.psi.psiUtil.isPublic
  * </compliant>
  */
 @ActiveByDefault(since = "1.2.0")
-class UtilityClassWithPublicConstructor(config: Config) : Rule(
-    config,
-    "The class declaration is unnecessary because it only contains utility functions. " +
-        "An object declaration should be used instead."
-) {
+class UtilityClassWithPublicConstructor(config: Config) :
+    Rule(
+        config,
+        "The class declaration is unnecessary because it only contains utility functions. " +
+            "An object declaration should be used instead."
+    ) {
 
     override fun visitClass(klass: KtClass) {
         if (canBeCheckedForUtilityClass(klass)) {

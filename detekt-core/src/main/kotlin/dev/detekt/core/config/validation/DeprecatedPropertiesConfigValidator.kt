@@ -3,9 +3,8 @@ package dev.detekt.core.config.validation
 import dev.detekt.api.Notification
 import dev.detekt.core.config.YamlConfig
 
-internal class DeprecatedPropertiesConfigValidator(
-    private val deprecatedProperties: Set<DeprecatedProperty>,
-) : AbstractYamlConfigValidator() {
+internal class DeprecatedPropertiesConfigValidator(private val deprecatedProperties: Set<DeprecatedProperty>) :
+    AbstractYamlConfigValidator() {
 
     override val id: String = "DeprecatedPropertiesConfigValidator"
 

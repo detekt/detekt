@@ -12,10 +12,8 @@ import org.jetbrains.kotlin.psi.KtProperty
 /**
  * Reports when very long variable names are used.
  */
-class VariableMaxLength(config: Config) : Rule(
-    config,
-    "Variable names should not be longer than the maximum set in detekt's configuration."
-) {
+class VariableMaxLength(config: Config) :
+    Rule(config, "Variable names should not be longer than the maximum set in detekt's configuration.") {
 
     @Configuration("maximum name length")
     private val maximumVariableNameLength: Int by config(DEFAULT_MAXIMUM_VARIABLE_NAME_LENGTH)

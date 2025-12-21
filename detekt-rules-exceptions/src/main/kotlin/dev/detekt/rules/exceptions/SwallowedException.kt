@@ -66,10 +66,8 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  * </compliant>
  */
 @ActiveByDefault(since = "1.16.0")
-class SwallowedException(config: Config) : Rule(
-    config,
-    "The caught exception is swallowed. The original exception could be lost."
-) {
+class SwallowedException(config: Config) :
+    Rule(config, "The caught exception is swallowed. The original exception could be lost.") {
 
     @Configuration("exception types which should be ignored (both in the catch clause and body)")
     private val ignoredExceptionTypes: List<String> by config(EXCEPTIONS_IGNORED_BY_DEFAULT) { exceptions ->

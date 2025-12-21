@@ -30,10 +30,7 @@ import org.jetbrains.kotlin.psi.psiUtil.siblings
  * fun <V> foo(): Int where V : Int = 5
  * </compliant>
  */
-class EqualsOnSignatureLine(config: Config) : Rule(
-    config,
-    MESSAGE
-) {
+class EqualsOnSignatureLine(config: Config) : Rule(config, MESSAGE) {
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         val equalsToken = function.equalsToken ?: return

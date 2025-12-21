@@ -14,9 +14,10 @@ interface ClassloaderAware {
     fun closeLoaderIfNeeded()
 }
 
-class ExtensionFacade(
-    private val plugins: ExtensionsSpec.Plugins?,
-) : AutoCloseable, Closeable, ClassloaderAware {
+class ExtensionFacade(private val plugins: ExtensionsSpec.Plugins?) :
+    AutoCloseable,
+    Closeable,
+    ClassloaderAware {
 
     init {
         plugins?.paths?.forEach {

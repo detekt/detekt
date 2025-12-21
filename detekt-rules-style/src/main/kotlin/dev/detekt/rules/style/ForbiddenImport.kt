@@ -21,11 +21,12 @@ import org.jetbrains.kotlin.psi.KtImportDirective
  * import kotlin.SinceKotlin
  * </noncompliant>
  */
-class ForbiddenImport(config: Config) : Rule(
-    config,
-    "Mark forbidden imports. A forbidden import could be an import for an unstable / experimental api " +
-        "and hence you might want to mark it as forbidden in order to get warned about the usage."
-) {
+class ForbiddenImport(config: Config) :
+    Rule(
+        config,
+        "Mark forbidden imports. A forbidden import could be an import for an unstable / experimental api " +
+            "and hence you might want to mark it as forbidden in order to get warned about the usage."
+    ) {
 
     @Configuration(
         "List of imports, specified as glob patterns, that are forbidden. " +

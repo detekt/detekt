@@ -39,11 +39,12 @@ import org.jetbrains.kotlin.psi.psiUtil.plainContent
  * }
  * </compliant>
  */
-class StringLiteralDuplication(config: Config) : Rule(
-    config,
-    "Multiple occurrences of the same string literal within a single file detected. " +
-        "Prefer extracting the string literal into a property or constant."
-) {
+class StringLiteralDuplication(config: Config) :
+    Rule(
+        config,
+        "Multiple occurrences of the same string literal within a single file detected. " +
+            "Prefer extracting the string literal into a property or constant."
+    ) {
 
     @Configuration("The maximum allowed amount of duplications.")
     private val allowedDuplications: Int by config(defaultValue = 2)

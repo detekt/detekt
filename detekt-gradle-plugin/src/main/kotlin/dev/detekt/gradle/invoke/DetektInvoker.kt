@@ -58,9 +58,8 @@ internal abstract class DetektWorkAction : WorkAction<DetektWorkParameters> {
     }
 }
 
-internal class DefaultCliInvoker(
-    private val classLoaderCache: ClassLoaderCache = GlobalClassLoaderCache,
-) : DetektInvoker {
+internal class DefaultCliInvoker(private val classLoaderCache: ClassLoaderCache = GlobalClassLoaderCache) :
+    DetektInvoker {
 
     override fun invokeCli(arguments: List<String>, classpath: Set<File>, taskName: String, ignoreFailures: Boolean) {
         try {

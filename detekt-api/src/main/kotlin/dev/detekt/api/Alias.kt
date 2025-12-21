@@ -9,6 +9,4 @@ package dev.detekt.api
  */
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.SOURCE)
-annotation class Alias(
-    vararg val values: String,
-)
+annotation class Alias(vararg val values: String)

@@ -41,11 +41,10 @@ interface EnvironmentAware {
     val disposable: Disposable
 }
 
-internal class EnvironmentFacade(
-    projectSpec: ProjectSpec,
-    compilerSpec: CompilerSpec,
-    loggingSpec: LoggingSpec,
-) : AutoCloseable, Closeable, EnvironmentAware {
+internal class EnvironmentFacade(projectSpec: ProjectSpec, compilerSpec: CompilerSpec, loggingSpec: LoggingSpec) :
+    AutoCloseable,
+    Closeable,
+    EnvironmentAware {
 
     private val printStream = if (loggingSpec.debug) loggingSpec.errorChannel.asPrintStream() else NullPrintStream
     override val configuration: CompilerConfiguration =

@@ -45,11 +45,12 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * </compliant>
  */
 @ActiveByDefault(since = "1.0.0")
-class MatchingDeclarationName(config: Config) : Rule(
-    config,
-    "If a source file contains only a single non-private top-level class or object, " +
-        "the file name should reflect the case-sensitive name plus the .kt extension."
-) {
+class MatchingDeclarationName(config: Config) :
+    Rule(
+        config,
+        "If a source file contains only a single non-private top-level class or object, " +
+            "the file name should reflect the case-sensitive name plus the .kt extension."
+    ) {
 
     @Configuration("name should only be checked if the file starts with a class or object")
     private val mustBeFirst: Boolean by config(true)

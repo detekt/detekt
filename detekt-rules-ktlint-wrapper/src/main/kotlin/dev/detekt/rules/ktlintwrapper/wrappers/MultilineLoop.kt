@@ -15,10 +15,7 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "2.0.0")
-class MultilineLoop(config: Config) : KtlintRule(
-    config,
-    "Detects multiline loop statements without braces"
-) {
+class MultilineLoop(config: Config) : KtlintRule(config, "Detects multiline loop statements without braces") {
 
     override val wrapping = MultilineLoopRule()
 

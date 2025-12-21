@@ -15,10 +15,8 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "1.23.0")
-class EnumWrapping(config: Config) : KtlintRule(
-    config,
-    "An enum should be a single line, or each enum entry has to be placed on a separate line."
-) {
+class EnumWrapping(config: Config) :
+    KtlintRule(config, "An enum should be a single line, or each enum entry has to be placed on a separate line.") {
 
     override val wrapping = EnumWrappingRule()
 

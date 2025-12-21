@@ -10,10 +10,7 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  * documentation.
  */
 @ActiveByDefault(since = "2.0.0")
-class TypeArgumentComment(config: Config) : KtlintRule(
-    config,
-    "Detect discouraged type argument comment locations."
-) {
+class TypeArgumentComment(config: Config) : KtlintRule(config, "Detect discouraged type argument comment locations.") {
 
     override val wrapping = TypeArgumentCommentRule()
 }

@@ -11,10 +11,7 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  */
 @AutoCorrectable(since = "1.10.0")
 @ActiveByDefault(since = "1.22.0")
-class SpacingAroundDoubleColon(config: Config) : KtlintRule(
-    config,
-    "Reports spaces around double colons"
-) {
+class SpacingAroundDoubleColon(config: Config) : KtlintRule(config, "Reports spaces around double colons") {
 
     override val wrapping = SpacingAroundDoubleColonRule()
 }

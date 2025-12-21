@@ -7,10 +7,8 @@ import dev.detekt.api.RuleSetProvider
 import dev.detekt.core.config.YamlConfig
 import java.util.ServiceLoader
 
-internal class MissingRulesConfigValidator(
-    private val baseline: YamlConfig,
-    private val excludePatterns: Set<Regex>,
-) : AbstractYamlConfigValidator() {
+internal class MissingRulesConfigValidator(private val baseline: YamlConfig, private val excludePatterns: Set<Regex>) :
+    AbstractYamlConfigValidator() {
 
     override val id: String = "MissingRulesConfigValidator"
 

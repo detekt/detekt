@@ -13,7 +13,8 @@ class CompositeConfig(
     private val lookFirst: Config,
     private val lookSecond: Config,
     override val parent: Config? = null,
-) : Config, ValidatableConfiguration {
+) : Config,
+    ValidatableConfiguration {
 
     override val parentPath: String?
         get() = lookFirst.parentPath ?: lookSecond.parentPath

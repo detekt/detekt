@@ -19,10 +19,7 @@ import dev.detekt.rules.ktlintwrapper.configWithAndroidVariants
  */
 @ActiveByDefault(since = "1.0.0")
 @Alias("MaxLineLength")
-class MaximumLineLength(config: Config) : KtlintRule(
-    config,
-    "Reports lines with exceeded length"
-) {
+class MaximumLineLength(config: Config) : KtlintRule(config, "Reports lines with exceeded length") {
 
     override val wrapping = MaxLineLengthRule()
 

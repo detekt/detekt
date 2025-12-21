@@ -67,8 +67,6 @@ exceptions:
 ktlint:
   active: true
   autoCorrect: true
-  ClassSignature:
-    active: false
   Filename:
     active: false
   FunctionSignature:

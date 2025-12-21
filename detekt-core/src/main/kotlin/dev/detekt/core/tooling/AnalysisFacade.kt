@@ -14,9 +14,7 @@ import dev.detekt.tooling.api.spec.ProcessingSpec
 import dev.detekt.tooling.internal.DefaultAnalysisResult
 import org.jetbrains.kotlin.psi.KtFile
 
-class AnalysisFacade(
-    private val spec: ProcessingSpec,
-) : Detekt {
+class AnalysisFacade(private val spec: ProcessingSpec) : Detekt {
 
     override fun run(): AnalysisResult =
         runAnalysis {

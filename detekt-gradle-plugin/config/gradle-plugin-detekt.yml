@@ -35,8 +35,6 @@ ktlint:
     active: false
   ChainMethodContinuation:
     active: false
-  ClassSignature:
-    active: false
   FunctionSignature:
     functionBodyExpressionWrapping: multiline
   MaximumLineLength:

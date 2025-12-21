@@ -11,10 +11,7 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  */
 @ActiveByDefault(since = "1.0.0")
 @AutoCorrectable(since = "1.0.0")
-class SpacingAroundDot(config: Config) : KtlintRule(
-    config,
-    "Reports spaces around member invocation operator (dot)."
-) {
+class SpacingAroundDot(config: Config) : KtlintRule(config, "Reports spaces around member invocation operator (dot).") {
 
     override val wrapping = SpacingAroundDotRule()
 }

@@ -16,12 +16,13 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * functions with better names if necessary. Giving the function a better, more descriptive name can also help
  * solve this issue.
  */
-class DocumentationOverPrivateFunction(config: Config) : Rule(
-    config,
-    "Comments for private functions should be avoided. " +
-        "Prefer giving the function an expressive name. " +
-        "Split it up in smaller, self-explaining functions if necessary."
-) {
+class DocumentationOverPrivateFunction(config: Config) :
+    Rule(
+        config,
+        "Comments for private functions should be avoided. " +
+            "Prefer giving the function an expressive name. " +
+            "Split it up in smaller, self-explaining functions if necessary."
+    ) {
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (function.hasKDocInPrivateMember()) {

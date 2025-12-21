@@ -21,11 +21,12 @@ import java.util.IdentityHashMap
  * things.
  */
 @ActiveByDefault(since = "1.0.0")
-class LargeClass(config: Config) : Rule(
-    config,
-    "One class should have one responsibility. Large classes tend to handle many things at once. " +
-        "Split up large classes into smaller classes that are easier to understand."
-) {
+class LargeClass(config: Config) :
+    Rule(
+        config,
+        "One class should have one responsibility. Large classes tend to handle many things at once. " +
+            "Split up large classes into smaller classes that are easier to understand."
+    ) {
 
     @Configuration("The maximum number of lines allowed per class.")
     private val allowedLines: Int by config(defaultValue = 600)

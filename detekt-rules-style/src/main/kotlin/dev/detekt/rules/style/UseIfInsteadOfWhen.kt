@@ -25,10 +25,11 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  * if (x == null) true else false
  * </compliant>
  */
-class UseIfInsteadOfWhen(config: Config) : Rule(
-    config,
-    "Binary expressions are better expressed using an `if` expression than a `when` expression."
-) {
+class UseIfInsteadOfWhen(config: Config) :
+    Rule(
+        config,
+        "Binary expressions are better expressed using an `if` expression than a `when` expression."
+    ) {
 
     @Configuration("ignores when statements with a variable declaration used in the subject")
     private val ignoreWhenContainingVariableDeclaration: Boolean by config(false)

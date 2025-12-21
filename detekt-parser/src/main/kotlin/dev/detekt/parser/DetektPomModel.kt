@@ -12,7 +12,9 @@ import com.intellij.pom.tree.TreeAspect
  * Adapted from https://github.com/pinterest/ktlint/blob/0.50.0/ktlint-rule-engine/src/main/kotlin/com/pinterest/ktlint/rule/engine/internal/KotlinPsiFileFactory.kt
  * Licenced under the MIT licence - https://github.com/pinterest/ktlint/blob/master/LICENSE
  */
-class DetektPomModel(project: Project) : UserDataHolderBase(), PomModel {
+class DetektPomModel(project: Project) :
+    UserDataHolderBase(),
+    PomModel {
 
     val treeAspect: TreeAspect = project.getService(TreeAspect::class.java)
 

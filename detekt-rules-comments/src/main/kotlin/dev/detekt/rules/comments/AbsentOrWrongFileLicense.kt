@@ -16,10 +16,7 @@ import org.jetbrains.kotlin.psi.KtFile
  * a regular expression produced from the passed template license file (defined via `licenseTemplateFile` configuration
  * option).
  */
-class AbsentOrWrongFileLicense(config: Config) : Rule(
-    config,
-    "License text is absent or incorrect."
-) {
+class AbsentOrWrongFileLicense(config: Config) : Rule(config, "License text is absent or incorrect.") {
 
     @Suppress("unused")
     @Configuration("path to file with license header template resolved relatively to config file")

@@ -3,10 +3,8 @@ package dev.detekt.core.baseline
 import javax.xml.stream.XMLStreamWriter
 
 @Suppress("TooManyFunctions")
-internal class IndentingXMLStreamWriter(
-    private val writer: XMLStreamWriter,
-    private val indent: String = "  ",
-) : XMLStreamWriter by writer {
+internal class IndentingXMLStreamWriter(private val writer: XMLStreamWriter, private val indent: String = "  ") :
+    XMLStreamWriter by writer {
 
     private var currentState = NOTHING
     private val stateStack = ArrayDeque<Any>()

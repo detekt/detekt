@@ -8,17 +8,13 @@ import dev.detekt.api.Rule
 import dev.detekt.api.config
 import dev.detekt.api.simplePatternToRegex
 import org.jetbrains.kotlin.psi.KtClassOrObject
-import kotlin.collections.filter
 
 /**
  * Reports class names which are forbidden per configuration. By default, this rule does not report any classes.
  * This can be used to prevent the use of overly generic class names like `*Manager` or names shadowing common
  * types like `LocalDate`.
  */
-class ForbiddenClassName(config: Config) : Rule(
-    config,
-    "Forbidden class name as per configuration detected."
-) {
+class ForbiddenClassName(config: Config) : Rule(config, "Forbidden class name as per configuration detected.") {
 
     @Configuration("List of glob patterns to be disallowed as class names")
     private val forbiddenName: List<Regex> by config(emptyList<String>()) { patterns ->

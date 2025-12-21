@@ -33,10 +33,11 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * </compliant>
  */
 @ActiveByDefault(since = "1.2.0")
-class WrongEqualsTypeParameter(config: Config) : Rule(
-    config,
-    "Wrong parameter type for `equals()` method found. To correctly override the `equals()` method use `Any?`."
-) {
+class WrongEqualsTypeParameter(config: Config) :
+    Rule(
+        config,
+        "Wrong parameter type for `equals()` method found. To correctly override the `equals()` method use `Any?`."
+    ) {
 
     override fun visitClass(klass: KtClass) {
         if (klass.isInterface()) {

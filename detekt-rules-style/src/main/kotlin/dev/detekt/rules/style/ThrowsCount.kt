@@ -35,10 +35,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  * </compliant>
  */
 @ActiveByDefault(since = "1.0.0")
-class ThrowsCount(config: Config) : Rule(
-    config,
-    "Restrict the number of throw statements in methods."
-) {
+class ThrowsCount(config: Config) : Rule(config, "Restrict the number of throw statements in methods.") {
 
     @Configuration("maximum amount of throw statements in a method")
     private val max: Int by config(2)

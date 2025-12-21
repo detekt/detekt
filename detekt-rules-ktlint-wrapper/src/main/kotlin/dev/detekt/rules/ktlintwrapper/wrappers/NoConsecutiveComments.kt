@@ -7,10 +7,7 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
 /**
  * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#no-consecutive-comments) for documentation.
  */
-class NoConsecutiveComments(config: Config) : KtlintRule(
-    config,
-    "Disallow consecutive comments in most cases."
-) {
+class NoConsecutiveComments(config: Config) : KtlintRule(config, "Disallow consecutive comments in most cases.") {
 
     override val wrapping = NoConsecutiveCommentsRule()
 }

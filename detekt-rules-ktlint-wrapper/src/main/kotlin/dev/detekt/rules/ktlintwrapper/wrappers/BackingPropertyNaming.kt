@@ -10,9 +10,6 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  * for documentation.
  */
 @ActiveByDefault(since = "2.0.0")
-class BackingPropertyNaming(config: Config) : KtlintRule(
-    config,
-    "Reports incorrect property name."
-) {
+class BackingPropertyNaming(config: Config) : KtlintRule(config, "Reports incorrect property name.") {
     override val wrapping = BackingPropertyNamingRule()
 }

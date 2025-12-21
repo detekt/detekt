@@ -43,9 +43,7 @@ object KtLintLineColCalculator {
         }
     }
 
-    private class SegmentTree(
-        sortedArray: IntArray,
-    ) {
+    private class SegmentTree(sortedArray: IntArray) {
 
         init {
             require(sortedArray.size > 1) { "At least two data points are required" }

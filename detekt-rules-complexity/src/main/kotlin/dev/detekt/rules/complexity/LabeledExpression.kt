@@ -56,10 +56,8 @@ import org.jetbrains.kotlin.psi.psiUtil.isExtensionDeclaration
  * }
  * </compliant>
  */
-class LabeledExpression(config: Config) : Rule(
-    config,
-    "Expression with labels increase complexity and affect maintainability."
-) {
+class LabeledExpression(config: Config) :
+    Rule(config, "Expression with labels increase complexity and affect maintainability.") {
 
     @Configuration("allows to provide a list of label names which should be ignored by this rule")
     private val ignoredLabels: List<String> by config(emptyList<String>()) { list ->

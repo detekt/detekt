@@ -10,10 +10,7 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  * documentation.
  */
 @ActiveByDefault(since = "1.22.0")
-class PackageName(config: Config) : KtlintRule(
-    config,
-    "Checks package name is formatted correctly"
-) {
+class PackageName(config: Config) : KtlintRule(config, "Checks package name is formatted correctly") {
 
     override val wrapping = PackageNameRule()
 }

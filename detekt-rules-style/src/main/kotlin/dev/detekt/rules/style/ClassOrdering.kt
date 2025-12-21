@@ -48,11 +48,12 @@ import org.jetbrains.kotlin.psi.KtSecondaryConstructor
  * }
  * </compliant>
  */
-class ClassOrdering(config: Config) : Rule(
-    config,
-    "Class contents should be in this order: Property declarations/initializer blocks; secondary constructors; " +
-        "method declarations then companion objects."
-) {
+class ClassOrdering(config: Config) :
+    Rule(
+        config,
+        "Class contents should be in this order: Property declarations/initializer blocks; secondary constructors; " +
+            "method declarations then companion objects."
+    ) {
 
     override fun visitClassBody(classBody: KtClassBody) {
         super.visitClassBody(classBody)
@@ -140,10 +141,7 @@ class ClassOrdering(config: Config) : Rule(
             listOfIncreasingSection
     }
 
-    private data class DeclarationWithSection(
-        val declaration: KtDeclaration,
-        val section: Section,
-    )
+    private data class DeclarationWithSection(val declaration: KtDeclaration, val section: Section)
 }
 
 private fun KtDeclaration.toDescription(): String =
