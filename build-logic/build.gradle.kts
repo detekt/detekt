@@ -8,7 +8,6 @@ dependencies {
     implementation(libs.gradleNexus.publish.plugin)
     implementation(libs.semver4j)
     implementation(libs.breadmoirai.githubRelease.plugin)
-    implementation(libs.binaryCompatibilityValidator.plugin)
     implementation(libs.dokka.plugin)
 }
 

@@ -3,6 +3,7 @@ package dev.detekt.rules.ktlintwrapper.wrappers
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfigProperty
 import com.pinterest.ktlint.ruleset.standard.rules.BlankLineBetweenWhenConditions
 import com.pinterest.ktlint.ruleset.standard.rules.BlankLineBetweenWhenConditions.Companion.LINE_BREAK_AFTER_WHEN_CONDITION_PROPERTY
+import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.Config
 import dev.detekt.api.Configuration
 import dev.detekt.api.config
@@ -14,6 +15,7 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  * for documentation.
  */
 @AutoCorrectable(since = "2.0.0")
+@ActiveByDefault(since = "2.0.0")
 class BlankLineBetweenWhenConditions(config: Config) :
     KtlintRule(config, "Consistently add or remove blank lines between when-conditions in a when-statement") {
 

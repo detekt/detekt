@@ -21,19 +21,23 @@ fun main(args: Array<String>) {
     @Suppress("ForbiddenMethodCall")
     when (val error = result.error) {
         is InvalidConfig, is IssuesFound -> println(error.message)
+
         is UnexpectedError -> {
             when (val cause = error.cause) {
                 is HelpRequest -> {
                     println(cause.usageText)
                     exitProcess(0)
                 }
+
                 is HandledArgumentViolation -> {
                     println(cause.message)
                     println(cause.usageText)
                 }
+
                 else -> cause.printStackTrace()
             }
         }
+
         else -> Unit // print nothing extra when there is no error
     }
     exitProcess(result.exitCode())

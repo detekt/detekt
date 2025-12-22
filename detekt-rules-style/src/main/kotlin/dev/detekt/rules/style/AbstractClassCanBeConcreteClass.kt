@@ -60,6 +60,7 @@ class AbstractClassCanBeConcreteClass(config: Config) :
         val members = members()
         when {
             members.isNotEmpty() -> checkMembers(members, nameIdentifier)
+
             hasConstructorParameter() ->
                 report(Finding(Entity.from(nameIdentifier), noAbstractMember))
         }
@@ -81,6 +82,7 @@ class AbstractClassCanBeConcreteClass(config: Config) :
     private fun KtClass.hasInheritedMember(): Boolean =
         when {
             superTypeListEntries.isEmpty() -> false
+
             else -> {
                 analyze(this) {
                     (symbol as? KaClassSymbol)?.memberScope?.declarations.orEmpty().any {

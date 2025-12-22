@@ -66,7 +66,7 @@ class MatchingDeclarationName(config: Config) :
             .toList()
 
         fun matchesFirstClassOrObjectCondition(): Boolean =
-            !mustBeFirst || mustBeFirst && declarations.first() === file.declarations.first()
+            !mustBeFirst || (mustBeFirst && declarations.first() === file.declarations.first())
 
         fun hasNoMatchingTypeAlias(filename: String): Boolean =
             file.declarations.filterIsInstance<KtTypeAlias>().all { it.name != filename }

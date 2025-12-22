@@ -175,10 +175,12 @@ class VarCouldBeVal(config: Config) :
                         it.isEscapeCandidate()
                     }
                 }
+
                 is KtIfExpression -> {
                     rightExpression.then?.let { evaluateAssignmentExpression(symbol, it) }
                     rightExpression.`else`?.let { evaluateAssignmentExpression(symbol, it) }
                 }
+
                 is KtBlockExpression -> {
                     rightExpression.lastBlockStatementOrThis()
                         .takeIf { it != rightExpression }
@@ -194,15 +196,18 @@ class VarCouldBeVal(config: Config) :
                         it.isEscapeCandidate()
                     }.forEach(declarationCandidates::remove)
                 }
+
                 is KtNameReferenceExpression -> {
                     returnedExpression.mainReference.resolveToSymbol()?.let {
                         escapeCandidates[it]?.forEach(declarationCandidates::remove)
                     }
                 }
+
                 is KtIfExpression -> {
                     returnedExpression.then?.let { evaluateReturnExpression(it) }
                     returnedExpression.`else`?.let { evaluateReturnExpression(it) }
                 }
+
                 is KtBlockExpression -> {
                     returnedExpression.lastBlockStatementOrThis()
                         .takeIf { it != returnedExpression }
@@ -214,7 +219,9 @@ class VarCouldBeVal(config: Config) :
         private fun KtProperty.isDeclarationCandidate(): Boolean =
             when {
                 !isVar || isOverride() || (ignoreLateinitVar && isLateinit()) -> false
+
                 isLocal || isPrivate() -> true
+
                 else -> {
                     // Check for whether property belongs to an anonymous object
                     // defined in a function.

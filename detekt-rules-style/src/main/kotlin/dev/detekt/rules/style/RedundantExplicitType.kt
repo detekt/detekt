@@ -65,7 +65,9 @@ class RedundantExplicitType(config: Config) :
     private fun KaSession.typeIsSameAs(expression: KtConstantExpression, type: KaType) =
         when (expression.node.elementType) {
             KtNodeTypes.BOOLEAN_CONSTANT -> type.isBooleanType
+
             KtNodeTypes.CHARACTER_CONSTANT -> type.isCharType
+
             KtNodeTypes.INTEGER_CONSTANT -> {
                 if (expression.text.endsWith("L")) {
                     type.isLongType
@@ -73,6 +75,7 @@ class RedundantExplicitType(config: Config) :
                     type.isIntType
                 }
             }
+
             KtNodeTypes.FLOAT_CONSTANT -> {
                 if (expression.text.endsWith("f") || expression.text.endsWith("F")) {
                     type.isFloatType
@@ -80,6 +83,7 @@ class RedundantExplicitType(config: Config) :
                     type.isDoubleType
                 }
             }
+
             else -> false
         }
 }

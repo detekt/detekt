@@ -170,6 +170,7 @@ class ForbiddenMethodCall(config: Config) :
                 )
 
                 is KaCompoundArrayAccessCall -> null
+
                 is KaCompoundVariableAccessCall -> null
             } ?: return@sequence
 

@@ -32,12 +32,14 @@ class ExtensionFacade(private val plugins: ExtensionsSpec.Plugins?) :
     override val pluginLoader: ClassLoader by lazy {
         when {
             plugins?.loader != null -> checkNotNull(plugins.loader)
+
             plugins?.paths != null -> {
                 val pluginUrls = checkNotNull(plugins.paths)
                     .map { it.toUri().toURL() }
                     .toTypedArray()
                 URLClassLoader(pluginUrls, javaClass.classLoader)
             }
+
             else -> javaClass.classLoader
         }
     }

@@ -17,6 +17,7 @@ fun Config.valueOrDefaultInternal(
         if (result != null) {
             when {
                 result is String -> parser(result, default)
+
                 result is List<*> -> {
                     if (default !is List<*>) {
                         throw ClassCastException()

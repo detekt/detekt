@@ -101,12 +101,15 @@ class MemberNameEqualsClassName(config: Config) :
                 val refName = (typeReference.typeElement as? KtUserType)?.referencedName ?: typeReference.text
                 refName == klass.name
             }
+
             function.bodyExpression is KtBlockExpression -> false
+
             function.bodyExpression !is KtBlockExpression -> {
                 analyze(function) {
                     klass.symbol == function.returnType.symbol
                 }
             }
+
             else -> true // We don't know if it is or not a factory. We assume it is a factory to avoid false-positives
         }
     }

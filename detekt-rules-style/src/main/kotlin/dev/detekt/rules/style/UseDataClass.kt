@@ -151,6 +151,7 @@ class UseDataClass(config: Config) :
     ): Boolean =
         when (function.name) {
             !in DEFAULT_FUNCTION_NAMES -> false
+
             "copy" -> {
                 if (classType != null) {
                     val returnType = function.symbol.returnType

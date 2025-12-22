@@ -17,7 +17,9 @@ interface LoggingAware {
 internal fun Throwable.printStacktraceRecursively(logger: Appendable) {
     when (logger) {
         is PrintStream -> this.printStackTrace(logger)
+
         is PrintWriter -> this.printStackTrace(logger)
+
         else -> {
             stackTrace.forEach { logger.appendLine(it.toString()) }
             cause?.printStacktraceRecursively(logger)
