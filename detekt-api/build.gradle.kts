@@ -48,6 +48,13 @@ listOf(configurations.testFixturesApiElements, configurations.testFixturesRuntim
     }
 }
 
-apiValidation {
-    ignoredPackages.add("dev.detekt.api.internal")
+kotlin {
+    @OptIn(org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation::class)
+    abiValidation {
+        filters {
+            excluded {
+                byNames.add("dev.detekt.api.internal.**")
+            }
+        }
+    }
 }
