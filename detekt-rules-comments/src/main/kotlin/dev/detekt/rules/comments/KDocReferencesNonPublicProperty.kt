@@ -72,7 +72,11 @@ class KDocReferencesNonPublicProperty(config: Config) :
         for (privateProperty in privateProperties.orEmpty()) {
             val qualifiedName = privateProperty.qualifiedName()
             val matchesPublicProperty = publicPropertyNames.contains(qualifiedName)
-            if (!matchesPublicProperty && comment.contains("[$qualifiedName]")) {
+            if (
+                !matchesPublicProperty &&
+                comment.contains("[$qualifiedName]") &&
+                !comment.contains("[$qualifiedName][")
+            ) {
                 report(privateProperty)
             }
         }

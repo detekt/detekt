@@ -222,4 +222,31 @@ class KDocReferencesNonPublicPropertySpec {
         """.trimIndent()
         assertThat(subject.lint(code)).isEmpty()
     }
+
+    @Test
+    fun `does not report when ref is used with same name as private property - #8893`() {
+        val code = """
+            import java.util.LinkedList
+            /**
+             * This is a wrapper which internally maintains a [list][LinkedList] variable
+             */
+            class Test {
+                private var list: LinkedList<Int>? = null
+            }
+        """.trimIndent()
+        assertThat(subject.lint(code)).isEmpty()
+    }
+
+    @Test
+    fun `does not report when ref is used with fully qualified name same as private property`() {
+        val code = """
+            /**
+             * This is a wrapper which internally maintains a [list][java.util.LinkedList] variable
+             */
+            class Test {
+                private var list: java.util.LinkedList<Int>? = null
+            }
+        """.trimIndent()
+        assertThat(subject.lint(code)).isEmpty()
+    }
 }
