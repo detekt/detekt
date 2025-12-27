@@ -628,4 +628,26 @@ class UnnecessaryInnerClassSpec(val env: KotlinEnvironmentContainer) {
             assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
     }
+
+    @Test
+    fun `#8927 - does not inner class report when it's parent is inner class`() {
+        val code = """
+            class A {
+                fun computeExpensive(className: String) = className + "_1"
+                // this inner class is required due to the usage of computeExpensive()
+                inner class B {
+                    val bName by lazy { computeExpensive(B::class.java.name) }
+                    init {
+                        print(bName)
+                    }
+                    // if parent is inner then below class should be inner
+                    inner class C {
+                        val d = 9
+                    }
+                }
+            }
+        """.trimIndent()
+
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
 }
