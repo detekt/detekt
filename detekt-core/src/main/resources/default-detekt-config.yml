@@ -127,6 +127,7 @@ complexity:
   NamedArguments:
     active: false
     allowedArguments: 3
+    ignoreMethods: []
     ignoreArgumentsMatchingNames: false
   NestedBlockDepth:
     active: true
