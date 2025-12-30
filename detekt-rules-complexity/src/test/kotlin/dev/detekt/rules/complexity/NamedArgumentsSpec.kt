@@ -327,7 +327,7 @@ class NamedArgumentsSpec(val env: KotlinEnvironmentContainer) {
         }
 
         @Test
-        fun `does not report when method is ignored with multiple ignored methods configs present`() {
+        fun `does not report with ignore_methods config is present`() {
             val code = """
                 fun main() {
                     Pair(1, 2)
@@ -343,7 +343,7 @@ class NamedArgumentsSpec(val env: KotlinEnvironmentContainer) {
         }
 
         @Test
-        fun `does report when method is not ignored`() {
+        fun `reports when method is not ignored`() {
             val code = """
                 fun main() {
                     Triple(1, 2, 3)
