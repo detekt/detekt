@@ -63,7 +63,6 @@ val jvmMajorVersion = jvmTargetVersion.toIntOrNull() ?: 8
 kotlin {
     compilerOptions {
         jvmTarget = JvmTarget.fromTarget(jvmTargetVersion)
-        progressiveMode = true
         extraWarnings = true
         allWarningsAsErrors = providers.gradleProperty("warningsAsErrors").orNull.toBoolean()
         freeCompilerArgs.add("-Xcontext-parameters")
@@ -71,6 +70,10 @@ kotlin {
             // DGP compiles with Kotlin 2.1.21. Support for the stable version of this flag was only added in 2.2.0.
             // See KT-73007 & KT-74590
             jvmDefault = JvmDefaultMode.NO_COMPATIBILITY
+
+            // Only enable progressive mode in non-DGP modules. DGP doesn't compile with latest language version so
+            // progressive mode is not appropriate.
+            progressiveMode = true
         } else {
             freeCompilerArgs.add("-Xjvm-default=all")
         }
