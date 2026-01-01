@@ -1020,6 +1020,124 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinEnvironmentCont
             .hasEndSourceLocation(SourceLocation(4, 16))
     }
 
+    @Test
+    fun `does not report when no suspend function is called`() {
+        val code = """
+            import kotlinx.coroutines.CoroutineDispatcher
+            import kotlinx.coroutines.Dispatchers
+            import kotlinx.coroutines.withContext
+
+            class CountryRepositoryImpl() {
+                suspend fun loadCountries(): List<String> =
+                    withContext(Dispatchers.IO) {
+                        val countries = try {
+                            listOf("1")
+                        } catch (e: Exception) {
+                            emptyList()
+                        }
+                        val result = countries.map {
+                            it.uppercase()
+                        }
+                        result
+                    }
+            }
+        """.trimIndent()
+
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `does not report when no suspend function is called for overridden method`() {
+        val code = """
+            import kotlinx.coroutines.CoroutineDispatcher
+            import kotlinx.coroutines.Dispatchers
+            import kotlinx.coroutines.withContext
+
+            interface CountryRepository {
+                suspend fun loadCountries(language: String): List<String>
+            }
+
+            class CountryRepositoryImpl() : CountryRepository {
+                override suspend fun loadCountries(): List<String> =
+                    withContext(Dispatchers.IO) {
+                        val countries = try {
+                            listOf("1")
+                        } catch (e: Exception) {
+                            emptyList()
+                        }
+                        val result = countries.map {
+                            it.uppercase()
+                        }
+                        result
+                    }
+            }
+        """.trimIndent()
+
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `does not report when when suspend call is inside the suspend trailing block`() {
+        val code = """
+            import kotlinx.coroutines.Dispatchers
+            import kotlinx.coroutines.delay
+            import kotlinx.coroutines.runBlocking
+            import kotlinx.coroutines.withContext
+
+            class CountryRepositoryImpl() {
+                fun blockingCall(block: suspend () -> Unit) = runBlocking { block() }
+                suspend fun loadCountries(): List<String> =
+                    withContext(Dispatchers.IO) {
+                        val countries = try {
+                            blockingCall { delay(1000L) }
+                            listOf("1")
+                        } catch (e: Exception) {
+                            emptyList()
+                        }
+                        val result = countries.map {
+                            it.uppercase()
+                        }
+                        result
+                    }
+            }
+        """.trimIndent()
+
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `reports when when suspend call is inside the inline function`() {
+        val code = """
+            import kotlinx.coroutines.Dispatchers
+            import kotlinx.coroutines.delay
+            import kotlinx.coroutines.runBlocking
+            import kotlinx.coroutines.withContext
+
+            class CountryRepositoryImpl() {
+                inline fun blockingCall(block: () -> Unit) = block()
+                suspend fun loadCountries(): List<String> =
+                    withContext(Dispatchers.IO) {
+                        val countries = try {
+                            blockingCall { delay(1000L) }
+                            listOf("1")
+                        } catch (e: Exception) {
+                            emptyList()
+                        }
+                        val result = countries.map {
+                            it.uppercase()
+                        }
+                        result
+                    }
+            }
+        """.trimIndent()
+
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).hasSize(1)
+    }
+
     @Nested
     inner class WithOperators {
         @Test
