@@ -19,6 +19,7 @@ import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCatchClause
 import org.jetbrains.kotlin.psi.KtElement
@@ -177,8 +178,7 @@ class SuspendFunSwallowedCancellation(config: Config) :
 
         val function = expression.getParentOfType<KtFunction>(strict = true)
 
-        if (function?.isSuspend != true) {
-            // Don't care about the try-catch block unless it's in a suspending context
+        if (function?.isSuspend != true || !expression.tryBlock.hasSuspendCalls()) {
             return
         }
 
@@ -271,6 +271,14 @@ class SuspendFunSwallowedCancellation(config: Config) :
                         ?.successfulCallOrNull<KaCallableMemberCall<*, *>>()
                         ?.symbol
                         ?.callableId == CoroutineCallableIds.CoroutineContextCallableId
+                }
+            }
+
+            is KtBlockExpression -> {
+                fun shouldTraverseInside(element: PsiElement): Boolean =
+                    this == element || shouldTraverseInsideImpl(element)
+                this.anyDescendantOfType<KtExpression>(::shouldTraverseInside) { descendant ->
+                    if (descendant == this) false else descendant.hasSuspendCalls()
                 }
             }
 
