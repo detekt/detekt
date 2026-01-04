@@ -173,18 +173,14 @@ class SuspendFunSwallowedCancellation(config: Config) :
         }.ifTrue { report(expression) }
     }
 
-    @Suppress("ReturnCount")
     override fun visitTryExpression(expression: KtTryExpression) {
         super.visitTryExpression(expression)
 
         val function = expression.getParentOfType<KtFunction>(strict = true)
 
-        if (function?.isSuspend != true) {
-            // Don't care about the try-catch block unless it's in a suspending context
+        if (function?.isSuspend != true || !expression.tryBlock.hasSuspendCalls()) {
             return
         }
-
-        if (!expression.tryBlock.hasSuspendCalls()) return
 
         for (catchClause in expression.catchClauses) {
             val parameter = catchClause?.catchParameter ?: continue

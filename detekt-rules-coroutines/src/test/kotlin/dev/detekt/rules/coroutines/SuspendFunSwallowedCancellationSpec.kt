@@ -1079,7 +1079,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinEnvironmentCont
     }
 
     @Test
-    fun `does not report when when suspend call is inside the suspend trailing block`() {
+    fun `does not report when suspend call is inside the suspend trailing block`() {
         val code = """
             import kotlinx.coroutines.Dispatchers
             import kotlinx.coroutines.delay
@@ -1109,7 +1109,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinEnvironmentCont
     }
 
     @Test
-    fun `reports when when suspend call is inside the inline function`() {
+    fun `reports when suspend call is inside the inline function`() {
         val code = """
             import kotlinx.coroutines.Dispatchers
             import kotlinx.coroutines.delay
