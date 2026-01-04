@@ -1055,7 +1055,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinEnvironmentCont
             import kotlinx.coroutines.withContext
 
             interface CountryRepository {
-                suspend fun loadCountries(language: String): List<String>
+                suspend fun loadCountries(): List<String>
             }
 
             class CountryRepositoryImpl() : CountryRepository {
