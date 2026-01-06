@@ -1,9 +1,7 @@
-name: Build and Deploy Website
+name: Preview Website for PRs
 
 on:
-  push:
-    branches:
-      - main
+  pull_request:
 
 env:
   DEVELOCITY_ACCESS_KEY: ${{ secrets.GRADLE_ENTERPRISE_ACCESS_KEY }}
@@ -48,9 +46,11 @@ jobs:
         working-directory: website/
         run: yarn build
 
-      - name: Deploy GitHub Pages (only on main)
-        uses: JamesIves/github-pages-deploy-action@9d877eea73427180ae43cf98e8914934fe157a1a # v4
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
         with:
-          branch: gh-pages
-          folder: website/build/
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: detekt
+          directory: website/build/
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
