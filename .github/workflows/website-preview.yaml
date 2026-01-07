@@ -60,6 +60,7 @@ jobs:
           command: >
             pages deploy website/build
             --project-name=detekt
+            --commit-dirty=true
             --branch=pr-${{ github.event.pull_request.number }}
 
       - name: Comment preview URL
