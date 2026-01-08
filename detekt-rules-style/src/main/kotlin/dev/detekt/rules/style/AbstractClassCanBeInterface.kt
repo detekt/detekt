@@ -71,33 +71,33 @@ class AbstractClassCanBeInterface(config: Config) :
     RequiresAnalysisApi {
 
     override fun visitClass(klass: KtClass) {
+        check(klass)
+        super.visitClass(klass)
+    }
+
+    private fun check(klass: KtClass) {
         val nameIdentifier = klass.nameIdentifier ?: return
         if (!shouldCheck(klass)) return
 
         val members = klass.members()
         analyze(klass) {
             when {
-                members.isNotEmpty() ->
-                    checkMembers(klass, members, nameIdentifier)
-
-                hasInheritedMember(klass, isAbstract = true) && isAnyParentAbstract(klass) ->
-                    return
-
-                !klass.hasConstructorParameter() ->
-                    report(Finding(Entity.from(nameIdentifier), klass.message()))
+                members.isNotEmpty() -> checkMembers(klass, members, nameIdentifier)
+                hasInheritedMember(klass, isAbstract = true) && isAnyParentAbstract(klass) -> return
+                klass.hasConstructorParameter() || klass.containsInternalClass() -> return
+                else -> report(Finding(Entity.from(nameIdentifier), klass.message()))
             }
         }
-
-        super.visitClass(klass)
     }
 
     private fun KtClass.message(): String = if (isSealed()) SEALED_NO_CONCRETE_MEMBER else NO_CONCRETE_MEMBER
 
-    private fun shouldCheck(klass: KtClass): Boolean = when {
-        klass.isInterface() -> false
-        klass.isSealed() -> true
-        else -> klass.isAbstract()
-    }
+    private fun shouldCheck(klass: KtClass) =
+        when {
+            klass.isInterface() -> false
+            klass.isSealed() -> true
+            else -> klass.isAbstract()
+        }
 
     private fun KaSession.checkMembers(
         klass: KtClass,
@@ -107,10 +107,11 @@ class AbstractClassCanBeInterface(config: Config) :
         val (abstractMembers, concreteMembers) = members.partition { it.isAbstract() }
         when {
             abstractMembers.isEmpty() && !hasInheritedMember(klass, isAbstract = true) ->
-                Unit
+                return
 
-            abstractMembers.any { it.isInternal() || it.isProtected() } || klass.hasConstructorParameter() ->
-                Unit
+            abstractMembers.any { it.isInternal() || it.isProtected() } ||
+                klass.hasConstructorParameter() ||
+                klass.containsInternalClass() -> return
 
             concreteMembers.isEmpty() && !hasInheritedMember(klass, isAbstract = false) ->
                 report(Finding(Entity.from(nameIdentifier), klass.message()))
@@ -122,6 +123,10 @@ class AbstractClassCanBeInterface(config: Config) :
             primaryConstructor?.valueParameters?.filter { it.hasValOrVar() }.orEmpty()
 
     private fun KtClass.hasConstructorParameter() = primaryConstructor?.valueParameters?.isNotEmpty() == true
+
+    // Kotlin doesn't allow internal classes within an interface, but it does allow them within a sealed class
+    private fun KtClass.containsInternalClass() =
+        body?.children?.filterIsInstance<KtClass>()?.any { it.isInternal() } == true
 
     private fun KaSession.hasInheritedMember(klass: KtClass, isAbstract: Boolean): Boolean =
         when {

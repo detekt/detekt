@@ -5,11 +5,7 @@ import java.util.Properties
 
 internal sealed interface Deprecation
 
-internal data class DeprecatedRule(
-    val ruleSetId: String,
-    val ruleName: String,
-    val description: String,
-) : Deprecation
+internal data class DeprecatedRule(val ruleSetId: String, val ruleName: String, val description: String) : Deprecation
 
 internal data class DeprecatedProperty(
     val ruleSetId: String,

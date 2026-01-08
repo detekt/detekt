@@ -162,6 +162,19 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
             """.trimIndent()
             assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
+
+        @Test
+        fun `does not report an abstract class containing an internal nested class`() {
+            val code = """
+                abstract class A {
+                    abstract val x: Int
+                    internal class InternalImpl {
+                        val data: Int = 42
+                    }
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
     }
 
     @Nested
@@ -437,6 +450,60 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
+        }
+
+        // This would otherwise be flagged by this rule, but Kotlin doesn't allow internal classes declared within an
+        // interface
+        @Test
+        fun `don't report a sealed class containing an internal implementation class`() {
+            val code = """
+                sealed class Result {
+                    internal data class Success(val data: Int) : Result()
+                }
+            """.trimIndent()
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `don't report a sealed class with abstract properties and an internal nested class`() {
+            val code = """
+                sealed class Result {
+                    abstract val x: Int
+                    internal data class Success(val data: Int, override val x: Int) : Result()
+                }
+            """.trimIndent()
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `don't report a sealed class with multiple nested classes including an internal one`() {
+            val code = """
+                sealed class Result {
+                    abstract val x: Int
+                    data class Success(val data: Int, override val x: Int) : Result()
+                    internal data class Loading(override val x: Int) : Result()
+                    data class Failure(val reason: String, override val x: Int) : Result()
+                }
+            """.trimIndent()
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `report a sealed class with only public nested classes`() {
+            val code = """
+                sealed class Result {
+                    abstract val x: Int
+                    data class Success(val data: Int, override val x: Int) : Result()
+                    data class Failure(val reason: String, override val x: Int) : Result()
+                }
+            """.trimIndent()
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings)
+                .singleElement()
+                .hasMessage(SEALED_NO_CONCRETE_MEMBER)
         }
     }
 }

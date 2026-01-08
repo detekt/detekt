@@ -12,8 +12,6 @@ import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
-// Suppression to avoid affecting published API
-@Suppress("AbstractClassCanBeInterface")
 sealed class FunctionMatcher {
 
     abstract fun match(function: KtNamedFunction, fullAnalysis: Boolean): Boolean
