@@ -17,11 +17,8 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
 import java.nio.file.Path
 
-class CheckConfigurationSpec {
+class CheckConfigurationSpec(@param:TempDir private val testDir: Path) {
 
-    @TempDir
-    @Suppress("VarCouldBeVal")
-    private lateinit var testDir: Path
     private val spec = createNullLoggingSpec {}
 
     @Test
