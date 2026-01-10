@@ -1,15 +1,19 @@
-name: Build and Deploy Website
+name: Preview Website for PRs
+
 
 on:
-  push:
-    branches:
-      - main
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+permissions:
+  contents: read
+  pull-requests: write
 
 env:
   DEVELOCITY_ACCESS_KEY: ${{ secrets.GRADLE_ENTERPRISE_ACCESS_KEY }}
-
-permissions:
-  contents: write  # for JamesIves/github-pages-deploy-action to push changes in repo
 
 jobs:
   build-detekt-docs:
@@ -48,9 +52,20 @@ jobs:
         working-directory: website/
         run: yarn build
 
-      - name: Deploy GitHub Pages (only on main)
-        uses: JamesIves/github-pages-deploy-action@d92aa235d04922e8f08b40ce78cc5442fcfbfa2f # v4
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      - name: Deploy preview to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
         with:
-          branch: gh-pages
-          folder: website/build/
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: >
+            pages deploy website/build
+            --project-name=detekt
+            --commit-dirty=true
+            --branch=pr-${{ github.event.pull_request.number }}
+
+      - name: Comment preview URL
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          message: |
+            🚀 **Docs preview ready**
+            🔗 https://pr-${{ github.event.pull_request.number }}.detekt.corti-nico.workers.dev
