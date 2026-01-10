@@ -16,7 +16,6 @@ import kotlinx.html.CommonAttributeGroupFacadeFlowInteractiveContent
 import kotlinx.html.FlowContent
 import kotlinx.html.FlowOrInteractiveContent
 import kotlinx.html.HTMLTag
-import kotlinx.html.HtmlTagMarker
 import kotlinx.html.TagConsumer
 import kotlinx.html.a
 import kotlinx.html.attributesMapOf
@@ -175,7 +174,6 @@ class HtmlOutputReport : OutputReport {
         ComplexityReportGenerator.create(detektion).generate().orEmpty()
 }
 
-@HtmlTagMarker
 private fun FlowOrInteractiveContent.summary(classes: String, block: SUMMARY.() -> Unit = {}): Unit =
     SUMMARY(attributesMapOf("class", classes), consumer).visit(block)
 
