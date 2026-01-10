@@ -11,9 +11,9 @@ internal fun RulesSpec.FailurePolicy.check(result: Detektion): FailurePolicyResu
         is RulesSpec.FailurePolicy.FailOnSeverity -> result.checkForIssuesWithSeverity(minSeverity)
     }
 
-sealed class FailurePolicyResult {
-    data object Ok : FailurePolicyResult()
-    data class Fail(val message: String) : FailurePolicyResult()
+sealed interface FailurePolicyResult {
+    data object Ok : FailurePolicyResult
+    data class Fail(val message: String) : FailurePolicyResult
 }
 
 private fun Detektion.checkForIssuesWithSeverity(minSeverity: Severity): FailurePolicyResult {
