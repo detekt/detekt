@@ -53,6 +53,7 @@ jobs:
         run: yarn build
 
       - name: Deploy preview to Cloudflare Pages
+        id: deploy
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -67,4 +68,4 @@ jobs:
         with:
           message: |
             🚀 **Docs preview ready**
-            🔗 https://pr-${{ github.event.pull_request.number }}.detekt.corti-nico.workers.dev
+            🔗 ${{ steps.deploy.outputs.pages-deployment-alias-url || steps.deploy.outputs.deployment-url }}
