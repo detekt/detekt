@@ -33,7 +33,8 @@ import org.jetbrains.kotlin.psi.psiUtil.hasInnerModifier
 
 /**
  * Disallows shadowing variable declarations.
- * Shadowing makes it impossible to access a variable with the same name in the scope.
+ * Shadowing makes it impossible to access a variable with the same name in the scope
+ * except of underscore lambda parameters for unused variables.
  *
  * <noncompliant>
  * fun test(i: Int, j: Int, k: Int) {
@@ -56,6 +57,7 @@ import org.jetbrains.kotlin.psi.psiUtil.hasInnerModifier
  *         listOf(2).forEach { x ->
  *         }
  *     }
+ *     listOf(1).map { _ -> println("_") }
  * }
  * </compliant>
  *
@@ -97,6 +99,9 @@ class NoNameShadowing(config: Config) :
     private fun checkNameShadowing(declaration: KtNamedDeclaration, parentToSkipSearchFrom: PsiElement) {
         val declarationNameIdentifier = declaration.nameIdentifier ?: return
         val declarationName = declarationNameIdentifier.text
+        // Skip underscore placeholders for unused variables
+        if (declarationName == "_") return
+
         val matched = parentToSkipSearchFrom.parents(false)
             .filterIsInstance<KtElement>()
             .any { parent ->
