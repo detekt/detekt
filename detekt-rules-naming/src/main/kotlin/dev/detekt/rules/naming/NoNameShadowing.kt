@@ -99,7 +99,6 @@ class NoNameShadowing(config: Config) :
     private fun checkNameShadowing(declaration: KtNamedDeclaration, parentToSkipSearchFrom: PsiElement) {
         val declarationNameIdentifier = declaration.nameIdentifier ?: return
         val declarationName = declarationNameIdentifier.text
-        // Skip underscore placeholders for unused variables
         if (declarationName == "_") return
 
         val matched = parentToSkipSearchFrom.parents(false)
