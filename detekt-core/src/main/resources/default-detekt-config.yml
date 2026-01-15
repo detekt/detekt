@@ -36,8 +36,8 @@ comments:
   active: true
   AbsentOrWrongFileLicense:
     active: false
-    licenseTemplateFile: 'license.template'
     licenseTemplateIsRegex: false
+    licenseTemplate: ''
   DeprecatedBlockTag:
     active: false
   DocumentationOverPrivateFunction:

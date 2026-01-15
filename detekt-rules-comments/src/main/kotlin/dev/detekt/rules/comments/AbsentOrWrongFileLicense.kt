@@ -11,23 +11,28 @@ import org.jetbrains.kotlin.psi.KtFile
 /**
  * This rule will report every Kotlin source file which doesn't have the required license header.
  * The rule validates each Kotlin source and operates in two modes: if `licenseTemplateIsRegex = false` (or missing)
- * the rule checks whether the input file header starts with the read text from the passed file in the
- * `licenseTemplateFile` configuration option. If `licenseTemplateIsRegex = true` the rule matches the header with
- * a regular expression produced from the passed template license file (defined via `licenseTemplateFile` configuration
- * option).
+ * the rule checks whether the input file header starts with text from `licenseTemplate` configuration option.
+ * If `licenseTemplateIsRegex = true` the rule matches the header with a regular expression produced from the passed
+ * template license.
  */
 class AbsentOrWrongFileLicense(config: Config) : Rule(config, "License text is absent or incorrect.") {
 
-    @Suppress("unused")
-    @Configuration("path to file with license header template resolved relatively to config file")
-    private val licenseTemplateFile: String by config(DEFAULT_LICENSE_TEMPLATE_FILE)
+    @Configuration("Whether or not the license header template is a regex template")
+    private val licenseTemplateIsRegex: Boolean by config(false)
 
-    @Suppress("unused")
-    @Configuration("whether or not the license header template is a regex template")
-    private val licenseTemplateIsRegex: Boolean by config(DEFAULT_LICENSE_TEMPLATE_IS_REGEX)
+    @Configuration("License header template")
+    private val licenseTemplate: String by config("")
+
+    private val matchesLicense: (String) -> Boolean = if (licenseTemplateIsRegex) {
+        val regex = licenseTemplate.toRegex(RegexOption.MULTILINE)
+        fun matcher(text: String): Boolean = regex.find(text)?.range?.start == 0
+        ::matcher
+    } else {
+        { it.startsWith(licenseTemplate) }
+    }
 
     override fun visitKtFile(file: KtFile) {
-        if ((file.hasLicenseHeader() || file.hasLicenseHeaderRegex()) && !file.hasValidLicense()) {
+        if (!matchesLicense(file.text)) {
             report(
                 Finding(
                     Entity.atPackageOrFirstDecl(file),
@@ -35,20 +40,5 @@ class AbsentOrWrongFileLicense(config: Config) : Rule(config, "License text is a
                 )
             )
         }
-    }
-
-    private fun KtFile.hasValidLicense(): Boolean =
-        if (hasLicenseHeaderRegex()) {
-            getLicenseHeaderRegex().find(text)?.range?.start == 0
-        } else {
-            text.startsWith(getLicenseHeader())
-        }
-
-    companion object {
-        const val PARAM_LICENSE_TEMPLATE_FILE = "licenseTemplateFile"
-        const val DEFAULT_LICENSE_TEMPLATE_FILE = "license.template"
-        const val PARAM_LICENSE_TEMPLATE_IS_REGEX = "licenseTemplateIsRegex"
-        const val DEFAULT_LICENSE_TEMPLATE_IS_REGEX = false
-        val RULE_NAME: String = AbsentOrWrongFileLicense::class.java.simpleName
     }
 }

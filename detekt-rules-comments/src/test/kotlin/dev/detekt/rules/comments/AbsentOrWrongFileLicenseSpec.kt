@@ -1,13 +1,9 @@
 package dev.detekt.rules.comments
 
-import dev.detekt.api.Config
 import dev.detekt.api.Finding
-import dev.detekt.api.testfixtures.TestSetupContext
+import dev.detekt.test.TestConfig
 import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
-import dev.detekt.test.utils.compileContentForTest
-import dev.detekt.test.utils.resource
-import dev.detekt.test.yamlConfig
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -177,20 +173,20 @@ class AbsentOrWrongFileLicenseSpec {
 }
 
 private fun checkLicence(@Language("kotlin") content: String, isRegexLicense: Boolean = false): List<Finding> {
-    val file = compileContentForTest(content.trimIndent())
-
-    val configFileName = if (isRegexLicense) "license-config-regex.yml" else "license-config.yml"
-    val config = yamlConfig(configFileName)
-
-    LicenceHeaderLoaderExtension().apply {
-        init(
-            TestSetupContext(
-                config = config,
-                configUris = listOf(resource(configFileName)),
-            )
-        )
-        onStart(listOf(file))
+    val licenseTemplate = if (isRegexLicense) {
+        """
+            ^\/\/
+            \/\/ Copyright 20[0-9]{2} Artur Bosch & Contributors
+            \/\/     http:\/\/www\.apache\.org\/licenses\/LICENSE-2\.0
+            \/\/ See the License for the specific language governing permissions and
+            \/\/ limitations under the License\.
+            \/\/$
+        """.trimIndent()
+    } else {
+        "/* LICENSE */"
     }
 
-    return AbsentOrWrongFileLicense(Config.empty).lint(file)
+    val config = TestConfig("licenseTemplateIsRegex" to isRegexLicense, "licenseTemplate" to licenseTemplate)
+
+    return AbsentOrWrongFileLicense(config).lint(content)
 }
