@@ -5,9 +5,9 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RuleSet
 import dev.detekt.api.RuleSetProvider
 import dev.detekt.api.modifiedText
+import dev.detekt.test.TestConfig
 import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
-import dev.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtFile
 import org.junit.jupiter.params.ParameterizedTest
@@ -28,7 +28,18 @@ class AutoCorrectLevelSpec {
         "False,     False,     false",
     )
     fun autoCorrect(ruleSet: AutoCorrectConfig, rule: AutoCorrectConfig, wasFormatted: Boolean) {
-        val config = yamlConfigFromContent(createConfig(ruleSet, rule))
+        val config = TestConfig(
+            "ktlint" to mapOfNotNull(
+                "active" to "true",
+                ("autoCorrect" to ruleSet.toString()).takeIf { ruleSet != AutoCorrectConfig.Undefined },
+                "ChainWrapping" to mapOfNotNull(
+                    "active" to "true",
+                    ("autoCorrect" to rule.toString()).takeIf { rule != AutoCorrectConfig.Undefined }
+                )
+            )
+        )
+
+        config.toString()
 
         val (file, findings) = runRule(config)
 
@@ -40,6 +51,8 @@ class AutoCorrectLevelSpec {
         }
     }
 }
+
+private fun <K, V> mapOfNotNull(vararg pairs: Pair<K, V>?): Map<K, V> = pairs.filterNotNull().toMap()
 
 enum class AutoCorrectConfig {
     True,
@@ -54,20 +67,6 @@ enum class AutoCorrectConfig {
             Undefined -> "Undefined"
         }
 }
-
-private fun createConfig(ruleSet: AutoCorrectConfig, rule: AutoCorrectConfig): String =
-    buildString {
-        appendLine("ktlint:")
-        appendLine("  active: true")
-        if (ruleSet != AutoCorrectConfig.Undefined) {
-            appendLine("  autoCorrect: $ruleSet")
-        }
-        appendLine("  ChainWrapping:")
-        appendLine("    active: true")
-        if (rule != AutoCorrectConfig.Undefined) {
-            appendLine("    autoCorrect: $rule")
-        }
-    }
 
 private fun runRule(config: Config): Pair<KtFile, List<Finding>> {
     val testFile = loadFile("configTests/fixed.kt")
