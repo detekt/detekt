@@ -6,10 +6,10 @@ import dev.detekt.core.config.tryParseBasedOnDefault
 import dev.detekt.core.config.valueOrDefaultInternal
 
 @Suppress("UNCHECKED_CAST")
-class TestConfig(override val parent: Config?, vararg pairs: Pair<String, Any>) : Config {
-    private val values: Map<String, Any> = mapOf(*pairs)
-
+class TestConfig private constructor(override val parent: Config?, private val values: Map<String, Any>) : Config {
     override val parentPath: String? = null
+
+    constructor(parent: Config?, vararg pairs: Pair<String, Any>) : this(parent, pairs.toMap())
 
     constructor(vararg pairs: Pair<String, Any>) : this(Config.empty, *pairs)
 
