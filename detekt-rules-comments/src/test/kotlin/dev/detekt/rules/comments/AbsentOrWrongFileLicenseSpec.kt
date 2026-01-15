@@ -6,7 +6,7 @@ import dev.detekt.api.testfixtures.TestSetupContext
 import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
 import dev.detekt.test.utils.compileContentForTest
-import dev.detekt.test.utils.resourceAsPath
+import dev.detekt.test.utils.resource
 import dev.detekt.test.yamlConfig
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Nested
@@ -180,14 +180,13 @@ private fun checkLicence(@Language("kotlin") content: String, isRegexLicense: Bo
     val file = compileContentForTest(content.trimIndent())
 
     val configFileName = if (isRegexLicense) "license-config-regex.yml" else "license-config.yml"
-    val resource = resourceAsPath(configFileName)
     val config = yamlConfig(configFileName)
 
     LicenceHeaderLoaderExtension().apply {
         init(
             TestSetupContext(
                 config = config,
-                configUris = listOf(resource.toUri()),
+                configUris = listOf(resource(configFileName)),
             )
         )
         onStart(listOf(file))
