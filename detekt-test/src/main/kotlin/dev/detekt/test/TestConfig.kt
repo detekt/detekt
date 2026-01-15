@@ -13,11 +13,10 @@ class TestConfig private constructor(override val parent: Config?, private val v
 
     constructor(vararg pairs: Pair<String, Any>) : this(Config.empty, *pairs)
 
-    override fun subConfig(key: String) =
-        TestConfig(
-            this,
-            *values.map { (keyInValues, value) -> keyInValues to value }.toTypedArray()
-        )
+    override fun subConfig(key: String): TestConfig {
+        val value = values.getOrDefault(key, emptyMap<String, Any>()) as Map<String, Any>
+        return TestConfig(this, value)
+    }
 
     override fun subConfigKeys(): Set<String> = values.keys
 
