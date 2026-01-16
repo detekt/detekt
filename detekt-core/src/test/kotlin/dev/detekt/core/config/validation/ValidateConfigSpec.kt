@@ -2,9 +2,9 @@ package dev.detekt.core.config.validation
 
 import dev.detekt.api.Config
 import dev.detekt.api.Notification
+import dev.detekt.core.yamlConfig
+import dev.detekt.core.yamlConfigFromContent
 import dev.detekt.test.TestConfig
-import dev.detekt.test.yamlConfig
-import dev.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.assertj.core.api.Assertions.assertThatIllegalStateException
