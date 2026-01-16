@@ -74,7 +74,6 @@ class DetektBasePluginSpec {
             gradleProperties = mapOf(
                 "android.builtInKotlin" to "false",
                 "android.newDsl" to "false",
-                "android.onlyEnableUnitTestForTheTestedBuildType" to "false",
             ),
             dryRun = true,
         ).also {
@@ -177,7 +176,6 @@ class DetektBasePluginSpec {
             gradleProperties = mapOf(
                 "android.builtInKotlin" to "false",
                 "android.newDsl" to "false",
-                "android.onlyEnableUnitTestForTheTestedBuildType" to "false",
             ),
             dryRun = true,
         ).also {

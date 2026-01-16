@@ -79,9 +79,6 @@ class DetektAndroidSpec {
         fun appDetektTest() {
             gradleRunner.runTasksAndCheckResult(":app:detektTest") { buildResult ->
                 assertThat(buildResult.output).containsPattern(
-                    """--baseline \S*[/\\]detekt-baseline-releaseUnitTest.xml """
-                )
-                assertThat(buildResult.output).containsPattern(
                     """--baseline \S*[/\\]detekt-baseline-debugUnitTest.xml """
                 )
                 assertThat(buildResult.output).containsPattern(
@@ -103,7 +100,6 @@ class DetektAndroidSpec {
                     .containsExactlyInAnyOrder(
                         ":app:detektDebugAndroidTest",
                         ":app:detektDebugUnitTest",
-                        ":app:detektReleaseUnitTest",
                         ":app:detektTest",
                     )
             }
@@ -206,9 +202,6 @@ class DetektAndroidSpec {
         fun libDetektTest() {
             gradleRunner.runTasksAndCheckResult(":lib:detektTest") { buildResult ->
                 assertThat(buildResult.output).containsPattern(
-                    """--baseline \S*[/\\]detekt-baseline-releaseUnitTest.xml """
-                )
-                assertThat(buildResult.output).containsPattern(
                     """--baseline \S*[/\\]detekt-baseline-debugUnitTest.xml """
                 )
                 assertThat(buildResult.output).containsPattern(
@@ -222,7 +215,6 @@ class DetektAndroidSpec {
                     .containsExactlyInAnyOrder(
                         ":lib:detektDebugAndroidTest",
                         ":lib:detektDebugUnitTest",
-                        ":lib:detektReleaseUnitTest",
                         ":lib:detektTest",
                     )
             }
@@ -341,7 +333,6 @@ class DetektAndroidSpec {
                     .containsExactlyInAnyOrder(
                         ":android_lib:detektDebugAndroidTest",
                         ":android_lib:detektDebugUnitTest",
-                        ":android_lib:detektReleaseUnitTest",
                         ":android_lib:detektTest",
                     )
             }
@@ -393,11 +384,9 @@ class DetektAndroidSpec {
                     .containsExactlyInAnyOrder(
                         ":lib:detektOldHarryDebugAndroidTest",
                         ":lib:detektOldHarryDebugUnitTest",
-                        ":lib:detektOldHarryReleaseUnitTest",
                         ":lib:detektTest",
                         ":lib:detektYoungHarryDebugAndroidTest",
                         ":lib:detektYoungHarryDebugUnitTest",
-                        ":lib:detektYoungHarryReleaseUnitTest",
                     )
             }
         }
@@ -518,10 +507,8 @@ class DetektAndroidSpec {
                         ":lib:detektOldHarryDebugAndroidTest",
                         ":lib:detektOldHarryDebugUnitTest",
                         ":lib:detektTest",
-                        ":lib:detektYoungHarryReleaseUnitTest",
                     )
                     .doesNotContain(
-                        ":lib:detektOldHarryReleaseUnitTest",
                         ":lib:detektYoungHarryDebugAndroidTest",
                         ":lib:detektYoungHarryDebugUnitTest",
                     )
@@ -580,13 +567,11 @@ class DetektAndroidSpec {
                     .containsExactlyInAnyOrder(
                         ":lib:detektOldHarryDebugAndroidTest",
                         ":lib:detektOldHarryDebugUnitTest",
-                        ":lib:detektOldHarryReleaseUnitTest",
                         ":lib:detektTest",
                     )
                     .doesNotContain(
                         ":lib:detektYoungHarryDebugAndroidTest",
                         ":lib:detektYoungHarryDebugUnitTest",
-                        ":lib:detektYoungHarryReleaseUnitTest",
                     )
             }
         }
@@ -786,7 +771,6 @@ private fun createGradleRunnerAndSetupProject(projectLayout: ProjectLayout, dryR
         gradleProperties = mapOf(
             "android.builtInKotlin" to "false",
             "android.newDsl" to "false",
-            "android.onlyEnableUnitTestForTheTestedBuildType" to "false",
         ),
         dryRun = dryRun,
     ).also { it.setupProject() }
