@@ -195,7 +195,6 @@ class DetektMultiplatformSpec {
         fun `configures test tasks`() {
             gradleRunner.runTasks(":shared:detektDebugAndroidTestAndroid")
             gradleRunner.runTasks(":shared:detektDebugUnitTestAndroid")
-            gradleRunner.runTasks(":shared:detektReleaseUnitTestAndroid")
         }
 
         @Test
@@ -349,7 +348,6 @@ private fun setupProject(projectLayoutAction: ProjectLayout.() -> Unit): DslGrad
         gradleProperties = mapOf(
             "android.builtInKotlin" to "false",
             "android.newDsl" to "false",
-            "android.onlyEnableUnitTestForTheTestedBuildType" to "false",
         ),
         dryRun = true
     ).also {
