@@ -9,7 +9,7 @@ dependencies {
     compileOnly(projects.detektPsiUtils)
     implementation(projects.detektRulesKtlintWrapper.ktlintRepackage) {
         attributes {
-            attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.SHADOWED))
+            attribute(Bundling.BUNDLING_ATTRIBUTE, named(Bundling.SHADOWED))
         }
     }
 

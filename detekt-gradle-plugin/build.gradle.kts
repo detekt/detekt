@@ -151,7 +151,7 @@ dependencies {
     testKitGradleMinVersionRuntimeOnly(libs.kotlin.gradle.plugin) {
         attributes {
             // Set this value to the minimum Gradle version tested in testKitGradleMinVersionRuntimeOnly source set
-            attribute(GradlePluginApiVersion.GRADLE_PLUGIN_API_VERSION_ATTRIBUTE, objects.named("7.6.3"))
+            attribute(GradlePluginApiVersion.GRADLE_PLUGIN_API_VERSION_ATTRIBUTE, named("7.6.3"))
         }
     }
 
