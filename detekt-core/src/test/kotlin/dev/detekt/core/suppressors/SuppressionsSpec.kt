@@ -284,7 +284,7 @@ class SuppressionsSpec {
     }
 
     @Test
-    fun neverSuppressForbiddenSuppress2() {
+    fun neverSuppressForbiddenSuppress_withSlashId() {
         val file = compileContentForTest("""@file:Suppress("ForbiddenSuppress/foo")""")
         assertThat(file.isSuppressedBy("ForbiddenSuppress", emptySet())).isFalse()
     }

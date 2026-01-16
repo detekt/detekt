@@ -1,11 +1,9 @@
 package dev.detekt.test
 
-import dev.detekt.api.Config
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
-import dev.detekt.api.RuleSetId
-import dev.detekt.core.suppressors.isSuppressedBy
+import dev.detekt.api.RuleName
 import dev.detekt.test.utils.KotlinAnalysisApiEngine
 import dev.detekt.test.utils.KotlinEnvironmentContainer
 import dev.detekt.test.utils.compileContentForTest
@@ -13,7 +11,11 @@ import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.cli.jvm.config.javaSourceRoots
 import org.jetbrains.kotlin.config.LanguageVersionSettings
 import org.jetbrains.kotlin.config.languageVersionSettings
+import org.jetbrains.kotlin.psi.KtAnnotated
+import org.jetbrains.kotlin.psi.KtAnnotationEntry
+import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import kotlin.io.path.Path
 
 private val shouldCompileTestSnippets: Boolean =
@@ -65,11 +67,29 @@ fun Rule.lint(
 }
 
 private fun List<Finding>.filterSuppressed(rule: Rule): List<Finding> =
-    filterNot {
-        it.entity.ktElement.isSuppressedBy(rule.ruleName.value, rule.aliases, RuleSetId("NoARuleSetId"))
+    filterNot { it.entity.ktElement.isSuppressedBy(rule.ruleName) }
+
+private fun KtElement.isSuppressedBy(id: RuleName): Boolean {
+    if (id.value == "ForbiddenSuppress") return false
+
+    fun KtElement.allAnnotationEntries(): Sequence<KtAnnotationEntry> {
+        val element = this
+        return sequence {
+            if (element is KtAnnotated) {
+                yieldAll(element.annotationEntries)
+            }
+
+            element.getStrictParentOfType<KtAnnotated>()?.let { yieldAll(it.allAnnotationEntries()) }
+        }
     }
 
-private val Rule.aliases: Set<String> get() = config.valueOrDefault(Config.ALIASES_KEY, emptyList<String>()).toSet()
+    return allAnnotationEntries()
+        .filter { it.typeReference?.text == "Suppress" }
+        .flatMap { it.valueArguments }
+        .mapNotNull { it.getArgumentExpression()?.text }
+        .map { it.replace("\"", "") }
+        .any { it == id.value }
+}
 
 private fun RuntimeException.isNoMatchingOutputFiles() =
     message?.contains("Compilation produced no matching output files") == true
