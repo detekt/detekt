@@ -346,6 +346,11 @@ private fun setupProject(projectLayoutAction: ProjectLayout.() -> Unit): DslGrad
                 }
             }
         """.trimIndent(),
+        gradleProperties = mapOf(
+            "android.builtInKotlin" to "false",
+            "android.newDsl" to "false",
+            "android.onlyEnableUnitTestForTheTestedBuildType" to "false",
+        ),
         dryRun = true
     ).also {
         it.setupProject()

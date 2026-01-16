@@ -783,5 +783,10 @@ private fun createGradleRunnerAndSetupProject(projectLayout: ProjectLayout, dryR
                 }
             }
         """.trimIndent(),
+        gradleProperties = mapOf(
+            "android.builtInKotlin" to "false",
+            "android.newDsl" to "false",
+            "android.onlyEnableUnitTestForTheTestedBuildType" to "false",
+        ),
         dryRun = dryRun,
     ).also { it.setupProject() }
