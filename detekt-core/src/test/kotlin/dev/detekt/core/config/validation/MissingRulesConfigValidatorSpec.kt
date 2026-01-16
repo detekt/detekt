@@ -1,8 +1,8 @@
 package dev.detekt.core.config.validation
 
 import dev.detekt.core.config.YamlConfig
-import dev.detekt.test.yamlConfig
-import dev.detekt.test.yamlConfigFromContent
+import dev.detekt.core.yamlConfig
+import dev.detekt.core.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
