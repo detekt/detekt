@@ -3,7 +3,6 @@ package dev.detekt.core
 import dev.detekt.api.Config
 import dev.detekt.api.Rule
 import dev.detekt.test.utils.compileForTest
-import dev.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtClass
 import org.junit.jupiter.params.ParameterizedTest
