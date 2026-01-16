@@ -276,6 +276,18 @@ class SuppressionsSpec {
         )
         assertThat(file.isSuppressedBy()).isTrue()
     }
+
+    @Test
+    fun neverSuppressForbiddenSuppress() {
+        val file = compileContentForTest("""@file:Suppress("ForbiddenSuppress")""")
+        assertThat(file.isSuppressedBy("ForbiddenSuppress", emptySet())).isFalse()
+    }
+
+    @Test
+    fun neverSuppressForbiddenSuppress2() {
+        val file = compileContentForTest("""@file:Suppress("ForbiddenSuppress/foo")""")
+        assertThat(file.isSuppressedBy("ForbiddenSuppress", emptySet())).isFalse()
+    }
 }
 
 private fun KtFile.getClass(): KtElement = findChildByClass(KtClass::class.java)!!
