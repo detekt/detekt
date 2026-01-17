@@ -18,7 +18,7 @@ dependencies {
         attributes {
             // https://github.com/ben-manes/caffeine/issues/716
             // Remove on upgrade to Caffeine 3.x or if https://youtrack.jetbrains.com/issue/KT-73751 is fixed
-            attribute(Bundling.BUNDLING_ATTRIBUTE, objects.named(Bundling.EXTERNAL))
+            attribute(Bundling.BUNDLING_ATTRIBUTE, named(Bundling.EXTERNAL))
         }
     }
     implementation(libs.kotlinx.serializationCore)
