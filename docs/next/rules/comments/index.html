@@ -10,7 +10,7 @@
 
 
 <link rel="search" type="application/opensearchdescription+xml" title="detekt" href="/opensearch.xml"><link rel="stylesheet" href="/assets/css/styles.274b461d.css">
-<script src="/assets/js/runtime~main.8d19a8a9.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.770347b6.js" defer="defer"></script>
 <script src="/assets/js/main.ecc9f328.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -23,20 +23,19 @@ of the code.</p>
 <h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="absentorwrongfilelicense">AbsentOrWrongFileLicense<a href="#absentorwrongfilelicense" class="hash-link" aria-label="Direct link to AbsentOrWrongFileLicense" title="Direct link to AbsentOrWrongFileLicense" translate="no">​</a></h3>
 <p>This rule will report every Kotlin source file which doesn&#x27;t have the required license header.
 The rule validates each Kotlin source and operates in two modes: if <code>licenseTemplateIsRegex = false</code> (or missing)
-the rule checks whether the input file header starts with the read text from the passed file in the
-<code>licenseTemplateFile</code> configuration option. If <code>licenseTemplateIsRegex = true</code> the rule matches the header with
-a regular expression produced from the passed template license file (defined via <code>licenseTemplateFile</code> configuration
-option).</p>
+the rule checks whether the input file header starts with text from <code>licenseTemplate</code> configuration option.
+If <code>licenseTemplateIsRegex = true</code> the rule matches the header with a regular expression produced from the passed
+template license.</p>
 <p><strong>Active by default</strong>: No</p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options">Configuration options:<a href="#configuration-options" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
 <ul>
 <li class="">
-<p><code>licenseTemplateFile</code> (default: <code>&#x27;license.template&#x27;</code>)</p>
-<p>path to file with license header template resolved relatively to config file</p>
+<p><code>licenseTemplateIsRegex</code> (default: <code>false</code>)</p>
+<p>Whether or not the license header template is a regex template</p>
 </li>
 <li class="">
-<p><code>licenseTemplateIsRegex</code> (default: <code>false</code>)</p>
-<p>whether or not the license header template is a regex template</p>
+<p><code>licenseTemplate</code> (default: <code>&#x27;&#x27;</code>)</p>
+<p>License header template</p>
 </li>
 </ul>
 <h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="deprecatedblocktag">DeprecatedBlockTag<a href="#deprecatedblocktag" class="hash-link" aria-label="Direct link to DeprecatedBlockTag" title="Direct link to DeprecatedBlockTag" translate="no">​</a></h3>
