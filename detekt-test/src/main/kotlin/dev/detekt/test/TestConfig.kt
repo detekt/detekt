@@ -21,27 +21,9 @@ class TestConfig private constructor(override val parent: Config?, private val v
     override fun subConfigKeys(): Set<String> = values.keys
 
     override fun <T : Any> valueOrDefault(key: String, default: T) =
-        if (key == Config.ACTIVE_KEY) {
-            getActiveValue(default) as T
-        } else {
-            valueOrDefaultInternal(key, values[key], default, ::tryParseBasedOnDefaultRespectingCollections) as T
-        }
+        valueOrDefaultInternal(key, values[key], default, ::tryParseBasedOnDefaultRespectingCollections) as T
 
-    private fun <T : Any> getActiveValue(default: T): Any {
-        val active = values[Config.ACTIVE_KEY]
-        return if (active != null) {
-            valueOrDefaultInternal("active", active, default, ::tryParseBasedOnDefaultRespectingCollections)
-        } else {
-            true
-        }
-    }
-
-    override fun <T : Any> valueOrNull(key: String): T? =
-        if (key == Config.ACTIVE_KEY) {
-            (values[Config.ACTIVE_KEY] ?: true) as T?
-        } else {
-            values[key] as? T
-        }
+    override fun <T : Any> valueOrNull(key: String): T? = values[key] as? T
 
     private fun tryParseBasedOnDefaultRespectingCollections(result: String, defaultResult: Any): Any =
         when (defaultResult) {
