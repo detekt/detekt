@@ -56,18 +56,6 @@ class ConfigPropertySpec {
             }
 
             @Nested
-            inner class `defined as string` {
-                private val subject = object : TestRule("present" to "$configValue") {
-                    val present: Int by config(defaultValue)
-                }
-
-                @Test
-                fun `uses the value provided in config if present`() {
-                    assertThat(subject.present).isEqualTo(configValue)
-                }
-            }
-
-            @Nested
             inner class `ValuesWithReason property` {
                 private val defaultValue = valuesWithReason("aValue" to "aReason")
 
@@ -213,18 +201,6 @@ class ConfigPropertySpec {
                 @Test
                 fun `uses the default value if not present`() {
                     assertThat(subject.notPresent).isEqualTo(defaultValue)
-                }
-            }
-
-            @Nested
-            inner class `defined as string` {
-                private val subject = object : TestRule("present" to "$configValue") {
-                    val present: Boolean by config(defaultValue)
-                }
-
-                @Test
-                fun `uses the value provided in config if present`() {
-                    assertThat(subject.present).isEqualTo(configValue)
                 }
             }
         }
@@ -484,7 +460,7 @@ class ConfigPropertySpec {
             private val defaultValue = 0
             private val fallbackValue = -1
             private val subject =
-                object : TestRule("present" to "$configValue", "fallback" to fallbackValue) {
+                object : TestRule("present" to configValue, "fallback" to fallbackValue) {
                     private val fallback: Int by config(42)
                     private val missing: Int by config(42)
                     val present: Int by configWithFallback(::fallback, defaultValue)
