@@ -62,7 +62,7 @@ class ForbiddenVoidSpec(val env: KotlinEnvironmentContainer) {
     @Nested
     inner class `ignoreOverridden is enabled` {
 
-        val config = TestConfig(IGNORE_OVERRIDDEN to "true")
+        val config = TestConfig(IGNORE_OVERRIDDEN to true)
 
         @Test
         fun `should not report Void in overriding function declarations`() {
@@ -138,7 +138,7 @@ class ForbiddenVoidSpec(val env: KotlinEnvironmentContainer) {
     @Nested
     inner class `ignoreUsageInGenerics is enabled` {
 
-        val config = TestConfig(IGNORE_USAGE_IN_GENERICS to "true")
+        val config = TestConfig(IGNORE_USAGE_IN_GENERICS to true)
 
         @Test
         fun `should not report Void in generic type declaration`() {

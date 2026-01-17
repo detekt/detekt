@@ -134,7 +134,7 @@ class ExpressionBodySyntaxSpec {
 
         @Test
         fun `reports with includeLineWrapping = true configuration`() {
-            val config = TestConfig(INCLUDE_LINE_WRAPPING to "true")
+            val config = TestConfig(INCLUDE_LINE_WRAPPING to true)
             assertThat(ExpressionBodySyntax(config).lint(code)).hasSize(1)
         }
     }
@@ -158,7 +158,7 @@ class ExpressionBodySyntaxSpec {
 
         @Test
         fun `reports with includeLineWrapping = true configuration`() {
-            val config = TestConfig(INCLUDE_LINE_WRAPPING to "true")
+            val config = TestConfig(INCLUDE_LINE_WRAPPING to true)
             assertThat(ExpressionBodySyntax(config).lint(code)).hasSize(1)
         }
     }
@@ -184,7 +184,7 @@ class ExpressionBodySyntaxSpec {
 
         @Test
         fun `does not report with includeLineWrapping = true configuration`() {
-            val config = TestConfig(INCLUDE_LINE_WRAPPING to "true")
+            val config = TestConfig(INCLUDE_LINE_WRAPPING to true)
             assertThat(ExpressionBodySyntax(config).lint(code)).isEmpty()
         }
     }
@@ -206,7 +206,7 @@ class ExpressionBodySyntaxSpec {
 
         @Test
         fun `reports with includeLineWrapping = true configuration`() {
-            val config = TestConfig(INCLUDE_LINE_WRAPPING to "true")
+            val config = TestConfig(INCLUDE_LINE_WRAPPING to true)
             assertThat(ExpressionBodySyntax(config).lint(code)).hasSize(1)
         }
     }

@@ -188,7 +188,7 @@ class OutdatedDocumentationSpec {
             """.trimIndent()
             assertThat(
                 OutdatedDocumentation(
-                    TestConfig("allowParamOnConstructorProperties" to "true")
+                    TestConfig("allowParamOnConstructorProperties" to true)
                 ).lint(incorrectDeclarationsOrder)
             ).isEmpty()
         }
@@ -496,7 +496,7 @@ class OutdatedDocumentationSpec {
     @Nested
     inner class `configuration matchTypeParameters` {
         private val configuredSubject =
-            OutdatedDocumentation(TestConfig("matchTypeParameters" to "false"))
+            OutdatedDocumentation(TestConfig("matchTypeParameters" to false))
 
         @Test
         fun `should not report when class type parameters mismatch and configuration is off`() {
@@ -524,7 +524,7 @@ class OutdatedDocumentationSpec {
     @Nested
     inner class `configuration matchDeclarationsOrder` {
         private val configuredSubject =
-            OutdatedDocumentation(TestConfig("matchDeclarationsOrder" to "false"))
+            OutdatedDocumentation(TestConfig("matchDeclarationsOrder" to false))
 
         @Test
         fun `should not report when declarations order mismatch and configuration is off`() {
@@ -556,7 +556,7 @@ class OutdatedDocumentationSpec {
     @Nested
     inner class `configuration allowParamOnConstructorProperties` {
         private val configuredSubject = OutdatedDocumentation(
-            TestConfig("allowParamOnConstructorProperties" to "true")
+            TestConfig("allowParamOnConstructorProperties" to true)
         )
 
         @Test
@@ -600,8 +600,8 @@ class OutdatedDocumentationSpec {
     inner class `configuration matchDeclarationsOrder and allowParamOnConstructorProperties` {
         private val configuredSubject = OutdatedDocumentation(
             TestConfig(
-                "matchDeclarationsOrder" to "false",
-                "allowParamOnConstructorProperties" to "true",
+                "matchDeclarationsOrder" to false,
+                "allowParamOnConstructorProperties" to true,
             )
         )
 

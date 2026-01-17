@@ -66,7 +66,7 @@ class LoopWithTooManyJumpStatementsSpec {
                 }
             }
         """.trimIndent()
-        val findings = LoopWithTooManyJumpStatements(TestConfig(MAX_JUMP_COUNT to "2")).lint(code)
+        val findings = LoopWithTooManyJumpStatements(TestConfig(MAX_JUMP_COUNT to 2)).lint(code)
         assertThat(findings).isEmpty()
     }
 
@@ -79,7 +79,7 @@ class LoopWithTooManyJumpStatementsSpec {
                 }
             }
         """.trimIndent()
-        val findings = LoopWithTooManyJumpStatements(TestConfig(MAX_JUMP_COUNT to "2")).lint(code)
+        val findings = LoopWithTooManyJumpStatements(TestConfig(MAX_JUMP_COUNT to 2)).lint(code)
         assertThat(findings).isEmpty()
     }
 
@@ -92,7 +92,7 @@ class LoopWithTooManyJumpStatementsSpec {
                 } while (i < 1)
             }
         """.trimIndent()
-        val findings = LoopWithTooManyJumpStatements(TestConfig(MAX_JUMP_COUNT to "2")).lint(code)
+        val findings = LoopWithTooManyJumpStatements(TestConfig(MAX_JUMP_COUNT to 2)).lint(code)
         assertThat(findings).isEmpty()
     }
 

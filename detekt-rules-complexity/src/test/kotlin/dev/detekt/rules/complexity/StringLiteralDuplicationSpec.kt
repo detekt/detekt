@@ -59,7 +59,7 @@ class StringLiteralDuplicationSpec {
 
         @Test
         fun `reports strings in annotations according to config`() {
-            val config = TestConfig(IGNORE_ANNOTATION to "false", "allowedDuplications" to 2)
+            val config = TestConfig(IGNORE_ANNOTATION to false, "allowedDuplications" to 2)
             assertFindingWithConfig(code, config, 1)
         }
     }

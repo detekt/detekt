@@ -26,7 +26,7 @@ class UnderscoresInNumericLiteralsSpec {
         @Test
         fun `should be reported if acceptableLength is 3`() {
             val findings = UnderscoresInNumericLiterals(
-                TestConfig(ACCEPTABLE_LENGTH to "3")
+                TestConfig(ACCEPTABLE_LENGTH to 3)
             ).lint(code)
             assertThat(findings).isNotEmpty
         }
@@ -56,7 +56,7 @@ class UnderscoresInNumericLiteralsSpec {
         @Test
         fun `should not be reported if acceptableLength is 7`() {
             val findings = UnderscoresInNumericLiterals(
-                TestConfig(ACCEPTABLE_LENGTH to "7")
+                TestConfig(ACCEPTABLE_LENGTH to 7)
             ).lint(code)
             assertThat(findings).isEmpty()
         }
@@ -75,7 +75,7 @@ class UnderscoresInNumericLiteralsSpec {
         @Test
         fun `should be reported if acceptableLength is 3`() {
             val findings = UnderscoresInNumericLiterals(
-                TestConfig(ACCEPTABLE_LENGTH to "3")
+                TestConfig(ACCEPTABLE_LENGTH to 3)
             ).lint(code)
             assertThat(findings).isNotEmpty
         }
@@ -94,7 +94,7 @@ class UnderscoresInNumericLiteralsSpec {
         @Test
         fun `should be reported if acceptableLength is 3`() {
             val findings = UnderscoresInNumericLiterals(
-                TestConfig(ACCEPTABLE_LENGTH to "3")
+                TestConfig(ACCEPTABLE_LENGTH to 3)
             ).lint(code)
             assertThat(findings).isNotEmpty
         }
@@ -124,7 +124,7 @@ class UnderscoresInNumericLiteralsSpec {
         @Test
         fun `should not be reported if ignored acceptableLength is 7`() {
             val findings = UnderscoresInNumericLiterals(
-                TestConfig(ACCEPTABLE_LENGTH to "7")
+                TestConfig(ACCEPTABLE_LENGTH to 7)
             ).lint(code)
             assertThat(findings).isEmpty()
         }
@@ -155,7 +155,7 @@ class UnderscoresInNumericLiteralsSpec {
         @Test
         fun `should be reported if acceptableLength is 3`() {
             val findings = UnderscoresInNumericLiterals(
-                TestConfig(ACCEPTABLE_LENGTH to "3")
+                TestConfig(ACCEPTABLE_LENGTH to 3)
             ).lint(code)
             assertThat(findings).isNotEmpty
         }
@@ -198,7 +198,7 @@ class UnderscoresInNumericLiteralsSpec {
         @Test
         fun `should still be reported even if acceptableLength is 99`() {
             val findings = UnderscoresInNumericLiterals(
-                TestConfig(ACCEPTABLE_LENGTH to "99")
+                TestConfig(ACCEPTABLE_LENGTH to 99)
             ).lint(code)
             assertThat(findings).isNotEmpty
         }
@@ -369,7 +369,7 @@ class UnderscoresInNumericLiteralsSpec {
         @Test
         fun `should not be reported if acceptableLength is 5`() {
             val findings = UnderscoresInNumericLiterals(
-                TestConfig(ACCEPTABLE_LENGTH to "5")
+                TestConfig(ACCEPTABLE_LENGTH to 5)
             ).lint(code)
             assertThat(findings).isEmpty()
         }
@@ -407,7 +407,7 @@ class UnderscoresInNumericLiteralsSpec {
         @Test
         fun `should be reported if acceptableLength is 3`() {
             val findings = UnderscoresInNumericLiterals(
-                TestConfig(ACCEPTABLE_LENGTH to "3")
+                TestConfig(ACCEPTABLE_LENGTH to 3)
             ).lint(code)
             assertThat(findings).isNotEmpty
         }
@@ -427,7 +427,7 @@ class UnderscoresInNumericLiteralsSpec {
         @Test
         fun `should not be reported if acceptableLength is 7`() {
             val findings = UnderscoresInNumericLiterals(
-                TestConfig(ACCEPTABLE_LENGTH to "7")
+                TestConfig(ACCEPTABLE_LENGTH to 7)
             ).lint(code)
             assertThat(findings).isEmpty()
         }

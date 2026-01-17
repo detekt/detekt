@@ -41,7 +41,7 @@ class IndentationSpec {
 
         @Test
         fun `does not report when using an indentation level config of 1`() {
-            val config = TestConfig("indentSize" to "1")
+            val config = TestConfig("indentSize" to 1)
             assertThat(Indentation(config).lint(code)).isEmpty()
         }
     }
@@ -68,7 +68,7 @@ class IndentationSpec {
 
         @Test
         fun `does not report when using an indentation level config of 1`() {
-            val config = TestConfig("indentSize" to "1")
+            val config = TestConfig("indentSize" to 1)
             assertThat(Indentation(config).lint(code)).isEmpty()
         }
     }

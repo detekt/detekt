@@ -54,7 +54,7 @@ class ReturnCountSpec {
 
         @Test
         fun `should not get flagged for if condition guard clauses`() {
-            val findings = ReturnCount(TestConfig(EXCLUDE_GUARD_CLAUSES to "true"))
+            val findings = ReturnCount(TestConfig(EXCLUDE_GUARD_CLAUSES to true))
                 .lint(code)
             assertThat(findings).isEmpty()
         }
@@ -78,14 +78,14 @@ class ReturnCountSpec {
 
         @Test
         fun `should not get flagged for if condition guard clauses`() {
-            val findings = ReturnCount(TestConfig(EXCLUDE_GUARD_CLAUSES to "true"))
+            val findings = ReturnCount(TestConfig(EXCLUDE_GUARD_CLAUSES to true))
                 .lint(code)
             assertThat(findings).isEmpty()
         }
 
         @Test
         fun `should get flagged without guard clauses`() {
-            val findings = ReturnCount(TestConfig(EXCLUDE_GUARD_CLAUSES to "false"))
+            val findings = ReturnCount(TestConfig(EXCLUDE_GUARD_CLAUSES to false))
                 .lint(code)
             assertThat(findings).hasSize(1)
         }
@@ -113,7 +113,7 @@ class ReturnCountSpec {
 
         @Test
         fun `should report a too-complicated if statement for being a guard clause, with EXCLUDE_GUARD_CLAUSES on`() {
-            val findings = ReturnCount(TestConfig(EXCLUDE_GUARD_CLAUSES to "true"))
+            val findings = ReturnCount(TestConfig(EXCLUDE_GUARD_CLAUSES to true))
                 .lint(code)
             assertThat(findings).hasSize(1)
         }
@@ -134,7 +134,7 @@ class ReturnCountSpec {
 
         @Test
         fun `should not get flagged for ELVIS operator guard clauses`() {
-            val findings = ReturnCount(TestConfig(EXCLUDE_GUARD_CLAUSES to "true"))
+            val findings = ReturnCount(TestConfig(EXCLUDE_GUARD_CLAUSES to true))
                 .lint(code)
             assertThat(findings).isEmpty()
         }
@@ -155,7 +155,7 @@ class ReturnCountSpec {
 
         @Test
         fun `should get flagged for an if condition guard clause which is not the first statement`() {
-            val findings = ReturnCount(TestConfig(EXCLUDE_GUARD_CLAUSES to "true"))
+            val findings = ReturnCount(TestConfig(EXCLUDE_GUARD_CLAUSES to true))
                 .lint(code)
             assertThat(findings).hasSize(1)
         }
@@ -176,7 +176,7 @@ class ReturnCountSpec {
 
         @Test
         fun `should get flagged for an ELVIS guard clause which is not the first statement`() {
-            val findings = ReturnCount(TestConfig(EXCLUDE_GUARD_CLAUSES to "true"))
+            val findings = ReturnCount(TestConfig(EXCLUDE_GUARD_CLAUSES to true))
                 .lint(code)
             assertThat(findings).hasSize(1)
         }
@@ -204,7 +204,7 @@ class ReturnCountSpec {
         fun `should not count all four guard clauses`() {
             val findings = ReturnCount(
                 TestConfig(
-                    EXCLUDE_GUARD_CLAUSES to "true"
+                    EXCLUDE_GUARD_CLAUSES to true
                 )
             ).lint(code)
             assertThat(findings).isEmpty()
@@ -214,7 +214,7 @@ class ReturnCountSpec {
         fun `should count all four guard clauses`() {
             val findings = ReturnCount(
                 TestConfig(
-                    EXCLUDE_GUARD_CLAUSES to "false"
+                    EXCLUDE_GUARD_CLAUSES to false
                 )
             ).lint(code)
             assertThat(findings).hasSize(1)
@@ -244,7 +244,7 @@ class ReturnCountSpec {
                 """.trimIndent()
                 val findings = ReturnCount(
                     TestConfig(
-                        EXCLUDE_GUARD_CLAUSES to "true",
+                        EXCLUDE_GUARD_CLAUSES to true,
                         MAX to 0,
                     )
                 ).lint(code)
@@ -272,7 +272,7 @@ class ReturnCountSpec {
                 """.trimIndent()
                 val findings = ReturnCount(
                     TestConfig(
-                        EXCLUDE_GUARD_CLAUSES to "true",
+                        EXCLUDE_GUARD_CLAUSES to true,
                         MAX to 0,
                     )
                 ).lint(code)
@@ -301,7 +301,7 @@ class ReturnCountSpec {
                 """.trimIndent()
                 val findings = ReturnCount(
                     TestConfig(
-                        EXCLUDE_GUARD_CLAUSES to "true",
+                        EXCLUDE_GUARD_CLAUSES to true,
                         MAX to 0,
                     )
                 ).lint(code)
@@ -330,7 +330,7 @@ class ReturnCountSpec {
                 """.trimIndent()
                 val findings = ReturnCount(
                     TestConfig(
-                        EXCLUDE_GUARD_CLAUSES to "false",
+                        EXCLUDE_GUARD_CLAUSES to false,
                         MAX to 3,
                     )
                 ).lint(code)
@@ -360,13 +360,13 @@ class ReturnCountSpec {
 
         @Test
         fun `should not get flagged when max value is 3`() {
-            val findings = ReturnCount(TestConfig(MAX to "3")).lint(code)
+            val findings = ReturnCount(TestConfig(MAX to 3)).lint(code)
             assertThat(findings).isEmpty()
         }
 
         @Test
         fun `should get flagged when max value is 1`() {
-            val findings = ReturnCount(TestConfig(MAX to "1")).lint(code)
+            val findings = ReturnCount(TestConfig(MAX to 1)).lint(code)
             assertThat(findings).hasSize(1)
         }
     }
@@ -391,13 +391,13 @@ class ReturnCountSpec {
 
         @Test
         fun `should not get flagged when max value is 2`() {
-            val findings = ReturnCount(TestConfig(MAX to "2")).lint(code)
+            val findings = ReturnCount(TestConfig(MAX to 2)).lint(code)
             assertThat(findings).isEmpty()
         }
 
         @Test
         fun `should get flagged when max value is 1`() {
-            val findings = ReturnCount(TestConfig(MAX to "1")).lint(code)
+            val findings = ReturnCount(TestConfig(MAX to 1)).lint(code)
             assertThat(findings).hasSize(1)
         }
     }
@@ -419,7 +419,7 @@ class ReturnCountSpec {
         fun `should not get flagged`() {
             val findings = ReturnCount(
                 TestConfig(
-                    MAX to "2",
+                    MAX to 2,
                     EXCLUDED_FUNCTIONS to listOf("test"),
                 )
             ).lint(code)
@@ -462,7 +462,7 @@ class ReturnCountSpec {
         fun `should flag none of the ignored functions`() {
             val findings = ReturnCount(
                 TestConfig(
-                    MAX to "2",
+                    MAX to 2,
                     EXCLUDED_FUNCTIONS to listOf("factorial", "fac"),
                 )
             ).lint(code)
@@ -473,7 +473,7 @@ class ReturnCountSpec {
         fun `should flag none of the ignored functions using globbing`() {
             val findings = ReturnCount(
                 TestConfig(
-                    MAX to "2",
+                    MAX to 2,
                     EXCLUDED_FUNCTIONS to listOf("fa*ctorial"),
                 )
             ).lint(code)
@@ -504,7 +504,7 @@ class ReturnCountSpec {
 
         @Test
         fun `should not get flag when returns is in inner object`() {
-            val findings = ReturnCount(TestConfig(MAX to "2")).lint(code)
+            val findings = ReturnCount(TestConfig(MAX to 2)).lint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -541,7 +541,7 @@ class ReturnCountSpec {
 
         @Test
         fun `should not get flag when returns is in inner object`() {
-            val findings = ReturnCount(TestConfig(MAX to "2")).lint(code)
+            val findings = ReturnCount(TestConfig(MAX to 2)).lint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -580,7 +580,7 @@ class ReturnCountSpec {
 
         @Test
         fun `should get flagged when returns is in inner object`() {
-            val findings = ReturnCount(TestConfig(MAX to "2")).lint(code)
+            val findings = ReturnCount(TestConfig(MAX to 2)).lint(code)
             assertThat(findings).hasSize(1)
         }
     }
@@ -605,14 +605,14 @@ class ReturnCountSpec {
 
         @Test
         fun `should count labeled returns from lambda when activated`() {
-            val findings = ReturnCount(TestConfig(EXCLUDE_RETURN_FROM_LAMBDA to "false"))
+            val findings = ReturnCount(TestConfig(EXCLUDE_RETURN_FROM_LAMBDA to false))
                 .lint(code, compile = false)
             assertThat(findings).hasSize(1)
         }
 
         @Test
         fun `should be empty when labeled returns are de-activated`() {
-            val findings = ReturnCount(TestConfig(EXCLUDE_LABELED to "true", EXCLUDE_RETURN_FROM_LAMBDA to "false",))
+            val findings = ReturnCount(TestConfig(EXCLUDE_LABELED to true, EXCLUDE_RETURN_FROM_LAMBDA to false))
                 .lint(code, compile = false)
             assertThat(findings).isEmpty()
         }
@@ -632,7 +632,7 @@ class ReturnCountSpec {
 
         @Test
         fun `should count labeled return of lambda with explicit label`() {
-            val findings = ReturnCount(TestConfig(EXCLUDE_RETURN_FROM_LAMBDA to "false")).lint(code)
+            val findings = ReturnCount(TestConfig(EXCLUDE_RETURN_FROM_LAMBDA to false)).lint(code)
             assertThat(findings).hasSize(1)
         }
 
@@ -646,8 +646,8 @@ class ReturnCountSpec {
         fun `excludeReturnFromLambda should take precedence over excludeLabeled`() {
             val findings = ReturnCount(
                 TestConfig(
-                    EXCLUDE_RETURN_FROM_LAMBDA to "true",
-                    EXCLUDE_LABELED to "false",
+                    EXCLUDE_RETURN_FROM_LAMBDA to true,
+                    EXCLUDE_LABELED to false,
                 )
             ).lint(code)
             assertThat(findings).isEmpty()
@@ -677,7 +677,7 @@ class ReturnCountSpec {
             """.trimIndent()
             val findings = ReturnCount(
                 TestConfig(
-                    EXCLUDE_GUARD_CLAUSES to "true",
+                    EXCLUDE_GUARD_CLAUSES to true,
                     MAX to 1,
                 )
             ).lint(code)
@@ -717,7 +717,7 @@ class ReturnCountSpec {
             """.trimIndent()
             val findings = ReturnCount(
                 TestConfig(
-                    EXCLUDE_GUARD_CLAUSES to "true",
+                    EXCLUDE_GUARD_CLAUSES to true,
                     MAX to 1,
                 )
             ).lint(code)
@@ -745,7 +745,7 @@ class ReturnCountSpec {
             """.trimIndent()
             val findings = ReturnCount(
                 TestConfig(
-                    EXCLUDE_GUARD_CLAUSES to "true",
+                    EXCLUDE_GUARD_CLAUSES to true,
                     MAX to 1,
                 )
             ).lint(code)

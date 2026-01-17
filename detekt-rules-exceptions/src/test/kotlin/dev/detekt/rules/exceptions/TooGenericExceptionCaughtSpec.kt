@@ -64,7 +64,7 @@ class TooGenericExceptionCaughtSpec {
 
         @Test
         fun `should not report an ignored catch blocks because of its exception type`() {
-            val config = TestConfig(CAUGHT_EXCEPTIONS_PROPERTY to "[MyException]")
+            val config = TestConfig(CAUGHT_EXCEPTIONS_PROPERTY to listOf("MyException"))
             val rule = TooGenericExceptionCaught(config)
 
             val findings = rule.lint(code)
@@ -107,7 +107,7 @@ class TooGenericExceptionCaughtSpec {
 
     @Test
     fun `should not report any`() {
-        val rule = TooGenericExceptionCaught(TestConfig(CAUGHT_EXCEPTIONS_PROPERTY to "[]"))
+        val rule = TooGenericExceptionCaught(TestConfig(CAUGHT_EXCEPTIONS_PROPERTY to emptyList<String>()))
         val code = """
             fun main() {
                 try {

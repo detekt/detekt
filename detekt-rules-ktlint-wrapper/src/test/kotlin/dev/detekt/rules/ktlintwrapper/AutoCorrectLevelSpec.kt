@@ -30,11 +30,11 @@ class AutoCorrectLevelSpec {
     fun autoCorrect(ruleSet: AutoCorrectConfig, rule: AutoCorrectConfig, wasFormatted: Boolean) {
         val config = TestConfig(
             "ktlint" to mapOfNotNull(
-                "active" to "true",
-                ("autoCorrect" to ruleSet.toString()).takeIf { ruleSet != AutoCorrectConfig.Undefined },
+                "active" to true,
+                ("autoCorrect" to ruleSet.toConfig()).takeIf { ruleSet != AutoCorrectConfig.Undefined },
                 "ChainWrapping" to mapOfNotNull(
-                    "active" to "true",
-                    ("autoCorrect" to rule.toString()).takeIf { rule != AutoCorrectConfig.Undefined }
+                    "active" to true,
+                    ("autoCorrect" to rule.toConfig()).takeIf { rule != AutoCorrectConfig.Undefined }
                 )
             )
         )
@@ -60,11 +60,11 @@ enum class AutoCorrectConfig {
     Undefined,
     ;
 
-    override fun toString(): String =
+    fun toConfig(): Any? =
         when (this) {
-            True -> "true"
-            False -> "false"
-            Undefined -> "Undefined"
+            True -> true
+            False -> false
+            Undefined -> null
         }
 }
 

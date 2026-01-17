@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 
 class CognitiveComplexMethodSpec {
 
-    private val testConfig = TestConfig("allowedComplexity" to "1")
+    private val testConfig = TestConfig("allowedComplexity" to 1)
 
     @Test
     fun `should report complex function exceeding the allowed complexity`() {
