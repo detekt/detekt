@@ -1,6 +1,0 @@
-comments:
-  active: true
-  AbsentOrWrongFileLicense:
-    active: true
-    licenseTemplateFile: 'license-regex.template'
-    licenseTemplateIsRegex: true
