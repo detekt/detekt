@@ -3,11 +3,12 @@ package dev.detekt.rules.comments
 import dev.detekt.api.Config
 import dev.detekt.api.Finding
 import dev.detekt.api.testfixtures.TestSetupContext
+import dev.detekt.core.config.YamlConfig
 import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
 import dev.detekt.test.utils.compileContentForTest
 import dev.detekt.test.utils.resource
-import dev.detekt.test.yamlConfig
+import dev.detekt.utils.openSafeStream
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -194,3 +195,5 @@ private fun checkLicence(@Language("kotlin") content: String, isRegexLicense: Bo
 
     return AbsentOrWrongFileLicense(Config.empty).lint(file)
 }
+
+private fun yamlConfig(name: String): Config = resource(name).toURL().openSafeStream().reader().use(YamlConfig::load)
