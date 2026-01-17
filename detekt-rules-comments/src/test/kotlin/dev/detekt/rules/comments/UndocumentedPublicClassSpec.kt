@@ -105,21 +105,21 @@ class UndocumentedPublicClassSpec {
     @Test
     fun `should not report inner classes when turned off`() {
         val findings =
-            UndocumentedPublicClass(TestConfig(SEARCH_IN_INNER_CLASS to "false")).lint(inner)
+            UndocumentedPublicClass(TestConfig(SEARCH_IN_INNER_CLASS to false)).lint(inner)
         assertThat(findings).isEmpty()
     }
 
     @Test
     fun `should not report inner objects when turned off`() {
         val findings =
-            UndocumentedPublicClass(TestConfig(SEARCH_IN_INNER_OBJECT to "false")).lint(innerObject)
+            UndocumentedPublicClass(TestConfig(SEARCH_IN_INNER_OBJECT to false)).lint(innerObject)
         assertThat(findings).isEmpty()
     }
 
     @Test
     fun `should not report inner interfaces when turned off`() {
         val findings =
-            UndocumentedPublicClass(TestConfig(SEARCH_IN_INNER_INTERFACE to "false")).lint(
+            UndocumentedPublicClass(TestConfig(SEARCH_IN_INNER_INTERFACE to false)).lint(
                 innerInterface
             )
         assertThat(findings).isEmpty()
@@ -128,7 +128,7 @@ class UndocumentedPublicClassSpec {
     @Test
     fun `should not report nested classes when turned off`() {
         val findings =
-            UndocumentedPublicClass(TestConfig(SEARCH_IN_NESTED_CLASS to "false")).lint(nested)
+            UndocumentedPublicClass(TestConfig(SEARCH_IN_NESTED_CLASS to false)).lint(nested)
         assertThat(findings).isEmpty()
     }
 
@@ -254,7 +254,7 @@ class UndocumentedPublicClassSpec {
                 protected class ProtectedClass
             }
         """.trimIndent()
-        val subject = UndocumentedPublicClass(TestConfig(SEARCH_IN_PROTECTED_CLASS to "true"))
+        val subject = UndocumentedPublicClass(TestConfig(SEARCH_IN_PROTECTED_CLASS to true))
         assertThat(subject.lint(code)).hasSize(1)
     }
 
@@ -300,7 +300,7 @@ class UndocumentedPublicClassSpec {
         """.trimIndent()
         assertThat(
             UndocumentedPublicClass(
-                TestConfig(IGNORE_DEFAULT_COMPANION_OBJECT to "true")
+                TestConfig(IGNORE_DEFAULT_COMPANION_OBJECT to true)
             ).lint(code)
         ).isEmpty()
     }
@@ -335,7 +335,7 @@ class UndocumentedPublicClassSpec {
         """.trimIndent()
         assertThat(
             UndocumentedPublicClass(
-                TestConfig(IGNORE_DEFAULT_COMPANION_OBJECT to "true")
+                TestConfig(IGNORE_DEFAULT_COMPANION_OBJECT to true)
             ).lint(code)
         ).hasSize(4)
     }
@@ -362,7 +362,7 @@ class UndocumentedPublicClassSpec {
         """.trimIndent()
         assertThat(
             UndocumentedPublicClass(
-                TestConfig(IGNORE_DEFAULT_COMPANION_OBJECT to "true")
+                TestConfig(IGNORE_DEFAULT_COMPANION_OBJECT to true)
             ).lint(code)
         ).hasSize(3)
     }

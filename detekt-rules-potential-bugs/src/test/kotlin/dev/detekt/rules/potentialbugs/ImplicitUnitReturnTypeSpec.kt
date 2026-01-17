@@ -38,7 +38,7 @@ class ImplicitUnitReturnTypeSpec(private val env: KotlinEnvironmentContainer) {
     fun `reports explicit Unit return type if configured`() {
         val code = """fun safeButStillReported(): Unit = println("Hello Unit")"""
 
-        val findings = ImplicitUnitReturnType(TestConfig("allowExplicitReturnType" to "false"))
+        val findings = ImplicitUnitReturnType(TestConfig("allowExplicitReturnType" to false))
             .lintWithContext(env, code)
 
         assertThat(findings).hasSize(1)
