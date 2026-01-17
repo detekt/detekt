@@ -73,12 +73,12 @@ class ImportOrderingSpec {
 
             @Test
             fun `passes for alphabetical order`() {
-                assertThat(ImportOrdering(TestConfig("android" to "true")).lint(negativeCase)).isEmpty()
+                assertThat(ImportOrdering(TestConfig("android" to true)).lint(negativeCase)).isEmpty()
             }
 
             @Test
             fun `fails for non alphabetical order`() {
-                assertThat(ImportOrdering(TestConfig("android" to "true")).lint(positiveCase)).hasSize(1)
+                assertThat(ImportOrdering(TestConfig("android" to true)).lint(positiveCase)).hasSize(1)
             }
         }
     }

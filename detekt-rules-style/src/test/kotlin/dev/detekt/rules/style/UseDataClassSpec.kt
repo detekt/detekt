@@ -325,7 +325,7 @@ class UseDataClassSpec(val env: KotlinEnvironmentContainer) {
         @Test
         fun `does not report class with mutable constructor parameter`() {
             val code = """class DataClassCandidateWithVar(var i: Int)"""
-            val config = TestConfig(ALLOW_VARS to "true")
+            val config = TestConfig(ALLOW_VARS to true)
             assertThat(UseDataClass(config).lintWithContext(env, code)).isEmpty()
         }
 
@@ -336,7 +336,7 @@ class UseDataClassSpec(val env: KotlinEnvironmentContainer) {
                     var i2: Int = 0
                 }
             """.trimIndent()
-            val config = TestConfig(ALLOW_VARS to "true")
+            val config = TestConfig(ALLOW_VARS to true)
             assertThat(UseDataClass(config).lintWithContext(env, code)).isEmpty()
         }
 
@@ -347,7 +347,7 @@ class UseDataClassSpec(val env: KotlinEnvironmentContainer) {
                     var i2: Int = 0
                 }
             """.trimIndent()
-            val config = TestConfig(ALLOW_VARS to "true")
+            val config = TestConfig(ALLOW_VARS to true)
             assertThat(UseDataClass(config).lintWithContext(env, code)).isEmpty()
         }
 
@@ -358,7 +358,7 @@ class UseDataClassSpec(val env: KotlinEnvironmentContainer) {
                     val i2: Int = 0
                 }
             """.trimIndent()
-            val config = TestConfig(ALLOW_VARS to "true")
+            val config = TestConfig(ALLOW_VARS to true)
             assertThat(UseDataClass(config).lintWithContext(env, code)).isEmpty()
         }
     }

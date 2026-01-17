@@ -8,7 +8,7 @@ import dev.detekt.test.lint
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-private val defaultAllowedComplexity = "allowedComplexity" to "1"
+private val defaultAllowedComplexity = "allowedComplexity" to 1
 
 class CyclomaticComplexMethodSpec {
 
@@ -81,13 +81,13 @@ class CyclomaticComplexMethodSpec {
 
         @Test
         fun `counts three with nesting function 'forEach'`() {
-            val config = TestConfig(defaultAllowedComplexity, "ignoreNestingFunctions" to "false")
+            val config = TestConfig(defaultAllowedComplexity, "ignoreNestingFunctions" to false)
             assertExpectedComplexityValue(code, config, expectedValue = 3)
         }
 
         @Test
         fun `can ignore nesting functions like 'forEach'`() {
-            val config = TestConfig(defaultAllowedComplexity, "ignoreNestingFunctions" to "true")
+            val config = TestConfig(defaultAllowedComplexity, "ignoreNestingFunctions" to true)
             assertExpectedComplexityValue(code, config, expectedValue = 2)
         }
 
@@ -161,8 +161,8 @@ class CyclomaticComplexMethodSpec {
         @Test
         fun `does not report complex methods with a single when expression`() {
             val config = TestConfig(
-                "allowedComplexity" to "4",
-                "ignoreSingleWhenExpression" to "true",
+                "allowedComplexity" to 4,
+                "ignoreSingleWhenExpression" to true,
             )
             val subject = CyclomaticComplexMethod(config)
 
@@ -172,7 +172,7 @@ class CyclomaticComplexMethodSpec {
 
         @Test
         fun `reports all complex methods`() {
-            val config = TestConfig("allowedComplexity" to "4")
+            val config = TestConfig("allowedComplexity" to 4)
             val subject = CyclomaticComplexMethod(config)
 
             val findings = subject.lint(code)
@@ -188,7 +188,7 @@ class CyclomaticComplexMethodSpec {
 
         @Test
         fun `does not report function that has exactly the allowed complexity`() {
-            val config = TestConfig("allowedComplexity" to "6")
+            val config = TestConfig("allowedComplexity" to 6)
             val subject = CyclomaticComplexMethod(config)
 
             val code = """
@@ -211,7 +211,7 @@ class CyclomaticComplexMethodSpec {
 
         @Test
         fun `does not trip for a reasonable amount of simple when entries when ignoreSimpleWhenEntries is true`() {
-            val config = TestConfig("ignoreSimpleWhenEntries" to "true")
+            val config = TestConfig("ignoreSimpleWhenEntries" to true)
             val subject = CyclomaticComplexMethod(config)
             val code = """
                 fun f() {
