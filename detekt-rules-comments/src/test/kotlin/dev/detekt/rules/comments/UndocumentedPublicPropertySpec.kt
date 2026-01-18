@@ -234,7 +234,7 @@ class UndocumentedPublicPropertySpec {
                 protected val a = 1
             }
         """.trimIndent()
-        val subject = UndocumentedPublicProperty(TestConfig(SEARCH_PROTECTED_PROPERTY to "true"))
+        val subject = UndocumentedPublicProperty(TestConfig(SEARCH_PROTECTED_PROPERTY to true))
         assertThat(subject.lint(code)).hasSize(1)
     }
 

@@ -87,7 +87,7 @@ class DestructuringDeclarationWithTooManyEntriesSpec {
 
         val configuredRule =
             DestructuringDeclarationWithTooManyEntries(
-                TestConfig(MAX_DESTRUCTURING_ENTRIES to "2")
+                TestConfig(MAX_DESTRUCTURING_ENTRIES to 2)
             )
 
         @Test

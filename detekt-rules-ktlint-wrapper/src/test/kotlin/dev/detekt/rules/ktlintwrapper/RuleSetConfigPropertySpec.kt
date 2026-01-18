@@ -14,7 +14,7 @@ class RuleSetConfigPropertySpec {
     inner class `boolean property` {
         @Test
         fun `reads the value in config if present`() {
-            assertThat(TestRuleSetProvider.android.value(TestConfig("android" to "false")))
+            assertThat(TestRuleSetProvider.android.value(TestConfig("android" to false)))
                 .isEqualTo(false)
         }
 
@@ -29,7 +29,7 @@ class RuleSetConfigPropertySpec {
     inner class `int property` {
         @Test
         fun `reads the value in config if present`() {
-            assertThat(TestRuleSetProvider.number.value(TestConfig("number" to "37"))).isEqualTo(37)
+            assertThat(TestRuleSetProvider.number.value(TestConfig("number" to 37))).isEqualTo(37)
         }
 
         @Test

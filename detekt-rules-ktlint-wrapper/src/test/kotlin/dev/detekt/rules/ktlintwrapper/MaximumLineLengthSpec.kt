@@ -15,7 +15,7 @@ class MaximumLineLengthSpec {
 
     @BeforeEach
     fun createSubject() {
-        subject = MaximumLineLength(TestConfig(MAX_LINE_LENGTH to "30"))
+        subject = MaximumLineLength(TestConfig(MAX_LINE_LENGTH to 30))
     }
 
     @Nested
@@ -75,8 +75,8 @@ class MaximumLineLengthSpec {
         """.trimIndent()
         val findings = MaximumLineLength(
             TestConfig(
-                MAX_LINE_LENGTH to "30",
-                "ignoreBackTickedIdentifier" to "true"
+                MAX_LINE_LENGTH to 30,
+                "ignoreBackTickedIdentifier" to true,
             )
         ).lint(code)
         assertThat(findings).isEmpty()
