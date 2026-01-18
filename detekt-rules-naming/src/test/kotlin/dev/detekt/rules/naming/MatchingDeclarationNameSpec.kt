@@ -247,7 +247,7 @@ class MatchingDeclarationNameSpec {
                 filename = "Classes.kt"
             )
             val findings = MatchingDeclarationName(
-                TestConfig("mustBeFirst" to "false")
+                TestConfig("mustBeFirst" to false)
             ).lint(ktFile)
             assertThat(findings).singleElement()
                 .hasStartSourceLocation(3, 7)

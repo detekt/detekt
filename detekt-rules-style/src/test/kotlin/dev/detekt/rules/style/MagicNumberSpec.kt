@@ -475,12 +475,12 @@ class MagicNumberSpec {
         @Test
         fun `should report all without ignore flags`() {
             val config = TestConfig(
-                IGNORE_PROPERTY_DECLARATION to "false",
-                IGNORE_ANNOTATION to "false",
-                IGNORE_NAMED_ARGUMENT to "false",
-                IGNORE_HASH_CODE to "false",
-                IGNORE_CONSTANT_DECLARATION to "false",
-                IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "false",
+                IGNORE_PROPERTY_DECLARATION to false,
+                IGNORE_ANNOTATION to false,
+                IGNORE_NAMED_ARGUMENT to false,
+                IGNORE_HASH_CODE to false,
+                IGNORE_CONSTANT_DECLARATION to false,
+                IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to false,
             )
 
             val findings = MagicNumber(config).lint(code, compile = false)
@@ -500,11 +500,11 @@ class MagicNumberSpec {
         @Test
         fun `should not report any issues with all ignore flags`() {
             val config = TestConfig(
-                IGNORE_PROPERTY_DECLARATION to "true",
-                IGNORE_ANNOTATION to "true",
-                IGNORE_HASH_CODE to "true",
-                IGNORE_CONSTANT_DECLARATION to "true",
-                IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "true",
+                IGNORE_PROPERTY_DECLARATION to true,
+                IGNORE_ANNOTATION to true,
+                IGNORE_HASH_CODE to true,
+                IGNORE_CONSTANT_DECLARATION to true,
+                IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to true,
             )
 
             val findings = MagicNumber(config).lint(code, compile = false)
@@ -533,9 +533,9 @@ class MagicNumberSpec {
         @Test
         fun `should not report any issues when ignoring properties but not constants nor companion objects`() {
             val config = TestConfig(
-                IGNORE_PROPERTY_DECLARATION to "true",
-                IGNORE_CONSTANT_DECLARATION to "false",
-                IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "false",
+                IGNORE_PROPERTY_DECLARATION to true,
+                IGNORE_CONSTANT_DECLARATION to false,
+                IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to false,
             )
 
             val findings = MagicNumber(config).lint(code)
@@ -545,9 +545,9 @@ class MagicNumberSpec {
         @Test
         fun `should not report any issues when ignoring properties and constants but not companion objects`() {
             val config = TestConfig(
-                IGNORE_PROPERTY_DECLARATION to "true",
-                IGNORE_CONSTANT_DECLARATION to "true",
-                IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "false",
+                IGNORE_PROPERTY_DECLARATION to true,
+                IGNORE_CONSTANT_DECLARATION to true,
+                IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to false,
             )
 
             val findings = MagicNumber(config).lint(code)
@@ -557,8 +557,8 @@ class MagicNumberSpec {
         @Test
         fun `should not report any issues when ignoring properties, constants and companion objects`() {
             val config = TestConfig(
-                IGNORE_PROPERTY_DECLARATION to "true",
-                IGNORE_CONSTANT_DECLARATION to "true",
+                IGNORE_PROPERTY_DECLARATION to true,
+                IGNORE_CONSTANT_DECLARATION to true,
                 IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "true"
             )
 
@@ -569,9 +569,9 @@ class MagicNumberSpec {
         @Test
         fun `should not report any issues when ignoring companion objects but not properties and constants`() {
             val config = TestConfig(
-                IGNORE_PROPERTY_DECLARATION to "false",
-                IGNORE_CONSTANT_DECLARATION to "false",
-                IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "true",
+                IGNORE_PROPERTY_DECLARATION to false,
+                IGNORE_CONSTANT_DECLARATION to false,
+                IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to true,
             )
 
             val findings = MagicNumber(config).lint(code)
@@ -581,9 +581,9 @@ class MagicNumberSpec {
         @Test
         fun `should report property when ignoring constants but not properties and companion objects`() {
             val config = TestConfig(
-                IGNORE_PROPERTY_DECLARATION to "false",
-                IGNORE_CONSTANT_DECLARATION to "true",
-                IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "false",
+                IGNORE_PROPERTY_DECLARATION to false,
+                IGNORE_CONSTANT_DECLARATION to true,
+                IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to false,
             )
 
             val findings = MagicNumber(config).lint(code)
@@ -594,9 +594,9 @@ class MagicNumberSpec {
         @Test
         fun `should report property and constant when not ignoring properties, constants nor companion objects`() {
             val config = TestConfig(
-                IGNORE_PROPERTY_DECLARATION to "false",
-                IGNORE_CONSTANT_DECLARATION to "false",
-                IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "false",
+                IGNORE_PROPERTY_DECLARATION to false,
+                IGNORE_CONSTANT_DECLARATION to false,
+                IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to false,
             )
 
             val findings = MagicNumber(config).lint(code)
@@ -634,25 +634,25 @@ class MagicNumberSpec {
 
             @Test
             fun `should not ignore int`() {
-                val rule = MagicNumber(TestConfig(IGNORE_NAMED_ARGUMENT to "false"))
+                val rule = MagicNumber(TestConfig(IGNORE_NAMED_ARGUMENT to false))
                 assertThat(rule.lint(code("53"))).hasSize(1)
             }
 
             @Test
             fun `should not ignore float`() {
-                val rule = MagicNumber(TestConfig(IGNORE_NAMED_ARGUMENT to "false"))
+                val rule = MagicNumber(TestConfig(IGNORE_NAMED_ARGUMENT to false))
                 assertThat(rule.lint(code("53f"), compile = false)).hasSize(1)
             }
 
             @Test
             fun `should not ignore binary`() {
-                val rule = MagicNumber(TestConfig(IGNORE_NAMED_ARGUMENT to "false"))
+                val rule = MagicNumber(TestConfig(IGNORE_NAMED_ARGUMENT to false))
                 assertThat(rule.lint(code("0b01001"))).hasSize(1)
             }
 
             @Test
             fun `should ignore integer with underscores`() {
-                val rule = MagicNumber(TestConfig(IGNORE_NAMED_ARGUMENT to "false"))
+                val rule = MagicNumber(TestConfig(IGNORE_NAMED_ARGUMENT to false))
                 assertThat(rule.lint(code("101_000"))).hasSize(1)
             }
 
@@ -749,7 +749,7 @@ class MagicNumberSpec {
 
             @Test
             fun `numbers when 'ignoreEnums' is set to true`() {
-                val rule = MagicNumber(TestConfig(IGNORE_ENUMS to "true"))
+                val rule = MagicNumber(TestConfig(IGNORE_ENUMS to true))
                 assertThat(rule.lint(code)).isEmpty()
             }
         }
@@ -765,7 +765,7 @@ class MagicNumberSpec {
 
             @Test
             fun `should be reported`() {
-                val rule = MagicNumber(TestConfig(IGNORE_NAMED_ARGUMENT to "false"))
+                val rule = MagicNumber(TestConfig(IGNORE_NAMED_ARGUMENT to false))
                 assertThat(rule.lint(code)).hasSize(1)
             }
 
@@ -773,8 +773,8 @@ class MagicNumberSpec {
             fun `numbers when 'ignoreEnums' is set to true`() {
                 val rule = MagicNumber(
                     TestConfig(
-                        IGNORE_NAMED_ARGUMENT to "false",
-                        IGNORE_ENUMS to "true",
+                        IGNORE_NAMED_ARGUMENT to false,
+                        IGNORE_ENUMS to true,
                     )
                 )
                 assertThat(rule.lint(code)).isEmpty()
@@ -783,7 +783,7 @@ class MagicNumberSpec {
 
         @Test
         fun `in constructor invocation with complex expression`() {
-            val rule = MagicNumber(TestConfig(IGNORE_NAMED_ARGUMENT to "true"))
+            val rule = MagicNumber(TestConfig(IGNORE_NAMED_ARGUMENT to true))
             val code = """
                 data class Image(val size: Float)
                 val a = Image(
@@ -909,27 +909,27 @@ class MagicNumberSpec {
         @ParameterizedTest
         @MethodSource("cases")
         fun `reports a finding if ranges are not ignored`(code: String) {
-            assertThat(MagicNumber(TestConfig(IGNORE_RANGES to "false")).lint(code))
+            assertThat(MagicNumber(TestConfig(IGNORE_RANGES to false)).lint(code))
                 .hasSize(1)
         }
 
         @ParameterizedTest
         @MethodSource("cases")
         fun `reports no finding if ranges are ignored`(code: String) {
-            assertThat(MagicNumber(TestConfig(IGNORE_RANGES to "true")).lint(code))
+            assertThat(MagicNumber(TestConfig(IGNORE_RANGES to true)).lint(code))
                 .isEmpty()
         }
 
         @Test
         fun `reports a finding for a parenthesized number if ranges are ignored`() {
             val code = "val foo : Int = (127)"
-            assertThat(MagicNumber(TestConfig(IGNORE_RANGES to "true")).lint(code)).hasSize(1)
+            assertThat(MagicNumber(TestConfig(IGNORE_RANGES to true)).lint(code)).hasSize(1)
         }
 
         @Test
         fun `reports a finding for an addition if ranges are ignored`() {
             val code = "val foo : Int = 1 + 27"
-            assertThat(MagicNumber(TestConfig(IGNORE_RANGES to "true")).lint(code)).hasSize(1)
+            assertThat(MagicNumber(TestConfig(IGNORE_RANGES to true)).lint(code)).hasSize(1)
         }
     }
 
@@ -940,13 +940,13 @@ class MagicNumberSpec {
 
         @Test
         fun `reports 3 due to the assignment to a local variable`() {
-            val rule = MagicNumber(TestConfig(IGNORE_LOCAL_VARIABLES to "false"))
+            val rule = MagicNumber(TestConfig(IGNORE_LOCAL_VARIABLES to false))
             assertThat(rule.lint(code)).hasSize(1)
         }
 
         @Test
         fun `should not report 3 due to the ignored local variable config`() {
-            val rule = MagicNumber(TestConfig(IGNORE_LOCAL_VARIABLES to "true"))
+            val rule = MagicNumber(TestConfig(IGNORE_LOCAL_VARIABLES to true))
             assertThat(rule.lint(code)).isEmpty()
         }
     }
@@ -956,8 +956,8 @@ class MagicNumberSpec {
 
         private val rule = MagicNumber(
             TestConfig(
-                IGNORE_LOCAL_VARIABLES to "true",
-                IGNORE_NAMED_ARGUMENT to "true",
+                IGNORE_LOCAL_VARIABLES to true,
+                IGNORE_NAMED_ARGUMENT to true,
             )
         )
 
@@ -981,7 +981,7 @@ class MagicNumberSpec {
     inner class `with extension function` {
 
         private val rule = MagicNumber(
-            TestConfig(IGNORE_EXTENSION_FUNCTIONS to "true")
+            TestConfig(IGNORE_EXTENSION_FUNCTIONS to true)
         )
 
         @Test
@@ -1105,7 +1105,7 @@ class MagicNumberSpec {
         @Test
         fun `should not report unsigned literals in property declarations when ignored`() {
             val code = "val myUInt = 65520U"
-            val findings = MagicNumber(TestConfig(IGNORE_PROPERTY_DECLARATION to "true")).lint(code)
+            val findings = MagicNumber(TestConfig(IGNORE_PROPERTY_DECLARATION to true)).lint(code)
             assertThat(findings).isEmpty()
         }
 
@@ -1239,7 +1239,7 @@ class MagicNumberSpec {
                 val myUInt = 65520u
                 val myULong = 0xFFF0uL
             """.trimIndent()
-            val findings = MagicNumber(TestConfig(IGNORE_PROPERTY_DECLARATION to "true")).lint(code)
+            val findings = MagicNumber(TestConfig(IGNORE_PROPERTY_DECLARATION to true)).lint(code)
             assertThat(findings).isEmpty()
         }
     }

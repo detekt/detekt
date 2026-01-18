@@ -57,7 +57,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinEnvironmentContainer) {
 
     @Nested
     inner class `some classes with members which have the same name` {
-        private val noIgnoreOverridden = TestConfig(IGNORE_OVERRIDDEN to "false")
+        private val noIgnoreOverridden = TestConfig(IGNORE_OVERRIDDEN to false)
 
         @Test
         fun `reports a method which is named after the class`() {

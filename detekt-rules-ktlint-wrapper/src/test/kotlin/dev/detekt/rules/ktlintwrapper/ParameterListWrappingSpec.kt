@@ -33,7 +33,7 @@ class ParameterListWrappingSpec {
             fun f(a: Int, b: Int, c: Int) {
             }
         """.trimIndent()
-        val config = TestConfig("maxLineLength" to "10")
+        val config = TestConfig("maxLineLength" to 10)
         assertThat(ParameterListWrapping(config).lint(code)).hasSize(4)
     }
 }

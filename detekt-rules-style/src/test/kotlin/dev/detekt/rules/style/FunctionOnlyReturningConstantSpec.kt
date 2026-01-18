@@ -61,7 +61,7 @@ class FunctionOnlyReturningConstantSpec {
 
         @Test
         fun `reports overridden functions which return constants`() {
-            val config = TestConfig(IGNORE_OVERRIDABLE_FUNCTION to "false")
+            val config = TestConfig(IGNORE_OVERRIDABLE_FUNCTION to false)
             val rule = FunctionOnlyReturningConstant(config)
             assertThat(rule.lint(code)).hasSize(9)
         }
@@ -73,7 +73,7 @@ class FunctionOnlyReturningConstantSpec {
 
         @Test
         fun `reports actual functions which return constants`() {
-            val config = TestConfig(IGNORE_ACTUAL_FUNCTION to "false")
+            val config = TestConfig(IGNORE_ACTUAL_FUNCTION to false)
             val rule = FunctionOnlyReturningConstant(config)
             assertThat(rule.lint(actualFunctionCode, compile = false)).hasSize(1)
         }

@@ -111,7 +111,7 @@ class ReturnFromFinallySpec(val env: KotlinEnvironmentContainer) {
 
         @Test
         fun `should not report when ignoreLabeled is true`() {
-            val config = TestConfig("ignoreLabeled" to "true")
+            val config = TestConfig("ignoreLabeled" to true)
             val findings = ReturnFromFinally(config).lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }

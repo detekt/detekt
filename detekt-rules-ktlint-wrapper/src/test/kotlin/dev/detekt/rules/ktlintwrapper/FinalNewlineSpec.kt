@@ -30,7 +30,7 @@ class FinalNewlineSpec {
 
     @Test
     fun `should report new line when configured`() {
-        val findings = FinalNewline(TestConfig(INSERT_FINAL_NEWLINE_KEY to "false"))
+        val findings = FinalNewline(TestConfig(INSERT_FINAL_NEWLINE_KEY to false))
             .lint(
                 """
                     fun main() = Unit
@@ -43,7 +43,7 @@ class FinalNewlineSpec {
 
     @Test
     fun `should not report when no new line is configured and not present`() {
-        val findings = FinalNewline(TestConfig(INSERT_FINAL_NEWLINE_KEY to "false"))
+        val findings = FinalNewline(TestConfig(INSERT_FINAL_NEWLINE_KEY to false))
             .lint("fun main() = Unit")
 
         assertThat(findings).isEmpty()

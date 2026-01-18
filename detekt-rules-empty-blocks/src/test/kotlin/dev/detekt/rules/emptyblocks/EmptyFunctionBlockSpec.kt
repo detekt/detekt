@@ -89,7 +89,7 @@ class EmptyFunctionBlockSpec {
 
         @Test
         fun `should not flag overridden functions`() {
-            val config = TestConfig(IGNORE_OVERRIDDEN to "true")
+            val config = TestConfig(IGNORE_OVERRIDDEN to true)
             assertThat(EmptyFunctionBlock(config).lint(code)).singleElement()
                 .hasStartSourceLocation(1, 13)
         }
@@ -123,7 +123,7 @@ class EmptyFunctionBlockSpec {
 
         @Test
         fun `should not flag overridden functions with ignoreOverridden`() {
-            val config = TestConfig(IGNORE_OVERRIDDEN to "true")
+            val config = TestConfig(IGNORE_OVERRIDDEN to true)
             assertThat(EmptyFunctionBlock(config).lint(code)).isEmpty()
         }
     }

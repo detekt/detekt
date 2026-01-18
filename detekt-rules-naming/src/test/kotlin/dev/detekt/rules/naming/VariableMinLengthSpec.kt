@@ -13,7 +13,7 @@ class VariableMinLengthSpec {
     inner class `VariableMinLength rule with a custom minimum length` {
 
         private val variableMinLength =
-            VariableMinLength(TestConfig(VariableMinLength.MINIMUM_VARIABLE_NAME_LENGTH to "2"))
+            VariableMinLength(TestConfig(VariableMinLength.MINIMUM_VARIABLE_NAME_LENGTH to 2))
 
         @Test
         fun `reports a very short variable name`() {
