@@ -8,5 +8,4 @@ dependencies {
     api(projects.detektTestUtils)
     api(libs.kotlin.compiler)
     implementation(libs.kotlin.reflect)
-    implementation(projects.detektCore)
 }

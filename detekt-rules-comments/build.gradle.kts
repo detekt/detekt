@@ -8,6 +8,7 @@ dependencies {
     compileOnly(libs.jetbrains.annotations)
 
     testImplementation(libs.kotlin.compiler)
+    testRuntimeOnly(projects.detektPsiUtils)
     testImplementation(projects.detektTest)
     testImplementation(projects.detektTestAssertj)
     testImplementation(projects.detektTestUtils)
