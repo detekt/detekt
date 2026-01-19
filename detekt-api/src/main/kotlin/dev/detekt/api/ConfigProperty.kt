@@ -97,28 +97,28 @@ private fun Config.getValuesWithReasonOrDefault(
     defaultValue: ValuesWithReason,
 ): ValuesWithReason {
     val valuesAsList: List<*> = valueOrNull(propertyName) ?: return defaultValue
-    if (!valuesAsList.all { it is String || it is Map<*, *> }) {
-        error(
-            "Only lists of strings and/or maps with keys 'value' and 'reason' are supported. " +
-                "'$propertyName' is invalid."
-        )
-    }
     return ValuesWithReason(
         valuesAsList.map {
-            if (it is String) {
-                ValueWithReason(it)
-            } else {
-                val mapValue = it as Map<*, *>
-                try {
-                    ValueWithReason(
-                        value = mapValue["value"] as String,
-                        reason = mapValue["reason"] as String?
-                    )
-                } catch (e: ClassCastException) {
-                    throw Config.InvalidConfigurationError(e)
-                } catch (@Suppress("TooGenericExceptionCaught") e: NullPointerException) {
-                    throw Config.InvalidConfigurationError(e)
+            when (it) {
+                is String -> ValueWithReason(it)
+
+                is Map<*, *> -> {
+                    try {
+                        ValueWithReason(
+                            value = it["value"] as String,
+                            reason = it["reason"] as String?
+                        )
+                    } catch (e: ClassCastException) {
+                        throw Config.InvalidConfigurationError(e)
+                    } catch (@Suppress("TooGenericExceptionCaught") e: NullPointerException) {
+                        throw Config.InvalidConfigurationError(e)
+                    }
                 }
+
+                else -> error(
+                    "Only lists of strings and/or maps with keys 'value' and 'reason' are supported. " +
+                        "'$propertyName' is invalid."
+                )
             }
         }
     )
