@@ -44,12 +44,15 @@ interface Config {
     /**
      * Is thrown when loading a configuration results in errors.
      */
-    class InvalidConfigurationError(throwable: Throwable? = null) :
+    class InvalidConfigurationError(throwable: Throwable) :
         RuntimeException(
-            "Provided configuration file is invalid: Structure must be from type Map<String,Any>!" +
-                throwable?.let { "\n" + it.message }.orEmpty(),
-            throwable
+            """
+                Provided configuration file is invalid: Structure must be from type Map<String,Any>!
+                ${throwable.message}
+            """.trimIndent(),
+            throwable,
         )
+
 
     companion object {
 

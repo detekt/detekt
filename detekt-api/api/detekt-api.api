@@ -40,9 +40,7 @@ public final class dev/detekt/api/Config$Companion {
 }
 
 public final class dev/detekt/api/Config$InvalidConfigurationError : java/lang/RuntimeException {
-	public fun <init> ()V
 	public fun <init> (Ljava/lang/Throwable;)V
-	public synthetic fun <init> (Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 }
 
 public final class dev/detekt/api/ConfigPropertyKt {
