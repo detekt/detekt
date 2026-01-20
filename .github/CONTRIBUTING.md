@@ -58,7 +58,7 @@ of descriptions, respectively.
 
 ```kotlin
 @ActiveByDefault(since = "1.0.0")
-class SomeRule(config: Config = Config.empty) : Rule(config), RequiresFullAnalysis {
+class SomeRule(config: Config) : Rule(config), RequiresFullAnalysis {
 
     @Configuration("This is the description for the configuration parameter below.")
     private val name: String by config(default = "whatever should be the default")
@@ -152,7 +152,7 @@ the detailed description of the rule.
  * // add the compliant code example here
  * </compliant>
  */
-class SomeRule(config: Config = Config.empty) : Rule(config) {
+class SomeRule(config: Config) : Rule(config) {
 
 }
 ```
