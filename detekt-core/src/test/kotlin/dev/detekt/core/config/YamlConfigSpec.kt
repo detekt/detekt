@@ -1,6 +1,5 @@
 package dev.detekt.core.config
 
-import dev.detekt.api.Config
 import dev.detekt.test.utils.resourceAsPath
 import dev.detekt.test.yamlConfig
 import dev.detekt.test.yamlConfigFromContent
@@ -266,7 +265,7 @@ class YamlConfigSpec {
                               {}map
                     """.trimIndent()
                 )
-            }.isInstanceOf(Config.InvalidConfigurationError::class.java)
+            }.isInstanceOf(InvalidConfigurationError::class.java)
                 .hasMessageContaining("Provided configuration file is invalid")
                 .hasCauseInstanceOf(ParserException::class.java)
         }

@@ -39,10 +39,6 @@ public final class dev/detekt/api/Config$Companion {
 	public final fun getEmpty ()Ldev/detekt/api/Config;
 }
 
-public final class dev/detekt/api/Config$InvalidConfigurationError : java/lang/RuntimeException {
-	public fun <init> (Ljava/lang/Throwable;)V
-}
-
 public final class dev/detekt/api/ConfigPropertyKt {
 	public static final fun config (Ljava/lang/Object;)Lkotlin/properties/ReadOnlyProperty;
 	public static final fun config (Ljava/lang/Object;Lkotlin/jvm/functions/Function1;)Lkotlin/properties/ReadOnlyProperty;

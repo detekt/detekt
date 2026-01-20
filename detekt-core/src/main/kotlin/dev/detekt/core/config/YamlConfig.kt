@@ -87,7 +87,7 @@ class YamlConfig internal constructor(
                 val map: Map<*, *>? = runCatching {
                     @Suppress("UNCHECKED_CAST")
                     createYamlLoad().loadFromReader(bufferedReader) as Map<String, *>?
-                }.getOrElse { throw Config.InvalidConfigurationError(it) }
+                }.getOrElse { throw InvalidConfigurationError(it) }
                 @Suppress("UNCHECKED_CAST")
                 YamlConfig(map.orEmpty() as Map<String, Any>, null, null)
             }
@@ -103,6 +103,15 @@ class YamlConfig internal constructor(
             )
     }
 }
+
+internal class InvalidConfigurationError(throwable: Throwable) :
+    RuntimeException(
+        """
+            Provided configuration file is invalid: Structure must be from type Map<String,Any>!
+            ${throwable.message}
+        """.trimIndent(),
+        throwable,
+    )
 
 @Suppress("MagicNumber")
 private fun Map<*, *>.toPrettyString(recursive: Int): String =

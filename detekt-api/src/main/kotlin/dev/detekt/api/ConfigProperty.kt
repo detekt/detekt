@@ -109,9 +109,9 @@ private fun Config.getValuesWithReasonOrDefault(
                             reason = it["reason"] as String?
                         )
                     } catch (e: ClassCastException) {
-                        throw Config.InvalidConfigurationError(e)
+                        throw InvalidConfigurationError(e)
                     } catch (@Suppress("TooGenericExceptionCaught") e: NullPointerException) {
-                        throw Config.InvalidConfigurationError(e)
+                        throw InvalidConfigurationError(e)
                     }
                 }
 
@@ -123,6 +123,15 @@ private fun Config.getValuesWithReasonOrDefault(
         }
     )
 }
+
+internal class InvalidConfigurationError(throwable: Throwable) :
+    RuntimeException(
+        """
+            Provided configuration file is invalid: Structure must be from type Map<String,Any>!
+            ${throwable.message}
+        """.trimIndent(),
+        throwable,
+    )
 
 private abstract class MemoizedConfigProperty<U : Any> : ReadOnlyProperty<Rule, U> {
     private var value: U? = null
