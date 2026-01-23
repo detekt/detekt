@@ -19,7 +19,7 @@ class ClassNamingSpec {
             }
         """.trimIndent()
 
-        assertThat(ClassNaming(Config.empty).lint(code)).isEmpty()
+        assertThat(ClassNaming(Config.Empty).lint(code)).isEmpty()
     }
 
     @Test
@@ -40,7 +40,7 @@ class ClassNamingSpec {
             class MyClassWithNumbers5
         """.trimIndent()
 
-        assertThat(ClassNaming(Config.empty).lint(code)).isEmpty()
+        assertThat(ClassNaming(Config.Empty).lint(code)).isEmpty()
     }
 
     @Test
@@ -50,7 +50,7 @@ class ClassNamingSpec {
             }
         """.trimIndent()
 
-        assertThat(ClassNaming(Config.empty).lint(code)).isEmpty()
+        assertThat(ClassNaming(Config.Empty).lint(code)).isEmpty()
     }
 
     @Test
@@ -59,7 +59,7 @@ class ClassNamingSpec {
             class `NamingConventions`
         """.trimIndent()
 
-        assertThat(ClassNaming(Config.empty).lint(code)).isEmpty()
+        assertThat(ClassNaming(Config.Empty).lint(code)).isEmpty()
     }
 
     @Test
@@ -68,7 +68,7 @@ class ClassNamingSpec {
             class _NamingConventions
         """.trimIndent()
 
-        assertThat(ClassNaming(Config.empty).lint(code)).singleElement()
+        assertThat(ClassNaming(Config.Empty).lint(code)).singleElement()
             .hasTextLocation(6 to 24)
     }
 
@@ -78,7 +78,7 @@ class ClassNamingSpec {
             class namingConventions {}
         """.trimIndent()
 
-        assertThat(ClassNaming(Config.empty).lint(code)).singleElement()
+        assertThat(ClassNaming(Config.Empty).lint(code)).singleElement()
             .hasTextLocation(6 to 23)
     }
 
@@ -88,7 +88,7 @@ class ClassNamingSpec {
             @Suppress("ClassNaming")
             class namingConventions {}
         """.trimIndent()
-        assertThat(ClassNaming(Config.empty).lint(code)).isEmpty()
+        assertThat(ClassNaming(Config.Empty).lint(code)).isEmpty()
     }
 
     @Test
@@ -100,6 +100,6 @@ class ClassNamingSpec {
             }
         """.trimIndent()
 
-        assertThat(ClassNaming(Config.empty).lint(code)).isEmpty()
+        assertThat(ClassNaming(Config.Empty).lint(code)).isEmpty()
     }
 }

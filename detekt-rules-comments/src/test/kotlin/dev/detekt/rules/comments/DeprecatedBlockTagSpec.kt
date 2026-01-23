@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class DeprecatedBlockTagSpec {
-    val subject = DeprecatedBlockTag(Config.empty)
+    val subject = DeprecatedBlockTag(Config.Empty)
 
     @Test
     fun `does not report regular kdoc block`() {

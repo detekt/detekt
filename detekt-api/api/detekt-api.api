@@ -36,7 +36,16 @@ public final class dev/detekt/api/Config$Companion {
 	public static final field EXCLUDES_KEY Ljava/lang/String;
 	public static final field INCLUDES_KEY Ljava/lang/String;
 	public static final field SEVERITY_KEY Ljava/lang/String;
-	public final fun getEmpty ()Ldev/detekt/api/Config;
+}
+
+public final class dev/detekt/api/Config$Empty : dev/detekt/api/Config {
+	public static final field INSTANCE Ldev/detekt/api/Config$Empty;
+	public fun getParent ()Ldev/detekt/api/Config;
+	public fun getParentPath ()Ljava/lang/String;
+	public fun subConfig (Ljava/lang/String;)Ldev/detekt/api/Config;
+	public fun subConfigKeys ()Ljava/util/Set;
+	public fun toString ()Ljava/lang/String;
+	public fun valueOrNull (Ljava/lang/String;)Ljava/lang/Object;
 }
 
 public final class dev/detekt/api/Config$InvalidConfigurationError : java/lang/RuntimeException {

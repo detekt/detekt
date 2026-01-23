@@ -6,7 +6,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class NestedClassesVisibilitySpec {
-    val subject = NestedClassesVisibility(Config.empty)
+    val subject = NestedClassesVisibility(Config.Empty)
 
     @Test
     fun `reports explicit public visibility in nested objects, classes and interfaces`() {

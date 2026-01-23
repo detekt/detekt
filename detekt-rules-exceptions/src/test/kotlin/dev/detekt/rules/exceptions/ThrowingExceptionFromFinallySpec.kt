@@ -6,7 +6,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class ThrowingExceptionFromFinallySpec {
-    val subject = ThrowingExceptionFromFinally(Config.empty)
+    val subject = ThrowingExceptionFromFinally(Config.Empty)
 
     @Test
     fun `should report a throw expression`() {

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.TestFactory
 
 class UseLetSpec {
 
-    val subject = UseLet(Config.empty)
+    val subject = UseLet(Config.Empty)
 
     @TestFactory
     fun `it forbids all != null else null combinations`(): Iterable<DynamicTest> {

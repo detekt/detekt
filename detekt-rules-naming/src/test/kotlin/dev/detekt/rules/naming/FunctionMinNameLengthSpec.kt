@@ -11,7 +11,7 @@ class FunctionMinNameLengthSpec {
     @Test
     fun `should report a function name that is too short`() {
         val code = "fun a() = 3"
-        assertThat(FunctionNameMinLength(Config.empty).lint(code)).hasSize(1)
+        assertThat(FunctionNameMinLength(Config.Empty).lint(code)).hasSize(1)
     }
 
     @Test
@@ -26,7 +26,7 @@ class FunctionMinNameLengthSpec {
     @Test
     fun `should not report a function name that is okay`() {
         val code = "fun three() = 3"
-        assertThat(FunctionNameMinLength(Config.empty).lint(code)).isEmpty()
+        assertThat(FunctionNameMinLength(Config.Empty).lint(code)).isEmpty()
     }
 
     @Test

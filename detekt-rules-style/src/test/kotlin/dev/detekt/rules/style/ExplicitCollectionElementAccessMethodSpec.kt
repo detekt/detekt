@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class ExplicitCollectionElementAccessMethodSpec {
-    val subject = ExplicitCollectionElementAccessMethod(Config.empty)
+    val subject = ExplicitCollectionElementAccessMethod(Config.Empty)
 
     @Nested
     @KotlinCoreEnvironmentTest

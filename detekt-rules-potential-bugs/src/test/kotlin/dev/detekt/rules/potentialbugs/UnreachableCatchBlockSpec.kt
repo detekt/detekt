@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class UnreachableCatchBlockSpec(private val env: KotlinEnvironmentContainer) {
-    private val subject = UnreachableCatchBlock(Config.empty)
+    private val subject = UnreachableCatchBlock(Config.Empty)
 
     @Test
     fun `reports a unreachable catch block that is after the super class catch block`() {

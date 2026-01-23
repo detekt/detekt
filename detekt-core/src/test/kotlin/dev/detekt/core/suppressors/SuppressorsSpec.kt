@@ -51,4 +51,4 @@ class SuppressorsSpec {
     }
 }
 
-private class ARule(config: Config = Config.empty) : Rule(config, "")
+private class ARule(config: Config = Config.Empty) : Rule(config, "")

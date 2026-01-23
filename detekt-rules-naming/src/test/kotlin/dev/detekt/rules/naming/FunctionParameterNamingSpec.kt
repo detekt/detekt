@@ -21,7 +21,7 @@ class FunctionParameterNamingSpec {
                     fun someStuff(param: String) {}
                 }
             """.trimIndent()
-            assertThat(FunctionParameterNaming(Config.empty).lint(code)).isEmpty()
+            assertThat(FunctionParameterNaming(Config.Empty).lint(code)).isEmpty()
         }
 
         @Test
@@ -32,7 +32,7 @@ class FunctionParameterNamingSpec {
                 }
                 interface I { fun someStuff(@Suppress("FunctionParameterNaming") `object`: String) }
             """.trimIndent()
-            assertThat(FunctionParameterNaming(Config.empty).lint(code)).isEmpty()
+            assertThat(FunctionParameterNaming(Config.Empty).lint(code)).isEmpty()
         }
 
         @Test
@@ -42,7 +42,7 @@ class FunctionParameterNamingSpec {
                     fun someStuff(PARAM: String) {}
                 }
             """.trimIndent()
-            assertThat(FunctionParameterNaming(Config.empty).lint(code)).hasSize(1)
+            assertThat(FunctionParameterNaming(Config.Empty).lint(code)).hasSize(1)
         }
     }
 

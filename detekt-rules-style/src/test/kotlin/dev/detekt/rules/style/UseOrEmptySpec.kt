@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class UseOrEmptySpec(val env: KotlinEnvironmentContainer) {
-    val subject = UseOrEmpty(Config.empty)
+    val subject = UseOrEmpty(Config.Empty)
 
     @Nested
     inner class `report UseOrEmptySpec rule` {

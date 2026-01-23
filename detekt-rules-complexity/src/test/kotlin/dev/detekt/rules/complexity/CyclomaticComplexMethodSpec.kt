@@ -290,7 +290,7 @@ class CyclomaticComplexMethodSpec {
 
         @Test
         fun `should not count these overridden functions to base functions complexity`() {
-            assertThat(CyclomaticComplexMethod(Config.empty).lint(code)).isEmpty()
+            assertThat(CyclomaticComplexMethod(Config.Empty).lint(code)).isEmpty()
         }
     }
 }

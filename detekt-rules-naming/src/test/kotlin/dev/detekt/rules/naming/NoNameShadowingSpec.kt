@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class NoNameShadowingSpec(val env: KotlinEnvironmentContainer) {
-    val subject = NoNameShadowing(Config.empty)
+    val subject = NoNameShadowing(Config.Empty)
 
     @Test
     fun `report shadowing variable`() {

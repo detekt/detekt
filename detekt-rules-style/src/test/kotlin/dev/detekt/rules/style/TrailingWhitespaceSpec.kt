@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 
 class TrailingWhitespaceSpec {
 
-    private val subject = TrailingWhitespace(Config.empty)
+    private val subject = TrailingWhitespace(Config.Empty)
 
     @Nested
     inner class `positive cases` {

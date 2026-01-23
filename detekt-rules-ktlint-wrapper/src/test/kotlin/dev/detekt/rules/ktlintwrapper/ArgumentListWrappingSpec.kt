@@ -16,7 +16,7 @@ class ArgumentListWrappingSpec {
                 2, 3
             )
         """.trimIndent()
-        assertThat(ArgumentListWrapping(Config.empty).lint(code)).hasSize(1)
+        assertThat(ArgumentListWrapping(Config.Empty).lint(code)).hasSize(1)
     }
 
     @Test
@@ -28,7 +28,7 @@ class ArgumentListWrappingSpec {
                 3
             )
         """.trimIndent()
-        assertThat(ArgumentListWrapping(Config.empty).lint(code)).isEmpty()
+        assertThat(ArgumentListWrapping(Config.Empty).lint(code)).isEmpty()
     }
 
     @Test

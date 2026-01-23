@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class UseEmptyCounterpartSpec(val env: KotlinEnvironmentContainer) {
-    val rule = UseEmptyCounterpart(Config.empty)
+    val rule = UseEmptyCounterpart(Config.Empty)
 
     @Test
     fun `reports no-arg instantiation`() {

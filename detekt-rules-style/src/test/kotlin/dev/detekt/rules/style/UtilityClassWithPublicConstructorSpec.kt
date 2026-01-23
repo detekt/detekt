@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 
 class UtilityClassWithPublicConstructorSpec {
 
-    val subject = UtilityClassWithPublicConstructor(Config.empty)
+    val subject = UtilityClassWithPublicConstructor(Config.Empty)
 
     @Nested
     inner class `several UtilityClassWithPublicConstructor rule violations` {

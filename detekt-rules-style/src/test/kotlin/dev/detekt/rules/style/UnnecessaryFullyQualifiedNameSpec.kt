@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 
 class UnnecessaryFullyQualifiedNameSpec {
 
-    val subject = UnnecessaryFullyQualifiedName(Config.empty)
+    val subject = UnnecessaryFullyQualifiedName(Config.Empty)
 
     @Nested
     inner class `fully qualified class names in type annotations` {

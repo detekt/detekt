@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class UnnecessaryReversedSpec(val env: KotlinEnvironmentContainer) {
-    val subject = UnnecessaryReversed(Config.empty)
+    val subject = UnnecessaryReversed(Config.Empty)
 
     @Test
     fun `reports when sortedBy is followed by asReversed()`() {

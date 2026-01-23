@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class ExplicitItLambdaMultipleParametersSpec {
-    val subject = ExplicitItLambdaMultipleParameters(Config.empty)
+    val subject = ExplicitItLambdaMultipleParameters(Config.Empty)
 
     @Nested
     inner class `multiple parameters one of which with name 'it' declared explicitly` {

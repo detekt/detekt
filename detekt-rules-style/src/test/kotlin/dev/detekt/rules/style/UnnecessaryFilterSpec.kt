@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class UnnecessaryFilterSpec(val env: KotlinEnvironmentContainer) {
-    val subject = UnnecessaryFilter(Config.empty)
+    val subject = UnnecessaryFilter(Config.Empty)
 
     @Nested
     inner class UnnecessaryFilterTest {

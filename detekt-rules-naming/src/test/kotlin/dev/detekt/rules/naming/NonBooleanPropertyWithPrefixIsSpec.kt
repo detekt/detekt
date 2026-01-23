@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinEnvironmentContainer) {
-    val subject = NonBooleanPropertyPrefixedWithIs(Config.empty)
+    val subject = NonBooleanPropertyPrefixedWithIs(Config.Empty)
 
     @Nested
     inner class `argument declarations` {

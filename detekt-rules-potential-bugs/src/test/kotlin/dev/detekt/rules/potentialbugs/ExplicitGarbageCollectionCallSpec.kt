@@ -6,7 +6,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class ExplicitGarbageCollectionCallSpec {
-    private val subject = ExplicitGarbageCollectionCall(Config.empty)
+    private val subject = ExplicitGarbageCollectionCall(Config.Empty)
 
     @Test
     fun `reports garbage collector calls`() {

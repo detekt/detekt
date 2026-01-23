@@ -18,7 +18,7 @@ class ImportOrderingSpec {
 
     @Test
     fun `defaults to the idea layout`() {
-        val findings = ImportOrdering(Config.empty).lint(
+        val findings = ImportOrdering(Config.Empty).lint(
             """
                 import android.app.Activity
                 import android.view.View

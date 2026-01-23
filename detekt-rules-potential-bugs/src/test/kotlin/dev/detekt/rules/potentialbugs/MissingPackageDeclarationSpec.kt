@@ -14,7 +14,7 @@ internal class MissingPackageDeclarationSpec {
             
             class C
         """.trimIndent()
-        val findings = MissingPackageDeclaration(Config.empty).lint(code)
+        val findings = MissingPackageDeclaration(Config.Empty).lint(code)
 
         assertThat(findings).isEmpty()
     }
@@ -23,7 +23,7 @@ internal class MissingPackageDeclarationSpec {
     fun `should report if package declaration is missing`() {
         val code = "class C"
 
-        val findings = MissingPackageDeclaration(Config.empty).lint(code)
+        val findings = MissingPackageDeclaration(Config.Empty).lint(code)
 
         assertThat(findings).hasSize(1)
     }

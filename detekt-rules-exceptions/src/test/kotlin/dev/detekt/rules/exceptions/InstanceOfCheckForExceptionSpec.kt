@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class InstanceOfCheckForExceptionSpec(private val env: KotlinEnvironmentContainer) {
-    val subject = InstanceOfCheckForException(Config.empty)
+    val subject = InstanceOfCheckForException(Config.Empty)
 
     @Test
     fun `has is and as checks`() {

@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class PrintStackTraceSpec {
-    val subject = PrintStackTrace(Config.empty)
+    val subject = PrintStackTrace(Config.Empty)
 
     @Nested
     inner class `catch clauses with printStacktrace methods` {

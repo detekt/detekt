@@ -12,7 +12,7 @@ private const val ADDITIONAL_OPERATOR_SET = "additionalOperatorSet"
 
 @KotlinCoreEnvironmentTest
 class UnusedImportSpec(val env: KotlinEnvironmentContainer) {
-    val subject = UnusedImport(Config.empty)
+    val subject = UnusedImport(Config.Empty)
 
     @Test
     fun `does not report infix operators`() {

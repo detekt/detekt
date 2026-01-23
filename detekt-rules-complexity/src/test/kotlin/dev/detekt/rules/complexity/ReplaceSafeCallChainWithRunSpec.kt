@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 @KotlinCoreEnvironmentTest
 class ReplaceSafeCallChainWithRunSpec(val env: KotlinEnvironmentContainer) {
 
-    val subject = ReplaceSafeCallChainWithRun(Config.empty)
+    val subject = ReplaceSafeCallChainWithRun(Config.Empty)
 
     @Test
     fun `reports long chain of unnecessary safe qualified expressions`() {

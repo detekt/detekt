@@ -9,7 +9,7 @@ import dev.drewhamilton.poko.Poko
 class RuleSet(val id: RuleSetId, val rules: Map<RuleName, (Config) -> Rule>) {
     companion object {
         operator fun invoke(id: RuleSetId, rules: List<(Config) -> Rule>): RuleSet =
-            RuleSet(id, rules.associateBy { it(Config.empty).ruleName })
+            RuleSet(id, rules.associateBy { it(Config.Empty).ruleName })
     }
 }
 

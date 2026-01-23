@@ -26,7 +26,7 @@ class ForbiddenImportSpec {
 
     @Test
     fun `should report nothing by default`() {
-        val findings = ForbiddenImport(Config.empty).lint(code, compile = false)
+        val findings = ForbiddenImport(Config.Empty).lint(code, compile = false)
         assertThat(findings).isEmpty()
     }
 

@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
 @KotlinCoreEnvironmentTest
 class ArrayPrimitiveSpec(val env: KotlinEnvironmentContainer) {
 
-    val subject = ArrayPrimitive(Config.empty)
+    val subject = ArrayPrimitive(Config.Empty)
 
     @Nested
     inner class `one function parameter` {

@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 private const val SEARCH_PROTECTED_FUN = "searchProtectedFunction"
 
 class UndocumentedPublicFunctionSpec {
-    val subject = UndocumentedPublicFunction(Config.empty)
+    val subject = UndocumentedPublicFunction(Config.Empty)
 
     @Test
     fun `reports undocumented public functions`() {

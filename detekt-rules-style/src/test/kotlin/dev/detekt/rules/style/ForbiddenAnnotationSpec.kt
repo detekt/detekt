@@ -20,7 +20,7 @@ class ForbiddenAnnotationSpec(val env: KotlinEnvironmentContainer) {
             @SuppressWarnings("unused")
             fun main() {}
         """.trimIndent()
-        val findings = ForbiddenAnnotation(Config.empty).lintWithContext(env, code)
+        val findings = ForbiddenAnnotation(Config.Empty).lintWithContext(env, code)
 
         assertThat(findings).singleElement()
             .hasStartSourceLocation(SourceLocation(1, 1))
@@ -52,7 +52,7 @@ class ForbiddenAnnotationSpec(val env: KotlinEnvironmentContainer) {
             @Inherited
             annotation class SomeClass(val value: Array<SomeClass>)
         """.trimIndent()
-        val findings = ForbiddenAnnotation(Config.empty).lintWithContext(env, code)
+        val findings = ForbiddenAnnotation(Config.Empty).lintWithContext(env, code)
         assertThat(findings).satisfiesExactlyInAnyOrder(
             { assertThat(it).hasTextLocation("@Deprecated") },
             { assertThat(it).hasTextLocation("@Documented") },
@@ -222,7 +222,7 @@ class ForbiddenAnnotationSpec(val env: KotlinEnvironmentContainer) {
             @Dep
             fun f() = Unit
         """.trimIndent()
-        val findings = ForbiddenAnnotation(Config.empty).lintWithContext(env, code)
+        val findings = ForbiddenAnnotation(Config.Empty).lintWithContext(env, code)
         assertThat(findings).singleElement()
             .hasTextLocation("@Dep")
     }

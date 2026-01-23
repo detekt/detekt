@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class DeprecationSpec(private val env: KotlinEnvironmentContainer) {
-    private val subject = Deprecation(Config.empty)
+    private val subject = Deprecation(Config.Empty)
 
     @Test
     fun `reports when supertype is deprecated`() {

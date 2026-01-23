@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class UnnamedParameterUseSpec(private val env: KotlinEnvironmentContainer) {
-    private val subject = UnnamedParameterUse(Config.empty)
+    private val subject = UnnamedParameterUse(Config.Empty)
 
     @Test
     fun `does not report for no param function call`() {

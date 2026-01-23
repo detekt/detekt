@@ -10,7 +10,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
 class SwallowedExceptionSpec {
-    val subject = SwallowedException(Config.empty)
+    val subject = SwallowedException(Config.Empty)
 
     @Test
     fun `reports a swallowed exception`() {

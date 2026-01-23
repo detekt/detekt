@@ -15,7 +15,7 @@ private const val SEARCH_IN_PROTECTED_CLASS = "searchInProtectedClass"
 private const val IGNORE_DEFAULT_COMPANION_OBJECT = "ignoreDefaultCompanionObject"
 
 class UndocumentedPublicClassSpec {
-    val subject = UndocumentedPublicClass(Config.empty)
+    val subject = UndocumentedPublicClass(Config.Empty)
 
     val inner = """
         /** Some doc */

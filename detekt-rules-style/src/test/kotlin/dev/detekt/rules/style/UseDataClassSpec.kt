@@ -13,7 +13,7 @@ private const val ALLOW_VARS = "allowVars"
 
 @KotlinCoreEnvironmentTest
 class UseDataClassSpec(val env: KotlinEnvironmentContainer) {
-    val subject = UseDataClass(Config.empty)
+    val subject = UseDataClass(Config.Empty)
 
     @Nested
     inner class `does not report invalid data class candidates` {

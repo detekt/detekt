@@ -24,7 +24,7 @@ class EnumNamingSpec {
 
     @Test
     fun `should detect no violation`() {
-        val findings = EnumNaming(Config.empty).lint(
+        val findings = EnumNaming(Config.Empty).lint(
             """
                 enum class WorkFlow {
                     ACTIVE, NOT_ACTIVE, Unknown, Number1
@@ -41,7 +41,7 @@ class EnumNamingSpec {
                 default
             }
         """.trimIndent()
-        assertThat(EnumNaming(Config.empty).lint(code)).hasSize(1)
+        assertThat(EnumNaming(Config.Empty).lint(code)).hasSize(1)
     }
 
     @Test
@@ -51,7 +51,7 @@ class EnumNamingSpec {
                 _Default
             }
         """.trimIndent()
-        assertThat(EnumNaming(Config.empty).lint(code)).hasSize(1)
+        assertThat(EnumNaming(Config.Empty).lint(code)).hasSize(1)
     }
 
     @Test
@@ -61,7 +61,7 @@ class EnumNamingSpec {
                 @Suppress("EnumNaming") _Default
             }
         """.trimIndent()
-        assertThat(EnumNaming(Config.empty).lint(code)).isEmpty()
+        assertThat(EnumNaming(Config.Empty).lint(code)).isEmpty()
     }
 
     @Test
@@ -71,7 +71,7 @@ class EnumNamingSpec {
                 _Default,
             }
         """.trimIndent()
-        val findings = EnumNaming(Config.empty).lint(code)
+        val findings = EnumNaming(Config.Empty).lint(code)
         assertThat(findings).singleElement()
             .hasTextLocation(26 to 34)
     }

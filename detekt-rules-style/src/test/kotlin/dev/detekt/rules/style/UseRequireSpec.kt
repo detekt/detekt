@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class UseRequireSpec(val env: KotlinEnvironmentContainer) {
-    val subject = UseRequire(Config.empty)
+    val subject = UseRequire(Config.Empty)
 
     @Test
     fun `reports if a precondition throws an IllegalArgumentException`() {

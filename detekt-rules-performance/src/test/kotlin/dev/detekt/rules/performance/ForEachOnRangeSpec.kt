@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 
 class ForEachOnRangeSpec {
 
-    val subject = ForEachOnRange(Config.empty)
+    val subject = ForEachOnRange(Config.Empty)
 
     @Nested
     inner class `using a forEach on a range` {

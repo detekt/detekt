@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 
 class LabeledExpressionSpec {
 
-    private val subject = LabeledExpression(Config.empty)
+    private val subject = LabeledExpression(Config.Empty)
 
     @Test
     fun `reports break and continue labels`() {

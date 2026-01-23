@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 
 class EmptyIfBlockSpec {
 
-    private val subject = EmptyIfBlock(Config.empty)
+    private val subject = EmptyIfBlock(Config.Empty)
 
     @Test
     fun `reports empty if with trailing semicolon`() {

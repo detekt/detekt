@@ -12,7 +12,7 @@ class ChainWrappingSpec {
         val subject = loadFile("configTests/chain-wrapping-before.kt")
         val expected = loadFileContent("configTests/chain-wrapping-after.kt")
 
-        val findings = ChainWrapping(Config.empty).lint(subject.text)
+        val findings = ChainWrapping(Config.Empty).lint(subject.text)
 
         assertThat(findings).isNotEmpty()
         assertThat(subject.text).isEqualTo(expected)

@@ -12,7 +12,7 @@ class NoSingleLineBlockCommentSpec {
         val code = """
             /** Some comment */
         """.trimIndent()
-        assertThat(NoSingleLineBlockComment(Config.empty).lint(code)).isEmpty()
+        assertThat(NoSingleLineBlockComment(Config.Empty).lint(code)).isEmpty()
     }
 
     @Test
@@ -20,7 +20,7 @@ class NoSingleLineBlockCommentSpec {
         val code = """
             /* Some comment */
         """.trimIndent()
-        assertThat(NoSingleLineBlockComment(Config.empty).lint(code)).hasSize(1)
+        assertThat(NoSingleLineBlockComment(Config.Empty).lint(code)).hasSize(1)
     }
 
     @Test
@@ -32,6 +32,6 @@ class NoSingleLineBlockCommentSpec {
             /* Some comment 4 */fun foo4() = "foo4"
         """.trimIndent()
 
-        assertThat(CommentWrapping(Config.empty).lint(code)).hasSize(4)
+        assertThat(CommentWrapping(Config.Empty).lint(code)).hasSize(4)
     }
 }

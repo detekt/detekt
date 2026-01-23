@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class ImplicitUnitReturnTypeSpec(private val env: KotlinEnvironmentContainer) {
-    private val subject = ImplicitUnitReturnType(Config.empty)
+    private val subject = ImplicitUnitReturnType(Config.Empty)
 
     @Test
     fun `reports implicit Unit return types`() {

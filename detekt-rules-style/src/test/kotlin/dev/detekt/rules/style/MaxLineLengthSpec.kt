@@ -86,7 +86,7 @@ class MaxLineLengthSpec {
 
         @Test
         fun `should report all errors with default maxLineLength`() {
-            val rule = MaxLineLength(Config.empty)
+            val rule = MaxLineLength(Config.Empty)
 
             val findings = rule.lint(code)
             assertThat(findings).hasSize(3)
@@ -106,7 +106,7 @@ class MaxLineLengthSpec {
 
         @Test
         fun `should report meaningful signature for all violations`() {
-            val rule = MaxLineLength(Config.empty)
+            val rule = MaxLineLength(Config.Empty)
 
             val findings = rule.lint(code)
             assertThat(findings).hasSize(3)
@@ -219,7 +219,7 @@ class MaxLineLengthSpec {
 
         @Test
         fun `should not report as lines are suppressed`() {
-            val rule = MaxLineLength(Config.empty)
+            val rule = MaxLineLength(Config.Empty)
 
             val findings = rule.lint(code)
             assertThat(findings).isEmpty()

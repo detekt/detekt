@@ -20,7 +20,7 @@ class KtlintRuleSpec {
 
     @BeforeEach
     fun createSubject() {
-        subject = NoLineBreakBeforeAssignment(Config.empty)
+        subject = NoLineBreakBeforeAssignment(Config.Empty)
     }
 
     @Nested
@@ -75,7 +75,7 @@ class KtlintRuleSpec {
     fun `#3063_ ktlint issues have an absolute path`() {
         val expectedPath = Path("src/test/resources/configTests/chain-wrapping-before.kt").absolute()
 
-        val rule = ChainWrapping(Config.empty)
+        val rule = ChainWrapping(Config.Empty)
         val findings = rule.lint(compileForTest(expectedPath))
         assertThat(findings).anySatisfy { finding ->
             assertThat(finding.location.path).isEqualTo(expectedPath)

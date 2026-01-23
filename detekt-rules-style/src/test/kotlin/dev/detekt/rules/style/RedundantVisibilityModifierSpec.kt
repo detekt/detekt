@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class RedundantVisibilityModifierSpec {
-    val subject = RedundantVisibilityModifier(Config.empty)
+    val subject = RedundantVisibilityModifier(Config.Empty)
 
     @Test
     fun `does not report overridden function of abstract class with public modifier`() {

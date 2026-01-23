@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class UnnecessarySafeCallSpec(private val env: KotlinEnvironmentContainer) {
-    private val subject = UnnecessarySafeCall(Config.empty)
+    private val subject = UnnecessarySafeCall(Config.Empty)
 
     @Nested
     inner class `check unnecessary safe operators` {

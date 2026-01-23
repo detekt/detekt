@@ -11,7 +11,7 @@ class TestConfig private constructor(override val parent: Config?, private val v
 
     constructor(parent: Config?, vararg pairs: Pair<String, Any>) : this(parent, pairs.toMap())
 
-    constructor(vararg pairs: Pair<String, Any>) : this(Config.empty, *pairs)
+    constructor(vararg pairs: Pair<String, Any>) : this(Config.Empty, *pairs)
 
     override fun subConfig(key: String): TestConfig {
         val value = values.getOrDefault(key, emptyMap<String, Any>()) as Map<String, Any>

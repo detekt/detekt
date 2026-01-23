@@ -15,7 +15,7 @@ class InjectDispatcherSpec(val env: KotlinEnvironmentContainer) {
     @Nested
     inner class `InjectDispatcher with default config` {
 
-        val subject = InjectDispatcher(Config.empty)
+        val subject = InjectDispatcher(Config.Empty)
 
         @Test
         fun `reports when dispatchers is used inside a function`() {

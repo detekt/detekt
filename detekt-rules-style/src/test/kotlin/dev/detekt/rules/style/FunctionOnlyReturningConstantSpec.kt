@@ -12,7 +12,7 @@ private const val IGNORE_ACTUAL_FUNCTION = "ignoreActualFunction"
 private const val EXCLUDED_FUNCTIONS = "excludedFunctions"
 
 class FunctionOnlyReturningConstantSpec {
-    val subject = FunctionOnlyReturningConstant(Config.empty)
+    val subject = FunctionOnlyReturningConstant(Config.Empty)
 
     @Nested
     inner class `FunctionOnlyReturningConstant rule - positive cases` {

@@ -6,7 +6,7 @@ import dev.detekt.test.lint
 import org.junit.jupiter.api.Test
 
 class SafeCastSpec {
-    val subject = SafeCast(Config.empty)
+    val subject = SafeCast(Config.Empty)
 
     @Test
     fun `reports negated expression`() {

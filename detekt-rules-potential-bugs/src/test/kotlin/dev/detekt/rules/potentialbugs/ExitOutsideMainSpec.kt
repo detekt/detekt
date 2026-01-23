@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class ExitOutsideMainSpec(private val env: KotlinEnvironmentContainer) {
-    private val subject = ExitOutsideMain(Config.empty)
+    private val subject = ExitOutsideMain(Config.Empty)
 
     @Test
     fun `reports exitProcess used outside main()`() {

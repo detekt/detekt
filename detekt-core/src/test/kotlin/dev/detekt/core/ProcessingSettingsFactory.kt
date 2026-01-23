@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit
  */
 fun createProcessingSettings(
     inputPath: Path? = null,
-    config: Config = Config.empty,
+    config: Config = Config.Empty,
     reportPaths: Collection<ReportsSpec.Report> = emptyList(),
     outputChannel: PrintStream = NullPrintStream(),
     init: ProcessingSpecBuilder.() -> Unit = { /* no-op */ },

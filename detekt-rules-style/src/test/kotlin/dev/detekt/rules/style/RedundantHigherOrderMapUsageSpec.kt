@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class RedundantHigherOrderMapUsageSpec(val env: KotlinEnvironmentContainer) {
-    val subject = RedundantHigherOrderMapUsage(Config.empty)
+    val subject = RedundantHigherOrderMapUsage(Config.Empty)
 
     @Nested
     inner class `report RedundantHigherOrderMapUsage rule` {

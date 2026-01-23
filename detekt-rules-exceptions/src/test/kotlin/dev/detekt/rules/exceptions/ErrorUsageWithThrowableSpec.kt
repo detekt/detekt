@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class ErrorUsageWithThrowableSpec(private val env: KotlinEnvironmentContainer) {
-    val subject = ErrorUsageWithThrowable(Config.empty)
+    val subject = ErrorUsageWithThrowable(Config.Empty)
 
     @Test
     fun `reports error getting called with Exception instance`() {

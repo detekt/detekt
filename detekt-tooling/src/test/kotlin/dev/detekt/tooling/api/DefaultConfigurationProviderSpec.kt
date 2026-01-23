@@ -24,7 +24,7 @@ internal class TestConfigurationProvider : DefaultConfigurationProvider {
         // no-op
     }
 
-    override fun get(): Config = Config.empty
+    override fun get(): Config = Config.Empty
 
     override fun copy(targetLocation: Path) {
         // nothing

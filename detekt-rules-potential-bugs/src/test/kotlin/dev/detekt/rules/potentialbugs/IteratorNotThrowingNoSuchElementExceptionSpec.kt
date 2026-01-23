@@ -6,7 +6,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class IteratorNotThrowingNoSuchElementExceptionSpec {
-    private val subject = IteratorNotThrowingNoSuchElementException(Config.empty)
+    private val subject = IteratorNotThrowingNoSuchElementException(Config.Empty)
 
     @Test
     fun `reports invalid next() implementations`() {

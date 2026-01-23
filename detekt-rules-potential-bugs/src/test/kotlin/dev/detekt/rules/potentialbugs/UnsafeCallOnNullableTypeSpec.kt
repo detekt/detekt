@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class UnsafeCallOnNullableTypeSpec(private val env: KotlinEnvironmentContainer) {
-    private val subject = UnsafeCallOnNullableType(Config.empty)
+    private val subject = UnsafeCallOnNullableType(Config.Empty)
 
     @Test
     fun `reports unsafe call on nullable type`() {

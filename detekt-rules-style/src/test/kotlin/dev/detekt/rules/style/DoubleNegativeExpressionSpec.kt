@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class DoubleNegativeExpressionSpec(private val env: KotlinEnvironmentContainer) {
-    private val subject = DoubleNegativeExpression(Config.empty)
+    private val subject = DoubleNegativeExpression(Config.Empty)
 
     @Test
     fun not() {

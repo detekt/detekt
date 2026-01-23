@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class CharArrayToStringCallSpec(private val env: KotlinEnvironmentContainer) {
-    private val subject = CharArrayToStringCall(Config.empty)
+    private val subject = CharArrayToStringCall(Config.Empty)
 
     @Test
     fun `toString() calls`() {

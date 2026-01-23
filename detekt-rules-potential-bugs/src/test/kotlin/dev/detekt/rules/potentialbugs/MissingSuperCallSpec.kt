@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class MissingSuperCallSpec(private val env: KotlinEnvironmentContainer) {
-    private val subject = MissingSuperCall(Config.empty)
+    private val subject = MissingSuperCall(Config.Empty)
 
     @Test
     fun `super method has CallSuper annotation`() {

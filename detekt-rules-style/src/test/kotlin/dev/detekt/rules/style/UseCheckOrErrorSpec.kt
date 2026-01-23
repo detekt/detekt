@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class UseCheckOrErrorSpec(val env: KotlinEnvironmentContainer) {
-    val subject = UseCheckOrError(Config.empty)
+    val subject = UseCheckOrError(Config.Empty)
 
     @Test
     fun `reports if a an IllegalStateException is thrown`() {

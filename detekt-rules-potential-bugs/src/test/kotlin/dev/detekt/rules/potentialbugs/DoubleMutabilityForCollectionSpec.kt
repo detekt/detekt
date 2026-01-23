@@ -13,7 +13,7 @@ private const val MUTABLE_TYPES = "mutableTypes"
 
 @KotlinCoreEnvironmentTest
 class DoubleMutabilityForCollectionSpec(private val env: KotlinEnvironmentContainer) {
-    private val subject = DoubleMutabilityForCollection(Config.empty)
+    private val subject = DoubleMutabilityForCollection(Config.Empty)
 
     @Nested
     inner class `local variables` {

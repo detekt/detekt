@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class ModifierOrderSpec {
-    val subject = ModifierOrder(Config.empty)
+    val subject = ModifierOrder(Config.Empty)
 
     @Nested
     inner class `kt classes with modifiers` {

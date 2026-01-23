@@ -14,7 +14,7 @@ class IgnoredReturnValueSpec {
     @Nested
     @KotlinCoreEnvironmentTest
     inner class `default config with non-annotated return values`(private val env: KotlinEnvironmentContainer) {
-        private val subject = IgnoredReturnValue(Config.empty)
+        private val subject = IgnoredReturnValue(Config.Empty)
 
         @Test
         fun `does not report when a function which returns a value is called and the return is ignored`() {
@@ -199,7 +199,7 @@ class IgnoredReturnValueSpec {
     @Nested
     @KotlinCoreEnvironmentTest
     inner class `default config with annotated return values`(private val env: KotlinEnvironmentContainer) {
-        private val subject = IgnoredReturnValue(Config.empty)
+        private val subject = IgnoredReturnValue(Config.Empty)
 
         @Test
         fun `reports when a function which returns a value is called and the return is ignored`() {
@@ -1081,7 +1081,7 @@ class IgnoredReturnValueSpec {
     @Nested
     @KotlinCoreEnvironmentTest
     inner class `return value types default config`(private val env: KotlinEnvironmentContainer) {
-        private val subject = IgnoredReturnValue(Config.empty)
+        private val subject = IgnoredReturnValue(Config.Empty)
 
         @Test
         fun `reports when result of function returning Flow is ignored`() {
@@ -1198,7 +1198,7 @@ class IgnoredReturnValueSpec {
     @Nested
     @KotlinCoreEnvironmentTest(additionalJavaSourcePaths = ["java"])
     inner class `Java sources`(val env: KotlinEnvironmentContainer) {
-        private val subject = IgnoredReturnValue(Config.empty)
+        private val subject = IgnoredReturnValue(Config.Empty)
 
         @Test
         fun `reports when annotation is on the method`() {

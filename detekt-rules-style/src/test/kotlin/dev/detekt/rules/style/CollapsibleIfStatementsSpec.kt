@@ -6,7 +6,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class CollapsibleIfStatementsSpec {
-    val subject = CollapsibleIfStatements(Config.empty)
+    val subject = CollapsibleIfStatements(Config.Empty)
 
     @Test
     fun `reports if statements which can be merged`() {

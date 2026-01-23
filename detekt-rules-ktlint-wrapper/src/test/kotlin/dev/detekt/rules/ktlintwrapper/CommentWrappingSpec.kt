@@ -16,7 +16,7 @@ class CommentWrappingSpec {
         val code = """
             /** Some comment */
         """.trimIndent()
-        assertThat(CommentWrapping(Config.empty).lint(code)).isEmpty()
+        assertThat(CommentWrapping(Config.Empty).lint(code)).isEmpty()
     }
 
     @Test
@@ -28,6 +28,6 @@ class CommentWrappingSpec {
             /* Some comment 4 */fun foo4() = "foo4"
         """.trimIndent()
 
-        assertThat(CommentWrapping(Config.empty).lint(code)).hasSize(4)
+        assertThat(CommentWrapping(Config.Empty).lint(code)).hasSize(4)
     }
 }

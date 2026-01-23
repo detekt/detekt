@@ -27,7 +27,7 @@ class NoUnusedImportsSpec {
             fun f() = 5
         """.trimIndent()
 
-        val findings = NoUnusedImports(Config.empty).lint(code)
+        val findings = NoUnusedImports(Config.Empty).lint(code)
 
         assertThat(findings).satisfiesExactlyInAnyOrder(
             { assertThat(it).hasStartSourceLocation(3, 1) },

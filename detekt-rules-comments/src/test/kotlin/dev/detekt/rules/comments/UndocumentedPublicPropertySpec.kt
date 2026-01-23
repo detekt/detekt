@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 private const val SEARCH_PROTECTED_PROPERTY = "searchProtectedProperty"
 
 class UndocumentedPublicPropertySpec {
-    val subject = UndocumentedPublicProperty(Config.empty)
+    val subject = UndocumentedPublicProperty(Config.Empty)
 
     @Test
     fun `reports undocumented public property`() {

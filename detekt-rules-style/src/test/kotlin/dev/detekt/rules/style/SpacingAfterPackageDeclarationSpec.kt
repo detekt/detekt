@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class SpacingAfterPackageDeclarationSpec {
-    val subject = SpacingAfterPackageDeclaration(Config.empty)
+    val subject = SpacingAfterPackageDeclaration(Config.Empty)
 
     @Test
     fun `has no blank lines violation`() {

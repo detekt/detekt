@@ -15,7 +15,7 @@ import org.junit.jupiter.params.provider.ValueSource
 class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinEnvironmentContainer) {
     @Nested
     inner class `positive cases` {
-        val subject = LibraryCodeMustSpecifyReturnType(Config.empty)
+        val subject = LibraryCodeMustSpecifyReturnType(Config.Empty)
 
         @Test
         fun `should report a top level function`() {
@@ -99,7 +99,7 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinEnvironmentContainer) 
 
     @Nested
     inner class `negative cases with public scope` {
-        val subject = LibraryCodeMustSpecifyReturnType(Config.empty)
+        val subject = LibraryCodeMustSpecifyReturnType(Config.Empty)
 
         @Test
         fun `should not report a top level function`() {
@@ -185,7 +185,7 @@ class LibraryCodeMustSpecifyReturnTypeSpec(val env: KotlinEnvironmentContainer) 
 
     @Nested
     inner class `negative cases with no public scope` {
-        val subject = LibraryCodeMustSpecifyReturnType(Config.empty)
+        val subject = LibraryCodeMustSpecifyReturnType(Config.Empty)
 
         @Test
         fun `should not report a private top level function`() {

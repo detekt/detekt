@@ -6,7 +6,7 @@ import dev.detekt.test.lint
 import org.junit.jupiter.api.Test
 
 class KDocReferencesNonPublicPropertySpec {
-    val subject = KDocReferencesNonPublicProperty(Config.empty)
+    val subject = KDocReferencesNonPublicProperty(Config.Empty)
 
     @Test
     fun `reports referenced non-public properties`() {

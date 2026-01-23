@@ -6,7 +6,7 @@ import dev.detekt.test.lint
 import org.junit.jupiter.api.Test
 
 class RedundantConstructorKeywordSpec {
-    val subject = RedundantConstructorKeyword(Config.empty)
+    val subject = RedundantConstructorKeyword(Config.Empty)
 
     @Test fun `report on data class with redundant constructor keyword`() {
         val code = """

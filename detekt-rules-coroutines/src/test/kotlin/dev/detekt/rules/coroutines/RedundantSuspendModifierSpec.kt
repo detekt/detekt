@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 @KotlinCoreEnvironmentTest
 class RedundantSuspendModifierSpec(val env: KotlinEnvironmentContainer) {
 
-    private val subject = RedundantSuspendModifier(Config.empty)
+    private val subject = RedundantSuspendModifier(Config.Empty)
 
     @Test
     fun `reports when public function returns expression of platform type`() {

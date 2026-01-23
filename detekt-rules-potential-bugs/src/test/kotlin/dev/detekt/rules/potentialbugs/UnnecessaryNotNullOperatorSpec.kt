@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class UnnecessaryNotNullOperatorSpec(private val env: KotlinEnvironmentContainer) {
-    private val subject = UnnecessaryNotNullOperator(Config.empty)
+    private val subject = UnnecessaryNotNullOperator(Config.Empty)
 
     @Nested
     inner class `check unnecessary not null operators` {

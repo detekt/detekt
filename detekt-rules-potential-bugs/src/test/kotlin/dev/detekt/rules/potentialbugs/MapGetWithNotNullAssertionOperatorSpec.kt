@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class MapGetWithNotNullAssertionOperatorSpec(private val env: KotlinEnvironmentContainer) {
-    private val subject = MapGetWithNotNullAssertionOperator(Config.empty)
+    private val subject = MapGetWithNotNullAssertionOperator(Config.Empty)
 
     @Test
     fun `reports map get operator function with not null assertion when assigned`() {

@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class MultilineRawStringIndentationSpec {
-    val subject = MultilineRawStringIndentation(Config.empty)
+    val subject = MultilineRawStringIndentation(Config.Empty)
 
     @Nested
     inner class IfTheOpeningDoesNotStartTheLine {

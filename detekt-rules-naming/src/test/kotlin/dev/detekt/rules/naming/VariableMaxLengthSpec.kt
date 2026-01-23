@@ -16,13 +16,13 @@ class VariableMaxLengthSpec {
                 val (_, status) = getResult()
             }
         """.trimIndent()
-        assertThat(VariableMaxLength(Config.empty).lint(code)).isEmpty()
+        assertThat(VariableMaxLength(Config.Empty).lint(code)).isEmpty()
     }
 
     @Test
     fun `should not report a variable with 64 letters`() {
         val code = "private val varThatIsExactly64LettersLongWhichYouMightNotWantToBelieveInLolz = 3"
-        assertThat(VariableMaxLength(Config.empty).lint(code)).isEmpty()
+        assertThat(VariableMaxLength(Config.Empty).lint(code)).isEmpty()
     }
 
     @Test
@@ -46,6 +46,6 @@ class VariableMaxLengthSpec {
     @Test
     fun `should report a variable name that is too long`() {
         val code = "private val thisVariableIsDefinitelyWayTooLongLongerThanEverythingAndShouldBeMuchShorter = 3"
-        assertThat(VariableMaxLength(Config.empty).lint(code)).hasSize(1)
+        assertThat(VariableMaxLength(Config.Empty).lint(code)).hasSize(1)
     }
 }

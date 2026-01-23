@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 
 class UseArrayLiteralsInAnnotationsSpec {
 
-    val subject = UseArrayLiteralsInAnnotations(Config.empty)
+    val subject = UseArrayLiteralsInAnnotations(Config.Empty)
 
     @Test
     fun `finds an arrayOf usage`() {

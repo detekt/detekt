@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class UnnecessaryBackticksSpec {
-    val subject = UnnecessaryBackticks(Config.empty)
+    val subject = UnnecessaryBackticks(Config.Empty)
 
     @Nested
     inner class `Reports UnnecessaryInnerClass Rule` {

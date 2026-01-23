@@ -68,7 +68,7 @@ private fun getRulesPackageNameForProvider(providerType: Class<out RuleSetProvid
 
 private fun getRules(ruleSetProvider: RuleSetProvider): List<Rule> {
     val ruleSet = ruleSetProvider.instance()
-    val rules = ruleSet.rules.map { (_, provider) -> provider(Config.empty) }
+    val rules = ruleSet.rules.map { (_, provider) -> provider(Config.Empty) }
     assertThat(rules).isNotEmpty
     return rules
 }

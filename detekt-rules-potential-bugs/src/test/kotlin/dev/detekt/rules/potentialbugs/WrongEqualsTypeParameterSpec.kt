@@ -6,7 +6,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class WrongEqualsTypeParameterSpec {
-    private val subject = WrongEqualsTypeParameter(Config.empty)
+    private val subject = WrongEqualsTypeParameter(Config.Empty)
 
     @Test
     fun `does not report nullable Any as parameter`() {

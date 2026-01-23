@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class NullableToStringCallSpec(private val env: KotlinEnvironmentContainer) {
-    private val subject = NullableToStringCall(Config.empty)
+    private val subject = NullableToStringCall(Config.Empty)
 
     @Test
     fun `reports when a nullable toString is explicitly called`() {

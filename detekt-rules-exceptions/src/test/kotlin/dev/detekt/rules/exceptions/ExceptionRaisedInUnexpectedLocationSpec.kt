@@ -7,7 +7,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class ExceptionRaisedInUnexpectedLocationSpec {
-    val subject = ExceptionRaisedInUnexpectedLocation(Config.empty)
+    val subject = ExceptionRaisedInUnexpectedLocation(Config.Empty)
 
     @Test
     fun `reports methods raising an unexpected exception`() {

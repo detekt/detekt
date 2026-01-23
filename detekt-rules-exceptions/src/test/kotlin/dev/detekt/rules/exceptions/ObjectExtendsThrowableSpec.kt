@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 @KotlinCoreEnvironmentTest
 class ObjectExtendsThrowableSpec(val env: KotlinEnvironmentContainer) {
 
-    val subject = ObjectExtendsThrowable(Config.empty)
+    val subject = ObjectExtendsThrowable(Config.Empty)
 
     @Test
     fun `reports top-level objects that extend Throwable`() {

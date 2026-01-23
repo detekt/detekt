@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 @KotlinCoreEnvironmentTest
 class SpreadOperatorSpec(val env: KotlinEnvironmentContainer) {
 
-    private val subject = SpreadOperator(Config.empty)
+    private val subject = SpreadOperator(Config.Empty)
 
     private val errorMessage = "Used in this way a spread operator causes a full copy of the array to" +
         " be created before calling a method. This may result in a performance penalty."

@@ -16,21 +16,21 @@ class PackageNamingSpec {
 
     @Test
     fun `should find a uppercase package name`() {
-        assertThat(PackageNaming(Config.empty).lint("package FOO.BAR")).hasSize(1)
+        assertThat(PackageNaming(Config.Empty).lint("package FOO.BAR")).hasSize(1)
     }
 
     @Test
     fun `should find a upper camel case package name`() {
-        assertThat(PackageNaming(Config.empty).lint("package Foo.Bar")).hasSize(1)
+        assertThat(PackageNaming(Config.Empty).lint("package Foo.Bar")).hasSize(1)
     }
 
     @Test
     fun `should find a camel case package name`() {
-        assertThat(PackageNaming(Config.empty).lint("package fOO.bAR")).hasSize(1)
+        assertThat(PackageNaming(Config.Empty).lint("package fOO.bAR")).hasSize(1)
     }
 
     @Test
     fun `should check an valid package name`() {
-        assertThat(PackageNaming(Config.empty).lint("package foo.bar")).isEmpty()
+        assertThat(PackageNaming(Config.Empty).lint("package foo.bar")).isEmpty()
     }
 }

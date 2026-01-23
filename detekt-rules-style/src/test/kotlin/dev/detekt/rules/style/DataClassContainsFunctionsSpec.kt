@@ -11,7 +11,7 @@ private const val CONVERSION_FUNCTION_PREFIX = "conversionFunctionPrefix"
 private const val ALLOW_OPERATORS = "allowOperators"
 
 class DataClassContainsFunctionsSpec {
-    val subject = DataClassContainsFunctions(Config.empty)
+    val subject = DataClassContainsFunctions(Config.Empty)
 
     @Nested
     inner class `flagged functions in data class` {
@@ -48,7 +48,7 @@ class DataClassContainsFunctionsSpec {
 
         @Test
         fun `reports operators if not allowed by default`() {
-            val rule = DataClassContainsFunctions(Config.empty)
+            val rule = DataClassContainsFunctions(Config.Empty)
             assertThat(rule.lint(code)).hasSize(1)
         }
 

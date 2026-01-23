@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class EqualsOnSignatureLineSpec {
-    val subject = EqualsOnSignatureLine(Config.empty)
+    val subject = EqualsOnSignatureLine(Config.Empty)
 
     @Nested
     inner class `with expression syntax and without a return type` {

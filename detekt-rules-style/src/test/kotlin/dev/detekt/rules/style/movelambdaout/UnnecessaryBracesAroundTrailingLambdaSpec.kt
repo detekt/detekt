@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 // Source https://github.com/JetBrains/intellij-community/tree/master/plugins/kotlin/idea/tests/testData/inspectionsLocal/moveLambdaOutsideParentheses
 @KotlinCoreEnvironmentTest
 class UnnecessaryBracesAroundTrailingLambdaSpec(val env: KotlinEnvironmentContainer) {
-    private val subject = UnnecessaryBracesAroundTrailingLambda(Config.empty)
+    private val subject = UnnecessaryBracesAroundTrailingLambda(Config.Empty)
 
     @Test
     fun `does not report when lambda inside braces is used in class delegation`() {

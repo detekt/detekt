@@ -23,7 +23,7 @@ class WildcardImportSpec {
 
         @Test
         fun `should report all wildcard imports`() {
-            val rule = WildcardImport(Config.empty)
+            val rule = WildcardImport(Config.Empty)
 
             val findings = rule.lint(code)
             assertThat(findings).hasSize(2)
@@ -66,7 +66,7 @@ class WildcardImportSpec {
                 import java.util.*
             """.trimIndent()
 
-            val findings = WildcardImport(Config.empty).lint(code2)
+            val findings = WildcardImport(Config.Empty).lint(code2)
             assertThat(findings).isEmpty()
         }
     }
@@ -84,7 +84,7 @@ class WildcardImportSpec {
 
         @Test
         fun `should not report any issues`() {
-            val findings = WildcardImport(Config.empty).lint(code)
+            val findings = WildcardImport(Config.Empty).lint(code)
             assertThat(findings).isEmpty()
         }
     }

@@ -11,7 +11,7 @@ import org.junit.jupiter.params.provider.ValueSource
 
 @KotlinCoreEnvironmentTest
 class NullableBooleanCheckSpec(val env: KotlinEnvironmentContainer) {
-    val subject = NullableBooleanCheck(Config.empty)
+    val subject = NullableBooleanCheck(Config.Empty)
 
     /**
      * The recommended replacement string for `?: [fallback]`.

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class RedundantExplicitTypeSpec(val env: KotlinEnvironmentContainer) {
-    val subject = RedundantExplicitType(Config.empty)
+    val subject = RedundantExplicitType(Config.Empty)
 
     @Test
     fun `reports explicit type for boolean`() {

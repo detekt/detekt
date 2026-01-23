@@ -179,7 +179,7 @@ class StringLiteralDuplicationSpec {
             }
         """.trimIndent()
 
-        assertThat(StringLiteralDuplication(Config.empty).lint(code)).isEmpty()
+        assertThat(StringLiteralDuplication(Config.Empty).lint(code)).isEmpty()
     }
 }
 

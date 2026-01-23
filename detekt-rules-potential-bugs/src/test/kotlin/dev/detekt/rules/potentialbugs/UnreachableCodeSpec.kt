@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class UnreachableCodeSpec(private val env: KotlinEnvironmentContainer) {
-    private val subject = UnreachableCode(Config.empty)
+    private val subject = UnreachableCode(Config.Empty)
 
     @Test
     fun `reports unreachable code after return`() {

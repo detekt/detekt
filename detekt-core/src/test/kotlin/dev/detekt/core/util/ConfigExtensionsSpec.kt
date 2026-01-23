@@ -25,8 +25,8 @@ class IsActiveOrDefaultSpec {
 
     @Test
     fun `use the default value when it is not defined`() {
-        assertThat(Config.empty.isActiveOrDefault(true)).isTrue()
-        assertThat(Config.empty.isActiveOrDefault(false)).isFalse()
+        assertThat(Config.Empty.isActiveOrDefault(true)).isTrue()
+        assertThat(Config.Empty.isActiveOrDefault(false)).isFalse()
     }
 }
 
@@ -37,7 +37,7 @@ class ShouldAnalyzeFileSpec {
 
     @Test
     fun `analyzes file with an empty config`() {
-        val config = Config.empty
+        val config = Config.Empty
         assertThat(config.shouldAnalyzeFile(file, basePath)).isTrue()
     }
 

@@ -6,7 +6,7 @@ import dev.detekt.test.lint
 import org.junit.jupiter.api.Test
 
 class NoTabsSpec {
-    private val subject = NoTabs(Config.empty)
+    private val subject = NoTabs(Config.Empty)
 
     @Test
     fun `should flag a line that contains a tab`() {

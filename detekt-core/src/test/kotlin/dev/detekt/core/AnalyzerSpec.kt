@@ -476,7 +476,7 @@ internal fun createRuleDescriptor(provider: (Config) -> Rule, config: Config) =
         provider,
         config,
         RuleInstance(
-            id = provider(Config.empty).javaClass.simpleName,
+            id = provider(Config.Empty).javaClass.simpleName,
             ruleSetId = RuleSetId("custom"),
             url = URI("https://example.org/"),
             description = "TestDescription",

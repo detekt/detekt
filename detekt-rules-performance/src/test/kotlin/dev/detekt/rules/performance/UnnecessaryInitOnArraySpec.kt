@@ -11,7 +11,7 @@ import org.junit.jupiter.params.provider.MethodSource
 
 class UnnecessaryInitOnArraySpec {
 
-    val subject = UnnecessaryInitOnArray(Config.empty)
+    val subject = UnnecessaryInitOnArray(Config.Empty)
 
     @ParameterizedTest(name = "reports {0} with lambda returning {1}")
     @MethodSource("defaultValueTestCases")

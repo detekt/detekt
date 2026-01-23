@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
 @KotlinCoreEnvironmentTest
 @Suppress("unused")
 class UnusedVariableSpec(val env: KotlinEnvironmentContainer) {
-    val subject = UnusedVariable(Config.empty)
+    val subject = UnusedVariable(Config.Empty)
 
     @Nested
     inner class `ignored list` {

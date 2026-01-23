@@ -6,7 +6,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class DataClassShouldBeImmutableSpec {
-    val subject = DataClassShouldBeImmutable(Config.empty)
+    val subject = DataClassShouldBeImmutable(Config.Empty)
 
     @Test
     fun `reports mutable variable in primary constructor`() {

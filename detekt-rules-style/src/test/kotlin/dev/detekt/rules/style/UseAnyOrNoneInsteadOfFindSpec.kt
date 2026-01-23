@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class UseAnyOrNoneInsteadOfFindSpec(val env: KotlinEnvironmentContainer) {
-    val subject = UseAnyOrNoneInsteadOfFind(Config.empty)
+    val subject = UseAnyOrNoneInsteadOfFind(Config.Empty)
 
     @Test
     @DisplayName("Reports collections.find != null")

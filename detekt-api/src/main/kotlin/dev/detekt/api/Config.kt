@@ -51,27 +51,26 @@ interface Config {
             throwable
         )
 
+    /**
+     * An empty configuration with no properties.
+     * This config should only be used in test cases.
+     * Always returns the default value except when 'active' is queried, it returns true.
+     */
+    object Empty : Config {
+        override val parentPath: String? = null
+
+        override val parent: Config = this
+
+        override fun subConfig(key: String): Config = this
+
+        override fun subConfigKeys(): Set<String> = emptySet()
+
+        override fun <T : Any> valueOrNull(key: String): T? = null
+
+        override fun toString(): String = "Config.Empty"
+    }
+
     companion object {
-
-        /**
-         * An empty configuration with no properties.
-         * This config should only be used in test cases.
-         * Always returns the default value except when 'active' is queried, it returns true.
-         */
-        val empty: Config = object : Config {
-            override val parentPath: String? = null
-
-            override val parent: Config = this
-
-            override fun subConfig(key: String): Config = this
-
-            override fun subConfigKeys(): Set<String> = emptySet()
-
-            override fun <T : Any> valueOrNull(key: String): T? = null
-
-            override fun toString(): String = "Config.empty"
-        }
-
         const val ACTIVE_KEY: String = "active"
         const val ALIASES_KEY: String = "aliases"
         const val AUTO_CORRECT_KEY: String = "autoCorrect"

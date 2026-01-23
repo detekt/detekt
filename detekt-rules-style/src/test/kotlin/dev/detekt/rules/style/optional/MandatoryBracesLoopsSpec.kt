@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class MandatoryBracesLoopsSpec {
-    val subject = MandatoryBracesLoops(Config.empty)
+    val subject = MandatoryBracesLoops(Config.Empty)
 
     @Nested
     inner class `MandatoryBracesLoops rule for 'for' loops` {

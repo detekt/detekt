@@ -13,7 +13,7 @@ class ParameterListWrappingSpec {
 
     @BeforeEach
     fun createSubject() {
-        subject = ParameterListWrapping(Config.empty)
+        subject = ParameterListWrapping(Config.Empty)
     }
 
     @Test

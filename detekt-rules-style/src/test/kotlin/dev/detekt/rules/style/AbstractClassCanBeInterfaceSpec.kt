@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
-    val subject = AbstractClassCanBeInterface(Config.empty)
+    val subject = AbstractClassCanBeInterface(Config.Empty)
 
     @Nested
     inner class `abstract classes with no concrete members` {

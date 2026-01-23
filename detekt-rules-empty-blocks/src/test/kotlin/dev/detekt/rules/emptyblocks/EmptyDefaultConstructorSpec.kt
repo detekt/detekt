@@ -12,7 +12,7 @@ internal class EmptyDefaultConstructorSpec {
         val code = """
             class EmptyConstructor()
         """.trimIndent()
-        assertThat(EmptyDefaultConstructor(Config.empty).lint(code)).hasSize(1)
+        assertThat(EmptyDefaultConstructor(Config.Empty).lint(code)).hasSize(1)
     }
 
     @Test
@@ -20,7 +20,7 @@ internal class EmptyDefaultConstructorSpec {
         val code = """
             class EmptyPrimaryConstructor constructor()
         """.trimIndent()
-        assertThat(EmptyDefaultConstructor(Config.empty).lint(code)).hasSize(1)
+        assertThat(EmptyDefaultConstructor(Config.Empty).lint(code)).hasSize(1)
     }
 
     @Test
@@ -28,7 +28,7 @@ internal class EmptyDefaultConstructorSpec {
         val code = """
             class EmptyPublicPrimaryConstructor public constructor()
         """.trimIndent()
-        assertThat(EmptyDefaultConstructor(Config.empty).lint(code)).hasSize(1)
+        assertThat(EmptyDefaultConstructor(Config.Empty).lint(code)).hasSize(1)
     }
 
     @Test
@@ -36,7 +36,7 @@ internal class EmptyDefaultConstructorSpec {
         val code = """
             class PrimaryConstructorWithParameter constructor(x: Int)
         """.trimIndent()
-        assertThat(EmptyDefaultConstructor(Config.empty).lint(code)).isEmpty()
+        assertThat(EmptyDefaultConstructor(Config.Empty).lint(code)).isEmpty()
     }
 
     @Test
@@ -44,7 +44,7 @@ internal class EmptyDefaultConstructorSpec {
         val code = """
             class PrimaryConstructorWithAnnotation @SafeVarargs constructor()
         """.trimIndent()
-        assertThat(EmptyDefaultConstructor(Config.empty).lint(code)).isEmpty()
+        assertThat(EmptyDefaultConstructor(Config.Empty).lint(code)).isEmpty()
     }
 
     @Test
@@ -52,7 +52,7 @@ internal class EmptyDefaultConstructorSpec {
         val code = """
             class PrivatePrimaryConstructor private constructor()
         """.trimIndent()
-        assertThat(EmptyDefaultConstructor(Config.empty).lint(code)).isEmpty()
+        assertThat(EmptyDefaultConstructor(Config.Empty).lint(code)).isEmpty()
     }
 
     @Test
@@ -63,7 +63,7 @@ internal class EmptyDefaultConstructorSpec {
                 constructor(i: Int) : this()
             }
         """.trimIndent()
-        assertThat(EmptyDefaultConstructor(Config.empty).lint(code)).isEmpty()
+        assertThat(EmptyDefaultConstructor(Config.Empty).lint(code)).isEmpty()
     }
 
     @Test
@@ -71,7 +71,7 @@ internal class EmptyDefaultConstructorSpec {
         val code = """
             expect class NeedsConstructor()
         """.trimIndent()
-        assertThat(EmptyDefaultConstructor(Config.empty).lint(code, compile = false)).isEmpty()
+        assertThat(EmptyDefaultConstructor(Config.Empty).lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -79,7 +79,7 @@ internal class EmptyDefaultConstructorSpec {
         val code = """
             actual class NeedsConstructor actual constructor()
         """.trimIndent()
-        assertThat(EmptyDefaultConstructor(Config.empty).lint(code, compile = false)).isEmpty()
+        assertThat(EmptyDefaultConstructor(Config.Empty).lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -87,7 +87,7 @@ internal class EmptyDefaultConstructorSpec {
         val code = """
             expect annotation class NeedsConstructor()
         """.trimIndent()
-        assertThat(EmptyDefaultConstructor(Config.empty).lint(code, compile = false)).isEmpty()
+        assertThat(EmptyDefaultConstructor(Config.Empty).lint(code, compile = false)).isEmpty()
     }
 
     @Test
@@ -95,6 +95,6 @@ internal class EmptyDefaultConstructorSpec {
         val code = """
             actual annotation class NeedsConstructor actual constructor()
         """.trimIndent()
-        assertThat(EmptyDefaultConstructor(Config.empty).lint(code, compile = false)).isEmpty()
+        assertThat(EmptyDefaultConstructor(Config.Empty).lint(code, compile = false)).isEmpty()
     }
 }

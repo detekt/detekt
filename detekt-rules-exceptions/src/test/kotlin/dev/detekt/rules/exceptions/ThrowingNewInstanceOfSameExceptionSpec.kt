@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class ThrowingNewInstanceOfSameExceptionSpec {
-    val subject = ThrowingNewInstanceOfSameException(Config.empty)
+    val subject = ThrowingNewInstanceOfSameException(Config.Empty)
 
     @Nested
     inner class `a catch block which rethrows a new instance of the caught exception` {

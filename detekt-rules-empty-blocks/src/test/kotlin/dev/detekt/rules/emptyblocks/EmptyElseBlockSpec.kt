@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 
 class EmptyElseBlockSpec {
 
-    private val subject = EmptyElseBlock(Config.empty)
+    private val subject = EmptyElseBlock(Config.Empty)
 
     @Test
     fun `reports empty else block`() {

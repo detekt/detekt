@@ -6,7 +6,7 @@ import dev.detekt.test.lint
 import org.junit.jupiter.api.Test
 
 class EmptyKotlinFileSpec {
-    private val subject = EmptyKotlinFile(Config.empty)
+    private val subject = EmptyKotlinFile(Config.Empty)
 
     @Test
     fun `reports empty if file is blank`() {

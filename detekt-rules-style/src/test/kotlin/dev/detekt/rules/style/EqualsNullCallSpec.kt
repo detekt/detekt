@@ -6,7 +6,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class EqualsNullCallSpec {
-    val subject = EqualsNullCall(Config.empty)
+    val subject = EqualsNullCall(Config.Empty)
 
     @Test
     fun `reports equals call with null as parameter`() {

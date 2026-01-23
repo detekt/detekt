@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class UseSumOfInsteadOfFlatMapSizeSpec(val env: KotlinEnvironmentContainer) {
-    val subject = UseSumOfInsteadOfFlatMapSize(Config.empty)
+    val subject = UseSumOfInsteadOfFlatMapSize(Config.Empty)
 
     @Test
     fun `reports flatMap and size`() {

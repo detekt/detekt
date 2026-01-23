@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class ObjectLiteralToLambdaSpec {
-    val subject = ObjectLiteralToLambda(Config.empty)
+    val subject = ObjectLiteralToLambda(Config.Empty)
 
     @Nested
     @KotlinCoreEnvironmentTest

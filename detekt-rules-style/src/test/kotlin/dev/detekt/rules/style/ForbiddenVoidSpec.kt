@@ -14,7 +14,7 @@ private const val IGNORE_USAGE_IN_GENERICS = "ignoreUsageInGenerics"
 
 @KotlinCoreEnvironmentTest
 class ForbiddenVoidSpec(val env: KotlinEnvironmentContainer) {
-    val subject = ForbiddenVoid(Config.empty)
+    val subject = ForbiddenVoid(Config.Empty)
 
     @Test
     fun `should report all Void type usage`() {

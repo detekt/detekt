@@ -27,15 +27,15 @@ internal class ValidateConfigSpec {
     fun `returns an error for an invalid baseline`() {
         val invalidBaseline = TestConfig()
         assertThatIllegalArgumentException().isThrownBy {
-            validateConfig(Config.empty, invalidBaseline, emptySet())
+            validateConfig(Config.Empty, invalidBaseline, emptySet())
         }.withMessageStartingWith("Only supported baseline config is the YamlConfig.")
     }
 
     @Test
     fun `returns an error for an empty baseline`() {
-        val invalidBaseline = Config.empty
+        val invalidBaseline = Config.Empty
         assertThatIllegalArgumentException().isThrownBy {
-            validateConfig(Config.empty, invalidBaseline, emptySet())
+            validateConfig(Config.Empty, invalidBaseline, emptySet())
         }.withMessageStartingWith("Cannot validate configuration based on an empty baseline config.")
     }
 

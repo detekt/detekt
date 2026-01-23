@@ -6,7 +6,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class DocumentationOverPrivatePropertiesSpec {
-    private val subject = DocumentationOverPrivateProperty(Config.empty)
+    private val subject = DocumentationOverPrivateProperty(Config.Empty)
 
     @Test
     fun `reports private property with a comment`() {

@@ -6,7 +6,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class UnnecessaryTemporaryInstantiationSpec {
-    val subject = UnnecessaryTemporaryInstantiation(Config.empty)
+    val subject = UnnecessaryTemporaryInstantiation(Config.Empty)
 
     @Test
     fun `temporary instantiation for conversion`() {

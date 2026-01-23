@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 @KotlinCoreEnvironmentTest
 class SuspendFunWithFlowReturnTypeSpec(private val env: KotlinEnvironmentContainer) {
 
-    private val subject = SuspendFunWithFlowReturnType(Config.empty)
+    private val subject = SuspendFunWithFlowReturnType(Config.Empty)
 
     @Test
     fun `reports when top-level suspend function has explicit Flow return type`() {

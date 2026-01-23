@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test
 @KotlinCoreEnvironmentTest
 class CoroutineLaunchedInTestWithoutRunTestSpec(private val env: KotlinEnvironmentContainer) {
 
-    private val subject = CoroutineLaunchedInTestWithoutRunTest(Config.empty)
+    private val subject = CoroutineLaunchedInTestWithoutRunTest(Config.Empty)
 
     @Test
     fun `reports when coroutine is launched in test without a runTest block`() {

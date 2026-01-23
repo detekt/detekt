@@ -14,7 +14,7 @@ class AvoidReferentialEqualitySpec(private val env: KotlinEnvironmentContainer) 
 
     @Nested
     inner class `ReferentialEquality with defaults` {
-        private val subject = AvoidReferentialEquality(Config.empty)
+        private val subject = AvoidReferentialEquality(Config.Empty)
 
         @Test
         fun `reports usage of === for strings`() {

@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class VarCouldBeValSpec(val env: KotlinEnvironmentContainer) {
-    val subject = VarCouldBeVal(Config.empty)
+    val subject = VarCouldBeVal(Config.Empty)
 
     @Nested
     inner class `file-level declarations` {

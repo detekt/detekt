@@ -8,7 +8,7 @@ import kotlin.io.path.Path
 import kotlin.io.path.absolute
 
 class TestSetupContext(
-    override val config: Config = Config.empty,
+    override val config: Config = Config.Empty,
     override val basePath: Path = Path("").absolute(),
     properties: Map<String, Any?> = emptyMap(),
     override val outputChannel: Appendable = StringBuilder(),

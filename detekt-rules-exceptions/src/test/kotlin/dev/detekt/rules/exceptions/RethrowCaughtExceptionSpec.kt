@@ -6,7 +6,7 @@ import dev.detekt.test.lint
 import org.junit.jupiter.api.Test
 
 class RethrowCaughtExceptionSpec {
-    val subject = RethrowCaughtException(Config.empty)
+    val subject = RethrowCaughtException(Config.Empty)
 
     @Test
     fun `reports when the same exception is rethrown`() {

@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test
 @KotlinCoreEnvironmentTest
 class SuspendFunSwallowedCancellationSpec(private val env: KotlinEnvironmentContainer) {
 
-    private val subject = SuspendFunSwallowedCancellation(Config.empty)
+    private val subject = SuspendFunSwallowedCancellation(Config.Empty)
 
     @Test
     fun `does report if swallowing generic exception in suspend fun`() {

@@ -1273,7 +1273,7 @@ class BracesOnWhenStatementsSpec {
             val codeLocation = locations.map { it(code) }.toTypedArray()
             // Separately compile the code because otherwise all the combinations would compile them again and again.
             val compileTest = dynamicTest("Compiles: $code") {
-                BracesOnWhenStatements(Config.empty).lint(code)
+                BracesOnWhenStatements(Config.Empty).lint(code)
             }
             val validationTests = createBraceTests(singleLine, multiLine) { rule ->
                 rule.test(code, *codeLocation)

@@ -60,7 +60,7 @@ class ConfigAssert(private val config: Config, private val name: String, private
         getRuleSetProviderInPackageOrNull()
             ?.instance()
             ?.rules
-            ?.map { (_, provider) -> provider(Config.empty) }
+            ?.map { (_, provider) -> provider(Config.Empty) }
             .orEmpty()
 
     private fun getRuleSetProviderInPackageOrNull(): RuleSetProvider? =

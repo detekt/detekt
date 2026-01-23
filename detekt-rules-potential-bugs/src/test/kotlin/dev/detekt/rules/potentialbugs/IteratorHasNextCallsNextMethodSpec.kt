@@ -6,7 +6,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class IteratorHasNextCallsNextMethodSpec {
-    private val subject = IteratorHasNextCallsNextMethod(Config.empty)
+    private val subject = IteratorHasNextCallsNextMethod(Config.Empty)
 
     @Test
     fun `reports wrong iterator implementation`() {

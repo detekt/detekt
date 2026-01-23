@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class CastNullableToNonNullableTypeSpec(private val env: KotlinEnvironmentContainer) {
-    private val subject = CastNullableToNonNullableType(Config.empty)
+    private val subject = CastNullableToNonNullableType(Config.Empty)
 
     @Test
     fun `reports casting Nullable type to NonNullable type`() {

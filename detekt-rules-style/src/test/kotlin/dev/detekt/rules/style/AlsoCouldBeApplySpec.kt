@@ -6,7 +6,7 @@ import dev.detekt.test.lint
 import org.junit.jupiter.api.Test
 
 class AlsoCouldBeApplySpec {
-    val subject = AlsoCouldBeApply(Config.empty)
+    val subject = AlsoCouldBeApply(Config.Empty)
 
     @Test
     fun `does not report when no also is used`() {

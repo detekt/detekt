@@ -6,7 +6,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class ThrowingExceptionInMainSpec {
-    val subject = ThrowingExceptionInMain(Config.empty)
+    val subject = ThrowingExceptionInMain(Config.Empty)
 
     @Test
     fun `reports a runnable main function without args which throws an exception`() {

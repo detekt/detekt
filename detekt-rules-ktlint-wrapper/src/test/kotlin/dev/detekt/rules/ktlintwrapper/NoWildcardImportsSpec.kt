@@ -16,7 +16,7 @@ class NoWildcardImportsSpec {
 
         @BeforeEach
         fun createSubject() {
-            subject = NoWildcardImports(Config.empty)
+            subject = NoWildcardImports(Config.Empty)
         }
 
         @Test

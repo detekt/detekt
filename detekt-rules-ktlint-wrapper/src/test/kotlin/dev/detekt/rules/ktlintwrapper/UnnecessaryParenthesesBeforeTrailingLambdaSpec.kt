@@ -18,7 +18,7 @@ class UnnecessaryParenthesesBeforeTrailingLambdaSpec {
             fun countDash(input: String) =
                 "some-string".count() { it == '-' }
         """.trimIndent()
-        assertThat(UnnecessaryParenthesesBeforeTrailingLambda(Config.empty).lint(code)).hasSize(1)
+        assertThat(UnnecessaryParenthesesBeforeTrailingLambda(Config.Empty).lint(code)).hasSize(1)
     }
 
     @Test
@@ -27,6 +27,6 @@ class UnnecessaryParenthesesBeforeTrailingLambdaSpec {
             fun countDash(input: String) =
                 "some-string".count { it == '-' }
         """.trimIndent()
-        assertThat(UnnecessaryParenthesesBeforeTrailingLambda(Config.empty).lint(code)).isEmpty()
+        assertThat(UnnecessaryParenthesesBeforeTrailingLambda(Config.Empty).lint(code)).isEmpty()
     }
 }

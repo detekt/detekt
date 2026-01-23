@@ -18,7 +18,7 @@ class ConstructorParameterNamingSpec {
                 constructor(param: String, privateParam: String) {}
             }
         """.trimIndent()
-        assertThat(ConstructorParameterNaming(Config.empty).lint(code)).isEmpty()
+        assertThat(ConstructorParameterNaming(Config.Empty).lint(code)).isEmpty()
     }
 
     @Test
@@ -31,7 +31,7 @@ class ConstructorParameterNamingSpec {
                 constructor(PARAM: String, PRIVATE_PARAM: String) {}
             }
         """.trimIndent()
-        assertThat(ConstructorParameterNaming(Config.empty).lint(code)).hasSize(5)
+        assertThat(ConstructorParameterNaming(Config.Empty).lint(code)).hasSize(5)
     }
 
     @Test
@@ -39,7 +39,7 @@ class ConstructorParameterNamingSpec {
         val code = """
             class C(val PARAM: String)
         """.trimIndent()
-        assertThat(ConstructorParameterNaming(Config.empty).lint(code)).singleElement()
+        assertThat(ConstructorParameterNaming(Config.Empty).lint(code)).singleElement()
             .hasTextLocation(8 to 25)
     }
 
@@ -50,7 +50,7 @@ class ConstructorParameterNamingSpec {
             
             interface I { val PARAM: String }
         """.trimIndent()
-        assertThat(ConstructorParameterNaming(Config.empty).lint(code)).isEmpty()
+        assertThat(ConstructorParameterNaming(Config.Empty).lint(code)).isEmpty()
     }
 
     @Nested
@@ -60,7 +60,7 @@ class ConstructorParameterNamingSpec {
             val code = """
                 class Foo(val `is`: Boolean)
             """.trimIndent()
-            assertThat(ConstructorParameterNaming(Config.empty).lint(code)).isEmpty()
+            assertThat(ConstructorParameterNaming(Config.Empty).lint(code)).isEmpty()
         }
 
         @Test
@@ -68,7 +68,7 @@ class ConstructorParameterNamingSpec {
             val code = """
                 class Foo(private val `is`: Boolean)
             """.trimIndent()
-            assertThat(ConstructorParameterNaming(Config.empty).lint(code)).isEmpty()
+            assertThat(ConstructorParameterNaming(Config.Empty).lint(code)).isEmpty()
         }
 
         @Test
@@ -76,7 +76,7 @@ class ConstructorParameterNamingSpec {
             val code = """
                 class Foo(private val `PARAM_NAME`: Boolean)
             """.trimIndent()
-            assertThat(ConstructorParameterNaming(Config.empty).lint(code)).singleElement()
+            assertThat(ConstructorParameterNaming(Config.Empty).lint(code)).singleElement()
                 .hasStartSourceLocation(1, 11)
         }
 
@@ -88,7 +88,7 @@ class ConstructorParameterNamingSpec {
                     constructor(`is`: Boolean, `when`: Boolean): this(`is`)
                 }
             """.trimIndent()
-            assertThat(ConstructorParameterNaming(Config.empty).lint(code)).isEmpty()
+            assertThat(ConstructorParameterNaming(Config.Empty).lint(code)).isEmpty()
         }
     }
 }

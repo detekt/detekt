@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 
 class UseIfInsteadOfWhenSpec {
 
-    val subject = UseIfInsteadOfWhen(Config.empty)
+    val subject = UseIfInsteadOfWhen(Config.Empty)
 
     @Test
     fun `reports when using two branches`() {

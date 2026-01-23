@@ -6,7 +6,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class NotImplementedDeclarationSpec {
-    val subject = NotImplementedDeclaration(Config.empty)
+    val subject = NotImplementedDeclaration(Config.Empty)
 
     @Test
     fun `reports NotImplementedErrors`() {

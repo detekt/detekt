@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 @KotlinCoreEnvironmentTest
 class UnnecessaryApplySpec(val env: KotlinEnvironmentContainer) {
 
-    val subject = UnnecessaryApply(Config.empty)
+    val subject = UnnecessaryApply(Config.Empty)
 
     @Nested
     inner class `unnecessary apply expressions that can be changed to ordinary method call` {

@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class UseIfEmptyOrIfBlankSpec(val env: KotlinEnvironmentContainer) {
-    val subject = UseIfEmptyOrIfBlank(Config.empty)
+    val subject = UseIfEmptyOrIfBlank(Config.Empty)
 
     @Nested
     inner class `report UseIfEmptyOrIfBlank rule` {

@@ -17,7 +17,7 @@ class InvalidPackageDeclarationSpec {
     @Test
     fun `should pass if package declaration is correct`() {
         val ktFile = compileForTest(Path("src/test/resources/InvalidPackageDeclarationSpec/src/foo/bar/correct.kt"))
-        val findings = InvalidPackageDeclaration(Config.empty).lint(ktFile)
+        val findings = InvalidPackageDeclaration(Config.Empty).lint(ktFile)
 
         assertThat(findings).isEmpty()
     }
@@ -25,7 +25,7 @@ class InvalidPackageDeclarationSpec {
     @Test
     fun `should report if package declaration does not match source location`() {
         val ktFile = compileForTest(Path("src/test/resources/InvalidPackageDeclarationSpec/src/bar/incorrect.kt"))
-        val findings = InvalidPackageDeclaration(Config.empty).lint(ktFile)
+        val findings = InvalidPackageDeclaration(Config.Empty).lint(ktFile)
 
         assertThat(findings).singleElement()
             .hasTextLocation(0 to 11)

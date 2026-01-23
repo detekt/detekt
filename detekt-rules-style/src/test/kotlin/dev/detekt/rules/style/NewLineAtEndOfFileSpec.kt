@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 
 class NewLineAtEndOfFileSpec {
 
-    val subject = NewLineAtEndOfFile(Config.empty)
+    val subject = NewLineAtEndOfFile(Config.Empty)
 
     @Test
     fun `should not flag a kt file containing new line at the end`() {

@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 private const val INCLUDE_LINE_WRAPPING = "includeLineWrapping"
 
 class ExpressionBodySyntaxSpec {
-    val subject = ExpressionBodySyntax(Config.empty)
+    val subject = ExpressionBodySyntax(Config.Empty)
 
     @Nested
     inner class `several return statements` {

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 class UnusedPrivateClassSpec {
 
-    val subject = UnusedPrivateClass(Config.empty)
+    val subject = UnusedPrivateClass(Config.Empty)
 
     @Nested
     inner class `top level interfaces` {
@@ -340,7 +340,7 @@ class UnusedPrivateClassSpec {
                 fun bar(clazz: KClass<*>) = Unit
             """.trimIndent()
 
-            val findings = UnusedPrivateClass(Config.empty).lint(code)
+            val findings = UnusedPrivateClass(Config.Empty).lint(code)
 
             assertThat(findings).hasSize(1)
         }
@@ -360,7 +360,7 @@ class UnusedPrivateClassSpec {
                 }
             """.trimIndent()
 
-            val findings = UnusedPrivateClass(Config.empty).lint(code)
+            val findings = UnusedPrivateClass(Config.Empty).lint(code)
 
             assertThat(findings).isEmpty()
         }
@@ -385,7 +385,7 @@ class UnusedPrivateClassSpec {
                 }
             """.trimIndent()
 
-            val findings = UnusedPrivateClass(Config.empty).lint(code)
+            val findings = UnusedPrivateClass(Config.Empty).lint(code)
 
             assertThat(findings).isEmpty()
         }
@@ -404,7 +404,7 @@ class UnusedPrivateClassSpec {
                 }
             """.trimIndent()
 
-            val findings = UnusedPrivateClass(Config.empty).lint(code)
+            val findings = UnusedPrivateClass(Config.Empty).lint(code)
 
             assertThat(findings).isEmpty()
         }
@@ -428,7 +428,7 @@ class UnusedPrivateClassSpec {
                     }
                 }
             """.trimIndent()
-            val findings = UnusedPrivateClass(Config.empty).lint(code)
+            val findings = UnusedPrivateClass(Config.Empty).lint(code)
             assertThat(findings).isEmpty()
         }
 
@@ -453,7 +453,7 @@ class UnusedPrivateClassSpec {
                     }
                 }
             """.trimIndent()
-            val findings = UnusedPrivateClass(Config.empty).lint(code)
+            val findings = UnusedPrivateClass(Config.Empty).lint(code)
             assertThat(findings).singleElement()
                 .hasStartSourceLocation(10, 5)
         }
@@ -465,7 +465,7 @@ class UnusedPrivateClassSpec {
 
                 private val listOfConstructors = listOf(::A)
             """.trimIndent()
-            val findings = UnusedPrivateClass(Config.empty).lint(code)
+            val findings = UnusedPrivateClass(Config.Empty).lint(code)
             assertThat(findings).isEmpty()
         }
 
@@ -478,7 +478,7 @@ class UnusedPrivateClassSpec {
                     private val list = listOf(Parent::Foo)
                 }
             """.trimIndent()
-            val findings = UnusedPrivateClass(Config.empty).lint(code)
+            val findings = UnusedPrivateClass(Config.Empty).lint(code)
             assertThat(findings).isEmpty()
         }
 
@@ -492,7 +492,7 @@ class UnusedPrivateClassSpec {
                     }
                 }
             """.trimIndent()
-            val findings = UnusedPrivateClass(Config.empty).lint(code)
+            val findings = UnusedPrivateClass(Config.Empty).lint(code)
             assertThat(findings).isEmpty()
         }
 
@@ -505,7 +505,7 @@ class UnusedPrivateClassSpec {
                     private val list = listOf(::Foo)
                 }
             """.trimIndent()
-            val findings = UnusedPrivateClass(Config.empty).lint(code)
+            val findings = UnusedPrivateClass(Config.Empty).lint(code)
             assertThat(findings).isEmpty()
         }
 
@@ -520,7 +520,7 @@ class UnusedPrivateClassSpec {
                     private val list = listOf(1).map(::Foo)
                 }
             """.trimIndent()
-            val findings = UnusedPrivateClass(Config.empty).lint(code)
+            val findings = UnusedPrivateClass(Config.Empty).lint(code)
             assertThat(findings).isEmpty()
         }
     }

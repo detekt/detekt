@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test
 @KotlinCoreEnvironmentTest
 class OptionalUnitSpec(val env: KotlinEnvironmentContainer) {
 
-    val subject = OptionalUnit(Config.empty)
+    val subject = OptionalUnit(Config.Empty)
 
     @Test
     fun `should report when a function has an explicit Unit return type`() {

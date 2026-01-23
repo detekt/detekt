@@ -6,7 +6,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class UnnecessaryInheritanceSpec {
-    val subject = UnnecessaryInheritance(Config.empty)
+    val subject = UnnecessaryInheritance(Config.Empty)
 
     @Test
     fun `has unnecessary super type declarations`() {

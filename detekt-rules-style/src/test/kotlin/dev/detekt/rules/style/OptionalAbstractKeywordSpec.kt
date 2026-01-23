@@ -6,7 +6,7 @@ import dev.detekt.test.lint
 import org.junit.jupiter.api.Test
 
 class OptionalAbstractKeywordSpec {
-    val subject = OptionalAbstractKeyword(Config.empty)
+    val subject = OptionalAbstractKeyword(Config.Empty)
 
     @Test
     fun `does not report abstract keywords on an interface`() {

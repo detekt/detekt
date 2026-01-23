@@ -125,7 +125,7 @@ internal class InvalidPropertiesConfigValidatorSpec {
 
         @Test
         fun `passes for empty configs`() {
-            val result = CompositeConfig(Config.empty, Config.empty).validate(baseline, emptySet())
+            val result = CompositeConfig(Config.Empty, Config.Empty).validate(baseline, emptySet())
             assertThat(result).isEmpty()
         }
 

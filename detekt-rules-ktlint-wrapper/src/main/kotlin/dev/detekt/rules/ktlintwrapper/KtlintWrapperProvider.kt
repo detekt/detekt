@@ -257,7 +257,7 @@ internal fun List<(Config) -> KtlintRule>.sorted(): List<(Config) -> KtlintRule>
     val sortedRules = mutableListOf<(Config) -> KtlintRule>()
     val sortedRuleIds = mutableSetOf<RuleId>()
     val unprocessedRules = this
-        .map { it to it(Config.empty) }
+        .map { it to it(Config.Empty) }
         .sortedWith(defaultRuleOrderComparator())
         .toMutableList()
 

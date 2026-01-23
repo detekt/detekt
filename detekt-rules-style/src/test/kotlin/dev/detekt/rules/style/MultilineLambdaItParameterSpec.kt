@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class MultilineLambdaItParameterSpec(val env: KotlinEnvironmentContainer) {
-    val subject = MultilineLambdaItParameter(Config.empty)
+    val subject = MultilineLambdaItParameter(Config.Empty)
 
     @Nested
     inner class `single parameter, multiline lambda with multiple statements` {

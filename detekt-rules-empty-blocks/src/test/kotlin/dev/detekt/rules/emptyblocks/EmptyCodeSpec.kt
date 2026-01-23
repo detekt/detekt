@@ -23,7 +23,7 @@ class EmptyCodeSpec {
 
     @Test
     fun findsEmptyCatch() {
-        test { EmptyCatchBlock(Config.empty) }
+        test { EmptyCatchBlock(Config.Empty) }
     }
 
     @Test
@@ -38,7 +38,7 @@ class EmptyCodeSpec {
                 }
             }
         """.trimIndent()
-        assertThat(EmptyCatchBlock(Config.empty).lint(code)).hasSize(1)
+        assertThat(EmptyCatchBlock(Config.Empty).lint(code)).hasSize(1)
     }
 
     @Test
@@ -51,7 +51,7 @@ class EmptyCodeSpec {
                 }
             }
         """.trimIndent()
-        assertThat(EmptyCatchBlock(Config.empty).lint(code)).isEmpty()
+        assertThat(EmptyCatchBlock(Config.Empty).lint(code)).isEmpty()
     }
 
     @Test
@@ -69,67 +69,67 @@ class EmptyCodeSpec {
 
     @Test
     fun findsEmptyFinally() {
-        test { EmptyFinallyBlock(Config.empty) }
+        test { EmptyFinallyBlock(Config.Empty) }
     }
 
     @Test
     fun findsEmptyIf() {
-        test { EmptyIfBlock(Config.empty) }
+        test { EmptyIfBlock(Config.Empty) }
     }
 
     @Test
     fun findsEmptyElse() {
-        test { EmptyElseBlock(Config.empty) }
+        test { EmptyElseBlock(Config.Empty) }
     }
 
     @Test
     fun findsEmptyFor() {
-        test { EmptyForBlock(Config.empty) }
+        test { EmptyForBlock(Config.Empty) }
     }
 
     @Test
     fun findsEmptyWhile() {
-        test { EmptyWhileBlock(Config.empty) }
+        test { EmptyWhileBlock(Config.Empty) }
     }
 
     @Test
     fun findsEmptyDoWhile() {
-        test { EmptyDoWhileBlock(Config.empty) }
+        test { EmptyDoWhileBlock(Config.Empty) }
     }
 
     @Test
     fun findsEmptyFun() {
-        test { EmptyFunctionBlock(Config.empty) }
+        test { EmptyFunctionBlock(Config.Empty) }
     }
 
     @Test
     fun findsEmptyClass() {
-        test { EmptyClassBlock(Config.empty) }
+        test { EmptyClassBlock(Config.Empty) }
     }
 
     @Test
     fun findsEmptyTry() {
-        test { EmptyTryBlock(Config.empty) }
+        test { EmptyTryBlock(Config.Empty) }
     }
 
     @Test
     fun findsEmptyWhen() {
-        test { EmptyWhenBlock(Config.empty) }
+        test { EmptyWhenBlock(Config.Empty) }
     }
 
     @Test
     fun findsEmptyInit() {
-        test { EmptyInitBlock(Config.empty) }
+        test { EmptyInitBlock(Config.Empty) }
     }
 
     @Test
     fun findsOneEmptySecondaryConstructor() {
-        test { EmptySecondaryConstructor(Config.empty) }
+        test { EmptySecondaryConstructor(Config.Empty) }
     }
 
     @Test
     fun `reports an empty kotlin file`() {
-        val rule = EmptyKotlinFile(Config.empty)
+        val rule = EmptyKotlinFile(Config.Empty)
         assertThat(rule.lint("")).hasSize(1)
     }
 

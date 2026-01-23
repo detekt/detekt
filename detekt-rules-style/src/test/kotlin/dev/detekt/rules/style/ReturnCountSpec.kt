@@ -23,7 +23,7 @@ class ReturnCountSpec {
 
         @Test
         fun `does not report violation by default`() {
-            assertThat(ReturnCount(Config.empty).lint(code)).isEmpty()
+            assertThat(ReturnCount(Config.Empty).lint(code)).isEmpty()
         }
     }
 
@@ -35,7 +35,7 @@ class ReturnCountSpec {
 
         @Test
         fun `does not report violation by default`() {
-            assertThat(ReturnCount(Config.empty).lint(code)).isEmpty()
+            assertThat(ReturnCount(Config.Empty).lint(code)).isEmpty()
         }
     }
 
@@ -354,7 +354,7 @@ class ReturnCountSpec {
 
         @Test
         fun `should get flagged by default`() {
-            val findings = ReturnCount(Config.empty).lint(code)
+            val findings = ReturnCount(Config.Empty).lint(code)
             assertThat(findings).hasSize(1)
         }
 
@@ -385,7 +385,7 @@ class ReturnCountSpec {
 
         @Test
         fun `should not get flagged by default`() {
-            val findings = ReturnCount(Config.empty).lint(code)
+            val findings = ReturnCount(Config.Empty).lint(code)
             assertThat(findings).isEmpty()
         }
 
@@ -599,7 +599,7 @@ class ReturnCountSpec {
 
         @Test
         fun `should not count labeled returns from lambda by default`() {
-            val findings = ReturnCount(Config.empty).lint(code, compile = false)
+            val findings = ReturnCount(Config.Empty).lint(code, compile = false)
             assertThat(findings).isEmpty()
         }
 
@@ -638,7 +638,7 @@ class ReturnCountSpec {
 
         @Test
         fun `should not count labeled return of lambda with explicit label when deactivated by default`() {
-            val findings = ReturnCount(Config.empty).lint(code)
+            val findings = ReturnCount(Config.Empty).lint(code)
             assertThat(findings).isEmpty()
         }
 

@@ -40,7 +40,7 @@ internal fun ProcessingSpec.loadConfiguration(): Config =
         return when {
             configPaths.isNotEmpty() -> configPaths.map { YamlConfig.load(it) }
             resources.isNotEmpty() -> resources.map { it.openSafeStream().reader().use(YamlConfig::load) }
-            else -> listOf(Config.empty)
+            else -> listOf(Config.Empty)
         }
             .reduce { composite, config -> CompositeConfig(config, composite) }
     }
@@ -57,7 +57,7 @@ private fun ProcessingSpec.workaroundConfiguration(config: Config): Config {
         declaredConfig = DisabledAutoCorrectConfig(declaredConfig)
     }
 
-    if (configSpec.useDefaultConfig || config === Config.empty) {
+    if (configSpec.useDefaultConfig || config === Config.Empty) {
         declaredConfig = CompositeConfig(declaredConfig, getDefaultConfiguration())
     }
 

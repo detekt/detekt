@@ -17,7 +17,7 @@ class KdocWrappingSpec {
             /** Some KDoc comment */
         """.trimIndent()
 
-        assertThat(KdocWrapping(Config.empty).lint(code)).isEmpty()
+        assertThat(KdocWrapping(Config.Empty).lint(code)).isEmpty()
     }
 
     @Test
@@ -29,6 +29,6 @@ class KdocWrappingSpec {
             /** Some comment 4 */fun foo4() = "foo4"
         """.trimIndent()
 
-        assertThat(KdocWrapping(Config.empty).lint(code)).hasSize(4)
+        assertThat(KdocWrapping(Config.Empty).lint(code)).hasSize(4)
     }
 }

@@ -28,5 +28,5 @@ class WrapperSmokeTestSpec {
             .acceptPackages("dev.detekt.rules.ktlintwrapper.wrappers")
             .scan()
             .use { scanResult -> scanResult.getSubclasses(KtlintRule::class.java).loadClasses() }
-            .map { it.getDeclaredConstructor(Config::class.java).newInstance(Config.empty) as KtlintRule }
+            .map { it.getDeclaredConstructor(Config::class.java).newInstance(Config.Empty) as KtlintRule }
 }

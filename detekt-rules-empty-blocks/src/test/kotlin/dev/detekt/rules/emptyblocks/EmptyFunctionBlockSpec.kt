@@ -11,7 +11,7 @@ private const val IGNORE_OVERRIDDEN = "ignoreOverridden"
 
 class EmptyFunctionBlockSpec {
 
-    private val subject = EmptyFunctionBlock(Config.empty)
+    private val subject = EmptyFunctionBlock(Config.Empty)
 
     @Test
     fun `should flag function with protected modifier`() {

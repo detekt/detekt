@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 
 class DoubleNegativeLambdaSpec {
 
-    private val subject = DoubleNegativeLambda(Config.empty)
+    private val subject = DoubleNegativeLambda(Config.Empty)
 
     @Test
     fun `reports simple logical not`() {

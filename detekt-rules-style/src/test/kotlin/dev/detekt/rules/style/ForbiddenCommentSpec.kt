@@ -29,7 +29,7 @@ class ForbiddenCommentSpec {
         @DisplayName("should report TODO: usages")
         fun reportTodoColon() {
             val findings =
-                ForbiddenComment(Config.empty).lint("// TODO: I need to fix this.")
+                ForbiddenComment(Config.Empty).lint("// TODO: I need to fix this.")
             assertThat(findings).singleElement()
                 .hasMessage("Forbidden TODO todo marker in comment, please do the changes.")
         }
@@ -37,7 +37,7 @@ class ForbiddenCommentSpec {
         @Test
         fun `should not report TODO usages`() {
             val findings =
-                ForbiddenComment(Config.empty).lint("// TODO I need to fix this.")
+                ForbiddenComment(Config.Empty).lint("// TODO I need to fix this.")
             assertThat(findings).isEmpty()
         }
 
@@ -45,14 +45,14 @@ class ForbiddenCommentSpec {
         @DisplayName("should report FIXME: usages")
         fun reportFixMe() {
             val findings =
-                ForbiddenComment(Config.empty).lint("// FIXME: I need to fix this.")
+                ForbiddenComment(Config.Empty).lint("// FIXME: I need to fix this.")
             assertThat(findings).hasSize(1)
         }
 
         @Test
         fun `should not report FIXME usages`() {
             val findings =
-                ForbiddenComment(Config.empty).lint("// FIXME I need to fix this.")
+                ForbiddenComment(Config.Empty).lint("// FIXME I need to fix this.")
             assertThat(findings).isEmpty()
         }
 
@@ -60,7 +60,7 @@ class ForbiddenCommentSpec {
         @DisplayName("should report STOPSHIP: usages")
         fun reportStopShipColon() {
             val findings =
-                ForbiddenComment(Config.empty).lint("// STOPSHIP: I need to fix this.")
+                ForbiddenComment(Config.Empty).lint("// STOPSHIP: I need to fix this.")
             assertThat(findings).singleElement()
                 .hasMessage(
                     "Forbidden STOPSHIP todo marker in comment, please address the problem before shipping the code."
@@ -70,7 +70,7 @@ class ForbiddenCommentSpec {
         @Test
         fun `should not report STOPSHIP usages`() {
             val findings =
-                ForbiddenComment(Config.empty).lint("// STOPSHIP I need to fix this.")
+                ForbiddenComment(Config.Empty).lint("// STOPSHIP I need to fix this.")
             assertThat(findings).isEmpty()
         }
 
@@ -81,7 +81,7 @@ class ForbiddenCommentSpec {
                  TODO: I need to fix this.
                  */
             """.trimIndent()
-            val findings = ForbiddenComment(Config.empty).lint(code)
+            val findings = ForbiddenComment(Config.Empty).lint(code)
             assertThat(findings).hasSize(1)
         }
 
@@ -90,7 +90,7 @@ class ForbiddenCommentSpec {
             val code = """
                 /*TODO: I need to fix this.*/
             """.trimIndent()
-            val findings = ForbiddenComment(Config.empty).lint(code)
+            val findings = ForbiddenComment(Config.Empty).lint(code)
             assertThat(findings).hasSize(1)
         }
 
@@ -106,7 +106,7 @@ class ForbiddenCommentSpec {
                      */
                 }
             """.trimIndent()
-            val findings = ForbiddenComment(Config.empty).lint(code)
+            val findings = ForbiddenComment(Config.Empty).lint(code)
             assertThat(findings).hasSize(2)
         }
 
@@ -118,7 +118,7 @@ class ForbiddenCommentSpec {
                  */
                 class A
             """.trimIndent()
-            val findings = ForbiddenComment(Config.empty).lint(code)
+            val findings = ForbiddenComment(Config.Empty).lint(code)
             assertThat(findings).hasSize(1)
         }
     }

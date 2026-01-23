@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class UnusedUnaryOperatorSpec(private val env: KotlinEnvironmentContainer) {
-    private val subject = UnusedUnaryOperator(Config.empty)
+    private val subject = UnusedUnaryOperator(Config.Empty)
 
     @Test
     fun `unused plus operator`() {

@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 
 class EmptyClassBlockSpec {
 
-    private val subject = EmptyClassBlock(Config.empty)
+    private val subject = EmptyClassBlock(Config.Empty)
 
     @Test
     fun `reports the empty class body`() {

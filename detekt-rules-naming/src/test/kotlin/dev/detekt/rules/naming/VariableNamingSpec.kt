@@ -57,7 +57,7 @@ class VariableNamingSpec {
                 val camel_Case_Property = 5
             }
         """.trimIndent()
-        val findings = VariableNaming(Config.empty).lint(code)
+        val findings = VariableNaming(Config.Empty).lint(code)
         assertThat(findings).satisfiesExactlyInAnyOrder(
             { assertThat(it).hasStartSourceLocation(2, 17) },
             { assertThat(it).hasStartSourceLocation(3, 9) },
@@ -74,7 +74,7 @@ class VariableNamingSpec {
                 val camelCaseProperty = 5
             }
         """.trimIndent()
-        assertThat(VariableNaming(Config.empty).lint(code)).isEmpty()
+        assertThat(VariableNaming(Config.Empty).lint(code)).isEmpty()
     }
 
     @Test
@@ -90,7 +90,7 @@ class VariableNamingSpec {
                 @Suppress("VariableNaming") val SHOULD_NOT_BE_FLAGGED: String
             }
         """.trimIndent()
-        assertThat(VariableNaming(Config.empty).lint(code)).isEmpty()
+        assertThat(VariableNaming(Config.Empty).lint(code)).isEmpty()
     }
 
     @Test
@@ -103,7 +103,7 @@ class VariableNamingSpec {
                 listOf<Pair<Int, Int>>().flatMap { (right, _) -> listOf(right) }
             }
         """.trimIndent()
-        assertThat(VariableNaming(Config.empty).lint(code)).isEmpty()
+        assertThat(VariableNaming(Config.Empty).lint(code)).isEmpty()
     }
 
     @Test
@@ -114,6 +114,6 @@ class VariableNamingSpec {
                 val (_, HOLY_GRAIL) = D(5, 4)
             }
         """.trimIndent()
-        assertThat(VariableNaming(Config.empty).lint(code)).isEmpty()
+        assertThat(VariableNaming(Config.Empty).lint(code)).isEmpty()
     }
 }

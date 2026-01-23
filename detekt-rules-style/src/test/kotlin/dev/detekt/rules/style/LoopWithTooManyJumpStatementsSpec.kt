@@ -23,7 +23,7 @@ class LoopWithTooManyJumpStatementsSpec {
                 }
             }
         """.trimIndent()
-        assertThat(LoopWithTooManyJumpStatements(Config.empty).lint(code)).singleElement()
+        assertThat(LoopWithTooManyJumpStatements(Config.Empty).lint(code)).singleElement()
             .hasTextLocation(20 to 23)
     }
 
@@ -36,7 +36,7 @@ class LoopWithTooManyJumpStatementsSpec {
                 }
             }
         """.trimIndent()
-        assertThat(LoopWithTooManyJumpStatements(Config.empty).lint(code)).singleElement()
+        assertThat(LoopWithTooManyJumpStatements(Config.Empty).lint(code)).singleElement()
             .hasTextLocation(20 to 25)
     }
 
@@ -49,7 +49,7 @@ class LoopWithTooManyJumpStatementsSpec {
                 } while (i < 1)
             }
         """.trimIndent()
-        assertThat(LoopWithTooManyJumpStatements(Config.empty).lint(code)).singleElement()
+        assertThat(LoopWithTooManyJumpStatements(Config.Empty).lint(code)).singleElement()
             .hasTextLocation(20 to 22)
     }
 
@@ -105,7 +105,7 @@ class LoopWithTooManyJumpStatementsSpec {
                 }
             }
         """.trimIndent()
-        val findings = LoopWithTooManyJumpStatements(Config.empty).lint(code)
+        val findings = LoopWithTooManyJumpStatements(Config.Empty).lint(code)
         assertThat(findings).isEmpty()
     }
 
@@ -122,7 +122,7 @@ class LoopWithTooManyJumpStatementsSpec {
                 }
             }
         """.trimIndent()
-        val findings = LoopWithTooManyJumpStatements(Config.empty).lint(code)
+        val findings = LoopWithTooManyJumpStatements(Config.Empty).lint(code)
         assertThat(findings).isEmpty()
     }
 }

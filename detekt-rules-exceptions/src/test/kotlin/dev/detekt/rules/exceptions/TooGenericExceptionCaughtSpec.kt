@@ -15,7 +15,7 @@ private const val ALLOWED_EXCEPTION_NAME_REGEX = "allowedExceptionNameRegex"
 class TooGenericExceptionCaughtSpec {
     @Test
     fun `a file with many caught exceptions should find one of each kind of defaults`() {
-        val rule = TooGenericExceptionCaught(Config.empty)
+        val rule = TooGenericExceptionCaught(Config.Empty)
         val code = """
             fun main() {
                 try {

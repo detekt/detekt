@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinEnvironmentContainer) {
-    private val subject = ElseCaseInsteadOfExhaustiveWhen(Config.empty)
+    private val subject = ElseCaseInsteadOfExhaustiveWhen(Config.Empty)
 
     @Nested
     inner class Enum {

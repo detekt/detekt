@@ -15,7 +15,7 @@ class IndentationSpec {
 
     @BeforeEach
     fun createSubject() {
-        subject = Indentation(Config.empty)
+        subject = Indentation(Config.Empty)
     }
 
     @Nested

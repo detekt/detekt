@@ -13,7 +13,7 @@ class WrappingSpec {
 
     @BeforeEach
     fun createSubject() {
-        subject = Wrapping(Config.empty)
+        subject = Wrapping(Config.Empty)
     }
 
     @Test

@@ -6,7 +6,7 @@ import dev.detekt.test.lint
 import org.junit.jupiter.api.Test
 
 class ClassOrderingSpec {
-    val subject = ClassOrdering(Config.empty)
+    val subject = ClassOrdering(Config.Empty)
 
     @Test
     fun `does not report when class contents are in expected order with property first`() {

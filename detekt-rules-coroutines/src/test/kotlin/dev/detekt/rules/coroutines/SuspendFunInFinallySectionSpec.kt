@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class SuspendFunInFinallySectionSpec(private val env: KotlinEnvironmentContainer) {
-    private val subject = SuspendFunInFinallySection(Config.empty)
+    private val subject = SuspendFunInFinallySection(Config.Empty)
 
     @Test
     fun `report unwrapped suspend function in finally section`() {

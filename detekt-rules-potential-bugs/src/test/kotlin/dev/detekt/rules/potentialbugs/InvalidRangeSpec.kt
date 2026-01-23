@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class InvalidRangeSpec {
-    private val subject = InvalidRange(Config.empty)
+    private val subject = InvalidRange(Config.Empty)
 
     @Nested
     inner class `check for loop conditions` {

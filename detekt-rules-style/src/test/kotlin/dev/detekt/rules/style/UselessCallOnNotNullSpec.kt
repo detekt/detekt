@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class UselessCallOnNotNullSpec(val env: KotlinEnvironmentContainer) {
-    val subject = UselessCallOnNotNull(Config.empty)
+    val subject = UselessCallOnNotNull(Config.Empty)
 
     @Test
     fun `reports when calling orEmpty on a list`() {

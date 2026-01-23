@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class UselessPostfixExpressionSpec {
-    private val subject = UselessPostfixExpression(Config.empty)
+    private val subject = UselessPostfixExpression(Config.Empty)
 
     @Nested
     inner class `check several types of postfix increments` {

@@ -21,7 +21,7 @@ class LateinitUsageSpec {
 
     @Test
     fun `should report lateinit usages`() {
-        val findings = LateinitUsage(Config.empty).lint(code)
+        val findings = LateinitUsage(Config.Empty).lint(code)
         assertThat(findings).hasSize(2)
     }
 

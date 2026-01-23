@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class UnusedParameterSpec {
-    val subject = UnusedParameter(Config.empty)
+    val subject = UnusedParameter(Config.Empty)
 
     @Nested
     inner class `function parameters` {

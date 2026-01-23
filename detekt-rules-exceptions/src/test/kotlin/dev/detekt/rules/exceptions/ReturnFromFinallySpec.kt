@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
 @KotlinCoreEnvironmentTest
 class ReturnFromFinallySpec(val env: KotlinEnvironmentContainer) {
 
-    val subject = ReturnFromFinally(Config.empty)
+    val subject = ReturnFromFinally(Config.Empty)
 
     @Nested
     inner class `a finally block with a return statement` {

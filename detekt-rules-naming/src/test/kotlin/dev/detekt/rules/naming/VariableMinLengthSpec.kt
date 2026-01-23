@@ -35,13 +35,13 @@ class VariableMinLengthSpec {
     @Test
     fun `should not report a variable name that is okay`() {
         val code = "private val thisOneIsCool = 3"
-        assertThat(VariableMinLength(Config.empty).lint(code)).isEmpty()
+        assertThat(VariableMinLength(Config.Empty).lint(code)).isEmpty()
     }
 
     @Test
     fun `should not report a variable with single letter name`() {
         val code = "private val a = 3"
-        assertThat(VariableMinLength(Config.empty).lint(code)).isEmpty()
+        assertThat(VariableMinLength(Config.Empty).lint(code)).isEmpty()
     }
 
     @Test
@@ -52,7 +52,7 @@ class VariableMinLengthSpec {
                 val (_, status) = getResult()
             }
         """.trimIndent()
-        assertThat(VariableMinLength(Config.empty).lint(code)).isEmpty()
+        assertThat(VariableMinLength(Config.Empty).lint(code)).isEmpty()
     }
 
     @Test

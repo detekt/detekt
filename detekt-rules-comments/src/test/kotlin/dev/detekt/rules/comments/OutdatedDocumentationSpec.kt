@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class OutdatedDocumentationSpec {
-    val subject = OutdatedDocumentation(Config.empty)
+    val subject = OutdatedDocumentation(Config.Empty)
 
     @Nested
     inner class General {

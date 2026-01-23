@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 
 internal class UseEntityAtNameSpec {
 
-    private val rule = UseEntityAtName(Config.empty)
+    private val rule = UseEntityAtName(Config.Empty)
 
     @Test
     fun `should not report calls when there's no name involved`() {

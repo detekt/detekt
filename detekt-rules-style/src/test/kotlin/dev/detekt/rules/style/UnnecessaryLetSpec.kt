@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class UnnecessaryLetSpec(val env: KotlinEnvironmentContainer) {
-    val subject = UnnecessaryLet(Config.empty)
+    val subject = UnnecessaryLet(Config.Empty)
 
     @Test
     fun `reports unnecessary lets that can be changed to ordinary method call 1`() {

@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class UnnecessaryAnySpec(val env: KotlinEnvironmentContainer) {
-    val subject = UnnecessaryAny(Config.empty)
+    val subject = UnnecessaryAny(Config.Empty)
 
     @Test
     fun `reports any which is used for checking presence of a element`() {

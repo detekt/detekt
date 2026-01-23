@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class HasPlatformTypeSpec(private val env: KotlinEnvironmentContainer) {
-    private val subject = HasPlatformType(Config.empty)
+    private val subject = HasPlatformType(Config.Empty)
 
     @Test
     fun `reports when public function returns expression of platform type`() {

@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 private const val MAX_DESTRUCTURING_ENTRIES = "maxDestructuringEntries"
 
 class DestructuringDeclarationWithTooManyEntriesSpec {
-    val subject = DestructuringDeclarationWithTooManyEntries(Config.empty)
+    val subject = DestructuringDeclarationWithTooManyEntries(Config.Empty)
 
     @Nested
     inner class `default configuration` {

@@ -7,7 +7,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class TrimMultilineRawStringSpec {
-    val subject = TrimMultilineRawString(Config.empty)
+    val subject = TrimMultilineRawString(Config.Empty)
 
     @Test
     fun `raises multiline raw strings without trim`() {

@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class EqualsWithHashCodeExistSpec {
-    private val subject = EqualsWithHashCodeExist(Config.empty)
+    private val subject = EqualsWithHashCodeExist(Config.Empty)
 
     @Nested
     inner class `some classes with equals() and hashCode() functions` {

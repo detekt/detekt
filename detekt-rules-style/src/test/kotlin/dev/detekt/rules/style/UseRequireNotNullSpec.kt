@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class UseRequireNotNullSpec(val env: KotlinEnvironmentContainer) {
-    val subject = UseRequireNotNull(Config.empty)
+    val subject = UseRequireNotNull(Config.Empty)
 
     @Test
     fun `reports 'require' calls with a non-null check`() {

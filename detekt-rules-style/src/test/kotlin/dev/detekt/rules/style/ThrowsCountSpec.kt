@@ -20,7 +20,7 @@ class ThrowsCountSpec {
 
         @Test
         fun `does not report violation by default`() {
-            assertThat(ThrowsCount(Config.empty).lint(code)).isEmpty()
+            assertThat(ThrowsCount(Config.Empty).lint(code)).isEmpty()
         }
     }
 
@@ -32,7 +32,7 @@ class ThrowsCountSpec {
 
         @Test
         fun `does not report violation by default`() {
-            assertThat(ThrowsCount(Config.empty).lint(code)).isEmpty()
+            assertThat(ThrowsCount(Config.Empty).lint(code)).isEmpty()
         }
     }
 
@@ -48,7 +48,7 @@ class ThrowsCountSpec {
                 }
             }
         """.trimIndent()
-        val subject = ThrowsCount(Config.empty)
+        val subject = ThrowsCount(Config.Empty)
 
         @Test
         fun `does not report violation`() {
@@ -69,7 +69,7 @@ class ThrowsCountSpec {
                 }
             }
         """.trimIndent()
-        val subject = ThrowsCount(Config.empty)
+        val subject = ThrowsCount(Config.Empty)
 
         @Test
         fun `reports violation by default`() {
@@ -90,7 +90,7 @@ class ThrowsCountSpec {
                 }
             }
         """.trimIndent()
-        val subject = ThrowsCount(Config.empty)
+        val subject = ThrowsCount(Config.Empty)
 
         @Test
         fun `reports violation by default`() {
@@ -114,7 +114,7 @@ class ThrowsCountSpec {
                 return bar(x)
             }
         """.trimIndent()
-        val subject = ThrowsCount(Config.empty)
+        val subject = ThrowsCount(Config.Empty)
 
         @Test
         fun `reports violation by default`() {

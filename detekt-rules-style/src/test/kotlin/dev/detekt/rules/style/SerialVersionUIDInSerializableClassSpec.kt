@@ -7,7 +7,7 @@ import dev.detekt.test.lint
 import org.junit.jupiter.api.Test
 
 class SerialVersionUIDInSerializableClassSpec {
-    val subject = SerialVersionUIDInSerializableClass(Config.empty)
+    val subject = SerialVersionUIDInSerializableClass(Config.Empty)
 
     @Test
     fun `reports class with no serialVersionUID`() {

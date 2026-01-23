@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class PropertyUsedBeforeDeclarationSpec(private val env: KotlinEnvironmentContainer) {
-    private val subject = PropertyUsedBeforeDeclaration(Config.empty)
+    private val subject = PropertyUsedBeforeDeclaration(Config.Empty)
 
     @Test
     fun `used before declaration in getter`() {

@@ -40,7 +40,7 @@ class RuleDescriptorKtTest {
         val rules = getRules(
             analysisMode,
             listOf(TestDefaultRuleSetProvider()),
-            Config.empty,
+            Config.Empty,
             log,
         )
         assertThat(rules).isEqualTo(emptyList<RuleDescriptor>())
@@ -367,7 +367,7 @@ private class RuleDescriptionMatcher(
     private val ruleProvider: (Config) -> Rule,
     private val config: Map<String, Any>,
     private val active: Boolean = true,
-    private val id: String = ruleProvider(Config.empty).javaClass.simpleName,
+    private val id: String = ruleProvider(Config.Empty).javaClass.simpleName,
     private val severity: Severity = Error,
     private val url: String? = "default",
 ) : ThrowingConsumer<RuleDescriptor> {

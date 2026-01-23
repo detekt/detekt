@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class ImplicitDefaultLocaleSpec(private val env: KotlinEnvironmentContainer) {
-    private val subject = ImplicitDefaultLocale(Config.empty)
+    private val subject = ImplicitDefaultLocale(Config.Empty)
 
     @Test
     fun `reports String_format call with template but without explicit locale`() {

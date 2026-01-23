@@ -6,7 +6,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class EqualsAlwaysReturnsTrueOrFalseSpec {
-    private val subject = EqualsAlwaysReturnsTrueOrFalse(Config.empty)
+    private val subject = EqualsAlwaysReturnsTrueOrFalse(Config.Empty)
 
     @Test
     fun `reports equals() methods`() {

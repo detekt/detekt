@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class NullCheckOnMutablePropertySpec(private val env: KotlinEnvironmentContainer) {
-    private val subject = NullCheckOnMutableProperty(Config.empty)
+    private val subject = NullCheckOnMutableProperty(Config.Empty)
 
     @Test
     fun `should report a null-check on a mutable constructor property`() {

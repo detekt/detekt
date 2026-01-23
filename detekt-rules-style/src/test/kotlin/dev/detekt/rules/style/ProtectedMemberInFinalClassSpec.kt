@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class ProtectedMemberInFinalClassSpec {
-    val subject = ProtectedMemberInFinalClass(Config.empty)
+    val subject = ProtectedMemberInFinalClass(Config.Empty)
 
     @Nested
     inner class `check all variants of protected visibility modifier in final class` {

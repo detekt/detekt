@@ -16,7 +16,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinEnvironmentContainer) {
 
     @Nested
     inner class `some classes with methods which don't have the same name` {
-        private val subject = MemberNameEqualsClassName(Config.empty)
+        private val subject = MemberNameEqualsClassName(Config.Empty)
 
         @Test
         fun `does not report a nested function with the same name as the class`() {
@@ -66,7 +66,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinEnvironmentContainer) {
                     fun methodNameEqualsClassName() {}
                 }
             """.trimIndent()
-            assertThat(MemberNameEqualsClassName(Config.empty).lintWithContext(env, code)).hasSize(1)
+            assertThat(MemberNameEqualsClassName(Config.Empty).lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -76,7 +76,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinEnvironmentContainer) {
                     fun MethodNameEqualsObjectName() {}
                 }
             """.trimIndent()
-            assertThat(MemberNameEqualsClassName(Config.empty).lintWithContext(env, code)).hasSize(1)
+            assertThat(MemberNameEqualsClassName(Config.Empty).lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -86,7 +86,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinEnvironmentContainer) {
                     val propertyNameEqualsClassName = 0
                 }
             """.trimIndent()
-            assertThat(MemberNameEqualsClassName(Config.empty).lintWithContext(env, code)).hasSize(1)
+            assertThat(MemberNameEqualsClassName(Config.Empty).lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -96,7 +96,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinEnvironmentContainer) {
                     val propertyNameEqualsObjectName = 0
                 }
             """.trimIndent()
-            assertThat(MemberNameEqualsClassName(Config.empty).lintWithContext(env, code)).hasSize(1)
+            assertThat(MemberNameEqualsClassName(Config.Empty).lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -108,7 +108,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinEnvironmentContainer) {
                     }
                 }
             """.trimIndent()
-            assertThat(MemberNameEqualsClassName(Config.empty).lintWithContext(env, code)).hasSize(1)
+            assertThat(MemberNameEqualsClassName(Config.Empty).lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -120,7 +120,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinEnvironmentContainer) {
                     }
                 }
             """.trimIndent()
-            assertThat(MemberNameEqualsClassName(Config.empty).lintWithContext(env, code)).hasSize(1)
+            assertThat(MemberNameEqualsClassName(Config.Empty).lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -133,7 +133,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinEnvironmentContainer) {
                     abstract fun AbstractMethodNameEqualsClassName()
                 }
             """.trimIndent()
-            assertThat(MemberNameEqualsClassName(Config.empty).lintWithContext(env, code)).isEmpty()
+            assertThat(MemberNameEqualsClassName(Config.Empty).lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -143,7 +143,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinEnvironmentContainer) {
                     fun MethodNameEqualsInterfaceName() {}
                 }
             """.trimIndent()
-            assertThat(MemberNameEqualsClassName(Config.empty).lintWithContext(env, code)).isEmpty()
+            assertThat(MemberNameEqualsClassName(Config.Empty).lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -169,7 +169,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinEnvironmentContainer) {
                     abstract val AbstractMethodNameEqualsClassName: String
                 }
             """.trimIndent()
-            assertThat(MemberNameEqualsClassName(Config.empty).lintWithContext(env, code)).isEmpty()
+            assertThat(MemberNameEqualsClassName(Config.Empty).lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -199,7 +199,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinEnvironmentContainer) {
                     }
                 }
             """.trimIndent()
-            assertThat(MemberNameEqualsClassName(Config.empty).lintWithContext(env, code)).hasSize(1)
+            assertThat(MemberNameEqualsClassName(Config.Empty).lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -214,7 +214,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinEnvironmentContainer) {
                     }
                 }
             """.trimIndent()
-            assertThat(MemberNameEqualsClassName(Config.empty).lintWithContext(env, code)).hasSize(1)
+            assertThat(MemberNameEqualsClassName(Config.Empty).lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -227,7 +227,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinEnvironmentContainer) {
                     }
                 }
             """.trimIndent()
-            assertThat(MemberNameEqualsClassName(Config.empty).lintWithContext(env, code)).hasSize(1)
+            assertThat(MemberNameEqualsClassName(Config.Empty).lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -245,7 +245,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinEnvironmentContainer) {
                 
                 class C: A()
             """.trimIndent()
-            assertThat(MemberNameEqualsClassName(Config.empty).lintWithContext(env, code)).isEmpty()
+            assertThat(MemberNameEqualsClassName(Config.Empty).lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -262,7 +262,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinEnvironmentContainer) {
                     }
                 }
             """.trimIndent()
-            assertThat(MemberNameEqualsClassName(Config.empty).lintWithContext(env, code)).isEmpty()
+            assertThat(MemberNameEqualsClassName(Config.Empty).lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -279,7 +279,7 @@ class MemberNameEqualsClassNameSpec(val env: KotlinEnvironmentContainer) {
                 class C: A()
             """.trimIndent()
 
-            assertThat(MemberNameEqualsClassName(Config.empty).lintWithContext(env, code)).isEmpty()
+            assertThat(MemberNameEqualsClassName(Config.Empty).lintWithContext(env, code)).isEmpty()
         }
     }
 }

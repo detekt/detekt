@@ -51,7 +51,7 @@ private fun RuleSet.getRules(
         .mapNotNull { ruleId -> extractRuleName(ruleId)?.let { ruleName -> ruleId to ruleName } }
         .mapNotNull { (ruleId, ruleName) ->
             this.rules[ruleName]?.let { ruleProvider ->
-                val rule = ruleProvider(Config.empty)
+                val rule = ruleProvider(Config.Empty)
                 val ruleConfig = config.subConfig(ruleId)
                 val active = config.isActiveOrDefault(true) && ruleConfig.isActiveOrDefault(false)
                 val executable = when (analysisMode) {

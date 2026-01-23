@@ -32,13 +32,13 @@ class FunctionNameMaxLengthSpec {
     @Test
     fun `should report a function name that is too long`() {
         val code = "fun thisFunctionIsDefinitelyWayTooLongAndShouldBeMuchShorter() = 3"
-        assertThat(FunctionNameMaxLength(Config.empty).lint(code)).hasSize(1)
+        assertThat(FunctionNameMaxLength(Config.Empty).lint(code)).hasSize(1)
     }
 
     @Test
     fun `should not report a function name that is okay`() {
         val code = "fun three() = 3"
-        assertThat(FunctionNameMaxLength(Config.empty).lint(code)).isEmpty()
+        assertThat(FunctionNameMaxLength(Config.Empty).lint(code)).isEmpty()
     }
 
     @Test

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 class TopLevelPropertyNamingSpec {
 
-    val subject = TopLevelPropertyNaming(Config.empty)
+    val subject = TopLevelPropertyNaming(Config.Empty)
 
     @Test
     fun `should use custom name top level properties`() {

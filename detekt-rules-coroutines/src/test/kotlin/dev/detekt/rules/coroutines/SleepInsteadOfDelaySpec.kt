@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test
 @KotlinCoreEnvironmentTest
 class SleepInsteadOfDelaySpec(private val env: KotlinEnvironmentContainer) {
 
-    private val subject = SleepInsteadOfDelay(Config.empty)
+    private val subject = SleepInsteadOfDelay(Config.Empty)
 
     @Test
     fun `should report no issue for delay() in suspend functions`() {

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class UnsafeCastSpec(private val env: KotlinEnvironmentContainer) {
-    private val subject = UnsafeCast(Config.empty)
+    private val subject = UnsafeCast(Config.Empty)
 
     @Test
     fun `reports cast that cannot succeed`() {

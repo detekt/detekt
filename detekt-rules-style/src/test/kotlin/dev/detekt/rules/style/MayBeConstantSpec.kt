@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 
 class MayBeConstantSpec {
 
-    val subject = MayBeConstant(Config.empty)
+    val subject = MayBeConstant(Config.Empty)
 
     @Nested
     inner class `some valid constants` {

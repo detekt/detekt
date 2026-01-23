@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class DontDowncastCollectionTypesSpec(private val env: KotlinEnvironmentContainer) {
-    private val subject = DontDowncastCollectionTypes(Config.empty)
+    private val subject = DontDowncastCollectionTypes(Config.Empty)
 
     @Nested
     inner class `valid cases` {

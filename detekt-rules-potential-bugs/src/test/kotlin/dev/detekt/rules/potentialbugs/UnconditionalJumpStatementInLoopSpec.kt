@@ -6,7 +6,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class UnconditionalJumpStatementInLoopSpec {
-    private val subject = UnconditionalJumpStatementInLoop(Config.empty)
+    private val subject = UnconditionalJumpStatementInLoop(Config.Empty)
 
     @Test
     fun `reports an unconditional return in for loop`() {

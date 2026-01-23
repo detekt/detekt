@@ -7,7 +7,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
 class GlobalCoroutineUsageSpec {
-    val subject = GlobalCoroutineUsage(Config.empty)
+    val subject = GlobalCoroutineUsage(Config.Empty)
 
     @Test
     @DisplayName("should report GlobalScope.launch")

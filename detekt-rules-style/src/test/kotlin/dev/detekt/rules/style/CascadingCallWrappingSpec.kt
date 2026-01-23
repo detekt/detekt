@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class CascadingCallWrappingSpec {
-    private val subject = CascadingCallWrapping(Config.empty)
+    private val subject = CascadingCallWrapping(Config.Empty)
 
     @Test
     fun `reports missing wrapping`() {

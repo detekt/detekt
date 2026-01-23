@@ -10,7 +10,7 @@ class FinalNewlineSpec {
 
     @Test
     fun `should report missing new line by default`() {
-        val findings = FinalNewline(Config.empty)
+        val findings = FinalNewline(Config.Empty)
             .lint("fun main() = Unit")
 
         assertThat(findings).hasSize(1)
@@ -18,7 +18,7 @@ class FinalNewlineSpec {
 
     @Test
     fun `should not report as new line is present`() {
-        val findings = FinalNewline(Config.empty).lint(
+        val findings = FinalNewline(Config.Empty).lint(
             """
                 fun main() = Unit
 

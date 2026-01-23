@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class UnusedPrivateFunctionSpec(val env: KotlinEnvironmentContainer) {
-    val subject = UnusedPrivateFunction(Config.empty)
+    val subject = UnusedPrivateFunction(Config.Empty)
 
     @Nested
     inner class `interface functions` {

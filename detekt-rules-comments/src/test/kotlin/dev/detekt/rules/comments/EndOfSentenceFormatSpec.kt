@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 
 class EndOfSentenceFormatSpec {
 
-    val subject = EndOfSentenceFormat(Config.empty)
+    val subject = EndOfSentenceFormat(Config.Empty)
 
     @Test
     fun `reports invalid KDoc endings on classes`() {

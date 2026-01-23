@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
-    val subject = CanBeNonNullable(Config.empty)
+    val subject = CanBeNonNullable(Config.Empty)
 
     @Nested
     inner class `evaluating private properties` {

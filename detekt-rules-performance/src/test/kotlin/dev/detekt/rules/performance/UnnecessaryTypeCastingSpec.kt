@@ -6,7 +6,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class UnnecessaryTypeCastingSpec {
-    private val subject = UnnecessaryTypeCasting(Config.empty)
+    private val subject = UnnecessaryTypeCasting(Config.Empty)
 
     @Test
     fun `reports unnecessary type casting instead of type checking`() {

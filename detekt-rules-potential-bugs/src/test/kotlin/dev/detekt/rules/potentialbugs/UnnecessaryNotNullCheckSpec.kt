@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class UnnecessaryNotNullCheckSpec(private val env: KotlinEnvironmentContainer) {
-    private val subject = UnnecessaryNotNullCheck(Config.empty)
+    private val subject = UnnecessaryNotNullCheck(Config.Empty)
 
     @Nested
     inner class `check unnecessary not null checks` {

@@ -16,7 +16,7 @@ private const val ALLOWED_NAMES_PATTERN = "allowedNames"
 
 @KotlinCoreEnvironmentTest
 class UnusedPrivatePropertySpec(val env: KotlinEnvironmentContainer) {
-    val subject = UnusedPrivateProperty(Config.empty)
+    val subject = UnusedPrivateProperty(Config.Empty)
 
     val regexTestingCode = """
         class Test {

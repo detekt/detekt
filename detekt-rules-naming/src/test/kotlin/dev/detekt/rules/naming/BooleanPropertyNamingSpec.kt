@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class BooleanPropertyNamingSpec(val env: KotlinEnvironmentContainer) {
-    val subject = BooleanPropertyNaming(Config.empty)
+    val subject = BooleanPropertyNaming(Config.Empty)
 
     @Nested
     inner class `argument declarations` {

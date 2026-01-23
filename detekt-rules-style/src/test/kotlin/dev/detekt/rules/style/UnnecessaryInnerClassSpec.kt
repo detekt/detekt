@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class UnnecessaryInnerClassSpec(val env: KotlinEnvironmentContainer) {
-    val subject = UnnecessaryInnerClass(Config.empty)
+    val subject = UnnecessaryInnerClass(Config.Empty)
 
     @Test
     fun `reports when an inner class does not access members of its outer class`() {

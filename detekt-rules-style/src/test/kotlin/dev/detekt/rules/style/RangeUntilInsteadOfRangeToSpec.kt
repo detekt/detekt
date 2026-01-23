@@ -7,7 +7,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 
 class RangeUntilInsteadOfRangeToSpec {
-    val subject = RangeUntilInsteadOfRangeTo(Config.empty)
+    val subject = RangeUntilInsteadOfRangeTo(Config.Empty)
 
     @Test
     @DisplayName("reports for '..'")
