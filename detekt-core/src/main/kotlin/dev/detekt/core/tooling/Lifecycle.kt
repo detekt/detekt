@@ -35,7 +35,7 @@ internal class Lifecycle(
     fun analyze(): Detektion {
         measure(Phase.ValidateConfig) { checkConfiguration(settings, baselineConfig) }
         val filesToAnalyze = measure(Phase.Parsing) { settings.ktFiles }
-        if (settings.spec.projectSpec.analysisMode == AnalysisMode.full) {
+        if (settings.spec.projectSpec.analysisMode == AnalysisMode.Full) {
             measure(Phase.ValidateClasspath) { validateClasspath(filesToAnalyze) }
         }
         val analysisMode = settings.spec.projectSpec.analysisMode
