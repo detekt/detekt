@@ -308,6 +308,7 @@ internal class CliArgsSpec {
             fun `throws exception on invalid analysis mode`() {
                 assertThatExceptionOfType(HandledArgumentViolation::class.java)
                     .isThrownBy { parseArguments(arrayOf("--analysis-mode", "invalid")) }
+                    .withMessage("Invalid value for --analysis-mode parameter. Allowed values:[full, light]")
             }
         }
 
