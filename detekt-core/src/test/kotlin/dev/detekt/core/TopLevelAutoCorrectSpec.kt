@@ -8,7 +8,7 @@ import dev.detekt.api.RuleSet
 import dev.detekt.api.RuleSetId
 import dev.detekt.api.RuleSetProvider
 import dev.detekt.core.tooling.AnalysisFacade
-import dev.detekt.core.tooling.DefaultLifecycle
+import dev.detekt.core.tooling.Lifecycle
 import dev.detekt.test.utils.NullPrintStream
 import dev.detekt.test.utils.readResourceContent
 import dev.detekt.test.utils.resourceAsPath
@@ -52,7 +52,7 @@ class TopLevelAutoCorrectSpec {
         }
 
         AnalysisFacade(spec).runAnalysis { settings ->
-            DefaultLifecycle(
+            Lifecycle(
                 settings.config,
                 settings,
                 processorsProvider = { listOf(contentChangedListener) },
