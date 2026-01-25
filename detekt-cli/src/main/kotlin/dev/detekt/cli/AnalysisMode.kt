@@ -10,7 +10,7 @@ enum class AnalysisMode {
 
     fun toTooling(): AnalysisMode =
         when (this) {
-            full -> AnalysisMode.full
-            light -> AnalysisMode.light
+            full -> AnalysisMode.Full
+            light -> AnalysisMode.Light
         }
 }
