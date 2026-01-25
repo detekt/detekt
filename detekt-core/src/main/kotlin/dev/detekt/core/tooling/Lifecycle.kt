@@ -69,7 +69,7 @@ internal class DefaultLifecycle(
     override val settings: ProcessingSettings,
     override val bindingProvider: (files: List<KtFile>) -> Unit =
         {
-            if (settings.spec.projectSpec.analysisMode == AnalysisMode.full) {
+            if (settings.spec.projectSpec.analysisMode == AnalysisMode.Full) {
                 val collector = DetektMessageCollector(
                     minSeverity = CompilerMessageSeverity.ERROR,
                     debugPrinter = settings::debug,
