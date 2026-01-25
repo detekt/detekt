@@ -31,7 +31,7 @@ junit-jupiterApi = { module = "org.junit.jupiter:junit-jupiter-api", version = "
 # This should only be updated when updating the minimum version supported by detekt's Gradle plugin.
 kotlin-gradlePluginApi = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin-api", version = "2.1.0" }
 
-assertj-core = { module = "org.assertj:assertj-core", version = "3.27.6" }
+assertj-core = { module = "org.assertj:assertj-core", version = "3.27.7" }
 # This represents the oldest assertj version supported by detekt-test-assertj.
 # This should only be updated when updating the minimum version supported by detekt-test-assertj.
 # Any update to the lower-bound version should also be reflected at renovate.json to lock this version.
