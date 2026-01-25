@@ -52,8 +52,8 @@ class ClasspathResourceConverter : IStringConverter<URL> {
 class AnalysisModeConverter : IStringConverter<AnalysisMode> {
     override fun convert(value: String): AnalysisMode =
         when (value) {
-            "light" -> AnalysisMode.light
-            "full" -> AnalysisMode.full
+            "light" -> AnalysisMode.Light
+            "full" -> AnalysisMode.Full
             else -> throw ParameterException("Invald value $value")
         }
 }
