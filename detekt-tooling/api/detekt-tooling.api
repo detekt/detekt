@@ -1,6 +1,6 @@
 public final class dev/detekt/tooling/api/AnalysisMode : java/lang/Enum {
-	public static final field full Ldev/detekt/tooling/api/AnalysisMode;
-	public static final field light Ldev/detekt/tooling/api/AnalysisMode;
+	public static final field Full Ldev/detekt/tooling/api/AnalysisMode;
+	public static final field Light Ldev/detekt/tooling/api/AnalysisMode;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Ldev/detekt/tooling/api/AnalysisMode;
 	public static fun values ()[Ldev/detekt/tooling/api/AnalysisMode;

@@ -15,7 +15,7 @@ class ProjectSpecBuilder : Builder<ProjectSpec> {
             field = value
         }
     var inputPaths: Collection<Path> = emptyList()
-    var analysisMode: AnalysisMode = AnalysisMode.light
+    var analysisMode: AnalysisMode = AnalysisMode.Light
 
     override fun build(): ProjectSpec = ProjectModel(basePath, inputPaths, analysisMode)
 }

@@ -35,7 +35,7 @@ class SuppressorsSpec {
     @Test
     fun `A finding that should be suppressed`() {
         val rule = ARule(TestConfig("ignoreAnnotated" to listOf("Composable")))
-        val suppress = buildSuppressors(rule, AnalysisMode.light)
+        val suppress = buildSuppressors(rule, AnalysisMode.Light)
             .fold(false) { acc, suppressor -> acc || suppressor.shouldSuppress(noIgnorableFinding) }
 
         assertThat(suppress).isFalse()
@@ -44,7 +44,7 @@ class SuppressorsSpec {
     @Test
     fun `A finding that should not be suppressed`() {
         val rule = ARule(TestConfig("ignoreAnnotated" to listOf("Composable")))
-        val suppress = buildSuppressors(rule, AnalysisMode.light)
+        val suppress = buildSuppressors(rule, AnalysisMode.Light)
             .fold(false) { acc, suppressor -> acc || suppressor.shouldSuppress(ignorableFinding) }
 
         assertThat(suppress).isTrue()
