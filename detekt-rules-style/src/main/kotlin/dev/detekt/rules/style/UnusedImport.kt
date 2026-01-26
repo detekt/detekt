@@ -11,12 +11,13 @@ import dev.detekt.api.config
 import dev.detekt.psi.isPartOf
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.symbols.KaCallableSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaClassKind
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassLikeSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbol
 import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocTag
 import org.jetbrains.kotlin.name.FqName
-import org.jetbrains.kotlin.name.SpecialNames
 import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtImportDirective
@@ -161,15 +162,12 @@ class UnusedImport(config: Config) :
         @Suppress("ClassOrdering")
         private val KaSymbol.fqNameForImport: FqName?
             get() = when (this) {
-                is KaClassLikeSymbol -> {
-                    val classIdRemovingCompanion =
-                        if (classId?.shortClassName == SpecialNames.DEFAULT_NAME_FOR_COMPANION_OBJECT) {
-                            classId?.outerClassId
-                        } else {
-                            classId
-                        }
-                    classIdRemovingCompanion?.asSingleFqName()
-                }
+                is KaClassLikeSymbol -> when {
+                    this is KaClassSymbol && classKind == KaClassKind.COMPANION_OBJECT ->
+                        classId?.outerClassId
+
+                    else -> classId
+                }?.asSingleFqName()
 
                 is KaCallableSymbol -> callableId?.asSingleFqName()
 
