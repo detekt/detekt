@@ -1,9 +1,11 @@
 package dev.detekt.cli
 
+import com.beust.jcommander.IParameterValidator
 import com.beust.jcommander.IStringConverter
 import com.beust.jcommander.IValueValidator
 import com.beust.jcommander.ParameterException
 import com.beust.jcommander.converters.IParameterSplitter
+import dev.detekt.tooling.api.AnalysisMode
 import org.jetbrains.kotlin.config.ApiVersion
 import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
@@ -44,6 +46,23 @@ class ClasspathResourceConverter : IStringConverter<URL> {
         val relativeResource = if (resource.startsWith("/")) resource else "/$resource"
         return javaClass.getResource(relativeResource)
             ?: throw ParameterException("Classpath resource '$resource' does not exist!")
+    }
+}
+
+class AnalysisModeConverter : IStringConverter<AnalysisMode> {
+    override fun convert(value: String): AnalysisMode =
+        when (value) {
+            "light" -> AnalysisMode.Light
+            "full" -> AnalysisMode.Full
+            else -> throw ParameterException("Invald value $value")
+        }
+}
+
+class AnalysisModeValidator : IParameterValidator {
+    override fun validate(name: String, value: String) {
+        if (value !in setOf("light", "full")) {
+            throw ParameterException("Invalid value for $name parameter. Allowed values:[full, light]")
+        }
     }
 }
 
