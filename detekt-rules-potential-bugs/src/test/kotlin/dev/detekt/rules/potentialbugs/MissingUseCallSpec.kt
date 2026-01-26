@@ -2,6 +2,7 @@
 
 package dev.detekt.rules.potentialbugs
 
+import dev.detekt.api.Config
 import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.junit.KotlinCoreEnvironmentTest
 import dev.detekt.test.lintWithContext
@@ -13,7 +14,7 @@ import org.junit.jupiter.params.provider.ValueSource
 
 @KotlinCoreEnvironmentTest
 class MissingUseCallSpec(private val env: KotlinEnvironmentContainer) {
-    private val subject = MissingUseCall()
+    private val subject = MissingUseCall(Config.empty)
 
     @ParameterizedTest
     @ValueSource(strings = ["java.io.Closeable", "java.lang.AutoCloseable"])

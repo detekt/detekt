@@ -67,7 +67,7 @@ import org.jetbrains.kotlin.psi.psiUtil.siblings
  * </compliant>
  */
 @Suppress("TooManyFunctions")
-class MissingUseCall(config: Config = Config.empty) :
+class MissingUseCall(config: Config) :
     Rule(
         config,
         "Usage of `Closeable` detected without `use` call. Using `Closeable` without `use` " +
