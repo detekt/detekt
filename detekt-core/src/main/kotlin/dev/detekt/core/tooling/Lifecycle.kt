@@ -23,51 +23,10 @@ import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity
 import org.jetbrains.kotlin.diagnostics.DiagnosticUtils.getLineAndColumnRangeInPsiFile
 import org.jetbrains.kotlin.psi.KtFile
 
-internal interface Lifecycle {
-
-    val baselineConfig: Config
-    val settings: ProcessingSettings
-    val bindingProvider: (files: List<KtFile>) -> Unit
-    val processorsProvider: () -> List<FileProcessListener>
-    val ruleSetsProvider: () -> List<RuleSetProvider>
-
-    private fun <R> measure(phase: Phase, block: () -> R): R = settings.monitor.measure(phase, block)
-
-    fun analyze(): Detektion {
-        measure(Phase.ValidateConfig) { checkConfiguration(settings, baselineConfig) }
-        val filesToAnalyze = measure(Phase.Parsing) { settings.ktFiles }
-        measure(Phase.Binding) { bindingProvider.invoke(filesToAnalyze) }
-        val analysisMode = settings.spec.projectSpec.analysisMode
-        val (processors, rules) = measure(Phase.LoadingExtensions) {
-            val rules = getRules(
-                analysisMode = analysisMode,
-                ruleSetProviders = ruleSetsProvider.invoke(),
-                config = settings.config,
-                log = settings::debug,
-            )
-            processorsProvider.invoke() to rules
-        }
-
-        val result = measure(Phase.Analyzer) {
-            val analyzer = Analyzer(settings, rules.filter { it.ruleInstance.active }, processors, analysisMode)
-            processors.forEach { it.onStart(filesToAnalyze) }
-            val issues = analyzer.run(filesToAnalyze)
-            val detektion = Detektion(issues, rules.map { it.ruleInstance })
-            processors.fold(detektion) { acc, processor -> processor.onFinish(filesToAnalyze, acc) }
-        }
-
-        return measure(Phase.Reporting) {
-            val finalResult = handleReportingExtensions(settings, result)
-            OutputFacade(settings).run(finalResult)
-            finalResult
-        }
-    }
-}
-
-internal class DefaultLifecycle(
-    override val baselineConfig: Config,
-    override val settings: ProcessingSettings,
-    override val bindingProvider: (files: List<KtFile>) -> Unit =
+internal class Lifecycle(
+    val baselineConfig: Config,
+    val settings: ProcessingSettings,
+    val bindingProvider: (files: List<KtFile>) -> Unit =
         {
             if (settings.spec.projectSpec.analysisMode == AnalysisMode.full) {
                 val collector = DetektMessageCollector(
@@ -103,11 +62,44 @@ internal class DefaultLifecycle(
                 collector.printIssuesCountIfAny()
             }
         },
-    override val processorsProvider: () -> List<FileProcessListener> =
+    val processorsProvider: () -> List<FileProcessListener> =
         { FileProcessorLocator(settings).load() },
-    override val ruleSetsProvider: () -> List<RuleSetProvider> =
+    val ruleSetsProvider: () -> List<RuleSetProvider> =
         { settings.createRuleProviders() },
-) : Lifecycle
+) {
+
+    private fun <R> measure(phase: Phase, block: () -> R): R = settings.monitor.measure(phase, block)
+
+    fun analyze(): Detektion {
+        measure(Phase.ValidateConfig) { checkConfiguration(settings, baselineConfig) }
+        val filesToAnalyze = measure(Phase.Parsing) { settings.ktFiles }
+        measure(Phase.Binding) { bindingProvider.invoke(filesToAnalyze) }
+        val analysisMode = settings.spec.projectSpec.analysisMode
+        val (processors, rules) = measure(Phase.LoadingExtensions) {
+            val rules = getRules(
+                analysisMode = analysisMode,
+                ruleSetProviders = ruleSetsProvider.invoke(),
+                config = settings.config,
+                log = settings::debug,
+            )
+            processorsProvider.invoke() to rules
+        }
+
+        val result = measure(Phase.Analyzer) {
+            val analyzer = Analyzer(settings, rules.filter { it.ruleInstance.active }, processors, analysisMode)
+            processors.forEach { it.onStart(filesToAnalyze) }
+            val issues = analyzer.run(filesToAnalyze)
+            val detektion = Detektion(issues, rules.map { it.ruleInstance })
+            processors.fold(detektion) { acc, processor -> processor.onFinish(filesToAnalyze, acc) }
+        }
+
+        return measure(Phase.Reporting) {
+            val finalResult = handleReportingExtensions(settings, result)
+            OutputFacade(settings).run(finalResult)
+            finalResult
+        }
+    }
+}
 
 private fun KaSeverity.toCompilerMessageSeverity(): CompilerMessageSeverity =
     when (this) {

@@ -16,15 +16,10 @@ import org.jetbrains.kotlin.psi.KtFile
 
 class AnalysisFacade(private val spec: ProcessingSpec) : Detekt {
 
-    override fun run(): AnalysisResult =
-        runAnalysis {
-            DefaultLifecycle(spec.getDefaultConfiguration(), it)
-        }
+    override fun run(): AnalysisResult = runAnalysis { Lifecycle(spec.getDefaultConfiguration(), it) }
 
     override fun run(files: Collection<KtFile>): AnalysisResult =
-        runAnalysis {
-            DefaultLifecycle(spec.getDefaultConfiguration(), it)
-        }
+        runAnalysis { Lifecycle(spec.getDefaultConfiguration(), it) }
 
     internal fun runAnalysis(createLifecycle: (ProcessingSettings) -> Lifecycle): AnalysisResult =
         spec.withSettings {
