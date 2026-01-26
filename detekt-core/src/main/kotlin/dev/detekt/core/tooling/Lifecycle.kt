@@ -28,39 +28,37 @@ internal class Lifecycle(
     val settings: ProcessingSettings,
     val bindingProvider: (files: List<KtFile>) -> Unit =
         {
-            if (settings.spec.projectSpec.analysisMode == AnalysisMode.full) {
-                val collector = DetektMessageCollector(
-                    minSeverity = CompilerMessageSeverity.ERROR,
-                    debugPrinter = settings::debug,
-                    warningPrinter = settings::info,
-                    isDebugEnabled = settings.spec.loggingSpec.debug
-                )
+            val collector = DetektMessageCollector(
+                minSeverity = CompilerMessageSeverity.ERROR,
+                debugPrinter = settings::debug,
+                warningPrinter = settings::info,
+                isDebugEnabled = settings.spec.loggingSpec.debug
+            )
 
-                it.forEach { file: KtFile ->
-                    analyze(file) {
-                        file.collectDiagnostics(KaDiagnosticCheckerFilter.ONLY_COMMON_CHECKERS).forEach { diagnostic ->
-                            val lineAndColumnRange =
-                                getLineAndColumnRangeInPsiFile(diagnostic.psi.containingFile, diagnostic.psi.textRange)
+            it.forEach { file: KtFile ->
+                analyze(file) {
+                    file.collectDiagnostics(KaDiagnosticCheckerFilter.ONLY_COMMON_CHECKERS).forEach { diagnostic ->
+                        val lineAndColumnRange =
+                            getLineAndColumnRangeInPsiFile(diagnostic.psi.containingFile, diagnostic.psi.textRange)
 
-                            val location = CompilerMessageLocationWithRange.create(
-                                diagnostic.psi.containingFile.virtualFile.path,
-                                lineAndColumnRange.start.line,
-                                lineAndColumnRange.start.column,
-                                lineAndColumnRange.end.line,
-                                lineAndColumnRange.end.column,
-                                lineAndColumnRange.start.lineContent
-                            )
-                            collector.report(
-                                diagnostic.severity.toCompilerMessageSeverity(),
-                                diagnostic.defaultMessage,
-                                location,
-                            )
-                        }
+                        val location = CompilerMessageLocationWithRange.create(
+                            diagnostic.psi.containingFile.virtualFile.path,
+                            lineAndColumnRange.start.line,
+                            lineAndColumnRange.start.column,
+                            lineAndColumnRange.end.line,
+                            lineAndColumnRange.end.column,
+                            lineAndColumnRange.start.lineContent
+                        )
+                        collector.report(
+                            diagnostic.severity.toCompilerMessageSeverity(),
+                            diagnostic.defaultMessage,
+                            location,
+                        )
                     }
                 }
-
-                collector.printIssuesCountIfAny()
             }
+
+            collector.printIssuesCountIfAny()
         },
     val processorsProvider: () -> List<FileProcessListener> =
         { FileProcessorLocator(settings).load() },
@@ -73,7 +71,9 @@ internal class Lifecycle(
     fun analyze(): Detektion {
         measure(Phase.ValidateConfig) { checkConfiguration(settings, baselineConfig) }
         val filesToAnalyze = measure(Phase.Parsing) { settings.ktFiles }
-        measure(Phase.Binding) { bindingProvider.invoke(filesToAnalyze) }
+        if (settings.spec.projectSpec.analysisMode == AnalysisMode.full) {
+            measure(Phase.Binding) { bindingProvider.invoke(filesToAnalyze) }
+        }
         val analysisMode = settings.spec.projectSpec.analysisMode
         val (processors, rules) = measure(Phase.LoadingExtensions) {
             val rules = getRules(
