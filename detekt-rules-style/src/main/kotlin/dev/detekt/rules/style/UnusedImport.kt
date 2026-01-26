@@ -162,16 +162,12 @@ class UnusedImport(config: Config) :
         @Suppress("ClassOrdering")
         private val KaSymbol.fqNameForImport: FqName?
             get() = when (this) {
-                is KaClassLikeSymbol -> {
-                    val isCompanionObject = this is KaClassSymbol &&
-                        classKind == KaClassKind.COMPANION_OBJECT
-                    val classIdRemovingCompanion = if (isCompanionObject) {
+                is KaClassLikeSymbol -> when {
+                    this is KaClassSymbol && classKind == KaClassKind.COMPANION_OBJECT ->
                         classId?.outerClassId
-                    } else {
-                        classId
-                    }
-                    classIdRemovingCompanion?.asSingleFqName()
-                }
+
+                    else -> classId
+                }?.asSingleFqName()
 
                 is KaCallableSymbol -> callableId?.asSingleFqName()
 
