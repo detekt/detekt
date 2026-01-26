@@ -776,12 +776,12 @@ class MissingUseCallSpec(private val env: KotlinEnvironmentContainer) {
         }
 
         @Test
-        fun `does report use of _Closeable_ without _use_ inside class inside function returning _Closeable_`() {
+        fun `does not report _Closeable_ assigned to member property inside class inside function returning _Closeable_`() {
             val code = """
                 ${myClosable()}
 
                 fun functionThatReturnsClosable1(): MyCloseable {
-                    val r = object : Runnable { 
+                    val r = object : Runnable {
                         override fun run() {
                             /* no-op */
                         }
@@ -792,7 +792,83 @@ class MissingUseCallSpec(private val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
-            assertThat(findings).hasSize(1)
+            // Member property inside a class - the class is responsible for managing its lifecycle
+            assertThat(findings).isEmpty()
+        }
+    }
+
+    @Nested
+    inner class `Given member property assignment` {
+        @Test
+        fun `does not report _Closeable_ assigned to class member property`() {
+            val code = """
+                import java.io.Closeable
+
+                class ResourceHolder {
+                    val resource: Closeable = object : Closeable {
+                        override fun close() { /* no-op */ }
+                    }
+                }
+            """.trimIndent()
+            val findings = subject.lintWithContext(env, code)
+            // Class member property - the class is responsible for managing its lifecycle
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `does not report _Closeable_ assigned to class member property using function call`() {
+            val code = """
+                ${myClosable()}
+
+                fun createCloseable(): MyCloseable = MyCloseable(0)
+
+                class ResourceHolder {
+                    val resource = createCloseable()
+                }
+            """.trimIndent()
+            val findings = subject.lintWithContext(env, code)
+            // Class member property - the class is responsible for managing its lifecycle
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `does not report _Closeable_ assigned to class member property with initializer`() {
+            val code = """
+                ${myClosable()}
+
+                class ResourceHolder {
+                    val resource = MyCloseable(0)
+                }
+            """.trimIndent()
+            val findings = subject.lintWithContext(env, code)
+            // Class member property - the class is responsible for managing its lifecycle
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `does report _Closeable_ assigned to local variable inside function`() {
+            val code = """
+                ${myClosable()}
+
+                fun test() {
+                    val resource = MyCloseable(0)
+                }
+            """.trimIndent()
+            val findings = subject.lintWithContext(env, code)
+            // Local variable needs to use `use` for proper resource management
+            assertThat(findings).singleElement()
+        }
+
+        @Test
+        fun `does report _Closeable_ assigned to top-level property`() {
+            val code = """
+                ${myClosable()}
+
+                val globalResource = MyCloseable(0)
+            """.trimIndent()
+            val findings = subject.lintWithContext(env, code)
+            // Top-level property should still be reported
+            assertThat(findings).singleElement()
         }
     }
 }

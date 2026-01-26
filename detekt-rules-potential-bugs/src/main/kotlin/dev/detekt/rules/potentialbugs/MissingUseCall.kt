@@ -143,8 +143,14 @@ class MissingUseCall(config: Config) :
             }
 
             expressionParent is KtProperty -> {
-                // rhs has already been analysed
-                traversedParentExpression.contains(expressionParent.children.getOrNull(0)).not()
+                // Don't report if assigning to a member property (parent is class body)
+                // The class/object is responsible for managing its lifecycle
+                if (expressionParent.parent is KtClassBody) {
+                    false
+                } else {
+                    // rhs has already been analysed
+                    traversedParentExpression.contains(expressionParent.children.getOrNull(0)).not()
+                }
             }
 
             else -> {
