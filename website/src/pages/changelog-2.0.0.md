@@ -35,8 +35,7 @@ Further updates on builtInKotlin support in Detekt Gradle Plugin [will be availa
 - Bump KtLint to v1.8.0 - [#8843](https://github.com/detekt/detekt/pull/8843)
 - New ktlint Rule: `ThenSpacingRule` - [#8850](https://github.com/detekt/detekt/pull/8850)
 - New Rule: `UnnecessaryInitOnArray` - [#8784](https://github.com/detekt/detekt/pull/8784)
-- New Rule: `UnnecessaryRun` - [#7428](https://github.com/detekt/detekt/pull/7428)
-- New Rule `UnnecessaryFullyQualifiedName` - [#8917](https://github.com/detekt/detekt/pull/8917)
+- New Rule: `UnnecessaryFullyQualifiedName` - [#8917](https://github.com/detekt/detekt/pull/8917)
 
 ### Breaking Changes
 
