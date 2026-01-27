@@ -205,7 +205,7 @@ class RuleProfilingReportSpec {
     }
 
     @Nested
-    inner class `render` {
+    inner class Render {
 
         @Test
         fun `returns null for empty metrics`() {
@@ -385,7 +385,7 @@ class RuleProfilingReportSpec {
     }
 
     @Nested
-    inner class `writeCsv` {
+    inner class WriteCsv {
 
         @Test
         fun `writes header`() {
@@ -437,7 +437,7 @@ class RuleProfilingReportSpec {
     }
 
     @Nested
-    inner class `AggregatedRuleMetric` {
+    inner class AggregatedRuleMetric {
 
         @Test
         fun `calculates average duration correctly`() {
