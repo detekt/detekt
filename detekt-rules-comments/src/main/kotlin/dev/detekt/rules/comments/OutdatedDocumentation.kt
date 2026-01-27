@@ -6,6 +6,7 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.Rule
 import dev.detekt.api.config
+import dev.detekt.psi.isAbstract
 import dev.detekt.psi.isInternal
 import dev.detekt.psi.isOverride
 import org.jetbrains.kotlin.kdoc.parser.KDocKnownTag
@@ -76,6 +77,10 @@ class OutdatedDocumentation(config: Config) :
 
     override fun visitClass(klass: KtClass) {
         super.visitClass(klass)
+        // Skip checking interfaces and abstract classes - their properties are meant to be overridden
+        if (klass.isInterface() || klass.isAbstract()) {
+            return
+        }
         val classDeclarations = getClassDeclarations(klass)
         val overridePropertyNames = getOverridePropertyNames(klass)
         (
