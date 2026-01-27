@@ -23,7 +23,7 @@ internal fun Project.registerJvmCompilationDetektTask(
     tasks.register(DetektPlugin.DETEKT_TASK_NAME + taskSuffix.capitalize(), Detekt::class.java) { detektTask ->
         val siblingTask = compilation.compileTaskProvider.get() as KotlinJvmCompile
 
-        detektTask.setSource(siblingTask.sources)
+        detektTask.setSource(compilation.kotlinSourceSets.flatMap { it.kotlin.srcDirs })
         detektTask.classpath.conventionCompat(compilation.output.classesDirs, siblingTask.libraries)
         detektTask.friendPaths.conventionCompat(compilation.output.classesDirs, siblingTask.friendPaths)
         detektTask.apiVersion.convention(siblingTask.compilerOptions.apiVersion.map { it.version })
@@ -67,7 +67,7 @@ internal fun Project.registerJvmCompilationCreateBaselineTask(
     ) { createBaselineTask ->
         val siblingTask = compilation.compileTaskProvider.get() as KotlinJvmCompile
 
-        createBaselineTask.setSource(siblingTask.sources)
+        createBaselineTask.setSource(compilation.kotlinSourceSets.flatMap { it.kotlin.srcDirs })
         createBaselineTask.classpath.conventionCompat(compilation.output.classesDirs, siblingTask.libraries)
         createBaselineTask.friendPaths.conventionCompat(compilation.output.classesDirs, siblingTask.friendPaths)
         createBaselineTask.apiVersion.convention(siblingTask.compilerOptions.apiVersion.map { it.version })
