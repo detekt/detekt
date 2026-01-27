@@ -12,6 +12,84 @@ Detekt 2.0.0 is still in alpha. While it's stable enough to use in your projects
 
 :::
 
+## 2.0.0-alpha.2 - 2026-01-27
+
+This is an alpha release of Detekt 2.0.0. Is built against Kotlin 2.3.0, Gradle 9.3.0, AGP 9.0.0 and is tested against JDK 25.
+
+Please note that in order for this alpha of Detekt to run in a AGP 9.0.0 project, you will need to disable the new DSL and built-in Kotlin by adding these properties to `gradle.properties`:
+
+```
+android.newDsl=false
+android.builtInKotlin=false
+```
+
+Further updates on builtInKotlin support in Detekt Gradle Plugin [will be available here](https://github.com/detekt/detekt/issues/8981).
+
+### Notable Changes
+
+- Bump Kotlin to 2.3.0 - [#8743](https://github.com/detekt/detekt/pull/8743)
+- Bump Gradle to 9.3.0 - [#8982](https://github.com/detekt/detekt/pull/8982)
+- Bump AGP to 9 - [#8553](https://github.com/detekt/detekt/pull/8553)
+- Bump minimum AGP to 8.2.2 - [#8931](https://github.com/detekt/detekt/pull/8931)
+- Enable rules by default that are now standard in ktlint 1.8.0 - [#8849](https://github.com/detekt/detekt/pull/8849)
+- Bump KtLint to v1.8.0 - [#8843](https://github.com/detekt/detekt/pull/8843)
+- New ktlint Rule: `ThenSpacingRule` - [#8850](https://github.com/detekt/detekt/pull/8850)
+- New Rule: `UnnecessaryInitOnArray` - [#8784](https://github.com/detekt/detekt/pull/8784)
+- New Rule: `UnnecessaryRun` - [#7428](https://github.com/detekt/detekt/pull/7428)
+- New Rule `UnnecessaryFullyQualifiedName` - [#8917](https://github.com/detekt/detekt/pull/8917)
+
+### Breaking Changes
+
+- Rename `documentation` to `comments` - [#8889](https://github.com/detekt/detekt/pull/8889)
+- Rename `empty` to `emptyblocks` - [#8888](https://github.com/detekt/detekt/pull/8888)
+- Rename `bugs` rules to `potentialbugs` - [#8887](https://github.com/detekt/detekt/pull/8887)
+- Remove `UnnecessaryAnnotationUseSiteTarget` rule - [#8861](https://github.com/detekt/detekt/pull/8861)
+- Rename RuleSet.Id to RuleSetId - [#8810](https://github.com/detekt/detekt/pull/8810)
+- Rename rule `CommentOverPrivateMethod` to `DocumentationOverPrivateMethod` - [#8778](https://github.com/detekt/detekt/pull/8778)
+- Refactor `AbsentOrWrongFileLicense` - [#8969](https://github.com/detekt/detekt/pull/8969)
+- Compile DGP against kotlin-plugin-api only not KGP itself - [#8756](https://github.com/detekt/detekt/pull/8756)
+- Change configuration options for ForbiddenImport rule - [#8747](https://github.com/detekt/detekt/pull/8747)
+
+### Changelog
+
+- fix(UnusedImport): detect named companion objects correctly - [#9005](https://github.com/detekt/detekt/pull/9005)
+- Remove unnecessary tests - [#8985](https://github.com/detekt/detekt/pull/8985)
+- Pass the correct type to `TestConfig` - [#8984](https://github.com/detekt/detekt/pull/8984)
+- Remove special case for active at `TestConfig` - [#8983](https://github.com/detekt/detekt/pull/8983)
+- `TestConfig` over `yamlConfigFromContent` - [#8974](https://github.com/detekt/detekt/pull/8974)
+- Skip underscore placeholders for unused variables on NonNameShadowing rule (#8962) - [#8965](https://github.com/detekt/detekt/pull/8965)
+- docs: clarify function type handling in ForbiddenMethodCall - [#8964](https://github.com/detekt/detekt/pull/8964)
+- Check if there suspend function in try block before reporting - [#8950](https://github.com/detekt/detekt/pull/8950)
+- Fix SubpluginArtifact coordinates for dev.detekt:detekt-compiler-plugin - [#8938](https://github.com/detekt/detekt/pull/8938)
+- Handle case when inner is required as parent is inner - [#8927](https://github.com/detekt/detekt/pull/8927)
+- Add paragraph on AI contributed PR - [#8922](https://github.com/detekt/detekt/pull/8922)
+- Handle case when reference is provided - [#8895](https://github.com/detekt/detekt/pull/8895)
+- Don't enable rules by default that are only enabled when using ktlint_official code style - [#8845](https://github.com/detekt/detekt/pull/8845)
+- Filter operations which are terminal as they don't continue sequence - [#8804](https://github.com/detekt/detekt/pull/8804)
+- Add modality check from analysis api - [#8803](https://github.com/detekt/detekt/pull/8803)
+- Update `getPropertyAccessorSymbol` method to correctly return getter … - [#8787](https://github.com/detekt/detekt/pull/8787)
+- Fix #8160 - Exclude classes in NamedArguments rule - [#8782](https://github.com/detekt/detekt/pull/8782)
+- remove suppression - [#8736](https://github.com/detekt/detekt/pull/8736)
+- Remove "V2" from DGP plugin display name and description - [#8628](https://github.com/detekt/detekt/pull/8628)
+
+### Dependency Updates
+
+- Bump Kotlin to v2.2.21 - [#8807](https://github.com/detekt/detekt/pull/8807)
+- Bump AGP to 8.13.2 - [#8914](https://github.com/detekt/detekt/pull/8914)
+- Add transitive assertj dep of assertj core in `detekt-test-assertj` - [#8923](https://github.com/detekt/detekt/pull/8923)
+- chore(deps): update gradle to v9.2.1 - [#8868](https://github.com/detekt/detekt/pull/8868)
+- fix(deps): update dependency com.android.tools.build:gradle to v8.13.1 - [#8838](https://github.com/detekt/detekt/pull/8838)
+- chore(deps): update gradle to v9.2.0 - [#8820](https://github.com/detekt/detekt/pull/8820)
+
+### Housekeeping & Refactorings
+
+- Bump min Node version for website build - [#8875](https://github.com/detekt/detekt/pull/8875)
+- Enable ValueArgumentComment for detekt project - [#8854](https://github.com/detekt/detekt/pull/8854)
+
+### Contributors
+
+We would like to thank the following contributors that made this release possible: [@3flex](https://github.com/3flex), [@BraisGabin](https://github.com/BraisGabin), [@atulgpt](https://github.com/atulgpt), [@chao2zhang](https://github.com/chao2zhang), [@cortinico](https://github.com/cortinico), [@csbiy](https://github.com/csbiy), [@forketyfork](https://github.com/forketyfork), [@marschwar](https://github.com/marschwar), [@rschattauer](https://github.com/rschattauer).
+
 ## 2.0.0-alpha.1 - 2025-10-21
 
 This is an alpha release of Detekt 2.0.0. Is built against Kotlin 2.2.20, Gradle 9.1.0 and is tested against JDK 25.
