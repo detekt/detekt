@@ -189,7 +189,7 @@ Rules with high **average time** but low call counts might:
 
 **Parallel Execution**: When profiling is enabled, parallel execution is automatically disabled (even if `--parallel` is specified). This ensures timing measurements are accurate and not influenced by concurrency overhead or resource contention.
 
-**Overhead**: Profiling adds minimal overhead to analysis time (typically <1%). The measurements are collected efficiently using high-precision timers.
+**Overhead**: Profiling adds minimal overhead to analysis time (typically less than 1%). The measurements are collected efficiently using high-precision timers.
 
 **Type Resolution**: Profiling works with both light analysis mode and full analysis mode (with type resolution). Type-resolution-based rules will typically show higher execution times.
 
