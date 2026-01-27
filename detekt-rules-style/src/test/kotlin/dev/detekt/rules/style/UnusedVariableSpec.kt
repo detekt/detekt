@@ -404,7 +404,7 @@ class UnusedVariableSpec(val env: KotlinEnvironmentContainer) {
 
                 fun main() {
                     val dependencies = listOf<Pair<Predicate, Block>>(
-                        { it is String } to { println(it) }
+                        { it: Any -> it is String } to { it: Any -> println(it) }
                     )
                     dependencies.forEach { (predicate, block) ->
                         if (predicate("test")) {
