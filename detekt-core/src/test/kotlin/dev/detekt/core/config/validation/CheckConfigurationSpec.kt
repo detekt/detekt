@@ -10,7 +10,7 @@ import dev.detekt.api.RuleSetProvider
 import dev.detekt.core.createNullLoggingSpec
 import dev.detekt.core.createProcessingSettings
 import dev.detekt.core.tooling.getDefaultConfiguration
-import dev.detekt.test.yamlConfigFromContent
+import dev.detekt.core.yamlConfigFromContent
 import dev.detekt.tooling.api.InvalidConfig
 import org.assertj.core.api.Assertions.assertThatCode
 import org.junit.jupiter.api.Test
