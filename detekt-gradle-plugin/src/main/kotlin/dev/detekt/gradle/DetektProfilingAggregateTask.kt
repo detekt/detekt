@@ -87,7 +87,7 @@ abstract class DetektProfilingAggregateTask : DefaultTask() {
             extension: DetektExtension,
             rootProfilingTaskProvider: TaskProvider<DetektProfilingTask>?,
         ) {
-            val profilingConsumer = project.configurations.create("detektProfilingConsumer") { config ->
+            val profilingConsumer = project.configurations.create("${taskName}Consumer") { config ->
                 config.isCanBeConsumed = false
                 config.isCanBeResolved = true
                 config.description = "Consumes Detekt profiling CSV artifacts from subprojects"
