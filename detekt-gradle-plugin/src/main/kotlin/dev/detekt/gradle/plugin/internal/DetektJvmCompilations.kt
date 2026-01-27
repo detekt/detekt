@@ -9,6 +9,7 @@ internal object DetektJvmCompilations {
         project.extensions.getByType(KotlinJvmExtension::class.java).target.compilations.configureEach { compilation ->
             project.registerJvmCompilationDetektTask(extension, compilation)
             project.registerJvmCompilationCreateBaselineTask(extension, compilation)
+            project.registerJvmCompilationProfilingTask(extension, compilation)
         }
     }
 }
