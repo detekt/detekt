@@ -67,14 +67,14 @@ class CompositeConfigSpec {
         @Test
         fun `is derived from the _override_ config if available`() {
             val subject = compositeConfig.subConfig("style")
-            val actual = subject.parentPath
+            val actual = subject.key
             assertThat(actual).isEqualTo("style")
         }
 
         @Test
         fun `is derived from the default config if unavailable in original config`() {
             val subject = compositeConfig.subConfig("code-smell")
-            val actual = subject.parentPath
+            val actual = subject.key
             assertThat(actual).isEqualTo("code-smell")
         }
     }

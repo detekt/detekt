@@ -11,8 +11,8 @@ class DisabledAutoCorrectConfig(private val wrapped: Config, override val parent
     Config,
     ValidatableConfiguration {
 
-    override val parentPath: String?
-        get() = wrapped.parentPath
+    override val key: String?
+        get() = wrapped.key
 
     override fun subConfig(key: String): Config = DisabledAutoCorrectConfig(wrapped.subConfig(key), this)
 

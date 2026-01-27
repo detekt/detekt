@@ -1,7 +1,6 @@
 package dev.detekt.core.config
 
 import dev.detekt.api.Config
-import dev.detekt.api.Config.Companion.CONFIG_SEPARATOR
 import dev.detekt.api.Notification
 import dev.detekt.core.config.validation.ValidatableConfiguration
 import dev.detekt.core.config.validation.validateConfig
@@ -21,7 +20,7 @@ import kotlin.io.path.reader
  */
 class YamlConfig internal constructor(
     val properties: Map<String, Any>,
-    override val parentPath: String?,
+    override val key: String?,
     override val parent: Config?,
 ) : Config,
     ValidatableConfiguration {
@@ -29,11 +28,7 @@ class YamlConfig internal constructor(
     override fun subConfig(key: String): Config {
         @Suppress("UNCHECKED_CAST")
         val subProperties = properties.getOrElse(key) { emptyMap<String, Any>() } as Map<String, Any>
-        return YamlConfig(
-            subProperties,
-            if (parentPath == null) key else "$parentPath $CONFIG_SEPARATOR $key",
-            this,
-        )
+        return YamlConfig(subProperties, key, this)
     }
 
     override fun subConfigKeys(): Set<String> = properties.keys

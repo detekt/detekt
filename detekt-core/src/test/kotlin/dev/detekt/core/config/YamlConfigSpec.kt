@@ -64,7 +64,7 @@ class YamlConfigSpec {
         fun `parent path of ruleset config is ruleset id`() {
             val rulesetId = "style"
             val subject = config.subConfig(rulesetId)
-            val actual = subject.parentPath
+            val actual = subject.key
             assertThat(actual).isEqualTo(rulesetId)
         }
 
