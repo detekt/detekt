@@ -6,7 +6,6 @@ import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.FileCollection
 import org.gradle.api.file.RegularFile
 import java.io.File
-import java.util.Locale
 
 private const val DEBUG_PARAMETER = "--debug"
 private const val INPUT_PARAMETER = "--input"
@@ -134,7 +133,7 @@ internal data class FailOnSeverityArgument(val ignoreFailures: Boolean, val minS
     CliArgument {
     override fun toArgument(): List<String> {
         val effectiveSeverity = if (ignoreFailures) FailOnSeverity.Never else minSeverity
-        return listOf(FAIL_ON_SEVERITY_PARAMETER, effectiveSeverity.name.toLowerCase(Locale.ROOT))
+        return listOf(FAIL_ON_SEVERITY_PARAMETER, effectiveSeverity.name.lowercase())
     }
 }
 

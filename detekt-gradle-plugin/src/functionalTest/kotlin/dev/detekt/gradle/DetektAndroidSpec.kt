@@ -617,6 +617,99 @@ class DetektAndroidSpec {
             }
         }
     }
+
+    @Nested
+    inner class `configures project with a generated source directory` {
+        val projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 0).apply {
+            addSubmodule(
+                name = "app",
+                numberOfSourceFilesPerSourceDir = 0,
+                numberOfFindings = 0,
+                buildFileContent = """
+                    plugins {
+                        id("com.android.application")
+                        kotlin("android")
+                        id("dev.detekt")
+                    }
+                    
+                    android {
+                        compileSdk = 36
+                        namespace = "dev.detekt.app"
+                        defaultConfig {
+                            minSdk = 23
+                        }
+                        compileOptions {
+                            sourceCompatibility = JavaVersion.VERSION_1_8
+                            targetCompatibility = JavaVersion.VERSION_1_8
+                        }
+                    }
+                    
+                    kotlin {
+                        compilerOptions {
+                            jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8
+                        }
+                        sourceSets.getByName("debug") {
+                            generatedKotlin.srcDir(project.layout.buildDirectory.dir("generated/custom/debug"))
+                        }
+                    }
+                    
+                    tasks.withType<dev.detekt.gradle.DetektCreateBaselineTask>().configureEach {
+                        doFirst {
+                            inputs.sourceFiles.forEach { println("- baseline source: ${'$'}it") }
+                        }
+                    }
+                """.trimIndent(),
+                srcDirs = listOf("src/main/java"),
+            )
+        }
+
+        val gradleRunner = createGradleRunnerAndSetupProject(projectLayout, dryRun = true).also {
+            it.writeProjectFile("app/src/main/AndroidManifest.xml", manifestContent)
+            it.writeProjectFile(
+                filename = "app/build/generated/custom/debug/GeneratedClass.kt",
+                content = """
+                    package generated
+                    class GeneratedClass
+                """.trimIndent()
+            )
+            it.writeProjectFile(
+                filename = "app/src/main/java/MainActivity.kt",
+                content = """
+                    import generated.GeneratedClass
+                    class MainActivity {
+                        val generated = GeneratedClass()
+                    }
+                """.trimIndent()
+            )
+        }
+
+        @Test
+        @DisplayName("task app:detektDebug")
+        fun appDetektDebug() {
+            gradleRunner.runTasksAndCheckResult(":app:detektDebug") { result ->
+                assertThat(result.output).containsPattern(
+                    """--input \S*[/\\]app[/\\]src[/\\]main[/\\]java"""
+                )
+                assertThat(result.output).doesNotContainPattern(
+                    """--input \S*[/\\]build[/\\]"""
+                )
+            }
+        }
+
+        @Test
+        @DisplayName("task app:detektBaselineDebug")
+        fun appDetektBaselineDebug() {
+            gradleRunner.runTasksAndCheckResult(":app:detektBaselineDebug") { result ->
+                // Manually added the logs for DetektCreateBaselineTask.inputs.sourceFiles.
+                assertThat(result.output).containsPattern(
+                    """- baseline source: \S*[/\\]app[/\\]src[/\\]main[/\\]java"""
+                )
+                assertThat(result.output).doesNotContainPattern(
+                    """- baseline source: \S*[/\\]build[/\\]"""
+                )
+            }
+        }
+    }
 }
 
 /**
