@@ -121,6 +121,7 @@ public abstract interface class dev/detekt/tooling/api/spec/ExecutionSpec {
 	public abstract fun getExecutorService ()Ljava/util/concurrent/ExecutorService;
 	public abstract fun getParallelAnalysis ()Z
 	public abstract fun getParallelParsing ()Z
+	public abstract fun getProfiling ()Z
 }
 
 public abstract interface class dev/detekt/tooling/api/spec/ExtensionsSpec {
@@ -275,9 +276,11 @@ public final class dev/detekt/tooling/dsl/ExecutionSpecBuilder : dev/detekt/tool
 	public final fun getExecutorService ()Ljava/util/concurrent/ExecutorService;
 	public final fun getParallelAnalysis ()Z
 	public final fun getParallelParsing ()Z
+	public final fun getProfiling ()Z
 	public final fun setExecutorService (Ljava/util/concurrent/ExecutorService;)V
 	public final fun setParallelAnalysis (Z)V
 	public final fun setParallelParsing (Z)V
+	public final fun setProfiling (Z)V
 }
 
 public final class dev/detekt/tooling/dsl/ExtensionsSpecBuilder : dev/detekt/tooling/dsl/Builder {
