@@ -138,6 +138,7 @@ class CanBeNonNullable(config: Config) :
     @Suppress("TooManyFunctions")
     private inner class ParameterCheckVisitor : DetektVisitor() {
         private val nullableParams = mutableMapOf<KaVariableSymbol, NullableParam>()
+        private var isTopLevelExpression = false
 
         override fun visitNamedFunction(function: KtNamedFunction) {
             if (function.isOverride()) {
@@ -184,10 +185,11 @@ class CanBeNonNullable(config: Config) :
                 // * It has been forced into a non-null type, either by `!!` or by
                 //   `checkNonNull()`/`requireNonNull()`, or
                 // * The containing function only consists of a single non-null check on
-                //   the param, either via an if/when check or with a safe-qualified expression.
+                //   the param at the TOP LEVEL (not nested), either via an if/when check
+                //   or with a safe-qualified expression.
                 .filter {
                     val onlyNonNullCheck =
-                        validSingleChildExpression && it.isNonNullChecked && !it.isNullChecked
+                        validSingleChildExpression && it.isTopLevelNonNullCheck && !it.isNullChecked
                     it.isNonNullForced || it.isNullCheckReturnsUnit || onlyNonNullCheck
                 }
                 .forEach { nullableParam ->
@@ -233,6 +235,9 @@ class CanBeNonNullable(config: Config) :
         }
 
         override fun visitWhenExpression(expression: KtWhenExpression) {
+            // Only consider it a top-level check if this when-expression is directly in
+            // a function body (not nested inside another if/when/else branch)
+            val isTopLevel = expression.parent?.parent is KtNamedFunction
             val nullCheckedDescriptor = expression.subjectExpression
                 ?.collectDescendantsOfType<KtNameReferenceExpression>()
                 .orEmpty()
@@ -249,11 +254,11 @@ class CanBeNonNullable(config: Config) :
                 .mapNotNull { callDescriptor -> analyze(expression) { callDescriptor.restoreSymbol() } }
             val whenConditions = expression.entries.flatMap { it.conditions.asList() }
             if (nullCheckedDescriptor.isNotEmpty()) {
-                whenConditions.evaluateSubjectWhenExpression(expression, nullCheckedDescriptor)
+                whenConditions.evaluateSubjectWhenExpression(expression, nullCheckedDescriptor, isTopLevel)
             } else {
                 whenConditions.forEach { whenCondition ->
                     if (whenCondition is KtWhenConditionWithExpression) {
-                        whenCondition.expression.evaluateCheckStatement(expression.elseExpression)
+                        whenCondition.expression.evaluateCheckStatement(expression.elseExpression, isTopLevel)
                     }
                 }
             }
@@ -261,7 +266,10 @@ class CanBeNonNullable(config: Config) :
         }
 
         override fun visitIfExpression(expression: KtIfExpression) {
-            expression.condition.evaluateCheckStatement(expression.`else`)
+            // Only consider it a top-level check if this if-expression is directly in
+            // a function body (not nested inside another if/when/else branch)
+            val isTopLevel = expression.parent?.parent is KtNamedFunction
+            expression.condition.evaluateCheckStatement(expression.`else`, isTopLevel)
             if (expression.isFirstStatement()) {
                 evaluateNullCheckReturnsUnit(expression.condition, expression.then)
             }
@@ -340,7 +348,10 @@ class CanBeNonNullable(config: Config) :
                 else -> null
             }
 
-        private fun KtExpression?.evaluateCheckStatement(elseExpression: KtExpression?) {
+        private fun KtExpression?.evaluateCheckStatement(
+            elseExpression: KtExpression?,
+            isTopLevel: Boolean = false,
+        ) {
             this.getNonNullChecks(null)?.let { nonNullChecks ->
                 val nullableParamCallback = if (elseExpression.isValidElseExpression()) {
                     { nullableParam: NullableParam ->
@@ -348,7 +359,13 @@ class CanBeNonNullable(config: Config) :
                         nullableParam.isNullChecked = true
                     }
                 } else {
-                    { nullableParam -> nullableParam.isNonNullChecked = true }
+                    { nullableParam: NullableParam ->
+                        nullableParam.isNonNullChecked = true
+                        // Only mark as top-level if this is a direct child of the function body
+                        if (isTopLevel) {
+                            nullableParam.isTopLevelNonNullCheck = true
+                        }
+                    }
                 }
                 nonNullChecks.forEach {
                     nullableParams[it]?.let(nullableParamCallback)
@@ -406,6 +423,7 @@ class CanBeNonNullable(config: Config) :
         private fun List<KtWhenCondition>.evaluateSubjectWhenExpression(
             expression: KtWhenExpression,
             subjectDescriptors: List<KaVariableSymbol>,
+            isTopLevel: Boolean = false,
         ) {
             var isNonNullChecked = false
             var isNullChecked = false
@@ -436,7 +454,13 @@ class CanBeNonNullable(config: Config) :
             subjectDescriptors.forEach { callableDescriptor ->
                 nullableParams[callableDescriptor]?.let {
                     if (isNullChecked) it.isNullChecked = true
-                    if (isNonNullChecked) it.isNonNullChecked = true
+                    if (isNonNullChecked) {
+                        it.isNonNullChecked = true
+                        // Only mark as top-level if directly in the function body
+                        if (isTopLevel && !isNullChecked) {
+                            it.isTopLevelNonNullCheck = true
+                        }
+                    }
                 }
             }
         }
@@ -466,6 +490,7 @@ class CanBeNonNullable(config: Config) :
         var isNonNullChecked = false
         var isNonNullForced = false
         var isNullCheckReturnsUnit = false
+        var isTopLevelNonNullCheck = false
     }
 
     private inner class PropertyCheckVisitor : DetektVisitor() {
