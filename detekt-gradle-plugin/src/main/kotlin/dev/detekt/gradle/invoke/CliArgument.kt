@@ -9,6 +9,7 @@ import java.io.File
 import java.util.Locale
 
 private const val DEBUG_PARAMETER = "--debug"
+private const val PROFILING_PARAMETER = "--profiling"
 private const val INPUT_PARAMETER = "--input"
 private const val ANALYSIS_MODE = "--analysis-mode"
 private const val CONFIG_PARAMETER = "--config"
@@ -153,6 +154,8 @@ internal sealed class BoolCliArgument(open val value: Boolean, val configSwitch:
 }
 
 internal data class DebugArgument(override val value: Boolean) : BoolCliArgument(value, DEBUG_PARAMETER)
+
+internal data class ProfilingArgument(override val value: Boolean) : BoolCliArgument(value, PROFILING_PARAMETER)
 
 internal data class ParallelArgument(override val value: Boolean) : BoolCliArgument(value, PARALLEL_PARAMETER)
 

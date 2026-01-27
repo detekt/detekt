@@ -30,6 +30,7 @@ import dev.detekt.gradle.invoke.MultiPlatformEnabledArgument
 import dev.detekt.gradle.invoke.NoJdkArgument
 import dev.detekt.gradle.invoke.OptInArguments
 import dev.detekt.gradle.invoke.ParallelArgument
+import dev.detekt.gradle.invoke.ProfilingArgument
 import dev.detekt.gradle.plugin.isWorkerApiEnabled
 import org.gradle.api.Action
 import org.gradle.api.Incubating
@@ -50,6 +51,7 @@ import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.Nested
 import org.gradle.api.tasks.Optional
+import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.SkipWhenEmpty
@@ -108,8 +110,15 @@ abstract class Detekt @Inject constructor(
     @get:Console
     abstract val debug: Property<Boolean>
 
-    @get:Internal
+    @get:Input
     abstract val parallel: Property<Boolean>
+
+    @get:Input
+    abstract val profile: Property<Boolean>
+
+    @get:OutputFile
+    @get:Optional
+    abstract val profileOutput: RegularFileProperty
 
     @get:Input
     abstract val disableDefaultRuleSets: Property<Boolean>
@@ -166,6 +175,11 @@ abstract class Detekt @Inject constructor(
 
     init {
         group = LifecycleBasePlugin.VERIFICATION_GROUP
+        profile.convention(false)
+
+        // When profiling is enabled, always run the task to get fresh timing data
+        outputs.upToDateWhen { !profile.get() }
+        outputs.cacheIf { !profile.get() }
     }
 
     @get:Internal
@@ -184,7 +198,8 @@ abstract class Detekt @Inject constructor(
             DefaultReportArgument(reports.sarif),
             DefaultReportArgument(reports.markdown),
             DebugArgument(debug.get()),
-            ParallelArgument(parallel.get()),
+            ProfilingArgument(profile.get()),
+            ParallelArgument(parallel.get() && !profile.get()),
             BuildUponDefaultConfigArgument(buildUponDefaultConfig.get()),
             AllRulesArgument(allRules.get()),
             AutoCorrectArgument(autoCorrect.get()),
@@ -200,7 +215,9 @@ abstract class Detekt @Inject constructor(
             NoJdkArgument(noJdk.get()),
             ExplicitApiArgument(explicitApi.orNull),
             MultiPlatformEnabledArgument(multiPlatformEnabled.get()),
-        ).plus(convertCustomReportsToArguments()).flatMap(CliArgument::toArgument)
+        ).plus(convertCustomReportsToArguments())
+            .plus(convertProfileReportToArgument())
+            .flatMap(CliArgument::toArgument)
             .plus("-no-stdlib")
             .plus("-no-reflect")
 
@@ -253,6 +270,13 @@ abstract class Detekt @Inject constructor(
             }
 
             CustomReportArgument(reportId, objects.fileProperty().getOrElse { destination })
+        }
+
+    private fun convertProfileReportToArgument(): List<CustomReportArgument> =
+        if (profile.get() && profileOutput.isPresent) {
+            listOf(CustomReportArgument("profiling", profileOutput.get()))
+        } else {
+            emptyList()
         }
 }
 
