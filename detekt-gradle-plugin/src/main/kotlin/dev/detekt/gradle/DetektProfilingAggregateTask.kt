@@ -77,7 +77,7 @@ abstract class DetektProfilingAggregateTask : DefaultTask() {
         }
 
         logger.lifecycle("")
-        logger.lifecycle("Full profiling report (CSV): ${outputFile.toURI()}")
+        logger.lifecycle("Full profiling report (CSV): ${outputFile.toPath().toUri()}")
     }
 
     companion object {

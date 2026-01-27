@@ -87,7 +87,7 @@ abstract class DetektProfilingTask @Inject constructor() : DefaultTask() {
 
     private fun displayProfilingResults(outputFile: File) {
         if (!outputFile.exists() || outputFile.length() == 0L) {
-            logger.lifecycle("Profiling output (CSV): ${outputFile.toURI()}")
+            logger.lifecycle("Profiling output (CSV): ${outputFile.toPath().toUri()}")
             return
         }
 
@@ -105,7 +105,7 @@ abstract class DetektProfilingTask @Inject constructor() : DefaultTask() {
         }
 
         // Always print the output file URI
-        logger.lifecycle("Profiling output (CSV): ${outputFile.toURI()}")
+        logger.lifecycle("Profiling output (CSV): ${outputFile.toPath().toUri()}")
     }
 
     companion object {
