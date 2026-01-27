@@ -149,7 +149,7 @@ class ConfigPropertySpec {
                             ) {
                                 val present: ValuesWithReason by config(defaultValue)
                             }.present
-                        }.isInstanceOf(Config.InvalidConfigurationError::class.java)
+                        }.isInstanceOf(InvalidConfigurationError::class.java)
                     }
 
                     @Test
@@ -162,7 +162,7 @@ class ConfigPropertySpec {
                             ) {
                                 val present: ValuesWithReason by config(defaultValue)
                             }.present
-                        }.isInstanceOf(Config.InvalidConfigurationError::class.java)
+                        }.isInstanceOf(InvalidConfigurationError::class.java)
                     }
 
                     @Test
@@ -175,7 +175,7 @@ class ConfigPropertySpec {
                             ) {
                                 val present: ValuesWithReason by config(defaultValue)
                             }.present
-                        }.isInstanceOf(Config.InvalidConfigurationError::class.java)
+                        }.isInstanceOf(InvalidConfigurationError::class.java)
                     }
                 }
             }

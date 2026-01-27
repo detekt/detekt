@@ -41,16 +41,6 @@ interface Config {
      */
     fun <T : Any> valueOrNull(key: String): T?
 
-    /**
-     * Is thrown when loading a configuration results in errors.
-     */
-    class InvalidConfigurationError(throwable: Throwable? = null) :
-        RuntimeException(
-            "Provided configuration file is invalid: Structure must be from type Map<String,Any>!" +
-                throwable?.let { "\n" + it.message }.orEmpty(),
-            throwable
-        )
-
     companion object {
 
         /**
