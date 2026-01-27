@@ -84,20 +84,21 @@ class ImplicitDefaultLocale(config: Config) :
         }
 
         // Case 2: String.format("format", args) - format string is the first argument
-        val callExpression = expression.selectorExpression as? KtCallExpression ?: return null
-        val firstArg = callExpression.valueArguments.firstOrNull()?.getArgumentExpression()
-        if (firstArg is KtStringTemplateExpression && !firstArg.hasInterpolation()) {
-            return firstArg.entries.joinToString("") { it.text }
-        }
+        val callExpression = expression.selectorExpression as? KtCallExpression
+        val firstArg = callExpression?.valueArguments?.firstOrNull()?.getArgumentExpression()
+        return when {
+            firstArg is KtStringTemplateExpression && !firstArg.hasInterpolation() ->
+                firstArg.entries.joinToString("") { it.text }
 
-        return null
+            else -> null
+        }
     }
 
     private fun hasOnlyLocaleIndependentSpecifiers(formatString: String): Boolean {
         // Java format specifier pattern: %[argument_index$][flags][width][.precision]conversion
         // or %[argument_index$][flags][width][.precision]t/T<date/time conversion>
         val specifierPattern = Regex("""%(\d+\$)?[-#+ 0,(]*\d*(\.\d+)?([tT][a-zA-Z]|[a-zA-Z%])""")
-        val conversions = specifierPattern.findAll(formatString).map { it.groupValues[3] }.toList()
+        val conversions = specifierPattern.findAll(formatString).map { it.groupValues[CONVERSION_GROUP_INDEX] }.toList()
 
         // If no format specifiers found, no locale dependency
         if (conversions.isEmpty()) return true
@@ -123,17 +124,20 @@ class ImplicitDefaultLocale(config: Config) :
 
         private val localeClassId = ClassId(FqName("java.util"), Name.identifier("Locale"))
 
+        // Index of the conversion character group in the format specifier regex
+        private const val CONVERSION_GROUP_INDEX = 3
+
         // Locale-independent format conversions
         private val localeIndependentConversions = setOf(
-            "x", "X",   // hexadecimal integer
-            "o",        // octal integer
-            "a", "A",   // hexadecimal floating-point
-            "b", "B",   // boolean
-            "h", "H",   // hash code
-            "s",        // string (lowercase only - uppercase S is locale-dependent)
-            "c",        // character (lowercase only - uppercase C is locale-dependent)
-            "n",        // line separator
-            "%",        // literal percent
+            "x", "X", // hexadecimal integer
+            "o", // octal integer
+            "a", "A", // hexadecimal floating-point
+            "b", "B", // boolean
+            "h", "H", // hash code
+            "s", // string (lowercase only - uppercase S is locale-dependent)
+            "c", // character (lowercase only - uppercase C is locale-dependent)
+            "n", // line separator
+            "%", // literal percent
         )
     }
 }
