@@ -195,8 +195,14 @@ class CanBeNonNullable(config: Config) :
                     val onlyNonNullCheck =
                         validSingleChildExpression && it.isTopLevelNonNullCheck && !it.isNullChecked
                     val onlySafeCallsWithoutExplicitCheck =
-                        validSingleChildExpression && it.isNonNullChecked && !it.isNullChecked && !it.hasExplicitNullCheck
-                    it.isNonNullForced || it.isNullCheckReturnsUnit || onlyNonNullCheck || onlySafeCallsWithoutExplicitCheck
+                        validSingleChildExpression &&
+                            it.isNonNullChecked &&
+                            !it.isNullChecked &&
+                            !it.hasExplicitNullCheck
+                    it.isNonNullForced ||
+                        it.isNullCheckReturnsUnit ||
+                        onlyNonNullCheck ||
+                        onlySafeCallsWithoutExplicitCheck
                 }
                 .forEach { nullableParam ->
                     report(
@@ -360,6 +366,7 @@ class CanBeNonNullable(config: Config) :
                 else -> null
             }
 
+        @Suppress("FunctionSignature")
         private fun KtExpression?.evaluateCheckStatement(
             elseExpression: KtExpression?,
             isTopLevel: Boolean = false,
@@ -434,6 +441,7 @@ class CanBeNonNullable(config: Config) :
             }
         }
 
+        @Suppress("CyclomaticComplexMethod")
         private fun List<KtWhenCondition>.evaluateSubjectWhenExpression(
             expression: KtWhenExpression,
             subjectDescriptors: List<KaVariableSymbol>,
