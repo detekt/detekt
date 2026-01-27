@@ -12,6 +12,7 @@ public abstract class dev/detekt/gradle/Detekt : org/gradle/api/tasks/SourceTask
 	public abstract fun getDebug ()Lorg/gradle/api/provider/Property;
 	public abstract fun getDetektClasspath ()Lorg/gradle/api/file/ConfigurableFileCollection;
 	public abstract fun getDisableDefaultRuleSets ()Lorg/gradle/api/provider/Property;
+	public abstract fun getEnableProfiling ()Lorg/gradle/api/provider/Property;
 	public abstract fun getFailOnSeverity ()Lorg/gradle/api/provider/Property;
 	public abstract fun getFreeCompilerArgs ()Lorg/gradle/api/provider/ListProperty;
 	public abstract fun getFriendPaths ()Lorg/gradle/api/file/ConfigurableFileCollection;
@@ -24,6 +25,7 @@ public abstract class dev/detekt/gradle/Detekt : org/gradle/api/tasks/SourceTask
 	public abstract fun getOptIn ()Lorg/gradle/api/provider/ListProperty;
 	public abstract fun getParallel ()Lorg/gradle/api/provider/Property;
 	public abstract fun getPluginClasspath ()Lorg/gradle/api/file/ConfigurableFileCollection;
+	public abstract fun getProfilingOutput ()Lorg/gradle/api/file/RegularFileProperty;
 	public fun getReports ()Ldev/detekt/gradle/extensions/DetektReports;
 	public fun getSource ()Lorg/gradle/api/file/FileTree;
 	public final fun reports (Lorg/gradle/api/Action;)V
@@ -65,6 +67,34 @@ public abstract class dev/detekt/gradle/DetektGenerateConfigTask : org/gradle/ap
 	public abstract fun getPluginClasspath ()Lorg/gradle/api/file/ConfigurableFileCollection;
 }
 
+public abstract class dev/detekt/gradle/DetektProfilingAggregateTask : org/gradle/api/DefaultTask {
+	public static final field Companion Ldev/detekt/gradle/DetektProfilingAggregateTask$Companion;
+	public fun <init> ()V
+	public final fun aggregate ()V
+	public abstract fun getAggregatedOutput ()Lorg/gradle/api/file/RegularFileProperty;
+	public abstract fun getProfilingFiles ()Lorg/gradle/api/file/ConfigurableFileCollection;
+	public abstract fun getTopRulesToShow ()Lorg/gradle/api/provider/Property;
+}
+
+public final class dev/detekt/gradle/DetektProfilingAggregateTask$Companion {
+	public final fun register (Lorg/gradle/api/Project;Ljava/lang/String;Ldev/detekt/gradle/extensions/DetektExtension;Lorg/gradle/api/tasks/TaskProvider;)V
+}
+
+public abstract class dev/detekt/gradle/DetektProfilingTask : org/gradle/api/DefaultTask {
+	public static final field Companion Ldev/detekt/gradle/DetektProfilingTask$Companion;
+	public fun <init> ()V
+	public abstract fun getPrintResults ()Lorg/gradle/api/provider/Property;
+	public abstract fun getProfilingInput ()Lorg/gradle/api/file/RegularFileProperty;
+	public abstract fun getProfilingOutput ()Lorg/gradle/api/file/RegularFileProperty;
+	public abstract fun getTopRulesToShow ()Lorg/gradle/api/provider/Property;
+	public final fun processProfilingResults ()V
+}
+
+public final class dev/detekt/gradle/DetektProfilingTask$Companion {
+	public final fun register (Lorg/gradle/api/Project;Ljava/lang/String;Ljava/lang/String;Ldev/detekt/gradle/extensions/DetektExtension;Lorg/gradle/api/tasks/TaskProvider;)Lorg/gradle/api/tasks/TaskProvider;
+	public static synthetic fun register$default (Ldev/detekt/gradle/DetektProfilingTask$Companion;Lorg/gradle/api/Project;Ljava/lang/String;Ljava/lang/String;Ldev/detekt/gradle/extensions/DetektExtension;Lorg/gradle/api/tasks/TaskProvider;ILjava/lang/Object;)Lorg/gradle/api/tasks/TaskProvider;
+}
+
 public abstract class dev/detekt/gradle/extensions/CustomDetektReport {
 	public fun <init> ()V
 	public abstract fun getOutputLocation ()Lorg/gradle/api/file/RegularFileProperty;
@@ -99,6 +129,7 @@ public abstract interface class dev/detekt/gradle/extensions/DetektExtension {
 	public abstract fun getReportsDir ()Lorg/gradle/api/file/DirectoryProperty;
 	public abstract fun getSource ()Lorg/gradle/api/file/ConfigurableFileCollection;
 	public abstract fun getToolVersion ()Lorg/gradle/api/provider/Property;
+	public abstract fun getTopRulesToShow ()Lorg/gradle/api/provider/Property;
 }
 
 public abstract class dev/detekt/gradle/extensions/DetektReport {
@@ -193,5 +224,35 @@ public abstract class dev/detekt/gradle/report/ReportMergeTask : org/gradle/api/
 	public abstract fun getInput ()Lorg/gradle/api/file/ConfigurableFileCollection;
 	public abstract fun getOutput ()Lorg/gradle/api/file/RegularFileProperty;
 	public final fun merge ()V
+}
+
+public final class dev/detekt/gradle/util/RuleProfilingReport {
+	public static final field INSTANCE Ldev/detekt/gradle/util/RuleProfilingReport;
+	public final fun parseAndAggregate (Ljava/io/File;)Ljava/util/List;
+	public final fun parseAndAggregate (Ljava/util/List;)Ljava/util/List;
+	public final fun render (Ljava/util/List;ILjava/lang/Integer;)Ljava/lang/String;
+	public static synthetic fun render$default (Ldev/detekt/gradle/util/RuleProfilingReport;Ljava/util/List;ILjava/lang/Integer;ILjava/lang/Object;)Ljava/lang/String;
+	public final fun writeCsv (Ljava/util/List;Ljava/io/File;)V
+}
+
+public final class dev/detekt/gradle/util/RuleProfilingReport$AggregatedRuleMetric {
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;JIILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3-UwyO8pc ()J
+	public final fun component4 ()I
+	public final fun component5 ()I
+	public final fun copy-1Y68eR8 (Ljava/lang/String;Ljava/lang/String;JII)Ldev/detekt/gradle/util/RuleProfilingReport$AggregatedRuleMetric;
+	public static synthetic fun copy-1Y68eR8$default (Ldev/detekt/gradle/util/RuleProfilingReport$AggregatedRuleMetric;Ljava/lang/String;Ljava/lang/String;JIIILjava/lang/Object;)Ldev/detekt/gradle/util/RuleProfilingReport$AggregatedRuleMetric;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAverageDuration-UwyO8pc ()J
+	public final fun getDisplayName ()Ljava/lang/String;
+	public final fun getExecutionCount ()I
+	public final fun getRuleId ()Ljava/lang/String;
+	public final fun getRuleSetId ()Ljava/lang/String;
+	public final fun getTotalDuration-UwyO8pc ()J
+	public final fun getTotalFindings ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
