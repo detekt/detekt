@@ -236,6 +236,46 @@ public class dev/detekt/api/Rule : dev/detekt/api/DetektVisitor {
 	public final fun visitFile (Lorg/jetbrains/kotlin/psi/KtFile;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;)Ljava/util/List;
 }
 
+public abstract interface class dev/detekt/api/RuleExecutionListener : dev/detekt/api/Extension {
+	public fun afterRuleExecution-Wn2Vu4Y (Lorg/jetbrains/kotlin/psi/KtFile;Ldev/detekt/api/RuleInstance;IJ)V
+	public fun beforeRuleExecution (Lorg/jetbrains/kotlin/psi/KtFile;Ldev/detekt/api/RuleInstance;)V
+	public fun onFinish (Ldev/detekt/api/Detektion;)Ldev/detekt/api/Detektion;
+	public fun onStart (Ljava/util/List;Ljava/util/List;)V
+}
+
+public final class dev/detekt/api/RuleExecutionMetric {
+	public static final field Companion Ldev/detekt/api/RuleExecutionMetric$Companion;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getAverageDuration-UwyO8pc ()J
+	public final fun getExecutionCount ()I
+	public final fun getRuleId ()Ljava/lang/String;
+	public final fun getRuleSetId ()Ldev/detekt/api/RuleSetId;
+	public final fun getTotalDuration-UwyO8pc ()J
+	public final fun getTotalFindings ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/detekt/api/RuleExecutionMetric$Companion {
+	public final fun invoke-1Y68eR8 (Ljava/lang/String;Ldev/detekt/api/RuleSetId;JII)Ldev/detekt/api/RuleExecutionMetric;
+}
+
+public final class dev/detekt/api/RuleFileExecution {
+	public static final field Companion Ldev/detekt/api/RuleFileExecution$Companion;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDuration-UwyO8pc ()J
+	public final fun getFilePath ()Ljava/lang/String;
+	public final fun getFindings ()I
+	public final fun getRuleId ()Ljava/lang/String;
+	public final fun getRuleSetId ()Ldev/detekt/api/RuleSetId;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/detekt/api/RuleFileExecution$Companion {
+	public final fun invoke-zkXUZaI (Ljava/lang/String;Ldev/detekt/api/RuleSetId;Ljava/lang/String;JI)Ldev/detekt/api/RuleFileExecution;
+}
+
 public final class dev/detekt/api/RuleInstance {
 	public fun <init> (Ljava/lang/String;Ldev/detekt/api/RuleSetId;Ljava/net/URI;Ljava/lang/String;Ldev/detekt/api/Severity;Z)V
 	public fun equals (Ljava/lang/Object;)Z
@@ -255,6 +295,13 @@ public final class dev/detekt/api/RuleName {
 	public final fun getValue ()Ljava/lang/String;
 	public fun hashCode ()I
 	public fun toString ()Ljava/lang/String;
+}
+
+public final class dev/detekt/api/RuleProfilingKeys {
+	public static final field FILE_EXECUTIONS Ljava/lang/String;
+	public static final field INSTANCE Ldev/detekt/api/RuleProfilingKeys;
+	public static final field PARALLEL_DISABLED Ljava/lang/String;
+	public static final field RULE_METRICS Ljava/lang/String;
 }
 
 public final class dev/detekt/api/RuleSet {

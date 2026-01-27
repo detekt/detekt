@@ -89,6 +89,13 @@ class CliArgs {
     var parallel: Boolean = false
 
     @Parameter(
+        names = ["--profiling"],
+        description = "Enables rule execution profiling to measure the time spent in each rule." +
+            " When profiling is enabled, parallel analysis is disabled to ensure accurate measurements."
+    )
+    var profiling: Boolean = false
+
+    @Parameter(
         names = ["--baseline", "-b"],
         description = "If a baseline xml file is passed in," +
             " only new findings not in the baseline are printed in the console.",
