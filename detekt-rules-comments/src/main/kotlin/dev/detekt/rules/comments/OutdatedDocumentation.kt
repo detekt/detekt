@@ -129,7 +129,7 @@ class OutdatedDocumentation(config: Config) :
             ?.filter { it.isOverride() }
             ?.mapNotNull { it.name }
             ?.toSet()
-            ?: emptySet()
+            .orEmpty()
 
     private fun getFunctionDeclarations(function: KtNamedFunction): List<Declaration> {
         val typeParams = if (matchTypeParameters) {
