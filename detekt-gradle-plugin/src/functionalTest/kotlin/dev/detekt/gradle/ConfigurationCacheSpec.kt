@@ -69,4 +69,25 @@ class ConfigurationCacheSpec {
             assertThat(reuseCacheResult.output).contains("Reusing configuration cache.")
         }
     }
+
+    @Nested
+    inner class `Profiling task` {
+        @Test
+        fun `can be loaded from the configuration cache`() {
+            // Use dry run mode because the profiling CLI argument may not be in published detekt-cli
+            val gradleRunner = DslTestBuilder.kotlin()
+                .dryRun()
+                .build()
+
+            // First run primes the cache
+            val storeCacheResult = gradleRunner.runTasks("--configuration-cache", "detektProfile")
+
+            assertThat(storeCacheResult.output).contains("Configuration cache entry stored.")
+
+            // Second run reuses the cache
+            val reuseCacheResult = gradleRunner.runTasks("--configuration-cache", "detektProfile")
+
+            assertThat(reuseCacheResult.output).contains("Reusing configuration cache.")
+        }
+    }
 }
