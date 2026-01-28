@@ -143,7 +143,6 @@ private class UnusedVariableVisitor(private val allowedNames: Regex) : DetektVis
     context(session: KaSession)
     private fun KtExpression.resolveToLocalVariableSymbol(): KaVariableSymbol? =
         with(session) {
-            // Handle both local variables and destructured lambda parameters
             mainReference?.resolveToSymbol() as? KaVariableSymbol
         }
 
