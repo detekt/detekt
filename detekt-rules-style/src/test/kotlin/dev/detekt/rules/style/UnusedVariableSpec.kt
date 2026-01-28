@@ -357,13 +357,64 @@ class UnusedVariableSpec(val env: KotlinEnvironmentContainer) {
         fun `correctly reports the unused structured variable`() {
             val code = """
                fun main(){
-                   val (used, unused) = 1 to 2   
-                   println(used)                
+                   val (used, unused) = 1 to 2
+                   println(used)
                }
             """.trimIndent()
 
             assertThat(subject.lintWithContext(env, code)).singleElement()
                 .hasStartSourceLocation(SourceLocation(2, 16))
+        }
+
+        @Test
+        fun `does not report used destructured lambda parameters - issue 8942`() {
+            val code = """
+                fun main() {
+                    val pairs = listOf(1 to "one", 2 to "two")
+                    pairs.forEach { (number, text) ->
+                        println(number)
+                        println(text)
+                    }
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `reports unused destructured lambda parameters`() {
+            val code = """
+                fun main() {
+                    val pairs = listOf(1 to "one", 2 to "two")
+                    pairs.forEach { (number, text) ->
+                        println(number)
+                    }
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code)).singleElement()
+                .hasMessage("Variable `text` is unused.")
+        }
+
+        @Test
+        fun `does not report used destructured lambda parameters in nested scope`() {
+            val code = """
+                typealias Predicate = (Any) -> Boolean
+                typealias Block = (Any) -> Unit
+
+                fun main() {
+                    val dependencies = listOf<Pair<Predicate, Block>>(
+                        { it: Any -> it is String } to { it: Any -> println(it) }
+                    )
+                    dependencies.forEach { (predicate, block) ->
+                        if (predicate("test")) {
+                            block("result")
+                        }
+                    }
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 }
