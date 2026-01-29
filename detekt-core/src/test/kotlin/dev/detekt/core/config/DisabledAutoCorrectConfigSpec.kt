@@ -42,7 +42,7 @@ class DisabledAutoCorrectConfigSpec {
     @Test
     fun `parent path is derived from wrapped config`() {
         val subject = DisabledAutoCorrectConfig(configSingleRuleInStyle.subConfig(rulesetId))
-        val actual = subject.parentPath
+        val actual = subject.key
         assertThat(actual).isEqualTo(rulesetId)
     }
 

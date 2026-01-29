@@ -18,7 +18,7 @@ class DefaultConfigProviderSpec {
         fun gets() {
             val config = DefaultConfigProvider().apply { init(extensionsSpec) }.get()
 
-            assertThat(config.parentPath).isNull()
+            assertThat(config.key).isNull()
             assertThat(config.valueOrNull<Any>("sample")).isNull()
         }
 
@@ -44,7 +44,7 @@ class DefaultConfigProviderSpec {
         fun gets() {
             val config = DefaultConfigProvider().apply { init(extensionsSpec) }.get()
 
-            assertThat(config.parentPath).isNull()
+            assertThat(config.key).isNull()
             assertThat(config.valueOrNull<Any>("sample")).isNotNull()
         }
 

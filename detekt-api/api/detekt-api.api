@@ -15,13 +15,12 @@ public abstract interface class dev/detekt/api/Config {
 	public static final field ACTIVE_KEY Ljava/lang/String;
 	public static final field ALIASES_KEY Ljava/lang/String;
 	public static final field AUTO_CORRECT_KEY Ljava/lang/String;
-	public static final field CONFIG_SEPARATOR Ljava/lang/String;
 	public static final field Companion Ldev/detekt/api/Config$Companion;
 	public static final field EXCLUDES_KEY Ljava/lang/String;
 	public static final field INCLUDES_KEY Ljava/lang/String;
 	public static final field SEVERITY_KEY Ljava/lang/String;
+	public abstract fun getKey ()Ljava/lang/String;
 	public abstract fun getParent ()Ldev/detekt/api/Config;
-	public abstract fun getParentPath ()Ljava/lang/String;
 	public abstract fun subConfig (Ljava/lang/String;)Ldev/detekt/api/Config;
 	public abstract fun subConfigKeys ()Ljava/util/Set;
 	public fun valueOrDefault (Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/Object;
@@ -32,7 +31,6 @@ public final class dev/detekt/api/Config$Companion {
 	public static final field ACTIVE_KEY Ljava/lang/String;
 	public static final field ALIASES_KEY Ljava/lang/String;
 	public static final field AUTO_CORRECT_KEY Ljava/lang/String;
-	public static final field CONFIG_SEPARATOR Ljava/lang/String;
 	public static final field EXCLUDES_KEY Ljava/lang/String;
 	public static final field INCLUDES_KEY Ljava/lang/String;
 	public static final field SEVERITY_KEY Ljava/lang/String;

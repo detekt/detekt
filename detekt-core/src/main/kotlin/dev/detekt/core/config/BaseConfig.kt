@@ -1,11 +1,21 @@
 package dev.detekt.core.config
 
+import com.intellij.util.containers.addIfNotNull
 import dev.detekt.api.Config
-import dev.detekt.api.Config.Companion.CONFIG_SEPARATOR
 import kotlin.reflect.KClass
 
-private fun Config.keySequence(key: String): String =
-    if (parentPath == null) key else "$parentPath $CONFIG_SEPARATOR $key"
+private fun Config.keySequence(key: String): String {
+    var config: Config? = this
+    return buildList {
+        add(key)
+        while (config != null) {
+            addIfNotNull(config.key)
+            config = config.parent
+        }
+    }
+        .reversed()
+        .joinToString(" > ")
+}
 
 fun Config.valueOrDefaultInternal(
     key: String,

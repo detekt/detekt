@@ -16,8 +16,8 @@ class CompositeConfig(
 ) : Config,
     ValidatableConfiguration {
 
-    override val parentPath: String?
-        get() = lookFirst.parentPath ?: lookSecond.parentPath
+    override val key: String?
+        get() = lookFirst.key ?: lookSecond.key
 
     override fun subConfig(key: String): Config =
         CompositeConfig(lookFirst.subConfig(key), lookSecond.subConfig(key), this)

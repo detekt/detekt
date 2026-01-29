@@ -46,7 +46,7 @@ class AllRulesConfigSpec {
                 wrapped = rulesetConfig,
                 deprecatedRules = emptySet(),
             )
-            val actual = subject.parentPath
+            val actual = subject.key
             assertThat(actual).isEqualTo(rulesetId)
         }
 
@@ -56,7 +56,7 @@ class AllRulesConfigSpec {
                 wrapped = emptyYamlConfig,
                 deprecatedRules = emptySet(),
             )
-            val actual = subject.parentPath
+            val actual = subject.key
             assertThat(actual).isEqualTo(null)
         }
     }
