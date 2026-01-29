@@ -624,7 +624,6 @@ class DetektAndroidSpec {
             addSubmodule(
                 name = "app",
                 numberOfSourceFilesPerSourceDir = 0,
-                numberOfFindings = 0,
                 buildFileContent = """
                     plugins {
                         id("com.android.application")
@@ -648,8 +647,11 @@ class DetektAndroidSpec {
                         compilerOptions {
                             jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8
                         }
-                        sourceSets.getByName("debug") {
-                            generatedKotlin.srcDir(project.layout.buildDirectory.dir("generated/custom/debug"))
+                        sourceSets {
+                            debug {
+                                val generatedDir = project.layout.buildDirectory.dir("generated/debug")
+                                generatedKotlin.srcDir(generatedDir)
+                            }
                         }
                     }
                     
@@ -666,7 +668,7 @@ class DetektAndroidSpec {
         val gradleRunner = createGradleRunnerAndSetupProject(projectLayout, dryRun = true).also {
             it.writeProjectFile("app/src/main/AndroidManifest.xml", manifestContent)
             it.writeProjectFile(
-                filename = "app/build/generated/custom/debug/GeneratedClass.kt",
+                filename = "app/build/generated/debug/GeneratedClass.kt",
                 content = """
                     package generated
                     class GeneratedClass
