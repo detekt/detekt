@@ -138,7 +138,6 @@ class CanBeNonNullable(config: Config) :
     @Suppress("TooManyFunctions")
     private inner class ParameterCheckVisitor : DetektVisitor() {
         private val nullableParams = mutableMapOf<KaVariableSymbol, NullableParam>()
-        private var isTopLevelExpression = false
         private var currentFunction: KtNamedFunction? = null
 
         override fun visitNamedFunction(function: KtNamedFunction) {
