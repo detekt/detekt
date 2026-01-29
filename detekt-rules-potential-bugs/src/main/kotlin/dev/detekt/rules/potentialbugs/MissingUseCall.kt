@@ -125,9 +125,6 @@ class MissingUseCall(config: Config) :
     private fun KaSession.shouldReport(expression: KtExpression): Boolean {
         val expressionParent = getParentChainExpression(expression) ?: return false
 
-        // Check if the expression is assigned to a member property
-        // For expressions that aren't part of a chain (object literals, call expressions),
-        // getParentChainExpression returns the expression itself, so we need to check its parent
         if (expressionParent.parent is KtProperty) {
             val property = expressionParent.parent as KtProperty
             if (property.parent is KtClassBody) {
@@ -154,12 +151,9 @@ class MissingUseCall(config: Config) :
             }
 
             expressionParent is KtProperty -> {
-                // Don't report if assigning to a member property (parent is class body)
-                // The class/object is responsible for managing its lifecycle
                 if (expressionParent.parent is KtClassBody) {
                     false
                 } else {
-                    // rhs has already been analysed
                     traversedParentExpression.contains(expressionParent.children.getOrNull(0)).not()
                 }
             }

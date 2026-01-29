@@ -792,7 +792,6 @@ class MissingUseCallSpec(private val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
-            // Member property inside a class - the class is responsible for managing its lifecycle
             assertThat(findings).isEmpty()
         }
     }
@@ -811,7 +810,6 @@ class MissingUseCallSpec(private val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
-            // Class member property - the class is responsible for managing its lifecycle
             assertThat(findings).isEmpty()
         }
 
@@ -827,7 +825,6 @@ class MissingUseCallSpec(private val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
-            // Class member property - the class is responsible for managing its lifecycle
             assertThat(findings).isEmpty()
         }
 
@@ -841,7 +838,6 @@ class MissingUseCallSpec(private val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
-            // Class member property - the class is responsible for managing its lifecycle
             assertThat(findings).isEmpty()
         }
 
@@ -855,7 +851,6 @@ class MissingUseCallSpec(private val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
-            // Local variable needs to use `use` for proper resource management
             assertThat(findings).hasSize(1)
         }
 
@@ -867,7 +862,6 @@ class MissingUseCallSpec(private val env: KotlinEnvironmentContainer) {
                 val globalResource = MyCloseable(0)
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
-            // Top-level property should still be reported
             assertThat(findings).hasSize(1)
         }
     }
