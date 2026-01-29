@@ -62,7 +62,6 @@ class ImplicitDefaultLocale(config: Config) :
             if (symbol.callableId != formatCallId) return
             if (symbol.valueParameters.firstOrNull()?.returnType?.symbol?.classId == localeClassId) return
 
-            // Don't flag if the format string only contains locale-independent specifiers
             val formatString = getFormatString(expression)
             if (formatString != null && hasOnlyLocaleIndependentSpecifiers(formatString)) return
 
@@ -77,13 +76,9 @@ class ImplicitDefaultLocale(config: Config) :
 
     private fun getFormatString(expression: KtQualifiedExpression): String? {
         val receiver = expression.receiverExpression
-
-        // Case 1: "format".format(args) - receiver is the format string
         if (receiver is KtStringTemplateExpression && !receiver.hasInterpolation()) {
             return receiver.entries.joinToString("") { it.text }
         }
-
-        // Case 2: String.format("format", args) - format string is the first argument
         val callExpression = expression.selectorExpression as? KtCallExpression
         val firstArg = callExpression?.valueArguments?.firstOrNull()?.getArgumentExpression()
         return when {
@@ -95,25 +90,10 @@ class ImplicitDefaultLocale(config: Config) :
     }
 
     private fun hasOnlyLocaleIndependentSpecifiers(formatString: String): Boolean {
-        // Java format specifier pattern: %[argument_index$][flags][width][.precision]conversion
-        // or %[argument_index$][flags][width][.precision]t/T<date/time conversion>
         val specifierPattern = Regex("""%(\d+\$)?[-#+ 0,(]*\d*(\.\d+)?([tT][a-zA-Z]|[a-zA-Z%])""")
         val conversions = specifierPattern.findAll(formatString).map { it.groupValues[CONVERSION_GROUP_INDEX] }.toList()
 
-        // If no format specifiers found, no locale dependency
         if (conversions.isEmpty()) return true
-
-        // Locale-independent conversions according to Java Formatter documentation:
-        // - x, X: hexadecimal integer (no localization applied)
-        // - o: octal integer (no localization applied)
-        // - a, A: hexadecimal floating-point (no localization applied)
-        // - b, B: boolean
-        // - h, H: hash code (hexadecimal)
-        // - s: string (just toString())
-        // - c: character
-        // - n: platform line separator
-        // - %: literal percent
-        // Note: Uppercase S and C perform locale-dependent case conversion, so they're excluded
         return conversions.all { it in localeIndependentConversions }
     }
 
@@ -124,20 +104,10 @@ class ImplicitDefaultLocale(config: Config) :
 
         private val localeClassId = ClassId(FqName("java.util"), Name.identifier("Locale"))
 
-        // Index of the conversion character group in the format specifier regex
         private const val CONVERSION_GROUP_INDEX = 3
 
-        // Locale-independent format conversions
         private val localeIndependentConversions = setOf(
-            "x", "X", // hexadecimal integer
-            "o", // octal integer
-            "a", "A", // hexadecimal floating-point
-            "b", "B", // boolean
-            "h", "H", // hash code
-            "s", // string (lowercase only - uppercase S is locale-dependent)
-            "c", // character (lowercase only - uppercase C is locale-dependent)
-            "n", // line separator
-            "%", // literal percent
+            "x", "X", "o", "a", "A", "b", "B", "h", "H", "s", "c", "n", "%",
         )
     }
 }
