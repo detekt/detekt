@@ -112,7 +112,7 @@ class MagicNumber(config: Config) :
     private val ignoreExtensionFunctions: Boolean by config(true)
 
     override fun visitConstantExpression(expression: KtConstantExpression) {
-        val elementType = expression.elementType
+        val elementType = expression.iElementType
         if (elementType != KtNodeTypes.INTEGER_CONSTANT && elementType != KtNodeTypes.FLOAT_CONSTANT) return
 
         if (isIgnoredByConfig(expression) ||
