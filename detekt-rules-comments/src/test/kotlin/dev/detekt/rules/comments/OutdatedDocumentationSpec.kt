@@ -599,6 +599,32 @@ class OutdatedDocumentationSpec {
     @Nested
     inner class `override properties in class hierarchy` {
         @Test
+        fun `should not report for interfaces even with mismatched documentation`() {
+            val code = """
+                /**
+                 * @property wrongName Wrong documentation
+                 */
+                interface Named {
+                    val name: String
+                }
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `should not report for abstract classes even with mismatched documentation`() {
+            val code = """
+                /**
+                 * @property wrongName Wrong documentation
+                 */
+                abstract class Entity {
+                    abstract val id: String
+                }
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
         fun `should not report when subclass overrides documented property from base class`() {
             val code = """
                 /**
