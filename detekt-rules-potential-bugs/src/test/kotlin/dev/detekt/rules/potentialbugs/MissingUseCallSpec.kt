@@ -856,7 +856,7 @@ class MissingUseCallSpec(private val env: KotlinEnvironmentContainer) {
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
             // Local variable needs to use `use` for proper resource management
-            assertThat(findings).singleElement()
+            assertThat(findings).hasSize(1)
         }
 
         @Test
@@ -868,7 +868,7 @@ class MissingUseCallSpec(private val env: KotlinEnvironmentContainer) {
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
             // Top-level property should still be reported
-            assertThat(findings).singleElement()
+            assertThat(findings).hasSize(1)
         }
     }
 }
