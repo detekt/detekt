@@ -246,8 +246,6 @@ class CanBeNonNullable(config: Config) :
         }
 
         override fun visitWhenExpression(expression: KtWhenExpression) {
-            // Only consider it a top-level check if this when-expression is directly in
-            // a function body (not nested inside another if/when/else branch)
             val isTopLevel = expression.parent?.parent is KtNamedFunction
             val nullCheckedDescriptor = expression.subjectExpression
                 ?.collectDescendantsOfType<KtNameReferenceExpression>()
@@ -277,8 +275,6 @@ class CanBeNonNullable(config: Config) :
         }
 
         override fun visitIfExpression(expression: KtIfExpression) {
-            // Only consider it a top-level check if this if-expression is directly in
-            // a function body (not nested inside another if/when/else branch)
             val isTopLevel = expression.parent?.parent is KtNamedFunction
             expression.condition.evaluateCheckStatement(expression.`else`, isTopLevel)
             if (expression.isFirstStatement()) {
@@ -381,7 +377,6 @@ class CanBeNonNullable(config: Config) :
                     { nullableParam: NullableParam ->
                         nullableParam.isNonNullChecked = true
                         nullableParam.hasExplicitNullCheck = true
-                        // Only mark as top-level if this is a direct child of the function body
                         if (isTopLevel) {
                             nullableParam.isTopLevelNonNullCheck = true
                         }
@@ -478,7 +473,6 @@ class CanBeNonNullable(config: Config) :
                     if (isNonNullChecked) {
                         it.isNonNullChecked = true
                         it.hasExplicitNullCheck = true
-                        // Only mark as top-level if directly in the function body
                         if (isTopLevel && !isNullChecked) {
                             it.isTopLevelNonNullCheck = true
                         }
