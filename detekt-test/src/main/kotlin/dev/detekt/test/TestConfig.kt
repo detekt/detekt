@@ -9,7 +9,7 @@ import dev.detekt.core.config.valueOrDefaultInternal
 class TestConfig private constructor(
     override val parent: Config?,
     override val key: String?,
-    private val values: Map<String, Any>
+    private val values: Map<String, Any>,
 ) : Config {
 
     constructor(parent: Config?, vararg pairs: Pair<String, Any>) : this(parent, null, pairs.toMap())
