@@ -388,6 +388,80 @@ class DetektMultiplatformSpec {
             }
         }
     }
+
+    @Nested
+    inner class `multiplatform projects - JVM target with generated sources` {
+        val gradleRunner =
+            setupProject {
+                addSubmodule(
+                    name = "shared",
+                    numberOfSourceFilesPerSourceDir = 1,
+                    buildFileContent = joinGradleBlocks(
+                        KMM_PLUGIN_BLOCK,
+                        """
+                        kotlin {
+                            jvm()
+                            sourceSets {
+                                jvmMain {
+                                    val generatedDir = project.layout.buildDirectory.dir("generated/jvmMain")
+                                    generatedKotlin.srcDir(generatedDir)
+                                }
+                            }
+                        }
+                        
+                        tasks.withType<dev.detekt.gradle.DetektCreateBaselineTask>().configureEach {
+                            doFirst {
+                                inputs.sourceFiles.forEach { println("- baseline source: ${'$'}it") }
+                            }
+                        }
+                        """.trimIndent(),
+                    ),
+                    srcDirs = listOf(
+                        "src/commonMain/kotlin",
+                        "src/jvmMain/kotlin",
+                    ),
+                    baselineFiles = listOf("detekt-baseline.xml")
+                )
+            }.also {
+                it.writeProjectFile(
+                    "shared/build/generated/jvmMain/GeneratedClass.kt",
+                    """
+                    package generated
+                    class GeneratedClass
+                    """.trimIndent()
+                )
+            }
+
+        @Test
+        fun `detektMainJvm sources include jvmMain and commonMain but exclude generated`() {
+            gradleRunner.runTasksAndCheckResult(":shared:detektMainJvm") {
+                assertThat(it.output).containsPattern(
+                    """--input \S*[/\\]shared[/\\]src[/\\]jvmMain[/\\]kotlin"""
+                )
+                assertThat(it.output).containsPattern(
+                    """--input \S*[/\\]shared[/\\]src[/\\]commonMain[/\\]kotlin"""
+                )
+                assertThat(it.output).doesNotContainPattern(
+                    """--input \S*[/\\]build[/\\]"""
+                )
+            }
+        }
+
+        @Test
+        fun `detektBaselineMainJvm sources include jvmMain and commonMain but exclude generated`() {
+            gradleRunner.runTasksAndCheckResult(":shared:detektBaselineMainJvm") {
+                assertThat(it.output).containsPattern(
+                    """- baseline source: \S*[/\\]shared[/\\]src[/\\]jvmMain[/\\]kotlin"""
+                )
+                assertThat(it.output).containsPattern(
+                    """- baseline source: \S*[/\\]shared[/\\]src[/\\]commonMain[/\\]kotlin"""
+                )
+                assertThat(it.output).doesNotContainPattern(
+                    """- baseline source: \S*[/\\]build[/\\]"""
+                )
+            }
+        }
+    }
 }
 
 private fun setupProject(projectLayoutAction: ProjectLayout.() -> Unit): DslGradleRunner =
