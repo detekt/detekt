@@ -77,7 +77,6 @@ class OutdatedDocumentation(config: Config) :
 
     override fun visitClass(klass: KtClass) {
         super.visitClass(klass)
-        // Skip checking interfaces and abstract classes - their properties are meant to be overridden
         if (klass.isInterface() || klass.isAbstract()) {
             return
         }
@@ -149,7 +148,6 @@ class OutdatedDocumentation(config: Config) :
 
     private fun getDeclarationsForValueParameters(valueParameters: List<KtParameter>): List<Declaration> =
         valueParameters.mapNotNull {
-            // Skip override properties - they inherit documentation from the parent class/interface
             if (it.isOverride()) return@mapNotNull null
             it.name?.let { name ->
                 val type = if (it.isPropertyParameter() && it.isPrivate().not()) {
@@ -196,7 +194,6 @@ class OutdatedDocumentation(config: Config) :
     ): Boolean {
         val doc = element.docComment ?: return false
         val docDeclarations = getDocDeclarations(doc)
-            // Filter out documented override properties - they inherit documentation from parent
             .filterNot { it.name in overridePropertyNames }
         return if (docDeclarations.isNotEmpty()) {
             val elementDeclarations = elementDeclarationsProvider()
