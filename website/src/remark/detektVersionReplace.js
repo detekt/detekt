@@ -3,7 +3,7 @@ import { visit } from "unist-util-visit";
 // Remark plugin that is replacing the [detekt_version] with the latest
 // released version. Please note that this field is updated automatically
 // by the `applyDocVersion` task.
-const detektVersion = "2.0.0-alpha.1";
+const detektVersion = "2.0.0-alpha.2";
 
 const getVersionToUse = filePath => {
   if (!filePath.includes("versioned_docs/")) return detektVersion;
