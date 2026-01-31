@@ -9,6 +9,7 @@ import dev.detekt.api.FileProcessListener
 import dev.detekt.api.Finding
 import dev.detekt.api.Issue
 import dev.detekt.api.Rule
+import dev.detekt.api.RuleExecutionListener
 import dev.detekt.api.RuleInstance
 import dev.detekt.api.RuleSetId
 import dev.detekt.api.Severity
@@ -462,12 +463,14 @@ internal fun Analyzer(
     settings: ProcessingSettings,
     vararg ruleDescriptors: RuleDescriptor,
     processors: List<FileProcessListener> = emptyList(),
+    ruleListeners: List<RuleExecutionListener> = emptyList(),
     analysisMode: AnalysisMode = AnalysisMode.light,
 ): Analyzer =
     Analyzer(
         settings,
         ruleDescriptors.toList(),
         processors,
+        ruleListeners,
         analysisMode,
     )
 
