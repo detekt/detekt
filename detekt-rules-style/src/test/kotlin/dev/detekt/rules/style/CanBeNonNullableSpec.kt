@@ -2100,6 +2100,49 @@ class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
                 """.trimIndent()
                 assertThat(subject.lintWithContext(env, code)).hasSize(1)
             }
+
+            @Test
+            fun `reports when top-level if with non-null check has no else`() {
+                val code = """
+                    fun process(value: String?) {
+                        if (value != null) println(value.length)
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
+            }
+
+            @Test
+            fun `does not report when nested function has null check`() {
+                val code = """
+                    fun outer() {
+                        fun inner(value: String?) {
+                            if (value != null) println(value)
+                        }
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
+            }
+
+            @Test
+            fun `does not report when when checks both null and non-null at top level`() {
+                val code = """
+                    fun process(value: String?) {
+                        when {
+                            value == null -> println("null")
+                            value != null -> println(value)
+                        }
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `reports for safe call in single expression function`() {
+                val code = """
+                    fun process(value: String?) = value?.length
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
         }
     }
 
