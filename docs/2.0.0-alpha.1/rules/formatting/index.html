@@ -1,11 +1,802 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0; url=/docs/rules/formatting">
-    <link rel="canonical" href="/docs/rules/formatting" />
-  </head>
-  <script>
-    window.location.href = '/docs/rules/formatting' + window.location.search + window.location.hash;
-  </script>
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-2.0.0-alpha.1 docs-doc-page docs-doc-id-rules/formatting" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.9.2">
+<title data-rh="true">Formatting Rule Set | detekt</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://detekt.dev/docs/2.0.0-alpha.1/rules/formatting"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="2.0.0-alpha.1"><meta data-rh="true" name="docusaurus_tag" content="docs-default-2.0.0-alpha.1"><meta data-rh="true" name="docsearch:version" content="2.0.0-alpha.1"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-2.0.0-alpha.1"><meta data-rh="true" property="og:title" content="Formatting Rule Set | detekt"><meta data-rh="true" name="description" content="This rule set provides wrappers for rules implemented by ktlint - https://ktlint.github.io/."><meta data-rh="true" property="og:description" content="This rule set provides wrappers for rules implemented by ktlint - https://ktlint.github.io/."><meta data-rh="true" name="keywords" content="rules,formatting"><link data-rh="true" rel="icon" href="/img/favicon.svg"><link data-rh="true" rel="canonical" href="https://detekt.dev/docs/2.0.0-alpha.1/rules/formatting"><link data-rh="true" rel="alternate" href="https://detekt.dev/docs/2.0.0-alpha.1/rules/formatting" hreflang="en"><link data-rh="true" rel="alternate" href="https://detekt.dev/docs/2.0.0-alpha.1/rules/formatting" hreflang="x-default"><link data-rh="true" rel="preconnect" href="https://5PZNXB7M3G-dsn.algolia.net" crossorigin="anonymous"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Formatting Rule Set","item":"https://detekt.dev/docs/2.0.0-alpha.1/rules/formatting"}]}</script><link rel="alternate" type="application/rss+xml" href="/blog/rss.xml" title="detekt RSS Feed">
+<link rel="alternate" type="application/atom+xml" href="/blog/atom.xml" title="detekt Atom Feed">
+
+
+
+
+<link rel="search" type="application/opensearchdescription+xml" title="detekt" href="/opensearch.xml"><link rel="stylesheet" href="/assets/css/styles.274b461d.css">
+<script src="/assets/js/runtime~main.0d846d04.js" defer="defer"></script>
+<script src="/assets/js/main.54cc35b2.js" defer="defer"></script>
+</head>
+<body class="navigation-with-keyboard">
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||"light"),document.documentElement.setAttribute("data-theme-choice",t||"light")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><link rel="preload" as="image" href="/img/favicon.svg"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/"><div class="navbar__logo"><img src="/img/favicon.svg" alt="detekt logo" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="/img/favicon.svg" alt="detekt logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">detekt</b></a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/docs/2.0.0-alpha.1/intro">Docs</a><a class="navbar__item navbar__link" href="/blog">Blog</a><a href="https://detekt.dev/kdoc/" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">APIs</a><a class="navbar__item navbar__link" href="/marketplace">Marketplace</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><div class="navbar__item dropdown dropdown--hoverable dropdown--right"><a class="navbar__link" aria-haspopup="true" aria-expanded="false" role="button" href="/docs/2.0.0-alpha.1/rules/formatting">2.0.0-alpha.1</a><ul class="dropdown__menu"><li><a class="dropdown__link" href="/docs/next/intro">Next</a></li><li><a class="dropdown__link" href="/docs/intro">2.0.0-alpha.2</a></li><li><a aria-current="page" class="dropdown__link dropdown__link--active" href="/docs/2.0.0-alpha.1/rules/formatting">2.0.0-alpha.1</a></li><li><a class="dropdown__link" href="/docs/2.0.0-alpha.0/rules/formatting">2.0.0-alpha.0</a></li><li><a class="dropdown__link" href="/docs/1.23.8/rules/formatting">1.23.8</a></li><li><a class="dropdown__link" href="/docs/1.23.7/rules/formatting">1.23.7</a></li><li><a class="dropdown__link" href="/docs/1.23.6/rules/formatting">1.23.6</a></li><li><a class="dropdown__link" href="/docs/1.23.5/rules/formatting">1.23.5</a></li><li><a class="dropdown__link" href="/docs/1.23.4/rules/formatting">1.23.4</a></li><li><a class="dropdown__link" href="/docs/1.23.3/rules/formatting">1.23.3</a></li><li><a class="dropdown__link" href="/docs/1.23.1/rules/formatting">1.23.1</a></li><li><a class="dropdown__link" href="/docs/1.23.0/rules/formatting">1.23.0</a></li><li><a class="dropdown__link" href="/docs/1.22.0/rules/formatting">1.22.0</a></li><li><a class="dropdown__link" href="/docs/1.21.0/rules/formatting">1.21.0</a></li><li><a class="dropdown__link" href="/changelog">All changelogs</a></li></ul></div><a href="https://github.com/detekt/detekt" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link header-github-link" aria-label="GitHub repository">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"><button type="button" class="DocSearch DocSearch-Button" aria-label="Search (Meta+k)" aria-keyshortcuts="Meta+k"><span class="DocSearch-Button-Container"><svg width="20" height="20" class="DocSearch-Search-Icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8" stroke="currentColor" fill="none" stroke-width="1.4"></circle><path d="m21 21-4.3-4.3" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg><span class="DocSearch-Button-Placeholder">Search</span></span><span class="DocSearch-Button-Keys"></span></button></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/docs/2.0.0-alpha.1/intro"><span title="Welcome" class="linkLabel_WmDU">Welcome</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/docs/2.0.0-alpha.1/introduction/configurations"><span title="Introduction" class="categoryLinkLabel_W154">Introduction</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/docs/2.0.0-alpha.1/gettingstarted/cli"><span title="Getting Started" class="categoryLinkLabel_W154">Getting Started</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" href="/docs/2.0.0-alpha.1/rules/comments"><span title="Rules Documentation" class="categoryLinkLabel_W154">Rules Documentation</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/2.0.0-alpha.1/rules/comments"><span title="Comments Rule Set" class="linkLabel_WmDU">Comments Rule Set</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/2.0.0-alpha.1/rules/complexity"><span title="Complexity Rule Set" class="linkLabel_WmDU">Complexity Rule Set</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/2.0.0-alpha.1/rules/coroutines"><span title="Coroutines Rule Set" class="linkLabel_WmDU">Coroutines Rule Set</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/2.0.0-alpha.1/rules/empty-blocks"><span title="Empty-blocks Rule Set" class="linkLabel_WmDU">Empty-blocks Rule Set</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/2.0.0-alpha.1/rules/exceptions"><span title="Exceptions Rule Set" class="linkLabel_WmDU">Exceptions Rule Set</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/docs/2.0.0-alpha.1/rules/formatting"><span title="Formatting Rule Set" class="linkLabel_WmDU">Formatting Rule Set</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/2.0.0-alpha.1/rules/ktlint"><span title="Ktlint Rule Set" class="linkLabel_WmDU">Ktlint Rule Set</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/2.0.0-alpha.1/rules/libraries"><span title="Libraries Rule Set" class="linkLabel_WmDU">Libraries Rule Set</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/2.0.0-alpha.1/rules/naming"><span title="Naming Rule Set" class="linkLabel_WmDU">Naming Rule Set</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/2.0.0-alpha.1/rules/performance"><span title="Performance Rule Set" class="linkLabel_WmDU">Performance Rule Set</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/2.0.0-alpha.1/rules/potential-bugs"><span title="Potential-bugs Rule Set" class="linkLabel_WmDU">Potential-bugs Rule Set</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/2.0.0-alpha.1/rules/ruleauthors"><span title="Ruleauthors Rule Set" class="linkLabel_WmDU">Ruleauthors Rule Set</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-2 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/2.0.0-alpha.1/rules/style"><span title="Style Rule Set" class="linkLabel_WmDU">Style Rule Set</span></a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" href="/changelog-2.0.0"><span title="Changelogs" class="categoryLinkLabel_W154">Changelogs</span></a></div></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="theme-doc-version-banner alert alert--warning margin-bottom--md" role="alert"><div>This is documentation for <!-- -->detekt<!-- --> <b>2.0.0-alpha.1</b>, which is no longer actively maintained.</div><div class="margin-top--md">For up-to-date documentation, see the <b><a href="/docs/intro">latest version</a></b> (<!-- -->2.0.0-alpha.2<!-- -->).</div></div><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Breadcrumbs"><ul class="breadcrumbs"><li class="breadcrumbs__item"><a aria-label="Home page" class="breadcrumbs__link" href="/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">Rules Documentation</span></li><li class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link">Formatting Rule Set</span></li></ul></nav><span class="theme-doc-version-badge badge badge--secondary">Version: 2.0.0-alpha.1</span><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>Formatting Rule Set</h1></header><p>This rule set provides wrappers for rules implemented by ktlint - <a href="https://ktlint.github.io/" target="_blank" rel="noopener noreferrer" class="">https://ktlint.github.io/</a>.</p>
+<p><strong>Note: The <code>formatting</code> rule set is not included in the detekt-cli or Gradle plugin.</strong></p>
+<p>To enable this rule set, add <code>detektPlugins &quot;io.gitlab.arturbosch.detekt:detekt-formatting:$version&quot;</code>
+to your gradle <code>dependencies</code> or reference the <code>detekt-formatting</code>-jar with the <code>--plugins</code> option
+in the command line interface.</p>
+<p>Note: Issues reported by this rule set can only be suppressed on file level (<code>@file:Suppress(&quot;detekt.rule&quot;)</code>).</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="annotationonseparateline">AnnotationOnSeparateLine<a href="#annotationonseparateline" class="hash-link" aria-label="Direct link to AnnotationOnSeparateLine" title="Direct link to AnnotationOnSeparateLine" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#annotation-formatting" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.22.0</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options">Configuration options:<a href="#configuration-options" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>indentSize</code> (default: <code>4</code>)</p>
+<p>indentation size</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="annotationspacing">AnnotationSpacing<a href="#annotationspacing" class="hash-link" aria-label="Direct link to AnnotationSpacing" title="Direct link to AnnotationSpacing" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#annotation-spacing" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.22.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="argumentlistwrapping">ArgumentListWrapping<a href="#argumentlistwrapping" class="hash-link" aria-label="Direct link to ArgumentListWrapping" title="Direct link to ArgumentListWrapping" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#argument-list-wrapping" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.22.0</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-1">Configuration options:<a href="#configuration-options-1" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>indentSize</code> (default: <code>4</code>)</p>
+<p>indentation size</p>
+</li>
+<li class="">
+<p><code>maxLineLength</code> (default: <code>120</code>) (android default: <code>100</code>)</p>
+<p>maximum line length</p>
+</li>
+<li class="">
+<p><code>ignoreRuleParameterThreshold</code> (default: <code>8</code>)</p>
+<p>parameter threshold to ignore rule</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="backingpropertynaming">BackingPropertyNaming<a href="#backingpropertynaming" class="hash-link" aria-label="Direct link to BackingPropertyNaming" title="Direct link to BackingPropertyNaming" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#backing-property-naming" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a>
+for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="binaryexpressionwrapping">BinaryExpressionWrapping<a href="#binaryexpressionwrapping" class="hash-link" aria-label="Direct link to BinaryExpressionWrapping" title="Direct link to BinaryExpressionWrapping" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#binary-expression-wrapping" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for
+documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-2">Configuration options:<a href="#configuration-options-2" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>maxLineLength</code> (default: <code>120</code>) (android default: <code>100</code>)</p>
+<p>maximum line length</p>
+</li>
+<li class="">
+<p><code>indentSize</code> (default: <code>4</code>)</p>
+<p>indentation size</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="blanklinebeforedeclaration">BlankLineBeforeDeclaration<a href="#blanklinebeforedeclaration" class="hash-link" aria-label="Direct link to BlankLineBeforeDeclaration" title="Direct link to BlankLineBeforeDeclaration" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#blank-line-before-declarations" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for
+documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="blanklinebetweenwhenconditions">BlankLineBetweenWhenConditions<a href="#blanklinebetweenwhenconditions" class="hash-link" aria-label="Direct link to BlankLineBetweenWhenConditions" title="Direct link to BlankLineBetweenWhenConditions" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/experimental/#blank-lines-between-when-conditions" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a>
+for documentation.</p>
+<p><strong>Active by default</strong>: No</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-3">Configuration options:<a href="#configuration-options-3" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>lineBreakAfterWhenEntries</code> (default: <code>true</code>)</p>
+<p>require line breaks after multiline entries</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="blockcommentinitialstaralignment">BlockCommentInitialStarAlignment<a href="#blockcommentinitialstaralignment" class="hash-link" aria-label="Direct link to BlockCommentInitialStarAlignment" title="Direct link to BlockCommentInitialStarAlignment" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#block-comment-initial-star-alignment" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for
+documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.23.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="chainmethodcontinuation">ChainMethodContinuation<a href="#chainmethodcontinuation" class="hash-link" aria-label="Direct link to ChainMethodContinuation" title="Direct link to ChainMethodContinuation" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#chain-method-continuation" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a>
+for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-4">Configuration options:<a href="#configuration-options-4" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>indentSize</code> (default: <code>4</code>)</p>
+<p>indentation size</p>
+</li>
+<li class="">
+<p><code>maxLineLength</code> (default: <code>120</code>) (android default: <code>100</code>)</p>
+<p>maximum line length</p>
+</li>
+<li class="">
+<p><code>forceMultilineWhenChainOperatorCountGreaterOrEqualThan</code> (default: <code>4</code>)</p>
+<p>chain operator count means multiline threshold</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="chainwrapping">ChainWrapping<a href="#chainwrapping" class="hash-link" aria-label="Direct link to ChainWrapping" title="Direct link to ChainWrapping" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#chain-wrapping" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-5">Configuration options:<a href="#configuration-options-5" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>indentSize</code> (default: <code>4</code>)</p>
+<p>indentation size</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="classname">ClassName<a href="#classname" class="hash-link" aria-label="Direct link to ClassName" title="Direct link to ClassName" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#class-naming" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for
+documentation.</p>
+<p><strong>Active by default</strong>: No</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="classsignature">ClassSignature<a href="#classsignature" class="hash-link" aria-label="Direct link to ClassSignature" title="Direct link to ClassSignature" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#class-signature" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for
+documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-6">Configuration options:<a href="#configuration-options-6" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>indentSize</code> (default: <code>4</code>)</p>
+<p>indentation size</p>
+</li>
+<li class="">
+<p><code>maxLineLength</code> (default: <code>120</code>) (android default: <code>100</code>)</p>
+<p>maximum line length</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="commentspacing">CommentSpacing<a href="#commentspacing" class="hash-link" aria-label="Direct link to CommentSpacing" title="Direct link to CommentSpacing" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#comment-spacing" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="commentwrapping">CommentWrapping<a href="#commentwrapping" class="hash-link" aria-label="Direct link to CommentWrapping" title="Direct link to CommentWrapping" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#comment-wrapping" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.23.0</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-7">Configuration options:<a href="#configuration-options-7" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>indentSize</code> (default: <code>4</code>)</p>
+<p>indentation size</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="conditionwrapping">ConditionWrapping<a href="#conditionwrapping" class="hash-link" aria-label="Direct link to ConditionWrapping" title="Direct link to ConditionWrapping" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#condition-wrapping" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-8">Configuration options:<a href="#configuration-options-8" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>indentSize</code> (default: <code>4</code>)</p>
+<p>indentation size</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="contextreceiverlistwrapping">ContextReceiverListWrapping<a href="#contextreceiverlistwrapping" class="hash-link" aria-label="Direct link to ContextReceiverListWrapping" title="Direct link to ContextReceiverListWrapping" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#context-receiver-list-wrapping" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-9">Configuration options:<a href="#configuration-options-9" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>maxLineLength</code> (default: <code>120</code>) (android default: <code>100</code>)</p>
+<p>maximum line length</p>
+</li>
+<li class="">
+<p><code>indentSize</code> (default: <code>4</code>)</p>
+<p>indentation size</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="contextreceivermapping">ContextReceiverMapping<a href="#contextreceivermapping" class="hash-link" aria-label="Direct link to ContextReceiverMapping" title="Direct link to ContextReceiverMapping" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#content-receiver-wrapping" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-10">Configuration options:<a href="#configuration-options-10" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>maxLineLength</code> (default: <code>120</code>) (android default: <code>100</code>)</p>
+<p>maximum line length</p>
+</li>
+<li class="">
+<p><code>indentSize</code> (default: <code>4</code>)</p>
+<p>indentation size</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="enumentrynamecase">EnumEntryNameCase<a href="#enumentrynamecase" class="hash-link" aria-label="Direct link to EnumEntryNameCase" title="Direct link to EnumEntryNameCase" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#enum-entry" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.22.0</p>
+<p><strong>Aliases</strong>: EnumEntryName</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-11">Configuration options:<a href="#configuration-options-11" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>enumEntryNameCasing</code> (default: <code>&#x27;upper_or_camel_cases&#x27;</code>)</p>
+<p>enum entry naming casing</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="enumwrapping">EnumWrapping<a href="#enumwrapping" class="hash-link" aria-label="Direct link to EnumWrapping" title="Direct link to EnumWrapping" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#enum-wrapping" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-12">Configuration options:<a href="#configuration-options-12" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>indentSize</code> (default: <code>4</code>)</p>
+<p>indentation size</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="expressionoperandwrapping">ExpressionOperandWrapping<a href="#expressionoperandwrapping" class="hash-link" aria-label="Direct link to ExpressionOperandWrapping" title="Direct link to ExpressionOperandWrapping" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/experimental/#expression-operand-wrapping" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for
+documentation.</p>
+<p><strong>Active by default</strong>: No</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-13">Configuration options:<a href="#configuration-options-13" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>indentSize</code> (default: <code>4</code>)</p>
+<p>indentation size</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="filename">Filename<a href="#filename" class="hash-link" aria-label="Direct link to Filename" title="Direct link to Filename" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#file-name" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p>This rules overlaps with <a href="https://detekt.dev/naming.html#matchingdeclarationname" target="_blank" rel="noopener noreferrer" class="">naming&gt;MatchingDeclarationName</a>
+from the standard rules, make sure to enable just one.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="finalnewline">FinalNewline<a href="#finalnewline" class="hash-link" aria-label="Direct link to FinalNewline" title="Direct link to FinalNewline" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#final-newline" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p>This rules overlaps with <a href="https://detekt.dev/style.html#newlineatendoffile" target="_blank" rel="noopener noreferrer" class="">style&gt;NewLineAtEndOfFile</a>
+from the standard rules, make sure to enable just one. The pro of this rule is that it can auto-correct the issue.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-14">Configuration options:<a href="#configuration-options-14" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>insertFinalNewLine</code> (default: <code>true</code>)</p>
+<p>report absence or presence of a newline</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="funkeywordspacing">FunKeywordSpacing<a href="#funkeywordspacing" class="hash-link" aria-label="Direct link to FunKeywordSpacing" title="Direct link to FunKeywordSpacing" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#fun-keyword-spacing" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.23.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="functionexpressionbody">FunctionExpressionBody<a href="#functionexpressionbody" class="hash-link" aria-label="Direct link to FunctionExpressionBody" title="Direct link to FunctionExpressionBody" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#function-expression-body" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a>
+for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-15">Configuration options:<a href="#configuration-options-15" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>indentSize</code> (default: <code>4</code>)</p>
+<p>indentation size</p>
+</li>
+<li class="">
+<p><code>maxLineLength</code> (default: <code>120</code>) (android default: <code>100</code>)</p>
+<p>maximum line length</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="functionliteral">FunctionLiteral<a href="#functionliteral" class="hash-link" aria-label="Direct link to FunctionLiteral" title="Direct link to FunctionLiteral" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#function-literal" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for
+documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-16">Configuration options:<a href="#configuration-options-16" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>indentSize</code> (default: <code>4</code>)</p>
+<p>indentation size</p>
+</li>
+<li class="">
+<p><code>maxLineLength</code> (default: <code>120</code>) (android default: <code>100</code>)</p>
+<p>maximum line length</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="functionname">FunctionName<a href="#functionname" class="hash-link" aria-label="Direct link to FunctionName" title="Direct link to FunctionName" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#function-naming" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for
+documentation.</p>
+<p><strong>Active by default</strong>: No</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="functionreturntypespacing">FunctionReturnTypeSpacing<a href="#functionreturntypespacing" class="hash-link" aria-label="Direct link to FunctionReturnTypeSpacing" title="Direct link to FunctionReturnTypeSpacing" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#function-return-type-spacing" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for
+documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.23.0</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-17">Configuration options:<a href="#configuration-options-17" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>maxLineLength</code> (default: <code>120</code>) (android default: <code>100</code>)</p>
+<p>maximum line length</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="functionsignature">FunctionSignature<a href="#functionsignature" class="hash-link" aria-label="Direct link to FunctionSignature" title="Direct link to FunctionSignature" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#function-signature" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for
+documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-18">Configuration options:<a href="#configuration-options-18" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>forceMultilineWhenParameterCountGreaterOrEqualThan</code> (default: <code>2147483647</code>)</p>
+<p>parameter count means multiline threshold</p>
+</li>
+<li class="">
+<p><code>functionBodyExpressionWrapping</code> (default: <code>&#x27;default&#x27;</code>)</p>
+<p>indentation size</p>
+</li>
+<li class="">
+<p><code>maxLineLength</code> (default: <code>120</code>) (android default: <code>100</code>)</p>
+<p>maximum line length</p>
+</li>
+<li class="">
+<p><code>indentSize</code> (default: <code>4</code>)</p>
+<p>indentation size</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="functionstartofbodyspacing">FunctionStartOfBodySpacing<a href="#functionstartofbodyspacing" class="hash-link" aria-label="Direct link to FunctionStartOfBodySpacing" title="Direct link to FunctionStartOfBodySpacing" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#function-start-of-body-spacing" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for
+documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.23.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="functiontypemodifierspacing">FunctionTypeModifierSpacing<a href="#functiontypemodifierspacing" class="hash-link" aria-label="Direct link to FunctionTypeModifierSpacing" title="Direct link to FunctionTypeModifierSpacing" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#function-type-modifier-spacing" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a>
+for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="functiontypereferencespacing">FunctionTypeReferenceSpacing<a href="#functiontypereferencespacing" class="hash-link" aria-label="Direct link to FunctionTypeReferenceSpacing" title="Direct link to FunctionTypeReferenceSpacing" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#function-type-reference-spacing" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for
+documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.23.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="ifelsebracing">IfElseBracing<a href="#ifelsebracing" class="hash-link" aria-label="Direct link to IfElseBracing" title="Direct link to IfElseBracing" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#if-else-bracing" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-19">Configuration options:<a href="#configuration-options-19" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>indentSize</code> (default: <code>4</code>)</p>
+<p>indentation size</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="ifelsewrapping">IfElseWrapping<a href="#ifelsewrapping" class="hash-link" aria-label="Direct link to IfElseWrapping" title="Direct link to IfElseWrapping" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#if-else-wrapping" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-20">Configuration options:<a href="#configuration-options-20" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>indentSize</code> (default: <code>4</code>)</p>
+<p>indentation size</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="importordering">ImportOrdering<a href="#importordering" class="hash-link" aria-label="Direct link to ImportOrdering" title="Direct link to ImportOrdering" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#import-ordering" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p>For defining import layout patterns see the <a href="https://github.com/pinterest/ktlint/blob/0.50.0/ktlint-ruleset-standard/src/main/kotlin/com/pinterest/ktlint/ruleset/standard/rules/ImportOrderingRule.kt" target="_blank" rel="noopener noreferrer" class="">KtLint Source Code</a></p>
+<p><strong>Active by default</strong>: Yes - Since v1.19.0</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-21">Configuration options:<a href="#configuration-options-21" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>layout</code> (default: <code>&#x27;*,java.**,javax.**,kotlin.**,^&#x27;</code>) (android default: <code>&#x27;*&#x27;</code>)</p>
+<p>the import ordering layout</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="indentation">Indentation<a href="#indentation" class="hash-link" aria-label="Direct link to Indentation" title="Direct link to Indentation" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#indentation" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.19.0</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-22">Configuration options:<a href="#configuration-options-22" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>indentSize</code> (default: <code>4</code>)</p>
+<p>indentation size</p>
+</li>
+<li class="">
+<p><code>indentWhenArrowOnNewLine</code> (default: <code>false</code>)</p>
+<p>indent when arrow on new line</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="kdoc">Kdoc<a href="#kdoc" class="hash-link" aria-label="Direct link to Kdoc" title="Direct link to Kdoc" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/experimental/#kdoc" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: No</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="kdocwrapping">KdocWrapping<a href="#kdocwrapping" class="hash-link" aria-label="Direct link to KdocWrapping" title="Direct link to KdocWrapping" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#kdoc-wrapping" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.23.0</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-23">Configuration options:<a href="#configuration-options-23" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>indentSize</code> (default: <code>4</code>)</p>
+<p>indentation size</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="maximumlinelength">MaximumLineLength<a href="#maximumlinelength" class="hash-link" aria-label="Direct link to MaximumLineLength" title="Direct link to MaximumLineLength" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#max-line-length" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p>This rules overlaps with <a href="https://detekt.dev/style.html#maxlinelength" target="_blank" rel="noopener noreferrer" class="">style&gt;MaxLineLength</a>
+from the standard rules, make sure to enable just one or keep them aligned.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
+<p><strong>Aliases</strong>: MaxLineLength</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-24">Configuration options:<a href="#configuration-options-24" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>maxLineLength</code> (default: <code>120</code>) (android default: <code>100</code>)</p>
+<p>maximum line length</p>
+</li>
+<li class="">
+<p><code>ignoreBackTickedIdentifier</code> (default: <code>false</code>)</p>
+<p>ignore back ticked identifier</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="mixedconditionoperators">MixedConditionOperators<a href="#mixedconditionoperators" class="hash-link" aria-label="Direct link to MixedConditionOperators" title="Direct link to MixedConditionOperators" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/experimental/" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: No</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="modifierlistspacing">ModifierListSpacing<a href="#modifierlistspacing" class="hash-link" aria-label="Direct link to ModifierListSpacing" title="Direct link to ModifierListSpacing" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#modifier-list-spacing" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.23.0</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-25">Configuration options:<a href="#configuration-options-25" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>indentSize</code> (default: <code>4</code>)</p>
+<p>indentation size</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="modifierordering">ModifierOrdering<a href="#modifierordering" class="hash-link" aria-label="Direct link to ModifierOrdering" title="Direct link to ModifierOrdering" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#modifier-order" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p>This rules overlaps with <a href="https://detekt.dev/style.html#modifierorder" target="_blank" rel="noopener noreferrer" class="">style&gt;ModifierOrder</a>
+from the standard rules, make sure to enable just one. The pro of this rule is that it can auto-correct the issue.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="multilineifelse">MultiLineIfElse<a href="#multilineifelse" class="hash-link" aria-label="Direct link to MultiLineIfElse" title="Direct link to MultiLineIfElse" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#multiline-if-else" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.22.0</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-26">Configuration options:<a href="#configuration-options-26" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>indentSize</code> (default: <code>4</code>)</p>
+<p>indentation size</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="multilineexpressionwrapping">MultilineExpressionWrapping<a href="#multilineexpressionwrapping" class="hash-link" aria-label="Direct link to MultilineExpressionWrapping" title="Direct link to MultilineExpressionWrapping" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#multiline-expression-wrapping" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for
+documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-27">Configuration options:<a href="#configuration-options-27" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>indentSize</code> (default: <code>4</code>)</p>
+<p>indentation size</p>
+</li>
+<li class="">
+<p><code>functionBodyExpressionWrapping</code> (default: <code>&#x27;multiline&#x27;</code>)</p>
+<p>function body expression wrapping</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="multilineloop">MultilineLoop<a href="#multilineloop" class="hash-link" aria-label="Direct link to MultilineLoop" title="Direct link to MultilineLoop" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#multiline-loop" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-28">Configuration options:<a href="#configuration-options-28" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>indentSize</code> (default: <code>4</code>)</p>
+<p>indentation size</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="noblanklinebeforerbrace">NoBlankLineBeforeRbrace<a href="#noblanklinebeforerbrace" class="hash-link" aria-label="Direct link to NoBlankLineBeforeRbrace" title="Direct link to NoBlankLineBeforeRbrace" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#no-blank-lines-before" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="noblanklineinlist">NoBlankLineInList<a href="#noblanklineinlist" class="hash-link" aria-label="Direct link to NoBlankLineInList" title="Direct link to NoBlankLineInList" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#no-blank-lines-in-list" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="noblanklinesinchainedmethodcalls">NoBlankLinesInChainedMethodCalls<a href="#noblanklinesinchainedmethodcalls" class="hash-link" aria-label="Direct link to NoBlankLinesInChainedMethodCalls" title="Direct link to NoBlankLinesInChainedMethodCalls" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#no-blank-lines-in-chained-method-calls" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for
+documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.22.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="noconsecutiveblanklines">NoConsecutiveBlankLines<a href="#noconsecutiveblanklines" class="hash-link" aria-label="Direct link to NoConsecutiveBlankLines" title="Direct link to NoConsecutiveBlankLines" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#no-consecutive-blank-lines" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="noconsecutivecomments">NoConsecutiveComments<a href="#noconsecutivecomments" class="hash-link" aria-label="Direct link to NoConsecutiveComments" title="Direct link to NoConsecutiveComments" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#no-consecutive-comments" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="noemptyclassbody">NoEmptyClassBody<a href="#noemptyclassbody" class="hash-link" aria-label="Direct link to NoEmptyClassBody" title="Direct link to NoEmptyClassBody" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#no-empty-class-bodies" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p>This rules overlaps with <a href="https://detekt.dev/empty-blocks.html#emptyclassblock" target="_blank" rel="noopener noreferrer" class="">empty-blocks&gt;EmptyClassBlock</a>
+from the standard rules, make sure to enable just one.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="noemptyfile">NoEmptyFile<a href="#noemptyfile" class="hash-link" aria-label="Direct link to NoEmptyFile" title="Direct link to NoEmptyFile" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#no-empty-file" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="noemptyfirstlineinclassbody">NoEmptyFirstLineInClassBody<a href="#noemptyfirstlineinclassbody" class="hash-link" aria-label="Direct link to NoEmptyFirstLineInClassBody" title="Direct link to NoEmptyFirstLineInClassBody" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#no-empty-first-line-at-start-in-class-body" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a>
+for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-29">Configuration options:<a href="#configuration-options-29" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>indentSize</code> (default: <code>4</code>)</p>
+<p>indentation size</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="noemptyfirstlineinmethodblock">NoEmptyFirstLineInMethodBlock<a href="#noemptyfirstlineinmethodblock" class="hash-link" aria-label="Direct link to NoEmptyFirstLineInMethodBlock" title="Direct link to NoEmptyFirstLineInMethodBlock" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#no-leading-empty-lines-in-method-blocks" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for
+documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.22.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="nolinebreakafterelse">NoLineBreakAfterElse<a href="#nolinebreakafterelse" class="hash-link" aria-label="Direct link to NoLineBreakAfterElse" title="Direct link to NoLineBreakAfterElse" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#no-line-break-after-else" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="nolinebreakbeforeassignment">NoLineBreakBeforeAssignment<a href="#nolinebreakbeforeassignment" class="hash-link" aria-label="Direct link to NoLineBreakBeforeAssignment" title="Direct link to NoLineBreakBeforeAssignment" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#no-line-break-before-assignment" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for
+documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="nomultiplespaces">NoMultipleSpaces<a href="#nomultiplespaces" class="hash-link" aria-label="Direct link to NoMultipleSpaces" title="Direct link to NoMultipleSpaces" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#no-multi-spaces" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="nosemicolons">NoSemicolons<a href="#nosemicolons" class="hash-link" aria-label="Direct link to NoSemicolons" title="Direct link to NoSemicolons" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#no-semicolons" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="nosinglelineblockcomment">NoSingleLineBlockComment<a href="#nosinglelineblockcomment" class="hash-link" aria-label="Direct link to NoSingleLineBlockComment" title="Direct link to NoSingleLineBlockComment" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#no-single-line-block-comment" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-30">Configuration options:<a href="#configuration-options-30" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>indentSize</code> (default: <code>4</code>)</p>
+<p>indentation size</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="notrailingspaces">NoTrailingSpaces<a href="#notrailingspaces" class="hash-link" aria-label="Direct link to NoTrailingSpaces" title="Direct link to NoTrailingSpaces" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#no-trailing-whitespaces" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="nounitreturn">NoUnitReturn<a href="#nounitreturn" class="hash-link" aria-label="Direct link to NoUnitReturn" title="Direct link to NoUnitReturn" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#no-unit-as-return-type" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="nounusedimports">NoUnusedImports<a href="#nounusedimports" class="hash-link" aria-label="Direct link to NoUnusedImports" title="Direct link to NoUnusedImports" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#no-unused-imports" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="nowildcardimports">NoWildcardImports<a href="#nowildcardimports" class="hash-link" aria-label="Direct link to NoWildcardImports" title="Direct link to NoWildcardImports" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#no-wildcard-imports" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-31">Configuration options:<a href="#configuration-options-31" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>packagesToUseImportOnDemandProperty</code> (default: <code>&#x27;java.util.*,kotlinx.android.synthetic.**&#x27;</code>)</p>
+<p>Defines allowed wildcard imports</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="nullabletypespacing">NullableTypeSpacing<a href="#nullabletypespacing" class="hash-link" aria-label="Direct link to NullableTypeSpacing" title="Direct link to NullableTypeSpacing" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#nullable-type-spacing" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for
+documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.23.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="packagename">PackageName<a href="#packagename" class="hash-link" aria-label="Direct link to PackageName" title="Direct link to PackageName" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#package-name" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for
+documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.22.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="parameterlistspacing">ParameterListSpacing<a href="#parameterlistspacing" class="hash-link" aria-label="Direct link to ParameterListSpacing" title="Direct link to ParameterListSpacing" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#parameter-list-spacing" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for
+documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-32">Configuration options:<a href="#configuration-options-32" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>maxLineLength</code> (default: <code>120</code>) (android default: <code>100</code>)</p>
+<p>maximum line length</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="parameterlistwrapping">ParameterListWrapping<a href="#parameterlistwrapping" class="hash-link" aria-label="Direct link to ParameterListWrapping" title="Direct link to ParameterListWrapping" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#parameter-list-wrapping" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-33">Configuration options:<a href="#configuration-options-33" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>maxLineLength</code> (default: <code>120</code>) (android default: <code>100</code>)</p>
+<p>maximum line length</p>
+</li>
+<li class="">
+<p><code>indentSize</code> (default: <code>4</code>)</p>
+<p>indentation size</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="parameterwrapping">ParameterWrapping<a href="#parameterwrapping" class="hash-link" aria-label="Direct link to ParameterWrapping" title="Direct link to ParameterWrapping" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#parameter-wrapping" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.23.0</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-34">Configuration options:<a href="#configuration-options-34" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>indentSize</code> (default: <code>4</code>)</p>
+<p>indentation size</p>
+</li>
+<li class="">
+<p><code>maxLineLength</code> (default: <code>120</code>) (android default: <code>100</code>)</p>
+<p>maximum line length</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="propertyname">PropertyName<a href="#propertyname" class="hash-link" aria-label="Direct link to PropertyName" title="Direct link to PropertyName" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#property-naming" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for
+documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-35">Configuration options:<a href="#configuration-options-35" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>constantNamingStyle</code> (default: <code>&#x27;screaming_snake_case&#x27;</code>)</p>
+<p>The naming style (&#x27;screaming_snake_case&#x27;, or &#x27;pascal_case&#x27;) to be applied on constant properties.</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="propertywrapping">PropertyWrapping<a href="#propertywrapping" class="hash-link" aria-label="Direct link to PropertyWrapping" title="Direct link to PropertyWrapping" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#property-wrapping" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.23.0</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-36">Configuration options:<a href="#configuration-options-36" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>indentSize</code> (default: <code>4</code>)</p>
+<p>indentation size</p>
+</li>
+<li class="">
+<p><code>maxLineLength</code> (default: <code>120</code>) (android default: <code>100</code>)</p>
+<p>maximum line length</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="spacingaroundanglebrackets">SpacingAroundAngleBrackets<a href="#spacingaroundanglebrackets" class="hash-link" aria-label="Direct link to SpacingAroundAngleBrackets" title="Direct link to SpacingAroundAngleBrackets" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#angle-bracket-spacing" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.22.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="spacingaroundcolon">SpacingAroundColon<a href="#spacingaroundcolon" class="hash-link" aria-label="Direct link to SpacingAroundColon" title="Direct link to SpacingAroundColon" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#colon-spacing" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="spacingaroundcomma">SpacingAroundComma<a href="#spacingaroundcomma" class="hash-link" aria-label="Direct link to SpacingAroundComma" title="Direct link to SpacingAroundComma" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#comma-spacing" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="spacingaroundcurly">SpacingAroundCurly<a href="#spacingaroundcurly" class="hash-link" aria-label="Direct link to SpacingAroundCurly" title="Direct link to SpacingAroundCurly" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#curly-spacing" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-37">Configuration options:<a href="#configuration-options-37" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>indentSize</code> (default: <code>4</code>)</p>
+<p>indentation size</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="spacingarounddot">SpacingAroundDot<a href="#spacingarounddot" class="hash-link" aria-label="Direct link to SpacingAroundDot" title="Direct link to SpacingAroundDot" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#dot-spacing" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="spacingarounddoublecolon">SpacingAroundDoubleColon<a href="#spacingarounddoublecolon" class="hash-link" aria-label="Direct link to SpacingAroundDoubleColon" title="Direct link to SpacingAroundDoubleColon" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#double-colon-spacing" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.22.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="spacingaroundkeyword">SpacingAroundKeyword<a href="#spacingaroundkeyword" class="hash-link" aria-label="Direct link to SpacingAroundKeyword" title="Direct link to SpacingAroundKeyword" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#keyword-spacing" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="spacingaroundoperators">SpacingAroundOperators<a href="#spacingaroundoperators" class="hash-link" aria-label="Direct link to SpacingAroundOperators" title="Direct link to SpacingAroundOperators" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#operator-spacing" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="spacingaroundparens">SpacingAroundParens<a href="#spacingaroundparens" class="hash-link" aria-label="Direct link to SpacingAroundParens" title="Direct link to SpacingAroundParens" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#parenthesis-spacing" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="spacingaroundrangeoperator">SpacingAroundRangeOperator<a href="#spacingaroundrangeoperator" class="hash-link" aria-label="Direct link to SpacingAroundRangeOperator" title="Direct link to SpacingAroundRangeOperator" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#range-spacing" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="spacingaroundsquarebrackets">SpacingAroundSquareBrackets<a href="#spacingaroundsquarebrackets" class="hash-link" aria-label="Direct link to SpacingAroundSquareBrackets" title="Direct link to SpacingAroundSquareBrackets" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/experimental/#square-brackets-spacing" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for
+documentation.</p>
+<p><strong>Active by default</strong>: No</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="spacingaroundunaryoperator">SpacingAroundUnaryOperator<a href="#spacingaroundunaryoperator" class="hash-link" aria-label="Direct link to SpacingAroundUnaryOperator" title="Direct link to SpacingAroundUnaryOperator" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#unary-operator-spacing" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.22.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="spacingbetweendeclarationswithannotations">SpacingBetweenDeclarationsWithAnnotations<a href="#spacingbetweendeclarationswithannotations" class="hash-link" aria-label="Direct link to SpacingBetweenDeclarationsWithAnnotations" title="Direct link to SpacingBetweenDeclarationsWithAnnotations" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#blank-line-between-declarations-with-annotations" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a>
+for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.22.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="spacingbetweendeclarationswithcomments">SpacingBetweenDeclarationsWithComments<a href="#spacingbetweendeclarationswithcomments" class="hash-link" aria-label="Direct link to SpacingBetweenDeclarationsWithComments" title="Direct link to SpacingBetweenDeclarationsWithComments" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#blank-line-between-declaration-with-comments" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a>
+for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.22.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="spacingbetweenfunctionnameandopeningparenthesis">SpacingBetweenFunctionNameAndOpeningParenthesis<a href="#spacingbetweenfunctionnameandopeningparenthesis" class="hash-link" aria-label="Direct link to SpacingBetweenFunctionNameAndOpeningParenthesis" title="Direct link to SpacingBetweenFunctionNameAndOpeningParenthesis" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#spacing-between-function-name-and-opening-parenthesis" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for
+documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.23.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="statementwrapping">StatementWrapping<a href="#statementwrapping" class="hash-link" aria-label="Direct link to StatementWrapping" title="Direct link to StatementWrapping" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#statement-wrapping" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for
+documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-38">Configuration options:<a href="#configuration-options-38" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>indentSize</code> (default: <code>4</code>)</p>
+<p>indentation size</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="stringtemplate">StringTemplate<a href="#stringtemplate" class="hash-link" aria-label="Direct link to StringTemplate" title="Direct link to StringTemplate" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#string-template" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="stringtemplateindent">StringTemplateIndent<a href="#stringtemplateindent" class="hash-link" aria-label="Direct link to StringTemplateIndent" title="Direct link to StringTemplateIndent" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#string-template-indent" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-39">Configuration options:<a href="#configuration-options-39" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>indentSize</code> (default: <code>4</code>)</p>
+<p>indentation size</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="trailingcommaoncallsite">TrailingCommaOnCallSite<a href="#trailingcommaoncallsite" class="hash-link" aria-label="Direct link to TrailingCommaOnCallSite" title="Direct link to TrailingCommaOnCallSite" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#trailing-comma-on-call-site" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p>The default config comes from ktlint and follows these conventions:</p>
+<ul>
+<li class=""><a href="https://kotlinlang.org/docs/coding-conventions.html#trailing-commas" target="_blank" rel="noopener noreferrer" class="">Kotlin coding convention</a> recommends
+trailing comma encourage the use of trailing commas at the declaration site and
+leaves it at your discretion for the call site.</li>
+<li class=""><a href="https://developer.android.com/kotlin/style-guide" target="_blank" rel="noopener noreferrer" class="">Android Kotlin style guide</a> does not include
+trailing comma usage yet.</li>
+</ul>
+<p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-40">Configuration options:<a href="#configuration-options-40" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>useTrailingCommaOnCallSite</code> (default: <code>true</code>) (android default: <code>false</code>)</p>
+<p>Defines whether trailing commas are required (true) or forbidden (false) at call sites</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="trailingcommaondeclarationsite">TrailingCommaOnDeclarationSite<a href="#trailingcommaondeclarationsite" class="hash-link" aria-label="Direct link to TrailingCommaOnDeclarationSite" title="Direct link to TrailingCommaOnDeclarationSite" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#trailing-comma-on-declaration-site" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p>The default config comes from ktlint and follows these conventions:</p>
+<ul>
+<li class=""><a href="https://kotlinlang.org/docs/coding-conventions.html#trailing-commas" target="_blank" rel="noopener noreferrer" class="">Kotlin coding convention</a> recommends
+trailing comma encourage the use of trailing commas at the declaration site and
+leaves it at your discretion for the call site.</li>
+<li class=""><a href="https://developer.android.com/kotlin/style-guide" target="_blank" rel="noopener noreferrer" class="">Android Kotlin style guide</a> does not include
+trailing comma usage yet.</li>
+</ul>
+<p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-41">Configuration options:<a href="#configuration-options-41" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>useTrailingCommaOnDeclarationSite</code> (default: <code>true</code>) (android default: <code>false</code>)</p>
+<p>Defines whether trailing commas are required (true) or forbidden (false) at declaration sites</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="trycatchfinallyspacing">TryCatchFinallySpacing<a href="#trycatchfinallyspacing" class="hash-link" aria-label="Direct link to TryCatchFinallySpacing" title="Direct link to TryCatchFinallySpacing" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#try-catch-finally-spacing" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for
+documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-42">Configuration options:<a href="#configuration-options-42" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>indentSize</code> (default: <code>4</code>)</p>
+<p>indentation size</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="typeargumentcomment">TypeArgumentComment<a href="#typeargumentcomment" class="hash-link" aria-label="Direct link to TypeArgumentComment" title="Direct link to TypeArgumentComment" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for
+documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="typeargumentlistspacing">TypeArgumentListSpacing<a href="#typeargumentlistspacing" class="hash-link" aria-label="Direct link to TypeArgumentListSpacing" title="Direct link to TypeArgumentListSpacing" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#type-argument-list-spacing" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for
+documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-43">Configuration options:<a href="#configuration-options-43" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>indentSize</code> (default: <code>4</code>)</p>
+<p>indentation size</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="typeparametercomment">TypeParameterComment<a href="#typeparametercomment" class="hash-link" aria-label="Direct link to TypeParameterComment" title="Direct link to TypeParameterComment" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for
+documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="typeparameterlistspacing">TypeParameterListSpacing<a href="#typeparameterlistspacing" class="hash-link" aria-label="Direct link to TypeParameterListSpacing" title="Direct link to TypeParameterListSpacing" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#type-parameter-list-spacing" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for
+documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-44">Configuration options:<a href="#configuration-options-44" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>indentSize</code> (default: <code>4</code>)</p>
+<p>indentation size</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="unnecessaryparenthesesbeforetrailinglambda">UnnecessaryParenthesesBeforeTrailingLambda<a href="#unnecessaryparenthesesbeforetrailinglambda" class="hash-link" aria-label="Direct link to UnnecessaryParenthesesBeforeTrailingLambda" title="Direct link to UnnecessaryParenthesesBeforeTrailingLambda" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#unnecessary-parenthesis-before-trailing-lambda" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a>
+for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.23.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="valueargumentcomment">ValueArgumentComment<a href="#valueargumentcomment" class="hash-link" aria-label="Direct link to ValueArgumentComment" title="Direct link to ValueArgumentComment" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for
+documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="valueparametercomment">ValueParameterComment<a href="#valueparametercomment" class="hash-link" aria-label="Direct link to ValueParameterComment" title="Direct link to ValueParameterComment" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for
+documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="whenentrybracing">WhenEntryBracing<a href="#whenentrybracing" class="hash-link" aria-label="Direct link to WhenEntryBracing" title="Direct link to WhenEntryBracing" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/experimental/#when-entry-bracing" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for
+documentation.</p>
+<p><strong>Active by default</strong>: No</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-45">Configuration options:<a href="#configuration-options-45" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>indentSize</code> (default: <code>4</code>)</p>
+<p>indentation size</p>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="wrapping">Wrapping<a href="#wrapping" class="hash-link" aria-label="Direct link to Wrapping" title="Direct link to Wrapping" translate="no">​</a></h3>
+<p>See <a href="https://pinterest.github.io/ktlint/1.7.1/rules/standard/#wrapping" target="_blank" rel="noopener noreferrer" class="">ktlint docs</a> for documentation.</p>
+<p><strong>Active by default</strong>: Yes - Since v1.20.0</p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-46">Configuration options:<a href="#configuration-options-46" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>indentSize</code> (default: <code>4</code>)</p>
+<p>indentation size</p>
+</li>
+<li class="">
+<p><code>maxLineLength</code> (default: <code>120</code>) (android default: <code>100</code>)</p>
+<p>maximum line length</p>
+</li>
+</ul></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href="https://github.com/detekt/detekt/edit/main/website/versioned_docs/version-2.0.0-alpha.1/rules/formatting.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/docs/2.0.0-alpha.1/rules/exceptions"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Exceptions Rule Set</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/docs/2.0.0-alpha.1/rules/ktlint"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Ktlint Rule Set</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#annotationonseparateline" class="table-of-contents__link toc-highlight">AnnotationOnSeparateLine</a></li><li><a href="#annotationspacing" class="table-of-contents__link toc-highlight">AnnotationSpacing</a></li><li><a href="#argumentlistwrapping" class="table-of-contents__link toc-highlight">ArgumentListWrapping</a></li><li><a href="#backingpropertynaming" class="table-of-contents__link toc-highlight">BackingPropertyNaming</a></li><li><a href="#binaryexpressionwrapping" class="table-of-contents__link toc-highlight">BinaryExpressionWrapping</a></li><li><a href="#blanklinebeforedeclaration" class="table-of-contents__link toc-highlight">BlankLineBeforeDeclaration</a></li><li><a href="#blanklinebetweenwhenconditions" class="table-of-contents__link toc-highlight">BlankLineBetweenWhenConditions</a></li><li><a href="#blockcommentinitialstaralignment" class="table-of-contents__link toc-highlight">BlockCommentInitialStarAlignment</a></li><li><a href="#chainmethodcontinuation" class="table-of-contents__link toc-highlight">ChainMethodContinuation</a></li><li><a href="#chainwrapping" class="table-of-contents__link toc-highlight">ChainWrapping</a></li><li><a href="#classname" class="table-of-contents__link toc-highlight">ClassName</a></li><li><a href="#classsignature" class="table-of-contents__link toc-highlight">ClassSignature</a></li><li><a href="#commentspacing" class="table-of-contents__link toc-highlight">CommentSpacing</a></li><li><a href="#commentwrapping" class="table-of-contents__link toc-highlight">CommentWrapping</a></li><li><a href="#conditionwrapping" class="table-of-contents__link toc-highlight">ConditionWrapping</a></li><li><a href="#contextreceiverlistwrapping" class="table-of-contents__link toc-highlight">ContextReceiverListWrapping</a></li><li><a href="#contextreceivermapping" class="table-of-contents__link toc-highlight">ContextReceiverMapping</a></li><li><a href="#enumentrynamecase" class="table-of-contents__link toc-highlight">EnumEntryNameCase</a></li><li><a href="#enumwrapping" class="table-of-contents__link toc-highlight">EnumWrapping</a></li><li><a href="#expressionoperandwrapping" class="table-of-contents__link toc-highlight">ExpressionOperandWrapping</a></li><li><a href="#filename" class="table-of-contents__link toc-highlight">Filename</a></li><li><a href="#finalnewline" class="table-of-contents__link toc-highlight">FinalNewline</a></li><li><a href="#funkeywordspacing" class="table-of-contents__link toc-highlight">FunKeywordSpacing</a></li><li><a href="#functionexpressionbody" class="table-of-contents__link toc-highlight">FunctionExpressionBody</a></li><li><a href="#functionliteral" class="table-of-contents__link toc-highlight">FunctionLiteral</a></li><li><a href="#functionname" class="table-of-contents__link toc-highlight">FunctionName</a></li><li><a href="#functionreturntypespacing" class="table-of-contents__link toc-highlight">FunctionReturnTypeSpacing</a></li><li><a href="#functionsignature" class="table-of-contents__link toc-highlight">FunctionSignature</a></li><li><a href="#functionstartofbodyspacing" class="table-of-contents__link toc-highlight">FunctionStartOfBodySpacing</a></li><li><a href="#functiontypemodifierspacing" class="table-of-contents__link toc-highlight">FunctionTypeModifierSpacing</a></li><li><a href="#functiontypereferencespacing" class="table-of-contents__link toc-highlight">FunctionTypeReferenceSpacing</a></li><li><a href="#ifelsebracing" class="table-of-contents__link toc-highlight">IfElseBracing</a></li><li><a href="#ifelsewrapping" class="table-of-contents__link toc-highlight">IfElseWrapping</a></li><li><a href="#importordering" class="table-of-contents__link toc-highlight">ImportOrdering</a></li><li><a href="#indentation" class="table-of-contents__link toc-highlight">Indentation</a></li><li><a href="#kdoc" class="table-of-contents__link toc-highlight">Kdoc</a></li><li><a href="#kdocwrapping" class="table-of-contents__link toc-highlight">KdocWrapping</a></li><li><a href="#maximumlinelength" class="table-of-contents__link toc-highlight">MaximumLineLength</a></li><li><a href="#mixedconditionoperators" class="table-of-contents__link toc-highlight">MixedConditionOperators</a></li><li><a href="#modifierlistspacing" class="table-of-contents__link toc-highlight">ModifierListSpacing</a></li><li><a href="#modifierordering" class="table-of-contents__link toc-highlight">ModifierOrdering</a></li><li><a href="#multilineifelse" class="table-of-contents__link toc-highlight">MultiLineIfElse</a></li><li><a href="#multilineexpressionwrapping" class="table-of-contents__link toc-highlight">MultilineExpressionWrapping</a></li><li><a href="#multilineloop" class="table-of-contents__link toc-highlight">MultilineLoop</a></li><li><a href="#noblanklinebeforerbrace" class="table-of-contents__link toc-highlight">NoBlankLineBeforeRbrace</a></li><li><a href="#noblanklineinlist" class="table-of-contents__link toc-highlight">NoBlankLineInList</a></li><li><a href="#noblanklinesinchainedmethodcalls" class="table-of-contents__link toc-highlight">NoBlankLinesInChainedMethodCalls</a></li><li><a href="#noconsecutiveblanklines" class="table-of-contents__link toc-highlight">NoConsecutiveBlankLines</a></li><li><a href="#noconsecutivecomments" class="table-of-contents__link toc-highlight">NoConsecutiveComments</a></li><li><a href="#noemptyclassbody" class="table-of-contents__link toc-highlight">NoEmptyClassBody</a></li><li><a href="#noemptyfile" class="table-of-contents__link toc-highlight">NoEmptyFile</a></li><li><a href="#noemptyfirstlineinclassbody" class="table-of-contents__link toc-highlight">NoEmptyFirstLineInClassBody</a></li><li><a href="#noemptyfirstlineinmethodblock" class="table-of-contents__link toc-highlight">NoEmptyFirstLineInMethodBlock</a></li><li><a href="#nolinebreakafterelse" class="table-of-contents__link toc-highlight">NoLineBreakAfterElse</a></li><li><a href="#nolinebreakbeforeassignment" class="table-of-contents__link toc-highlight">NoLineBreakBeforeAssignment</a></li><li><a href="#nomultiplespaces" class="table-of-contents__link toc-highlight">NoMultipleSpaces</a></li><li><a href="#nosemicolons" class="table-of-contents__link toc-highlight">NoSemicolons</a></li><li><a href="#nosinglelineblockcomment" class="table-of-contents__link toc-highlight">NoSingleLineBlockComment</a></li><li><a href="#notrailingspaces" class="table-of-contents__link toc-highlight">NoTrailingSpaces</a></li><li><a href="#nounitreturn" class="table-of-contents__link toc-highlight">NoUnitReturn</a></li><li><a href="#nounusedimports" class="table-of-contents__link toc-highlight">NoUnusedImports</a></li><li><a href="#nowildcardimports" class="table-of-contents__link toc-highlight">NoWildcardImports</a></li><li><a href="#nullabletypespacing" class="table-of-contents__link toc-highlight">NullableTypeSpacing</a></li><li><a href="#packagename" class="table-of-contents__link toc-highlight">PackageName</a></li><li><a href="#parameterlistspacing" class="table-of-contents__link toc-highlight">ParameterListSpacing</a></li><li><a href="#parameterlistwrapping" class="table-of-contents__link toc-highlight">ParameterListWrapping</a></li><li><a href="#parameterwrapping" class="table-of-contents__link toc-highlight">ParameterWrapping</a></li><li><a href="#propertyname" class="table-of-contents__link toc-highlight">PropertyName</a></li><li><a href="#propertywrapping" class="table-of-contents__link toc-highlight">PropertyWrapping</a></li><li><a href="#spacingaroundanglebrackets" class="table-of-contents__link toc-highlight">SpacingAroundAngleBrackets</a></li><li><a href="#spacingaroundcolon" class="table-of-contents__link toc-highlight">SpacingAroundColon</a></li><li><a href="#spacingaroundcomma" class="table-of-contents__link toc-highlight">SpacingAroundComma</a></li><li><a href="#spacingaroundcurly" class="table-of-contents__link toc-highlight">SpacingAroundCurly</a></li><li><a href="#spacingarounddot" class="table-of-contents__link toc-highlight">SpacingAroundDot</a></li><li><a href="#spacingarounddoublecolon" class="table-of-contents__link toc-highlight">SpacingAroundDoubleColon</a></li><li><a href="#spacingaroundkeyword" class="table-of-contents__link toc-highlight">SpacingAroundKeyword</a></li><li><a href="#spacingaroundoperators" class="table-of-contents__link toc-highlight">SpacingAroundOperators</a></li><li><a href="#spacingaroundparens" class="table-of-contents__link toc-highlight">SpacingAroundParens</a></li><li><a href="#spacingaroundrangeoperator" class="table-of-contents__link toc-highlight">SpacingAroundRangeOperator</a></li><li><a href="#spacingaroundsquarebrackets" class="table-of-contents__link toc-highlight">SpacingAroundSquareBrackets</a></li><li><a href="#spacingaroundunaryoperator" class="table-of-contents__link toc-highlight">SpacingAroundUnaryOperator</a></li><li><a href="#spacingbetweendeclarationswithannotations" class="table-of-contents__link toc-highlight">SpacingBetweenDeclarationsWithAnnotations</a></li><li><a href="#spacingbetweendeclarationswithcomments" class="table-of-contents__link toc-highlight">SpacingBetweenDeclarationsWithComments</a></li><li><a href="#spacingbetweenfunctionnameandopeningparenthesis" class="table-of-contents__link toc-highlight">SpacingBetweenFunctionNameAndOpeningParenthesis</a></li><li><a href="#statementwrapping" class="table-of-contents__link toc-highlight">StatementWrapping</a></li><li><a href="#stringtemplate" class="table-of-contents__link toc-highlight">StringTemplate</a></li><li><a href="#stringtemplateindent" class="table-of-contents__link toc-highlight">StringTemplateIndent</a></li><li><a href="#trailingcommaoncallsite" class="table-of-contents__link toc-highlight">TrailingCommaOnCallSite</a></li><li><a href="#trailingcommaondeclarationsite" class="table-of-contents__link toc-highlight">TrailingCommaOnDeclarationSite</a></li><li><a href="#trycatchfinallyspacing" class="table-of-contents__link toc-highlight">TryCatchFinallySpacing</a></li><li><a href="#typeargumentcomment" class="table-of-contents__link toc-highlight">TypeArgumentComment</a></li><li><a href="#typeargumentlistspacing" class="table-of-contents__link toc-highlight">TypeArgumentListSpacing</a></li><li><a href="#typeparametercomment" class="table-of-contents__link toc-highlight">TypeParameterComment</a></li><li><a href="#typeparameterlistspacing" class="table-of-contents__link toc-highlight">TypeParameterListSpacing</a></li><li><a href="#unnecessaryparenthesesbeforetrailinglambda" class="table-of-contents__link toc-highlight">UnnecessaryParenthesesBeforeTrailingLambda</a></li><li><a href="#valueargumentcomment" class="table-of-contents__link toc-highlight">ValueArgumentComment</a></li><li><a href="#valueparametercomment" class="table-of-contents__link toc-highlight">ValueParameterComment</a></li><li><a href="#whenentrybracing" class="table-of-contents__link toc-highlight">WhenEntryBracing</a></li><li><a href="#wrapping" class="table-of-contents__link toc-highlight">Wrapping</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Docs</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/docs/gettingstarted/gradle">Getting Started with Gradle</a></li><li class="footer__item"><a class="footer__link-item" href="/docs/gettingstarted/cli">Getting Started with the CLI</a></li><li class="footer__item"><a class="footer__link-item" href="/docs/rules/comments">Rules Documentation</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Community</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://kotlinlang.slack.com/archives/C88E12QH4" target="_blank" rel="noopener noreferrer" class="footer__link-item">Slack<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://stackoverflow.com/questions/tagged/detekt" target="_blank" rel="noopener noreferrer" class="footer__link-item">Stack Overflow<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">More</div><ul class="footer__items clean-list"><li class="footer__item"><a class="footer__link-item" href="/blog">Blog</a></li><li class="footer__item"><a href="https://github.com/detekt/detekt" target="_blank" rel="noopener noreferrer" class="footer__link-item">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li><li class="footer__item"><a href="https://detekt.dev/kdoc" target="_blank" rel="noopener noreferrer" class="footer__link-item">KDoc<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2026 detekt team - Built with Docusaurus.</div></div></div></footer></div>
+</body>
 </html>
