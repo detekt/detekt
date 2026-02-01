@@ -268,4 +268,64 @@ class ImplicitDefaultLocaleSpec(private val env: KotlinEnvironmentContainer) {
         """.trimIndent()
         assertThat(subject.lintWithContext(env, code)).hasSize(1)
     }
+
+    @Test
+    fun `does not report for format string without any specifiers`() {
+        val code = """
+            fun x() {
+                "no specifiers here".format()
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
+    fun `reports for dynamic format string that cannot be analyzed`() {
+        val code = """
+            fun x(template: String) {
+                template.format(1)
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
+    fun `reports for String_format with dynamic format string`() {
+        val code = """
+            fun x(template: String) {
+                String.format(template, 1)
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
+    fun `does not report for format string with interpolation`() {
+        val code = """
+            fun x(prefix: String) {
+                "${'$'}prefix: %s".format("test")
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
+    fun `does not report for non-format method calls`() {
+        val code = """
+            fun x() {
+                "test".toString()
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
+    fun `does not report for uppercase hexadecimal with argument index %1$X`() {
+        val code = """
+            fun x() {
+                "hex: %1${'$'}08X".format(255)
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
 }
