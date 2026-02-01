@@ -328,4 +328,44 @@ class ImplicitDefaultLocaleSpec(private val env: KotlinEnvironmentContainer) {
         """.trimIndent()
         assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
+
+    @Test
+    fun `reports for String_format with interpolated format string as first argument`() {
+        val code = """
+            fun x(prefix: String) {
+                String.format("${'$'}prefix: %d", 1)
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
+    fun `reports for format extension with receiver that has interpolation`() {
+        val code = """
+            fun x(prefix: String) {
+                "${'$'}prefix: %d".format(1)
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
+    fun `does not report for String_format with locale-independent specifier as first string arg`() {
+        val code = """
+            fun x() {
+                String.format("%x", 255)
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
+    fun `reports when format string has no interpolation but locale-dependent specifier`() {
+        val code = """
+            fun x() {
+                String.format("%g", 1.5)
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
+    }
 }
