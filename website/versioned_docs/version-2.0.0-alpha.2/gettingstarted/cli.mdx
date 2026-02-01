@@ -1,0 +1,77 @@
+---
+title: "Run detekt using Command Line Interface"
+keywords: [cli]
+sidebar:
+permalink: cli.html
+folder: gettingstarted
+summary:
+sidebar_position: 1
+---
+
+import CliOptions from "./_cli-options.md";
+import CliGeneratorOptions from "./_cli-generator-options.md";
+
+## Install the cli
+
+There are different ways to install the Command Line Interface (CLI):
+
+### MacOS, with [Homebrew](https://brew.sh/):
+
+```sh
+brew install detekt
+detekt [options]
+```
+
+### Windows, with [Scoop](https://scoop.sh/):
+
+```powershell
+scoop install detekt
+detekt [options]
+```
+
+### Unix-like OS, with [SDKMAN!](https://sdkman.io/):
+
+```sh
+sdk install detekt
+```
+
+### Any OS:
+
+```sh
+curl -sSLO https://github.com/detekt/detekt/releases/download/v[detekt_version]/detekt-cli-[detekt_version].zip
+unzip detekt-cli-[detekt_version].zip
+./detekt-cli-[detekt_version]/bin/detekt-cli --help
+```
+
+### NixOS:
+
+As a prerequisite, you have to add the unstable channel via `nix-channel` and then execute the following command.
+
+```sh
+nix-shell -I nixpkgs=channel:nixpkgs-unstable -p detekt
+```
+
+## Use the cli
+
+detekt will exit with one of the following exit codes:
+
+| Exit code | Description                                          |
+| --------- | ---------------------------------------------------- |
+| 0         | _detekt_ ran normally and no issues[^1] were found.  |
+| 1         | An unexpected error occurred.                        |
+| 2         | At least one issue[^1] was found.                    |
+| 3         | Invalid detekt configuration file detected.          |
+
+The following parameters are shown when `--help` is entered.
+
+<CliOptions />
+
+## Use the cli to generate configuration for custom rules
+
+<CliGeneratorOptions />
+
+```sh
+java -jar detekt-generator-[detekt_version]-all.jar -gcrc -i /path/to/rule1, /path/to/rule2
+```
+
+[^1]: All found issues that have a severity of or above the `--fail-on-severity` argument are considered.

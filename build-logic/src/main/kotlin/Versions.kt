@@ -1,6 +1,6 @@
 object Versions {
 
-    const val DETEKT: String = "2.0.0-alpha.1"
+    const val DETEKT: String = "2.0.0-alpha.2"
     const val SNAPSHOT_NAME: String = "main"
 
     fun currentOrSnapshot(): String {
