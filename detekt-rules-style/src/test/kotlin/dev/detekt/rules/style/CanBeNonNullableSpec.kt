@@ -2079,14 +2079,14 @@ class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
             }
 
             @Test
-            fun `does not report when safe call combined with null check`() {
+            fun `reports when null check returns unit before using value`() {
                 val code = """
                     fun process(value: String?) {
                         if (value == null) return
                         value.let { println(it) }
                     }
                 """.trimIndent()
-                assertThat(subject.lintWithContext(env, code)).isEmpty()
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
             }
 
             @Test
@@ -2112,7 +2112,7 @@ class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
             }
 
             @Test
-            fun `does not report when nested function has null check`() {
+            fun `reports when nested function has top-level null check`() {
                 val code = """
                     fun outer() {
                         fun inner(value: String?) {
@@ -2137,7 +2137,7 @@ class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
             }
 
             @Test
-            fun `reports for safe call in single expression function`() {
+            fun `does not report for safe call in single expression function`() {
                 val code = """
                     fun process(value: String?) = value?.length
                 """.trimIndent()
