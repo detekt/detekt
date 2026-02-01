@@ -151,11 +151,7 @@ class MissingUseCall(config: Config) :
             }
 
             expressionParent is KtProperty -> {
-                if (expressionParent.parent is KtClassBody) {
-                    false
-                } else {
-                    traversedParentExpression.contains(expressionParent.children.getOrNull(0)).not()
-                }
+                traversedParentExpression.contains(expressionParent.children.getOrNull(0)).not()
             }
 
             else -> {
