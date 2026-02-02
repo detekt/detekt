@@ -508,4 +508,75 @@ class ImplicitDefaultLocaleSpec(private val env: KotlinEnvironmentContainer) {
         """.trimIndent()
         assertThat(subject.lintWithContext(env, code)).hasSize(1)
     }
+
+    @Test
+    fun `does not report for format string with escape sequences`() {
+        val code = """
+            fun x() {
+                "value:\t%x\n".format(255)
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
+    fun `does not report for String_format with escape sequences in format string`() {
+        val code = """
+            fun x() {
+                String.format("line1\nvalue: %s\tend", "test")
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
+    fun `reports for String_format when first argument is not a string literal`() {
+        val code = """
+            fun x(fmt: String) {
+                String.format(fmt, 1)
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
+    fun `reports for String_format when first argument is an expression`() {
+        val code = """
+            fun x() {
+                String.format(getFormat(), 1)
+            }
+            fun getFormat() = "%d"
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
+    fun `does not report for format with only newline specifier`() {
+        val code = """
+            fun x() {
+                "line1%nline2%n".format()
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
+    fun `reports for format with locale-dependent specifier among multiple locale-independent ones`() {
+        val code = """
+            fun x() {
+                "%s %s %d %s".format("a", "b", 1, "c")
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
+    fun `does not report for format with all supported locale-independent specifiers combined`() {
+        val code = """
+            fun x() {
+                "%x %X %o %a %A %b %B %h %H %s %c %n %%".format(1, 2, 3, 1.0, 2.0, true, false, "a", "b", "c", 'd')
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
 }
