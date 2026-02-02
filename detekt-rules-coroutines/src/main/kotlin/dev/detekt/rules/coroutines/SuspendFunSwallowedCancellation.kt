@@ -250,7 +250,7 @@ class SuspendFunSwallowedCancellation(config: Config) :
                     resolveToCall()
                         ?.successfulCallOrNull<KaCompoundVariableAccessCall>()
                         ?.compoundOperation
-                        ?.operationPartiallyAppliedSymbol
+                        ?.operationCall
                         ?.signature
                         ?.symbol
                         ?.isSuspend
