@@ -196,6 +196,7 @@ class CanBeNonNullable(config: Config) :
                     val onlySafeCallsWithoutExplicitCheck =
                         validSingleChildExpression &&
                             it.isNonNullChecked &&
+                            it.isTopLevelNonNullCheck &&
                             !it.isNullChecked &&
                             !it.hasExplicitNullCheck
                     it.isNonNullForced ||
