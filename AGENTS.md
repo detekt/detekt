@@ -23,8 +23,8 @@ This document provides guidance for AI coding agents (Claude, Codex, Copilot, et
 git clone https://github.com/detekt/detekt.git
 cd detekt
 
-# IMPORTANT: Before running tests, publish to local Maven
-./gradlew publishToMavenLocal
+# NOTE: Only required before running Gradle plugin functional tests
+# ./gradlew publishToMavenLocal
 
 # Build (excluding slow documentation generation)
 ./gradlew build -x dokkaGenerate
@@ -33,10 +33,10 @@ cd detekt
 ### Verification Commands
 ```bash
 # Run detekt on itself (must pass before submitting PRs)
-./gradlew detektMain detektTest
+./gradlew detektMain detektTest detektFunctionalTest detektTestFixtures
 
-# Run all tests
-./gradlew test
+# Run all tests (including functional tests)
+./gradlew test detektFunctionalTest detektFunctionalTestMinSupportedGradle
 
 # Generate documentation (when modifying rules)
 ./gradlew generateDocumentation
@@ -48,7 +48,7 @@ Key modules:
 - `detekt-api/` - Public API for extending detekt
 - `detekt-core/` - Core analysis engine
 - `detekt-cli/` - Command-line interface
-- `detekt-gradle-plugin/` - Gradle plugin (separate build in `detekt-gradle-plugin/`)
+- `detekt-gradle-plugin/` - Gradle plugin (composite build in `detekt-gradle-plugin/`)
 - `detekt-rules-*/` - Rule implementations by category (style, complexity, performance, etc.)
 - `detekt-report-*/` - Report format implementations
 - `detekt-test/` - Testing utilities
@@ -56,7 +56,7 @@ Key modules:
 ## Code Conventions
 
 - Follow [Kotlin coding conventions](https://kotlinlang.org/docs/reference/coding-conventions.html)
-- Code style is enforced by ktlint via the `detekt` Gradle tasks
+- Code style is enforced by detekt via the `detekt` Gradle tasks
 - Use settings from [.editorconfig](.editorconfig)
 - Test classes must use the `Spec.kt` suffix
 - All code in `detekt-api` and rules must be documented with KDoc
@@ -65,14 +65,13 @@ Key modules:
 
 - Use [JUnit 5](https://junit.org/junit5/docs/current/user-guide/) for testing
 - For rules requiring type resolution, annotate test classes with `@KotlinCoreEnvironmentTest`
-- Run `./gradlew publishToMavenLocal` before running tests to use local artifacts
 - Test new rules with `--run-rule RuleSet:RuleId` option for isolation testing
 
 ## CI/CD Pipeline
 
 The CI workflow is located in `.github/workflows/`. Key checks:
 - `./gradlew build` - Full build and test suite
-- `./gradlew detektMain detektTest` - Self-analysis (detekt analyzing itself)
+- Self-analysis with detekt on all source sets
 - Code coverage reporting
 
 ---
@@ -138,6 +137,10 @@ This is an open-source project. All contributions, whether from humans or AI age
 - Copying AI responses directly into review comments without context
 - Attempting to game contribution metrics
 
+### Human Explanation Requests
+
+Maintainers may request a human provide comments, explanations, or justifications at any time. AI cannot be solely relied upon in these cases. AI-assisted responses are acceptable (e.g., tweaking wording, grammar, adjusting for clarity), but human judgment must guide the conversation.
+
 ---
 
 ## Implementing New Rules
@@ -148,7 +151,7 @@ When an AI agent implements a new rule:
 2. Include comprehensive KDoc with `<noncompliant>` and `<compliant>` examples
 3. Write thorough tests using `lint()` or `compileAndLintWithContext()`
 4. Run `./gradlew generateDocumentation` to update config files
-5. Test with `--run-rule RuleSet:RuleId` on real Kotlin projects
+5. Optionally test with `--run-rule RuleSet:RuleId` on real Kotlin projects to verify behavior
 
 ### Rule Documentation Requirements
 
