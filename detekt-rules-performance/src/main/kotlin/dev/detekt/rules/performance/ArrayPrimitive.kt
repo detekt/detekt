@@ -55,7 +55,7 @@ class ArrayPrimitive(config: Config) :
     private fun KtCallExpression.returnsArrayPrimitive(): Boolean =
         analyze(this) {
             val functionCall = resolveToCall()?.singleFunctionCallOrNull() ?: return false
-            val returnType = functionCall.partiallyAppliedSymbol.signature.returnType
+            val returnType = functionCall.signature.returnType
             return returnType.arrayElementType?.isPrimitive == true
         }
 
