@@ -65,6 +65,13 @@ public abstract class dev/detekt/gradle/DetektGenerateConfigTask : org/gradle/ap
 	public abstract fun getPluginClasspath ()Lorg/gradle/api/file/ConfigurableFileCollection;
 }
 
+public final class dev/detekt/gradle/ProblemsApiConsoleReport : dev/detekt/api/ConsoleReport {
+	public fun <init> (Lorg/gradle/api/problems/ProblemReporter;Ljava/lang/String;)V
+	public fun getId ()Ljava/lang/String;
+	public fun getPriority ()I
+	public fun render (Ldev/detekt/api/Detektion;)Ljava/lang/String;
+}
+
 public abstract class dev/detekt/gradle/extensions/CustomDetektReport {
 	public fun <init> ()V
 	public abstract fun getOutputLocation ()Lorg/gradle/api/file/RegularFileProperty;
