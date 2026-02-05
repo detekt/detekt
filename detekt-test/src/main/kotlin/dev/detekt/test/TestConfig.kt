@@ -2,8 +2,6 @@ package dev.detekt.test
 
 import dev.detekt.api.Config
 import dev.detekt.api.ValueWithReason
-import dev.detekt.core.config.tryParseBasedOnDefault
-import dev.detekt.core.config.valueOrDefaultInternal
 
 @Suppress("UNCHECKED_CAST")
 class TestConfig private constructor(override val parent: Config?, private val values: Map<String, Any>) : Config {
@@ -20,28 +18,9 @@ class TestConfig private constructor(override val parent: Config?, private val v
 
     override fun subConfigKeys(): Set<String> = values.keys
 
-    override fun <T : Any> valueOrDefault(key: String, default: T) =
-        valueOrDefaultInternal(key, values[key], default, ::tryParseBasedOnDefaultRespectingCollections) as T
+    override fun <T : Any> valueOrDefault(key: String, default: T) = values.getOrDefault(key, default) as T
 
     override fun <T : Any> valueOrNull(key: String): T? = values[key] as? T
-
-    private fun tryParseBasedOnDefaultRespectingCollections(result: String, defaultResult: Any): Any =
-        when (defaultResult) {
-            is List<*> -> parseList(result)
-            is Set<*> -> parseList(result).toSet()
-            else -> tryParseBasedOnDefault(result, defaultResult)
-        }
-
-    private fun parseList(result: String): List<String> {
-        if (result.startsWith('[') && result.endsWith(']')) {
-            val str = result.substring(1, result.length - 1)
-            return str.splitToSequence(',')
-                .map { it.trim() }
-                .filter { it.isNotEmpty() }
-                .toList()
-        }
-        throw ClassCastException()
-    }
 }
 
 fun ValueWithReason.toConfig(): Map<String, String?> = mapOf("value" to value, "reason" to reason)
