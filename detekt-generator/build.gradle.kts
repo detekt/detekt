@@ -51,9 +51,9 @@ val documentationDir = "$rootDir/website/docs/rules"
 val configDir = "$rootDir/detekt-core/src/main/resources"
 val defaultConfigFile = "$configDir/default-detekt-config.yml"
 val deprecationFile = "$configDir/deprecation.properties"
-val ktlintWrapperConfigFile = "$rootDir/detekt-rules-ktlint-wrapper/src/main/resources/config/config.yml"
-val librariesConfigFile = "$rootDir/detekt-rules-libraries/src/main/resources/config/config.yml"
-val ruleauthorsConfigFile = "$rootDir/detekt-rules-ruleauthors/src/main/resources/config/config.yml"
+val ktlintWrapperConfigFile = "$rootDir/detekt-rules/ktlint-wrapper/src/main/resources/config/config.yml"
+val librariesConfigFile = "$rootDir/detekt-rules/libraries/src/main/resources/config/config.yml"
+val ruleauthorsConfigFile = "$rootDir/detekt-rules/ruleauthors/src/main/resources/config/config.yml"
 
 tasks.register("generateWebsite") {
     dependsOn(
