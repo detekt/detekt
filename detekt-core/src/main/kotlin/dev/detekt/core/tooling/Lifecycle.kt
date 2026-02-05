@@ -36,7 +36,7 @@ internal class Lifecycle(
         measure(Phase.ValidateConfig) { checkConfiguration(settings, baselineConfig) }
         val filesToAnalyze = measure(Phase.Parsing) { settings.ktFiles }
         if (settings.spec.projectSpec.analysisMode == AnalysisMode.full) {
-            measure(Phase.Binding) { bindingProvider(filesToAnalyze) }
+            measure(Phase.ValidateClasspath) { validateClasspath(filesToAnalyze) }
         }
         val analysisMode = settings.spec.projectSpec.analysisMode
         val (processors, rules) = measure(Phase.LoadingExtensions) {
@@ -64,7 +64,7 @@ internal class Lifecycle(
         }
     }
 
-    private fun bindingProvider(files: List<KtFile>) {
+    private fun validateClasspath(files: List<KtFile>) {
         val collector = DetektMessageCollector(
             minSeverity = CompilerMessageSeverity.ERROR,
             debugPrinter = settings::debug,
