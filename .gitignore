@@ -11,7 +11,8 @@ local.properties
 
 /build
 */build/
-/detekt-rules-ktlint-wrapper/ktlint-repackage/build/
+/detekt-rules/*/build/
+/detekt-rules/ktlint-wrapper/ktlint-repackage/build/
 
 *.jar
 !gradle-wrapper.jar
