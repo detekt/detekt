@@ -26,7 +26,7 @@ class YamlConfig internal constructor(
 ) : Config,
     ValidatableConfiguration {
 
-    override fun subConfig(key: String): Config {
+    override fun subConfig(key: String): YamlConfig {
         @Suppress("UNCHECKED_CAST")
         val subProperties = properties.getOrElse(key) { emptyMap<String, Any>() } as Map<String, Any>
         return YamlConfig(
@@ -82,7 +82,7 @@ class YamlConfig internal constructor(
          *
          * Note the reader will be consumed and closed.
          */
-        fun load(reader: Reader): Config =
+        fun load(reader: Reader): YamlConfig =
             reader.buffered().use { bufferedReader ->
                 val map: Map<*, *>? = runCatching {
                     @Suppress("UNCHECKED_CAST")
