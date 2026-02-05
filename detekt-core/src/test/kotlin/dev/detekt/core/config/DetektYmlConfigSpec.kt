@@ -19,7 +19,7 @@ class DetektYmlConfigSpec {
 
     private val config: YamlConfig = YamlConfig.load(
         Path("../detekt-core/src/main/resources/default-detekt-config.yml").absolute()
-    ) as YamlConfig
+    )
 
     private fun ruleSetsNamesToPackage(): List<Arguments> =
         listOf(
