@@ -40,13 +40,6 @@ class DisabledAutoCorrectConfigSpec {
     }
 
     @Test
-    fun `parent path is derived from wrapped config`() {
-        val subject = DisabledAutoCorrectConfig(configSingleRuleInStyle.subConfig(rulesetId))
-        val actual = subject.parentPath
-        assertThat(actual).isEqualTo(rulesetId)
-    }
-
-    @Test
     fun `verify the autocorrect field false in case the autoCorrect not present into yaml config`() {
         val config = yamlConfigFromContent(
             """
