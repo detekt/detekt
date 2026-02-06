@@ -68,15 +68,14 @@ tasks.register("generateWebsite") {
 val generateDocumentation = tasks.register<JavaExec>("generateDocumentation") {
     dependsOn(
         generateCliOptions,
-        ":detekt-rules-libraries:sourcesJar",
-        ":detekt-rules-ruleauthors:sourcesJar",
+        ":detekt-rules:libraries:sourcesJar",
+        ":detekt-rules:ruleauthors:sourcesJar",
     )
     description = "Generates detekt documentation and the default config.yml based on Rule KDoc"
     group = "documentation"
 
-    val ruleModules = rootProject.subprojects.asSequence()
-        .filter { "rules" in it.name }
-        .filterNot { it.name == "detekt-rules" }
+    val ruleModules = rootProject.project("detekt-rules").subprojects.asSequence()
+        .filterNot { it.name == "ktlint-repackage" }
         .flatMap { it.sourceSets.main.get().kotlin.srcDirs }
         .filter { it.exists() }
         .toList()
