@@ -164,7 +164,7 @@ style:
         reason: 'Forbidden TODO todo marker in comment, please do the changes.'
       - value: '@author'
         reason: 'Authors are not recorded in KDoc.'
-    excludes: ['**/detekt-rules-style/**/ForbiddenComment.kt']
+    excludes: ['**/detekt-rules/style/**/ForbiddenComment.kt']
   ForbiddenImport:
     active: true
     forbiddenImports:
