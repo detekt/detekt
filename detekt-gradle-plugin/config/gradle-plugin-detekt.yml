@@ -17,7 +17,7 @@ performance:
 style:
   ForbiddenImport:
     active: true
-    imports:
+    forbiddenImports:
       - value: 'org.gradle.util.GradleVersion'
         reason: 'Gradle version checks must be isolated to GradleCompat.kt'
     excludes: ["**/GradleCompat.kt"]

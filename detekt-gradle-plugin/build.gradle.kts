@@ -14,7 +14,7 @@ plugins {
     id("idea")
     id("com.gradle.plugin-publish") version "2.0.0"
     // We use this published version of the detekt plugin to self analyse this project.
-    id("dev.detekt") version "2.0.0-alpha.1"
+    id("dev.detekt") version "2.0.0-alpha.2"
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.18.1"
     id("org.jetbrains.dokka") version "2.1.0"
     id("signing")
@@ -156,7 +156,7 @@ dependencies {
     }
 
     // We use this published version of the detekt-rules-ktlint-wrapper to self analyse this project.
-    detektPlugins("dev.detekt:detekt-rules-ktlint-wrapper:2.0.0-alpha.1")
+    detektPlugins("dev.detekt:detekt-rules-ktlint-wrapper:2.0.0-alpha.2")
 }
 
 gradlePlugin {
