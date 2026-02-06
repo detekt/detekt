@@ -48,4 +48,22 @@ class IsolatedProjectsSpec {
             assertThat(buildResult.output).contains("Isolated projects is an incubating feature.")
         }
     }
+
+    @Nested
+    inner class `Profiling task` {
+        @Test
+        fun `supports isolated projects`() {
+            // Use dry run mode because the profiling CLI argument may not be in published detekt-cli
+            val gradleRunner = DslTestBuilder.kotlin()
+                .dryRun()
+                .build()
+
+            val buildResult = gradleRunner.runTasks(
+                "-Dorg.gradle.unsafe.isolated-projects=true",
+                "detektProfile"
+            )
+
+            assertThat(buildResult.output).contains("Isolated projects is an incubating feature.")
+        }
+    }
 }
