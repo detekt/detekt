@@ -7,7 +7,7 @@ val extraDepsToPackage by configurations.registering
 dependencies {
     compileOnly(projects.detektApi)
     compileOnly(projects.detektPsiUtils)
-    implementation(projects.detektRulesKtlintWrapper.ktlintRepackage) {
+    implementation(projects.detektRules.ktlintWrapper.ktlintRepackage) {
         attributes {
             attribute(Bundling.BUNDLING_ATTRIBUTE, named(Bundling.SHADOWED))
         }
