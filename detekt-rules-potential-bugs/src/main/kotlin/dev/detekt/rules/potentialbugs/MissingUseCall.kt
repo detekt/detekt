@@ -124,6 +124,14 @@ class MissingUseCall(config: Config) :
 
     private fun KaSession.shouldReport(expression: KtExpression): Boolean {
         val expressionParent = getParentChainExpression(expression) ?: return false
+
+        if (expressionParent.parent is KtProperty) {
+            val property = expressionParent.parent as KtProperty
+            if (property.parent is KtClassBody) {
+                return false
+            }
+        }
+
         return when {
             expressionParent is KtQualifiedExpression -> {
                 expressionParent.doesEndWithUse().not() &&
@@ -143,7 +151,6 @@ class MissingUseCall(config: Config) :
             }
 
             expressionParent is KtProperty -> {
-                // rhs has already been analysed
                 traversedParentExpression.contains(expressionParent.children.getOrNull(0)).not()
             }
 
