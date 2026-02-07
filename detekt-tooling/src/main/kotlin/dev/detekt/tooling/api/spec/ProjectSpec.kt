@@ -24,4 +24,9 @@ interface ProjectSpec {
      * The analysis mode used by detekt. See [AnalysisMode] for information about available analysis modes.
      */
     val analysisMode: AnalysisMode
+
+    /**
+     * Analyze Kotlin source files and collect diagnostics.
+     */
+    val diagnostics: Boolean
 }

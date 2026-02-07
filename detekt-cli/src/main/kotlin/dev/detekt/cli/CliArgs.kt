@@ -89,6 +89,12 @@ class CliArgs {
     var parallel: Boolean = false
 
     @Parameter(
+        names = ["--diagnostics"],
+        description = "Analyse Kotlin source files and collect diagnostics",
+    )
+    var diagnostics: Boolean = false
+
+    @Parameter(
         names = ["--baseline", "-b"],
         description = "If a baseline xml file is passed in," +
             " only new findings not in the baseline are printed in the console.",
