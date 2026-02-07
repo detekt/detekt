@@ -367,10 +367,10 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
         }
 
         @Test
-        fun `don't report a sealed class with open methods`() {
+        fun `report a sealed class with open methods`() {
             val code = """
                 sealed class Result {
-                    open fun x() = println("default") 
+                    open fun x() = println("default")
                     data class Success(val data: Int) : Result() {
                         override fun x() = println("success!")
                     }
@@ -378,7 +378,9 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
-            assertThat(findings).isEmpty()
+            assertThat(findings)
+                .singleElement()
+                .hasMessage(SEALED_NO_CONCRETE_MEMBER)
         }
 
         @Test
@@ -412,12 +414,72 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
         }
 
         @Test
-        fun `don't report a sealed class with open properties`() {
+        fun `report a sealed class with non-const open properties`() {
             val code = """
+                fun computeSomething(): Int = 456 * 789
+
                 sealed class Result {
-                    open val x: Int = 123
+                    open val x: Int = computeSomething()
                     data class Success(val data: Int, override val x: Int) : Result()
                     data class Failure(val reason: String) : Result()
+                }
+            """.trimIndent()
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings)
+                .singleElement()
+                .hasMessage(SEALED_NO_CONCRETE_MEMBER)
+        }
+
+        @Test
+        fun `don't report a sealed class with open literal const properties`() {
+            val code = """
+                sealed class Result {
+                    open val code: Int = 404
+                    data class Success(val data: Int, override val code: Int) : Result()
+                    data class Failure(val reason: String) : Result()
+                }
+            """.trimIndent()
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `don't report a sealed class with open const properties`() {
+            val code = """
+                const val DEFAULT_CODE = 404
+
+                sealed class Result {
+                    open val code: Int = DEFAULT_CODE
+                    data class Success(val data: Int, override val code: Int) : Result()
+                    data class Failure(val reason: String) : Result()
+                }
+            """.trimIndent()
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `don't report a sealed class with mixed property types`() {
+            val code = """
+                const val CONST_VALUE = 123
+                fun computeSomething(): Int = 456 * 789
+
+                sealed class Result {
+                    abstract val abstractVal: Int
+                    open val openConstVal: Int = CONST_VALUE
+                    open val openNonConstVal: Int = computeSomething()
+                    val finalVal: Int = 789
+
+                    data class Success(val data: Int, override val abstractVal: Int) : Result()
+
+                    data class Failure(val reason: String) : Result() {
+                        override val abstractVal: Int = 1234
+                        override var openConstVal: Int = 56789
+                            set(value) {
+                                field = value
+                                computeSomething()
+                            }
+                    }
                 }
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
