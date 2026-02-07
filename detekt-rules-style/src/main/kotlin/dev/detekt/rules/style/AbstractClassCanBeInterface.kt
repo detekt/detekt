@@ -16,8 +16,13 @@ import org.jetbrains.kotlin.analysis.api.symbols.KaClassKind
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolModality
 import org.jetbrains.kotlin.analysis.api.types.symbol
+import org.jetbrains.kotlin.idea.references.mainReference
+import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtConstantExpression
+import org.jetbrains.kotlin.psi.KtNameReferenceExpression
+import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.isAbstract
 
 /**
@@ -62,6 +67,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isAbstract
  * }
  * </compliant>
  */
+@Suppress("TooManyFunctions")
 @ActiveByDefault(since = "1.23.0")
 class AbstractClassCanBeInterface(config: Config) :
     Rule(
@@ -104,7 +110,12 @@ class AbstractClassCanBeInterface(config: Config) :
         members: List<KtCallableDeclaration>,
         nameIdentifier: PsiElement,
     ) {
-        val (abstractMembers, concreteMembers) = members.partition { it.isAbstract() }
+        // For sealed classes, treat open properties as abstract unless they have const initializers
+        val sealedType = klass.isSealed()
+        val (abstractMembers, concreteMembers) = members.partition { member ->
+            member.isAbstract() || (sealedType && member.isOpen() && !member.hasConstInitializer())
+        }
+
         when {
             abstractMembers.isEmpty() && !hasInheritedMember(klass, isAbstract = true) ->
                 return
@@ -117,6 +128,8 @@ class AbstractClassCanBeInterface(config: Config) :
                 report(Finding(Entity.from(nameIdentifier), klass.message()))
         }
     }
+
+    private fun KtCallableDeclaration.isOpen(): Boolean = hasModifier(KtTokens.OPEN_KEYWORD)
 
     private fun KtClass.members() =
         body?.children?.filterIsInstance<KtCallableDeclaration>().orEmpty() +
@@ -143,6 +156,32 @@ class AbstractClassCanBeInterface(config: Config) :
         (klass.symbol as? KaClassSymbol)
             ?.superTypes
             ?.all { (it.symbol as? KaClassSymbol)?.classKind == KaClassKind.INTERFACE } == false
+
+    /**
+     * Checks if a property has a compile-time constant initializer.
+     *
+     * Takes a conservative approach: only literal values (e.g., `404`, `"text"`) and direct references to `const val`
+     * are considered constant. Expressions like `CONST + 1`, string templates, or delegated properties are treated as
+     * non-const to avoid suggesting refactorings that would change meaning. E.g. class fields evaluate once vs.
+     * interface getters evaluate on each access.
+     */
+    context(session: KaSession)
+    private fun KtCallableDeclaration.hasConstInitializer(): Boolean =
+        when (val initializer = (this as? KtProperty)?.initializer) {
+            null -> false
+
+            // Literal values
+            is KtConstantExpression -> true
+
+            // Reference to a const val
+            is KtNameReferenceExpression -> {
+                val symbol = with(session) { initializer.mainReference.resolveToSymbol() }
+                val psi = symbol?.psi as? KtProperty
+                psi?.hasModifier(KtTokens.CONST_KEYWORD) == true
+            }
+
+            else -> false
+        }
 
     internal companion object {
         const val NO_CONCRETE_MEMBER = "An abstract class without a concrete member can be refactored to an interface."
