@@ -1,10 +1,10 @@
 package dev.detekt.core.util
 
 import dev.detekt.api.Config
+import dev.detekt.core.yamlConfigFromContent
 import dev.detekt.test.TestConfig
 import dev.detekt.test.utils.compileForTest
 import dev.detekt.test.utils.resourceAsPath
-import dev.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test

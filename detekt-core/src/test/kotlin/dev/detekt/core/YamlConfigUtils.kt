@@ -1,4 +1,4 @@
-package dev.detekt.test
+package dev.detekt.core
 
 import dev.detekt.api.Config
 import dev.detekt.core.config.YamlConfig

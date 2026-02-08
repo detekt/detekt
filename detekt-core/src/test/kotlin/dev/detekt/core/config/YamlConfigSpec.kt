@@ -1,8 +1,8 @@
 package dev.detekt.core.config
 
+import dev.detekt.core.yamlConfig
+import dev.detekt.core.yamlConfigFromContent
 import dev.detekt.test.utils.resourceAsPath
-import dev.detekt.test.yamlConfig
-import dev.detekt.test.yamlConfigFromContent
 import dev.detekt.utils.getSafeResourceAsStream
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode
