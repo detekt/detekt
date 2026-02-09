@@ -5,7 +5,7 @@ This document provides guidance for AI coding agents (Claude, Codex, Copilot, et
 ## Project Overview
 
 **detekt** is a static code analysis tool for Kotlin. It provides:
-- Code smell analysis with 40+ built-in rules
+- Code smell analysis with 200+ built-in rules
 - Highly configurable rule sets
 - Multiple report formats (HTML, Markdown, SARIF, Checkstyle XML)
 - Extensibility through custom rules, processors, and reports
