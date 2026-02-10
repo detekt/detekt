@@ -1,7 +1,6 @@
 package dev.detekt.core.config
 
 import dev.detekt.api.Config
-import dev.detekt.api.Config.Companion.CONFIG_SEPARATOR
 import dev.detekt.api.Notification
 import dev.detekt.core.config.validation.ValidatableConfiguration
 import dev.detekt.core.config.validation.validateConfig
@@ -16,12 +15,12 @@ import java.io.Reader
  */
 class YamlConfig internal constructor(
     val properties: Map<String, Any>,
-    override val parentPath: String?,
+    val parentPath: String?,
     override val parent: Config?,
 ) : Config,
     ValidatableConfiguration {
 
-    override fun subConfig(key: String): Config {
+    override fun subConfig(key: String): YamlConfig {
         @Suppress("UNCHECKED_CAST")
         val subProperties = properties.getOrElse(key) { emptyMap<String, Any>() } as Map<String, Any>
         return YamlConfig(
@@ -56,6 +55,7 @@ class YamlConfig internal constructor(
         validateConfig(this, baseline, excludePatterns)
 
     companion object {
+        const val CONFIG_SEPARATOR: String = ">"
         private const val YAML_DOC_LIMIT = 102_400 // limit the YAML size to 100 kB
 
         // limit the anchors/aliases for collections to prevent attacks from for untrusted sources

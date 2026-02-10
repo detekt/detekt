@@ -5,8 +5,6 @@ import dev.detekt.api.ValueWithReason
 
 @Suppress("UNCHECKED_CAST")
 class TestConfig private constructor(override val parent: Config?, private val values: Map<String, Any>) : Config {
-    override val parentPath: String? = null
-
     constructor(parent: Config?, vararg pairs: Pair<String, Any>) : this(parent, pairs.toMap())
 
     constructor(vararg pairs: Pair<String, Any>) : this(Config.empty, *pairs)

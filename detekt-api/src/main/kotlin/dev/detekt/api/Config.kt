@@ -4,15 +4,6 @@ package dev.detekt.api
  * A configuration holds information about how to configure specific rules.
  */
 interface Config {
-
-    /**
-     * Keeps track of which key was taken to [subConfig] this configuration.
-     * Sub-sequential calls to [subConfig] are tracked with '>' as a separator.
-     *
-     * May be null if this is the top most configuration object.
-     */
-    val parentPath: String?
-
     /**
      * The reference to a parent [Config] from this configuration, useful when navigating with [subConfig].
      * It's `null` if this is the top most configuration object.
@@ -49,8 +40,6 @@ interface Config {
          * Always returns the default value except when 'active' is queried, it returns true.
          */
         val empty: Config = object : Config {
-            override val parentPath: String? = null
-
             override val parent: Config = this
 
             override fun subConfig(key: String): Config = this
@@ -68,6 +57,5 @@ interface Config {
         const val SEVERITY_KEY: String = "severity"
         const val EXCLUDES_KEY: String = "excludes"
         const val INCLUDES_KEY: String = "includes"
-        const val CONFIG_SEPARATOR: String = ">"
     }
 }
