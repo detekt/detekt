@@ -257,17 +257,28 @@ class YamlConfigSpec {
         }
 
         @Test
-        fun `throws InvalidConfigurationError on invalid structured yaml files`() {
+        fun `throws when yaml can't be parsed`() {
             assertThatCode {
                 yamlConfigFromContent(
                     """
                         map:
-                              {}map
+                          {}map
+                    """.trimIndent()
+                )
+            }.isInstanceOf(ParserException::class.java)
+        }
+
+        @Test
+        fun `throws InvalidConfigurationError when content is not a map`() {
+            assertThatCode {
+                yamlConfigFromContent(
+                    """
+                      - item
                     """.trimIndent()
                 )
             }.isInstanceOf(InvalidConfigurationError::class.java)
-                .hasMessageContaining("Provided configuration file is invalid")
-                .hasCauseInstanceOf(ParserException::class.java)
+                .hasMessage("Provided configuration file is invalid: Structure must be from type Map<String, Any>!")
+                .hasCauseInstanceOf(ClassCastException::class.java)
         }
     }
 }

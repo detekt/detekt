@@ -84,10 +84,11 @@ class YamlConfig internal constructor(
          */
         fun load(reader: Reader): Config =
             reader.buffered().use { bufferedReader ->
-                val map: Map<*, *>? = runCatching {
-                    @Suppress("UNCHECKED_CAST")
-                    createYamlLoad().loadFromReader(bufferedReader) as Map<String, *>?
-                }.getOrElse { throw InvalidConfigurationError(it) }
+                val map: Map<*, *>? = try {
+                    createYamlLoad().loadFromReader(bufferedReader) as Map<*, *>?
+                } catch (cce: ClassCastException) {
+                    throw InvalidConfigurationError(cce)
+                }
                 @Suppress("UNCHECKED_CAST")
                 YamlConfig(map.orEmpty() as Map<String, Any>, null, null)
             }
@@ -106,10 +107,7 @@ class YamlConfig internal constructor(
 
 internal class InvalidConfigurationError(throwable: Throwable) :
     RuntimeException(
-        """
-            Provided configuration file is invalid: Structure must be from type Map<String,Any>!
-            ${throwable.message}
-        """.trimIndent(),
+        "Provided configuration file is invalid: Structure must be from type Map<String, Any>!",
         throwable,
     )
 
