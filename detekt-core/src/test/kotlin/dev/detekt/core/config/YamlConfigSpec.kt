@@ -1,8 +1,6 @@
 package dev.detekt.core.config
 
 import dev.detekt.core.yamlConfigFromContent
-import dev.detekt.test.utils.resourceAsPath
-import dev.detekt.utils.getSafeResourceAsStream
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
@@ -10,7 +8,6 @@ import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.snakeyaml.engine.v2.exceptions.ParserException
-import kotlin.io.path.Path
 
 class YamlConfigSpec {
 
@@ -192,32 +189,12 @@ class YamlConfigSpec {
 
         @Test
         fun `loads the config from a given yaml file`() {
-            val path = resourceAsPath("detekt.yml")
-            val config = YamlConfig.load(path)
-            assertThat(config).isNotNull
-        }
-
-        @Test
-        fun `loads the config from a given text file`() {
-            val path = resourceAsPath("detekt.txt")
-            val config = YamlConfig.load(path)
-            assertThat(config).isNotNull
-        }
-
-        @Test
-        fun `throws an exception on an non-existing file`() {
-            val path = Path("doesNotExist.yml")
-            assertThatIllegalArgumentException()
-                .isThrownBy { YamlConfig.load(path) }
-                .withMessageStartingWith("Configuration does not exist")
-        }
-
-        @Test
-        fun `throws an exception on a directory`() {
-            val path = resourceAsPath("/config_validation")
-            assertThatIllegalArgumentException()
-                .isThrownBy { YamlConfig.load(path) }
-                .withMessageStartingWith("Configuration must be a file")
+            yamlConfigFromContent(
+                """
+                    code-smell:
+                      LongMethod:
+                """.trimIndent()
+            )
         }
 
         @Test

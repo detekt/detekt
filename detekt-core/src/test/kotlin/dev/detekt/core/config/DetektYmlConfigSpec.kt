@@ -7,7 +7,7 @@ import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.Arguments.arguments
 import org.junit.jupiter.params.provider.MethodSource
 import kotlin.io.path.Path
-import kotlin.io.path.absolute
+import kotlin.io.path.reader
 
 class DetektYmlConfigSpec {
 
@@ -17,9 +17,7 @@ class DetektYmlConfigSpec {
         "console-reports",
     )
 
-    private val config: YamlConfig = YamlConfig.load(
-        Path("../detekt-core/src/main/resources/default-detekt-config.yml").absolute()
-    ) as YamlConfig
+    private val config = YamlConfig.load(Path("../detekt-core/src/main/resources/default-detekt-config.yml").reader())
 
     private fun ruleSetsNamesToPackage(): List<Arguments> =
         listOf(
