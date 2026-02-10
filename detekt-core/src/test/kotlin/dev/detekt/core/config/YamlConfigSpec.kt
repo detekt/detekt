@@ -46,21 +46,16 @@ class YamlConfigSpec {
         @Test
         fun `should create a sub config`() {
             val subConfig = config.subConfig("style")
-            assertThat(subConfig.valueOrDefault("WildcardImport", emptyMap<String, Any>())).isNotEmpty
-            assertThat(
-                subConfig.valueOrDefault(
-                    "WildcardImport",
-                    emptyMap<String, Any>()
-                )["active"].toString()
-            ).isEqualTo("true")
-            assertThat(
-                subConfig.valueOrDefault(
-                    "WildcardImport",
-                    emptyMap<String, Any>()
-                )["active"] as Boolean
-            ).isTrue()
-            assertThat(subConfig.valueOrDefault("NotFound", emptyMap<String, Any>())).isEmpty()
-            assertThat(subConfig.valueOrDefault("NotFound", "")).isEmpty()
+            assertThat(subConfig.valueOrDefault("WildcardImport", emptyMap<String, Any>()))
+                .isNotEmpty
+            assertThat(subConfig.valueOrDefault("WildcardImport", emptyMap<String, Any>())["active"].toString())
+                .isEqualTo("true")
+            assertThat(subConfig.valueOrDefault("WildcardImport", emptyMap<String, Any>())["active"] as Boolean)
+                .isTrue()
+            assertThat(subConfig.valueOrDefault("NotFound", emptyMap<String, Any>()))
+                .isEmpty()
+            assertThat(subConfig.valueOrDefault("NotFound", ""))
+                .isEmpty()
         }
 
         @Test
