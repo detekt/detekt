@@ -71,10 +71,11 @@ private fun <T : Any> getValueOrDefault(config: Config, propertyName: String, de
 
         is List<*> -> config.getListOrDefault(propertyName, defaultValue) as T
 
-        is String,
-        is Boolean,
-        is Int,
-        -> config.valueOrDefault(propertyName, defaultValue)
+        is String -> config.valueOrDefault<String>(propertyName, defaultValue) as T
+
+        is Boolean -> config.valueOrDefault<Boolean>(propertyName, defaultValue) as T
+
+        is Int -> config.valueOrDefault<Int>(propertyName, defaultValue) as T
 
         else -> error(
             "${defaultValue.javaClass} is not supported for delegated config property '$propertyName'. " +
