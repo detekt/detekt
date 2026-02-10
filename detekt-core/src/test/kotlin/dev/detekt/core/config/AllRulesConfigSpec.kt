@@ -1,6 +1,8 @@
 package dev.detekt.core.config
 
 import dev.detekt.api.Config
+import dev.detekt.api.valueOrDefault
+import dev.detekt.api.valueOrNull
 import dev.detekt.core.config.validation.DeprecatedRule
 import dev.detekt.core.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat

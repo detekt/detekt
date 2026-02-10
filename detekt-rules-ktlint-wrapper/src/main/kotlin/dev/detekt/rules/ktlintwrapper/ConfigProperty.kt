@@ -2,6 +2,7 @@ package dev.detekt.rules.ktlintwrapper
 
 import dev.detekt.api.Config
 import dev.detekt.api.Rule
+import dev.detekt.api.valueOrDefault
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
@@ -62,11 +63,13 @@ private abstract class MemoizedConfigProperty<U : Any> : ReadOnlyProperty<Rule, 
 }
 
 private fun <T : Any> getValueOrDefault(config: Config, propertyName: String, defaultValue: T): T =
+    @Suppress("UNCHECKED_CAST")
     when (defaultValue) {
-        is String,
-        is Boolean,
-        is Int,
-        -> config.valueOrDefault(propertyName, defaultValue)
+        is String -> config.valueOrDefault<String>(propertyName, defaultValue) as T
+
+        is Boolean -> config.valueOrDefault<Boolean>(propertyName, defaultValue) as T
+
+        is Int -> config.valueOrDefault<Int>(propertyName, defaultValue) as T
 
         else -> error(
             "${defaultValue.javaClass} is not supported for delegated config property '$propertyName'. " +
