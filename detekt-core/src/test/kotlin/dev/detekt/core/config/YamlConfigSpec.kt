@@ -50,12 +50,9 @@ class YamlConfigSpec {
 
         @Test
         fun `tests wrong sub config conversion`() {
-            assertThatIllegalStateException().isThrownBy {
-                @Suppress("UNUSED_VARIABLE")
-                val ignored = config.valueOrDefault("style", "")
-            }
+            assertThatIllegalStateException().isThrownBy { config.valueOrDefault("style", "") }
                 .withMessage(
-                    "Value \"{WildcardImport={active=true}, NoElseInWhenExpression={active=true}, MagicNumber={active=true, ignoreNumbers=[-1, 0, 1, 2]}}\" set for config parameter \"style\" is not of required type String."
+                    "Value '{WildcardImport={active=true}, NoElseInWhenExpression={active=true}, MagicNumber={active=true, ignoreNumbers=[-1, 0, 1, 2]}}' set for config parameter 'style' is not of required type `kotlin.String`"
                 )
         }
 
@@ -126,20 +123,19 @@ class YamlConfigSpec {
                     .valueOrDefault("threshold", 6)
             }
                 .withMessage(
-                    "Value \"v5.7\" set for config parameter \"RuleSet > Rule > threshold\" is not of required type Int."
+                    "Value 'v5.7' set for config parameter 'RuleSet > Rule > threshold' is not of required type `kotlin.Int`"
                 )
         }
 
         @Test
         fun `prints whole config-key path for ClassCastException`() {
             assertThatIllegalStateException().isThrownBy {
-                @Suppress("UNUSED_VARIABLE")
-                val bool: Int = config.subConfig("RuleSet")
+                config.subConfig("RuleSet")
                     .subConfig("Rule")
                     .valueOrDefault("active", 1)
             }
                 .withMessage(
-                    "Value \"[]\" set for config parameter \"RuleSet > Rule > active\" is not of required type Int."
+                    "Value '[]' set for config parameter 'RuleSet > Rule > active' is not of required type `kotlin.Int`"
                 )
         }
 
@@ -149,7 +145,7 @@ class YamlConfigSpec {
                 config.valueOrDefaultInternal(key = "key", result = listOf(1, 2), default = listOf("1", "2"))
             }.withMessage(
                 "Only lists of strings are supported. " +
-                    "Value \"[1, 2]\" set for config parameter \"key\" contains non-string values."
+                    "Value '[1, 2]' set for config parameter 'key' contains non-string values"
             )
         }
 
@@ -157,11 +153,7 @@ class YamlConfigSpec {
         fun `prints meaningful message when string is used instead of list of strings`() {
             assertThatIllegalStateException().isThrownBy {
                 config.valueOrDefaultInternal(key = "key", result = "", default = emptyList<String>())
-            }.withMessage(
-                """
-                    Value "" set for config parameter "key" is not of required type List.
-                """.trimIndent()
-            )
+            }.withMessage("Value '' set for config parameter 'key' is not of required type `kotlin.List`")
         }
     }
 
