@@ -53,7 +53,7 @@ parameter. You can just move it from issue to the second constructor parameter.
 
 ### Analysis API - the old type solving
 
-If your rules used type solving, you should port your rule from using `ContextBinding` to using the `analize(KtElement) {}` API.
+If your rules used type solving, you should port your rule from using `ContextBinding` to using the `analyze(KtElement) {}` API.
 
 The annotation `@RequiresTypeSolving` is replaced with the interface `RequiresAnalysisApi`. Your rule should implement
 this interface to use the Analysis API.
