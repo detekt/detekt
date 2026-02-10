@@ -5,6 +5,7 @@ import dev.detekt.api.Detektion
 import dev.detekt.api.Notification
 import dev.detekt.api.Notification.Level
 import dev.detekt.api.OutputReport
+import dev.detekt.api.valueOrDefault
 import dev.detekt.core.ProcessingSettings
 import dev.detekt.core.extensions.loadExtensions
 import dev.detekt.core.util.isActiveOrDefault

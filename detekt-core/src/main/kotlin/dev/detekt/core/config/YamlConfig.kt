@@ -8,6 +8,8 @@ import dev.detekt.core.util.indentCompat
 import org.snakeyaml.engine.v2.api.Load
 import org.snakeyaml.engine.v2.api.LoadSettings
 import java.io.Reader
+import kotlin.reflect.KClass
+import kotlin.reflect.cast
 
 /**
  * Config implementation using the yaml format. SubConfigurations can return sub maps according to the
@@ -28,15 +30,23 @@ class YamlConfig internal constructor(
 
     override fun subConfigKeys(): Set<String> = properties.keys
 
-    override fun <T : Any> valueOrDefault(key: String, default: T): T {
-        val result = properties[key]
-        @Suppress("UNCHECKED_CAST")
-        return valueOrDefaultInternal(key, result, default) as T
-    }
-
-    override fun <T : Any> valueOrNull(key: String): T? {
-        @Suppress("UNCHECKED_CAST")
-        return properties[key] as? T?
+    override fun <T : Any> valueOrNull(key: String, type: KClass<T>): T? {
+        val value = properties[key] ?: return null
+        val parsedValue = when (type) {
+            Long::class if value is Int -> value.toLong()
+            Float::class if (value is Int || value is Long || value is Double) -> value.toFloat()
+            Double::class if (value is Int || value is Long || value is Float) -> value.toDouble()
+            else -> value
+        }
+        return try {
+            type.cast(parsedValue)
+        } catch (cce: ClassCastException) {
+            throw IllegalArgumentException(
+                "Value '$value' set for config parameter '${keySequence(key)}' is not of required type " +
+                    "`${type.qualifiedName}`",
+                cce,
+            )
+        }
     }
 
     @Suppress("MagicNumber")

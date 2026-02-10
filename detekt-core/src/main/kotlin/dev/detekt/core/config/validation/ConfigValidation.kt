@@ -4,6 +4,7 @@ import dev.detekt.api.Config
 import dev.detekt.api.ConfigValidator
 import dev.detekt.api.Notification
 import dev.detekt.api.Notification.Level
+import dev.detekt.api.valueOrDefault
 import dev.detekt.core.NL
 import dev.detekt.core.ProcessingSettings
 import dev.detekt.core.config.YamlConfig

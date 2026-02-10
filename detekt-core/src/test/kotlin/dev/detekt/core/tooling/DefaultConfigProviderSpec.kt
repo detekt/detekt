@@ -1,5 +1,6 @@
 package dev.detekt.core.tooling
 
+import dev.detekt.api.valueOrNull
 import dev.detekt.core.createNullLoggingSpec
 import dev.detekt.test.utils.resourceAsPath
 import org.assertj.core.api.Assertions.assertThat

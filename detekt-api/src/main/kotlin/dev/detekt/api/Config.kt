@@ -1,5 +1,7 @@
 package dev.detekt.api
 
+import kotlin.reflect.KClass
+
 /**
  * A configuration holds information about how to configure specific rules.
  */
@@ -21,16 +23,10 @@ interface Config {
     fun subConfigKeys(): Set<String>
 
     /**
-     * Retrieves a sub configuration or value based on given key. If configuration property cannot be found
-     * the specified default value is returned.
-     */
-    fun <T : Any> valueOrDefault(key: String, default: T): T = valueOrNull(key) ?: default
-
-    /**
      * Retrieves a sub configuration or value based on given key.
      * If the configuration property cannot be found, null is returned.
      */
-    fun <T : Any> valueOrNull(key: String): T?
+    fun <T : Any> valueOrNull(key: String, type: KClass<T>): T?
 
     companion object {
 
@@ -46,7 +42,7 @@ interface Config {
 
             override fun subConfigKeys(): Set<String> = emptySet()
 
-            override fun <T : Any> valueOrNull(key: String): T? = null
+            override fun <T : Any> valueOrNull(key: String, type: KClass<T>): T? = null
 
             override fun toString(): String = "Config.empty"
         }
@@ -59,3 +55,6 @@ interface Config {
         const val INCLUDES_KEY: String = "includes"
     }
 }
+
+inline fun <reified T : Any> Config.valueOrDefault(key: String, default: T): T = valueOrNull(key, T::class) ?: default
+inline fun <reified T : Any> Config.valueOrNull(key: String): T? = valueOrNull(key, T::class)
