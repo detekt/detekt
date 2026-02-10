@@ -1,6 +1,5 @@
 package dev.detekt.core.config
 
-import dev.detekt.core.yamlConfig
 import dev.detekt.core.yamlConfigFromContent
 import dev.detekt.test.utils.resourceAsPath
 import dev.detekt.utils.getSafeResourceAsStream
@@ -18,7 +17,34 @@ class YamlConfigSpec {
     @Nested
     inner class `load yaml config` {
 
-        private val config = yamlConfig("detekt.yml")
+        private val config = yamlConfigFromContent(
+            """
+                code-smell:
+                  LongMethod:
+                    active: true
+                    allowedLines: 20
+                  LongParameterList:
+                    active: false
+                    threshold: 5
+                  LargeClass:
+                    active: false
+                    threshold: 70
+                  InnerMap:
+                    Inner1:
+                      active: true
+                    Inner2:
+                      active: true
+
+                style:
+                  WildcardImport:
+                    active: true
+                  NoElseInWhenExpression:
+                    active: true
+                  MagicNumber:
+                    active: true
+                    ignoreNumbers: ['-1', '0', '1', '2']
+            """.trimIndent()
+        )
 
         @Test
         fun `should create a sub config`() {
@@ -156,12 +182,12 @@ class YamlConfigSpec {
 
         @Test
         fun `empty yaml file is equivalent to empty config`() {
-            javaClass.getSafeResourceAsStream("/empty.yml")!!.reader().use(YamlConfig::load)
+            yamlConfigFromContent("")
         }
 
         @Test
         fun `single item in yaml file is valid`() {
-            javaClass.getSafeResourceAsStream("/oneitem.yml")!!.reader().use(YamlConfig::load)
+            yamlConfigFromContent("style:")
         }
 
         @Test
@@ -211,7 +237,35 @@ class YamlConfigSpec {
 
     @Nested
     inner class `Values with reason` {
-        private val config = YamlConfig.load(resourceAsPath("values-with-reason.yml"))
+        private val config = yamlConfigFromContent(
+            """
+                style:
+                  AsList:
+                    values:
+                      - a
+                      - b
+                      - c
+                  AsListOfMaps:
+                    values:
+                      - value: a
+                        reason: reason A
+                      - value: b
+                      - value: c
+                        reason: reason C
+                  EmptyListOfMaps:
+                    values: []
+                  MixedWithStringAndMaps:
+                    values:
+                      - a
+                      - b
+                      - value: c
+                      - value: d
+                      - value: e
+                        reason: reason E
+                      - value: f
+                        reason: reason F
+            """.trimIndent()
+        )
 
         @Test
         fun `can be parsed`() {
