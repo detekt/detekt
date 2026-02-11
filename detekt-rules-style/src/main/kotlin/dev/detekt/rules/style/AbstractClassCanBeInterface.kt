@@ -8,7 +8,9 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.psi.isAbstract
+import dev.detekt.psi.isConstant
 import dev.detekt.psi.isInternal
+import dev.detekt.psi.isOpen
 import dev.detekt.psi.isProtected
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
@@ -17,7 +19,6 @@ import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolModality
 import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.idea.references.mainReference
-import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtConstantExpression
@@ -110,10 +111,12 @@ class AbstractClassCanBeInterface(config: Config) :
         members: List<KtCallableDeclaration>,
         nameIdentifier: PsiElement,
     ) {
-        // For sealed classes, treat open properties as abstract unless they have const initializers
-        val sealedType = klass.isSealed()
+        // Treat open members as abstract-like unless they have a non-const backing field. An open val with a
+        // non-const initializer (e.g. open val x = computeSomething()) stores a value evaluated once per instance.
+        // In an interface it would become a getter evaluated on every access, changing the behavior and preventing
+        // a safe refactoring.
         val (abstractMembers, concreteMembers) = members.partition { member ->
-            member.isAbstract() || (sealedType && member.isOpen() && !member.hasConstInitializer())
+            member.isAbstract() || (member.isOpen() && member.hasConstOrNoBackingField())
         }
 
         when {
@@ -128,8 +131,6 @@ class AbstractClassCanBeInterface(config: Config) :
                 report(Finding(Entity.from(nameIdentifier), klass.message()))
         }
     }
-
-    private fun KtCallableDeclaration.isOpen(): Boolean = hasModifier(KtTokens.OPEN_KEYWORD)
 
     private fun KtClass.members() =
         body?.children?.filterIsInstance<KtCallableDeclaration>().orEmpty() +
@@ -158,28 +159,31 @@ class AbstractClassCanBeInterface(config: Config) :
             ?.all { (it.symbol as? KaClassSymbol)?.classKind == KaClassKind.INTERFACE } == false
 
     /**
-     * Checks if a property has a compile-time constant initializer.
+     * Returns true if this callable can be safely represented in an interface: functions, getter-only properties
+     * (no initializer), and properties with compile-time constant initializers all qualify.
      *
-     * Takes a conservative approach: only literal values (e.g., `404`, `"text"`) and direct references to `const val`
-     * are considered constant. Expressions like `CONST + 1`, string templates, or delegated properties are treated as
-     * non-const to avoid suggesting refactorings that would change meaning. E.g. class fields evaluate once vs.
-     * interface getters evaluate on each access.
+     * Returns false for properties with a non-const backing field. In a class the initializer runs once per
+     * instance, but in an interface the property requires a getter evaluated on every access, changing behaviour.
+     *
+     * Only literal values (e.g. 404, "text") and direct references to const vals are considered constant.
      */
     context(session: KaSession)
-    private fun KtCallableDeclaration.hasConstInitializer(): Boolean =
+    private fun KtCallableDeclaration.hasConstOrNoBackingField(): Boolean =
         when (val initializer = (this as? KtProperty)?.initializer) {
-            null -> false
+            // No initializer: getter-only property or a function. no backing field, safe for interface
+            null -> true
 
-            // Literal values
+            // Literal constant. value is always the same whether field or getter, safe for interface getters
             is KtConstantExpression -> true
 
-            // Reference to a const val
+            // Reference to a const val. Effectively a compile-time constant, safe for interface getters
             is KtNameReferenceExpression -> {
                 val symbol = with(session) { initializer.mainReference.resolveToSymbol() }
                 val psi = symbol?.psi as? KtProperty
-                psi?.hasModifier(KtTokens.CONST_KEYWORD) == true
+                psi?.isConstant() == true
             }
 
+            // Any other expression (function call, arithmetic, etc.) has a non-const backing field => NOT safe
             else -> false
         }
 

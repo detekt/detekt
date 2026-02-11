@@ -239,6 +239,44 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
         }
 
         @Test
+        fun `does not report an abstract class with a non-const open val property`() {
+            val code = """
+                fun computeSomething(): Int = 456 * 789
+
+                abstract class A {
+                    open val x: Int = computeSomething()
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `reports an abstract class with only an open literal const property`() {
+            val code = """
+                abstract class A {
+                    open val x: Int = 404
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code))
+                .singleElement()
+                .hasMessage(NO_CONCRETE_MEMBER)
+        }
+
+        @Test
+        fun `reports an abstract class with only an open val property using a getter`() {
+            val code = """
+                fun computeSomething(): Int = 456 * 789
+
+                abstract class A {
+                    open val x: Int get() = computeSomething()
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code))
+                .singleElement()
+                .hasMessage(NO_CONCRETE_MEMBER)
+        }
+
+        @Test
         fun `does not report an abstract class with no abstract member derived from a class with abstract members`() {
             val code = """
                 abstract class Base {
@@ -414,12 +452,27 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
         }
 
         @Test
-        fun `report a sealed class with non-const open properties`() {
+        fun `don't report a sealed class with non-const open val properties`() {
             val code = """
                 fun computeSomething(): Int = 456 * 789
 
                 sealed class Result {
                     open val x: Int = computeSomething()
+                    data class Success(val data: Int, override val x: Int) : Result()
+                    data class Failure(val reason: String) : Result()
+                }
+            """.trimIndent()
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `report a sealed class with open val property using a getter`() {
+            val code = """
+                fun computeSomething(): Int = 456 * 789
+
+                sealed class Result {
+                    open val x: Int get() = computeSomething()
                     data class Success(val data: Int, override val x: Int) : Result()
                     data class Failure(val reason: String) : Result()
                 }
@@ -431,7 +484,7 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
         }
 
         @Test
-        fun `don't report a sealed class with open literal const properties`() {
+        fun `report a sealed class with open literal const properties`() {
             val code = """
                 sealed class Result {
                     open val code: Int = 404
@@ -440,11 +493,13 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
-            assertThat(findings).isEmpty()
+            assertThat(findings)
+                .singleElement()
+                .hasMessage(SEALED_NO_CONCRETE_MEMBER)
         }
 
         @Test
-        fun `don't report a sealed class with open const properties`() {
+        fun `report a sealed class with open const val properties`() {
             val code = """
                 const val DEFAULT_CODE = 404
 
@@ -455,7 +510,9 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
-            assertThat(findings).isEmpty()
+            assertThat(findings)
+                .singleElement()
+                .hasMessage(SEALED_NO_CONCRETE_MEMBER)
         }
 
         @Test
