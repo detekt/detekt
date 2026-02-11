@@ -25,6 +25,7 @@ import org.jetbrains.kotlin.psi.KtFile
 import java.io.File
 import java.nio.file.Path
 import kotlin.io.path.Path
+import kotlin.io.path.nameWithoutExtension
 
 /**
  * The object to use the Kotlin Analysis API for code compilation.
@@ -47,6 +48,7 @@ object KotlinAnalysisApiEngine {
         @Language("kotlin") code: String,
         dependencyCodes: List<String> = emptyList(),
         javaSourceRoots: List<Path> = emptyList(),
+        jvmClasspathRoots: List<Path> = emptyList(),
         allowCompilationErrors: Boolean = false,
     ): KtFile {
         val disposable = Disposer.newDisposable()
@@ -88,6 +90,16 @@ object KotlinAnalysisApiEngine {
                     }
                 )
 
+                val additionalLibraries = jvmClasspathRoots.map { path ->
+                    addModule(
+                        buildKtLibraryModule {
+                            addBinaryRoot(path)
+                            platform = targetPlatform
+                            libraryName = path.nameWithoutExtension
+                        }
+                    )
+                }
+
                 val vf = LightVirtualFile("dummy.kt", code)
 
                 val depVfs = dependencyCodes.mapIndexed { index, depCode ->
@@ -100,6 +112,7 @@ object KotlinAnalysisApiEngine {
                         addRegularDependency(stdlib)
                         addRegularDependency(coroutinesCore)
                         addRegularDependency(coroutinesTest)
+                        additionalLibraries.forEach(::addRegularDependency)
                         addSourceVirtualFile(vf)
                         addSourceVirtualFiles(depVfs)
                         addSourceRoots(javaSourceRoots)

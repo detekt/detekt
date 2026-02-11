@@ -1,9 +1,7 @@
 package dev.detekt.test.utils
 
-import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.cli.jvm.config.addJavaSourceRoots
-import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoot
 import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoots
 import org.jetbrains.kotlin.cli.jvm.config.configureJdkClasspathRoots
 import org.jetbrains.kotlin.config.CommonConfigurationKeys
@@ -30,8 +28,6 @@ fun createEnvironment(
     // Get the runtime locations of both the stdlib and kotlinx coroutines core jars and pass
     // to the compiler so it's available to generate the BindingContext for rules under test.
     configuration.apply {
-        addJvmClasspathRoot(kotlinStdLibPath())
-        addJvmClasspathRoot(kotlinxCoroutinesCorePath())
         addJvmClasspathRoots(additionalRootPaths)
         addJavaSourceRoots(additionalJavaSourceRootPaths)
         put(JVMConfigurationKeys.JDK_HOME, File(System.getProperty("java.home")))
@@ -40,8 +36,3 @@ fun createEnvironment(
 
     return KotlinEnvironmentContainer(configuration)
 }
-
-private fun kotlinStdLibPath(): File = File(CharRange::class.java.protectionDomain.codeSource.location.path)
-
-private fun kotlinxCoroutinesCorePath(): File =
-    File(CoroutineScope::class.java.protectionDomain.codeSource.location.path)

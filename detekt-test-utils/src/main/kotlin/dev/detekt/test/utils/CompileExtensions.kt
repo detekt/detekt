@@ -2,7 +2,9 @@ package dev.detekt.test.utils
 
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.cli.jvm.config.javaSourceRoots
+import org.jetbrains.kotlin.cli.jvm.config.jvmClasspathRoots
 import org.jetbrains.kotlin.psi.KtFile
+import java.io.File
 import java.nio.file.Path
 import kotlin.io.path.Path
 import kotlin.io.path.absolute
@@ -32,6 +34,7 @@ fun compileContentForTest(
     return KotlinAnalysisApiEngine.compile(
         code = content,
         javaSourceRoots = environment.configuration.javaSourceRoots.map(::Path),
+        jvmClasspathRoots = environment.configuration.jvmClasspathRoots.map(File::toPath)
     )
 }
 

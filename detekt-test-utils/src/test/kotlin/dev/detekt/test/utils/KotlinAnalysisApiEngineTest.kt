@@ -1,10 +1,12 @@
 package dev.detekt.test.utils
 
+import dev.detekt.detekt_test_utils.TestBuildConfig.OKIO_JAR_PATH
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.RepeatedTest
 import org.junit.jupiter.api.Test
+import kotlin.io.path.Path
 
-class KotlinAnalysisAAEngineTest {
+class KotlinAnalysisApiEngineTest {
 
     @Test
     fun `can compile a valid script`() {
@@ -68,6 +70,50 @@ class KotlinAnalysisAAEngineTest {
             val unknownType: UnknownType
         """.trimIndent()
         assertThatThrownBy { KotlinAnalysisApiEngine.compile(invalidCode) }
+            .isInstanceOf(IllegalStateException::class.java)
+    }
+
+    @Test
+    fun `can compile with an external JAR dependency`() {
+        val code = """
+            package foo.e
+            
+            import okio.FileSystem
+            import okio.Path
+            import okio.buffer
+            
+            fun readFileContents(path: Path): String {
+                return FileSystem.SYSTEM
+                    .source(path)
+                    .buffer()
+                    .use { it.readUtf8() }
+            }
+        """.trimIndent()
+
+        KotlinAnalysisApiEngine.compile(
+            code = code,
+            jvmClasspathRoots = listOf(Path(OKIO_JAR_PATH))
+        )
+    }
+
+    @Test
+    fun `fail compilation if the external JAR dependency isn't specified`() {
+        val code = """
+            package foo.e
+            
+            import okio.FileSystem
+            import okio.Path
+            import okio.buffer
+            
+            fun readFileContents(path: Path): String {
+                return FileSystem.SYSTEM
+                    .source(path)
+                    .buffer()
+                    .use { it.readUtf8() }
+            }
+        """.trimIndent()
+
+        assertThatThrownBy { KotlinAnalysisApiEngine.compile(code) }
             .isInstanceOf(IllegalStateException::class.java)
     }
 }
