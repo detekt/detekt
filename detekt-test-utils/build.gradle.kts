@@ -1,3 +1,4 @@
+import dev.detekt.gradle.Detekt
 import okio.ByteString
 
 plugins {
@@ -30,8 +31,13 @@ kotlin {
     }
 }
 
+tasks.withType(Detekt::class).configureEach {
+    exclude { it.path.contains("generated") }
+}
+
 buildConfig {
     sourceSets.named("test") {
+        packageName("dev.detekt.generated")
         buildConfigField("OKIO_JAR_PATH", ByteString::class.java.protectionDomain.codeSource.location.path)
     }
 }

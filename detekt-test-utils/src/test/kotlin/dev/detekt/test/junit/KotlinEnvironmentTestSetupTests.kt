@@ -1,6 +1,6 @@
 package dev.detekt.test.junit
 
-import dev.detekt.detekt_test_utils.TestBuildConfig.OKIO_JAR_PATH
+import dev.detekt.generated.TestBuildConfig.OKIO_JAR_PATH
 import dev.detekt.test.utils.KotlinEnvironmentContainer
 import dev.detekt.test.utils.compileContentForTest
 import org.junit.jupiter.api.Test

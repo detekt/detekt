@@ -1,6 +1,6 @@
 package dev.detekt.test.utils
 
-import dev.detekt.detekt_test_utils.TestBuildConfig.OKIO_JAR_PATH
+import dev.detekt.generated.TestBuildConfig.OKIO_JAR_PATH
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.RepeatedTest
 import org.junit.jupiter.api.Test
