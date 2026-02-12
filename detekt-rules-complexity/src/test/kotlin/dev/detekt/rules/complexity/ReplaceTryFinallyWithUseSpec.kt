@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
 class ReplaceTryFinallyWithUseSpec(val env: KotlinEnvironmentContainer) {
-
     val subject = ReplaceTryFinallyWithUse(Config.empty)
 
     @Test
@@ -76,11 +75,10 @@ class ReplaceTryFinallyWithUseSpec(val env: KotlinEnvironmentContainer) {
     }
 
     @Test
-    fun `does not report with no close calls`() {
+    fun `does not report with empty block`() {
         val code = """
                 class ExampleCloseable: AutoCloseable {
                     override fun close() { }
-                    fun close(test: String) { }
                 }
             
                 val closeable = ExampleCloseable()
@@ -97,13 +95,38 @@ class ReplaceTryFinallyWithUseSpec(val env: KotlinEnvironmentContainer) {
     }
 
     @Test
-    fun `only reports when receiver is AutoCloseable`() {
+    fun `does not report with no close calls`() {
         val code = """
-                class NotCloseableInterface {
-                    fun close() { }
+                class ExampleCloseable: AutoCloseable {
+                    override fun close() { }
+                    fun test() { }
                 }
             
-                val closeable = NotCloseableInterface()
+                val closeable = ExampleCloseable()
+                fun test() {
+                    try {
+            
+                    } finally {
+                        closeable.test()
+                    }
+                }
+        """.trimIndent()
+
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
+    fun `only reports when receiver is AutoCloseable`() {
+        val code = """
+                interface NotCloseableInterface {
+                    fun close()
+                }
+
+                class NotCloseable : NotCloseableInterface {
+                    override fun close() {}
+                }
+            
+                val closeable = NotCloseable()
                 fun test() {
                     try {
             
