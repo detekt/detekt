@@ -101,6 +101,22 @@ sealed class FunctionMatcher {
     }
 
     companion object {
+        const val FUNCTION_MATCHER_DOC = "Methods can be defined without full signature " +
+            "(i.e. `java.time.LocalDate.now`) which will match " +
+            "calls of all methods with this name or with full signature " +
+            "(i.e. `java.time.LocalDate(java.time.Clock)`) which would match only call " +
+            "with this concrete signature. If you want to match an extension function like " +
+            "`fun String.hello(a: Int)` you should add the receiver parameter as the first parameter like this: " +
+            "`hello(kotlin.String, kotlin.Int)`. To match constructor calls you need to define them with `<init>`, " +
+            "for example `java.util.Date.<init>`. To match calls involving type parameters, omit them, for example " +
+            "`fun hello(args: Array<Any>)` is referred to as simply `hello(kotlin.Array)`. To match calls " +
+            "involving varargs for example `fun hello(vararg args: String)` you need to define it like " +
+            "`hello(vararg String)`. To forbid methods from the companion object reference the Companion class, for " +
+            "example as `TestClass.Companion.hello()` (even if it is marked `@JvmStatic`). " +
+            "To match function type parameters like `initializer` in `fun <T> lazy(initializer: () -> T)`, " +
+            "use `kotlin.Function{N}` where N is the number of parameters the function takes. For example, " +
+            "`kotlin.lazy(kotlin.Function0)` matches calls to `lazy { ... }`."
+
         fun fromFunctionSignature(methodSignature: String): FunctionMatcher {
             @Suppress("TooGenericExceptionCaught", "UnsafeCallOnNullableType")
             try {
@@ -120,7 +136,7 @@ sealed class FunctionMatcher {
             }
         }
 
-        fun getNameForGetterOrSetter(propertySymbol: KaPropertySymbol, symbol: KaCallableSymbol): String? {
+        private fun getNameForGetterOrSetter(propertySymbol: KaPropertySymbol, symbol: KaCallableSymbol): String? {
             return if (symbol.callableId != null) {
                 // in case it is Java getter or setter then callableId id will be not null and can be used
                 symbol.asFqNameString()

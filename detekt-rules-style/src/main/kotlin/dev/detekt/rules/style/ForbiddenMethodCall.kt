@@ -60,20 +60,7 @@ class ForbiddenMethodCall(config: Config) :
 
     @Configuration(
         "List of fully qualified method signatures which are forbidden. " +
-            "Methods can be defined without full signature (i.e. `java.time.LocalDate.now`) which will report " +
-            "calls of all methods with this name or with full signature " +
-            "(i.e. `java.time.LocalDate(java.time.Clock)`) which would report only call " +
-            "with this concrete signature. If you want to forbid an extension function like " +
-            "`fun String.hello(a: Int)` you should add the receiver parameter as the first parameter like this: " +
-            "`hello(kotlin.String, kotlin.Int)`. To forbid constructor calls you need to define them with `<init>`, " +
-            "for example `java.util.Date.<init>`. To forbid calls involving type parameters, omit them, for example " +
-            "`fun hello(args: Array<Any>)` is referred to as simply `hello(kotlin.Array)`. To forbid calls " +
-            "involving varargs for example `fun hello(vararg args: String)` you need to define it like " +
-            "`hello(vararg String)`. To forbid methods from the companion object reference the Companion class, for " +
-            "example as `TestClass.Companion.hello()` (even if it is marked `@JvmStatic`). " +
-            "To match function type parameters like `initializer` in `fun <T> lazy(initializer: () -> T)`, " +
-            "use `kotlin.Function{N}` where N is the number of parameters the function takes. For example, " +
-            "`kotlin.lazy(kotlin.Function0)` matches calls to `lazy { ... }`."
+            FunctionMatcher.FUNCTION_MATCHER_DOC
     )
     private val methods: List<ForbiddenMethod> by config(
         valuesWithReason(
