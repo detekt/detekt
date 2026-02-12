@@ -16,7 +16,6 @@ dependencies {
     implementation(libs.kotlinx.coroutinesCore)
     implementation(libs.kotlinx.coroutinesTest)
 
-    testImplementation(projects.detektTestJunit)
     testImplementation(libs.assertj.core)
 }
 

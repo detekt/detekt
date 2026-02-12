@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 @KotlinCoreEnvironmentTest(additionalJavaSourcePaths = ["java"])
 class CompileWithSourcesTest(private val environment: KotlinEnvironmentContainer) {
     @Test
-    fun `can compile snippet from resources`() {
+    fun `can compile snippet`() {
         val content = $$"""
             import com.example.dummy.Bar
             import com.example.dummy.Foo
@@ -26,7 +26,7 @@ class CompileWithSourcesTest(private val environment: KotlinEnvironmentContainer
 @KotlinCoreEnvironmentTest(additionalJarPaths = [OKIO_JAR_PATH])
 class CompileWithThirdPartyLib(private val environment: KotlinEnvironmentContainer) {
     @Test
-    fun `can compile snippet from resources`() {
+    fun `can compile snippet`() {
         val content = """
             import okio.ByteString
             import okio.ByteString.Companion.decodeBase64
@@ -47,8 +47,8 @@ class CompileWithThirdPartyLib(private val environment: KotlinEnvironmentContain
 )
 class CompileWithBoth(private val environment: KotlinEnvironmentContainer) {
     @Test
-    fun `can compile snippet from resources`() {
-        val content = $$"""
+    fun `can compile snippet`() {
+        val content = """
             import com.example.dummy.Foo
             import okio.ByteString
             import okio.ByteString.Companion.decodeBase64

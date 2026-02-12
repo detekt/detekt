@@ -11,7 +11,7 @@ import java.io.File
 import kotlin.script.experimental.jvm.util.classpathFromClassloader
 
 /**
- * [additionalJavaSourcePaths] should be paths relative to the test/resources directory of your Gradle module.
+ * [additionalJavaSourcePaths] should be paths relative to the `test/resources` directory of your Gradle module.
  * [additionalJarPaths] should be absolute file paths.
  */
 @Retention(AnnotationRetention.RUNTIME)
