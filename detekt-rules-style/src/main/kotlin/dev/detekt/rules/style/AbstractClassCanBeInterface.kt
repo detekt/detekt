@@ -8,7 +8,9 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.psi.isAbstract
+import dev.detekt.psi.isConstant
 import dev.detekt.psi.isInternal
+import dev.detekt.psi.isOpen
 import dev.detekt.psi.isProtected
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
@@ -16,8 +18,12 @@ import org.jetbrains.kotlin.analysis.api.symbols.KaClassKind
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolModality
 import org.jetbrains.kotlin.analysis.api.types.symbol
+import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtConstantExpression
+import org.jetbrains.kotlin.psi.KtNameReferenceExpression
+import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.isAbstract
 
 /**
@@ -62,6 +68,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isAbstract
  * }
  * </compliant>
  */
+@Suppress("TooManyFunctions")
 @ActiveByDefault(since = "1.23.0")
 class AbstractClassCanBeInterface(config: Config) :
     Rule(
@@ -104,7 +111,14 @@ class AbstractClassCanBeInterface(config: Config) :
         members: List<KtCallableDeclaration>,
         nameIdentifier: PsiElement,
     ) {
-        val (abstractMembers, concreteMembers) = members.partition { it.isAbstract() }
+        // Treat open members as abstract-like unless they have a non-const backing field. An open val with a
+        // non-const initializer (e.g. open val x = computeSomething()) stores a value evaluated once per instance.
+        // In an interface it would become a getter evaluated on every access, changing the behavior and preventing
+        // a safe refactoring.
+        val (abstractMembers, concreteMembers) = members.partition { member ->
+            member.isAbstract() || (member.isOpen() && member.hasConstOrNoBackingField())
+        }
+
         when {
             abstractMembers.isEmpty() && !hasInheritedMember(klass, isAbstract = true) ->
                 return
@@ -143,6 +157,35 @@ class AbstractClassCanBeInterface(config: Config) :
         (klass.symbol as? KaClassSymbol)
             ?.superTypes
             ?.all { (it.symbol as? KaClassSymbol)?.classKind == KaClassKind.INTERFACE } == false
+
+    /**
+     * Returns true if this callable can be safely represented in an interface: functions, getter-only properties
+     * (no initializer), and properties with compile-time constant initializers all qualify.
+     *
+     * Returns false for properties with a non-const backing field. In a class the initializer runs once per
+     * instance, but in an interface the property requires a getter evaluated on every access, changing behaviour.
+     *
+     * Only literal values (e.g. 404, "text") and direct references to const vals are considered constant.
+     */
+    context(session: KaSession)
+    private fun KtCallableDeclaration.hasConstOrNoBackingField(): Boolean =
+        when (val initializer = (this as? KtProperty)?.initializer) {
+            // No initializer: getter-only property or a function. no backing field, safe for interface
+            null -> true
+
+            // Literal constant. value is always the same whether field or getter, safe for interface getters
+            is KtConstantExpression -> true
+
+            // Reference to a const val. Effectively a compile-time constant, safe for interface getters
+            is KtNameReferenceExpression -> {
+                val symbol = with(session) { initializer.mainReference.resolveToSymbol() }
+                val psi = symbol?.psi as? KtProperty
+                psi?.isConstant() == true
+            }
+
+            // Any other expression (function call, arithmetic, etc.) has a non-const backing field => NOT safe
+            else -> false
+        }
 
     internal companion object {
         const val NO_CONCRETE_MEMBER = "An abstract class without a concrete member can be refactored to an interface."
