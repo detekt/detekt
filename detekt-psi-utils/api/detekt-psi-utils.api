@@ -9,6 +9,7 @@ public final class dev/detekt/psi/AnnotationExcluder {
 
 public abstract class dev/detekt/psi/FunctionMatcher {
 	public static final field Companion Ldev/detekt/psi/FunctionMatcher$Companion;
+	public static final field FUNCTION_MATCHER_DOC Ljava/lang/String;
 	public abstract fun match (Lorg/jetbrains/kotlin/analysis/api/symbols/KaCallableSymbol;)Z
 	public abstract fun match (Lorg/jetbrains/kotlin/analysis/api/symbols/KaPropertySymbol;Lorg/jetbrains/kotlin/analysis/api/symbols/KaCallableSymbol;)Z
 	public abstract fun match (Lorg/jetbrains/kotlin/psi/KtNamedFunction;Z)Z
@@ -16,7 +17,6 @@ public abstract class dev/detekt/psi/FunctionMatcher {
 
 public final class dev/detekt/psi/FunctionMatcher$Companion {
 	public final fun fromFunctionSignature (Ljava/lang/String;)Ldev/detekt/psi/FunctionMatcher;
-	public final fun getNameForGetterOrSetter (Lorg/jetbrains/kotlin/analysis/api/symbols/KaPropertySymbol;Lorg/jetbrains/kotlin/analysis/api/symbols/KaCallableSymbol;)Ljava/lang/String;
 }
 
 public final class dev/detekt/psi/IsPartOfUtilsKt {
