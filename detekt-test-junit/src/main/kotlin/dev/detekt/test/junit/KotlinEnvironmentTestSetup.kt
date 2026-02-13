@@ -16,7 +16,7 @@ import kotlin.script.experimental.jvm.util.classpathFromClassloader
  * via `lintWithContext`. Make sure to pass an instance of [KotlinEnvironmentContainer] into the constructor of your
  * test class, which you can then pass into `lintWithContext` to compile/lint the code snippet against your rule.
  *
- * [additionalJavaSourcePaths] should be paths relative to the `test/resources` directory of your Gradle module. These
+ * @param additionalJavaSourcePaths should be paths relative to the `test/resources` directory of your Gradle module. These
  * must be Java (not Kotlin) source files, which will then be importable from your test snippets.
  *
  * @param additionalLibraryTypes is a method of including third-party library artifacts in the classpath when compiling your
