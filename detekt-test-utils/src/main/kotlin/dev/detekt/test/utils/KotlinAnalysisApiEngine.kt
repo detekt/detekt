@@ -90,7 +90,7 @@ object KotlinAnalysisApiEngine {
                     }
                 )
 
-                val additionalLibraries = jvmClasspathRoots.map { path ->
+                val additionalLibraries = jvmClasspathRoots.distinct().map { path ->
                     addModule(
                         buildKtLibraryModule {
                             addBinaryRoot(path)

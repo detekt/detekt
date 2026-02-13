@@ -19,8 +19,8 @@ public final class dev/detekt/test/utils/KotlinEnvironmentContainer {
 }
 
 public final class dev/detekt/test/utils/KotlinEnvironmentContainerKt {
-	public static final fun createEnvironment (Ljava/util/List;Ljava/util/List;)Ldev/detekt/test/utils/KotlinEnvironmentContainer;
-	public static synthetic fun createEnvironment$default (Ljava/util/List;Ljava/util/List;ILjava/lang/Object;)Ldev/detekt/test/utils/KotlinEnvironmentContainer;
+	public static final fun createEnvironment (Ljava/util/List;Ljava/util/List;Ljava/util/List;)Ldev/detekt/test/utils/KotlinEnvironmentContainer;
+	public static synthetic fun createEnvironment$default (Ljava/util/List;Ljava/util/List;Ljava/util/List;ILjava/lang/Object;)Ldev/detekt/test/utils/KotlinEnvironmentContainer;
 }
 
 public final class dev/detekt/test/utils/NullPrintStream : java/io/PrintStream {
