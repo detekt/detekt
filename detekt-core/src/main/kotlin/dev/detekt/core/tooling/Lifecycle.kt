@@ -3,10 +3,13 @@ package dev.detekt.core.tooling
 import dev.detekt.api.Config
 import dev.detekt.api.Detektion
 import dev.detekt.api.FileProcessListener
+import dev.detekt.api.RuleExecutionListener
+import dev.detekt.api.RuleProfilingKeys
 import dev.detekt.api.RuleSetProvider
 import dev.detekt.core.Analyzer
 import dev.detekt.core.FileProcessorLocator
 import dev.detekt.core.ProcessingSettings
+import dev.detekt.core.RuleExecutionListenerLocator
 import dev.detekt.core.config.validation.checkConfiguration
 import dev.detekt.core.extensions.handleReportingExtensions
 import dev.detekt.core.getRules
@@ -62,6 +65,8 @@ internal class Lifecycle(
         },
     val processorsProvider: () -> List<FileProcessListener> =
         { FileProcessorLocator(settings).load() },
+    val ruleListenersProvider: () -> List<RuleExecutionListener> =
+        { RuleExecutionListenerLocator(settings).load() },
     val ruleSetsProvider: () -> List<RuleSetProvider> =
         { settings.createRuleProviders() },
 ) {
@@ -75,22 +80,30 @@ internal class Lifecycle(
             measure(Phase.Binding) { bindingProvider.invoke(filesToAnalyze) }
         }
         val analysisMode = settings.spec.projectSpec.analysisMode
-        val (processors, rules) = measure(Phase.LoadingExtensions) {
+        val (processors, rules, ruleListeners) = measure(Phase.LoadingExtensions) {
             val rules = getRules(
                 analysisMode = analysisMode,
                 ruleSetProviders = ruleSetsProvider.invoke(),
                 config = settings.config,
                 log = settings::debug,
             )
-            processorsProvider.invoke() to rules
+            Triple(processorsProvider.invoke(), rules, ruleListenersProvider.invoke())
         }
 
         val result = measure(Phase.Analyzer) {
-            val analyzer = Analyzer(settings, rules.filter { it.ruleInstance.active }, processors, analysisMode)
+            val activeRules = rules.filter { it.ruleInstance.active }
+            val analyzer = Analyzer(settings, activeRules, processors, ruleListeners, analysisMode)
             processors.forEach { it.onStart(filesToAnalyze) }
+            ruleListeners.forEach { it.onStart(filesToAnalyze, activeRules.map { r -> r.ruleInstance }) }
             val issues = analyzer.run(filesToAnalyze)
             val detektion = Detektion(issues, rules.map { it.ruleInstance })
-            processors.fold(detektion) { acc, processor -> processor.onFinish(filesToAnalyze, acc) }
+            if (analyzer.parallelDisabledForProfiling) {
+                detektion.userData[RuleProfilingKeys.PARALLEL_DISABLED] = true
+            }
+            val afterProcessors = processors.fold(detektion) { acc, processor ->
+                processor.onFinish(filesToAnalyze, acc)
+            }
+            ruleListeners.fold(afterProcessors) { acc, listener -> listener.onFinish(acc) }
         }
 
         return measure(Phase.Reporting) {
