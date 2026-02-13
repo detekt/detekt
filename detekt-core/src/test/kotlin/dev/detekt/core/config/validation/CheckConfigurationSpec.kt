@@ -7,6 +7,7 @@ import dev.detekt.api.Notification.Level
 import dev.detekt.api.RuleSet
 import dev.detekt.api.RuleSetId
 import dev.detekt.api.RuleSetProvider
+import dev.detekt.api.valueOrNull
 import dev.detekt.core.createNullLoggingSpec
 import dev.detekt.core.createProcessingSettings
 import dev.detekt.core.tooling.getDefaultConfiguration

@@ -20,12 +20,10 @@ public final class dev/detekt/test/TestConfig : dev/detekt/api/Config {
 	public fun <init> (Ldev/detekt/api/Config;[Lkotlin/Pair;)V
 	public fun <init> ([Lkotlin/Pair;)V
 	public fun getParent ()Ldev/detekt/api/Config;
-	public fun getParentPath ()Ljava/lang/String;
 	public synthetic fun subConfig (Ljava/lang/String;)Ldev/detekt/api/Config;
 	public fun subConfig (Ljava/lang/String;)Ldev/detekt/test/TestConfig;
 	public fun subConfigKeys ()Ljava/util/Set;
-	public fun valueOrDefault (Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/Object;
-	public fun valueOrNull (Ljava/lang/String;)Ljava/lang/Object;
+	public fun valueOrNull (Ljava/lang/String;Lkotlin/reflect/KClass;)Ljava/lang/Object;
 }
 
 public final class dev/detekt/test/TestConfigKt {

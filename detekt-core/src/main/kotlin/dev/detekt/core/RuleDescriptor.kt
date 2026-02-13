@@ -11,6 +11,7 @@ import dev.detekt.api.RuleSetProvider
 import dev.detekt.api.Severity
 import dev.detekt.api.internal.DefaultRuleSetProvider
 import dev.detekt.api.internal.whichDetekt
+import dev.detekt.api.valueOrNull
 import dev.detekt.core.util.isActiveOrDefault
 import dev.detekt.tooling.api.AnalysisMode
 import java.net.URI
