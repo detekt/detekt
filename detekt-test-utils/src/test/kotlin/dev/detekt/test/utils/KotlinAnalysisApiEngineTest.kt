@@ -1,6 +1,5 @@
 package dev.detekt.test.utils
 
-import dev.detekt.generated.TestBuildConfig.OKIO_JAR_PATH
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.RepeatedTest
 import org.junit.jupiter.api.Test
@@ -78,21 +77,21 @@ class KotlinAnalysisApiEngineTest {
         val code = """
             package foo.e
             
-            import okio.FileSystem
-            import okio.Path
-            import okio.buffer
-            
-            fun readFileContents(path: Path): String {
-                return FileSystem.SYSTEM
-                    .source(path)
-                    .buffer()
-                    .use { it.readUtf8() }
+            import org.junit.jupiter.api.Assertions.assertEquals
+            import org.junit.jupiter.api.Test
+
+            class MyTest {
+                @Test
+                fun testSomething() {
+                    assertEquals(1 + 2, 3)
+                }
             }
         """.trimIndent()
 
+        val junitApiJar = Test::class.java.protectionDomain.codeSource.location.path
         KotlinAnalysisApiEngine.compile(
             code = code,
-            jvmClasspathRoots = listOf(Path(OKIO_JAR_PATH))
+            jvmClasspathRoots = listOf(Path(junitApiJar))
         )
     }
 
@@ -101,15 +100,14 @@ class KotlinAnalysisApiEngineTest {
         val code = """
             package foo.e
             
-            import okio.FileSystem
-            import okio.Path
-            import okio.buffer
-            
-            fun readFileContents(path: Path): String {
-                return FileSystem.SYSTEM
-                    .source(path)
-                    .buffer()
-                    .use { it.readUtf8() }
+            import org.junit.jupiter.api.Assertions.assertEquals
+            import org.junit.jupiter.api.Test
+
+            class MyTest {
+                @Test
+                fun testSomething() {
+                    assertEquals(1 + 2, 3)
+                }
             }
         """.trimIndent()
 
