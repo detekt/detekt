@@ -3,7 +3,6 @@ package dev.detekt.core.config.validation
 import dev.detekt.api.Config
 import dev.detekt.api.Notification
 import dev.detekt.core.config.CompositeConfig
-import dev.detekt.core.config.YamlConfig
 import dev.detekt.core.config.validation.InvalidPropertiesConfigValidator.Companion.nestedConfigurationExpected
 import dev.detekt.core.config.validation.InvalidPropertiesConfigValidator.Companion.propertyDoesNotExists
 import dev.detekt.core.config.validation.InvalidPropertiesConfigValidator.Companion.unexpectedNestedConfiguration
@@ -23,7 +22,7 @@ internal class InvalidPropertiesConfigValidatorSpec {
             description = "use xxx instead"
         )
     )
-    private val baseline = yamlConfig("config_validation/baseline.yml") as YamlConfig
+    private val baseline = yamlConfig("config_validation/baseline.yml")
     private val defaultExcludePatterns = DEFAULT_PROPERTY_EXCLUDES.toSet()
     private val subject = InvalidPropertiesConfigValidator(baseline, deprecatedProperties, defaultExcludePatterns)
 
@@ -77,7 +76,7 @@ internal class InvalidPropertiesConfigValidatorSpec {
     fun `reports unexpected nested configs`() {
         // note that the baseline config is now the config to validate
         val subject = InvalidPropertiesConfigValidator(
-            yamlConfig("config_validation/no-value.yml") as YamlConfig,
+            yamlConfig("config_validation/no-value.yml"),
             deprecatedProperties,
             defaultExcludePatterns
         )
@@ -157,18 +156,14 @@ internal class InvalidPropertiesConfigValidatorSpec {
         fun `does not report any complexity properties`() {
             val subject = InvalidPropertiesConfigValidator(baseline, deprecatedProperties, patterns("complexity"))
 
-            val result = subject.validate(
-                yamlConfig("config_validation/other-nested-property-names.yml") as YamlConfig,
-            )
+            val result = subject.validate(yamlConfig("config_validation/other-nested-property-names.yml"))
             assertThat(result).isEmpty()
         }
 
         @Test
         fun `does not report 'complexity_LargeClass_howMany'`() {
             val subject = InvalidPropertiesConfigValidator(baseline, deprecatedProperties, patterns(".*>.*>howMany"))
-            val result = subject.validate(
-                yamlConfig("config_validation/other-nested-property-names.yml") as YamlConfig
-            )
+            val result = subject.validate(yamlConfig("config_validation/other-nested-property-names.yml"))
 
             assertThat(result).contains(
                 propertyDoesNotExists("complexity>LongLongMethod"),
@@ -186,9 +181,7 @@ internal class InvalidPropertiesConfigValidatorSpec {
         @DisplayName("does not report .*>InnerMap")
         fun `does not report innerMap`() {
             val subject = InvalidPropertiesConfigValidator(baseline, deprecatedProperties, patterns(".*>InnerMap"))
-            val result = subject.validate(
-                yamlConfig("config_validation/other-nested-property-names.yml") as YamlConfig
-            )
+            val result = subject.validate(yamlConfig("config_validation/other-nested-property-names.yml"))
 
             assertThat(result).contains(
                 propertyDoesNotExists("complexity>LargeClass>howMany"),
