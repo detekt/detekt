@@ -18,7 +18,7 @@ class KotlinEnvironmentContainer(val configuration: CompilerConfiguration)
  * Create a {@link KotlinEnvironmentContainer} used for test.
  *
  * @param additionalRootPaths the optional JVM classpath roots list.
- * @param additionalRootPaths the optional Java classpath roots list.
+ * @param additionalJavaSourceRootPaths the optional Java source roots list.
  * @param additionalLibraryTypes the optional list of types from which to load the associated library artifact JAR.
  */
 fun createEnvironment(
