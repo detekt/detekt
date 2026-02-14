@@ -10,6 +10,7 @@ import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.config.JVMConfigurationKeys
 import java.io.File
+import kotlin.reflect.KClass
 
 class KotlinEnvironmentContainer(val configuration: CompilerConfiguration)
 
@@ -17,7 +18,7 @@ class KotlinEnvironmentContainer(val configuration: CompilerConfiguration)
  * Create a {@link KotlinEnvironmentContainer} used for test.
  *
  * @param additionalRootPaths the optional JVM classpath roots list.
- * @param additionalRootPaths the optional Java classpath roots list.
+ * @param additionalJavaSourceRootPaths the optional Java source roots list.
  */
 fun createEnvironment(
     additionalRootPaths: List<File> = emptyList(),
@@ -41,7 +42,8 @@ fun createEnvironment(
     return KotlinEnvironmentContainer(configuration)
 }
 
-private fun kotlinStdLibPath(): File = File(CharRange::class.java.protectionDomain.codeSource.location.path)
+private fun kotlinStdLibPath(): File = CharRange::class.toJar()
 
-private fun kotlinxCoroutinesCorePath(): File =
-    File(CoroutineScope::class.java.protectionDomain.codeSource.location.path)
+private fun kotlinxCoroutinesCorePath(): File = CoroutineScope::class.toJar()
+
+private fun KClass<*>.toJar() = File(this.java.protectionDomain.codeSource.location.path)
