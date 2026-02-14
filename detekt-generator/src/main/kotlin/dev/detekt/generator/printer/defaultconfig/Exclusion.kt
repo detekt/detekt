@@ -52,6 +52,7 @@ private object TestExclusions : Exclusions() {
         "UndocumentedPublicProperty",
         "UnsafeCallOnNullableType",
         "KDocReferencesNonPublicProperty",
+        "ImplicitUnitReturnType",
     )
 }
 
