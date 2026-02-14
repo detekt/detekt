@@ -482,6 +482,7 @@ potential-bugs:
   ImplicitUnitReturnType:
     active: false
     allowExplicitReturnType: true
+    excludes: [ '**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**' ]
   InvalidRange:
     active: true
   IteratorHasNextCallsNextMethod:
