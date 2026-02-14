@@ -58,9 +58,8 @@ internal class KotlinEnvironmentResolver : ParameterResolver {
         }
 
         return createEnvironment(
-            additionalRootPaths = classpath,
+            additionalRootPaths = classpath + annotation.additionalLibraryJars(),
             additionalJavaSourceRootPaths = annotation.additionalJavaSourcePaths(),
-            additionalLibraryTypes = annotation?.additionalLibraryTypes?.toList().orEmpty(),
         )
     }
 
@@ -71,6 +70,11 @@ internal class KotlinEnvironmentResolver : ParameterResolver {
         private fun KotlinCoreEnvironmentTest?.additionalJavaSourcePaths(): List<File> =
             this?.additionalJavaSourcePaths
                 ?.map { resourceAsPath(it).toFile() }
+                .orEmpty()
+
+        private fun KotlinCoreEnvironmentTest?.additionalLibraryJars(): List<File> =
+            this?.additionalLibraryTypes
+                ?.map { File(it.java.protectionDomain.codeSource.location.path) }
                 .orEmpty()
     }
 }

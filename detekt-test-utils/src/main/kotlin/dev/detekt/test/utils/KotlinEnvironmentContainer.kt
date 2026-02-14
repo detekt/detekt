@@ -19,12 +19,10 @@ class KotlinEnvironmentContainer(val configuration: CompilerConfiguration)
  *
  * @param additionalRootPaths the optional JVM classpath roots list.
  * @param additionalJavaSourceRootPaths the optional Java source roots list.
- * @param additionalLibraryTypes the optional list of types from which to load the associated library artifact JAR.
  */
 fun createEnvironment(
     additionalRootPaths: List<File> = emptyList(),
     additionalJavaSourceRootPaths: List<File> = emptyList(),
-    additionalLibraryTypes: List<KClass<*>> = emptyList(),
 ): KotlinEnvironmentContainer {
     val configuration = CompilerConfiguration()
     configuration.put(CommonConfigurationKeys.MODULE_NAME, "test_module")
@@ -36,7 +34,6 @@ fun createEnvironment(
         addJvmClasspathRoot(kotlinStdLibPath())
         addJvmClasspathRoot(kotlinxCoroutinesCorePath())
         addJvmClasspathRoots(additionalRootPaths)
-        addJvmClasspathRoots(additionalLibraryTypes.map { it.toJar() })
         addJavaSourceRoots(additionalJavaSourceRootPaths)
         put(JVMConfigurationKeys.JDK_HOME, File(System.getProperty("java.home")))
         configureJdkClasspathRoots()
