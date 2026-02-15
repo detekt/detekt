@@ -90,9 +90,8 @@ class ExplicitCollectionElementAccessMethod(config: Config) :
         }
 
     private fun canReplace(expression: KtCallExpression, function: KaNamedFunctionSymbol): Boolean {
-        if (!function.isOperator || !argumentCountMatches(expression, function)) {
-            return false
-        }
+        if (!function.isOperator) return false
+        if (expression.valueArguments.size !in function.expectedArgumentsRange()) return false
 
         // Can't use index operator when insufficient information is available to infer type variable.
         // For now, this is an incomplete check and doesn't report edge cases (e.g. inference using return type).
@@ -102,14 +101,13 @@ class ExplicitCollectionElementAccessMethod(config: Config) :
         return paramTypeNames.containsAll(typeParameterNames)
     }
 
-    // Checks that the call-site argument count is compatible with the resolved function's parameters. When there are
-    // compiler errors, the analysis API can sometimes misresolve to an unrelated operator function with wrong
-    // parameters - this is meant to catch (most of) those cases
-    private fun argumentCountMatches(expression: KtCallExpression, function: KaNamedFunctionSymbol): Boolean {
-        val params = function.valueParameters
-        val required = params.count { !it.isVararg && !it.hasDefaultValue }
-        val max = if (params.any { it.isVararg }) Int.MAX_VALUE else params.size
-        return expression.valueArguments.size in required..max
+    // Returns the range of valid call-site argument counts for this function. Used to guard against misresolution
+    // when there are compiler errors - the analysis API can sometimes resolve to an unrelated operator function
+    // with incompatible parameters
+    private fun KaNamedFunctionSymbol.expectedArgumentsRange(): IntRange {
+        val required = valueParameters.count { !it.isVararg && !it.hasDefaultValue }
+        val max = if (valueParameters.any { it.isVararg }) Int.MAX_VALUE else valueParameters.size
+        return required..max
     }
 
     @Suppress("ReturnCount")
