@@ -2,8 +2,6 @@ package dev.detekt.test.utils
 
 import com.intellij.openapi.util.Disposer
 import com.intellij.testFramework.LightVirtualFile
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.test.TestScope
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaImplementationDetail
@@ -21,7 +19,6 @@ import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.diagnostics.PsiDiagnosticUtils
 import org.jetbrains.kotlin.platform.jvm.JvmPlatforms
 import org.jetbrains.kotlin.psi.KtFile
-import java.io.File
 import java.nio.file.Path
 import kotlin.io.path.Path
 import kotlin.io.path.nameWithoutExtension
@@ -61,24 +58,6 @@ object KotlinAnalysisApiEngine {
                     libraryName = "sdk"
                 }
 
-                val stdlib = buildKtLibraryModule {
-                    addBinaryRoot(File(CharRange::class.java.protectionDomain.codeSource.location.path).toPath())
-                    platform = targetPlatform
-                    libraryName = "stdlib"
-                }
-
-                val coroutinesCore = buildKtLibraryModule {
-                    addBinaryRoot(kotlinxCoroutinesCorePath())
-                    platform = targetPlatform
-                    libraryName = "coroutines-core"
-                }
-
-                val coroutinesTest = buildKtLibraryModule {
-                    addBinaryRoot(kotlinxCoroutinesTestPath())
-                    platform = targetPlatform
-                    libraryName = "coroutines-test"
-                }
-
                 val additionalLibraries = jvmClasspathRoots.distinct().map { path ->
                     buildKtLibraryModule {
                         addBinaryRoot(path)
@@ -96,9 +75,6 @@ object KotlinAnalysisApiEngine {
                 addModule(
                     buildKtSourceModule {
                         addRegularDependency(jdk)
-                        addRegularDependency(stdlib)
-                        addRegularDependency(coroutinesCore)
-                        addRegularDependency(coroutinesTest)
                         additionalLibraries.forEach(::addRegularDependency)
                         addSourceVirtualFile(vf)
                         addSourceVirtualFiles(depVfs)
@@ -142,10 +118,4 @@ object KotlinAnalysisApiEngine {
             disposable.dispose()
         }
     }
-
-    private fun kotlinxCoroutinesCorePath(): Path =
-        File(CoroutineScope::class.java.protectionDomain.codeSource.location.path).toPath()
-
-    private fun kotlinxCoroutinesTestPath(): Path =
-        File(TestScope::class.java.protectionDomain.codeSource.location.path).toPath()
 }
