@@ -54,7 +54,9 @@ class ExplicitCollectionElementAccessMethod(config: Config) :
         if (expression.calleeExpression?.text != "get") return false
         analyze(expression) {
             val getter = expression.getFunctionSymbol() ?: return false
-            return expression.valueArguments.none { it.isSpread } && canReplace(getter) && shouldReplace(getter)
+            return expression.valueArguments.none { it.isSpread } &&
+                canReplace(expression, getter) &&
+                shouldReplace(getter)
         }
     }
 
@@ -63,7 +65,10 @@ class ExplicitCollectionElementAccessMethod(config: Config) :
             "set" -> {
                 analyze(expression) {
                     val setter = expression.getFunctionSymbol()
-                    setter != null && canReplace(setter) && shouldReplace(setter)
+                    setter != null &&
+                        expression.valueArguments.size >= 2 && // setter must have a minimum of key and value
+                        canReplace(expression, setter) &&
+                        shouldReplace(setter)
                 }
             }
 
@@ -83,14 +88,27 @@ class ExplicitCollectionElementAccessMethod(config: Config) :
             resolveToCall()?.singleFunctionCallOrNull()?.symbol as? KaNamedFunctionSymbol
         }
 
-    private fun canReplace(function: KaNamedFunctionSymbol): Boolean {
+    private fun canReplace(expression: KtCallExpression, function: KaNamedFunctionSymbol): Boolean {
+        if (!function.isOperator || !argumentCountMatches(expression, function)) {
+            return false
+        }
+
         // Can't use index operator when insufficient information is available to infer type variable.
         // For now, this is an incomplete check and doesn't report edge cases (e.g. inference using return type).
-        val genericParameterTypeNames = function.valueParameters.map { it.returnType.toString() }.toSet()
+        val params = function.valueParameters
+        val paramTypeNames = params.map { it.returnType.toString() }.toSet()
         val typeParameterNames = function.typeParameters.map { it.name.asString() }
-        if (!genericParameterTypeNames.containsAll(typeParameterNames)) return false
+        return paramTypeNames.containsAll(typeParameterNames)
+    }
 
-        return function.isOperator
+    // Checks that the call-site argument count is compatible with the resolved function's parameters. When there are
+    // compiler errors, the analysis API can sometimes misresolve to an unrelated operator function with wrong
+    // parameters - this is meant to catch (most of) those cases
+    private fun argumentCountMatches(expression: KtCallExpression, function: KaNamedFunctionSymbol): Boolean {
+        val params = function.valueParameters
+        val required = params.count { !it.isVararg && !it.hasDefaultValue }
+        val max = if (params.any { it.isVararg }) Int.MAX_VALUE else params.size
+        return expression.valueArguments.size in required..max
     }
 
     @Suppress("ReturnCount")
