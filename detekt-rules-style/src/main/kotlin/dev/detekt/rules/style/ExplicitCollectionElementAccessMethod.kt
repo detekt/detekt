@@ -55,6 +55,7 @@ class ExplicitCollectionElementAccessMethod(config: Config) :
         analyze(expression) {
             val getter = expression.getFunctionSymbol() ?: return false
             return expression.valueArguments.none { it.isSpread } &&
+                expression.valueArguments.isNotEmpty() && // getter must have a minimum of one key
                 canReplace(expression, getter) &&
                 shouldReplace(getter)
         }
@@ -66,7 +67,7 @@ class ExplicitCollectionElementAccessMethod(config: Config) :
                 analyze(expression) {
                     val setter = expression.getFunctionSymbol()
                     setter != null &&
-                        expression.valueArguments.size >= 2 && // setter must have a minimum of key and value
+                        expression.valueArguments.size >= 2 && // setter must have a minimum of one key and a value
                         canReplace(expression, setter) &&
                         shouldReplace(setter)
                 }
