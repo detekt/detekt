@@ -9,6 +9,7 @@ import dev.detekt.test.utils.KotlinEnvironmentContainer
 import dev.detekt.test.utils.compileContentForTest
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.cli.jvm.config.javaSourceRoots
+import org.jetbrains.kotlin.cli.jvm.config.jvmClasspathRoots
 import org.jetbrains.kotlin.config.LanguageVersionSettings
 import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtAnnotated
@@ -16,6 +17,7 @@ import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
+import java.io.File
 import kotlin.io.path.Path
 
 private val shouldCompileTestSnippets: Boolean =
@@ -51,6 +53,7 @@ fun <T> T.lintWithContext(
         code = content,
         dependencyCodes = dependencyContents.toList(),
         javaSourceRoots = environment.configuration.javaSourceRoots.map(::Path),
+        jvmClasspathRoots = environment.configuration.jvmClasspathRoots.map(File::toPath),
         allowCompilationErrors = allowCompilationErrors
     )
     return visitFile(ktFile, languageVersionSettings).filterSuppressed(this)
