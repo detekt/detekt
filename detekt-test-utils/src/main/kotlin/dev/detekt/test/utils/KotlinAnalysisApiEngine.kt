@@ -13,7 +13,6 @@ import org.jetbrains.kotlin.analysis.api.components.KaCompilationResult
 import org.jetbrains.kotlin.analysis.api.components.KaCompilerTarget
 import org.jetbrains.kotlin.analysis.api.diagnostics.KaDiagnosticWithPsi
 import org.jetbrains.kotlin.analysis.api.diagnostics.KaSeverity
-import org.jetbrains.kotlin.analysis.api.projectStructure.KaModule
 import org.jetbrains.kotlin.analysis.api.standalone.buildStandaloneAnalysisAPISession
 import org.jetbrains.kotlin.analysis.project.structure.builder.buildKtLibraryModule
 import org.jetbrains.kotlin.analysis.project.structure.builder.buildKtSdkModule
@@ -32,8 +31,6 @@ import kotlin.io.path.nameWithoutExtension
  */
 @OptIn(KaExperimentalApi::class)
 object KotlinAnalysisApiEngine {
-
-    private lateinit var sourceModule: KaModule
     private val targetPlatform = JvmPlatforms.defaultJvmPlatform
     private val configuration = CompilerConfiguration()
     private val target = KaCompilerTarget.Jvm(isTestMode = false, compiledClassHandler = null, debuggerExtension = null)
@@ -58,46 +55,36 @@ object KotlinAnalysisApiEngine {
             buildKtModuleProvider {
                 platform = targetPlatform
 
-                val jdk = addModule(
-                    buildKtSdkModule {
-                        addBinaryRootsFromJdkHome(Path(System.getProperty("java.home")), true)
-                        platform = targetPlatform
-                        libraryName = "sdk"
-                    }
-                )
+                val jdk = buildKtSdkModule {
+                    addBinaryRootsFromJdkHome(Path(System.getProperty("java.home")), true)
+                    platform = targetPlatform
+                    libraryName = "sdk"
+                }
 
-                val stdlib = addModule(
-                    buildKtLibraryModule {
-                        addBinaryRoot(File(CharRange::class.java.protectionDomain.codeSource.location.path).toPath())
-                        platform = targetPlatform
-                        libraryName = "stdlib"
-                    }
-                )
+                val stdlib = buildKtLibraryModule {
+                    addBinaryRoot(File(CharRange::class.java.protectionDomain.codeSource.location.path).toPath())
+                    platform = targetPlatform
+                    libraryName = "stdlib"
+                }
 
-                val coroutinesCore = addModule(
-                    buildKtLibraryModule {
-                        addBinaryRoot(kotlinxCoroutinesCorePath())
-                        platform = targetPlatform
-                        libraryName = "coroutines-core"
-                    }
-                )
+                val coroutinesCore = buildKtLibraryModule {
+                    addBinaryRoot(kotlinxCoroutinesCorePath())
+                    platform = targetPlatform
+                    libraryName = "coroutines-core"
+                }
 
-                val coroutinesTest = addModule(
-                    buildKtLibraryModule {
-                        addBinaryRoot(kotlinxCoroutinesTestPath())
-                        platform = targetPlatform
-                        libraryName = "coroutines-test"
-                    }
-                )
+                val coroutinesTest = buildKtLibraryModule {
+                    addBinaryRoot(kotlinxCoroutinesTestPath())
+                    platform = targetPlatform
+                    libraryName = "coroutines-test"
+                }
 
                 val additionalLibraries = jvmClasspathRoots.distinct().map { path ->
-                    addModule(
-                        buildKtLibraryModule {
-                            addBinaryRoot(path)
-                            platform = targetPlatform
-                            libraryName = path.nameWithoutExtension
-                        }
-                    )
+                    buildKtLibraryModule {
+                        addBinaryRoot(path)
+                        platform = targetPlatform
+                        libraryName = path.nameWithoutExtension
+                    }
                 }
 
                 val vf = LightVirtualFile("dummy.kt", code)
@@ -106,7 +93,7 @@ object KotlinAnalysisApiEngine {
                     LightVirtualFile("dependency_${index + 1}.kt", depCode)
                 }
 
-                sourceModule = addModule(
+                addModule(
                     buildKtSourceModule {
                         addRegularDependency(jdk)
                         addRegularDependency(stdlib)
