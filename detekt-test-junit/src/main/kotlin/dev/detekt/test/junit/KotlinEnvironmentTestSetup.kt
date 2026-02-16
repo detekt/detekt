@@ -36,9 +36,10 @@ internal class KotlinEnvironmentResolver : ParameterResolver {
     override fun resolveParameter(parameterContext: ParameterContext, extensionContext: ExtensionContext): Any =
         extensionContext.env
 
-    private fun createNewContainer(extensionContext: ExtensionContext) = createEnvironment(
-        additionalJavaSourceRootPaths = extensionContext.additionalJavaSourcePaths(),
-    )
+    private fun createNewContainer(extensionContext: ExtensionContext): KotlinEnvironmentContainer =
+        createEnvironment(
+            additionalJavaSourceRootPaths = extensionContext.additionalJavaSourcePaths(),
+        )
 
     companion object {
         private val NAMESPACE = ExtensionContext.Namespace.create("KotlinCoreEnvironment")
