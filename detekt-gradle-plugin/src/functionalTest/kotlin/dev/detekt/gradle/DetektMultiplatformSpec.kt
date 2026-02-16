@@ -244,7 +244,7 @@ class DetektMultiplatformSpec {
                         "src/androidMain/kotlin",
                     ),
                     baselineFiles = listOf(
-                        "detekt-baseline.xml",
+                        "detekt-baseline-main.xml",
                     )
                 )
             }
@@ -263,7 +263,7 @@ class DetektMultiplatformSpec {
         @Test
         fun `configures detekt task with type resolution`() {
             gradleRunner.runTasksAndCheckResult(":shared:detektMainAndroid") {
-                assertThat(it.output).containsPattern("""--baseline \S*[/\\]detekt-baseline.xml """)
+                assertThat(it.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-main.xml """)
                 assertThat(it.output).containsPattern("""--report checkstyle:\S*[/\\]mainAndroid.xml""")
                 assertDetektWithClasspath(it)
             }
