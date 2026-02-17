@@ -426,8 +426,8 @@ class DetektMultiplatformSpec {
                 it.writeProjectFile(
                     "shared/build/generated/jvmMain/GeneratedClass.kt",
                     """
-                    package generated
-                    class GeneratedClass
+                        package generated
+                        class GeneratedClass
                     """.trimIndent()
                 )
             }
