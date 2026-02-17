@@ -15,6 +15,10 @@ import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.name.StandardClassIds
 import org.jetbrains.kotlin.psi.KtPostfixExpression
 
+private val mapGetCallableId = CallableId(StandardClassIds.Map, Name.identifier("get"))
+private val mutableMapGetCallableId = CallableId(StandardClassIds.MutableMap, Name.identifier("get"))
+private val callableIds = setOf(mapGetCallableId, mutableMapGetCallableId)
+
 /**
  * Reports calls of the map access methods `map[]` or `map.get()` with a not-null assertion operator `!!`.
  * This may result in a NullPointerException.
@@ -63,14 +67,12 @@ class MapGetWithNotNullAssertionOperator(config: Config) :
     private fun KtPostfixExpression.isMapGet(): Boolean {
         val postfixExpression = baseExpression ?: return false
 
-        val equalsCallableId = CallableId(StandardClassIds.Map, Name.identifier("get"))
-
         analyze(postfixExpression) {
             return postfixExpression
                 .resolveToCall()
                 ?.successfulFunctionCallOrNull()
                 ?.symbol
-                ?.callableId == equalsCallableId
+                ?.callableId in callableIds
         }
     }
 }

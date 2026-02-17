@@ -76,4 +76,15 @@ class MapGetWithNotNullAssertionOperatorSpec(private val env: KotlinEnvironmentC
         """.trimIndent()
         assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
+
+    @Test
+    fun `reports map_get() with not null assertion given a MutableMap`() {
+        val code = """
+            fun f() {
+                val map = mutableMapOf<String, String>()
+                map.get("key")!!
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
+    }
 }
