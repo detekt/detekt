@@ -6,18 +6,28 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.successfulConstructorCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.successfulVariableAccessCall
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaCallableSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaNamedClassSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.name
+import org.jetbrains.kotlin.analysis.api.types.KaType
+import org.jetbrains.kotlin.analysis.api.types.KaTypeParameterType
+import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.lexer.KtTokens
-import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.name.StandardClassIds
+import org.jetbrains.kotlin.psi.KtArrayAccessExpression
+import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtPostfixExpression
 
-private val mapGetCallableId = CallableId(StandardClassIds.Map, Name.identifier("get"))
-private val mutableMapGetCallableId = CallableId(StandardClassIds.MutableMap, Name.identifier("get"))
-private val callableIds = setOf(mapGetCallableId, mutableMapGetCallableId)
+private val GET_FUNCTION_NAME = Name.identifier("get")
+private val KEY_PARAMETER_NAME = Name.identifier("K")
+private val VALUE_PARAMETER_NAME = Name.identifier("V")
 
 /**
  * Reports calls of the map access methods `map[]` or `map.get()` with a not-null assertion operator `!!`.
@@ -64,15 +74,45 @@ class MapGetWithNotNullAssertionOperator(config: Config) :
         super.visitPostfixExpression(expression)
     }
 
+    @OptIn(KaExperimentalApi::class)
     private fun KtPostfixExpression.isMapGet(): Boolean {
         val postfixExpression = baseExpression ?: return false
 
         analyze(postfixExpression) {
-            return postfixExpression
+            val expression = when (postfixExpression) {
+                is KtDotQualifiedExpression -> postfixExpression.receiverExpression
+                is KtArrayAccessExpression -> postfixExpression.arrayExpression
+                else -> null
+            } ?: return false
+
+            val callExpression = expression.resolveToCall()
+
+            val successfulCall = callExpression?.successfulVariableAccessCall()
+                ?: callExpression?.successfulFunctionCallOrNull()
+                ?: callExpression?.successfulConstructorCallOrNull()
+                ?: return false
+
+            val callReturnType = successfulCall.symbol.returnType
+            if (callReturnType.symbol?.classId != StandardClassIds.Map && !callReturnType.hasMapSuperType()) {
+                return false
+            }
+
+            val functionSymbol = postfixExpression
                 .resolveToCall()
                 ?.successfulFunctionCallOrNull()
                 ?.symbol
-                ?.callableId in callableIds
+                ?: return false
+
+            return functionSymbol.name == GET_FUNCTION_NAME &&
+                functionSymbol.valueParameters.singleOrNull()?.returnTypeName() == KEY_PARAMETER_NAME &&
+                functionSymbol.returnTypeName() == VALUE_PARAMETER_NAME
         }
     }
+
+    private fun KaType.hasMapSuperType(): Boolean =
+        (this.symbol as? KaNamedClassSymbol)?.superTypes?.any {
+            (it.symbol?.classId == StandardClassIds.Map) || it.hasMapSuperType()
+        } ?: false
+
+    private fun KaCallableSymbol.returnTypeName(): Name? = (this.returnType as? KaTypeParameterType)?.name
 }

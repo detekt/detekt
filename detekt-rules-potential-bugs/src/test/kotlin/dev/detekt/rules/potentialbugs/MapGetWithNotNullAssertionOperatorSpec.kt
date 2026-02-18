@@ -78,11 +78,90 @@ class MapGetWithNotNullAssertionOperatorSpec(private val env: KotlinEnvironmentC
     }
 
     @Test
-    fun `reports map_get() with not null assertion given a MutableMap`() {
+    fun `reports mutablemap_get() with not null assertion`() {
         val code = """
             fun f() {
                 val map = mutableMapOf<String, String>()
                 map.get("key")!!
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
+    fun `reports mutablemap get operator function with not null assertion`() {
+        val code = """
+            fun f() {
+                val map = mutableMapOf<String, String>()
+                map["key"]!!
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
+    fun `reports map_get() with not null assertion given a map implementation`() {
+        val code = """
+            fun f() {
+                val map = LinkedHashMap<String, String>()
+                map.get("key")!!
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
+    fun `reports map get operator function with not null assertion given a map implementation`() {
+        val code = """
+            fun f() {
+                val map = LinkedHashMap<String, String>()
+                map["key"]!!
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
+    fun `reports map_get()) call on constructor invocation`() {
+        val code = """
+            fun f() {
+                LinkedHashMap<String, String>().get("key")!!
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
+    fun `reports map get operator function call on constructor invocation`() {
+        val code = """
+            fun f() {
+                LinkedHashMap<String, String>()["key"]!!
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
+    fun `reports map_get()) call on function invocation`() {
+        val code = """
+            fun g(): Map<String, String> {
+                return mapOf()
+            }
+            fun f() {
+                g().get("key")!!
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).hasSize(1)
+    }
+
+    @Test
+    fun `reports map get operator function call on function invocation`() {
+        val code = """
+            fun g(): Map<String, String> {
+                return mapOf()
+            }
+            fun f() {
+                g()["key"]!!
             }
         """.trimIndent()
         assertThat(subject.lintWithContext(env, code)).hasSize(1)
