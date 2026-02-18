@@ -218,5 +218,4 @@ class MapGetWithNotNullAssertionOperatorSpec(private val env: KotlinEnvironmentC
         """.trimIndent()
         assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
-
 }
