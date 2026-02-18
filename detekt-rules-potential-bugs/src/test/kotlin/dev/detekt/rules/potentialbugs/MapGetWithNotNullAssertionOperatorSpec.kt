@@ -166,4 +166,57 @@ class MapGetWithNotNullAssertionOperatorSpec(private val env: KotlinEnvironmentC
         """.trimIndent()
         assertThat(subject.lintWithContext(env, code)).hasSize(1)
     }
+
+    @Test
+    fun `does not report get function calls with the same signature on non map types`() {
+        val code = """
+            class Container<K, V> {
+                fun get(key: K): V? = null
+            }
+            fun f() {
+                val map = Container<String, String>()
+                map.get("key")!!
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
+    fun `does not report get operator function calls with the same signature on non map types`() {
+        val code = """
+            class Container<K, V> {
+                operator fun get(key: K): V? = null
+            }
+            fun f() {
+                val map = Container<String, String>()
+                map["key"]!!
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
+    fun `does not report get function calls with the different signature on map`() {
+        val code = """
+            fun Map<*,*>.get(index: Int, offset: Int): Int? = null
+            fun f() {
+                val map = mapOf<String, String>()
+                map.get(0, 0)!!
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
+    fun `does not report get operator function calls with the different signature on map`() {
+        val code = """
+            operator fun Map<*,*>.get(one: Int): Int? = null
+            fun f() {
+                val map = mapOf<String, String>()
+                map[0]!!
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
+
 }

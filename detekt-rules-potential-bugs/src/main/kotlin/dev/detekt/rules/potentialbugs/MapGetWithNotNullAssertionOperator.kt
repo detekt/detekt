@@ -8,7 +8,6 @@ import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.resolution.successfulConstructorCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.successfulVariableAccessCall
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
@@ -89,7 +88,6 @@ class MapGetWithNotNullAssertionOperator(config: Config) :
 
             val successfulCall = callExpression?.successfulVariableAccessCall()
                 ?: callExpression?.successfulFunctionCallOrNull()
-                ?: callExpression?.successfulConstructorCallOrNull()
                 ?: return false
 
             val callReturnType = successfulCall.symbol.returnType
