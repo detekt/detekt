@@ -107,6 +107,103 @@ class DetektAndroidSpec {
     }
 
     @Nested
+    inner class `configures android tasks for application with newDsl and builtInKotlin on` {
+        val projectLayout = ProjectLayout(
+            numberOfSourceFilesInRootPerSourceDir = 0,
+        ).apply {
+            addSubmodule(
+                name = "app",
+                numberOfSourceFilesPerSourceDir = 1,
+                numberOfFindings = 1,
+                buildFileContent = joinGradleBlocks(
+                    BUILT_IN_KOTLIN_APP_PLUGIN_BLOCK,
+                    ANDROID_BLOCK,
+                    DETEKT_REPORTS_BLOCK,
+                ),
+                srcDirs = listOf(
+                    "src/main/java",
+                    "src/debug/java",
+                    "src/test/java",
+                    "src/androidTest/java",
+                    "src/main/kotlin",
+                    "src/debug/kotlin",
+                    "src/test/kotlin",
+                    "src/androidTest/kotlin",
+                ),
+                baselineFiles = listOf(
+                    "detekt-baseline.xml",
+                    "detekt-baseline-release.xml",
+                    "detekt-baseline-debug.xml",
+                    "detekt-baseline-releaseUnitTest.xml",
+                    "detekt-baseline-debugUnitTest.xml",
+                    "detekt-baseline-debugAndroidTest.xml"
+                )
+            )
+        }
+        val gradleRunner = createGradleRunnerAndSetupProject(
+            projectLayout,
+            newDsl = true.toString(),
+            builtInKotlin = true.toString(),
+        ).also {
+            it.writeProjectFile("app/src/main/AndroidManifest.xml", manifestContent)
+        }
+
+        @Test
+        @DisplayName("task :app:detektMain")
+        fun appDetektMain() {
+            gradleRunner.runTasksAndCheckResult(":app:detektMain") { buildResult ->
+                assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-release.xml """)
+                assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-debug.xml """)
+                assertThat(buildResult.output).containsPattern("""--input \S*[/\\]app[/\\]src[/\\]main[/\\]java""")
+                assertThat(buildResult.output).containsPattern("""--input \S*[/\\]app[/\\]src[/\\]debug[/\\]java""")
+                assertThat(buildResult.output).containsPattern("""--input \S*[/\\]app[/\\]src[/\\]main[/\\]kotlin""")
+                assertThat(buildResult.output).containsPattern("""--input \S*[/\\]app[/\\]src[/\\]debug[/\\]kotlin""")
+                assertThat(buildResult.output).contains("--report checkstyle:")
+                assertThat(buildResult.output).contains("--report sarif:")
+                assertThat(buildResult.output).doesNotContain("--report md:")
+                assertThat(buildResult.tasks.map { it.path })
+                    .filteredOn { it.startsWith(":app:detekt") }
+                    .containsExactlyInAnyOrder(
+                        ":app:detektDebug",
+                        ":app:detektMain",
+                        ":app:detektRelease",
+                    )
+            }
+        }
+
+        @Test
+        @DisplayName("task :app:detektTest")
+        fun appDetektTest() {
+            gradleRunner.runTasksAndCheckResult(":app:detektTest") { buildResult ->
+                assertThat(buildResult.output).containsPattern(
+                    """--baseline \S*[/\\]detekt-baseline-debugUnitTest.xml """
+                )
+                assertThat(buildResult.output).containsPattern(
+                    """--baseline \S*[/\\]detekt-baseline-debugAndroidTest.xml """
+                )
+                assertThat(buildResult.output).containsPattern("""--input \S*[/\\]app[/\\]src[/\\]test[/\\]java""")
+                assertThat(buildResult.output).containsPattern(
+                    """--input \S*[/\\]app[/\\]src[/\\]androidTest[/\\]java"""
+                )
+                assertThat(buildResult.output).containsPattern("""--input \S*[/\\]app[/\\]src[/\\]test[/\\]kotlin""")
+                assertThat(buildResult.output).containsPattern(
+                    """--input \S*[/\\]app[/\\]src[/\\]androidTest[/\\]kotlin"""
+                )
+                assertThat(buildResult.output).contains("--report checkstyle:")
+                assertThat(buildResult.output).contains("--report sarif:")
+                assertThat(buildResult.output).doesNotContain("--report md:")
+                assertThat(buildResult.tasks.map { it.path })
+                    .filteredOn { it.startsWith(":app:detekt") }
+                    .containsExactlyInAnyOrder(
+                        ":app:detektDebugAndroidTest",
+                        ":app:detektDebugUnitTest",
+                        ":app:detektTest",
+                    )
+            }
+        }
+    }
+
+    @Nested
     inner class `does not configure Android tasks if user opts out` {
         val projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 0).apply {
             addSubmodule(
@@ -742,6 +839,19 @@ private val APP_PLUGIN_BLOCK = """
 """.trimIndent()
 
 @Language("gradle.kts")
+private val BUILT_IN_KOTLIN_APP_PLUGIN_BLOCK = """
+    plugins {
+        id("com.android.application")
+        id("dev.detekt")
+    }
+    kotlin {
+        compilerOptions {
+            jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8
+        }
+    }
+""".trimIndent()
+
+@Language("gradle.kts")
 private val LIB_PLUGIN_BLOCK = """
     plugins {
         id("com.android.library")
@@ -850,22 +960,26 @@ private val SAMPLE_ACTIVITY_USING_VIEW_BINDING = """
     
 """.trimIndent() // Last line to prevent NewLineAtEndOfFile.
 
-private fun createGradleRunnerAndSetupProject(projectLayout: ProjectLayout, dryRun: Boolean = true) =
-    DslGradleRunner(
-        projectLayout = projectLayout,
-        buildFileName = "build.gradle.kts",
-        settingsContent = """
-            dependencyResolutionManagement {
-                repositories {
-                    mavenLocal()
-                    mavenCentral()
-                    google()
-                }
+private fun createGradleRunnerAndSetupProject(
+    projectLayout: ProjectLayout,
+    dryRun: Boolean = true,
+    newDsl: String = "false",
+    builtInKotlin: String = "false",
+) = DslGradleRunner(
+    projectLayout = projectLayout,
+    buildFileName = "build.gradle.kts",
+    settingsContent = """
+        dependencyResolutionManagement {
+            repositories {
+                mavenLocal()
+                mavenCentral()
+                google()
             }
-        """.trimIndent(),
-        gradleProperties = mapOf(
-            "android.builtInKotlin" to "false",
-            "android.newDsl" to "false",
-        ),
-        dryRun = dryRun,
-    ).also { it.setupProject() }
+        }
+    """.trimIndent(),
+    gradleProperties = mapOf(
+        "android.builtInKotlin" to builtInKotlin,
+        "android.newDsl" to newDsl,
+    ),
+    dryRun = dryRun,
+).also { it.setupProject() }

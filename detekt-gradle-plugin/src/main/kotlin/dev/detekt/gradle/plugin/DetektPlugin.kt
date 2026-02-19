@@ -61,7 +61,7 @@ class DetektPlugin : Plugin<Project> {
     }
 
     private fun Project.registerDetektAndroidTasks(extension: DetektExtension) {
-        plugins.withId("kotlin-android") {
+        plugins.withId("com.android.base") {
             DetektAndroidCompilations.registerTasks(project, extension)
             DetektAndroidCompilations.linkTasks(project, extension)
         }
