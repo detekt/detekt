@@ -21,6 +21,7 @@ import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.name.StandardClassIds
 import org.jetbrains.kotlin.psi.KtArrayAccessExpression
+import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtPostfixExpression
 
@@ -78,8 +79,12 @@ class MapGetWithNotNullAssertionOperator(config: Config) :
         val postfixExpression = baseExpression ?: return false
 
         val expression = when (postfixExpression) {
-            is KtDotQualifiedExpression -> postfixExpression.receiverExpression
+            is KtDotQualifiedExpression -> postfixExpression.receiverExpression.takeIf {
+                (postfixExpression.selectorExpression as? KtCallExpression)?.calleeExpression?.text == "get"
+            }
+
             is KtArrayAccessExpression -> postfixExpression.arrayExpression
+
             else -> null
         } ?: return false
 
