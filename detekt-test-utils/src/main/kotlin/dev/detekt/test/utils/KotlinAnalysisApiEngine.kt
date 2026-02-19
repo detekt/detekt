@@ -42,7 +42,7 @@ object KotlinAnalysisApiEngine {
         @Language("kotlin") code: String,
         dependencyCodes: List<String> = emptyList(),
         javaSourceRoots: List<Path> = emptyList(),
-        jvmClasspathRoots: List<Path> = emptyList(),
+        jvmClasspathRoots: List<Path> = listOf(Path(CharRange::class.java.protectionDomain.codeSource.location.path)),
         allowCompilationErrors: Boolean = false,
     ): KtFile {
         val disposable = Disposer.newDisposable()
