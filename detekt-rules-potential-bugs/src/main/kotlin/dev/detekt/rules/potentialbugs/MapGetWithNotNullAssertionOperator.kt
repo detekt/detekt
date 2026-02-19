@@ -77,13 +77,13 @@ class MapGetWithNotNullAssertionOperator(config: Config) :
     private fun KtPostfixExpression.isMapGet(): Boolean {
         val postfixExpression = baseExpression ?: return false
 
-        analyze(postfixExpression) {
-            val expression = when (postfixExpression) {
-                is KtDotQualifiedExpression -> postfixExpression.receiverExpression
-                is KtArrayAccessExpression -> postfixExpression.arrayExpression
-                else -> null
-            } ?: return false
+        val expression = when (postfixExpression) {
+            is KtDotQualifiedExpression -> postfixExpression.receiverExpression
+            is KtArrayAccessExpression -> postfixExpression.arrayExpression
+            else -> null
+        } ?: return false
 
+        analyze(postfixExpression) {
             val callExpression = expression.resolveToCall()
 
             val successfulCall = callExpression?.successfulVariableAccessCall()
