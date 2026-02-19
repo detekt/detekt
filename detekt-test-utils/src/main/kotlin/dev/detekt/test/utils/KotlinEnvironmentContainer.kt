@@ -17,7 +17,9 @@ class KotlinEnvironmentContainer(val configuration: CompilerConfiguration)
  *
  * @param additionalJavaSourceRootPaths the optional Java source roots list.
  */
-fun createEnvironment(additionalJavaSourceRootPaths: List<File> = emptyList()): KotlinEnvironmentContainer {
+fun createEnvironment(
+    additionalJavaSourceRootPaths: List<File> = emptyList(),
+): KotlinEnvironmentContainer {
     val configuration = CompilerConfiguration()
     configuration.put(CommonConfigurationKeys.MODULE_NAME, "test_module")
     configuration.put(CommonConfigurationKeys.MESSAGE_COLLECTOR_KEY, MessageCollector.NONE)

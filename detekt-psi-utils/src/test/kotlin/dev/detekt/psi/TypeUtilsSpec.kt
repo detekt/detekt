@@ -1,8 +1,6 @@
 package dev.detekt.psi
 
 import dev.detekt.test.utils.KotlinAnalysisApiEngine
-import dev.detekt.test.utils.compileContentForTest
-import dev.detekt.test.utils.createEnvironment
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtProperty
@@ -37,8 +35,7 @@ internal class TypeUtilsSpec {
             var a: Int? = null
             $codeToTest
         """.trimIndent()
-        val env = createEnvironment()
-        val file = compileContentForTest(code, env)
+        val file = KotlinAnalysisApiEngine.compile(code)
         val expression = file.children.filterIsInstance<KtProperty>().last().initializer!!
 
         assertThat(expression.isNullable(false)).isFalse()
@@ -51,8 +48,7 @@ internal class TypeUtilsSpec {
                 val f = javaClass.simpleName
             }
         """.trimIndent()
-        val env = createEnvironment()
-        val file = compileContentForTest(code, env)
+        val file = KotlinAnalysisApiEngine.compile(code)
         val expression = file
             .children
             .filterIsInstance<KtClass>()

@@ -38,8 +38,7 @@ class KotlinAnalysisApiEngineTest {
             }
         """.trimIndent()
 
-        val env = createEnvironment()
-        compileContentForTest(validCode, env)
+        KotlinAnalysisApiEngine.compile(validCode)
 
         val codeWithMissingImport = """
             fun useRandom() {
@@ -47,7 +46,7 @@ class KotlinAnalysisApiEngineTest {
             }
         """.trimIndent()
 
-        assertThatThrownBy { compileContentForTest(codeWithMissingImport, env) }
+        assertThatThrownBy { KotlinAnalysisApiEngine.compile(codeWithMissingImport) }
             .isInstanceOf(IllegalStateException::class.java)
             .hasMessage("ERROR Unresolved reference 'Random'. (dummy.kt:2:5)")
     }
