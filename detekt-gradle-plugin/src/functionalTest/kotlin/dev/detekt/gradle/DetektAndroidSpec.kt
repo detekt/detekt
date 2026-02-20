@@ -9,51 +9,63 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.condition.EnabledIf
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 
 @EnabledIf("dev.detekt.gradle.DetektAndroidSpecKt#isAndroidSdkInstalled")
 class DetektAndroidSpec {
 
     @Nested
     inner class `configures android tasks for android application` {
-        val projectLayout = ProjectLayout(
-            numberOfSourceFilesInRootPerSourceDir = 0,
-        ).apply {
-            addSubmodule(
-                name = "app",
-                numberOfSourceFilesPerSourceDir = 1,
-                numberOfFindings = 1,
-                buildFileContent = joinGradleBlocks(
-                    APP_PLUGIN_BLOCK,
-                    ANDROID_BLOCK,
-                    DETEKT_REPORTS_BLOCK,
-                ),
-                srcDirs = listOf(
-                    "src/main/java",
-                    "src/debug/java",
-                    "src/test/java",
-                    "src/androidTest/java",
-                    "src/main/kotlin",
-                    "src/debug/kotlin",
-                    "src/test/kotlin",
-                    "src/androidTest/kotlin",
-                ),
-                baselineFiles = listOf(
-                    "detekt-baseline.xml",
-                    "detekt-baseline-release.xml",
-                    "detekt-baseline-debug.xml",
-                    "detekt-baseline-releaseUnitTest.xml",
-                    "detekt-baseline-debugUnitTest.xml",
-                    "detekt-baseline-debugAndroidTest.xml"
+        private fun createAppRunner(builtInKotlin: Boolean): DslGradleRunner {
+            val projectLayout = ProjectLayout(
+                numberOfSourceFilesInRootPerSourceDir = 0,
+            ).apply {
+                addSubmodule(
+                    name = "app",
+                    numberOfSourceFilesPerSourceDir = 1,
+                    numberOfFindings = 1,
+                    buildFileContent = joinGradleBlocks(
+                        when {
+                            builtInKotlin -> APP_BUILT_IN_KOTLIN_PLUGIN_BLOCK
+                            else -> APP_PLUGIN_BLOCK
+                        },
+                        ANDROID_BLOCK,
+                        DETEKT_REPORTS_BLOCK,
+                    ),
+                    srcDirs = listOf(
+                        "src/main/java",
+                        "src/debug/java",
+                        "src/test/java",
+                        "src/androidTest/java",
+                        "src/main/kotlin",
+                        "src/debug/kotlin",
+                        "src/test/kotlin",
+                        "src/androidTest/kotlin",
+                    ),
+                    baselineFiles = listOf(
+                        "detekt-baseline.xml",
+                        "detekt-baseline-release.xml",
+                        "detekt-baseline-debug.xml",
+                        "detekt-baseline-releaseUnitTest.xml",
+                        "detekt-baseline-debugUnitTest.xml",
+                        "detekt-baseline-debugAndroidTest.xml"
+                    )
                 )
-            )
-        }
-        val gradleRunner = createGradleRunnerAndSetupProject(projectLayout).also {
-            it.writeProjectFile("app/src/main/AndroidManifest.xml", manifestContent)
+            }
+            return createGradleRunnerAndSetupProject(
+                projectLayout,
+                newDsl = builtInKotlin.toString(),
+                builtInKotlin = builtInKotlin.toString(),
+            ).also {
+                it.writeProjectFile("app/src/main/AndroidManifest.xml", manifestContent)
+            }
         }
 
-        @Test
-        @DisplayName("task :app:detektMain")
-        fun appDetektMain() {
+        @ParameterizedTest(name = "task :app:detektMain with builtInKotlin {0}")
+        @ValueSource(booleans = [false, true])
+        fun appDetektMain(builtInKotlin: Boolean) {
+            val gradleRunner = createAppRunner(builtInKotlin)
             gradleRunner.runTasksAndCheckResult(":app:detektMain") { buildResult ->
                 assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-release.xml """)
                 assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-debug.xml """)
@@ -74,106 +86,10 @@ class DetektAndroidSpec {
             }
         }
 
-        @Test
-        @DisplayName("task :app:detektTest")
-        fun appDetektTest() {
-            gradleRunner.runTasksAndCheckResult(":app:detektTest") { buildResult ->
-                assertThat(buildResult.output).containsPattern(
-                    """--baseline \S*[/\\]detekt-baseline-debugUnitTest.xml """
-                )
-                assertThat(buildResult.output).containsPattern(
-                    """--baseline \S*[/\\]detekt-baseline-debugAndroidTest.xml """
-                )
-                assertThat(buildResult.output).containsPattern("""--input \S*[/\\]app[/\\]src[/\\]test[/\\]java""")
-                assertThat(buildResult.output).containsPattern(
-                    """--input \S*[/\\]app[/\\]src[/\\]androidTest[/\\]java"""
-                )
-                assertThat(buildResult.output).containsPattern("""--input \S*[/\\]app[/\\]src[/\\]test[/\\]kotlin""")
-                assertThat(buildResult.output).containsPattern(
-                    """--input \S*[/\\]app[/\\]src[/\\]androidTest[/\\]kotlin"""
-                )
-                assertThat(buildResult.output).contains("--report checkstyle:")
-                assertThat(buildResult.output).contains("--report sarif:")
-                assertThat(buildResult.output).doesNotContain("--report md:")
-                assertThat(buildResult.tasks.map { it.path })
-                    .filteredOn { it.startsWith(":app:detekt") }
-                    .containsExactlyInAnyOrder(
-                        ":app:detektDebugAndroidTest",
-                        ":app:detektDebugUnitTest",
-                        ":app:detektTest",
-                    )
-            }
-        }
-    }
-
-    @Nested
-    inner class `configures android tasks for application with newDsl and builtInKotlin on` {
-        val projectLayout = ProjectLayout(
-            numberOfSourceFilesInRootPerSourceDir = 0,
-        ).apply {
-            addSubmodule(
-                name = "app",
-                numberOfSourceFilesPerSourceDir = 1,
-                numberOfFindings = 1,
-                buildFileContent = joinGradleBlocks(
-                    BUILT_IN_KOTLIN_APP_PLUGIN_BLOCK,
-                    ANDROID_BLOCK,
-                    DETEKT_REPORTS_BLOCK,
-                ),
-                srcDirs = listOf(
-                    "src/main/java",
-                    "src/debug/java",
-                    "src/test/java",
-                    "src/androidTest/java",
-                    "src/main/kotlin",
-                    "src/debug/kotlin",
-                    "src/test/kotlin",
-                    "src/androidTest/kotlin",
-                ),
-                baselineFiles = listOf(
-                    "detekt-baseline.xml",
-                    "detekt-baseline-release.xml",
-                    "detekt-baseline-debug.xml",
-                    "detekt-baseline-releaseUnitTest.xml",
-                    "detekt-baseline-debugUnitTest.xml",
-                    "detekt-baseline-debugAndroidTest.xml"
-                )
-            )
-        }
-        val gradleRunner = createGradleRunnerAndSetupProject(
-            projectLayout,
-            newDsl = true.toString(),
-            builtInKotlin = true.toString(),
-        ).also {
-            it.writeProjectFile("app/src/main/AndroidManifest.xml", manifestContent)
-        }
-
-        @Test
-        @DisplayName("task :app:detektMain")
-        fun appDetektMain() {
-            gradleRunner.runTasksAndCheckResult(":app:detektMain") { buildResult ->
-                assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-release.xml """)
-                assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-debug.xml """)
-                assertThat(buildResult.output).containsPattern("""--input \S*[/\\]app[/\\]src[/\\]main[/\\]java""")
-                assertThat(buildResult.output).containsPattern("""--input \S*[/\\]app[/\\]src[/\\]debug[/\\]java""")
-                assertThat(buildResult.output).containsPattern("""--input \S*[/\\]app[/\\]src[/\\]main[/\\]kotlin""")
-                assertThat(buildResult.output).containsPattern("""--input \S*[/\\]app[/\\]src[/\\]debug[/\\]kotlin""")
-                assertThat(buildResult.output).contains("--report checkstyle:")
-                assertThat(buildResult.output).contains("--report sarif:")
-                assertThat(buildResult.output).doesNotContain("--report md:")
-                assertThat(buildResult.tasks.map { it.path })
-                    .filteredOn { it.startsWith(":app:detekt") }
-                    .containsExactlyInAnyOrder(
-                        ":app:detektDebug",
-                        ":app:detektMain",
-                        ":app:detektRelease",
-                    )
-            }
-        }
-
-        @Test
-        @DisplayName("task :app:detektTest")
-        fun appDetektTest() {
+        @ParameterizedTest(name = "task :app:detektTest with builtInKotlin {0}")
+        @ValueSource(booleans = [false, true])
+        fun appDetektTest(builtInKotlin: Boolean) {
+            val gradleRunner = createAppRunner(builtInKotlin)
             gradleRunner.runTasksAndCheckResult(":app:detektTest") { buildResult ->
                 assertThat(buildResult.output).containsPattern(
                     """--baseline \S*[/\\]detekt-baseline-debugUnitTest.xml """
@@ -250,34 +166,44 @@ class DetektAndroidSpec {
 
     @Nested
     inner class `configures android tasks for android library` {
-        val projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 0).apply {
-            addSubmodule(
-                name = "lib",
-                numberOfSourceFilesPerSourceDir = 1,
-                numberOfFindings = 1,
-                buildFileContent = joinGradleBlocks(
-                    LIB_PLUGIN_BLOCK,
-                    ANDROID_BLOCK,
-                    DETEKT_REPORTS_BLOCK,
-                ),
-                srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java"),
-                baselineFiles = listOf(
-                    "detekt-baseline.xml",
-                    "detekt-baseline-release.xml",
-                    "detekt-baseline-debug.xml",
-                    "detekt-baseline-releaseUnitTest.xml",
-                    "detekt-baseline-debugUnitTest.xml",
-                    "detekt-baseline-debugAndroidTest.xml"
+        private fun createLibRunner(builtInKotlin: Boolean): DslGradleRunner {
+            val projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 0).apply {
+                addSubmodule(
+                    name = "lib",
+                    numberOfSourceFilesPerSourceDir = 1,
+                    numberOfFindings = 1,
+                    buildFileContent = joinGradleBlocks(
+                        when {
+                            builtInKotlin -> LIB_BUILT_IN_KOTLIN_PLUGIN_BLOCK
+                            else -> LIB_PLUGIN_BLOCK
+                        },
+                        ANDROID_BLOCK,
+                        DETEKT_REPORTS_BLOCK,
+                    ),
+                    srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java"),
+                    baselineFiles = listOf(
+                        "detekt-baseline.xml",
+                        "detekt-baseline-release.xml",
+                        "detekt-baseline-debug.xml",
+                        "detekt-baseline-releaseUnitTest.xml",
+                        "detekt-baseline-debugUnitTest.xml",
+                        "detekt-baseline-debugAndroidTest.xml"
+                    )
                 )
-            )
-        }
-        val gradleRunner = createGradleRunnerAndSetupProject(projectLayout).also {
-            it.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent)
+            }
+            return createGradleRunnerAndSetupProject(
+                projectLayout = projectLayout,
+                newDsl = builtInKotlin.toString(),
+                builtInKotlin = builtInKotlin.toString(),
+            ).also {
+                it.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent)
+            }
         }
 
-        @Test
-        @DisplayName("task :lib:detektMain")
-        fun libDetektMain() {
+        @ParameterizedTest(name = "task :lib:detektMain with builtInKotlin {0}")
+        @ValueSource(booleans = [false, true])
+        fun libDetektMain(builtInKotlin: Boolean) {
+            val gradleRunner = createLibRunner(builtInKotlin)
             gradleRunner.runTasksAndCheckResult(":lib:detektMain") { buildResult ->
                 assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-release.xml """)
                 assertThat(buildResult.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-debug.xml """)
@@ -294,9 +220,10 @@ class DetektAndroidSpec {
             }
         }
 
-        @Test
-        @DisplayName("task :lib:detektTest")
-        fun libDetektTest() {
+        @ParameterizedTest(name = "task :lib:detektTest with builtInKotlin {0}")
+        @ValueSource(booleans = [false, true])
+        fun libDetektTest(builtInKotlin: Boolean) {
+            val gradleRunner = createLibRunner(builtInKotlin)
             gradleRunner.runTasksAndCheckResult(":lib:detektTest") { buildResult ->
                 assertThat(buildResult.output).containsPattern(
                     """--baseline \S*[/\\]detekt-baseline-debugUnitTest.xml """
@@ -439,26 +366,36 @@ class DetektAndroidSpec {
     @Nested
     inner class `configures android tasks for different build variants` {
 
-        val projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 0).apply {
-            addSubmodule(
-                name = "lib",
-                numberOfSourceFilesPerSourceDir = 1,
-                numberOfFindings = 1,
-                buildFileContent = joinGradleBlocks(
-                    LIB_PLUGIN_BLOCK,
-                    ANDROID_BLOCK_WITH_FLAVOR,
-                    DETEKT_REPORTS_BLOCK,
-                ),
-                srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java")
-            )
-        }
-        val gradleRunner = createGradleRunnerAndSetupProject(projectLayout).also {
-            it.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent)
+        private fun createLibRunner(builtInKotlin: Boolean): DslGradleRunner {
+            val projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 0).apply {
+                addSubmodule(
+                    name = "lib",
+                    numberOfSourceFilesPerSourceDir = 1,
+                    numberOfFindings = 1,
+                    buildFileContent = joinGradleBlocks(
+                        when {
+                            builtInKotlin -> LIB_BUILT_IN_KOTLIN_PLUGIN_BLOCK
+                            else -> LIB_PLUGIN_BLOCK
+                        },
+                        ANDROID_BLOCK_WITH_FLAVOR,
+                        DETEKT_REPORTS_BLOCK,
+                    ),
+                    srcDirs = listOf("src/main/java", "src/debug/java", "src/test/java", "src/androidTest/java")
+                )
+            }
+            return createGradleRunnerAndSetupProject(
+                projectLayout = projectLayout,
+                newDsl = builtInKotlin.toString(),
+                builtInKotlin = builtInKotlin.toString(),
+            ).also {
+                it.writeProjectFile("lib/src/main/AndroidManifest.xml", manifestContent)
+            }
         }
 
-        @Test
-        @DisplayName("task :lib:detektMain")
-        fun libDetektMain() {
+        @ParameterizedTest(name = "task :lib:detektMain with builtInKotlin {0}")
+        @ValueSource(booleans = [false, true])
+        fun libDetektMain(builtInKotlin: Boolean) {
+            val gradleRunner = createLibRunner(builtInKotlin)
             gradleRunner.runTasksAndCheckResult(":lib:detektMain") { buildResult ->
                 assertThat(buildResult.tasks.map { it.path })
                     .filteredOn { it.startsWith(":lib:detekt") }
@@ -472,9 +409,10 @@ class DetektAndroidSpec {
             }
         }
 
-        @Test
-        @DisplayName("task :lib:detektTest")
-        fun libDetektTest() {
+        @ParameterizedTest(name = "task :lib:detektTest with builtInKotlin {0}")
+        @ValueSource(booleans = [false, true])
+        fun libDetektTest(builtInKotlin: Boolean) {
+            val gradleRunner = createLibRunner(builtInKotlin)
             gradleRunner.runTasksAndCheckResult(":lib:detektTest") { buildResult ->
                 assertThat(buildResult.tasks.map { it.path })
                     .filteredOn { it.startsWith(":lib:detekt") }
@@ -839,7 +777,7 @@ private val APP_PLUGIN_BLOCK = """
 """.trimIndent()
 
 @Language("gradle.kts")
-private val BUILT_IN_KOTLIN_APP_PLUGIN_BLOCK = """
+private val APP_BUILT_IN_KOTLIN_PLUGIN_BLOCK = """
     plugins {
         id("com.android.application")
         id("dev.detekt")
@@ -856,6 +794,19 @@ private val LIB_PLUGIN_BLOCK = """
     plugins {
         id("com.android.library")
         kotlin("android")
+        id("dev.detekt")
+    }
+    kotlin {
+        compilerOptions {
+            jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8
+        }
+    }
+""".trimIndent()
+
+@Language("gradle.kts")
+private val LIB_BUILT_IN_KOTLIN_PLUGIN_BLOCK = """
+    plugins {
+        id("com.android.library")
         id("dev.detekt")
     }
     kotlin {
