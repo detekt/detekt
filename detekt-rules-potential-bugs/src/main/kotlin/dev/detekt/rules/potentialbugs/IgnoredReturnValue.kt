@@ -158,7 +158,7 @@ class IgnoredReturnValue(config: Config) :
         val origin = (this as? KaClassSymbol)?.origin
         if (origin != KaSymbolOrigin.JAVA_SOURCE && origin != KaSymbolOrigin.JAVA_LIBRARY) return emptyList()
         val packageFqName = this.classId?.packageFqName ?: return emptyList()
-        val javaClassFinder = JavaClassFinderImpl().apply {
+        val javaClassFinder = JavaClassFinderImpl(null).apply {
             setScope(scope)
             setProjectInstance(project)
         }
