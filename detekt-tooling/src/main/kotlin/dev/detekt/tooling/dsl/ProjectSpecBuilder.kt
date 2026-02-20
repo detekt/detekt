@@ -16,12 +16,14 @@ class ProjectSpecBuilder : Builder<ProjectSpec> {
         }
     var inputPaths: Collection<Path> = emptyList()
     var analysisMode: AnalysisMode = AnalysisMode.light
+    var diagnostics: Boolean = false
 
-    override fun build(): ProjectSpec = ProjectModel(basePath, inputPaths, analysisMode)
+    override fun build(): ProjectSpec = ProjectModel(basePath, inputPaths, analysisMode, diagnostics)
 }
 
 private data class ProjectModel(
     override val basePath: Path,
     override val inputPaths: Collection<Path>,
     override val analysisMode: AnalysisMode,
+    override val diagnostics: Boolean,
 ) : ProjectSpec

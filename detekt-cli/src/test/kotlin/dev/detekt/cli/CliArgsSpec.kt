@@ -388,6 +388,22 @@ internal class CliArgsSpec {
     }
 
     @Nested
+    inner class `Diagnostics parameter` {
+
+        @Test
+        fun `--diagnostics is false by default`() {
+            val spec = parseArguments(emptyArray()).toSpec()
+            assertThat(spec.projectSpec.diagnostics).isFalse()
+        }
+
+        @Test
+        fun `--diagnostics enables diagnostics`() {
+            val spec = parseArguments(arrayOf("--diagnostics")).toSpec()
+            assertThat(spec.projectSpec.diagnostics).isTrue()
+        }
+    }
+
+    @Nested
     inner class `Configuration of FailurePolicy` {
         @Test
         fun `not specified results in default value`() {
