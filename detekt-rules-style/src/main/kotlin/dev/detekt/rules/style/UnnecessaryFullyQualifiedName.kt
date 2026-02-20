@@ -3,7 +3,13 @@ package dev.detekt.rules.style
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
+import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
+import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaConstructorSymbol
 import org.jetbrains.kotlin.psi.KtClassLiteralExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtElement
@@ -57,7 +63,8 @@ import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
  * </compliant>
  */
 class UnnecessaryFullyQualifiedName(config: Config) :
-    Rule(config, "Unnecessary fully qualified names make code harder to read. Use imports instead.") {
+    Rule(config, "Unnecessary fully qualified names make code harder to read. Use imports instead."),
+    RequiresAnalysisApi {
 
     override fun visitUserType(type: KtUserType) {
         super.visitUserType(type)
@@ -122,6 +129,29 @@ class UnnecessaryFullyQualifiedName(config: Config) :
 
         val receiverText = expression.receiverExpression.text
         val selectorText = expression.selectorExpression?.text ?: return
+
+        analyze(expression) {
+            val resolvedCall = expression.resolveToCall()?.successfulCallOrNull<KaCallableMemberCall<*, *>>()
+            val fqName = when (val symbol = resolvedCall?.partiallyAppliedSymbol?.symbol) {
+                is KaConstructorSymbol -> {
+                    val containingClassId = symbol.containingClassId
+                    val outermostClassId = containingClassId?.outermostClassId
+                    if (outermostClassId == containingClassId) {
+                        outermostClassId?.packageFqName?.asString()
+                    } else {
+                        outermostClassId?.asFqNameString()
+                    }
+                }
+
+                else -> {
+                    val callableId = symbol?.callableId
+                    callableId?.classId?.asFqNameString() ?: callableId?.packageName?.asString()
+                }
+            }
+            if (fqName != receiverText) {
+                return
+            }
+        }
 
         checkQualifiedClassReference(expression, receiverText, selectorText)?.let { finding ->
             report(finding)
