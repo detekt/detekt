@@ -2,7 +2,7 @@ package dev.detekt.core.config
 
 import dev.detekt.api.Config
 import dev.detekt.core.config.validation.DeprecatedRule
-import dev.detekt.test.yamlConfigFromContent
+import dev.detekt.core.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test

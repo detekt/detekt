@@ -7,11 +7,6 @@ public final class dev/detekt/test/FindingExtensionsKt {
 	public static final fun getLocation (Ldev/detekt/api/Finding;)Ldev/detekt/api/Location;
 }
 
-public final class dev/detekt/test/ResourcesKt {
-	public static final fun yamlConfig (Ljava/lang/String;)Ldev/detekt/api/Config;
-	public static final fun yamlConfigFromContent (Ljava/lang/String;)Ldev/detekt/api/Config;
-}
-
 public final class dev/detekt/test/RuleExtensionsKt {
 	public static final fun lint (Ldev/detekt/api/Rule;Ljava/lang/String;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;Z)Ljava/util/List;
 	public static final fun lint (Ldev/detekt/api/Rule;Lorg/jetbrains/kotlin/psi/KtFile;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;)Ljava/util/List;

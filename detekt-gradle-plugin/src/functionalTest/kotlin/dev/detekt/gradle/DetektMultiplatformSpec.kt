@@ -134,7 +134,7 @@ class DetektMultiplatformSpec {
 
     @Nested
     @EnabledIf("dev.detekt.gradle.DetektAndroidSpecKt#isAndroidSdkInstalled")
-    inner class `multiplatform projects - Android target` {
+    inner class `multiplatform projects - Android target (legacy plugin)` {
         val gradleRunner =
             setupAndroidProject {
                 addSubmodule(
@@ -207,6 +207,64 @@ class DetektMultiplatformSpec {
             gradleRunner.runTasksAndCheckResult(":shared:detektReleaseAndroid") {
                 assertThat(it.output).containsPattern("""--baseline \S*[/\\]detekt-baseline-release.xml """)
                 assertThat(it.output).containsPattern("""--report checkstyle:\S*[/\\]releaseAndroid.xml""")
+                assertDetektWithClasspath(it)
+            }
+        }
+    }
+
+    @Nested
+    @EnabledIf("dev.detekt.gradle.DetektAndroidSpecKt#isAndroidSdkInstalled")
+    inner class `multiplatform projects - Android target` {
+        val gradleRunner =
+            setupAndroidProject {
+                addSubmodule(
+                    "shared",
+                    1,
+                    1,
+                    buildFileContent = joinGradleBlocks(
+                        """
+                            plugins {
+                                kotlin("multiplatform")
+                                id("com.android.kotlin.multiplatform.library")
+                                id("dev.detekt")
+                            }
+                            kotlin {
+                                androidLibrary {
+                                    compileSdk = 34
+                                    namespace = "dev.detekt.app"
+
+                                    withHostTest {}
+                                    withDeviceTest {}
+                                }
+                            }
+                        """.trimIndent(),
+                        DETEKT_BLOCK,
+                    ),
+                    srcDirs = listOf(
+                        "src/androidMain/kotlin",
+                    ),
+                    baselineFiles = listOf(
+                        "detekt-baseline.xml",
+                    )
+                )
+            }
+
+        @Test
+        fun `configures baseline task`() {
+            gradleRunner.runTasks(":shared:detektBaselineMainAndroid")
+        }
+
+        @Test
+        fun `configures test tasks`() {
+            gradleRunner.runTasks(":shared:detektDeviceTestAndroid")
+            gradleRunner.runTasks(":shared:detektHostTestAndroid")
+        }
+
+        @Test
+        fun `configures detekt task with type resolution`() {
+            gradleRunner.runTasksAndCheckResult(":shared:detektMainAndroid") {
+                assertThat(it.output).containsPattern("""--baseline \S*[/\\]detekt-baseline.xml """)
+                assertThat(it.output).containsPattern("""--report checkstyle:\S*[/\\]mainAndroid.xml""")
                 assertDetektWithClasspath(it)
             }
         }

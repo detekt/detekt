@@ -7,8 +7,8 @@ import dev.detekt.core.config.YamlConfig
 import dev.detekt.core.config.validation.InvalidPropertiesConfigValidator.Companion.nestedConfigurationExpected
 import dev.detekt.core.config.validation.InvalidPropertiesConfigValidator.Companion.propertyDoesNotExists
 import dev.detekt.core.config.validation.InvalidPropertiesConfigValidator.Companion.unexpectedNestedConfiguration
-import dev.detekt.test.yamlConfig
-import dev.detekt.test.yamlConfigFromContent
+import dev.detekt.core.yamlConfig
+import dev.detekt.core.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested

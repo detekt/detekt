@@ -13,7 +13,6 @@ dependencies {
     runtimeOnly(projects.detektRulesPerformance)
     runtimeOnly(projects.detektRulesStyle)
 
-    testImplementation(projects.detektTestUtils)
     testImplementation(projects.detektRulesComplexity)
     testImplementation(projects.detektRulesCoroutines)
     testImplementation(projects.detektRulesComments)
@@ -25,5 +24,5 @@ dependencies {
     testImplementation(projects.detektRulesStyle)
     testImplementation(libs.assertj.core)
     testImplementation(libs.classgraph)
-    testImplementation(testFixtures(projects.detektApi))
+    testImplementation(projects.detektApi)
 }

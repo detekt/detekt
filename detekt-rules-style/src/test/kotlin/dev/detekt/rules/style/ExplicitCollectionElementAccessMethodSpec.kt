@@ -548,7 +548,7 @@ class ExplicitCollectionElementAccessMethodSpec {
             }
 
             @Test
-            fun `does not report for unresolvable code`() {
+            fun `does not report put on unresolvable code`() {
                 val code = """
                     fun f() {
                        val unknownType = UnknownType()
@@ -556,6 +556,56 @@ class ExplicitCollectionElementAccessMethodSpec {
                     }
                 """.trimIndent()
                 assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true)).isEmpty()
+            }
+
+            @Test
+            fun `does not report set on unresolvable type`() {
+                val code = """
+                    fun f() {
+                        val property = UnknownProperty()
+                        property.set("value")
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true)).isEmpty()
+            }
+
+            @Test
+            fun `does not report get on unresolvable type`() {
+                val code = """
+                    fun f(): String {
+                        val provider = UnknownProvider()
+                        return provider.get()
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true)).isEmpty()
+            }
+
+            @Test
+            fun `reports get operator with default parameter called without that argument`() {
+                val code = """
+                    class Custom {
+                        operator fun get(key: String, default: String = ""): String = default
+                    }
+                    fun f() {
+                        val custom = Custom()
+                        val value = custom.get("key")
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
+            }
+
+            @Test
+            fun `reports get operator with default parameter called with all arguments`() {
+                val code = """
+                    class Custom {
+                        operator fun get(key: String, default: String = ""): String = default
+                    }
+                    fun f() {
+                        val custom = Custom()
+                        val value = custom.get("key", "fallback")
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
             }
 
             @Test

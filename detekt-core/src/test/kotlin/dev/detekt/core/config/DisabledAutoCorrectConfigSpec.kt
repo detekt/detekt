@@ -1,6 +1,6 @@
 package dev.detekt.core.config
 
-import dev.detekt.test.yamlConfigFromContent
+import dev.detekt.core.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

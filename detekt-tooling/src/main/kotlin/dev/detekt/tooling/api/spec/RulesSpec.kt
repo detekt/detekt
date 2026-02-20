@@ -18,17 +18,17 @@ interface RulesSpec {
     /**
      * Policy to decide if detekt throws an error.
      */
-    sealed class FailurePolicy {
+    sealed interface FailurePolicy {
 
         /**
          * Any number of issues is allowed. The build never fails due to detekt issues.
          */
-        data object NeverFail : FailurePolicy()
+        data object NeverFail : FailurePolicy
 
         /**
          * No issue at or above the specified severity is allowed.
          */
-        data class FailOnSeverity(val minSeverity: Severity) : FailurePolicy()
+        data class FailOnSeverity(val minSeverity: Severity) : FailurePolicy
     }
 
     /**
@@ -46,21 +46,21 @@ interface RulesSpec {
     /**
      * Restrict rules to use for current analysis.
      */
-    sealed class RunPolicy {
+    sealed interface RunPolicy {
 
         /**
          * Run all loaded rules provided by [dev.detekt.api.RuleSetProvider]
          */
-        data object NoRestrictions : RunPolicy()
+        data object NoRestrictions : RunPolicy
 
         /**
          * Exclude all default rule sets provided by detekt.
          */
-        data object DisableDefaultRuleSets : RunPolicy()
+        data object DisableDefaultRuleSets : RunPolicy
 
         /**
          * Run a single rule.
          */
-        class RestrictToSingleRule(val ruleSetId: RuleSetId, val ruleId: String) : RunPolicy()
+        class RestrictToSingleRule(val ruleSetId: RuleSetId, val ruleId: String) : RunPolicy
     }
 }
