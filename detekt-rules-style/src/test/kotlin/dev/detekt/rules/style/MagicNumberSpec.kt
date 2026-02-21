@@ -49,13 +49,13 @@ class MagicNumberSpec {
 
         @Test
         fun `should not be reported by default`() {
-            val findings = MagicNumber(Config.empty).lint(code, compile = false)
+            val findings = MagicNumber(Config.empty).lint(code)
             assertThat(findings).isEmpty()
         }
 
         @Test
         fun `should not be reported when ignoredNumbers is empty`() {
-            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to emptyList<String>())).lint(code, compile = false)
+            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to emptyList<String>())).lint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -84,13 +84,13 @@ class MagicNumberSpec {
 
         @Test
         fun `should not be reported by default`() {
-            val findings = MagicNumber(Config.empty).lint(code, compile = false)
+            val findings = MagicNumber(Config.empty).lint(code)
             assertThat(findings).isEmpty()
         }
 
         @Test
         fun `should not be reported when ignoredNumbers is empty`() {
-            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to emptyList<String>())).lint(code, compile = false)
+            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to emptyList<String>())).lint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -169,13 +169,13 @@ class MagicNumberSpec {
 
         @Test
         fun `should not be reported by default`() {
-            val findings = MagicNumber(Config.empty).lint(code, compile = false)
+            val findings = MagicNumber(Config.empty).lint(code)
             assertThat(findings).isEmpty()
         }
 
         @Test
         fun `should not be reported when ignoredNumbers is empty`() {
-            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to emptyList<String>())).lint(code, compile = false)
+            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to emptyList<String>())).lint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -204,13 +204,13 @@ class MagicNumberSpec {
 
         @Test
         fun `should not be reported by default`() {
-            val findings = MagicNumber(Config.empty).lint(code, compile = false)
+            val findings = MagicNumber(Config.empty).lint(code)
             assertThat(findings).isEmpty()
         }
 
         @Test
         fun `should not be reported when ignoredNumbers is empty`() {
-            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to emptyList<String>())).lint(code, compile = false)
+            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to emptyList<String>())).lint(code)
             assertThat(findings).isEmpty()
         }
     }
@@ -239,13 +239,13 @@ class MagicNumberSpec {
 
         @Test
         fun `should not be reported by default`() {
-            val findings = MagicNumber(Config.empty).lint(code, compile = false)
+            val findings = MagicNumber(Config.empty).lint(code)
             assertThat(findings).isEmpty()
         }
 
         @Test
         fun `should not be reported when ignoredNumbers is empty`() {
-            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to emptyList<String>())).lint(code, compile = false)
+            val findings = MagicNumber(TestConfig(IGNORE_NUMBERS to emptyList<String>())).lint(code)
             assertThat(findings).isEmpty()
         }
     }

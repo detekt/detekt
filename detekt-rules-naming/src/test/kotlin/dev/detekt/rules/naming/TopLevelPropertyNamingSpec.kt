@@ -17,7 +17,7 @@ class TopLevelPropertyNamingSpec {
             const val lowerCaseConst = ""
         """.trimIndent()
         val subject = TopLevelPropertyNaming(TestConfig(TopLevelPropertyNaming.CONSTANT_PATTERN to "^lowerCaseConst$"))
-        assertThat(subject.lint(code, compile = false)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Nested
@@ -29,7 +29,7 @@ class TopLevelPropertyNamingSpec {
                 const val MY_NAME_8 = "Artur"
                 const val MYNAME = "Artur"
             """.trimIndent()
-            assertThat(subject.lint(code, compile = false)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         @Test
@@ -41,7 +41,7 @@ class TopLevelPropertyNamingSpec {
                 private const val _nAme = "Artur"
                 const val serialVersionUID = 42L
             """.trimIndent()
-            assertThat(subject.lint(code, compile = false)).hasSize(5)
+            assertThat(subject.lint(code)).hasSize(5)
         }
     }
 
