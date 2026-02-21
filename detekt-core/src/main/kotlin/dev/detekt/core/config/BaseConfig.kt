@@ -50,10 +50,10 @@ fun Config.valueOrDefaultInternal(
     }
 
 private fun getDefaultName(className: String): String =
-    if (className == "kotlin.collections.EmptyList") {
-        "kotlin.List"
-    } else {
-        className
+    when (className) {
+        "kotlin.collections.EmptyList" -> "kotlin.List"
+        "java.util.Collections.EmptyList" -> "kotlin.List"
+        else -> className
     }
 
 fun tryParseBasedOnDefault(result: String, defaultResult: Any): Any =
