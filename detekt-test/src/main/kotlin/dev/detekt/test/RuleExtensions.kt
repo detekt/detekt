@@ -7,6 +7,7 @@ import dev.detekt.api.RuleName
 import dev.detekt.test.utils.KotlinAnalysisApiEngine
 import dev.detekt.test.utils.KotlinEnvironmentContainer
 import dev.detekt.test.utils.compileContentForTest
+import dev.detekt.test.utils.createEnvironment
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.cli.jvm.config.javaSourceRoots
 import org.jetbrains.kotlin.cli.jvm.config.jvmClasspathRoots
@@ -33,7 +34,10 @@ fun Rule.lint(
     }
     if (compile && shouldCompileTestSnippets) {
         try {
-            KotlinAnalysisApiEngine.compile(content)
+            KotlinAnalysisApiEngine.compile(
+                content,
+                jvmClasspathRoots = createEnvironment().configuration.jvmClasspathRoots.map(File::toPath),
+            )
         } catch (ex: RuntimeException) {
             if (!ex.isNoMatchingOutputFiles()) throw ex
         }

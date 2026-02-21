@@ -21,7 +21,7 @@ class GlobalCoroutineUsageSpec {
                 GlobalScope.launch { delay(1_000L) }
             }
         """.trimIndent()
-        assertThat(subject.lint(code, compile = false)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -36,7 +36,7 @@ class GlobalCoroutineUsageSpec {
                 GlobalScope.async { delay(1_000L) }
             }
         """.trimIndent()
-        assertThat(subject.lint(code, compile = false)).hasSize(1)
+        assertThat(subject.lint(code)).hasSize(1)
     }
 
     @Test
@@ -51,7 +51,7 @@ class GlobalCoroutineUsageSpec {
                 bar(GlobalScope)
             }
         """.trimIndent()
-        assertThat(subject.lint(code, compile = false)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 
     @Test
@@ -67,6 +67,6 @@ class GlobalCoroutineUsageSpec {
                 bar(scope)
             }
         """.trimIndent()
-        assertThat(subject.lint(code, compile = false)).isEmpty()
+        assertThat(subject.lint(code)).isEmpty()
     }
 }
