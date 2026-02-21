@@ -3,7 +3,7 @@ package dev.detekt.test.utils
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.RepeatedTest
 import org.junit.jupiter.api.Test
-import java.nio.file.Paths
+import java.io.File
 
 class KotlinAnalysisApiEngineTest {
 
@@ -88,7 +88,7 @@ class KotlinAnalysisApiEngineTest {
             }
         """.trimIndent()
 
-        val junitApiJar = Paths.get(Test::class.java.protectionDomain.codeSource.location.toURI())
+        val junitApiJar = File(Test::class.java.protectionDomain.codeSource.location.path).toPath()
         KotlinAnalysisApiEngine.compile(
             code = code,
             jvmClasspathRoots = listOf(junitApiJar)

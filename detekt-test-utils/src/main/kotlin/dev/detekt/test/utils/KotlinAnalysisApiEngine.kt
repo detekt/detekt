@@ -19,8 +19,8 @@ import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.diagnostics.PsiDiagnosticUtils
 import org.jetbrains.kotlin.platform.jvm.JvmPlatforms
 import org.jetbrains.kotlin.psi.KtFile
+import java.io.File
 import java.nio.file.Path
-import java.nio.file.Paths
 import kotlin.io.path.Path
 import kotlin.io.path.nameWithoutExtension
 
@@ -43,7 +43,7 @@ object KotlinAnalysisApiEngine {
         @Language("kotlin") code: String,
         dependencyCodes: List<String> = emptyList(),
         javaSourceRoots: List<Path> = emptyList(),
-        jvmClasspathRoots: List<Path> = listOf(Paths.get(CharRange::class.java.protectionDomain.codeSource.location.toURI())),
+        jvmClasspathRoots: List<Path> = listOf(File(CharRange::class.java.protectionDomain.codeSource.location.path).toPath()),
         allowCompilationErrors: Boolean = false,
     ): KtFile {
         val disposable = Disposer.newDisposable()
