@@ -8,8 +8,15 @@ import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.api.extension.ParameterContext
 import org.junit.jupiter.api.extension.ParameterResolver
 import java.io.File
-import kotlin.script.experimental.jvm.util.classpathFromClassloader
 
+/**
+ * This annotation must be applied to a test class to make use of type analysis APIs when testing Detekt rules, e.g.
+ * via `lintWithContext`. Make sure to pass an instance of [KotlinEnvironmentContainer] into the constructor of your
+ * test class, which you can then pass into `lintWithContext` to compile/lint the code snippet against your rule.
+ *
+ * @param additionalJavaSourcePaths should be paths relative to the `test/resources` directory of your Gradle module. These
+ * must be Java (not Kotlin) source files, which will then be importable from your test snippets.
+ */
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.CLASS)
 @ExtendWith(KotlinEnvironmentResolver::class)
@@ -29,11 +36,8 @@ internal class KotlinEnvironmentResolver : ParameterResolver {
     override fun resolveParameter(parameterContext: ParameterContext, extensionContext: ExtensionContext): Any =
         extensionContext.env
 
-    private fun createNewContainer(extensionContext: ExtensionContext): KotlinEnvironmentContainer =
+    private fun createNewContainer(extensionContext: ExtensionContext) =
         createEnvironment(
-            additionalRootPaths = checkNotNull(
-                classpathFromClassloader(Thread.currentThread().contextClassLoader)
-            ) { "We should always have a classpath" },
             additionalJavaSourceRootPaths = extensionContext.additionalJavaSourcePaths(),
         )
 

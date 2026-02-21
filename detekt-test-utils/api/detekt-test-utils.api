@@ -9,8 +9,8 @@ public final class dev/detekt/test/utils/CompileExtensionsKt {
 
 public final class dev/detekt/test/utils/KotlinAnalysisApiEngine {
 	public static final field INSTANCE Ldev/detekt/test/utils/KotlinAnalysisApiEngine;
-	public final fun compile (Ljava/lang/String;Ljava/util/List;Ljava/util/List;Z)Lorg/jetbrains/kotlin/psi/KtFile;
-	public static synthetic fun compile$default (Ldev/detekt/test/utils/KotlinAnalysisApiEngine;Ljava/lang/String;Ljava/util/List;Ljava/util/List;ZILjava/lang/Object;)Lorg/jetbrains/kotlin/psi/KtFile;
+	public final fun compile (Ljava/lang/String;Ljava/util/List;Ljava/util/List;Ljava/util/List;Z)Lorg/jetbrains/kotlin/psi/KtFile;
+	public static synthetic fun compile$default (Ldev/detekt/test/utils/KotlinAnalysisApiEngine;Ljava/lang/String;Ljava/util/List;Ljava/util/List;Ljava/util/List;ZILjava/lang/Object;)Lorg/jetbrains/kotlin/psi/KtFile;
 }
 
 public final class dev/detekt/test/utils/KotlinEnvironmentContainer {
@@ -19,8 +19,8 @@ public final class dev/detekt/test/utils/KotlinEnvironmentContainer {
 }
 
 public final class dev/detekt/test/utils/KotlinEnvironmentContainerKt {
-	public static final fun createEnvironment (Ljava/util/List;Ljava/util/List;)Ldev/detekt/test/utils/KotlinEnvironmentContainer;
-	public static synthetic fun createEnvironment$default (Ljava/util/List;Ljava/util/List;ILjava/lang/Object;)Ldev/detekt/test/utils/KotlinEnvironmentContainer;
+	public static final fun createEnvironment (Ljava/util/List;)Ldev/detekt/test/utils/KotlinEnvironmentContainer;
+	public static synthetic fun createEnvironment$default (Ljava/util/List;ILjava/lang/Object;)Ldev/detekt/test/utils/KotlinEnvironmentContainer;
 }
 
 public final class dev/detekt/test/utils/NullPrintStream : java/io/PrintStream {
