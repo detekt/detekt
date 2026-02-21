@@ -130,7 +130,8 @@ class YamlConfigSpec {
         @Test
         fun `prints whole config-key path for ClassCastException`() {
             assertThatIllegalStateException().isThrownBy {
-                config.subConfig("RuleSet")
+                @Suppress("UNUSED_VARIABLE")
+                val bool: Int = config.subConfig("RuleSet")
                     .subConfig("Rule")
                     .valueOrDefault("active", 1)
             }
@@ -269,7 +270,9 @@ class YamlConfigSpec {
                     """.trimIndent()
                 )
             }.isInstanceOf(InvalidConfigurationError::class.java)
-                .hasMessage("Provided configuration file is invalid: Structure must be from type Map<String, Any>!")
+                .hasMessageStartingWith(
+                    "Provided configuration file is invalid: Structure must be from type Map<String, Any>!"
+                )
                 .hasCauseInstanceOf(ClassCastException::class.java)
         }
     }

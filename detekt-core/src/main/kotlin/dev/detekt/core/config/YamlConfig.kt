@@ -107,7 +107,10 @@ class YamlConfig internal constructor(
 
 internal class InvalidConfigurationError(throwable: Throwable) :
     RuntimeException(
-        "Provided configuration file is invalid: Structure must be from type Map<String, Any>!",
+        """
+            Provided configuration file is invalid: Structure must be from type Map<String, Any>!
+            ${throwable.message}
+        """.trimIndent(),
         throwable,
     )
 
