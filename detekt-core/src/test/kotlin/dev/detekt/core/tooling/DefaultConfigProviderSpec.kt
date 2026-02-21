@@ -1,5 +1,6 @@
 package dev.detekt.core.tooling
 
+import dev.detekt.api.valueOrNull
 import dev.detekt.core.createNullLoggingSpec
 import dev.detekt.test.utils.resourceAsPath
 import org.assertj.core.api.Assertions.assertThat
@@ -18,7 +19,6 @@ class DefaultConfigProviderSpec {
         fun gets() {
             val config = DefaultConfigProvider().apply { init(extensionsSpec) }.get()
 
-            assertThat(config.parentPath).isNull()
             assertThat(config.valueOrNull<Any>("sample")).isNull()
         }
 
@@ -44,7 +44,6 @@ class DefaultConfigProviderSpec {
         fun gets() {
             val config = DefaultConfigProvider().apply { init(extensionsSpec) }.get()
 
-            assertThat(config.parentPath).isNull()
             assertThat(config.valueOrNull<Any>("sample")).isNotNull()
         }
 

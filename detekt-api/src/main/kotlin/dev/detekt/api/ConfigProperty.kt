@@ -71,10 +71,11 @@ private fun <T : Any> getValueOrDefault(config: Config, propertyName: String, de
 
         is List<*> -> config.getListOrDefault(propertyName, defaultValue) as T
 
-        is String,
-        is Boolean,
-        is Int,
-        -> config.valueOrDefault(propertyName, defaultValue)
+        is String -> config.valueOrDefault<String>(propertyName, defaultValue) as T
+
+        is Boolean -> config.valueOrDefault<Boolean>(propertyName, defaultValue) as T
+
+        is Int -> config.valueOrDefault<Int>(propertyName, defaultValue) as T
 
         else -> error(
             "${defaultValue.javaClass} is not supported for delegated config property '$propertyName'. " +
@@ -83,14 +84,15 @@ private fun <T : Any> getValueOrDefault(config: Config, propertyName: String, de
     }
 }
 
-private fun Config.getListOrDefault(propertyName: String, defaultValue: List<*>): List<String> =
-    if (defaultValue.all { it is String }) {
+private fun Config.getListOrDefault(propertyName: String, defaultValue: List<*>): List<String> {
+    val value = valueOrDefault(propertyName, defaultValue)
+    return if (value.all { it is String }) {
         @Suppress("UNCHECKED_CAST")
-        val defaultValueAsListOfStrings = defaultValue as List<String>
-        valueOrDefault(propertyName, defaultValueAsListOfStrings)
+        value as List<String>
     } else {
         error("Only lists of strings are supported. '$propertyName' is invalid. ")
     }
+}
 
 private fun Config.getValuesWithReasonOrDefault(
     propertyName: String,

@@ -3,6 +3,7 @@ package dev.detekt.core.config.validation
 import dev.detekt.api.Config
 import dev.detekt.api.ConfigValidator
 import dev.detekt.api.Notification
+import dev.detekt.api.valueOrDefault
 import dev.detekt.core.config.YamlConfig
 
 internal abstract class AbstractYamlConfigValidator : ConfigValidator {

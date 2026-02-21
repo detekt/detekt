@@ -1,7 +1,6 @@
 package dev.detekt.core.config
 
 import dev.detekt.api.Config
-import dev.detekt.api.Config.Companion.CONFIG_SEPARATOR
 import dev.detekt.api.Notification
 import dev.detekt.core.config.validation.ValidatableConfiguration
 import dev.detekt.core.config.validation.validateConfig
@@ -9,11 +8,8 @@ import dev.detekt.core.util.indentCompat
 import org.snakeyaml.engine.v2.api.Load
 import org.snakeyaml.engine.v2.api.LoadSettings
 import java.io.Reader
-import java.nio.file.Path
-import kotlin.io.path.exists
-import kotlin.io.path.isReadable
-import kotlin.io.path.isRegularFile
-import kotlin.io.path.reader
+import kotlin.reflect.KClass
+import kotlin.reflect.cast
 
 /**
  * Config implementation using the yaml format. SubConfigurations can return sub maps according to the
@@ -21,32 +17,36 @@ import kotlin.io.path.reader
  */
 class YamlConfig internal constructor(
     val properties: Map<String, Any>,
-    override val parentPath: String?,
+    val parentPath: String?,
     override val parent: Config?,
 ) : Config,
     ValidatableConfiguration {
 
-    override fun subConfig(key: String): Config {
+    override fun subConfig(key: String): YamlConfig {
         @Suppress("UNCHECKED_CAST")
         val subProperties = properties.getOrElse(key) { emptyMap<String, Any>() } as Map<String, Any>
-        return YamlConfig(
-            subProperties,
-            if (parentPath == null) key else "$parentPath $CONFIG_SEPARATOR $key",
-            this,
-        )
+        return YamlConfig(subProperties, keySequence(key), this)
     }
 
     override fun subConfigKeys(): Set<String> = properties.keys
 
-    override fun <T : Any> valueOrDefault(key: String, default: T): T {
-        val result = properties[key]
-        @Suppress("UNCHECKED_CAST")
-        return valueOrDefaultInternal(key, result, default) as T
-    }
-
-    override fun <T : Any> valueOrNull(key: String): T? {
-        @Suppress("UNCHECKED_CAST")
-        return properties[key] as? T?
+    override fun <T : Any> valueOrNull(key: String, type: KClass<T>): T? {
+        val value = properties[key] ?: return null
+        val parsedValue = when (type) {
+            Long::class if value is Int -> value.toLong()
+            Float::class if (value is Int || value is Long || value is Double) -> value.toFloat()
+            Double::class if (value is Int || value is Long || value is Float) -> value.toDouble()
+            else -> value
+        }
+        return try {
+            type.cast(parsedValue)
+        } catch (cce: ClassCastException) {
+            throw IllegalArgumentException(
+                "Value '$value' set for config parameter '${keySequence(key)}' is not of required type " +
+                    "`${type.qualifiedName}`",
+                cce,
+            )
+        }
     }
 
     @Suppress("MagicNumber")
@@ -67,27 +67,17 @@ class YamlConfig internal constructor(
         private const val ALIASES_LIMIT = 100
 
         /**
-         * Factory method to load a yaml configuration. Given path must exist and point to a readable file.
-         */
-        fun load(path: Path): Config {
-            require(path.exists()) { "Configuration does not exist: $path" }
-            require(path.isRegularFile()) { "Configuration must be a file: $path" }
-            require(path.isReadable()) { "Configuration must be readable: $path" }
-
-            return load(path.reader())
-        }
-
-        /**
          * Constructs a [YamlConfig] from any [Reader].
          *
          * Note the reader will be consumed and closed.
          */
-        fun load(reader: Reader): Config =
+        fun load(reader: Reader): YamlConfig =
             reader.buffered().use { bufferedReader ->
-                val map: Map<*, *>? = runCatching {
-                    @Suppress("UNCHECKED_CAST")
-                    createYamlLoad().loadFromReader(bufferedReader) as Map<String, *>?
-                }.getOrElse { throw InvalidConfigurationError(it) }
+                val map: Map<*, *>? = try {
+                    createYamlLoad().loadFromReader(bufferedReader) as Map<*, *>?
+                } catch (cce: ClassCastException) {
+                    throw InvalidConfigurationError(cce)
+                }
                 @Suppress("UNCHECKED_CAST")
                 YamlConfig(map.orEmpty() as Map<String, Any>, null, null)
             }
@@ -104,12 +94,11 @@ class YamlConfig internal constructor(
     }
 }
 
+internal fun YamlConfig.keySequence(key: String): String = if (parentPath == null) key else "$parentPath > $key"
+
 internal class InvalidConfigurationError(throwable: Throwable) :
     RuntimeException(
-        """
-            Provided configuration file is invalid: Structure must be from type Map<String,Any>!
-            ${throwable.message}
-        """.trimIndent(),
+        "Provided configuration file is invalid: Structure must be from type Map<String, Any>!",
         throwable,
     )
 

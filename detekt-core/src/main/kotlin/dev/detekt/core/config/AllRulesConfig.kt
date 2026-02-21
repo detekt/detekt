@@ -5,40 +5,31 @@ import dev.detekt.core.config.validation.DeprecatedRule
 import dev.detekt.core.config.validation.ValidatableConfiguration
 import dev.detekt.core.config.validation.validateConfig
 import dev.detekt.core.util.indentCompat
+import kotlin.reflect.KClass
+import kotlin.reflect.cast
 
-@Suppress("UNCHECKED_CAST")
 internal data class AllRulesConfig(
     private val wrapped: Config,
     private val deprecatedRules: Set<DeprecatedRule>,
     override val parent: Config? = null,
+    private val key: String? = null,
 ) : Config,
     ValidatableConfiguration {
-
-    override val parentPath: String?
-        get() = wrapped.parentPath
-
-    override fun subConfig(key: String) = AllRulesConfig(wrapped.subConfig(key), deprecatedRules, this)
+    override fun subConfig(key: String) = AllRulesConfig(wrapped.subConfig(key), deprecatedRules, this, key)
 
     override fun subConfigKeys(): Set<String> = wrapped.subConfigKeys()
 
-    override fun <T : Any> valueOrDefault(key: String, default: T): T =
+    override fun <T : Any> valueOrNull(key: String, type: KClass<T>): T? =
         when (key) {
-            Config.ACTIVE_KEY -> if (isDeprecated()) false as T else wrapped.valueOrDefault(key, true) as T
-            else -> wrapped.valueOrDefault(key, default)
-        }
-
-    override fun <T : Any> valueOrNull(key: String): T? =
-        when (key) {
-            Config.ACTIVE_KEY -> if (isDeprecated()) false as T else wrapped.valueOrNull(key) ?: true as? T
-            else -> wrapped.valueOrNull(key)
+            Config.ACTIVE_KEY -> type.cast(if (isDeprecated()) false else wrapped.valueOrNull(key, type) ?: true)
+            else -> wrapped.valueOrNull(key, type)
         }
 
     override fun validate(baseline: Config, excludePatterns: Set<Regex>) =
         validateConfig(wrapped, baseline, excludePatterns)
 
-    private fun isDeprecated(): Boolean = deprecatedRules.any { parentPath == it.toPath() }
-
-    private fun DeprecatedRule.toPath() = "$ruleSetId > $ruleName"
+    private fun isDeprecated(): Boolean =
+        deprecatedRules.any { key == it.ruleName && (parent as? AllRulesConfig)?.key == it.ruleSetId }
 
     @Suppress("MagicNumber")
     override fun toString() =

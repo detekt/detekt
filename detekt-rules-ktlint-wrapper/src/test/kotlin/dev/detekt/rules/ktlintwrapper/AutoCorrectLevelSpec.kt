@@ -5,6 +5,7 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RuleSet
 import dev.detekt.api.RuleSetProvider
 import dev.detekt.api.modifiedText
+import dev.detekt.api.valueOrDefault
 import dev.detekt.test.TestConfig
 import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint

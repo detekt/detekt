@@ -5,6 +5,7 @@ import dev.detekt.api.Notification
 import dev.detekt.core.config.validation.ValidatableConfiguration
 import dev.detekt.core.config.validation.validateConfig
 import dev.detekt.core.util.indentCompat
+import kotlin.reflect.KClass
 
 /**
  * Wraps two different configuration which should be considered when retrieving properties.
@@ -16,22 +17,13 @@ class CompositeConfig(
 ) : Config,
     ValidatableConfiguration {
 
-    override val parentPath: String?
-        get() = lookFirst.parentPath ?: lookSecond.parentPath
-
     override fun subConfig(key: String): Config =
         CompositeConfig(lookFirst.subConfig(key), lookSecond.subConfig(key), this)
 
     override fun subConfigKeys(): Set<String> = lookFirst.subConfigKeys() + lookSecond.subConfigKeys()
 
-    override fun <T : Any> valueOrDefault(key: String, default: T): T {
-        if (lookFirst.valueOrNull<T>(key) != null) {
-            return lookFirst.valueOrDefault(key, default)
-        }
-        return lookSecond.valueOrDefault(key, default)
-    }
-
-    override fun <T : Any> valueOrNull(key: String): T? = lookFirst.valueOrNull(key) ?: lookSecond.valueOrNull(key)
+    override fun <T : Any> valueOrNull(key: String, type: KClass<T>): T? =
+        lookFirst.valueOrNull(key, type) ?: lookSecond.valueOrNull(key, type)
 
     @Suppress("MagicNumber")
     override fun toString() =

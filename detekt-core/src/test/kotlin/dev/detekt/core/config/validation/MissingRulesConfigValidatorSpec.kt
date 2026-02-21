@@ -1,13 +1,12 @@
 package dev.detekt.core.config.validation
 
-import dev.detekt.core.config.YamlConfig
 import dev.detekt.core.yamlConfig
 import dev.detekt.core.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 internal class MissingRulesConfigValidatorSpec {
-    private val baseline = yamlConfig("config_validation/baseline.yml") as YamlConfig
+    private val baseline = yamlConfig("config_validation/baseline.yml")
     private val subject = MissingRulesConfigValidator(baseline, DEFAULT_PROPERTY_EXCLUDES.toSet())
 
     @Test

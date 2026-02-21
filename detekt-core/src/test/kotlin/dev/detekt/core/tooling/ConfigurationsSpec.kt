@@ -1,11 +1,14 @@
 package dev.detekt.core.tooling
 
+import dev.detekt.api.valueOrDefault
 import dev.detekt.test.utils.resourceAsPath
 import dev.detekt.test.utils.resourceUrl
 import dev.detekt.tooling.api.spec.ProcessingSpec
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import kotlin.io.path.Path
 
 class ConfigurationsSpec {
 
@@ -53,6 +56,28 @@ class ConfigurationsSpec {
             assertThat(config.valueOrDefault("one", -1)).isEqualTo(1)
             assertThat(config.valueOrDefault("two", -1)).isEqualTo(2)
             assertThat(config.valueOrDefault("three", -1)).isEqualTo(3)
+        }
+
+        @Test
+        fun `throws an exception on an non-existing file`() {
+            assertThatIllegalArgumentException()
+                .isThrownBy {
+                    ProcessingSpec {
+                        config { configPaths = listOf(Path("doesNotExist.yml")) }
+                    }.loadConfiguration()
+                }
+                .withMessageStartingWith("Configuration does not exist")
+        }
+
+        @Test
+        fun `throws an exception on a directory`() {
+            assertThatIllegalArgumentException()
+                .isThrownBy {
+                    ProcessingSpec {
+                        config { configPaths = listOf(resourceAsPath("/configs")) }
+                    }.loadConfiguration()
+                }
+                .withMessageStartingWith("Configuration must be a file")
         }
     }
 
