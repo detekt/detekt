@@ -138,8 +138,11 @@ class CanBeNonNullable(config: Config) :
     @Suppress("TooManyFunctions")
     private inner class ParameterCheckVisitor : DetektVisitor() {
         private val nullableParams = mutableMapOf<KaVariableSymbol, NullableParam>()
+        private var currentFunction: KtNamedFunction? = null
 
         override fun visitNamedFunction(function: KtNamedFunction) {
+            val previousFunction = currentFunction
+            currentFunction = function
             if (function.isOverride()) {
                 return
             }
@@ -177,6 +180,7 @@ class CanBeNonNullable(config: Config) :
             // Evaluate the function, then analyze afterwards whether the candidate properties
             // could be made non-nullable.
             super.visitNamedFunction(function)
+            currentFunction = previousFunction
 
             candidateDescriptors.asSequence()
                 .mapNotNull(nullableParams::remove)
@@ -184,11 +188,20 @@ class CanBeNonNullable(config: Config) :
                 // * It has been forced into a non-null type, either by `!!` or by
                 //   `checkNonNull()`/`requireNonNull()`, or
                 // * The containing function only consists of a single non-null check on
-                //   the param, either via an if/when check or with a safe-qualified expression.
+                //   the param at the TOP LEVEL (not nested), either via an if/when check
+                //   or with a safe-qualified expression.
                 .filter {
                     val onlyNonNullCheck =
-                        validSingleChildExpression && it.isNonNullChecked && !it.isNullChecked
-                    it.isNonNullForced || it.isNullCheckReturnsUnit || onlyNonNullCheck
+                        validSingleChildExpression && it.isTopLevelNonNullCheck && !it.isNullChecked
+                    val onlySafeCallsWithoutExplicitCheck =
+                        validSingleChildExpression &&
+                            it.isNonNullChecked &&
+                            !it.isNullChecked &&
+                            !it.hasExplicitNullCheck
+                    it.isNonNullForced ||
+                        it.isNullCheckReturnsUnit ||
+                        onlyNonNullCheck ||
+                        onlySafeCallsWithoutExplicitCheck
                 }
                 .forEach { nullableParam ->
                     report(
@@ -233,6 +246,7 @@ class CanBeNonNullable(config: Config) :
         }
 
         override fun visitWhenExpression(expression: KtWhenExpression) {
+            val isTopLevel = expression.parent?.parent is KtNamedFunction
             val nullCheckedDescriptor = expression.subjectExpression
                 ?.collectDescendantsOfType<KtNameReferenceExpression>()
                 .orEmpty()
@@ -249,11 +263,11 @@ class CanBeNonNullable(config: Config) :
                 .mapNotNull { callDescriptor -> analyze(expression) { callDescriptor.restoreSymbol() } }
             val whenConditions = expression.entries.flatMap { it.conditions.asList() }
             if (nullCheckedDescriptor.isNotEmpty()) {
-                whenConditions.evaluateSubjectWhenExpression(expression, nullCheckedDescriptor)
+                whenConditions.evaluateSubjectWhenExpression(expression, nullCheckedDescriptor, isTopLevel)
             } else {
                 whenConditions.forEach { whenCondition ->
                     if (whenCondition is KtWhenConditionWithExpression) {
-                        whenCondition.expression.evaluateCheckStatement(expression.elseExpression)
+                        whenCondition.expression.evaluateCheckStatement(expression.elseExpression, isTopLevel)
                     }
                 }
             }
@@ -261,7 +275,8 @@ class CanBeNonNullable(config: Config) :
         }
 
         override fun visitIfExpression(expression: KtIfExpression) {
-            expression.condition.evaluateCheckStatement(expression.`else`)
+            val isTopLevel = expression.parent?.parent is KtNamedFunction
+            expression.condition.evaluateCheckStatement(expression.`else`, isTopLevel)
             if (expression.isFirstStatement()) {
                 evaluateNullCheckReturnsUnit(expression.condition, expression.then)
             }
@@ -281,7 +296,13 @@ class CanBeNonNullable(config: Config) :
         }
 
         override fun visitSafeQualifiedExpression(expression: KtSafeQualifiedExpression) {
-            updateNullableParam(expression.receiverExpression) { it.isNonNullChecked = true }
+            val isTopLevel = expression.parent?.parent is KtNamedFunction
+            updateNullableParam(expression.receiverExpression) {
+                it.isNonNullChecked = true
+                if (isTopLevel) {
+                    it.isTopLevelNonNullCheck = true
+                }
+            }
             super.visitSafeQualifiedExpression(expression)
         }
 
@@ -340,15 +361,26 @@ class CanBeNonNullable(config: Config) :
                 else -> null
             }
 
-        private fun KtExpression?.evaluateCheckStatement(elseExpression: KtExpression?) {
+        @Suppress("FunctionSignature")
+        private fun KtExpression?.evaluateCheckStatement(
+            elseExpression: KtExpression?,
+            isTopLevel: Boolean = false,
+        ) {
             this.getNonNullChecks(null)?.let { nonNullChecks ->
                 val nullableParamCallback = if (elseExpression.isValidElseExpression()) {
                     { nullableParam: NullableParam ->
                         nullableParam.isNonNullChecked = true
                         nullableParam.isNullChecked = true
+                        nullableParam.hasExplicitNullCheck = true
                     }
                 } else {
-                    { nullableParam -> nullableParam.isNonNullChecked = true }
+                    { nullableParam: NullableParam ->
+                        nullableParam.isNonNullChecked = true
+                        nullableParam.hasExplicitNullCheck = true
+                        if (isTopLevel) {
+                            nullableParam.isTopLevelNonNullCheck = true
+                        }
+                    }
                 }
                 nonNullChecks.forEach {
                     nullableParams[it]?.let(nullableParamCallback)
@@ -403,9 +435,11 @@ class CanBeNonNullable(config: Config) :
             }
         }
 
+        @Suppress("CyclomaticComplexMethod")
         private fun List<KtWhenCondition>.evaluateSubjectWhenExpression(
             expression: KtWhenExpression,
             subjectDescriptors: List<KaVariableSymbol>,
+            isTopLevel: Boolean = false,
         ) {
             var isNonNullChecked = false
             var isNullChecked = false
@@ -436,7 +470,13 @@ class CanBeNonNullable(config: Config) :
             subjectDescriptors.forEach { callableDescriptor ->
                 nullableParams[callableDescriptor]?.let {
                     if (isNullChecked) it.isNullChecked = true
-                    if (isNonNullChecked) it.isNonNullChecked = true
+                    if (isNonNullChecked) {
+                        it.isNonNullChecked = true
+                        it.hasExplicitNullCheck = true
+                        if (isTopLevel && !isNullChecked) {
+                            it.isTopLevelNonNullCheck = true
+                        }
+                    }
                 }
             }
         }
@@ -466,6 +506,8 @@ class CanBeNonNullable(config: Config) :
         var isNonNullChecked = false
         var isNonNullForced = false
         var isNullCheckReturnsUnit = false
+        var isTopLevelNonNullCheck = false
+        var hasExplicitNullCheck = false
     }
 
     private inner class PropertyCheckVisitor : DetektVisitor() {
