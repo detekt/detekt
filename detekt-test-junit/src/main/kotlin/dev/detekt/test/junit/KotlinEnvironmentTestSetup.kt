@@ -7,7 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.api.extension.ParameterContext
 import org.junit.jupiter.api.extension.ParameterResolver
-import java.io.File
+import java.nio.file.Path
 
 /**
  * This annotation must be applied to a test class to make use of type analysis APIs when testing Detekt rules, e.g.
@@ -44,10 +44,10 @@ internal class KotlinEnvironmentResolver : ParameterResolver {
     companion object {
         private val NAMESPACE = ExtensionContext.Namespace.create("KotlinCoreEnvironment")
         private const val ENV_KEY = "env"
-        private fun ExtensionContext.additionalJavaSourcePaths(): List<File> {
+        private fun ExtensionContext.additionalJavaSourcePaths(): List<Path> {
             val annotation = requiredTestClass.annotations
                 .find { it is KotlinCoreEnvironmentTest } as? KotlinCoreEnvironmentTest ?: return emptyList()
-            return annotation.additionalJavaSourcePaths.map { resourceAsPath(it).toFile() }
+            return annotation.additionalJavaSourcePaths.map { resourceAsPath(it) }
         }
     }
 }

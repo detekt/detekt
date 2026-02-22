@@ -14,8 +14,9 @@ public final class dev/detekt/test/utils/KotlinAnalysisApiEngine {
 }
 
 public final class dev/detekt/test/utils/KotlinEnvironmentContainer {
-	public fun <init> (Lorg/jetbrains/kotlin/config/CompilerConfiguration;)V
-	public final fun getConfiguration ()Lorg/jetbrains/kotlin/config/CompilerConfiguration;
+	public fun <init> (Ljava/util/List;Ljava/util/List;)V
+	public final fun getJavaSourceRoots ()Ljava/util/List;
+	public final fun getJvmClasspathRoots ()Ljava/util/List;
 }
 
 public final class dev/detekt/test/utils/KotlinEnvironmentContainerKt {
