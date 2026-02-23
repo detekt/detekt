@@ -81,7 +81,7 @@ class DetektBasePlugin : Plugin<Project> {
 
             project.extensions.getByType(KotlinSourceSetContainer::class.java)
                 .sourceSets
-                .all { sourceSet ->
+                .configureEach { sourceSet ->
                     val taskName = "${DetektPlugin.DETEKT_TASK_NAME}${sourceSet.name.capitalize()}SourceSet"
                     tasks.register(taskName, Detekt::class.java) { detektTask ->
                         detektTask.source = sourceSet.kotlin
