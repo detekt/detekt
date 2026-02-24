@@ -14,11 +14,12 @@ class JvmSpec {
             .withArguments("detektMain")
             .buildAndFail()
 
-        assertThat(result.output).contains("failed with 3 issues.")
+        assertThat(result.output).contains("failed with 4 issues.")
         assertThat(result.output).contains(
             "src/main/kotlin/Errors.kt:7:9: Do not directly exit the process outside the `main` function. Throw an exception instead. [ExitOutsideMain]",
             "src/main/kotlin/Errors.kt:12:16: Do not directly exit the process outside the `main` function. Throw an exception instead. [ExitOutsideMain]",
             "src/main/kotlin/Caller.kt:5:18: The method `jvm.src.main.kotlin.Callee.forbiddenMethod` has been forbidden in the detekt config. [ForbiddenMethodCall]",
+            "src/main/kotlin/Caller.kt:6:9: Callee()?.toString() contains an unnecessary safe call operator [UnnecessarySafeCall]",
         )
     }
 }

@@ -28,6 +28,8 @@ console-reports:
 potential-bugs:
   ExitOutsideMain:
     active: true
+  UnnecessarySafeCall:
+    active: true
 
 style:
   ForbiddenMethodCall:
