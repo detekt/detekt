@@ -1,3 +1,30 @@
+processors:
+  active: true
+  exclude:
+    - 'DetektProgressListener'
+  # - 'KtFileCountProcessor'
+  # - 'PackageCountProcessor'
+  # - 'ClassCountProcessor'
+  # - 'FunctionCountProcessor'
+  # - 'PropertyCountProcessor'
+  # - 'ProjectComplexityProcessor'
+  # - 'ProjectCognitiveComplexityProcessor'
+  # - 'ProjectLLOCProcessor'
+  # - 'ProjectCLOCProcessor'
+  # - 'ProjectLOCProcessor'
+  # - 'ProjectSLOCProcessor'
+  # - 'LicenseHeaderLoaderExtension'
+
+console-reports:
+  active: true
+  exclude:
+    - 'ProjectStatisticsReport'
+    - 'ComplexityReport'
+    - 'NotificationReport'
+    - 'IssuesReport'
+    - 'FileBasedIssuesReport'
+  #  - 'LiteIssuesReport'
+
 potential-bugs:
   ExitOutsideMain:
     active: true

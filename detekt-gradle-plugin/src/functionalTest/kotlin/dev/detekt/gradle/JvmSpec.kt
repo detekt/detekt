@@ -16,13 +16,9 @@ class JvmSpec {
 
         assertThat(result.output).contains("failed with 3 issues.")
         assertThat(result.output).contains(
-            "Do not directly exit the process outside the `main` function. Throw an exception(...)"
+            "src/main/kotlin/Errors.kt:7:9: Do not directly exit the process outside the `main` function. Throw an exception instead. [ExitOutsideMain]",
+            "src/main/kotlin/Errors.kt:12:16: Do not directly exit the process outside the `main` function. Throw an exception instead. [ExitOutsideMain]",
+            "src/main/kotlin/Caller.kt:5:18: The method `jvm.src.main.kotlin.Callee.forbiddenMethod` has been forbidden in the detekt config. [ForbiddenMethodCall]",
         )
-        assertThat(result.output).contains(
-            "The method `jvm.src.main.kotlin.Callee.forbiddenMethod` has been forbidden in th(...)"
-        )
-        assertThat(result.output).contains("Errors.kt:7:9")
-        assertThat(result.output).contains("Errors.kt:12:16")
-        assertThat(result.output).contains("Caller.kt:5:18")
     }
 }
