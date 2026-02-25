@@ -153,6 +153,7 @@ dependencies {
     implementation(libs.sarif4k)
 
     testKitRuntimeOnly(libs.kotlin.gradle.plugin)
+    testKitRuntimeOnly(libs.kotlinx.serialization.gradle.plugin)
     testKitRuntimeOnly(libs.android.gradle.plugin)
     testKitRuntimeOnly(libs.android.gradle.builtInKotlin.plugin)
     testKitGradleMinVersionRuntimeOnly(libs.kotlin.gradle.plugin) {
