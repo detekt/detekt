@@ -47,6 +47,7 @@ ktlint:
   ClassSignature:
     active: true
     autoCorrect: true
+    forceMultilineWhenParameterCountGreaterOrEqualThan: 'unset'
     indentSize: 4
     # maxLineLength: If the 'code_style' ruleset property is set to 'android', the default is '100', otherwise '120'.
   CommentSpacing:
