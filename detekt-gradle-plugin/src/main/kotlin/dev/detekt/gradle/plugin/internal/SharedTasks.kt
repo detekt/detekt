@@ -7,6 +7,7 @@ import dev.detekt.gradle.internal.addVariantName
 import dev.detekt.gradle.internal.existingVariantOrBaseFile
 import dev.detekt.gradle.plugin.DetektPlugin
 import org.gradle.api.Project
+import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.provider.Provider
 import org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode
 import org.jetbrains.kotlin.gradle.dsl.KotlinBaseExtension
@@ -18,12 +19,13 @@ internal fun Project.registerJvmCompilationDetektTask(
     extension: DetektExtension,
     compilation: KotlinCompilation<*>,
     target: KotlinTarget? = null,
+    sources: ConfigurableFileCollection = sourcesProvider(compilation),
 ) {
     val taskSuffix = if (target != null) compilation.name + target.name.capitalize() else compilation.name
     tasks.register(DetektPlugin.DETEKT_TASK_NAME + taskSuffix.capitalize(), Detekt::class.java) { detektTask ->
         val siblingTask = compilation.compileTaskProvider.map { it as KotlinJvmCompile }
 
-        detektTask.setSource(siblingTask.map { it.sources })
+        detektTask.setSource(sources)
         detektTask.classpath.conventionCompat(
             compilation.output.classesDirs,
             siblingTask.map { it.libraries }
@@ -71,6 +73,7 @@ internal fun Project.registerJvmCompilationCreateBaselineTask(
     extension: DetektExtension,
     compilation: KotlinCompilation<*>,
     target: KotlinTarget? = null,
+    sources: ConfigurableFileCollection = sourcesProvider(compilation),
 ) {
     val taskSuffix = if (target != null) compilation.name + target.name.capitalize() else compilation.name
     tasks.register(
@@ -79,7 +82,7 @@ internal fun Project.registerJvmCompilationCreateBaselineTask(
     ) { createBaselineTask ->
         val siblingTask = compilation.compileTaskProvider.map { it as KotlinJvmCompile }
 
-        createBaselineTask.setSource(siblingTask.map { it.sources })
+        createBaselineTask.setSource(sources)
         createBaselineTask.classpath.conventionCompat(
             compilation.output.classesDirs,
             siblingTask.map { it.libraries }
@@ -132,3 +135,10 @@ internal fun Project.mapExplicitArgMode(): Provider<String> =
             else -> null
         }
     }
+
+internal fun Project.sourcesProvider(compilation: KotlinCompilation<*>): ConfigurableFileCollection =
+    objects.fileCollection().from(
+        provider {
+            compilation.compileTaskProvider.map { it as KotlinJvmCompile }.map { it.sources }
+        }
+    )
