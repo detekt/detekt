@@ -147,6 +147,7 @@ dependencies {
     testFixturesCompileOnly(libs.jetbrains.annotations)
 
     testKitRuntimeOnly(libs.kotlin.gradle.plugin)
+    testKitRuntimeOnly(libs.kotlinx.serialization.gradle.plugin)
     testKitRuntimeOnly(libs.android.gradle.plugin)
     testKitGradleMinVersionRuntimeOnly(libs.kotlin.gradle.plugin) {
         attributes {
