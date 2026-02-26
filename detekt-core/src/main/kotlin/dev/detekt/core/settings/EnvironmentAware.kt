@@ -38,7 +38,6 @@ interface EnvironmentAware {
     val project: Project
     val languageVersionSettings: LanguageVersionSettings
     val ktFiles: List<KtFile>
-    val disposable: Disposable
 }
 
 internal class EnvironmentFacade(projectSpec: ProjectSpec, compilerSpec: CompilerSpec, loggingSpec: LoggingSpec) :
@@ -47,24 +46,23 @@ internal class EnvironmentFacade(projectSpec: ProjectSpec, compilerSpec: Compile
 
     private val printStream = if (loggingSpec.debug) loggingSpec.errorChannel.asPrintStream() else NullPrintStream
 
-    private val configuration: CompilerConfiguration =
-        createCompilerConfiguration(
-            projectSpec.inputPaths.toList(),
-            compilerSpec.classpathEntries(),
-            compilerSpec.apiVersion,
-            compilerSpec.languageVersion,
-            compilerSpec.jvmTarget,
-            compilerSpec.jdkHome,
-            compilerSpec.freeCompilerArgs,
-            printStream,
-        )
+    private val configuration: CompilerConfiguration = createCompilerConfiguration(
+        projectSpec.inputPaths.toList(),
+        compilerSpec.classpathEntries(),
+        compilerSpec.apiVersion,
+        compilerSpec.languageVersion,
+        compilerSpec.jvmTarget,
+        compilerSpec.jdkHome,
+        compilerSpec.freeCompilerArgs,
+        printStream,
+    )
+
+    private val disposable: Disposable = Disposer.newDisposable()
+
+    private lateinit var sourceModule: KaSourceModule
 
     override val languageVersionSettings: LanguageVersionSettings
         get() = configuration.languageVersionSettings
-
-    override val disposable: Disposable = Disposer.newDisposable()
-
-    private lateinit var sourceModule: KaSourceModule
 
     @OptIn(KaExperimentalApi::class)
     override val ktFiles: List<KtFile>

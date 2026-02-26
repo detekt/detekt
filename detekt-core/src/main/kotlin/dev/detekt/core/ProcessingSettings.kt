@@ -1,6 +1,5 @@
 package dev.detekt.core
 
-import com.intellij.openapi.util.Disposer
 import dev.detekt.api.Config
 import dev.detekt.api.PropertiesAware
 import dev.detekt.api.SetupContext
@@ -27,11 +26,15 @@ import java.nio.file.Path
  * Always close the settings as dispose the Kotlin compiler and detekt class loader.
  * If using a custom executor service be aware that detekt won't shut it down after use!
  */
-class ProcessingSettings(val spec: ProcessingSpec, override val config: Config, val monitor: PerformanceMonitor) :
-    AutoCloseable,
+class ProcessingSettings private constructor(
+    val spec: ProcessingSpec,
+    override val config: Config,
+    val monitor: PerformanceMonitor,
+    private val environmentAware: EnvironmentFacade,
+) : AutoCloseable,
     LoggingAware by LoggingFacade(spec.loggingSpec),
     PropertiesAware by PropertiesFacade(),
-    EnvironmentAware by EnvironmentFacade(spec.projectSpec, spec.compilerSpec, spec.loggingSpec),
+    EnvironmentAware by environmentAware,
     ClassloaderAware by ExtensionFacade(spec.extensionsSpec.plugins),
     SetupContext {
 
@@ -44,9 +47,16 @@ class ProcessingSettings(val spec: ProcessingSpec, override val config: Config, 
      */
     val taskPool: TaskPool by lazy { TaskPool(spec.executionSpec.executorService) }
 
+    constructor(spec: ProcessingSpec, config: Config, monitor: PerformanceMonitor) : this(
+        spec,
+        config,
+        monitor,
+        EnvironmentFacade(spec.projectSpec, spec.compilerSpec, spec.loggingSpec),
+    )
+
     override fun close() {
         closeQuietly(taskPool)
-        Disposer.dispose(disposable)
+        environmentAware.close()
         closeLoaderIfNeeded()
     }
 }
