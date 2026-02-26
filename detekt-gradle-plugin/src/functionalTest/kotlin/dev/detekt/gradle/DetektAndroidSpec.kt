@@ -132,8 +132,8 @@ class DetektAndroidSpec {
         val gradleRunner = createGradleRunnerAndSetupProject(projectLayout, builtInKotlin = builtInKotlin).also {
             it.writeProjectFile(
                 "gradle.properties",
-                // KotlinSourceSet registration never occurs if both `builtInKotlin` and `disallowKotlinSourceSets`
-                // are true.
+                // When both `builtInKotlin` and `disallowKotlinSourceSets` are true,
+                // main source sets are no longer registered.
                 """
                     detekt.android.disabled=true
                     android.disallowKotlinSourceSets=false
