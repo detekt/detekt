@@ -27,7 +27,6 @@ import org.jetbrains.kotlin.config.jvmTarget
 import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.platform.jvm.JvmPlatforms
 import org.jetbrains.kotlin.psi.KtFile
-import java.io.Closeable
 import java.io.File
 import java.io.OutputStream
 import java.io.PrintStream
@@ -43,7 +42,6 @@ interface EnvironmentAware {
 
 internal class EnvironmentFacade(projectSpec: ProjectSpec, compilerSpec: CompilerSpec, loggingSpec: LoggingSpec) :
     AutoCloseable,
-    Closeable,
     EnvironmentAware {
 
     private val printStream = if (loggingSpec.debug) loggingSpec.errorChannel.asPrintStream() else NullPrintStream

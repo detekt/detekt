@@ -15,7 +15,6 @@ import dev.detekt.core.util.PerformanceMonitor
 import dev.detekt.tooling.api.spec.ConfigSpec
 import dev.detekt.tooling.api.spec.ProcessingSpec
 import org.jetbrains.kotlin.utils.closeQuietly
-import java.io.Closeable
 import java.net.URI
 import java.net.URL
 import java.nio.file.FileSystemNotFoundException
@@ -30,7 +29,6 @@ import java.nio.file.Path
  */
 class ProcessingSettings(val spec: ProcessingSpec, override val config: Config, val monitor: PerformanceMonitor) :
     AutoCloseable,
-    Closeable,
     LoggingAware by LoggingFacade(spec.loggingSpec),
     PropertiesAware by PropertiesFacade(),
     EnvironmentAware by EnvironmentFacade(spec.projectSpec, spec.compilerSpec, spec.loggingSpec),
