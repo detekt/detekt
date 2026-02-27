@@ -301,7 +301,7 @@ Each requires an implementation of the `render()` function, which takes an objec
 abstract fun render(detektion: Detektion): String?
 ```
 
-## Apply Ruleset in Detekt {#configureextensions}
+## Integrating extensions with detekt {#configureextensions}
 
 So you have implemented your own rules or other extensions and want to integrate them
 into your `detekt` run? Great, make sure to have a `jar` with all your needed dependencies 
