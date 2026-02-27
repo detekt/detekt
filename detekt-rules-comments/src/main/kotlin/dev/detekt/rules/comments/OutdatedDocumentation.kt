@@ -6,7 +6,9 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.Rule
 import dev.detekt.api.config
+import dev.detekt.psi.isAbstract
 import dev.detekt.psi.isInternal
+import dev.detekt.psi.isOverride
 import org.jetbrains.kotlin.kdoc.parser.KDocKnownTag
 import org.jetbrains.kotlin.kdoc.psi.api.KDoc
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocSection
@@ -75,13 +77,17 @@ class OutdatedDocumentation(config: Config) :
 
     override fun visitClass(klass: KtClass) {
         super.visitClass(klass)
+        if (klass.isInterface() || klass.isAbstract()) {
+            return
+        }
         val classDeclarations = getClassDeclarations(klass)
+        val overridePropertyNames = getOverridePropertyNames(klass)
         (
-            isDocumentationOutdated(klass) { classDeclarations } &&
+            isDocumentationOutdated(klass, overridePropertyNames) { classDeclarations } &&
                 (
                     // checking below only if constructor in internal or private
                     isInternalOrPrivate(klass.primaryConstructor).not() ||
-                        isDocumentationOutdated(klass) {
+                        isDocumentationOutdated(klass, overridePropertyNames) {
                             // case when only property can be documented
                             classDeclarations.filterNot { it.type == DeclarationType.PARAM }
                         }
@@ -94,14 +100,14 @@ class OutdatedDocumentation(config: Config) :
 
     override fun visitSecondaryConstructor(constructor: KtSecondaryConstructor) {
         super.visitSecondaryConstructor(constructor)
-        isDocumentationOutdated(constructor) { getSecondaryConstructorDeclarations(constructor) }.ifTrue {
+        isDocumentationOutdated(constructor, emptySet()) { getSecondaryConstructorDeclarations(constructor) }.ifTrue {
             reportFinding(constructor)
         }
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
-        isDocumentationOutdated(function) { getFunctionDeclarations(function) }.ifTrue {
+        isDocumentationOutdated(function, emptySet()) { getFunctionDeclarations(function) }.ifTrue {
             reportFinding(function)
         }
     }
@@ -116,6 +122,13 @@ class OutdatedDocumentation(config: Config) :
         }
         return typeParams + constructorDeclarations
     }
+
+    private fun getOverridePropertyNames(klass: KtClass): Set<String> =
+        klass.primaryConstructor?.valueParameters
+            ?.filter { it.isOverride() }
+            ?.mapNotNull { it.name }
+            ?.toSet()
+            .orEmpty()
 
     private fun getFunctionDeclarations(function: KtNamedFunction): List<Declaration> {
         val typeParams = if (matchTypeParameters) {
@@ -135,6 +148,7 @@ class OutdatedDocumentation(config: Config) :
 
     private fun getDeclarationsForValueParameters(valueParameters: List<KtParameter>): List<Declaration> =
         valueParameters.mapNotNull {
+            if (it.isOverride()) return@mapNotNull null
             it.name?.let { name ->
                 val type = if (it.isPropertyParameter() && it.isPrivate().not()) {
                     if (allowParamOnConstructorProperties) {
@@ -175,10 +189,12 @@ class OutdatedDocumentation(config: Config) :
 
     private fun isDocumentationOutdated(
         element: KtNamedDeclaration,
+        overridePropertyNames: Set<String>,
         elementDeclarationsProvider: () -> List<Declaration>,
     ): Boolean {
         val doc = element.docComment ?: return false
         val docDeclarations = getDocDeclarations(doc)
+            .filterNot { it.name in overridePropertyNames }
         return if (docDeclarations.isNotEmpty()) {
             val elementDeclarations = elementDeclarationsProvider()
             !declarationsMatch(docDeclarations, elementDeclarations)

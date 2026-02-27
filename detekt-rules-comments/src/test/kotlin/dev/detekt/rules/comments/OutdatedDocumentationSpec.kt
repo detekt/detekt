@@ -597,6 +597,114 @@ class OutdatedDocumentationSpec {
     }
 
     @Nested
+    inner class `override properties in class hierarchy` {
+        @Test
+        fun `should not report for interfaces even with mismatched documentation`() {
+            val code = """
+                /**
+                 * @property wrongName Wrong documentation
+                 */
+                interface Named {
+                    val name: String
+                }
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `should not report for abstract classes even with mismatched documentation`() {
+            val code = """
+                /**
+                 * @property wrongName Wrong documentation
+                 */
+                abstract class Entity {
+                    abstract val id: String
+                }
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `should not report when subclass overrides documented property from base class`() {
+            val code = """
+                /**
+                 * @property name The name
+                 */
+                interface Named {
+                    val name: String
+                }
+
+                /**
+                 * @property age The age
+                 */
+                class Person(
+                    override val name: String,
+                    val age: Int
+                ) : Named
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `should not report when subclass overrides and has own documented properties`() {
+            val code = """
+                /**
+                 * @property id The identifier
+                 */
+                abstract class Entity {
+                    abstract val id: String
+                }
+
+                /**
+                 * @property name The user name
+                 * @property email The user email
+                 */
+                class User(
+                    override val id: String,
+                    val name: String,
+                    val email: String
+                ) : Entity()
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `should not report when data class overrides property from interface`() {
+            val code = """
+                interface HasId {
+                    val id: Long
+                }
+
+                /**
+                 * @property name The name
+                 */
+                data class Item(
+                    override val id: Long,
+                    val name: String
+                ) : HasId
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `should report when override property is incorrectly documented`() {
+            val code = """
+                interface Named {
+                    val name: String
+                }
+
+                /**
+                 * @property wrongName Wrong documentation
+                 */
+                class Person(
+                    override val name: String
+                ) : Named
+            """.trimIndent()
+            assertThat(subject.lint(code)).hasSize(1)
+        }
+    }
+
+    @Nested
     inner class `configuration matchDeclarationsOrder and allowParamOnConstructorProperties` {
         private val configuredSubject = OutdatedDocumentation(
             TestConfig(
