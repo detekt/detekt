@@ -14,7 +14,9 @@ import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
+import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.resolve.calls.util.getCalleeExpressionIfAny
 
 /**
@@ -59,6 +61,10 @@ class ImplicitDefaultLocale(config: Config) :
             val symbol = expression.resolveToCall()?.singleFunctionCallOrNull()?.symbol ?: return
             if (symbol.callableId != formatCallId) return
             if (symbol.valueParameters.firstOrNull()?.returnType?.symbol?.classId == localeClassId) return
+
+            val formatString = getFormatString(expression)
+            if (formatString != null && hasOnlyLocaleIndependentSpecifiers(formatString)) return
+
             report(
                 Finding(
                     Entity.from(expression),
@@ -68,11 +74,40 @@ class ImplicitDefaultLocale(config: Config) :
         }
     }
 
+    private fun getFormatString(expression: KtQualifiedExpression): String? {
+        val receiver = expression.receiverExpression
+        if (receiver is KtStringTemplateExpression && !receiver.hasInterpolation()) {
+            return receiver.entries.joinToString("") { it.text }
+        }
+        val callExpression = expression.selectorExpression as? KtCallExpression
+        val firstArg = callExpression?.valueArguments?.firstOrNull()?.getArgumentExpression()
+        return when {
+            firstArg is KtStringTemplateExpression && !firstArg.hasInterpolation() ->
+                firstArg.entries.joinToString("") { it.text }
+
+            else -> null
+        }
+    }
+
+    private fun hasOnlyLocaleIndependentSpecifiers(formatString: String): Boolean {
+        val specifierPattern = Regex("""%(\d+\$)?[-#+ 0,(]*\d*(\.\d+)?([tT][a-zA-Z]|[a-zA-Z%])""")
+        val conversions = specifierPattern.findAll(formatString).map { it.groupValues[CONVERSION_GROUP_INDEX] }.toList()
+
+        if (conversions.isEmpty()) return true
+        return conversions.all { it in localeIndependentConversions }
+    }
+
     companion object {
         private val formatCallIds = listOf(
             CallableId(FqName("kotlin.text"), Name.identifier("format")),
         ).associateBy { it.callableName.asString() }
 
         private val localeClassId = ClassId(FqName("java.util"), Name.identifier("Locale"))
+
+        private const val CONVERSION_GROUP_INDEX = 3
+
+        private val localeIndependentConversions = setOf(
+            "x", "X", "o", "a", "A", "b", "B", "h", "H", "s", "c", "n", "%",
+        )
     }
 }
