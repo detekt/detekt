@@ -1957,6 +1957,192 @@ class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
                 """.trimIndent()
                 assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
+
+            @Test
+            fun `does not report when null check is in nested if inside else branch - issue 7420`() {
+                val code = """
+                    enum class MessageType { ChecklistItem, Regular }
+                    class Message(val sentAt: java.time.ZonedDateTime?)
+
+                    fun setMessageTimestamp(
+                        messageType: MessageType,
+                        message: Message,
+                        locale: java.util.Locale?,
+                    ) {
+                        if (messageType == MessageType.ChecklistItem) {
+                            println("Marked completed")
+                        } else {
+                            val zonedDateTime = message.sentAt
+                            if (zonedDateTime != null && locale != null) {
+                                println(zonedDateTime.format(java.time.format.DateTimeFormatter.ofPattern("", locale)))
+                            }
+                        }
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does not report when nullable param is only used in conditional inside nested scope`() {
+                val code = """
+                    fun process(flag: Boolean, value: String?) {
+                        if (flag) {
+                            println("flag is true")
+                        } else {
+                            if (value != null) {
+                                println(value.uppercase())
+                            }
+                        }
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does not report when nullable param check is deeply nested`() {
+                val code = """
+                    fun deepNested(a: Int, b: String?) {
+                        if (a > 0) {
+                            if (a > 10) {
+                                if (b != null) {
+                                    println(b)
+                                }
+                            }
+                        }
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does not report when null check is nested inside when expression`() {
+                val code = """
+                    fun process(type: Int, value: String?) {
+                        when (type) {
+                            1 -> println("one")
+                            2 -> {
+                                if (value != null) {
+                                    println(value)
+                                }
+                            }
+                            else -> println("other")
+                        }
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does not report when safe call is nested inside if`() {
+                val code = """
+                    fun process(flag: Boolean, value: String?) {
+                        if (flag) {
+                            value?.let { println(it) }
+                        }
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `reports when top-level when checks for non-null`() {
+                val code = """
+                    fun process(value: String?) {
+                        when {
+                            value != null -> println(value)
+                        }
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
+            }
+
+            @Test
+            fun `reports when top-level if checks for non-null without else`() {
+                val code = """
+                    fun process(value: String?) {
+                        if (value != null) {
+                            println(value)
+                        }
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
+            }
+
+            @Test
+            fun `reports when single safe call at top level`() {
+                val code = """
+                    fun process(value: String?) {
+                        value?.let { println(it) }
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
+            }
+
+            @Test
+            fun `reports when null check returns unit before using value`() {
+                val code = """
+                    fun process(value: String?) {
+                        if (value == null) return
+                        value.let { println(it) }
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
+            }
+
+            @Test
+            fun `reports when when expression with subject uses is pattern at top level`() {
+                val code = """
+                    fun process(value: Any?) {
+                        when (value) {
+                            is String -> println(value.length)
+                        }
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
+            }
+
+            @Test
+            fun `reports when top-level if with non-null check has no else`() {
+                val code = """
+                    fun process(value: String?) {
+                        if (value != null) println(value.length)
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
+            }
+
+            @Test
+            fun `reports when nested function has top-level null check`() {
+                val code = """
+                    fun outer() {
+                        fun inner(value: String?) {
+                            if (value != null) println(value)
+                        }
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
+            }
+
+            @Test
+            fun `does not report when when checks both null and non-null at top level`() {
+                val code = """
+                    fun process(value: String?) {
+                        when {
+                            value == null -> println("null")
+                            value != null -> println(value)
+                        }
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does not report for safe call in single expression function`() {
+                val code = """
+                    fun process(value: String?) = value?.length
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
         }
     }
 
