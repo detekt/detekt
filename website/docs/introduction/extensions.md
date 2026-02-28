@@ -8,15 +8,17 @@ sidebar_position: 9
 The following page describes how to extend detekt and how to customize it to your domain-specific needs.
 The associated **code samples** to this guide can be found in the package [detekt/detekt-sample-extensions](https://github.com/detekt/detekt/tree/main/detekt-sample-extensions).
 
-#### <a name="customrulesets">Custom RuleSets</a>
+## Custom RuleSets {#customrulesets}
 
-_detekt_ uses the `ServiceLoader` pattern to collect all instances of `RuleSetProvider` interfaces. 
-So it is possible to define rules/rule sets and enhance _detekt_ with your own flavor. 
+_detekt_ uses the `ServiceLoader` pattern to collect all instances of the `RuleSetProvider` interface, making it possible to define rules/rule sets and enhance _detekt_ with your own flavor.
 
 :::caution Attention
 
-You need a `resources/META-INF/services/dev.detekt.api.RuleSetProvider` file which 
-has as content the fully qualified name of your `RuleSetProvider` e.g. `dev.detekt.sample.extensions.SampleProvider`.
+You need a `resources/META-INF/services/dev.detekt.api.RuleSetProvider` file containing the fully qualified name of
+your `RuleSetProvider`. For example: 
+```
+dev.detekt.sample.extensions.SampleProvider
+```
 
 :::
 
@@ -26,22 +28,20 @@ develop your own custom rules. Another option is to clone the provided [detekt/d
 :::note
 
 It's important that the dependency of `dev.detekt:detekt-api` is configured as `compileOnly` (as in the examples).
-You can read more information about this [here](https://github.com/detekt/detekt/issues/7883).
+[You can read more information about this here](https://github.com/detekt/detekt/issues/7883).
 
 :::
 
-Own rules have to extend the abstract _Rule_ class and override the `visitXXX()`-functions from the AST.  
-A `RuleSetProvider` must be implemented, which declares a `RuleSet` in the `instance()`-function.
-To leverage the configuration mechanism of detekt you must pass the Config object from your rule set provider to your rule.
-An `Issue` property defines what ID and message should be printed on the console or on any other output format.
+Custom rules must extend the `Rule` class and override the `visitXXX()` functions from the AST.
+A `RuleSetProvider` must also be implemented, declaring a `RuleSet` in the `instance()` function.
 
 Example of a custom rule:
 ```kotlin
-class TooManyFunctions(config: Config) : Rule(
+class TooManyFunctions2(config: Config) : Rule(
     config,
     "This rule reports a file with an excessive function count.",
 ) {
-    private val threshold = 10
+    private val threshold: Int by config(defaultValue = 10)
     private var amount: Int = 0
 
     override fun visitKtFile(file: KtFile) {
@@ -60,39 +60,7 @@ class TooManyFunctions(config: Config) : Rule(
 }
 ```
 
-Example of a much preciser rule in terms of more specific Finding constructor and Rule attributes:
-```kotlin
-class TooManyFunctions2(config: Config) : Rule(
-    config,
-    "This rule reports a file with an excessive function count.",
-) {
-    private val threshold: Int by config(defaultValue = 10)
-    private var amount: Int = 0
-
-    override fun visitKtFile(file: KtFile) {
-        super.visitKtFile(file)
-        if (amount > threshold) {
-            report(ThresholdedCodeSmell(issue,
-                entity = Entity.from(file),
-                metric = Metric(type = "SIZE", value = amount, threshold = threshold),
-                message = "The file ${file.name} has $amount function declarations. " +
-                        "Threshold is specified with $threshold.",
-                references = emptyList())
-            )
-        }
-        amount = 0
-    }
-
-    override fun visitNamedFunction(function: KtNamedFunction) {
-        super.visitNamedFunction(function)
-        amount++
-    }
-}
-```
-
-If you want your rule to be configurable, write down your properties inside the detekt.yml file.
-Please note that this will only take effect, if the `Config` object is passed on by the `RuleSetProvider`
-to the rule itself.
+If you want your rule to be configurable, write down your properties inside the `detekt.yml` file.
 
 ```yaml
 MyRuleSet:
@@ -103,42 +71,119 @@ MyRuleSet:
     active: false
 ```
 
-By specifying the rule set and rule ids, _detekt_ will use the sub configuration of `TooManyFunctions2`:
+By specifying the rule set and rule IDs, _detekt_ will use the sub-configuration of `TooManyFunctions2`.
 
-```val threshold = valueOrDefault("threshold", THRESHOLD)```
+### Testing custom rules {#testing}
 
-:::note
+To test your rules, add the `detekt-test` dependency to your project:
 
-As of version 1.2.0 detekt now verifies if all configured properties actually exist in a configuration created by `--generate-config`.
-This means that by default detekt does not know about your new properties.
-Therefore we need to mention them in the configuration under `config>excludes`.
+```kotlin
+// Required
+testImplementation("dev.detekt:detekt-test:[detekt_version]")
 
-:::
+// Optional - makes use of the "assertThat" test structure 
+testImplementation("dev.detekt:detekt-test-assertj:[detekt_version]")
 
-```yaml
-config:
-  validation: true
-  # 1. exclude rule set 'sample' and all its nested members
-  # 2. exclude every property in every rule under the rule set 'sample'
-  excludes: "sample.*,sample>.*>.*"
+// Optional - handy to test rules that use type resolution
+testImplementation("dev.detekt:detekt-test-junit:[detekt_version]")
 ```
 
-##### <a name="testing">Testing your rules</a>
+#### Basic tests
 
-To test your rules, add the dependency on `detekt-test` to your project: `testCompile "dev.detekt:detekt-test:$version"`.
+The simplest way to test a rule is with the `lint` extension function, which runs your rule against inline Kotlin code:
 
-The easiest way to detect issues with your newly created rule is to use the `lint` extension function:
-- `Rule.lint(StringContent/Path/KtFile): List<Finding>`
+```kotlin
+class TooManyFunctionsSpec {
+    val subject = TooManyFunctions(Config.empty)
 
-If you need to reuse the Kotlin file for performance reasons within similar test cases, please use one of these functions:
-- `compileContentForTest(content: String): KtFile`
-- `compileForTest(path: Path): KtFile`
+    @Test
+    fun `reports files with too many functions`() {
+        val code = """
+            class MyClass {
+                fun a() = Unit
+                fun b() = Unit
+                // ...
+            }
+        """.trimIndent()
 
-#### <a name="customprocessors">Custom Processors</a>
+        assertThat(subject.lint(code)).hasSize(1)
+    }
 
-Custom processors can be used for example to implement additional project metrics.
+    @Test
+    fun `does not report files within threshold`() {
+        val code = """
+            class MyClass {
+                fun a() = Unit
+            }
+        """.trimIndent()
 
-When for whatever reason you want to count all loop statements inside your code base, you could write something like:
+        assertThat(subject.lint(code)).isEmpty()
+    }
+}
+```
+
+#### With custom configs
+
+To validate configurable rules, use `TestConfig` instead of `Config.empty`:
+
+```kotlin
+val subject = TooManyFunctions(
+    TestConfig(
+        "threshold" to 5,
+        "someBooleanKey" to false,
+        "someStringKey" to "abc",
+    )
+)
+```
+
+#### With type resolution
+
+If your rule requires type resolution (i.e. it implements `RequiresAnalysisApi`):
+1. annotate the test class with `@KotlinCoreEnvironmentTest`,
+1. put an instance of `KotlinEnvironmentContainer` in the test class constructor,
+1. use the `lintWithContext` extension function to generate findings using full analysis:
+
+```kotlin
+@KotlinCoreEnvironmentTest
+class MyTypeAwareRuleSpec(val env: KotlinEnvironmentContainer) {
+    private val subject = MyTypeAwareRule(Config.empty)
+    
+    @Test
+    fun `detects issue with type info`() {
+        val code = """...""".trimIndent()
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).hasSize(1)
+    }
+}
+```
+
+By default, code snippets passed into `lintWithContext` are compiled against the full test classpath (kotlin-stdlib, any `testImplementation` dependencies, etc.). If your rule targets a specific third-party library, just add it as a `testRuntimeOnly` dependency in your build file and any classes in that library will be available for import/analysis in test snippets automatically.
+
+You can also make Java source files available to your test snippets by placing them under `test/resources` and referencing them via the `@KotlinCoreEnvironmentTest` annotation, but remember that this is **Java** only - not Kotlin files.
+
+```kotlin
+@KotlinCoreEnvironmentTest(additionalJavaSourcePaths = ["myJavaSources"])
+class MyRuleSpec(val env: KotlinEnvironmentContainer) {
+    // Java classes under test/resources/myJavaSources/ are now importable in test snippets
+}
+```
+
+#### Custom assertions
+
+The custom `assertThat` from `detekt-test-assertj` supports more idiomatic assertions on findings:
+
+```kotlin
+assertThat(findings)
+    .singleElement()
+    .hasMessage("Expected message")
+    .hasStartSourceLocation(3, 5)
+```
+
+## Custom Processors {#customprocessors}
+
+Custom processors can be used, for example, to implement additional project metrics.
+
+For instance, if you want to count all loop statements in your codebase, you could write something like:
 
 ```kotlin
 class NumberOfLoopsProcessor : FileProcessListener {
@@ -165,10 +210,10 @@ class NumberOfLoopsProcessor : FileProcessListener {
 ```
 
 To let detekt know about the new processor, we specify a `resources/META-INF/services/dev.detekt.api.FileProcessListener` file 
-with the full qualify name of our processor as the content: `dev.detekt.sample.extensions.processors.NumberOfLoopsProcessor`.
+with the fully qualified name of the processor as its content, e.g. `dev.detekt.sample.extensions.processors.NumberOfLoopsProcessor`.
 
 
-To test the code we use the `detekt-test` module and write a JUnit 5 testcase.
+To test the code, use the `detekt-test` module and write a JUnit 5 test case.
 
 ```kotlin
 class NumberOfLoopsProcessorTest {
@@ -193,18 +238,18 @@ class NumberOfLoopsProcessorTest {
 }
 ```
 
-#### <a name="customreports">Custom Reports</a>
+## Custom Reports {#customreports}
 
 _detekt_ allows you to extend the console output and to create custom output formats.
 If you want to customize the output, take a look at the `ConsoleReport` and `OutputReport` classes.
 
-All they need are an implementation of the `render()`-function which takes an object with all findings and returns a string to be printed out.
+Each requires an implementation of the `render()` function, which takes an object with all findings and returns a string to be printed.
 
 ```kotlin
 abstract fun render(detektion: Detektion): String?
 ```
 
-#### <a name="configureextensions">Let detekt know about your extensions</a>
+## Integrating extensions with detekt {#configureextensions}
 
 So you have implemented your own rules or other extensions and want to integrate them
 into your `detekt` run? Great, make sure to have a `jar` with all your needed dependencies 
@@ -212,20 +257,17 @@ minus the ones `detekt` brings itself.
 
 Take a look at our [sample project](https://github.com/detekt/detekt/tree/main/detekt-sample-extensions) on how to achieve this with gradle.
 
-##### Integrate your extension with the detekt CLI
+### Via the Detekt CLI
 
-Mention your `jar` with the `--plugins` flag when calling the cli fatjar:
+Pass your `jar` with the `--plugins` flag when calling the CLI fatjar:
 ```sh
 detekt --input ... --plugins /path/to/my/jar
 ```
 
-##### Integrate your extension with the Detekt Gradle Plugin 
+### Via the Detekt Gradle Plugin
 
 For example `detekt` itself provides a wrapper over [ktlint](https://github.com/pinterest/ktlint) as a 
-custom `ktlint` rule set.
-To enable it, we add the published dependency to `detekt` via the `detektPlugins` configuration:
-
-###### Gradle (Kotlin/Groovy DSL)
+custom rule set. To enable it, we add the published dependency to `detekt` via the `detektPlugins` configuration:
 
 ```kotlin
 dependencies {
@@ -233,17 +275,17 @@ dependencies {
 }
 ```
 
-##### Pitfalls
+You can use the same method to apply any other custom rulesets! See the [Detekt 3rd-party Marketplace](https://detekt.dev/marketplace) for more.
+
+### Pitfalls
 
 - All rules are disabled by default and have to be explicitly enabled in the `detekt` yaml configuration file.
-- If you do not pass the `Config` object from the `RuleSetProvider` to the rule, the rule is active, but you will not be able to use
-any configuration options or disable the rule via config file.
-- If your extension is part of your project and you integrate it like `detektPlugins project(":my-rules")` make sure that this
-subproject is build before `gradle detekt` is run.
+- If your extension is part of your project and you integrate it like `detektPlugins(project(":my-rules"))` make sure that this
+subproject is built before `gradle detekt` is run.
 In the `kotlin-dsl` you could add something like `tasks.withType<Detekt> { dependsOn(":my-rules:assemble") }` to explicitly run `detekt` only 
-after your extension sub project is built.
-- If you use detekt for your Android project, and if you want to integrate all your custom rules in a new module, please make sure that
-you created a pure kotlin module which has no Android dependencies. `apply plugin: "kotlin"` is enough to make it work.
+after your extension subproject is built.
+- If you use detekt for your Android project and if you want to integrate all your custom rules in a new module, please make sure that
+you put them in a pure kotlin module with no Android dependencies. `kotlin("jvm")` is enough to make it work.
 - Sometimes when you run detekt task, you may not see the violations detected by your custom rules. In this case open a terminal and run
 `./gradlew --stop` to stop gradle daemons and run the task again.
 - If you are configuring a custom detekt task at the root project level, you will need to apply the detektPlugins at the root project as well (not subprojects). See [this issue](https://github.com/detekt/detekt/issues/3989#issuecomment-890331512) for more.
