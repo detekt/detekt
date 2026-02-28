@@ -20,11 +20,52 @@ class DocumentationCollector(private val textReplacements: Map<String, String>) 
 
     fun setClass(classOrObject: KtClassOrObject) {
         name = classOrObject.name?.trim().orEmpty()
-        classOrObject.kDocSection()
-            ?.getContent()
+        classOrObject.docComment
+            ?.text
+            ?.let(::extractKDocContent)
             ?.trim()
             ?.replace("@@", "@")
             ?.let(::extractRuleDocumentation)
+    }
+
+    private fun extractKDocContent(rawKDoc: String): String {
+        // Remove the opening /** and closing */
+        val withoutDelimiters = rawKDoc
+            .removePrefix("/**")
+            .removeSuffix("*/")
+
+        // Process each line to remove the leading " * " pattern while preserving indentation after it
+        return withoutDelimiters
+            .lines()
+            .joinToString("\n") { line ->
+                // Match the KDoc comment pattern: optional whitespace + asterisk + optional space
+                when {
+                    line.trimStart().startsWith("* ") -> {
+                        // Find the position after " * " and preserve everything after that
+                        val asteriskIndex = line.indexOf('*')
+                        if (asteriskIndex + 2 < line.length) {
+                            line.substring(asteriskIndex + 2)
+                        } else {
+                            ""
+                        }
+                    }
+
+                    line.trimStart().startsWith("*") && line.trimStart().length > 1 -> {
+                        // Asterisk without space after it
+                        val asteriskIndex = line.indexOf('*')
+                        if (asteriskIndex + 1 < line.length) {
+                            line.substring(asteriskIndex + 1)
+                        } else {
+                            ""
+                        }
+                    }
+
+                    // Just an asterisk, empty line
+                    line.trimStart() == "*" -> ""
+
+                    else -> line.trimStart() // No asterisk, just trim
+                }
+            }
     }
 
     private fun extractRuleDocumentation(comment: String) {
