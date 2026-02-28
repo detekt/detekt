@@ -34,16 +34,14 @@ It's important that the dependency of `dev.detekt:detekt-api` is configured as `
 
 Custom rules must extend the `Rule` class and override the `visitXXX()` functions from the AST.
 A `RuleSetProvider` must also be implemented, declaring a `RuleSet` in the `instance()` function.
-To leverage the configuration mechanism of detekt you must pass the Config object from your rule set provider to your rule.
-An `Issue` property defines what ID and message should be printed on the console or on any other output format.
 
 Example of a custom rule:
 ```kotlin
-class TooManyFunctions(config: Config) : Rule(
+class TooManyFunctions2(config: Config) : Rule(
     config,
     "This rule reports a file with an excessive function count.",
 ) {
-    private val threshold = 10
+    private val threshold: Int by config(defaultValue = 10)
     private var amount: Int = 0
 
     override fun visitKtFile(file: KtFile) {
@@ -62,39 +60,7 @@ class TooManyFunctions(config: Config) : Rule(
 }
 ```
 
-Example of a much more precise rule, making fuller use of the `Finding` constructor and `Rule` attributes:
-```kotlin
-class TooManyFunctions2(config: Config) : Rule(
-    config,
-    "This rule reports a file with an excessive function count.",
-) {
-    private val threshold: Int by config(defaultValue = 10)
-    private var amount: Int = 0
-
-    override fun visitKtFile(file: KtFile) {
-        super.visitKtFile(file)
-        if (amount > threshold) {
-            report(ThresholdedCodeSmell(issue,
-                entity = Entity.from(file),
-                metric = Metric(type = "SIZE", value = amount, threshold = threshold),
-                message = "The file ${file.name} has $amount function declarations. " +
-                        "Threshold is specified with $threshold.",
-                references = emptyList())
-            )
-        }
-        amount = 0
-    }
-
-    override fun visitNamedFunction(function: KtNamedFunction) {
-        super.visitNamedFunction(function)
-        amount++
-    }
-}
-```
-
 If you want your rule to be configurable, write down your properties inside the `detekt.yml` file.
-Please note that this will only take effect if the `Config` object is passed on by the `RuleSetProvider`
-to the rule itself.
 
 ```yaml
 MyRuleSet:
@@ -105,27 +71,9 @@ MyRuleSet:
     active: false
 ```
 
-By specifying the rule set and rule IDs, _detekt_ will use the sub-configuration of `TooManyFunctions2`:
+By specifying the rule set and rule IDs, _detekt_ will use the sub-configuration of `TooManyFunctions2`.
 
-```val threshold = valueOrDefault("threshold", THRESHOLD)```
-
-:::note
-
-As of version 1.2.0 detekt now verifies whether all configured properties actually exist in a configuration created by `--generate-config`.
-This means that by default detekt does not know about your new properties.
-Therefore we need to mention them in the configuration under `config>excludes`.
-
-:::
-
-```yaml
-config:
-  validation: true
-  # 1. exclude rule set 'sample' and all its nested members
-  # 2. exclude every property in every rule under the rule set 'sample'
-  excludes: "sample.*,sample>.*>.*"
-```
-
-## Testing custom rules {#testing}
+### Testing custom rules {#testing}
 
 To test your rules, add the `detekt-test` dependency to your project:
 
@@ -136,11 +84,11 @@ testImplementation("dev.detekt:detekt-test:[detekt_version]")
 // Optional - makes use of the "assertThat" test structure 
 testImplementation("dev.detekt:detekt-test-assertj:[detekt_version]")
 
-// Optional in general, but required for the @KotlinCoreEnvironmentTest annotation
+// Optional - handy to test rules that use type resolution
 testImplementation("dev.detekt:detekt-test-junit:[detekt_version]")
 ```
 
-### Basic tests
+#### Basic tests
 
 The simplest way to test a rule is with the `lint` extension function, which runs your rule against inline Kotlin code:
 
@@ -174,7 +122,7 @@ class TooManyFunctionsSpec {
 }
 ```
 
-### With custom configs
+#### With custom configs
 
 To validate configurable rules, use `TestConfig` instead of `Config.empty`:
 
@@ -188,7 +136,7 @@ val subject = TooManyFunctions(
 )
 ```
 
-### With type resolution
+#### With type resolution
 
 If your rule requires type resolution (i.e. it implements `RequiresAnalysisApi`):
 1. annotate the test class with `@KotlinCoreEnvironmentTest`,
@@ -209,7 +157,7 @@ class MyTypeAwareRuleSpec(val env: KotlinEnvironmentContainer) {
 }
 ```
 
-By default, code snippets passed into `lintWithContext` are compiled against the full test classpath (kotlin-stdlib, any `testImplementation` dependencies, etc.). If your rule targets a specific third-party library, just add it as a `testImplementation` dependency in your build file and any classes in that library will be available for import/analysis in test snippets automatically.
+By default, code snippets passed into `lintWithContext` are compiled against the full test classpath (kotlin-stdlib, any `testImplementation` dependencies, etc.). If your rule targets a specific third-party library, just add it as a `testRuntimeOnly` dependency in your build file and any classes in that library will be available for import/analysis in test snippets automatically.
 
 You can also make Java source files available to your test snippets by placing them under `test/resources` and referencing them via the `@KotlinCoreEnvironmentTest` annotation, but remember that this is **Java** only - not Kotlin files.
 
@@ -220,7 +168,7 @@ class MyRuleSpec(val env: KotlinEnvironmentContainer) {
 }
 ```
 
-### Custom assertions
+#### Custom assertions
 
 The custom `assertThat` from `detekt-test-assertj` supports more idiomatic assertions on findings:
 
@@ -319,7 +267,7 @@ detekt --input ... --plugins /path/to/my/jar
 ### Via the Detekt Gradle Plugin
 
 For example `detekt` itself provides a wrapper over [ktlint](https://github.com/pinterest/ktlint) as a 
-custom `ktlint` rule set. To enable it, we add the published dependency to `detekt` via the `detektPlugins` configuration:
+custom rule set. To enable it, we add the published dependency to `detekt` via the `detektPlugins` configuration:
 
 ```kotlin
 dependencies {
@@ -332,8 +280,6 @@ You can use the same method to apply any other custom rulesets! See the [Detekt 
 ### Pitfalls
 
 - All rules are disabled by default and have to be explicitly enabled in the `detekt` yaml configuration file.
-- If you do not pass the `Config` object from the `RuleSetProvider` to the rule, the rule is active, but you will not be able to use
-any configuration options or disable the rule via config file.
 - If your extension is part of your project and you integrate it like `detektPlugins(project(":my-rules"))` make sure that this
 subproject is built before `gradle detekt` is run.
 In the `kotlin-dsl` you could add something like `tasks.withType<Detekt> { dependsOn(":my-rules:assemble") }` to explicitly run `detekt` only 
