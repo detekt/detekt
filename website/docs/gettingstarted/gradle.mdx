@@ -24,6 +24,11 @@ The Detekt Gradle Plugin will generate multiple tasks:
   - You may specify Gradle task CLI option for auto correction, such as `gradle detekt --auto-correct`.
 - `detektGenerateConfig` - Generates a default detekt configuration file into your project directory.
 - `detektBaseline` - Similar to `detekt`, but creates a finding baseline. Further detekt runs will only feature new findings not in this list.
+- `detektProfile` - Runs detekt with profiling enabled to measure rule execution times. Displays the top slowest
+  rules in console output and generates an aggregated profiling summary. In multi-project builds, running this task 
+  on the root project will also run profiling on all subprojects and aggregate the results into 
+  `build/reports/detekt/detektProfile-aggregate.txt`. Note: Parallel execution is automatically disabled when profiling 
+  to ensure accurate timing measurements.
 
 In addition to these standard tasks, the plugin will also generate a set of tasks that have
 [type resolution](type-resolution.md) enabled. This happens for both, pure JVM projects and Android projects that have
@@ -33,13 +38,22 @@ the Android Gradle Plugin applied:
   (Android: all production source sets)
 - `detektTest` - Similar to `detekt`, but runs only on the `test` source set
   (Android: all JVM and Android Test source sets)
-- `detektBaselineMain` - Similar to `detektBaseline`, but creates a baseline only for the `main` source set 
+- `detektBaselineMain` - Similar to `detektBaseline`, but creates a baseline only for the `main` source set
   (Android: multiple baselines for all production source sets)
 - `detektBaselineTest` - Similar to `detektBaseline`, but creates a baseline only for the `test` source set
   (Android: multiple baselines for all JVM and Android Test source sets)
+- `detektProfileMain` - Similar to `detektProfile`, but runs profiling only on the `main` source set with type 
+  resolution enabled (Android: all production source sets). In multi-project builds, running this task on the root 
+  project will aggregate profiling results from all subprojects into `build/reports/detekt/detektProfileMain-aggregate.txt`.
+- `detektProfileTest` - Similar to `detektProfile`, but runs profiling only on the `test` source set with type 
+  resolution enabled (Android: all JVM and Android Test source sets). In multi-project builds, running this task on 
+  the root project will aggregate profiling results from all subprojects into `build/reports/detekt/detektProfileTest-aggregate.txt`.
 - Android-only: `detekt<Variant>` - Similar to `detekt`, but runs only on the specific (test) build variant
 - Android-only: `detektBaseline<Variant>` - Similar to `detektBaseline`, but creates a baseline only for the
   specific (test) build variant
+- Android-only: `detektProfile<Variant>` - Similar to `detektProfile`, but runs profiling with type resolution 
+  enabled only for the specific (test) build variant. In multi-project builds, running this task on the root project 
+  will aggregate profiling results from all subprojects.
   
 Baseline files that are generated for these specific source sets / build variants contain the name of the source set /
 the name of the build variant in their name, unless otherwise configured, such as `detekt-main.xml` or 
@@ -240,9 +254,13 @@ detekt {
     // Android: Don't create tasks for the specified build variants (e.g. "productionRelease")
     ignoredVariants = ["productionRelease"]
     
-    // Specify the base path for file paths in the formatted reports. 
+    // Specify the base path for file paths in the formatted reports.
     // If not set, all file paths reported will be absolute file path.
     basePath = projectDir
+
+    // Number of slowest rules to display in profiling task console output.
+    // Defaults to 10.
+    topRulesToShow = 10
 }
 ```
 
@@ -301,9 +319,13 @@ detekt {
     // Android: Don't create tasks for the specified build variants (e.g. "productionRelease")
     ignoredVariants = listOf("productionRelease")
     
-    // Specify the base path for file paths in the formatted reports. 
+    // Specify the base path for file paths in the formatted reports.
     // If not set, all file paths reported will be absolute file path.
     basePath.set(projectDir)
+
+    // Number of slowest rules to display in profiling task console output.
+    // Defaults to 10.
+    topRulesToShow = 10
 }
 ```
 

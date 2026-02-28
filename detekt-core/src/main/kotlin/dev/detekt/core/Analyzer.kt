@@ -7,6 +7,7 @@ import dev.detekt.api.Finding
 import dev.detekt.api.Issue
 import dev.detekt.api.Location
 import dev.detekt.api.Rule
+import dev.detekt.api.RuleExecutionListener
 import dev.detekt.api.RuleInstance
 import dev.detekt.api.Severity
 import dev.detekt.api.internal.whichDetekt
@@ -21,17 +22,29 @@ import org.jetbrains.kotlin.config.LanguageVersionSettings
 import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
+import kotlin.time.measureTimedValue
 
 internal class Analyzer(
     private val settings: ProcessingSettings,
     private val rules: List<RuleDescriptor>,
     private val processors: List<FileProcessListener>,
+    private val ruleListeners: List<RuleExecutionListener>,
     private val analysisMode: AnalysisMode,
 ) {
+    /**
+     * Whether profiling was requested, and parallel execution was disabled to ensure accurate measurements.
+     */
+    val parallelDisabledForProfiling: Boolean =
+        settings.spec.executionSpec.parallelAnalysis && ruleListeners.isNotEmpty()
+
     fun run(ktFiles: Collection<KtFile>): List<Issue> {
         val languageVersionSettings = settings.configuration.languageVersionSettings
 
-        return if (settings.spec.executionSpec.parallelAnalysis) {
+        // Force sequential execution when profiling is active to get accurate timing measurements.
+        // Parallel execution inflates per-rule times due to thread contention and makes times non-additive.
+        val useParallel = settings.spec.executionSpec.parallelAnalysis && ruleListeners.isEmpty()
+
+        return if (useParallel) {
             runAsync(ktFiles, languageVersionSettings)
         } else {
             runSync(ktFiles, languageVersionSettings)
@@ -79,12 +92,17 @@ internal class Analyzer(
             .partition { (_, rule) -> rule.autoCorrect }
 
         return (correctableRules + otherRules).flatMap { (ruleInstance, rule) ->
-            rule.visitFile(file, languageVersionSettings)
+            ruleListeners.forEach { it.beforeRuleExecution(file, ruleInstance) }
+            val (findings, duration) = measureTimedValue {
+                rule.visitFile(file, languageVersionSettings)
+            }
+            val filteredFindings = findings
                 .filterNot {
                     it.entity.ktElement.isSuppressedBy(ruleInstance.id, rule.aliases, ruleInstance.ruleSetId)
                 }
                 .filterSuppressedFindings(rule, analysisMode)
-                .map { it.toIssue(ruleInstance, ruleInstance.severity, settings.spec.projectSpec.basePath) }
+            ruleListeners.forEach { it.afterRuleExecution(file, ruleInstance, filteredFindings.size, duration) }
+            filteredFindings.map { it.toIssue(ruleInstance, ruleInstance.severity, settings.spec.projectSpec.basePath) }
         }
     }
 }

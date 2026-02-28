@@ -14,6 +14,7 @@ internal object DetektKmpJvmCompilations {
             target.compilations.configureEach { compilation ->
                 project.registerJvmCompilationDetektTask(extension, compilation, target)
                 project.registerJvmCompilationCreateBaselineTask(extension, compilation, target)
+                project.registerJvmCompilationProfilingTask(extension, compilation)
             }
         }
     }

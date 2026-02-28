@@ -3,6 +3,7 @@ package dev.detekt.gradle.plugin
 import dev.detekt.detekt_gradle_plugin.BuildConfig
 import dev.detekt.gradle.Detekt
 import dev.detekt.gradle.DetektCreateBaselineTask
+import dev.detekt.gradle.DetektProfilingTask
 import dev.detekt.gradle.extensions.DetektExtension
 import dev.detekt.gradle.extensions.FailOnSeverity
 import dev.detekt.gradle.internal.addVariantName
@@ -44,6 +45,7 @@ class DetektBasePlugin : Plugin<Project> {
             buildUponDefaultConfig.convention(DEFAULT_BUILD_UPON_DEFAULT_CONFIG_VALUE)
             disableDefaultRuleSets.convention(DEFAULT_DISABLE_RULESETS_VALUE)
             autoCorrect.convention(DEFAULT_AUTO_CORRECT_VALUE)
+            topRulesToShow.convention(DEFAULT_TOP_RULES_TO_SHOW)
             reportsDir.convention(
                 project.extensions.getByType(ReportingExtension::class.java).baseDirectory.dir("detekt")
             )
@@ -83,7 +85,7 @@ class DetektBasePlugin : Plugin<Project> {
                 .sourceSets
                 .configureEach { sourceSet ->
                     val taskName = "${DetektPlugin.DETEKT_TASK_NAME}${sourceSet.name.capitalize()}SourceSet"
-                    tasks.register(taskName, Detekt::class.java) { detektTask ->
+                    val detektTaskProvider = tasks.register(taskName, Detekt::class.java) { detektTask ->
                         detektTask.source = sourceSet.kotlin
                         detektTask.baseline.convention(
                             project.layout.file(
@@ -117,6 +119,14 @@ class DetektBasePlugin : Plugin<Project> {
                         }
                         createBaselineTask.description = "Creates detekt baseline for ${sourceSet.name} source set"
                     }
+
+                    val profilingTaskName = "${DetektPlugin.PROFILING_TASK_NAME}${sourceSet.name.capitalize()}SourceSet"
+                    DetektProfilingTask.register(
+                        project = this,
+                        taskName = profilingTaskName,
+                        extension = extension,
+                        detektTaskProvider = detektTaskProvider
+                    )
                 }
         }
     }
@@ -138,6 +148,7 @@ class DetektBasePlugin : Plugin<Project> {
         private const val DEFAULT_DISABLE_RULESETS_VALUE = false
         private const val DEFAULT_ALL_RULES_VALUE = false
         private const val DEFAULT_BUILD_UPON_DEFAULT_CONFIG_VALUE = false
+        internal const val DEFAULT_TOP_RULES_TO_SHOW = 10
 
         // This flag is ignored unless the compiler plugin is applied to the project
         private const val DEFAULT_COMPILER_PLUGIN_ENABLED = true

@@ -4,6 +4,8 @@ import dev.detekt.detekt_gradle_plugin.BuildConfig
 import dev.detekt.gradle.Detekt
 import dev.detekt.gradle.DetektCreateBaselineTask
 import dev.detekt.gradle.DetektGenerateConfigTask
+import dev.detekt.gradle.DetektProfilingAggregateTask
+import dev.detekt.gradle.DetektProfilingTask
 import dev.detekt.gradle.extensions.DetektExtension
 import dev.detekt.gradle.internal.DetektPlain
 import dev.detekt.gradle.plugin.DetektBasePlugin.Companion.CONFIG_DIR_NAME
@@ -46,6 +48,10 @@ class DetektPlugin : Plugin<Project> {
             project.registerDetektMultiplatformTasks(extension)
         }
         project.registerGenerateConfigTask(extension)
+
+        if (project == project.rootProject) {
+            project.registerProfilingAggregateTasks(extension)
+        }
     }
 
     private fun Project.registerDetektJvmTasks(extension: DetektExtension) {
@@ -140,9 +146,41 @@ class DetektPlugin : Plugin<Project> {
         }
     }
 
+    /*
+    This is not the best method to create root project aggregation tasks, but it is the only
+    way to do it without user intervention. If task abbreviations are used (e.g. `dPDSS` instead
+    of `detektProfileDebugSourceSet`) it will not work.
+
+    The "correct" method would be to require the user to register DetektProfilingAggregateTasks in the
+    root project manually.
+     */
+    private fun Project.registerProfilingAggregateTasks(extension: DetektExtension) {
+        gradle
+            .startParameter
+            .taskNames
+            .filter { it.startsWith(PROFILING_TASK_NAME) }
+            .forEach { taskName ->
+                val rootProfilingTaskProvider =
+                    if (taskName == PROFILING_ROOT_TASK_NAME) {
+                        tasks.named(PROFILING_ROOT_TASK_NAME, DetektProfilingTask::class.java)
+                    } else {
+                        null
+                    }
+
+                DetektProfilingAggregateTask.register(
+                    project = this,
+                    taskName = taskName,
+                    extension = extension,
+                    rootProfilingTaskProvider = rootProfilingTaskProvider
+                )
+            }
+    }
+
     internal companion object {
         internal const val DETEKT_TASK_NAME = "detekt"
         internal const val BASELINE_TASK_NAME = "detektBaseline"
+        internal const val PROFILING_TASK_NAME = "detektProfile"
+        internal const val PROFILING_ROOT_TASK_NAME = "detektProfileRoot"
         private const val GENERATE_CONFIG = "detektGenerateConfig"
         val defaultExcludes = listOf("build/")
         val defaultIncludes = listOf("**/*.kt", "**/*.kts")
