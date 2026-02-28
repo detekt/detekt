@@ -17,6 +17,7 @@ import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
+import org.jetbrains.kotlin.psi.KtFunctionLiteral
 
 /**
  * In Kotlin functions `get` or `set` can be replaced with the shorter operator — `[]`,
@@ -138,5 +139,17 @@ class ExplicitCollectionElementAccessMethod(config: Config) :
             symbol.superTypes.asSequence().flatMap { it.allSupertypes }.any { it.symbol?.classId == mapClass }
     }
 
-    private fun unusedReturnValue(expression: KtCallExpression): Boolean = expression.parent.parent is KtBlockExpression
+    private fun unusedReturnValue(expression: KtCallExpression): Boolean {
+        val block = expression.parent.parent as? KtBlockExpression ?: return false
+
+        // If the block is a lambda body and this expression is the last statement, the return value is implicitly
+        // used as the lambda's return value — unless the lambda returns Unit
+        val functionLiteral = block.parent as? KtFunctionLiteral
+        if (functionLiteral != null && block.statements.lastOrNull() == expression.parent) {
+            return analyze(functionLiteral) {
+                functionLiteral.symbol.returnType.isUnitType
+            }
+        }
+        return true
+    }
 }
