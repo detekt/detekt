@@ -191,7 +191,7 @@ class UnnecessaryParentheses(config: Config) :
 
             if (
                 parentExpression.operationToken != KtTokens.RANGE ||
-                (this.expression as? KtConstantExpression)?.elementType != KtNodeTypes.FLOAT_CONSTANT ||
+                (this.expression as? KtConstantExpression)?.iElementType != KtNodeTypes.FLOAT_CONSTANT ||
                 parentExpression.right != this
             ) {
                 return false

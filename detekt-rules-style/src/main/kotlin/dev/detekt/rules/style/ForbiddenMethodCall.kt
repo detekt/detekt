@@ -169,7 +169,7 @@ class ForbiddenMethodCall(config: Config) :
                 }
 
                 is KaCompoundAccessCall -> sequenceOf(
-                    null to kaCall.compoundOperation.operationPartiallyAppliedSymbol.symbol
+                    null to kaCall.compoundOperation.operationCall.symbol
                 )
 
                 is KaCompoundArrayAccessCall -> null

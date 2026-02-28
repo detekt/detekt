@@ -89,12 +89,11 @@ class RedundantHigherOrderMapUsage(config: Config) :
         val lambdaStatements = functionLiteral?.bodyExpression?.statements ?: return
 
         analyze(functionLiteral) {
-            val partiallyAppliedSymbol =
-                expression.resolveToCall()?.singleFunctionCallOrNull()?.partiallyAppliedSymbol ?: return
-            val symbol = partiallyAppliedSymbol.symbol
+            val functionCall = expression.resolveToCall()?.singleFunctionCallOrNull() ?: return
+            val symbol = functionCall.symbol
             if (symbol.callableId !in mapCallableIds) return
 
-            val receiver = partiallyAppliedSymbol.dispatchReceiver ?: partiallyAppliedSymbol.extensionReceiver
+            val receiver = functionCall.dispatchReceiver ?: functionCall.extensionReceiver
             val receiverType = receiver?.type ?: return
             val receiverIsList = receiverType.isSubtypeOf(listClassId)
             val receiverIsSet = receiverType.isSubtypeOf(setClassId)
