@@ -243,7 +243,7 @@ export const extensions = [
   {
     title: "detekt-rules-koin",
     description:
-      "51 rules for Koin 4.x — enforces best practices and catches common anti-patterns via static analysis.",
+      "Koin 4.x rules for detekt",
     repo: "https://github.com/androidbroadcast/Koin-Detekt",
     ruleset: "koin-rules",
     rules: [
