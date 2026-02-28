@@ -3,6 +3,7 @@ package dev.detekt.core.reporting.console
 import dev.detekt.api.Issue
 import dev.detekt.api.SetupContext
 import dev.detekt.core.reporting.compact
+import dev.detekt.core.reporting.prefix
 import java.nio.file.Path
 
 /**
@@ -23,7 +24,8 @@ class LiteIssuesReport : AbstractIssuesReport() {
     override fun render(issues: List<Issue>): String =
         buildString {
             issues.forEach { issue ->
-                append("${issue.location.compact(basePath)}: ${issue.message} [${issue.ruleInstance.id}]")
+                append(issue.severity.prefix())
+                append("${issue.location.compact(basePath)} ${issue.message} [${issue.ruleInstance.id}]")
                 appendLine()
             }
         }
