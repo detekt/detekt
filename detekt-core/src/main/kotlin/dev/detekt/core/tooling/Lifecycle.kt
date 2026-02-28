@@ -26,44 +26,8 @@ import org.jetbrains.kotlin.psi.KtFile
 internal class Lifecycle(
     val baselineConfig: Config,
     val settings: ProcessingSettings,
-    val bindingProvider: (files: List<KtFile>) -> Unit =
-        {
-            val collector = DetektMessageCollector(
-                minSeverity = CompilerMessageSeverity.ERROR,
-                debugPrinter = settings::debug,
-                warningPrinter = settings::info,
-                isDebugEnabled = settings.spec.loggingSpec.debug
-            )
-
-            it.forEach { file: KtFile ->
-                analyze(file) {
-                    file.collectDiagnostics(KaDiagnosticCheckerFilter.ONLY_COMMON_CHECKERS).forEach { diagnostic ->
-                        val lineAndColumnRange =
-                            getLineAndColumnRangeInPsiFile(diagnostic.psi.containingFile, diagnostic.psi.textRange)
-
-                        val location = CompilerMessageLocationWithRange.create(
-                            diagnostic.psi.containingFile.virtualFile.path,
-                            lineAndColumnRange.start.line,
-                            lineAndColumnRange.start.column,
-                            lineAndColumnRange.end.line,
-                            lineAndColumnRange.end.column,
-                            lineAndColumnRange.start.lineContent
-                        )
-                        collector.report(
-                            diagnostic.severity.toCompilerMessageSeverity(),
-                            diagnostic.defaultMessage,
-                            location,
-                        )
-                    }
-                }
-            }
-
-            collector.printIssuesCountIfAny()
-        },
-    val processorsProvider: () -> List<FileProcessListener> =
-        { FileProcessorLocator(settings).load() },
-    val ruleSetsProvider: () -> List<RuleSetProvider> =
-        { settings.createRuleProviders() },
+    val processorsProvider: () -> List<FileProcessListener> = { FileProcessorLocator(settings).load() },
+    val ruleSetsProvider: () -> List<RuleSetProvider> = { settings.createRuleProviders() },
 ) {
 
     private fun <R> measure(phase: Phase, block: () -> R): R = settings.monitor.measure(phase, block)
@@ -72,7 +36,7 @@ internal class Lifecycle(
         measure(Phase.ValidateConfig) { checkConfiguration(settings, baselineConfig) }
         val filesToAnalyze = measure(Phase.Parsing) { settings.ktFiles }
         if (settings.spec.projectSpec.analysisMode == AnalysisMode.full) {
-            measure(Phase.Binding) { bindingProvider.invoke(filesToAnalyze) }
+            measure(Phase.ValidateClasspath) { validateClasspath(filesToAnalyze) }
         }
         val analysisMode = settings.spec.projectSpec.analysisMode
         val (processors, rules) = measure(Phase.LoadingExtensions) {
@@ -98,6 +62,40 @@ internal class Lifecycle(
             OutputFacade(settings).run(finalResult)
             finalResult
         }
+    }
+
+    private fun validateClasspath(files: List<KtFile>) {
+        val collector = DetektMessageCollector(
+            minSeverity = CompilerMessageSeverity.ERROR,
+            debugPrinter = settings::debug,
+            warningPrinter = settings::info,
+            isDebugEnabled = settings.spec.loggingSpec.debug
+        )
+
+        files.forEach { file: KtFile ->
+            analyze(file) {
+                file.collectDiagnostics(KaDiagnosticCheckerFilter.ONLY_COMMON_CHECKERS).forEach { diagnostic ->
+                    val lineAndColumnRange =
+                        getLineAndColumnRangeInPsiFile(diagnostic.psi.containingFile, diagnostic.psi.textRange)
+
+                    val location = CompilerMessageLocationWithRange.create(
+                        diagnostic.psi.containingFile.virtualFile.path,
+                        lineAndColumnRange.start.line,
+                        lineAndColumnRange.start.column,
+                        lineAndColumnRange.end.line,
+                        lineAndColumnRange.end.column,
+                        lineAndColumnRange.start.lineContent
+                    )
+                    collector.report(
+                        diagnostic.severity.toCompilerMessageSeverity(),
+                        diagnostic.defaultMessage,
+                        location,
+                    )
+                }
+            }
+        }
+
+        collector.printIssuesCountIfAny()
     }
 }
 
