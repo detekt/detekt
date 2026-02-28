@@ -17,7 +17,7 @@ class PerformanceMonitorSpec {
             project {
                 basePath = resourceAsPath("")
                 inputPaths = listOf(resourceAsPath("cases/Test.kt"))
-                analysisMode = AnalysisMode.full
+                analysisMode = AnalysisMode.Full
             }
             logging {
                 debug = true
@@ -37,7 +37,7 @@ class PerformanceMonitorSpec {
             project {
                 basePath = resourceAsPath("")
                 inputPaths = listOf(resourceAsPath("cases/Test.kt"))
-                analysisMode = AnalysisMode.light
+                analysisMode = AnalysisMode.Light
             }
             logging {
                 debug = true
