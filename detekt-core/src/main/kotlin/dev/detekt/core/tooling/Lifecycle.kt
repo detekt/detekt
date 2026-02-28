@@ -69,9 +69,7 @@ internal class Lifecycle(
     private fun validateClasspath(files: List<KtFile>) {
         val collector = DetektMessageCollector(
             minSeverity = CompilerMessageSeverity.ERROR,
-            debugPrinter = settings::debug,
-            warningPrinter = settings::info,
-            isDebugEnabled = settings.spec.loggingSpec.debug
+            printer = settings.outputChannel::appendLine,
         )
 
         files.forEach { file: KtFile ->
