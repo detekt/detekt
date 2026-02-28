@@ -178,6 +178,36 @@ class ExplicitCollectionElementAccessMethodSpec {
                 """.trimIndent()
                 assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
+
+            @Test
+            fun `does not report when put return value is implicitly passed into function`() {
+                val code = $$"""
+                    fun handlePutResult(oldValue: String?) {
+                        println("Old value = $oldValue")
+                    }
+
+                    fun main() {
+                        val map = mutableMapOf<Int, String>()
+                        handlePutResult(map.put(123, "abc"))
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `does not report when put return value is implicitly used as return value in lambda`() {
+                val code = $$"""
+                    fun handlePutResult(runPutHere: () -> String?) {
+                        println("Old value = ${runPutHere()}")
+                    }
+
+                    fun main() {
+                        val map = mutableMapOf<Int, String>()
+                        handlePutResult { map.put(123, "abc") }
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
         }
 
         @Nested
