@@ -1,9 +1,6 @@
 package dev.detekt.core.config
 
-import dev.detekt.core.yamlConfig
 import dev.detekt.core.yamlConfigFromContent
-import dev.detekt.test.utils.resourceAsPath
-import dev.detekt.utils.getSafeResourceAsStream
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
@@ -11,14 +8,40 @@ import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.snakeyaml.engine.v2.exceptions.ParserException
-import kotlin.io.path.Path
 
 class YamlConfigSpec {
 
     @Nested
     inner class `load yaml config` {
 
-        private val config = yamlConfig("detekt.yml")
+        private val config = yamlConfigFromContent(
+            """
+                code-smell:
+                  LongMethod:
+                    active: true
+                    allowedLines: 20
+                  LongParameterList:
+                    active: false
+                    threshold: 5
+                  LargeClass:
+                    active: false
+                    threshold: 70
+                  InnerMap:
+                    Inner1:
+                      active: true
+                    Inner2:
+                      active: true
+
+                style:
+                  WildcardImport:
+                    active: true
+                  NoElseInWhenExpression:
+                    active: true
+                  MagicNumber:
+                    active: true
+                    ignoreNumbers: ['-1', '0', '1', '2']
+            """.trimIndent()
+        )
 
         @Test
         fun `should create a sub config`() {
@@ -77,20 +100,6 @@ class YamlConfigSpec {
             val subject = config.subConfig("style")
             val actual = subject.subConfigKeys()
             assertThat(actual).containsExactly("WildcardImport", "NoElseInWhenExpression", "MagicNumber")
-        }
-    }
-
-    @Nested
-    inner class `loading empty configurations` {
-
-        @Test
-        fun `empty yaml file is equivalent to empty config`() {
-            javaClass.getSafeResourceAsStream("/empty.yml")!!.reader().use(YamlConfig::load)
-        }
-
-        @Test
-        fun `single item in yaml file is valid`() {
-            javaClass.getSafeResourceAsStream("/oneitem.yml")!!.reader().use(YamlConfig::load)
         }
     }
 
@@ -162,91 +171,23 @@ class YamlConfigSpec {
     inner class `yaml config` {
 
         @Test
+        fun `empty yaml file is equivalent to empty config`() {
+            yamlConfigFromContent("")
+        }
+
+        @Test
+        fun `single item in yaml file is valid`() {
+            yamlConfigFromContent("style:")
+        }
+
+        @Test
         fun `loads the config from a given yaml file`() {
-            val path = resourceAsPath("detekt.yml")
-            val config = YamlConfig.load(path)
-            assertThat(config).isNotNull
-        }
-
-        @Test
-        fun `loads the config from a given text file`() {
-            val path = resourceAsPath("detekt.txt")
-            val config = YamlConfig.load(path)
-            assertThat(config).isNotNull
-        }
-
-        @Nested
-        inner class `Values with reason` {
-            private val config = YamlConfig.load(resourceAsPath("values-with-reason.yml"))
-
-            @Test
-            fun `can be parsed`() {
-                assertThat(config).isNotNull
-            }
-
-            @Test
-            fun `supports lists`() {
-                val actualAsList: List<*>? = config
-                    .subConfig("style")
-                    .subConfig("AsList")
-                    .valueOrNull("values")
-                assertThat(actualAsList).hasSize(3)
-            }
-
-            @Test
-            fun `supports dictionaries`() {
-                val actualAsMap: List<Map<*, *>>? = config
-                    .subConfig("style")
-                    .subConfig("AsListOfMaps")
-                    .valueOrNull("values")
-                assertThat(actualAsMap)
-                    .hasSize(3)
-            }
-
-            @Test
-            fun `supports empty dictionaries`() {
-                val actualAsMap: List<Map<*, *>>? = config
-                    .subConfig("style")
-                    .subConfig("EmptyListOfMaps")
-                    .valueOrNull("values")
-                assertThat(actualAsMap)
-                    .isNotNull
-                    .isEmpty()
-            }
-
-            @Test
-            fun `supports mixed string and dictionary`() {
-                val actualAsMap: List<Map<*, *>>? = config
-                    .subConfig("style")
-                    .subConfig("MixedWithStringAndMaps")
-                    .valueOrNull("values")
-                assertThat(actualAsMap)
-                    .isNotNull
-                    .isNotEmpty
-                    .hasSize(6)
-                    .elements(0, 1)
-                    .hasOnlyElementsOfType(String::class.java)
-
-                assertThat(actualAsMap)
-                    .elements(2, 3, 4, 5)
-                    .hasOnlyElementsOfType(Map::class.java)
-            }
-        }
-
-        @Test
-        fun `throws an exception on an non-existing file`() {
-            val path = Path("doesNotExist.yml")
-            assertThatIllegalArgumentException()
-                .isThrownBy { YamlConfig.load(path) }
-                .withMessageStartingWith("Configuration does not exist")
-        }
-
-        @Test
-        fun `throws an exception on a directory`() {
-            val path = resourceAsPath("/config_validation")
-            assertThatIllegalArgumentException()
-                .isThrownBy { YamlConfig.load(path) }
-                .withMessageStartingWith("Configuration must be a file")
+            yamlConfigFromContent(
+                """
+                    code-smell:
+                      LongMethod:
+                """.trimIndent()
+            )
         }
 
         @Test
@@ -274,6 +215,92 @@ class YamlConfigSpec {
                     "Provided configuration file is invalid: Structure must be from type Map<String, Any>!"
                 )
                 .hasCauseInstanceOf(ClassCastException::class.java)
+        }
+    }
+
+    @Nested
+    inner class `Values with reason` {
+        private val config = yamlConfigFromContent(
+            """
+                style:
+                  AsList:
+                    values:
+                      - a
+                      - b
+                      - c
+                  AsListOfMaps:
+                    values:
+                      - value: a
+                        reason: reason A
+                      - value: b
+                      - value: c
+                        reason: reason C
+                  EmptyListOfMaps:
+                    values: []
+                  MixedWithStringAndMaps:
+                    values:
+                      - a
+                      - b
+                      - value: c
+                      - value: d
+                      - value: e
+                        reason: reason E
+                      - value: f
+                        reason: reason F
+            """.trimIndent()
+        )
+
+        @Test
+        fun `can be parsed`() {
+            assertThat(config).isNotNull
+        }
+
+        @Test
+        fun `supports lists`() {
+            val actualAsList: List<*>? = config
+                .subConfig("style")
+                .subConfig("AsList")
+                .valueOrNull("values")
+            assertThat(actualAsList).hasSize(3)
+        }
+
+        @Test
+        fun `supports dictionaries`() {
+            val actualAsMap: List<Map<*, *>>? = config
+                .subConfig("style")
+                .subConfig("AsListOfMaps")
+                .valueOrNull("values")
+            assertThat(actualAsMap)
+                .hasSize(3)
+        }
+
+        @Test
+        fun `supports empty dictionaries`() {
+            val actualAsMap: List<Map<*, *>>? = config
+                .subConfig("style")
+                .subConfig("EmptyListOfMaps")
+                .valueOrNull("values")
+            assertThat(actualAsMap)
+                .isNotNull
+                .isEmpty()
+        }
+
+        @Test
+        fun `supports mixed string and dictionary`() {
+            val actualAsMap: List<Map<*, *>>? = config
+                .subConfig("style")
+                .subConfig("MixedWithStringAndMaps")
+                .valueOrNull("values")
+            assertThat(actualAsMap)
+                .isNotNull
+                .isNotEmpty
+                .hasSize(6)
+                .elements(0, 1)
+                .hasOnlyElementsOfType(String::class.java)
+
+            assertThat(actualAsMap)
+                .elements(2, 3, 4, 5)
+                .hasOnlyElementsOfType(Map::class.java)
         }
     }
 }
