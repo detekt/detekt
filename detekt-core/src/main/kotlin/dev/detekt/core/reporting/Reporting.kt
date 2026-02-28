@@ -1,6 +1,7 @@
 package dev.detekt.core.reporting
 
 import dev.detekt.api.Issue
+import dev.detekt.api.Severity
 import java.nio.file.Path
 
 internal fun printIssues(issues: Map<String, List<Issue>>, basePath: Path): String =
@@ -30,6 +31,13 @@ private fun Issue.truncatedMessage(): String {
 }
 
 private fun Issue.detailed(basePath: Path): String =
-    "${ruleInstance.id} - [${truncatedMessage()}] at ${location.compact(basePath)}"
+    "${severity.prefix()}${ruleInstance.id} - [${truncatedMessage()}] at ${location.compact(basePath)}"
 
 internal fun Issue.Location.compact(basePath: Path): String = "${basePath.resolve(path)}:$source"
+
+internal fun Severity.prefix() =
+    when (this) {
+        Severity.Error -> "e: "
+        Severity.Warning -> "w: "
+        Severity.Info -> "i: "
+    }

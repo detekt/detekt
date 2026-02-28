@@ -1,5 +1,8 @@
 package dev.detekt.core.reporting.console
 
+import dev.detekt.api.Severity.Error
+import dev.detekt.api.Severity.Info
+import dev.detekt.api.Severity.Warning
 import dev.detekt.api.testfixtures.TestDetektion
 import dev.detekt.api.testfixtures.TestSetupContext
 import dev.detekt.api.testfixtures.createIssue
@@ -20,9 +23,9 @@ class IssuesReportSpec {
     fun `has the reference content`() {
         val location = createIssueLocation()
         val detektion = TestDetektion(
-            createIssue(createRuleInstance(ruleSetId = "Ruleset1"), location),
-            createIssue(createRuleInstance(ruleSetId = "Ruleset1"), location),
-            createIssue(createRuleInstance(ruleSetId = "Ruleset2"), location),
+            createIssue(createRuleInstance(ruleSetId = "Ruleset1"), location, severity = Error),
+            createIssue(createRuleInstance(ruleSetId = "Ruleset1"), location, severity = Warning),
+            createIssue(createRuleInstance(ruleSetId = "Ruleset2"), location, severity = Info),
         )
 
         val output = subject.render(detektion)?.decolorized()
@@ -30,10 +33,10 @@ class IssuesReportSpec {
         assertThat(output).isEqualTo(
             """
                 Ruleset1
-                	TestSmell/id - [TestMessage] at ${basePath.resolve(location.path)}:1:1
-                	TestSmell/id - [TestMessage] at ${basePath.resolve(location.path)}:1:1
+                	e: TestSmell/id - [TestMessage] at ${basePath.resolve(location.path)}:1:1
+                	w: TestSmell/id - [TestMessage] at ${basePath.resolve(location.path)}:1:1
                 Ruleset2
-                	TestSmell/id - [TestMessage] at ${basePath.resolve(location.path)}:1:1
+                	i: TestSmell/id - [TestMessage] at ${basePath.resolve(location.path)}:1:1
                 
             """.trimIndent()
         )

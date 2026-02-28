@@ -1,5 +1,8 @@
 package dev.detekt.core.reporting.console
 
+import dev.detekt.api.Severity.Error
+import dev.detekt.api.Severity.Info
+import dev.detekt.api.Severity.Warning
 import dev.detekt.api.testfixtures.TestDetektion
 import dev.detekt.api.testfixtures.TestSetupContext
 import dev.detekt.api.testfixtures.createIssue
@@ -21,9 +24,9 @@ class FileBasedIssuesReportSpec {
         val location1 = createIssueLocation("File1.kt")
         val location2 = createIssueLocation("File2.kt")
         val detektion = TestDetektion(
-            createIssue(createRuleInstance(ruleSetId = "Ruleset1"), location1),
-            createIssue(createRuleInstance(ruleSetId = "Ruleset1"), location2),
-            createIssue(createRuleInstance(ruleSetId = "Ruleset2"), location1),
+            createIssue(createRuleInstance(ruleSetId = "Ruleset1"), location1, severity = Error),
+            createIssue(createRuleInstance(ruleSetId = "Ruleset1"), location2, severity = Warning),
+            createIssue(createRuleInstance(ruleSetId = "Ruleset2"), location1, severity = Info),
         )
 
         val output = subject.render(detektion)?.decolorized()
@@ -31,10 +34,10 @@ class FileBasedIssuesReportSpec {
         assertThat(output).isEqualTo(
             """
                 ${basePath.resolve(location1.path)}
-                	TestSmell/id - [TestMessage] at ${basePath.resolve(location1.path)}:1:1
-                	TestSmell/id - [TestMessage] at ${basePath.resolve(location1.path)}:1:1
+                	e: TestSmell/id - [TestMessage] at ${basePath.resolve(location1.path)}:1:1
+                	i: TestSmell/id - [TestMessage] at ${basePath.resolve(location1.path)}:1:1
                 ${basePath.resolve(location2.path)}
-                	TestSmell/id - [TestMessage] at ${basePath.resolve(location2.path)}:1:1
+                	w: TestSmell/id - [TestMessage] at ${basePath.resolve(location2.path)}:1:1
                 
             """.trimIndent()
         )
