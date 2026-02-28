@@ -10,7 +10,6 @@ import dev.detekt.core.ProcessingSettings
 import dev.detekt.core.config.validation.checkConfiguration
 import dev.detekt.core.extensions.handleReportingExtensions
 import dev.detekt.core.getRules
-import dev.detekt.core.reporting.OutputFacade
 import dev.detekt.core.rules.createRuleProviders
 import dev.detekt.core.util.PerformanceMonitor.Phase
 import dev.detekt.parser.DetektMessageCollector
@@ -93,11 +92,7 @@ internal class Lifecycle(
             processors.fold(detektion) { acc, processor -> processor.onFinish(filesToAnalyze, acc) }
         }
 
-        return measure(Phase.Reporting) {
-            val finalResult = handleReportingExtensions(settings, result)
-            OutputFacade(settings).run(finalResult)
-            finalResult
-        }
+        return measure(Phase.Reporting) { handleReportingExtensions(settings, result) }
     }
 }
 
