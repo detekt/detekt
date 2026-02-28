@@ -3,8 +3,9 @@ package dev.detekt.test.utils
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.RepeatedTest
 import org.junit.jupiter.api.Test
+import java.io.File
 
-class KotlinAnalysisAAEngineTest {
+class KotlinAnalysisApiEngineTest {
 
     @Test
     fun `can compile a valid script`() {
@@ -68,6 +69,49 @@ class KotlinAnalysisAAEngineTest {
             val unknownType: UnknownType
         """.trimIndent()
         assertThatThrownBy { KotlinAnalysisApiEngine.compile(invalidCode) }
+            .isInstanceOf(IllegalStateException::class.java)
+    }
+
+    @Test
+    fun `can compile with an external JAR dependency`() {
+        val code = """
+            package foo.e
+            
+            import org.junit.jupiter.api.Assertions.assertEquals
+            import org.junit.jupiter.api.Test
+
+            class MyTest {
+                @Test
+                fun testSomething() {
+                    assertEquals(1 + 2, 3)
+                }
+            }
+        """.trimIndent()
+
+        val junitApiJar = File(Test::class.java.protectionDomain.codeSource.location.path).toPath()
+        KotlinAnalysisApiEngine.compile(
+            code = code,
+            jvmClasspathRoots = listOf(junitApiJar)
+        )
+    }
+
+    @Test
+    fun `fail compilation if the external JAR dependency isn't specified`() {
+        val code = """
+            package foo.e
+            
+            import org.junit.jupiter.api.Assertions.assertEquals
+            import org.junit.jupiter.api.Test
+
+            class MyTest {
+                @Test
+                fun testSomething() {
+                    assertEquals(1 + 2, 3)
+                }
+            }
+        """.trimIndent()
+
+        assertThatThrownBy { KotlinAnalysisApiEngine.compile(code) }
             .isInstanceOf(IllegalStateException::class.java)
     }
 }

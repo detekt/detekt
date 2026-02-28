@@ -18,7 +18,6 @@ import dev.detekt.api.config
 import dev.detekt.test.utils.compileContentForTest
 import dev.detekt.test.utils.compileForTest
 import dev.detekt.test.utils.resourceAsPath
-import dev.detekt.test.yamlConfigFromContent
 import dev.detekt.tooling.api.AnalysisMode
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy

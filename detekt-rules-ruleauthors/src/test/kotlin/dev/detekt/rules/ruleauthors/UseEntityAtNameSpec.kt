@@ -21,7 +21,7 @@ internal class UseEntityAtNameSpec {
                 report(Finding(Entity.from(element), "message"))
             }
         """.trimIndent()
-        val findings = rule.lint(code, compile = false)
+        val findings = rule.lint(code)
         assertThat(findings).isEmpty()
     }
 
@@ -37,7 +37,7 @@ internal class UseEntityAtNameSpec {
                 report(Finding(Entity.atName(element), "message"))
             }
         """.trimIndent()
-        val findings = rule.lint(code, compile = false)
+        val findings = rule.lint(code)
         assertThat(findings).isEmpty()
     }
 
@@ -53,7 +53,7 @@ internal class UseEntityAtNameSpec {
                 report(Finding(Entity.from(element.nameIdentifier!!), "message"))
             }
         """.trimIndent()
-        val findings = rule.lint(code, compile = false)
+        val findings = rule.lint(code)
         assertThat(findings).singleElement()
             .hasMessage("Recommended to use Entity.atName(element) instead.")
             .hasTextLocation("from")
@@ -71,7 +71,7 @@ internal class UseEntityAtNameSpec {
                 report(Finding(Entity.from(element.nameIdentifier!!!!), "message"))
             }
         """.trimIndent()
-        val findings = rule.lint(code, compile = false)
+        val findings = rule.lint(code)
         assertThat(findings).singleElement()
             .hasMessage("Recommended to use Entity.atName(element) instead.")
             .hasTextLocation("from")
@@ -89,7 +89,7 @@ internal class UseEntityAtNameSpec {
                 report(Finding(Entity.from(element.nameIdentifier ?: element), "message"))
             }
         """.trimIndent()
-        val findings = rule.lint(code, compile = false)
+        val findings = rule.lint(code)
         assertThat(findings).singleElement()
             .hasMessage("Recommended to use Entity.atName(element) instead.")
             .hasTextLocation("from")
@@ -110,7 +110,7 @@ internal class UseEntityAtNameSpec {
                 report(Finding(Entity.from(element.getStrictParentOfType<KtClass>()?.nameIdentifier ?: element), "message"))
             }
         """.trimIndent()
-        val findings = rule.lint(code, compile = false)
+        val findings = rule.lint(code)
         assertThat(findings).singleElement()
             .hasMessage("Recommended to use Entity.atName(element.getStrictParentOfType<KtClass>()) instead.")
             .hasTextLocation("from")
@@ -129,7 +129,7 @@ internal class UseEntityAtNameSpec {
                 report(Finding(Entity.from(element.nameIdentifier ?: element2), "message"))
             }
         """.trimIndent()
-        val findings = rule.lint(code, compile = false)
+        val findings = rule.lint(code)
         assertThat(findings).singleElement()
             .hasMessage("Recommended to use Entity.atName(element) instead.")
             .hasTextLocation("from")
@@ -148,7 +148,7 @@ internal class UseEntityAtNameSpec {
                 report(Finding(Entity.from(element.nameIdentifier ?: element2, 0), "message"))
             }
         """.trimIndent()
-        val findings = rule.lint(code, compile = false)
+        val findings = rule.lint(code)
         assertThat(findings).isEmpty()
     }
 }

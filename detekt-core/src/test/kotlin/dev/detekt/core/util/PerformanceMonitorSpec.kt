@@ -1,6 +1,7 @@
 package dev.detekt.core.util
 
 import dev.detekt.core.tooling.DefaultDetektProvider
+import dev.detekt.core.util.PerformanceMonitor.Phase.ValidateClasspath
 import dev.detekt.test.utils.StringPrintStream
 import dev.detekt.test.utils.resourceAsPath
 import dev.detekt.tooling.api.AnalysisMode
@@ -22,8 +23,8 @@ class PerformanceMonitorSpec {
         val actual = runDetekt(analysisMode = AnalysisMode.light, diagnostics = true)
 
         assertThat(actual)
-            .contains(PerformanceMonitor.Phase.entries.minus(PerformanceMonitor.Phase.Binding).map { it.name })
-            .doesNotContain(PerformanceMonitor.Phase.Binding.name)
+            .contains(PerformanceMonitor.Phase.entries.minus(ValidateClasspath).map { it.name })
+            .doesNotContain(ValidateClasspath.name)
     }
 
     @Test
@@ -31,8 +32,8 @@ class PerformanceMonitorSpec {
         val actual = runDetekt(analysisMode = AnalysisMode.full, diagnostics = false)
 
         assertThat(actual)
-            .contains(PerformanceMonitor.Phase.entries.minus(PerformanceMonitor.Phase.Binding).map { it.name })
-            .doesNotContain(PerformanceMonitor.Phase.Binding.name)
+            .contains(PerformanceMonitor.Phase.entries.minus(ValidateClasspath).map { it.name })
+            .doesNotContain(ValidateClasspath.name)
     }
 
     private fun runDetekt(analysisMode: AnalysisMode, diagnostics: Boolean): String {

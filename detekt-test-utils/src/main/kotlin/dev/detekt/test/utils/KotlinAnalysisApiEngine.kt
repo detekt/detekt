@@ -2,8 +2,6 @@ package dev.detekt.test.utils
 
 import com.intellij.openapi.util.Disposer
 import com.intellij.testFramework.LightVirtualFile
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.test.TestScope
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaImplementationDetail
@@ -13,7 +11,6 @@ import org.jetbrains.kotlin.analysis.api.components.KaCompilationResult
 import org.jetbrains.kotlin.analysis.api.components.KaCompilerTarget
 import org.jetbrains.kotlin.analysis.api.diagnostics.KaDiagnosticWithPsi
 import org.jetbrains.kotlin.analysis.api.diagnostics.KaSeverity
-import org.jetbrains.kotlin.analysis.api.projectStructure.KaModule
 import org.jetbrains.kotlin.analysis.api.standalone.buildStandaloneAnalysisAPISession
 import org.jetbrains.kotlin.analysis.project.structure.builder.buildKtLibraryModule
 import org.jetbrains.kotlin.analysis.project.structure.builder.buildKtSdkModule
@@ -25,14 +22,13 @@ import org.jetbrains.kotlin.psi.KtFile
 import java.io.File
 import java.nio.file.Path
 import kotlin.io.path.Path
+import kotlin.io.path.nameWithoutExtension
 
 /**
  * The object to use the Kotlin Analysis API for code compilation.
  */
 @OptIn(KaExperimentalApi::class)
 object KotlinAnalysisApiEngine {
-
-    private lateinit var sourceModule: KaModule
     private val targetPlatform = JvmPlatforms.defaultJvmPlatform
     private val configuration = CompilerConfiguration()
     private val target = KaCompilerTarget.Jvm(isTestMode = false, compiledClassHandler = null, debuggerExtension = null)
@@ -47,6 +43,8 @@ object KotlinAnalysisApiEngine {
         @Language("kotlin") code: String,
         dependencyCodes: List<String> = emptyList(),
         javaSourceRoots: List<Path> = emptyList(),
+        jvmClasspathRoots: List<Path> =
+            listOf(File(CharRange::class.java.protectionDomain.codeSource.location.path).toPath()),
         allowCompilationErrors: Boolean = false,
     ): KtFile {
         val disposable = Disposer.newDisposable()
@@ -56,37 +54,19 @@ object KotlinAnalysisApiEngine {
             buildKtModuleProvider {
                 platform = targetPlatform
 
-                val jdk = addModule(
-                    buildKtSdkModule {
-                        addBinaryRootsFromJdkHome(Path(System.getProperty("java.home")), true)
-                        platform = targetPlatform
-                        libraryName = "sdk"
-                    }
-                )
+                val jdk = buildKtSdkModule {
+                    addBinaryRootsFromJdkHome(Path(System.getProperty("java.home")), true)
+                    platform = targetPlatform
+                    libraryName = "sdk"
+                }
 
-                val stdlib = addModule(
+                val additionalLibraries = jvmClasspathRoots.distinct().map { path ->
                     buildKtLibraryModule {
-                        addBinaryRoot(File(CharRange::class.java.protectionDomain.codeSource.location.path).toPath())
+                        addBinaryRoot(path)
                         platform = targetPlatform
-                        libraryName = "stdlib"
+                        libraryName = path.nameWithoutExtension
                     }
-                )
-
-                val coroutinesCore = addModule(
-                    buildKtLibraryModule {
-                        addBinaryRoot(kotlinxCoroutinesCorePath())
-                        platform = targetPlatform
-                        libraryName = "coroutines-core"
-                    }
-                )
-
-                val coroutinesTest = addModule(
-                    buildKtLibraryModule {
-                        addBinaryRoot(kotlinxCoroutinesTestPath())
-                        platform = targetPlatform
-                        libraryName = "coroutines-test"
-                    }
-                )
+                }
 
                 val vf = LightVirtualFile("dummy.kt", code)
 
@@ -94,12 +74,10 @@ object KotlinAnalysisApiEngine {
                     LightVirtualFile("dependency_${index + 1}.kt", depCode)
                 }
 
-                sourceModule = addModule(
+                addModule(
                     buildKtSourceModule {
                         addRegularDependency(jdk)
-                        addRegularDependency(stdlib)
-                        addRegularDependency(coroutinesCore)
-                        addRegularDependency(coroutinesTest)
+                        additionalLibraries.forEach(::addRegularDependency)
                         addSourceVirtualFile(vf)
                         addSourceVirtualFiles(depVfs)
                         addSourceRoots(javaSourceRoots)
@@ -142,10 +120,4 @@ object KotlinAnalysisApiEngine {
             disposable.dispose()
         }
     }
-
-    private fun kotlinxCoroutinesCorePath(): Path =
-        File(CoroutineScope::class.java.protectionDomain.codeSource.location.path).toPath()
-
-    private fun kotlinxCoroutinesTestPath(): Path =
-        File(TestScope::class.java.protectionDomain.codeSource.location.path).toPath()
 }

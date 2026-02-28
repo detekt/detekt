@@ -53,6 +53,10 @@ reports:
       - any-glob-to-any-file:
           [
             "detekt-core/src/main/kotlin/dev/detekt/core/reporting/**/*",
+            "detekt-report-checkstyle/src/**/*",
+            "detekt-report-html/src/**/*",
+            "detekt-report-markdown/src/**/*",
+            "detekt-report-sarif/src/**/*",
           ]
 
 rules:
@@ -60,14 +64,16 @@ rules:
       - any-glob-to-any-file:
           [
             "detekt-rules/src/**/*",
+            "detekt-rules-comments/src/**/*",
             "detekt-rules-complexity/src/**/*",
             "detekt-rules-coroutines/src/**/*",
-            "detekt-rules-documentation/src/**/*",
-            "detekt-rules-empty/src/**/*",
-            "detekt-rules-errorprone/src/**/*",
+            "detekt-rules-empty-blocks/src/**/*",
             "detekt-rules-exceptions/src/**/*",
+            "detekt-rules-libraries/src/**/*",
             "detekt-rules-naming/src/**/*",
             "detekt-rules-performance/src/**/*",
+            "detekt-rules-potential-bugs/src/**/*",
+            "detekt-rules-ruleauthors/src/**/*",
             "detekt-rules-style/src/**/*",
           ]
 

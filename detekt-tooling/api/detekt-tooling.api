@@ -179,7 +179,7 @@ public abstract interface class dev/detekt/tooling/api/spec/RulesSpec {
 	public abstract fun getRunPolicy ()Ldev/detekt/tooling/api/spec/RulesSpec$RunPolicy;
 }
 
-public abstract class dev/detekt/tooling/api/spec/RulesSpec$FailurePolicy {
+public abstract interface class dev/detekt/tooling/api/spec/RulesSpec$FailurePolicy {
 }
 
 public final class dev/detekt/tooling/api/spec/RulesSpec$FailurePolicy$FailOnSeverity : dev/detekt/tooling/api/spec/RulesSpec$FailurePolicy {
@@ -200,7 +200,7 @@ public final class dev/detekt/tooling/api/spec/RulesSpec$FailurePolicy$NeverFail
 	public fun toString ()Ljava/lang/String;
 }
 
-public abstract class dev/detekt/tooling/api/spec/RulesSpec$RunPolicy {
+public abstract interface class dev/detekt/tooling/api/spec/RulesSpec$RunPolicy {
 }
 
 public final class dev/detekt/tooling/api/spec/RulesSpec$RunPolicy$DisableDefaultRuleSets : dev/detekt/tooling/api/spec/RulesSpec$RunPolicy {

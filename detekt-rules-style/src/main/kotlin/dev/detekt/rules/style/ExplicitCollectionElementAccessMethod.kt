@@ -17,6 +17,7 @@ import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
+import org.jetbrains.kotlin.psi.KtFunctionLiteral
 
 /**
  * In Kotlin functions `get` or `set` can be replaced with the shorter operator — `[]`,
@@ -54,7 +55,10 @@ class ExplicitCollectionElementAccessMethod(config: Config) :
         if (expression.calleeExpression?.text != "get") return false
         analyze(expression) {
             val getter = expression.getFunctionSymbol() ?: return false
-            return expression.valueArguments.none { it.isSpread } && canReplace(getter) && shouldReplace(getter)
+            return expression.valueArguments.none { it.isSpread } &&
+                expression.valueArguments.isNotEmpty() && // getter must have a minimum of one key
+                canReplace(expression, getter) &&
+                shouldReplace(getter)
         }
     }
 
@@ -63,7 +67,10 @@ class ExplicitCollectionElementAccessMethod(config: Config) :
             "set" -> {
                 analyze(expression) {
                     val setter = expression.getFunctionSymbol()
-                    setter != null && canReplace(setter) && shouldReplace(setter)
+                    setter != null &&
+                        expression.valueArguments.size >= 2 && // setter must have a minimum of one key and a value
+                        canReplace(expression, setter) &&
+                        shouldReplace(setter)
                 }
             }
 
@@ -83,14 +90,25 @@ class ExplicitCollectionElementAccessMethod(config: Config) :
             resolveToCall()?.singleFunctionCallOrNull()?.symbol as? KaNamedFunctionSymbol
         }
 
-    private fun canReplace(function: KaNamedFunctionSymbol): Boolean {
+    private fun canReplace(expression: KtCallExpression, function: KaNamedFunctionSymbol): Boolean {
+        if (!function.isOperator) return false
+        if (expression.valueArguments.size !in function.expectedArgumentsRange()) return false
+
         // Can't use index operator when insufficient information is available to infer type variable.
         // For now, this is an incomplete check and doesn't report edge cases (e.g. inference using return type).
-        val genericParameterTypeNames = function.valueParameters.map { it.returnType.toString() }.toSet()
+        val params = function.valueParameters
+        val paramTypeNames = params.map { it.returnType.toString() }.toSet()
         val typeParameterNames = function.typeParameters.map { it.name.asString() }
-        if (!genericParameterTypeNames.containsAll(typeParameterNames)) return false
+        return paramTypeNames.containsAll(typeParameterNames)
+    }
 
-        return function.isOperator
+    // Returns the range of valid call-site argument counts for this function. Used to guard against misresolution
+    // when there are compiler errors - the analysis API can sometimes resolve to an unrelated operator function
+    // with incompatible parameters
+    private fun KaNamedFunctionSymbol.expectedArgumentsRange(): IntRange {
+        val required = valueParameters.count { !it.isVararg && !it.hasDefaultValue }
+        val max = if (valueParameters.any { it.isVararg }) Int.MAX_VALUE else valueParameters.size
+        return required..max
     }
 
     @Suppress("ReturnCount")
@@ -121,5 +139,17 @@ class ExplicitCollectionElementAccessMethod(config: Config) :
             symbol.superTypes.asSequence().flatMap { it.allSupertypes }.any { it.symbol?.classId == mapClass }
     }
 
-    private fun unusedReturnValue(expression: KtCallExpression): Boolean = expression.parent.parent is KtBlockExpression
+    private fun unusedReturnValue(expression: KtCallExpression): Boolean {
+        val block = expression.parent.parent as? KtBlockExpression ?: return false
+
+        // If the block is a lambda body and this expression is the last statement, the return value is implicitly
+        // used as the lambda's return value — unless the lambda returns Unit
+        val functionLiteral = block.parent as? KtFunctionLiteral
+        if (functionLiteral != null && block.statements.lastOrNull() == expression.parent) {
+            return analyze(functionLiteral) {
+                functionLiteral.symbol.returnType.isUnitType
+            }
+        }
+        return true
+    }
 }

@@ -7,16 +7,15 @@ import dev.detekt.api.RuleName
 import dev.detekt.test.utils.KotlinAnalysisApiEngine
 import dev.detekt.test.utils.KotlinEnvironmentContainer
 import dev.detekt.test.utils.compileContentForTest
+import dev.detekt.test.utils.createEnvironment
 import org.intellij.lang.annotations.Language
-import org.jetbrains.kotlin.cli.jvm.config.javaSourceRoots
 import org.jetbrains.kotlin.config.LanguageVersionSettings
-import org.jetbrains.kotlin.config.languageVersionSettings
+import org.jetbrains.kotlin.config.LanguageVersionSettingsImpl
 import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
-import kotlin.io.path.Path
 
 private val shouldCompileTestSnippets: Boolean =
     System.getProperty("compile-test-snippets", "false")!!.toBoolean()
@@ -31,7 +30,7 @@ fun Rule.lint(
     }
     if (compile && shouldCompileTestSnippets) {
         try {
-            KotlinAnalysisApiEngine.compile(content)
+            KotlinAnalysisApiEngine.compile(content, jvmClasspathRoots = createEnvironment().jvmClasspathRoots)
         } catch (ex: RuntimeException) {
             if (!ex.isNoMatchingOutputFiles()) throw ex
         }
@@ -45,12 +44,13 @@ fun <T> T.lintWithContext(
     @Language("kotlin") content: String,
     @Language("kotlin") vararg dependencyContents: String,
     allowCompilationErrors: Boolean = false,
-    languageVersionSettings: LanguageVersionSettings = environment.configuration.languageVersionSettings,
+    languageVersionSettings: LanguageVersionSettings = LanguageVersionSettingsImpl.DEFAULT,
 ): List<Finding> where T : Rule, T : RequiresAnalysisApi {
     val ktFile = KotlinAnalysisApiEngine.compile(
         code = content,
         dependencyCodes = dependencyContents.toList(),
-        javaSourceRoots = environment.configuration.javaSourceRoots.map(::Path),
+        javaSourceRoots = environment.javaSourceRoots,
+        jvmClasspathRoots = environment.jvmClasspathRoots,
         allowCompilationErrors = allowCompilationErrors
     )
     return visitFile(ktFile, languageVersionSettings).filterSuppressed(this)

@@ -178,6 +178,83 @@ class ExplicitCollectionElementAccessMethodSpec {
                 """.trimIndent()
                 assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
+
+            @Test
+            fun `does not report when put return value is implicitly used`() {
+                val code = $$"""
+                    fun handlePutResultFromLambda(result: () -> String?) {
+                        println("Result = ${result()}")
+                    }
+
+                    fun handlePutResultDirectly(result: String?) {
+                        println("Result = $result")
+                    }
+
+                    fun main() {
+                        val map = mutableMapOf<Int, String>()
+                        handlePutResultFromLambda { map.put(123, "abc") }
+                        handlePutResultDirectly(map.put(123, "abc"))
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `reports when put is last statement in Unit-returning lambda`() {
+                val code = """
+                    fun doSomething(action: () -> Unit) {
+                        action()
+                    }
+
+                    fun main() {
+                        val map = mutableMapOf<Int, String>()
+                        doSomething { map.put(123, "abc") }
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
+            }
+
+            @Test
+            fun `reports when put is called multiple times in Unit-returning lambda`() {
+                val code = """
+                    fun doSomething(action: () -> Unit) {
+                        action()
+                    }
+
+                    fun main() {
+                        val map = mutableMapOf<Int, String>()
+                        doSomething { 
+                            map.put(123, "abc") 
+                            map.put(456, "def") 
+                            map.put(789, "ghi") 
+                        }
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).hasSize(3)
+            }
+
+            @Test
+            fun `does not report for a custom map type`() {
+                val code = $$"""
+                    interface PersistentMap<K, V> : Map<K, V> {
+                        fun put(key: K, value: V): PersistentMap<K, V>
+                    }
+
+                    fun handlePutResultFromLambda(result: () -> PersistentMap<Int, String>) {
+                        println("Result = ${result()}")
+                    }
+
+                    fun handlePutResultDirectly(result: PersistentMap<Int, String>) {
+                        println("Result = $result")
+                    }
+
+                    fun main(map: PersistentMap<Int, String>) {
+                        handlePutResultFromLambda { map.put(123, "abc") }
+                        handlePutResultDirectly(map.put(456, "xyz"))
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
         }
 
         @Nested
@@ -548,7 +625,7 @@ class ExplicitCollectionElementAccessMethodSpec {
             }
 
             @Test
-            fun `does not report for unresolvable code`() {
+            fun `does not report put on unresolvable code`() {
                 val code = """
                     fun f() {
                        val unknownType = UnknownType()
@@ -556,6 +633,56 @@ class ExplicitCollectionElementAccessMethodSpec {
                     }
                 """.trimIndent()
                 assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true)).isEmpty()
+            }
+
+            @Test
+            fun `does not report set on unresolvable type`() {
+                val code = """
+                    fun f() {
+                        val property = UnknownProperty()
+                        property.set("value")
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true)).isEmpty()
+            }
+
+            @Test
+            fun `does not report get on unresolvable type`() {
+                val code = """
+                    fun f(): String {
+                        val provider = UnknownProvider()
+                        return provider.get()
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true)).isEmpty()
+            }
+
+            @Test
+            fun `reports get operator with default parameter called without that argument`() {
+                val code = """
+                    class Custom {
+                        operator fun get(key: String, default: String = ""): String = default
+                    }
+                    fun f() {
+                        val custom = Custom()
+                        val value = custom.get("key")
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
+            }
+
+            @Test
+            fun `reports get operator with default parameter called with all arguments`() {
+                val code = """
+                    class Custom {
+                        operator fun get(key: String, default: String = ""): String = default
+                    }
+                    fun f() {
+                        val custom = Custom()
+                        val value = custom.get("key", "fallback")
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
             }
 
             @Test
