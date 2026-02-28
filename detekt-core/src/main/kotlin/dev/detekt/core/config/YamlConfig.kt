@@ -1,7 +1,6 @@
 package dev.detekt.core.config
 
 import dev.detekt.api.Config
-import dev.detekt.api.Config.Companion.CONFIG_SEPARATOR
 import dev.detekt.api.Notification
 import dev.detekt.core.config.validation.ValidatableConfiguration
 import dev.detekt.core.config.validation.validateConfig
@@ -21,12 +20,12 @@ import kotlin.io.path.reader
  */
 class YamlConfig internal constructor(
     val properties: Map<String, Any>,
-    override val parentPath: String?,
+    val parentPath: String?,
     override val parent: Config?,
 ) : Config,
     ValidatableConfiguration {
 
-    override fun subConfig(key: String): Config {
+    override fun subConfig(key: String): YamlConfig {
         @Suppress("UNCHECKED_CAST")
         val subProperties = properties.getOrElse(key) { emptyMap<String, Any>() } as Map<String, Any>
         return YamlConfig(
@@ -61,6 +60,7 @@ class YamlConfig internal constructor(
         validateConfig(this, baseline, excludePatterns)
 
     companion object {
+        const val CONFIG_SEPARATOR: String = ">"
         private const val YAML_DOC_LIMIT = 102_400 // limit the YAML size to 100 kB
 
         // limit the anchors/aliases for collections to prevent attacks from for untrusted sources
@@ -69,7 +69,7 @@ class YamlConfig internal constructor(
         /**
          * Factory method to load a yaml configuration. Given path must exist and point to a readable file.
          */
-        fun load(path: Path): Config {
+        fun load(path: Path): YamlConfig {
             require(path.exists()) { "Configuration does not exist: $path" }
             require(path.isRegularFile()) { "Configuration must be a file: $path" }
             require(path.isReadable()) { "Configuration must be readable: $path" }
@@ -82,7 +82,7 @@ class YamlConfig internal constructor(
          *
          * Note the reader will be consumed and closed.
          */
-        fun load(reader: Reader): Config =
+        fun load(reader: Reader): YamlConfig =
             reader.buffered().use { bufferedReader ->
                 val map: Map<*, *>? = try {
                     createYamlLoad().loadFromReader(bufferedReader) as Map<*, *>?

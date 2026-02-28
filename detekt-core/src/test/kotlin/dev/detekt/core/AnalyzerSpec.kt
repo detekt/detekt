@@ -487,4 +487,4 @@ internal fun createRuleDescriptor(provider: (Config) -> Rule, config: Config) =
 // The @receiver:Language("yaml") does nothing because of this bug on IntelliJ
 // https://youtrack.jetbrains.com/issue/KTIJ-5643/Language-injection-does-not-work-for-extension-receivers
 private fun @receiver:Language("yaml") String.toConfig(vararg subConfigs: String): Config =
-    subConfigs.fold(yamlConfigFromContent(this)) { acc, key -> acc.subConfig(key) }
+    subConfigs.fold(yamlConfigFromContent(this) as Config) { acc, key -> acc.subConfig(key) }
