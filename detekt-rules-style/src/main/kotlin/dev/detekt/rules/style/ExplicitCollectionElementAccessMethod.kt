@@ -143,7 +143,13 @@ class ExplicitCollectionElementAccessMethod(config: Config) :
         val block = expression.parent.parent as? KtBlockExpression ?: return false
 
         // If the block is a lambda body and this expression is the last statement, the return value is implicitly
-        // used as the lambda's return value
-        return !(block.parent is KtFunctionLiteral && block.statements.lastOrNull() == expression.parent)
+        // used as the lambda's return value — unless the lambda returns Unit
+        val functionLiteral = block.parent as? KtFunctionLiteral
+        if (functionLiteral != null && block.statements.lastOrNull() == expression.parent) {
+            return analyze(functionLiteral) {
+                functionLiteral.symbol.returnType.isUnitType
+            }
+        }
+        return true
     }
 }

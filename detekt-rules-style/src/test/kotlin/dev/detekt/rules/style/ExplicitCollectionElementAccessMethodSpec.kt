@@ -200,6 +200,40 @@ class ExplicitCollectionElementAccessMethodSpec {
             }
 
             @Test
+            fun `reports when put is last statement in Unit-returning lambda`() {
+                val code = """
+                    fun doSomething(action: () -> Unit) {
+                        action()
+                    }
+
+                    fun main() {
+                        val map = mutableMapOf<Int, String>()
+                        doSomething { map.put(123, "abc") }
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
+            }
+
+            @Test
+            fun `reports when put is called multiple times in Unit-returning lambda`() {
+                val code = """
+                    fun doSomething(action: () -> Unit) {
+                        action()
+                    }
+
+                    fun main() {
+                        val map = mutableMapOf<Int, String>()
+                        doSomething { 
+                            map.put(123, "abc") 
+                            map.put(456, "def") 
+                            map.put(789, "ghi") 
+                        }
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).hasSize(3)
+            }
+
+            @Test
             fun `does not report for a custom map type`() {
                 val code = $$"""
                     interface PersistentMap<K, V> : Map<K, V> {
