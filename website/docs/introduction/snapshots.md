@@ -3,7 +3,7 @@ id: snapshots
 title: "Using Snapshots"
 keywords: [snapshot, releases]
 summary: This page explains how you can setup snapshots for your detekt build to test the latest unreleased features. 
-sidebar_position: 10
+sidebar_position: 100
 ---
 
 This page explains how you can use our **latest snapshots** to test upcoming unreleased features.
