@@ -182,9 +182,6 @@ class ReportMergeSpec {
             settingsContent = settingsFile,
             jvmArgs = jvmArgs,
             disableIP = true,
-            gradleProperties = mapOf(
-                "android.newDsl" to "false",
-            ),
         )
 
         gradleRunner.setupProject()

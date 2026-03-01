@@ -117,7 +117,6 @@ class DetektBasePluginSpec {
                 }
             """.trimIndent(),
             gradleProperties = mapOf(
-                "android.newDsl" to "false",
                 "android.disallowKotlinSourceSets" to "false",
             ),
             dryRun = true,
@@ -219,9 +218,6 @@ class DetektBasePluginSpec {
                     }
                 }
             """.trimIndent(),
-            gradleProperties = mapOf(
-                "android.newDsl" to "false",
-            ),
             dryRun = true,
         ).also {
             it.setupProject()
