@@ -45,6 +45,12 @@ internal fun YamlNode.printRule(rule: Rule) {
         if (ruleExclusion != null) {
             keyValue { Config.EXCLUDES_KEY to ruleExclusion.pattern }
         }
+        val ignoreAnnotated = ignoreAnnotatedDefaults.firstNotNullOfOrNull { it.getAnnotations(rule) }
+        if (ignoreAnnotated != null) {
+            keyValue {
+                Config.IGNORE_ANNOTATED_KEY to ignoreAnnotated.joinToString(prefix = "[", postfix = "]") { "'$it'" }
+            }
+        }
         rule.configurations.forEach(::printConfiguration)
     }
 }
