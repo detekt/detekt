@@ -77,11 +77,9 @@ class DetektBasePlugin : Plugin<Project> {
         project.plugins.withType(KotlinBasePlugin::class.java) {
             if (sourceSetListenerConfigured) return@withType
 
-            sourceSetListenerConfigured = true
-
-            project.extensions.getByType(KotlinSourceSetContainer::class.java)
-                .sourceSets
-                .configureEach { sourceSet ->
+            project.extensions.findByType(KotlinSourceSetContainer::class.java)
+                ?.sourceSets
+                ?.configureEach { sourceSet ->
                     val taskName = "${DetektPlugin.DETEKT_TASK_NAME}${sourceSet.name.capitalize()}SourceSet"
                     tasks.register(taskName, Detekt::class.java) { detektTask ->
                         detektTask.source = sourceSet.kotlin
@@ -118,6 +116,9 @@ class DetektBasePlugin : Plugin<Project> {
                         createBaselineTask.description = "Creates detekt baseline for ${sourceSet.name} source set"
                     }
                 }
+                ?: return@withType
+
+            sourceSetListenerConfigured = true
         }
     }
 
