@@ -85,13 +85,13 @@ To solve this code smell, the forEach usage should be replaced by a for loop.
 
 ```kotlin
 (1..10).forEach {
-println(it)
+    println(it)
 }
 (1 until 10).forEach {
-println(it)
+    println(it)
 }
 (10 downTo 1).forEach {
-println(it)
+    println(it)
 }
 ```
 
@@ -99,7 +99,7 @@ println(it)
 
 ```kotlin
 for (i in 1..10) {
-println(i)
+    println(i)
 }
 ```
 
@@ -126,7 +126,7 @@ val strs = arrayOf("value one", "value two")
 val foo = bar(*strs)
 
 fun bar(vararg strs: String) {
-strs.forEach { println(it) }
+    strs.forEach { println(it) }
 }
 ```
 
@@ -140,7 +140,7 @@ val foo = bar(*arrayOf("value one", "value two"))
 val foo2 = bar("value one", "value two")
 
 fun bar(vararg strs: String) {
-strs.forEach { println(it) }
+    strs.forEach { println(it) }
 }
 ```
 
@@ -177,8 +177,8 @@ val e = CharArray(10)
 
 // with side effect(s)
 val k = IntArray(10) {
-println("Some side-effect")
-0
+    println("Some side-effect")
+    0
 }
 ```
 
@@ -238,8 +238,8 @@ replaced with type checking for performance reasons.
 
 ```kotlin
 fun foo() {
-val objList: List<Any> = emptyList()
-objList.any { it as? String != null }
+ val objList: List<Any> = emptyList()
+ objList.any { it as? String != null }
 }
 ```
 
@@ -247,7 +247,7 @@ objList.any { it as? String != null }
 
 ```kotlin
 fun foo() {
-val objList: List<Any> = emptyList()
-objList.any { it is String }
+ val objList: List<Any> = emptyList()
+ objList.any { it is String }
 }
 ```

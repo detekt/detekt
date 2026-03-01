@@ -230,7 +230,7 @@ fun Foo.toBar(): Bar = ...
 
 ```kotlin
 class Foo { // Foo.kt
-fun stuff() = 42
+    fun stuff() = 42
 }
 
 fun Bar.toFoo(): Foo = ...
@@ -295,13 +295,13 @@ except of underscore lambda parameters for unused variables.
 
 ```kotlin
 fun test(i: Int, j: Int, k: Int) {
-val i = 1
-val (j, _) = 1 to 2
-listOf(1).map { k -> println(k) }
-listOf(1).forEach {
-listOf(2).forEach {
-}
-}
+    val i = 1
+    val (j, _) = 1 to 2
+    listOf(1).map { k -> println(k) }
+    listOf(1).forEach {
+        listOf(2).forEach {
+        }
+    }
 }
 ```
 
@@ -309,14 +309,14 @@ listOf(2).forEach {
 
 ```kotlin
 fun test(i: Int, j: Int, k: Int) {
-val x = 1
-val (y, _) = 1 to 2
-listOf(1).map { z -> println(z) }
-listOf(1).forEach {
-listOf(2).forEach { x ->
-}
-}
-listOf(1).map { _ -> println("_") }
+    val x = 1
+    val (y, _) = 1 to 2
+    listOf(1).map { z -> println(z) }
+    listOf(1).forEach {
+        listOf(2).forEach { x ->
+        }
+    }
+    listOf(1).map { _ -> println("_") }
 }
 ```
 

@@ -45,12 +45,12 @@ annotation constructor has dedicated fields for a message and a type (warning, e
 
 ```kotlin
 /**
-* This function prints a message followed by a new line.
-*
-* @deprecated Useless, the Kotlin standard library can already do this. Replace with println.
-*/
+ * This function prints a message followed by a new line.
+ *
+ * @deprecated Useless, the Kotlin standard library can already do this. Replace with println.
+ */
 fun printThenNewline(what: String) {
-// ...
+    // ...
 }
 ```
 
@@ -58,12 +58,12 @@ fun printThenNewline(what: String) {
 
 ```kotlin
 /**
-* This function prints a message followed by a new line.
-*/
+ * This function prints a message followed by a new line.
+ */
 @Deprecated("Useless, the Kotlin standard library can already do this.")
 @ReplaceWith("println(what)")
 fun printThenNewline(what: String) {
-// ...
+    // ...
 }
 ```
 
@@ -117,13 +117,13 @@ Clients do not need to know the implementation details.
 
 ```kotlin
 /**
-* Comment
-* [prop1] - non-public property
-* [prop2] - public property
-*/
+ * Comment
+ * [prop1] - non-public property
+ * [prop2] - public property
+ */
 class Test {
-private val prop1 = 0
-val prop2 = 0
+    private val prop1 = 0
+    val prop2 = 0
 }
 ```
 
@@ -131,12 +131,12 @@ val prop2 = 0
 
 ```kotlin
 /**
-* Comment
-* [prop2] - public property
-*/
+ * Comment
+ * [prop2] - public property
+ */
 class Test {
-private val prop1 = 0
-val prop2 = 0
+    private val prop1 = 0
+    val prop2 = 0
 }
 ```
 
@@ -167,15 +167,15 @@ turn off these features using configuration options.
 
 ```kotlin
 /**
-* @param someParam
-* @property someProp
-*/
+ * @param someParam
+ * @property someProp
+ */
 class MyClass(otherParam: String, val otherProp: String)
 
 /**
-* @param T
-* @param someParam
-*/
+ * @param T
+ * @param someParam
+ */
 fun <T, S> myFun(someParam: String)
 ```
 
@@ -183,16 +183,16 @@ fun <T, S> myFun(someParam: String)
 
 ```kotlin
 /**
-* @param someParam
-* @property someProp
-*/
+ * @param someParam
+ * @property someProp
+ */
 class MyClass(someParam: String, val someProp: String)
 
 /**
-* @param T
-* @param S
-* @param someParam
-*/
+ * @param T
+ * @param S
+ * @param someParam
+ */
 fun <T, S> myFun(someParam: String)
 ```
 
