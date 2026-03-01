@@ -6,6 +6,7 @@ import dev.detekt.gradle.testkit.joinGradleBlocks
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.BuildResult
 import org.intellij.lang.annotations.Language
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.condition.EnabledIf
@@ -133,6 +134,7 @@ class DetektMultiplatformSpec {
     }
 
     @Nested
+    @Disabled("TODO - needs further setup so Gradle properties can be set correctly")
     @EnabledIf("dev.detekt.gradle.DetektAndroidSpecKt#isAndroidSdkInstalled")
     inner class `multiplatform projects - Android target (legacy plugin)` {
         val gradleRunner =
