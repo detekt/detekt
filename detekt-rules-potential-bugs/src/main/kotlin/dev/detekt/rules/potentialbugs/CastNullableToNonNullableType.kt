@@ -16,7 +16,7 @@ import org.jetbrains.kotlin.psi.KtTypeReference
 /**
  * Reports cast of nullable variable to non-null type. Cast like this can hide `null`
  * problems in your code. The compliant code would be that which will correctly check
- *  for two things (nullability and type) and not just one (cast).
+ * for two things (nullability and type) and not just one (cast).
  *
  * <noncompliant>
  * fun foo(bar: Any?) {

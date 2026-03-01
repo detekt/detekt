@@ -14,15 +14,15 @@ import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
  *
  * <noncompliant>
  * fun foo() {
- *  val objList: List<Any> = emptyList()
- *  objList.any { it as? String != null }
+ *     val objList: List<Any> = emptyList()
+ *     objList.any { it as? String != null }
  * }
  * </noncompliant>
  *
  * <compliant>
  * fun foo() {
- *  val objList: List<Any> = emptyList()
- *  objList.any { it is String }
+ *     val objList: List<Any> = emptyList()
+ *     objList.any { it is String }
  * }
  * </compliant>
  */
