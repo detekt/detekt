@@ -106,7 +106,6 @@ class ReportMergeSpec {
                 buildFileContent = """
                     plugins {
                         id("com.android.application")
-                        kotlin("android")
                         id("dev.detekt")
                     }
                     android {
@@ -134,7 +133,6 @@ class ReportMergeSpec {
                 buildFileContent = """
                     plugins {
                         id("com.android.library")
-                        kotlin("android")
                     }
                     android {
                         compileSdk = 34
@@ -195,7 +193,6 @@ class ReportMergeSpec {
             jvmArgs = jvmArgs,
             disableIP = true,
             gradleProperties = mapOf(
-                "android.builtInKotlin" to "false",
                 "android.newDsl" to "false",
             ),
         )

@@ -41,7 +41,7 @@ class DetektBasePluginSpec {
     }
 
     @Test
-    fun `generates source set tasks for Android project`() {
+    fun `generates source set tasks for Android project (legacy plugin)`() {
         val gradleRunner = DslGradleRunner(
             projectLayout = ProjectLayout(
                 numberOfSourceFilesInRootPerSourceDir = 1,
@@ -74,6 +74,51 @@ class DetektBasePluginSpec {
             gradleProperties = mapOf(
                 "android.builtInKotlin" to "false",
                 "android.newDsl" to "false",
+            ),
+            dryRun = true,
+        ).also {
+            it.setupProject()
+        }
+
+        gradleRunner.checkTask("main")
+        gradleRunner.checkTask("debug")
+        gradleRunner.checkTask("test")
+        gradleRunner.checkTask("androidTest")
+    }
+
+    @Test
+    fun `generates source set tasks for Android project (disallowKotlinSourceSets=false)`() {
+        val gradleRunner = DslGradleRunner(
+            projectLayout = ProjectLayout(
+                numberOfSourceFilesInRootPerSourceDir = 1,
+                srcDirs = listOf(
+                    "src/main/kotlin",
+                    "src/debug/kotlin",
+                    "src/test/kotlin",
+                    "src/androidTest/kotlin",
+                ),
+            ),
+            buildFileName = "build.gradle.kts",
+            mainBuildFileContent = """
+                plugins {
+                    id("com.android.application")
+                    id("dev.detekt")
+                }
+
+                repositories {
+                    mavenLocal()
+                    mavenCentral()
+                    google()
+                }
+
+                android {
+                    compileSdk = 34
+                    namespace = "dev.detekt.gradle.plugin.app"
+                }
+            """.trimIndent(),
+            gradleProperties = mapOf(
+                "android.newDsl" to "false",
+                "android.disallowKotlinSourceSets" to "false",
             ),
             dryRun = true,
         ).also {
@@ -129,8 +174,8 @@ class DetektBasePluginSpec {
                     "src/commonMain/kotlin",
                     "src/commonTest/kotlin",
                     "src/androidMain/kotlin",
-                    "src/androidUnitTest/kotlin",
-                    "src/androidInstrumentedTest/kotlin",
+                    "src/androidDeviceTest/kotlin",
+                    "src/androidHostTest/kotlin",
                     "src/jvmMain/kotlin",
                     "src/jvmTest/kotlin",
                     "src/jsMain/kotlin",
@@ -148,7 +193,7 @@ class DetektBasePluginSpec {
                 plugins {
                     id("dev.detekt")
                     kotlin("multiplatform")
-                    id("com.android.library")
+                    id("com.android.kotlin.multiplatform.library")
                 }
                 
                 repositories {
@@ -158,7 +203,13 @@ class DetektBasePluginSpec {
                 }
                 
                 kotlin {
-                    androidTarget()
+                    androidLibrary {
+                        compileSdk = 34
+                        namespace = "dev.detekt.gradle.plugin.app"
+
+                        withHostTest {}
+                        withDeviceTest {}
+                    }
                     iosArm64()
                     iosSimulatorArm64()
                     jvm()
@@ -167,14 +218,8 @@ class DetektBasePluginSpec {
                         nodejs()
                     }
                 }
-                
-                android {
-                    compileSdk = 34
-                    namespace = "dev.detekt.gradle.plugin.app"
-                }
             """.trimIndent(),
             gradleProperties = mapOf(
-                "android.builtInKotlin" to "false",
                 "android.newDsl" to "false",
             ),
             dryRun = true,
@@ -189,7 +234,7 @@ class DetektBasePluginSpec {
         }
 
         @ParameterizedTest
-        @ValueSource(strings = ["androidMain", "androidUnitTest", "androidInstrumentedTest"])
+        @ValueSource(strings = ["androidMain", "androidDeviceTest", "androidHostTest"])
         fun `generates source set tasks for Android`(sourceSetTaskName: String) {
             gradleRunner.checkTask(sourceSetTaskName)
         }

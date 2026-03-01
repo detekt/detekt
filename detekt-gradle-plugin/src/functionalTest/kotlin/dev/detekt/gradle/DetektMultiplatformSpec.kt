@@ -404,7 +404,6 @@ private fun setupProject(projectLayoutAction: ProjectLayout.() -> Unit): DslGrad
             }
         """.trimIndent(),
         gradleProperties = mapOf(
-            "android.builtInKotlin" to "false",
             "android.newDsl" to "false",
         ),
         dryRun = true
