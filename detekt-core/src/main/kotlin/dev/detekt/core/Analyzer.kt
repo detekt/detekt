@@ -29,7 +29,7 @@ internal class Analyzer(
     private val analysisMode: AnalysisMode,
 ) {
     fun run(ktFiles: Collection<KtFile>): List<Issue> {
-        val languageVersionSettings = settings.configuration.languageVersionSettings
+        val languageVersionSettings = settings.languageVersionSettings
 
         return if (settings.spec.executionSpec.parallelAnalysis) {
             runAsync(ktFiles, languageVersionSettings)
