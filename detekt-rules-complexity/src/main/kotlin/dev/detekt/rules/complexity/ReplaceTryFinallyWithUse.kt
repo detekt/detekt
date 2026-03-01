@@ -78,13 +78,17 @@ class ReplaceTryFinallyWithUse(config: Config) :
             functionCall.symbol.valueParameters.isEmpty()
 
         val containingClass = functionCall.symbol.containingDeclaration as? KaClassSymbol ?: return false
-        return isSubtypeOfCloseable(containingClass) && isCloseFunction
+        return (isCloseable(containingClass) || isSubtypeOfCloseable(containingClass)) &&
+            isCloseFunction
     }
 
     private fun KaSession.isSubtypeOfCloseable(classSymbol: KaClassSymbol): Boolean {
         val superTypes = classSymbol.superTypes.flatMap { listOf(it) + it.allSupertypes }
         return superTypes.any { it.expandedSymbol?.classId?.asSingleFqName() == FQ_NAME_AUTO_CLOSEABLE }
     }
+
+    private fun isCloseable(classSymbol: KaClassSymbol): Boolean =
+        classSymbol.classId?.asSingleFqName() == FQ_NAME_AUTO_CLOSEABLE
 
     companion object {
         private const val FUNCTION_NAME_CLOSE = "close"

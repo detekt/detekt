@@ -34,13 +34,13 @@ class ReplaceTryFinallyWithUseSpec(val env: KotlinEnvironmentContainer) {
     }
 
     @Test
-    fun `reports close in try-finally block`() {
+    fun `reports close in try-finally block when interface symbol is returned`() {
         val code = """
                 class ExampleCloseable: AutoCloseable {
                     override fun close() { }
                 }
             
-                val closeable = ExampleCloseable()
+                val closeable: AutoCloseable = ExampleCloseable()
                 fun test() {
                     try {
             
