@@ -19,9 +19,10 @@ dokka-plugin = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version = "
 gradleNexus-publish-plugin = { module = "io.github.gradle-nexus:publish-plugin", version = "2.0.0" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 
-# This represents the oldest AGP version that is supported by detekt.
+# This represents the oldest AGP 9 version that is supported by detekt.
 # This should only be updated when updating the minimum version supported by detekt's Gradle plugin.
-android-gradleApi = { module = "com.android.tools.build:gradle-api", version = "8.2.2" }
+# This should be set to an 8.x version, however DGP checks android.enableKotlin DSL property which is only in AGP 9 API
+android-gradleApi = { module = "com.android.tools.build:gradle-api", version = "9.0.0" }
 
 # This represents the oldest JUnit version supported by detekt-test-junit.
 # This should only be updated when updating the minimum version supported by detekt-test-junit.
