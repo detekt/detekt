@@ -166,13 +166,11 @@ constructor(
     fun runTasksAndCheckResult(
         vararg tasks: String,
         extraProperties: Map<String, String> = emptyMap(),
-        doAssert: DslGradleRunner.(BuildResult) -> Unit
+        doAssert: DslGradleRunner.(BuildResult) -> Unit,
     ) = doAssert(runTasks(tasks = tasks, extraProperties = extraProperties))
 
-    fun runTasks(
-        vararg tasks: String,
-        extraProperties: Map<String, String> = emptyMap()
-    ): BuildResult = buildGradleRunner(tasks.toList(), extraProperties).build()
+    fun runTasks(vararg tasks: String, extraProperties: Map<String, String> = emptyMap()): BuildResult =
+        buildGradleRunner(tasks.toList(), extraProperties).build()
 
     fun runTasksAndExpectFailure(
         vararg tasks: String,
