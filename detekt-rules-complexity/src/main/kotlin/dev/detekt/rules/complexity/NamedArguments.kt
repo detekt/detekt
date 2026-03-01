@@ -44,17 +44,7 @@ class NamedArguments(config: Config) :
 
     @Configuration(
         "List of fully qualified method signatures where this rule is ignored. " +
-            "Methods can be defined without full signatures (i.e. `java.time.LocalDate.now`), which will report " +
-            "calls of all methods with this name or with the full signature " +
-            "(i.e. `java.time.LocalDate(java.time.Clock)`), which reports only calls" +
-            "with the specific signature given. If you want to add an extension function like " +
-            "`fun String.hello(a: Int)` you should add the receiver parameter as the first parameter like this: " +
-            "`hello(kotlin.String, kotlin.Int)`. To add constructor calls you need to define them with `<init>`, " +
-            "for example `java.util.Date.<init>`. To add calls involving type parameters, omit them, for example " +
-            "`fun hello(args: Array<Any>)` is referred to as simply `hello(kotlin.Array)`. To add calls " +
-            "involving varargs, for example `fun hello(vararg args: String)`, you need to define it like " +
-            "`hello(vararg String)`. To add methods from the companion object reference the companion class, for " +
-            "example with `TestClass.Companion.hello()`, even if it is marked `@JvmStatic`."
+            FunctionMatcher.FUNCTION_MATCHER_DOC
     )
     private val ignoreMethods: List<ForbiddenMethod> by config(
         valuesWithReason()
