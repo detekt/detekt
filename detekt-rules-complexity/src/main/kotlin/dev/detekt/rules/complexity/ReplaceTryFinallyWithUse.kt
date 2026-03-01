@@ -20,7 +20,7 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 
 /**
  *
- * In Kotlin, the idiomatic way to manage resources that implement the AutoClosable interface,
+ * In Kotlin, the idiomatic way to manage resources that implement the AutoCloseable interface,
  * is to use the `.use()` function, to automatically close the resource when the block of code completes.
  *
  * This rule checks if a `AutoCloseable.close()` call has been made in a finally block, suggesting to
@@ -65,7 +65,7 @@ class ReplaceTryFinallyWithUse(config: Config) :
             report(
                 Finding(
                     Entity.from(tryExpression),
-                    "This try-finally block can be replaced with ${receiver.text}.use { ... }`."
+                    "This try-finally block can be replaced with `${receiver.text}.use { ... }`."
                 )
             )
         }
@@ -74,8 +74,8 @@ class ReplaceTryFinallyWithUse(config: Config) :
     private fun KaSession.isCloseCall(callExpression: KtCallExpression): Boolean {
         val functionCall = callExpression.resolveToCall()?.singleFunctionCallOrNull() ?: return false
 
-        val isCloseFunction = (functionCall.symbol as KaNamedFunctionSymbol).name.asString() == FUNCTION_NAME_CLOSE &&
-            functionCall.symbol.valueParameters.isEmpty()
+        val isCloseFunction = (functionCall.symbol as? KaNamedFunctionSymbol)?.name?.asString() ==
+            FUNCTION_NAME_CLOSE && functionCall.symbol.valueParameters.isEmpty()
 
         val containingClass = functionCall.symbol.containingDeclaration as? KaClassSymbol ?: return false
         return (isCloseable(containingClass) || isSubtypeOfCloseable(containingClass)) &&

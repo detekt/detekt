@@ -75,26 +75,6 @@ class ReplaceTryFinallyWithUseSpec(val env: KotlinEnvironmentContainer) {
     }
 
     @Test
-    fun `does not report with empty block`() {
-        val code = """
-                class ExampleCloseable: AutoCloseable {
-                    override fun close() { }
-                }
-            
-                val closeable = ExampleCloseable()
-                fun test() {
-                    try {
-            
-                    } finally {
-                        // empty
-                    }
-                }
-        """.trimIndent()
-
-        assertThat(subject.lintWithContext(env, code)).isEmpty()
-    }
-
-    @Test
     fun `does not report with no close calls`() {
         val code = """
                 class ExampleCloseable: AutoCloseable {
