@@ -22,13 +22,13 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
  *
  * <noncompliant>
  * listOf(1,2)
- *  .sorted()
- *  .asReversed()
+ *     .sorted()
+ *     .asReversed()
  * </noncompliant>
  *
  * <compliant>
  * listOf(1,2)
- *  .sortedDescending()
+ *     .sortedDescending()
  * </compliant>
  */
 class UnnecessaryReversed(config: Config) :

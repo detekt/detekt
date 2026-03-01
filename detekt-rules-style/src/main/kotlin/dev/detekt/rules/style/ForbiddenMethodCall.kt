@@ -43,12 +43,11 @@ import org.jetbrains.kotlin.resolve.calls.util.getCalleeExpressionIfAny
  *
  * <noncompliant>
  * fun main() {
- *   println()
- *   val myPrintln : () -> Unit = ::println
- *   kotlin.io.print("Hello, World!")
+ *     println()
+ *     val myPrintln : () -> Unit = ::println
+ *     kotlin.io.print("Hello, World!")
  * }
  * </noncompliant>
- *
  */
 class ForbiddenMethodCall(config: Config) :
     Rule(

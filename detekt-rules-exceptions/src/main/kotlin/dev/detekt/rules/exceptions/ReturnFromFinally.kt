@@ -39,22 +39,22 @@ import org.jetbrains.kotlin.psi.psiUtil.isInsideOf
  * }
  *
  * val a: String = try {
- *   "s"
+ *     "s"
  * } catch (e: Exception) {
- *   "e"
+ *     "e"
  * } finally {
- *   // Implies assigning "f" to variable a, but the exception gets propagated first.
- *   // Misleading and not immediately obvious, this gets flagged!
- *   "f"
+ *     // Implies assigning "f" to variable a, but the exception gets propagated first.
+ *     // Misleading and not immediately obvious, this gets flagged!
+ *     "f"
  * }
  * </noncompliant>
  *
  * <compliant>
  * fun bar(thing: Thing): Unit = try {
- *   thing.doSomethingReturningUnit()
+ *     thing.doSomethingReturningUnit()
  * } finally {
- *   // Any exceptions will still be propagated, but the Unit-returning cleanup function will be called first
- *   thing.cleanUp()
+ *     // Any exceptions will still be propagated, but the Unit-returning cleanup function will be called first
+ *     thing.cleanUp()
  * }
  * </compliant>
  */

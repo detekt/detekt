@@ -22,15 +22,15 @@ import org.jetbrains.kotlin.psi.psiUtil.startOffset
  *
  * <noncompliant>
  * foo()
- *   .bar().baz()
+ *     .bar().baz()
  * </noncompliant>
  *
  * <compliant>
  * foo().bar().baz()
  *
  * foo()
- *   .bar()
- *   .baz()
+ *     .bar()
+ *     .baz()
  * </compliant>
  */
 class CascadingCallWrapping(config: Config) :

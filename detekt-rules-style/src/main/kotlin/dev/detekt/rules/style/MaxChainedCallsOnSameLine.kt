@@ -31,7 +31,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getStartOffsetIn
  *
  * <compliant>
  * a().b().c()
- *   .d().e().f()
+ *     .d().e().f()
  * </compliant>
  */
 class MaxChainedCallsOnSameLine(config: Config) :

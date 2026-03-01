@@ -32,13 +32,13 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  *
  * <compliant>
  * """
- *   |  Hello World!
- *   |  How are you?
+ *     |  Hello World!
+ *     |  How are you?
  * """.trimMargin()
  *
  * """
- *   Hello World!
- *   How are you?
+ *     Hello World!
+ *     How are you?
  * """.trimIndent()
  *
  * """Hello World! How are you?"""
