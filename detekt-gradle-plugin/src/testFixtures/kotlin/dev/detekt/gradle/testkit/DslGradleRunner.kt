@@ -131,7 +131,10 @@ constructor(
             .build()
             .apply(projectScript)
 
-    private fun buildGradleRunner(tasks: List<String>): GradleRunner {
+    private fun buildGradleRunner(
+        tasks: List<String>,
+        extraProperties: Map<String, String> = emptyMap(),
+    ): GradleRunner {
         val args = buildList {
             add("--stacktrace")
             add("--info")
@@ -143,6 +146,7 @@ constructor(
             if (!disableIP) {
                 add("-Dorg.gradle.unsafe.isolated-projects=true")
             }
+            extraProperties.forEach { k, v -> add("-P$k=$v") }
             addAll(gradleProperties.toList().map { (key, value) -> "-P$key=$value" })
             addAll(tasks)
         }
@@ -159,14 +163,23 @@ constructor(
         }
     }
 
-    fun runTasksAndCheckResult(vararg tasks: String, doAssert: DslGradleRunner.(BuildResult) -> Unit) {
-        this.doAssert(runTasks(*tasks))
-    }
+    fun runTasksAndCheckResult(
+        vararg tasks: String,
+        extraProperties: Map<String, String> = emptyMap(),
+        doAssert: DslGradleRunner.(BuildResult) -> Unit
+    ) = doAssert(runTasks(tasks = tasks, extraProperties = extraProperties))
 
-    fun runTasks(vararg tasks: String): BuildResult = buildGradleRunner(tasks.toList()).build()
+    fun runTasks(
+        vararg tasks: String,
+        extraProperties: Map<String, String> = emptyMap()
+    ): BuildResult = buildGradleRunner(tasks.toList(), extraProperties).build()
 
-    fun runTasksAndExpectFailure(vararg tasks: String, doAssert: DslGradleRunner.(BuildResult) -> Unit) {
-        val result: BuildResult = buildGradleRunner(tasks.toList()).buildAndFail()
+    fun runTasksAndExpectFailure(
+        vararg tasks: String,
+        extraProperties: Map<String, String> = emptyMap(),
+        doAssert: DslGradleRunner.(BuildResult) -> Unit,
+    ) {
+        val result: BuildResult = buildGradleRunner(tasks.toList(), extraProperties).buildAndFail()
         this.doAssert(result)
     }
 

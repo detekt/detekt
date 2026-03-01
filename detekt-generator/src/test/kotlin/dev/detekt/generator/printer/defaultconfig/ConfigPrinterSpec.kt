@@ -24,7 +24,7 @@ class ConfigPrinterSpec {
               MagicNumber:
                 active: true
                 aliases: ['alias1', 'alias2']
-                excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**', '**/*.kts']
+                excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/androidHostTest/**', '**/androidDeviceTest/**', '**/jsTest/**', '**/iosTest/**', '**/*.kts']
                 conf1: 'foo'
                 conf3:
                   - 'a'

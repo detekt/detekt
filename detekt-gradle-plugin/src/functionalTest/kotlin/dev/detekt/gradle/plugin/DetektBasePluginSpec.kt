@@ -213,14 +213,127 @@ class DetektBasePluginSpec {
         }
     }
 
-    private fun DslGradleRunner.checkTask(sourceSetTaskName: String) {
-        runTasksAndCheckResult(":detekt${sourceSetTaskName}SourceSet") { buildResult ->
+    @Nested
+    inner class `generates source set tasks for KMP project with AGP-KMP` {
+        val gradleRunner = DslGradleRunner(
+            dryRun = true,
+            projectLayout = ProjectLayout(
+                numberOfSourceFilesInRootPerSourceDir = 1,
+                srcDirs = listOf(
+                    "src/androidDeviceTest/kotlin",
+                    "src/androidHostTest/kotlin",
+                    "src/androidMain/kotlin",
+                    "src/appleMain/kotlin",
+                    "src/appleTest/kotlin",
+                    "src/commonMain/kotlin",
+                    "src/commonTest/kotlin",
+                    "src/iosMain/kotlin",
+                    "src/iosTest/kotlin",
+                    "src/jsMain/kotlin",
+                    "src/jsTest/kotlin",
+                    "src/jvmMain/kotlin",
+                    "src/jvmTest/kotlin",
+                    "src/nativeMain/kotlin",
+                    "src/nativeTest/kotlin",
+                ),
+            ),
+            buildFileName = "build.gradle.kts",
+            mainBuildFileContent = """
+                plugins {
+                    id("dev.detekt")
+                    kotlin("multiplatform")
+                    id("com.android.kotlin.multiplatform.library")
+                }
+                
+                repositories {
+                    mavenLocal()
+                    mavenCentral()
+                    google()
+                }
+                
+                kotlin {
+                    android {
+                        compileSdk = 34
+                        namespace = "dev.detekt.gradle.plugin.app"
+                        if ("withHostTest" in properties) withHostTest {}
+                        if ("withDeviceTest" in properties) withDeviceTest {}
+                    }
+                    
+                    iosArm64()
+                    iosSimulatorArm64()
+                    jvm()
+                    js {
+                        browser()
+                        nodejs()
+                    }
+                }
+            """.trimIndent(),
+        ).also {
+            it.setupProject()
+        }
+
+        @Test
+        fun `generates androidHostTest task for Android`() {
+            gradleRunner.checkTask(
+                sourceSetTaskName = "androidHostTest",
+                extraProperties = mapOf("withHostTest" to "true"),
+            )
+        }
+
+        @Test
+        fun `generates androidDeviceTest task for Android`() {
+            gradleRunner.checkTask(
+                sourceSetTaskName = "androidDeviceTest",
+                extraProperties = mapOf("withDeviceTest" to "true"),
+            )
+        }
+
+        @Test
+        fun `don't generate androidHostTest task for Android`() {
+            gradleRunner.checkNoTaskIsCreated(
+                sourceSetTaskName = "androidHostTest",
+                extraProperties = emptyMap(),
+            )
+        }
+
+        @Test
+        fun `don't generate androidDeviceTest task for Android`() {
+            gradleRunner.checkNoTaskIsCreated(
+                sourceSetTaskName = "androidDeviceTest",
+                extraProperties = mapOf(),
+            )
+        }
+    }
+
+    private fun DslGradleRunner.checkTask(
+        sourceSetTaskName: String,
+        extraProperties: Map<String, String> = emptyMap(),
+    ) {
+        runTasksAndCheckResult(
+            tasks = arrayOf(":detekt${sourceSetTaskName}SourceSet"),
+            extraProperties = extraProperties,
+        ) { buildResult ->
             assertThat(buildResult.output)
                 .containsPattern("""--input \S*[/\\]src[/\\]$sourceSetTaskName[/\\]kotlin""")
             val checkstyleReportFile = projectFile("build/reports/detekt/${sourceSetTaskName}SourceSet.xml")
             val sarifReportFile = projectFile("build/reports/detekt/${sourceSetTaskName}SourceSet.sarif")
-            assertThat(buildResult.output).contains("--report checkstyle:$checkstyleReportFile")
-            assertThat(buildResult.output).contains("--report sarif:$sarifReportFile")
+            assertThat(buildResult.output)
+                .contains("--report checkstyle:$checkstyleReportFile")
+                .contains("--report sarif:$sarifReportFile")
+        }
+    }
+
+    private fun DslGradleRunner.checkNoTaskIsCreated(
+        sourceSetTaskName: String,
+        extraProperties: Map<String, String> = emptyMap(),
+    ) {
+        val taskName = "detekt${sourceSetTaskName}SourceSet"
+        runTasksAndExpectFailure(
+            tasks = arrayOf(":$taskName"),
+            extraProperties = extraProperties,
+        ) { buildResult ->
+            assertThat(buildResult.output)
+                .contains("task '$taskName' not found in root project")
         }
     }
 }
