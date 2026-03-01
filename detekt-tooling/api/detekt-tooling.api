@@ -160,6 +160,7 @@ public abstract interface class dev/detekt/tooling/api/spec/ProjectSpec {
 	public abstract fun getAnalysisMode ()Ldev/detekt/tooling/api/AnalysisMode;
 	public abstract fun getBasePath ()Ljava/nio/file/Path;
 	public abstract fun getInputPaths ()Ljava/util/Collection;
+	public abstract fun getValidateClasspath ()Z
 }
 
 public abstract interface class dev/detekt/tooling/api/spec/ReportsSpec {
@@ -328,9 +329,11 @@ public final class dev/detekt/tooling/dsl/ProjectSpecBuilder : dev/detekt/toolin
 	public final fun getAnalysisMode ()Ldev/detekt/tooling/api/AnalysisMode;
 	public final fun getBasePath ()Ljava/nio/file/Path;
 	public final fun getInputPaths ()Ljava/util/Collection;
+	public final fun getValidateClasspath ()Z
 	public final fun setAnalysisMode (Ldev/detekt/tooling/api/AnalysisMode;)V
 	public final fun setBasePath (Ljava/nio/file/Path;)V
 	public final fun setInputPaths (Ljava/util/Collection;)V
+	public final fun setValidateClasspath (Z)V
 }
 
 public final class dev/detekt/tooling/dsl/ReportsSpecBuilder : dev/detekt/tooling/dsl/Builder {

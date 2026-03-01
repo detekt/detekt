@@ -89,6 +89,12 @@ class CliArgs {
     var parallel: Boolean = false
 
     @Parameter(
+        names = ["--validate-classpath"],
+        description = "Validate classpath to ensure that all the types are resolvable",
+    )
+    var validateClasspath: Boolean = false
+
+    @Parameter(
         names = ["--baseline", "-b"],
         description = "If a baseline xml file is passed in," +
             " only new findings not in the baseline are printed in the console.",
