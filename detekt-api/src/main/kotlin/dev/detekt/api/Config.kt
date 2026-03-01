@@ -65,6 +65,7 @@ interface Config {
         const val ACTIVE_KEY: String = "active"
         const val ALIASES_KEY: String = "aliases"
         const val AUTO_CORRECT_KEY: String = "autoCorrect"
+        const val IGNORE_ANNOTATED_KEY: String = "ignoreAnnotated"
         const val SEVERITY_KEY: String = "severity"
         const val EXCLUDES_KEY: String = "excludes"
         const val INCLUDES_KEY: String = "includes"
