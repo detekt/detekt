@@ -2,6 +2,7 @@ package dev.detekt.cli
 
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.ParameterException
+import dev.detekt.tooling.api.AnalysisMode
 import kotlin.io.path.isRegularFile
 import kotlin.io.path.notExists
 
@@ -46,6 +47,10 @@ private fun CliArgs.validate(jCommander: JCommander) {
         } else if (!baseline.isRegularFile()) {
             violation = "The path specified by --baseline should be a file '$baseline'."
         }
+    }
+
+    if (validateClasspath && analysisMode != AnalysisMode.full) {
+        violation = "Validate Classpath can only be executed with `--analysis-mode full`."
     }
 
     if (violation != null) {

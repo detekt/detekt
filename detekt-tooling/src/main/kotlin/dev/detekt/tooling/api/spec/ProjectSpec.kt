@@ -26,7 +26,7 @@ interface ProjectSpec {
     val analysisMode: AnalysisMode
 
     /**
-     * Analyze Kotlin source files and collect diagnostics.
+     * Validate classpath to ensure that all the types are resolvable.
      */
-    val diagnostics: Boolean
+    val validateClasspath: Boolean
 }

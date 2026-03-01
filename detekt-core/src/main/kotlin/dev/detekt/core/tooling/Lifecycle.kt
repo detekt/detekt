@@ -14,7 +14,6 @@ import dev.detekt.core.reporting.OutputFacade
 import dev.detekt.core.rules.createRuleProviders
 import dev.detekt.core.util.PerformanceMonitor.Phase
 import dev.detekt.parser.DetektMessageCollector
-import dev.detekt.tooling.api.AnalysisMode
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.components.KaDiagnosticCheckerFilter
 import org.jetbrains.kotlin.analysis.api.diagnostics.KaSeverity
@@ -35,9 +34,7 @@ internal class Lifecycle(
     fun analyze(): Detektion {
         measure(Phase.ValidateConfig) { checkConfiguration(settings, baselineConfig) }
         val filesToAnalyze = measure(Phase.Parsing) { settings.ktFiles }
-        if (settings.spec.projectSpec.analysisMode == AnalysisMode.full &&
-            settings.spec.projectSpec.diagnostics
-        ) {
+        if (settings.spec.projectSpec.validateClasspath) {
             measure(Phase.ValidateClasspath) { validateClasspath(filesToAnalyze) }
         }
         val analysisMode = settings.spec.projectSpec.analysisMode

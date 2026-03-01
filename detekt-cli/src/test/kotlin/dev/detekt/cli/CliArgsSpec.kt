@@ -388,18 +388,25 @@ internal class CliArgsSpec {
     }
 
     @Nested
-    inner class `Diagnostics parameter` {
+    inner class `Validate classpath parameter` {
 
         @Test
-        fun `--diagnostics is false by default`() {
+        fun `--validate-classpath is false by default`() {
             val spec = parseArguments(emptyArray()).toSpec()
-            assertThat(spec.projectSpec.diagnostics).isFalse()
+            assertThat(spec.projectSpec.validateClasspath).isFalse()
         }
 
         @Test
-        fun `--diagnostics enables diagnostics`() {
-            val spec = parseArguments(arrayOf("--diagnostics")).toSpec()
-            assertThat(spec.projectSpec.diagnostics).isTrue()
+        fun `--validate-classpath enables validateClasspath`() {
+            val spec = parseArguments(arrayOf("--analysis-mode", "full", "--validate-classpath")).toSpec()
+            assertThat(spec.projectSpec.validateClasspath).isTrue()
+        }
+
+        @Test
+        fun `--validate-classpath fails with --analysis-mode light`() {
+            assertThatCode { parseArguments(arrayOf("--analysis-mode", "light", "--validate-classpath")) }
+                .isInstanceOf(HandledArgumentViolation::class.java)
+                .hasMessage("Validate Classpath can only be executed with `--analysis-mode full`.")
         }
     }
 

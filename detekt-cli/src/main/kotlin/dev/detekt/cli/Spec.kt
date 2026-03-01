@@ -36,7 +36,7 @@ internal fun CliArgs.createSpec(output: Appendable, error: Appendable): Processi
                 .map { path -> absoluteBasePath.resolve(path).normalize() }
                 .toSet()
             analysisMode = args.analysisMode
-            diagnostics = args.diagnostics
+            validateClasspath = args.validateClasspath
         }
 
         rules {

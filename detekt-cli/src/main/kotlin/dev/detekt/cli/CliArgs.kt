@@ -89,10 +89,10 @@ class CliArgs {
     var parallel: Boolean = false
 
     @Parameter(
-        names = ["--diagnostics"],
-        description = "Analyse Kotlin source files and collect diagnostics",
+        names = ["--validate-classpath"],
+        description = "Validate classpath to ensure that all the types are resolvable",
     )
-    var diagnostics: Boolean = false
+    var validateClasspath: Boolean = false
 
     @Parameter(
         names = ["--baseline", "-b"],
