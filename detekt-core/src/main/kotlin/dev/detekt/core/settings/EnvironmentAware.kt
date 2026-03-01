@@ -27,7 +27,6 @@ import org.jetbrains.kotlin.config.jvmTarget
 import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.platform.jvm.JvmPlatforms
 import org.jetbrains.kotlin.psi.KtFile
-import java.io.Closeable
 import java.io.File
 import java.io.OutputStream
 import java.io.PrintStream
@@ -38,15 +37,18 @@ interface EnvironmentAware {
     val project: Project
     val configuration: CompilerConfiguration
     val ktFiles: List<KtFile>
-    val disposable: Disposable
 }
 
 internal class EnvironmentFacade(projectSpec: ProjectSpec, compilerSpec: CompilerSpec, loggingSpec: LoggingSpec) :
     AutoCloseable,
-    Closeable,
     EnvironmentAware {
 
     private val printStream = if (loggingSpec.debug) loggingSpec.errorChannel.asPrintStream() else NullPrintStream
+
+    private val disposable: Disposable = Disposer.newDisposable()
+
+    private lateinit var sourceModule: KaSourceModule
+
     override val configuration: CompilerConfiguration =
         createCompilerConfiguration(
             projectSpec.inputPaths.toList(),
@@ -58,10 +60,6 @@ internal class EnvironmentFacade(projectSpec: ProjectSpec, compilerSpec: Compile
             compilerSpec.freeCompilerArgs,
             printStream,
         )
-
-    override val disposable: Disposable = Disposer.newDisposable()
-
-    private lateinit var sourceModule: KaSourceModule
 
     @OptIn(KaExperimentalApi::class)
     override val ktFiles: List<KtFile>
