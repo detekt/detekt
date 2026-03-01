@@ -11,6 +11,7 @@ import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.repositories
+import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinPluginWrapper
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -79,6 +80,72 @@ class DetektPlainSpec {
             assertThat(argumentString).doesNotContain("--classpath")
             assertThat(argumentString).contains("--analysis-mode light")
             assertThat(argumentString).contains("--fail-on-severity error")
+        }
+    }
+
+    @Nested
+    inner class `When applying detekt with strict explicit API` {
+        val gradleRunner = DslGradleRunner(
+            projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 1),
+            buildFileName = "build.gradle.kts",
+            projectScript = {
+                apply<KotlinPluginWrapper>() // org.jetbrains.kotlin.jvm
+                apply<DetektPlugin>()
+
+                repositories {
+                    mavenCentral()
+                }
+
+                configure<KotlinProjectExtension> {
+                    explicitApi()
+                }
+            },
+        ).also { it.setupProject() }
+
+        @Test
+        fun `configures detekt plain task with explicit API mode`() {
+            val project = gradleRunner.buildProject()
+
+            val detektTask = project.tasks.getByPath("detekt") as Detekt
+            val argumentString = detektTask.arguments.joinToString(" ")
+
+            assertThat(argumentString).contains("-Xexplicit-api=strict")
+        }
+
+        @Test
+        fun `configures detekt baseline task with explicit API mode`() {
+            val project = gradleRunner.buildProject()
+
+            val baselineTask = project.tasks.getByPath("detektBaseline") as DetektCreateBaselineTask
+            val argumentString = baselineTask.arguments.joinToString(" ")
+
+            assertThat(argumentString).contains("-Xexplicit-api=strict")
+        }
+    }
+
+    @Nested
+    inner class `When applying detekt without explicit API mode` {
+        val gradleRunner = DslGradleRunner(
+            projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 1),
+            buildFileName = "build.gradle.kts",
+            projectScript = {
+                apply<KotlinPluginWrapper>() // org.jetbrains.kotlin.jvm
+                apply<DetektPlugin>()
+
+                repositories {
+                    mavenCentral()
+                }
+            },
+        ).also { it.setupProject() }
+
+        @Test
+        fun `does not configure detekt plain task with explicit API mode`() {
+            val project = gradleRunner.buildProject()
+
+            val detektTask = project.tasks.getByPath("detekt") as Detekt
+            val argumentString = detektTask.arguments.joinToString(" ")
+
+            assertThat(argumentString).doesNotContain("-Xexplicit-api")
         }
     }
 
