@@ -405,9 +405,6 @@ private fun setupProject(projectLayoutAction: ProjectLayout.() -> Unit): DslGrad
                 }
             }
         """.trimIndent(),
-        gradleProperties = mapOf(
-            "android.newDsl" to "false",
-        ),
         dryRun = true
     ).also {
         it.setupProject()
