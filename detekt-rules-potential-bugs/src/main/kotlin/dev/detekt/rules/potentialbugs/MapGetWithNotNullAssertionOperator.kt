@@ -37,11 +37,11 @@ private val VALUE_PARAMETER_NAME = Name.identifier("V")
  * Based on an IntelliJ IDEA inspection MapGetWithNotNullAssertionOperatorInspection.
  *
  * <noncompliant>
- *  val map = emptyMap<String, String>()
- *  map["key"]!!
+ * val map = emptyMap<String, String>()
+ * map["key"]!!
  *
- *  val map = emptyMap<String, String>()
- *  map.get("key")!!
+ * val map = emptyMap<String, String>()
+ * map.get("key")!!
  * </noncompliant>
  *
  * <compliant>

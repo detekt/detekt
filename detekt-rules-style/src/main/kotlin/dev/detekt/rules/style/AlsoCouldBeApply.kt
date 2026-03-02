@@ -16,20 +16,20 @@ import org.jetbrains.kotlin.psi.KtQualifiedExpression
  *
  * <noncompliant>
  * Buzz().also {
- *   it.init()
- *   it.block()
+ *     it.init()
+ *     it.block()
  * }
  * </noncompliant>
  *
  * <compliant>
  * Buzz().apply {
- *   init()
- *   block()
+ *     init()
+ *     block()
  * }
  *
  * // Also compliant
  * fun foo(a: Int): Int {
- *   return a.also { println(it) }
+ *     return a.also { println(it) }
  * }
  * </compliant>
  */
