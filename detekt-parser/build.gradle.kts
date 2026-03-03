@@ -4,5 +4,4 @@ plugins {
 
 dependencies {
     api(libs.kotlin.compiler)
-    testImplementation(libs.assertj.core)
 }
