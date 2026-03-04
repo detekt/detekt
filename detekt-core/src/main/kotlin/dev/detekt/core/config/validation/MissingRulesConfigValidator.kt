@@ -7,27 +7,19 @@ import dev.detekt.api.RuleSetProvider
 import dev.detekt.core.config.YamlConfig
 import java.util.ServiceLoader
 
-internal class MissingRulesConfigValidator(
-    private val baseline: YamlConfig,
-    private val excludePatterns: Set<Regex>,
-) : AbstractYamlConfigValidator() {
+internal class MissingRulesConfigValidator(private val baseline: YamlConfig, private val excludePatterns: Set<Regex>) :
+    AbstractYamlConfigValidator() {
 
     override val id: String = "MissingRulesConfigValidator"
 
-    override fun validate(
-        configToValidate: YamlConfig,
-        settings: ValidationSettings,
-    ): Collection<Notification> {
+    override fun validate(configToValidate: YamlConfig, settings: ValidationSettings): Collection<Notification> {
         if (!settings.checkExhaustiveness) {
             return emptyList()
         }
         return ruleSetNames.flatMap { ruleSet -> validateRuleSet(ruleSet, configToValidate) }
     }
 
-    private fun validateRuleSet(
-        ruleSet: RuleSetId,
-        configToValidate: YamlConfig,
-    ): List<Notification> {
+    private fun validateRuleSet(ruleSet: RuleSetId, configToValidate: YamlConfig): List<Notification> {
         val ruleSetConfigToValidate = configToValidate.getSubMapOrNull(ruleSet)
         val ruleSetConfigFromBaseline = baseline.getSubMapOrNull(ruleSet)
         return when {

@@ -11,10 +11,7 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  */
 @ActiveByDefault(since = "1.0.0")
 @AutoCorrectable(since = "1.0.0")
-class SpacingAroundParens(config: Config) : KtlintRule(
-    config,
-    "Reports spaces around parentheses"
-) {
+class SpacingAroundParens(config: Config) : KtlintRule(config, "Reports spaces around parentheses") {
 
     override val wrapping = SpacingAroundParensRule()
 }

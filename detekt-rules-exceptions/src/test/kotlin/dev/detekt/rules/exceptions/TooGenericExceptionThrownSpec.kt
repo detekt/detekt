@@ -14,7 +14,7 @@ class TooGenericExceptionThrownSpec {
     @ParameterizedTest
     @ValueSource(strings = ["Error", "Exception", "Throwable", "RuntimeException"])
     fun `should report $exceptionName`(exceptionName: String) {
-        val rule = TooGenericExceptionThrown(TestConfig(EXCEPTION_NAMES to "[$exceptionName]"))
+        val rule = TooGenericExceptionThrown(TestConfig(EXCEPTION_NAMES to listOf(exceptionName)))
         val code = """
             fun main() {
                 try {
@@ -40,7 +40,7 @@ class TooGenericExceptionThrownSpec {
 
     @Test
     fun `should not report thrown exceptions`() {
-        val rule = TooGenericExceptionThrown(TestConfig(EXCEPTION_NAMES to "['MyException', Bar]"))
+        val rule = TooGenericExceptionThrown(TestConfig(EXCEPTION_NAMES to listOf("MyException", "Bar")))
         val code = """
             fun main() {
                 try {
@@ -66,7 +66,7 @@ class TooGenericExceptionThrownSpec {
 
     @Test
     fun `should not report caught exceptions`() {
-        val rule = TooGenericExceptionThrown(TestConfig(EXCEPTION_NAMES to "['Exception']"))
+        val rule = TooGenericExceptionThrown(TestConfig(EXCEPTION_NAMES to listOf("Exception")))
         val code = """
             fun f() {
                 try {
@@ -82,7 +82,7 @@ class TooGenericExceptionThrownSpec {
 
     @Test
     fun `should not report initialize exceptions`() {
-        val rule = TooGenericExceptionThrown(TestConfig(EXCEPTION_NAMES to "['Exception']"))
+        val rule = TooGenericExceptionThrown(TestConfig(EXCEPTION_NAMES to listOf("Exception")))
         val code = """fun f() { val ex = Exception() }"""
 
         assertThat(rule.lint(code)).isEmpty()
@@ -90,7 +90,7 @@ class TooGenericExceptionThrownSpec {
 
     @Test
     fun `should not report any`() {
-        val rule = TooGenericExceptionThrown(TestConfig(EXCEPTION_NAMES to "[]"))
+        val rule = TooGenericExceptionThrown(TestConfig(EXCEPTION_NAMES to emptyList<String>()))
         val code = """
             fun main() {
                 try {

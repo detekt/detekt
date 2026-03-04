@@ -14,8 +14,7 @@ internal data class DefaultBaseline(
     override val currentIssues: FindingsIdList,
 ) : Baseline {
 
-    override fun contains(id: FindingId): Boolean =
-        currentIssues.contains(id) || manuallySuppressedIssues.contains(id)
+    override fun contains(id: FindingId): Boolean = currentIssues.contains(id) || manuallySuppressedIssues.contains(id)
 
     companion object {
 

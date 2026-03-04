@@ -24,10 +24,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isIdentifier
  * class HelloWorld
  * </compliant>
  */
-class UnnecessaryBackticks(config: Config) : Rule(
-    config,
-    "Backticks are unnecessary."
-) {
+class UnnecessaryBackticks(config: Config) : Rule(config, "Backticks are unnecessary.") {
 
     override fun visitKtElement(element: KtElement) {
         element.allChildren
@@ -41,7 +38,9 @@ class UnnecessaryBackticks(config: Config) : Rule(
 
         return when {
             (!text.startsWith("`") || !text.endsWith("`")) -> false
+
             (!unquoted.isIdentifier() || unquoted.isKeyword()) -> false
+
             else -> canPlaceAfterSimpleNameEntry(
                 getStrictParentOfType<KtSimpleNameStringTemplateEntry>()?.nextSibling
             )

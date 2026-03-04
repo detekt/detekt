@@ -8,9 +8,7 @@ interface VersionProvider {
 
     companion object {
 
-        fun load(
-            classLoader: ClassLoader = VersionProvider::class.java.classLoader,
-        ): VersionProvider =
+        fun load(classLoader: ClassLoader = VersionProvider::class.java.classLoader): VersionProvider =
             ServiceLoader.load(VersionProvider::class.java, classLoader).first()
     }
 }

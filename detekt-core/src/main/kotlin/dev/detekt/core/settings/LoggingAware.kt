@@ -17,7 +17,9 @@ interface LoggingAware {
 internal fun Throwable.printStacktraceRecursively(logger: Appendable) {
     when (logger) {
         is PrintStream -> this.printStackTrace(logger)
+
         is PrintWriter -> this.printStackTrace(logger)
+
         else -> {
             stackTrace.forEach { logger.appendLine(it.toString()) }
             cause?.printStacktraceRecursively(logger)
@@ -25,9 +27,7 @@ internal fun Throwable.printStacktraceRecursively(logger: Appendable) {
     }
 }
 
-internal class LoggingFacade(
-    val spec: LoggingSpec,
-) : LoggingAware {
+internal class LoggingFacade(val spec: LoggingSpec) : LoggingAware {
 
     override val outputChannel: Appendable = spec.outputChannel
     override val errorChannel: Appendable = spec.errorChannel

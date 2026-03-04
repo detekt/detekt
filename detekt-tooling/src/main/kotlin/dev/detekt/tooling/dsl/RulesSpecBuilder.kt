@@ -11,12 +11,13 @@ class RulesSpecBuilder : Builder<RulesSpec> {
     var autoCorrect: Boolean = false
     var runPolicy: RulesSpec.RunPolicy = RulesSpec.RunPolicy.NoRestrictions
 
-    override fun build(): RulesSpec = RulesModel(
-        activateAllRules,
-        failurePolicy,
-        autoCorrect,
-        runPolicy
-    )
+    override fun build(): RulesSpec =
+        RulesModel(
+            activateAllRules,
+            failurePolicy,
+            autoCorrect,
+            runPolicy
+        )
 }
 
 private data class RulesModel(

@@ -17,7 +17,7 @@ performance:
 style:
   ForbiddenImport:
     active: true
-    imports:
+    forbiddenImports:
       - value: 'org.gradle.util.GradleVersion'
         reason: 'Gradle version checks must be isolated to GradleCompat.kt'
     excludes: ["**/GradleCompat.kt"]
@@ -35,10 +35,8 @@ ktlint:
     active: false
   ChainMethodContinuation:
     active: false
-  ClassSignature:
-    active: false
   FunctionSignature:
-    active: false
+    functionBodyExpressionWrapping: multiline
   MaximumLineLength:
     active: false
   MultilineExpressionWrapping:

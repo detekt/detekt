@@ -49,10 +49,8 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  * """.trimMargin()
  * </compliant>
  */
-class MultilineRawStringIndentation(config: Config) : Rule(
-    config,
-    "The indentation of the raw String should be consistent"
-) {
+class MultilineRawStringIndentation(config: Config) :
+    Rule(config, "The indentation of the raw String should be consistent") {
 
     @Configuration("indentation size")
     private val indentSize by config(4)
@@ -94,10 +92,7 @@ class MultilineRawStringIndentation(config: Config) : Rule(
         checkClosing(baseIndent, lastLineNumber)
     }
 
-    private fun KtStringTemplateExpression.checkContent(
-        desiredIndent: Int,
-        lineNumberRange: IntRange,
-    ) {
+    private fun KtStringTemplateExpression.checkContent(desiredIndent: Int, lineNumberRange: IntRange) {
         data class LineInformation(val lineNumber: Int, val line: String, val currentIndent: Int)
 
         val indentation = lineNumberRange
@@ -134,10 +129,7 @@ class MultilineRawStringIndentation(config: Config) : Rule(
         }
     }
 
-    private fun KtStringTemplateExpression.checkClosing(
-        desiredIndent: Int,
-        lineNumber: Int,
-    ) {
+    private fun KtStringTemplateExpression.checkClosing(desiredIndent: Int, lineNumber: Int) {
         val currentIndent = containingFile.getLine(lineNumber).countIndent()
         if (currentIndent != desiredIndent) {
             val location = if (currentIndent < desiredIndent) {

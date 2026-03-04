@@ -33,10 +33,7 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
  * </compliant>
  */
 @ActiveByDefault(since = "1.2.0")
-class MayBeConstant(config: Config) : Rule(
-    config,
-    "Usage of `vals` that can be `const val` detected."
-) {
+class MayBeConstant(config: Config) : Rule(config, "Usage of `vals` that can be `const val` detected.") {
 
     private val binaryTokens = hashSetOf<KtSingleValueToken>(
         KtTokens.PLUS,
@@ -107,12 +104,10 @@ class MayBeConstant(config: Config) : Rule(
             isConstant() ||
             isOverride()
 
-    private fun KtProperty.isInObject() =
-        !isTopLevel && containingClassOrObject !is KtObjectDeclaration
+    private fun KtProperty.isInObject() = !isTopLevel && containingClassOrObject !is KtObjectDeclaration
 
     private fun KtExpression.isConstantExpression(): Boolean =
-        this is KtStringTemplateExpression &&
-            !hasInterpolation() ||
+        (this is KtStringTemplateExpression && !hasInterpolation()) ||
             node.elementType == KtNodeTypes.BOOLEAN_CONSTANT ||
             node.elementType == KtNodeTypes.INTEGER_CONSTANT ||
             node.elementType == KtNodeTypes.CHARACTER_CONSTANT ||

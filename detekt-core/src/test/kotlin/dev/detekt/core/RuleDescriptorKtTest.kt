@@ -15,7 +15,6 @@ import dev.detekt.api.Severity.Warning
 import dev.detekt.api.config
 import dev.detekt.api.internal.DefaultRuleSetProvider
 import dev.detekt.api.internal.whichDetekt
-import dev.detekt.test.yamlConfigFromContent
 import dev.detekt.tooling.api.AnalysisMode
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
@@ -378,31 +377,33 @@ private class RuleDescriptionMatcher(
     }
 }
 
-private fun Config.toMap(): Map<String, Any?> = buildMap {
-    subConfigKeys().forEach {
-        put(it, valueOrNull(it))
+private fun Config.toMap(): Map<String, Any?> =
+    buildMap {
+        subConfigKeys().forEach {
+            put(it, valueOrNull(it))
+        }
     }
-}
 
 private val configActive = mapOf("active" to true)
 private val configInactive = mapOf("active" to false)
 
-private fun createRuleInstance(id: String, active: Boolean, url: String?, severity: Severity) = RuleInstance(
-    id,
-    RuleSetId("custom"),
-    if (url == "default") {
-        if (id.startsWith("AnotherRule")) {
-            URI("https://example.org/")
+private fun createRuleInstance(id: String, active: Boolean, url: String?, severity: Severity) =
+    RuleInstance(
+        id,
+        RuleSetId("custom"),
+        if (url == "default") {
+            if (id.startsWith("AnotherRule")) {
+                URI("https://example.org/")
+            } else {
+                URI("https://detekt.dev/docs/${whichDetekt()}/rules/custom#${id.substringBefore("/").lowercase()}")
+            }
         } else {
-            URI("https://detekt.dev/docs/${whichDetekt()}/rules/custom#${id.substringBefore("/").lowercase()}")
-        }
-    } else {
-        url?.let(::URI)
-    },
-    "${id.substringBefore("/")}Description",
-    severity = severity,
-    active = active
-)
+            url?.let(::URI)
+        },
+        "${id.substringBefore("/")}Description",
+        severity = severity,
+        active = active
+    )
 
 private class TestDefaultRuleSetProvider : DefaultRuleSetProvider {
     override val ruleSetId = RuleSetId("custom")
@@ -422,6 +423,6 @@ private class OneRule(config: Config) : Rule(config, "OneRuleDescription") {
 
 private class AnotherRule(config: Config) : Rule(config, "AnotherRuleDescription", URI("https://example.org/"))
 
-private class RequiresAnalysisApiRule(
-    config: Config,
-) : Rule(config, "RequiresAnalysisApiRuleDescription"), RequiresAnalysisApi
+private class RequiresAnalysisApiRule(config: Config) :
+    Rule(config, "RequiresAnalysisApiRuleDescription"),
+    RequiresAnalysisApi

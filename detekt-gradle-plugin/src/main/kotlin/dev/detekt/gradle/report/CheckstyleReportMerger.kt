@@ -88,20 +88,21 @@ internal object CheckstyleReportMerger {
     private class CheckstyleSourceFileNodes(private val nodes: List<Node>) {
 
         /** Returns a map containing only distinct error nodes, grouped by file name */
-        fun distinctErrorsGroupedBySourceFile() = nodes
-            .flatMap { fileNode ->
-                val fileNameAttribute = fileNode.attributes.getNamedItem("name").nodeValue
-                val errorNodes = fileNode.childNodes.asSequence().filterWhitespace()
-                errorNodes.map { errorNode ->
-                    CheckstyleErrorNodeWithFileData(
-                        errorID = errorID(fileNameAttribute, errorNode),
-                        fileName = fileNameAttribute,
-                        errorNode = errorNode
-                    )
+        fun distinctErrorsGroupedBySourceFile() =
+            nodes
+                .flatMap { fileNode ->
+                    val fileNameAttribute = fileNode.attributes.getNamedItem("name").nodeValue
+                    val errorNodes = fileNode.childNodes.asSequence().filterWhitespace()
+                    errorNodes.map { errorNode ->
+                        CheckstyleErrorNodeWithFileData(
+                            errorID = errorID(fileNameAttribute, errorNode),
+                            fileName = fileNameAttribute,
+                            errorNode = errorNode
+                        )
+                    }
                 }
-            }
-            .distinctBy { it.errorID }
-            .groupBy({ it.fileName }, { it.errorNode })
+                .distinctBy { it.errorID }
+                .groupBy({ it.fileName }, { it.errorNode })
 
         private fun errorID(fileNameAttribute: String, errorNode: Node): Any {
             // error nodes are expected to take the form of at least <error line="#" column="#" source="ruleName"/>
@@ -119,30 +120,23 @@ internal object CheckstyleReportMerger {
             }
         }
 
-        private class CheckstyleErrorNodeWithFileData(
-            val errorID: Any,
-            val fileName: String,
-            val errorNode: Node,
-        )
+        private class CheckstyleErrorNodeWithFileData(val errorID: Any, val fileName: String, val errorNode: Node)
 
-        private data class ErrorID(
-            val fileName: String,
-            val line: String,
-            val column: String,
-            val source: String,
-        )
+        private data class ErrorID(val fileName: String, val line: String, val column: String, val source: String)
     }
 
     /**
      * Use code instead of XSLT to exclude whitespaces.
      */
-    private fun Sequence<Node>.filterWhitespace(): Sequence<Node> = filterNot {
-        it.nodeType == Node.TEXT_NODE && it.textContent.isBlank()
-    }
-
-    private fun NodeList.asSequence() = sequence {
-        for (index in 0 until length) {
-            yield(item(index))
+    private fun Sequence<Node>.filterWhitespace(): Sequence<Node> =
+        filterNot {
+            it.nodeType == Node.TEXT_NODE && it.textContent.isBlank()
         }
-    }
+
+    private fun NodeList.asSequence() =
+        sequence {
+            for (index in 0 until length) {
+                yield(item(index))
+            }
+        }
 }

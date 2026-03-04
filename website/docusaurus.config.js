@@ -91,7 +91,7 @@ const config = {
           { to: "/docs/rules/coroutines", from: "/coroutines.html" },
           { to: "/docs/rules/empty-blocks", from: "/empty-blocks.html" },
           { to: "/docs/rules/exceptions", from: "/exceptions.html" },
-          { to: "/docs/rules/formatting", from: "/formatting.html" },
+          { to: "/docs/rules/ktlint", from: "/formatting.html" },
           { to: "/docs/rules/naming", from: "/naming.html" },
           { to: "/docs/rules/performance", from: "/performance.html" },
           { to: "/docs/rules/potential-bugs", from: "/potential-bugs.html" },

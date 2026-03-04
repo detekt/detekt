@@ -772,6 +772,51 @@ class RuleCollectorSpec {
     }
 
     @Test
+    fun `preserves indentation in code examples`() {
+        val code = """
+            /**
+             * description
+             *
+             * <noncompliant>
+             * fun foo() {
+             *     if (true) {
+             *         bar()
+             *     }
+             * }
+             * </noncompliant>
+             *
+             * <compliant>
+             * fun foo() {
+             *     if (true) {
+             *         return
+             *     }
+             * }
+             * </compliant>
+             */
+            class RandomClass : Rule
+        """.trimIndent()
+        val items = subject.run(code)
+        assertThat(items[0].nonCompliantCodeExample).isEqualTo(
+            """
+            fun foo() {
+                if (true) {
+                    bar()
+                }
+            }
+            """.trimIndent()
+        )
+        assertThat(items[0].compliantCodeExample).isEqualTo(
+            """
+            fun foo() {
+                if (true) {
+                    return
+                }
+            }
+            """.trimIndent()
+        )
+    }
+
+    @Test
     fun `has wrong noncompliant code example declaration`() {
         val code = """
             /**

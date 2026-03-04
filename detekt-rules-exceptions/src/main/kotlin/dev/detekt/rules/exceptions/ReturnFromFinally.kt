@@ -39,22 +39,22 @@ import org.jetbrains.kotlin.psi.psiUtil.isInsideOf
  * }
  *
  * val a: String = try {
- *   "s"
+ *     "s"
  * } catch (e: Exception) {
- *   "e"
+ *     "e"
  * } finally {
- *   // Implies assigning "f" to variable a, but the exception gets propagated first.
- *   // Misleading and not immediately obvious, this gets flagged!
- *   "f"
+ *     // Implies assigning "f" to variable a, but the exception gets propagated first.
+ *     // Misleading and not immediately obvious, this gets flagged!
+ *     "f"
  * }
  * </noncompliant>
  *
  * <compliant>
  * fun bar(thing: Thing): Unit = try {
- *   thing.doSomethingReturningUnit()
+ *     thing.doSomethingReturningUnit()
  * } finally {
- *   // Any exceptions will still be propagated, but the Unit-returning cleanup function will be called first
- *   thing.cleanUp()
+ *     // Any exceptions will still be propagated, but the Unit-returning cleanup function will be called first
+ *     thing.cleanUp()
  * }
  * </compliant>
  */
@@ -110,9 +110,8 @@ class ReturnFromFinally(config: Config) :
         return blockExpression.isInsideOf(targetFunctionBodyExpressionStatements)
     }
 
-    private fun canFilterLabeledExpression(
-        returnStmt: KtReturnExpression,
-    ): Boolean = !ignoreLabeled || returnStmt.labeledExpression == null
+    private fun canFilterLabeledExpression(returnStmt: KtReturnExpression): Boolean =
+        !ignoreLabeled || returnStmt.labeledExpression == null
 
     private fun KtFinallySection.typeEqualsTo(type: KaType?): Boolean {
         val finallyExpression = finalExpression
@@ -123,7 +122,8 @@ class ReturnFromFinally(config: Config) :
         }
     }
 
-    private fun KtFinallySection.returnsNonUnitType(): Boolean = analyze(finalExpression) {
-        finalExpression.expressionType?.isUnitType == false
-    }
+    private fun KtFinallySection.returnsNonUnitType(): Boolean =
+        analyze(finalExpression) {
+            finalExpression.expressionType?.isUnitType == false
+        }
 }

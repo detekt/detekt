@@ -14,27 +14,22 @@ import dev.detekt.tooling.api.spec.ProcessingSpec
 import dev.detekt.tooling.internal.DefaultAnalysisResult
 import org.jetbrains.kotlin.psi.KtFile
 
-class AnalysisFacade(
-    private val spec: ProcessingSpec,
-) : Detekt {
+class AnalysisFacade(private val spec: ProcessingSpec) : Detekt {
 
-    override fun run(): AnalysisResult = runAnalysis {
-        DefaultLifecycle(spec.getDefaultConfiguration(), it)
-    }
+    override fun run(): AnalysisResult = runAnalysis { Lifecycle(spec.getDefaultConfiguration(), it) }
 
     override fun run(files: Collection<KtFile>): AnalysisResult =
-        runAnalysis {
-            DefaultLifecycle(spec.getDefaultConfiguration(), it)
-        }
+        runAnalysis { Lifecycle(spec.getDefaultConfiguration(), it) }
 
-    internal fun runAnalysis(createLifecycle: (ProcessingSettings) -> Lifecycle): AnalysisResult = spec.withSettings {
-        runCatching { createLifecycle(this).analyze() }.fold(
-            onSuccess = { detektion -> DefaultAnalysisResult(detektion, checkFailurePolicy(detektion)) },
-            onFailure = { error ->
-                DefaultAnalysisResult(null, if (error is InvalidConfig) error else UnexpectedError(error))
-            },
-        )
-    }
+    internal fun runAnalysis(createLifecycle: (ProcessingSettings) -> Lifecycle): AnalysisResult =
+        spec.withSettings {
+            runCatching { createLifecycle(this).analyze() }.fold(
+                onSuccess = { detektion -> DefaultAnalysisResult(detektion, checkFailurePolicy(detektion)) },
+                onFailure = { error ->
+                    DefaultAnalysisResult(null, if (error is InvalidConfig) error else UnexpectedError(error))
+                },
+            )
+        }
 
     private fun checkFailurePolicy(detektion: Detektion): DetektError? {
         if (spec.baselineSpec.shouldCreateDuringAnalysis) {

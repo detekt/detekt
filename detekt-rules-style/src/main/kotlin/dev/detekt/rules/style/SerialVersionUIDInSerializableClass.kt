@@ -41,11 +41,12 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * </compliant>
  */
 @ActiveByDefault(since = "1.16.0")
-class SerialVersionUIDInSerializableClass(config: Config) : Rule(
-    config,
-    "A class which implements the Serializable interface does not define a correct serialVersionUID field. " +
-        "The serialVersionUID field should be a private constant long value inside a companion object."
-) {
+class SerialVersionUIDInSerializableClass(config: Config) :
+    Rule(
+        config,
+        "A class which implements the Serializable interface does not define a correct serialVersionUID field. " +
+            "The serialVersionUID field should be a private constant long value inside a companion object."
+    ) {
 
     override fun visitClass(klass: KtClass) {
         super.visitClass(klass)
@@ -125,8 +126,5 @@ class SerialVersionUIDInSerializableClass(config: Config) : Rule(
             assignmentText.substring(0, assignmentText.length - 1).toLongOrNull() != null
     }
 
-    private data class SerialVersionUIDFindings(
-        val violatingElement: KtNamedDeclaration,
-        val issueMsg: String,
-    )
+    private data class SerialVersionUIDFindings(val violatingElement: KtNamedDeclaration, val issueMsg: String)
 }

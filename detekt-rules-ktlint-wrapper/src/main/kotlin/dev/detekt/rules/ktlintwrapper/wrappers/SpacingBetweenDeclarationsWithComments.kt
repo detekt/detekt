@@ -12,10 +12,8 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  */
 @AutoCorrectable(since = "1.10.0")
 @ActiveByDefault(since = "1.22.0")
-class SpacingBetweenDeclarationsWithComments(config: Config) : KtlintRule(
-    config,
-    "Declarations and declarations with comments should have an empty space between."
-) {
+class SpacingBetweenDeclarationsWithComments(config: Config) :
+    KtlintRule(config, "Declarations and declarations with comments should have an empty space between.") {
 
     override val wrapping = SpacingBetweenDeclarationsWithCommentsRule()
 }

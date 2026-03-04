@@ -12,10 +12,8 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  */
 @ActiveByDefault(since = "1.22.0")
 @AutoCorrectable(since = "1.22.0")
-class NoBlankLinesInChainedMethodCalls(config: Config) : KtlintRule(
-    config,
-    "Detects blank lines in chained method rules."
-) {
+class NoBlankLinesInChainedMethodCalls(config: Config) :
+    KtlintRule(config, "Detects blank lines in chained method rules.") {
 
     override val wrapping = NoBlankLinesInChainedMethodCallsRule()
 }

@@ -17,11 +17,7 @@ import java.net.URI
  *
  * @property url An url pointing to the documentation of this rule
  */
-open class Rule(
-    val config: Config,
-    val description: String,
-    val url: URI? = null,
-) : DetektVisitor() {
+open class Rule(val config: Config, val description: String, val url: URI? = null) : DetektVisitor() {
 
     /**
      * An id this rule is identified with.
@@ -42,10 +38,7 @@ open class Rule(
      * Before starting visiting kotlin elements, a check is performed if this rule should be triggered.
      * Pre- and post-visit-hooks are executed before/after the visiting process.
      */
-    fun visitFile(
-        root: KtFile,
-        languageVersionSettings: LanguageVersionSettings,
-    ): List<Finding> {
+    fun visitFile(root: KtFile, languageVersionSettings: LanguageVersionSettings): List<Finding> {
         findings.clear()
         this.languageVersionSettings = languageVersionSettings
         preVisit(root)

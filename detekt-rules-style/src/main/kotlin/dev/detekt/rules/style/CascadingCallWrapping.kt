@@ -22,21 +22,19 @@ import org.jetbrains.kotlin.psi.psiUtil.startOffset
  *
  * <noncompliant>
  * foo()
- *   .bar().baz()
+ *     .bar().baz()
  * </noncompliant>
  *
  * <compliant>
  * foo().bar().baz()
  *
  * foo()
- *   .bar()
- *   .baz()
+ *     .bar()
+ *     .baz()
  * </compliant>
  */
-class CascadingCallWrapping(config: Config) : Rule(
-    config,
-    "If a chained call is wrapped to a new line, subsequent chained calls should be as well."
-) {
+class CascadingCallWrapping(config: Config) :
+    Rule(config, "If a chained call is wrapped to a new line, subsequent chained calls should be as well.") {
 
     @Configuration("require trailing elvis expressions to be wrapped on a new line")
     private val includeElvis: Boolean by config(true)
@@ -77,11 +75,13 @@ class CascadingCallWrapping(config: Config) : Rule(
                 lhs = receiverExpression
                 rhs = selectorExpression ?: return false
             }
+
             is KtBinaryExpression -> {
                 if (operationToken != KtTokens.ELVIS) return false
                 lhs = left ?: return false
                 rhs = right ?: return false
             }
+
             else -> return false
         }
 
@@ -108,6 +108,7 @@ class CascadingCallWrapping(config: Config) : Rule(
     private fun KtExpression.toErrorReportEntity(): Entity {
         return when (this) {
             is KtQualifiedExpression -> Entity.from(this.selectorExpression ?: this)
+
             is KtBinaryExpression -> {
                 val rhs = this.right ?: return Entity.from(this)
                 val operationSourceLocation = Location.from(operationReference).source
@@ -118,6 +119,7 @@ class CascadingCallWrapping(config: Config) : Rule(
                     Location(operationSourceLocation, rhsSourceLocation, textLocation, containingFile.absolutePath())
                 )
             }
+
             else -> Entity.from(this)
         }
     }

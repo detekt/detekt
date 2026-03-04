@@ -97,21 +97,33 @@ class DetektCommandLineProcessor : CommandLineProcessor {
     override fun processOption(option: AbstractCliOption, value: String, configuration: CompilerConfiguration) {
         when (option.optionName) {
             Options.BASELINE -> configuration.put(Keys.BASELINE, Path(value))
+
             Options.CONFIG -> configuration.appendList(Keys.CONFIG, Path(value))
+
             Options.CONFIG_DIGEST -> configuration.put(Keys.CONFIG_DIGEST, value)
+
             Options.DEBUG -> configuration.put(Keys.DEBUG, value.toBoolean())
+
             Options.IS_ENABLED -> configuration.put(Keys.IS_ENABLED, value.toBoolean())
+
             Options.USE_DEFAULT_CONFIG -> configuration.put(Keys.USE_DEFAULT_CONFIG, value.toBoolean())
+
             Options.ALL_RULES -> configuration.put(Keys.ALL_RULES, value.toBoolean())
+
             Options.DISABLE_DEFAULT_RULE_SETS -> configuration.put(Keys.DISABLE_DEFAULT_RULE_SETS, value.toBoolean())
+
             Options.PARALLEL -> configuration.put(Keys.PARALLEL, value.toBoolean())
+
             Options.ROOT_PATH -> configuration.put(Keys.ROOT_PATH, Path(value))
+
             Options.EXCLUDES -> configuration.put(Keys.EXCLUDES, value.decodeToGlobSet())
+
             Options.REPORT -> configuration.put(
                 Keys.REPORTS,
                 value.substringBefore(':'),
                 Path(value.substringAfter(':')),
             )
+
             else -> throw CliOptionProcessingException("Unknown option: ${option.optionName}")
         }
     }

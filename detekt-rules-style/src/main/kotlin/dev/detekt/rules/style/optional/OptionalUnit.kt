@@ -75,8 +75,11 @@ class OptionalUnit(config: Config) :
                 .filter {
                     when {
                         it !is KtNameReferenceExpression || it.text != UNIT -> false
+
                         it != lastStatement -> true
+
                         !it.isUsedAsExpression -> true
+
                         else -> {
                             val prev =
                                 it.siblings(forward = false, withItself = false).firstIsInstanceOrNull<KtExpression>()
@@ -136,8 +139,8 @@ class OptionalUnit(config: Config) :
         }
     }
 
-    private fun createMessage(function: KtNamedFunction) = "The function ${function.name} " +
-        "defines a return type of Unit. This is unnecessary and can safely be removed."
+    private fun createMessage(function: KtNamedFunction) =
+        "The function ${function.name} defines a return type of Unit. This is unnecessary and can safely be removed."
 
     private fun KtExpression.isGenericOrNothingType(): Boolean {
         analyze(this) {

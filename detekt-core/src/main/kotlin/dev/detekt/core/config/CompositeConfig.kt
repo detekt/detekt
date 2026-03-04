@@ -13,7 +13,8 @@ class CompositeConfig(
     private val lookFirst: Config,
     private val lookSecond: Config,
     override val parent: Config? = null,
-) : Config, ValidatableConfiguration {
+) : Config,
+    ValidatableConfiguration {
 
     override val parentPath: String?
         get() = lookFirst.parentPath ?: lookSecond.parentPath
@@ -30,16 +31,16 @@ class CompositeConfig(
         return lookSecond.valueOrDefault(key, default)
     }
 
-    override fun <T : Any> valueOrNull(key: String): T? =
-        lookFirst.valueOrNull(key) ?: lookSecond.valueOrNull(key)
+    override fun <T : Any> valueOrNull(key: String): T? = lookFirst.valueOrNull(key) ?: lookSecond.valueOrNull(key)
 
     @Suppress("MagicNumber")
-    override fun toString() = """
-        CompositeConfig(
-            lookFirst=${lookFirst.toString().indentCompat(12).trim()},
-            lookSecond=${lookSecond.toString().indentCompat(12).trim()},
-        )
-    """.trimIndent()
+    override fun toString() =
+        """
+            CompositeConfig(
+                lookFirst=${lookFirst.toString().indentCompat(12).trim()},
+                lookSecond=${lookSecond.toString().indentCompat(12).trim()},
+            )
+        """.trimIndent()
 
     /**
      * Validates both sides of the composite config according to defined properties of the baseline config.

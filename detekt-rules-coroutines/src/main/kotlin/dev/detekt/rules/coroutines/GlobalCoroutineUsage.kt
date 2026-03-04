@@ -32,14 +32,12 @@ import org.jetbrains.kotlin.resolve.calls.util.getCalleeExpressionIfAny
  * }
  *
  * fun onDestroy() {
- *    scope.cancel()
+ *     scope.cancel()
  * }
  * </compliant>
  */
-class GlobalCoroutineUsage(config: Config) : Rule(
-    config,
-    "The usage of the `GlobalScope` instance is highly discouraged."
-) {
+class GlobalCoroutineUsage(config: Config) :
+    Rule(config, "The usage of the `GlobalScope` instance is highly discouraged.") {
 
     override fun visitDotQualifiedExpression(expression: KtDotQualifiedExpression) {
         if (expression.receiverExpression.text == "GlobalScope" &&

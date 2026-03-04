@@ -10,11 +10,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.fail
 import java.lang.reflect.Modifier
 
-class ConfigAssert(
-    private val config: Config,
-    private val name: String,
-    private val packageName: String,
-) {
+class ConfigAssert(private val config: Config, private val name: String, private val packageName: String) {
     private val allowedOptions = setOf(
         Config.ACTIVE_KEY,
         Config.EXCLUDES_KEY,
@@ -57,8 +53,8 @@ class ConfigAssert(
             .isEqualTo(RuleName(clazz.simpleName))
     }
 
-    private fun getYmlRuleConfig() = config.subConfig(name) as? YamlConfig
-        ?: error("yaml config expected but got ${config.javaClass}")
+    private fun getYmlRuleConfig() =
+        config.subConfig(name) as? YamlConfig ?: error("yaml config expected but got ${config.javaClass}")
 
     private fun getRulesDefinedByRuleSet(): List<Rule> =
         getRuleSetProviderInPackageOrNull()

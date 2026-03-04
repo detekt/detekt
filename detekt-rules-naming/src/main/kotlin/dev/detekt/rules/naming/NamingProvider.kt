@@ -13,30 +13,31 @@ class NamingProvider : DefaultRuleSetProvider {
 
     override val ruleSetId = RuleSetId("naming")
 
-    override fun instance(): RuleSet = RuleSet(
-        ruleSetId,
-        listOf(
-            ::MatchingDeclarationName,
-            ::MemberNameEqualsClassName,
-            ::InvalidPackageDeclaration,
-            ::NoNameShadowing,
-            ::TopLevelPropertyNaming,
-            ::BooleanPropertyNaming,
-            ::LambdaParameterNaming,
-            ::ConstructorParameterNaming,
-            ::ForbiddenClassName,
-            ::ClassNaming,
-            ::PackageNaming,
-            ::EnumNaming,
-            ::ObjectPropertyNaming,
-            ::FunctionParameterNaming,
-            ::FunctionNaming,
-            ::FunctionNameMinLength,
-            ::FunctionNameMaxLength,
-            ::VariableMaxLength,
-            ::VariableMinLength,
-            ::VariableNaming,
-            ::NonBooleanPropertyPrefixedWithIs
+    override fun instance(): RuleSet =
+        RuleSet(
+            ruleSetId,
+            listOf(
+                ::MatchingDeclarationName,
+                ::MemberNameEqualsClassName,
+                ::InvalidPackageDeclaration,
+                ::NoNameShadowing,
+                ::TopLevelPropertyNaming,
+                ::BooleanPropertyNaming,
+                ::LambdaParameterNaming,
+                ::ConstructorParameterNaming,
+                ::ForbiddenClassName,
+                ::ClassNaming,
+                ::PackageNaming,
+                ::EnumNaming,
+                ::ObjectPropertyNaming,
+                ::FunctionParameterNaming,
+                ::FunctionNaming,
+                ::FunctionNameMinLength,
+                ::FunctionNameMaxLength,
+                ::VariableMaxLength,
+                ::VariableMinLength,
+                ::VariableNaming,
+                ::NonBooleanPropertyPrefixedWithIs
+            )
         )
-    )
 }

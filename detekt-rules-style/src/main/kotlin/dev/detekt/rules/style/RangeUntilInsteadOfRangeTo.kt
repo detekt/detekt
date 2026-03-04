@@ -26,10 +26,7 @@ import org.jetbrains.kotlin.psi.KtExpression
  * val range = 0..<10
  * </compliant>
  */
-class RangeUntilInsteadOfRangeTo(config: Config) : Rule(
-    config,
-    "A `..` call can be replaced with `..<`."
-) {
+class RangeUntilInsteadOfRangeTo(config: Config) : Rule(config, "A `..` call can be replaced with `..<`.") {
 
     override fun visitBinaryExpression(expression: KtBinaryExpression) {
         if (expression.operationReference.text == RANGE_TO_OPERATOR &&
@@ -49,10 +46,11 @@ class RangeUntilInsteadOfRangeTo(config: Config) : Rule(
         super.visitCallExpression(expression)
     }
 
-    private fun KtExpression?.isMinusOneExpression() = this is KtBinaryExpression &&
-        left != null &&
-        operationToken == KtTokens.MINUS &&
-        (right as? KtConstantExpression)?.text == "1"
+    private fun KtExpression?.isMinusOneExpression() =
+        this is KtBinaryExpression &&
+            left != null &&
+            operationToken == KtTokens.MINUS &&
+            (right as? KtConstantExpression)?.text == "1"
 
     private fun report(expression: KtExpression, rangeTo: String) {
         report(

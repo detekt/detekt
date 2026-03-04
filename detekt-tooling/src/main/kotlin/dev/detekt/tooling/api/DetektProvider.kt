@@ -25,9 +25,7 @@ interface DetektProvider {
         /**
          * Looks for a provider on the classpath which is able to load [Detekt] instances.
          */
-        fun load(
-            classLoader: ClassLoader = DetektProvider::class.java.classLoader,
-        ): DetektProvider =
+        fun load(classLoader: ClassLoader = DetektProvider::class.java.classLoader): DetektProvider =
             ServiceLoader.load(DetektProvider::class.java, classLoader)
                 .maxByOrNull { it.priority }
                 ?: error("No implementation of DetektProvider found.")

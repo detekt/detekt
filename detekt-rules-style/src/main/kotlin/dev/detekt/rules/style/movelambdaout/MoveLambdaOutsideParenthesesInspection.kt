@@ -81,6 +81,7 @@ private val KaType.isFunctionOrSuspendingFunctionOrGenericType: Boolean
 private fun KtCallExpression.isEligible(): Boolean =
     when {
         valueArguments.lastOrNull()?.isNamed() == true -> false
+
         valueArguments.count {
             it.getArgumentExpression()?.unpackFunctionLiteral() != null
         } > 1 -> false
@@ -88,9 +89,8 @@ private fun KtCallExpression.isEligible(): Boolean =
         else -> true
     }
 
-internal fun shouldReportUnnecessaryBracesAroundTrailingLambda(
-    element: KtCallExpression,
-) = element.canMoveLambdaOutsideParentheses()
+internal fun shouldReportUnnecessaryBracesAroundTrailingLambda(element: KtCallExpression) =
+    element.canMoveLambdaOutsideParentheses()
 
 private fun KtCallExpression.getLastLambdaExpression(): KtLambdaExpression? {
     if (lambdaArguments.isNotEmpty()) return null

@@ -9,9 +9,8 @@ fun KtValueArgument.isString(): Boolean {
 
     analyze(argumentExpression) {
         val type = argumentExpression.expressionType
-        return argumentExpression is KtStringTemplateExpression || type != null && type.isStringType
+        return argumentExpression is KtStringTemplateExpression || (type != null && type.isStringType)
     }
 }
 
-fun List<KtValueArgument>.isEmptyOrSingleStringArgument(): Boolean =
-    isEmpty() || singleOrNull()?.isString() == true
+fun List<KtValueArgument>.isEmptyOrSingleStringArgument(): Boolean = isEmpty() || singleOrNull()?.isString() == true

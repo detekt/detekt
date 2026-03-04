@@ -11,10 +11,7 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  */
 @ActiveByDefault(since = "1.0.0")
 @AutoCorrectable(since = "1.0.0")
-class NoBlankLineBeforeRbrace(config: Config) : KtlintRule(
-    config,
-    "Detects blank lines before rbraces"
-) {
+class NoBlankLineBeforeRbrace(config: Config) : KtlintRule(config, "Detects blank lines before rbraces") {
 
     override val wrapping = NoBlankLineBeforeRbraceRule()
 }

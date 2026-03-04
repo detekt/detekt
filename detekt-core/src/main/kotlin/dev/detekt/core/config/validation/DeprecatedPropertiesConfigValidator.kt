@@ -3,16 +3,12 @@ package dev.detekt.core.config.validation
 import dev.detekt.api.Notification
 import dev.detekt.core.config.YamlConfig
 
-internal class DeprecatedPropertiesConfigValidator(
-    private val deprecatedProperties: Set<DeprecatedProperty>,
-) : AbstractYamlConfigValidator() {
+internal class DeprecatedPropertiesConfigValidator(private val deprecatedProperties: Set<DeprecatedProperty>) :
+    AbstractYamlConfigValidator() {
 
     override val id: String = "DeprecatedPropertiesConfigValidator"
 
-    override fun validate(
-        configToValidate: YamlConfig,
-        settings: ValidationSettings,
-    ): Collection<Notification> {
+    override fun validate(configToValidate: YamlConfig, settings: ValidationSettings): Collection<Notification> {
         val configAsMap = configToValidate.properties
         return deprecatedProperties
             .filter { hasValue(configAsMap, it) }
@@ -26,9 +22,7 @@ internal class DeprecatedPropertiesConfigValidator(
         return ruleSubMap.containsKey(deprecatedProperty.propertyName)
     }
 
-    private fun createNotification(
-        foundProperty: DeprecatedProperty,
-    ): Notification {
+    private fun createNotification(foundProperty: DeprecatedProperty): Notification {
         val propertyPath = foundProperty.asPath()
         return Notification(
             "Property '$propertyPath' is deprecated. ${foundProperty.description}.",

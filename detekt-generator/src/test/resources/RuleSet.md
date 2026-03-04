@@ -1,3 +1,5 @@
+Rule Set ID: `style`
+
 style rule set
 
 #### Configuration options:

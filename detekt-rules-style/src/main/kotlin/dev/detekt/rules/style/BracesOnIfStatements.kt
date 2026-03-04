@@ -18,12 +18,12 @@ import org.jetbrains.kotlin.psi.KtQualifiedExpression
  * Keeping braces consistent will improve readability and avoid possible errors.
  *
  * The available options are:
- *  * `always`: forces braces on all `if` and `else` branches in the whole codebase.
- *  * `consistent`: ensures that braces are consistent within each `if`-`else if`-`else` chain.
- *    If there's a brace on one of the branches, all branches should have it.
- *  * `necessary`: forces no braces on any `if` and `else` branches in the whole codebase
- *    except where necessary for multi-statement branches.
- *  * `never`: forces no braces on any `if` and `else` branches in the whole codebase.
+ * - `always`: forces braces on all `if` and `else` branches in the whole codebase.
+ * - `consistent`: ensures that braces are consistent within each `if`-`else if`-`else` chain.
+ * If there's a brace on one of the branches, all branches should have it.
+ * - `necessary`: forces no braces on any `if` and `else` branches in the whole codebase
+ * except where necessary for multi-statement branches.
+ * - `never`: forces no braces on any `if` and `else` branches in the whole codebase.
  *
  * Single-line if-statement has no line break (\n):
  * ```kotlin
@@ -45,9 +45,9 @@ import org.jetbrains.kotlin.psi.KtQualifiedExpression
  *
  * // multiLine = 'never'
  * if (a) {
- *    b
+ *     b
  * } else {
- *    c
+ *     c
  * }
  *
  * // singleLine = 'always'
@@ -57,9 +57,9 @@ import org.jetbrains.kotlin.psi.KtQualifiedExpression
  *
  * // multiLine = 'always'
  * if (a) {
- *    b
+ *     b
  * } else
- *    c
+ *     c
  *
  * // singleLine = 'consistent'
  * if (a) b else { c }
@@ -67,9 +67,9 @@ import org.jetbrains.kotlin.psi.KtQualifiedExpression
  *
  * // multiLine = 'consistent'
  * if (a)
- *    b
+ *     b
  * else {
- *    c
+ *     c
  * }
  *
  * // singleLine = 'necessary'
@@ -77,12 +77,12 @@ import org.jetbrains.kotlin.psi.KtQualifiedExpression
  *
  * // multiLine = 'necessary'
  * if (a) {
- *    b
- *    c
+ *     b
+ *     c
  * } else if (d) {
- *    e
+ *     e
  * } else {
- *    f
+ *     f
  * }
  * </noncompliant>
  *
@@ -92,9 +92,9 @@ import org.jetbrains.kotlin.psi.KtQualifiedExpression
  *
  * // multiLine = 'never'
  * if (a)
- *    b
+ *     b
  * else
- *    c
+ *     c
  *
  * // singleLine = 'always'
  * if (a) { b } else { c }
@@ -103,15 +103,15 @@ import org.jetbrains.kotlin.psi.KtQualifiedExpression
  *
  * // multiLine = 'always'
  * if (a) {
- *    b
+ *     b
  * } else {
- *    c
+ *     c
  * }
  *
  * if (a) {
- *    b
+ *     b
  * } else if (c) {
- *    d
+ *     d
  * }
  *
  * // singleLine = 'consistent'
@@ -123,9 +123,9 @@ import org.jetbrains.kotlin.psi.KtQualifiedExpression
  *
  * // multiLine = 'consistent'
  * if (a) {
- *    b
+ *     b
  * } else {
- *    c
+ *     c
  * }
  *
  * if (a) b
@@ -136,18 +136,15 @@ import org.jetbrains.kotlin.psi.KtQualifiedExpression
  *
  * // multiLine = 'necessary'
  * if (a) {
- *    b
- *    c
+ *     b
+ *     c
  * } else if (d)
- *    e
+ *     e
  * else
- *    f
+ *     f
  * </compliant>
  */
-class BracesOnIfStatements(config: Config) : Rule(
-    config,
-    "Braces do not comply with the specified policy"
-) {
+class BracesOnIfStatements(config: Config) : Rule(config, "Braces do not comply with the specified policy") {
 
     @Configuration("single-line braces policy")
     private val singleLine: BracePolicy by config("never") { BracePolicy.getValue(it) }
@@ -244,8 +241,7 @@ class BracesOnIfStatements(config: Config) : Rule(
      * @see org.jetbrains.kotlin.KtNodeTypes.THEN
      * @see org.jetbrains.kotlin.KtNodeTypes.ELSE
      */
-    private fun KtExpression.parentIfCandidate(): PsiElement? =
-        this.parent.parent
+    private fun KtExpression.parentIfCandidate(): PsiElement? = this.parent.parent
 
     private fun isMultiStatement(expression: KtExpression): Boolean =
         expression is KtBlockExpression && expression.statements.size > 1
@@ -253,8 +249,7 @@ class BracesOnIfStatements(config: Config) : Rule(
     private fun policy(expression: KtExpression): BracePolicy =
         if (expression.textContains('\n')) multiLine else singleLine
 
-    private fun hasBraces(expression: KtExpression): Boolean =
-        expression is KtBlockExpression
+    private fun hasBraces(expression: KtExpression): Boolean = expression is KtBlockExpression
 
     enum class BracePolicy(val config: String) {
         Always("always"),

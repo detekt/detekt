@@ -31,13 +31,11 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  * - __Operators__ `&&`, `||`, `?:`
  * - __Exceptions__ - `catch`, `use`
  * - __Scope Functions__ - `let`, `run`, `with`, `apply`, and `also` ->
- *  [Reference](https://kotlinlang.org/docs/scope-functions.html)
+ * [Reference](https://kotlinlang.org/docs/scope-functions.html)
  */
 @ActiveByDefault(since = "1.0.0")
-class CyclomaticComplexMethod(config: Config) : Rule(
-    config,
-    "Prefer splitting up complex methods into smaller, easier to test methods."
-) {
+class CyclomaticComplexMethod(config: Config) :
+    Rule(config, "Prefer splitting up complex methods into smaller, easier to test methods.") {
 
     @Configuration("The maximum allowed McCabe's Cyclomatic Complexity (MCC) for a method.")
     private val allowedComplexity: Int by config(defaultValue = 14)
@@ -81,15 +79,18 @@ class CyclomaticComplexMethod(config: Config) : Rule(
         }
     }
 
-    private fun hasSingleWhenExpression(bodyExpression: KtExpression?): Boolean = when {
-        bodyExpression is KtBlockExpression && bodyExpression.statements.size == 1 -> {
-            val statement = bodyExpression.statements.single()
-            statement is KtWhenExpression || statement.returnsWhenExpression()
+    private fun hasSingleWhenExpression(bodyExpression: KtExpression?): Boolean =
+        when {
+            bodyExpression is KtBlockExpression && bodyExpression.statements.size == 1 -> {
+                val statement = bodyExpression.statements.single()
+                statement is KtWhenExpression || statement.returnsWhenExpression()
+            }
+
+            // the case where function-expression syntax is used: `fun test() = when { ... }`
+            bodyExpression is KtWhenExpression -> true
+
+            else -> false
         }
-        // the case where function-expression syntax is used: `fun test() = when { ... }`
-        bodyExpression is KtWhenExpression -> true
-        else -> false
-    }
 
     private fun KtExpression.returnsWhenExpression() =
         this is KtReturnExpression && this.returnedExpression is KtWhenExpression

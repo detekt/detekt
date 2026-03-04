@@ -19,6 +19,7 @@ import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCatchClause
 import org.jetbrains.kotlin.psi.KtElement
@@ -177,8 +178,7 @@ class SuspendFunSwallowedCancellation(config: Config) :
 
         val function = expression.getParentOfType<KtFunction>(strict = true)
 
-        if (function?.isSuspend != true) {
-            // Don't care about the try-catch block unless it's in a suspending context
+        if (function?.isSuspend != true || !expression.tryBlock.hasSuspendCalls()) {
             return
         }
 
@@ -200,92 +200,103 @@ class SuspendFunSwallowedCancellation(config: Config) :
         }
     }
 
-    private fun shouldTraverseInsideImpl(element: PsiElement): Boolean = when (element) {
-        is KtCallExpression -> {
-            val functionSymbol = analyze(element) {
-                element.resolveToCall()
-                    ?.successfulFunctionCallOrNull()
-                    ?.symbol
-                    as? KaNamedFunctionSymbol
-            }
-
-            functionSymbol?.callableId != RUN_CATCHING_CALLABLE_ID && functionSymbol?.isInline == true
-        }
-
-        is KtValueArgument -> {
-            val parentCallExpression = element.getParentOfType<KtCallExpression>(true) ?: return false
-            val valueSymbol = analyze(parentCallExpression) {
-                val elementArgument = element.getArgumentExpression()
-
-                parentCallExpression.resolveToCall()
-                    ?.successfulFunctionCallOrNull()
-                    ?.argumentMapping
-                    ?.get(elementArgument)
-                    ?.symbol
-            }
-
-            valueSymbol
-                ?.let {
-                    it.isCrossinline.not() && it.isNoinline.not()
+    private fun shouldTraverseInsideImpl(element: PsiElement): Boolean =
+        when (element) {
+            is KtCallExpression -> {
+                val functionSymbol = analyze(element) {
+                    element.resolveToCall()
+                        ?.successfulFunctionCallOrNull()
+                        ?.symbol
+                        as? KaNamedFunctionSymbol
                 }
-                ?: false
-        }
 
-        else -> true
-    }
+                functionSymbol?.callableId != RUN_CATCHING_CALLABLE_ID && functionSymbol?.isInline == true
+            }
 
-    private fun KtExpression.hasSuspendCalls(): Boolean = when (this) {
-        is KtForExpression -> {
-            val loopRangeReferences = analyze(this) {
-                mainReference?.resolveToSymbols()
-                    ?.filterIsInstance<KaNamedFunctionSymbol>()
-            }.orEmpty()
-            loopRangeReferences.any { it.isSuspend }
-        }
+            is KtValueArgument -> {
+                val parentCallExpression = element.getParentOfType<KtCallExpression>(true) ?: return false
+                val valueSymbol = analyze(parentCallExpression) {
+                    val elementArgument = element.getArgumentExpression()
 
-        is KtCallExpression, is KtOperationExpression -> {
-            analyze(this) {
-                resolveToCall()
-                    ?.successfulCallOrNull<KaCompoundVariableAccessCall>()
-                    ?.compoundOperation
-                    ?.operationPartiallyAppliedSymbol
-                    ?.signature
-                    ?.symbol
-                    ?.isSuspend
+                    parentCallExpression.resolveToCall()
+                        ?.successfulFunctionCallOrNull()
+                        ?.argumentMapping
+                        ?.get(elementArgument)
+                        ?.symbol
+                }
 
-                    ?: (
-                        resolveToCall()
-                            ?.successfulFunctionCallOrNull()
-                            ?.symbol as? KaNamedFunctionSymbol
-                        )?.isSuspend
-
+                valueSymbol
+                    ?.let {
+                        it.isCrossinline.not() && it.isNoinline.not()
+                    }
                     ?: false
             }
+
+            else -> true
         }
 
-        is KtNameReferenceExpression -> {
-            analyze(this) {
-                resolveToCall()
-                    ?.successfulCallOrNull<KaCallableMemberCall<*, *>>()
-                    ?.symbol
-                    ?.callableId == CoroutineCallableIds.CoroutineContextCallableId
+    private fun KtExpression.hasSuspendCalls(): Boolean =
+        when (this) {
+            is KtForExpression -> {
+                val loopRangeReferences = analyze(this) {
+                    mainReference?.resolveToSymbols()
+                        ?.filterIsInstance<KaNamedFunctionSymbol>()
+                }.orEmpty()
+                loopRangeReferences.any { it.isSuspend }
+            }
+
+            is KtCallExpression, is KtOperationExpression -> {
+                analyze(this) {
+                    resolveToCall()
+                        ?.successfulCallOrNull<KaCompoundVariableAccessCall>()
+                        ?.compoundOperation
+                        ?.operationPartiallyAppliedSymbol
+                        ?.signature
+                        ?.symbol
+                        ?.isSuspend
+
+                        ?: (
+                            resolveToCall()
+                                ?.successfulFunctionCallOrNull()
+                                ?.symbol as? KaNamedFunctionSymbol
+                            )?.isSuspend
+
+                        ?: false
+                }
+            }
+
+            is KtNameReferenceExpression -> {
+                analyze(this) {
+                    resolveToCall()
+                        ?.successfulCallOrNull<KaCallableMemberCall<*, *>>()
+                        ?.symbol
+                        ?.callableId == CoroutineCallableIds.CoroutineContextCallableId
+                }
+            }
+
+            is KtBlockExpression -> {
+                fun shouldTraverseInside(element: PsiElement): Boolean =
+                    this == element || shouldTraverseInsideImpl(element)
+                this.anyDescendantOfType<KtExpression>(::shouldTraverseInside) { descendant ->
+                    if (descendant == this) false else descendant.hasSuspendCalls()
+                }
+            }
+
+            else -> {
+                false
             }
         }
 
-        else -> {
-            false
+    private fun KtParameter.isCancellationExceptionOrSuperClass(): Boolean =
+        analyze(this) {
+            val parameterFqName = typeReference
+                ?.type
+                ?.symbol
+                ?.classId
+                ?.asFqNameString()
+
+            parameterFqName in CANCELLATION_EXCEPTION_FQ_NAMES
         }
-    }
-
-    private fun KtParameter.isCancellationExceptionOrSuperClass(): Boolean = analyze(this) {
-        val parameterFqName = typeReference
-            ?.type
-            ?.symbol
-            ?.classId
-            ?.asFqNameString()
-
-        parameterFqName in CANCELLATION_EXCEPTION_FQ_NAMES
-    }
 
     /**
      * Checking for a [KtThrowExpression] which throws the same element as we received from the [KtCatchClause]. This

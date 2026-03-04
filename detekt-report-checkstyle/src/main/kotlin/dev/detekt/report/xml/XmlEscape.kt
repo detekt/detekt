@@ -298,7 +298,7 @@ private object Xml10EscapeSymbolsInitializer {
      * Create a new XmlEscapeSymbols structure. This will initialize all the structures needed to cover the
      * specified references and escape levels, including sorted arrays, overflow maps, etc.
      */
-    internal constructor(
+    constructor(
         references: References,
         escapeLevels: ByteArray,
         /*
@@ -408,16 +408,16 @@ private object Xml10EscapeSymbolsInitializer {
          */
         class References {
 
-            internal val references = ArrayList<Reference>(200)
+            val references = ArrayList<Reference>(200)
 
             fun addReference(codepoint: Int, cer: String) {
                 this.references.add(Reference(cer, codepoint))
             }
         }
 
-        class Reference internal constructor(cer: String, internal val codepoint: Int) {
+        class Reference(cer: String, val codepoint: Int) {
             // cer CAN be null -> codepoint should be removed from escaped output.
-            internal val cer: CharArray = cer.toCharArray()
+            val cer: CharArray = cer.toCharArray()
         }
 
         companion object {

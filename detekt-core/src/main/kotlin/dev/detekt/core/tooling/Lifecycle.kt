@@ -23,20 +23,21 @@ import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity
 import org.jetbrains.kotlin.diagnostics.DiagnosticUtils.getLineAndColumnRangeInPsiFile
 import org.jetbrains.kotlin.psi.KtFile
 
-internal interface Lifecycle {
-
-    val baselineConfig: Config
-    val settings: ProcessingSettings
-    val bindingProvider: (files: List<KtFile>) -> Unit
-    val processorsProvider: () -> List<FileProcessListener>
-    val ruleSetsProvider: () -> List<RuleSetProvider>
+internal class Lifecycle(
+    val baselineConfig: Config,
+    val settings: ProcessingSettings,
+    val processorsProvider: () -> List<FileProcessListener> = { FileProcessorLocator(settings).load() },
+    val ruleSetsProvider: () -> List<RuleSetProvider> = { settings.createRuleProviders() },
+) {
 
     private fun <R> measure(phase: Phase, block: () -> R): R = settings.monitor.measure(phase, block)
 
     fun analyze(): Detektion {
         measure(Phase.ValidateConfig) { checkConfiguration(settings, baselineConfig) }
         val filesToAnalyze = measure(Phase.Parsing) { settings.ktFiles }
-        measure(Phase.Binding) { bindingProvider.invoke(filesToAnalyze) }
+        if (settings.spec.projectSpec.analysisMode == AnalysisMode.full) {
+            measure(Phase.ValidateClasspath) { validateClasspath(filesToAnalyze) }
+        }
         val analysisMode = settings.spec.projectSpec.analysisMode
         val (processors, rules) = measure(Phase.LoadingExtensions) {
             val rules = getRules(
@@ -62,52 +63,41 @@ internal interface Lifecycle {
             finalResult
         }
     }
-}
 
-internal class DefaultLifecycle(
-    override val baselineConfig: Config,
-    override val settings: ProcessingSettings,
-    override val bindingProvider: (files: List<KtFile>) -> Unit =
-        {
-            if (settings.spec.projectSpec.analysisMode == AnalysisMode.full) {
-                val collector = DetektMessageCollector(
-                    minSeverity = CompilerMessageSeverity.ERROR,
-                    debugPrinter = settings::debug,
-                    warningPrinter = settings::info,
-                    isDebugEnabled = settings.spec.loggingSpec.debug
-                )
+    private fun validateClasspath(files: List<KtFile>) {
+        val collector = DetektMessageCollector(
+            minSeverity = CompilerMessageSeverity.ERROR,
+            debugPrinter = settings::debug,
+            warningPrinter = settings::info,
+            isDebugEnabled = settings.spec.loggingSpec.debug
+        )
 
-                it.forEach { file: KtFile ->
-                    analyze(file) {
-                        file.collectDiagnostics(KaDiagnosticCheckerFilter.ONLY_COMMON_CHECKERS).forEach { diagnostic ->
-                            val lineAndColumnRange =
-                                getLineAndColumnRangeInPsiFile(diagnostic.psi.containingFile, diagnostic.psi.textRange)
+        files.forEach { file: KtFile ->
+            analyze(file) {
+                file.collectDiagnostics(KaDiagnosticCheckerFilter.ONLY_COMMON_CHECKERS).forEach { diagnostic ->
+                    val lineAndColumnRange =
+                        getLineAndColumnRangeInPsiFile(diagnostic.psi.containingFile, diagnostic.psi.textRange)
 
-                            val location = CompilerMessageLocationWithRange.create(
-                                diagnostic.psi.containingFile.virtualFile.path,
-                                lineAndColumnRange.start.line,
-                                lineAndColumnRange.start.column,
-                                lineAndColumnRange.end.line,
-                                lineAndColumnRange.end.column,
-                                lineAndColumnRange.start.lineContent
-                            )
-                            collector.report(
-                                diagnostic.severity.toCompilerMessageSeverity(),
-                                diagnostic.defaultMessage,
-                                location,
-                            )
-                        }
-                    }
+                    val location = CompilerMessageLocationWithRange.create(
+                        diagnostic.psi.containingFile.virtualFile.path,
+                        lineAndColumnRange.start.line,
+                        lineAndColumnRange.start.column,
+                        lineAndColumnRange.end.line,
+                        lineAndColumnRange.end.column,
+                        lineAndColumnRange.start.lineContent
+                    )
+                    collector.report(
+                        diagnostic.severity.toCompilerMessageSeverity(),
+                        diagnostic.defaultMessage,
+                        location,
+                    )
                 }
-
-                collector.printIssuesCountIfAny()
             }
-        },
-    override val processorsProvider: () -> List<FileProcessListener> =
-        { FileProcessorLocator(settings).load() },
-    override val ruleSetsProvider: () -> List<RuleSetProvider> =
-        { settings.createRuleProviders() },
-) : Lifecycle
+        }
+
+        collector.printIssuesCountIfAny()
+    }
+}
 
 private fun KaSeverity.toCompilerMessageSeverity(): CompilerMessageSeverity =
     when (this) {

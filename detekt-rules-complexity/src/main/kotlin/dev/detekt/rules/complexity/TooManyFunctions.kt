@@ -25,12 +25,13 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * which clearly belongs together in separate parts of the code.
  */
 @ActiveByDefault(since = "1.0.0")
-class TooManyFunctions(config: Config) : Rule(
-    config,
-    "Too many functions inside a/an file/class/object/interface always indicate a violation of " +
-        "the single responsibility principle. Maybe the file/class/object/interface wants to manage too " +
-        "many things at once. Extract functionality which clearly belongs together."
-) {
+class TooManyFunctions(config: Config) :
+    Rule(
+        config,
+        "Too many functions inside a/an file/class/object/interface always indicate a violation of " +
+            "the single responsibility principle. Maybe the file/class/object/interface wants to manage too " +
+            "many things at once. Extract functionality which clearly belongs together."
+    ) {
 
     @Configuration("The maximum allowed functions per file")
     private val allowedFunctionsPerFile: Int by config(DEFAULT_THRESHOLD)
@@ -142,22 +143,24 @@ class TooManyFunctions(config: Config) : Rule(
         super.visitObjectDeclaration(declaration)
     }
 
-    private fun calcFunctions(classOrObject: KtClassOrObject): Int = classOrObject.body
-        ?.run {
-            declarations
-                .filterIsInstance<KtNamedFunction>()
-                .count { !isIgnoredFunction(it) }
-        }
-        ?: 0
+    private fun calcFunctions(classOrObject: KtClassOrObject): Int =
+        classOrObject.body
+            ?.run {
+                declarations
+                    .filterIsInstance<KtNamedFunction>()
+                    .count { !isIgnoredFunction(it) }
+            }
+            ?: 0
 
-    private fun isIgnoredFunction(function: KtNamedFunction): Boolean = when {
-        ignoreDeprecated && function.hasAnnotation(DEPRECATED) -> true
-        ignorePrivate && function.isPrivate() -> true
-        ignoreInternal && function.isInternal() -> true
-        ignoreOverridden && function.isOverride() -> true
-        ignoreAnnotatedFunctions.any { function.hasAnnotation(it) } -> true
-        else -> false
-    }
+    private fun isIgnoredFunction(function: KtNamedFunction): Boolean =
+        when {
+            ignoreDeprecated && function.hasAnnotation(DEPRECATED) -> true
+            ignorePrivate && function.isPrivate() -> true
+            ignoreInternal && function.isInternal() -> true
+            ignoreOverridden && function.isOverride() -> true
+            ignoreAnnotatedFunctions.any { function.hasAnnotation(it) } -> true
+            else -> false
+        }
 
     companion object {
         const val DEFAULT_THRESHOLD = 11

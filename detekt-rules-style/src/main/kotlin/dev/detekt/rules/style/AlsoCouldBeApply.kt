@@ -16,27 +16,25 @@ import org.jetbrains.kotlin.psi.KtQualifiedExpression
  *
  * <noncompliant>
  * Buzz().also {
- *   it.init()
- *   it.block()
+ *     it.init()
+ *     it.block()
  * }
  * </noncompliant>
  *
  * <compliant>
  * Buzz().apply {
- *   init()
- *   block()
+ *     init()
+ *     block()
  * }
  *
  * // Also compliant
  * fun foo(a: Int): Int {
- *   return a.also { println(it) }
+ *     return a.also { println(it) }
  * }
  * </compliant>
  */
-class AlsoCouldBeApply(config: Config) : Rule(
-    config,
-    "When an `also` block contains only `it`-started expressions, simplify it to the `apply` block."
-) {
+class AlsoCouldBeApply(config: Config) :
+    Rule(config, "When an `also` block contains only `it`-started expressions, simplify it to the `apply` block.") {
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)

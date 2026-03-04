@@ -26,10 +26,7 @@ import org.jetbrains.kotlin.psi.psiUtil.siblings
  * }
  * </compliant>
  */
-class RedundantConstructorKeyword(config: Config) : Rule(
-    config,
-    "Redundant `constructor` modifier can be removed."
-) {
+class RedundantConstructorKeyword(config: Config) : Rule(config, "Redundant `constructor` modifier can be removed.") {
 
     override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {
         super.visitPrimaryConstructor(constructor)
@@ -49,8 +46,9 @@ class RedundantConstructorKeyword(config: Config) : Rule(
 
     private fun KtPrimaryConstructor.hasNoModifier() = modifierList == null && !hasPreviousComment()
 
-    private fun KtPrimaryConstructor.hasPreviousComment(): Boolean = siblings(
-        forward = false,
-        withItself = false
-    ).takeWhile { it is PsiComment || it is PsiWhiteSpace }.any { it is PsiComment }
+    private fun KtPrimaryConstructor.hasPreviousComment(): Boolean =
+        siblings(
+            forward = false,
+            withItself = false
+        ).takeWhile { it is PsiComment || it is PsiWhiteSpace }.any { it is PsiComment }
 }

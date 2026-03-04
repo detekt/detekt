@@ -5,14 +5,15 @@ import dev.detekt.api.Severity
 import dev.detekt.api.suppressed
 import dev.detekt.tooling.api.spec.RulesSpec
 
-internal fun RulesSpec.FailurePolicy.check(result: Detektion): FailurePolicyResult = when (this) {
-    RulesSpec.FailurePolicy.NeverFail -> FailurePolicyResult.Ok
-    is RulesSpec.FailurePolicy.FailOnSeverity -> result.checkForIssuesWithSeverity(minSeverity)
-}
+internal fun RulesSpec.FailurePolicy.check(result: Detektion): FailurePolicyResult =
+    when (this) {
+        RulesSpec.FailurePolicy.NeverFail -> FailurePolicyResult.Ok
+        is RulesSpec.FailurePolicy.FailOnSeverity -> result.checkForIssuesWithSeverity(minSeverity)
+    }
 
-sealed class FailurePolicyResult {
-    data object Ok : FailurePolicyResult()
-    data class Fail(val message: String) : FailurePolicyResult()
+sealed interface FailurePolicyResult {
+    data object Ok : FailurePolicyResult
+    data class Fail(val message: String) : FailurePolicyResult
 }
 
 private fun Detektion.checkForIssuesWithSeverity(minSeverity: Severity): FailurePolicyResult {

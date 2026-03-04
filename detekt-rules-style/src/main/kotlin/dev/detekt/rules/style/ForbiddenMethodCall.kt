@@ -43,12 +43,11 @@ import org.jetbrains.kotlin.resolve.calls.util.getCalleeExpressionIfAny
  *
  * <noncompliant>
  * fun main() {
- *   println()
- *   val myPrintln : () -> Unit = ::println
- *   kotlin.io.print("Hello, World!")
+ *     println()
+ *     val myPrintln : () -> Unit = ::println
+ *     kotlin.io.print("Hello, World!")
  * }
  * </noncompliant>
- *
  */
 class ForbiddenMethodCall(config: Config) :
     Rule(
@@ -70,7 +69,10 @@ class ForbiddenMethodCall(config: Config) :
             "`fun hello(args: Array<Any>)` is referred to as simply `hello(kotlin.Array)`. To forbid calls " +
             "involving varargs for example `fun hello(vararg args: String)` you need to define it like " +
             "`hello(vararg String)`. To forbid methods from the companion object reference the Companion class, for " +
-            "example as `TestClass.Companion.hello()` (even if it is marked `@JvmStatic`)."
+            "example as `TestClass.Companion.hello()` (even if it is marked `@JvmStatic`). " +
+            "To match function type parameters like `initializer` in `fun <T> lazy(initializer: () -> T)`, " +
+            "use `kotlin.Function{N}` where N is the number of parameters the function takes. For example, " +
+            "`kotlin.lazy(kotlin.Function0)` matches calls to `lazy { ... }`."
     )
     private val methods: List<ForbiddenMethod> by config(
         valuesWithReason(
@@ -147,33 +149,35 @@ class ForbiddenMethodCall(config: Config) :
     private fun KaSession.getCallInfos(
         kaCall: KaCall,
         expression: KtExpression,
-    ): Sequence<Pair<KaPropertySymbol?, KaCallableSymbol?>> = sequence {
-        val symbols = when (kaCall) {
-            is KaCallableMemberCall<*, *> -> {
-                val expressionSymbol = kaCall.partiallyAppliedSymbol.symbol
-                sequenceOf(expressionSymbol).plus(expressionSymbol.allOverriddenSymbols).map {
-                    if (
-                        it is KaPropertySymbol &&
-                        it.isGetterOrSetter() &&
-                        expression !is KtOperationReferenceExpression
-                    ) {
-                        it to getPropertyAccessorSymbol(it, expression)
-                    } else {
-                        null to it
+    ): Sequence<Pair<KaPropertySymbol?, KaCallableSymbol?>> =
+        sequence {
+            val symbols = when (kaCall) {
+                is KaCallableMemberCall<*, *> -> {
+                    val expressionSymbol = kaCall.partiallyAppliedSymbol.symbol
+                    sequenceOf(expressionSymbol).plus(expressionSymbol.allOverriddenSymbols).map {
+                        if (
+                            it is KaPropertySymbol &&
+                            it.isGetterOrSetter() &&
+                            expression !is KtOperationReferenceExpression
+                        ) {
+                            it to getPropertyAccessorSymbol(it, expression)
+                        } else {
+                            null to it
+                        }
                     }
                 }
-            }
 
-            is KaCompoundAccessCall -> sequenceOf(
-                null to kaCall.compoundOperation.operationPartiallyAppliedSymbol.symbol
-            )
+                is KaCompoundAccessCall -> sequenceOf(
+                    null to kaCall.compoundOperation.operationPartiallyAppliedSymbol.symbol
+                )
 
-            is KaCompoundArrayAccessCall -> null
-            is KaCompoundVariableAccessCall -> null
-        } ?: return@sequence
+                is KaCompoundArrayAccessCall -> null
 
-        yieldAll(symbols)
-    }
+                is KaCompoundVariableAccessCall -> null
+            } ?: return@sequence
+
+            yieldAll(symbols)
+        }
 
     private fun KaPropertySymbol.isGetterOrSetter(): Boolean = hasSetter || hasGetter
 

@@ -9,7 +9,9 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidExtension
 
 internal object DetektAndroidCompilations {
     fun registerTasks(project: Project, extension: DetektExtension) {
-        project.extensions.getByType(KotlinAndroidExtension::class.java).target.compilations.all { compilation ->
+        project.extensions.getByType(
+            KotlinAndroidExtension::class.java
+        ).target.compilations.configureEach { compilation ->
             project.registerJvmCompilationDetektTask(extension, compilation)
             project.registerJvmCompilationCreateBaselineTask(extension, compilation)
         }

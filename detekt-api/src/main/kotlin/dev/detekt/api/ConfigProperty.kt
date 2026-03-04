@@ -11,9 +11,7 @@ import kotlin.reflect.KProperty0
  * @param defaultValue the value that the property evaluates to when there is no key with the name of the property in
  * the config. Although [T] is defined as [Any], only [String], [Int], [Boolean] and [List<String>] are supported.
  */
-fun <T : Any> config(
-    defaultValue: T,
-): ReadOnlyProperty<Rule, T> = config(defaultValue) { it }
+fun <T : Any> config(defaultValue: T): ReadOnlyProperty<Rule, T> = config(defaultValue) { it }
 
 /**
  * Creates a delegated read-only property that can be used in [Rule] objects. The name of the property is the
@@ -24,10 +22,8 @@ fun <T : Any> config(
  * @param transformer a function that transforms the value from the configuration (or the default) into its final
  * value. A typical use case for this is a conversion from a [String] into a [Regex].
  */
-fun <T : Any, U : Any> config(
-    defaultValue: T,
-    transformer: (T) -> U,
-): ReadOnlyProperty<Rule, U> = TransformedConfigProperty(defaultValue, transformer)
+fun <T : Any, U : Any> config(defaultValue: T, transformer: (T) -> U): ReadOnlyProperty<Rule, U> =
+    TransformedConfigProperty(defaultValue, transformer)
 
 /**
  * Creates a delegated read-only property that can be used in [Rule] objects. The name of the property is the
@@ -43,10 +39,8 @@ fun <T : Any, U : Any> config(
  * @param defaultValue the value that the property evaluates to when there is no key with the name of the property in
  * the config. Although [T] is defined as [Any], only [String], [Int], [Boolean] and [List<String>] are supported.
  */
-fun <T : Any> configWithFallback(
-    fallbackProperty: KProperty0<T>,
-    defaultValue: T,
-): ReadOnlyProperty<Rule, T> = configWithFallback(fallbackProperty, defaultValue) { it }
+fun <T : Any> configWithFallback(fallbackProperty: KProperty0<T>, defaultValue: T): ReadOnlyProperty<Rule, T> =
+    configWithFallback(fallbackProperty, defaultValue) { it }
 
 /**
  * Creates a delegated read-only property that can be used in [Rule] objects. The name of the property is the
@@ -68,14 +62,15 @@ fun <T : Any, U : Any> configWithFallback(
     fallbackProperty: KProperty0<U>,
     defaultValue: T,
     transformer: (T) -> U,
-): ReadOnlyProperty<Rule, U> =
-    FallbackConfigProperty(fallbackProperty, defaultValue, transformer)
+): ReadOnlyProperty<Rule, U> = FallbackConfigProperty(fallbackProperty, defaultValue, transformer)
 
 private fun <T : Any> getValueOrDefault(config: Config, propertyName: String, defaultValue: T): T {
     @Suppress("UNCHECKED_CAST")
     return when (defaultValue) {
         is ValuesWithReason -> config.getValuesWithReasonOrDefault(propertyName, defaultValue) as T
+
         is List<*> -> config.getListOrDefault(propertyName, defaultValue) as T
+
         is String,
         is Boolean,
         is Int,
@@ -102,32 +97,41 @@ private fun Config.getValuesWithReasonOrDefault(
     defaultValue: ValuesWithReason,
 ): ValuesWithReason {
     val valuesAsList: List<*> = valueOrNull(propertyName) ?: return defaultValue
-    if (!valuesAsList.all { it is String || it is Map<*, *> }) {
-        error(
-            "Only lists of strings and/or maps with keys 'value' and 'reason' are supported. " +
-                "'$propertyName' is invalid."
-        )
-    }
     return ValuesWithReason(
         valuesAsList.map {
-            if (it is String) {
-                ValueWithReason(it)
-            } else {
-                val mapValue = it as Map<*, *>
-                try {
-                    ValueWithReason(
-                        value = mapValue["value"] as String,
-                        reason = mapValue["reason"] as String?
-                    )
-                } catch (e: ClassCastException) {
-                    throw Config.InvalidConfigurationError(e)
-                } catch (@Suppress("TooGenericExceptionCaught") e: NullPointerException) {
-                    throw Config.InvalidConfigurationError(e)
+            when (it) {
+                is String -> ValueWithReason(it)
+
+                is Map<*, *> -> {
+                    try {
+                        ValueWithReason(
+                            value = it["value"] as String,
+                            reason = it["reason"] as String?
+                        )
+                    } catch (e: ClassCastException) {
+                        throw InvalidConfigurationError(e)
+                    } catch (@Suppress("TooGenericExceptionCaught") e: NullPointerException) {
+                        throw InvalidConfigurationError(e)
+                    }
                 }
+
+                else -> error(
+                    "Only lists of strings and/or maps with keys 'value' and 'reason' are supported. " +
+                        "'$propertyName' is invalid."
+                )
             }
         }
     )
 }
+
+internal class InvalidConfigurationError(throwable: Throwable) :
+    RuntimeException(
+        """
+            Provided configuration file is invalid: Structure must be from type Map<String,Any>!
+            ${throwable.message}
+        """.trimIndent(),
+        throwable,
+    )
 
 private abstract class MemoizedConfigProperty<U : Any> : ReadOnlyProperty<Rule, U> {
     private var value: U? = null

@@ -22,13 +22,13 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
  *
  * <noncompliant>
  * listOf(1,2)
- *  .sorted()
- *  .asReversed()
+ *     .sorted()
+ *     .asReversed()
  * </noncompliant>
  *
  * <compliant>
  * listOf(1,2)
- *  .sortedDescending()
+ *     .sortedDescending()
  * </compliant>
  */
 class UnnecessaryReversed(config: Config) :
@@ -77,9 +77,10 @@ class UnnecessaryReversed(config: Config) :
         )
     }
 
-    private fun KtCallExpression.callableId(): CallableId? = analyze(this) {
-        resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId
-    }
+    private fun KtCallExpression.callableId(): CallableId? =
+        analyze(this) {
+            resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId
+        }
 
     private fun KtExpression.getPrevCallInChainOrNull(): List<KtCallExpression> =
         parent.collectDescendantsOfType<KtCallExpression>()

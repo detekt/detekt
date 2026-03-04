@@ -10,7 +10,9 @@ import dev.detekt.tooling.api.spec.ProcessingSpec
 import dev.detekt.tooling.internal.NotApiButProbablyUsedByUsers
 import java.util.concurrent.Callable
 
-class Runner(private val spec: ProcessingSpec) : Executable, Callable<AnalysisResult> {
+class Runner(private val spec: ProcessingSpec) :
+    Executable,
+    Callable<AnalysisResult> {
 
     @NotApiButProbablyUsedByUsers
     constructor(

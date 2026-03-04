@@ -19,35 +19,29 @@ sealed class FunctionMatcher {
     abstract fun match(propertySymbol: KaPropertySymbol?, symbol: KaCallableSymbol): Boolean
     abstract fun match(symbol: KaCallableSymbol): Boolean
 
-    internal data class NameOnly(
-        private val fullyQualifiedName: String,
-    ) : FunctionMatcher() {
+    internal data class NameOnly(private val fullyQualifiedName: String) : FunctionMatcher() {
 
         override fun match(function: KtNamedFunction, fullAnalysis: Boolean): Boolean =
             function.name == fullyQualifiedName ||
                 function.fqName?.asString() == fullyQualifiedName
 
-        override fun match(
-            propertySymbol: KaPropertySymbol?,
-            symbol: KaCallableSymbol,
-        ): Boolean = if (propertySymbol != null) {
-            getNameForGetterOrSetter(
-                propertySymbol,
-                symbol
-            ) == fullyQualifiedName
-        } else {
-            match(symbol)
-        }
+        override fun match(propertySymbol: KaPropertySymbol?, symbol: KaCallableSymbol): Boolean =
+            if (propertySymbol != null) {
+                getNameForGetterOrSetter(
+                    propertySymbol,
+                    symbol
+                ) == fullyQualifiedName
+            } else {
+                match(symbol)
+            }
 
         override fun match(symbol: KaCallableSymbol): Boolean = symbol.asFqNameString() == fullyQualifiedName
 
         override fun toString(): String = fullyQualifiedName
     }
 
-    internal data class WithParameters(
-        private val fullyQualifiedName: String,
-        private val parameters: List<String>,
-    ) : FunctionMatcher() {
+    internal data class WithParameters(private val fullyQualifiedName: String, private val parameters: List<String>) :
+        FunctionMatcher() {
 
         override fun match(function: KtNamedFunction, fullAnalysis: Boolean): Boolean {
             if (!fullAnalysis) return false
@@ -71,17 +65,12 @@ sealed class FunctionMatcher {
             return encounteredParameters == parameters
         }
 
-        override fun match(
-            propertySymbol: KaPropertySymbol?,
-            symbol: KaCallableSymbol,
-        ): Boolean = if (propertySymbol != null) {
-            getNameForGetterOrSetter(
-                propertySymbol,
-                symbol
-            ) == fullyQualifiedName
-        } else {
-            match(symbol)
-        }
+        override fun match(propertySymbol: KaPropertySymbol?, symbol: KaCallableSymbol): Boolean =
+            if (propertySymbol != null) {
+                getNameForGetterOrSetter(propertySymbol, symbol) == fullyQualifiedName
+            } else {
+                match(symbol)
+            }
 
         override fun match(symbol: KaCallableSymbol): Boolean {
             if (symbol.asFqNameString() != fullyQualifiedName) return false
@@ -191,8 +180,8 @@ private fun KaCallableSymbol.asFqNameString() =
         callableId?.run { asSingleFqName().asString() } ?: returnType.asFqNameString()
     }
 
-private fun KaType.asFqNameString() = symbol?.classId?.asFqNameString()
-    ?: toString().replace('/', '.').removeSuffix("!")
+private fun KaType.asFqNameString() =
+    symbol?.classId?.asFqNameString() ?: toString().replace('/', '.').removeSuffix("!")
 
 private fun changeIfLambda(param: String): String? {
     val (paramsRaw, _) = splitLambda(param) ?: return null

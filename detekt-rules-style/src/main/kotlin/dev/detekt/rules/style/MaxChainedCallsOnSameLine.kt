@@ -31,7 +31,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getStartOffsetIn
  *
  * <compliant>
  * a().b().c()
- *   .d().e().f()
+ *     .d().e().f()
  * </compliant>
  */
 class MaxChainedCallsOnSameLine(config: Config) :
@@ -72,7 +72,9 @@ class MaxChainedCallsOnSameLine(config: Config) :
                 receiverExpression.isReferenceToPackageOrClass() || callOnNewLine() -> 0
                 else -> receiverExpression.countChainedCalls() + 1
             }
+
             is KtUnaryExpression -> baseExpression?.countChainedCalls() ?: 0
+
             else -> 0
         }
 

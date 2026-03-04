@@ -9,12 +9,18 @@ dependencies {
     implementation(projects.detektKotlinAnalysisApi)
     implementation(projects.detektKotlinAnalysisApiStandalone)
     implementation(projects.detektParser)
-    implementation(libs.kotlinx.coroutinesCore)
-    implementation(libs.kotlinx.coroutinesTest)
+    implementation(libs.kotlin.scriptingJvm)
 
     testImplementation(libs.assertj.core)
 }
 
-apiValidation {
-    ignoredPackages.add("dev.detekt.test.utils.internal")
+kotlin {
+    @OptIn(org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation::class)
+    abiValidation {
+        filters {
+            excluded {
+                byNames.add("dev.detekt.test.utils.internal.**")
+            }
+        }
+    }
 }

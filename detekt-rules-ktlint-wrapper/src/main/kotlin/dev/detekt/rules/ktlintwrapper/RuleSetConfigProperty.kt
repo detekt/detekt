@@ -7,9 +7,8 @@ import kotlin.reflect.KProperty
 fun <T : Any> ruleSetConfig(defaultValue: T): ReadOnlyProperty<Any?, RuleSetConfigProperty<T>> =
     RuleSetConfigPropertyDelegate(defaultValue)
 
-private class RuleSetConfigPropertyDelegate<T : Any>(
-    val defaultValue: T,
-) : ReadOnlyProperty<Any?, RuleSetConfigProperty<T>> {
+private class RuleSetConfigPropertyDelegate<T : Any>(val defaultValue: T) :
+    ReadOnlyProperty<Any?, RuleSetConfigProperty<T>> {
 
     @Volatile private var value: RuleSetConfigProperty<T>? = null
 

@@ -1,6 +1,7 @@
 import com.gradle.develocity.agent.gradle.test.DevelocityTestConfiguration
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
+import org.jetbrains.kotlin.gradle.dsl.JvmDefaultMode
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.UsesKotlinJavaToolchain
 
@@ -61,10 +62,21 @@ val jvmMajorVersion = jvmTargetVersion.toIntOrNull() ?: 8
 
 kotlin {
     compilerOptions {
-        progressiveMode = true
+        jvmTarget = JvmTarget.fromTarget(jvmTargetVersion)
+        extraWarnings = true
         allWarningsAsErrors = providers.gradleProperty("warningsAsErrors").orNull.toBoolean()
-        freeCompilerArgs.add("-Xjvm-default=all")
         freeCompilerArgs.add("-Xcontext-parameters")
+        if (project.name != "detekt-gradle-plugin") {
+            // DGP compiles with Kotlin 2.1.21. Support for the stable version of this flag was only added in 2.2.0.
+            // See KT-73007 & KT-74590
+            jvmDefault = JvmDefaultMode.NO_COMPATIBILITY
+
+            // Only enable progressive mode in non-DGP modules. DGP doesn't compile with latest language version so
+            // progressive mode is not appropriate.
+            progressiveMode = true
+        } else {
+            freeCompilerArgs.add("-Xjvm-default=all")
+        }
     }
 }
 
@@ -90,10 +102,11 @@ testing {
     }
 }
 
-// Pretend JUnit targets JVM 8. Required while detekt itself targets JVM 8 while JUnit 6 targets JVM 17.
+// Pretend AGP API and JUnit targets JVM 8. Required while detekt itself targets JVM 8 while AGP API targets JVM 11 and JUnit 6 targets JVM 17.
 dependencies {
     components {
         setOf(
+            "com.android.tools.build:gradle-api",
             "org.junit.jupiter:junit-jupiter",
             "org.junit.jupiter:junit-jupiter-api",
             "org.junit.jupiter:junit-jupiter-engine",
@@ -118,7 +131,7 @@ java {
     withJavadocJar()
     sourceCompatibility = JavaVersion.toVersion(jvmTargetVersion)
     targetCompatibility = JavaVersion.toVersion(jvmTargetVersion)
-    if (project.name != "detekt-gradle-plugin") {
+    if (project.name !in setOf("detekt-gradle-plugin", "detekt-test-junit")) {
         // DGP uses different versions of kotlin-gradle-api in test runtime and compile time
         consistentResolution {
             useCompileClasspathVersions()

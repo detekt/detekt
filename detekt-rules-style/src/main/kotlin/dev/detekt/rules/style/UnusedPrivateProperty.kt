@@ -185,23 +185,21 @@ private class UnusedPrivatePropertyVisitor(private val allowedNames: Regex) : De
                     val psi = it.psi ?: return@forEach
                     when {
                         psi is KtProperty && psi.isTopLevel -> usedTopLevelProperties.add(psi)
-                        psi is KtProperty || psi is KtParameter && psi.hasValOrVar() -> usedClassProperties.add(psi)
+                        psi is KtProperty || (psi is KtParameter && psi.hasValOrVar()) -> usedClassProperties.add(psi)
                         else -> usedConstructorParameters.add(psi)
                     }
                 }
         }
     }
 
-    private fun KtConstructor<*>.isExpectClassConstructor() =
-        containingClassOrObject?.isExpect() == true
+    private fun KtConstructor<*>.isExpectClassConstructor() = containingClassOrObject?.isExpect() == true
 
     private fun KtConstructor<*>.isDataOrValueClassConstructor(): Boolean {
         val parent = parent as? KtClass ?: return false
         return parent.isData() || parent.isValue() || parent.isInline()
     }
 
-    fun KaSymbol.isPrivateProperty() =
-        this is KaPropertySymbol && this.visibility == KaSymbolVisibility.PRIVATE
+    fun KaSymbol.isPrivateProperty() = this is KaPropertySymbol && this.visibility == KaSymbolVisibility.PRIVATE
 
     context(session: KaSession)
     fun KaSymbol.isConstructorParameter(): Boolean {

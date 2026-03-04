@@ -270,6 +270,42 @@ class NoNameShadowingSpec(val env: KotlinEnvironmentContainer) {
         )
     }
 
+    @Test
+    fun `does not report when underscore placeholder for unused variables is used present inside a function`() {
+        val code = """
+            fun bar(a: Int) {
+                foo { _ -> 
+                    val (c, _) = 1 to 2
+                }        
+            }
+
+            fun foo(b: (Int) -> Unit) {
+                 return b(0)   
+            }
+        """.trimIndent()
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `does not report when underscore placeholder for unused variables is used present inside a class`() {
+        val code = """
+            class Test {
+                fun bar(a: Int) {
+                    foo { _ -> 
+                        val (c, _) = 1 to 2
+                    }        
+                }
+
+                fun foo(b: (Int) -> Unit) {
+                     return b(0)   
+                }
+            }
+        """.trimIndent()
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).isEmpty()
+    }
+
     @Nested
     inner class `with class` {
         @Test

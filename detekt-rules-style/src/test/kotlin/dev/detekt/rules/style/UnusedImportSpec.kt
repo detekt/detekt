@@ -11,9 +11,7 @@ import org.junit.jupiter.api.Test
 private const val ADDITIONAL_OPERATOR_SET = "additionalOperatorSet"
 
 @KotlinCoreEnvironmentTest
-class UnusedImportSpec(
-    val env: KotlinEnvironmentContainer,
-) {
+class UnusedImportSpec(val env: KotlinEnvironmentContainer) {
     val subject = UnusedImport(Config.empty)
 
     @Test
@@ -781,6 +779,28 @@ class UnusedImportSpec(
                 companion object {
                     const val BAR = 1
                 }
+            }
+            """.trimIndent()
+        val findings = subject.lintWithContext(env, mainFile, additionalFile)
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `does not report named companion object - #8989`() {
+        val mainFile =
+            """
+            import x.y.z.Foo
+
+            fun main() {
+                println(Foo)
+            }
+            """.trimIndent()
+        val additionalFile =
+            """
+            package x.y.z
+
+            class Foo {
+                companion object Key
             }
             """.trimIndent()
         val findings = subject.lintWithContext(env, mainFile, additionalFile)

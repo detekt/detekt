@@ -21,19 +21,23 @@ fun main(args: Array<String>) {
     @Suppress("ForbiddenMethodCall")
     when (val error = result.error) {
         is InvalidConfig, is IssuesFound -> println(error.message)
+
         is UnexpectedError -> {
             when (val cause = error.cause) {
                 is HelpRequest -> {
                     println(cause.usageText)
                     exitProcess(0)
                 }
+
                 is HandledArgumentViolation -> {
                     println(cause.message)
                     println(cause.usageText)
                 }
+
                 else -> cause.printStackTrace()
             }
         }
+
         else -> Unit // print nothing extra when there is no error
     }
     exitProcess(result.exitCode())
@@ -47,11 +51,7 @@ fun main(args: Array<String>) {
         "io.github.detekt.tooling.api.DetektCli"
     )
 )
-fun buildRunner(
-    args: Array<String>,
-    outputPrinter: PrintStream,
-    errorPrinter: PrintStream,
-): Executable {
+fun buildRunner(args: Array<String>, outputPrinter: PrintStream, errorPrinter: PrintStream): Executable {
     check(KotlinCompilerVersion.VERSION == whichKotlin()) {
         """
             detekt was compiled with Kotlin ${whichKotlin()} but is currently running with ${KotlinCompilerVersion.VERSION}.
@@ -67,9 +67,10 @@ fun buildRunner(
 }
 
 @Suppress("detekt.MagicNumber")
-internal fun AnalysisResult.exitCode(): Int = when (error) {
-    is UnexpectedError -> 1
-    is IssuesFound -> 2
-    is InvalidConfig -> 3
-    null -> 0
-}
+internal fun AnalysisResult.exitCode(): Int =
+    when (error) {
+        is UnexpectedError -> 1
+        is IssuesFound -> 2
+        is InvalidConfig -> 3
+        null -> 0
+    }

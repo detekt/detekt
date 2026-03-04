@@ -7,8 +7,8 @@ version = "$kotlinVersion-$detektVersion"
 
 plugins {
     id("module")
-    id("com.gradleup.shadow") version "9.2.2"
-    id("de.undercouch.download") version "5.6.0"
+    id("com.gradleup.shadow") version "9.3.2"
+    id("de.undercouch.download") version "5.7.0"
 }
 
 kotlin {
@@ -112,11 +112,12 @@ val testPluginKotlinc by tasks.registering(Task::class) {
     }
 }
 
-private fun String.toArg() = if (org.apache.tools.ant.taskdefs.condition.Os.isFamily("windows")) {
-    "\"$this\""
-} else {
-    this
-}
+private fun String.toArg() =
+    if (org.apache.tools.ant.taskdefs.condition.Os.isFamily("windows")) {
+        "\"$this\""
+    } else {
+        this
+    }
 
 tasks.check {
     dependsOn(testPluginKotlinc)

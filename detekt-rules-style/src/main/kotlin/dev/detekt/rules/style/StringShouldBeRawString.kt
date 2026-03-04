@@ -40,22 +40,19 @@ import org.jetbrains.kotlin.psi.psiUtil.parents
  * <compliant>
  * val windowJson = """
  *     {
- *          "window": {
- *              "title": "Sample Quantum With AI and ML Widget",
- *              "name": "main_window",
- *              "width": 500,
- *              "height": 500
- *          }
+ *         "window": {
+ *             "title": "Sample Quantum With AI and ML Widget",
+ *             "name": "main_window",
+ *             "width": 500,
+ *             "height": 500
+ *         }
  *     }
  * """.trimIndent()
  *
  * val patRegex = """/^(\/[^\/]+){0,2}\/?$/gm"""
  * </compliant>
  */
-class StringShouldBeRawString(config: Config) : Rule(
-    config,
-    "The string can be converted to raw string."
-) {
+class StringShouldBeRawString(config: Config) : Rule(config, "The string can be converted to raw string.") {
 
     @Configuration("maximum escape characters allowed")
     private val maxEscapedCharacterCount by config(2)
@@ -112,9 +109,7 @@ class StringShouldBeRawString(config: Config) : Rule(
         }
     }
 
-    private fun KtStringTemplateExpression.isPivotElementInTheTree(
-        rootElement: KtElement,
-    ): Boolean {
+    private fun KtStringTemplateExpression.isPivotElementInTheTree(rootElement: KtElement): Boolean {
         val leftMostElementOfLeftSubtree = rootElement.leftMostElementOfLeftSubtree
         return this == if (leftMostElementOfLeftSubtree is KtStringTemplateExpression) {
             leftMostElementOfLeftSubtree
@@ -124,18 +119,19 @@ class StringShouldBeRawString(config: Config) : Rule(
     }
 
     private fun KtElement.getStringSequenceExcludingRawString(): Sequence<String> {
-        fun KtElement.getStringSequence(): Sequence<KtStringTemplateExpression> = sequence {
-            if (this@getStringSequence is KtStringTemplateExpression) {
-                yield(this@getStringSequence)
-            } else if (this@getStringSequence is KtBinaryExpression) {
-                left?.let {
-                    yieldAll(KtPsiUtil.safeDeparenthesize(it).getStringSequence())
-                }
-                right?.let {
-                    yieldAll(KtPsiUtil.safeDeparenthesize(it).getStringSequence())
+        fun KtElement.getStringSequence(): Sequence<KtStringTemplateExpression> =
+            sequence {
+                if (this@getStringSequence is KtStringTemplateExpression) {
+                    yield(this@getStringSequence)
+                } else if (this@getStringSequence is KtBinaryExpression) {
+                    left?.let {
+                        yieldAll(KtPsiUtil.safeDeparenthesize(it).getStringSequence())
+                    }
+                    right?.let {
+                        yieldAll(KtPsiUtil.safeDeparenthesize(it).getStringSequence())
+                    }
                 }
             }
-        }
         return this.getStringSequence().filter {
             (it.text.startsWith("\"\"\"") && it.text.endsWith("\"\"\"")).not()
         }.map {

@@ -49,10 +49,8 @@ import org.jetbrains.kotlin.psi.KtPsiUtil
  * }
  * </compliant>
  */
-class UnnecessaryParentheses(config: Config) : Rule(
-    config,
-    "Unnecessary parentheses don't add any value to the code and should be removed."
-) {
+class UnnecessaryParentheses(config: Config) :
+    Rule(config, "Unnecessary parentheses don't add any value to the code and should be removed.") {
 
     @Configuration(
         "allow parentheses when not strictly required but precedence may be unclear, such as `(a && b) || c`"
@@ -130,8 +128,11 @@ class UnnecessaryParentheses(config: Config) : Rule(
             when (this) {
                 is KtBinaryExpression ->
                     operationReference.takeUnless { operationToken in KtTokens.ALL_ASSIGNMENTS }
+
                 is KtBinaryExpressionWithTypeRHS -> operationReference
+
                 is KtIsExpression -> operationReference
+
                 else -> null
             }?.getReferencedNameElementType()
 

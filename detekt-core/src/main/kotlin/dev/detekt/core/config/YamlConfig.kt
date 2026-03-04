@@ -23,7 +23,8 @@ class YamlConfig internal constructor(
     val properties: Map<String, Any>,
     override val parentPath: String?,
     override val parent: Config?,
-) : Config, ValidatableConfiguration {
+) : Config,
+    ValidatableConfiguration {
 
     override fun subConfig(key: String): Config {
         @Suppress("UNCHECKED_CAST")
@@ -49,11 +50,12 @@ class YamlConfig internal constructor(
     }
 
     @Suppress("MagicNumber")
-    override fun toString() = """
-        YamlConfig(
-            ${properties.toPrettyString(recursive = 1).indentCompat(12).trim()},
-        )
-    """.trimIndent()
+    override fun toString() =
+        """
+            YamlConfig(
+                ${properties.toPrettyString(recursive = 1).indentCompat(12).trim()},
+            )
+        """.trimIndent()
 
     override fun validate(baseline: Config, excludePatterns: Set<Regex>): List<Notification> =
         validateConfig(this, baseline, excludePatterns)
@@ -80,25 +82,37 @@ class YamlConfig internal constructor(
          *
          * Note the reader will be consumed and closed.
          */
-        fun load(reader: Reader): Config = reader.buffered().use { bufferedReader ->
-            val map: Map<*, *>? = runCatching {
+        fun load(reader: Reader): Config =
+            reader.buffered().use { bufferedReader ->
+                val map: Map<*, *>? = try {
+                    createYamlLoad().loadFromReader(bufferedReader) as Map<*, *>?
+                } catch (cce: ClassCastException) {
+                    throw InvalidConfigurationError(cce)
+                }
                 @Suppress("UNCHECKED_CAST")
-                createYamlLoad().loadFromReader(bufferedReader) as Map<String, *>?
-            }.getOrElse { throw Config.InvalidConfigurationError(it) }
-            @Suppress("UNCHECKED_CAST")
-            YamlConfig(map.orEmpty() as Map<String, Any>, null, null)
-        }
+                YamlConfig(map.orEmpty() as Map<String, Any>, null, null)
+            }
 
-        private fun createYamlLoad() = Load(
-            LoadSettings.builder()
-                .setAllowDuplicateKeys(false)
-                .setAllowRecursiveKeys(false)
-                .setCodePointLimit(YAML_DOC_LIMIT)
-                .setMaxAliasesForCollections(ALIASES_LIMIT)
-                .build()
-        )
+        private fun createYamlLoad() =
+            Load(
+                LoadSettings.builder()
+                    .setAllowDuplicateKeys(false)
+                    .setAllowRecursiveKeys(false)
+                    .setCodePointLimit(YAML_DOC_LIMIT)
+                    .setMaxAliasesForCollections(ALIASES_LIMIT)
+                    .build()
+            )
     }
 }
+
+internal class InvalidConfigurationError(throwable: Throwable) :
+    RuntimeException(
+        """
+            Provided configuration file is invalid: Structure must be from type Map<String, Any>!
+            ${throwable.message}
+        """.trimIndent(),
+        throwable,
+    )
 
 @Suppress("MagicNumber")
 private fun Map<*, *>.toPrettyString(recursive: Int): String =

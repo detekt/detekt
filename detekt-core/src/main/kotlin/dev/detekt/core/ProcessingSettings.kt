@@ -28,11 +28,8 @@ import java.nio.file.Path
  * Always close the settings as dispose the Kotlin compiler and detekt class loader.
  * If using a custom executor service be aware that detekt won't shut it down after use!
  */
-class ProcessingSettings(
-    val spec: ProcessingSpec,
-    override val config: Config,
-    val monitor: PerformanceMonitor,
-) : AutoCloseable,
+class ProcessingSettings(val spec: ProcessingSpec, override val config: Config, val monitor: PerformanceMonitor) :
+    AutoCloseable,
     Closeable,
     LoggingAware by LoggingFacade(spec.loggingSpec),
     PropertiesAware by PropertiesFacade(),
@@ -59,10 +56,9 @@ class ProcessingSettings(
 private fun ConfigSpec.extractUris(): Collection<URI> {
     fun initFileSystem(uri: URI) {
         runCatching {
-            @Suppress("SwallowedException") // Create file system inferred from URI if it does not exist.
             try {
                 FileSystems.getFileSystem(uri)
-            } catch (e: FileSystemNotFoundException) {
+            } catch (_: FileSystemNotFoundException) {
                 FileSystems.newFileSystem(uri, mapOf("create" to "true"))
             }
         }

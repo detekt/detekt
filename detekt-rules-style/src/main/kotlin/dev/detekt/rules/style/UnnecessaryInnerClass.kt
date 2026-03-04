@@ -54,7 +54,14 @@ class UnnecessaryInnerClass(config: Config) :
         // to outer class members.
         super.visitClass(klass)
 
-        if (klass.isInner() && candidateClassToParentClasses.contains(klass)) {
+        val klassParent = candidateClassToParentClasses[klass]?.first()
+        @Suppress("ComplexCondition")
+        if (
+            klass.isInner() &&
+            candidateClassToParentClasses.containsKey(klass) &&
+            // parent class is null or not inner or does not require to be inner
+            (klassParent == null || !klassParent.isInner() || candidateClassToParentClasses.containsKey(klassParent))
+        ) {
             report(
                 Finding(
                     Entity.Companion.from(klass),
@@ -75,13 +82,14 @@ class UnnecessaryInnerClass(config: Config) :
         checkForOuterUsage { expression.referenceClassId() }
     }
 
-    private fun findParentClasses(ktClass: KtClass): List<KtClass> = buildList {
-        var containingClass = ktClass.containingClass()
-        while (containingClass != null) {
-            add(containingClass)
-            containingClass = containingClass.containingClass()
+    private fun findParentClasses(ktClass: KtClass): List<KtClass> =
+        buildList {
+            var containingClass = ktClass.containingClass()
+            while (containingClass != null) {
+                add(containingClass)
+                containingClass = containingClass.containingClass()
+            }
         }
-    }
 
     private fun checkForOuterUsage(getTargetClassId: () -> ClassId?) {
         val currentClass = classChain.lastOrNull() ?: return
@@ -99,17 +107,19 @@ class UnnecessaryInnerClass(config: Config) :
         }
     }
 
-    private fun findResolvedContainingClassId(expression: KtReferenceExpression): ClassId? = analyze(expression) {
-        expression.resolveToCall()
-            ?.successfulCallOrNull<KaCallableMemberCall<*, *>>()
-            ?.partiallyAppliedSymbol
-            ?.dispatchReceiver
-            ?.type
-            ?.symbol
-            ?.classId
-    }
+    private fun findResolvedContainingClassId(expression: KtReferenceExpression): ClassId? =
+        analyze(expression) {
+            expression.resolveToCall()
+                ?.successfulCallOrNull<KaCallableMemberCall<*, *>>()
+                ?.partiallyAppliedSymbol
+                ?.dispatchReceiver
+                ?.type
+                ?.symbol
+                ?.classId
+        }
 
-    private fun KtThisExpression.referenceClassId(): ClassId? = analyze(this) {
-        expressionType?.symbol?.classId
-    }
+    private fun KtThisExpression.referenceClassId(): ClassId? =
+        analyze(this) {
+            expressionType?.symbol?.classId
+        }
 }

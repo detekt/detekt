@@ -10,18 +10,15 @@ import dev.detekt.api.RuleSetProvider
 import dev.detekt.core.createNullLoggingSpec
 import dev.detekt.core.createProcessingSettings
 import dev.detekt.core.tooling.getDefaultConfiguration
-import dev.detekt.test.yamlConfigFromContent
+import dev.detekt.core.yamlConfigFromContent
 import dev.detekt.tooling.api.InvalidConfig
 import org.assertj.core.api.Assertions.assertThatCode
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
 import java.nio.file.Path
 
-class CheckConfigurationSpec {
+class CheckConfigurationSpec(@param:TempDir private val testDir: Path) {
 
-    @TempDir
-    @Suppress("VarCouldBeVal")
-    private lateinit var testDir: Path
     private val spec = createNullLoggingSpec {}
 
     @Test

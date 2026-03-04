@@ -71,6 +71,10 @@ class DetektBasePluginSpec {
                     namespace = "dev.detekt.gradle.plugin.app"
                 }
             """.trimIndent(),
+            gradleProperties = mapOf(
+                "android.builtInKotlin" to "false",
+                "android.newDsl" to "false",
+            ),
             dryRun = true,
         ).also {
             it.setupProject()
@@ -169,6 +173,10 @@ class DetektBasePluginSpec {
                     namespace = "dev.detekt.gradle.plugin.app"
                 }
             """.trimIndent(),
+            gradleProperties = mapOf(
+                "android.builtInKotlin" to "false",
+                "android.newDsl" to "false",
+            ),
             dryRun = true,
         ).also {
             it.setupProject()

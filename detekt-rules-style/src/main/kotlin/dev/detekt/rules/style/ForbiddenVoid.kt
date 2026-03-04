@@ -74,11 +74,9 @@ class ForbiddenVoid(config: Config) :
             ?.anyDescendantOfType<KtTypeReference> { it == this }
             ?: false
 
-    private fun KtTypeReference.isParameterTypeOfFunction() =
-        getStrictParentOfType<KtParameter>() != null
+    private fun KtTypeReference.isParameterTypeOfFunction() = getStrictParentOfType<KtParameter>() != null
 
-    private fun KtTypeReference.isGenericArgument() =
-        getStrictParentOfType<KtTypeArgumentList>() != null
+    private fun KtTypeReference.isGenericArgument() = getStrictParentOfType<KtTypeArgumentList>() != null
 
     companion object {
         private val VOID_FQ_NAME = FqName("java.lang.Void")

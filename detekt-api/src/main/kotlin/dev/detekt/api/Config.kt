@@ -41,16 +41,6 @@ interface Config {
      */
     fun <T : Any> valueOrNull(key: String): T?
 
-    /**
-     * Is thrown when loading a configuration results in errors.
-     */
-    class InvalidConfigurationError(throwable: Throwable? = null) :
-        RuntimeException(
-            "Provided configuration file is invalid: Structure must be from type Map<String,Any>!" +
-                throwable?.let { "\n" + it.message }.orEmpty(),
-            throwable
-        )
-
     companion object {
 
         /**
@@ -75,6 +65,7 @@ interface Config {
         const val ACTIVE_KEY: String = "active"
         const val ALIASES_KEY: String = "aliases"
         const val AUTO_CORRECT_KEY: String = "autoCorrect"
+        const val IGNORE_ANNOTATED_KEY: String = "ignoreAnnotated"
         const val SEVERITY_KEY: String = "severity"
         const val EXCLUDES_KEY: String = "excludes"
         const val INCLUDES_KEY: String = "includes"

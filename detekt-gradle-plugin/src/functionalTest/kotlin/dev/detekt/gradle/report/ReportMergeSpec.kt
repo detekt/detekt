@@ -194,6 +194,10 @@ class ReportMergeSpec {
             settingsContent = settingsFile,
             jvmArgs = jvmArgs,
             disableIP = true,
+            gradleProperties = mapOf(
+                "android.builtInKotlin" to "false",
+                "android.newDsl" to "false",
+            ),
         )
 
         gradleRunner.setupProject()

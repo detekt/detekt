@@ -13,18 +13,19 @@ class CoroutinesProvider : DefaultRuleSetProvider {
 
     override val ruleSetId = RuleSetId("coroutines")
 
-    override fun instance(): RuleSet = RuleSet(
-        ruleSetId,
-        listOf(
-            ::CoroutineLaunchedInTestWithoutRunTest,
-            ::GlobalCoroutineUsage,
-            ::InjectDispatcher,
-            ::RedundantSuspendModifier,
-            ::SleepInsteadOfDelay,
-            ::SuspendFunWithFlowReturnType,
-            ::SuspendFunWithCoroutineScopeReceiver,
-            ::SuspendFunSwallowedCancellation,
-            ::SuspendFunInFinallySection
+    override fun instance(): RuleSet =
+        RuleSet(
+            ruleSetId,
+            listOf(
+                ::CoroutineLaunchedInTestWithoutRunTest,
+                ::GlobalCoroutineUsage,
+                ::InjectDispatcher,
+                ::RedundantSuspendModifier,
+                ::SleepInsteadOfDelay,
+                ::SuspendFunWithFlowReturnType,
+                ::SuspendFunWithCoroutineScopeReceiver,
+                ::SuspendFunSwallowedCancellation,
+                ::SuspendFunInFinallySection
+            )
         )
-    )
 }

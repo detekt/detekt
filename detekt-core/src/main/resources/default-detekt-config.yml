@@ -36,8 +36,8 @@ comments:
   active: true
   AbsentOrWrongFileLicense:
     active: false
-    licenseTemplateFile: 'license.template'
     licenseTemplateIsRegex: false
+    licenseTemplate: ''
   DeprecatedBlockTag:
     active: false
   DocumentationOverPrivateFunction:
@@ -127,6 +127,7 @@ complexity:
   NamedArguments:
     active: false
     allowedArguments: 3
+    ignoreMethods: []
     ignoreArgumentsMatchingNames: false
   NestedBlockDepth:
     active: true
@@ -480,6 +481,7 @@ potential-bugs:
     active: true
   ImplicitUnitReturnType:
     active: false
+    ignoreAnnotated: ['Test']
     allowExplicitReturnType: true
   InvalidRange:
     active: true
@@ -776,6 +778,8 @@ style:
     active: false
   UnnecessaryFilter:
     active: true
+  UnnecessaryFullyQualifiedName:
+    active: false
   UnnecessaryInheritance:
     active: true
   UnnecessaryInnerClass:

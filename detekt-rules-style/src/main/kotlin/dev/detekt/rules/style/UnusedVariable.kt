@@ -13,7 +13,7 @@ import dev.detekt.api.Rule
 import dev.detekt.api.config
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.symbols.KaLocalVariableSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaVariableSymbol
 import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDeclaration
@@ -103,6 +103,7 @@ private class UnusedVariableVisitor(private val allowedNames: Regex) : DetektVis
                     dcl.destructuringDeclaration
                         ?.entries
                         ?.forEach(::registerNewDeclaration)
+
                 dcl.isLoopParameter -> registerNewDeclaration(dcl)
             }
 
@@ -119,6 +120,7 @@ private class UnusedVariableVisitor(private val allowedNames: Regex) : DetektVis
                     listOfNotNull(expression.resolveToLocalVariableSymbol())
                 }
             }
+
             is KtCallExpression -> {
                 val arguments = expression.getChildrenOfType<KtValueArgumentList>().flatMap { it.arguments }
                 if (arguments.isNotEmpty()) {
@@ -139,11 +141,12 @@ private class UnusedVariableVisitor(private val allowedNames: Regex) : DetektVis
     }
 
     context(session: KaSession)
-    private fun KtExpression.resolveToLocalVariableSymbol(): KaLocalVariableSymbol? = with(session) {
-        mainReference?.resolveToSymbol() as? KaLocalVariableSymbol
-    }
+    private fun KtExpression.resolveToLocalVariableSymbol(): KaVariableSymbol? =
+        with(session) {
+            mainReference?.resolveToSymbol() as? KaVariableSymbol
+        }
 
-    private fun registerVariableUse(symbol: KaLocalVariableSymbol) {
+    private fun registerVariableUse(symbol: KaVariableSymbol) {
         symbol.psi?.also {
             usedVariables.add(it)
         }

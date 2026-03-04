@@ -4,8 +4,8 @@ import dev.detekt.api.Config
 import dev.detekt.test.junit.KotlinCoreEnvironmentTest
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.location
-import dev.detekt.test.utils.KotlinAnalysisApiEngine
 import dev.detekt.test.utils.KotlinEnvironmentContainer
+import dev.detekt.test.utils.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -344,7 +344,7 @@ class CoroutineLaunchedInTestWithoutRunTestSpec(private val env: KotlinEnvironme
             }
         """.trimIndent()
 
-        val ktFile = KotlinAnalysisApiEngine.compile(code)
+        val ktFile = compileContentForTest(code, env)
 
         val namedFunctions = ktFile
             .collectDescendantsOfType<KtNamedFunction>()

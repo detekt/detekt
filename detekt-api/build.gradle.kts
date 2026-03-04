@@ -5,8 +5,8 @@ plugins {
     id("module")
     id("public-api")
     id("java-test-fixtures")
-    id("dev.drewhamilton.poko") version "0.20.1"
-    id("com.github.gmazzo.buildconfig") version "5.7.1"
+    id("dev.drewhamilton.poko") version "0.21.3"
+    id("com.github.gmazzo.buildconfig") version "6.0.7"
 }
 
 dependencies {
@@ -48,6 +48,13 @@ listOf(configurations.testFixturesApiElements, configurations.testFixturesRuntim
     }
 }
 
-apiValidation {
-    ignoredPackages.add("dev.detekt.api.internal")
+kotlin {
+    @OptIn(org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation::class)
+    abiValidation {
+        filters {
+            excluded {
+                byNames.add("dev.detekt.api.internal.**")
+            }
+        }
+    }
 }

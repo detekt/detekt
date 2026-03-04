@@ -40,7 +40,7 @@ class ArgumentListWrappingSpec {
              3
             )
         """.trimIndent()
-        val config = TestConfig("indentSize" to "1")
+        val config = TestConfig("indentSize" to 1)
         assertThat(ArgumentListWrapping(config).lint(code)).isEmpty()
     }
 
@@ -49,7 +49,7 @@ class ArgumentListWrappingSpec {
         val code = """
             val x = f(1111, 2222, 3333)
         """.trimIndent()
-        val config = TestConfig("maxLineLength" to "10")
+        val config = TestConfig("maxLineLength" to 10)
         assertThat(ArgumentListWrapping(config).lint(code)).hasSize(4)
     }
 }

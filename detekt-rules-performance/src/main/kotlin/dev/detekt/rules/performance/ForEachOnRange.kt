@@ -44,10 +44,8 @@ import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
  * </compliant>
  */
 @ActiveByDefault(since = "1.0.0")
-class ForEachOnRange(config: Config) : Rule(
-    config,
-    "Using the forEach method on ranges has a heavy performance cost. Prefer using simple for loops."
-) {
+class ForEachOnRange(config: Config) :
+    Rule(config, "Using the forEach method on ranges has a heavy performance cost. Prefer using simple for loops.") {
 
     private val rangeOperators = setOf("..", "rangeTo", "downTo", "until", "..<")
 

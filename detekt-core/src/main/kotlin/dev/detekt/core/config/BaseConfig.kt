@@ -17,13 +17,14 @@ fun Config.valueOrDefaultInternal(
         if (result != null) {
             when {
                 result is String -> parser(result, default)
+
                 result is List<*> -> {
                     if (default !is List<*>) {
                         throw ClassCastException()
                     }
                     check(result.all { it is String }) {
                         "Only lists of strings are supported. Value \"$result\" set " +
-                            "for config parameter \"${keySequence(key)}\" contains non-string values."
+                            "for config parameter \"${keySequence(key)}\" contains non-string values"
                     }
                     result.map { it as String }
                 }
@@ -39,28 +40,30 @@ fun Config.valueOrDefaultInternal(
     } catch (_: ClassCastException) {
         error(
             "Value \"$result\" set for config parameter \"${keySequence(key)}\" is not of" +
-                " required type ${default::class.simpleName?.let { getDefaultName(it) }}."
+                " required type `${default::class.qualifiedName?.let { getDefaultName(it) }}`"
         )
     } catch (_: NumberFormatException) {
         error(
             "Value \"$result\" set for config parameter \"${keySequence(key)}\" is not of" +
-                " required type ${default::class.simpleName?.let { getDefaultName(it) }}."
+                " required type `${default::class.qualifiedName?.let { getDefaultName(it) }}`"
         )
     }
 
-private fun getDefaultName(className: String): String = if (className == "EmptyList") {
-    "List"
-} else {
-    className
-}
+private fun getDefaultName(className: String): String =
+    when (className) {
+        "kotlin.collections.EmptyList" -> "kotlin.List"
+        "java.util.Collections.EmptyList" -> "kotlin.List"
+        else -> className
+    }
 
-fun tryParseBasedOnDefault(result: String, defaultResult: Any): Any = when (defaultResult) {
-    is Int -> result.toInt()
-    is Boolean -> result.toBooleanStrict()
-    is Double -> result.toDouble()
-    is String -> result
-    else -> throw ClassCastException()
-}
+fun tryParseBasedOnDefault(result: String, defaultResult: Any): Any =
+    when (defaultResult) {
+        is Int -> result.toInt()
+        is Boolean -> result.toBooleanStrict()
+        is Double -> result.toDouble()
+        is String -> result
+        else -> throw ClassCastException()
+    }
 
 private val PRIMITIVES: Set<KClass<out Any>> = setOf(
     Int::class,

@@ -26,12 +26,13 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
  * fun Int.evenOrNull() = takeIf { it % 2 == 0 }
  * </compliant>
  */
-class DoubleNegativeLambda(config: Config) : Rule(
-    config,
-    "Double negative from a function name expressed in the negative (like `takeUnless`) with a lambda block " +
-        "that also contains negation. This is more readable when rewritten using a positive form of the function " +
-        "(like `takeIf`).",
-) {
+class DoubleNegativeLambda(config: Config) :
+    Rule(
+        config,
+        "Double negative from a function name expressed in the negative (like `takeUnless`) with a lambda block " +
+            "that also contains negation. This is more readable when rewritten using a positive form of the function " +
+            "(like `takeIf`).",
+    ) {
 
     private val splitCamelCaseRegex = "(?<=[a-z])(?=[A-Z])".toRegex()
 
@@ -86,35 +87,32 @@ class DoubleNegativeLambda(config: Config) : Rule(
     private fun KtExpression.isForbiddenNegation(): Boolean =
         when (this) {
             is KtOperationReferenceExpression -> operationSignTokenType in negationTokens
+
             is KtCallExpression -> {
                 text == "not()" ||
                     text.split(splitCamelCaseRegex).map { it.lowercase() }.any { it in negativeFunctionNameParts }
             }
+
             else -> false
         }
 
-    private fun formatMessage(
-        forbiddenChildren: List<KtExpression>,
-        negativeFunction: NegativeFunction,
-    ) = buildString {
-        append("Double negative through using ${forbiddenChildren.joinInBackTicks()} inside a ")
-        append("`${negativeFunction.simpleName}` lambda. ")
-        if (negativeFunction.recommendation != null) {
-            append(negativeFunction.recommendation)
-        } else {
-            append("Rewrite in the positive.")
+    private fun formatMessage(forbiddenChildren: List<KtExpression>, negativeFunction: NegativeFunction) =
+        buildString {
+            append("Double negative through using ${forbiddenChildren.joinInBackTicks()} inside a ")
+            append("`${negativeFunction.simpleName}` lambda. ")
+            if (negativeFunction.recommendation != null) {
+                append(negativeFunction.recommendation)
+            } else {
+                append("Rewrite in the positive.")
+            }
         }
-    }
 
     private fun List<KtExpression>.joinInBackTicks() = joinToString { "`${it.text}`" }
 
     /**
      * A function that can form a double negative with its lambda.
      */
-    private data class NegativeFunction(
-        val simpleName: String,
-        val recommendation: String?,
-    )
+    private data class NegativeFunction(val simpleName: String, val recommendation: String?)
 
     companion object {
         const val NEGATIVE_FUNCTIONS = "negativeFunctions"
