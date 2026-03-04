@@ -22,7 +22,6 @@ import org.jetbrains.kotlin.psi.KtFile
 import java.io.File
 import java.nio.file.Path
 import kotlin.io.path.Path
-import kotlin.io.path.nameWithoutExtension
 
 /**
  * The object to use the Kotlin Analysis API for code compilation.
@@ -60,12 +59,10 @@ object KotlinAnalysisApiEngine {
                     libraryName = "sdk"
                 }
 
-                val additionalLibraries = jvmClasspathRoots.distinct().map { path ->
-                    buildKtLibraryModule {
-                        addBinaryRoot(path)
-                        platform = targetPlatform
-                        libraryName = path.nameWithoutExtension
-                    }
+                val additionalLibraries = buildKtLibraryModule {
+                    addBinaryRoots(jvmClasspathRoots.distinct())
+                    platform = targetPlatform
+                    libraryName = "classpath"
                 }
 
                 val vf = LightVirtualFile("dummy.kt", code)
@@ -77,7 +74,7 @@ object KotlinAnalysisApiEngine {
                 addModule(
                     buildKtSourceModule {
                         addRegularDependency(jdk)
-                        additionalLibraries.forEach(::addRegularDependency)
+                        addRegularDependency(additionalLibraries)
                         addSourceVirtualFile(vf)
                         addSourceVirtualFiles(depVfs)
                         addSourceRoots(javaSourceRoots)
