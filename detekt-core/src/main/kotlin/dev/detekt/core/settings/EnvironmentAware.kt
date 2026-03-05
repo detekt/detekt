@@ -21,6 +21,7 @@ import org.jetbrains.kotlin.cli.jvm.config.jvmClasspathRoots
 import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.config.JvmTarget
+import org.jetbrains.kotlin.config.LanguageVersionSettings
 import org.jetbrains.kotlin.config.friendPaths
 import org.jetbrains.kotlin.config.jdkHome
 import org.jetbrains.kotlin.config.jvmTarget
@@ -36,7 +37,7 @@ import kotlin.io.path.Path
 
 interface EnvironmentAware {
     val project: Project
-    val configuration: CompilerConfiguration
+    val languageVersionSettings: LanguageVersionSettings
     val ktFiles: List<KtFile>
     val disposable: Disposable
 }
@@ -47,7 +48,8 @@ internal class EnvironmentFacade(projectSpec: ProjectSpec, compilerSpec: Compile
     EnvironmentAware {
 
     private val printStream = if (loggingSpec.debug) loggingSpec.errorChannel.asPrintStream() else NullPrintStream
-    override val configuration: CompilerConfiguration =
+
+    private val configuration: CompilerConfiguration =
         createCompilerConfiguration(
             projectSpec.inputPaths.toList(),
             compilerSpec.classpathEntries(),
@@ -58,6 +60,9 @@ internal class EnvironmentFacade(projectSpec: ProjectSpec, compilerSpec: Compile
             compilerSpec.freeCompilerArgs,
             printStream,
         )
+
+    override val languageVersionSettings: LanguageVersionSettings
+        get() = configuration.languageVersionSettings
 
     override val disposable: Disposable = Disposer.newDisposable()
 
