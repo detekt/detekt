@@ -235,7 +235,7 @@ style:
   ReturnCount:
     active: true
     excludeGuardClauses: true
-  SpacingAfterPackageDeclaration:
+  SpacingAfterPackageAndImports:
     active: true
   TrimMultilineRawString:
     active: true

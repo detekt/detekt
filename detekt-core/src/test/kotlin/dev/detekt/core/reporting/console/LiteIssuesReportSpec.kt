@@ -19,12 +19,12 @@ class LiteIssuesReportSpec {
     fun `reports non-empty issues`() {
         val location = createIssueLocation()
         val detektion = TestDetektion(
-            createIssue(createRuleInstance("SpacingAfterPackageDeclaration/id"), location),
+            createIssue(createRuleInstance("SpacingAfterPackageAndImports/id"), location),
             createIssue(createRuleInstance("UnnecessarySafeCall"), location),
         )
         assertThat(subject.render(detektion)).isEqualTo(
             """
-                ${basePath.resolve(location.path)}:1:1: TestMessage [SpacingAfterPackageDeclaration/id]
+                ${basePath.resolve(location.path)}:1:1: TestMessage [SpacingAfterPackageAndImports/id]
                 ${basePath.resolve(location.path)}:1:1: TestMessage [UnnecessarySafeCall]
 
             """.trimIndent()

@@ -32,8 +32,8 @@ import org.jetbrains.kotlin.psi.psiUtil.siblings
  * class Bar { }
  * </compliant>
  */
-class SpacingAfterPackageDeclaration(config: Config) :
-    Rule(config, "Violation of the package declaration style detected.") {
+class SpacingAfterPackageAndImports(config: Config) :
+    Rule(config, "Violation of the package and import statements declaration style detected.") {
 
     override fun visitKtFile(file: KtFile) {
         if (file.hasPackage() && file.anyDescendantOfType<KtClassOrObject>()) {
