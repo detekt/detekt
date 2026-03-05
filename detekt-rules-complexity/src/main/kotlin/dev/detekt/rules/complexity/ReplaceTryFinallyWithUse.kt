@@ -66,20 +66,20 @@ class ReplaceTryFinallyWithUse(config: Config) :
         )
     }
 
-    private fun isCloseCall(callExpression: KtCallExpression): Boolean = analyze(callExpression) {
-        val functionCall = callExpression.resolveToCall()?.singleFunctionCallOrNull() ?: return false
-        val containingClass = functionCall.symbol.containingDeclaration as? KaClassSymbol ?: return false
+    private fun isCloseCall(callExpression: KtCallExpression): Boolean =
+        analyze(callExpression) {
+            val functionCall = callExpression.resolveToCall()?.singleFunctionCallOrNull() ?: return false
+            val containingClass = functionCall.symbol.containingDeclaration as? KaClassSymbol ?: return false
 
-        isCloseable(containingClass) || isSubtypeOfCloseable(containingClass)
-    }
+            isCloseable(containingClass) || isSubtypeOfCloseable(containingClass)
+        }
 
     private fun KaSession.isSubtypeOfCloseable(classSymbol: KaClassSymbol): Boolean {
         val superTypes = classSymbol.superTypes.flatMap { listOf(it) + it.allSupertypes }
         return superTypes.any { it.expandedSymbol?.classId == CLASS_ID_AUTO_CLOSEABLE }
     }
 
-    private fun isCloseable(classSymbol: KaClassSymbol): Boolean =
-        classSymbol.classId == CLASS_ID_AUTO_CLOSEABLE
+    private fun isCloseable(classSymbol: KaClassSymbol): Boolean = classSymbol.classId == CLASS_ID_AUTO_CLOSEABLE
 
     companion object {
         private val CLASS_ID_AUTO_CLOSEABLE = ClassId.fromString("java/lang/AutoCloseable")
