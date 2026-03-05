@@ -19,13 +19,11 @@ class DetektPomModel(project: Project) :
     val treeAspect: TreeAspect = project.getService(TreeAspect::class.java)
 
     override fun runTransaction(transaction: PomTransaction) {
-        val transactionCandidate = transaction as? PomTransactionBase
-
-        val pomTransaction = requireNotNull(transactionCandidate) {
+        require(transaction is PomTransactionBase) {
             "${PomTransactionBase::class.simpleName} type expected, actual is ${transaction.javaClass.simpleName}"
         }
 
-        pomTransaction.run()
+        transaction.run()
     }
 
     override fun <T : PomModelAspect> getModelAspect(aspect: Class<T>): T {
