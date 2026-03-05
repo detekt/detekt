@@ -117,10 +117,28 @@ class SpacingAfterPackageDeclarationSpec {
     fun `has no class`() {
         val code = """
             package com.my.has.no.clazz
-            
+
             import kotlin.collections.List
             import kotlin.collections.Set
         """.trimIndent()
         assertThat(subject.lint(code)).isEmpty()
+    }
+
+    @Test
+    fun `reports missing blank line between package and import without class`() {
+        val code = "package test\nimport a.b"
+        assertThat(subject.lint(code, compile = false)).hasSize(1)
+    }
+
+    @Test
+    fun `reports missing blank line between import and function`() {
+        val code = "package test\n\nimport a.b\nfun foo() {}"
+        assertThat(subject.lint(code, compile = false)).hasSize(1)
+    }
+
+    @Test
+    fun `reports missing blank line between import and property`() {
+        val code = "package test\n\nimport a.b\nval hello = \"hola\""
+        assertThat(subject.lint(code, compile = false)).hasSize(1)
     }
 }

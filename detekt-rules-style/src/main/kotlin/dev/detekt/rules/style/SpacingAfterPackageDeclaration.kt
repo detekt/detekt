@@ -6,17 +6,16 @@ import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.Rule
-import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtImportList
+import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtPackageDirective
-import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.siblings
 
 /**
- * This rule verifies spacing between package and import statements as well as between import statements and class
- * declarations.
+ * This rule verifies spacing between package and import statements as well as between import statements and top
+ * level declarations.
  *
  * <noncompliant>
  * package foo
@@ -36,7 +35,7 @@ class SpacingAfterPackageDeclaration(config: Config) :
     Rule(config, "Violation of the package declaration style detected.") {
 
     override fun visitKtFile(file: KtFile) {
-        if (file.hasPackage() && file.anyDescendantOfType<KtClassOrObject>()) {
+        if (file.hasPackage()) {
             file.importList?.let {
                 if (it.imports.isNotEmpty()) {
                     checkPackageDeclaration(it)
@@ -65,7 +64,7 @@ class SpacingAfterPackageDeclaration(config: Config) :
         val ktElement = importList.siblings(withItself = false).filterIsInstance<KtElement>().firstOrNull() ?: return
         val nextSibling = importList.nextSibling
         if (nextSibling is PsiWhiteSpace || nextSibling is KtElement) {
-            val name = (ktElement as? KtClassOrObject)?.name ?: "the class or object"
+            val name = (ktElement as? KtNamedDeclaration)?.name ?: "the declaration"
 
             checkLinebreakAfterElement(
                 nextSibling,
