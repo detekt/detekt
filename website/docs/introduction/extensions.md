@@ -37,7 +37,7 @@ A `RuleSetProvider` must also be implemented, declaring a `RuleSet` in the `inst
 
 Example of a custom rule:
 ```kotlin
-class TooManyFunctions2(config: Config) : Rule(
+class TooManyFunctions(config: Config) : Rule(
     config,
     "This rule reports a file with an excessive function count.",
 ) {
@@ -64,14 +64,14 @@ If you want your rule to be configurable, write down your properties inside the 
 
 ```yaml
 MyRuleSet:
-  TooManyFunctions2:
+  TooManyFunctions:
     active: true
     threshold: 5
   OtherRule:
     active: false
 ```
 
-By specifying the rule set and rule IDs, _detekt_ will use the sub-configuration of `TooManyFunctions2`.
+By specifying the rule set and rule IDs, _detekt_ will use the sub-configuration of `TooManyFunctions`.
 
 ### Testing custom rules {#testing}
 
