@@ -68,7 +68,7 @@ See also: [Kotlin 1.4 Explicit API](https://kotlinlang.org/docs/whatsnew14.html#
 val strs = listOf("foo, bar")
 fun bar() = 5
 class Parser {
-fun parse() = ...
+     fun parse() = ...
 }
 ```
 
@@ -80,7 +80,7 @@ val strs: List<String> = listOf("foo, bar")
 fun bar(): Int = 5
 
 class Parser {
-fun parse(): ParsingResult = ...
+     fun parse(): ParsingResult = ...
 }
 ```
 

@@ -5,8 +5,8 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Disposer
 import com.intellij.pom.PomModel
 import com.intellij.pom.tree.TreeAspect
+import dev.detekt.core.parser.createCompilerConfiguration
 import dev.detekt.parser.DetektPomModel
-import dev.detekt.parser.createCompilerConfiguration
 import dev.detekt.tooling.api.spec.CompilerSpec
 import dev.detekt.tooling.api.spec.LoggingSpec
 import dev.detekt.tooling.api.spec.ProjectSpec
@@ -21,13 +21,13 @@ import org.jetbrains.kotlin.cli.jvm.config.jvmClasspathRoots
 import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.config.JvmTarget
+import org.jetbrains.kotlin.config.LanguageVersionSettings
 import org.jetbrains.kotlin.config.friendPaths
 import org.jetbrains.kotlin.config.jdkHome
 import org.jetbrains.kotlin.config.jvmTarget
 import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.platform.jvm.JvmPlatforms
 import org.jetbrains.kotlin.psi.KtFile
-import java.io.Closeable
 import java.io.File
 import java.io.OutputStream
 import java.io.PrintStream
@@ -36,32 +36,33 @@ import kotlin.io.path.Path
 
 interface EnvironmentAware {
     val project: Project
-    val configuration: CompilerConfiguration
+    val languageVersionSettings: LanguageVersionSettings
     val ktFiles: List<KtFile>
-    val disposable: Disposable
 }
 
 internal class EnvironmentFacade(projectSpec: ProjectSpec, compilerSpec: CompilerSpec, loggingSpec: LoggingSpec) :
     AutoCloseable,
-    Closeable,
     EnvironmentAware {
 
     private val printStream = if (loggingSpec.debug) loggingSpec.errorChannel.asPrintStream() else NullPrintStream
-    override val configuration: CompilerConfiguration =
-        createCompilerConfiguration(
-            projectSpec.inputPaths.toList(),
-            compilerSpec.classpathEntries(),
-            compilerSpec.apiVersion,
-            compilerSpec.languageVersion,
-            compilerSpec.jvmTarget,
-            compilerSpec.jdkHome,
-            compilerSpec.freeCompilerArgs,
-            printStream,
-        )
 
-    override val disposable: Disposable = Disposer.newDisposable()
+    private val configuration: CompilerConfiguration = createCompilerConfiguration(
+        projectSpec.inputPaths.toList(),
+        compilerSpec.classpathEntries(),
+        compilerSpec.apiVersion,
+        compilerSpec.languageVersion,
+        compilerSpec.jvmTarget,
+        compilerSpec.jdkHome,
+        compilerSpec.freeCompilerArgs,
+        printStream,
+    )
+
+    private val disposable: Disposable = Disposer.newDisposable()
 
     private lateinit var sourceModule: KaSourceModule
+
+    override val languageVersionSettings: LanguageVersionSettings
+        get() = configuration.languageVersionSettings
 
     @OptIn(KaExperimentalApi::class)
     override val ktFiles: List<KtFile>

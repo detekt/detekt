@@ -481,6 +481,7 @@ potential-bugs:
     active: true
   ImplicitUnitReturnType:
     active: false
+    ignoreAnnotated: ['Test']
     allowExplicitReturnType: true
   InvalidRange:
     active: true

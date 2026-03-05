@@ -28,21 +28,21 @@ import org.jetbrains.kotlin.psi.KtReferenceExpression
  *
  * <noncompliant>
  * class A(private var a: Int?) {
- *   fun foo() {
- *     if (a != null) {
- *       println(2 + a!!)
+ *     fun foo() {
+ *         if (a != null) {
+ *             println(2 + a!!)
+ *         }
  *     }
- *   }
  * }
  * </noncompliant>
  *
  * <compliant>
  * class A(private val a: Int?) {
- *   fun foo() {
- *     if (a != null) {
- *       println(2 + a)
+ *     fun foo() {
+ *         if (a != null) {
+ *             println(2 + a)
+ *         }
  *     }
- *   }
  * }
  * </compliant>
  */
