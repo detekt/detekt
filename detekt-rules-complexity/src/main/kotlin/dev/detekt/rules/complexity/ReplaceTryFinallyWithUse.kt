@@ -10,7 +10,6 @@ import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
-import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
@@ -19,7 +18,6 @@ import org.jetbrains.kotlin.psi.KtTryExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 
 /**
- *
  * In Kotlin, the idiomatic way to manage resources that implement the AutoCloseable interface,
  * is to use the `.use()` function, to automatically close the resource when the block of code completes.
  *
@@ -40,7 +38,6 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
  *         fileWriter.write("example")
  *     }
  * </compliant>
- *
  */
 class ReplaceTryFinallyWithUse(config: Config) :
     Rule(
@@ -52,34 +49,28 @@ class ReplaceTryFinallyWithUse(config: Config) :
     override fun visitFinallySection(expression: KtFinallySection) {
         super.visitFinallySection(expression)
 
-        analyze(expression) {
-            val tryExpression = expression.parent as? KtTryExpression ?: return
+        val tryExpression = expression.parent as? KtTryExpression ?: return
 
-            val closeCallInFinally = expression
-                .collectDescendantsOfType<KtCallExpression>()
-                .firstOrNull { isCloseCall(it) }
-                ?: return
+        val closeCallInFinally = expression.collectDescendantsOfType<KtCallExpression>()
+            .filter { it.calleeExpression?.text == "close" && it.valueArguments.isEmpty() }
+            .firstOrNull { isCloseCall(it) }
+            ?: return
 
-            val receiver = (closeCallInFinally.parent as? KtDotQualifiedExpression)?.receiverExpression ?: return
+        val receiver = (closeCallInFinally.parent as? KtDotQualifiedExpression)?.receiverExpression ?: return
 
-            report(
-                Finding(
-                    Entity.from(tryExpression),
-                    "This try-finally block can be replaced with `${receiver.text}.use { ... }`."
-                )
+        report(
+            Finding(
+                Entity.from(tryExpression),
+                "This try-finally block can be replaced with `${receiver.text}.use { ... }`."
             )
-        }
+        )
     }
 
-    private fun KaSession.isCloseCall(callExpression: KtCallExpression): Boolean {
+    private fun isCloseCall(callExpression: KtCallExpression): Boolean = analyze(callExpression) {
         val functionCall = callExpression.resolveToCall()?.singleFunctionCallOrNull() ?: return false
-
-        val isCloseFunction = (functionCall.symbol as? KaNamedFunctionSymbol)?.name?.asString() ==
-            FUNCTION_NAME_CLOSE && functionCall.symbol.valueParameters.isEmpty()
-
         val containingClass = functionCall.symbol.containingDeclaration as? KaClassSymbol ?: return false
-        return (isCloseable(containingClass) || isSubtypeOfCloseable(containingClass)) &&
-            isCloseFunction
+
+        isCloseable(containingClass) || isSubtypeOfCloseable(containingClass)
     }
 
     private fun KaSession.isSubtypeOfCloseable(classSymbol: KaClassSymbol): Boolean {
@@ -91,7 +82,6 @@ class ReplaceTryFinallyWithUse(config: Config) :
         classSymbol.classId == CLASS_ID_AUTO_CLOSEABLE
 
     companion object {
-        private const val FUNCTION_NAME_CLOSE = "close"
         private val CLASS_ID_AUTO_CLOSEABLE = ClassId.fromString("java/lang/AutoCloseable")
     }
 }
