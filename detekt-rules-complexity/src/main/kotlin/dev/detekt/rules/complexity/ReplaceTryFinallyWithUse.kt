@@ -11,7 +11,7 @@ import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
-import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtFinallySection
@@ -84,14 +84,14 @@ class ReplaceTryFinallyWithUse(config: Config) :
 
     private fun KaSession.isSubtypeOfCloseable(classSymbol: KaClassSymbol): Boolean {
         val superTypes = classSymbol.superTypes.flatMap { listOf(it) + it.allSupertypes }
-        return superTypes.any { it.expandedSymbol?.classId?.asSingleFqName() == FQ_NAME_AUTO_CLOSEABLE }
+        return superTypes.any { it.expandedSymbol?.classId == CLASS_ID_AUTO_CLOSEABLE }
     }
 
     private fun isCloseable(classSymbol: KaClassSymbol): Boolean =
-        classSymbol.classId?.asSingleFqName() == FQ_NAME_AUTO_CLOSEABLE
+        classSymbol.classId == CLASS_ID_AUTO_CLOSEABLE
 
     companion object {
         private const val FUNCTION_NAME_CLOSE = "close"
-        private val FQ_NAME_AUTO_CLOSEABLE = FqName("java.lang.AutoCloseable")
+        private val CLASS_ID_AUTO_CLOSEABLE = ClassId.fromString("java/lang/AutoCloseable")
     }
 }
