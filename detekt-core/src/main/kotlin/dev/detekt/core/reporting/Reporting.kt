@@ -31,13 +31,13 @@ private fun Issue.truncatedMessage(): String {
 }
 
 private fun Issue.detailed(basePath: Path): String =
-    "${severity.prefix()}${ruleInstance.id} - [${truncatedMessage()}] at ${location.compact(basePath)}"
+    "${severity.prefix()}: ${ruleInstance.id} - [${truncatedMessage()}] at ${location.compact(basePath)}"
 
 internal fun Issue.Location.compact(basePath: Path): String = "${basePath.resolve(path)}:$source"
 
 internal fun Severity.prefix() =
     when (this) {
-        Severity.Error -> "e: "
-        Severity.Warning -> "w: "
-        Severity.Info -> "i: "
+        Severity.Error -> "e"
+        Severity.Warning -> "w"
+        Severity.Info -> "i"
     }

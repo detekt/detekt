@@ -25,6 +25,7 @@ class LiteIssuesReport : AbstractIssuesReport() {
         buildString {
             issues.forEach { issue ->
                 append(issue.severity.prefix())
+                append(": ")
                 append("${issue.location.compact(basePath)} ${issue.message} [${issue.ruleInstance.id}]")
                 appendLine()
             }
