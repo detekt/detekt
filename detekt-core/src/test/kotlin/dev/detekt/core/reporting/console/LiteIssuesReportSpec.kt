@@ -1,5 +1,8 @@
 package dev.detekt.core.reporting.console
 
+import dev.detekt.api.Severity.Error
+import dev.detekt.api.Severity.Info
+import dev.detekt.api.Severity.Warning
 import dev.detekt.api.testfixtures.TestDetektion
 import dev.detekt.api.testfixtures.TestSetupContext
 import dev.detekt.api.testfixtures.createIssue
@@ -19,13 +22,15 @@ class LiteIssuesReportSpec {
     fun `reports non-empty issues`() {
         val location = createIssueLocation()
         val detektion = TestDetektion(
-            createIssue(createRuleInstance("SpacingAfterPackageAndImports/id"), location),
-            createIssue(createRuleInstance("UnnecessarySafeCall"), location),
+            createIssue(createRuleInstance("SpacingAfterPackageAndImports/id"), location, severity = Error),
+            createIssue(createRuleInstance("UnnecessarySafeCall"), location, severity = Warning),
+            createIssue(createRuleInstance("MagicNumber"), location, severity = Info),
         )
         assertThat(subject.render(detektion)).isEqualTo(
             """
-                ${basePath.resolve(location.path)}:1:1: TestMessage [SpacingAfterPackageAndImports/id]
-                ${basePath.resolve(location.path)}:1:1: TestMessage [UnnecessarySafeCall]
+                e: ${basePath.resolve(location.path)}:1:1 TestMessage [SpacingAfterPackageAndImports/id]
+                w: ${basePath.resolve(location.path)}:1:1 TestMessage [UnnecessarySafeCall]
+                i: ${basePath.resolve(location.path)}:1:1 TestMessage [MagicNumber]
 
             """.trimIndent()
         )

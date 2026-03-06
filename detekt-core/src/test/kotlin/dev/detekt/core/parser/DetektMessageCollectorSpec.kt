@@ -1,4 +1,4 @@
-package dev.detekt.parser
+package dev.detekt.core.parser
 
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity
