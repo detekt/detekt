@@ -7,7 +7,6 @@ import dev.detekt.api.Rule
 import dev.detekt.api.RuleExecutionListener
 import dev.detekt.api.RuleInstance
 import dev.detekt.test.utils.compileContentForTest
-import dev.detekt.test.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtFile
 import org.junit.jupiter.api.Nested
