@@ -24,4 +24,9 @@ interface ProjectSpec {
      * The analysis mode used by detekt. See [AnalysisMode] for information about available analysis modes.
      */
     val analysisMode: AnalysisMode
+
+    /**
+     * Validate classpath to ensure that all the types are resolvable.
+     */
+    val validateClasspath: Boolean
 }
