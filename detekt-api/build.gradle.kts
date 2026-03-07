@@ -52,7 +52,7 @@ kotlin {
     @OptIn(org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation::class)
     abiValidation {
         filters {
-            excluded {
+            exclude {
                 byNames.add("dev.detekt.api.internal.**")
             }
         }
