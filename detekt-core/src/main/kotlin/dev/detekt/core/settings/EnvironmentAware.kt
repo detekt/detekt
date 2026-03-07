@@ -95,7 +95,7 @@ internal class EnvironmentFacade(projectSpec: ProjectSpec, compilerSpec: Compile
                             paths.forEach { addBinaryRoot(Path(it)) }
                             libraryName = UUID.randomUUID().toString()
                         }
-                }
+                    }
 
                 val dependencies = buildKtLibraryModule {
                     platform = targetPlatform
