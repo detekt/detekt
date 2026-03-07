@@ -7,8 +7,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-class SpacingAfterPackageDeclarationSpec {
-    val subject = SpacingAfterPackageDeclaration(Config.empty)
+class SpacingAfterPackageAndImportsSpec {
+    val subject = SpacingAfterPackageAndImports(Config.empty)
 
     @Test
     fun `has no blank lines violation`() {
