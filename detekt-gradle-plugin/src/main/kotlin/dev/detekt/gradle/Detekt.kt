@@ -1,5 +1,6 @@
 package dev.detekt.gradle
 
+import dev.detekt.detekt_gradle_plugin.BuildConfig
 import dev.detekt.gradle.extensions.DetektReportType
 import dev.detekt.gradle.extensions.DetektReports
 import dev.detekt.gradle.extensions.FailOnSeverity
@@ -216,6 +217,16 @@ abstract class Detekt @Inject constructor(
 
     @TaskAction
     fun check() {
+        if (debug.get()) {
+            println("To execute this on cli:")
+            val arguments = buildList {
+                if (!pluginClasspath.isEmpty) {
+                    add(pluginClasspath.joinToString(",", "--plugins "))
+                }
+                addAll(arguments)
+            }
+            println("java -jar detekt-cli-${BuildConfig.DETEKT_VERSION}-all.jar ${arguments.joinToString(" ")}")
+        }
         if (providers.isWorkerApiEnabled()) {
             logger.info("Executing $name using Worker API")
             val workQueue = workerExecutor.processIsolation()
