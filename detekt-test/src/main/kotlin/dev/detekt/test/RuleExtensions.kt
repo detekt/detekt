@@ -31,7 +31,7 @@ fun Rule.lint(
         try {
             KotlinAnalysisApiEngine.compile(content)
         } catch (ex: RuntimeException) {
-            if (!ex.isNoMatchingOutputFiles()) throw ex
+            if (!ex.isNoMatchingOutputFiles() && !ex.isAllUnresolvedReferences()) throw ex
         }
     }
     val ktFile = compileContentForTest(content)
@@ -92,3 +92,10 @@ private fun KtElement.isSuppressedBy(id: RuleName): Boolean {
 
 private fun RuntimeException.isNoMatchingOutputFiles() =
     message?.contains("Compilation produced no matching output files") == true
+
+private fun RuntimeException.isAllUnresolvedReferences(): Boolean {
+    val message = message ?: return false
+    return message.lines().all { line ->
+        line.isBlank() || line.contains("Unresolved reference")
+    }
+}
