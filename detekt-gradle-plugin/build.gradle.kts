@@ -2,6 +2,7 @@
 // https://github.com/gradle/gradle/issues/21285
 @file:Suppress("StringLiteralDuplication")
 
+import dev.detekt.buildlogic.osDependent
 import dev.detekt.gradle.Detekt
 import dev.detekt.gradle.DetektCreateBaselineTask
 import org.jetbrains.kotlin.buildtools.api.ExperimentalBuildToolsApi
@@ -89,6 +90,7 @@ testing {
             targets {
                 all {
                     testTask.configure {
+                        osDependent()
                         // If `androidSdkInstalled` is false, skip running DetektAndroidSpec
                         val isAndroidSdkInstalled = providers.environmentVariable("ANDROID_SDK_ROOT").isPresent ||
                             providers.environmentVariable("ANDROID_HOME").isPresent
