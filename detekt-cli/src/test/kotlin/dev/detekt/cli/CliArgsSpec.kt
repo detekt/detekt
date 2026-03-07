@@ -295,19 +295,20 @@ internal class CliArgsSpec {
             @Test
             fun `--analysis-mode light is accepted`() {
                 val spec = parseArguments(arrayOf("--analysis-mode", "light")).toSpec()
-                assertThat(spec.projectSpec.analysisMode).isEqualTo(AnalysisMode.light)
+                assertThat(spec.projectSpec.analysisMode).isEqualTo(AnalysisMode.Light)
             }
 
             @Test
             fun `--analysis-mode full is accepted`() {
                 val spec = parseArguments(arrayOf("--analysis-mode", "full")).toSpec()
-                assertThat(spec.projectSpec.analysisMode).isEqualTo(AnalysisMode.full)
+                assertThat(spec.projectSpec.analysisMode).isEqualTo(AnalysisMode.Full)
             }
 
             @Test
             fun `throws exception on invalid analysis mode`() {
                 assertThatExceptionOfType(HandledArgumentViolation::class.java)
                     .isThrownBy { parseArguments(arrayOf("--analysis-mode", "invalid")) }
+                    .withMessage("Invalid value for --analysis-mode parameter. Allowed values:[full, light]")
             }
         }
 
