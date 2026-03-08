@@ -1,5 +1,6 @@
 plugins {
     id("module")
+    id("generator")
 }
 
 val extraDepsToPackage by configurations.registering
@@ -26,17 +27,6 @@ dependencies {
     testRuntimeOnly(libs.slf4j.nop)
     extraDepsToPackage(libs.slf4j.nop)
 }
-
-consumeGeneratedConfig(
-    fromProject = projects.detektGenerator,
-    fromConfiguration = "generatedKtlintWrapperConfig",
-    forTask = tasks.sourcesJar
-)
-consumeGeneratedConfig(
-    fromProject = projects.detektGenerator,
-    fromConfiguration = "generatedKtlintWrapperConfig",
-    forTask = tasks.processResources
-)
 
 val depsToPackage = setOf(
     "org.ec4j.core",

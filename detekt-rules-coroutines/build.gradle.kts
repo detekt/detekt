@@ -1,5 +1,6 @@
 plugins {
     id("module")
+    id("generator")
 }
 
 dependencies {
@@ -16,3 +17,5 @@ dependencies {
     testRuntimeOnly(libs.kotlinx.coroutinesCore)
     testRuntimeOnly(libs.kotlinx.coroutinesTest)
 }
+
+detektGeneratorConfig.addConfigToResources = false
