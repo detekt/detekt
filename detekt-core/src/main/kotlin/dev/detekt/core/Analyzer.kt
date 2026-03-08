@@ -96,13 +96,14 @@ internal class Analyzer(
             val (findings, duration) = measureTimedValue {
                 rule.visitFile(file, languageVersionSettings)
             }
-            val filteredFindings = findings
+            ruleListeners.forEach { it.afterRuleExecution(file, ruleInstance, findings.size, duration) }
+
+            findings
                 .filterNot {
                     it.entity.ktElement.isSuppressedBy(ruleInstance.id, rule.aliases, ruleInstance.ruleSetId)
                 }
                 .filterSuppressedFindings(rule, analysisMode)
-            ruleListeners.forEach { it.afterRuleExecution(file, ruleInstance, filteredFindings.size, duration) }
-            filteredFindings.map { it.toIssue(ruleInstance, ruleInstance.severity, settings.spec.projectSpec.basePath) }
+                .map { it.toIssue(ruleInstance, ruleInstance.severity, settings.spec.projectSpec.basePath) }
         }
     }
 }
