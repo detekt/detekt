@@ -2,10 +2,7 @@ package dev.detekt.core.profiling
 
 import dev.detekt.api.Detektion
 import dev.detekt.api.RuleExecutionListener
-import dev.detekt.api.RuleExecutionMetric
-import dev.detekt.api.RuleFileExecution
 import dev.detekt.api.RuleInstance
-import dev.detekt.api.RuleProfilingKeys
 import dev.detekt.api.RuleSetId
 import dev.detekt.psi.absolutePath
 import org.jetbrains.kotlin.psi.KtFile
