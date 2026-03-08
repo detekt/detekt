@@ -1,5 +1,6 @@
 plugins {
     id("module")
+    id("generator")
 }
 
 dependencies {
@@ -18,3 +19,5 @@ dependencies {
     testImplementation(libs.assertj.core)
     testCompileOnly(libs.jetbrains.annotations)
 }
+
+detektGeneratorConfig.addConfigToResources = false
