@@ -4,7 +4,7 @@ import dev.detekt.api.Config
 import dev.detekt.api.Detektion
 import dev.detekt.api.FileProcessListener
 import dev.detekt.api.RuleExecutionListener
-import dev.detekt.api.RuleProfilingKeys
+import dev.detekt.core.profiling.RuleProfilingKeys
 import dev.detekt.api.RuleSetProvider
 import dev.detekt.core.Analyzer
 import dev.detekt.core.FileProcessorLocator

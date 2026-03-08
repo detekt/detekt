@@ -1,10 +1,10 @@
-package dev.detekt.api
+package dev.detekt.core.profiling
 
-import dev.drewhamilton.poko.Poko
+import dev.detekt.api.RuleSetId
 import kotlin.time.Duration
 
 /**
- * Keys for storing rule execution profiling data in [Detektion.userData].
+ * Keys for storing rule execution profiling data in [dev.detekt.api.Detektion.userData].
  */
 object RuleProfilingKeys {
     /**
@@ -34,8 +34,7 @@ object RuleProfilingKeys {
  * @property executionCount Number of files this rule was executed against
  * @property totalFindings Total number of findings reported by this rule
  */
-@Poko
-class RuleExecutionMetric internal constructor(
+data class RuleExecutionMetric(
     val ruleId: String,
     val ruleSetId: RuleSetId,
     val totalDuration: Duration,
@@ -47,23 +46,6 @@ class RuleExecutionMetric internal constructor(
      */
     val averageDuration: Duration
         get() = if (executionCount > 0) totalDuration / executionCount else Duration.ZERO
-
-    companion object {
-        operator fun invoke(
-            ruleId: String,
-            ruleSetId: RuleSetId,
-            totalDuration: Duration,
-            executionCount: Int,
-            totalFindings: Int,
-        ): RuleExecutionMetric =
-            RuleExecutionMetric(
-                ruleId = ruleId,
-                ruleSetId = ruleSetId,
-                totalDuration = totalDuration,
-                executionCount = executionCount,
-                totalFindings = totalFindings,
-            )
-    }
 }
 
 /**
@@ -75,28 +57,10 @@ class RuleExecutionMetric internal constructor(
  * @property duration Time taken by the rule to process this file
  * @property findings Number of findings reported for this file
  */
-@Poko
-class RuleFileExecution internal constructor(
+data class RuleFileExecution(
     val ruleId: String,
     val ruleSetId: RuleSetId,
     val filePath: String,
     val duration: Duration,
     val findings: Int,
-) {
-    companion object {
-        operator fun invoke(
-            ruleId: String,
-            ruleSetId: RuleSetId,
-            filePath: String,
-            duration: Duration,
-            findings: Int,
-        ): RuleFileExecution =
-            RuleFileExecution(
-                ruleId = ruleId,
-                ruleSetId = ruleSetId,
-                filePath = filePath,
-                duration = duration,
-                findings = findings,
-            )
-    }
-}
+)
