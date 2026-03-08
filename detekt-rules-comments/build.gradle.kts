@@ -1,5 +1,6 @@
 plugins {
     id("module")
+    id("generator")
 }
 
 dependencies {
@@ -14,3 +15,5 @@ dependencies {
     testImplementation(libs.assertj.core)
     testImplementation(projects.detektApi)
 }
+
+detektGeneratorConfig.addConfigToResources = false
