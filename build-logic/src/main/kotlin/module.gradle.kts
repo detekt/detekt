@@ -23,7 +23,12 @@ tasks.withType<Test>().configureEach {
     val compileTestSnippets = providers.gradleProperty("compile-test-snippets").orNull.toBoolean()
     systemProperty("compile-test-snippets", compileTestSnippets)
 
-    maxHeapSize = "3g"
+    if (compileTestSnippets) {
+        maxHeapSize = "4g"
+        forkEvery = 200
+    } else {
+        maxHeapSize = "3g"
+    }
 
     testLogging {
         // set options for log level LIFECYCLE
