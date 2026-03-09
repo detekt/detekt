@@ -85,10 +85,10 @@ class MagicNumber(config: Config) :
     private val ignoreHashCodeFunction: Boolean by config(true)
 
     @Configuration("whether magic numbers in property declarations should be ignored")
-    private val ignorePropertyDeclaration: Boolean by config(false)
+    private val ignorePropertyDeclaration: Boolean by config(true)
 
     @Configuration("whether magic numbers in local variable declarations should be ignored")
-    private val ignoreLocalVariableDeclaration: Boolean by config(false)
+    private val ignoreLocalVariableDeclaration: Boolean by config(true)
 
     @Configuration("whether magic numbers in constant declarations should be ignored")
     private val ignoreConstantDeclaration: Boolean by config(true)
@@ -159,7 +159,7 @@ class MagicNumber(config: Config) :
     private fun parseAsDoubleOrNull(rawToken: String): Double? =
         try {
             parseAsDouble(rawToken)
-        } catch (e: NumberFormatException) {
+        } catch (_: NumberFormatException) {
             null
         }
 

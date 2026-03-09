@@ -23,7 +23,6 @@ style:
     excludes: ["**/GradleCompat.kt"]
   MagicNumber:
     active: true
-    ignoreLocalVariableDeclaration: true
     excludes: ["**/test/**", "**/*Test.kt", "**/*Spec.kt"]
   MaxLineLength:
     active: true
