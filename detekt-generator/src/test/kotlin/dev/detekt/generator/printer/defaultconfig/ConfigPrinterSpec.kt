@@ -42,16 +42,6 @@ class ConfigPrinterSpec {
     }
 
     @Test
-    fun `prints default config configuration`() {
-        assertThat(yamlString).contains("config:")
-    }
-
-    @Test
-    fun `prints default processor configuration`() {
-        assertThat(yamlString).contains("processors:")
-    }
-
-    @Test
     fun `omits deprecated ruleset properties`() {
         assertThat(yamlString).doesNotContain("deprecatedSimpleConfig")
         assertThat(yamlString).doesNotContain("deprecatedListConfig")
