@@ -14,7 +14,7 @@ class Generator(
     private val inputPaths: List<Path>,
     documentationPath: Path?,
     configPath: Path?,
-    private val outPrinter: PrintStream = System.out,
+    private val outPrinter: PrintStream,
 ) {
     private val collector = DetektCollector()
     private val printer = DetektPrinter(documentationPath, configPath, outPrinter)
