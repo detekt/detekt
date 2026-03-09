@@ -17,7 +17,7 @@ class Generator(
     private val outPrinter: PrintStream = System.out,
 ) {
     private val collector = DetektCollector()
-    private val printer = DetektPrinter(documentationPath, configPath)
+    private val printer = DetektPrinter(documentationPath, configPath, outPrinter)
 
     fun execute() {
         val time = measureTime {
