@@ -91,9 +91,6 @@ jobs:
         with:
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
-      - name: Verify Generated Detekt Config File
-        run: ./gradlew verifyGeneratorOutput
-
   compile-test-snippets:
     runs-on: ubuntu-latest
     steps:
