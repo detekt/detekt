@@ -7,10 +7,7 @@ import dev.detekt.generator.out.YamlWriter
 import dev.detekt.generator.printer.DeprecatedPrinter
 import dev.detekt.generator.printer.RuleSetPagePrinter
 import dev.detekt.generator.printer.defaultconfig.ConfigPrinter
-import dev.detekt.generator.printer.defaultconfig.printRuleSetPage
-import dev.detekt.utils.yaml
 import java.nio.file.Path
-import kotlin.io.path.Path
 
 class DetektPrinter(private val documentationPath: Path?, private val configPath: Path?) {
 
@@ -27,31 +24,8 @@ class DetektPrinter(private val documentationPath: Path?, private val configPath
             }
         }
         if (configPath != null) {
-            yamlWriter.write(configPath, "default-detekt-config") {
-                ConfigPrinter.print(
-                    pages.filterNot { it.ruleSet.name in listOf("ktlint", "libraries", "ruleauthors") }
-                )
-            }
-            propertiesWriter.write(configPath, "deprecation") {
-                // We intentionally not filter for "ktlint" as we want to be able to deprecate
-                // properties from that ruleset as well.
-                DeprecatedPrinter.print(pages)
-            }
-        }
-        yamlWriter.write(Path("../detekt-rules-ktlint-wrapper/src/main/resources/config"), "config") {
-            yaml {
-                printRuleSetPage(pages.first { it.ruleSet.name == "ktlint" })
-            }
-        }
-        yamlWriter.write(Path("../detekt-rules-libraries/src/main/resources/config"), "config") {
-            yaml {
-                printRuleSetPage(pages.first { it.ruleSet.name == "libraries" })
-            }
-        }
-        yamlWriter.write(Path("../detekt-rules-ruleauthors/src/main/resources/config"), "config") {
-            yaml {
-                printRuleSetPage(pages.first { it.ruleSet.name == "ruleauthors" })
-            }
+            yamlWriter.write(configPath, "config") { ConfigPrinter.print(pages) }
+            propertiesWriter.write(configPath, "deprecation") { DeprecatedPrinter.print(pages) }
         }
     }
 
