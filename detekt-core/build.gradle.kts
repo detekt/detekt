@@ -62,11 +62,12 @@ val generateDefaultDetektConfig by tasks.registering {
         .withPropertyName(generatedConfig.name)
         .withPathSensitivity(PathSensitivity.RELATIVE)
 
-    val output = sourceSets.main.map { it.resources.srcDirs.single().resolve("default-detekt-config.yml") }
-    outputs.file(output)
+    val output = layout.buildDirectory
+        .map { it.dir("generated").dir("detekt").dir("config").asFile }
+    outputs.dir(output)
 
     doLast {
-        output.get().outputStream().use { outputStream ->
+        output.get().resolve("default-detekt-config.yml").outputStream().use { outputStream ->
             outputStream.writer().use { writer ->
                 writer.write(
                     """
@@ -121,11 +122,11 @@ val generateDeprecationList by tasks.registering {
         .withPropertyName(generatedDeprecations.name)
         .withPathSensitivity(PathSensitivity.RELATIVE)
 
-    val output = sourceSets.main.map { it.resources.srcDirs.single().resolve("deprecation.properties") }
-    outputs.file(output)
+    val output = layout.buildDirectory.map { it.dir("generated").dir("detekt").dir("deprecation").asFile }
+    outputs.dir(output)
 
     doLast {
-        output.get().outputStream().use { outputStream ->
+        output.get().resolve("deprecation.properties").outputStream().use { outputStream ->
             inputs.files.asFileTree.forEach {
                 it.inputStream().use { inputStream -> inputStream.copyTo(outputStream) }
             }
@@ -133,35 +134,11 @@ val generateDeprecationList by tasks.registering {
     }
 }
 
-tasks.processResources.configure {
-    inputs.files(generateDefaultDetektConfig)
-    inputs.files(generateDeprecationList)
-}
-
-tasks.sourcesJar.configure {
-    inputs.files(generateDefaultDetektConfig)
-    inputs.files(generateDeprecationList)
-}
-
-val verifyGeneratorOutput by tasks.registering(Exec::class) {
-    dependsOn(generateDefaultDetektConfig, generateDeprecationList)
-    description = "Verifies that generated config files are up-to-date"
-    commandLine = listOf(
-        "git",
-        "diff",
-        "--quiet",
-        sourceSets.main.map { it.resources.srcDirs.single().resolve("default-detekt-config.yml") }.get().toString(),
-        sourceSets.main.map { it.resources.srcDirs.single().resolve("deprecation.properties") }.get().toString(),
-    )
-    isIgnoreExitValue = true
-
-    doLast {
-        if (executionResult.get().exitValue == 1) {
-            throw GradleException(
-                "At least one generated configuration file is not up-to-date. " +
-                    "You can execute the Gradle tasks generateDefaultDetektConfig and generateDeprecationList " +
-                    "to update the generated files and then commit the changes."
-            )
+sourceSets {
+    main {
+        resources {
+            srcDir(generateDefaultDetektConfig)
+            srcDir(generateDeprecationList)
         }
     }
 }
