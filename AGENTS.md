@@ -39,7 +39,7 @@ cd detekt
 ./gradlew test detektFunctionalTest detektFunctionalTestMinSupportedGradle
 
 # Generate documentation (when modifying rules)
-./gradlew generateDocumentation
+./gradlew generateDefaultDetektConfig generateDeprecationList
 ```
 
 ## Project Structure
@@ -150,7 +150,7 @@ When an AI agent implements a new rule:
 1. Add the rule to the appropriate `RuleSetProvider`
 2. Include comprehensive KDoc with `<noncompliant>` and `<compliant>` examples
 3. Write thorough tests using `lint()` or `compileAndLintWithContext()`
-4. Run `./gradlew generateDocumentation` to update config files
+4. Run `./gradlew generateDefaultDetektConfig generateDeprecationList` to update config files
 5. Optionally test with `--run-rule RuleSet:RuleId` on real Kotlin projects to verify behavior
 
 ### Rule Documentation Requirements
