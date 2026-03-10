@@ -32,7 +32,6 @@ import org.jetbrains.kotlin.psi.psiUtil.siblings
  * class Bar { }
  * </compliant>
  */
-@Alias("SpacingAfterPackageDeclaration")
 class SpacingAfterPackageAndImports(config: Config) :
     Rule(config, "Violation of the package and import statements declaration style detected.") {
 
