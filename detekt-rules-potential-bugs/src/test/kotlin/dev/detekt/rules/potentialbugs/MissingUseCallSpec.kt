@@ -91,6 +91,42 @@ class MissingUseCallSpec(private val env: KotlinEnvironmentContainer) {
     }
 
     @Test
+    fun `does not report when _Closeable_ is passed to requireNotNull and result uses _use_`() {
+        val code = """
+            import java.io.InputStream
+
+            fun createInputStream(): InputStream? {
+                throw UnsupportedOperationException()
+            }
+
+            fun test() {
+                requireNotNull(createInputStream()) { "Stream should not be null" }.use {
+                }
+            }
+        """.trimIndent()
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `does not report when _Closeable_ is passed to checkNotNull and result uses _use_`() {
+        val code = """
+            import java.io.InputStream
+
+            fun createInputStream(): InputStream? {
+                throw UnsupportedOperationException()
+            }
+
+            fun test() {
+                checkNotNull(createInputStream()) { "Stream should not be null" }.use {
+                }
+            }
+        """.trimIndent()
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
     fun `does report when _use_ is not used in outer closeable taking closable param`() {
         val code = """
             import java.io.Closeable

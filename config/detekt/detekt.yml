@@ -203,6 +203,7 @@ style:
   MagicNumber:
     excludes: ['**/test/**', '**/*Test.kt', '**/*Spec.kt']
     ignorePropertyDeclaration: true
+    ignoreLocalVariableDeclaration: true
     ignoreAnnotation: true
     ignoreEnums: true
     ignoreNumbers:
