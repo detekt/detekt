@@ -30,7 +30,6 @@ import org.jetbrains.kotlin.psi.KtFile
 import java.io.File
 import java.io.OutputStream
 import java.io.PrintStream
-import java.util.UUID
 import kotlin.io.path.Path
 
 interface EnvironmentAware {
@@ -88,20 +87,19 @@ internal class EnvironmentFacade(projectSpec: ProjectSpec, compilerSpec: Compile
                     }
                 }
 
-                val friends = configuration.friendPaths.map {
-                    buildKtLibraryModule {
-                        platform = targetPlatform
-                        addBinaryRoot(Path(it))
-                        libraryName = UUID.randomUUID().toString()
+                val friends = configuration.friendPaths.takeIf { it.isNotEmpty() }
+                    ?.let { paths ->
+                        buildKtLibraryModule {
+                            platform = targetPlatform
+                            paths.forEach { addBinaryRoot(Path(it)) }
+                            libraryName = "friendDependencies"
+                        }
                     }
-                }
 
-                val dependencies = configuration.jvmClasspathRoots.map {
-                    buildKtLibraryModule {
-                        platform = targetPlatform
-                        addBinaryRoot(it.toPath())
-                        libraryName = "regulardependencies"
-                    }
+                val dependencies = buildKtLibraryModule {
+                    platform = targetPlatform
+                    addBinaryRoots(configuration.jvmClasspathRoots.map { it.toPath() })
+                    libraryName = "regularDependencies"
                 }
 
                 sourceModule = buildKtSourceModule {
@@ -110,14 +108,12 @@ internal class EnvironmentFacade(projectSpec: ProjectSpec, compilerSpec: Compile
                     moduleName = "source"
 
                     jdk?.let { addRegularDependency(it) }
-                    friends.forEach {
+                    friends?.let {
                         // Friend dependencies must also be declared as regular dependencies - https://github.com/JetBrains/kotlin/commit/69cfa0498a76f0c3eec39eb06b5de70a0d06e41a
                         addFriendDependency(it)
                         addRegularDependency(it)
                     }
-                    dependencies.forEach {
-                        addRegularDependency(it)
-                    }
+                    addRegularDependency(dependencies)
 
                     languageVersionSettings = configuration.languageVersionSettings
                 }
