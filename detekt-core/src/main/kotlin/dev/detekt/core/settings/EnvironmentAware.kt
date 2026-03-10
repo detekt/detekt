@@ -30,7 +30,6 @@ import org.jetbrains.kotlin.psi.KtFile
 import java.io.File
 import java.io.OutputStream
 import java.io.PrintStream
-import java.util.UUID
 import kotlin.io.path.Path
 
 interface EnvironmentAware {
