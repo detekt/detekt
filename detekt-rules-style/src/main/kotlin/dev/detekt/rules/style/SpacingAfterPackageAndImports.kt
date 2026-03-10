@@ -2,7 +2,6 @@ package dev.detekt.rules.style
 
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiWhiteSpace
-import dev.detekt.api.Alias
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
