@@ -5,6 +5,9 @@ import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.junit.KotlinCoreEnvironmentTest
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.KotlinEnvironmentContainer
+import org.jetbrains.kotlin.config.ApiVersion
+import org.jetbrains.kotlin.config.LanguageVersion
+import org.jetbrains.kotlin.config.LanguageVersionSettingsImpl
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
@@ -227,5 +230,66 @@ class NullableToStringCallSpec(private val env: KotlinEnvironmentContainer) {
         """.trimIndent()
         val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(1)
+    }
+
+    @Test
+    fun `doesn't report when contract implying non null - #9145`() {
+        val code = """
+            @OptIn(kotlin.contracts.ExperimentalContracts::class)
+            fun CharSequence?.isNotNullOrBlank(): Boolean {
+                kotlin.contracts.contract {
+                    returns(true) implies (this@isNotNullOrBlank != null)
+                }
+                return !this.isNullOrBlank()
+            }
+            
+            data class Demo(
+                val firstName: String?,
+                val lastName: String?,
+                val default: String,
+            ) {
+                fun getDisplayName(): String {
+                    return if (firstName.isNotNullOrBlank() && lastName.isNotNullOrBlank()) {
+                        "${'$'}firstName ${'$'}lastName"
+                    } else default
+                }
+            }
+        """.trimIndent()
+        val actual = subject.lintWithContext(
+            environment = env,
+            content = code,
+        )
+        assertThat(actual).isEmpty()
+    }
+
+    @Test
+    fun `doesn't report when contract implying non null is used in Kotlin 2_3`() {
+        val code = """
+            @OptIn(kotlin.contracts.ExperimentalContracts::class)
+            fun CharSequence?.isNotNullOrBlank(): Boolean {
+                kotlin.contracts.contract {
+                    returns(true) implies (this@isNotNullOrBlank != null)
+                }
+                return !this.isNullOrBlank()
+            }
+            
+            data class Demo(
+                val firstName: String?,
+                val lastName: String?,
+                val default: String,
+            ) {
+                fun getDisplayName(): String {
+                    return if (firstName.isNotNullOrBlank() && lastName.isNotNullOrBlank()) {
+                        "${'$'}firstName ${'$'}lastName"
+                    } else default
+                }
+            }
+        """.trimIndent()
+        val actual = subject.lintWithContext(
+            environment = env,
+            content = code,
+            languageVersionSettings = LanguageVersionSettingsImpl(LanguageVersion.KOTLIN_2_3, ApiVersion.KOTLIN_2_3),
+        )
+        assertThat(actual).isEmpty()
     }
 }
