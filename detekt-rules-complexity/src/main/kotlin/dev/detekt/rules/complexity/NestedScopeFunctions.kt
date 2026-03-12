@@ -53,7 +53,7 @@ class NestedScopeFunctions(config: Config) :
 
     @Configuration(
         "Set of scope function names which add complexity. " +
-            "Function names have to be fully qualified. For example 'kotlin.apply'."
+            FunctionMatcher.FUNCTION_MATCHER_DOC
     )
     private val functions: List<FunctionMatcher> by config(DEFAULT_FUNCTIONS) {
         it.toSet().map(FunctionMatcher::fromFunctionSignature)
