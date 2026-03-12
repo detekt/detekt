@@ -32,7 +32,6 @@ class KotlinAnalysisApiEngine : AutoCloseable {
         javaSourceRoots: List<Path> = emptyList(),
         jvmClasspathRoots: List<Path> =
             listOf(File(CharRange::class.java.protectionDomain.codeSource.location.path).toPath()),
-        allowCompilationErrors: Boolean = false,
     ): KtFile {
         val session = buildStandaloneAnalysisAPISession(disposable) {
             buildKtModuleProvider {
@@ -70,13 +69,7 @@ class KotlinAnalysisApiEngine : AutoCloseable {
             }
         }
 
-        val file = session.modulesWithFiles.values.flatten().single { it.name == "dummy.kt" } as KtFile
-
-        if (!allowCompilationErrors) {
-            file.checkCompilesWithoutErrors()
-        }
-
-        return file
+        return session.modulesWithFiles.values.flatten().single { it.name == "dummy.kt" } as KtFile
     }
 
     override fun close() {
