@@ -25,6 +25,10 @@ public final class dev/detekt/test/utils/KotlinEnvironmentContainerKt {
 	public static synthetic fun createEnvironment$default (Ljava/util/List;ILjava/lang/Object;)Ldev/detekt/test/utils/KotlinEnvironmentContainer;
 }
 
+public final class dev/detekt/test/utils/KtFileKt {
+	public static final fun checkCompilesWithoutErrors (Lorg/jetbrains/kotlin/psi/KtFile;)V
+}
+
 public final class dev/detekt/test/utils/NullPrintStream : java/io/PrintStream {
 	public fun <init> ()V
 }
