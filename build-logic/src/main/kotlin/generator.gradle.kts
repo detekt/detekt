@@ -18,7 +18,7 @@ project.plugins.withId("org.jetbrains.kotlin.jvm") {
     val configDir = generatedDetektDir.map { it.resolve("config") }
     val documentationDir = generatedDetektDir.map { it.resolve("documentation") }
 
-    val generateConfig = tasks.register<JavaExec>("generateConfig") {
+    val generateConfig = tasks.register<JavaExecCacheable>("generateConfig") {
         inputs.files(kotlinDirs)
         outputs.dir(generatedDetektDir)
 
@@ -82,3 +82,6 @@ project.plugins.withId("org.jetbrains.kotlin.jvm") {
 interface DetektGeneratorExtension {
     val addConfigToResources: Property<Boolean>
 }
+
+@CacheableTask
+abstract class JavaExecCacheable : JavaExec()
