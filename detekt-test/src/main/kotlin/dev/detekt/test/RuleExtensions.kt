@@ -57,7 +57,7 @@ fun <T> T.lintWithContext(
             javaSourceRoots = environment.javaSourceRoots,
             jvmClasspathRoots = environment.jvmClasspathRoots,
         )
-        if (!allowCompilationErrors) ktFile.checkCompilesWithoutErrors()
+        if (!allowCompilationErrors && shouldCompileTestSnippets) ktFile.checkCompilesWithoutErrors()
         visitFile(ktFile, languageVersionSettings).filterSuppressed(this)
     }
 
