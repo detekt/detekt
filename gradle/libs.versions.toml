@@ -25,7 +25,7 @@ android-gradleApi = { module = "com.android.tools.build:gradle-api", version = "
 
 # This represents the oldest JUnit version supported by detekt-test-junit.
 # This should only be updated when updating the minimum version supported by detekt-test-junit.
-junit-jupiterApi = { module = "org.junit.jupiter:junit-jupiter-api", version = "5.0.0" }
+junit-jupiterApi = { module = "org.junit.jupiter:junit-jupiter-api", version = "5.1.0" }
 
 # This represents the oldest Kotlin version that is supported by detekt's Gradle plugin.
 # This should only be updated when updating the minimum version supported by detekt's Gradle plugin.

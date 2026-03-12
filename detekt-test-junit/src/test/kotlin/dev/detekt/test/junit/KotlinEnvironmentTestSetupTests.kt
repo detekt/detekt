@@ -1,11 +1,16 @@
 package dev.detekt.test.junit
 
+import dev.detekt.test.utils.KotlinAnalysisApiEngine
 import dev.detekt.test.utils.KotlinEnvironmentContainer
 import dev.detekt.test.utils.compileContentForTest
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest(additionalJavaSourcePaths = ["java"])
-class CompileWithSourcesTest(private val environment: KotlinEnvironmentContainer) {
+@KotlinAnalysisApiEngineTest
+class CompileWithSourcesTest(
+    private val environment: KotlinEnvironmentContainer,
+    private val analysisApiEngine: KotlinAnalysisApiEngine,
+) {
     @Test
     fun `can compile snippet with test resources`() {
         val content = $$"""
@@ -18,12 +23,16 @@ class CompileWithSourcesTest(private val environment: KotlinEnvironmentContainer
             }
         """.trimIndent()
 
-        compileContentForTest(content, environment)
+        compileContentForTest(content, environment, analysisApiEngine)
     }
 }
 
 @KotlinCoreEnvironmentTest
-class CompileWithThirdPartyLib(private val environment: KotlinEnvironmentContainer) {
+@KotlinAnalysisApiEngineTest
+class CompileWithThirdPartyLib(
+    private val environment: KotlinEnvironmentContainer,
+    private val analysisApiEngine: KotlinAnalysisApiEngine,
+) {
     @Test
     fun `can compile snippet with junit5 api`() {
         val content = """
@@ -38,14 +47,16 @@ class CompileWithThirdPartyLib(private val environment: KotlinEnvironmentContain
             }
         """.trimIndent()
 
-        compileContentForTest(content, environment)
+        compileContentForTest(content, environment, analysisApiEngine)
     }
 }
 
-@KotlinCoreEnvironmentTest(
-    additionalJavaSourcePaths = ["java"],
-)
-class CompileWithBoth(private val environment: KotlinEnvironmentContainer) {
+@KotlinCoreEnvironmentTest(additionalJavaSourcePaths = ["java"])
+@KotlinAnalysisApiEngineTest
+class CompileWithBoth(
+    private val environment: KotlinEnvironmentContainer,
+    private val analysisApiEngine: KotlinAnalysisApiEngine,
+) {
     @Test
     fun `can compile snippet with external library and test resources`() {
         val content = """
@@ -63,6 +74,6 @@ class CompileWithBoth(private val environment: KotlinEnvironmentContainer) {
             }
         """.trimIndent()
 
-        compileContentForTest(content, environment)
+        compileContentForTest(content, environment, analysisApiEngine)
     }
 }

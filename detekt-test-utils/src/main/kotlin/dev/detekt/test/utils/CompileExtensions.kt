@@ -22,13 +22,14 @@ fun compileContentForTest(@Language("kotlin") content: String, filename: String 
 fun compileContentForTest(
     @Language("kotlin") content: String,
     environment: KotlinEnvironmentContainer,
+    kotlinAnalysisApiEngine: KotlinAnalysisApiEngine,
     filename: String = "Test.kt",
 ): KtFile {
     require('/' !in filename && '\\' !in filename) {
         "filename must be a file name only and not contain any path elements"
     }
 
-    return KotlinAnalysisApiEngine.compile(
+    return kotlinAnalysisApiEngine.compile(
         code = content,
         javaSourceRoots = environment.javaSourceRoots,
         jvmClasspathRoots = environment.jvmClasspathRoots,

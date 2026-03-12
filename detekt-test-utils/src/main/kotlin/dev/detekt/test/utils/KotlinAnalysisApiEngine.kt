@@ -20,6 +20,7 @@ import org.jetbrains.kotlin.diagnostics.PsiDiagnosticUtils
 import org.jetbrains.kotlin.platform.jvm.JvmPlatforms
 import org.jetbrains.kotlin.psi.KtFile
 import java.io.File
+import java.lang.AutoCloseable
 import java.nio.file.Path
 import kotlin.io.path.Path
 
@@ -27,10 +28,11 @@ import kotlin.io.path.Path
  * The object to use the Kotlin Analysis API for code compilation.
  */
 @OptIn(KaExperimentalApi::class)
-object KotlinAnalysisApiEngine {
+class KotlinAnalysisApiEngine : AutoCloseable {
     private val targetPlatform = JvmPlatforms.defaultJvmPlatform
     private val configuration = CompilerConfiguration()
     private val target = KaCompilerTarget.Jvm(isTestMode = false, compiledClassHandler = null, debuggerExtension = null)
+    private val disposable = Disposer.newDisposable()
 
     /**
      * Compiles a given code string using Kotlin's Analysis API.
@@ -46,8 +48,6 @@ object KotlinAnalysisApiEngine {
             listOf(File(CharRange::class.java.protectionDomain.codeSource.location.path).toPath()),
         allowCompilationErrors: Boolean = false,
     ): KtFile {
-        val disposable = Disposer.newDisposable()
-
         @OptIn(KaImplementationDetail::class, KaPlatformInterface::class)
         val session = buildStandaloneAnalysisAPISession(disposable) {
             buildKtModuleProvider {
@@ -85,36 +85,36 @@ object KotlinAnalysisApiEngine {
             }
         }
 
-        try {
-            val file = session.modulesWithFiles.values.flatten().single { it.name == "dummy.kt" } as KtFile
+        val file = session.modulesWithFiles.values.flatten().single { it.name == "dummy.kt" } as KtFile
 
-            analyze(file) {
-                val result = compile(file, configuration, target) {
-                    it.severity != KaSeverity.ERROR
-                }
-
-                if (result is KaCompilationResult.Failure) {
-                    val errors = result.errors.joinToString("\n") {
-                        if (it is KaDiagnosticWithPsi<*>) {
-                            val lineAndColumn = PsiDiagnosticUtils.offsetToLineAndColumn(
-                                it.psi.containingFile.viewProvider.document,
-                                it.psi.textOffset
-                            )
-                            "${it.severity.name} ${it.defaultMessage} (${it.psi.containingFile.name}:${lineAndColumn.line}:${lineAndColumn.column})"
-                        } else {
-                            "${it.severity.name} ${it.defaultMessage}"
-                        }
-                    }
-
-                    if (!allowCompilationErrors) {
-                        error(errors)
-                    }
-                }
+        analyze(file) {
+            val result = compile(file, configuration, target) {
+                it.severity != KaSeverity.ERROR
             }
 
-            return file
-        } finally {
-            disposable.dispose()
+            if (result is KaCompilationResult.Failure) {
+                val errors = result.errors.joinToString("\n") {
+                    if (it is KaDiagnosticWithPsi<*>) {
+                        val lineAndColumn = PsiDiagnosticUtils.offsetToLineAndColumn(
+                            it.psi.containingFile.viewProvider.document,
+                            it.psi.textOffset
+                        )
+                        "${it.severity.name} ${it.defaultMessage} (${it.psi.containingFile.name}:${lineAndColumn.line}:${lineAndColumn.column})"
+                    } else {
+                        "${it.severity.name} ${it.defaultMessage}"
+                    }
+                }
+
+                if (!allowCompilationErrors) {
+                    error(errors)
+                }
+            }
         }
+
+        return file
+    }
+
+    override fun close() {
+        Disposer.dispose(disposable)
     }
 }

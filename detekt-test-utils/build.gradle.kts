@@ -12,6 +12,7 @@ dependencies {
     implementation(libs.kotlin.scriptingJvm)
 
     testImplementation(libs.assertj.core)
+    testImplementation(projects.detektTestJunit)
 }
 
 kotlin {

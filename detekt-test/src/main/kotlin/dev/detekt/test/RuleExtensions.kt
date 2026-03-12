@@ -30,7 +30,9 @@ fun Rule.lint(
     }
     if (compile && shouldCompileTestSnippets) {
         try {
-            KotlinAnalysisApiEngine.compile(content, jvmClasspathRoots = createEnvironment().jvmClasspathRoots)
+            KotlinAnalysisApiEngine().use {
+                it.compile(content, jvmClasspathRoots = createEnvironment().jvmClasspathRoots)
+            }
         } catch (ex: RuntimeException) {
             if (!ex.isNoMatchingOutputFiles()) throw ex
         }
@@ -45,16 +47,17 @@ fun <T> T.lintWithContext(
     @Language("kotlin") vararg dependencyContents: String,
     allowCompilationErrors: Boolean = false,
     languageVersionSettings: LanguageVersionSettings = LanguageVersionSettingsImpl.DEFAULT,
-): List<Finding> where T : Rule, T : RequiresAnalysisApi {
-    val ktFile = KotlinAnalysisApiEngine.compile(
-        code = content,
-        dependencyCodes = dependencyContents.toList(),
-        javaSourceRoots = environment.javaSourceRoots,
-        jvmClasspathRoots = environment.jvmClasspathRoots,
-        allowCompilationErrors = allowCompilationErrors
-    )
-    return visitFile(ktFile, languageVersionSettings).filterSuppressed(this)
-}
+): List<Finding> where T : Rule, T : RequiresAnalysisApi =
+    KotlinAnalysisApiEngine().use {
+        val ktFile = it.compile(
+            code = content,
+            dependencyCodes = dependencyContents.toList(),
+            javaSourceRoots = environment.javaSourceRoots,
+            jvmClasspathRoots = environment.jvmClasspathRoots,
+            allowCompilationErrors = allowCompilationErrors
+        )
+        visitFile(ktFile, languageVersionSettings).filterSuppressed(this)
+    }
 
 fun Rule.lint(
     ktFile: KtFile,

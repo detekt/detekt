@@ -1,5 +1,6 @@
 package dev.detekt.psi
 
+import dev.detekt.test.junit.KotlinAnalysisApiEngineTest
 import dev.detekt.test.utils.KotlinAnalysisApiEngine
 import dev.detekt.test.utils.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
@@ -12,14 +13,15 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvFileSource
 
-class AnnotationExcluderSpec {
+@KotlinAnalysisApiEngineTest
+class AnnotationExcluderSpec(val analysisApiEngine: KotlinAnalysisApiEngine) {
 
     @ParameterizedTest(
         name = "Given {0} is excluded when the {1} is found then the excluder returns {2} without Analysis API"
     )
     @CsvFileSource(resources = ["/annotation_excluder.csv"])
     fun `all cases`(exclusion: String, annotation: String, shouldExclude: Boolean) {
-        val (file, ktAnnotation) = createKtFile(annotation, enableAnalysisApi = false)
+        val (file, ktAnnotation) = analysisApiEngine.createKtFile(annotation, enableAnalysisApi = false)
         val excluder = AnnotationExcluder(file, listOf(exclusion.toRegex()), false)
 
         assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isEqualTo(shouldExclude)
@@ -30,7 +32,7 @@ class AnnotationExcluderSpec {
     )
     @CsvFileSource(resources = ["/annotation_excluder.csv"])
     fun `all cases - AnalysisAPI`(exclusion: String, annotation: String, shouldExclude: Boolean) {
-        val (file, ktAnnotation) = createKtFile(annotation, enableAnalysisApi = true)
+        val (file, ktAnnotation) = analysisApiEngine.createKtFile(annotation, enableAnalysisApi = true)
         val excluder = AnnotationExcluder(file, listOf(exclusion.toRegex()), true)
 
         assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isEqualTo(shouldExclude)
@@ -40,7 +42,7 @@ class AnnotationExcluderSpec {
     inner class `special cases` {
         @Test
         fun `should not exclude when the annotation was not found`() {
-            val (file, ktAnnotation) = createKtFile("@Component", enableAnalysisApi = false)
+            val (file, ktAnnotation) = analysisApiEngine.createKtFile("@Component", enableAnalysisApi = false)
             val excluder = AnnotationExcluder(file, listOf("SinceKotlin".toRegex()), false)
 
             assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isFalse()
@@ -48,7 +50,7 @@ class AnnotationExcluderSpec {
 
         @Test
         fun `should not exclude when no annotations should be excluded`() {
-            val (file, ktAnnotation) = createKtFile("@Component", enableAnalysisApi = false)
+            val (file, ktAnnotation) = analysisApiEngine.createKtFile("@Component", enableAnalysisApi = false)
             val excluder = AnnotationExcluder(file, emptyList(), false)
 
             assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isFalse()
@@ -56,7 +58,7 @@ class AnnotationExcluderSpec {
 
         @Test
         fun `should also exclude an annotation that is not imported`() {
-            val (file, ktAnnotation) = createKtFile("@SinceKotlin", enableAnalysisApi = false)
+            val (file, ktAnnotation) = analysisApiEngine.createKtFile("@SinceKotlin", enableAnalysisApi = false)
             val excluder = AnnotationExcluder(file, listOf("SinceKotlin".toRegex()), false)
 
             assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isTrue()
@@ -71,7 +73,7 @@ class AnnotationExcluderSpec {
 
             @Test
             fun `incorrect without Analysis API`() {
-                val (file, ktAnnotation) = createKtFile("@Deprecated", enableAnalysisApi = false)
+                val (file, ktAnnotation) = analysisApiEngine.createKtFile("@Deprecated", enableAnalysisApi = false)
                 val excluder = AnnotationExcluder(file, listOf("foo\\.Deprecated".toRegex()), false)
 
                 assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isTrue()
@@ -79,7 +81,7 @@ class AnnotationExcluderSpec {
 
             @Test
             fun `correct with Analysis API`() {
-                val (file, ktAnnotation) = createKtFile("@Deprecated(\"\")", enableAnalysisApi = true)
+                val (file, ktAnnotation) = analysisApiEngine.createKtFile("@Deprecated(\"\")", enableAnalysisApi = true)
                 val excluder = AnnotationExcluder(file, listOf("foo\\.Deprecated".toRegex()), true)
 
                 assertThat(excluder.shouldExclude(listOf(ktAnnotation))).isFalse()
@@ -114,7 +116,7 @@ class AnnotationExcluderSpec {
             @Test
             @Disabled("This should be doable but it's not imlemented yet")
             fun `correct with Analysis API`() {
-                val file = KotlinAnalysisApiEngine.compile(code, listOf(helloWorldAnnotationsCode))
+                val file = analysisApiEngine.compile(code, listOf(helloWorldAnnotationsCode))
                 val ktAnnotation = file.annotationEntry()
                 val excluder = AnnotationExcluder(file, listOf("Hello\\.World".toRegex()), true)
 
@@ -153,7 +155,7 @@ class AnnotationExcluderSpec {
 
             @Test
             fun `correct with Analysis API`() {
-                val file = KotlinAnalysisApiEngine.compile(file, listOf(helloWorldAnnotationsKtFile))
+                val file = analysisApiEngine.compile(file, listOf(helloWorldAnnotationsKtFile))
                 val ktAnnotation = file.annotationEntry()
                 val excluder = AnnotationExcluder(file, listOf("foo\\.World".toRegex()), true)
 
@@ -167,7 +169,10 @@ class AnnotationExcluderSpec {
     }
 }
 
-private fun createKtFile(annotation: String, enableAnalysisApi: Boolean): Pair<KtFile, KtAnnotationEntry> {
+private fun KotlinAnalysisApiEngine.createKtFile(
+    annotation: String,
+    enableAnalysisApi: Boolean,
+): Pair<KtFile, KtAnnotationEntry> {
     val code = """
         package foo
         
@@ -178,7 +183,7 @@ private fun createKtFile(annotation: String, enableAnalysisApi: Boolean): Pair<K
         fun function() = Unit
     """.trimIndent()
     val file = if (enableAnalysisApi) {
-        KotlinAnalysisApiEngine.compile(
+        compile(
             code,
             listOf(
                 """
