@@ -19,7 +19,7 @@ class FunctionSuppressorSpec {
         fun `Factory returns null if ignoreFunction is not set`() {
             val suppressor = functionSuppressorFactory(
                 buildRule(),
-                AnalysisMode.light,
+                AnalysisMode.Light,
             )
 
             assertThat(suppressor).isNull()
@@ -29,7 +29,7 @@ class FunctionSuppressorSpec {
         fun `Factory returns null if ignoreFunction is set to empty`() {
             val suppressor = functionSuppressorFactory(
                 buildRule("ignoreFunction" to emptyList<String>()),
-                AnalysisMode.light,
+                AnalysisMode.Light,
             )
 
             assertThat(suppressor).isNull()
@@ -39,7 +39,7 @@ class FunctionSuppressorSpec {
         fun `Factory returns not null if ignoreFunction is set to a not empty list`() {
             val suppressor = functionSuppressorFactory(
                 buildRule("ignoreFunction" to listOf("toString")),
-                AnalysisMode.light,
+                AnalysisMode.Light,
             )
 
             assertThat(suppressor).isNotNull()
@@ -50,7 +50,7 @@ class FunctionSuppressorSpec {
     inner class FunctionSuppressor {
         @Test
         fun `If KtElement is null it returns false`() {
-            val suppressor = buildFunctionSuppressor(listOf("toString"), AnalysisMode.light)
+            val suppressor = buildFunctionSuppressor(listOf("toString"), AnalysisMode.Light)
 
             assertThat(suppressor.shouldSuppress(buildFinding(element = null))).isFalse()
         }
@@ -75,14 +75,14 @@ class FunctionSuppressorSpec {
 
             @Test
             fun `If reports root it returns false`() {
-                val suppressor = buildFunctionSuppressor(listOf("toString"), AnalysisMode.light)
+                val suppressor = buildFunctionSuppressor(listOf("toString"), AnalysisMode.Light)
 
                 assertThat(suppressor.shouldSuppress(buildFinding(element = root))).isFalse()
             }
 
             @Test
             fun `If reports class it returns false`() {
-                val suppressor = buildFunctionSuppressor(listOf("toString"), AnalysisMode.light)
+                val suppressor = buildFunctionSuppressor(listOf("toString"), AnalysisMode.Light)
                 val ktClass = root.findChildByClass(KtClass::class.java)!!
 
                 assertThat(suppressor.shouldSuppress(buildFinding(element = ktClass))).isFalse()
@@ -90,7 +90,7 @@ class FunctionSuppressorSpec {
 
             @Test
             fun `If reports function in class it returns true`() {
-                val suppressor = buildFunctionSuppressor(listOf("toString"), AnalysisMode.light)
+                val suppressor = buildFunctionSuppressor(listOf("toString"), AnalysisMode.Light)
                 val ktFunction = root.findChildByClass(KtClass::class.java)!!
                     .findFunctionByName("toString")!!
 
@@ -99,7 +99,7 @@ class FunctionSuppressorSpec {
 
             @Test
             fun `If reports parameter in function in class it returns true`() {
-                val suppressor = buildFunctionSuppressor(listOf("toString"), AnalysisMode.light)
+                val suppressor = buildFunctionSuppressor(listOf("toString"), AnalysisMode.Light)
                 val ktParameter = root.findChildByClass(KtClass::class.java)!!
                     .findFunctionByName("toString")!!
                     .findDescendantOfType<KtParameter>()!!
@@ -109,7 +109,7 @@ class FunctionSuppressorSpec {
 
             @Test
             fun `If reports function in function it returns true`() {
-                val suppressor = buildFunctionSuppressor(listOf("toString"), AnalysisMode.light)
+                val suppressor = buildFunctionSuppressor(listOf("toString"), AnalysisMode.Light)
                 val ktFunction = root.findChildByClass(KtClass::class.java)!!
                     .findFunctionByName("toString")!!
                     .children
@@ -120,7 +120,7 @@ class FunctionSuppressorSpec {
 
             @Test
             fun `If reports parameter function in function it returns true`() {
-                val suppressor = buildFunctionSuppressor(listOf("toString"), AnalysisMode.light)
+                val suppressor = buildFunctionSuppressor(listOf("toString"), AnalysisMode.Light)
                 val ktFunction = root.findChildByClass(KtClass::class.java)!!
                     .findFunctionByName("toString")!!
                     .children
@@ -132,7 +132,7 @@ class FunctionSuppressorSpec {
 
             @Test
             fun `If reports parameter function in function it returns true 2`() {
-                val suppressor = buildFunctionSuppressor(listOf("hello"), AnalysisMode.light)
+                val suppressor = buildFunctionSuppressor(listOf("hello"), AnalysisMode.Light)
                 val ktFunction = root.findChildByClass(KtClass::class.java)!!
                     .findFunctionByName("toString")!!
                     .children
@@ -144,7 +144,7 @@ class FunctionSuppressorSpec {
 
             @Test
             fun `If reports top level function it returns true`() {
-                val suppressor = buildFunctionSuppressor(listOf("toString"), AnalysisMode.light)
+                val suppressor = buildFunctionSuppressor(listOf("toString"), AnalysisMode.Light)
                 val ktFunction = root.findChildByClass(KtFunction::class.java)!!
 
                 assertThat(suppressor.shouldSuppress(buildFinding(element = ktFunction))).isTrue()
@@ -167,13 +167,13 @@ class FunctionSuppressorSpec {
 
             @Test
             fun `If reports root it returns false`() {
-                val suppressor = buildFunctionSuppressor(listOf("toString"), AnalysisMode.light)
+                val suppressor = buildFunctionSuppressor(listOf("toString"), AnalysisMode.Light)
                 assertThat(suppressor.shouldSuppress(buildFinding(element = root))).isFalse()
             }
 
             @Test
             fun `If reports class it returns false`() {
-                val suppressor = buildFunctionSuppressor(listOf("toString"), AnalysisMode.light)
+                val suppressor = buildFunctionSuppressor(listOf("toString"), AnalysisMode.Light)
                 val ktClass = root.findChildByClass(KtClass::class.java)!!
 
                 assertThat(suppressor.shouldSuppress(buildFinding(element = ktClass))).isFalse()
@@ -181,7 +181,7 @@ class FunctionSuppressorSpec {
 
             @Test
             fun `If reports function in class it returns false`() {
-                val suppressor = buildFunctionSuppressor(listOf("toString"), AnalysisMode.light)
+                val suppressor = buildFunctionSuppressor(listOf("toString"), AnalysisMode.Light)
                 val ktFunction = root.findChildByClass(KtClass::class.java)!!
                     .findFunctionByName("compare")!!
 
@@ -190,7 +190,7 @@ class FunctionSuppressorSpec {
 
             @Test
             fun `If reports parameter in function in class it returns false`() {
-                val suppressor = buildFunctionSuppressor(listOf("toString"), AnalysisMode.light)
+                val suppressor = buildFunctionSuppressor(listOf("toString"), AnalysisMode.Light)
                 val ktParameter = root.findChildByClass(KtClass::class.java)!!
                     .findFunctionByName("compare")!!
                     .findDescendantOfType<KtParameter>()!!
@@ -200,7 +200,7 @@ class FunctionSuppressorSpec {
 
             @Test
             fun `If reports top level function it returns false`() {
-                val suppressor = buildFunctionSuppressor(listOf("toString"), AnalysisMode.light)
+                val suppressor = buildFunctionSuppressor(listOf("toString"), AnalysisMode.Light)
                 val ktFunction = root.findChildByClass(KtFunction::class.java)!!
 
                 assertThat(suppressor.shouldSuppress(buildFinding(element = ktFunction))).isFalse()
