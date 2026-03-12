@@ -127,4 +127,25 @@ class PropertyUsedBeforeDeclarationSpec(private val env: KotlinEnvironmentContai
         val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
+
+    @Test
+    fun `imported function is used - #9147`() {
+        val additionalCode = """
+            package com.xyz
+            
+            class AccountCapabilities
+            
+            fun accountCapabilities() = AccountCapabilities()
+        """.trimIndent()
+        val code = """
+            import com.xyz.AccountCapabilities
+            import com.xyz.accountCapabilities // this is a function
+
+            class Demo {
+               var accountCapabilities: AccountCapabilities? = accountCapabilities()
+            }
+        """.trimIndent()
+        val findings = subject.lintWithContext(env, code, additionalCode)
+        assertThat(findings).isEmpty()
+    }
 }
