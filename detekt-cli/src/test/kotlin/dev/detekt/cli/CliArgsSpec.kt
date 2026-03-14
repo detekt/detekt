@@ -388,6 +388,22 @@ internal class CliArgsSpec {
     }
 
     @Nested
+    inner class `Profiling parameter` {
+
+        @Test
+        fun `--profiling is false by default`() {
+            val spec = parseArguments(emptyArray()).toSpec()
+            assertThat(spec.executionSpec.profiling).isFalse()
+        }
+
+        @Test
+        fun `--profiling enables profiling`() {
+            val spec = parseArguments(arrayOf("--profiling")).toSpec()
+            assertThat(spec.executionSpec.profiling).isTrue()
+        }
+    }
+
+    @Nested
     inner class `Configuration of FailurePolicy` {
         @Test
         fun `not specified results in default value`() {
