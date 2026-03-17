@@ -28,6 +28,7 @@ internal fun Project.registerJvmCompilationDetektTask(
             compilation.output.classesDirs,
             siblingTask.map { it.libraries }
         )
+        detektTask.compilerPluginClasspath.conventionCompat(siblingTask.map { it.pluginClasspath })
         detektTask.friendPaths.conventionCompat(
             compilation.output.classesDirs,
             siblingTask.map { it.friendPaths }
@@ -84,6 +85,7 @@ internal fun Project.registerJvmCompilationCreateBaselineTask(
             compilation.output.classesDirs,
             siblingTask.map { it.libraries }
         )
+        createBaselineTask.compilerPluginClasspath.conventionCompat(siblingTask.map { it.pluginClasspath })
         createBaselineTask.friendPaths.conventionCompat(
             compilation.output.classesDirs,
             siblingTask.map { it.friendPaths }

@@ -1,5 +1,6 @@
 package dev.detekt.core.parser
 
+import com.intellij.openapi.Disposable
 import org.jetbrains.kotlin.cli.common.arguments.K2JVMCompilerArguments
 import org.jetbrains.kotlin.cli.common.arguments.parseCommandLineArguments
 import org.jetbrains.kotlin.cli.common.arguments.validateArguments
@@ -11,6 +12,7 @@ import org.jetbrains.kotlin.cli.jvm.config.addJavaSourceRoots
 import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoots
 import org.jetbrains.kotlin.cli.jvm.config.configureJdkClasspathRoots
 import org.jetbrains.kotlin.cli.jvm.configureAdvancedJvmOptions
+import org.jetbrains.kotlin.cli.jvm.plugins.PluginCliParser
 import org.jetbrains.kotlin.cli.jvm.setupJvmSpecificArguments
 import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
@@ -32,6 +34,8 @@ fun createCompilerConfiguration(
     jvmTarget: String,
     jdkHome: Path?,
     freeCompilerArgs: List<String>,
+    compilerPluginClasspath: String?,
+    disposable: Disposable,
     printStream: PrintStream,
 ): CompilerConfiguration {
     val javaFiles = pathsToAnalyze.flatMap { path ->
@@ -88,5 +92,30 @@ fun createCompilerConfiguration(
         }
 
         configureJdkClasspathRoots()
+        loadCompilerPlugins(compilerPluginClasspath, jvmCompilerArguments, disposable)
     }
+}
+
+private fun CompilerConfiguration.loadCompilerPlugins(
+    compilerPluginClasspath: String?,
+    jvmCompilerArguments: K2JVMCompilerArguments,
+    disposable: Disposable,
+) {
+    val pluginOptions = listOf("plugin:kotlin.scripting:disable=true")
+        .plus(jvmCompilerArguments.pluginOptions?.asList().orEmpty())
+        .distinct()
+
+    compilerPluginClasspath?.split(File.pathSeparator)
+        .orEmpty()
+        .takeIf { it.isNotEmpty() }
+        ?.let { pluginClasspaths ->
+            PluginCliParser.loadPluginsSafe(
+                pluginClasspaths = pluginClasspaths,
+                pluginOptions = pluginOptions,
+                pluginConfigurations = jvmCompilerArguments.pluginConfigurations?.asList().orEmpty(),
+                pluginOrderConstraints = jvmCompilerArguments.pluginOrderConstraints?.asList().orEmpty(),
+                configuration = this,
+                parentDisposable = disposable,
+            )
+        }
 }

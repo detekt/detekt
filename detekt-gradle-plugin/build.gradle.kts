@@ -150,6 +150,7 @@ dependencies {
 
     testKitRuntimeOnly(libs.kotlin.gradle.plugin)
     testKitRuntimeOnly(libs.android.gradle.plugin)
+    testKitRuntimeOnly(libs.kotlinx.serialization.gradle.plugin)
     testKitGradleMinVersionRuntimeOnly(libs.kotlin.gradle.plugin) {
         attributes {
             // Set this value to the minimum Gradle version tested in testKitGradleMinVersionRuntimeOnly source set

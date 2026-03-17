@@ -193,6 +193,12 @@ class CliArgs {
     var classpath: String? = null
 
     @Parameter(
+        names = ["--compiler-plugin-classpath"],
+        description = "Paths to Kotlin compiler plugin class files and jar files."
+    )
+    var compilerPluginClasspath: String? = null
+
+    @Parameter(
         names = ["--api-version"],
         converter = ApiVersionConverter::class,
         description = "Kotlin API version used by the code under analysis. Some rules use this " +

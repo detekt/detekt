@@ -46,18 +46,20 @@ internal class EnvironmentFacade(projectSpec: ProjectSpec, compilerSpec: Compile
     // This lateinit var can be changed to val if https://github.com/JetBrains/kotlin/pull/5703 is merged
     private lateinit var sourceModule: KaSourceModule
 
-    private val configuration: CompilerConfiguration = createCompilerConfiguration(
-        projectSpec.inputPaths.toList(),
-        compilerSpec.classpathEntries(),
-        compilerSpec.apiVersion,
-        compilerSpec.languageVersion,
-        compilerSpec.jvmTarget,
-        compilerSpec.jdkHome,
-        compilerSpec.freeCompilerArgs,
-        printStream,
-    )
-
     private val disposable: Disposable = Disposer.newDisposable()
+
+    private val configuration: CompilerConfiguration = createCompilerConfiguration(
+        pathsToAnalyze = projectSpec.inputPaths.toList(),
+        classpath = compilerSpec.classpathEntries(),
+        apiVersion = compilerSpec.apiVersion,
+        languageVersion = compilerSpec.languageVersion,
+        jvmTarget = compilerSpec.jvmTarget,
+        jdkHome = compilerSpec.jdkHome,
+        freeCompilerArgs = compilerSpec.freeCompilerArgs,
+        compilerPluginClasspath = compilerSpec.compilerPluginClasspath,
+        disposable = disposable,
+        printStream = printStream,
+    )
 
     override val languageVersionSettings: LanguageVersionSettings
         get() = configuration.languageVersionSettings
@@ -68,6 +70,7 @@ internal class EnvironmentFacade(projectSpec: ProjectSpec, compilerSpec: Compile
 
     init {
         buildStandaloneAnalysisAPISession(disposable) {
+            registerCompilerPluginServices(configuration)
             // Required for autocorrect support
             registerProjectService(TreeAspect::class.java)
             registerProjectService(PomModel::class.java, DetektPomModel(project))
