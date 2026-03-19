@@ -9,3 +9,10 @@ enum class Severity {
     Warning,
     Info,
 }
+
+fun Severity.prefix() =
+    when (this) {
+        Severity.Error -> "e"
+        Severity.Warning -> "w"
+        Severity.Info -> "i"
+    }

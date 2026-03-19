@@ -8,6 +8,7 @@ import dev.detekt.api.RuleInstance
 import dev.detekt.api.SetupContext
 import dev.detekt.api.SourceLocation
 import dev.detekt.api.internal.whichDetekt
+import dev.detekt.api.prefix
 import dev.detekt.api.suppressed
 import dev.detekt.metrics.ComplexityReportGenerator
 import dev.detekt.utils.MarkdownContent
@@ -152,7 +153,7 @@ private fun MarkdownContent.renderIssue(issue: Issue, basePath: Path): String {
         null
     }
 
-    return listOfNotNull(location, message, snippet).joinToString("\n")
+    return listOfNotNull("${issue.severity.prefix()}: $location", message, snippet).joinToString("\n")
 }
 
 private fun MarkdownContent.snippetCode(lines: Sequence<String>, location: SourceLocation): String {

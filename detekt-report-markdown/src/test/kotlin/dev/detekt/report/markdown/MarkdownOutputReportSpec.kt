@@ -72,7 +72,7 @@ class MarkdownOutputReportSpec {
                 
                 [Documentation](https://example.org/)
                 
-                * src/main/com/sample/Sample1.kt:9:17
+                * e: src/main/com/sample/Sample1.kt:9:17
                 ```
                 Issue message 1
                 ```
@@ -88,7 +88,7 @@ class MarkdownOutputReportSpec {
                 
                 ```
                 
-                * src/main/com/sample/Sample2.kt:13:17
+                * e: src/main/com/sample/Sample2.kt:13:17
                 ```
                 Issue message 2
                 ```
@@ -108,7 +108,7 @@ class MarkdownOutputReportSpec {
                 
                 Description rule_b
                 
-                * src/main/com/sample/Sample3.kt:14:16
+                * e: src/main/com/sample/Sample3.kt:14:16
                 ```
                 Issue message 3
                 ```

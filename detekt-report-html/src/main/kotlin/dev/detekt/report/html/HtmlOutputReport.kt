@@ -9,6 +9,7 @@ import dev.detekt.api.RuleSetId
 import dev.detekt.api.SetupContext
 import dev.detekt.api.TextLocation
 import dev.detekt.api.internal.whichDetekt
+import dev.detekt.api.prefix
 import dev.detekt.api.suppressed
 import dev.detekt.metrics.ComplexityReportGenerator
 import dev.detekt.utils.openSafeStream
@@ -154,7 +155,7 @@ class HtmlOutputReport : OutputReport {
         val pathString = issue.location.path.invariantSeparatorsPathString
         span("location") {
             text(
-                "$pathString:${issue.location.source.line}:${issue.location.source.column}"
+                "${issue.severity.prefix()}: $pathString:${issue.location.source.line}:${issue.location.source.column}"
             )
         }
 

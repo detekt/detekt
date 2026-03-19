@@ -71,9 +71,9 @@ class HtmlOutputReportSpec {
     fun `renders the right file locations`() {
         val result = htmlReport.render(createTestDetektionWithMultipleSmells())
 
-        assertThat(result).contains("<span class=\"location\">src/main/com/sample/Sample1.kt:11:1</span>")
-        assertThat(result).contains("<span class=\"location\">src/main/com/sample/Sample2.kt:22:2</span>")
-        assertThat(result).contains("<span class=\"location\">src/main/com/sample/Sample3.kt:33:3</span>")
+        assertThat(result).contains("<span class=\"location\">e: src/main/com/sample/Sample1.kt:11:1</span>")
+        assertThat(result).contains("<span class=\"location\">e: src/main/com/sample/Sample2.kt:22:2</span>")
+        assertThat(result).contains("<span class=\"location\">e: src/main/com/sample/Sample3.kt:33:3</span>")
     }
 
     @Test
