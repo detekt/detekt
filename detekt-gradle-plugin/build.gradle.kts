@@ -13,7 +13,7 @@ plugins {
     id("java-gradle-plugin")
     id("java-test-fixtures")
     id("idea")
-    id("com.gradle.plugin-publish") version "2.1.0"
+    id("com.gradle.plugin-publish") version "2.1.1"
     // We use this published version of the detekt plugin to self analyse this project.
     id("dev.detekt") version "2.0.0-alpha.2"
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.18.1"
