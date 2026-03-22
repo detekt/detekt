@@ -102,6 +102,7 @@ class AbstractClassCanBeInterface(config: Config) :
     private fun shouldCheck(klass: KtClass) =
         when {
             klass.isInterface() -> false
+            klass.isLocal -> false
             klass.isSealed() -> true
             else -> klass.isAbstract()
         }
