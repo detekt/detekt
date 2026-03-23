@@ -6,7 +6,6 @@ import dev.detekt.api.Rule
 import dev.detekt.api.RuleName
 import dev.detekt.test.utils.KotlinAnalysisApiEngine
 import dev.detekt.test.utils.KotlinEnvironmentContainer
-import dev.detekt.test.utils.checkNoCompilationErrors
 import dev.detekt.test.utils.compileContentForTest
 import dev.detekt.test.utils.createEnvironment
 import org.intellij.lang.annotations.Language
@@ -32,8 +31,11 @@ fun Rule.lint(
     if (compile && shouldCompileTestSnippets) {
         try {
             KotlinAnalysisApiEngine().use {
-                it.compile(content, jvmClasspathRoots = createEnvironment().jvmClasspathRoots)
-                    .checkNoCompilationErrors()
+                it.compile(
+                    content,
+                    jvmClasspathRoots = createEnvironment().jvmClasspathRoots,
+                    allowCompilationErrors = false,
+                )
             }
         } catch (ex: RuntimeException) {
             if (!ex.isNoMatchingOutputFiles()) throw ex
@@ -56,8 +58,8 @@ fun <T> T.lintWithContext(
             dependencyCodes = dependencyContents.toList(),
             javaSourceRoots = environment.javaSourceRoots,
             jvmClasspathRoots = environment.jvmClasspathRoots,
+            allowCompilationErrors = allowCompilationErrors || !shouldCompileTestSnippets
         )
-        if (!allowCompilationErrors && shouldCompileTestSnippets) ktFile.checkNoCompilationErrors()
         visitFile(ktFile, languageVersionSettings).filterSuppressed(this)
     }
 

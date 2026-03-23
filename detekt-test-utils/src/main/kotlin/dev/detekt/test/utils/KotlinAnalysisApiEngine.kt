@@ -14,6 +14,10 @@ import java.lang.AutoCloseable
 import java.nio.file.Path
 import kotlin.io.path.Path
 
+private val shouldCompileTestSnippets by lazy(LazyThreadSafetyMode.NONE) {
+    System.getProperty("compile-test-snippets", "false")!!.toBoolean()
+}
+
 /**
  * The object to use the Kotlin Analysis API for code compilation.
  */
@@ -32,6 +36,7 @@ class KotlinAnalysisApiEngine : AutoCloseable {
         javaSourceRoots: List<Path> = emptyList(),
         jvmClasspathRoots: List<Path> =
             listOf(File(CharRange::class.java.protectionDomain.codeSource.location.path).toPath()),
+        allowCompilationErrors: Boolean = shouldCompileTestSnippets,
     ): KtFile {
         val session = buildStandaloneAnalysisAPISession(disposable) {
             buildKtModuleProvider {
@@ -69,7 +74,9 @@ class KotlinAnalysisApiEngine : AutoCloseable {
             }
         }
 
-        return session.modulesWithFiles.values.flatten().single { it.name == "dummy.kt" } as KtFile
+        return (session.modulesWithFiles.values.flatten().single { it.name == "dummy.kt" } as KtFile).also {
+            if (!allowCompilationErrors) it.checkNoCompilationErrors()
+        }
     }
 
     override fun close() {

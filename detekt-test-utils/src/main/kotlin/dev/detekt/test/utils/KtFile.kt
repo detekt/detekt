@@ -14,7 +14,7 @@ import org.jetbrains.kotlin.psi.KtFile
  * Throw an exception if the KtFile had any compilation error
  */
 @OptIn(KaExperimentalApi::class)
-fun KtFile.checkNoCompilationErrors() {
+internal fun KtFile.checkNoCompilationErrors() {
     val file = this
     analyze(file) {
         val result = compile(
