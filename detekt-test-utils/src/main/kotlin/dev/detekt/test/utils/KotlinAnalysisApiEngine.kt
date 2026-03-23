@@ -3,20 +3,10 @@ package dev.detekt.test.utils
 import com.intellij.openapi.util.Disposer
 import com.intellij.testFramework.LightVirtualFile
 import org.intellij.lang.annotations.Language
-import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
-import org.jetbrains.kotlin.analysis.api.KaImplementationDetail
-import org.jetbrains.kotlin.analysis.api.KaPlatformInterface
-import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.components.KaCompilationResult
-import org.jetbrains.kotlin.analysis.api.components.KaCompilerTarget
-import org.jetbrains.kotlin.analysis.api.diagnostics.KaDiagnosticWithPsi
-import org.jetbrains.kotlin.analysis.api.diagnostics.KaSeverity
 import org.jetbrains.kotlin.analysis.api.standalone.buildStandaloneAnalysisAPISession
 import org.jetbrains.kotlin.analysis.project.structure.builder.buildKtLibraryModule
 import org.jetbrains.kotlin.analysis.project.structure.builder.buildKtSdkModule
 import org.jetbrains.kotlin.analysis.project.structure.builder.buildKtSourceModule
-import org.jetbrains.kotlin.config.CompilerConfiguration
-import org.jetbrains.kotlin.diagnostics.PsiDiagnosticUtils
 import org.jetbrains.kotlin.platform.jvm.JvmPlatforms
 import org.jetbrains.kotlin.psi.KtFile
 import java.io.File
@@ -24,14 +14,15 @@ import java.lang.AutoCloseable
 import java.nio.file.Path
 import kotlin.io.path.Path
 
+private val shouldCompileTestSnippets by lazy(LazyThreadSafetyMode.NONE) {
+    System.getProperty("compile-test-snippets", "false")!!.toBoolean()
+}
+
 /**
  * The object to use the Kotlin Analysis API for code compilation.
  */
-@OptIn(KaExperimentalApi::class)
 class KotlinAnalysisApiEngine : AutoCloseable {
     private val targetPlatform = JvmPlatforms.defaultJvmPlatform
-    private val configuration = CompilerConfiguration()
-    private val target = KaCompilerTarget.Jvm(isTestMode = false, compiledClassHandler = null, debuggerExtension = null)
     private val disposable = Disposer.newDisposable()
 
     /**
@@ -39,16 +30,14 @@ class KotlinAnalysisApiEngine : AutoCloseable {
      *
      * @throws IllegalStateException if the given code snippet does not compile
      */
-    @Suppress("LongMethod")
     fun compile(
         @Language("kotlin") code: String,
         dependencyCodes: List<String> = emptyList(),
         javaSourceRoots: List<Path> = emptyList(),
         jvmClasspathRoots: List<Path> =
             listOf(File(CharRange::class.java.protectionDomain.codeSource.location.path).toPath()),
-        allowCompilationErrors: Boolean = false,
+        allowCompilationErrors: Boolean = shouldCompileTestSnippets,
     ): KtFile {
-        @OptIn(KaImplementationDetail::class, KaPlatformInterface::class)
         val session = buildStandaloneAnalysisAPISession(disposable) {
             buildKtModuleProvider {
                 platform = targetPlatform
@@ -85,33 +74,9 @@ class KotlinAnalysisApiEngine : AutoCloseable {
             }
         }
 
-        val file = session.modulesWithFiles.values.flatten().single { it.name == "dummy.kt" } as KtFile
-
-        analyze(file) {
-            val result = compile(file, configuration, target) {
-                it.severity != KaSeverity.ERROR
-            }
-
-            if (result is KaCompilationResult.Failure) {
-                val errors = result.errors.joinToString("\n") {
-                    if (it is KaDiagnosticWithPsi<*>) {
-                        val lineAndColumn = PsiDiagnosticUtils.offsetToLineAndColumn(
-                            it.psi.containingFile.viewProvider.document,
-                            it.psi.textOffset
-                        )
-                        "${it.severity.name} ${it.defaultMessage} (${it.psi.containingFile.name}:${lineAndColumn.line}:${lineAndColumn.column})"
-                    } else {
-                        "${it.severity.name} ${it.defaultMessage}"
-                    }
-                }
-
-                if (!allowCompilationErrors) {
-                    error(errors)
-                }
-            }
+        return (session.modulesWithFiles.values.flatten().single { it.name == "dummy.kt" } as KtFile).also {
+            if (!allowCompilationErrors) it.checkNoCompilationErrors()
         }
-
-        return file
     }
 
     override fun close() {

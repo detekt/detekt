@@ -31,7 +31,11 @@ fun Rule.lint(
     if (compile && shouldCompileTestSnippets) {
         try {
             KotlinAnalysisApiEngine().use {
-                it.compile(content, jvmClasspathRoots = createEnvironment().jvmClasspathRoots)
+                it.compile(
+                    content,
+                    jvmClasspathRoots = createEnvironment().jvmClasspathRoots,
+                    allowCompilationErrors = false,
+                )
             }
         } catch (ex: RuntimeException) {
             if (!ex.isNoMatchingOutputFiles()) throw ex
@@ -54,7 +58,7 @@ fun <T> T.lintWithContext(
             dependencyCodes = dependencyContents.toList(),
             javaSourceRoots = environment.javaSourceRoots,
             jvmClasspathRoots = environment.jvmClasspathRoots,
-            allowCompilationErrors = allowCompilationErrors
+            allowCompilationErrors = allowCompilationErrors || !shouldCompileTestSnippets
         )
         visitFile(ktFile, languageVersionSettings).filterSuppressed(this)
     }
