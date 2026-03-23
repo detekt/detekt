@@ -22,6 +22,7 @@ dependencies {
         }
     }
     implementation(libs.kotlinx.serializationCore)
+    runtimeOnly(libs.kotlinx.coroutinesCore.intellij)
 }
 
 java {
