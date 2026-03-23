@@ -1,15 +1,14 @@
 package dev.detekt.core.config
 
+import dev.detekt.utils.getSafeResourceAsStream
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.Arguments.arguments
 import org.junit.jupiter.params.provider.MethodSource
-import kotlin.io.path.Path
-import kotlin.io.path.absolute
 
-class DetektYmlConfigSpec {
+class DefaultDetektConfigSpec {
 
     private val generalConfigKeys = listOf(
         "config",
@@ -18,7 +17,7 @@ class DetektYmlConfigSpec {
     )
 
     private val config: YamlConfig = YamlConfig.load(
-        Path("../detekt-core/src/main/resources/default-detekt-config.yml").absolute()
+        DefaultDetektConfigSpec::class.java.getSafeResourceAsStream("/default-detekt-config.yml")!!.reader()
     )
 
     private fun ruleSetsNamesToPackage(): List<Arguments> =
