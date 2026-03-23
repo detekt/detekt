@@ -26,7 +26,7 @@ public final class dev/detekt/test/utils/KotlinEnvironmentContainerKt {
 }
 
 public final class dev/detekt/test/utils/KtFileKt {
-	public static final fun checkCompilesWithoutErrors (Lorg/jetbrains/kotlin/psi/KtFile;)V
+	public static final fun checkNoCompilationErrors (Lorg/jetbrains/kotlin/psi/KtFile;)V
 }
 
 public final class dev/detekt/test/utils/NullPrintStream : java/io/PrintStream {

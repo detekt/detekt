@@ -17,7 +17,7 @@ class KotlinAnalysisApiEngineTest(val analysisApiEngine: KotlinAnalysisApiEngine
             class A
         """.trimIndent()
         analysisApiEngine.compile(code)
-            .checkCompilesWithoutErrors()
+            .checkNoCompilationErrors()
     }
 
     @Test
@@ -27,7 +27,7 @@ class KotlinAnalysisApiEngineTest(val analysisApiEngine: KotlinAnalysisApiEngine
             
             val unknownType: UnknownType
         """.trimIndent()
-        assertThatThrownBy { analysisApiEngine.compile(invalidCode).checkCompilesWithoutErrors() }
+        assertThatThrownBy { analysisApiEngine.compile(invalidCode).checkNoCompilationErrors() }
             .isInstanceOf(IllegalStateException::class.java)
     }
 
@@ -42,7 +42,7 @@ class KotlinAnalysisApiEngineTest(val analysisApiEngine: KotlinAnalysisApiEngine
         """.trimIndent()
 
         analysisApiEngine.compile(validCode)
-            .checkCompilesWithoutErrors()
+            .checkNoCompilationErrors()
 
         val codeWithMissingImport = """
             fun useRandom() {
@@ -50,7 +50,7 @@ class KotlinAnalysisApiEngineTest(val analysisApiEngine: KotlinAnalysisApiEngine
             }
         """.trimIndent()
 
-        assertThatThrownBy { analysisApiEngine.compile(codeWithMissingImport).checkCompilesWithoutErrors() }
+        assertThatThrownBy { analysisApiEngine.compile(codeWithMissingImport).checkNoCompilationErrors() }
             .isInstanceOf(IllegalStateException::class.java)
             .hasMessage("ERROR Unresolved reference 'Random'. (dummy.kt:2:5)")
     }
@@ -62,7 +62,7 @@ class KotlinAnalysisApiEngineTest(val analysisApiEngine: KotlinAnalysisApiEngine
             
             class A
         """.trimIndent()
-        analysisApiEngine.compile(code).checkCompilesWithoutErrors()
+        analysisApiEngine.compile(code).checkNoCompilationErrors()
     }
 
     @RepeatedTest(10)
@@ -72,7 +72,7 @@ class KotlinAnalysisApiEngineTest(val analysisApiEngine: KotlinAnalysisApiEngine
             
             val unknownType: UnknownType
         """.trimIndent()
-        assertThatThrownBy { analysisApiEngine.compile(invalidCode).checkCompilesWithoutErrors() }
+        assertThatThrownBy { analysisApiEngine.compile(invalidCode).checkNoCompilationErrors() }
             .isInstanceOf(IllegalStateException::class.java)
     }
 
@@ -94,7 +94,7 @@ class KotlinAnalysisApiEngineTest(val analysisApiEngine: KotlinAnalysisApiEngine
 
         val junitApiJar = File(Test::class.java.protectionDomain.codeSource.location.path).toPath()
         analysisApiEngine.compile(code = code, jvmClasspathRoots = listOf(junitApiJar))
-            .checkCompilesWithoutErrors()
+            .checkNoCompilationErrors()
     }
 
     @Test
@@ -113,7 +113,7 @@ class KotlinAnalysisApiEngineTest(val analysisApiEngine: KotlinAnalysisApiEngine
             }
         """.trimIndent()
 
-        assertThatThrownBy { analysisApiEngine.compile(code).checkCompilesWithoutErrors() }
+        assertThatThrownBy { analysisApiEngine.compile(code).checkNoCompilationErrors() }
             .isInstanceOf(IllegalStateException::class.java)
     }
 }
