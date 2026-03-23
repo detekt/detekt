@@ -9,7 +9,7 @@ import org.junit.jupiter.params.provider.MethodSource
 import kotlin.io.path.Path
 import kotlin.io.path.absolute
 
-class DetektYmlConfigSpec {
+class DefaultDetektConfigSpec {
 
     private val generalConfigKeys = listOf(
         "config",
