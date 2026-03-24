@@ -30,4 +30,5 @@ kotlin {
 
 dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.10.0")
+    detektCompilerPlugin("org.jetbrains.kotlin:kotlin-serialization-compiler-plugin:${kotlin.coreLibrariesVersion}")
 }
