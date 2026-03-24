@@ -64,7 +64,7 @@ kotlin-analysisApiStandalone = { module = "org.jetbrains.kotlin:analysis-api-sta
 kotlin-lowLevelApiFir = { module = "org.jetbrains.kotlin:low-level-api-fir-for-ide", version.ref = "kotlin" }
 kotlin-symbolLightClasses = { module = "org.jetbrains.kotlin:symbol-light-classes-for-ide", version.ref = "kotlin" }
 kotlin-analysisApiImplBase = { module = "org.jetbrains.kotlin:analysis-api-impl-base-for-ide", version.ref = "kotlin" }
-// Should be possible to remove when https://youtrack.jetbrains.com/issue/KT-81457 fixed
+# Should be possible to remove when https://youtrack.jetbrains.com/issue/KT-81457 fixed
 kotlinx-coroutinesCore-intellij = { module = "org.jetbrains.intellij.deps.kotlinx:kotlinx-coroutines-core", version = "1.10.2-intellij-1" }
 # Can likely be removed in future - https://youtrack.jetbrains.com/issue/KT-73751/Analysis-API-Caffeine-dependency
 caffeine = { module = "com.github.ben-manes.caffeine:caffeine", version = "2.9.3" }
