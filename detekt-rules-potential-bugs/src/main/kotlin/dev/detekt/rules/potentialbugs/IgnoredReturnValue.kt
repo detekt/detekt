@@ -20,9 +20,11 @@ import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaDeclarationSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolOrigin
+import org.jetbrains.kotlin.analysis.api.symbols.name
 import org.jetbrains.kotlin.analysis.api.types.KaClassType
 import org.jetbrains.kotlin.analysis.api.types.KaFunctionType
 import org.jetbrains.kotlin.analysis.api.types.KaType
+import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.load.java.JavaClassFinderImpl
 import org.jetbrains.kotlin.name.CallableId
@@ -116,8 +118,9 @@ class IgnoredReturnValue(config: Config) :
         super.visitCallExpression(expression)
 
         analyze(expression) {
-            val symbol = expression.resolveToCall()?.singleFunctionCallOrNull()?.symbol ?: return
-            val returnType = symbol.returnType
+            val functionCall = expression.resolveToCall()?.singleFunctionCallOrNull() ?: return
+            val symbol = functionCall.symbol
+            val returnType = functionCall.signature.returnType
             if (returnType.isUnitType || returnType.isNothingType) return
 
             if (ignoreFunctionCall.any { it.match(symbol) }) return
