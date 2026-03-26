@@ -152,7 +152,7 @@ private fun MarkdownContent.renderIssue(issue: Issue, basePath: Path): String {
         null
     }
 
-    return listOfNotNull(location, message, snippet).joinToString("\n")
+    return listOfNotNull("${issue.severity.name}: $location", message, snippet).joinToString("\n")
 }
 
 private fun MarkdownContent.snippetCode(lines: Sequence<String>, location: SourceLocation): String {
