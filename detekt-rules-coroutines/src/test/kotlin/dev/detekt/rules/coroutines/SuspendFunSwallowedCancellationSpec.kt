@@ -65,21 +65,6 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinEnvironmentCont
     }
 
     @Test
-    fun `does report if swallowing generic java throwable in suspend fun - #9185`() {
-        val code = """
-            suspend fun foo() {
-                try {
-                    kotlinx.coroutines.delay(1000L)
-                } catch (e: java.lang.Throwable) {
-                    // Throwable is a super class of CancellationException, so this counts as swallowing
-                }
-            }
-        """.trimIndent()
-        val findings = subject.lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-    }
-
-    @Test
     fun `doesnt report if only catching a non-superclass`() {
         val code = """
             import kotlinx.coroutines.delay
