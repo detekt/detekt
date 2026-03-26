@@ -89,8 +89,8 @@ class AbstractClassCanBeInterface(config: Config) :
         val members = klass.members()
         analyze(klass) {
             when {
+                isAnyParentClass(klass) -> return
                 members.isNotEmpty() -> checkMembers(klass, members, nameIdentifier)
-                hasInheritedMember(klass, isAbstract = true) && isAnyParentAbstract(klass) -> return
                 klass.hasConstructorParameter() || klass.containsInternalClass() -> return
                 else -> report(Finding(Entity.from(nameIdentifier), klass.message()))
             }
@@ -153,10 +153,10 @@ class AbstractClassCanBeInterface(config: Config) :
             }
         }
 
-    private fun KaSession.isAnyParentAbstract(klass: KtClass): Boolean =
+    private fun KaSession.isAnyParentClass(klass: KtClass): Boolean =
         (klass.symbol as? KaClassSymbol)
             ?.superTypes
-            ?.all { (it.symbol as? KaClassSymbol)?.classKind == KaClassKind.INTERFACE } == false
+            ?.any { !it.isAnyType && (it.symbol as? KaClassSymbol)?.classKind == KaClassKind.CLASS } == true
 
     /**
      * Returns true if this callable can be safely represented in an interface: functions, getter-only properties
