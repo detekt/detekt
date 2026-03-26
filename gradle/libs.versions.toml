@@ -18,6 +18,7 @@ develocity-plugin = { module = "com.gradle.develocity:com.gradle.develocity.grad
 dokka-plugin = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version = "2.1.0" }
 gradleNexus-publish-plugin = { module = "io.github.gradle-nexus:publish-plugin", version = "2.0.0" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+kotlinx-serialization-gradle-plugin = { module = "org.jetbrains.kotlin.plugin.serialization:org.jetbrains.kotlin.plugin.serialization.gradle.plugin", version.ref = "kotlin" }
 
 # This represents the oldest AGP version that is supported by detekt.
 # This should only be updated when updating the minimum version supported by detekt's Gradle plugin.

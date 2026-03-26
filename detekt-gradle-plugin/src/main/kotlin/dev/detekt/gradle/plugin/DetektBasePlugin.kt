@@ -9,7 +9,9 @@ import dev.detekt.gradle.internal.addVariantName
 import dev.detekt.gradle.internal.existingVariantOrBaseFile
 import dev.detekt.gradle.internal.setCreateBaselineTaskDefaults
 import dev.detekt.gradle.internal.setDetektTaskDefaults
+import dev.detekt.gradle.plugin.internal.declarableCompat
 import dev.detekt.gradle.plugin.internal.mapExplicitArgMode
+import dev.detekt.gradle.plugin.internal.resolvableCompat
 import dev.detekt.gradle.plugin.internal.rootProjectDirectoryCompat
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -66,6 +68,7 @@ class DetektBasePlugin : Plugin<Project> {
 
         project.setTaskDefaults(extension)
         project.registerSourceSetTasks(extension)
+        project.registerCompilerPluginConfigurations()
     }
 
     private fun Project.setTaskDefaults(extension: DetektExtension) {
@@ -121,6 +124,20 @@ class DetektBasePlugin : Plugin<Project> {
         }
     }
 
+    private fun Project.registerCompilerPluginConfigurations() {
+        val detektCompilerPlugin = configurations.declarableCompat(CONFIGURATION_DETEKT_COMPILER_PLUGIN) {
+            description = "Compiler plugins to load for detekt analysis."
+        }
+
+        configurations.resolvableCompat(
+            name = CONFIGURATION_DETEKT_COMPILER_PLUGIN_CLASSPATH,
+            declarable = detektCompilerPlugin,
+        ) {
+            isTransitive = false
+            description = "Resolved classpath of compiler plugins for detekt analysis."
+        }
+    }
+
     internal companion object {
         internal const val DETEKT_EXTENSION = "detekt"
         internal const val CONFIG_DIR_NAME = "config/detekt"
@@ -145,3 +162,5 @@ class DetektBasePlugin : Plugin<Project> {
 }
 
 internal const val CONFIGURATION_DETEKT_PLUGINS = "detektPlugins"
+internal const val CONFIGURATION_DETEKT_COMPILER_PLUGIN = "detektCompilerPlugin"
+internal const val CONFIGURATION_DETEKT_COMPILER_PLUGIN_CLASSPATH = "detektCompilerPluginClasspath"

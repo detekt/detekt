@@ -12,6 +12,7 @@ import dev.detekt.gradle.invoke.BaselineArgumentOrEmpty
 import dev.detekt.gradle.invoke.BuildUponDefaultConfigArgument
 import dev.detekt.gradle.invoke.ClasspathArgument
 import dev.detekt.gradle.invoke.CliArgument
+import dev.detekt.gradle.invoke.CompilerPluginClasspathArgument
 import dev.detekt.gradle.invoke.ConfigArgument
 import dev.detekt.gradle.invoke.CustomReportArgument
 import dev.detekt.gradle.invoke.DebugArgument
@@ -87,6 +88,10 @@ abstract class Detekt @Inject constructor(
     @get:Classpath
     @get:Optional
     abstract val classpath: ConfigurableFileCollection
+
+    @get:Classpath
+    @get:Optional
+    abstract val compilerPluginClasspath: ConfigurableFileCollection
 
     @get:Internal
     abstract val friendPaths: ConfigurableFileCollection
@@ -174,6 +179,7 @@ abstract class Detekt @Inject constructor(
         get() = listOf(
             InputArgument(source),
             ClasspathArgument(classpath),
+            CompilerPluginClasspathArgument(compilerPluginClasspath),
             ApiVersionArgument(apiVersion.orNull),
             LanguageVersionArgument(languageVersion.orNull),
             JvmTargetArgument(jvmTarget.orNull),

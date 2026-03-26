@@ -32,6 +32,7 @@ fun createCompilerConfiguration(
     jvmTarget: String,
     jdkHome: Path?,
     freeCompilerArgs: List<String>,
+    jvmCompilerArguments: K2JVMCompilerArguments,
     printStream: PrintStream,
 ): CompilerConfiguration {
     val javaFiles = pathsToAnalyze.flatMap { path ->
@@ -48,8 +49,6 @@ fun createCompilerConfiguration(
     }
 
     val classpathFiles = classpath.map { File(it) }
-
-    val jvmCompilerArguments = K2JVMCompilerArguments()
 
     val args = buildList {
         if (apiVersion != null) {
