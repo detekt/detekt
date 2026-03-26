@@ -2,8 +2,8 @@ package dev.detekt.core.reporting.console
 
 import dev.detekt.api.Issue
 import dev.detekt.api.SetupContext
-import dev.detekt.api.prefix
 import dev.detekt.core.reporting.compact
+import dev.detekt.core.reporting.prefix
 import java.nio.file.Path
 
 /**

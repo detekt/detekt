@@ -300,10 +300,6 @@ public final class dev/detekt/api/Severity : java/lang/Enum {
 	public static fun values ()[Ldev/detekt/api/Severity;
 }
 
-public final class dev/detekt/api/SeverityKt {
-	public static final fun prefix (Ldev/detekt/api/Severity;)Ljava/lang/String;
-}
-
 public final class dev/detekt/api/SourceLocation : java/lang/Comparable {
 	public fun <init> (II)V
 	public fun compareTo (Ldev/detekt/api/SourceLocation;)I
