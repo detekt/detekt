@@ -4,7 +4,7 @@ import dev.detekt.gradle.report.ReportMergeTask
 plugins {
     id("releasing")
     id("dev.detekt")
-    id("org.jetbrains.dokka") version "2.1.0"
+    id("org.jetbrains.dokka") version "2.2.0"
 }
 
 dependencies {
