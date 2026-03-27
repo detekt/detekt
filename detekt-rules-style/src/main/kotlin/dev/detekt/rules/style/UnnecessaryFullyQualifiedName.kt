@@ -3,17 +3,27 @@ package dev.detekt.rules.style
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
+import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
+import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaCallableSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaConstructorSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaSymbol
+import org.jetbrains.kotlin.analysis.api.types.symbol
+import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.psi.KtClassLiteralExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtElement
-import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtImportDirective
-import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtPackageDirective
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.KtUserType
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
+import org.jetbrains.kotlin.psi.psiUtil.getPossiblyQualifiedCallExpression
 
 /**
  * This rule reports unnecessary fully qualified class names and function calls.
@@ -57,8 +67,10 @@ import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
  * </compliant>
  */
 class UnnecessaryFullyQualifiedName(config: Config) :
-    Rule(config, "Unnecessary fully qualified names make code harder to read. Use imports instead.") {
+    Rule(config, "Unnecessary fully qualified names make code harder to read. Use imports instead."),
+    RequiresAnalysisApi {
 
+    @Suppress("ReturnCount")
     override fun visitUserType(type: KtUserType) {
         super.visitUserType(type)
 
@@ -76,18 +88,23 @@ class UnnecessaryFullyQualifiedName(config: Config) :
         }
 
         val typeText = type.text
+        if (!typeText.contains(".")) return
 
-        if (shouldReportAsFullyQualified(typeText)) {
-            val qualifiedName = typeText.substringBefore('<')
-            report(
-                Finding(
-                    Entity.from(type),
-                    "Fully qualified class name '$qualifiedName' can be replaced with an import."
-                )
-            )
+        analyze(type) {
+            val packageFqName = type.referenceExpression?.mainReference?.resolveToSymbol()?.packageFqName() ?: return
+            if (!typeText.startsWith(packageFqName)) return
         }
+
+        val qualifiedName = typeText.substringBefore('<')
+        report(
+            Finding(
+                Entity.from(type),
+                "Fully qualified class name '$qualifiedName' can be replaced with an import.",
+            ),
+        )
     }
 
+    @Suppress("ReturnCount")
     override fun visitClassLiteralExpression(expression: KtClassLiteralExpression) {
         super.visitClassLiteralExpression(expression)
 
@@ -96,15 +113,19 @@ class UnnecessaryFullyQualifiedName(config: Config) :
 
         val receiverExpression = expression.receiverExpression ?: return
         val receiverText = receiverExpression.text
+        if (!receiverText.contains(".")) return
 
-        if (shouldReportAsFullyQualified(receiverText)) {
-            report(
-                Finding(
-                    Entity.from(receiverExpression),
-                    "Fully qualified class reference '$receiverText' can be replaced with an import."
-                )
-            )
+        analyze(receiverExpression) {
+            val packageFqName = receiverExpression.expressionType?.symbol?.packageFqName() ?: return
+            if (!receiverText.startsWith("$packageFqName.")) return
         }
+
+        report(
+            Finding(
+                Entity.from(receiverExpression),
+                "Fully qualified class reference '$receiverText' can be replaced with an import.",
+            ),
+        )
     }
 
     @Suppress("ReturnCount", "CyclomaticComplexMethod")
@@ -120,100 +141,32 @@ class UnnecessaryFullyQualifiedName(config: Config) :
             return
         }
 
+        if (!expression.text.contains(".")) return
         val receiverText = expression.receiverExpression.text
-        val selectorText = expression.selectorExpression?.text ?: return
+        val selectorText = expression.getPossiblyQualifiedCallExpression()?.calleeExpression?.text
+            ?: expression.selectorExpression?.text
+            ?: return
 
-        checkQualifiedClassReference(expression, receiverText, selectorText)?.let { finding ->
-            report(finding)
-            return
-        }
+        analyze(expression) {
+            val resolvedCall = expression.resolveToCall()?.successfulCallOrNull<KaCallableMemberCall<*, *>>()
+            val symbol = resolvedCall?.partiallyAppliedSymbol?.symbol ?: return
+            val packageFqName = symbol.packageFqName() ?: return
+            if (!receiverText.startsWith(packageFqName)) return
 
-        checkConstructorOrFunctionCall(expression, receiverText, selectorText)?.let { finding ->
-            report(finding)
-        }
-    }
-
-    @Suppress("ReturnCount")
-    private fun checkQualifiedClassReference(
-        expression: KtDotQualifiedExpression,
-        receiverText: String,
-        selectorText: String,
-    ): Finding? {
-        if (!shouldReportAsFullyQualified(receiverText)) return null
-
-        val receiverParts = receiverText.split('.')
-        val lastPart = receiverParts.last()
-        if (!lastPart[0].isUpperCase()) return null
-
-        return if (selectorText.contains('(')) {
-            val methodName = selectorText.substringBefore('(')
-            val fullName = "$receiverText.$methodName"
-            Finding(
-                Entity.from(expression),
-                "Fully qualified static method call '$fullName' can be replaced with an import."
-            )
-        } else {
-            Finding(
-                Entity.from(expression.receiverExpression),
-                "Fully qualified class reference '$receiverText' can be replaced with an import."
-            )
-        }
-    }
-
-    @Suppress("ReturnCount")
-    private fun checkConstructorOrFunctionCall(
-        expression: KtDotQualifiedExpression,
-        receiverText: String,
-        selectorText: String,
-    ): Finding? {
-        // Check for regular calls with () or SAM constructor calls with trailing lambda {}
-        if (!selectorText.contains('(') && !selectorText.contains('{')) return null
-
-        val functionOrClassName = selectorText
-            .substringBefore('(')
-            .substringBefore('{')
-            .substringBefore(' ')
-            .trim()
-        if (functionOrClassName.isEmpty()) return null
-
-        if (functionOrClassName[0].isUpperCase()) {
-            val fullClassName = "$receiverText.$functionOrClassName"
-            if (shouldReportAsFullyQualified(fullClassName)) {
-                return Finding(
+            val finding = if (symbol.callableId?.classId != null) {
+                Finding(
+                    Entity.from(expression.receiverExpression),
+                    "Fully qualified class reference '$receiverText' can be replaced with an import.",
+                )
+            } else {
+                val type = if (symbol is KaConstructorSymbol) "class reference" else "function call"
+                Finding(
                     Entity.from(expression),
-                    "Fully qualified class reference '$fullClassName' can be replaced with an import."
+                    "Fully qualified $type '$receiverText.$selectorText' can be replaced with an import.",
                 )
             }
-        } else if (functionOrClassName[0].isLowerCase() &&
-            isLikelyPackageQualifiedFunction(expression, receiverText)
-        ) {
-            val fullName = "$receiverText.$functionOrClassName"
-            return Finding(
-                Entity.from(expression),
-                "Fully qualified function call '$fullName' can be replaced with an import."
-            )
+            report(finding)
         }
-        return null
-    }
-
-    @Suppress("ReturnCount")
-    private fun shouldReportAsFullyQualified(typeText: String): Boolean {
-        if (!typeText.contains('.')) return false
-
-        val baseType = typeText.substringBefore('<')
-        val parts = baseType.split('.')
-
-        val validParts = parts.all { part ->
-            part.isNotEmpty() &&
-                part.all { char -> char.isLetterOrDigit() || char == '_' } &&
-                part[0].isLetter()
-        }
-        if (!validParts) return false
-
-        val hasPackagePart = parts.any { it[0].isLowerCase() }
-        val hasClassPart = parts.any { it[0].isUpperCase() }
-
-        return hasPackagePart && hasClassPart
     }
 
     private fun isInImportOrPackage(element: KtElement): Boolean =
@@ -223,24 +176,11 @@ class UnnecessaryFullyQualifiedName(config: Config) :
     private fun isInStringLiteral(element: KtElement): Boolean =
         element.getParentOfType<KtStringTemplateExpression>(strict = false) != null
 
-    private fun isLikelyPackageQualifiedFunction(expression: KtDotQualifiedExpression, receiverText: String): Boolean {
-        if (!receiverText.contains('.')) return false
-
-        var currentReceiver: KtExpression = expression.receiverExpression
-
-        while (currentReceiver is KtDotQualifiedExpression) {
-            currentReceiver = currentReceiver.receiverExpression
-        }
-
-        if (currentReceiver is KtNameReferenceExpression) {
-            val firstIdentifier = currentReceiver.getReferencedName()
-            return firstIdentifier in KNOWN_PACKAGES
-        }
-
-        return false
-    }
-
-    companion object {
-        private val KNOWN_PACKAGES = setOf("kotlin", "java", "javax", "org", "com", "io", "net")
-    }
+    private fun KaSymbol.packageFqName(): String? =
+        when (this) {
+            is KaClassSymbol -> classId?.packageFqName
+            is KaConstructorSymbol -> containingClassId?.packageFqName
+            is KaCallableSymbol -> callableId?.packageName
+            else -> null
+        }?.asString()?.takeIf { it.isNotBlank() }
 }

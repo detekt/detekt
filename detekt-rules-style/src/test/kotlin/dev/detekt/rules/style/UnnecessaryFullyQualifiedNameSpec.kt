@@ -4,11 +4,14 @@ package dev.detekt.rules.style
 
 import dev.detekt.api.Config
 import dev.detekt.test.assertj.assertThat
-import dev.detekt.test.lint
+import dev.detekt.test.junit.KotlinCoreEnvironmentTest
+import dev.detekt.test.lintWithContext
+import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-class UnnecessaryFullyQualifiedNameSpec {
+@KotlinCoreEnvironmentTest
+class UnnecessaryFullyQualifiedNameSpec(val env: KotlinEnvironmentContainer) {
 
     val subject = UnnecessaryFullyQualifiedName(Config.empty)
 
@@ -24,7 +27,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(2)
+            assertThat(subject.lintWithContext(env, code)).hasSize(2)
         }
 
         @Test
@@ -35,7 +38,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(2)
+            assertThat(subject.lintWithContext(env, code)).hasSize(2)
         }
 
         @Test
@@ -50,7 +53,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(2)
+            assertThat(subject.lintWithContext(env, code)).hasSize(2)
         }
     }
 
@@ -67,7 +70,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(2)
+            assertThat(subject.lintWithContext(env, code)).hasSize(2)
         }
     }
 
@@ -82,7 +85,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -104,7 +107,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -124,7 +127,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -139,7 +142,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -157,7 +160,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -171,7 +174,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(2)
+            assertThat(subject.lintWithContext(env, code)).hasSize(2)
         }
 
         @Test
@@ -184,7 +187,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -197,7 +200,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -214,7 +217,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(2)
+            assertThat(subject.lintWithContext(env, code)).hasSize(2)
         }
     }
 
@@ -230,7 +233,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(2)
+            assertThat(subject.lintWithContext(env, code)).hasSize(2)
         }
     }
 
@@ -252,7 +255,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -266,7 +269,23 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(4)
+            assertThat(subject.lintWithContext(env, code)).hasSize(4)
+        }
+
+        @Test
+        fun `does not report when inner class instance is created from the outer class instance`() {
+            val code = """
+                class Test {
+                    inner class A
+                }
+                
+                fun main(test: Test) {
+                    val a = Test().A()
+                    val b = test.A()
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -284,7 +303,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(3)
+            assertThat(subject.lintWithContext(env, code)).hasSize(3)
         }
 
         @Test
@@ -298,7 +317,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -315,7 +334,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -330,7 +349,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(6)
+            assertThat(subject.lintWithContext(env, code)).hasSize(6)
         }
     }
 
@@ -348,7 +367,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(2)
+            assertThat(subject.lintWithContext(env, code)).hasSize(2)
         }
     }
 
@@ -369,7 +388,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(3)
+            assertThat(subject.lintWithContext(env, code)).hasSize(3)
         }
     }
 
@@ -393,7 +412,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(3)
+            assertThat(subject.lintWithContext(env, code)).hasSize(3)
         }
     }
 
@@ -415,7 +434,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(2)
+            assertThat(subject.lintWithContext(env, code)).hasSize(2)
         }
     }
 
@@ -429,7 +448,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 typealias DateList = java.util.ArrayList<java.time.LocalDate>
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(3)
+            assertThat(subject.lintWithContext(env, code)).hasSize(3)
         }
     }
 
@@ -451,7 +470,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(3)
+            assertThat(subject.lintWithContext(env, code)).hasSize(3)
         }
     }
 
@@ -467,7 +486,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(3)
+            assertThat(subject.lintWithContext(env, code)).hasSize(3)
         }
     }
 
@@ -491,7 +510,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(2)
+            assertThat(subject.lintWithContext(env, code)).hasSize(2)
         }
     }
 
@@ -509,7 +528,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(3)
+            assertThat(subject.lintWithContext(env, code)).hasSize(3)
         }
     }
 
@@ -527,7 +546,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(4)
+            assertThat(subject.lintWithContext(env, code)).hasSize(4)
         }
     }
 
@@ -544,7 +563,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(2)
+            assertThat(subject.lintWithContext(env, code)).hasSize(2)
         }
 
         @Test
@@ -559,7 +578,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(3)
+            assertThat(subject.lintWithContext(env, code)).hasSize(3)
         }
 
         @Test
@@ -574,7 +593,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(3)
+            assertThat(subject.lintWithContext(env, code)).hasSize(3)
         }
 
         @Test
@@ -590,7 +609,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -605,7 +624,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(3)
+            assertThat(subject.lintWithContext(env, code)).hasSize(3)
         }
     }
 
@@ -625,7 +644,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(2)
+            assertThat(subject.lintWithContext(env, code)).hasSize(2)
         }
     }
 
@@ -640,7 +659,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(3)
+            assertThat(subject.lintWithContext(env, code)).hasSize(3)
         }
     }
 
@@ -657,7 +676,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(3)
+            assertThat(subject.lintWithContext(env, code)).hasSize(3)
         }
     }
 
@@ -674,7 +693,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(2)
+            assertThat(subject.lintWithContext(env, code)).hasSize(2)
         }
 
         @Test
@@ -691,7 +710,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -713,7 +732,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -730,7 +749,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -743,7 +762,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -756,11 +775,11 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
-        fun `does not report calls on package paths ending with lowercase identifier`() {
+        fun `reports calls on package paths ending with lowercase identifier`() {
             val code = """
                 package foo.bar
                 object baz {
@@ -774,11 +793,11 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
-        fun `does not report function calls from unknown packages`() {
+        fun `reports function calls from unknown packages`() {
             val code = """
                 package mycompany.utils
                 object helper {
@@ -792,11 +811,11 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
-        fun `does not report property access without method call`() {
+        fun `reports property access without method call`() {
             val code = """
                 package foo
                 object bar {
@@ -810,7 +829,23 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        }
+
+        @Test
+        fun `does not report function calls with PascalCase fields`() {
+            val code = """
+                class Foo {
+                    val PascalCase: String = "test"
+                }
+                
+                fun main() {
+                    val foo = Foo()
+                    println(foo.PascalCase.substring(1))
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -827,7 +862,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -845,11 +880,11 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
-        fun `does not report single-segment package qualified calls`() {
+        fun `reports single-segment package qualified calls`() {
             val code = """
                 class Test {
                     fun method() {
@@ -858,7 +893,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
     }
 
@@ -874,7 +909,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
     }
 
@@ -888,7 +923,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -899,7 +934,7 @@ class UnnecessaryFullyQualifiedNameSpec {
                 }
             """.trimIndent()
 
-            val findings = subject.lint(code)
+            val findings = subject.lintWithContext(env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings.first()).hasMessage(
                 "Fully qualified class name 'java.util.AbstractMap.SimpleEntry' can be replaced with an import."
