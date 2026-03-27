@@ -2,6 +2,7 @@ package dev.detekt.gradle.plugin.internal
 
 import dev.detekt.gradle.Detekt
 import dev.detekt.gradle.DetektCreateBaselineTask
+import dev.detekt.gradle.DetektProfilingTask
 import dev.detekt.gradle.extensions.DetektExtension
 import dev.detekt.gradle.internal.addVariantName
 import dev.detekt.gradle.internal.existingVariantOrBaseFile
@@ -19,8 +20,8 @@ internal fun Project.registerJvmCompilationDetektTask(
     compilation: KotlinCompilation<*>,
     target: KotlinTarget? = null,
 ) {
-    val taskSuffix = if (target != null) compilation.name + target.name.capitalize() else compilation.name
-    tasks.register(DetektPlugin.DETEKT_TASK_NAME + taskSuffix.capitalize(), Detekt::class.java) { detektTask ->
+    val taskSuffix = compilation.taskSuffix(target).capitalize()
+    tasks.register(DetektPlugin.DETEKT_TASK_NAME + taskSuffix, Detekt::class.java) { detektTask ->
         val siblingTask = compilation.compileTaskProvider.map { it as KotlinJvmCompile }
 
         detektTask.setSource(siblingTask.map { it.sources })
@@ -72,9 +73,9 @@ internal fun Project.registerJvmCompilationCreateBaselineTask(
     compilation: KotlinCompilation<*>,
     target: KotlinTarget? = null,
 ) {
-    val taskSuffix = if (target != null) compilation.name + target.name.capitalize() else compilation.name
+    val taskSuffix = compilation.taskSuffix(target).capitalize()
     tasks.register(
-        DetektPlugin.BASELINE_TASK_NAME + taskSuffix.capitalize(),
+        DetektPlugin.BASELINE_TASK_NAME + taskSuffix,
         DetektCreateBaselineTask::class.java,
     ) { createBaselineTask ->
         val siblingTask = compilation.compileTaskProvider.map { it as KotlinJvmCompile }
@@ -123,6 +124,34 @@ internal fun Project.registerJvmCompilationCreateBaselineTask(
     }
 }
 
+internal fun Project.registerJvmCompilationProfilingTask(
+    extension: DetektExtension,
+    compilation: KotlinCompilation<*>,
+    target: KotlinTarget? = null,
+) {
+    val taskPrefix =
+        if (this == rootProject) DetektPlugin.PROFILING_ROOT_TASK_NAME else DetektPlugin.PROFILING_TASK_NAME
+    val taskSuffix = compilation.taskSuffix(target).capitalize()
+    val detektTaskName = DetektPlugin.DETEKT_TASK_NAME + taskSuffix
+    val profilingTaskName = taskPrefix + taskSuffix
+
+    // Get the corresponding Detekt task
+    val detektTaskProvider = tasks.named(detektTaskName, Detekt::class.java)
+
+    DetektProfilingTask.register(
+        project = this,
+        taskName = profilingTaskName,
+        extension = extension,
+        detektTaskProvider = detektTaskProvider
+    ).configure { profilingTask ->
+        profilingTask.description = if (target != null) {
+            "Process detekt profiling output for compilation ${compilation.name} on target ${compilation.target.name}"
+        } else {
+            "Process detekt profiling output for ${compilation.name} classes"
+        }
+    }
+}
+
 internal fun Project.mapExplicitArgMode(): Provider<String> =
     provider {
         val kotlinExtension = extensions.getByType(KotlinBaseExtension::class.java)
@@ -132,3 +161,6 @@ internal fun Project.mapExplicitArgMode(): Provider<String> =
             else -> null
         }
     }
+
+private fun KotlinCompilation<*>.taskSuffix(target: KotlinTarget?): String =
+    if (target != null) name + target.name.capitalize() else name
