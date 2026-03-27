@@ -38,7 +38,6 @@ When implementing a new rule, do not forget to perform the following steps:
 - Test the new rule and/or add tests for any changes made to a rule. Run detekt on itself and other
   Kotlin projects with the `--run-rule RuleSet:RuleId` option to test your rule in isolation. Make use of
   the `scripts/get_analysis_projects.kts` script to automatically establish a set of analysis projects.
-- Run `./gradlew generateDocumentation` to add your rule and its config options to the `default-detekt-config.yml`.
 - Run `./gradlew build`. This will execute tests locally.
 
 To view the AST (PSI) of your source code, you can use the [PSI Viewer plugin](https://plugins.jetbrains.com/plugin/227-psiviewer) for IntelliJ.
