@@ -376,7 +376,6 @@ class SuspendFunSwallowedCancellation(config: Config) :
             "java.lang.IllegalStateException", // JVM
             "java.lang.RuntimeException", // JVM
             "java.lang.Exception", // JVM
-            "java.lang.Throwable", // JVM
             "kotlin.Throwable",
         )
     }
