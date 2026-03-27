@@ -763,7 +763,7 @@ class UnnecessaryFullyQualifiedNameSpec(val env: KotlinEnvironmentContainer) {
         }
 
         @Test
-        fun `does not report calls on package paths ending with lowercase identifier`() {
+        fun `reports calls on package paths ending with lowercase identifier`() {
             val code = """
                 package foo.bar
                 object baz {
@@ -777,11 +777,11 @@ class UnnecessaryFullyQualifiedNameSpec(val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
-        fun `does not report function calls from unknown packages`() {
+        fun `reports function calls from unknown packages`() {
             val code = """
                 package mycompany.utils
                 object helper {
@@ -795,11 +795,11 @@ class UnnecessaryFullyQualifiedNameSpec(val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
-        fun `does not report property access without method call`() {
+        fun `reports property access without method call`() {
             val code = """
                 package foo
                 object bar {
@@ -813,7 +813,7 @@ class UnnecessaryFullyQualifiedNameSpec(val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -868,7 +868,7 @@ class UnnecessaryFullyQualifiedNameSpec(val env: KotlinEnvironmentContainer) {
         }
 
         @Test
-        fun `does not report single-segment package qualified calls`() {
+        fun `reports single-segment package qualified calls`() {
             val code = """
                 class Test {
                     fun method() {
@@ -877,7 +877,7 @@ class UnnecessaryFullyQualifiedNameSpec(val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code)).isEmpty()
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
     }
 
