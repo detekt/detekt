@@ -643,5 +643,17 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
                 .singleElement()
                 .hasMessage(SEALED_NO_CONCRETE_MEMBER)
         }
+
+        @Test
+        fun `don't report a sealed class inheriting a concrete class`() {
+            val code = """
+                sealed class Result : Throwable() {
+                    data class First(val data: String) : Result()
+                    data class Second(val data: Int): Result()
+                }
+            """.trimIndent()
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
     }
 }

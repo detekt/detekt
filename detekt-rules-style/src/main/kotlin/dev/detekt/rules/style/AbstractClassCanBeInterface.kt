@@ -91,6 +91,7 @@ class AbstractClassCanBeInterface(config: Config) :
             when {
                 members.isNotEmpty() -> checkMembers(klass, members, nameIdentifier)
                 hasInheritedMember(klass, isAbstract = true) && isAnyParentAbstract(klass) -> return
+                isAnyParentConcreteClass(klass) -> return
                 klass.hasConstructorParameter() || klass.containsInternalClass() -> return
                 else -> report(Finding(Entity.from(nameIdentifier), klass.message()))
             }
@@ -158,6 +159,19 @@ class AbstractClassCanBeInterface(config: Config) :
         (klass.symbol as? KaClassSymbol)
             ?.superTypes
             ?.all { (it.symbol as? KaClassSymbol)?.classKind == KaClassKind.INTERFACE } == false
+
+    private fun KaSession.isAnyParentConcreteClass(klass: KtClass): Boolean =
+        (klass.symbol as? KaClassSymbol)
+            ?.superTypes
+            ?.any { kaType ->
+                val symbol = kaType.symbol as? KaClassSymbol ?: return false
+                // exclude the `Any` class
+                if (symbol == builtinTypes.any.symbol) return false
+
+                symbol.classKind == KaClassKind.CLASS
+                    && symbol.modality != KaSymbolModality.ABSTRACT
+                    && symbol.modality != KaSymbolModality.SEALED
+            } == true
 
     /**
      * Returns true if this callable can be safely represented in an interface: functions, getter-only properties
