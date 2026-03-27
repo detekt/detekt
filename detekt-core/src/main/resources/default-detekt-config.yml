@@ -366,6 +366,7 @@ naming:
     active: true
   NonBooleanPropertyPrefixedWithIs:
     active: false
+    allowSingleTypedGenerics: false
   ObjectPropertyNaming:
     active: true
     aliases: ['ObjectPropertyName']

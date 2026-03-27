@@ -1,6 +1,7 @@
 package dev.detekt.rules.naming
 
 import dev.detekt.api.Config
+import dev.detekt.test.TestConfig
 import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.junit.KotlinCoreEnvironmentTest
 import dev.detekt.test.lintWithContext
@@ -328,6 +329,87 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinEnvironmentContainer) {
             val findings = subject.lintWithContext(env, code)
 
             assertThat(findings).isEmpty()
+        }
+    }
+
+    @Nested
+    inner class `boolean generics` {
+        private val allowSingleTypedGenerics =
+            NonBooleanPropertyPrefixedWithIs(TestConfig("allowSingleTypedGenerics" to true))
+
+        @Test
+        fun `report StateFlow boolean for default config`() {
+            val code = """
+                import kotlinx.coroutines.flow.StateFlow
+
+                interface Foo { 
+                    val isBar: StateFlow<Boolean> 
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code))
+                .hasSize(1)
+        }
+
+        @Test
+        fun `dont report StateFlow boolean`() {
+            val code = """
+                import kotlinx.coroutines.flow.StateFlow
+
+                interface Foo { 
+                    val isBar: StateFlow<Boolean> 
+                }
+            """.trimIndent()
+            assertThat(allowSingleTypedGenerics.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `report StateFlow string`() {
+            val code = """
+                import kotlinx.coroutines.flow.StateFlow
+
+                interface Foo { 
+                    val isBar: StateFlow<String> 
+                }
+            """.trimIndent()
+            assertThat(allowSingleTypedGenerics.lintWithContext(env, code)).hasSize(1)
+        }
+
+        @Test
+        fun `report nullable StateFlow boolean`() {
+            val code = """
+                import kotlinx.coroutines.flow.StateFlow
+
+                interface Foo { 
+                    val isBar: StateFlow<Boolean?> 
+                }
+            """.trimIndent()
+            assertThat(allowSingleTypedGenerics.lintWithContext(env, code)).hasSize(1)
+        }
+
+        @Test
+        fun `report multi-type generic`() {
+            val code = """
+                interface DataProvider<A, B>
+
+                interface Foo { 
+                    val isBar: DataProvider<Boolean, Int> 
+                }
+            """.trimIndent()
+            assertThat(allowSingleTypedGenerics.lintWithContext(env, code)).hasSize(1)
+        }
+
+        @Test
+        fun `report type inheriting from single-arg generic`() {
+            val code = """
+                interface DataProvider<A>
+
+                class BooleanProvider : DataProvider<Boolean>
+
+                interface Foo { 
+                    val isBar: BooleanProvider 
+                }
+            """.trimIndent()
+            assertThat(allowSingleTypedGenerics.lintWithContext(env, code)).hasSize(1)
         }
     }
 }
