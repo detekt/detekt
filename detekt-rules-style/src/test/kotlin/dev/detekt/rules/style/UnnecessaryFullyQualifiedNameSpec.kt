@@ -271,6 +271,22 @@ class UnnecessaryFullyQualifiedNameSpec(val env: KotlinEnvironmentContainer) {
 
             assertThat(subject.lintWithContext(env, code)).hasSize(4)
         }
+
+        @Test
+        fun `does not report when inner class instance is created from the outer class instance`() {
+            val code = """
+                class Test {
+                    inner class A
+                }
+                
+                fun main(test: Test) {
+                    val a = Test().A()
+                    val b = test.A()
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
     }
 
     @Nested
