@@ -116,8 +116,9 @@ class IgnoredReturnValue(config: Config) :
         super.visitCallExpression(expression)
 
         analyze(expression) {
-            val symbol = expression.resolveToCall()?.singleFunctionCallOrNull()?.symbol ?: return
-            val returnType = symbol.returnType
+            val functionCall = expression.resolveToCall()?.singleFunctionCallOrNull() ?: return
+            val symbol = functionCall.symbol
+            val returnType = functionCall.signature.returnType
             if (returnType.isUnitType || returnType.isNothingType) return
 
             if (ignoreFunctionCall.any { it.match(symbol) }) return
