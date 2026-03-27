@@ -177,7 +177,7 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
         }
 
         @Test
-        fun `does not report an abstract extending a class`() {
+        fun `does not report an abstract class extending a class`() {
             val code = """
                 abstract class A : Throwable()
             """.trimIndent()
@@ -185,7 +185,7 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
         }
 
         @Test
-        fun `does report an abstract extending an interface`() {
+        fun `does report an abstract class extending an interface`() {
             val code = """
                 abstract class A : Comparable<Int>
             """.trimIndent()
@@ -655,7 +655,7 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
         }
 
         @Test
-        fun `don't report a sealed class extending other class - #9182`() {
+        fun `don't report a sealed class extending another class - #9182`() {
             val code = """
                 sealed class MyError : Throwable() {
                     data class FirstType(val first: String) : MyError()
