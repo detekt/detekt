@@ -35,13 +35,13 @@ abstract class OnlyConcreteMembersInAbstractClass { // violation: no abstract me
 
 ```kotlin
 interface OnlyAbstractMembersInInterface {
-val i: Int
-fun f()
+    val i: Int
+    fun f()
 }
 
 class OnlyConcreteMembersInClass {
-val i: Int = 0
-fun f() { }
+    val i: Int = 0
+    fun f() { }
 }
 ```
 
@@ -68,8 +68,8 @@ abstract class OnlyAbstractMembersInAbstractClass { // violation: no concrete me
 
 ```kotlin
 interface Interface {
-val i: Int
-fun f()
+    val i: Int
+    fun f()
 }
 
 abstract class NonAbstractMembersInAbstractClass {
@@ -93,8 +93,8 @@ thus making the block more concise and easier to read.
 
 ```kotlin
 Buzz().also {
-it.init()
-it.block()
+  it.init()
+  it.block()
 }
 ```
 
@@ -102,13 +102,13 @@ it.block()
 
 ```kotlin
 Buzz().apply {
-init()
-block()
+  init()
+  block()
 }
 
 // Also compliant
 fun foo(a: Int): Int {
-return a.also { println(it) }
+  return a.also { println(it) }
 }
 ```
 
@@ -118,12 +118,12 @@ This rule detects `if` statements which do not comply with the specified rules.
 Keeping braces consistent will improve readability and avoid possible errors.
 
 The available options are:
-* `always`: forces braces on all `if` and `else` branches in the whole codebase.
-* `consistent`: ensures that braces are consistent within each `if`-`else if`-`else` chain.
-If there's a brace on one of the branches, all branches should have it.
-* `necessary`: forces no braces on any `if` and `else` branches in the whole codebase
-except where necessary for multi-statement branches.
-* `never`: forces no braces on any `if` and `else` branches in the whole codebase.
+ * `always`: forces braces on all `if` and `else` branches in the whole codebase.
+ * `consistent`: ensures that braces are consistent within each `if`-`else if`-`else` chain.
+   If there's a brace on one of the branches, all branches should have it.
+ * `necessary`: forces no braces on any `if` and `else` branches in the whole codebase
+   except where necessary for multi-statement branches.
+ * `never`: forces no braces on any `if` and `else` branches in the whole codebase.
 
 Single-line if-statement has no line break (\n):
 ```kotlin
@@ -159,9 +159,9 @@ if (a) b else { c; d }
 
 // multiLine = 'never'
 if (a) {
-b
+   b
 } else {
-c
+   c
 }
 
 // singleLine = 'always'
@@ -171,9 +171,9 @@ if (a) { b } else c
 
 // multiLine = 'always'
 if (a) {
-b
+   b
 } else
-c
+   c
 
 // singleLine = 'consistent'
 if (a) b else { c }
@@ -181,9 +181,9 @@ if (a) b else if (c) d else { e }
 
 // multiLine = 'consistent'
 if (a)
-b
+   b
 else {
-c
+   c
 }
 
 // singleLine = 'necessary'
@@ -191,12 +191,12 @@ if (a) { b } else { c; d }
 
 // multiLine = 'necessary'
 if (a) {
-b
-c
+   b
+   c
 } else if (d) {
-e
+   e
 } else {
-f
+   f
 }
 ```
 
@@ -208,9 +208,9 @@ if (a) b else c
 
 // multiLine = 'never'
 if (a)
-b
+   b
 else
-c
+   c
 
 // singleLine = 'always'
 if (a) { b } else { c }
@@ -219,15 +219,15 @@ if (a) { b } else if (c) { d }
 
 // multiLine = 'always'
 if (a) {
-b
+   b
 } else {
-c
+   c
 }
 
 if (a) {
-b
+   b
 } else if (c) {
-d
+   d
 }
 
 // singleLine = 'consistent'
@@ -239,9 +239,9 @@ if (a) { b } else { c; d }
 
 // multiLine = 'consistent'
 if (a) {
-b
+   b
 } else {
-c
+   c
 }
 
 if (a) b
@@ -252,12 +252,12 @@ if (a) b else { c; d }
 
 // multiLine = 'necessary'
 if (a) {
-b
-c
+   b
+   c
 } else if (d)
-e
+   e
 else
-f
+   f
 ```
 
 ### BracesOnWhenStatements
@@ -272,13 +272,13 @@ Multi-line `when` statement is:
 a `when` where at least one of the branches is multi-line (has a break line `\n`).
 
 Available options are:
-* `never`: forces no braces on any branch.
-_Tip_: this is very strict, it will force a simple expression, like a single function call / expression.
-Extracting a function for "complex" logic is one way to adhere to this policy.
-* `necessary`: forces no braces on any branch except where necessary for multi-statement branches.
-* `consistent`: ensures that braces are consistent within `when` statement.
-If there are braces on one of the branches, all branches should have it.
-* `always`: forces braces on all branches.
+ * `never`: forces no braces on any branch.
+ _Tip_: this is very strict, it will force a simple expression, like a single function call / expression.
+ Extracting a function for "complex" logic is one way to adhere to this policy.
+ * `necessary`: forces no braces on any branch except where necessary for multi-statement branches.
+ * `consistent`: ensures that braces are consistent within `when` statement.
+   If there are braces on one of the branches, all branches should have it.
+ * `always`: forces braces on all branches.
 
 **Active by default**: No
 
@@ -295,126 +295,126 @@ If there are braces on one of the branches, all branches should have it.
 #### Noncompliant Code:
 
 ```kotlin
-// singleLine = 'never'
-when (a) {
-1 -> { f1() } // Not allowed.
-2 -> f2()
-}
-// multiLine = 'never'
-when (a) {
-1 -> { // Not allowed.
-f1()
-}
-2 -> f2()
-}
-// singleLine = 'necessary'
-when (a) {
-1 -> { f1() } // Unnecessary braces.
-2 -> f2()
-}
-// multiLine = 'necessary'
-when (a) {
-1 -> { // Unnecessary braces.
-f1()
-}
-2 -> f2()
-}
+ // singleLine = 'never'
+ when (a) {
+     1 -> { f1() } // Not allowed.
+     2 -> f2()
+ }
+ // multiLine = 'never'
+ when (a) {
+     1 -> { // Not allowed.
+         f1()
+     }
+     2 -> f2()
+ }
+ // singleLine = 'necessary'
+ when (a) {
+     1 -> { f1() } // Unnecessary braces.
+     2 -> f2()
+ }
+ // multiLine = 'necessary'
+ when (a) {
+     1 -> { // Unnecessary braces.
+         f1()
+     }
+     2 -> f2()
+ }
 
-// singleLine = 'consistent'
-when (a) {
-1 -> { f1() }
-2 -> f2()
-}
-// multiLine = 'consistent'
-when (a) {
-1 ->
-f1() // Missing braces.
-2 -> {
-f2()
-f3()
-}
-}
+ // singleLine = 'consistent'
+ when (a) {
+     1 -> { f1() }
+     2 -> f2()
+ }
+ // multiLine = 'consistent'
+ when (a) {
+     1 ->
+         f1() // Missing braces.
+     2 -> {
+         f2()
+         f3()
+     }
+ }
 
-// singleLine = 'always'
-when (a) {
-1 -> { f1() }
-2 -> f2() // Missing braces.
-}
-// multiLine = 'always'
-when (a) {
-1 ->
-f1() // Missing braces.
-2 -> {
-f2()
-f3()
-}
-}
+ // singleLine = 'always'
+ when (a) {
+     1 -> { f1() }
+     2 -> f2() // Missing braces.
+ }
+ // multiLine = 'always'
+ when (a) {
+     1 ->
+         f1() // Missing braces.
+     2 -> {
+         f2()
+         f3()
+     }
+ }
 ```
 
 #### Compliant Code:
 
 ```kotlin
-// singleLine = 'never'
-when (a) {
-1 -> f1()
-2 -> f2()
-}
-// multiLine = 'never'
-when (a) {
-1 ->
-f1()
-2 -> f2()
-}
-// singleLine = 'necessary'
-when (a) {
-1 -> f1()
-2 -> { f2(); f3() } // Necessary braces because of multiple statements.
-}
-// multiLine = 'necessary'
-when (a) {
-1 ->
-f1()
-2 -> { // Necessary braces because of multiple statements.
-f2()
-f3()
-}
-}
+ // singleLine = 'never'
+ when (a) {
+     1 -> f1()
+     2 -> f2()
+ }
+ // multiLine = 'never'
+ when (a) {
+     1 ->
+         f1()
+     2 -> f2()
+ }
+ // singleLine = 'necessary'
+ when (a) {
+     1 -> f1()
+     2 -> { f2(); f3() } // Necessary braces because of multiple statements.
+ }
+ // multiLine = 'necessary'
+ when (a) {
+     1 ->
+         f1()
+     2 -> { // Necessary braces because of multiple statements.
+         f2()
+         f3()
+     }
+ }
 
-// singleLine = 'consistent'
-when (a) {
-1 -> { f1() }
-2 -> { f2() }
-}
-when (a) {
-1 -> f1()
-2 -> f2()
-}
-// multiLine = 'consistent'
-when (a) {
-1 -> {
-f1()
-}
-2 -> {
-f2()
-f3()
-}
-}
+ // singleLine = 'consistent'
+ when (a) {
+     1 -> { f1() }
+     2 -> { f2() }
+ }
+ when (a) {
+     1 -> f1()
+     2 -> f2()
+ }
+ // multiLine = 'consistent'
+ when (a) {
+     1 -> {
+         f1()
+     }
+     2 -> {
+         f2()
+         f3()
+     }
+ }
 
-// singleLine = 'always'
-when (a) {
-1 -> { f1() }
-2 -> { f2() }
-}
-// multiLine = 'always'
-when (a) {
-1 -> {
-f1()
-}
-2 -> {
-f2()
-f3()
-}
-}
+ // singleLine = 'always'
+ when (a) {
+     1 -> { f1() }
+     2 -> { f2() }
+ }
+ // multiLine = 'always'
+ when (a) {
+     1 -> {
+         f1()
+     }
+     2 -> {
+         f2()
+         f3()
+     }
+ }
 ```
 
 ### CanBeNonNullable
@@ -438,7 +438,7 @@ This could lead to less nullability overall in the codebase.
 
 ```kotlin
 class A {
-var a: Int? = 5
+    var a: Int? = 5
 
     fun foo() {
         a = 6
@@ -446,23 +446,23 @@ var a: Int? = 5
 }
 
 class A {
-val a: Int?
-get() = 5
+    val a: Int?
+        get() = 5
 }
 
 fun foo(a: Int?) {
-val b = a!! + 2
+    val b = a!! + 2
 }
 
 fun foo(a: Int?) {
-if (a != null) {
-println(a)
-}
+    if (a != null) {
+        println(a)
+    }
 }
 
 fun foo(a: Int?) {
-if (a == null) return
-println(a)
+    if (a == null) return
+    println(a)
 }
 ```
 
@@ -470,7 +470,7 @@ println(a)
 
 ```kotlin
 class A {
-var a: Int = 5
+    var a: Int = 5
 
     fun foo() {
         a = 6
@@ -478,16 +478,16 @@ var a: Int = 5
 }
 
 class A {
-val a: Int
-get() = 5
+    val a: Int
+        get() = 5
 }
 
 fun foo(a: Int) {
-val b = a + 2
+    val b = a + 2
 }
 
 fun foo(a: Int) {
-println(a)
+    println(a)
 }
 ```
 
@@ -507,7 +507,7 @@ Requires that all chained calls are placed on a new line if a preceding one is.
 
 ```kotlin
 foo()
-.bar().baz()
+  .bar().baz()
 ```
 
 #### Compliant Code:
@@ -516,8 +516,8 @@ foo()
 foo().bar().baz()
 
 foo()
-.bar()
-.baz()
+  .bar()
+  .baz()
 ```
 
 ### ClassOrdering
@@ -535,9 +535,9 @@ This rule ensures class contents are ordered as follows as recommended by the Ko
 
 ```kotlin
 class OutOfOrder {
-companion object {
-const val IMPORTANT_VALUE = 3
-}
+    companion object {
+        const val IMPORTANT_VALUE = 3
+    }
 
     fun returnX(): Int {
         return x
@@ -551,7 +551,7 @@ const val IMPORTANT_VALUE = 3
 
 ```kotlin
 class InOrder {
-private val x = 2
+    private val x = 2
 
     fun returnX(): Int {
         return x
@@ -577,9 +577,9 @@ statements may hide some edge cases from the reader.
 ```kotlin
 val i = 1
 if (i > 0) {
-if (i < 5) {
-println(i)
-}
+    if (i < 5) {
+        println(i)
+    }
 }
 ```
 
@@ -588,7 +588,7 @@ println(i)
 ```kotlin
 val i = 1
 if (i > 0 && i < 5) {
-println(i)
+    println(i)
 }
 ```
 
@@ -616,7 +616,7 @@ Data classes will automatically have a generated `equals`, `toString` and `hashC
 
 ```kotlin
 data class DataClassWithFunctions(val i: Int) {
-fun foo() { }
+    fun foo() { }
 }
 ```
 
@@ -633,7 +633,7 @@ mutable properties.
 
 ```kotlin
 data class MutableDataClass(var i: Int) {
-var s: String? = null
+    var s: String? = null
 }
 ```
 
@@ -641,8 +641,8 @@ var s: String? = null
 
 ```kotlin
 data class ImmutableDataClass(
-val i: Int,
-val s: String?
+    val i: Int,
+    val s: String?
 )
 ```
 
@@ -757,10 +757,10 @@ rest of the function signature.
 
 ```kotlin
 fun stuff(): Int
-= 5
+    = 5
 
 fun <V> foo(): Int where V : Int
-= 5
+    = 5
 ```
 
 #### Compliant Code:
@@ -769,7 +769,7 @@ fun <V> foo(): Int where V : Int
 fun stuff() = 5
 
 fun stuff() =
-foo.bar()
+    foo.bar()
 
 fun <V> foo(): Int where V : Int = 5
 ```
@@ -787,17 +787,17 @@ Prefer the usage of the indexed access operator `[]` for map or list element acc
 #### Noncompliant Code:
 
 ```kotlin
-val map = mutableMapOf<String, String>()
-map.put("key", "value")
-val value = map.get("key")
+ val map = mutableMapOf<String, String>()
+ map.put("key", "value")
+ val value = map.get("key")
 ```
 
 #### Compliant Code:
 
 ```kotlin
-val map = mutableMapOf<String, String>()
-map["key"] = "value"
-val value = map["key"]
+ val map = mutableMapOf<String, String>()
+ map["key"] = "value"
+ val value = map["key"]
 ```
 
 ### ExplicitItLambdaMultipleParameters
@@ -821,7 +821,7 @@ collection.zipWithNext { it, next -> Pair(it, next) }
 ```kotlin
 // Lambdas with multiple parameter should be named clearly, using it for one of them can be confusing
 collection.zipWithNext { prev, next ->
-Pair(prev, next)
+    Pair(prev, next)
 }
 ```
 
@@ -841,7 +841,7 @@ makes your code misleading, especially when dealing with nested functions.
 a?.let { it -> it.plus(1) }
 foo.flatMapObservable { it -> Observable.fromIterable(it) }
 listOfPairs.map(::second).forEach { it ->
-it.execute()
+    it.execute()
 }
 ```
 
@@ -854,7 +854,7 @@ foo.flatMapObservable(Observable::fromIterable) // Here we can have a method ref
 
 // For multiline blocks it is usually better come up with a clear and more meaningful name
 listOfPairs.map(::second).forEach { apiRequest ->
-apiRequest.execute()
+    apiRequest.execute()
 }
 ```
 
@@ -875,7 +875,7 @@ cleans up the code.
 
 ```kotlin
 fun stuff(): Int {
-return 5
+    return 5
 }
 ```
 
@@ -885,10 +885,10 @@ return 5
 fun stuff() = 5
 
 fun stuff() {
-return
-moreStuff()
-.getStuff()
-.stuffStuff()
+    return
+        moreStuff()
+            .getStuff()
+            .stuffStuff()
 }
 ```
 
@@ -927,56 +927,56 @@ This rule allows to set a list of comments which are forbidden in the codebase a
 development. Offending code comments will then be reported.
 
 The regular expressions in `comments` list will have the following behaviors while matching the comments:
-* **Each comment will be handled individually.**
-* single line comments are always separate, consecutive lines are not merged.
-* multi line comments are not split up, the regex will be applied to the whole comment.
-* KDoc comments are not split up, the regex will be applied to the whole comment.
-* **The following comment delimiters (and indentation before them) are removed** before applying the regex:
-`//`, `// `, `/​*`, `/​* `, `/​**`, `*` aligners, `*​/`, ` *​/`
-* **The regex is applied as a multiline regex**,
-see [Anchors](https://www.regular-expressions.info/anchors.html) for more info.
-To match the start and end of each line, use `^` and `$`.
-To match the start and end of the whole comment, use `\A` and `\Z`.
-To turn off multiline, use `(?-m)` at the start of your regex.
-* **The regex is applied with dotall semantics**, meaning `.` will match any character including newlines,
-this is to ensure that freeform line-wrapping doesn't mess with simple regexes.
-To turn off this behavior, use `(?-s)` at the start of your regex, or use `[^\r\n]*` instead of `.*`.
-* **The regex will be searched using "contains" semantics** not "matches",
-so partial comment matches will flag forbidden comments.
-In practice this means there's no need to start and end the regex with `.*`.
+ * **Each comment will be handled individually.**
+   * single line comments are always separate, consecutive lines are not merged.
+   * multi line comments are not split up, the regex will be applied to the whole comment.
+   * KDoc comments are not split up, the regex will be applied to the whole comment.
+ * **The following comment delimiters (and indentation before them) are removed** before applying the regex:
+   `//`, `// `, `/​*`, `/​* `, `/​**`, `*` aligners, `*​/`, ` *​/`
+ * **The regex is applied as a multiline regex**,
+   see [Anchors](https://www.regular-expressions.info/anchors.html) for more info.
+   To match the start and end of each line, use `^` and `$`.
+   To match the start and end of the whole comment, use `\A` and `\Z`.
+   To turn off multiline, use `(?-m)` at the start of your regex.
+ * **The regex is applied with dotall semantics**, meaning `.` will match any character including newlines,
+   this is to ensure that freeform line-wrapping doesn't mess with simple regexes.
+   To turn off this behavior, use `(?-s)` at the start of your regex, or use `[^\r\n]*` instead of `.*`.
+ * **The regex will be searched using "contains" semantics** not "matches",
+   so partial comment matches will flag forbidden comments.
+   In practice this means there's no need to start and end the regex with `.*`.
 
 The rule can be configured to add extra comments to the list of forbidden comments, here are some examples:
 ```yaml
-ForbiddenComment:
-  comments:
-    # Repeat the default configuration if it's still needed.
-    - reason: 'Forbidden FIXME todo marker in comment, please fix the problem.'
-      value: 'FIXME:'
-    - reason: 'Forbidden STOPSHIP todo marker in comment, please address the problem before shipping the code.'
-      value: 'STOPSHIP:'
-    - reason: 'Forbidden TODO todo marker in comment, please do the changes.'
-      value: 'TODO:'
-    # Add additional patterns to the list.
+  ForbiddenComment:
+    comments:
+      # Repeat the default configuration if it's still needed.
+      - reason: 'Forbidden FIXME todo marker in comment, please fix the problem.'
+        value: 'FIXME:'
+      - reason: 'Forbidden STOPSHIP todo marker in comment, please address the problem before shipping the code.'
+        value: 'STOPSHIP:'
+      - reason: 'Forbidden TODO todo marker in comment, please do the changes.'
+        value: 'TODO:'
+      # Add additional patterns to the list.
 
-    - reason: 'Authors are not recorded in KDoc.'
-      value: '@author'
+      - reason: 'Authors are not recorded in KDoc.'
+        value: '@author'
 
-    - reason: 'REVIEW markers are not allowed in production code, only use before PR is merged.'
-      value: '^\s*(?i)REVIEW\b'
-      # Non-compliant: // REVIEW this code before merging.
-      # Compliant: // Preview will show up here.
+      - reason: 'REVIEW markers are not allowed in production code, only use before PR is merged.'
+        value: '^\s*(?i)REVIEW\b'
+        # Non-compliant: // REVIEW this code before merging.
+        # Compliant: // Preview will show up here.
 
-    - reason: 'Use @androidx.annotation.VisibleForTesting(otherwise = VisibleForTesting.PRIVATE) instead.'
-      value: '^private$'
-      # Non-compliant: /*private*/fun f() { }
+      - reason: 'Use @androidx.annotation.VisibleForTesting(otherwise = VisibleForTesting.PRIVATE) instead.'
+        value: '^private$'
+        # Non-compliant: /*private*/ fun f() { }
 
       - reason: 'KDoc tag should have a value.'
         value: '^\s*@(?!suppress|hide)\w+\s*$'
         # Non-compliant: /** ... @see */
-    # Compliant: /** ... @throws IOException when there's a network problem */
+        # Compliant: /** ... @throws IOException when there's a network problem */
 
-    - reason: 'include an issue link at the beginning preceded by a space'
-      value: 'BUG:(?! https://github\.com/company/repo/issues/\d+).*'
+      - reason: 'include an issue link at the beginning preceded by a space'
+        value: 'BUG:(?! https://github\.com/company/repo/issues/\d+).*'
 ```
 
 By default the commonly used todo markers are forbidden: `TODO:`, `FIXME:` and `STOPSHIP:`.
@@ -998,8 +998,8 @@ By default the commonly used todo markers are forbidden: `TODO:`, `FIXME:` and `
 ```kotlin
 val a = "" // TODO: remove please
 /**
-* FIXME: this is a hack
-*/
+ * FIXME: this is a hack
+ */
 fun foo() { }
 /* STOPSHIP: */
 ```
@@ -1051,9 +1051,9 @@ of unstable, experimental or deprecated methods, especially for methods imported
 
 ```kotlin
 fun main() {
-println()
-val myPrintln : () -> Unit = ::println
-kotlin.io.print("Hello, World!")
+  println()
+  val myPrintln : () -> Unit = ::println
+  kotlin.io.print("Hello, World!")
 }
 ```
 
@@ -1080,8 +1080,8 @@ discourage the use named parameters.
 
 ```kotlin
 fun foo() {
-// `id =` here adds no value
-painterResource(id = R.drawable.ic_close)
+    // `id =` here adds no value
+    painterResource(id = R.drawable.ic_close)
 }
 ```
 
@@ -1089,7 +1089,7 @@ painterResource(id = R.drawable.ic_close)
 
 ```kotlin
 fun foo() {
-painterResource(R.drawable.ic_close)
+    painterResource(R.drawable.ic_close)
 }
 ```
 
@@ -1230,11 +1230,11 @@ To increase readability they should be refactored into simpler loops.
 ```kotlin
 val strs = listOf("foo, bar")
 for (str in strs) {
-if (str == "bar") {
-break
-} else {
-continue
-}
+    if (str == "bar") {
+        break
+    } else {
+        continue
+    }
 }
 ```
 
@@ -1334,13 +1334,13 @@ Adding braces would improve readability and avoid possible errors.
 
 ```kotlin
 for (i in 0..10)
-println(i)
+    println(i)
 
 while (true)
-println("Hello, world")
+    println("Hello, world")
 
 do
-println("Hello, world")
+    println("Hello, world")
 while (true)
 ```
 
@@ -1348,19 +1348,19 @@ while (true)
 
 ```kotlin
 for (i in 0..10) {
-println(i)
+    println(i)
 }
 
 for (i in 0..10) println(i)
 
 while (true) {
-println("Hello, world")
+    println("Hello, world")
 }
 
 while (true) println("Hello, world")
 
 do {
-println("Hello, world")
+    println("Hello, world")
 } while (true)
 
 do println("Hello, world") while (true)
@@ -1390,7 +1390,7 @@ a().b().c().d().e().f()
 
 ```kotlin
 a().b().c()
-.d().e().f()
+  .d().e().f()
 ```
 
 ### MaxLineLength
@@ -1479,18 +1479,18 @@ explicitly.
 
 ```kotlin
 val digits = 1234.let {
-println(it)
-listOf(it)
+    println(it)
+    listOf(it)
 }
 
 val digits = 1234.let { it ->
-println(it)
-listOf(it)
+    println(it)
+    listOf(it)
 }
 
 val flat = listOf(listOf(1), listOf(2)).mapIndexed { index, it ->
-println(it)
-it + index
+    println(it)
+    it + index
 }
 ```
 
@@ -1498,26 +1498,26 @@ it + index
 
 ```kotlin
 val digits = 1234.let { explicitParameterName ->
-println(explicitParameterName)
-listOf(explicitParameterName)
+    println(explicitParameterName)
+    listOf(explicitParameterName)
 }
 
 val lambda = { item: Int, that: String ->
-println(item)
-item.toString() + that
+    println(item)
+    item.toString() + that
 }
 
 val digits = 1234.let { listOf(it) }
 val digits = 1234.let {
-listOf(it)
+    listOf(it)
 }
 val digits = 1234.let { it -> listOf(it) }
 val digits = 1234.let { it ->
-listOf(it)
+    listOf(it)
 }
 val digits = 1234.let { explicit -> listOf(explicit) }
 val digits = 1234.let { explicit ->
-listOf(explicit)
+    listOf(explicit)
 }
 ```
 
@@ -1551,22 +1551,22 @@ How are you?
 """.trimMargin()
 
 val a = """
-Hello World!
-How are you?
-""".trimMargin()
+        Hello World!
+        How are you?
+        """.trimMargin()
 ```
 
 #### Compliant Code:
 
 ```kotlin
 val a = """
-Hello World!
-How are you?
+    Hello World!
+    How are you?
 """.trimMargin()
 
 val a = """
-Hello World!
-How are you?
+    Hello World!
+      How are you?
 """.trimMargin()
 ```
 
@@ -1585,8 +1585,8 @@ because the nested class still has an internal visibility.
 
 ```kotlin
 internal class Outer {
-// explicit public modifier still results in an internal nested class
-public class Nested
+    // explicit public modifier still results in an internal nested class
+    public class Nested
 }
 ```
 
@@ -1594,8 +1594,8 @@ public class Nested
 
 ```kotlin
 internal class Outer {
-class Nested1
-internal class Nested2
+    class Nested1
+    internal class Nested2
 }
 ```
 
@@ -1657,8 +1657,8 @@ See [SAM conversions](https://kotlinlang.org/docs/java-interop.html#sam-conversi
 
 ```kotlin
 object : Foo {
-override fun bar() {
-}
+    override fun bar() {
+    }
 }
 ```
 
@@ -1709,12 +1709,12 @@ of a lone Unit statement.
 
 ```kotlin
 fun foo(): Unit {
-return Unit
+    return Unit
 }
 fun foo() = Unit
 
 fun doesNothing() {
-Unit
+    Unit
 }
 ```
 
@@ -1738,7 +1738,7 @@ members. Consider using `private` or `internal` modifiers instead.
 
 ```kotlin
 class ProtectedMemberInFinalClass {
-protected var i = 0
+    protected var i = 0
 }
 ```
 
@@ -1746,7 +1746,7 @@ protected var i = 0
 
 ```kotlin
 class ProtectedMemberInFinalClass {
-private var i = 0
+    private var i = 0
 }
 ```
 
@@ -1791,7 +1791,7 @@ data class Foo constructor(val foo: Int)
 data class Foo(val foo: Int)
 
 data class Bar private constructor(val bar: String) {
-constructor(bar: Int): this("$foo")
+    constructor(bar: Int): this("$foo")
 }
 ```
 
@@ -1807,7 +1807,7 @@ Local properties do not need their type to be explicitly provided when the infer
 
 ```kotlin
 fun function() {
-val x: String = "string"
+    val x: String = "string"
 }
 ```
 
@@ -1815,7 +1815,7 @@ val x: String = "string"
 
 ```kotlin
 fun function() {
-val x = "string"
+    val x = "string"
 }
 ```
 
@@ -1832,22 +1832,22 @@ operator.
 
 ```kotlin
 fun foo(list: List<Int>): List<Int> {
-return list
-.filter { it > 5 }
-.map { it }
+    return list
+        .filter { it > 5 }
+        .map { it }
 }
 
 fun bar(list: List<Int>): List<Int> {
-return list
-.filter { it > 5 }
-.map {
-doSomething(it)
-it
-}
+    return list
+        .filter { it > 5 }
+        .map {
+            doSomething(it)
+            it
+        }
 }
 
 fun baz(set: Set<Int>): List<Int> {
-return set.map { it }
+    return set.map { it }
 }
 ```
 
@@ -1855,20 +1855,20 @@ return set.map { it }
 
 ```kotlin
 fun foo(list: List<Int>): List<Int> {
-return list
-.filter { it > 5 }
+    return list
+        .filter { it > 5 }
 }
 
 fun bar(list: List<Int>): List<Int> {
-return list
-.filter { it > 5 }
-.onEach {
-doSomething(it)
-}
+    return list
+        .filter { it > 5 }
+        .onEach {
+            doSomething(it)
+        }
 }
 
 fun baz(set: Set<Int>): List<Int> {
-return set.toList()
+    return set.toList()
 }
 ```
 
@@ -1935,11 +1935,11 @@ code.
 
 ```kotlin
 fun foo(i: Int): String {
-when (i) {
-1 -> return "one"
-2 -> return "two"
-else -> return "other"
-}
+    when (i) {
+        1 -> return "one"
+        2 -> return "two"
+        else -> return "other"
+    }
 }
 ```
 
@@ -1947,11 +1947,11 @@ else -> return "other"
 
 ```kotlin
 fun foo(i: Int): String {
-return when (i) {
-1 -> "one"
-2 -> "two"
-else -> "other"
-}
+    return when (i) {
+        1 -> "one"
+        2 -> "two"
+        else -> "other"
+    }
 }
 ```
 
@@ -1965,8 +1965,8 @@ This rule inspects casts and reports casts which could be replaced with safe cas
 
 ```kotlin
 fun numberMagic(number: Number) {
-val i = if (number is Int) number else null
-// ...
+    val i = if (number is Int) number else null
+    // ...
 }
 ```
 
@@ -1974,8 +1974,8 @@ val i = if (number is Int) number else null
 
 ```kotlin
 fun numberMagic(number: Number) {
-val i = number as? Int
-// ...
+    val i = number as? Int
+    // ...
 }
 ```
 
@@ -2059,13 +2059,13 @@ recommendation on using multiline strings
 
 ```kotlin
 val windowJson = "{\n" +
-"  \"window\": {\n" +
-"    \"title\": \"Sample Quantum With AI and ML Widget\",\n" +
-"    \"name\": \"main_window\",\n" +
-"    \"width\": 500,\n" +
-"    \"height\": 500\n" +
-"  }\n" +
-"}"
+                 "  \"window\": {\n" +
+                 "    \"title\": \"Sample Quantum With AI and ML Widget\",\n" +
+                 "    \"name\": \"main_window\",\n" +
+                 "    \"width\": 500,\n" +
+                 "    \"height\": 500\n" +
+                 "  }\n" +
+                 "}"
 
 val patRegex = "/^(\\/[^\\/]+){0,2}\\/?\$/gm\n"
 ```
@@ -2074,14 +2074,14 @@ val patRegex = "/^(\\/[^\\/]+){0,2}\\/?\$/gm\n"
 
 ```kotlin
 val windowJson = """
-{
-"window": {
-"title": "Sample Quantum With AI and ML Widget",
-"name": "main_window",
-"width": 500,
-"height": 500
-}
-}
+    {
+         "window": {
+             "title": "Sample Quantum With AI and ML Widget",
+             "name": "main_window",
+             "width": 500,
+             "height": 500
+         }
+    }
 """.trimIndent()
 
 val patRegex = """/^(\/[^\/]+){0,2}\/?$/gm"""
@@ -2108,11 +2108,11 @@ to confusion. Instead, prefer limiting the number of `throw` statements in a fun
 
 ```kotlin
 fun foo(i: Int) {
-when (i) {
-1 -> throw IllegalArgumentException()
-2 -> throw IllegalArgumentException()
-3 -> throw IllegalArgumentException()
-}
+    when (i) {
+        1 -> throw IllegalArgumentException()
+        2 -> throw IllegalArgumentException()
+        3 -> throw IllegalArgumentException()
+    }
 }
 ```
 
@@ -2120,9 +2120,9 @@ when (i) {
 
 ```kotlin
 fun foo(i: Int) {
-when (i) {
-1,2,3 -> throw IllegalArgumentException()
-}
+    when (i) {
+        1,2,3 -> throw IllegalArgumentException()
+    }
 }
 ```
 
@@ -2154,8 +2154,8 @@ All the Raw strings that have more than one line should be followed by `trimMarg
 
 ```kotlin
 """
-Hello World!
-How are you?
+  Hello World!
+  How are you?
 """
 ```
 
@@ -2163,13 +2163,13 @@ How are you?
 
 ```kotlin
 """
-|  Hello World!
-|  How are you?
+  |  Hello World!
+  |  How are you?
 """.trimMargin()
 
 """
-Hello World!
-How are you?
+  Hello World!
+  How are you?
 """.trimIndent()
 
 """Hello World! How are you?"""
@@ -2249,8 +2249,8 @@ config?.apply { println(version) } // `apply` can be replaced by `let`
 
 ```kotlin
 config.apply {
-version = "1.2"
-environment = "test"
+    version = "1.2"
+    environment = "test"
 }
 ```
 
@@ -2287,9 +2287,9 @@ Prefer the usage of trailing lambda.
 
 ```kotlin
 fun test() {
-repeat(10, {
-println(it)
-})
+    repeat(10, {
+        println(it)
+    })
 }
 ```
 
@@ -2297,9 +2297,9 @@ println(it)
 
 ```kotlin
 fun test() {
-repeat(10) {
-println(it)
-}
+    repeat(10) {
+        println(it)
+    }
 }
 ```
 
@@ -2315,22 +2315,22 @@ Unnecessary filters add complexity to the code and accomplish nothing. They shou
 
 ```kotlin
 val x = listOf(1, 2, 3)
-.filter { it > 1 }
-.count()
+     .filter { it > 1 }
+     .count()
 
 val x = listOf(1, 2, 3)
-.filter { it > 1 }
-.isEmpty()
+     .filter { it > 1 }
+     .isEmpty()
 ```
 
 #### Compliant Code:
 
 ```kotlin
 val x = listOf(1, 2, 3)
-.count { it > 2 }
+     .count { it > 2 }
 
 val x = listOf(1, 2, 3)
-.none { it > 1 }
+     .none { it > 1 }
 ```
 
 ### UnnecessaryFullyQualifiedName
@@ -2353,13 +2353,13 @@ for a similar rule in the Java ecosystem.
 
 ```kotlin
 class Foo {
-fun bar(): java.util.List<String> {
-val date = java.time.LocalDate.now()
-return java.util.ArrayList()
-}
-fun baz() {
-kotlin.io.println("Hello")
-}
+    fun bar(): java.util.List<String> {
+        val date = java.time.LocalDate.now()
+        return java.util.ArrayList()
+    }
+    fun baz() {
+        kotlin.io.println("Hello")
+    }
 }
 ```
 
@@ -2371,13 +2371,13 @@ import java.util.ArrayList
 import java.util.List
 
 class Foo {
-fun bar(): List<String> {
-val date = LocalDate.now()
-return ArrayList()
-}
-fun baz() {
-println("Hello")
-}
+    fun bar(): List<String> {
+        val date = LocalDate.now()
+        return ArrayList()
+    }
+    fun baz() {
+        println("Hello")
+    }
 }
 ```
 
@@ -2408,7 +2408,7 @@ not require the `inner` qualifier.
 
 ```kotlin
 class A {
-val foo = "BAR"
+    val foo = "BAR"
 
     inner class B {
         val fizz = "BUZZ"
@@ -2473,7 +2473,7 @@ val local = (5 + 3)
 if ((local == 8)) { }
 
 fun foo() {
-function({ input -> println(input) })
+    function({ input -> println(input) })
 }
 ```
 
@@ -2485,7 +2485,7 @@ val local = 5 + 3
 if (local == 8) { }
 
 fun foo() {
-function { input -> println(input) }
+    function { input -> println(input) }
 }
 ```
 
@@ -2502,15 +2502,15 @@ should be replaced by single equivalent sort operation.
 
 ```kotlin
 listOf(1,2)
-.sorted()
-.asReversed()
+ .sorted()
+ .asReversed()
 ```
 
 #### Compliant Code:
 
 ```kotlin
 listOf(1,2)
-.sortedDescending()
+ .sortedDescending()
 ```
 
 ### UnusedImport
@@ -2547,7 +2547,7 @@ An unused parameter can be removed to simplify the signature of the function.
 
 ```kotlin
 fun foo(unused: String) {
-println()
+    println()
 }
 ```
 
@@ -2555,7 +2555,7 @@ println()
 
 ```kotlin
 fun foo(used: String) {
-println(used)
+    println(used)
 }
 ```
 
@@ -2610,7 +2610,7 @@ properties of the class when they are declared with `val` or `var`.
 
 ```kotlin
 class Foo {
-private val unused = "unused"
+    private val unused = "unused"
 }
 ```
 
@@ -2618,7 +2618,7 @@ private val unused = "unused"
 
 ```kotlin
 class Foo {
-private val used = "used"
+    private val used = "used"
 
     fun greet() {
         println(used)
@@ -2646,7 +2646,7 @@ An unused variable can be removed to simplify the source file.
 
 ```kotlin
 fun foo() {
-val unused = "unused"
+    val unused = "unused"
 }
 ```
 
@@ -2654,8 +2654,8 @@ val unused = "unused"
 
 ```kotlin
 fun foo() {
-val used = "used"
-println(used)
+    val used = "used"
+    println(used)
 }
 ```
 
@@ -2735,8 +2735,8 @@ Prefer them instead of manually throwing an IllegalStateException.
 if (value == null) throw IllegalStateException("value should not be null")
 if (value < 0) throw IllegalStateException("value is $value but should be at least 0")
 when(a) {
-1 -> doSomething()
-else -> throw IllegalStateException("Unexpected value")
+    1 -> doSomething()
+    else -> throw IllegalStateException("Unexpected value")
 }
 ```
 
@@ -2746,8 +2746,8 @@ else -> throw IllegalStateException("Unexpected value")
 checkNotNull(value) { "value should not be null" }
 check(value >= 0) { "value is $value but should be at least 0" }
 when(a) {
-1 -> doSomething()
-else -> error("Unexpected value")
+    1 -> doSomething()
+    else -> error("Unexpected value")
 }
 ```
 
@@ -2772,7 +2772,7 @@ Read more about [data classes](https://kotlinlang.org/docs/data-classes.html)
 
 ```kotlin
 class DataClassCandidate(val i: Int) {
-val i2: Int = 0
+    val i2: Int = 0
 }
 ```
 
@@ -2828,10 +2828,10 @@ This rule detects `isEmpty` or `isBlank` calls to assign a default value. They c
 
 ```kotlin
 fun test(list: List<Int>, s: String) {
-val a = if (list.isEmpty()) listOf(1) else list
-val b = if (list.isNotEmpty()) list else listOf(2)
-val c = if (s.isBlank()) "foo" else s
-val d = if (s.isNotBlank()) s else "bar"
+    val a = if (list.isEmpty()) listOf(1) else list
+    val b = if (list.isNotEmpty()) list else listOf(2)
+    val c = if (s.isBlank()) "foo" else s
+    val d = if (s.isNotBlank()) s else "bar"
 }
 ```
 
@@ -2839,10 +2839,10 @@ val d = if (s.isNotBlank()) s else "bar"
 
 ```kotlin
 fun test(list: List<Int>, s: String) {
-val a = list.ifEmpty { listOf(1) }
-val b = list.ifEmpty { listOf(2) }
-val c = s.ifBlank { "foo" }
-val d = s.ifBlank { "bar" }
+    val a = list.ifEmpty { listOf(1) }
+    val b = list.ifEmpty { listOf(2) }
+    val c = s.ifBlank { "foo" }
+    val d = s.ifBlank { "bar" }
 }
 ```
 
@@ -2864,8 +2864,8 @@ See [if versus when](https://kotlinlang.org/docs/coding-conventions.html#if-vers
 
 ```kotlin
 when (x) {
-null -> true
-else -> false
+    null -> true
+    else -> false
 }
 ```
 
@@ -2887,13 +2887,13 @@ This rule detects null or empty checks that can be replaced with `isNullOrEmpty(
 
 ```kotlin
 fun foo(x: List<Int>?) {
-if (x == null || x.isEmpty()) return
+    if (x == null || x.isEmpty()) return
 }
 fun bar(x: List<Int>?) {
-if (x == null || x.count() == 0) return
+    if (x == null || x.count() == 0) return
 }
 fun baz(x: List<Int>?) {
-if (x == null || x.size == 0) return
+    if (x == null || x.size == 0) return
 }
 ```
 
@@ -2936,8 +2936,8 @@ This rule detects `?: emptyList()` that can be replaced with `orEmpty()` call.
 
 ```kotlin
 fun test(x: List<Int>?, s: String?) {
-val a = x ?: emptyList()
-val b = s ?: ""
+    val a = x ?: emptyList()
+    val b = s ?: ""
 }
 ```
 
@@ -2945,8 +2945,8 @@ val b = s ?: ""
 
 ```kotlin
 fun test(x: List<Int>?, s: String?) {
-val a = x.orEmpty()
-val b = s.orEmpty()
+    val a = x.orEmpty()
+    val b = s.orEmpty()
 }
 ```
 
@@ -3119,8 +3119,8 @@ the current state easier.
 
 ```kotlin
 fun example() {
-var i = 1 // violation: this variable is never re-assigned
-val j = i + 1
+    var i = 1 // violation: this variable is never re-assigned
+    val j = i + 1
 }
 ```
 
@@ -3128,8 +3128,8 @@ val j = i + 1
 
 ```kotlin
 fun example() {
-val i = 1
-val j = i + 1
+    val i = 1
+    val j = i + 1
 }
 ```
 
@@ -3157,8 +3157,8 @@ When suppressing an issue of WildcardImport in the baseline file, make sure to s
 import dev.detekt.*
 
 class DetektElements {
-val element1 = DetektElement1()
-val element2 = DetektElement2()
+    val element1 = DetektElement1()
+    val element2 = DetektElement2()
 }
 ```
 
@@ -3169,7 +3169,7 @@ import dev.detekt.DetektElement1
 import dev.detekt.DetektElement2
 
 class DetektElements {
-val element1 = DetektElement1()
-val element2 = DetektElement2()
+    val element1 = DetektElement1()
+    val element2 = DetektElement2()
 }
 ```

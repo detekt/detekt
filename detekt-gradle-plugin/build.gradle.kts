@@ -2,6 +2,7 @@
 // https://github.com/gradle/gradle/issues/21285
 @file:Suppress("StringLiteralDuplication")
 
+import dev.detekt.buildlogic.osDependent
 import dev.detekt.gradle.Detekt
 import dev.detekt.gradle.DetektCreateBaselineTask
 import org.jetbrains.kotlin.buildtools.api.ExperimentalBuildToolsApi
@@ -12,13 +13,13 @@ plugins {
     id("java-gradle-plugin")
     id("java-test-fixtures")
     id("idea")
-    id("com.gradle.plugin-publish") version "2.0.0"
+    id("com.gradle.plugin-publish") version "2.1.1"
     // We use this published version of the detekt plugin to self analyse this project.
     id("dev.detekt") version "2.0.0-alpha.2"
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.18.1"
-    id("org.jetbrains.dokka") version "2.1.0"
+    id("org.jetbrains.dokka") version "2.2.0"
     id("signing")
-    id("com.github.gmazzo.buildconfig") version "6.0.7"
+    id("com.github.gmazzo.buildconfig") version "6.0.9"
     id("io.github.gradle-nexus.publish-plugin") version "2.0.0"
 }
 
@@ -89,6 +90,7 @@ testing {
             targets {
                 all {
                     testTask.configure {
+                        osDependent()
                         // If `androidSdkInstalled` is false, skip running DetektAndroidSpec
                         val isAndroidSdkInstalled = providers.environmentVariable("ANDROID_SDK_ROOT").isPresent ||
                             providers.environmentVariable("ANDROID_HOME").isPresent

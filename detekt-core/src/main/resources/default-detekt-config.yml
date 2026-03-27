@@ -481,6 +481,7 @@ potential-bugs:
     active: true
   ImplicitUnitReturnType:
     active: false
+    ignoreAnnotated: ['Test']
     allowExplicitReturnType: true
   InvalidRange:
     active: true
@@ -746,7 +747,7 @@ style:
     active: true
   SerialVersionUIDInSerializableClass:
     active: true
-  SpacingAfterPackageDeclaration:
+  SpacingAfterPackageAndImports:
     active: false
   StringShouldBeRawString:
     active: false

@@ -3,6 +3,7 @@ package dev.detekt.report.markdown
 import dev.detekt.api.Detektion
 import dev.detekt.api.Issue
 import dev.detekt.api.ProjectMetric
+import dev.detekt.api.Severity
 import dev.detekt.api.internal.whichDetekt
 import dev.detekt.api.testfixtures.TestDetektion
 import dev.detekt.api.testfixtures.TestSetupContext
@@ -72,7 +73,7 @@ class MarkdownOutputReportSpec {
                 
                 [Documentation](https://example.org/)
                 
-                * src/main/com/sample/Sample1.kt:9:17
+                * Error: src/main/com/sample/Sample1.kt:9:17
                 ```
                 Issue message 1
                 ```
@@ -88,7 +89,7 @@ class MarkdownOutputReportSpec {
                 
                 ```
                 
-                * src/main/com/sample/Sample2.kt:13:17
+                * Warning: src/main/com/sample/Sample2.kt:13:17
                 ```
                 Issue message 2
                 ```
@@ -108,7 +109,7 @@ class MarkdownOutputReportSpec {
                 
                 Description rule_b
                 
-                * src/main/com/sample/Sample3.kt:14:16
+                * Info: src/main/com/sample/Sample3.kt:14:16
                 ```
                 Issue message 3
                 ```
@@ -210,17 +211,20 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
         createIssue(
             createRuleInstance("rule_a/id", "Section-1", url = "https://example.org/"),
             entity1,
-            "Issue message 1"
+            "Issue message 1",
+            Severity.Error,
         ),
         createIssue(
             createRuleInstance("rule_a/id", "Section-1", url = "https://example.org/"),
             entity2,
-            "Issue message 2"
+            "Issue message 2",
+            Severity.Warning,
         ),
         createIssue(
             createRuleInstance("rule_b", "Section-2", url = null),
             entity3,
-            "Issue message 3"
+            "Issue message 3",
+            Severity.Info,
         ),
         createIssue(
             createRuleInstance("rule_c", "Section-2"),

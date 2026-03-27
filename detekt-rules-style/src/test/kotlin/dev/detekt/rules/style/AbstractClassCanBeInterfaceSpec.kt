@@ -516,6 +516,25 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
         }
 
         @Test
+        fun `does not report local abstract class = #9073`() {
+            val code = """
+                class DependencyCollector
+
+                inline fun <reified T> newInstance(): T = T::class.java.newInstance()
+
+                private fun dependencyCollector(): DependencyCollector {
+                    abstract class DependencyCollectorCreator {
+                        abstract val dependencyCollector: DependencyCollector
+                    }
+                    return newInstance<DependencyCollectorCreator>().dependencyCollector
+                }
+            """.trimIndent()
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings)
+                .isEmpty()
+        }
+
+        @Test
         fun `don't report a sealed class with mixed property types`() {
             val code = """
                 const val CONST_VALUE = 123

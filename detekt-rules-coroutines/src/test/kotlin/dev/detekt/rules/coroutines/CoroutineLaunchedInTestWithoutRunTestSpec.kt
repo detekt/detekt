@@ -1,9 +1,11 @@
 package dev.detekt.rules.coroutines
 
 import dev.detekt.api.Config
+import dev.detekt.test.junit.KotlinAnalysisApiEngineTest
 import dev.detekt.test.junit.KotlinCoreEnvironmentTest
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.location
+import dev.detekt.test.utils.KotlinAnalysisApiEngine
 import dev.detekt.test.utils.KotlinEnvironmentContainer
 import dev.detekt.test.utils.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
@@ -307,7 +309,8 @@ class CoroutineLaunchedInTestWithoutRunTestSpec(private val env: KotlinEnvironme
     }
 
     @Test
-    fun `FunTraverseHelper correctly caches explored functions states`() {
+    @KotlinAnalysisApiEngineTest
+    fun `FunTraverseHelper correctly caches explored functions states`(analysisApiEngine: KotlinAnalysisApiEngine) {
         val subject = FunCoroutineLaunchesTraverseHelper()
 
         val code = """
@@ -344,7 +347,7 @@ class CoroutineLaunchedInTestWithoutRunTestSpec(private val env: KotlinEnvironme
             }
         """.trimIndent()
 
-        val ktFile = compileContentForTest(code, env)
+        val ktFile = compileContentForTest(code, env, analysisApiEngine)
 
         val namedFunctions = ktFile
             .collectDescendantsOfType<KtNamedFunction>()

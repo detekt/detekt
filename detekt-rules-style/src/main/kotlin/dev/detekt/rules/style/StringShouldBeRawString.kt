@@ -40,12 +40,12 @@ import org.jetbrains.kotlin.psi.psiUtil.parents
  * <compliant>
  * val windowJson = """
  *     {
- *          "window": {
- *              "title": "Sample Quantum With AI and ML Widget",
- *              "name": "main_window",
- *              "width": 500,
- *              "height": 500
- *          }
+ *         "window": {
+ *             "title": "Sample Quantum With AI and ML Widget",
+ *             "name": "main_window",
+ *             "width": 500,
+ *             "height": 500
+ *         }
  *     }
  * """.trimIndent()
  *

@@ -25,15 +25,15 @@ import org.jetbrains.kotlin.psi.KtFunctionLiteral
  * Prefer the usage of the indexed access operator `[]` for map or list element access or insert methods.
  *
  * <noncompliant>
- *  val map = mutableMapOf<String, String>()
- *  map.put("key", "value")
- *  val value = map.get("key")
+ * val map = mutableMapOf<String, String>()
+ * map.put("key", "value")
+ * val value = map.get("key")
  * </noncompliant>
  *
  * <compliant>
- *  val map = mutableMapOf<String, String>()
- *  map["key"] = "value"
- *  val value = map["key"]
+ * val map = mutableMapOf<String, String>()
+ * map["key"] = "value"
+ * val value = map["key"]
  * </compliant>
  */
 class ExplicitCollectionElementAccessMethod(config: Config) :

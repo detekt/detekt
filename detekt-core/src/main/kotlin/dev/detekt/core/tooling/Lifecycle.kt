@@ -10,10 +10,10 @@ import dev.detekt.core.ProcessingSettings
 import dev.detekt.core.config.validation.checkConfiguration
 import dev.detekt.core.extensions.handleReportingExtensions
 import dev.detekt.core.getRules
+import dev.detekt.core.parser.DetektMessageCollector
 import dev.detekt.core.reporting.OutputFacade
 import dev.detekt.core.rules.createRuleProviders
 import dev.detekt.core.util.PerformanceMonitor.Phase
-import dev.detekt.parser.DetektMessageCollector
 import dev.detekt.tooling.api.AnalysisMode
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.components.KaDiagnosticCheckerFilter

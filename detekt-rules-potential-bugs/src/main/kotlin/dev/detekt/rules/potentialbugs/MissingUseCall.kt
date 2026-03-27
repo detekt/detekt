@@ -174,8 +174,7 @@ class MissingUseCall(config: Config) :
     private fun KaSession.isParamForClosableOrFunReturningClosable(expression: KtExpression): Boolean {
         if (expression.parent !is KtValueArgument) return false
         val callExpression = expression.parent.parent.parent as? KtCallExpression ?: return false
-        val symbol =
-            callExpression.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.returnType?.symbol ?: return false
+        val symbol = callExpression.expressionType?.symbol ?: return false
         return isChildOfCloseable(symbol)
     }
 

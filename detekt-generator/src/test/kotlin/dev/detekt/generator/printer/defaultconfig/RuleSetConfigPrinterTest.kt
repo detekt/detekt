@@ -140,6 +140,28 @@ internal class RuleSetConfigPrinterTest {
                 assertThat(actual).doesNotContain(Config.EXCLUDES_KEY)
             }
         }
+
+        @Nested
+        inner class IgnoreAnnotated {
+            @Test
+            fun `rule has ignoreAnnotated`() {
+                val anIgnoreAnnotated = ignoreAnnotatedDefaults[0]
+                val anIgnoreAnnotatedRuleName = anIgnoreAnnotated.rules.first()
+                val rule = ruleTemplate.copy(name = anIgnoreAnnotatedRuleName)
+                val actual = yaml { printRule(rule) }
+                assertThat(actual).contains(Config.IGNORE_ANNOTATED_KEY)
+                anIgnoreAnnotated.annotations.forEach { annotation ->
+                    assertThat(actual).contains("'$annotation'")
+                }
+            }
+
+            @Test
+            fun `omits ignoreAnnotated property if rule has no default`() {
+                val rule = ruleTemplate.copy(name = "ARuleNameThatHasNoIgnoreAnnotated")
+                val actual = yaml { printRule(rule) }
+                assertThat(actual).doesNotContain(Config.IGNORE_ANNOTATED_KEY)
+            }
+        }
     }
 
     @Nested

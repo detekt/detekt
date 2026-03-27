@@ -2,7 +2,7 @@
 
 plugins {
     id("packaging")
-    id("com.gradleup.shadow") version "9.3.2"
+    id("com.gradleup.shadow") version "9.4.1"
 }
 
 dependencies {
@@ -22,6 +22,7 @@ dependencies {
         }
     }
     implementation(libs.kotlinx.serializationCore)
+    runtimeOnly(libs.kotlinx.coroutinesCore.intellij)
 }
 
 java {

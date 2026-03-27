@@ -54,7 +54,7 @@ and call those instead.
 ```kotlin
 val str = "foo"
 val isFoo = if (str.startsWith("foo") && !str.endsWith("foo") && !str.endsWith("bar") && !str.endsWith("_")) {
-// ...
+    // ...
 }
 ```
 
@@ -63,7 +63,7 @@ val isFoo = if (str.startsWith("foo") && !str.endsWith("foo") && !str.endsWith("
 ```kotlin
 val str = "foo"
 val isFoo = if (str.startsWith("foo") && hasCorrectEnding()) {
-// ...
+    // ...
 }
 
 fun hasCorrectEnding() = return !str.endsWith("foo") && !str.endsWith("bar") && !str.endsWith("_")
@@ -116,7 +116,7 @@ Each one of them adds one to the complexity count.
 - __Operators__ `&&`, `||`, `?:`
 - __Exceptions__ - `catch`, `use`
 - __Scope Functions__ - `let`, `run`, `with`, `apply`, and `also` ->
-[Reference](https://kotlinlang.org/docs/scope-functions.html)
+ [Reference](https://kotlinlang.org/docs/scope-functions.html)
 
 **Active by default**: Yes - Since v1.0.0
 
@@ -166,16 +166,16 @@ way to get the instance of an outer class from an inner class in Kotlin.
 ```kotlin
 val range = listOf<String>("foo", "bar")
 loop@ for (r in range) {
-if (r == "bar") break@loop
-println(r)
+    if (r == "bar") break@loop
+    println(r)
 }
 
 class Outer {
-inner class Inner {
-fun f() {
-val i = this@Inner // referencing itself, use `this instead
-}
-}
+    inner class Inner {
+        fun f() {
+            val i = this@Inner // referencing itself, use `this instead
+        }
+    }
 }
 ```
 
@@ -184,19 +184,19 @@ val i = this@Inner // referencing itself, use `this instead
 ```kotlin
 val range = listOf<String>("foo", "bar")
 for (r in range) {
-if (r == "bar") break
-println(r)
+    if (r == "bar") break
+    println(r)
 }
 
 class Outer {
-inner class Inner {
-fun f() {
-val outer = this@Outer
-}
-fun Int.extend() {
-val inner = this@Inner // this would reference Int and not Inner
-}
-}
+    inner class Inner {
+        fun f() {
+            val outer = this@Outer
+        }
+        fun Int.extend() {
+            val inner = this@Inner // this would reference Int and not Inner
+        }
+    }
 }
 ```
 
@@ -356,10 +356,10 @@ it's easy to get confused about the current context object and the value of this
 ```kotlin
 // Try to figure out, what changed, without knowing the details
 first.apply {
-second.apply {
-b = a
-c = b
-}
+    second.apply {
+        b = a
+        c = b
+    }
 }
 ```
 
@@ -392,18 +392,18 @@ only one, as that will still improve code coverage and reduce cyclomatic complex
 
 ```kotlin
 val x = System.getenv()
-?.getValue("HOME")
-?.toLowerCase()
-?.split("/") ?: emptyList()
+            ?.getValue("HOME")
+            ?.toLowerCase()
+            ?.split("/") ?: emptyList()
 ```
 
 #### Compliant Code:
 
 ```kotlin
 val x = getenv()?.run {
-getValue("HOME")
-.toLowerCase()
-.split("/")
+    getValue("HOME")
+        .toLowerCase()
+        .split("/")
 } ?: emptyList()
 ```
 
@@ -450,11 +450,11 @@ class Foo {
 
 ```kotlin
 class Foo {
-val lorem = "lorem"
-val s1 = lorem
-fun bar(s: String = lorem) {
-s1.equals(lorem)
-}
+    val lorem = "lorem"
+    val s1 = lorem
+    fun bar(s: String = lorem) {
+        s1.equals(lorem)
+    }
 }
 ```
 

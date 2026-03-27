@@ -1,9 +1,9 @@
 [versions]
-agp = "9.0.1"
+agp = "9.1.0"
 coroutines = "1.10.2"
 jacoco = "0.8.14"
 junit = "6.0.3"
-kotlin = "2.3.10"
+kotlin = "2.3.20"
 ktlint = "1.8.0"
 slf4j = "2.0.17"
 
@@ -16,8 +16,8 @@ java-compile-toolchain = "17"
 android-gradle-plugin = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 android-gradle-builtInKotlin-plugin = { module = "com.android.built-in-kotlin:com.android.built-in-kotlin.gradle.plugin", version.ref = "agp" }
 breadmoirai-githubRelease-plugin = { module = "com.github.breadmoirai:github-release", version = "2.5.2" }
-develocity-plugin = { module = "com.gradle.develocity:com.gradle.develocity.gradle.plugin", version = "4.3.2" }
-dokka-plugin = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version = "2.1.0" }
+develocity-plugin = { module = "com.gradle.develocity:com.gradle.develocity.gradle.plugin", version = "4.4.0" }
+dokka-plugin = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version = "2.2.0" }
 gradleNexus-publish-plugin = { module = "io.github.gradle-nexus:publish-plugin", version = "2.0.0" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 
@@ -28,7 +28,7 @@ android-gradleApi = { module = "com.android.tools.build:gradle-api", version = "
 
 # This represents the oldest JUnit version supported by detekt-test-junit.
 # This should only be updated when updating the minimum version supported by detekt-test-junit.
-junit-jupiterApi = { module = "org.junit.jupiter:junit-jupiter-api", version = "5.0.0" }
+junit-jupiterApi = { module = "org.junit.jupiter:junit-jupiter-api", version = "5.1.0" }
 
 # This represents the oldest Kotlin version that is supported by detekt's Gradle plugin.
 # This should only be updated when updating the minimum version supported by detekt's Gradle plugin.
@@ -67,6 +67,8 @@ kotlin-analysisApiStandalone = { module = "org.jetbrains.kotlin:analysis-api-sta
 kotlin-lowLevelApiFir = { module = "org.jetbrains.kotlin:low-level-api-fir-for-ide", version.ref = "kotlin" }
 kotlin-symbolLightClasses = { module = "org.jetbrains.kotlin:symbol-light-classes-for-ide", version.ref = "kotlin" }
 kotlin-analysisApiImplBase = { module = "org.jetbrains.kotlin:analysis-api-impl-base-for-ide", version.ref = "kotlin" }
+# Should be possible to remove when https://youtrack.jetbrains.com/issue/KT-81457 fixed
+kotlinx-coroutinesCore-intellij = { module = "org.jetbrains.intellij.deps.kotlinx:kotlinx-coroutines-core", version = "1.10.2-intellij-1" }
 # Can likely be removed in future - https://youtrack.jetbrains.com/issue/KT-73751/Analysis-API-Caffeine-dependency
 caffeine = { module = "com.github.ben-manes.caffeine:caffeine", version = "2.9.3" }
 

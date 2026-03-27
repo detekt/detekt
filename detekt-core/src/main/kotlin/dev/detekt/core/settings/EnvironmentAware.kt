@@ -1,12 +1,11 @@
 package dev.detekt.core.settings
 
 import com.intellij.openapi.Disposable
-import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.Disposer
 import com.intellij.pom.PomModel
 import com.intellij.pom.tree.TreeAspect
+import dev.detekt.core.parser.createCompilerConfiguration
 import dev.detekt.parser.DetektPomModel
-import dev.detekt.parser.createCompilerConfiguration
 import dev.detekt.tooling.api.spec.CompilerSpec
 import dev.detekt.tooling.api.spec.LoggingSpec
 import dev.detekt.tooling.api.spec.ProjectSpec
@@ -21,112 +20,107 @@ import org.jetbrains.kotlin.cli.jvm.config.jvmClasspathRoots
 import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.config.JvmTarget
+import org.jetbrains.kotlin.config.LanguageVersionSettings
 import org.jetbrains.kotlin.config.friendPaths
 import org.jetbrains.kotlin.config.jdkHome
 import org.jetbrains.kotlin.config.jvmTarget
 import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.platform.jvm.JvmPlatforms
 import org.jetbrains.kotlin.psi.KtFile
-import java.io.Closeable
 import java.io.File
 import java.io.OutputStream
 import java.io.PrintStream
-import java.util.UUID
 import kotlin.io.path.Path
 
 interface EnvironmentAware {
-    val project: Project
-    val configuration: CompilerConfiguration
+    val languageVersionSettings: LanguageVersionSettings
     val ktFiles: List<KtFile>
-    val disposable: Disposable
 }
 
 internal class EnvironmentFacade(projectSpec: ProjectSpec, compilerSpec: CompilerSpec, loggingSpec: LoggingSpec) :
     AutoCloseable,
-    Closeable,
     EnvironmentAware {
 
     private val printStream = if (loggingSpec.debug) loggingSpec.errorChannel.asPrintStream() else NullPrintStream
-    override val configuration: CompilerConfiguration =
-        createCompilerConfiguration(
-            projectSpec.inputPaths.toList(),
-            compilerSpec.classpathEntries(),
-            compilerSpec.apiVersion,
-            compilerSpec.languageVersion,
-            compilerSpec.jvmTarget,
-            compilerSpec.jdkHome,
-            compilerSpec.freeCompilerArgs,
-            printStream,
-        )
 
-    override val disposable: Disposable = Disposer.newDisposable()
-
+    // This lateinit var can be changed to val if https://github.com/JetBrains/kotlin/pull/5703 is merged
     private lateinit var sourceModule: KaSourceModule
+
+    private val configuration: CompilerConfiguration = createCompilerConfiguration(
+        projectSpec.inputPaths.toList(),
+        compilerSpec.classpathEntries(),
+        compilerSpec.apiVersion,
+        compilerSpec.languageVersion,
+        compilerSpec.jvmTarget,
+        compilerSpec.jdkHome,
+        compilerSpec.freeCompilerArgs,
+        printStream,
+    )
+
+    private val disposable: Disposable = Disposer.newDisposable()
+
+    override val languageVersionSettings: LanguageVersionSettings
+        get() = configuration.languageVersionSettings
 
     @OptIn(KaExperimentalApi::class)
     override val ktFiles: List<KtFile>
         get() = sourceModule.psiRoots.filterIsInstance<KtFile>()
 
-    private val analysisSession = buildStandaloneAnalysisAPISession(disposable) {
-        // Required for autocorrect support
-        registerProjectService(TreeAspect::class.java)
-        registerProjectService(PomModel::class.java, DetektPomModel(project))
+    init {
+        buildStandaloneAnalysisAPISession(disposable) {
+            // Required for autocorrect support
+            registerProjectService(TreeAspect::class.java)
+            registerProjectService(PomModel::class.java, DetektPomModel(project))
 
-        configuration.putIfAbsent(CommonConfigurationKeys.MODULE_NAME, "<no module name provided>")
+            configuration.putIfAbsent(CommonConfigurationKeys.MODULE_NAME, "<no module name provided>")
 
-        buildKtModuleProvider {
-            val targetPlatform =
-                JvmPlatforms.jvmPlatformByTargetVersion(configuration.jvmTarget ?: JvmTarget.DEFAULT)
-            platform = targetPlatform
-
-            val jdk = configuration.jdkHome?.let { jdkHome ->
-                buildKtSdkModule {
-                    addBinaryRootsFromJdkHome(jdkHome.toPath(), isJre = false)
-                    platform = targetPlatform
-                    libraryName = "jdk"
-                }
-            }
-
-            val friends = configuration.friendPaths.map {
-                buildKtLibraryModule {
-                    platform = targetPlatform
-                    addBinaryRoot(Path(it))
-                    libraryName = UUID.randomUUID().toString()
-                }
-            }
-
-            val dependencies = configuration.jvmClasspathRoots.map {
-                buildKtLibraryModule {
-                    platform = targetPlatform
-                    addBinaryRoot(it.toPath())
-                    libraryName = "regulardependencies"
-                }
-            }
-
-            sourceModule = buildKtSourceModule {
-                addSourceRoots(configuration.kotlinSourceRoots.map { Path(it.path) })
+            buildKtModuleProvider {
+                val targetPlatform =
+                    JvmPlatforms.jvmPlatformByTargetVersion(configuration.jvmTarget ?: JvmTarget.DEFAULT)
                 platform = targetPlatform
-                moduleName = "source"
 
-                jdk?.let { addRegularDependency(it) }
-                friends.forEach {
-                    // Friend dependencies must also be declared as regular dependencies - https://github.com/JetBrains/kotlin/commit/69cfa0498a76f0c3eec39eb06b5de70a0d06e41a
-                    addFriendDependency(it)
-                    addRegularDependency(it)
-                }
-                dependencies.forEach {
-                    addRegularDependency(it)
+                val jdk = configuration.jdkHome?.let { jdkHome ->
+                    buildKtSdkModule {
+                        addBinaryRootsFromJdkHome(jdkHome.toPath(), isJre = false)
+                        platform = targetPlatform
+                        libraryName = "jdk"
+                    }
                 }
 
-                languageVersionSettings = configuration.languageVersionSettings
+                val friends = configuration.friendPaths.takeIf { it.isNotEmpty() }
+                    ?.let { paths ->
+                        buildKtLibraryModule {
+                            platform = targetPlatform
+                            paths.forEach { addBinaryRoot(Path(it)) }
+                            libraryName = "friendDependencies"
+                        }
+                    }
+
+                val dependencies = buildKtLibraryModule {
+                    platform = targetPlatform
+                    addBinaryRoots(configuration.jvmClasspathRoots.map { it.toPath() })
+                    libraryName = "regularDependencies"
+                }
+
+                sourceModule = buildKtSourceModule {
+                    addSourceRoots(configuration.kotlinSourceRoots.map { Path(it.path) })
+                    platform = targetPlatform
+                    moduleName = "source"
+
+                    jdk?.let { addRegularDependency(it) }
+                    friends?.let {
+                        // Friend dependencies must also be declared as regular dependencies - https://github.com/JetBrains/kotlin/commit/69cfa0498a76f0c3eec39eb06b5de70a0d06e41a
+                        addFriendDependency(it)
+                        addRegularDependency(it)
+                    }
+                    addRegularDependency(dependencies)
+
+                    languageVersionSettings = configuration.languageVersionSettings
+                }
+
+                addModule(sourceModule)
             }
-
-            addModule(sourceModule)
         }
-    }
-
-    override val project: Project by lazy {
-        analysisSession.project
     }
 
     override fun close() {
