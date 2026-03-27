@@ -140,6 +140,7 @@ ktlint:
     active: true
     autoCorrect: true
     indentSize: 4
+    indentStyle: 'space'
     indentWhenArrowOnNewLine: false
   Kdoc:
     active: true
