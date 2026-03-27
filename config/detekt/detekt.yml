@@ -106,8 +106,6 @@ performance:
 potential-bugs:
   AvoidReferentialEquality:
     active: true
-  DontDowncastCollectionTypes:
-    active: true
   ElseCaseInsteadOfExhaustiveWhen:
     active: true
   ExitOutsideMain:
@@ -118,8 +116,6 @@ potential-bugs:
     active: true
   ImplicitUnitReturnType:
     active: true
-  MapGetWithNotNullAssertionOperator:
-    active: true
   UnconditionalJumpStatementInLoop:
     active: true
   UnreachableCatchBlock:
@@ -128,6 +124,38 @@ potential-bugs:
     active: true
     excludes: ['**/test/**', '**/*.Test.kt', '**/*.Spec.kt']
   UselessPostfixExpression:
+    active: true
+
+standard-library:
+  DontDowncastCollectionTypes:
+    active: true
+  MapGetWithNotNullAssertionOperator:
+      active: true
+  RedundantHigherOrderMapUsage:
+    active: true
+  TrimMultilineRawString:
+    active: true
+  UnnecessaryFilter:
+    active: true
+  UnnecessaryLet:
+    active: true
+  UseAnyOrNoneInsteadOfFind:
+    active: true
+  UseCheckOrError:
+    active: true
+  UseEmptyCounterpart:
+    active: true
+  UseIfEmptyOrIfBlank:
+    active: true
+  UseIsNullOrEmpty:
+    active: true
+  UseLet:
+    active: true
+  UseOrEmpty:
+    active: true
+  UseRequire:
+    active: true
+  UseRequireNotNull:
     active: true
 
 style:
@@ -229,8 +257,6 @@ style:
     active: true
   RedundantExplicitType:
     active: true
-  RedundantHigherOrderMapUsage:
-    active: true
   RedundantVisibilityModifier:
     active: true
   ReturnCount:
@@ -238,39 +264,15 @@ style:
     excludeGuardClauses: true
   SpacingAfterPackageAndImports:
     active: true
-  TrimMultilineRawString:
-    active: true
   UnderscoresInNumericLiterals:
     active: true
   UnnecessaryBackticks:
-    active: true
-  UnnecessaryFilter:
-    active: true
-  UnnecessaryLet:
     active: true
   UnnecessaryInnerClass:
     active: true
     ignoreAnnotated: ['Nested']
   UnusedImport:
     active: false # ktlint already have this rule enabled
-  UseAnyOrNoneInsteadOfFind:
-    active: true
-  UseCheckOrError:
-    active: true
-  UseEmptyCounterpart:
-    active: true
-  UseIfEmptyOrIfBlank:
-    active: true
-  UseIsNullOrEmpty:
-    active: true
-  UseLet:
-    active: true
-  UseOrEmpty:
-    active: true
-  UseRequire:
-    active: true
-  UseRequireNotNull:
-    active: true
   VarCouldBeVal:
     active: true
     ignoreAnnotated: ['Parameter']

@@ -26,11 +26,9 @@ class ComplexityProvider : DefaultRuleSetProvider {
                 ::StringLiteralDuplication,
                 ::MethodOverloading,
                 ::NestedBlockDepth,
-                ::NestedScopeFunctions,
                 ::TooManyFunctions,
                 ::ComplexCondition,
                 ::LabeledExpression,
-                ::ReplaceSafeCallChainWithRun,
                 ::NamedArguments
             )
         )
