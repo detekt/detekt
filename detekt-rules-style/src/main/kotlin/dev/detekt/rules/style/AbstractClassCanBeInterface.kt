@@ -90,9 +90,12 @@ class AbstractClassCanBeInterface(config: Config) :
         analyze(klass) {
             when {
                 members.isNotEmpty() -> checkMembers(klass, members, nameIdentifier)
-                hasInheritedMember(klass, isAbstract = true) && isAnyParentAbstract(klass) -> return
-                isAnyParentConcreteClass(klass) -> return
+
+                isAnyParentConcreteClass(klass) ||
+                    (hasInheritedMember(klass, isAbstract = true) && isAnyParentAbstract(klass)) -> return
+
                 klass.hasConstructorParameter() || klass.containsInternalClass() -> return
+
                 else -> report(Finding(Entity.from(nameIdentifier), klass.message()))
             }
         }
@@ -168,9 +171,9 @@ class AbstractClassCanBeInterface(config: Config) :
                 // exclude the `Any` class
                 if (symbol == builtinTypes.any.symbol) return false
 
-                symbol.classKind == KaClassKind.CLASS
-                    && symbol.modality != KaSymbolModality.ABSTRACT
-                    && symbol.modality != KaSymbolModality.SEALED
+                symbol.classKind == KaClassKind.CLASS &&
+                    symbol.modality != KaSymbolModality.ABSTRACT &&
+                    symbol.modality != KaSymbolModality.SEALED
             } == true
 
     /**
