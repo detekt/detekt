@@ -78,3 +78,18 @@ class DirectoryValidator : IValueValidator<Path> {
         if (!value.isDirectory()) throw ParameterException("Value passed to $name must be a directory.")
     }
 }
+
+class FilterSplitter : IParameterSplitter {
+    override fun split(value: String): List<String> = value.split(',', ';')
+}
+
+class FilterValidator : IValueValidator<List<String>> {
+    override fun validate(name: String, value: List<String>) {
+        if (value.any { it.isBlank() }) {
+            throw ParameterException("Value passed to $name contain empty globs.")
+        }
+        if (value.any { it.trim() != it }) {
+            throw ParameterException("Value passed to $name contain globs that start or end with space.")
+        }
+    }
+}
