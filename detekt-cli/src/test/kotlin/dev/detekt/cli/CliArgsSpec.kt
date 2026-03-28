@@ -108,11 +108,33 @@ internal class CliArgsSpec {
                 assertThat(spec.projectSpec.inputPaths).doesNotContain(pathAnalyzer)
             }
 
+            @ParameterizedTest
+            @ValueSource(strings = ["**/test/**,*.kts", "**/test/**;*.kts"])
+            fun `multiples excludes in path`(filter: String) {
+                val spec = parseArguments(input + arrayOf("--excludes", filter)).toSpec()
+
+                assertThat(spec.projectSpec.inputPaths).doesNotContain(pathBuildGradle)
+                assertThat(spec.projectSpec.inputPaths).contains(pathCliArgs)
+                assertThat(spec.projectSpec.inputPaths).contains(pathMain)
+                assertThat(spec.projectSpec.inputPaths).doesNotContain(pathAnalyzer)
+            }
+
             @Test
             fun `includes in path`() {
                 val spec = parseArguments(input + arrayOf("--includes", "**/test/**")).toSpec()
 
                 assertThat(spec.projectSpec.inputPaths).doesNotContain(pathBuildGradle)
+                assertThat(spec.projectSpec.inputPaths).doesNotContain(pathCliArgs)
+                assertThat(spec.projectSpec.inputPaths).doesNotContain(pathMain)
+                assertThat(spec.projectSpec.inputPaths).contains(pathAnalyzer)
+            }
+
+            @ParameterizedTest
+            @ValueSource(strings = ["**/test/**,*.kts", "**/test/**;*.kts"])
+            fun `multiples includes in path`(filter: String) {
+                val spec = parseArguments(input + arrayOf("--includes", filter)).toSpec()
+
+                assertThat(spec.projectSpec.inputPaths).contains(pathBuildGradle)
                 assertThat(spec.projectSpec.inputPaths).doesNotContain(pathCliArgs)
                 assertThat(spec.projectSpec.inputPaths).doesNotContain(pathMain)
                 assertThat(spec.projectSpec.inputPaths).contains(pathAnalyzer)
@@ -191,10 +213,10 @@ internal class CliArgsSpec {
                 assertThat(spec.projectSpec.inputPaths).isEmpty()
             }
 
-            @Test
-            fun `doesn't take into account absolute path`() {
-                val spec =
-                    parseArguments(input + arrayOf("--excludes", "/home/**,/Users/**")).toSpec()
+            @ParameterizedTest
+            @ValueSource(strings = ["/home/**", "/Users/**"])
+            fun `doesn't take into account absolute path`(glob: String) {
+                val spec = parseArguments(input + arrayOf("--excludes", glob)).toSpec()
 
                 assertThat(spec.projectSpec.inputPaths).contains(pathBuildGradle)
                 assertThat(spec.projectSpec.inputPaths).contains(pathCliArgs)
