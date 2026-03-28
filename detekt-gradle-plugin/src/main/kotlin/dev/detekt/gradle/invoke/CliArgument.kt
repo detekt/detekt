@@ -51,7 +51,8 @@ internal data class GenerateConfigArgument(val file: RegularFile) : CliArgument 
 }
 
 internal data class InputArgument(val fileCollection: FileCollection) : CliArgument {
-    override fun toArgument() = listOf(INPUT_PARAMETER, fileCollection.joinToString(",") { it.absolutePath })
+    override fun toArgument() =
+        listOf(INPUT_PARAMETER, fileCollection.joinToString(File.pathSeparator) { it.absolutePath })
 }
 
 internal data class ClasspathArgument(val fileCollection: FileCollection) : CliArgument {
@@ -136,12 +137,11 @@ internal data class FailOnSeverityArgument(val ignoreFailures: Boolean, val minS
 }
 
 internal data class ConfigArgument(val files: FileCollection) : CliArgument {
-
     override fun toArgument() =
         if (files.isEmpty) {
             emptyList()
         } else {
-            listOf(CONFIG_PARAMETER, files.joinToString(",") { it.absolutePath })
+            listOf(CONFIG_PARAMETER, files.joinToString(File.pathSeparator) { it.absolutePath })
         }
 }
 

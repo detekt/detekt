@@ -57,7 +57,7 @@ class ReportPathConverter : IStringConverter<ReportPath> {
 }
 
 class PathSplitter : IParameterSplitter {
-    override fun split(value: String): List<String> = value.split(',', ';')
+    override fun split(value: String): List<String> = value.split(File.pathSeparatorChar)
 }
 
 class PathValidator : IValueValidator<List<Path>> {
@@ -66,10 +66,6 @@ class PathValidator : IValueValidator<List<Path>> {
             if (!it.exists()) throw ParameterException("Path '$it' passed to $name does not exist.")
         }
     }
-}
-
-class ClassPathSplitter : IParameterSplitter {
-    override fun split(value: String): List<String> = value.split(File.pathSeparatorChar)
 }
 
 class DirectoryValidator : IValueValidator<Path> {
