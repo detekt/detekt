@@ -442,6 +442,56 @@ internal class CliArgsSpec {
             .isThrownBy { parseArguments(arrayOf("--jdk-home", "nonExistent")) }
             .withMessage("Value passed to --jdk-home must be a directory.")
     }
+
+    @Nested
+    inner class Reports {
+        @Test
+        fun `fails when there is no separator`() {
+            assertThatExceptionOfType(IllegalStateException::class.java)
+                .isThrownBy { parseArguments(arrayOf("--report", "foo")) }
+                .withMessage(
+                    "Input 'foo' must consist of two parts for Unix OSs or three for Windows (report-id:path)."
+                )
+        }
+
+        @Test
+        fun `fails when empty`() {
+            assertThatExceptionOfType(IllegalStateException::class.java)
+                .isThrownBy { parseArguments(arrayOf("--report", " ")).reportPaths }
+                .withMessage(
+                    "Input ' ' must consist of two parts for Unix OSs or three for Windows (report-id:path)."
+                )
+        }
+
+        @Test
+        fun `fails when there is no id`() {
+            assertThatExceptionOfType(IllegalArgumentException::class.java)
+                .isThrownBy { parseArguments(arrayOf("--report", ":foo")) }
+                .withMessage("The kind of report must not be empty (path - foo)")
+        }
+
+        @Test
+        fun `fails when there is no path`() {
+            assertThatExceptionOfType(IllegalArgumentException::class.java)
+                .isThrownBy { parseArguments(arrayOf("--report", "foo:")) }
+                .withMessage("The path of the report must not be empty (kind - foo)")
+        }
+
+        @Test
+        fun `works when there is separator`() {
+            val args = parseArguments(arrayOf("--report", "foo:bar"))
+
+            assertThat(args.reportPaths).isEqualTo(listOf(ReportPath("foo", Path("bar"))))
+        }
+
+        @Test
+        fun `works when with two reports`() {
+            val args = parseArguments(arrayOf("--report", "foo:bar", "-r", "abc:asdf"))
+
+            assertThat(args.reportPaths)
+                .isEqualTo(listOf(ReportPath("foo", Path("bar")), ReportPath("abc", Path("asdf"))))
+        }
+    }
 }
 
 private fun CliArgs.toSpec() = createSpec(NullPrintStream(), NullPrintStream())
