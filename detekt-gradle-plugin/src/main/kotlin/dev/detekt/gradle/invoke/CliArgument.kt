@@ -117,10 +117,7 @@ internal data class FreeArgs(val args: List<String>) : CliArgument {
 internal data class FriendPathArgs(val fileCollection: FileCollection) : CliArgument {
     override fun toArgument() =
         if (!fileCollection.isEmpty) {
-            listOf(
-                FRIEND_PATHS_PARAMETER,
-                fileCollection.joinToString(",") { it.absolutePath }
-            )
+            listOf(FRIEND_PATHS_PARAMETER, fileCollection.joinToString(",") { it.absolutePath })
         } else {
             emptyList()
         }
@@ -169,10 +166,7 @@ internal data class AutoCorrectArgument(override val value: Boolean) : BoolCliAr
 internal data class OptInArguments(val list: List<String>) : CliArgument {
     override fun toArgument() =
         if (list.isNotEmpty()) {
-            listOf(
-                OPT_IN_PARAMETER,
-                list.joinToString(",")
-            )
+            listOf(OPT_IN_PARAMETER, list.joinToString(","))
         } else {
             emptyList()
         }
