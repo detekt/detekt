@@ -19,7 +19,7 @@ import org.junit.jupiter.api.condition.EnabledOnOs
 import org.junit.jupiter.api.condition.OS
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
-import org.junit.jupiter.params.provider.ValueSource
+import java.io.File
 import java.nio.file.Path
 import kotlin.io.path.Path
 import kotlin.io.path.absolute
@@ -46,16 +46,14 @@ internal class CliArgsSpec {
             assertThat(spec.projectSpec.inputPaths).contains(pathCliArgsSpec)
         }
 
-        @ParameterizedTest
-        @ValueSource(
-            strings = [
-                "src/main,../detekt-core/src/test,build.gradle.kts",
-                "src/main;../detekt-core/src/test;build.gradle.kts",
-                "src/main,../detekt-core/src/test;build.gradle.kts",
-            ]
-        )
-        fun `when the input is defined it is passed to the spec`(param: String) {
-            val spec = parseArguments(arrayOf("--input", param)).toSpec()
+        @Test
+        fun `when the input is defined it is passed to the spec`() {
+            val spec = parseArguments(
+                arrayOf(
+                    "--input",
+                    "src/main${File.pathSeparator}../detekt-core/src/test${File.pathSeparator}build.gradle.kts",
+                )
+            ).toSpec()
 
             assertThat(spec.projectSpec.inputPaths).contains(pathBuildGradle)
             assertThat(spec.projectSpec.inputPaths).contains(pathCliArgs)
@@ -70,7 +68,7 @@ internal class CliArgsSpec {
 
             assertThatExceptionOfType(HandledArgumentViolation::class.java)
                 .isThrownBy { parseArguments(params) }
-                .withMessage("Input path does not exist: 'nonExistent '")
+                .withMessage("Path 'nonExistent ' passed to --input does not exist.")
         }
 
         @Test
@@ -85,7 +83,10 @@ internal class CliArgsSpec {
 
         @Nested
         inner class FilterInput {
-            private val input = arrayOf("--input", "src/main/../main/,../detekt-core/src/test,build.gradle.kts")
+            private val input = arrayOf(
+                "--input",
+                "src/main/../main/${File.pathSeparator}../detekt-core/src/test${File.pathSeparator}build.gradle.kts",
+            )
             private val pathMain = Path("src/main/kotlin/dev/detekt/cli/Main.kt").absolute()
 
             @Test

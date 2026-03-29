@@ -15,6 +15,7 @@ import org.jetbrains.kotlin.cli.jvm.setupJvmSpecificArguments
 import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.config.JVMConfigurationKeys
+import org.jetbrains.kotlin.incremental.storage.BasicFileToPathConverter.toFile
 import java.io.File
 import java.io.PrintStream
 import java.nio.file.Path
@@ -26,7 +27,7 @@ import java.nio.file.Path
 @Suppress("LongParameterList")
 fun createCompilerConfiguration(
     pathsToAnalyze: List<Path>,
-    classpath: List<String>,
+    classpath: List<Path>,
     apiVersion: String?,
     languageVersion: String?,
     jvmTarget: String,
@@ -47,7 +48,7 @@ fun createCompilerConfiguration(
             .toList()
     }
 
-    val classpathFiles = classpath.map { File(it) }
+    val classpathFiles = classpath.map(Path::toFile)
 
     val jvmCompilerArguments = K2JVMCompilerArguments()
 
