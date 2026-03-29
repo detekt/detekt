@@ -447,7 +447,7 @@ internal class CliArgsSpec {
     inner class Reports {
         @Test
         fun `fails when there is no separator`() {
-            assertThatExceptionOfType(IllegalStateException::class.java)
+            assertThatExceptionOfType(HandledArgumentViolation::class.java)
                 .isThrownBy { parseArguments(arrayOf("--report", "foo")) }
                 .withMessage(
                     "Input 'foo' must consist of two parts for Unix OSs or three for Windows (report-id:path)."
@@ -456,7 +456,7 @@ internal class CliArgsSpec {
 
         @Test
         fun `fails when empty`() {
-            assertThatExceptionOfType(IllegalStateException::class.java)
+            assertThatExceptionOfType(HandledArgumentViolation::class.java)
                 .isThrownBy { parseArguments(arrayOf("--report", " ")).reportPaths }
                 .withMessage(
                     "Input ' ' must consist of two parts for Unix OSs or three for Windows (report-id:path)."
@@ -465,14 +465,14 @@ internal class CliArgsSpec {
 
         @Test
         fun `fails when there is no id`() {
-            assertThatExceptionOfType(IllegalArgumentException::class.java)
+            assertThatExceptionOfType(HandledArgumentViolation::class.java)
                 .isThrownBy { parseArguments(arrayOf("--report", ":foo")) }
                 .withMessage("The kind of report must not be empty (path - foo)")
         }
 
         @Test
         fun `fails when there is no path`() {
-            assertThatExceptionOfType(IllegalArgumentException::class.java)
+            assertThatExceptionOfType(HandledArgumentViolation::class.java)
                 .isThrownBy { parseArguments(arrayOf("--report", "foo:")) }
                 .withMessage("The path of the report must not be empty (kind - foo)")
         }

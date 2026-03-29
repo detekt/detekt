@@ -18,7 +18,7 @@ data class ReportPath(val kind: String, val path: Path) {
 
                 NUM_OF_PARTS_WINDOWS -> parts.slice(1..<partsSize).joinToString(REPORT_PATH_SEPARATOR)
 
-                else -> error(
+                else -> throw IllegalArgumentException(
                     "Input '$input' must consist of two parts for Unix OSs or three for Windows (report-id:path)."
                 )
             }
