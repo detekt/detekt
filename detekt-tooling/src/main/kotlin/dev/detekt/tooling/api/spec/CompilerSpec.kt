@@ -23,9 +23,9 @@ interface CompilerSpec {
     val apiVersion: String?
 
     /**
-     * Paths to class files and jars separated by a path separator.
+     * Paths to class files and jars.
      */
-    val classpath: String?
+    val classpath: List<Path>
 
     /**
      * Path to custom JDK home. Includes the custom JDK from the specified location into the classpath instead of using
