@@ -52,7 +52,11 @@ class FailureSeverityConverter : IStringConverter<FailureSeverity> {
 }
 
 class ReportPathConverter : IStringConverter<ReportPath> {
-    override fun convert(value: String): ReportPath = ReportPath.from(value)
+    override fun convert(value: String): ReportPath = try {
+        ReportPath.from(value)
+    } catch (e: IllegalArgumentException) {
+        throw ParameterException(e.message, e)
+    }
 }
 
 class PathSplitter : IParameterSplitter {
