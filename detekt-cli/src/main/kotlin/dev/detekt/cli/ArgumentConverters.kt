@@ -7,6 +7,7 @@ import com.beust.jcommander.converters.IParameterSplitter
 import org.jetbrains.kotlin.config.ApiVersion
 import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
+import java.io.File
 import java.net.URL
 import java.nio.file.Path
 import kotlin.io.path.exists
@@ -62,9 +63,13 @@ class PathSplitter : IParameterSplitter {
 class PathValidator : IValueValidator<List<Path>> {
     override fun validate(name: String, value: List<Path>) {
         value.forEach {
-            if (!it.exists()) throw ParameterException("Input path does not exist: '$it'")
+            if (!it.exists()) throw ParameterException("Path '$it' passed to $name does not exist.")
         }
     }
+}
+
+class ClassPathSplitter : IParameterSplitter {
+    override fun split(value: String): List<String> = value.split(File.pathSeparatorChar)
 }
 
 class DirectoryValidator : IValueValidator<Path> {

@@ -70,7 +70,7 @@ internal class CliArgsSpec {
 
             assertThatExceptionOfType(HandledArgumentViolation::class.java)
                 .isThrownBy { parseArguments(params) }
-                .withMessage("Input path does not exist: 'nonExistent '")
+                .withMessage("Path 'nonExistent ' passed to --input does not exist.")
         }
 
         @Test
