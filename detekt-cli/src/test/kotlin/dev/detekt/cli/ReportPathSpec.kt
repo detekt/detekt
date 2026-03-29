@@ -109,7 +109,7 @@ class ReportPathSpec {
         fun `fails when part size is illegal`() {
             assertThatIllegalArgumentException()
                 .isThrownBy { ReportPath.from("") }
-                .withMessage("Input '' must consist of two parts for Unix OSs or three for Windows (report-id:path).")
+                .withMessage("Input '' must consist of two parts (report-id:path).")
         }
     }
 }

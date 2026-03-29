@@ -450,7 +450,7 @@ internal class CliArgsSpec {
             assertThatExceptionOfType(HandledArgumentViolation::class.java)
                 .isThrownBy { parseArguments(arrayOf("--report", "foo")) }
                 .withMessage(
-                    "Input 'foo' must consist of two parts for Unix OSs or three for Windows (report-id:path)."
+                    "Input 'foo' must consist of two parts (report-id:path)."
                 )
         }
 
@@ -459,7 +459,7 @@ internal class CliArgsSpec {
             assertThatExceptionOfType(HandledArgumentViolation::class.java)
                 .isThrownBy { parseArguments(arrayOf("--report", " ")).reportPaths }
                 .withMessage(
-                    "Input ' ' must consist of two parts for Unix OSs or three for Windows (report-id:path)."
+                    "Input ' ' must consist of two parts (report-id:path)."
                 )
         }
 
