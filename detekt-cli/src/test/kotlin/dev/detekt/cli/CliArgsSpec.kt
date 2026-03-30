@@ -442,6 +442,37 @@ internal class CliArgsSpec {
             .isThrownBy { parseArguments(arrayOf("--jdk-home", "nonExistent")) }
             .withMessage("Value passed to --jdk-home must be a directory.")
     }
+
+    @Nested
+    inner class `Console report` {
+        @Test
+        fun `default value`() {
+            val spec = parseArguments(emptyArray()).toSpec()
+
+            assertThat(spec.reportsSpec.consoleReports).isEqualTo(listOf("LiteIssuesReport"))
+        }
+
+        @Test
+        fun `no value`() {
+            val spec = parseArguments(arrayOf("--console-report", "")).toSpec()
+
+            assertThat(spec.reportsSpec.consoleReports).isEmpty()
+        }
+
+        @Test
+        fun `single param`() {
+            val spec = parseArguments(arrayOf("--console-report", "foo")).toSpec()
+
+            assertThat(spec.reportsSpec.consoleReports).isEqualTo(listOf("foo"))
+        }
+
+        @Test
+        fun `two param`() {
+            val spec = parseArguments(arrayOf("--console-report", "foo", "--console-report", "bar")).toSpec()
+
+            assertThat(spec.reportsSpec.consoleReports).isEqualTo(listOf("foo", "bar"))
+        }
+    }
 }
 
 private fun CliArgs.toSpec() = createSpec(NullPrintStream(), NullPrintStream())

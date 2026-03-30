@@ -71,6 +71,9 @@ internal fun CliArgs.createSpec(output: Appendable, error: Appendable): Processi
             args.reportPaths.forEach {
                 report { it.kind to it.path }
             }
+            args.consoleReports.forEach {
+                consoleReport(it)
+            }
         }
 
         compiler {

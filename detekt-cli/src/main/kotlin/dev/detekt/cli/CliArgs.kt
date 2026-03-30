@@ -57,7 +57,7 @@ class CliArgs {
     var config: List<Path> = emptyList()
 
     @Parameter(
-        names = ["--config-resource", "-cr"],
+        names = ["--config-resource"],
         converter = ClasspathResourceConverter::class,
         splitter = PathSplitter::class,
         description = "Path to the config resource on detekt's classpath (path/to/config.yml)."
@@ -112,6 +112,17 @@ class CliArgs {
             "e.g. '-r html:reports/detekt.html -r checkstyle:reports/detekt.xml'"
     )
     var reportPaths: List<ReportPath> = emptyList()
+
+    @Parameter(
+        names = ["--console-report", "-cr"],
+        defaultValueDescription = "LiteIssuesReport",
+        description = "Generates a report for given 'report-id' and prints it on the output. " +
+            "Available 'report-id' values: 'ProjectStatisticsReport', 'ComplexityReport', 'NotificationReport', " +
+            "'IssuesReport', 'FileBasedIssuesReport' and 'LiteIssuesReport'. " +
+            "These can also be used in combination with each other " +
+            "e.g. '-cr LiteIssuesReport -cr ComplexityReport'"
+    )
+    var consoleReports: List<String> = listOf("LiteIssuesReport")
 
     @Parameter(
         names = ["--fail-on-severity"],
