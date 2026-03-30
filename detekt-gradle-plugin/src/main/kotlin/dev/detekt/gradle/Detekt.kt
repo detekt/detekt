@@ -13,6 +13,7 @@ import dev.detekt.gradle.invoke.BuildUponDefaultConfigArgument
 import dev.detekt.gradle.invoke.ClasspathArgument
 import dev.detekt.gradle.invoke.CliArgument
 import dev.detekt.gradle.invoke.ConfigArgument
+import dev.detekt.gradle.invoke.ConsoleReportArgument
 import dev.detekt.gradle.invoke.CustomReportArgument
 import dev.detekt.gradle.invoke.DebugArgument
 import dev.detekt.gradle.invoke.DefaultReportArgument
@@ -157,6 +158,9 @@ abstract class Detekt @Inject constructor(
 
     private val isDryRun = project.providers.gradleProperty(DRY_RUN_PROPERTY)
 
+    @get:Internal
+    abstract val consoleReports: ListProperty<String>
+
     @get:Input
     @get:Incubating
     abstract val freeCompilerArgs: ListProperty<String>
@@ -184,6 +188,7 @@ abstract class Detekt @Inject constructor(
             DefaultReportArgument(reports.html),
             DefaultReportArgument(reports.sarif),
             DefaultReportArgument(reports.markdown),
+            ConsoleReportArgument(consoleReports.get()),
             DebugArgument(debug.get()),
             ParallelArgument(parallel.get()),
             BuildUponDefaultConfigArgument(buildUponDefaultConfig.get()),

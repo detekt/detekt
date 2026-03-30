@@ -20,6 +20,7 @@ private const val AUTO_CORRECT_PARAMETER = "--auto-correct"
 private const val FAIL_ON_SEVERITY_PARAMETER = "--fail-on-severity"
 private const val ALL_RULES_PARAMETER = "--all-rules"
 private const val REPORT_PARAMETER = "--report"
+private const val CONSOLE_REPORT_PARAMETER = "--console-report"
 private const val GENERATE_CONFIG_PARAMETER = "--generate-config"
 private const val CREATE_BASELINE_PARAMETER = "--create-baseline"
 private const val CLASSPATH_PARAMETER = "--classpath"
@@ -108,6 +109,11 @@ internal data class DefaultReportArgument(val report: DetektReport) : CliArgumen
 
 internal data class CustomReportArgument(val reportId: String, val file: RegularFile) : CliArgument {
     override fun toArgument() = listOf(REPORT_PARAMETER, "$reportId:${file.asFile.absolutePath}")
+}
+
+internal data class ConsoleReportArgument(val report: List<String>) : CliArgument {
+    override fun toArgument(): List<String> =
+        report.ifEmpty { listOf("") }.flatMap { listOf(CONSOLE_REPORT_PARAMETER, it) }
 }
 
 internal data class FreeArgs(val args: List<String>) : CliArgument {
