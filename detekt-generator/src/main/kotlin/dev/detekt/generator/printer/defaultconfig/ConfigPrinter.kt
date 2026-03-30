@@ -52,7 +52,6 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
               # - 'ProjectCLOCProcessor'
               # - 'ProjectLOCProcessor'
               # - 'ProjectSLOCProcessor'
-              # - 'LicenseHeaderLoaderExtension'
         """.trimIndent()
 
     private fun defaultConsoleReportsConfiguration(): String =
