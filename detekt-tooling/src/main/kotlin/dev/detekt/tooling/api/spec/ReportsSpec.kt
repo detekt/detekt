@@ -30,4 +30,9 @@ interface ReportsSpec {
      * Reports to generate for current analysis run.
      */
     val reports: Collection<Report>
+
+    /**
+     * Console reports to generate for current analysis run.
+     */
+    val consoleReports: Collection<String>
 }
