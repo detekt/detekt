@@ -3,6 +3,7 @@
 package dev.detekt.rules.potentialbugs
 
 import dev.detekt.api.Config
+import dev.detekt.test.TestConfig
 import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.junit.KotlinCoreEnvironmentTest
 import dev.detekt.test.lintWithContext
@@ -830,6 +831,35 @@ class MissingUseCallSpec(private val env: KotlinEnvironmentContainer) {
             val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
+    }
+
+    @Test
+    fun `does report when _use_ is not used on ByteArrayOutputStream by default`() {
+        val code = """
+            import java.io.ByteArrayOutputStream
+
+            val stream = ByteArrayOutputStream()
+            stream.size()
+        """.trimIndent()
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `does report when _use_ is not used on an excluded class`() {
+        val subjectWithConfig = MissingUseCall(
+            TestConfig(
+                "ignoreClass" to listOf("java.io.BufferedWriter")
+            )
+        )
+        val code = """
+            import java.io.BufferedWriter
+
+            val writer = BufferedWriter()
+            writer.append("")
+        """.trimIndent()
+        val findings = subjectWithConfig.lintWithContext(env, code)
+        assertThat(findings).isEmpty()
     }
 
     @Nested
