@@ -1,4 +1,4 @@
-package dev.detekt.metrics.processors
+package dev.detekt.test
 
 import dev.detekt.api.Detektion
 import dev.detekt.api.FileProcessListener
