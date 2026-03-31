@@ -1,5 +1,6 @@
 package dev.detekt.metrics.processors
 
+import com.intellij.openapi.util.Key
 import dev.detekt.api.DetektVisitor
 import dev.detekt.metrics.CognitiveComplexity
 import org.jetbrains.kotlin.psi.KtFile
@@ -12,9 +13,11 @@ class ProjectCognitiveComplexityProcessor : AbstractProcessor() {
 
         override fun visitKtFile(file: KtFile) {
             val complexity = CognitiveComplexity.calculate(file)
-            file.putUserData(CognitiveComplexity.KEY, complexity)
+            file.putUserData(cognitiveComplexityKey, complexity)
         }
     }
 
-    override val key = CognitiveComplexity.KEY
+    override val key = cognitiveComplexityKey
 }
+
+val cognitiveComplexityKey = Key<Int>("detekt.metrics.cognitive_complexity")
