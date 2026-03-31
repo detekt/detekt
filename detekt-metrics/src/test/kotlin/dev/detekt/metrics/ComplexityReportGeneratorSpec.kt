@@ -4,6 +4,7 @@ import dev.detekt.api.Detektion
 import dev.detekt.api.testfixtures.TestDetektion
 import dev.detekt.api.testfixtures.createIssue
 import dev.detekt.api.testfixtures.removeData
+import dev.detekt.metrics.processors.cognitiveComplexityKey
 import dev.detekt.metrics.processors.commentLinesKey
 import dev.detekt.metrics.processors.cyclomaticComplexityKey
 import dev.detekt.metrics.processors.linesKey
@@ -25,7 +26,7 @@ internal class ComplexityReportGeneratorSpec {
             createIssue("test2", suppressReasons = listOf("suppress")),
             userData = mapOf(
                 cyclomaticComplexityKey.toString() to 2,
-                CognitiveComplexity.KEY.toString() to 2,
+                cognitiveComplexityKey.toString() to 2,
                 linesKey.toString() to 1000,
                 sourceLinesKey.toString() to 6,
                 logicalLinesKey.toString() to 5,
