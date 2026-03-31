@@ -7,7 +7,6 @@ import dev.detekt.api.Notification.Level
 import dev.detekt.api.OutputReport
 import dev.detekt.core.ProcessingSettings
 import dev.detekt.core.extensions.loadExtensions
-import dev.detekt.core.util.isActiveOrDefault
 import dev.detekt.tooling.api.spec.ReportsSpec
 import java.nio.file.Path
 import kotlin.io.path.createParentDirectories
@@ -65,12 +64,6 @@ private fun OutputReport.write(filePath: Path, detektion: Detektion) {
 }
 
 internal fun loadConsoleReport(settings: ProcessingSettings): List<ConsoleReport> {
-    val config = settings.config.subConfig("console-reports")
-    val isActive = config.isActiveOrDefault(true)
-    return if (!isActive) {
-        emptyList()
-    } else {
-        val excludes = config.valueOrDefault("exclude", emptyList<String>()).toSet()
-        loadExtensions(settings) { it.id !in excludes }
-    }
+    val consoleReports = settings.spec.reportsSpec.consoleReports.toSet()
+    return loadExtensions(settings) { it.id in consoleReports }
 }

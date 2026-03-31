@@ -3,8 +3,6 @@ config:
   checkExhaustiveness: false
 processors:
   active: true
-console-reports:
-  active: true
 
 complexity:
   LongMethod:

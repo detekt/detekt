@@ -11,7 +11,6 @@ import { DefaultConfigurationFile } from "./../../src/components/ConfigurationFi
 _detekt_ uses a [YAML style configuration](https://yaml.org/spec/1.2/spec.html) file for various things:
 
 - rule set and rule properties
-- console reports
 - processors
 
 See the <DefaultConfigurationFile /> file for all defined configuration options and their default values. 
@@ -122,35 +121,6 @@ everyone can benefit from it.
 _detekt_ will fail your build if there is at least one issue with a severity of error. You can lower that threshold
 or completely disable build failures by using the `failOnSeverity` setting. Details can be found in the
 [gradle](../gettingstarted/gradle.mdx) and the [cli](../gettingstarted/cli.mdx) sections.
-
-## Console Reports
-
-Uncomment the reports you don't care about.
-
-```yaml
-console-reports:
-  active: true
-  exclude:
-  #  - 'ProjectStatisticsReport'
-  #  - 'ComplexityReport'
-  #  - 'NotificationReport'
-  #  - 'FindingsReport'
-  #  - 'FileBasedFindingsReport'
-  #  - 'LiteFindingsReport'
-```
-
-**ProjectStatisticsReport** contains metrics and statistics concerning the analyzed project sorted by priority.
-
-**ComplexityReport** contains metrics concerning the analyzed code. 
-For instance the source lines of code and the McCabe complexity are calculated.
-
-**NotificationReport** contains notifications reported by the detekt analyzer similar to push notifications. 
-It's simply a way of alerting users to information that they have opted-in to.
-
-**FindingsReport** contains all rule violations in a list format grouped by ruleset.
-
-**FileBasedFindingsReport** is similar to the FindingsReport shown above. 
-The rule violations are grouped by file location.
 
 ## Processors
 

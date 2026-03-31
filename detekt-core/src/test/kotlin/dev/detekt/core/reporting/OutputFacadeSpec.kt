@@ -40,6 +40,7 @@ class OutputFacadeSpec {
                 report { "checkstyle" to xmlOutputPath }
                 report { "markdown" to markdownOutputPath }
                 report { "sarif" to sarifOutputPath }
+                consoleReport("NotificationReport")
             }
             logging {
                 outputChannel = printStream
@@ -76,6 +77,7 @@ class OutputFacadeSpec {
                 report { "html" to htmlOutputPath }
                 report { "checkstyle" to htmlOutputPath }
                 report { "markdown" to markdownOutputPath }
+                consoleReport("NotificationReport")
             }
             logging {
                 outputChannel = printStream
@@ -107,6 +109,7 @@ class OutputFacadeSpec {
                 report { "checkstyle" to htmlOutputPath }
                 report { "markdown" to htmlOutputPath }
                 report { "sarif" to sarifOutputPath }
+                consoleReport("NotificationReport")
             }
             logging {
                 outputChannel = printStream

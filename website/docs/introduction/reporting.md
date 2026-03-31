@@ -6,43 +6,72 @@ summary: This page describes each reporting format and explains how to leverage 
 sidebar_position: 4
 ---
 
-## Formats
+Detekt has two different ways to communicate what it found: outputting it to the console or creating report files
+
+## Console reports
+
+## Console Reports
+
+### ProjectStatisticsReport
+It contains metrics and statistics concerning the analyzed project sorted by priority.
+
+### ComplexityReport
+It contains metrics concerning the analyzed code.
+For instance the source lines of code and the McCabe complexity are calculated.
+
+### NotificationReport
+It contains notifications reported by the detekt analyzer similar to push notifications.
+It's simply a way of alerting users to information that they have opted-in to.
+
+### FindingsReport
+It contains all rule violations in a list format grouped by ruleset.
+
+### FileBasedFindingsReport
+It is similar to the FindingsReport shown above.
+The rule violations are grouped by file location.
+
+### LiteFindingsReport
+It contains all rule violations in a compact way. Similar to how the kotlinc reports its errors
+
+## Reports
+
+### Formats
 
 In addition to the CLI output, detekt supports 4 different types of output reporting formats.
 You can refer to [CLI](../gettingstarted/cli.mdx) or [Gradle](../gettingstarted/gradle.mdx) to find
 out how to configure these report formats.
 
-### HTML
+#### HTML
 HTML is a human-readable format that can be open through browser. It includes different metrics
 and complexity reports of this run, in addition to the findings with detailed descriptions and
 report. Check out the example: ![HTML report](/img/tutorial/html.png)
 
-### CHECKSTYLE
+#### CHECKSTYLE
 [Checkstyle](https://checkstyle.sourceforge.io/) is a machine-readable xml format that can be integrated with CI tools.
 
-### SARIF
+#### SARIF
 [SARIF](https://sarifweb.azurewebsites.net/) is a standard format for the output of 
 static analysis tools. It is a JSON format with a defined 
 [schema](https://docs.oasis-open.org/sarif/sarif/v2.0/csprd02/schemas/). It is currently supported
 by GitHub Code Scanning, and we expect more consuming tools will adopt this format in the future.
 
-### MD
+#### MARKDOWN
 Markdown is a lightweight markup language for creating formatted text using a plain-text editor.
 The output structure looks similar to HTML format.
 About [markdown](https://github.github.com/gfm/#what-is-markdown-) on GitHub.
 
-## Relative path
+### Relative path
 In a shared codebase, it is often required to use relative path so that all developers and tooling
 have a consistent view. This can be enabled by CLI option `--base-path` or Gradle as the following:
 
-### Kotlin DSL
+#### Kotlin DSL
 ```kotlin
 detekt {
     basePath.set(projectDir)
 }
 ```
 
-### Groovy DSL
+#### Groovy DSL
 ```groovy
 detekt {
     basePath = projectDir
@@ -52,7 +81,7 @@ detekt {
 Note that this option only affects file paths in those formats for machine consumers,
 namely Checkstyle and SARIF.
 
-## Merging reports
+### Merging reports
 
 :::caution Attention
 
@@ -68,7 +97,7 @@ the merging makes most sense in a multi-module project. In this spirit, only Gra
 At the moment, merging Checkstyle and SARIF are supported. You can refer to the sample build script below and 
 run `./gradlew detekt reportMerge --continue` to execute detekt tasks and merge the corresponding reports.
 
-### Groovy DSL
+#### Groovy DSL
 ```groovy
 tasks.register("reportMerge", dev.detekt.gradle.report.ReportMergeTask) {
   output = project.layout.buildDirectory.file("reports/detekt/merge.xml") // or "reports/detekt/merge.sarif"
@@ -86,7 +115,7 @@ subprojects {
 }
 ```
 
-### Kotlin DSL
+#### Kotlin DSL
 
 ```kotlin
 val reportMerge by tasks.registering(dev.detekt.gradle.report.ReportMergeTask::class) { 
@@ -105,7 +134,7 @@ subprojects {
 }
 ```
 
-## Integration with GitHub Code Scanning
+### Integration with GitHub Code Scanning
 If your repository is hosted on GitHub, you can enable SARIF output in your repository.
 You can follow to the [official documentation](https://docs.github.com/en/github/finding-security-vulnerabilities-and-errors-in-your-code/uploading-a-sarif-file-to-github).
 
