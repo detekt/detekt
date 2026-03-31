@@ -20,7 +20,6 @@ import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.findTypeAlias
-import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.ClassId
@@ -309,13 +308,12 @@ class SuspendFunSwallowedCancellation(config: Config) :
 
     private fun KtParameter.isCancellationExceptionOrSuperClass(): Boolean =
         analyze(this) {
-            val parameterFqName = typeReference
-                ?.type
-                ?.symbol
-                ?.classId
-                ?.asFqNameString()
+            val exceptionType = typeReference?.type
 
-            parameterFqName in CANCELLATION_EXCEPTION_FQ_NAMES
+            val cancellationExceptionType = findTypeAlias(CANCELLATION_EXCEPTION_CLASS_ID)?.defaultType
+                ?: error("Cancellation exception type not found. Are coroutines on the classpath?")
+
+            exceptionType != null && cancellationExceptionType.isSubtypeOf(exceptionType)
         }
 
     /**
@@ -421,18 +419,6 @@ class SuspendFunSwallowedCancellation(config: Config) :
         private val RUN_CATCHING_CALLABLE_ID = CallableId(
             packageName = FqName("kotlin"),
             callableName = Name.identifier("runCatching")
-        )
-
-        // Pulled from https://github.com/search?q=repo%3AKotlin%2Fkotlinx.coroutines+%22actual+typealias+CancellationException%22&type=code,
-        // in descending order of priority.
-        private val CANCELLATION_EXCEPTION_FQ_NAMES = listOf(
-            "kotlinx.coroutines.CancellationException", // common typealias
-            "kotlin.coroutines.cancellation.CancellationException", // native
-            "java.util.concurrent.CancellationException", // JVM
-            "java.lang.IllegalStateException", // JVM
-            "java.lang.RuntimeException", // JVM
-            "java.lang.Exception", // JVM
-            "kotlin.Throwable",
         )
     }
 }
