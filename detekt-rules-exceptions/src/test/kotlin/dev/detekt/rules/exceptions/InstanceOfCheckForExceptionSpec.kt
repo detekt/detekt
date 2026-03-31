@@ -11,6 +11,20 @@ import org.junit.jupiter.api.Test
 class InstanceOfCheckForExceptionSpec(private val env: KotlinEnvironmentContainer) {
     val subject = InstanceOfCheckForException(Config.empty)
 
+    private val cancellationExceptionDefinitions = arrayOf(
+        """
+            package java.concurrent
+            import java.lang.IllegalStateException
+            
+            class CancellationException: IllegalStateException()
+        """.trimIndent(),
+        """
+            package kotlin.coroutines
+            
+            public actual typealias CancellationException = java.util.concurrent.CancellationException
+        """.trimIndent()
+    )
+
     @Test
     fun `has is and as checks`() {
         val code = """
@@ -72,5 +86,24 @@ class InstanceOfCheckForExceptionSpec(private val env: KotlinEnvironmentContaine
             }
         """.trimIndent()
         assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
+    fun `checks for cancellation exception`() {
+        // This is case where instance checking is recommended.
+        // Required to work around https://github.com/Kotlin/kotlinx.coroutines/issues/3658
+
+        val code = """
+            import kotlinx.coroutines.CancellationException
+
+            fun x() {
+                try {
+                } catch(e: Exception) {
+                    if (e is CancellationException) currentCoroutineContext().ensureActive()
+                }
+            }
+        """.trimIndent()
+
+        assertThat(subject.lintWithContext(env, code, *cancellationExceptionDefinitions)).isEmpty()
     }
 }
