@@ -3,6 +3,11 @@ public final class dev/detekt/test/FakeLanguageVersionSettingsKt {
 	public static synthetic fun FakeLanguageVersionSettings$default (Lorg/jetbrains/kotlin/config/ExplicitApiMode;ILjava/lang/Object;)Lorg/jetbrains/kotlin/config/LanguageVersionSettingsImpl;
 }
 
+public final class dev/detekt/test/FileProcessListenerExtensionsKt {
+	public static final fun invoke (Ldev/detekt/api/FileProcessListener;Ljava/util/List;)Ldev/detekt/api/Detektion;
+	public static final fun invoke (Ldev/detekt/api/FileProcessListener;[Lorg/jetbrains/kotlin/psi/KtFile;)Ldev/detekt/api/Detektion;
+}
+
 public final class dev/detekt/test/FindingExtensionsKt {
 	public static final fun getLocation (Ldev/detekt/api/Finding;)Ldev/detekt/api/Location;
 }
