@@ -4,10 +4,10 @@ import dev.detekt.test.utils.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ProjectComplexityProcessorSpec {
+class ProjectCyclomaticComplexityProcessorSpec {
     @Test
     fun counts() {
-        val detektion = ProjectComplexityProcessor().invoke(
+        val detektion = ProjectCyclomaticComplexityProcessor().invoke(
             compileContentForTest(default),
             compileContentForTest(emptyEnum),
             compileContentForTest(emptyInterface),
@@ -16,6 +16,6 @@ class ProjectComplexityProcessorSpec {
             compileContentForTest(complexClass),
         )
 
-        assertThat(detektion.userData[complexityKey.toString()]).isEqualTo(45)
+        assertThat(detektion.userData[cyclomaticComplexityKey.toString()]).isEqualTo(45)
     }
 }
