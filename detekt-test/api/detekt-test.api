@@ -4,8 +4,10 @@ public final class dev/detekt/test/FakeLanguageVersionSettingsKt {
 }
 
 public final class dev/detekt/test/FileProcessListenerExtensionsKt {
-	public static final fun invoke (Ldev/detekt/api/FileProcessListener;Ljava/util/List;)Ldev/detekt/api/Detektion;
-	public static final fun invoke (Ldev/detekt/api/FileProcessListener;[Lorg/jetbrains/kotlin/psi/KtFile;)Ldev/detekt/api/Detektion;
+	public static final fun invoke (Ldev/detekt/api/FileProcessListener;Ljava/util/List;Ldev/detekt/api/Detektion;Ljava/util/List;)Ldev/detekt/api/Detektion;
+	public static final fun invoke (Ldev/detekt/api/FileProcessListener;[Lorg/jetbrains/kotlin/psi/KtFile;Ldev/detekt/api/Detektion;Ljava/util/List;)Ldev/detekt/api/Detektion;
+	public static synthetic fun invoke$default (Ldev/detekt/api/FileProcessListener;Ljava/util/List;Ldev/detekt/api/Detektion;Ljava/util/List;ILjava/lang/Object;)Ldev/detekt/api/Detektion;
+	public static synthetic fun invoke$default (Ldev/detekt/api/FileProcessListener;[Lorg/jetbrains/kotlin/psi/KtFile;Ldev/detekt/api/Detektion;Ljava/util/List;ILjava/lang/Object;)Ldev/detekt/api/Detektion;
 }
 
 public final class dev/detekt/test/FindingExtensionsKt {
