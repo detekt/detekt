@@ -1,0 +1,27 @@
+package dev.detekt.report.complexity
+
+import dev.detekt.test.utils.compileContentForTest
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
+
+class CyclomaticComplexityVisitorSpec {
+    @Test
+    fun complexityOfDefaultCaseIsOne() {
+        val mcc = calcComplexity(default)
+
+        assertThat(mcc).isEqualTo(0)
+    }
+
+    @Test
+    fun complexityOfComplexAndNestedClass() {
+        val mcc = calcComplexity(complexClass)
+
+        assertThat(mcc).isEqualTo(44)
+    }
+}
+
+private fun calcComplexity(content: String) =
+    with(compileContentForTest(content)) {
+        accept(CyclomaticComplexityVisitor())
+        getUserData(cyclomaticComplexityKey)
+    }
