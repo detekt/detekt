@@ -5,6 +5,13 @@ pluginManagement {
     includeBuild("detekt-gradle-plugin")
 }
 
+// Workaround for https://github.com/autonomousapps/dependency-analysis-gradle-plugin/issues/1661
+buildscript {
+    dependencies {
+        classpath("org.jetbrains.kotlin:kotlin-metadata-jvm:2.3.20")
+    }
+}
+
 include("code-coverage-report")
 include("detekt-api")
 include("detekt-cli")
