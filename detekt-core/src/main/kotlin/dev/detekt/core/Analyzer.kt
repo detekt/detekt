@@ -18,7 +18,6 @@ import dev.detekt.core.util.shouldAnalyzeFile
 import dev.detekt.psi.absolutePath
 import dev.detekt.tooling.api.AnalysisMode
 import org.jetbrains.kotlin.config.LanguageVersionSettings
-import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
 
