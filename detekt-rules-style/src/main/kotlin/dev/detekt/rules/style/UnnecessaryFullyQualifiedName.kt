@@ -163,7 +163,7 @@ class UnnecessaryFullyQualifiedName(config: Config) :
             if (!receiverText.startsWith(packageFqName)) return
 
             val classId = symbol.callableId?.classId
-            val symbolToCheck = classId?.let { findClass(it) ?: return } ?: symbol
+            val symbolToCheck = classId?.let { findClass(it) } ?: symbol
             if (hasNameCollision(expression, symbolToCheck)) return
 
             val finding = if (classId != null) {
@@ -193,7 +193,6 @@ class UnnecessaryFullyQualifiedName(config: Config) :
     private fun hasNameCollision(element: KtElement, resolvedSymbol: KaSymbol): Boolean {
         val simpleName = when (resolvedSymbol) {
             is KaClassSymbol -> resolvedSymbol.classId?.shortClassName
-            is KaConstructorSymbol -> resolvedSymbol.containingClassId?.shortClassName
             is KaCallableSymbol -> resolvedSymbol.callableId?.callableName
             else -> null
         } ?: return false
