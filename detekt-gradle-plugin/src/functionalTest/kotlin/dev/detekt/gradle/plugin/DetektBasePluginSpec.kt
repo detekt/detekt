@@ -131,6 +131,52 @@ class DetektBasePluginSpec {
     }
 
     @Test
+    fun `generates source set tasks for Android project (disallowKotlinSourceSets=true)`() {
+        val gradleRunner = DslGradleRunner(
+            projectLayout = ProjectLayout(
+                numberOfSourceFilesInRootPerSourceDir = 1,
+                srcDirs = listOf(
+                    "src/main/kotlin",
+                    "src/debug/kotlin",
+                    "src/test/kotlin",
+                    "src/androidTest/kotlin",
+                ),
+            ),
+            buildFileName = "build.gradle.kts",
+            mainBuildFileContent = """
+                plugins {
+                    id("com.android.application")
+                    id("dev.detekt")
+                }
+
+                repositories {
+                    mavenLocal()
+                    mavenCentral()
+                    google()
+                }
+
+                android {
+                    compileSdk = 34
+                    namespace = "dev.detekt.gradle.plugin.app"
+                }
+            """.trimIndent(),
+            gradleProperties = mapOf(
+                "android.disallowKotlinSourceSets" to "true",
+            ),
+            dryRun = true,
+        ).also {
+            it.setupProject()
+        }
+
+        // With built-in Kotlin and disallowKotlinSourceSets, the tasks are registered by Android variant names.
+        // The release buildType doesn't have test tasks due to `android.onlyEnableUnitTestForTheTestedBuildType`.
+        gradleRunner.checkTask("debug", listOf("main", "debug"))
+        gradleRunner.checkTask("debugAndroidTest", listOf("androidTest"))
+        gradleRunner.checkTask("debugUnitTest", listOf("test"))
+        gradleRunner.checkTask("release", listOf("main"))
+    }
+
+    @Test
     fun `generates source set tasks when multiple plugins of type KotlinBasePlugin are applied #8613`() {
         val gradleRunner = DslGradleRunner(
             projectLayout = ProjectLayout(
@@ -254,10 +300,15 @@ class DetektBasePluginSpec {
         }
     }
 
-    private fun DslGradleRunner.checkTask(sourceSetTaskName: String) {
+    private fun DslGradleRunner.checkTask(
+        sourceSetTaskName: String,
+        expectedSourceDirs: List<String> = listOf(sourceSetTaskName),
+    ) {
         runTasksAndCheckResult(":detekt${sourceSetTaskName}SourceSet") { buildResult ->
-            assertThat(buildResult.output)
-                .containsPattern("""--input \S*[/\\]src[/\\]$sourceSetTaskName[/\\]kotlin""")
+            expectedSourceDirs.forEach { dir ->
+                assertThat(buildResult.output)
+                    .containsPattern("""--input \S*[/\\]src[/\\]$dir[/\\]kotlin""")
+            }
             val checkstyleReportFile = projectFile("build/reports/detekt/${sourceSetTaskName}SourceSet.xml")
             val sarifReportFile = projectFile("build/reports/detekt/${sourceSetTaskName}SourceSet.sarif")
             assertThat(buildResult.output).contains("--report checkstyle:$checkstyleReportFile")
