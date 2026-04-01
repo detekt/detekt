@@ -5,7 +5,9 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
+import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.components.KaScopeKind
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
@@ -15,15 +17,18 @@ import org.jetbrains.kotlin.analysis.api.symbols.KaConstructorSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbol
 import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.idea.references.mainReference
+import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtClassLiteralExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtImportDirective
 import org.jetbrains.kotlin.psi.KtPackageDirective
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
+import org.jetbrains.kotlin.psi.KtTypeParameterListOwner
 import org.jetbrains.kotlin.psi.KtUserType
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.getPossiblyQualifiedCallExpression
+import org.jetbrains.kotlin.psi.psiUtil.parents
 
 /**
  * This rule reports unnecessary fully qualified class names and function calls.
@@ -91,8 +96,10 @@ class UnnecessaryFullyQualifiedName(config: Config) :
         if (!typeText.contains(".")) return
 
         analyze(type) {
-            val packageFqName = type.referenceExpression?.mainReference?.resolveToSymbol()?.packageFqName() ?: return
+            val resolvedSymbol = type.referenceExpression?.mainReference?.resolveToSymbol() ?: return
+            val packageFqName = resolvedSymbol.packageFqName() ?: return
             if (!typeText.startsWith(packageFqName)) return
+            if (hasNameCollision(type, resolvedSymbol)) return
         }
 
         val qualifiedName = typeText.substringBefore('<')
@@ -116,8 +123,10 @@ class UnnecessaryFullyQualifiedName(config: Config) :
         if (!receiverText.contains(".")) return
 
         analyze(receiverExpression) {
-            val packageFqName = receiverExpression.expressionType?.symbol?.packageFqName() ?: return
+            val resolvedSymbol = receiverExpression.expressionType?.symbol ?: return
+            val packageFqName = resolvedSymbol.packageFqName() ?: return
             if (!receiverText.startsWith("$packageFqName.")) return
+            if (hasNameCollision(expression, resolvedSymbol)) return
         }
 
         report(
@@ -153,7 +162,11 @@ class UnnecessaryFullyQualifiedName(config: Config) :
             val packageFqName = symbol.packageFqName() ?: return
             if (!receiverText.startsWith(packageFqName)) return
 
-            val finding = if (symbol.callableId?.classId != null) {
+            val classId = symbol.callableId?.classId
+            val symbolToCheck = classId?.let { findClass(it) ?: return } ?: symbol
+            if (hasNameCollision(expression, symbolToCheck)) return
+
+            val finding = if (classId != null) {
                 Finding(
                     Entity.from(expression.receiverExpression),
                     "Fully qualified class reference '$receiverText' can be replaced with an import.",
@@ -175,6 +188,34 @@ class UnnecessaryFullyQualifiedName(config: Config) :
 
     private fun isInStringLiteral(element: KtElement): Boolean =
         element.getParentOfType<KtStringTemplateExpression>(strict = false) != null
+
+    context(session: KaSession)
+    private fun hasNameCollision(element: KtElement, resolvedSymbol: KaSymbol): Boolean {
+        val simpleName = when (resolvedSymbol) {
+            is KaClassSymbol -> resolvedSymbol.classId?.shortClassName
+            is KaConstructorSymbol -> resolvedSymbol.containingClassId?.shortClassName
+            is KaCallableSymbol -> resolvedSymbol.callableId?.callableName
+            else -> null
+        } ?: return false
+
+        if (resolvedSymbol !is KaCallableSymbol && isShadowedByTypeParameter(element, simpleName)) return true
+
+        return findLocalSymbols(element, resolvedSymbol, simpleName).any { it != resolvedSymbol }
+    }
+
+    context(session: KaSession)
+    private fun findLocalSymbols(element: KtElement, resolvedSymbol: KaSymbol, name: Name): Sequence<KaSymbol> {
+        val scope = with(session) {
+            element.containingKtFile.scopeContext(element).compositeScope { it !is KaScopeKind.ImportingScope }
+        }
+        return if (resolvedSymbol is KaCallableSymbol) scope.callables(name) else scope.classifiers(name)
+    }
+
+    private fun isShadowedByTypeParameter(element: KtElement, name: Name): Boolean =
+        element.parents
+            .filterIsInstance<KtTypeParameterListOwner>()
+            .flatMap { it.typeParameters }
+            .any { it.nameAsName == name }
 
     private fun KaSymbol.packageFqName(): String? =
         when (this) {
