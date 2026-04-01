@@ -1,4 +1,4 @@
-package dev.detekt.metrics.processors
+package dev.detekt.report.statistics
 
 import dev.detekt.api.ProjectMetric
 import dev.detekt.test.invoke
@@ -6,10 +6,10 @@ import dev.detekt.test.utils.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class PackageCountProcessorSpec {
+class PropertyCountProcessorSpec {
     @Test
     fun counts() {
-        val detektion = PackageCountProcessor().invoke(
+        val detektion = PropertyCountProcessor().invoke(
             compileContentForTest(default),
             compileContentForTest(emptyEnum),
             compileContentForTest(emptyInterface),
@@ -19,17 +19,16 @@ class PackageCountProcessorSpec {
         )
 
         assertThat(detektion.metrics).singleElement()
-            .isEqualTo(ProjectMetric("number of packages", 4))
+            .isEqualTo(ProjectMetric("number of properties", 2))
     }
 
     @Test
-    fun twoClassesInSeparatePackage() {
-        val detektion = PackageCountProcessor().invoke(
-            compileContentForTest(default),
-            compileContentForTest(emptyEnum),
+    fun defaultFieldCount() {
+        val detektion = PropertyCountProcessor().invoke(
+            compileContentForTest(classWithFields),
         )
 
         assertThat(detektion.metrics).singleElement()
-            .isEqualTo(ProjectMetric("number of packages", 2))
+            .isEqualTo(ProjectMetric("number of properties", 2))
     }
 }

@@ -1,4 +1,4 @@
-package dev.detekt.metrics.processors
+package dev.detekt.report.statistics
 
 import dev.detekt.api.ProjectMetric
 import dev.detekt.test.invoke
@@ -6,10 +6,10 @@ import dev.detekt.test.utils.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class PropertyCountProcessorSpec {
+class KtFileCountProcessorSpec {
     @Test
     fun counts() {
-        val detektion = PropertyCountProcessor().invoke(
+        val detektion = KtFileCountProcessor().invoke(
             compileContentForTest(default),
             compileContentForTest(emptyEnum),
             compileContentForTest(emptyInterface),
@@ -19,16 +19,17 @@ class PropertyCountProcessorSpec {
         )
 
         assertThat(detektion.metrics).singleElement()
-            .isEqualTo(ProjectMetric("number of properties", 2))
+            .isEqualTo(ProjectMetric("number of kt files", 6))
     }
 
     @Test
-    fun defaultFieldCount() {
-        val detektion = PropertyCountProcessor().invoke(
-            compileContentForTest(classWithFields),
+    fun twoFiles() {
+        val detektion = KtFileCountProcessor().invoke(
+            compileContentForTest(default),
+            compileContentForTest(complexClass),
         )
 
         assertThat(detektion.metrics).singleElement()
-            .isEqualTo(ProjectMetric("number of properties", 2))
+            .isEqualTo(ProjectMetric("number of kt files", 2))
     }
 }
