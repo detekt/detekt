@@ -1,26 +1,17 @@
 package dev.detekt.gradle.plugin
 
 import dev.detekt.detekt_gradle_plugin.BuildConfig
-import dev.detekt.gradle.Detekt
-import dev.detekt.gradle.DetektCreateBaselineTask
 import dev.detekt.gradle.extensions.DetektExtension
 import dev.detekt.gradle.extensions.FailOnSeverity
-import dev.detekt.gradle.internal.addVariantName
-import dev.detekt.gradle.internal.existingVariantOrBaseFile
 import dev.detekt.gradle.internal.setCreateBaselineTaskDefaults
 import dev.detekt.gradle.internal.setDetektTaskDefaults
-import dev.detekt.gradle.plugin.internal.mapExplicitArgMode
 import dev.detekt.gradle.plugin.internal.rootProjectDirectoryCompat
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.ReportingBasePlugin
 import org.gradle.api.reporting.ReportingExtension
-import org.jetbrains.kotlin.gradle.plugin.KotlinBasePlugin
-import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetContainer
 
 class DetektBasePlugin : Plugin<Project> {
-    private var sourceSetListenerConfigured = false
-
     override fun apply(project: Project) {
         project.pluginManager.apply(ReportingBasePlugin::class.java)
 
@@ -65,61 +56,11 @@ class DetektBasePlugin : Plugin<Project> {
         }
 
         project.setTaskDefaults(extension)
-        project.registerSourceSetTasks(extension)
     }
 
     private fun Project.setTaskDefaults(extension: DetektExtension) {
         setDetektTaskDefaults(extension)
         setCreateBaselineTaskDefaults(extension)
-    }
-
-    private fun Project.registerSourceSetTasks(extension: DetektExtension) {
-        project.plugins.withType(KotlinBasePlugin::class.java) {
-            if (sourceSetListenerConfigured) return@withType
-
-            project.extensions.findByType(KotlinSourceSetContainer::class.java)
-                ?.sourceSets
-                ?.configureEach { sourceSet ->
-                    val taskName = "${DetektPlugin.DETEKT_TASK_NAME}${sourceSet.name.capitalize()}SourceSet"
-                    tasks.register(taskName, Detekt::class.java) { detektTask ->
-                        detektTask.source = sourceSet.kotlin
-                        detektTask.baseline.convention(
-                            project.layout.file(
-                                extension.baseline.flatMap {
-                                    providers.provider {
-                                        it.asFile.existingVariantOrBaseFile("${sourceSet.name}SourceSet")
-                                    }
-                                }
-                            )
-                        )
-                        if (sourceSet.name == "main") {
-                            detektTask.explicitApi.convention(mapExplicitArgMode())
-                        }
-                        detektTask.description = "Run detekt analysis for ${sourceSet.name} source set"
-                    }
-
-                    val baseLineTaskName = "${DetektPlugin.BASELINE_TASK_NAME}${sourceSet.name.capitalize()}SourceSet"
-                    tasks.register(baseLineTaskName, DetektCreateBaselineTask::class.java) { createBaselineTask ->
-                        createBaselineTask.source = sourceSet.kotlin
-
-                        createBaselineTask.baseline.convention(
-                            project.layout.file(
-                                extension.baseline.flatMap {
-                                    providers.provider { it.asFile.addVariantName("${sourceSet.name}SourceSet") }
-                                }
-                            )
-                        )
-
-                        if (sourceSet.name == "main") {
-                            createBaselineTask.explicitApi.convention(mapExplicitArgMode())
-                        }
-                        createBaselineTask.description = "Creates detekt baseline for ${sourceSet.name} source set"
-                    }
-                }
-                ?: return@withType
-
-            sourceSetListenerConfigured = true
-        }
     }
 
     internal companion object {

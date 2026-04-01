@@ -15,6 +15,7 @@ import dev.detekt.gradle.plugin.internal.DetektAndroidCompilations
 import dev.detekt.gradle.plugin.internal.DetektJvmCompilations
 import dev.detekt.gradle.plugin.internal.DetektKmpJvmCompilations
 import dev.detekt.gradle.plugin.internal.conventionCompat
+import dev.detekt.gradle.plugin.internal.registerSourceSetTasks
 import org.gradle.api.Incubating
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -39,6 +40,8 @@ class DetektPlugin : Plugin<Project> {
                 .toBoolean()
         if (enableAndroidTasks) {
             project.registerDetektAndroidTasks(extension)
+        } else {
+            project.registerSourceSetTasks(extension)
         }
         val enableMppTasks =
             !project.providers
@@ -47,6 +50,8 @@ class DetektPlugin : Plugin<Project> {
                 .toBoolean()
         if (enableMppTasks) {
             project.registerDetektMultiplatformTasks(extension)
+        } else {
+            project.registerSourceSetTasks(extension)
         }
         project.registerGenerateConfigTask(extension)
     }
@@ -54,12 +59,14 @@ class DetektPlugin : Plugin<Project> {
     private fun Project.registerDetektJvmTasks(extension: DetektExtension) {
         plugins.withId("org.jetbrains.kotlin.jvm") {
             DetektJvmCompilations.registerTasks(project, extension)
+            registerSourceSetTasks(extension)
         }
     }
 
     private fun Project.registerDetektMultiplatformTasks(extension: DetektExtension) {
         plugins.withId("org.jetbrains.kotlin.multiplatform") {
             DetektKmpJvmCompilations.registerTasks(project, extension)
+            registerSourceSetTasks(extension)
         }
     }
 
@@ -81,6 +88,7 @@ class DetektPlugin : Plugin<Project> {
             if (builtInGradlePropertyEnabled() && agp9() && enableKotlinDslEnabled()) {
                 DetektAndroidCompilations.registerTasks(project, extension)
                 DetektAndroidCompilations.linkTasks(project, extension)
+                DetektAndroidCompilations.handleKotlinSourceSets(project, extension, builtInKotlin = true)
             }
 
             // Enabling built-in Kotlin with the plugin (only available in AGP 9 and higher)
@@ -88,6 +96,7 @@ class DetektPlugin : Plugin<Project> {
                 if (!builtInGradlePropertyEnabled() && enableKotlinDslEnabled()) {
                     DetektAndroidCompilations.registerTasks(project, extension)
                     DetektAndroidCompilations.linkTasks(project, extension)
+                    DetektAndroidCompilations.handleKotlinSourceSets(project, extension, builtInKotlin = true)
                 }
             }
 
@@ -95,6 +104,7 @@ class DetektPlugin : Plugin<Project> {
             plugins.withId("kotlin-android") {
                 DetektAndroidCompilations.registerTasks(project, extension)
                 DetektAndroidCompilations.linkTasks(project, extension)
+                DetektAndroidCompilations.handleKotlinSourceSets(project, extension, builtInKotlin = false)
             }
         }
     }
