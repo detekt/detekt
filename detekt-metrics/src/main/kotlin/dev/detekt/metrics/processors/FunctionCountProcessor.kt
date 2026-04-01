@@ -1,24 +1,21 @@
 package dev.detekt.metrics.processors
 
 import com.intellij.openapi.util.Key
-import dev.detekt.api.DetektVisitor
+import dev.detekt.api.Detektion
+import dev.detekt.api.FileProcessListener
+import dev.detekt.api.ProjectMetric
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 
-class FunctionCountProcessor : AbstractProjectMetricProcessor() {
-
+class FunctionCountProcessor : FileProcessListener {
     override val id: String = "FunctionCountProcessor"
-    override val visitor = FunctionCountVisitor()
-    override val key = numberOfFunctionsKey
+
+    override fun onFinish(files: List<KtFile>, result: Detektion): Detektion {
+        val count = files.sumOf { it.collectDescendantsOfType<KtNamedFunction>().size }
+        result.add(ProjectMetric(numberOfFunctionsKey.toString(), count))
+        return result
+    }
 }
 
 val numberOfFunctionsKey = Key<Int>("number of functions")
-
-class FunctionCountVisitor : DetektVisitor() {
-
-    override fun visitKtFile(file: KtFile) {
-        super.visitKtFile(file)
-        file.putUserData(numberOfFunctionsKey, file.collectDescendantsOfType<KtNamedFunction>().size)
-    }
-}
