@@ -230,7 +230,7 @@ class SuspendFunSwallowedCancellation(config: Config) :
                 analyze(parentCallExpression) {
                     val valueSymbol = parentCallExpression.resolveToCall()
                         ?.successfulFunctionCallOrNull()
-                        ?.argumentMapping
+                        ?.valueArgumentMapping
                         ?.get(elementArgument)
                         ?.symbol
 
