@@ -20,4 +20,15 @@ class PackageCountProcessorSpec {
         assertThat(detektion.metrics).singleElement()
             .isEqualTo(ProjectMetric("number of packages", 4))
     }
+
+    @Test
+    fun twoClassesInSeparatePackage() {
+        val detektion = PackageCountProcessor().invoke(
+            compileContentForTest(default),
+            compileContentForTest(emptyEnum),
+        )
+
+        assertThat(detektion.metrics).singleElement()
+            .isEqualTo(ProjectMetric("number of packages", 2))
+    }
 }

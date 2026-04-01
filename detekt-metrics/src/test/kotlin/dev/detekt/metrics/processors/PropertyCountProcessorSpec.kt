@@ -20,4 +20,14 @@ class PropertyCountProcessorSpec {
         assertThat(detektion.metrics).singleElement()
             .isEqualTo(ProjectMetric("number of properties", 2))
     }
+
+    @Test
+    fun defaultFieldCount() {
+        val detektion = PropertyCountProcessor().invoke(
+            compileContentForTest(classWithFields),
+        )
+
+        assertThat(detektion.metrics).singleElement()
+            .isEqualTo(ProjectMetric("number of properties", 2))
+    }
 }

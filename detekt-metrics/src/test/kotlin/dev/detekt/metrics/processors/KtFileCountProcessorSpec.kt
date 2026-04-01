@@ -20,4 +20,15 @@ class KtFileCountProcessorSpec {
         assertThat(detektion.metrics).singleElement()
             .isEqualTo(ProjectMetric("number of kt files", 6))
     }
+
+    @Test
+    fun twoFiles() {
+        val detektion = KtFileCountProcessor().invoke(
+            compileContentForTest(default),
+            compileContentForTest(complexClass),
+        )
+
+        assertThat(detektion.metrics).singleElement()
+            .isEqualTo(ProjectMetric("number of kt files", 2))
+    }
 }
