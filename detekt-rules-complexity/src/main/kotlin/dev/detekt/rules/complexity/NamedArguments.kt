@@ -85,7 +85,9 @@ class NamedArguments(config: Config) :
 
             val unnamedArguments = valueArguments.mapNotNull { argument ->
                 if (argument.isNamed() || argument is KtLambdaArgument) return@mapNotNull null
-                val parameter = functionCall.argumentMapping[argument.getArgumentExpression()] ?: return@mapNotNull null
+                val parameter = functionCall
+                    .valueArgumentMapping[argument.getArgumentExpression()]
+                    ?: return@mapNotNull null
                 if (ignoreArgumentsMatchingNames &&
                     parameter.name.asString() == argument.getArgumentExpression()?.text
                 ) {

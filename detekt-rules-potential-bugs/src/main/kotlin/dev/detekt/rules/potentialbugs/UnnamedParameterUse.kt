@@ -125,7 +125,7 @@ class UnnamedParameterUse(config: Config) :
             if (ignoreFunctionCall.any { it.match(symbol) }) return
 
             val argumentToParameterMap = valueArgumentList.arguments.associateWith {
-                val parameter = call.argumentMapping[it.getArgumentExpression()]?.symbol
+                val parameter = call.valueArgumentMapping[it.getArgumentExpression()]?.symbol
                 ParamInfo(
                     name = parameter?.name,
                     isNamed = it.isNamed(),
