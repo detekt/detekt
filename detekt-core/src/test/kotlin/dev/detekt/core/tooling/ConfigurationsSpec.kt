@@ -58,7 +58,7 @@ class ConfigurationsSpec {
         }
 
         @Test
-        fun `throws an exception on an non-existing file`() {
+        fun `throws an exception on a non-existing file`() {
             assertThatIllegalArgumentException()
                 .isThrownBy {
                     ProcessingSpec {
