@@ -31,6 +31,7 @@ class ComplexityProvider : DefaultRuleSetProvider {
                 ::ComplexCondition,
                 ::LabeledExpression,
                 ::ReplaceSafeCallChainWithRun,
+                ::ReplaceTryFinallyWithUse,
                 ::NamedArguments
             )
         )
