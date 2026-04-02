@@ -40,7 +40,6 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
             processors:
               active: true
               exclude:
-                - 'DetektProgressListener'
               # - 'KtFileCountProcessor'
               # - 'PackageCountProcessor'
               # - 'ClassCountProcessor'
