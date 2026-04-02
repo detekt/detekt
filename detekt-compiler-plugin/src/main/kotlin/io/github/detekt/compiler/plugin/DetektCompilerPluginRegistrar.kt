@@ -15,17 +15,17 @@ class DetektCompilerPluginRegistrar : CompilerPluginRegistrar() {
     override val pluginId = "dev.detekt"
 
     override fun ExtensionStorage.registerExtensions(configuration: CompilerConfiguration) {
-        if (configuration.get(Keys.IS_ENABLED) == false) {
+        if (configuration[Keys.IS_ENABLED] == false) {
             return
         }
 
-        val messageCollector = configuration.get(CommonConfigurationKeys.MESSAGE_COLLECTOR_KEY, MessageCollector.NONE)
+        val messageCollector = configuration[CommonConfigurationKeys.MESSAGE_COLLECTOR_KEY, MessageCollector.NONE]
 
         AnalysisHandlerExtension.registerExtension(
             DetektAnalysisExtension(
                 messageCollector,
                 configuration.toSpec(messageCollector),
-                configuration.get(Keys.ROOT_PATH, Path(System.getProperty("user.dir"))),
+                configuration[Keys.ROOT_PATH, Path(System.getProperty("user.dir"))],
                 configuration.getList(Keys.EXCLUDES)
             )
         )
