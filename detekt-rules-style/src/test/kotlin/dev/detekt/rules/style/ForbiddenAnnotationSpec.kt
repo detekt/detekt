@@ -215,13 +215,13 @@ class ForbiddenAnnotationSpec(val env: KotlinEnvironmentContainer) {
     @Test
     fun `should report aliased annotations`() {
         val code = """
-            typealias Dep = java.lang.Deprecated
-            @Dep
-            fun f() = Unit
+            typealias Doc = java.lang.annotation.Documented
+            @Doc
+            annotation class AnnotationClass
         """.trimIndent()
         val findings = ForbiddenAnnotation(Config.empty).lintWithContext(env, code)
         assertThat(findings).singleElement()
-            .hasTextLocation("@Dep")
+            .hasTextLocation("@Doc")
     }
 
     @Test
