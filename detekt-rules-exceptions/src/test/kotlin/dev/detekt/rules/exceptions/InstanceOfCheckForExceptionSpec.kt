@@ -95,8 +95,11 @@ class InstanceOfCheckForExceptionSpec(private val env: KotlinEnvironmentContaine
 
         val code = """
             import kotlinx.coroutines.CancellationException
+            import kotlinx.coroutines.currentCoroutineContext
+            import kotlinx.coroutines.ensureActive
 
-            fun x() {
+
+            suspend fun x() {
                 try {
                 } catch(e: Exception) {
                     if (e is CancellationException) currentCoroutineContext().ensureActive()

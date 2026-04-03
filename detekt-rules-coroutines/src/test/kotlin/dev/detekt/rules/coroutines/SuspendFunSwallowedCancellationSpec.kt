@@ -1761,7 +1761,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinEnvironmentCont
             import kotlinx.coroutines.ensureActive
             import kotlinx.coroutines.CancellationException
             import java.lang.Exception 
-            import java.lang.IOException 
+            import java.io.IOException 
 
             suspend fun foo() {
                 try {
