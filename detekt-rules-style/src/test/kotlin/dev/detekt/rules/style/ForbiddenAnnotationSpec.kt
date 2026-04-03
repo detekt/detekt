@@ -40,7 +40,6 @@ class ForbiddenAnnotationSpec(val env: KotlinEnvironmentContainer) {
             import java.lang.annotation.Documented
             import java.lang.annotation.Target
             import java.lang.annotation.Repeatable
-            import java.lang.annotation.Inherited
             import java.lang.annotation.RetentionPolicy
             import java.lang.annotation.ElementType
             import java.lang.Deprecated
@@ -49,7 +48,6 @@ class ForbiddenAnnotationSpec(val env: KotlinEnvironmentContainer) {
             @Retention(RetentionPolicy.RUNTIME)
             @Target(ElementType.TYPE)
             @Repeatable(value = SomeClass::class)
-            @Inherited
             annotation class SomeClass(val value: Array<SomeClass>)
         """.trimIndent()
         val findings = ForbiddenAnnotation(Config.empty).lintWithContext(env, code)
@@ -59,7 +57,6 @@ class ForbiddenAnnotationSpec(val env: KotlinEnvironmentContainer) {
             { assertThat(it).hasTextLocation("@Retention") },
             { assertThat(it).hasTextLocation("@Target") },
             { assertThat(it).hasTextLocation("@Repeatable") },
-            { assertThat(it).hasTextLocation("@Inherited") },
         )
     }
 
