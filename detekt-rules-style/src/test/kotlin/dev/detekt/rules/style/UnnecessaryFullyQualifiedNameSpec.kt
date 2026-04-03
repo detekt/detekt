@@ -914,6 +914,96 @@ class UnnecessaryFullyQualifiedNameSpec(val env: KotlinEnvironmentContainer) {
     }
 
     @Nested
+    inner class `name collisions` {
+        @Test
+        fun `does not report when shadowed by nested type`() {
+            val code = """
+                sealed interface Foo<T> {
+                    data object Any : Foo<kotlin.Any>
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report when shadowed by enclosing class member`() {
+            val code = """
+                class Container {
+                    class String
+                    fun doSomething(): kotlin.String = "done"
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report when shadowed by enclosing type parameter`() {
+            val code = """
+                sealed interface Foo<Any> {
+                    data object Bar : Foo<kotlin.Any>
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report class literal when shadowed`() {
+            val code = """
+                class Container {
+                    class String
+                    fun check() {
+                        println(kotlin.String::class)
+                    }
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report static call when shadowed`() {
+            val code = """
+                class Container {
+                    class System
+                    fun check() {
+                        java.lang.System.currentTimeMillis()
+                    }
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report function call when shadowed`() {
+            val code = """
+                class Container {
+                    fun println(msg: Any) {}
+                    fun check() {
+                        kotlin.io.println("Hello")
+                    }
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `reports when there is no name collision`() {
+            val code = """
+                sealed interface Foo<T> {
+                    data object Bar : Foo<kotlin.Any>
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        }
+    }
+
+    @Nested
     inner class `nested type qualifiers` {
         @Test
         fun `does not duplicate reports for nested qualified types`() {
