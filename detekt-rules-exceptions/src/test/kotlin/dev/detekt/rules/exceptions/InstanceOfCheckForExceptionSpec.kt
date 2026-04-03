@@ -11,20 +11,6 @@ import org.junit.jupiter.api.Test
 class InstanceOfCheckForExceptionSpec(private val env: KotlinEnvironmentContainer) {
     val subject = InstanceOfCheckForException(Config.empty)
 
-    private val cancellationExceptionDefinitions = arrayOf(
-        """
-            package java.concurrent
-            import java.lang.IllegalStateException
-            
-            class CancellationException: IllegalStateException()
-        """.trimIndent(),
-        """
-            package kotlin.coroutines
-            
-            public actual typealias CancellationException = java.util.concurrent.CancellationException
-        """.trimIndent()
-    )
-
     @Test
     fun `has is and as checks`() {
         val code = """
@@ -107,6 +93,6 @@ class InstanceOfCheckForExceptionSpec(private val env: KotlinEnvironmentContaine
             }
         """.trimIndent()
 
-        assertThat(subject.lintWithContext(env, code, *cancellationExceptionDefinitions)).isEmpty()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
 }

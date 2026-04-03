@@ -15,20 +15,6 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinEnvironmentCont
 
     private val subject = SuspendFunSwallowedCancellation(Config.empty)
 
-    private val cancellationExceptionDefinitions = arrayOf(
-        """
-            package java.concurrent
-            import java.lang.IllegalStateException
-            
-            class CancellationException: IllegalStateException()
-        """.trimIndent(),
-        """
-            package kotlin.coroutines
-            
-            public actual typealias CancellationException = java.util.concurrent.CancellationException
-        """.trimIndent()
-    )
-
     @Test
     fun `does report if swallowing generic exception in suspend fun`() {
         val code = """
@@ -1728,7 +1714,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinEnvironmentCont
                 }
             }
         """.trimIndent()
-        val findings = subject.lintWithContext(env, code, *cancellationExceptionDefinitions)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
@@ -1749,7 +1735,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinEnvironmentCont
                 }
             }
         """.trimIndent()
-        val findings = subject.lintWithContext(env, code, *cancellationExceptionDefinitions)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
 
@@ -1771,7 +1757,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinEnvironmentCont
                 }
             }
         """.trimIndent()
-        val findings = subject.lintWithContext(env, code, *cancellationExceptionDefinitions)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).hasSize(1)
     }
 
@@ -1795,7 +1781,7 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinEnvironmentCont
                 }
             }
         """.trimIndent()
-        val findings = subject.lintWithContext(env, code, *cancellationExceptionDefinitions)
+        val findings = subject.lintWithContext(env, code)
         assertThat(findings).hasSize(1)
     }
 
