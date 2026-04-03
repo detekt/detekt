@@ -837,9 +837,11 @@ class MissingUseCallSpec(private val env: KotlinEnvironmentContainer) {
     fun `does report when _use_ is not used on ByteArrayOutputStream by default`() {
         val code = """
             import java.io.ByteArrayOutputStream
-
-            val stream = ByteArrayOutputStream()
-            stream.size()
+        
+            fun main() {
+                val stream = ByteArrayOutputStream()
+                stream.size()
+            }
         """.trimIndent()
         val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
@@ -849,14 +851,17 @@ class MissingUseCallSpec(private val env: KotlinEnvironmentContainer) {
     fun `does report when _use_ is not used on an excluded class`() {
         val subjectWithConfig = MissingUseCall(
             TestConfig(
-                "ignoreClass" to listOf("java.io.BufferedWriter")
+                "ignoreClass" to listOf("java.io.FileOutputStream")
             )
         )
         val code = """
-            import java.io.BufferedWriter
+            import java.io.FileOutputStream
+            import java.io.File
 
-            val writer = BufferedWriter()
-            writer.append("")
+            fun main() {
+                val writer = FileOutputStream(File(""))
+                writer.write(0)
+            }
         """.trimIndent()
         val findings = subjectWithConfig.lintWithContext(env, code)
         assertThat(findings).isEmpty()
