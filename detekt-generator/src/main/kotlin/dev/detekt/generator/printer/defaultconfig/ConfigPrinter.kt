@@ -12,8 +12,6 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
             emptyLine()
             yaml { defaultProcessorsConfiguration() }
             emptyLine()
-            yaml { defaultConsoleReportsConfiguration() }
-            emptyLine()
 
             item.sortedBy { it.ruleSet.name }
                 .forEach { printRuleSetPage(it) }
@@ -51,18 +49,5 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
               # - 'ProjectCLOCProcessor'
               # - 'ProjectLOCProcessor'
               # - 'ProjectSLOCProcessor'
-        """.trimIndent()
-
-    private fun defaultConsoleReportsConfiguration(): String =
-        """
-            console-reports:
-              active: true
-              exclude:
-                 - 'ProjectStatisticsReport'
-                 - 'ComplexityReport'
-                 - 'NotificationReport'
-                 - 'IssuesReport'
-                 - 'FileBasedIssuesReport'
-              #  - 'LiteIssuesReport'
         """.trimIndent()
 }

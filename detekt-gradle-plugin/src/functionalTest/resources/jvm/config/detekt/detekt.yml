@@ -13,16 +13,6 @@ processors:
   # - 'ProjectLOCProcessor'
   # - 'ProjectSLOCProcessor'
 
-console-reports:
-  active: true
-  exclude:
-    - 'ProjectStatisticsReport'
-    - 'ComplexityReport'
-    - 'NotificationReport'
-    - 'IssuesReport'
-    - 'FileBasedIssuesReport'
-  #  - 'LiteIssuesReport'
-
 potential-bugs:
   ExitOutsideMain:
     active: true

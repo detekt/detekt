@@ -48,6 +48,7 @@ class DetektBasePlugin : Plugin<Project> {
                 project.extensions.getByType(ReportingExtension::class.java).baseDirectory.dir("detekt")
             )
             basePath.convention(project.rootProjectDirectoryCompat())
+            consoleReports.convention(listOf("LiteIssuesReport"))
         }
 
         val defaultConfigFile =

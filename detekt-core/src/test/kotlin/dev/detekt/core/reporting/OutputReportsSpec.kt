@@ -9,7 +9,6 @@ import dev.detekt.core.tooling.withSettings
 import dev.detekt.report.html.HtmlOutputReport
 import dev.detekt.report.markdown.MarkdownOutputReport
 import dev.detekt.report.xml.CheckstyleOutputReport
-import dev.detekt.test.utils.resourceAsPath
 import dev.detekt.tooling.dsl.ReportsSpecBuilder
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Condition
@@ -89,11 +88,7 @@ class OutputReportsSpec {
 
         @Test
         fun `yields empty extension list`() {
-            val spec = createNullLoggingSpec {
-                config {
-                    configPaths = listOf(resourceAsPath("/reporting/disabled-reports.yml"))
-                }
-            }
+            val spec = createNullLoggingSpec {}
 
             val extensions = spec.withSettings { loadConsoleReport(this) }
 

@@ -2,11 +2,6 @@ config:
   validation: true
   excludes: 'test>.*'
 
-console-reports:
-  active: true
-  exclude:
-    - 'FileBasedFindingsReport'
-
 potential-bugs:
   UnusedUnaryOperator:
     aliases: ['an-alias']

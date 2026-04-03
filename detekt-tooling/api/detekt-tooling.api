@@ -163,6 +163,7 @@ public abstract interface class dev/detekt/tooling/api/spec/ProjectSpec {
 }
 
 public abstract interface class dev/detekt/tooling/api/spec/ReportsSpec {
+	public abstract fun getConsoleReports ()Ljava/util/Collection;
 	public abstract fun getReports ()Ljava/util/Collection;
 }
 
@@ -337,8 +338,11 @@ public final class dev/detekt/tooling/dsl/ReportsSpecBuilder : dev/detekt/toolin
 	public fun <init> ()V
 	public fun build ()Ldev/detekt/tooling/api/spec/ReportsSpec;
 	public synthetic fun build ()Ljava/lang/Object;
+	public final fun consoleReport (Ljava/lang/String;)V
+	public final fun getConsoleReports ()Ljava/util/Collection;
 	public final fun getReports ()Ljava/util/Collection;
 	public final fun report (Lkotlin/jvm/functions/Function0;)V
+	public final fun setConsoleReports (Ljava/util/Collection;)V
 	public final fun setReports (Ljava/util/Collection;)V
 }
 

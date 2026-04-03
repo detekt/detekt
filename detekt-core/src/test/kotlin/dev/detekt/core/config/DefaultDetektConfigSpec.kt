@@ -9,12 +9,7 @@ import org.junit.jupiter.params.provider.Arguments.arguments
 import org.junit.jupiter.params.provider.MethodSource
 
 class DefaultDetektConfigSpec {
-
-    private val generalConfigKeys = listOf(
-        "config",
-        "processors",
-        "console-reports",
-    )
+    private val generalConfigKeys = listOf("config", "processors")
 
     private val config: YamlConfig = YamlConfig.load(
         DefaultDetektConfigSpec::class.java.getSafeResourceAsStream("/default-detekt-config.yml")!!.reader()

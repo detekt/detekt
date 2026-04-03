@@ -39,6 +39,8 @@ interface DetektExtension {
 
     val autoCorrect: Property<Boolean>
 
+    val consoleReports: ListProperty<String>
+
     /**
      * List of Android build variants for which no detekt task should be created.
      *
