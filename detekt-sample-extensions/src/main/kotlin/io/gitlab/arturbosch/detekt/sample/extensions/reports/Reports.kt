@@ -7,10 +7,9 @@ fun qualifiedNamesReport(detektion: Detektion): String? {
     val fqNames = detektion.userData[fqNamesKey.toString()] as Set<*>?
     if (fqNames.isNullOrEmpty()) return null
 
-    return with(StringBuilder()) {
+    return buildString {
         for (name in fqNames) {
             append("$name\n")
         }
-        toString()
     }
 }

@@ -52,8 +52,6 @@ class ForbiddenAnnotation(config: Config) :
             "java.lang.annotation.Target" to "it is a java annotation. Use `kotlin.annotation.Target` instead.",
             "java.lang.annotation.Retention" to "it is a java annotation. Use `kotlin.annotation.Retention` instead.",
             "java.lang.annotation.Repeatable" to "it is a java annotation. Use `kotlin.annotation.Repeatable` instead.",
-            "java.lang.annotation.Inherited" to "Kotlin does not support @Inherited annotation, " +
-                "see https://youtrack.jetbrains.com/issue/KT-22265",
         )
     ) { list ->
         list.associateBy { it.value }

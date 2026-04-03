@@ -1,7 +1,6 @@
 processors:
   active: true
   exclude:
-    - 'DetektProgressListener'
   # - 'KtFileCountProcessor'
   # - 'PackageCountProcessor'
   # - 'ClassCountProcessor'
@@ -13,7 +12,6 @@ processors:
   # - 'ProjectCLOCProcessor'
   # - 'ProjectLOCProcessor'
   # - 'ProjectSLOCProcessor'
-  # - 'LicenseHeaderLoaderExtension'
 
 console-reports:
   active: true
