@@ -2,7 +2,7 @@
 id: suppressing-rules
 title: "Suppressing Issues"
 keywords: [suppressing, issues]
-sidebar_position: 6
+sidebar_position: 40
 ---
 
 _detekt_ supports the Java (`@SuppressWarnings`) and Kotlin (`@Suppress`) style suppression. 
