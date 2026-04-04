@@ -15,8 +15,11 @@ import org.jetbrains.kotlin.analysis.api.standalone.buildStandaloneAnalysisAPISe
 import org.jetbrains.kotlin.analysis.project.structure.builder.buildKtLibraryModule
 import org.jetbrains.kotlin.analysis.project.structure.builder.buildKtSdkModule
 import org.jetbrains.kotlin.analysis.project.structure.builder.buildKtSourceModule
+import org.jetbrains.kotlin.cli.common.ExitCode
+import org.jetbrains.kotlin.cli.common.arguments.K2JVMCompilerArguments
 import org.jetbrains.kotlin.cli.common.config.kotlinSourceRoots
 import org.jetbrains.kotlin.cli.jvm.config.jvmClasspathRoots
+import org.jetbrains.kotlin.cli.jvm.plugins.PluginCliParser
 import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.config.JvmTarget
@@ -30,6 +33,7 @@ import org.jetbrains.kotlin.psi.KtFile
 import java.io.File
 import java.io.OutputStream
 import java.io.PrintStream
+import kotlin.collections.orEmpty
 import kotlin.io.path.Path
 
 interface EnvironmentAware {
@@ -46,15 +50,18 @@ internal class EnvironmentFacade(projectSpec: ProjectSpec, compilerSpec: Compile
     // This lateinit var can be changed to val if https://github.com/JetBrains/kotlin/pull/5703 is merged
     private lateinit var sourceModule: KaSourceModule
 
+    private val jvmCompilerArguments = K2JVMCompilerArguments()
+
     private val configuration: CompilerConfiguration = createCompilerConfiguration(
-        projectSpec.inputPaths.toList(),
-        compilerSpec.classpathEntries(),
-        compilerSpec.apiVersion,
-        compilerSpec.languageVersion,
-        compilerSpec.jvmTarget,
-        compilerSpec.jdkHome,
-        compilerSpec.freeCompilerArgs,
-        printStream,
+        pathsToAnalyze = projectSpec.inputPaths.toList(),
+        classpath = compilerSpec.classpathEntries(),
+        apiVersion = compilerSpec.apiVersion,
+        languageVersion = compilerSpec.languageVersion,
+        jvmTarget = compilerSpec.jvmTarget,
+        jdkHome = compilerSpec.jdkHome,
+        freeCompilerArgs = compilerSpec.freeCompilerArgs,
+        jvmCompilerArguments = jvmCompilerArguments,
+        printStream = printStream,
     )
 
     private val disposable: Disposable = Disposer.newDisposable()
@@ -68,6 +75,13 @@ internal class EnvironmentFacade(projectSpec: ProjectSpec, compilerSpec: Compile
 
     init {
         buildStandaloneAnalysisAPISession(disposable) {
+            loadCompilerPlugins(
+                compilerConfiguration = configuration,
+                compilerPluginClasspath = compilerSpec.compilerPluginClasspath,
+                jvmCompilerArguments = jvmCompilerArguments,
+                parentDisposable = disposable,
+            )
+            registerCompilerPluginServices(configuration)
             // Required for autocorrect support
             registerProjectService(TreeAspect::class.java)
             registerProjectService(PomModel::class.java, DetektPomModel(project))
@@ -151,4 +165,23 @@ private fun Appendable.asPrintStream(): PrintStream {
             }
         )
     }
+}
+
+private fun loadCompilerPlugins(
+    compilerConfiguration: CompilerConfiguration,
+    compilerPluginClasspath: String?,
+    jvmCompilerArguments: K2JVMCompilerArguments,
+    parentDisposable: Disposable,
+): ExitCode {
+    val pluginClasspaths = compilerPluginClasspath?.split(File.pathSeparator).orEmpty()
+    if (pluginClasspaths.isEmpty()) return ExitCode.OK
+
+    return PluginCliParser.loadPluginsSafe(
+        pluginClasspaths = pluginClasspaths,
+        pluginOptions = jvmCompilerArguments.pluginOptions?.asList().orEmpty(),
+        pluginConfigurations = jvmCompilerArguments.pluginConfigurations?.asList().orEmpty(),
+        pluginOrderConstraints = jvmCompilerArguments.pluginOrderConstraints?.asList().orEmpty(),
+        configuration = compilerConfiguration,
+        parentDisposable = parentDisposable,
+    )
 }

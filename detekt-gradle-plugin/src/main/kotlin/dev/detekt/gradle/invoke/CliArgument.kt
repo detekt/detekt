@@ -23,6 +23,7 @@ private const val REPORT_PARAMETER = "--report"
 private const val GENERATE_CONFIG_PARAMETER = "--generate-config"
 private const val CREATE_BASELINE_PARAMETER = "--create-baseline"
 private const val CLASSPATH_PARAMETER = "--classpath"
+private const val COMPILER_PLUGIN_CLASSPATH_PARAMETER = "--compiler-plugin-classpath"
 private const val API_VERSION_PARAMETER = "--api-version"
 private const val LANGUAGE_VERSION_PARAMETER = "--language-version"
 private const val JVM_TARGET_PARAMETER = "--jvm-target"
@@ -65,6 +66,18 @@ internal data class ClasspathArgument(val fileCollection: FileCollection) : CliA
             )
         } else {
             listOf(ANALYSIS_MODE, "light")
+        }
+}
+
+internal data class CompilerPluginClasspathArgument(val fileCollection: FileCollection) : CliArgument {
+    override fun toArgument() =
+        if (!fileCollection.isEmpty) {
+            listOf(
+                COMPILER_PLUGIN_CLASSPATH_PARAMETER,
+                fileCollection.files.filter(File::exists).joinToString(File.pathSeparator) { it.absolutePath },
+            )
+        } else {
+            emptyList()
         }
 }
 
