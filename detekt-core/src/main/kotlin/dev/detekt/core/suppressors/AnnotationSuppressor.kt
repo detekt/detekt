@@ -1,6 +1,7 @@
 package dev.detekt.core.suppressors
 
 import dev.detekt.api.Rule
+import dev.detekt.api.valueOrDefault
 import dev.detekt.psi.AnnotationExcluder
 import dev.detekt.tooling.api.AnalysisMode
 import org.jetbrains.kotlin.psi.KtAnnotated

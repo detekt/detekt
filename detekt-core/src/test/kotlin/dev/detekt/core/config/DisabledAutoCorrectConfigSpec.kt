@@ -1,5 +1,7 @@
 package dev.detekt.core.config
 
+import dev.detekt.api.valueOrDefault
+import dev.detekt.api.valueOrNull
 import dev.detekt.core.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -37,13 +39,6 @@ class DisabledAutoCorrectConfigSpec {
         val subject = DisabledAutoCorrectConfig(configSingleRuleInStyle)
         val actual = subject.subConfigKeys()
         assertThat(actual).containsExactly("style")
-    }
-
-    @Test
-    fun `parent path is derived from wrapped config`() {
-        val subject = DisabledAutoCorrectConfig(configSingleRuleInStyle.subConfig(rulesetId))
-        val actual = subject.parentPath
-        assertThat(actual).isEqualTo(rulesetId)
     }
 
     @Test
