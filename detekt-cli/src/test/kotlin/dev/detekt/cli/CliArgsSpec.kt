@@ -17,10 +17,11 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.condition.DisabledOnOs
 import org.junit.jupiter.api.condition.EnabledOnOs
 import org.junit.jupiter.api.condition.OS
+import org.junit.jupiter.params.Parameter
+import org.junit.jupiter.params.ParameterizedClass
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.provider.ValueSource
-import java.nio.file.Path
 import kotlin.io.path.Path
 import kotlin.io.path.absolute
 
@@ -108,11 +109,33 @@ internal class CliArgsSpec {
                 assertThat(spec.projectSpec.inputPaths).doesNotContain(pathAnalyzer)
             }
 
+            @ParameterizedTest
+            @ValueSource(strings = ["**/test/**,*.kts", "**/test/**;*.kts"])
+            fun `multiples excludes in path`(filter: String) {
+                val spec = parseArguments(input + arrayOf("--excludes", filter)).toSpec()
+
+                assertThat(spec.projectSpec.inputPaths).doesNotContain(pathBuildGradle)
+                assertThat(spec.projectSpec.inputPaths).contains(pathCliArgs)
+                assertThat(spec.projectSpec.inputPaths).contains(pathMain)
+                assertThat(spec.projectSpec.inputPaths).doesNotContain(pathAnalyzer)
+            }
+
             @Test
             fun `includes in path`() {
                 val spec = parseArguments(input + arrayOf("--includes", "**/test/**")).toSpec()
 
                 assertThat(spec.projectSpec.inputPaths).doesNotContain(pathBuildGradle)
+                assertThat(spec.projectSpec.inputPaths).doesNotContain(pathCliArgs)
+                assertThat(spec.projectSpec.inputPaths).doesNotContain(pathMain)
+                assertThat(spec.projectSpec.inputPaths).contains(pathAnalyzer)
+            }
+
+            @ParameterizedTest
+            @ValueSource(strings = ["**/test/**,*.kts", "**/test/**;*.kts"])
+            fun `multiples includes in path`(filter: String) {
+                val spec = parseArguments(input + arrayOf("--includes", filter)).toSpec()
+
+                assertThat(spec.projectSpec.inputPaths).contains(pathBuildGradle)
                 assertThat(spec.projectSpec.inputPaths).doesNotContain(pathCliArgs)
                 assertThat(spec.projectSpec.inputPaths).doesNotContain(pathMain)
                 assertThat(spec.projectSpec.inputPaths).contains(pathAnalyzer)
@@ -191,10 +214,10 @@ internal class CliArgsSpec {
                 assertThat(spec.projectSpec.inputPaths).isEmpty()
             }
 
-            @Test
-            fun `doesn't take into account absolute path`() {
-                val spec =
-                    parseArguments(input + arrayOf("--excludes", "/home/**,/Users/**")).toSpec()
+            @ParameterizedTest
+            @ValueSource(strings = ["/home/**", "/Users/**"])
+            fun `doesn't take into account absolute path`(glob: String) {
+                val spec = parseArguments(input + arrayOf("--excludes", glob)).toSpec()
 
                 assertThat(spec.projectSpec.inputPaths).contains(pathBuildGradle)
                 assertThat(spec.projectSpec.inputPaths).contains(pathCliArgs)
@@ -210,40 +233,36 @@ internal class CliArgsSpec {
                 assertThat(spec.projectSpec.inputPaths).isEmpty()
             }
 
-            @Test
-            fun `parse excludes correctly`() {
-                val paths: List<Collection<Path>> = listOf(
-                    "**/main/**,**/detekt-core/**,**/build.gradle.kts",
-                    "**/main/**;**/detekt-core/**;**/build.gradle.kts",
-                    "**/main/** ,**/detekt-core/**, **/build.gradle.kts",
-                    "**/main/** ;**/detekt-core/**; **/build.gradle.kts",
-                    "**/main/**,**/detekt-core/**;**/build.gradle.kts",
-                    "**/main/** ,**/detekt-core/**; **/build.gradle.kts",
-                    " ,,**/main/**,**/detekt-core/**,**/build.gradle.kts",
-                ).map {
-                    val spec = parseArguments(input + arrayOf("--excludes", it)).toSpec()
-                    spec.projectSpec.inputPaths
+            @Nested
+            @ParameterizedClass
+            @ValueSource(strings = ["--excludes", "--includes"])
+            inner class Validate {
+                @Parameter
+                lateinit var arg: String
+
+                @Test
+                fun spaceEnd() {
+                    assertThatExceptionOfType(HandledArgumentViolation::class.java)
+                        .isThrownBy { parseArguments(input + arrayOf(arg, "**/main/** ")) }
                 }
 
-                assertThat(paths.distinct()).hasSize(1)
-            }
-
-            @Test
-            fun `parse includes correctly`() {
-                val paths: List<Collection<Path>> = listOf(
-                    "**/main/**,**/detekt-core/**,**/build.gradle.kts",
-                    "**/main/**;**/detekt-core/**;**/build.gradle.kts",
-                    "**/main/** ,**/detekt-core/**, **/build.gradle.kts",
-                    "**/main/** ;**/detekt-core/**; **/build.gradle.kts",
-                    "**/main/**,**/detekt-core/**;**/build.gradle.kts",
-                    "**/main/** ,**/detekt-core/**; **/build.gradle.kts",
-                    " ,,**/main/**,**/detekt-core/**,**/build.gradle.kts",
-                ).map {
-                    val spec = parseArguments(input + arrayOf("--includes", it)).toSpec()
-                    spec.projectSpec.inputPaths
+                @Test
+                fun spaceStart() {
+                    assertThatExceptionOfType(HandledArgumentViolation::class.java)
+                        .isThrownBy { parseArguments(input + arrayOf(arg, " **/main/**")) }
                 }
 
-                assertThat(paths.distinct()).hasSize(1)
+                @Test
+                fun empty() {
+                    assertThatExceptionOfType(HandledArgumentViolation::class.java)
+                        .isThrownBy { parseArguments(input + arrayOf(arg, "")) }
+                }
+
+                @Test
+                fun blank() {
+                    assertThatExceptionOfType(HandledArgumentViolation::class.java)
+                        .isThrownBy { parseArguments(input + arrayOf(arg, " ")) }
+                }
             }
         }
     }
