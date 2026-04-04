@@ -6,7 +6,7 @@ import dev.detekt.api.testfixtures.createIssue
 import dev.detekt.api.testfixtures.createRuleInstance
 import dev.detekt.metrics.CognitiveComplexity
 import dev.detekt.metrics.processors.commentLinesKey
-import dev.detekt.metrics.processors.complexityKey
+import dev.detekt.metrics.processors.cyclomaticComplexityKey
 import dev.detekt.metrics.processors.linesKey
 import dev.detekt.metrics.processors.logicalLinesKey
 import dev.detekt.metrics.processors.sourceLinesKey
@@ -19,7 +19,7 @@ class ComplexityReportSpec {
     fun `successfully generates a complexity report`() {
         val detektion = createDetektion(
             mapOf(
-                complexityKey to 2,
+                cyclomaticComplexityKey to 2,
                 CognitiveComplexity.KEY to 2,
                 linesKey to 10,
                 sourceLinesKey to 6,

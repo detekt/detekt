@@ -13,7 +13,7 @@ import dev.detekt.api.testfixtures.createIssueLocation
 import dev.detekt.api.testfixtures.createRuleInstance
 import dev.detekt.metrics.CognitiveComplexity
 import dev.detekt.metrics.processors.commentLinesKey
-import dev.detekt.metrics.processors.complexityKey
+import dev.detekt.metrics.processors.cyclomaticComplexityKey
 import dev.detekt.metrics.processors.linesKey
 import dev.detekt.metrics.processors.logicalLinesKey
 import dev.detekt.metrics.processors.sourceLinesKey
@@ -116,7 +116,7 @@ class HtmlOutputReportSpec {
     fun `renders the complexity report correctly`() {
         val detektion = TestDetektion(
             userData = mapOf(
-                complexityKey.toString() to 10,
+                cyclomaticComplexityKey.toString() to 10,
                 CognitiveComplexity.KEY.toString() to 10,
                 sourceLinesKey.toString() to 20,
                 logicalLinesKey.toString() to 10,

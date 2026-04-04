@@ -45,7 +45,7 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
               # - 'ClassCountProcessor'
               # - 'FunctionCountProcessor'
               # - 'PropertyCountProcessor'
-              # - 'ProjectComplexityProcessor'
+              # - 'ProjectCyclomaticComplexityProcessor'
               # - 'ProjectCognitiveComplexityProcessor'
               # - 'ProjectLLOCProcessor'
               # - 'ProjectCLOCProcessor'

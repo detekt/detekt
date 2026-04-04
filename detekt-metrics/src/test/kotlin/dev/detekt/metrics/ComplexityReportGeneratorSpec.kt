@@ -5,7 +5,7 @@ import dev.detekt.api.testfixtures.TestDetektion
 import dev.detekt.api.testfixtures.createIssue
 import dev.detekt.api.testfixtures.removeData
 import dev.detekt.metrics.processors.commentLinesKey
-import dev.detekt.metrics.processors.complexityKey
+import dev.detekt.metrics.processors.cyclomaticComplexityKey
 import dev.detekt.metrics.processors.linesKey
 import dev.detekt.metrics.processors.logicalLinesKey
 import dev.detekt.metrics.processors.sourceLinesKey
@@ -24,7 +24,7 @@ internal class ComplexityReportGeneratorSpec {
             createIssue("test"),
             createIssue("test2", suppressReasons = listOf("suppress")),
             userData = mapOf(
-                complexityKey.toString() to 2,
+                cyclomaticComplexityKey.toString() to 2,
                 CognitiveComplexity.KEY.toString() to 2,
                 linesKey.toString() to 1000,
                 sourceLinesKey.toString() to 6,
@@ -61,7 +61,7 @@ internal class ComplexityReportGeneratorSpec {
 
         @Test
         fun `returns null for missing mcc`() {
-            detektion.removeData(complexityKey)
+            detektion.removeData(cyclomaticComplexityKey)
             assertThat(generateComplexityReport(detektion)).isNull()
         }
 
@@ -85,7 +85,7 @@ internal class ComplexityReportGeneratorSpec {
 
         @Test
         fun `returns null for missing cloc`() {
-            detektion.removeData(complexityKey)
+            detektion.removeData(cyclomaticComplexityKey)
             assertThat(generateComplexityReport(detektion)).isNull()
         }
     }
