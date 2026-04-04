@@ -58,7 +58,6 @@ public final class dev/detekt/tooling/api/DetektCli$Companion {
 }
 
 public abstract class dev/detekt/tooling/api/DetektError : java/lang/RuntimeException {
-	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
 }
 

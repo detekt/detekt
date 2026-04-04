@@ -220,7 +220,7 @@ class SuspendFunSwallowedCancellation(config: Config) :
 
                     parentCallExpression.resolveToCall()
                         ?.successfulFunctionCallOrNull()
-                        ?.argumentMapping
+                        ?.valueArgumentMapping
                         ?.get(elementArgument)
                         ?.symbol
                 }

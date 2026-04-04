@@ -7,6 +7,7 @@ import org.jetbrains.kotlin.cli.common.config.addKotlinSourceRoots
 import org.jetbrains.kotlin.cli.common.messages.MessageRenderer
 import org.jetbrains.kotlin.cli.common.messages.PrintingMessageCollector
 import org.jetbrains.kotlin.cli.common.setupLanguageVersionSettings
+import org.jetbrains.kotlin.cli.create
 import org.jetbrains.kotlin.cli.jvm.config.addJavaSourceRoots
 import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoots
 import org.jetbrains.kotlin.cli.jvm.config.configureJdkClasspathRoots
@@ -69,7 +70,7 @@ fun createCompilerConfiguration(
 
     validateArguments(jvmCompilerArguments.errors)?.let { throw IllegalStateException(it) }
 
-    return CompilerConfiguration().apply {
+    return CompilerConfiguration.create().apply {
         addJavaSourceRoots(javaFiles)
         addKotlinSourceRoots(kotlinFiles)
         addJvmClasspathRoots(classpathFiles)

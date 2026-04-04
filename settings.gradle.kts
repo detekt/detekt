@@ -5,6 +5,13 @@ pluginManagement {
     includeBuild("detekt-gradle-plugin")
 }
 
+// Workaround for https://github.com/autonomousapps/dependency-analysis-gradle-plugin/issues/1661
+buildscript {
+    dependencies {
+        classpath("org.jetbrains.kotlin:kotlin-metadata-jvm:2.3.20")
+    }
+}
+
 include("code-coverage-report")
 include("detekt-api")
 include("detekt-cli")
@@ -51,7 +58,7 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
     id("com.autonomousapps.build-health") version "3.6.1"
     // Kotlin plugin must be added to classpath to support build-health analysis
-    id("org.jetbrains.kotlin.jvm") version "2.3.20" apply false
+    id("org.jetbrains.kotlin.jvm") version "2.4.0-Beta1" apply false
 }
 
 val isCiBuild = providers.environmentVariable("CI").isPresent
