@@ -1697,6 +1697,94 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinEnvironmentCont
         }
     }
 
+    @Test
+    fun `does not report when using ensureActive approach to handle cancellation`() {
+        val code = """
+            import kotlinx.coroutines.currentCoroutineContext
+            import kotlinx.coroutines.delay
+            import kotlinx.coroutines.ensureActive
+            import kotlinx.coroutines.CancellationException
+            import java.lang.Exception 
+
+            suspend fun foo() {
+                try {
+                    delay(1000L)
+                } catch (e: Exception) {
+                    if (e is CancellationException) currentCoroutineContext().ensureActive()
+                }
+            }
+        """.trimIndent()
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `does not report when using ensureActive approach to handle java concurrent cancellation exception`() {
+        val code = """
+            import kotlinx.coroutines.currentCoroutineContext
+            import kotlinx.coroutines.delay
+            import kotlinx.coroutines.ensureActive
+            import java.util.concurrent.CancellationException
+            import java.lang.Exception 
+
+            suspend fun foo() {
+                try {
+                    delay(1000L)
+                } catch (e: Exception) {
+                    if (e is CancellationException) currentCoroutineContext().ensureActive()
+                }
+            }
+        """.trimIndent()
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `report when using checking for some other exception type`() {
+        val code = """
+            import kotlinx.coroutines.currentCoroutineContext
+            import kotlinx.coroutines.delay
+            import kotlinx.coroutines.ensureActive
+            import kotlinx.coroutines.CancellationException
+            import java.lang.Exception 
+            import java.io.IOException 
+
+            suspend fun foo() {
+                try {
+                    delay(1000L)
+                } catch (e: Exception) {
+                    if (e is IOException) currentCoroutineContext().ensureActive()
+                }
+            }
+        """.trimIndent()
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).hasSize(1)
+    }
+
+    @Test
+    fun `report when ensureActive is not the first thing inside catch`() {
+        val code = """
+            import kotlinx.coroutines.currentCoroutineContext
+            import kotlinx.coroutines.delay
+            import kotlinx.coroutines.ensureActive
+            import kotlinx.coroutines.CancellationException
+            import java.lang.Exception 
+
+            suspend fun performLongRunningWork() = delay(1_000_000_000L)
+
+            suspend fun foo() {
+                try {
+                    delay(1000L)
+                } catch (e: Exception) {
+                    performLongRunningWork()
+                    if (e is CancellationException) currentCoroutineContext().ensureActive()
+                }
+            }
+        """.trimIndent()
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).hasSize(1)
+    }
+
     private fun assertNoFindings(@Language("kotlin") code: String) {
         val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()

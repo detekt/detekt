@@ -7,26 +7,35 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.rules.coroutines.utils.CoroutineCallableIds
+import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
+import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.components.defaultType
+import org.jetbrains.kotlin.analysis.api.components.semanticallyEquals
+import org.jetbrains.kotlin.analysis.api.components.type
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaCompoundVariableAccessCall
 import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
-import org.jetbrains.kotlin.analysis.api.types.symbol
+import org.jetbrains.kotlin.analysis.api.symbols.findTypeAlias
 import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.name.CallableId
+import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCatchClause
+import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtForExpression
 import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtFunctionLiteral
+import org.jetbrains.kotlin.psi.KtIfExpression
+import org.jetbrains.kotlin.psi.KtIsExpression
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -120,6 +129,14 @@ import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
  * suspend fun foo() {
  *     bar(1_000L)
  * }
+ *
+ * // Alternative way of handling cancellation, to work around https://github.com/Kotlin/kotlinx.coroutines/issues/3658
+ * try {
+ *     bar(1_000L)
+ * } catch (e: IllegalStateException) {
+ *     if (e is CancellationException) currentCoroutineContext().ensureActive()
+ *     // handle error
+ * }
  * </compliant>
  *
  */
@@ -175,27 +192,29 @@ class SuspendFunSwallowedCancellation(config: Config) :
 
     override fun visitTryExpression(expression: KtTryExpression) {
         super.visitTryExpression(expression)
+        analyze(expression) {
+            val function = expression.getParentOfType<KtFunction>(strict = true)
 
-        val function = expression.getParentOfType<KtFunction>(strict = true)
+            if (function?.isSuspend != true || !expression.tryBlock.hasSuspendCalls()) {
+                return
+            }
 
-        if (function?.isSuspend != true || !expression.tryBlock.hasSuspendCalls()) {
-            return
-        }
+            for (catchClause in expression.catchClauses) {
+                val parameter = catchClause?.catchParameter ?: continue
+                if (parameter.isCancellationExceptionOrSuperClass()) {
+                    // This could be a CancellationException - we should make sure that it gets explicitly
+                    // re-thrown upwards immediately
+                    val wasRethrownAtStart = catchClause.exceptionWasRethrown(parameter) &&
+                        !catchClause.doesAnythingElseBeforeRethrowing()
+                    if (
+                        !wasRethrownAtStart &&
+                        !catchClause.exceptionWasCheckedAndEnsureActiveCalled(parameter)
+                    ) {
+                        report(catchClause)
+                    }
 
-        for (catchClause in expression.catchClauses) {
-            val parameter = catchClause?.catchParameter ?: continue
-            if (parameter.isCancellationExceptionOrSuperClass()) {
-                // This could be a CancellationException - we should make sure that it gets explicitly
-                // re-thrown upwards immediately
-                if (!catchClause.exceptionWasRethrown(parameter)) {
-                    report(catchClause)
-                } else if (catchClause.doesAnythingElseBeforeRethrowing()) {
-                    // it does re-throw, but a potentially long-lasting bit of logic is called first. This is still a
-                    // problem!
-                    report(catchClause)
+                    return // Only need to analyse the first CancellationException superclass instance
                 }
-
-                return // Only need to analyse the first CancellationException superclass instance
             }
         }
     }
@@ -289,13 +308,12 @@ class SuspendFunSwallowedCancellation(config: Config) :
 
     private fun KtParameter.isCancellationExceptionOrSuperClass(): Boolean =
         analyze(this) {
-            val parameterFqName = typeReference
-                ?.type
-                ?.symbol
-                ?.classId
-                ?.asFqNameString()
+            val exceptionType = typeReference?.type
 
-            parameterFqName in CANCELLATION_EXCEPTION_FQ_NAMES
+            val cancellationExceptionType = findTypeAlias(CANCELLATION_EXCEPTION_CLASS_ID)?.defaultType
+                ?: error("Cancellation exception type not found. Are coroutines on the classpath?")
+
+            exceptionType != null && cancellationExceptionType.isSubtypeOf(exceptionType)
         }
 
     /**
@@ -318,6 +336,39 @@ class SuspendFunSwallowedCancellation(config: Config) :
 
         // Returns false if thrownElements is empty, i.e. nothing was thrown
         return thrownElements.firstOrNull()?.textRange == cancellationException.textRange
+    }
+
+    /**
+     * Checks wheter this catch clause starts with a
+     * `if (e is CancellationException) currentCoroutineContext().ensureActive()`
+     */
+    @OptIn(KaContextParameterApi::class)
+    @Suppress("ReturnCount") // this seems way cleaner than nesting 3 levels deep
+    context(session: KaSession)
+    private fun KtCatchClause.exceptionWasCheckedAndEnsureActiveCalled(cancellationException: KtParameter): Boolean {
+        val ifAtStart = catchBody?.children?.firstOrNull() as? KtIfExpression ?: return false
+        val typeCheckCondition = ifAtStart.condition as? KtIsExpression ?: return false
+
+        val typeCheckConditionExceptionReference =
+            typeCheckCondition.leftHandSide as? KtNameReferenceExpression ?: return false
+        if (typeCheckConditionExceptionReference.getReferencedName() != cancellationException.name) {
+            // If check did not reference the passed exception
+            return false
+        }
+
+        val cancellationExceptionType = findTypeAlias(CANCELLATION_EXCEPTION_CLASS_ID)?.defaultType
+            ?: error("Cancellation exception type not found. Are coroutines on the classpath?")
+
+        if (typeCheckCondition.typeReference?.type?.semanticallyEquals(cancellationExceptionType) != true) {
+            return false
+        }
+
+        val ensureActiveExpression = ifAtStart.then as? KtDotQualifiedExpression ?: return false
+
+        return (
+            ensureActiveExpression.receiverExpression.text == "currentCoroutineContext()" &&
+                ensureActiveExpression.selectorExpression?.text == "ensureActive()"
+            )
     }
 
     private fun KtCatchClause.doesAnythingElseBeforeRethrowing(): Boolean {
@@ -362,21 +413,12 @@ class SuspendFunSwallowedCancellation(config: Config) :
     }
 
     companion object {
+        private val CANCELLATION_EXCEPTION_CLASS_ID =
+            ClassId.topLevel(FqName("kotlinx.coroutines.CancellationException"))
+
         private val RUN_CATCHING_CALLABLE_ID = CallableId(
             packageName = FqName("kotlin"),
             callableName = Name.identifier("runCatching")
-        )
-
-        // Pulled from https://github.com/search?q=repo%3AKotlin%2Fkotlinx.coroutines+%22actual+typealias+CancellationException%22&type=code,
-        // in descending order of priority.
-        private val CANCELLATION_EXCEPTION_FQ_NAMES = listOf(
-            "kotlinx.coroutines.CancellationException", // common typealias
-            "kotlin.coroutines.cancellation.CancellationException", // native
-            "java.util.concurrent.CancellationException", // JVM
-            "java.lang.IllegalStateException", // JVM
-            "java.lang.RuntimeException", // JVM
-            "java.lang.Exception", // JVM
-            "kotlin.Throwable",
         )
     }
 }
