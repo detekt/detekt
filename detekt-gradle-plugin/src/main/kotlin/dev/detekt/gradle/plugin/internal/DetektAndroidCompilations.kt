@@ -8,6 +8,10 @@ import org.gradle.api.Project
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidExtension
 
 internal object DetektAndroidCompilations {
+
+    private const val VERIFICATION_GROUP = "verification"
+    private const val TYPE_RESOLUTION_SUFFIX = "all variants with type resolution"
+
     fun registerTasks(project: Project, extension: DetektExtension) {
         project.extensions.getByType(
             KotlinAndroidExtension::class.java
@@ -22,33 +26,30 @@ internal object DetektAndroidCompilations {
             ignoredBuildTypes.get().contains(variant.buildType) ||
             ignoredFlavors.get().contains(variant.flavorName)
 
+    @Suppress("LongMethod")
     fun linkTasks(project: Project, extension: DetektExtension) {
         val mainTaskProvider =
             project.tasks.register("${DetektPlugin.DETEKT_TASK_NAME}Main") {
-                it.group = "verification"
-                it.description = "Run detekt analysis for production classes across " +
-                    "all variants with type resolution"
+                it.group = VERIFICATION_GROUP
+                it.description = "Run detekt analysis for production classes across $TYPE_RESOLUTION_SUFFIX"
             }
 
         val testTaskProvider =
             project.tasks.register("${DetektPlugin.DETEKT_TASK_NAME}Test") {
-                it.group = "verification"
-                it.description = "Run detekt analysis for test classes across " +
-                    "all variants with type resolution"
+                it.group = VERIFICATION_GROUP
+                it.description = "Run detekt analysis for test classes across $TYPE_RESOLUTION_SUFFIX"
             }
 
         val mainBaselineTaskProvider =
             project.tasks.register("${DetektPlugin.BASELINE_TASK_NAME}Main") {
-                it.group = "verification"
-                it.description = "Creates detekt baseline files for production classes across " +
-                    "all variants with type resolution"
+                it.group = VERIFICATION_GROUP
+                it.description = "Creates detekt baseline files for production classes across $TYPE_RESOLUTION_SUFFIX"
             }
 
         val testBaselineTaskProvider =
             project.tasks.register("${DetektPlugin.BASELINE_TASK_NAME}Test") {
-                it.group = "verification"
-                it.description = "Creates detekt baseline files for test classes across " +
-                    "all variants with type resolution"
+                it.group = VERIFICATION_GROUP
+                it.description = "Creates detekt baseline files for test classes across $TYPE_RESOLUTION_SUFFIX"
             }
 
         project.extensions.findByType(AndroidComponentsExtension::class.java)?.let { componentsExtension ->

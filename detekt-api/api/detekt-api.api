@@ -238,6 +238,13 @@ public class dev/detekt/api/Rule : dev/detekt/api/DetektVisitor {
 	public final fun visitFile (Lorg/jetbrains/kotlin/psi/KtFile;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;)Ljava/util/List;
 }
 
+public abstract interface class dev/detekt/api/RuleExecutionListener : dev/detekt/api/Extension {
+	public fun afterRuleExecution-Wn2Vu4Y (Lorg/jetbrains/kotlin/psi/KtFile;Ldev/detekt/api/RuleInstance;IJ)V
+	public fun beforeRuleExecution (Lorg/jetbrains/kotlin/psi/KtFile;Ldev/detekt/api/RuleInstance;)V
+	public fun onFinish (Ldev/detekt/api/Detektion;)Ldev/detekt/api/Detektion;
+	public fun onStart (Ljava/util/List;Ljava/util/List;)V
+}
+
 public final class dev/detekt/api/RuleInstance {
 	public fun <init> (Ljava/lang/String;Ldev/detekt/api/RuleSetId;Ljava/net/URI;Ljava/lang/String;Ldev/detekt/api/Severity;Z)V
 	public fun equals (Ljava/lang/Object;)Z
