@@ -72,4 +72,38 @@ internal object DetektAndroidCompilations {
             }
         }
     }
+
+    fun handleKotlinSourceSets(project: Project, extension: DetektExtension, builtInKotlin: Boolean) {
+        val disallowKotlinSourceSets = project.providers
+            .gradleProperty("android.disallowKotlinSourceSets")
+            .getOrElse("true")
+            .toBooleanStrict()
+
+        // Fallback to using Kotlin sourceSets if either of these are false.
+        if (!builtInKotlin || !disallowKotlinSourceSets) {
+            project.registerSourceSetTasks(extension)
+            return
+        }
+
+        // Resolve Kotlin source sets per variant.
+        project.extensions.findByType(AndroidComponentsExtension::class.java)
+            ?.onVariants { variant ->
+                val kotlin = variant.sources.kotlin?.all ?: return@onVariants
+                project.registerSourceSetTask(
+                    sourceSetName = variant.name,
+                    sourceSet = project.objects.fileCollection().from(kotlin),
+                    extension = extension,
+                )
+
+                @Suppress("UnstableApiUsage")
+                variant.nestedComponents.forEach { nested ->
+                    val nestedKotlin = nested.sources.kotlin?.all ?: return@forEach
+                    project.registerSourceSetTask(
+                        sourceSetName = nested.name,
+                        sourceSet = project.objects.fileCollection().from(nestedKotlin),
+                        extension = extension,
+                    )
+                }
+            }
+    }
 }

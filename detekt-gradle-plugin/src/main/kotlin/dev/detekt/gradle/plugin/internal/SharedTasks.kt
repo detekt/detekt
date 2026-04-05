@@ -7,10 +7,12 @@ import dev.detekt.gradle.internal.addVariantName
 import dev.detekt.gradle.internal.existingVariantOrBaseFile
 import dev.detekt.gradle.plugin.DetektPlugin
 import org.gradle.api.Project
+import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.provider.Provider
 import org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode
 import org.jetbrains.kotlin.gradle.dsl.KotlinBaseExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
+import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetContainer
 import org.jetbrains.kotlin.gradle.plugin.KotlinTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
@@ -132,3 +134,57 @@ internal fun Project.mapExplicitArgMode(): Provider<String> =
             else -> null
         }
     }
+
+internal fun Project.registerSourceSetTasks(extension: DetektExtension) {
+    extensions.findByType(KotlinSourceSetContainer::class.java)
+        ?.sourceSets
+        ?.configureEach { sourceSet ->
+            registerSourceSetTask(
+                sourceSetName = sourceSet.name,
+                sourceSet = objects.fileCollection().from(sourceSet.kotlin),
+                extension = extension,
+            )
+        }
+}
+
+internal fun Project.registerSourceSetTask(
+    sourceSetName: String,
+    sourceSet: ConfigurableFileCollection,
+    extension: DetektExtension,
+) {
+    val taskName = "${DetektPlugin.DETEKT_TASK_NAME}${sourceSetName.capitalize()}SourceSet"
+    tasks.register(taskName, Detekt::class.java) { detektTask ->
+        detektTask.setSource(sourceSet)
+        detektTask.baseline.convention(
+            project.layout.file(
+                extension.baseline.flatMap {
+                    providers.provider {
+                        it.asFile.existingVariantOrBaseFile("${sourceSetName}SourceSet")
+                    }
+                }
+            )
+        )
+        if (sourceSetName == "main") {
+            detektTask.explicitApi.convention(mapExplicitArgMode())
+        }
+        detektTask.description = "Run detekt analysis for $sourceSetName source set"
+    }
+
+    val baseLineTaskName = "${DetektPlugin.BASELINE_TASK_NAME}${sourceSetName.capitalize()}SourceSet"
+    tasks.register(baseLineTaskName, DetektCreateBaselineTask::class.java) { createBaselineTask ->
+        createBaselineTask.setSource(sourceSet)
+
+        createBaselineTask.baseline.convention(
+            project.layout.file(
+                extension.baseline.flatMap {
+                    providers.provider { it.asFile.addVariantName("${sourceSetName}SourceSet") }
+                }
+            )
+        )
+
+        if (sourceSetName == "main") {
+            createBaselineTask.explicitApi.convention(mapExplicitArgMode())
+        }
+        createBaselineTask.description = "Creates detekt baseline for $sourceSetName source set"
+    }
+}
