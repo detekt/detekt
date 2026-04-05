@@ -1,5 +1,6 @@
 plugins {
     id("module")
+    id("generator")
 }
 
 dependencies {
@@ -15,9 +16,3 @@ dependencies {
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.assertj.core)
 }
-
-consumeGeneratedConfig(
-    fromProject = projects.detektGenerator,
-    fromConfiguration = "generatedLibrariesConfig",
-    forTask = tasks.processResources
-)
