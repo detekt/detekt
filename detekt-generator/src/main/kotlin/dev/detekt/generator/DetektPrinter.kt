@@ -38,17 +38,17 @@ class DetektPrinter(private val documentationPath: Path?, private val configPath
                 DeprecatedPrinter.print(pages)
             }
         }
-        yamlWriter.write(Path("../detekt-rules-ktlint-wrapper/src/main/resources/config"), "config") {
+        yamlWriter.write(Path("../detekt-rules/ktlint-wrapper/src/main/resources/config"), "config") {
             yaml {
                 printRuleSetPage(pages.first { it.ruleSet.name == "ktlint" })
             }
         }
-        yamlWriter.write(Path("../detekt-rules-libraries/src/main/resources/config"), "config") {
+        yamlWriter.write(Path("../detekt-rules/libraries/src/main/resources/config"), "config") {
             yaml {
                 printRuleSetPage(pages.first { it.ruleSet.name == "libraries" })
             }
         }
-        yamlWriter.write(Path("../detekt-rules-ruleauthors/src/main/resources/config"), "config") {
+        yamlWriter.write(Path("../detekt-rules/ruleauthors/src/main/resources/config"), "config") {
             yaml {
                 printRuleSetPage(pages.first { it.ruleSet.name == "ruleauthors" })
             }
