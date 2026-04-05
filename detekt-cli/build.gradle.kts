@@ -35,11 +35,11 @@ dependencies {
 
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.assertj.core)
-    testRuntimeOnly(projects.detektRulesKtlintWrapper)
+    testRuntimeOnly(projects.detektRules.ktlintWrapper)
 
-    pluginsJar(projects.detektRulesKtlintWrapper)
-    pluginsJar(projects.detektRulesLibraries)
-    pluginsJar(projects.detektRulesRuleauthors)
+    pluginsJar(projects.detektRules.ktlintWrapper)
+    pluginsJar(projects.detektRules.libraries)
+    pluginsJar(projects.detektRules.ruleauthors)
 }
 
 shadow {
