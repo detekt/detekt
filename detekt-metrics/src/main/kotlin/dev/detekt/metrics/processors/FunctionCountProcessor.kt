@@ -13,8 +13,7 @@ class FunctionCountProcessor : FileProcessListener {
 
     override fun onFinish(files: List<KtFile>, result: Detektion): Detektion {
         val count = files.sumOf { it.collectDescendantsOfType<KtNamedFunction>().size }
-        result.add(ProjectMetric(numberOfFunctionsKey.toString(), count))
-        return result
+        return result.plus(ProjectMetric(numberOfFunctionsKey.toString(), count))
     }
 }
 

@@ -13,8 +13,7 @@ class PropertyCountProcessor : FileProcessListener {
 
     override fun onFinish(files: List<KtFile>, result: Detektion): Detektion {
         val count = files.sumOf { it.collectDescendantsOfType<KtProperty>().size }
-        result.add(ProjectMetric(numberOfFieldsKey.toString(), count))
-        return result
+        return result.plus(ProjectMetric(numberOfFieldsKey.toString(), count))
     }
 }
 
