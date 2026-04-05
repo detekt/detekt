@@ -1,6 +1,5 @@
 package dev.detekt.metrics
 
-import com.intellij.openapi.util.Key
 import com.intellij.psi.tree.IElementType
 import dev.detekt.api.DetektVisitor
 import org.jetbrains.kotlin.KtNodeTypes
@@ -200,9 +199,6 @@ class CognitiveComplexity private constructor() : DetektVisitor() {
     }
 
     companion object {
-
-        val KEY = Key<Int>("detekt.metrics.cognitive_complexity")
-
         private val logicalOps = setOf(KtTokens.ANDAND, KtTokens.OROR)
 
         fun calculate(element: KtElement): Int {

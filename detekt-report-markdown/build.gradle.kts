@@ -4,10 +4,11 @@ plugins {
 
 dependencies {
     compileOnly(projects.detektApi)
-    implementation(projects.detektMetrics)
+    compileOnly(projects.detektReportComplexity)
     implementation(projects.detektUtils)
 
     testImplementation(testFixtures(projects.detektApi))
     testImplementation(libs.assertj.core)
+    testImplementation(projects.detektReportComplexity)
     testImplementation(libs.kotlin.compiler)
 }
