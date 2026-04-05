@@ -1,9 +1,7 @@
-package dev.detekt.core.reporting
+package dev.detekt.profiler
 
 import dev.detekt.api.Detektion
 import dev.detekt.api.OutputReport
-import dev.detekt.core.profiling.RuleFileExecution
-import dev.detekt.core.profiling.RuleProfilingKeys
 import java.util.Locale
 import kotlin.time.DurationUnit
 

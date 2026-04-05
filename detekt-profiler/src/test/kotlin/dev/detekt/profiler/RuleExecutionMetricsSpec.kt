@@ -1,5 +1,6 @@
-package dev.detekt.api
+package dev.detekt.profiler
 
+import dev.detekt.api.RuleSetId
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test

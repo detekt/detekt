@@ -9,13 +9,11 @@ class ExecutionSpecBuilder : Builder<ExecutionSpec> {
     var executorService: ExecutorService? = null
     var parallelParsing: Boolean = false
     var parallelAnalysis: Boolean = false
-    var profiling: Boolean = false
-    override fun build(): ExecutionSpec = ExecutionModel(executorService, parallelParsing, parallelAnalysis, profiling)
+    override fun build(): ExecutionSpec = ExecutionModel(executorService, parallelParsing, parallelAnalysis)
 }
 
 private data class ExecutionModel(
     override val executorService: ExecutorService?,
     override val parallelParsing: Boolean,
     override val parallelAnalysis: Boolean,
-    override val profiling: Boolean,
 ) : ExecutionSpec
