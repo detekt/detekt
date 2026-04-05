@@ -11,6 +11,7 @@ dependencies {
     runtimeOnly(projects.detektRulesExceptions)
     runtimeOnly(projects.detektRulesNaming)
     runtimeOnly(projects.detektRulesPerformance)
+    runtimeOnly(projects.detektRulesStandardLibrary)
     runtimeOnly(projects.detektRulesStyle)
 
     testImplementation(projects.detektRulesComplexity)
@@ -21,6 +22,7 @@ dependencies {
     testImplementation(projects.detektRulesExceptions)
     testImplementation(projects.detektRulesNaming)
     testImplementation(projects.detektRulesPerformance)
+    testImplementation(projects.detektRulesStandardLibrary)
     testImplementation(projects.detektRulesStyle)
     testImplementation(libs.assertj.core)
     testImplementation(libs.classgraph)
