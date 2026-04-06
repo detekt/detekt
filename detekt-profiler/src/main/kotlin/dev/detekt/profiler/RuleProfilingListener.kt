@@ -1,4 +1,4 @@
-package dev.detekt.core.profiling
+package dev.detekt.profiler
 
 import dev.detekt.api.Detektion
 import dev.detekt.api.RuleExecutionListener

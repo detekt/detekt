@@ -2,7 +2,6 @@ package dev.detekt.gradle.plugin.internal
 
 import dev.detekt.gradle.Detekt
 import dev.detekt.gradle.DetektCreateBaselineTask
-import dev.detekt.gradle.DetektProfilingTask
 import dev.detekt.gradle.extensions.DetektExtension
 import dev.detekt.gradle.internal.addVariantName
 import dev.detekt.gradle.internal.existingVariantOrBaseFile
@@ -120,34 +119,6 @@ internal fun Project.registerJvmCompilationCreateBaselineTask(
                 "${compilation.target.name} with type resolution"
         } else {
             "Creates detekt baseline for ${compilation.name} classes with type resolution"
-        }
-    }
-}
-
-internal fun Project.registerJvmCompilationProfilingTask(
-    extension: DetektExtension,
-    compilation: KotlinCompilation<*>,
-    target: KotlinTarget? = null,
-) {
-    val taskPrefix =
-        if (this == rootProject) DetektPlugin.PROFILING_ROOT_TASK_NAME else DetektPlugin.PROFILING_TASK_NAME
-    val taskSuffix = compilation.taskSuffix(target).capitalize()
-    val detektTaskName = DetektPlugin.DETEKT_TASK_NAME + taskSuffix
-    val profilingTaskName = taskPrefix + taskSuffix
-
-    // Get the corresponding Detekt task
-    val detektTaskProvider = tasks.named(detektTaskName, Detekt::class.java)
-
-    DetektProfilingTask.register(
-        project = this,
-        taskName = profilingTaskName,
-        extension = extension,
-        detektTaskProvider = detektTaskProvider
-    ).configure { profilingTask ->
-        profilingTask.description = if (target != null) {
-            "Process detekt profiling output for compilation ${compilation.name} on target ${compilation.target.name}"
-        } else {
-            "Process detekt profiling output for ${compilation.name} classes"
         }
     }
 }

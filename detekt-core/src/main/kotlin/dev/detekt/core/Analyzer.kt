@@ -30,20 +30,10 @@ internal class Analyzer(
     private val ruleListeners: List<RuleExecutionListener>,
     private val analysisMode: AnalysisMode,
 ) {
-    /**
-     * Whether profiling was requested, and parallel execution was disabled to ensure accurate measurements.
-     */
-    val parallelDisabledForProfiling: Boolean =
-        settings.spec.executionSpec.parallelAnalysis && ruleListeners.isNotEmpty()
-
     fun run(ktFiles: Collection<KtFile>): List<Issue> {
         val languageVersionSettings = settings.languageVersionSettings
 
-        // Force sequential execution when profiling is active to get accurate timing measurements.
-        // Parallel execution inflates per-rule times due to thread contention and makes times non-additive.
-        val useParallel = settings.spec.executionSpec.parallelAnalysis && ruleListeners.isEmpty()
-
-        return if (useParallel) {
+        return if (settings.spec.executionSpec.parallelAnalysis) {
             runAsync(ktFiles, languageVersionSettings)
         } else {
             runSync(ktFiles, languageVersionSettings)

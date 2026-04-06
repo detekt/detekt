@@ -10,7 +10,9 @@ import kotlin.time.Duration
  * Implementations must be thread-safe as methods may be called concurrently from multiple threads.
  * Pay attention to the thread policy of each function!
  *
- * Listeners are loaded when profiling is enabled via `--profiling` (CLI) or `detektProfile` tasks (Gradle).
+ * Listeners are loaded via ServiceLoader when their implementations are on the classpath.
+ * For example, adding the `detekt-profiler` module to `detektPlugins` (Gradle)
+ * or `--plugins path/to/detekt-profiler.jar` (CLI) enables profiling.
  */
 @Suppress("EmptyFunctionBlock")
 interface RuleExecutionListener : Extension {

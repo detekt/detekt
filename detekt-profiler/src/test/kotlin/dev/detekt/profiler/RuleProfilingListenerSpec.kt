@@ -1,10 +1,7 @@
-package dev.detekt.core.profiling
+package dev.detekt.profiler
 
 import dev.detekt.api.Detektion
-import dev.detekt.api.RuleExecutionMetric
-import dev.detekt.api.RuleFileExecution
 import dev.detekt.api.RuleInstance
-import dev.detekt.api.RuleProfilingKeys
 import dev.detekt.api.RuleSetId
 import dev.detekt.api.Severity
 import dev.detekt.test.utils.compileContentForTest

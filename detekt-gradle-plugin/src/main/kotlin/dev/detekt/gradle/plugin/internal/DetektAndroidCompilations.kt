@@ -18,7 +18,6 @@ internal object DetektAndroidCompilations {
         ).target.compilations.configureEach { compilation ->
             project.registerJvmCompilationDetektTask(extension, compilation)
             project.registerJvmCompilationCreateBaselineTask(extension, compilation)
-            project.registerJvmCompilationProfilingTask(extension, compilation)
         }
     }
 
@@ -53,18 +52,6 @@ internal object DetektAndroidCompilations {
                 it.description = "Creates detekt baseline files for test classes across $TYPE_RESOLUTION_SUFFIX"
             }
 
-        val mainProfilingTaskProvider =
-            project.tasks.register("${DetektPlugin.PROFILING_TASK_NAME}Main") {
-                it.group = VERIFICATION_GROUP
-                it.description = "Run detekt profiling for production classes across $TYPE_RESOLUTION_SUFFIX"
-            }
-
-        val testProfilingTaskProvider =
-            project.tasks.register("${DetektPlugin.PROFILING_TASK_NAME}Test") {
-                it.group = VERIFICATION_GROUP
-                it.description = "Run detekt profiling for test classes across $TYPE_RESOLUTION_SUFFIX"
-            }
-
         project.extensions.findByType(AndroidComponentsExtension::class.java)?.let { componentsExtension ->
             componentsExtension.onVariants { variant ->
                 if (!extension.matchesIgnoredConfiguration(variant)) {
@@ -74,18 +61,12 @@ internal object DetektAndroidCompilations {
                     mainBaselineTaskProvider.configure {
                         it.dependsOn(DetektPlugin.BASELINE_TASK_NAME + variant.name.capitalize())
                     }
-                    mainProfilingTaskProvider.configure {
-                        it.dependsOn(DetektPlugin.PROFILING_TASK_NAME + variant.name.capitalize())
-                    }
                     variant.nestedComponents.forEach { testVariant ->
                         testTaskProvider.configure {
                             it.dependsOn(DetektPlugin.DETEKT_TASK_NAME + testVariant.name.capitalize())
                         }
                         testBaselineTaskProvider.configure {
                             it.dependsOn(DetektPlugin.BASELINE_TASK_NAME + testVariant.name.capitalize())
-                        }
-                        testProfilingTaskProvider.configure {
-                            it.dependsOn(DetektPlugin.PROFILING_TASK_NAME + testVariant.name.capitalize())
                         }
                     }
                 }

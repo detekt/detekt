@@ -1,7 +1,5 @@
-package dev.detekt.core.reporting
+package dev.detekt.profiler
 
-import dev.detekt.api.RuleFileExecution
-import dev.detekt.api.RuleProfilingKeys
 import dev.detekt.api.RuleSetId
 import dev.detekt.api.testfixtures.TestDetektion
 import org.assertj.core.api.Assertions.assertThat

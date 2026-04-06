@@ -4,7 +4,6 @@ import dev.detekt.api.Config
 import dev.detekt.api.Detektion
 import dev.detekt.api.FileProcessListener
 import dev.detekt.api.RuleExecutionListener
-import dev.detekt.core.profiling.RuleProfilingKeys
 import dev.detekt.api.RuleSetProvider
 import dev.detekt.core.Analyzer
 import dev.detekt.core.FileProcessorLocator
@@ -60,9 +59,6 @@ internal class Lifecycle(
             ruleListeners.forEach { it.onStart(filesToAnalyze, activeRules.map { r -> r.ruleInstance }) }
             val issues = analyzer.run(filesToAnalyze)
             val detektion = Detektion(issues, rules.map { it.ruleInstance })
-            if (analyzer.parallelDisabledForProfiling) {
-                detektion.userData[RuleProfilingKeys.PARALLEL_DISABLED] = true
-            }
             val afterProcessors = processors.fold(detektion) { acc, processor ->
                 processor.onFinish(filesToAnalyze, acc)
             }
