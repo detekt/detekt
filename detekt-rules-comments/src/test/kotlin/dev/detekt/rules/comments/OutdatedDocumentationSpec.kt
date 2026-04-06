@@ -53,7 +53,14 @@ class OutdatedDocumentationSpec {
                  */
                 class MyClass(otherParam: String)
             """.trimIndent()
-            assertThat(subject.lint(incorrectParamName)).hasSize(1)
+            val findings = subject.lint(incorrectParamName)
+            assertThat(findings)
+                .hasSize(2)
+                .flatExtracting({ it.message })
+                .containsExactlyInAnyOrder(
+                    "@param someParam doesn't have corresponding public declaration.",
+                    "Documentation of otherParam is missing.",
+                )
         }
 
         @Test
@@ -65,7 +72,10 @@ class OutdatedDocumentationSpec {
                  */
                 class MyClass(someParam: String)
             """.trimIndent()
-            assertThat(subject.lint(incorrectListOfParams)).hasSize(1)
+            assertThat(subject.lint(incorrectListOfParams))
+                .singleElement()
+                .extracting { it.message }
+                .isEqualTo("@param someSecondParam doesn't have corresponding public declaration.")
         }
 
         @Test
@@ -77,7 +87,10 @@ class OutdatedDocumentationSpec {
                  */
                 class MyClass(otherParam: String, someParam: String)
             """.trimIndent()
-            assertThat(subject.lint(incorrectParamOrder)).hasSize(1)
+            assertThat(subject.lint(incorrectParamOrder))
+                .singleElement()
+                .extracting { it.message }
+                .isEqualTo("Documentation elements order is mismatched with declaration.")
         }
 
         @Test
@@ -93,6 +106,21 @@ class OutdatedDocumentationSpec {
         }
 
         @Test
+        fun `should report when doc with property mismatch class param list order`() {
+            val correctParamAndProp = """
+                /**
+                 * @property someProp Description of property
+                 * @param someParam Description of param
+                 */
+                class MyClass(someParam: String, val someProp: String)
+            """.trimIndent()
+            assertThat(subject.lint(correctParamAndProp))
+                .singleElement()
+                .extracting { it.message }
+                .isEqualTo("Documentation elements order is mismatched with declaration.")
+        }
+
+        @Test
         fun `should report when doc match class params but mismatch props`() {
             val correctParamIncorrectProp = """
                 /**
@@ -101,7 +129,13 @@ class OutdatedDocumentationSpec {
                  */
                 class MyClass(someParam: String, val otherProp: String)
             """.trimIndent()
-            assertThat(subject.lint(correctParamIncorrectProp)).hasSize(1)
+            assertThat(subject.lint(correctParamIncorrectProp))
+                .hasSize(2)
+                .flatExtracting({ it.message })
+                .containsExactlyInAnyOrder(
+                    "@property someProp doesn't have corresponding public declaration.",
+                    "Documentation of otherProp is missing.",
+                )
         }
 
         @Test
@@ -113,7 +147,13 @@ class OutdatedDocumentationSpec {
                  */
                 class MyClass(otherParam: String, val someProp: String)
             """.trimIndent()
-            assertThat(subject.lint(incorrectParamCorrectProp)).hasSize(1)
+            assertThat(subject.lint(incorrectParamCorrectProp))
+                .hasSize(2)
+                .flatExtracting({ it.message })
+                .containsExactlyInAnyOrder(
+                    "@param someParam doesn't have corresponding public declaration.",
+                    "Documentation of otherParam is missing.",
+                )
         }
 
         @Test
@@ -126,7 +166,13 @@ class OutdatedDocumentationSpec {
                     constructor(otherParam: String)
                 }
             """.trimIndent()
-            assertThat(subject.lint(incorrectConstructorDoc)).hasSize(1)
+            assertThat(subject.lint(incorrectConstructorDoc))
+                .hasSize(2)
+                .flatExtracting({ it.message })
+                .containsExactlyInAnyOrder(
+                    "@param someParam doesn't have corresponding public declaration.",
+                    "Documentation of otherParam is missing.",
+                )
         }
 
         @Test
@@ -138,7 +184,13 @@ class OutdatedDocumentationSpec {
                  */
                 class MyClass(someParam: String, val someProp: String)
             """.trimIndent()
-            assertThat(subject.lint(propertyAsParam)).hasSize(1)
+            assertThat(subject.lint(propertyAsParam))
+                .hasSize(2)
+                .flatExtracting({ it.message })
+                .containsExactlyInAnyOrder(
+                    "@property someParam type doesn't match corresponding declaration of type param.",
+                    "@param someProp type doesn't match corresponding declaration of type property.",
+                )
         }
 
         @Test
@@ -150,7 +202,10 @@ class OutdatedDocumentationSpec {
                  */
                 class MyClass(someParam: String, val someProp: String)
             """.trimIndent()
-            assertThat(subject.lint(incorrectDeclarationsOrder)).hasSize(1)
+            assertThat(subject.lint(incorrectDeclarationsOrder))
+                .singleElement()
+                .extracting { it.message }
+                .isEqualTo("Documentation elements order is mismatched with declaration.")
         }
 
         @Test
@@ -161,6 +216,31 @@ class OutdatedDocumentationSpec {
                  * @property b desc
                  */
                 class A internal constructor(val b: String)
+            """.trimIndent()
+            assertThat(subject.lint(incorrectDeclarationsOrder)).isEmpty()
+        }
+
+        @Test
+        fun `should not report when only public property is documented in internal constructor with param`() {
+            val incorrectDeclarationsOrder = """
+                /**
+                 * Doc
+                 * @property b desc
+                 */
+                class A internal constructor(val b: String, c: String)
+            """.trimIndent()
+            assertThat(subject.lint(incorrectDeclarationsOrder)).isEmpty()
+        }
+
+        @Test
+        fun `should not report when only public property and type is documented in internal constructor with param`() {
+            val incorrectDeclarationsOrder = """
+                /**
+                 * Doc
+                 * @param T desc
+                 * @property b desc
+                 */
+                class A<T> internal constructor(val b: String, c: String)
             """.trimIndent()
             assertThat(subject.lint(incorrectDeclarationsOrder)).isEmpty()
         }
@@ -202,7 +282,10 @@ class OutdatedDocumentationSpec {
                  */
                 class A internal constructor(val a: String, val b: String)
             """.trimIndent()
-            assertThat(subject.lint(incorrectDeclarationsOrder)).hasSize(1)
+            assertThat(subject.lint(incorrectDeclarationsOrder))
+                .singleElement()
+                .extracting { it.message }
+                .isEqualTo("Documentation of b is missing.")
         }
 
         @Test
@@ -215,7 +298,10 @@ class OutdatedDocumentationSpec {
                  */
                 class A internal constructor(val a: String, val b: String)
             """.trimIndent()
-            assertThat(subject.lint(incorrectDeclarationsOrder)).hasSize(1)
+            assertThat(subject.lint(incorrectDeclarationsOrder))
+                .singleElement()
+                .extracting { it.message }
+                .isEqualTo("Documentation elements order is mismatched with declaration.")
         }
 
         @Test
@@ -232,7 +318,10 @@ class OutdatedDocumentationSpec {
                     c: Int,
                 )
             """.trimIndent()
-            assertThat(subject.lint(incorrectDeclarationsOrder)).hasSize(1)
+            assertThat(subject.lint(incorrectDeclarationsOrder))
+                .singleElement()
+                .extracting { it.message }
+                .isEqualTo("@param b doesn't have corresponding public declaration.")
         }
 
         @Test
@@ -248,7 +337,13 @@ class OutdatedDocumentationSpec {
                     c: Int,
                 )
             """.trimIndent()
-            assertThat(subject.lint(incorrectDeclarationsOrder)).hasSize(1)
+            assertThat(subject.lint(incorrectDeclarationsOrder))
+                .hasSize(2)
+                .flatExtracting({ it.message })
+                .containsExactlyInAnyOrder(
+                    "Documentation of b is missing.",
+                    "Documentation of c is missing.",
+                )
         }
 
         @Test
@@ -262,7 +357,10 @@ class OutdatedDocumentationSpec {
                     private val a: String,
                 )
             """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.lint(code))
+                .singleElement()
+                .extracting { it.message }
+                .isEqualTo("@property a type doesn't match corresponding declaration of type param.")
         }
 
         @Test
@@ -331,7 +429,10 @@ class OutdatedDocumentationSpec {
                  */
                 class MyClass<T>(someParam: String)
             """.trimIndent()
-            assertThat(subject.lint(missingTypeParam)).hasSize(1)
+            assertThat(subject.lint(missingTypeParam))
+                .singleElement()
+                .extracting { it.message }
+                .isEqualTo("Documentation of T is missing.")
         }
 
         @Test
@@ -343,7 +444,13 @@ class OutdatedDocumentationSpec {
                  */
                 class MyClass<T>(someParam: String)
             """.trimIndent()
-            assertThat(subject.lint(incorrectTypeParamName)).hasSize(1)
+            assertThat(subject.lint(incorrectTypeParamName))
+                .hasSize(2)
+                .flatExtracting({ it.message })
+                .containsExactlyInAnyOrder(
+                    "@param S doesn't have corresponding public declaration.",
+                    "Documentation of T is missing.",
+                )
         }
 
         @Test
@@ -355,7 +462,10 @@ class OutdatedDocumentationSpec {
                  */
                 class MyClass<T, S>(someParam: String)
             """.trimIndent()
-            assertThat(subject.lint(incorrectTypeParamList)).hasSize(1)
+            assertThat(subject.lint(incorrectTypeParamList))
+                .singleElement()
+                .extracting { it.message }
+                .isEqualTo("Documentation of S is missing.")
         }
     }
 
@@ -381,7 +491,13 @@ class OutdatedDocumentationSpec {
                  */
                 fun myFun(otherParam: String) {}
             """.trimIndent()
-            assertThat(subject.lint(incorrectParamName)).hasSize(1)
+            assertThat(subject.lint(incorrectParamName))
+                .hasSize(2)
+                .flatExtracting({ it.message })
+                .containsExactlyInAnyOrder(
+                    "@param someParam doesn't have corresponding public declaration.",
+                    "Documentation of otherParam is missing.",
+                )
         }
     }
 
@@ -408,7 +524,10 @@ class OutdatedDocumentationSpec {
                  */
                 fun <T> myFun(someParam: String) {}
             """.trimIndent()
-            assertThat(subject.lint(missingTypeParam)).hasSize(1)
+            assertThat(subject.lint(missingTypeParam))
+                .singleElement()
+                .extracting { it.message }
+                .isEqualTo("Documentation of T is missing.")
         }
 
         @Test
@@ -420,7 +539,13 @@ class OutdatedDocumentationSpec {
                  */
                 fun <T> myFun(someParam: String) {}
             """.trimIndent()
-            assertThat(subject.lint(incorrectTypeParamName)).hasSize(1)
+            assertThat(subject.lint(incorrectTypeParamName))
+                .hasSize(2)
+                .flatExtracting({ it.message })
+                .containsExactlyInAnyOrder(
+                    "@param S doesn't have corresponding public declaration.",
+                    "Documentation of T is missing.",
+                )
         }
 
         @Test
@@ -432,7 +557,10 @@ class OutdatedDocumentationSpec {
                  */
                 fun <T, S> myFun(someParam: String) {}
             """.trimIndent()
-            assertThat(subject.lint(incorrectTypeParamList)).hasSize(1)
+            assertThat(subject.lint(incorrectTypeParamList))
+                .singleElement()
+                .extracting { it.message }
+                .isEqualTo("Documentation of S is missing.")
         }
 
         @Test
@@ -445,7 +573,10 @@ class OutdatedDocumentationSpec {
                  */
                 fun <T, S> myFun(someParam: String) {}
             """.trimIndent()
-            assertThat(subject.lint(incorrectTypeParamsOrder)).hasSize(1)
+            assertThat(subject.lint(incorrectTypeParamsOrder))
+                .singleElement()
+                .extracting { it.message }
+                .isEqualTo("Documentation elements order is mismatched with declaration.")
         }
     }
 
@@ -489,7 +620,18 @@ class OutdatedDocumentationSpec {
                     class MyNestedClass(otherParam: String)
                 }
             """.trimIndent()
-            assertThat(subject.lint(incorrectClassWithTwoIncorrectFunctions)).hasSize(4)
+            val findings = subject.lint(incorrectClassWithTwoIncorrectFunctions)
+            assertThat(findings).hasSize(7)
+            assertThat(findings.map { it.message })
+                .containsExactlyInAnyOrder(
+                    "@param someParam doesn't have corresponding public declaration.",
+                    "@param someParam doesn't have corresponding public declaration.",
+                    "@param someParam doesn't have corresponding public declaration.",
+                    "Documentation of someProp is missing.",
+                    "Documentation of someSecondParam is missing.",
+                    "Documentation of otherParam is missing.",
+                    "Documentation of otherParam is missing.",
+                )
         }
     }
 
@@ -556,7 +698,7 @@ class OutdatedDocumentationSpec {
     @Nested
     inner class `configuration allowParamOnConstructorProperties` {
         private val configuredSubject = OutdatedDocumentation(
-            TestConfig("allowParamOnConstructorProperties" to true)
+            TestConfig("allowParamOnConstructorProperties" to true),
         )
 
         @Test
@@ -640,7 +782,10 @@ class OutdatedDocumentationSpec {
                     private val a: String,
                 )
             """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.lint(code))
+                .singleElement()
+                .extracting { it.message }
+                .isEqualTo("@property a type doesn't match corresponding declaration of type param.")
         }
     }
 }
