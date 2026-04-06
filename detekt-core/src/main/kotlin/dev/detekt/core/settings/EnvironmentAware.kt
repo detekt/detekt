@@ -11,12 +11,16 @@ import dev.detekt.tooling.api.spec.LoggingSpec
 import dev.detekt.tooling.api.spec.ProjectSpec
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.projectStructure.KaSourceModule
+import org.jetbrains.kotlin.analysis.api.standalone.StandaloneAnalysisAPISessionBuilder
 import org.jetbrains.kotlin.analysis.api.standalone.buildStandaloneAnalysisAPISession
 import org.jetbrains.kotlin.analysis.project.structure.builder.buildKtLibraryModule
 import org.jetbrains.kotlin.analysis.project.structure.builder.buildKtSdkModule
 import org.jetbrains.kotlin.analysis.project.structure.builder.buildKtSourceModule
+import org.jetbrains.kotlin.cli.common.ExitCode
+import org.jetbrains.kotlin.cli.common.arguments.K2JVMCompilerArguments
 import org.jetbrains.kotlin.cli.common.config.kotlinSourceRoots
 import org.jetbrains.kotlin.cli.jvm.config.jvmClasspathRoots
+import org.jetbrains.kotlin.cli.jvm.plugins.PluginCliParser
 import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.config.JvmTarget
@@ -29,6 +33,8 @@ import org.jetbrains.kotlin.platform.jvm.JvmPlatforms
 import org.jetbrains.kotlin.psi.KtFile
 import java.io.OutputStream
 import java.io.PrintStream
+import java.nio.file.Path
+import kotlin.collections.orEmpty
 import kotlin.io.path.Path
 
 interface EnvironmentAware {
@@ -45,15 +51,18 @@ internal class EnvironmentFacade(projectSpec: ProjectSpec, compilerSpec: Compile
     // This lateinit var can be changed to val if https://github.com/JetBrains/kotlin/pull/5703 is merged
     private lateinit var sourceModule: KaSourceModule
 
+    private val jvmCompilerArguments = K2JVMCompilerArguments()
+
     private val configuration: CompilerConfiguration = createCompilerConfiguration(
-        projectSpec.inputPaths.toList(),
-        compilerSpec.classpath,
-        compilerSpec.apiVersion,
-        compilerSpec.languageVersion,
-        compilerSpec.jvmTarget,
-        compilerSpec.jdkHome,
-        compilerSpec.freeCompilerArgs,
-        printStream,
+        pathsToAnalyze = projectSpec.inputPaths.toList(),
+        classpath = compilerSpec.classpath,
+        apiVersion = compilerSpec.apiVersion,
+        languageVersion = compilerSpec.languageVersion,
+        jvmTarget = compilerSpec.jvmTarget,
+        jdkHome = compilerSpec.jdkHome,
+        freeCompilerArgs = compilerSpec.freeCompilerArgs,
+        jvmCompilerArguments = jvmCompilerArguments,
+        printStream = printStream,
     )
 
     private val disposable: Disposable = Disposer.newDisposable()
@@ -67,6 +76,13 @@ internal class EnvironmentFacade(projectSpec: ProjectSpec, compilerSpec: Compile
 
     init {
         buildStandaloneAnalysisAPISession(disposable) {
+            loadCompilerPlugins(
+                sessionBuilder = this,
+                compilerConfiguration = configuration,
+                compilerPluginClasspath = compilerSpec.compilerPluginClasspath,
+                jvmCompilerArguments = jvmCompilerArguments,
+                parentDisposable = disposable,
+            )
             // Required for autocorrect support
             registerProjectService(TreeAspect::class.java)
             registerProjectService(PomModel::class.java, DetektPomModel(project))
@@ -148,4 +164,24 @@ private fun Appendable.asPrintStream(): PrintStream {
             }
         )
     }
+}
+
+private fun loadCompilerPlugins(
+    sessionBuilder: StandaloneAnalysisAPISessionBuilder,
+    compilerConfiguration: CompilerConfiguration,
+    compilerPluginClasspath: List<Path>,
+    jvmCompilerArguments: K2JVMCompilerArguments,
+    parentDisposable: Disposable,
+) {
+    if (compilerPluginClasspath.isEmpty()) return
+
+    PluginCliParser.loadPluginsSafe(
+        pluginClasspaths = compilerPluginClasspath.map(Path::toString),
+        pluginOptions = jvmCompilerArguments.pluginOptions?.asList().orEmpty(),
+        pluginConfigurations = jvmCompilerArguments.pluginConfigurations?.asList().orEmpty(),
+        pluginOrderConstraints = jvmCompilerArguments.pluginOrderConstraints?.asList().orEmpty(),
+        configuration = compilerConfiguration,
+        parentDisposable = parentDisposable,
+    ).takeIf { it == ExitCode.OK }
+        ?.also { sessionBuilder.registerCompilerPluginServices(compilerConfiguration) }
 }

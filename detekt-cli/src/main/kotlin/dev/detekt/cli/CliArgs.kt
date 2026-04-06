@@ -195,6 +195,15 @@ class CliArgs {
     var classpath: List<Path> = emptyList()
 
     @Parameter(
+        names = ["--compiler-plugin-classpath"],
+        converter = PathConverter::class,
+        splitter = ClassPathSplitter::class,
+        validateValueWith = [PathValidator::class],
+        description = "Paths to Kotlin compiler plugin class files and jar files."
+    )
+    var compilerPluginClasspath: List<Path> = emptyList()
+
+    @Parameter(
         names = ["--api-version"],
         converter = ApiVersionConverter::class,
         description = "Kotlin API version used by the code under analysis. Some rules use this " +

@@ -8,6 +8,7 @@ import dev.detekt.gradle.invoke.BaselineArgument
 import dev.detekt.gradle.invoke.BuildUponDefaultConfigArgument
 import dev.detekt.gradle.invoke.ClasspathArgument
 import dev.detekt.gradle.invoke.CliArgument
+import dev.detekt.gradle.invoke.CompilerPluginClasspathArgument
 import dev.detekt.gradle.invoke.ConfigArgument
 import dev.detekt.gradle.invoke.CreateBaselineArgument
 import dev.detekt.gradle.invoke.DebugArgument
@@ -80,6 +81,10 @@ abstract class DetektCreateBaselineTask @Inject constructor(
     @get:Classpath
     @get:Optional
     abstract val classpath: ConfigurableFileCollection
+
+    @get:Classpath
+    @get:Optional
+    abstract val compilerPluginClasspath: ConfigurableFileCollection
 
     @get:Internal
     abstract val friendPaths: ConfigurableFileCollection
@@ -154,6 +159,7 @@ abstract class DetektCreateBaselineTask @Inject constructor(
         get() = listOf(
             CreateBaselineArgument,
             ClasspathArgument(classpath),
+            CompilerPluginClasspathArgument(compilerPluginClasspath),
             ApiVersionArgument(apiVersion.orNull),
             LanguageVersionArgument(languageVersion.orNull),
             JvmTargetArgument(jvmTarget.orNull),

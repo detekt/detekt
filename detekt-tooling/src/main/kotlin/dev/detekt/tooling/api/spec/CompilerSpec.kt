@@ -37,4 +37,9 @@ interface CompilerSpec {
      * Options to pass to the Kotlin compiler.
      */
     val freeCompilerArgs: List<String>
+
+    /**
+     * Paths to Kotlin compiler plugins class files and jars.
+     */
+    val compilerPluginClasspath: List<Path>
 }

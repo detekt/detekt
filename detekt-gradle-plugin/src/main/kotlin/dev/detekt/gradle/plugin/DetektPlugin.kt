@@ -138,6 +138,9 @@ class DetektPlugin : Plugin<Project> {
         project.tasks.withType(Detekt::class.java).configureEach { task ->
             task.detektClasspath.conventionCompat(project.configurations.named(CONFIGURATION_DETEKT))
             task.pluginClasspath.conventionCompat(project.configurations.named(CONFIGURATION_DETEKT_PLUGINS))
+            task.compilerPluginClasspath.conventionCompat(
+                project.configurations.named(CONFIGURATION_DETEKT_COMPILER_PLUGIN_CLASSPATH)
+            )
             val reportName = if (task.name.startsWith(DETEKT_TASK_NAME) && task.name != DETEKT_TASK_NAME) {
                 task.name.removePrefix(DETEKT_TASK_NAME).decapitalize()
             } else {
@@ -164,6 +167,9 @@ class DetektPlugin : Plugin<Project> {
         project.tasks.withType(DetektCreateBaselineTask::class.java).configureEach { task ->
             task.detektClasspath.conventionCompat(project.configurations.named(CONFIGURATION_DETEKT))
             task.pluginClasspath.conventionCompat(project.configurations.named(CONFIGURATION_DETEKT_PLUGINS))
+            task.compilerPluginClasspath.conventionCompat(
+                project.configurations.named(CONFIGURATION_DETEKT_COMPILER_PLUGIN_CLASSPATH)
+            )
         }
 
         project.tasks.withType(DetektGenerateConfigTask::class.java).configureEach { task ->
