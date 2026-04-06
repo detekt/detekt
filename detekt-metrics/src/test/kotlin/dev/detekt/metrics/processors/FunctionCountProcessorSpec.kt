@@ -20,4 +20,14 @@ class FunctionCountProcessorSpec {
         assertThat(detektion.metrics).singleElement()
             .isEqualTo(ProjectMetric("number of functions", 7))
     }
+
+    @Test
+    fun defaultMethodCount() {
+        val detektion = FunctionCountProcessor().invoke(
+            compileContentForTest(complexClass),
+        )
+
+        assertThat(detektion.metrics).singleElement()
+            .isEqualTo(ProjectMetric("number of functions", 6))
+    }
 }

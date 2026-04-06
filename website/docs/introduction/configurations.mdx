@@ -11,9 +11,7 @@ import { DefaultConfigurationFile } from "./../../src/components/ConfigurationFi
 _detekt_ uses a [YAML style configuration](https://yaml.org/spec/1.2/spec.html) file for various things:
 
 - rule set and rule properties
-- build failure
 - console reports
-- output reports
 - processors
 
 See the <DefaultConfigurationFile /> file for all defined configuration options and their default values. 
@@ -161,21 +159,18 @@ For example, when all count processors are enabled, a detekt html report might l
 
 ![Processor metrics in html report](/img/tutorial/processor_metrics_in_html_report.png)
 
-The `'DetektProgressListener'` processor shows a progress indicator in stdout while a detekt process is running.
-
 Uncomment the processors you don't care about.
 
 ```yaml
 processors:
     active: true
     exclude:
-        - 'DetektProgressListener'
         # - 'KtFileCountProcessor'
         # - 'PackageCountProcessor'
         # - 'ClassCountProcessor'
         # - 'FunctionCountProcessor'
         # - 'PropertyCountProcessor'
-        # - 'ProjectComplexityProcessor'
+        # - 'ProjectCyclomaticComplexityProcessor'
         # - 'ProjectCognitiveComplexityProcessor'
         # - 'ProjectLLOCProcessor'
         # - 'ProjectCLOCProcessor'

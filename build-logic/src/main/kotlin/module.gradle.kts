@@ -107,6 +107,7 @@ dependencies {
     components {
         setOf(
             "com.android.tools.build:gradle-api",
+            "com.android.tools.build:gradle-common-api",
             "org.junit.jupiter:junit-jupiter",
             "org.junit.jupiter:junit-jupiter-api",
             "org.junit.jupiter:junit-jupiter-engine",

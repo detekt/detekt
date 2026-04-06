@@ -5,7 +5,7 @@ plugins {
     id("module")
     id("public-api")
     id("java-test-fixtures")
-    id("dev.drewhamilton.poko") version "0.21.3"
+    id("dev.drewhamilton.poko") version "0.22.0"
     id("com.github.gmazzo.buildconfig") version "6.0.9"
 }
 
@@ -52,7 +52,7 @@ kotlin {
     @OptIn(org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation::class)
     abiValidation {
         filters {
-            excluded {
+            exclude {
                 byNames.add("dev.detekt.api.internal.**")
             }
         }

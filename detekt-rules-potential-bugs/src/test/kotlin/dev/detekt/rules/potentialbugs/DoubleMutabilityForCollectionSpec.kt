@@ -34,6 +34,21 @@ class DoubleMutabilityForCollectionSpec(private val env: KotlinEnvironmentContai
             }
 
             @Test
+            fun `detects var declaration with mutable list in kdoc`() {
+                val code = """
+                    fun main() {
+                        /**
+                        * This is list is important
+                        */
+                        var myList = mutableListOf(1, 2, 3)
+                    }
+                """.trimIndent()
+                val result = subject.lintWithContext(env, code)
+                assertThat(result).singleElement()
+                    .hasStartSourceLocation(5, 5)
+            }
+
+            @Test
             fun `detects var declaration with mutable set`() {
                 val code = """
                     fun main() {

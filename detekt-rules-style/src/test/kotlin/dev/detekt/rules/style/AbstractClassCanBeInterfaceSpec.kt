@@ -175,6 +175,35 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
             """.trimIndent()
             assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
+
+        @Test
+        fun `does not report an abstract class extending a class`() {
+            val code = """
+                abstract class A : Throwable()
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does report an abstract class extending an interface`() {
+            val code = """
+                abstract class A : Comparable<Int>
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        }
+
+        @Test
+        fun `does not report an abstract class extending a class only containing abstract member`() {
+            val code = """
+                abstract class A : Throwable() {
+                    abstract val i: Int
+                    abstract fun f()
+                    public abstract fun f2()
+                }
+            """.trimIndent()
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
     }
 
     @Nested
@@ -516,6 +545,25 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
         }
 
         @Test
+        fun `does not report local abstract class = #9073`() {
+            val code = """
+                class DependencyCollector
+
+                inline fun <reified T> newInstance(): T = T::class.java.newInstance()
+
+                private fun dependencyCollector(): DependencyCollector {
+                    abstract class DependencyCollectorCreator {
+                        abstract val dependencyCollector: DependencyCollector
+                    }
+                    return newInstance<DependencyCollectorCreator>().dependencyCollector
+                }
+            """.trimIndent()
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings)
+                .isEmpty()
+        }
+
+        @Test
         fun `don't report a sealed class with mixed property types`() {
             val code = """
                 const val CONST_VALUE = 123
@@ -623,6 +671,30 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
             assertThat(findings)
                 .singleElement()
                 .hasMessage(SEALED_NO_CONCRETE_MEMBER)
+        }
+
+        @Test
+        fun `don't report a sealed class extending another class - #9182`() {
+            val code = """
+                sealed class MyError : Throwable() {
+                    data class FirstType(val first: String) : MyError()
+                    data class SecondType(val second: Int) : MyError()
+                }
+            """.trimIndent()
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `report a sealed class extending an interface`() {
+            val code = """
+                sealed class MySerializable : java.io.Serializable {
+                    data class FirstType(val first: String) : MySerializable()
+                    data class SecondType(val second: Int) : MySerializable()
+                }
+            """.trimIndent()
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings).hasSize(1)
         }
     }
 }

@@ -17,7 +17,6 @@ import io.github.classgraph.ClassGraph
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.lang.reflect.Modifier
-import kotlin.jvm.java
 
 class RuleProviderSpec {
 

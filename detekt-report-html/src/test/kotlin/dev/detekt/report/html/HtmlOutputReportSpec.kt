@@ -3,6 +3,7 @@ package dev.detekt.report.html
 import dev.detekt.api.Detektion
 import dev.detekt.api.Issue
 import dev.detekt.api.ProjectMetric
+import dev.detekt.api.Severity
 import dev.detekt.api.internal.whichDetekt
 import dev.detekt.api.testfixtures.TestDetektion
 import dev.detekt.api.testfixtures.TestSetupContext
@@ -12,7 +13,7 @@ import dev.detekt.api.testfixtures.createIssueLocation
 import dev.detekt.api.testfixtures.createRuleInstance
 import dev.detekt.metrics.CognitiveComplexity
 import dev.detekt.metrics.processors.commentLinesKey
-import dev.detekt.metrics.processors.complexityKey
+import dev.detekt.metrics.processors.cyclomaticComplexityKey
 import dev.detekt.metrics.processors.linesKey
 import dev.detekt.metrics.processors.logicalLinesKey
 import dev.detekt.metrics.processors.sourceLinesKey
@@ -71,9 +72,9 @@ class HtmlOutputReportSpec {
     fun `renders the right file locations`() {
         val result = htmlReport.render(createTestDetektionWithMultipleSmells())
 
-        assertThat(result).contains("<span class=\"location\">src/main/com/sample/Sample1.kt:11:1</span>")
-        assertThat(result).contains("<span class=\"location\">src/main/com/sample/Sample2.kt:22:2</span>")
-        assertThat(result).contains("<span class=\"location\">src/main/com/sample/Sample3.kt:33:3</span>")
+        assertThat(result).contains("<span class=\"location\">Error: src/main/com/sample/Sample1.kt:11:1</span>")
+        assertThat(result).contains("<span class=\"location\">Error: src/main/com/sample/Sample2.kt:22:2</span>")
+        assertThat(result).contains("<span class=\"location\">Info: src/main/com/sample/Sample3.kt:33:3</span>")
     }
 
     @Test
@@ -115,7 +116,7 @@ class HtmlOutputReportSpec {
     fun `renders the complexity report correctly`() {
         val detektion = TestDetektion(
             userData = mapOf(
-                complexityKey.toString() to 10,
+                cyclomaticComplexityKey.toString() to 10,
                 CognitiveComplexity.KEY.toString() to 10,
                 sourceLinesKey.toString() to 20,
                 logicalLinesKey.toString() to 10,
@@ -181,18 +182,21 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
         createIssue(
             createRuleInstance("rule_a/id", "RuleSet1", url = "https://example.org/"),
             entity2,
-            "Issue message 2"
+            "Issue message 2",
+            severity = Severity.Error,
         ),
         createIssue(
             createRuleInstance("rule_b", "RuleSet2", url = null),
             entity3,
-            "Issue message 3"
+            "Issue message 3",
+            severity = Severity.Info,
         ),
         createIssue(
             createRuleInstance("rule_c", "RuleSet2"),
             entity3,
             "Issue message 3",
-            suppressReasons = listOf("suppressed")
+            suppressReasons = listOf("suppressed"),
+            severity = Severity.Warning,
         ),
     )
 }
