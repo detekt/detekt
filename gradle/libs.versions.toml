@@ -40,7 +40,7 @@ assertj-core = { module = "org.assertj:assertj-core", version = "3.27.7" }
 # Any update to the lower-bound version should also be reflected at renovate.json to lock this version.
 assertj-coreMinimum = { module = "org.assertj:assertj-core", version = "3.27.4" }
 classgraph = { module = "io.github.classgraph:classgraph", version = "4.8.184" }
-jcommander = { module = "org.jcommander:jcommander", version = "1.85" }
+jcommander = { module = "org.jcommander:jcommander", version = "3.0" }
 jetbrains-annotations = { module = "org.jetbrains:annotations", version = "26.1.0" }
 kctfork-core = { module = "dev.zacsweers.kctfork:core", version = "0.12.1" }
 kotlin-compiler = { module = "org.jetbrains.kotlin:kotlin-compiler", version.ref = "kotlin" }
