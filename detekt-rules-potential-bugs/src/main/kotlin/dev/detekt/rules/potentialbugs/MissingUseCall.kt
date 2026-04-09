@@ -132,7 +132,7 @@ class MissingUseCall(config: Config) :
 
     private fun KaSession.isChildOfCloseable(symbol: KaSymbol): Boolean {
         val classSymbol = symbol as? KaClassSymbol ?: return false
-        val fqn = symbol.classId?.asString()?.replace('/', '.')
+        val fqn = symbol.classId?.asFqNameString()
         if (fqn != null && ignoreClass.contains(fqn)) {
             return false
         }
