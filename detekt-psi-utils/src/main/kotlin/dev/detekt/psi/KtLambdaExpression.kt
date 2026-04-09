@@ -1,5 +1,6 @@
 package dev.detekt.psi
 
+import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.symbols.KaValueParameterSymbol
 import org.jetbrains.kotlin.idea.references.mainReference
@@ -7,8 +8,9 @@ import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 
+context(session: KaSession)
 fun KtLambdaExpression.firstParameterOrNull(): KaValueParameterSymbol? =
-    analyze(this) {
+    with(session) {
         functionLiteral.symbol.valueParameters.singleOrNull()
     }
 
@@ -16,7 +18,7 @@ fun KtLambdaExpression.implicitParameterOrNull(): KaValueParameterSymbol? =
     if (valueParameters.isNotEmpty()) {
         null
     } else {
-        firstParameterOrNull()
+        analyze(this) { firstParameterOrNull() }
     }
 
 fun KtLambdaExpression.hasImplicitParameterReference(): Boolean {
