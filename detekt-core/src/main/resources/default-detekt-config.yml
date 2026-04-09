@@ -503,6 +503,9 @@ potential-bugs:
       - 'javax.annotation.OverridingMethodsMustInvokeSuper'
   MissingUseCall:
     active: false
+    ignoreClass:
+      - 'java.io.ByteArrayInputStream'
+      - 'java.io.ByteArrayOutputStream'
   NullCheckOnMutableProperty:
     active: false
   NullableToStringCall:

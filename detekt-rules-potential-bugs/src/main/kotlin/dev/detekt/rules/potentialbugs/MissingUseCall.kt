@@ -2,10 +2,12 @@ package dev.detekt.rules.potentialbugs
 
 import com.intellij.psi.PsiElement
 import dev.detekt.api.Config
+import dev.detekt.api.Configuration
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
+import dev.detekt.api.config
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
@@ -75,6 +77,17 @@ class MissingUseCall(config: Config) :
     ),
     RequiresAnalysisApi {
 
+    @Configuration(
+        "List of fully qualified class names that should be" +
+            " excluded from this rule (treated as not-closable)."
+    )
+    private val ignoreClass: List<String> by config(
+        listOf(
+            "java.io.ByteArrayInputStream",
+            "java.io.ByteArrayOutputStream",
+        )
+    )
+
     private val traversedParentExpression: MutableSet<PsiElement> = mutableSetOf()
     private val usedReferences: MutableSet<KaSymbol> = mutableSetOf()
 
@@ -118,7 +131,13 @@ class MissingUseCall(config: Config) :
     }
 
     private fun KaSession.isChildOfCloseable(symbol: KaSymbol): Boolean {
-        val superTypes = (symbol as? KaClassSymbol)?.superTypes.orEmpty().flatMap { listOf(it) + it.allSupertypes }
+        val classSymbol = symbol as? KaClassSymbol ?: return false
+        val fqn = symbol.classId?.asFqNameString()
+        if (fqn != null && ignoreClass.contains(fqn)) {
+            return false
+        }
+
+        val superTypes = classSymbol.superTypes.flatMap { listOf(it) + it.allSupertypes }
         return superTypes.any { it.symbol?.classId?.asSingleFqName() in listOfCloseables }
     }
 
