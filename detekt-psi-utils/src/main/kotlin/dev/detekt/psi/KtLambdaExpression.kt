@@ -14,11 +14,11 @@ fun KtLambdaExpression.firstParameterOrNull(): KaValueParameterSymbol? =
         functionLiteral.symbol.valueParameters.singleOrNull()
     }
 
-fun KtLambdaExpression.implicitParameterOrNull(): KaValueParameterSymbol? =
+fun KtLambdaExpression.hasImplicitParameter(): Boolean =
     if (valueParameters.isNotEmpty()) {
-        null
+        false
     } else {
-        analyze(this) { firstParameterOrNull() }
+        analyze(this) { firstParameterOrNull() != null }
     }
 
 fun KtLambdaExpression.hasImplicitParameterReference(): Boolean {
