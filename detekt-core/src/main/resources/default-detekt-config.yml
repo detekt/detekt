@@ -416,6 +416,8 @@ performance:
 
 potential-bugs:
   active: true
+  AvoidLeakingAnalysisApiTypesFromSessions:
+    active: false
   AvoidReferentialEquality:
     active: true
     forbiddenTypePatterns:
