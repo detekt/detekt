@@ -10,7 +10,7 @@ class PerformanceMonitor {
         CreateSettings,
         ValidateConfig,
         Parsing,
-        Binding,
+        ValidateClasspath,
         LoadingExtensions,
         Analyzer,
         Reporting,

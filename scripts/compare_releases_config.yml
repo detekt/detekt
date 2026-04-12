@@ -1,11 +1,3 @@
-build:
-
-processors:
-  active: true
-  exclude:
-  # IntelliJ terminal scrolls to much to the right
-    - 'DetektProgressListener'
-
 console-reports:
   active: true
   exclude:
@@ -18,4 +10,3 @@ console-reports:
 style:
   MaxLineLength:
     active: false
-

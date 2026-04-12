@@ -29,22 +29,22 @@ likely not intentional and may cause unexpected results.
 #### Noncompliant Code:
 
 ```kotlin
-val areEqual = "aString" === otherString
-val areNotEqual = "aString" !== otherString
+    val areEqual = "aString" === otherString
+    val areNotEqual = "aString" !== otherString
 ```
 
 #### Compliant Code:
 
 ```kotlin
-val areEqual = "aString" == otherString
-val areNotEqual = "aString" != otherString
+    val areEqual = "aString" == otherString
+    val areNotEqual = "aString" != otherString
 ```
 
 ### CastNullableToNonNullableType
 
 Reports cast of nullable variable to non-null type. Cast like this can hide `null`
 problems in your code. The compliant code would be that which will correctly check
-for two things (nullability and type) and not just one (cast).
+ for two things (nullability and type) and not just one (cast).
 
 **Active by default**: No
 
@@ -60,7 +60,7 @@ for two things (nullability and type) and not just one (cast).
 
 ```kotlin
 fun foo(bar: Any?) {
-val x = bar as String
+    val x = bar as String
 }
 ```
 
@@ -68,12 +68,12 @@ val x = bar as String
 
 ```kotlin
 fun foo(bar: Any?) {
-val x = checkNotNull(bar) as String
+    val x = checkNotNull(bar) as String
 }
 
 // Alternative
 fun foo(bar: Any?) {
-val x = (bar ?: error("null assertion message")) as String
+    val x = (bar ?: error("null assertion message")) as String
 }
 ```
 
@@ -90,7 +90,7 @@ Reports unsafe cast to nullable types.
 
 ```kotlin
 fun foo(a: Any?) {
-val x: String? = a as String? // If 'a' is not String, ClassCastException will be thrown.
+    val x: String? = a as String? // If 'a' is not String, ClassCastException will be thrown.
 }
 ```
 
@@ -98,7 +98,7 @@ val x: String? = a as String? // If 'a' is not String, ClassCastException will b
 
 ```kotlin
 fun foo(a: Any?) {
-val x: String? = a as? String
+    val x: String? = a as? String
 }
 ```
 
@@ -160,7 +160,7 @@ Prefer to use instead the `toMutable<Type>()` functions.
 ```kotlin
 val list : List<Int> = getAList()
 if (list is MutableList) {
-list.add(42)
+    list.add(42)
 }
 
 (list as MutableList).add(42)
@@ -239,15 +239,15 @@ or changing the nullability of a boolean, since this will be implicitly handled 
 
 ```kotlin
 enum class Color {
-RED,
-GREEN,
-BLUE
+    RED,
+    GREEN,
+    BLUE
 }
 
 when(c) {
-Color.RED -> {}
-Color.GREEN -> {}
-else -> {}
+    Color.RED -> {}
+    Color.GREEN -> {}
+    else -> {}
 }
 ```
 
@@ -255,15 +255,15 @@ else -> {}
 
 ```kotlin
 enum class Color {
-RED,
-GREEN,
-BLUE
+    RED,
+    GREEN,
+    BLUE
 }
 
 when(c) {
-Color.RED -> {}
-Color.GREEN -> {}
-Color.BLUE -> {}
+    Color.RED -> {}
+    Color.GREEN -> {}
+    Color.BLUE -> {}
 }
 ```
 
@@ -281,7 +281,7 @@ https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html
 
 ```kotlin
 override fun equals(other: Any?): Boolean {
-return true
+    return true
 }
 ```
 
@@ -289,7 +289,7 @@ return true
 
 ```kotlin
 override fun equals(other: Any?): Boolean {
-return this === other
+    return this === other
 }
 ```
 
@@ -344,12 +344,12 @@ failure in the program. In almost all cases it is more appropriate to throw an e
 
 ```kotlin
 fun randomFunction() {
-val result = doWork()
-if (result == FAILURE) {
-exitProcess(2)
-} else {
-exitProcess(0)
-}
+    val result = doWork()
+    if (result == FAILURE) {
+        exitProcess(2)
+    } else {
+        exitProcess(0)
+    }
 }
 ```
 
@@ -357,12 +357,12 @@ exitProcess(0)
 
 ```kotlin
 fun main() {
-val result = doWork()
-if (result == FAILURE) {
-exitProcess(2)
-} else {
-exitProcess(0)
-}
+    val result = doWork()
+    if (result == FAILURE) {
+        exitProcess(2)
+    } else {
+        exitProcess(0)
+    }
 }
 ```
 
@@ -394,7 +394,7 @@ Platform types must be declared explicitly in public APIs to prevent unexpected 
 
 ```kotlin
 class Person {
-fun apiCall() = System.getProperty("propertyName")
+    fun apiCall() = System.getProperty("propertyName")
 }
 ```
 
@@ -402,7 +402,7 @@ fun apiCall() = System.getProperty("propertyName")
 
 ```kotlin
 class Person {
-fun apiCall(): String = System.getProperty("propertyName")
+    fun apiCall(): String = System.getProperty("propertyName")
 }
 ```
 
@@ -511,7 +511,7 @@ fun String.errorProneUnitWithReceiver() = run { println(this) }
 
 ```kotlin
 fun blockStatementUnit() {
-// code
+    // code
 }
 
 // explicit Unit is compliant by default; can be configured to enforce block statement
@@ -618,8 +618,8 @@ guaranteed. Try using constructor injection or delegation to initialize properti
 
 ```kotlin
 class Foo {
-private lateinit var i1: Int
-lateinit var i2: Int
+    private lateinit var i1: Int
+    lateinit var i2: Int
 }
 ```
 
@@ -638,11 +638,11 @@ Based on an IntelliJ IDEA inspection MapGetWithNotNullAssertionOperatorInspectio
 #### Noncompliant Code:
 
 ```kotlin
-val map = emptyMap<String, String>()
-map["key"]!!
+ val map = emptyMap<String, String>()
+ map["key"]!!
 
-val map = emptyMap<String, String>()
-map.get("key")!!
+ val map = emptyMap<String, String>()
+ map.get("key")!!
 ```
 
 #### Compliant Code:
@@ -685,14 +685,14 @@ This rule checks whether overriding methods invoke the super method when the sup
 
 ```kotlin
 open class ParentClass {
-@CallSuper
-open fun someMethod(arg: Int) {
-}
+    @CallSuper
+    open fun someMethod(arg: Int) {
+    }
 }
 class MyClass : ParentClass() {
-override fun someMethod(arg: Int) {
-doSomething()
-}
+    override fun someMethod(arg: Int) {
+        doSomething()
+    }
 }
 ```
 
@@ -700,15 +700,15 @@ doSomething()
 
 ```kotlin
 open class ParentClass {
-@CallSuper
-open fun someMethod(arg: Int) {
-}
+    @CallSuper
+    open fun someMethod(arg: Int) {
+    }
 }
 class MyClass : ParentClass() {
-override fun someMethod(arg: Int) {
-super.someMethod(arg)
-doSomething()
-}
+    override fun someMethod(arg: Int) {
+        super.someMethod(arg)
+        doSomething()
+    }
 }
 ```
 
@@ -736,7 +736,7 @@ functionThatReturnsClosable().doStuff()
 
 ```kotlin
 MyCloseable().use {
-// do stuff with myCloseable
+    // do stuff with myCloseable
 }
 
 MyClosable().use { it.doStuff() }
@@ -758,11 +758,11 @@ if-statement.
 
 ```kotlin
 class A(private var a: Int?) {
-fun foo() {
-if (a != null) {
-println(2 + a!!)
-}
-}
+  fun foo() {
+    if (a != null) {
+      println(2 + a!!)
+    }
+  }
 }
 ```
 
@@ -770,11 +770,11 @@ println(2 + a!!)
 
 ```kotlin
 class A(private val a: Int?) {
-fun foo() {
-if (a != null) {
-println(2 + a)
-}
-}
+  fun foo() {
+    if (a != null) {
+      println(2 + a)
+    }
+  }
 }
 ```
 
@@ -790,11 +790,11 @@ Reports `toString()` calls with a nullable receiver that may return the string "
 
 ```kotlin
 fun foo(a: Any?): String {
-return a.toString()
+    return a.toString()
 }
 
 fun bar(a: Any?): String {
-return "$a"
+    return "$a"
 }
 ```
 
@@ -802,11 +802,11 @@ return "$a"
 
 ```kotlin
 fun foo(a: Any?): String {
-return a?.toString() ?: "-"
+    return a?.toString() ?: "-"
 }
 
 fun bar(a: Any?): String {
-return "${a ?: "-"}"
+    return "${a ?: "-"}"
 }
 ```
 
@@ -822,8 +822,8 @@ Reports properties that are used before declaration.
 
 ```kotlin
 class C {
-private val number
-get() = if (isValid) 1 else 0
+    private val number
+        get() = if (isValid) 1 else 0
 
     val list = listOf(number)
 
@@ -831,7 +831,7 @@ get() = if (isValid) 1 else 0
 }
 
 fun main() {
-println(C().list) // [0]
+    println(C().list) // [0]
 }
 ```
 
@@ -839,7 +839,7 @@ println(C().list) // [0]
 
 ```kotlin
 class C {
-private val isValid = true
+    private val isValid = true
 
     private val number
         get() = if (isValid) 1 else 0
@@ -848,7 +848,7 @@ private val isValid = true
 }
 
 fun main() {
-println(C().list) // [1]
+    println(C().list) // [1]
 }
 ```
 
@@ -870,7 +870,7 @@ for (i in 1..2) break
 
 ```kotlin
 for (i in 1..2) {
-if (i == 1) break
+    if (i == 1) break
 }
 ```
 
@@ -905,31 +905,31 @@ type changes. And code gets error prone as it gets easy to mix up parameters of 
 
 ```kotlin
 fun log(enabled: Boolean, shouldLog: Boolean) {
-if (shouldLog) println(enabled)
+    if (shouldLog) println(enabled)
 }
 fun test() {
-log(false, true)
+    log(false, true)
 }
 
 // allowAdjacentDifferentTypeParams = false
 fun logMsg(msg: String, shouldLog: Boolean) {
-if(shouldLog) println(msg)
+   if(shouldLog) println(msg)
 }
 fun test() {
-logMsg("test", true)
+    logMsg("test", true)
 }
 
 // allowSingleParamUse = false and allowAdjacentDifferentTypeParams = false
 fun logMsg(msg: String) {
-println(msg)
+    println(msg)
 }
 fun test() {
-logMsg("test")
+    logMsg("test")
 }
 
 // ignoreArgumentsMatchingNames = false
 fun test(enabled: Boolean, shouldLog: Boolean) {
-log(enabled, shouldLog)
+    log(enabled, shouldLog)
 }
 ```
 
@@ -937,30 +937,30 @@ log(enabled, shouldLog)
 
 ```kotlin
 fun log(enabled: Boolean, shouldLog: Boolean) {
-if (shouldLog) println(enabled)
+    if (shouldLog) println(enabled)
 }
 fun test() {
-log(enabled = false, shouldLog = true)
+    log(enabled = false, shouldLog = true)
 }
 // ignoreArgumentsMatchingNames = true
 fun test(enabled: Boolean, shouldLog: Boolean) {
-log(enabled, shouldLog)
+    log(enabled, shouldLog)
 }
 
 // allowAdjacentDifferentTypeParams = true
 fun logMsg(msg: String, shouldLog: Boolean) {
-if(shouldLog) println(msg)
+   if(shouldLog) println(msg)
 }
 fun test() {
-logMsg("test", true)
+    logMsg("test", true)
 }
 
 // allowSingleParamUse = true
 fun logMsg(msg: String) {
-println(msg)
+    println(msg)
 }
 fun test() {
-logMsg("test")
+    logMsg("test")
 }
 ```
 
@@ -1043,14 +1043,14 @@ Catch blocks can be unreachable if the exception has already been caught in the 
 
 ```kotlin
 fun test() {
-try {
-foo()
-} catch (t: Throwable) {
-bar()
-} catch (e: Exception) {
-// Unreachable
-baz()
-}
+    try {
+        foo()
+    } catch (t: Throwable) {
+        bar()
+    } catch (e: Exception) {
+        // Unreachable
+        baz()
+    }
 }
 ```
 
@@ -1058,13 +1058,13 @@ baz()
 
 ```kotlin
 fun test() {
-try {
-foo()
-} catch (e: Exception) {
-baz()
-} catch (t: Throwable) {
-bar()
-}
+    try {
+        foo()
+    } catch (e: Exception) {
+        baz()
+    } catch (t: Throwable) {
+        bar()
+    }
 }
 ```
 
@@ -1082,16 +1082,16 @@ This unreachable code should be removed as it serves no purpose.
 
 ```kotlin
 for (i in 1..2) {
-break
-println() // unreachable
+    break
+    println() // unreachable
 }
 
 throw IllegalArgumentException()
 println() // unreachable
 
 fun f() {
-return
-println() // unreachable
+    return
+    println() // unreachable
 }
 ```
 
@@ -1109,7 +1109,7 @@ null safety. Guard the code appropriately to prevent NullPointerExceptions.
 
 ```kotlin
 fun foo(str: String?) {
-println(str!!.length)
+    println(str!!.length)
 }
 ```
 
@@ -1117,7 +1117,7 @@ println(str!!.length)
 
 ```kotlin
 fun foo(str: String?) {
-println(str?.length)
+    println(str?.length)
 }
 ```
 
@@ -1135,11 +1135,11 @@ Reports casts that will never succeed.
 
 ```kotlin
 fun foo(s: String) {
-println(s as Int)
+    println(s as Int)
 }
 
 fun bar(s: String) {
-println(s as? Int)
+    println(s as? Int)
 }
 ```
 
@@ -1147,7 +1147,7 @@ println(s as? Int)
 
 ```kotlin
 fun foo(s: Any) {
-println(s as Int)
+    println(s as Int)
 }
 ```
 
@@ -1163,7 +1163,7 @@ Detects unused unary operators.
 
 ```kotlin
 val x = 1 + 2
-+ 3 + 4
+    + 3 + 4
 println(x) // 3
 ```
 
@@ -1191,9 +1191,9 @@ i = 1 + i++
 i = i++ + 1
 
 fun foo(): Int {
-var i = 0
-// ...
-return i++
+    var i = 0
+    // ...
+    return i++
 }
 ```
 
@@ -1206,10 +1206,10 @@ i = i + 2
 i = i + 2
 
 fun foo(): Int {
-var i = 0
-// ...
-i++
-return i
+    var i = 0
+    // ...
+    i++
+    return i
 }
 ```
 

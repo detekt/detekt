@@ -20,6 +20,7 @@ dependencies {
     testImplementation(projects.detektReportCheckstyle)
     testImplementation(projects.detektReportSarif)
     testImplementation(projects.detektTest)
+    testImplementation(projects.detektTestJunit)
     testImplementation(projects.detektTestUtils)
     testImplementation(testFixtures(projects.detektApi))
     testImplementation(libs.classgraph)

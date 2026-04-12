@@ -12,13 +12,14 @@ dependencies {
     implementation(libs.kotlin.scriptingJvm)
 
     testImplementation(libs.assertj.core)
+    testImplementation(projects.detektTestJunit)
 }
 
 kotlin {
     @OptIn(org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation::class)
     abiValidation {
         filters {
-            excluded {
+            exclude {
                 byNames.add("dev.detekt.test.utils.internal.**")
             }
         }

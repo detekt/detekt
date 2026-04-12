@@ -25,12 +25,12 @@ Instead, use `throw IllegalStateException(throwable)` to rethrow the throwable a
 
 ```kotlin
 fun foo() {
-try {
-// ... some code
-} catch(e: IOException) {
-// some addition handling
-error(e)
-}
+    try {
+        // ... some code
+    } catch(e: IOException) {
+        // some addition handling
+        error(e)
+    }
 }
 ```
 
@@ -38,12 +38,12 @@ error(e)
 
 ```kotlin
 fun foo() {
-try {
-// ... some code
-} catch(e: IOException) {
-// some addition handling
-throw e // or throw IllegalStateException(<some custom error msg>, e)
-}
+    try {
+        // ... some code
+    } catch(e: IOException) {
+        // some addition handling
+        throw e // or throw IllegalStateException(<some custom error msg>, e)
+    }
 }
 ```
 
@@ -87,11 +87,11 @@ use multiple catch blocks. These catch blocks should then catch the specific exc
 
 ```kotlin
 fun foo() {
-try {
-// ... do some I/O
-} catch(e: IOException) {
-if (e is MyException || (e as MyException) != null) { }
-}
+    try {
+        // ... do some I/O
+    } catch(e: IOException) {
+        if (e is MyException || (e as MyException) != null) { }
+    }
 }
 ```
 
@@ -99,11 +99,11 @@ if (e is MyException || (e as MyException) != null) { }
 
 ```kotlin
 fun foo() {
-try {
-// ... do some I/O
-} catch(e: MyException) {
-} catch(e: IOException) {
-}
+    try {
+        // ... do some I/O
+    } catch(e: MyException) {
+    } catch(e: IOException) {
+    }
 }
 ```
 
@@ -120,11 +120,11 @@ serve as temporary declarations and should not be put into production environmen
 
 ```kotlin
 fun foo() {
-throw NotImplementedError()
+    throw NotImplementedError()
 }
 
 fun todo() {
-TODO("")
+    TODO("")
 }
 ```
 
@@ -173,15 +173,15 @@ a better logging solution should be used.
 
 ```kotlin
 fun foo() {
-Thread.dumpStack()
+    Thread.dumpStack()
 }
 
 fun bar() {
-try {
-// ...
-} catch (e: IOException) {
-e.printStackTrace()
-}
+    try {
+        // ...
+    } catch (e: IOException) {
+        e.printStackTrace()
+    }
 }
 ```
 
@@ -191,11 +191,11 @@ e.printStackTrace()
 val LOGGER = Logger.getLogger()
 
 fun bar() {
-try {
-// ...
-} catch (e: IOException) {
-LOGGER.info(e)
-}
+    try {
+        // ...
+    } catch (e: IOException) {
+        LOGGER.info(e)
+    }
 }
 ```
 
@@ -212,11 +212,11 @@ It ignores cases:
 
 ```kotlin
 fun foo() {
-try {
-// ...
-} catch (e: IOException) {
-throw e
-}
+    try {
+        // ...
+    } catch (e: IOException) {
+        throw e
+    }
 }
 ```
 
@@ -224,23 +224,23 @@ throw e
 
 ```kotlin
 fun foo() {
-try {
-// ...
-} catch (e: IOException) {
-throw MyException(e)
-}
-try {
-// ...
-} catch (e: IOException) {
-print(e)
-throw e
-}
-try {
-// ...
-} catch (e: IOException) {
-print(e.message)
-throw e
-}
+    try {
+        // ...
+    } catch (e: IOException) {
+        throw MyException(e)
+    }
+    try {
+        // ...
+    } catch (e: IOException) {
+        print(e)
+        throw e
+    }
+    try {
+        // ...
+    } catch (e: IOException) {
+        print(e.message)
+        throw e
+    }
 
     try {
         // ...
@@ -276,21 +276,21 @@ as expected.
 
 ```kotlin
 fun foo() {
-try {
-throw MyException()
-} finally {
-return // prevents MyException from being propagated
-}
+    try {
+        throw MyException()
+    } finally {
+        return // prevents MyException from being propagated
+    }
 }
 
 val a: String = try {
-"s"
+  "s"
 } catch (e: Exception) {
-"e"
+  "e"
 } finally {
-// Implies assigning "f" to variable a, but the exception gets propagated first.
-// Misleading and not immediately obvious, this gets flagged!
-"f"
+  // Implies assigning "f" to variable a, but the exception gets propagated first.
+  // Misleading and not immediately obvious, this gets flagged!
+  "f"
 }
 ```
 
@@ -298,10 +298,10 @@ val a: String = try {
 
 ```kotlin
 fun bar(thing: Thing): Unit = try {
-thing.doSomethingReturningUnit()
+  thing.doSomethingReturningUnit()
 } finally {
-// Any exceptions will still be propagated, but the Unit-returning cleanup function will be called first
-thing.cleanUp()
+  // Any exceptions will still be propagated, but the Unit-returning cleanup function will be called first
+  thing.cleanUp()
 }
 ```
 
@@ -331,21 +331,21 @@ For that reason, this rule ignores that these configured exception types are cau
 
 ```kotlin
 fun foo() {
-try {
-// ...
-} catch(e: IOException) {
-throw MyException(e.message) // e is swallowed
-}
-try {
-// ...
-} catch(e: IOException) {
-throw MyException() // e is swallowed
-}
-try {
-// ...
-} catch(e: IOException) {
-bar() // exception is unused
-}
+    try {
+        // ...
+    } catch(e: IOException) {
+        throw MyException(e.message) // e is swallowed
+    }
+    try {
+        // ...
+    } catch(e: IOException) {
+        throw MyException() // e is swallowed
+    }
+    try {
+        // ...
+    } catch(e: IOException) {
+        bar() // exception is unused
+    }
 }
 ```
 
@@ -353,16 +353,16 @@ bar() // exception is unused
 
 ```kotlin
 fun foo() {
-try {
-// ...
-} catch(e: IOException) {
-throw MyException(e)
-}
-try {
-// ...
-} catch(e: IOException) {
-println(e) // logging is ok here
-}
+    try {
+        // ...
+    } catch(e: IOException) {
+        throw MyException(e)
+    }
+    try {
+        // ...
+    } catch(e: IOException) {
+        println(e) // logging is ok here
+    }
 }
 ```
 
@@ -377,11 +377,11 @@ block should be avoided as it can lead to confusion and discarded exceptions.
 
 ```kotlin
 fun foo() {
-try {
-// ...
-} finally {
-throw IOException()
-}
+    try {
+        // ...
+    } finally {
+        throw IOException()
+    }
 }
 ```
 
@@ -396,8 +396,8 @@ An exception should only be thrown if it can be handled by a "higher" function.
 
 ```kotlin
 fun main(args: Array<String>) {
-// ...
-throw IOException() // exception should not be thrown here
+    // ...
+    throw IOException() // exception should not be thrown here
 }
 ```
 
@@ -420,10 +420,10 @@ down an underlying issue in a better way.
 
 ```kotlin
 fun foo(bar: Int) {
-if (bar < 1) {
-throw IllegalArgumentException()
-}
-// ...
+    if (bar < 1) {
+        throw IllegalArgumentException()
+    }
+    // ...
 }
 ```
 
@@ -431,10 +431,10 @@ throw IllegalArgumentException()
 
 ```kotlin
 fun foo(bar: Int) {
-if (bar < 1) {
-throw IllegalArgumentException("bar must be greater than zero")
-}
-// ...
+    if (bar < 1) {
+        throw IllegalArgumentException("bar must be greater than zero")
+    }
+    // ...
 }
 ```
 
@@ -449,11 +449,11 @@ meaningful exception types.
 
 ```kotlin
 fun foo() {
-try {
-// ...
-} catch (e: IllegalStateException) {
-throw IllegalStateException(e) // rethrows the same exception
-}
+    try {
+        // ...
+    } catch (e: IllegalStateException) {
+        throw IllegalStateException(e) // rethrows the same exception
+    }
 }
 ```
 
@@ -461,11 +461,11 @@ throw IllegalStateException(e) // rethrows the same exception
 
 ```kotlin
 fun foo() {
-try {
-// ...
-} catch (e: IllegalStateException) {
-throw MyException(e)
-}
+    try {
+        // ...
+    } catch (e: IllegalStateException) {
+        throw MyException(e)
+    }
 }
 ```
 
@@ -491,9 +491,9 @@ exception is too broad it can lead to unintended exceptions being caught.
 
 ```kotlin
 fun foo() {
-try {
-// ... do some I/O
-} catch(e: Exception) { } // too generic exception caught here
+    try {
+        // ... do some I/O
+    } catch(e: Exception) { } // too generic exception caught here
 }
 ```
 
@@ -501,9 +501,9 @@ try {
 
 ```kotlin
 fun foo() {
-try {
-// ... do some I/O
-} catch(e: IOException) { }
+    try {
+        // ... do some I/O
+    } catch(e: IOException) { }
 }
 ```
 
@@ -524,10 +524,10 @@ exceptions to the case that has currently occurred.
 
 ```kotlin
 fun foo(bar: Int) {
-if (bar < 1) {
-throw Exception() // too generic exception thrown here
-}
-// ...
+    if (bar < 1) {
+        throw Exception() // too generic exception thrown here
+    }
+    // ...
 }
 ```
 
@@ -535,9 +535,9 @@ throw Exception() // too generic exception thrown here
 
 ```kotlin
 fun foo(bar: Int) {
-if (bar < 1) {
-throw IllegalArgumentException("bar must be greater than zero")
-}
-// ...
+    if (bar < 1) {
+        throw IllegalArgumentException("bar must be greater than zero")
+    }
+    // ...
 }
 ```

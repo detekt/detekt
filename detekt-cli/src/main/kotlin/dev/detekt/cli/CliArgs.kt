@@ -187,10 +187,12 @@ class CliArgs {
      */
     @Parameter(
         names = ["--classpath", "-cp"],
-        description = "Paths where to find user class files and depending jar files. " +
-            "Used for type resolution."
+        converter = PathConverter::class,
+        splitter = ClassPathSplitter::class,
+        validateValueWith = [PathValidator::class],
+        description = "Paths where to find user class files and depending jar files. Used for type resolution."
     )
-    var classpath: String? = null
+    var classpath: List<Path> = emptyList()
 
     @Parameter(
         names = ["--api-version"],

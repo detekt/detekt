@@ -250,7 +250,7 @@ class SuspendFunSwallowedCancellation(config: Config) :
                     resolveToCall()
                         ?.successfulCallOrNull<KaCompoundVariableAccessCall>()
                         ?.compoundOperation
-                        ?.operationPartiallyAppliedSymbol
+                        ?.operationCall
                         ?.signature
                         ?.symbol
                         ?.isSuspend
@@ -376,6 +376,7 @@ class SuspendFunSwallowedCancellation(config: Config) :
             "java.lang.IllegalStateException", // JVM
             "java.lang.RuntimeException", // JVM
             "java.lang.Exception", // JVM
+            "kotlin.Throwable",
         )
     }
 }

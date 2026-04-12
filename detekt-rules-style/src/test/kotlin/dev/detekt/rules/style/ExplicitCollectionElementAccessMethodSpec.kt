@@ -178,6 +178,83 @@ class ExplicitCollectionElementAccessMethodSpec {
                 """.trimIndent()
                 assertThat(subject.lintWithContext(env, code)).isEmpty()
             }
+
+            @Test
+            fun `does not report when put return value is implicitly used`() {
+                val code = $$"""
+                    fun handlePutResultFromLambda(result: () -> String?) {
+                        println("Result = ${result()}")
+                    }
+
+                    fun handlePutResultDirectly(result: String?) {
+                        println("Result = $result")
+                    }
+
+                    fun main() {
+                        val map = mutableMapOf<Int, String>()
+                        handlePutResultFromLambda { map.put(123, "abc") }
+                        handlePutResultDirectly(map.put(123, "abc"))
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
+
+            @Test
+            fun `reports when put is last statement in Unit-returning lambda`() {
+                val code = """
+                    fun doSomething(action: () -> Unit) {
+                        action()
+                    }
+
+                    fun main() {
+                        val map = mutableMapOf<Int, String>()
+                        doSomething { map.put(123, "abc") }
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).hasSize(1)
+            }
+
+            @Test
+            fun `reports when put is called multiple times in Unit-returning lambda`() {
+                val code = """
+                    fun doSomething(action: () -> Unit) {
+                        action()
+                    }
+
+                    fun main() {
+                        val map = mutableMapOf<Int, String>()
+                        doSomething { 
+                            map.put(123, "abc") 
+                            map.put(456, "def") 
+                            map.put(789, "ghi") 
+                        }
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).hasSize(3)
+            }
+
+            @Test
+            fun `does not report for a custom map type`() {
+                val code = $$"""
+                    interface PersistentMap<K, V> : Map<K, V> {
+                        fun put(key: K, value: V): PersistentMap<K, V>
+                    }
+
+                    fun handlePutResultFromLambda(result: () -> PersistentMap<Int, String>) {
+                        println("Result = ${result()}")
+                    }
+
+                    fun handlePutResultDirectly(result: PersistentMap<Int, String>) {
+                        println("Result = $result")
+                    }
+
+                    fun main(map: PersistentMap<Int, String>) {
+                        handlePutResultFromLambda { map.put(123, "abc") }
+                        handlePutResultDirectly(map.put(456, "xyz"))
+                    }
+                """.trimIndent()
+                assertThat(subject.lintWithContext(env, code)).isEmpty()
+            }
         }
 
         @Nested

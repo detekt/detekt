@@ -2,7 +2,6 @@ package dev.detekt.cli
 
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
-import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.condition.DisabledOnOs
@@ -108,9 +107,9 @@ class ReportPathSpec {
 
         @Test
         fun `fails when part size is illegal`() {
-            assertThatIllegalStateException()
+            assertThatIllegalArgumentException()
                 .isThrownBy { ReportPath.from("") }
-                .withMessage("Input '' must consist of two parts for Unix OSs or three for Windows (report-id:path).")
+                .withMessage("Input '' must consist of two parts (report-id:path).")
         }
     }
 }

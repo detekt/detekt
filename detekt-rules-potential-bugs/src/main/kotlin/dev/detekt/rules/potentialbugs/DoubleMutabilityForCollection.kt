@@ -62,9 +62,10 @@ class DoubleMutabilityForCollection(config: Config) :
         if (!property.isVar) return
         val type = analyze(property) { property.returnType.symbol?.classId?.asSingleFqName() }
         if (type in mutableTypes) {
+            val valOrVarKeyword = property.valOrVarKeyword
             report(
                 Finding(
-                    Entity.from(property),
+                    Entity.from(valOrVarKeyword, property),
                     "Variable ${property.name} is declared as `var` with a mutable type $type. " +
                         "Consider using `val` or an immutable collection or value type"
                 )

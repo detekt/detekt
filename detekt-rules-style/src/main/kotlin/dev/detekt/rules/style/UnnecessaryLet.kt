@@ -122,22 +122,18 @@ private fun KtExpression?.getRootExpression(): KtExpression? {
 
 private fun KtLambdaExpression.countLambdaParameterReference(): Int {
     val bodyExpression = bodyExpression ?: return 0
-    val variableList = if (valueParameters.isNotEmpty()) {
-        valueParameters.first().destructuringDeclaration?.let {
-            analyze(it) {
-                it.symbol.entries
+    return analyze(this) {
+        if (valueParameters.isNotEmpty()) {
+            valueParameters.first().destructuringDeclaration?.symbol?.entries ?: listOf(firstParameterOrNull())
+        } else {
+            // implicit it param
+            listOf(firstParameterOrNull())
+        }
+            .filterNotNull()
+            .sumOf { variableSymbol ->
+                bodyExpression.collectDescendantsOfType<KtSimpleNameExpression> {
+                    it.mainReference.resolveToSymbol() == variableSymbol
+                }.count()
             }
-        } ?: listOf(firstParameterOrNull())
-    } else {
-        // implicit it param
-        listOf(firstParameterOrNull())
-    }.filterNotNull()
-
-    return variableList.sumOf { variableSymbol ->
-        bodyExpression.collectDescendantsOfType<KtSimpleNameExpression> {
-            analyze(it) {
-                it.mainReference.resolveToSymbol() == variableSymbol
-            }
-        }.count()
     }
 }

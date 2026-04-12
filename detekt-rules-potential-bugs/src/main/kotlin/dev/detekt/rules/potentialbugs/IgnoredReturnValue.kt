@@ -116,8 +116,9 @@ class IgnoredReturnValue(config: Config) :
         super.visitCallExpression(expression)
 
         analyze(expression) {
-            val symbol = expression.resolveToCall()?.singleFunctionCallOrNull()?.symbol ?: return
-            val returnType = symbol.returnType
+            val functionCall = expression.resolveToCall()?.singleFunctionCallOrNull() ?: return
+            val symbol = functionCall.symbol
+            val returnType = functionCall.signature.returnType
             if (returnType.isUnitType || returnType.isNothingType) return
 
             if (ignoreFunctionCall.any { it.match(symbol) }) return
@@ -158,7 +159,7 @@ class IgnoredReturnValue(config: Config) :
         val origin = (this as? KaClassSymbol)?.origin
         if (origin != KaSymbolOrigin.JAVA_SOURCE && origin != KaSymbolOrigin.JAVA_LIBRARY) return emptyList()
         val packageFqName = this.classId?.packageFqName ?: return emptyList()
-        val javaClassFinder = JavaClassFinderImpl().apply {
+        val javaClassFinder = JavaClassFinderImpl(null).apply {
             setScope(scope)
             setProjectInstance(project)
         }

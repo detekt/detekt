@@ -1,4 +1,4 @@
-package dev.detekt.parser
+package dev.detekt.core.parser
 
 import org.jetbrains.kotlin.cli.common.arguments.K2JVMCompilerArguments
 import org.jetbrains.kotlin.cli.common.arguments.parseCommandLineArguments
@@ -26,7 +26,7 @@ import java.nio.file.Path
 @Suppress("LongParameterList")
 fun createCompilerConfiguration(
     pathsToAnalyze: List<Path>,
-    classpath: List<String>,
+    classpath: List<Path>,
     apiVersion: String?,
     languageVersion: String?,
     jvmTarget: String,
@@ -47,7 +47,7 @@ fun createCompilerConfiguration(
             .toList()
     }
 
-    val classpathFiles = classpath.map { File(it) }
+    val classpathFiles = classpath.map(Path::toFile)
 
     val jvmCompilerArguments = K2JVMCompilerArguments()
 

@@ -3,6 +3,7 @@
 package dev.detekt.rules.potentialbugs
 
 import dev.detekt.api.Config
+import dev.detekt.test.TestConfig
 import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.junit.KotlinCoreEnvironmentTest
 import dev.detekt.test.lintWithContext
@@ -84,6 +85,42 @@ class MissingUseCallSpec(private val env: KotlinEnvironmentContainer) {
             fun MyCloseable.actOnClosable(): MyCloseable { 
                 this.doStuff()
                 return this
+            }
+        """.trimIndent()
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `does not report when _Closeable_ is passed to requireNotNull and result uses _use_`() {
+        val code = """
+            import java.io.InputStream
+
+            fun createInputStream(): InputStream? {
+                throw UnsupportedOperationException()
+            }
+
+            fun test() {
+                requireNotNull(createInputStream()) { "Stream should not be null" }.use {
+                }
+            }
+        """.trimIndent()
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `does not report when _Closeable_ is passed to checkNotNull and result uses _use_`() {
+        val code = """
+            import java.io.InputStream
+
+            fun createInputStream(): InputStream? {
+                throw UnsupportedOperationException()
+            }
+
+            fun test() {
+                checkNotNull(createInputStream()) { "Stream should not be null" }.use {
+                }
             }
         """.trimIndent()
         val findings = subject.lintWithContext(env, code)
@@ -794,6 +831,40 @@ class MissingUseCallSpec(private val env: KotlinEnvironmentContainer) {
             val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
         }
+    }
+
+    @Test
+    fun `does report when _use_ is not used on ByteArrayOutputStream by default`() {
+        val code = """
+            import java.io.ByteArrayOutputStream
+        
+            fun main() {
+                val stream = ByteArrayOutputStream()
+                stream.size()
+            }
+        """.trimIndent()
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `does report when _use_ is not used on an excluded class`() {
+        val subjectWithConfig = MissingUseCall(
+            TestConfig(
+                "ignoreClass" to listOf("java.io.FileOutputStream")
+            )
+        )
+        val code = """
+            import java.io.FileOutputStream
+            import java.io.File
+
+            fun main() {
+                val writer = FileOutputStream(File(""))
+                writer.write(0)
+            }
+        """.trimIndent()
+        val findings = subjectWithConfig.lintWithContext(env, code)
+        assertThat(findings).isEmpty()
     }
 
     @Nested

@@ -10,6 +10,11 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.condition.EnabledIf
 
+/**
+ * Run all tests opting out of AGP 9's built-in Kotlin support, as well as setting
+ * onlyEnableUnitTestForTheTestedBuildType to false. This allows all tests that worked on AGP 8 to run with AGP 9
+ * without any changes, and should ensure that AGP 8 continues working.
+ */
 @EnabledIf("dev.detekt.gradle.DetektAndroidSpecKt#isAndroidSdkInstalled")
 class DetektAndroidSpec {
 

@@ -85,10 +85,10 @@ class MagicNumber(config: Config) :
     private val ignoreHashCodeFunction: Boolean by config(true)
 
     @Configuration("whether magic numbers in property declarations should be ignored")
-    private val ignorePropertyDeclaration: Boolean by config(false)
+    private val ignorePropertyDeclaration: Boolean by config(true)
 
     @Configuration("whether magic numbers in local variable declarations should be ignored")
-    private val ignoreLocalVariableDeclaration: Boolean by config(false)
+    private val ignoreLocalVariableDeclaration: Boolean by config(true)
 
     @Configuration("whether magic numbers in constant declarations should be ignored")
     private val ignoreConstantDeclaration: Boolean by config(true)
@@ -112,7 +112,7 @@ class MagicNumber(config: Config) :
     private val ignoreExtensionFunctions: Boolean by config(true)
 
     override fun visitConstantExpression(expression: KtConstantExpression) {
-        val elementType = expression.elementType
+        val elementType = expression.iElementType
         if (elementType != KtNodeTypes.INTEGER_CONSTANT && elementType != KtNodeTypes.FLOAT_CONSTANT) return
 
         if (isIgnoredByConfig(expression) ||
