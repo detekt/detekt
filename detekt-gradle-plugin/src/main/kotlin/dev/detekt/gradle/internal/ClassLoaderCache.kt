@@ -14,7 +14,7 @@ internal class DefaultClassLoaderCache : ClassLoaderCache {
     private val classpathFilesHashWithLoaders = ConcurrentHashMap<Int, URLClassLoader>()
 
     override fun getOrCreate(classpath: Set<File>): URLClassLoader {
-        val classpathHashCode = HashSet(classpath).hashCode()
+        val classpathHashCode = classpath.sorted().hashCode()
         return classpathFilesHashWithLoaders.getOrPut(classpathHashCode) {
             URLClassLoader(
                 classpath.map { it.toURI().toURL() }.toTypedArray(),
