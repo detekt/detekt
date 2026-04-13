@@ -44,6 +44,7 @@ constructor(
         style:
           MagicNumber:
             active: true
+            ignorePropertyDeclaration: false
     """.trimIndent()
 
     /**
@@ -55,7 +56,7 @@ constructor(
             internal class $className(
                 val randomDefaultValue: String = "$randomString"
             ) {
-                fun smellyMethod(): Int = ${if (withFinding) "11" else "0"}
+                val smellyConstant: Int = ${if (withFinding) "11" else "0"}
             }
             
         """.trimIndent() // Last line empty to prevent NewLineAtEndOfFile.
