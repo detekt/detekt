@@ -55,7 +55,7 @@ constructor(
             internal class $className(
                 val randomDefaultValue: String = "$randomString"
             ) {
-                val smellyConstant: Int = ${if (withFinding) "11" else "0"}
+                fun smellyMethod(): Int = ${if (withFinding) "11" else "0"}
             }
             
         """.trimIndent() // Last line empty to prevent NewLineAtEndOfFile.
