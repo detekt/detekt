@@ -69,7 +69,10 @@ abstract class KtlintRule(config: Config, description: String) : Rule(config, de
 
         usesEditorConfigProperties[CODE_STYLE_PROPERTY] = codeStyle
 
-        usesEditorConfigProperties[INDENT_STYLE_PROPERTY] = "space"
+        usesEditorConfigProperties[INDENT_STYLE_PROPERTY] = usesEditorConfigProperties.getOrDefault(
+            INDENT_STYLE_PROPERTY,
+            "space",
+        )
 
         val properties = buildMap {
             usesEditorConfigProperties.forEach { (editorConfigProperty, defaultValue) ->
