@@ -365,10 +365,8 @@ class SuspendFunSwallowedCancellation(config: Config) :
 
         val ensureActiveExpression = ifAtStart.then as? KtDotQualifiedExpression ?: return false
 
-        return (
-            ensureActiveExpression.receiverExpression.text == "currentCoroutineContext()" &&
-                ensureActiveExpression.selectorExpression?.text == "ensureActive()"
-            )
+        return ensureActiveExpression.receiverExpression.text == "currentCoroutineContext()" &&
+            ensureActiveExpression.selectorExpression?.text == "ensureActive()"
     }
 
     private fun KtCatchClause.doesAnythingElseBeforeRethrowing(): Boolean {
