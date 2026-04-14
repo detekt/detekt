@@ -7,19 +7,13 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.rules.coroutines.utils.CoroutineCallableIds
-import org.jetbrains.kotlin.analysis.api.KaContextParameterApi
-import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.components.defaultType
-import org.jetbrains.kotlin.analysis.api.components.semanticallyEquals
-import org.jetbrains.kotlin.analysis.api.components.type
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaCompoundVariableAccessCall
 import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
-import org.jetbrains.kotlin.analysis.api.symbols.findTypeAlias
 import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.ClassId
@@ -192,29 +186,27 @@ class SuspendFunSwallowedCancellation(config: Config) :
 
     override fun visitTryExpression(expression: KtTryExpression) {
         super.visitTryExpression(expression)
-        analyze(expression) {
-            val function = expression.getParentOfType<KtFunction>(strict = true)
+        val function = expression.getParentOfType<KtFunction>(strict = true)
 
-            if (function?.isSuspend != true || !expression.tryBlock.hasSuspendCalls()) {
-                return
-            }
+        if (function?.isSuspend != true || !expression.tryBlock.hasSuspendCalls()) {
+            return
+        }
 
-            for (catchClause in expression.catchClauses) {
-                val parameter = catchClause?.catchParameter ?: continue
-                if (parameter.isCancellationExceptionOrSuperClass()) {
-                    // This could be a CancellationException - we should make sure that it gets explicitly
-                    // re-thrown upwards immediately
-                    val wasRethrownAtStart = catchClause.exceptionWasRethrown(parameter) &&
-                        !catchClause.doesAnythingElseBeforeRethrowing()
-                    if (
-                        !wasRethrownAtStart &&
-                        !catchClause.exceptionWasCheckedAndEnsureActiveCalled(parameter)
-                    ) {
-                        report(catchClause)
-                    }
-
-                    return // Only need to analyse the first CancellationException superclass instance
+        for (catchClause in expression.catchClauses) {
+            val parameter = catchClause?.catchParameter ?: continue
+            if (parameter.isCancellationExceptionOrSuperClass()) {
+                // This could be a CancellationException - we should make sure that it gets explicitly
+                // re-thrown upwards immediately
+                val wasRethrownAtStart = catchClause.exceptionWasRethrown(parameter) &&
+                    !catchClause.doesAnythingElseBeforeRethrowing()
+                if (
+                    !wasRethrownAtStart &&
+                    !catchClause.exceptionWasCheckedAndEnsureActiveCalled(parameter)
+                ) {
+                    report(catchClause)
                 }
+
+                return // Only need to analyse the first CancellationException superclass instance
             }
         }
     }
@@ -342,9 +334,7 @@ class SuspendFunSwallowedCancellation(config: Config) :
      * Checks wheter this catch clause starts with a
      * `if (e is CancellationException) currentCoroutineContext().ensureActive()`
      */
-    @OptIn(KaContextParameterApi::class)
     @Suppress("ReturnCount") // this seems way cleaner than nesting 3 levels deep
-    context(session: KaSession)
     private fun KtCatchClause.exceptionWasCheckedAndEnsureActiveCalled(cancellationException: KtParameter): Boolean {
         val ifAtStart = catchBody?.children?.firstOrNull() as? KtIfExpression ?: return false
         val typeCheckCondition = ifAtStart.condition as? KtIsExpression ?: return false
@@ -356,17 +346,19 @@ class SuspendFunSwallowedCancellation(config: Config) :
             return false
         }
 
-        val cancellationExceptionType = findTypeAlias(CANCELLATION_EXCEPTION_CLASS_ID)?.defaultType
-            ?: return true
+        return analyze(this) {
+            val cancellationExceptionType = findTypeAlias(CANCELLATION_EXCEPTION_CLASS_ID)?.defaultType
+                ?: return true
 
-        if (typeCheckCondition.typeReference?.type?.semanticallyEquals(cancellationExceptionType) != true) {
-            return false
+            if (typeCheckCondition.typeReference?.type?.semanticallyEquals(cancellationExceptionType) != true) {
+                return false
+            }
+
+            val ensureActiveExpression = ifAtStart.then as? KtDotQualifiedExpression ?: return false
+
+            ensureActiveExpression.receiverExpression.text == "currentCoroutineContext()" &&
+                ensureActiveExpression.selectorExpression?.text == "ensureActive()"
         }
-
-        val ensureActiveExpression = ifAtStart.then as? KtDotQualifiedExpression ?: return false
-
-        return ensureActiveExpression.receiverExpression.text == "currentCoroutineContext()" &&
-            ensureActiveExpression.selectorExpression?.text == "ensureActive()"
     }
 
     private fun KtCatchClause.doesAnythingElseBeforeRethrowing(): Boolean {
