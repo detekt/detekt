@@ -311,7 +311,7 @@ class SuspendFunSwallowedCancellation(config: Config) :
             val exceptionType = typeReference?.type
 
             val cancellationExceptionType = findTypeAlias(CANCELLATION_EXCEPTION_CLASS_ID)?.defaultType
-                ?: error("Cancellation exception type not found. Are coroutines on the classpath?")
+                ?: return false
 
             exceptionType != null && cancellationExceptionType.isSubtypeOf(exceptionType)
         }
@@ -357,7 +357,7 @@ class SuspendFunSwallowedCancellation(config: Config) :
         }
 
         val cancellationExceptionType = findTypeAlias(CANCELLATION_EXCEPTION_CLASS_ID)?.defaultType
-            ?: error("Cancellation exception type not found. Are coroutines on the classpath?")
+            ?: return true
 
         if (typeCheckCondition.typeReference?.type?.semanticallyEquals(cancellationExceptionType) != true) {
             return false
