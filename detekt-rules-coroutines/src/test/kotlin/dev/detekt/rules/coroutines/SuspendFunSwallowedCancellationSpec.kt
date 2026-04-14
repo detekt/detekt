@@ -9,6 +9,8 @@ import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 
 @KotlinCoreEnvironmentTest
 class SuspendFunSwallowedCancellationSpec(private val env: KotlinEnvironmentContainer) {
@@ -1697,34 +1699,14 @@ class SuspendFunSwallowedCancellationSpec(private val env: KotlinEnvironmentCont
         }
     }
 
-    @Test
-    fun `does not report when using ensureActive approach to handle cancellation`() {
+    @ParameterizedTest
+    @ValueSource(strings = ["kotlinx.coroutines.CancellationException", "java.util.concurrent.CancellationException"])
+    fun `does not report when using ensureActive approach to handle cancellation`(cancellationException: String) {
         val code = """
             import kotlinx.coroutines.currentCoroutineContext
             import kotlinx.coroutines.delay
             import kotlinx.coroutines.ensureActive
-            import kotlinx.coroutines.CancellationException
-            import java.lang.Exception 
-
-            suspend fun foo() {
-                try {
-                    delay(1000L)
-                } catch (e: Exception) {
-                    if (e is CancellationException) currentCoroutineContext().ensureActive()
-                }
-            }
-        """.trimIndent()
-        val findings = subject.lintWithContext(env, code)
-        assertThat(findings).isEmpty()
-    }
-
-    @Test
-    fun `does not report when using ensureActive approach to handle java concurrent cancellation exception`() {
-        val code = """
-            import kotlinx.coroutines.currentCoroutineContext
-            import kotlinx.coroutines.delay
-            import kotlinx.coroutines.ensureActive
-            import java.util.concurrent.CancellationException
+            import $cancellationException
             import java.lang.Exception 
 
             suspend fun foo() {
