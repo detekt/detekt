@@ -168,7 +168,7 @@ class DetektBasePluginSpec {
             it.setupProject()
         }
 
-        // With built-in Kotlin and disallowKotlinSourceSets, the tasks are registered by Android variant names.
+        // With built-in Kotlin and disallowKotlinSourceSets, the tasks are registered by Android source sets.
         // The release buildType doesn't have test tasks due to `android.onlyEnableUnitTestForTheTestedBuildType`.
         gradleRunner.checkTask("debug", listOf("main", "debug"))
         gradleRunner.checkTask("debugAndroidTest", listOf("androidTest"))

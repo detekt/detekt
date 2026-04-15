@@ -73,19 +73,18 @@ internal object DetektAndroidCompilations {
         }
     }
 
-    fun handleKotlinSourceSets(project: Project, extension: DetektExtension, builtInKotlin: Boolean) {
+    fun registerAndroidSourceSetTasks(project: Project, extension: DetektExtension) {
         val disallowKotlinSourceSets = project.providers
             .gradleProperty("android.disallowKotlinSourceSets")
             .getOrElse("true")
             .toBooleanStrict()
 
-        // Fallback to using Kotlin sourceSets if either of these are false.
-        if (!builtInKotlin || !disallowKotlinSourceSets) {
-            project.registerSourceSetTasks(extension)
+        // Fallback to registration by Kotlin source sets.
+        if (!disallowKotlinSourceSets) {
+            project.registerKotlinSourceSetTasks(extension)
             return
         }
 
-        // Resolve Kotlin source sets per variant.
         project.extensions.findByType(AndroidComponentsExtension::class.java)
             ?.onVariants { variant ->
                 val kotlin = variant.sources.kotlin?.all ?: return@onVariants

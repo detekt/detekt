@@ -135,7 +135,7 @@ internal fun Project.mapExplicitArgMode(): Provider<String> =
         }
     }
 
-internal fun Project.registerSourceSetTasks(extension: DetektExtension) {
+internal fun Project.registerKotlinSourceSetTasks(extension: DetektExtension) =
     extensions.findByType(KotlinSourceSetContainer::class.java)
         ?.sourceSets
         ?.configureEach { sourceSet ->
@@ -145,7 +145,6 @@ internal fun Project.registerSourceSetTasks(extension: DetektExtension) {
                 extension = extension,
             )
         }
-}
 
 internal fun Project.registerSourceSetTask(
     sourceSetName: String,
