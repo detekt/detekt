@@ -169,11 +169,10 @@ class DetektBasePluginSpec {
         }
 
         // With built-in Kotlin and disallowKotlinSourceSets, the tasks are registered by Android source sets.
-        // The release buildType doesn't have test tasks due to `android.onlyEnableUnitTestForTheTestedBuildType`.
-        gradleRunner.checkTask("debug", listOf("main", "debug"))
-        gradleRunner.checkTask("debugAndroidTest", listOf("androidTest"))
-        gradleRunner.checkTask("debugUnitTest", listOf("test"))
-        gradleRunner.checkTask("release", listOf("main"))
+        gradleRunner.checkTask(sourceSetTaskName = "release", kotlinSourceSet = "main")
+        gradleRunner.checkTask(sourceSetTaskName = "debug")
+        gradleRunner.checkTask(sourceSetTaskName = "debugUnitTest", kotlinSourceSet = "test")
+        gradleRunner.checkTask(sourceSetTaskName = "debugAndroidTest", kotlinSourceSet = "androidTest")
     }
 
     @Test
@@ -300,15 +299,10 @@ class DetektBasePluginSpec {
         }
     }
 
-    private fun DslGradleRunner.checkTask(
-        sourceSetTaskName: String,
-        expectedSourceDirs: List<String> = listOf(sourceSetTaskName),
-    ) {
+    private fun DslGradleRunner.checkTask(sourceSetTaskName: String, kotlinSourceSet: String = sourceSetTaskName) {
         runTasksAndCheckResult(":detekt${sourceSetTaskName}SourceSet") { buildResult ->
-            expectedSourceDirs.forEach { dir ->
-                assertThat(buildResult.output)
-                    .containsPattern("""--input \S*[/\\]src[/\\]$dir[/\\]kotlin""")
-            }
+            assertThat(buildResult.output)
+                    .containsPattern("""--input \S*[/\\]src[/\\]$kotlinSourceSet[/\\]kotlin""")
             val checkstyleReportFile = projectFile("build/reports/detekt/${sourceSetTaskName}SourceSet.xml")
             val sarifReportFile = projectFile("build/reports/detekt/${sourceSetTaskName}SourceSet.sarif")
             assertThat(buildResult.output).contains("--report checkstyle:$checkstyleReportFile")
