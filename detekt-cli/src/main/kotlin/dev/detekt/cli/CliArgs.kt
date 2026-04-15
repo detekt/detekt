@@ -20,8 +20,8 @@ class CliArgs {
         converter = PathConverter::class,
         splitter = PathSplitter::class,
         validateValueWith = [PathValidator::class],
-        description = "Input paths to analyze. Multiple paths are separated by comma. If not specified the " +
-            "current working directory is used."
+        description = "Input paths to analyze. Multiple paths are separated by ':' on *nix or ';' on Windows. " +
+            "If not specified the current working directory is used."
     )
     var inputPaths: List<Path> = listOf(Path(System.getProperty("user.dir")))
 
@@ -52,7 +52,7 @@ class CliArgs {
         splitter = PathSplitter::class,
         validateValueWith = [PathValidator::class],
         description = "Path to the config file (path/to/config.yml). " +
-            "Multiple configuration files can be specified with ',' or ';' as separator."
+            "Multiple configuration files can be specified with ':' on *nix or ';' on Windows as separator."
     )
     var config: List<Path> = emptyList()
 
@@ -76,7 +76,7 @@ class CliArgs {
         converter = PathConverter::class,
         splitter = PathSplitter::class,
         validateValueWith = [PathValidator::class],
-        description = "Extra paths to plugin jars separated by ',' or ';'."
+        description = "Extra paths to plugin jars separated by ':' on *nix or ';' on Windows."
     )
     var plugins: List<Path> = emptyList()
 
@@ -188,7 +188,7 @@ class CliArgs {
     @Parameter(
         names = ["--classpath", "-cp"],
         converter = PathConverter::class,
-        splitter = ClassPathSplitter::class,
+        splitter = PathSplitter::class,
         validateValueWith = [PathValidator::class],
         description = "Paths where to find user class files and depending jar files. Used for type resolution."
     )
