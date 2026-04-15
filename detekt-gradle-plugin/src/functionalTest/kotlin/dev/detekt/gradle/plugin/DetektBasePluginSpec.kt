@@ -302,7 +302,7 @@ class DetektBasePluginSpec {
     private fun DslGradleRunner.checkTask(sourceSetTaskName: String, kotlinSourceSet: String = sourceSetTaskName) {
         runTasksAndCheckResult(":detekt${sourceSetTaskName}SourceSet") { buildResult ->
             assertThat(buildResult.output)
-                    .containsPattern("""--input \S*[/\\]src[/\\]$kotlinSourceSet[/\\]kotlin""")
+                .containsPattern("""--input \S*[/\\]src[/\\]$kotlinSourceSet[/\\]kotlin""")
             val checkstyleReportFile = projectFile("build/reports/detekt/${sourceSetTaskName}SourceSet.xml")
             val sarifReportFile = projectFile("build/reports/detekt/${sourceSetTaskName}SourceSet.sarif")
             assertThat(buildResult.output).contains("--report checkstyle:$checkstyleReportFile")
