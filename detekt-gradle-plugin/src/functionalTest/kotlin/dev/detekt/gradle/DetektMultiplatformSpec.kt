@@ -390,6 +390,138 @@ class DetektMultiplatformSpec {
             }
         }
     }
+
+    @Nested
+    inner class `multiplatform projects - excludes generated sources by default` {
+        val gradleRunner =
+            setupProject {
+                addSubmodule(
+                    name = "shared",
+                    numberOfSourceFilesPerSourceDir = 1,
+                    buildFileContent = joinGradleBlocks(
+                        KMM_PLUGIN_BLOCK,
+                        """
+                        kotlin {
+                            jvm()
+                            sourceSets {
+                                jvmMain {
+                                    val generatedDir = project.layout.buildDirectory.dir("generated/jvmMain")
+                                    generatedKotlin.srcDir(generatedDir)
+                                }
+                            }
+                        }
+                        """.trimIndent(),
+                    ),
+                    srcDirs = listOf(
+                        "src/commonMain/kotlin",
+                        "src/jvmMain/kotlin",
+                    ),
+                )
+            }.also {
+                it.writeProjectFile(
+                    "shared/build/generated/jvmMain/GeneratedClass.kt",
+                    """
+                        package generated
+                        class GeneratedClass
+                    """.trimIndent()
+                )
+            }
+
+        @Test
+        fun `detektMainJvm configures sources`() {
+            gradleRunner.runTasksAndCheckResult(":shared:detektMainJvm") {
+                assertThat(it.output).containsPattern(
+                    """--input \S*[/\\]shared[/\\]src[/\\]jvmMain[/\\]kotlin"""
+                )
+                assertThat(it.output).containsPattern(
+                    """--input \S*[/\\]shared[/\\]src[/\\]commonMain[/\\]kotlin"""
+                )
+                assertThat(it.output).doesNotContainPattern(
+                    """--input \S*[/\\]shared[/\\]build"""
+                )
+            }
+        }
+
+        @Test
+        fun `detektCommonMain configures sources`() {
+            gradleRunner.runTasksAndCheckResult(":shared:detektCommonMain") {
+                assertThat(it.output).containsPattern(
+                    """--input \S*[/\\]shared[/\\]src[/\\]commonMain[/\\]kotlin"""
+                )
+                assertThat(it.output).doesNotContainPattern(
+                    """--input \S*[/\\]shared[/\\]build"""
+                )
+            }
+        }
+    }
+
+    @Nested
+    inner class `multiplatform projects - allows adding generated source sets to detekt sources` {
+        val gradleRunner =
+            setupProject {
+                addSubmodule(
+                    name = "shared",
+                    numberOfSourceFilesPerSourceDir = 1,
+                    buildFileContent = joinGradleBlocks(
+                        KMM_PLUGIN_BLOCK,
+                        """
+                        kotlin {
+                            jvm()
+                            sourceSets {
+                                jvmMain {
+                                    val generatedDir = project.layout.buildDirectory.dir("generated/jvmMain")
+                                    generatedKotlin.srcDir(generatedDir)
+                                }
+                            }
+                        }
+                        
+                        tasks.withType<dev.detekt.gradle.Detekt>().configureEach {
+                            source(project.layout.buildDirectory.dir("generated/jvmMain"))
+                        }
+                        """.trimIndent(),
+                    ),
+                    srcDirs = listOf(
+                        "src/commonMain/kotlin",
+                        "src/jvmMain/kotlin",
+                    ),
+                )
+            }.also {
+                it.writeProjectFile(
+                    "shared/build/generated/jvmMain/GeneratedClass.kt",
+                    """
+                        package generated
+                        class GeneratedClass
+                    """.trimIndent()
+                )
+            }
+
+        @Test
+        fun `detektMainJvm configures sources`() {
+            gradleRunner.runTasksAndCheckResult(":shared:detektMainJvm") {
+                assertThat(it.output).containsPattern(
+                    """--input \S*[/\\]shared[/\\]src[/\\]jvmMain[/\\]kotlin"""
+                )
+                assertThat(it.output).containsPattern(
+                    """--input \S*[/\\]shared[/\\]src[/\\]commonMain[/\\]kotlin"""
+                )
+                assertThat(it.output).containsPattern(
+                    """--input \S*[/\\]shared[/\\]build"""
+                )
+            }
+        }
+
+        @Test
+        fun `detektCommonMain configures sources`() {
+            gradleRunner.runTasksAndCheckResult(":shared:detektCommonMain") {
+                assertThat(it.output).containsPattern(
+                    """--input \S*[/\\]shared[/\\]src[/\\]commonMain[/\\]kotlin"""
+                )
+                assertThat(it.output).containsPattern(
+                    """--input \S*[/\\]shared[/\\]build"""
+                )
+            }
+        }
+    }
 }
 
 private fun setupProject(projectLayoutAction: ProjectLayout.() -> Unit): DslGradleRunner =

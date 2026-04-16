@@ -622,6 +622,126 @@ class DetektAndroidSpec {
             }
         }
     }
+
+    @Nested
+    inner class `excludes generated source sets by default` {
+        val projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 0).apply {
+            addSubmodule(
+                name = "app",
+                numberOfSourceFilesPerSourceDir = 0,
+                buildFileContent = joinGradleBlocks(
+                    APP_PLUGIN_BLOCK,
+                    ANDROID_BLOCK,
+                    """
+                        kotlin {
+                            sourceSets {
+                                debug {
+                                    val generatedDir = project.layout.buildDirectory.dir("generated/debug")
+                                    generatedKotlin.srcDir(generatedDir)
+                                }
+                            }
+                        }
+                    """.trimIndent(),
+                ),
+                srcDirs = listOf("src/main/java"),
+            )
+        }
+
+        val gradleRunner = createGradleRunnerAndSetupProject(projectLayout, dryRun = true).also {
+            it.writeProjectFile("app/src/main/AndroidManifest.xml", manifestContent)
+            it.writeProjectFile(
+                filename = "app/build/generated/debug/GeneratedClass.kt",
+                content = """
+                    package generated
+                    class GeneratedClass
+                """.trimIndent()
+            )
+            it.writeProjectFile(
+                filename = "app/src/main/java/MainActivity.kt",
+                content = """
+                    import generated.GeneratedClass
+                    class MainActivity {
+                        val generated = GeneratedClass()
+                    }
+                """.trimIndent()
+            )
+        }
+
+        @Test
+        @DisplayName("task app:detektDebug")
+        fun appDetektDebug() {
+            gradleRunner.runTasksAndCheckResult(":app:detektDebug") { result ->
+                assertThat(result.output).containsPattern(
+                    """--input \S*[/\\]app[/\\]src[/\\]main[/\\]java"""
+                )
+                assertThat(result.output).doesNotContainPattern(
+                    """--input \S*[/\\]app[/\\]build"""
+                )
+            }
+        }
+    }
+
+    @Nested
+    inner class `allows adding generated source sets to detekt sources` {
+        val projectLayout = ProjectLayout(numberOfSourceFilesInRootPerSourceDir = 0).apply {
+            addSubmodule(
+                name = "app",
+                numberOfSourceFilesPerSourceDir = 0,
+                buildFileContent = joinGradleBlocks(
+                    APP_PLUGIN_BLOCK,
+                    ANDROID_BLOCK,
+                    """
+                        kotlin {
+                            sourceSets {
+                                debug {
+                                    val generatedDir = project.layout.buildDirectory.dir("generated/debug")
+                                    generatedKotlin.srcDir(generatedDir)
+                                }
+                            }
+                        }
+                        
+                        tasks.withType<dev.detekt.gradle.Detekt>().configureEach {
+                            source(project.layout.buildDirectory.dir("generated/debug"))
+                        }
+                    """.trimIndent(),
+                ),
+                srcDirs = listOf("src/main/java"),
+            )
+        }
+
+        val gradleRunner = createGradleRunnerAndSetupProject(projectLayout, dryRun = true).also {
+            it.writeProjectFile("app/src/main/AndroidManifest.xml", manifestContent)
+            it.writeProjectFile(
+                filename = "app/build/generated/debug/GeneratedClass.kt",
+                content = """
+                    package generated
+                    class GeneratedClass
+                """.trimIndent()
+            )
+            it.writeProjectFile(
+                filename = "app/src/main/java/MainActivity.kt",
+                content = """
+                    import generated.GeneratedClass
+                    class MainActivity {
+                        val generated = GeneratedClass()
+                    }
+                """.trimIndent()
+            )
+        }
+
+        @Test
+        @DisplayName("task app:detektDebug")
+        fun appDetektDebug() {
+            gradleRunner.runTasksAndCheckResult(":app:detektDebug") { result ->
+                assertThat(result.output).containsPattern(
+                    """--input \S*[/\\]app[/\\]src[/\\]main[/\\]java"""
+                )
+                assertThat(result.output).containsPattern(
+                    """--input \S*[/\\]app[/\\]build"""
+                )
+            }
+        }
+    }
 }
 
 /**
