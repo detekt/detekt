@@ -53,6 +53,7 @@ class DetektReportMergeSpec {
             buildFileContent,
             settingsFile,
             disableIP = true,
+            configFileOrNone = "config/detekt/detekt.yml",
         )
         gradleRunner.setupProject()
         gradleRunner.runTasksAndExpectFailure("detekt", "sarifReportMerge", "--continue") { result ->
@@ -124,6 +125,7 @@ class DetektReportMergeSpec {
             buildFileContent,
             settingsFile,
             disableIP = true,
+            configFileOrNone = "config/detekt/detekt.yml",
         )
         gradleRunner.setupProject()
         gradleRunner.runTasksAndExpectFailure("detekt", "checkstyleReportMerge", "--continue") { result ->
