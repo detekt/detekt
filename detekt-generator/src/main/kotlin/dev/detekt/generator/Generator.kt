@@ -45,37 +45,4 @@ class Generator(
 
         outPrinter.println("\nGenerated all detekt documentation in $time.")
     }
-
-    fun executeCustomRuleConfig() {
-        val time = measureTime {
-            val session = buildStandaloneAnalysisAPISession {
-                buildKtModuleProvider {
-                    val targetPlatform = JvmPlatforms.defaultJvmPlatform
-                    platform = targetPlatform
-                    inputPaths.forEach {
-                        addModule(
-                            buildKtSourceModule {
-                                addSourceRoot(it.resolve("src/main/kotlin/"))
-                                platform = targetPlatform
-                                moduleName = it.toString()
-                            }
-                        )
-                    }
-                }
-            }
-
-            session.modulesWithFiles.forEach { (sourceModule, files) ->
-                val collector = DetektCollector(textReplacements)
-                files.forEach { file ->
-                    collector.visit(file as KtFile)
-                }
-                printer.printCustomRuleConfig(
-                    collector.items,
-                    Path(sourceModule.name).resolve("src/main/resources/config/")
-                )
-            }
-        }
-
-        outPrinter.println("\nGenerated custom rules config in $time.")
-    }
 }
