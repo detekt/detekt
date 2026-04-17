@@ -7,39 +7,18 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-private val LIFETIME_OWNER_STUB = """
-    package org.jetbrains.kotlin.analysis.api.lifetime
-
-    interface KaLifetimeOwner
-""".trimIndent()
-
-private val ANALYZE_STUB = """
-    package org.jetbrains.kotlin.analysis.api
-
-    import org.jetbrains.kotlin.analysis.api.lifetime.KaLifetimeOwner
-
-    interface KaSession : KaLifetimeOwner
-    class KtElement
-    fun <R> analyze(element: KtElement, action: KaSession.() -> R): R = TODO()
-""".trimIndent()
-
-private val SYMBOL_POINTER_STUB = """
-    package org.jetbrains.kotlin.analysis.api.symbols.pointers
-
-    class KaSymbolPointer<T>
-""".trimIndent()
-
 private val DEFINITIONS = """
-    import org.jetbrains.kotlin.analysis.api.lifetime.KaLifetimeOwner
     import org.jetbrains.kotlin.analysis.api.KaSession
-    import org.jetbrains.kotlin.analysis.api.KtElement
     import org.jetbrains.kotlin.analysis.api.analyze
+    import org.jetbrains.kotlin.analysis.api.lifetime.KaLifetimeOwner
+    import org.jetbrains.kotlin.analysis.api.lifetime.KaLifetimeToken
+    import org.jetbrains.kotlin.analysis.api.types.KaType
+    import org.jetbrains.kotlin.analysis.api.symbols.KaCallableSymbol
+    import org.jetbrains.kotlin.analysis.api.symbols.KaSymbol
     import org.jetbrains.kotlin.analysis.api.symbols.pointers.KaSymbolPointer
+    import org.jetbrains.kotlin.psi.KtElement
 
-    open class KaType : KaLifetimeOwner
-    class KaClassType : KaType()
-    open class KaSymbol : KaLifetimeOwner
-    val element = KtElement()
+    val element: KtElement = TODO()
 """.trimIndent()
 
 @KotlinCoreEnvironmentTest
@@ -59,14 +38,12 @@ class AvoidLeakingAnalysisApiTypesFromSessionsSpec(private val env: KotlinEnviro
                 $DEFINITIONS
 
                 val result = analyze(element) {
-                    KaType()
+                    Unit as KaType
                 }
             """.trimIndent(),
-            LIFETIME_OWNER_STUB,
-            ANALYZE_STUB,
         )
 
-        assertThat(findings).isNotEmpty()
+        assertThat(findings).hasSize(1)
     }
 
     @Test
@@ -78,15 +55,13 @@ class AvoidLeakingAnalysisApiTypesFromSessionsSpec(private val env: KotlinEnviro
 
                 fun go(condition: Boolean) {
                     val result = analyze(element) {
-                        if (condition) KaType() else null
+                        if (condition) Unit as KaType else null
                     }
                 }
             """.trimIndent(),
-            LIFETIME_OWNER_STUB,
-            ANALYZE_STUB,
         )
 
-        assertThat(findings).isNotEmpty()
+        assertThat(findings).hasSize(1)
     }
 
     @Test
@@ -97,14 +72,12 @@ class AvoidLeakingAnalysisApiTypesFromSessionsSpec(private val env: KotlinEnviro
                 $DEFINITIONS
 
                 val result = analyze(element) {
-                    listOf(KaType())
+                    listOf(Unit as KaType)
                 }
             """.trimIndent(),
-            LIFETIME_OWNER_STUB,
-            ANALYZE_STUB,
         )
 
-        assertThat(findings).isNotEmpty()
+        assertThat(findings).hasSize(1)
     }
 
     @Test
@@ -115,14 +88,12 @@ class AvoidLeakingAnalysisApiTypesFromSessionsSpec(private val env: KotlinEnviro
                 $DEFINITIONS
 
                 val result = analyze(element) {
-                    setOf<KaSymbol?>(KaSymbol(), null)
+                    setOf<KaSymbol?>(Unit as KaSymbol, null)
                 }
             """.trimIndent(),
-            LIFETIME_OWNER_STUB,
-            ANALYZE_STUB,
         )
 
-        assertThat(findings).isNotEmpty()
+        assertThat(findings).hasSize(1)
     }
 
     @Test
@@ -133,14 +104,15 @@ class AvoidLeakingAnalysisApiTypesFromSessionsSpec(private val env: KotlinEnviro
                 $DEFINITIONS
 
                 val result = analyze(element) {
-                    object : KaLifetimeOwner {}
+                    object : KaLifetimeOwner {
+                        override val token: KaLifetimeToken
+                            get() = TODO("Not yet implemented")
+                    }
                 }
             """.trimIndent(),
-            LIFETIME_OWNER_STUB,
-            ANALYZE_STUB,
         )
 
-        assertThat(findings).isNotEmpty()
+        assertThat(findings).hasSize(1)
     }
 
     @Test
@@ -156,8 +128,6 @@ class AvoidLeakingAnalysisApiTypesFromSessionsSpec(private val env: KotlinEnviro
                    SafeResult("hello")
                }
             """.trimIndent(),
-            LIFETIME_OWNER_STUB,
-            ANALYZE_STUB,
         )
 
         assertThat(findings).isEmpty()
@@ -176,8 +146,6 @@ class AvoidLeakingAnalysisApiTypesFromSessionsSpec(private val env: KotlinEnviro
                   }
                 }
             """.trimIndent(),
-            LIFETIME_OWNER_STUB,
-            ANALYZE_STUB,
         )
 
         assertThat(findings).isEmpty()
@@ -191,12 +159,9 @@ class AvoidLeakingAnalysisApiTypesFromSessionsSpec(private val env: KotlinEnviro
                 $DEFINITIONS
 
                 val result = analyze(element) {
-                    KaSymbolPointer<KaSymbol>()
+                    Unit as KaSymbolPointer<KaSymbol>
                 }
             """.trimIndent(),
-            LIFETIME_OWNER_STUB,
-            ANALYZE_STUB,
-            SYMBOL_POINTER_STUB,
         )
 
         assertThat(findings).isEmpty()
@@ -204,33 +169,21 @@ class AvoidLeakingAnalysisApiTypesFromSessionsSpec(private val env: KotlinEnviro
 
     @Test
     fun `returning Sequence of subtype from a different package triggers the rule`() {
-        val symbolsStub = """
-          package org.jetbrains.kotlin.analysis.api.symbols
-          import org.jetbrains.kotlin.analysis.api.lifetime.KaLifetimeOwner
-          open class KaCallableSymbol : KaLifetimeOwner
-        """.trimIndent()
         val findings = rule.lintWithContext(
             env,
             """
-                import org.jetbrains.kotlin.analysis.api.KtElement
-                import org.jetbrains.kotlin.analysis.api.analyze
-                import org.jetbrains.kotlin.analysis.api.symbols.KaCallableSymbol
-
-                val element = KtElement()
+                $DEFINITIONS
 
                 fun getSymbols(): Sequence<KaCallableSymbol>? =
                     analyze(element) {
                         sequence {
-                            yield(KaCallableSymbol())
+                            yield(Unit as KaCallableSymbol)
                         }
                     }
             """.trimIndent(),
-            LIFETIME_OWNER_STUB,
-            ANALYZE_STUB,
-            symbolsStub,
         )
 
-        assertThat(findings).isNotEmpty()
+        assertThat(findings).hasSize(1)
     }
 
     @Test
@@ -240,14 +193,12 @@ class AvoidLeakingAnalysisApiTypesFromSessionsSpec(private val env: KotlinEnviro
             """
                 $DEFINITIONS
 
-                fun <R> notAnalyze(element: org.jetbrains.kotlin.analysis.api.KtElement, action: KaSession.() -> R): R = TODO()
+                fun <R> notAnalyze(element: KtElement, action: KaSession.() -> R): R = TODO()
 
                 val result = notAnalyze(element) {
-                    KaType()
+                    Unit as KaType
                 }
             """.trimIndent(),
-            LIFETIME_OWNER_STUB,
-            ANALYZE_STUB,
         )
 
         assertThat(findings).isEmpty()
