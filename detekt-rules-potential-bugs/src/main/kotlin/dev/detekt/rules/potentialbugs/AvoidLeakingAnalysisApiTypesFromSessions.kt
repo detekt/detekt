@@ -53,14 +53,11 @@ class AvoidLeakingAnalysisApiTypesFromSessions(config: Config = Config.empty) :
         val lambdaArgument = lambdaExpression.getParentOfType<KtLambdaArgument>(strict = true) ?: return
         val callExpression = lambdaArgument.getParentOfType<KtCallExpression>(strict = true) ?: return
 
-        val isAnalyzeCall = analyze(lambdaExpression) {
-            val resolvedCall = callExpression.resolveToCall()?.singleFunctionCallOrNull() ?: return@analyze false
-            resolvedCall.symbol.callableId == analyzeCallableId
-        }
-        if (!isAnalyzeCall) return
-
         analyze(lambdaExpression) {
-            val returnType = callExpression.expressionType ?: return@analyze
+            val resolvedCall = callExpression.resolveToCall()?.singleFunctionCallOrNull() ?: return
+            if (resolvedCall.symbol.callableId != analyzeCallableId) return
+            val returnType = callExpression.expressionType ?: return
+
             if (usesBannedType(returnType)) {
                 report(
                     Finding(
