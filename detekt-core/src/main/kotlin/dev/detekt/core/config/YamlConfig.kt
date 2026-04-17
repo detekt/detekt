@@ -1,7 +1,6 @@
 package dev.detekt.core.config
 
 import dev.detekt.api.Config
-import dev.detekt.api.Config.Companion.CONFIG_SEPARATOR
 import dev.detekt.api.Notification
 import dev.detekt.core.config.validation.ValidatableConfiguration
 import dev.detekt.core.config.validation.validateConfig
@@ -9,6 +8,8 @@ import dev.detekt.core.util.indentCompat
 import org.snakeyaml.engine.v2.api.Load
 import org.snakeyaml.engine.v2.api.LoadSettings
 import java.io.Reader
+import kotlin.reflect.KClass
+import kotlin.reflect.cast
 
 /**
  * Config implementation using the yaml format. SubConfigurations can return sub maps according to the
@@ -16,7 +17,7 @@ import java.io.Reader
  */
 class YamlConfig internal constructor(
     val properties: Map<String, Any>,
-    override val parentPath: String?,
+    val parentPath: String?,
     override val parent: Config?,
 ) : Config,
     ValidatableConfiguration {
@@ -24,24 +25,28 @@ class YamlConfig internal constructor(
     override fun subConfig(key: String): YamlConfig {
         @Suppress("UNCHECKED_CAST")
         val subProperties = properties.getOrElse(key) { emptyMap<String, Any>() } as Map<String, Any>
-        return YamlConfig(
-            subProperties,
-            if (parentPath == null) key else "$parentPath $CONFIG_SEPARATOR $key",
-            this,
-        )
+        return YamlConfig(subProperties, keySequence(key), this)
     }
 
     override fun subConfigKeys(): Set<String> = properties.keys
 
-    override fun <T : Any> valueOrDefault(key: String, default: T): T {
-        val result = properties[key]
-        @Suppress("UNCHECKED_CAST")
-        return valueOrDefaultInternal(key, result, default) as T
-    }
-
-    override fun <T : Any> valueOrNull(key: String): T? {
-        @Suppress("UNCHECKED_CAST")
-        return properties[key] as? T?
+    override fun <T : Any> valueOrNull(key: String, type: KClass<T>): T? {
+        val value = properties[key] ?: return null
+        val parsedValue = when (type) {
+            Long::class if value is Int -> value.toLong()
+            Float::class if (value is Int || value is Long || value is Double) -> value.toFloat()
+            Double::class if (value is Int || value is Long || value is Float) -> value.toDouble()
+            else -> value
+        }
+        return try {
+            type.cast(parsedValue)
+        } catch (cce: ClassCastException) {
+            throw IllegalArgumentException(
+                "Value \"$value\" set for config parameter \"${keySequence(key)}\" is not of required type " +
+                    "`${type.qualifiedName}`",
+                cce,
+            )
+        }
     }
 
     @Suppress("MagicNumber")
@@ -88,6 +93,8 @@ class YamlConfig internal constructor(
             )
     }
 }
+
+internal fun YamlConfig.keySequence(key: String): String = if (parentPath == null) key else "$parentPath > $key"
 
 internal class InvalidConfigurationError(throwable: Throwable) :
     RuntimeException(
