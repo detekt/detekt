@@ -13,8 +13,7 @@ class ClassCountProcessor : FileProcessListener {
 
     override fun onFinish(files: List<KtFile>, result: Detektion): Detektion {
         val count = files.sumOf { it.collectDescendantsOfType<KtClass>().size }
-        result.add(ProjectMetric(numberOfClassesKey.toString(), count))
-        return result
+        return result.plus(ProjectMetric(numberOfClassesKey.toString(), count))
     }
 }
 
