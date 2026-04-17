@@ -73,10 +73,7 @@ class AvoidLeakingAnalysisApiTypesFromSessions(config: Config = Config.empty) :
     private fun KaSession.usesBannedType(type: KaType): Boolean {
         val classType = type as? KaClassType ?: return false
         if (classType.classId in bannedReturnTypes) return true
-        val hasBannedSupertype = classType.allSupertypes.any {
-            (it as? KaClassType)?.classId in bannedReturnTypes
-        }
-        if (hasBannedSupertype) return true
+        if (classType.allSupertypes.any { (it as? KaClassType)?.classId in bannedReturnTypes }) return true
         if (classType.classId in allowedWrapperTypes) return false
         return classType.typeArguments.any { arg ->
             val argType = arg.type ?: return@any false
