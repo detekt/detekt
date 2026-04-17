@@ -58,7 +58,7 @@ class AvoidLeakingAnalysisApiTypesFromSessions(config: Config = Config.empty) :
             if (resolvedCall.symbol.callableId != analyzeCallableId) return
             val returnType = callExpression.expressionType ?: return
 
-            if (usesBannedType(returnType)) {
+            if (returnType.usesBannedType()) {
                 report(
                     Finding(
                         entity = Entity.from(lambdaExpression),
@@ -70,15 +70,16 @@ class AvoidLeakingAnalysisApiTypesFromSessions(config: Config = Config.empty) :
         }
     }
 
-    private fun KaSession.usesBannedType(type: KaType): Boolean {
-        val classType = type as? KaClassType ?: return false
+    @Suppress("ReturnCount")
+    context(session: KaSession)
+    private fun KaType.usesBannedType(): Boolean {
+        val classType = this as? KaClassType ?: return false
         if (classType.classId in bannedReturnTypes) return true
-        if (classType.allSupertypes.any { (it as? KaClassType)?.classId in bannedReturnTypes }) return true
-        if (classType.classId in allowedWrapperTypes) return false
-        return classType.typeArguments.any { arg ->
-            val argType = arg.type ?: return@any false
-            usesBannedType(argType)
+        with(session) {
+            if (classType.allSupertypes.any { (it as? KaClassType)?.classId in bannedReturnTypes }) return true
         }
+        if (classType.classId in allowedWrapperTypes) return false
+        return classType.typeArguments.any { arg -> arg.type?.usesBannedType() ?: false }
     }
 
     companion object {
