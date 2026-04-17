@@ -8,38 +8,38 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 private val LIFETIME_OWNER_STUB = """
-  package org.jetbrains.kotlin.analysis.api.lifetime
+    package org.jetbrains.kotlin.analysis.api.lifetime
 
-  interface KaLifetimeOwner
+    interface KaLifetimeOwner
 """.trimIndent()
 
 private val ANALYZE_STUB = """
-  package org.jetbrains.kotlin.analysis.api
+    package org.jetbrains.kotlin.analysis.api
 
-  import org.jetbrains.kotlin.analysis.api.lifetime.KaLifetimeOwner
+    import org.jetbrains.kotlin.analysis.api.lifetime.KaLifetimeOwner
 
-  interface KaSession : KaLifetimeOwner
-  class KtElement
-  fun <R> analyze(element: KtElement, action: KaSession.() -> R): R = TODO()
+    interface KaSession : KaLifetimeOwner
+    class KtElement
+    fun <R> analyze(element: KtElement, action: KaSession.() -> R): R = TODO()
 """.trimIndent()
 
 private val SYMBOL_POINTER_STUB = """
-  package org.jetbrains.kotlin.analysis.api.symbols.pointers
+    package org.jetbrains.kotlin.analysis.api.symbols.pointers
 
-  class KaSymbolPointer<T>
+    class KaSymbolPointer<T>
 """.trimIndent()
 
 private val DEFINITIONS = """
-  import org.jetbrains.kotlin.analysis.api.lifetime.KaLifetimeOwner
-  import org.jetbrains.kotlin.analysis.api.KaSession
-  import org.jetbrains.kotlin.analysis.api.KtElement
-  import org.jetbrains.kotlin.analysis.api.analyze
-  import org.jetbrains.kotlin.analysis.api.symbols.pointers.KaSymbolPointer
+    import org.jetbrains.kotlin.analysis.api.lifetime.KaLifetimeOwner
+    import org.jetbrains.kotlin.analysis.api.KaSession
+    import org.jetbrains.kotlin.analysis.api.KtElement
+    import org.jetbrains.kotlin.analysis.api.analyze
+    import org.jetbrains.kotlin.analysis.api.symbols.pointers.KaSymbolPointer
 
-  open class KaType : KaLifetimeOwner
-  class KaClassType : KaType()
-  open class KaSymbol : KaLifetimeOwner
-  val element = KtElement()
+    open class KaType : KaLifetimeOwner
+    class KaClassType : KaType()
+    open class KaSymbol : KaLifetimeOwner
+    val element = KtElement()
 """.trimIndent()
 
 @KotlinCoreEnvironmentTest
@@ -56,11 +56,11 @@ class AvoidLeakingAnalysisApiTypesFromSessionsSpec(private val env: KotlinEnviro
         val findings = rule.lintWithContext(
             env,
             """
-          $DEFINITIONS
+                $DEFINITIONS
 
-          val result = analyze(element) {
-            KaType()
-          }
+                val result = analyze(element) {
+                    KaType()
+                }
             """.trimIndent(),
             LIFETIME_OWNER_STUB,
             ANALYZE_STUB,
@@ -74,13 +74,13 @@ class AvoidLeakingAnalysisApiTypesFromSessionsSpec(private val env: KotlinEnviro
         val findings = rule.lintWithContext(
             env,
             """
-          $DEFINITIONS
+                $DEFINITIONS
 
-          fun go(condition: Boolean) {
-            val result = analyze(element) {
-              if (condition) KaType() else null
-            }
-          }
+                fun go(condition: Boolean) {
+                    val result = analyze(element) {
+                        if (condition) KaType() else null
+                    }
+                }
             """.trimIndent(),
             LIFETIME_OWNER_STUB,
             ANALYZE_STUB,
@@ -94,11 +94,11 @@ class AvoidLeakingAnalysisApiTypesFromSessionsSpec(private val env: KotlinEnviro
         val findings = rule.lintWithContext(
             env,
             """
-          $DEFINITIONS
+                $DEFINITIONS
 
-          val result = analyze(element) {
-            listOf(KaType())
-          }
+                val result = analyze(element) {
+                    listOf(KaType())
+                }
             """.trimIndent(),
             LIFETIME_OWNER_STUB,
             ANALYZE_STUB,
@@ -112,11 +112,11 @@ class AvoidLeakingAnalysisApiTypesFromSessionsSpec(private val env: KotlinEnviro
         val findings = rule.lintWithContext(
             env,
             """
-          $DEFINITIONS
+                $DEFINITIONS
 
-          val result = analyze(element) {
-            setOf<KaSymbol?>(KaSymbol(), null)
-          }
+                val result = analyze(element) {
+                    setOf<KaSymbol?>(KaSymbol(), null)
+                }
             """.trimIndent(),
             LIFETIME_OWNER_STUB,
             ANALYZE_STUB,
@@ -130,11 +130,11 @@ class AvoidLeakingAnalysisApiTypesFromSessionsSpec(private val env: KotlinEnviro
         val findings = rule.lintWithContext(
             env,
             """
-          $DEFINITIONS
+                $DEFINITIONS
 
-          val result = analyze(element) {
-            object : KaLifetimeOwner {}
-          }
+                val result = analyze(element) {
+                    object : KaLifetimeOwner {}
+                }
             """.trimIndent(),
             LIFETIME_OWNER_STUB,
             ANALYZE_STUB,
@@ -148,13 +148,13 @@ class AvoidLeakingAnalysisApiTypesFromSessionsSpec(private val env: KotlinEnviro
         val findings = rule.lintWithContext(
             env,
             """
-          $DEFINITIONS
+               $DEFINITIONS
 
-          data class SafeResult(val name: String)
+               data class SafeResult(val name: String)
 
-          val result = analyze(element) {
-            SafeResult("hello")
-          }
+               val result = analyze(element) {
+                   SafeResult("hello")
+               }
             """.trimIndent(),
             LIFETIME_OWNER_STUB,
             ANALYZE_STUB,
@@ -168,13 +168,13 @@ class AvoidLeakingAnalysisApiTypesFromSessionsSpec(private val env: KotlinEnviro
         val findings = rule.lintWithContext(
             env,
             """
-          $DEFINITIONS
+                $DEFINITIONS
 
-          fun go() {
-            analyze(element) {
-              println("side effect only")
-            }
-          }
+                fun go() {
+                  analyze(element) {
+                      println("side effect only")
+                  }
+                }
             """.trimIndent(),
             LIFETIME_OWNER_STUB,
             ANALYZE_STUB,
@@ -188,11 +188,11 @@ class AvoidLeakingAnalysisApiTypesFromSessionsSpec(private val env: KotlinEnviro
         val findings = rule.lintWithContext(
             env,
             """
-          $DEFINITIONS
+                $DEFINITIONS
 
-          val result = analyze(element) {
-            KaSymbolPointer<KaSymbol>()
-          }
+                val result = analyze(element) {
+                    KaSymbolPointer<KaSymbol>()
+                }
             """.trimIndent(),
             LIFETIME_OWNER_STUB,
             ANALYZE_STUB,
@@ -212,18 +212,18 @@ class AvoidLeakingAnalysisApiTypesFromSessionsSpec(private val env: KotlinEnviro
         val findings = rule.lintWithContext(
             env,
             """
-          import org.jetbrains.kotlin.analysis.api.KtElement
-          import org.jetbrains.kotlin.analysis.api.analyze
-          import org.jetbrains.kotlin.analysis.api.symbols.KaCallableSymbol
+                import org.jetbrains.kotlin.analysis.api.KtElement
+                import org.jetbrains.kotlin.analysis.api.analyze
+                import org.jetbrains.kotlin.analysis.api.symbols.KaCallableSymbol
 
-          val element = KtElement()
+                val element = KtElement()
 
-          fun getSymbols(): Sequence<KaCallableSymbol>? =
-            analyze(element) {
-              sequence {
-                yield(KaCallableSymbol())
-              }
-            }
+                fun getSymbols(): Sequence<KaCallableSymbol>? =
+                    analyze(element) {
+                        sequence {
+                            yield(KaCallableSymbol())
+                        }
+                    }
             """.trimIndent(),
             LIFETIME_OWNER_STUB,
             ANALYZE_STUB,
@@ -238,13 +238,13 @@ class AvoidLeakingAnalysisApiTypesFromSessionsSpec(private val env: KotlinEnviro
         val findings = rule.lintWithContext(
             env,
             """
-          $DEFINITIONS
+                $DEFINITIONS
 
-          fun <R> notAnalyze(element: org.jetbrains.kotlin.analysis.api.KtElement, action: KaSession.() -> R): R = TODO()
+                fun <R> notAnalyze(element: org.jetbrains.kotlin.analysis.api.KtElement, action: KaSession.() -> R): R = TODO()
 
-          val result = notAnalyze(element) {
-            KaType()
-          }
+                val result = notAnalyze(element) {
+                    KaType()
+                }
             """.trimIndent(),
             LIFETIME_OWNER_STUB,
             ANALYZE_STUB,
