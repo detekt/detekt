@@ -612,6 +612,34 @@ class UnnecessaryLetSpec(val env: KotlinEnvironmentContainer) {
             assertThat(findings).hasSize(2)
         }
     }
+
+    @Test
+    fun `when let uses the it`() {
+        val content = """
+            fun some(value: Int) = value
+            fun test(value: Int?) {
+                value?.let {
+                    some(it)
+                }
+            }
+        """.trimIndent()
+        val findings = subject.lintWithContext(env, content)
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `when let uses the variable`() {
+        val content = """
+            fun some(value: Int) = value
+            fun test(value: Int?) {
+                value?.let {
+                    some(value)
+                }
+            }
+        """.trimIndent()
+        val findings = subject.lintWithContext(env, content)
+        assertThat(findings).isEmpty()
+    }
 }
 
 private const val MESSAGE_OMIT_LET = "let expression can be omitted"
