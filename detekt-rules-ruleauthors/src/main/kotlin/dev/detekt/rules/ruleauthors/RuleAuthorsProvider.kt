@@ -23,6 +23,7 @@ class RuleAuthorsProvider : RuleSetProvider {
         RuleSet(
             ruleSetId,
             listOf(
+                ::AvoidLeakingAnalysisApiTypesFromSessions,
                 ::UseEntityAtName,
             )
         )

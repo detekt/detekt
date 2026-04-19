@@ -1,4 +1,4 @@
-package dev.detekt.rules.potentialbugs
+package dev.detekt.rules.ruleauthors
 
 import dev.detekt.api.Config
 import dev.detekt.api.Entity

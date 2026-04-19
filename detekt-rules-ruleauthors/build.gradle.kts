@@ -8,9 +8,11 @@ dependencies {
 
     testImplementation(libs.kotlin.compiler)
     testImplementation(projects.detektApi)
+    testImplementation(projects.detektKotlinAnalysisApiStandalone)
     testRuntimeOnly(projects.detektPsiUtils)
     testImplementation(projects.detektTest)
     testImplementation(projects.detektTestAssertj)
+    testImplementation(projects.detektTestJunit)
     testImplementation(libs.assertj.core)
 }
 

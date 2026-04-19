@@ -17,7 +17,6 @@ class PotentialBugProvider : DefaultRuleSetProvider {
         RuleSet(
             ruleSetId,
             listOf(
-                ::AvoidLeakingAnalysisApiTypesFromSessions,
                 ::AvoidReferentialEquality,
                 ::Deprecation,
                 ::DontDowncastCollectionTypes,

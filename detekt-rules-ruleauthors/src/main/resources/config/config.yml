@@ -1,4 +1,6 @@
 ruleauthors:
   active: true
+  AvoidLeakingAnalysisApiTypesFromSessions:
+    active: false
   UseEntityAtName:
     active: true
