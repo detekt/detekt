@@ -11,7 +11,7 @@ import java.nio.file.Path
 import kotlin.io.path.createParentDirectories
 import kotlin.io.path.writeText
 
-class OutputFacade(private val settings: ProcessingSettings, private val showReports: Boolean) {
+class OutputFacade(private val settings: ProcessingSettings) {
     private val reports: Map<String, ReportsSpec.Report> = settings.spec.reportsSpec.reports.associateBy { it.type }
 
     init {
@@ -23,8 +23,8 @@ class OutputFacade(private val settings: ProcessingSettings, private val showRep
             }
     }
 
-    fun run(result: Detektion) {
-        handleOutputReports(result)
+    fun run(result: Detektion, reportPaths: ReportPaths = ReportPaths.Hidden) {
+        handleOutputReports(result, reportPaths)
         handleConsoleReports(result)
     }
 
@@ -38,18 +38,20 @@ class OutputFacade(private val settings: ProcessingSettings, private val showRep
         }
     }
 
-    private fun handleOutputReports(result: Detektion) {
+    private fun handleOutputReports(result: Detektion, reportPaths: ReportPaths) {
         val extensions = loadExtensions<OutputReport>(settings)
         for (report in extensions) {
             val filePath = reports[report.id]?.path
             if (filePath != null) {
                 report.write(filePath, result)
-                if (showReports) {
+                if (reportPaths == ReportPaths.Show) {
                     settings.outputChannel.appendLine("Successfully generated ${report.id} at ${filePath.toUri()}")
                 }
             }
         }
     }
+
+    enum class ReportPaths { Show, Hidden }
 }
 
 /*
