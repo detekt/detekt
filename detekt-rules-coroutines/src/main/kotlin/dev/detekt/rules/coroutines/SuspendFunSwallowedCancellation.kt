@@ -203,33 +203,28 @@ class SuspendFunSwallowedCancellation(config: Config) :
     private fun shouldTraverseInsideImpl(element: PsiElement): Boolean =
         when (element) {
             is KtCallExpression -> {
-                val functionSymbol = analyze(element) {
-                    element.resolveToCall()
+                analyze(element) {
+                    val functionSymbol = element.resolveToCall()
                         ?.successfulFunctionCallOrNull()
                         ?.symbol
                         as? KaNamedFunctionSymbol
-                }
 
-                functionSymbol?.callableId != RUN_CATCHING_CALLABLE_ID && functionSymbol?.isInline == true
+                    functionSymbol?.callableId != RUN_CATCHING_CALLABLE_ID && functionSymbol?.isInline == true
+                }
             }
 
             is KtValueArgument -> {
                 val parentCallExpression = element.getParentOfType<KtCallExpression>(true) ?: return false
-                val valueSymbol = analyze(parentCallExpression) {
-                    val elementArgument = element.getArgumentExpression()
-
-                    parentCallExpression.resolveToCall()
+                val elementArgument = element.getArgumentExpression()
+                analyze(parentCallExpression) {
+                    val valueSymbol = parentCallExpression.resolveToCall()
                         ?.successfulFunctionCallOrNull()
                         ?.argumentMapping
                         ?.get(elementArgument)
                         ?.symbol
-                }
 
-                valueSymbol
-                    ?.let {
-                        it.isCrossinline.not() && it.isNoinline.not()
-                    }
-                    ?: false
+                    valueSymbol?.let { it.isCrossinline.not() && it.isNoinline.not() } ?: false
+                }
             }
 
             else -> true
@@ -238,11 +233,11 @@ class SuspendFunSwallowedCancellation(config: Config) :
     private fun KtExpression.hasSuspendCalls(): Boolean =
         when (this) {
             is KtForExpression -> {
-                val loopRangeReferences = analyze(this) {
-                    mainReference?.resolveToSymbols()
-                        ?.filterIsInstance<KaNamedFunctionSymbol>()
-                }.orEmpty()
-                loopRangeReferences.any { it.isSuspend }
+                analyze(this) {
+                    mainReference?.resolveToSymbols()?.filterIsInstance<KaNamedFunctionSymbol>()
+                        .orEmpty()
+                        .any { it.isSuspend }
+                }
             }
 
             is KtCallExpression, is KtOperationExpression -> {
@@ -254,13 +249,8 @@ class SuspendFunSwallowedCancellation(config: Config) :
                         ?.signature
                         ?.symbol
                         ?.isSuspend
-
-                        ?: (
-                            resolveToCall()
-                                ?.successfulFunctionCallOrNull()
-                                ?.symbol as? KaNamedFunctionSymbol
-                            )?.isSuspend
-
+                        ?: (resolveToCall()?.successfulFunctionCallOrNull()?.symbol as? KaNamedFunctionSymbol)
+                            ?.isSuspend
                         ?: false
                 }
             }
