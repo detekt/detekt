@@ -109,7 +109,7 @@ abstract class Detekt @Inject constructor(
     @get:Console
     abstract val debug: Property<Boolean>
 
-    @get:Internal
+    @get:Input
     abstract val parallel: Property<Boolean>
 
     @get:Input
@@ -201,7 +201,8 @@ abstract class Detekt @Inject constructor(
             NoJdkArgument(noJdk.get()),
             ExplicitApiArgument(explicitApi.orNull),
             MultiPlatformEnabledArgument(multiPlatformEnabled.get()),
-        ).plus(convertCustomReportsToArguments()).flatMap(CliArgument::toArgument)
+        ).plus(convertCustomReportsToArguments())
+            .flatMap(CliArgument::toArgument)
             .plus("-no-stdlib")
             .plus("-no-reflect")
 

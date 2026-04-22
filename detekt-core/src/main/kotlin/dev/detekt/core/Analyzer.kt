@@ -7,6 +7,7 @@ import dev.detekt.api.Finding
 import dev.detekt.api.Issue
 import dev.detekt.api.Location
 import dev.detekt.api.Rule
+import dev.detekt.api.RuleExecutionListener
 import dev.detekt.api.RuleInstance
 import dev.detekt.api.Severity
 import dev.detekt.api.internal.whichDetekt
@@ -20,11 +21,13 @@ import dev.detekt.tooling.api.AnalysisMode
 import org.jetbrains.kotlin.config.LanguageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
+import kotlin.time.measureTimedValue
 
 internal class Analyzer(
     private val settings: ProcessingSettings,
     private val rules: List<RuleDescriptor>,
     private val processors: List<FileProcessListener>,
+    private val ruleListeners: List<RuleExecutionListener>,
     private val analysisMode: AnalysisMode,
 ) {
     fun run(ktFiles: Collection<KtFile>): List<Issue> {
@@ -78,7 +81,13 @@ internal class Analyzer(
             .partition { (_, rule) -> rule.autoCorrect }
 
         return (correctableRules + otherRules).flatMap { (ruleInstance, rule) ->
-            rule.visitFile(file, languageVersionSettings)
+            ruleListeners.forEach { it.beforeRuleExecution(file, ruleInstance) }
+            val (findings, duration) = measureTimedValue {
+                rule.visitFile(file, languageVersionSettings)
+            }
+            ruleListeners.forEach { it.afterRuleExecution(file, ruleInstance, findings.size, duration) }
+
+            findings
                 .filterNot {
                     it.entity.ktElement.isSuppressedBy(ruleInstance.id, rule.aliases, ruleInstance.ruleSetId)
                 }
