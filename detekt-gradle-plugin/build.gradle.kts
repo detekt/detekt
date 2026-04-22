@@ -77,7 +77,7 @@ testing {
             dependencies {
                 implementation(libs.assertj.core)
                 implementation(libs.kotlin.gradle.plugin)
-                implementation(gradleKotlinDsl())
+                runtimeOnly(gradleKotlinDsl())
             }
         }
         register<JvmTestSuite>("functionalTest") {
