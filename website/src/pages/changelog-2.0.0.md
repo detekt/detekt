@@ -16,6 +16,8 @@ Detekt 2.0.0 is still in alpha. While it's stable enough to use in your projects
 
 This is an alpha release of Detekt 2.0.0. Is built against Kotlin 2.3.21, Gradle 9.3.1, AGP 9.1.1 and is tested against JDK 25.
 
+As of this release, the workaround of disabling the new DSL and built-in Kotlin via `gradle.properties` for AGP 9.x projects is **no longer required**.
+
 ### Notable Changes
 
 - Bump Kotlin to v2.3.21 - [#9272](https://github.com/detekt/detekt/pull/9272)
@@ -104,7 +106,7 @@ This is an alpha release of Detekt 2.0.0. Is built against Kotlin 2.3.21, Gradle
 
 ### Contributors
 
-We would like to thank the following contributors that made this release possible: @3flex, @BraisGabin, @FletchMcKee, @TWiStErRob, @UnguidedFreedom, @atulgpt, @cortinico, @fru1tworld, @jonapoul, @matejdro, @mirkoalicastro, @picklebento, @t-kameyama, @travisMiehm
+We would like to thank the following contributors that made this release possible: [@3flex](https://github.com/3flex), [@BraisGabin](https://github.com/BraisGabin), [@FletchMcKee](https://github.com/FletchMcKee), [@TWiStErRob](https://github.com/TWiStErRob), [@UnguidedFreedom](https://github.com/UnguidedFreedom), [@atulgpt](https://github.com/atulgpt), [@cortinico](https://github.com/cortinico), [@fru1tworld](https://github.com/fru1tworld), [@jonapoul](https://github.com/jonapoul), [@matejdro](https://github.com/matejdro), [@mirkoalicastro](https://github.com/mirkoalicastro), [@picklebento](https://github.com/picklebento), [@t-kameyama](https://github.com/t-kameyama), [@travisMiehm](https://github.com/travisMiehm)
 
 ## 2.0.0-alpha.2 - 2026-01-27
 
