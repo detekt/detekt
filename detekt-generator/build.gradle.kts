@@ -66,6 +66,7 @@ tasks.register("generateWebsite") {
 
 val generateDocumentation by tasks.registering(JavaExec::class) {
     dependsOn(
+        generateCliOptions,
         ":detekt-rules-libraries:sourcesJar",
         ":detekt-rules-ruleauthors:sourcesJar",
     )
