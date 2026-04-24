@@ -75,7 +75,9 @@ class OutdatedDocumentation(config: Config) :
     @Configuration("if we allow constructor parameters to be marked as @param instead of @property")
     private val allowParamOnConstructorProperties: Boolean by config(false)
 
-    @Configuration("if true, all parameters must be documented; if false, only documented parameters are validated against the declaration")
+    @Configuration(
+        "if true, all parameters must be documented; if false, only documented parameters are validated against the declaration"
+    )
     private val exhaustive: Boolean by config(true)
 
     override fun visitClass(klass: KtClass) {
