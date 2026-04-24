@@ -4,6 +4,9 @@ import dev.detekt.api.Detektion
 import dev.detekt.core.ProcessingSettings
 import dev.detekt.core.config.FailurePolicyResult
 import dev.detekt.core.config.check
+import dev.detekt.core.reporting.OutputFacade
+import dev.detekt.core.reporting.OutputFacade.ReportPaths.Hidden
+import dev.detekt.core.reporting.OutputFacade.ReportPaths.Show
 import dev.detekt.tooling.api.AnalysisResult
 import dev.detekt.tooling.api.Detekt
 import dev.detekt.tooling.api.DetektError
@@ -24,7 +27,16 @@ class AnalysisFacade(private val spec: ProcessingSpec) : Detekt {
     internal fun runAnalysis(createLifecycle: (ProcessingSettings) -> Lifecycle): AnalysisResult =
         spec.withSettings {
             runCatching { createLifecycle(this).analyze() }.fold(
-                onSuccess = { detektion -> DefaultAnalysisResult(detektion, checkFailurePolicy(detektion)) },
+                onSuccess = { detektion ->
+                    val fail = checkFailurePolicy(detektion)
+                    @Suppress("TooGenericExceptionCaught")
+                    try {
+                        OutputFacade(this).run(detektion, if (fail != null) Show else Hidden)
+                    } catch (ex: Exception) {
+                        DefaultAnalysisResult(detektion, UnexpectedError(ex))
+                    }
+                    DefaultAnalysisResult(detektion, fail)
+                },
                 onFailure = { error ->
                     DefaultAnalysisResult(null, if (error is InvalidConfig) error else UnexpectedError(error))
                 },

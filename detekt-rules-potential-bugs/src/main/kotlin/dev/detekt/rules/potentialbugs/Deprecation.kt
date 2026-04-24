@@ -38,7 +38,7 @@ class Deprecation(config: Config) :
             report(
                 Finding(
                     if (element is KtNamedDeclaration) Entity.atName(element) else Entity.from(element),
-                    """${element.text} is deprecated with message "${diagnostic.message}""""
+                    """${element.text} is deprecated with message "$diagnostic""""
                 )
             )
         }
@@ -46,10 +46,11 @@ class Deprecation(config: Config) :
     }
 
     @OptIn(KaExperimentalApi::class)
-    private fun deprecationDiagnostic(element: KtElement): KaFirDiagnostic.Deprecation? =
+    private fun deprecationDiagnostic(element: KtElement): String? =
         analyze(element) {
             element
                 .diagnostics(KaDiagnosticCheckerFilter.ONLY_COMMON_CHECKERS)
                 .firstNotNullOfOrNull { it as? KaFirDiagnostic.Deprecation }
+                ?.message
         }
 }
