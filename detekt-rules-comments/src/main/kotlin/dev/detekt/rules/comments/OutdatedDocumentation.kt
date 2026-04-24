@@ -76,7 +76,8 @@ class OutdatedDocumentation(config: Config) :
     private val allowParamOnConstructorProperties: Boolean by config(false)
 
     @Configuration(
-        "if true, all parameters must be documented; if false, only documented parameters are validated against the declaration"
+        "if true, all parameters must be documented; " +
+            "if false, only documented parameters are validated against the declaration"
     )
     private val exhaustive: Boolean by config(true)
 
