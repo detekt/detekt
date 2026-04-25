@@ -12,6 +12,102 @@ Detekt 2.0.0 is still in alpha. While it's stable enough to use in your projects
 
 :::
 
+## 2.0.0-alpha.3 - 2026-04-24
+
+This is an alpha release of Detekt 2.0.0. Is built against Kotlin 2.3.21, Gradle 9.3.1, AGP 9.1.1 and is tested against JDK 25.
+
+As of this release, the workaround of disabling the new DSL and built-in Kotlin via `gradle.properties` for AGP 9.x projects is **no longer required**.
+
+### Notable Changes
+
+- Bump Kotlin to v2.3.21 - [#9272](https://github.com/detekt/detekt/pull/9272)
+- Bump AGP to v9.1.1 - [#9244](https://github.com/detekt/detekt/pull/9244)
+- Add support for AGP 9 built-in Kotlin - [#9100](https://github.com/detekt/detekt/pull/9100)
+- Rule `UnnecessaryFullyQualifiedName` now requires full mode to run - [#9061](https://github.com/detekt/detekt/pull/9061)
+- Add new rule: `UnnecessaryRun` - [#7428](https://github.com/detekt/detekt/pull/7428)
+
+### Breaking Changes
+
+- Remove `DetektProgressListener` from our public API - [#9221](https://github.com/detekt/detekt/pull/9221)
+- Remove `InvalidConfigurationError` from our public API - [#8994](https://github.com/detekt/detekt/pull/8994)
+
+### Changelog
+
+- UseOrEmpty - Fix AA type leaks - [#9263](https://github.com/detekt/detekt/pull/9263)
+- ForbiddenNamedParam - Fix AA type leaks - [#9262](https://github.com/detekt/detekt/pull/9262)
+- UnusedVariable - Fix AA type leaks - [#9260](https://github.com/detekt/detekt/pull/9260)
+- UnnecessaryNotNullOperator - Fix AA type leaks - [#9259](https://github.com/detekt/detekt/pull/9259)
+- Deprecation - Fix AA type leaks - [#9258](https://github.com/detekt/detekt/pull/9258)
+- NestedScopeFunctions - Fix AA type leaks - [#9257](https://github.com/detekt/detekt/pull/9257)
+- Suggest similar property names for misspelled config properties - [#9250](https://github.com/detekt/detekt/pull/9250)
+- MagicNumber DslGradleRunner test fix - [#9245](https://github.com/detekt/detekt/pull/9245)
+- Don't forbid use of `java.lang.annotation.Inherited` annotation by default - [#9224](https://github.com/detekt/detekt/pull/9224)
+- Fixes #9017 - false positive with name collisions - [#9223](https://github.com/detekt/detekt/pull/9223)
+- Optimize how we get project statistics - [#9217](https://github.com/detekt/detekt/pull/9217)
+- Rename `ProjectComplexityProcessor` to `ProjectCyclomaticComplexityProcessor` - [#9213](https://github.com/detekt/detekt/pull/9213)
+- Add ignoreClass config to MissingUseCall - [#9205](https://github.com/detekt/detekt/pull/9205)
+- Remove `LicenseHeaderLoaderExtension` from the list of processors - [#9204](https://github.com/detekt/detekt/pull/9204)
+- cli: Improve messages and exception types of `--report` - [#9203](https://github.com/detekt/detekt/pull/9203)
+- Validate `--classpath` with JCommander - [#9202](https://github.com/detekt/detekt/pull/9202)
+- System-dependent path separators - [#9199](https://github.com/detekt/detekt/pull/9199)
+- Do not report IgnoredReturnValue on lambda invocation that returns Unit - [#9192](https://github.com/detekt/detekt/pull/9192)
+- Point to `valOrVarKeyword` for reporting the issue - [#9191](https://github.com/detekt/detekt/pull/9191)
+- Check `Throwable` class - [#9190](https://github.com/detekt/detekt/pull/9190)
+- Do no report when parent has class - [#9189](https://github.com/detekt/detekt/pull/9189)
+- Add support of `indent_style` in ktlint `Indention` rule - [#9180](https://github.com/detekt/detekt/pull/9180)
+- Add severity to different md, html reports - [#9167](https://github.com/detekt/detekt/pull/9167)
+- Check local class which can't be converted to interface - [#9166](https://github.com/detekt/detekt/pull/9166)
+- Inline yaml config in the test - [#9154](https://github.com/detekt/detekt/pull/9154)
+- Tests: Don't check compilation errors with `compile-test-snippets=false` - [#9153](https://github.com/detekt/detekt/pull/9153)
+- `YamlConfig.load` returns `YamlConfig` instead of `Config` - [#9151](https://github.com/detekt/detekt/pull/9151)
+- Generator: The --config flag value should be a directory or it shouldn't exist - [#9131](https://github.com/detekt/detekt/pull/9131)
+- Fix broken test JvmSpec - [#9129](https://github.com/detekt/detekt/pull/9129)
+- Performance improvement - consolidated KaLibraryModules - [#9127](https://github.com/detekt/detekt/pull/9127)
+- Print cli arguments with `debug = true` - [#9126](https://github.com/detekt/detekt/pull/9126)
+- MissingUseCall: Fix false negative for checkNotNull/requireNotNull - [#9123](https://github.com/detekt/detekt/pull/9123)
+- Make `functionalTest` os dependent - [#9098](https://github.com/detekt/detekt/pull/9098)
+- Fix false positive for `ExplicitCollectionElementAccessMethod` with lambdas - [#9096](https://github.com/detekt/detekt/pull/9096)
+- Expose only `LanguageVersionSettings` instead of `CompilerConfiguration` - [#9092](https://github.com/detekt/detekt/pull/9092)
+- Remove project from EnvironmentFacade - [#9089](https://github.com/detekt/detekt/pull/9089)
+- Ensure that AA knows types of excluded files - [#9082](https://github.com/detekt/detekt/pull/9082)
+- Updated to using Gradle's lazy APIs - [#9080](https://github.com/detekt/detekt/pull/9080)
+- Simplify KotlinEnvironmentContainer - [#9077](https://github.com/detekt/detekt/pull/9077)
+- Reduce calls to `analyze` in `MapGetWithNotNullAssertionOperator` - [#9067](https://github.com/detekt/detekt/pull/9067)
+- Report MapGetWithNonNullAssertionOperator violations on MutableMaps - [#9065](https://github.com/detekt/detekt/pull/9065)
+- Fix `ExplicitCollectionElementAccessMethodSpec` for unresolved types - [#9059](https://github.com/detekt/detekt/pull/9059)
+- Allow external dependencies in analysis tests - [#9051](https://github.com/detekt/detekt/pull/9051)
+- Improve exception handling on `YamlConfig` - [#9048](https://github.com/detekt/detekt/pull/9048)
+- Remove `YamlConfig.load(Path)` - [#9047](https://github.com/detekt/detekt/pull/9047)
+- Refine AbstractClassCanBeInterface treatment of open properties - [#9043](https://github.com/detekt/detekt/pull/9043)
+- rename Claude.md to CLAUDE.md for cross-platform compatibility - [#9033](https://github.com/detekt/detekt/pull/9033)
+- Clarify CommentOverPrivate... renames in detekt 2 - [#9025](https://github.com/detekt/detekt/pull/9025)
+- Exclude generated sources from default sources - [#9019](https://github.com/detekt/detekt/pull/9019)
+- fix(UnusedVariable): recognize destructured lambda parameters as used - [#9015](https://github.com/detekt/detekt/pull/9015)
+- Replace `Lifecycle.bindingProvider` by a private function and rename it to `validateClasspath` - [#9003](https://github.com/detekt/detekt/pull/9003)
+- Remove unnecessary interface - [#9002](https://github.com/detekt/detekt/pull/9002)
+- Remove dependecy of `:detekt-test` with `:detekt-core` - [#8987](https://github.com/detekt/detekt/pull/8987)
+- Move `yamlConfig` functions to `:detekt-core` - [#8976](https://github.com/detekt/detekt/pull/8976)
+- Only print paths of reports when detektion fails - [#8560](https://github.com/detekt/detekt/pull/8560)
+
+### Dependency Updates
+
+- Bump Kotlin 2.3.20 - [#8959](https://github.com/detekt/detekt/pull/8959)
+- Bump AGP to v9.1.0 - [#9110](https://github.com/detekt/detekt/pull/9110)
+- Add coroutinesCore Intellij to the classpath - [#9176](https://github.com/detekt/detekt/pull/9176)
+- chore: update Kotlin 2.3.20-RC2 → 2.3.20 - [#9160](https://github.com/detekt/detekt/pull/9160)
+- chore(deps): update plugin dev.drewhamilton.poko to v0.22.0 - [#9159](https://github.com/detekt/detekt/pull/9159)
+- Make `KotlinAnalysisApiEngine` `AutoCloseable` - [#9144](https://github.com/detekt/detekt/pull/9144)
+- fix(deps): update kotlin monorepo to v2.3.10 - [#9037](https://github.com/detekt/detekt/pull/9037)
+
+### Housekeeping & Refactorings
+
+- Don't use paths to read files from `resources/` - [#9175](https://github.com/detekt/detekt/pull/9175)
+- Remove unnecessary test nesting - [#9150](https://github.com/detekt/detekt/pull/9150)
+
+### Contributors
+
+We would like to thank the following contributors that made this release possible: [@3flex](https://github.com/3flex), [@BraisGabin](https://github.com/BraisGabin), [@FletchMcKee](https://github.com/FletchMcKee), [@TWiStErRob](https://github.com/TWiStErRob), [@UnguidedFreedom](https://github.com/UnguidedFreedom), [@atulgpt](https://github.com/atulgpt), [@cortinico](https://github.com/cortinico), [@fru1tworld](https://github.com/fru1tworld), [@jonapoul](https://github.com/jonapoul), [@matejdro](https://github.com/matejdro), [@mirkoalicastro](https://github.com/mirkoalicastro), [@picklebento](https://github.com/picklebento), [@t-kameyama](https://github.com/t-kameyama), [@travisMiehm](https://github.com/travisMiehm)
+
 ## 2.0.0-alpha.2 - 2026-01-27
 
 This is an alpha release of Detekt 2.0.0. Is built against Kotlin 2.3.0, Gradle 9.3.0, AGP 9.0.0 and is tested against JDK 25.
