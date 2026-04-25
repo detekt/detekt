@@ -26,7 +26,8 @@ class DetektAndroidBuiltInKotlinSpec {
         true, false"""
     )
     @ParameterizedClass
-    class BuiltInKotlinEnabled {
+    @Nested
+    inner class BuiltInKotlinEnabled {
 
         @Parameter(0)
         var propertyEnabled: Boolean = false
@@ -663,7 +664,8 @@ class DetektAndroidBuiltInKotlinSpec {
         true, true, false"""
     )
     @ParameterizedClass
-    class BuiltInKotlinDisabled {
+    @Nested
+    inner class BuiltInKotlinDisabled {
         @Parameter(0)
         var propertyEnabled: Boolean = false
 
