@@ -14,7 +14,7 @@ This document provides guidance for AI coding agents (Claude, Codex, Copilot, et
 ## Development Environment
 
 ### Prerequisites
-- JDK 11+ (JDK 17+ recommended)
+- JDK 17+ required for the build
 - Android SDK must be installed to execute certain tests. They will be skipped if the SDK is not installed. This is only an issue if making changes to detekt-gradle-plugin.
 
 ### Initial Setup
