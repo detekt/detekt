@@ -15,7 +15,6 @@ This document provides guidance for AI coding agents (Claude, Codex, Copilot, et
 
 ### Prerequisites
 - JDK 11+ (JDK 17+ recommended)
-- Gradle (wrapper included)
 
 ### Initial Setup
 ```bash
