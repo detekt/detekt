@@ -39,7 +39,7 @@ class UnnecessarySafeCall(config: Config) :
 
         val isUnnecessarySafeCall = analyze(expression) {
             expression
-                .diagnostics(KaDiagnosticCheckerFilter.ONLY_COMMON_CHECKERS)
+                .directDiagnostics(KaDiagnosticCheckerFilter.ONLY_COMMON_CHECKERS)
                 .any { it is KaFirDiagnostic.UnnecessarySafeCall }
         }
 
