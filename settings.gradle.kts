@@ -45,6 +45,12 @@ include("detekt-utils")
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
 
+buildscript {
+    dependencies {
+        classpath("org.jetbrains.kotlin:kotlin-metadata-jvm:2.3.21")
+    }
+}
+
 plugins {
     id("com.gradle.develocity") version "4.4.1"
     id("com.gradle.common-custom-user-data-gradle-plugin") version "2.6.0"
