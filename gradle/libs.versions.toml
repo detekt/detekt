@@ -1,5 +1,5 @@
 [versions]
-agp = "9.1.1"
+agp = "9.2.0"
 coroutines = "1.10.2"
 jacoco = "0.8.14"
 junit = "6.0.3"
