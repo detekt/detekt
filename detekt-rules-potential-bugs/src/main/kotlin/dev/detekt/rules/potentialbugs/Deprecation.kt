@@ -49,7 +49,7 @@ class Deprecation(config: Config) :
     private fun deprecationDiagnostic(element: KtElement): String? =
         analyze(element) {
             element
-                .diagnostics(KaDiagnosticCheckerFilter.ONLY_COMMON_CHECKERS)
+                .directDiagnostics(KaDiagnosticCheckerFilter.ONLY_COMMON_CHECKERS)
                 .firstNotNullOfOrNull { it as? KaFirDiagnostic.Deprecation }
                 ?.message
         }

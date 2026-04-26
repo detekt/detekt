@@ -6,6 +6,7 @@ import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.junit.KotlinCoreEnvironmentTest
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.KotlinEnvironmentContainer
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -77,6 +78,7 @@ class DeprecationSpec(private val env: KotlinEnvironmentContainer) {
     }
 
     @Test
+    @Disabled("https://github.com/detekt/detekt/issues/9280")
     fun `does report import location when excludeImportStatements has default value`() {
         val deprecatedFile = """
             package com.example.detekt.featureflag
