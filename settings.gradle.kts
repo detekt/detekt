@@ -45,6 +45,13 @@ include("detekt-utils")
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
 
+buildscript {
+    dependencies {
+        // https://github.com/autonomousapps/dependency-analysis-gradle-plugin/issues/1661
+        classpath("org.jetbrains.kotlin:kotlin-metadata-jvm:2.4.0")
+    }
+}
+
 plugins {
     id("com.gradle.develocity") version "4.4.2"
     id("com.gradle.common-custom-user-data-gradle-plugin") version "2.6.0"
