@@ -727,7 +727,7 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
     @Nested
     inner class `Kotlin property getter setter` {
         @Test
-        @Disabled("Retest in 2.4.0-Beta2")
+        @Disabled("Retest in 2.4.0-RC")
         fun `should report getter call`() {
             val code = """                
                 fun foo() = "".length + mutableListOf<Int>().size
