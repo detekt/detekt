@@ -51,7 +51,7 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
     id("com.autonomousapps.build-health") version "3.9.0"
     // Kotlin plugin must be added to classpath to support build-health analysis
-    id("org.jetbrains.kotlin.jvm") version "2.4.0-Beta1" apply false
+    id("org.jetbrains.kotlin.jvm") version "2.4.0-Beta2" apply false
 }
 
 val isCiBuild = providers.environmentVariable("CI").isPresent
