@@ -24,10 +24,7 @@ internal fun CliArgs.createSpec(output: Appendable, error: Appendable): Processi
 
         project {
             basePath = args.basePath.absolute()
-            val pathFilters = PathFilters.of(
-                includes = args.includes?.let(::asPatterns).orEmpty(),
-                excludes = args.excludes?.let(::asPatterns).orEmpty(),
-            )
+            val pathFilters = PathFilters.of(includes = args.includes, excludes = args.excludes)
             val absoluteBasePath = basePath.absolute()
             inputPaths = args.inputPaths.walk()
                 .filter { path -> path.isKotlinFile() }
@@ -89,13 +86,6 @@ private fun Iterable<Path>.walk(): Sequence<Path> = asSequence().flatMap { it.wa
 private fun Path.isKotlinFile() = extension in KT_ENDINGS
 
 private val KT_ENDINGS = setOf("kt", "kts")
-
-private fun asPatterns(rawValue: String): List<String> =
-    rawValue.trim()
-        .splitToSequence(",", ";")
-        .filter { it.isNotBlank() }
-        .map { it.trim() }
-        .toList()
 
 private fun CliArgs.toRunPolicy(): RulesSpec.RunPolicy {
     val parts = runRule?.split(":")
