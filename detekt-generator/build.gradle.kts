@@ -18,7 +18,9 @@ val detektCliClasspath by configurations.resolvable("detektCliClasspath") {
 dependencies {
     implementation(libs.kotlin.compiler)
     implementation(projects.detektApi)
-    implementation(projects.detektKotlinAnalysisApi)
+    implementation(projects.detektKotlinAnalysisApi) {
+        targetConfiguration = "shadow"
+    }
     implementation(projects.detektKotlinAnalysisApiStandalone)
     detektCli(projects.detektCli)
     implementation(projects.detektUtils)
