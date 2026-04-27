@@ -1,6 +1,7 @@
-package dev.detekt.metrics.processors
+package dev.detekt.report.statistics
 
 import dev.detekt.api.ProjectMetric
+import dev.detekt.test.invoke
 import dev.detekt.test.utils.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
