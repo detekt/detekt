@@ -11,7 +11,7 @@ import dev.detekt.api.testfixtures.createIssue
 import dev.detekt.api.testfixtures.createIssueEntity
 import dev.detekt.api.testfixtures.createIssueLocation
 import dev.detekt.api.testfixtures.createRuleInstance
-import dev.detekt.metrics.CognitiveComplexity
+import dev.detekt.metrics.processors.cognitiveComplexityKey
 import dev.detekt.metrics.processors.commentLinesKey
 import dev.detekt.metrics.processors.cyclomaticComplexityKey
 import dev.detekt.metrics.processors.linesKey
@@ -241,7 +241,7 @@ private fun createMdDetektion(vararg issues: Issue) =
         metrics = listOf(ProjectMetric("M1", 10_000), ProjectMetric("M2", 2)),
         userData = mapOf(
             cyclomaticComplexityKey.toString() to 10,
-            CognitiveComplexity.KEY.toString() to 10,
+            cognitiveComplexityKey.toString() to 10,
             sourceLinesKey.toString() to 20,
             logicalLinesKey.toString() to 10,
             commentLinesKey.toString() to 2,
