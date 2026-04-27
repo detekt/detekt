@@ -9,7 +9,7 @@ import dev.detekt.api.SetupContext
 import dev.detekt.api.SourceLocation
 import dev.detekt.api.internal.whichDetekt
 import dev.detekt.api.suppressed
-import dev.detekt.metrics.ComplexityReportGenerator
+import dev.detekt.report.complexity.ComplexityReportGenerator
 import dev.detekt.utils.MarkdownContent
 import dev.detekt.utils.codeBlock
 import dev.detekt.utils.emptyLine
@@ -72,7 +72,11 @@ class MarkdownOutputReport : OutputReport {
     }
 
     private fun getComplexityMetrics(detektion: Detektion): List<String> =
-        ComplexityReportGenerator.create(detektion).generate().orEmpty()
+        try {
+            ComplexityReportGenerator.create(detektion).generate().orEmpty()
+        } catch (_: NoClassDefFoundError) {
+            emptyList()
+        }
 }
 
 private fun MarkdownContent.renderMetrics(metrics: Collection<ProjectMetric>) {

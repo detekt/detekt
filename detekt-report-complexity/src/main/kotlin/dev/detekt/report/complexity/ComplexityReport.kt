@@ -1,0 +1,29 @@
+package dev.detekt.report.complexity
+
+import dev.detekt.api.ConsoleReport
+import dev.detekt.api.Detektion
+
+/**
+ * Contains metrics concerning the analyzed code.
+ * For instance the source lines of code and the McCabe complexity are calculated.
+ * See: https://detekt.dev/configurations.html#console-reports
+ */
+class ComplexityReport : ConsoleReport {
+
+    override val id: String = "ComplexityReport"
+    override val priority: Int = 20
+
+    override fun render(detektion: Detektion): String? {
+        val complexityReportGenerator = ComplexityReportGenerator.create(detektion)
+        return complexityReportGenerator.generate()?.let { list ->
+            buildString {
+                append("Complexity Report:\n")
+                list.forEach {
+                    append("\t- ")
+                    append(it)
+                    append("\n")
+                }
+            }
+        }
+    }
+}

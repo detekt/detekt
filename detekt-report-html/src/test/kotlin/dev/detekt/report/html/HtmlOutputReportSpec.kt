@@ -11,12 +11,12 @@ import dev.detekt.api.testfixtures.createIssue
 import dev.detekt.api.testfixtures.createIssueEntity
 import dev.detekt.api.testfixtures.createIssueLocation
 import dev.detekt.api.testfixtures.createRuleInstance
-import dev.detekt.metrics.CognitiveComplexity
-import dev.detekt.metrics.processors.commentLinesKey
-import dev.detekt.metrics.processors.cyclomaticComplexityKey
-import dev.detekt.metrics.processors.linesKey
-import dev.detekt.metrics.processors.logicalLinesKey
-import dev.detekt.metrics.processors.sourceLinesKey
+import dev.detekt.report.complexity.cognitiveComplexityKey
+import dev.detekt.report.complexity.commentLinesKey
+import dev.detekt.report.complexity.cyclomaticComplexityKey
+import dev.detekt.report.complexity.linesKey
+import dev.detekt.report.complexity.logicalLinesKey
+import dev.detekt.report.complexity.sourceLinesKey
 import dev.detekt.test.utils.readResourceContent
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -117,7 +117,7 @@ class HtmlOutputReportSpec {
         val detektion = TestDetektion(
             userData = mapOf(
                 cyclomaticComplexityKey.toString() to 10,
-                CognitiveComplexity.KEY.toString() to 10,
+                cognitiveComplexityKey.toString() to 10,
                 sourceLinesKey.toString() to 20,
                 logicalLinesKey.toString() to 10,
                 commentLinesKey.toString() to 2,
