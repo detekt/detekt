@@ -137,8 +137,8 @@ kotlin {
     }
 }
 
-val testKitRuntimeOnly by configurations.registering
-val testKitGradleMinVersionRuntimeOnly by configurations.registering
+val testKitRuntimeOnly = configurations.register("testKitRuntimeOnly")
+val testKitGradleMinVersionRuntimeOnly = configurations.register("testKitGradleMinVersionRuntimeOnly")
 
 dependencies {
     compileOnly(libs.android.gradleApi)
