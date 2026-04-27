@@ -21,13 +21,15 @@ import org.jetbrains.kotlin.psi.psiUtil.PsiChildRange
 import org.jetbrains.kotlin.psi.psiUtil.allChildren
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
-import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
 
 /**
  * This rule will report any class, function or constructor with KDoc that does not match the declaration signature.
  * If KDoc is not present or does not contain any @param or @property tags, rule violation will not be reported.
  * By default, both type and value parameters need to be matched and declarations orders must be preserved. You can
  * turn off these features using configuration options.
+ *
+ * Set `exhaustive` to `false` to only check that documented parameters are valid without requiring all
+ * parameters to be documented. This is useful when documentation is used sparingly and only where it is really needed.
  *
  * <noncompliant>
  * /**
@@ -73,36 +75,38 @@ class OutdatedDocumentation(config: Config) :
     @Configuration("if we allow constructor parameters to be marked as @param instead of @property")
     private val allowParamOnConstructorProperties: Boolean by config(false)
 
+    @Configuration(
+        "if true, all parameters must be documented; " +
+            "if false, only documented parameters are validated against the declaration"
+    )
+    private val exhaustive: Boolean by config(true)
+
     override fun visitClass(klass: KtClass) {
         super.visitClass(klass)
         val classDeclarations = getClassDeclarations(klass)
-        (
-            isDocumentationOutdated(klass) { classDeclarations } &&
-                (
-                    // checking below only if constructor in internal or private
-                    isInternalOrPrivate(klass.primaryConstructor).not() ||
-                        isDocumentationOutdated(klass) {
-                            // case when only property can be documented
-                            classDeclarations.filterNot { it.type == DeclarationType.PARAM }
-                        }
-                    )
-            )
-            .ifTrue {
-                reportFinding(klass)
-            }
+        val reason = findDocumentationMismatch(klass) { classDeclarations }
+        if (reason != null && (
+                isInternalOrPrivate(klass.primaryConstructor).not() ||
+                    findDocumentationMismatch(klass) {
+                        classDeclarations.filterNot { it.type == DeclarationType.PARAM }
+                    } != null
+                )
+        ) {
+            reportFinding(klass, reason)
+        }
     }
 
     override fun visitSecondaryConstructor(constructor: KtSecondaryConstructor) {
         super.visitSecondaryConstructor(constructor)
-        isDocumentationOutdated(constructor) { getSecondaryConstructorDeclarations(constructor) }.ifTrue {
-            reportFinding(constructor)
+        findDocumentationMismatch(constructor) { getSecondaryConstructorDeclarations(constructor) }?.let {
+            reportFinding(constructor, it)
         }
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
-        isDocumentationOutdated(function) { getFunctionDeclarations(function) }.ifTrue {
-            reportFinding(function)
+        findDocumentationMismatch(function) { getFunctionDeclarations(function) }?.let {
+            reportFinding(function, it)
         }
     }
 
@@ -173,18 +177,15 @@ class OutdatedDocumentation(config: Config) :
         }
     }
 
-    private fun isDocumentationOutdated(
+    private fun findDocumentationMismatch(
         element: KtNamedDeclaration,
         elementDeclarationsProvider: () -> List<Declaration>,
-    ): Boolean {
-        val doc = element.docComment ?: return false
+    ): String? {
+        val doc = element.docComment ?: return null
         val docDeclarations = getDocDeclarations(doc)
-        return if (docDeclarations.isNotEmpty()) {
-            val elementDeclarations = elementDeclarationsProvider()
-            !declarationsMatch(docDeclarations, elementDeclarations)
-        } else {
-            false
-        }
+        if (docDeclarations.isEmpty()) return null
+        val elementDeclarations = elementDeclarationsProvider()
+        return findMismatchReason(docDeclarations, elementDeclarations)
     }
 
     private fun isInternalOrPrivate(primaryConstructor: KtPrimaryConstructor?): Boolean {
@@ -192,28 +193,53 @@ class OutdatedDocumentation(config: Config) :
         return primaryConstructor.isInternal() || primaryConstructor.isPrivate()
     }
 
-    private fun declarationsMatch(doc: List<Declaration>, element: List<Declaration>): Boolean {
-        if (doc.size != element.size) {
-            return false
+    private fun findMismatchReason(doc: List<Declaration>, element: List<Declaration>): String? {
+        val invalidDocs = doc.filter { docDecl ->
+            element.none { elementDecl -> declarationMatches(docDecl, elementDecl) }
         }
 
-        val zippedElements = if (matchDeclarationsOrder) {
-            doc.zip(element)
+        val orderMismatch = matchDeclarationsOrder && doc.map { docDecl ->
+            element.indexOfFirst { elementDecl -> declarationMatches(docDecl, elementDecl) }
+        }.zipWithNext().any { (a, b) -> a >= b }
+
+        val undocumented = if (exhaustive && doc.size != element.size) {
+            element.filter { elementDecl ->
+                doc.none { docDecl -> declarationMatches(docDecl, elementDecl) }
+            }
         } else {
-            doc.sortedBy { it.name }.zip(element.sortedBy { it.name })
+            emptyList()
         }
 
-        return zippedElements.all { (docItr, elementItr) -> declarationMatches(docItr, elementItr) }
+        return when {
+            invalidDocs.isNotEmpty() -> {
+                val names = invalidDocs.joinToString {
+                    "'${it.name}'"
+                }
+                "documented parameters $names are not present in the declaration"
+            }
+
+            orderMismatch ->
+                "order of documented parameters does not match the declaration order"
+
+            undocumented.isNotEmpty() -> {
+                val names = undocumented.joinToString {
+                    "'${it.name}'"
+                }
+                "parameters $names are not documented"
+            }
+
+            else -> null
+        }
     }
 
     private fun declarationMatches(doc: Declaration, element: Declaration): Boolean =
         element.name == doc.name && (element.type == DeclarationType.ANY || element.type == doc.type)
 
-    private fun reportFinding(element: KtNamedDeclaration) {
+    private fun reportFinding(element: KtNamedDeclaration, reason: String) {
         report(
             Finding(
                 Entity.atName(element),
-                "Documentation of ${element.nameAsSafeName} is outdated"
+                "Documentation of ${element.nameAsSafeName} is outdated: $reason"
             )
         )
     }
