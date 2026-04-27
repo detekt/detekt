@@ -19,8 +19,8 @@ internal fun Project.registerJvmCompilationDetektTask(
     compilation: KotlinCompilation<*>,
     target: KotlinTarget? = null,
 ) {
-    val taskSuffix = if (target != null) compilation.name + target.name.capitalize() else compilation.name
-    tasks.register(DetektPlugin.DETEKT_TASK_NAME + taskSuffix.capitalize(), Detekt::class.java) { detektTask ->
+    val taskSuffix = compilation.taskSuffix(target).capitalize()
+    tasks.register(DetektPlugin.DETEKT_TASK_NAME + taskSuffix, Detekt::class.java) { detektTask ->
         val siblingTask = compilation.compileTaskProvider.map { it as KotlinJvmCompile }
 
         detektTask.setSource(siblingTask.map { it.sources })
@@ -72,9 +72,9 @@ internal fun Project.registerJvmCompilationCreateBaselineTask(
     compilation: KotlinCompilation<*>,
     target: KotlinTarget? = null,
 ) {
-    val taskSuffix = if (target != null) compilation.name + target.name.capitalize() else compilation.name
+    val taskSuffix = compilation.taskSuffix(target).capitalize()
     tasks.register(
-        DetektPlugin.BASELINE_TASK_NAME + taskSuffix.capitalize(),
+        DetektPlugin.BASELINE_TASK_NAME + taskSuffix,
         DetektCreateBaselineTask::class.java,
     ) { createBaselineTask ->
         val siblingTask = compilation.compileTaskProvider.map { it as KotlinJvmCompile }
@@ -132,3 +132,6 @@ internal fun Project.mapExplicitArgMode(): Provider<String> =
             else -> null
         }
     }
+
+private fun KotlinCompilation<*>.taskSuffix(target: KotlinTarget?): String =
+    if (target != null) name + target.name.capitalize() else name

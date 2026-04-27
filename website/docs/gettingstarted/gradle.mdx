@@ -33,7 +33,7 @@ the Android Gradle Plugin applied:
   (Android: all production source sets)
 - `detektTest` - Similar to `detekt`, but runs only on the `test` source set
   (Android: all JVM and Android Test source sets)
-- `detektBaselineMain` - Similar to `detektBaseline`, but creates a baseline only for the `main` source set 
+- `detektBaselineMain` - Similar to `detektBaseline`, but creates a baseline only for the `main` source set
   (Android: multiple baselines for all production source sets)
 - `detektBaselineTest` - Similar to `detektBaseline`, but creates a baseline only for the `test` source set
   (Android: multiple baselines for all JVM and Android Test source sets)
@@ -240,7 +240,7 @@ detekt {
     // Android: Don't create tasks for the specified build variants (e.g. "productionRelease")
     ignoredVariants = ["productionRelease"]
     
-    // Specify the base path for file paths in the formatted reports. 
+    // Specify the base path for file paths in the formatted reports.
     // If not set, all file paths reported will be absolute file path.
     basePath = projectDir
 }
@@ -301,7 +301,7 @@ detekt {
     // Android: Don't create tasks for the specified build variants (e.g. "productionRelease")
     ignoredVariants = listOf("productionRelease")
     
-    // Specify the base path for file paths in the formatted reports. 
+    // Specify the base path for file paths in the formatted reports.
     // If not set, all file paths reported will be absolute file path.
     basePath.set(projectDir)
 }
