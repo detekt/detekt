@@ -10,7 +10,7 @@
 
 
 <link rel="search" type="application/opensearchdescription+xml" title="detekt" href="/opensearch.xml"><link rel="stylesheet" href="/assets/css/styles.bc76b9d6.css">
-<script src="/assets/js/runtime~main.421856ca.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.2b20b5a5.js" defer="defer"></script>
 <script src="/assets/js/main.db4b2f10.js" defer="defer"></script>
 </head>
 <body>
@@ -75,13 +75,6 @@ for two things (nullability and type) and not just one (cast).</p>
 <p><strong>Active by default</strong>: No</p>
 <p><strong>Requires Type Resolution</strong></p>
 <p><strong>Aliases</strong>: DEPRECATION</p>
-<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-2">Configuration options:<a href="#configuration-options-2" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
-<ul>
-<li class="">
-<p><code>excludeImportStatements</code> (default: <code>false</code>)</p>
-<p>Ignore deprecation in import statements</p>
-</li>
-</ul>
 <h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="dontdowncastcollectiontypes">DontDowncastCollectionTypes<a href="#dontdowncastcollectiontypes" class="hash-link" aria-label="Direct link to DontDowncastCollectionTypes" title="Direct link to DontDowncastCollectionTypes" translate="no">​</a></h3>
 <p>Down-casting immutable types from kotlin.collections should be discouraged.
 The result of the downcast is platform specific and can lead to unexpected crashes.
@@ -102,7 +95,7 @@ Compose.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.21.0</p>
 <p><strong>Requires Type Resolution</strong></p>
 <p><strong>Aliases</strong>: DoubleMutability</p>
-<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-3">Configuration options:<a href="#configuration-options-3" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-2">Configuration options:<a href="#configuration-options-2" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
 <ul>
 <li class="">
 <p><code>mutableTypes</code> (default: <code>[&#x27;kotlin.collections.MutableList&#x27;, &#x27;kotlin.collections.MutableMap&#x27;, &#x27;kotlin.collections.MutableSet&#x27;, &#x27;java.util.ArrayList&#x27;, &#x27;java.util.LinkedHashSet&#x27;, &#x27;java.util.HashSet&#x27;, &#x27;java.util.LinkedHashMap&#x27;, &#x27;java.util.HashMap&#x27;]</code>)</p>
@@ -120,7 +113,7 @@ Using <code>else</code> cases for these expressions can lead to unintended behav
 or changing the nullability of a boolean, since this will be implicitly handled by the <code>else</code> case.</p>
 <p><strong>Active by default</strong>: No</p>
 <p><strong>Requires Type Resolution</strong></p>
-<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-4">Configuration options:<a href="#configuration-options-4" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-3">Configuration options:<a href="#configuration-options-3" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
 <ul>
 <li class="">
 <p><code>ignoredSubjectTypes</code> (default: <code>[]</code>)</p>
@@ -185,7 +178,7 @@ normally so that&#x27;s the rationale behind this rule.</p>
 fun returnsNoValue() </p>
 <p><strong>Active by default</strong>: Yes - Since v1.21.0</p>
 <p><strong>Requires Type Resolution</strong></p>
-<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-5">Configuration options:<a href="#configuration-options-5" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-4">Configuration options:<a href="#configuration-options-4" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
 <ul>
 <li class="">
 <p><code>restrictToConfig</code> (default: <code>true</code>)</p>
@@ -232,7 +225,7 @@ This may lead to backward incompatibility.
 Use a block statement to make clear this function will never return a value.</p>
 <p><strong>Active by default</strong>: No</p>
 <p><strong>Requires Type Resolution</strong></p>
-<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-6">Configuration options:<a href="#configuration-options-6" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-5">Configuration options:<a href="#configuration-options-5" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
 <ul>
 <li class="">
 <p><code>allowExplicitReturnType</code> (default: <code>true</code>)</p>
@@ -274,7 +267,7 @@ NoSuchElementException.</p>
 <p>Using lateinit for property initialization can be error-prone and the actual initialization is not
 guaranteed. Try using constructor injection or delegation to initialize properties.</p>
 <p><strong>Active by default</strong>: No</p>
-<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-7">Configuration options:<a href="#configuration-options-7" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-6">Configuration options:<a href="#configuration-options-6" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
 <ul>
 <li class="">
 <p><code>ignoreOnClassesPattern</code> (default: <code>&#x27;&#x27;</code>)</p>
@@ -301,7 +294,7 @@ Preferred access methods are <code>map[]</code> without <code>!!</code>, <code>m
 <p>This rule checks whether overriding methods invoke the super method when the super method has a specific annotation.</p>
 <p><strong>Active by default</strong>: No</p>
 <p><strong>Requires Type Resolution</strong></p>
-<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-8">Configuration options:<a href="#configuration-options-8" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-7">Configuration options:<a href="#configuration-options-7" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
 <ul>
 <li class="">
 <p><code>mustInvokeSuperAnnotations</code> (default: <code>[&#x27;androidx.annotation.CallSuper&#x27;, &#x27;javax.annotation.OverridingMethodsMustInvokeSuper&#x27;]</code>)</p>
@@ -317,7 +310,7 @@ Preferred access methods are <code>map[]</code> without <code>!!</code>, <code>m
 <code>Closable</code>. It also properly handles exceptions if raised while closing the resource</p>
 <p><strong>Active by default</strong>: No</p>
 <p><strong>Requires Type Resolution</strong></p>
-<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-9">Configuration options:<a href="#configuration-options-9" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-8">Configuration options:<a href="#configuration-options-8" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
 <ul>
 <li class="">
 <p><code>ignoreClass</code> (default: <code>[&#x27;java.io.ByteArrayInputStream&#x27;, &#x27;java.io.ByteArrayOutputStream&#x27;]</code>)</p>
@@ -368,7 +361,7 @@ loop altogether.</p>
 type changes. And code gets error prone as it gets easy to mix up parameters of the same type</p>
 <p><strong>Active by default</strong>: No</p>
 <p><strong>Requires Type Resolution</strong></p>
-<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-10">Configuration options:<a href="#configuration-options-10" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-9">Configuration options:<a href="#configuration-options-9" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
 <ul>
 <li class="">
 <p><code>allowAdjacentDifferentTypeParams</code> (default: <code>true</code>)</p>
