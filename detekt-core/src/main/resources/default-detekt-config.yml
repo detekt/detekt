@@ -778,6 +778,7 @@ style:
     active: true
   UnnecessaryFullyQualifiedName:
     active: false
+    ignorePackages: []
   UnnecessaryInheritance:
     active: true
   UnnecessaryInnerClass:

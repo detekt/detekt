@@ -1,10 +1,13 @@
 package dev.detekt.rules.style
 
 import dev.detekt.api.Config
+import dev.detekt.api.Configuration
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
+import dev.detekt.api.config
+import dev.detekt.api.simplePatternToRegex
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.components.KaScopeKind
@@ -42,6 +45,7 @@ import org.jetbrains.kotlin.psi.psiUtil.parents
  * - Package declarations
  * - String literals
  * - Nested class references without packages (e.g., Outer.Inner)
+ * - Packages that were ignored by configuration
  *
  * See [PMD UnnecessaryFullyQualifiedName](https://pmd.github.io/latest/pmd_rules_java_codestyle.html#unnecessaryfullyqualifiedname)
  * for a similar rule in the Java ecosystem.
@@ -78,6 +82,13 @@ class UnnecessaryFullyQualifiedName(config: Config) :
     Rule(config, "Unnecessary fully qualified names make code harder to read. Use imports instead."),
     RequiresAnalysisApi {
 
+    @Configuration("packages that are ignored, for example `['java.lang', 'java.nio.*']`")
+    private val ignorePackages: List<Regex> by config(emptyList<String>()) {
+        it.distinct().map { packageName ->
+            packageName.trim('.').simplePatternToRegex()
+        }
+    }
+
     @Suppress("ReturnCount")
     override fun visitUserType(type: KtUserType) {
         super.visitUserType(type)
@@ -101,6 +112,7 @@ class UnnecessaryFullyQualifiedName(config: Config) :
         analyze(type) {
             val resolvedSymbol = type.referenceExpression?.mainReference?.resolveToSymbol() ?: return
             val packageFqName = resolvedSymbol.packageFqName() ?: return
+            if (ignorePackages.any { it.matches(packageFqName) }) return
             if (!typeText.startsWith(packageFqName)) return
             if (hasNameCollision(type, resolvedSymbol)) return
         }
@@ -128,6 +140,7 @@ class UnnecessaryFullyQualifiedName(config: Config) :
         analyze(receiverExpression) {
             val resolvedSymbol = receiverExpression.expressionType?.symbol ?: return
             val packageFqName = resolvedSymbol.packageFqName() ?: return
+            if (ignorePackages.any { it.matches(packageFqName) }) return
             if (!receiverText.startsWith("$packageFqName.")) return
             if (hasNameCollision(expression, resolvedSymbol)) return
         }
@@ -163,6 +176,7 @@ class UnnecessaryFullyQualifiedName(config: Config) :
             val resolvedCall = expression.resolveToCall()?.successfulCallOrNull<KaCallableMemberCall<*, *>>()
             val symbol = resolvedCall?.partiallyAppliedSymbol?.symbol ?: return
             val packageFqName = symbol.packageFqName() ?: return
+            if (ignorePackages.any { it.matches(packageFqName) }) return
             if (!receiverText.startsWith(packageFqName)) return
 
             // If the leftmost part of the receiver resolves to a variable/property, this is a method call on an
