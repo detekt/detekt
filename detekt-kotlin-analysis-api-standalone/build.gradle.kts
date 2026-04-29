@@ -10,14 +10,32 @@ dependencies {
     api(libs.kotlin.analysisApiStandalone) { isTransitive = false }
 }
 
+val defaultJarClassifier = "default-jar"
+
+tasks.jar {
+    archiveClassifier = defaultJarClassifier
+}
+
+configurations.runtimeElements {
+    outgoing.artifacts.removeIf { it.classifier == defaultJarClassifier && it.extension == "jar" }
+    outgoing.artifact(tasks.shadowJar)
+}
+
+configurations.apiElements {
+    outgoing.variants.removeIf { it.name == "classes" }
+
+    outgoing.artifacts.removeIf { it.classifier == defaultJarClassifier && it.extension == "jar" }
+    outgoing.artifact(tasks.shadowJar)
+}
+
+tasks.shadowJar {
+    archiveClassifier = ""
+}
+
 java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
-val javaComponent = components["java"] as AdhocComponentWithVariants
-javaComponent.withVariantsFromConfiguration(configurations["apiElements"]) {
-    skip()
-}
-javaComponent.withVariantsFromConfiguration(configurations["runtimeElements"]) {
-    skip()
+shadow {
+    addShadowVariantIntoJavaComponent = false
 }
