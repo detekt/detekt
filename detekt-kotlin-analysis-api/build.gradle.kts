@@ -5,15 +5,20 @@ plugins {
     id("com.gradleup.shadow") version "9.4.1"
 }
 
+val aaDependency = configurations.dependencyScope("aaDependency")
+val aaDependencies = configurations.resolvable("aaDependencies") {
+    extendsFrom(aaDependency.get())
+}
+
 dependencies {
     // Exclude transitive dependencies due to https://youtrack.jetbrains.com/issue/KT-61639
-    api(libs.kotlin.analysisApi) { isTransitive = false }
-    api(libs.kotlin.analysisApiK2) { isTransitive = false }
+    aaDependency(libs.kotlin.analysisApi) { isTransitive = false }
+    aaDependency(libs.kotlin.analysisApiK2) { isTransitive = false }
 
-    implementation(libs.kotlin.analysisApiImplBase) { isTransitive = false }
-    implementation(libs.kotlin.analysisApiPlatformInterface) { isTransitive = false }
-    implementation(libs.kotlin.lowLevelApiFir) { isTransitive = false }
-    implementation(libs.kotlin.symbolLightClasses) { isTransitive = false }
+    aaDependency(libs.kotlin.analysisApiImplBase) { isTransitive = false }
+    aaDependency(libs.kotlin.analysisApiPlatformInterface) { isTransitive = false }
+    aaDependency(libs.kotlin.lowLevelApiFir) { isTransitive = false }
+    aaDependency(libs.kotlin.symbolLightClasses) { isTransitive = false }
     runtimeOnly(libs.caffeine) {
         attributes {
             // https://github.com/ben-manes/caffeine/issues/716
@@ -23,6 +28,10 @@ dependencies {
     }
     runtimeOnly(libs.kotlinx.serializationCore)
     runtimeOnly(libs.kotlinx.coroutinesCore.intellij)
+}
+
+tasks.shadowJar {
+    configurations = aaDependencies.map { listOf(it) }
 }
 
 java {
