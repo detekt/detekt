@@ -1,6 +1,7 @@
 package dev.detekt.rules.ktlintwrapper
 
 import dev.detekt.api.Config
+import dev.detekt.api.modifiedText
 import dev.detekt.rules.ktlintwrapper.wrappers.NoLineBreakBeforeAssignment
 import dev.detekt.test.FakeLanguageVersionSettings
 import dev.detekt.test.utils.compileContentForTest
@@ -42,6 +43,19 @@ class KtlintEngineSpec {
         val findings = NoLineBreakBeforeAssignment(Config.empty).lint("fun main()\n= Unit")
 
         assertThat(findings).hasSize(1)
+    }
+
+    @Test
+    fun `engine reads from modifiedText when a prior autocorrect has set it`() {
+        // Source has a violation; modifiedText overrides it with a clean version.
+        // The engine should walk modifiedText, not the original text, and emit no findings.
+        val ktFile = compileContentForTest("fun main()\n= Unit", "EngineSpecModifiedText.kt")
+        ktFile.modifiedText = "fun main() = Unit\n"
+
+        val findings = NoLineBreakBeforeAssignment(Config.empty)
+            .visitFile(ktFile, FakeLanguageVersionSettings())
+
+        assertThat(findings).isEmpty()
     }
 
     @Test
