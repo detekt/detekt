@@ -31,19 +31,27 @@ import java.util.concurrent.atomic.AtomicInteger
 internal object KtlintEngine {
 
     private val registry = mutableListOf<KtlintRule>()
-    private val registeredIds = mutableSetOf<RuleId>()
 
     private val contexts = ConcurrentHashMap<KtFile, Lazy<FileContext>>()
 
+    /**
+     * Registers (or replaces) the canonical [KtlintRule] instance for its [RuleId]. Latest-wins so
+     * that newly-instantiated rules with custom configuration take precedence over earlier
+     * registrations — important for tests, which create fresh rule instances with bespoke configs
+     * and expect the engine to honour them.
+     */
     @Synchronized
     fun register(rule: KtlintRule) {
-        if (registeredIds.add(rule.wrapping.ruleId)) {
+        val ruleId = rule.wrapping.ruleId
+        val existing = registry.indexOfFirst { it.wrapping.ruleId == ruleId }
+        if (existing >= 0) {
+            registry[existing] = rule
+        } else {
             registry.add(rule)
         }
     }
 
-    fun contextFor(root: KtFile): FileContext =
-        contexts.computeIfAbsent(root) { lazy { build(it) } }.value
+    fun contextFor(root: KtFile): FileContext = contexts.computeIfAbsent(root) { lazy { build(it) } }.value
 
     fun ruleDoneWithFile(root: KtFile, context: FileContext) {
         if (context.remainingVisits.decrementAndGet() <= 0) {
@@ -72,7 +80,14 @@ internal object KtlintEngine {
         )
         val positionByOffset = KtLintLineColCalculator.calculateLineColByOffset(fileCopy.text)
 
-        val active = snapshotRegistry()
+        // Restrict the shared walk to rules that are either active by config or have had their
+        // visit() called directly (the test path via `subject.lint(...)`). This stops stale
+        // provider-registered rules from participating — important for autocorrecting rules
+        // whose AST mutations would otherwise leak into the test's modifiedText assertions.
+        val active = snapshotRegistry().filter { it.triggeredVisit || it.isActiveByConfig() }
+        if (active.isEmpty()) {
+            return FileContext(fileCopy, positionByOffset, emptyMap(), AtomicInteger(0))
+        }
         // Fresh per-file ktlint StandardRule instances so different files dispatching through
         // the engine concurrently do not race on shared per-file state (counters, last-token, etc.).
         val perFile: List<Pair<KtlintRule, StandardRule>> = active.map { it to it.newWrapping() }
@@ -94,6 +109,8 @@ internal object KtlintEngine {
     }
 
     private fun snapshotRegistry(): List<KtlintRule> = synchronized(this) { registry.toList() }
+
+    private fun KtlintRule.isActiveByConfig(): Boolean = config.valueOrDefault("active", false)
 
     private fun walkOnce(
         node: ASTNode,

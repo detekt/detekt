@@ -31,15 +31,6 @@ abstract class KtlintRule(config: Config, description: String) : Rule(config, de
 
     abstract val wrapping: StandardRule
 
-    /**
-     * Factory for fresh per-file [StandardRule] instances. [KtlintEngine] uses this so each
-     * Kotlin file gets its own ktlint rule instance, preventing cross-thread races on the
-     * wrapping's internal per-file state (counters, last-token, etc.). The default reflective
-     * implementation works for the standard ktlint rule set; override if the wrapped
-     * [StandardRule] has a non-default constructor.
-     */
-    open fun newWrapping(): StandardRule = wrapping::class.java.getDeclaredConstructor().newInstance()
-
     internal val autocorrectDecision: AutocorrectDecision
         get() = if (autoCorrect) AutocorrectDecision.ALLOW_AUTOCORRECT else AutocorrectDecision.NO_AUTOCORRECT
 
@@ -52,7 +43,35 @@ abstract class KtlintRule(config: Config, description: String) : Rule(config, de
     private lateinit var root: KtFile
     private lateinit var originalFilePath: Path
 
+    /**
+     * Set the first time [visit] is called. The engine treats a rule as "active for this run"
+     * when this flag is true OR the rule's config has `active: true`. The flag covers two cases
+     * the config check alone misses: tests that instantiate a rule with [Config.empty] and call
+     * [dev.detekt.test.lint] directly (config.active is false but the rule is clearly being
+     * exercised), and a defensive guard against stale provider-registered instances participating
+     * in the shared dispatch.
+     */
+    @Volatile
+    internal var triggeredVisit: Boolean = false
+        private set
+
+    /**
+     * Factory for fresh per-file [StandardRule] instances. [KtlintEngine] uses this so each
+     * Kotlin file gets its own ktlint rule instance, preventing cross-thread races on the
+     * wrapping's internal per-file state (counters, last-token, etc.). The default reflective
+     * implementation works for the standard ktlint rule set; override if the wrapped
+     * [StandardRule] has a non-default constructor.
+     */
+    open fun newWrapping(): StandardRule = wrapping::class.java.getDeclaredConstructor().newInstance()
+
     override fun visit(root: KtFile) {
+        if (!triggeredVisit) {
+            // Self-register so the engine sees this exact instance — and its config — instead of
+            // any stale registration with the same RuleId. KtlintWrapperProvider also registers
+            // rules at construction time, but tests instantiate rules outside the provider.
+            KtlintEngine.register(this)
+            triggeredVisit = true
+        }
         val context = KtlintEngine.contextFor(root)
         try {
             val myFindings = context.findings[wrapping.ruleId]
