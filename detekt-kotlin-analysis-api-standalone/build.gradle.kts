@@ -5,9 +5,14 @@ plugins {
     id("com.gradleup.shadow") version "9.4.1"
 }
 
+val aaDependency = configurations.dependencyScope("aaDependency")
+val aaDependencies = configurations.resolvable("aaDependencies") {
+    extendsFrom(aaDependency.get())
+}
+
 dependencies {
     // Exclude transitive dependencies due to https://youtrack.jetbrains.com/issue/KT-61639
-    api(libs.kotlin.analysisApiStandalone) { isTransitive = false }
+    aaDependency(libs.kotlin.analysisApiStandalone) { isTransitive = false }
 }
 
 val defaultJarClassifier = "default-jar"
@@ -30,13 +35,14 @@ configurations.apiElements {
 
 tasks.shadowJar {
     archiveClassifier = ""
+    configurations = aaDependencies.map { listOf(it) }
 }
 
 val sourcesJar = tasks.register<Jar>("sourcesJar") {
     archiveClassifier = "sources"
 
     from(
-        configurations.runtimeClasspath.map {
+        aaDependencies.map {
             it.incoming.artifactView {
                 withVariantReselection()
                 attributes {
