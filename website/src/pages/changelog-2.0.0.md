@@ -522,6 +522,7 @@ This is an initial alpha release of Detekt 2.0.0.
 - Replaced "threshold" property of LongMethod rule by "allowedLines" - [#6181](https://github.com/detekt/detekt/pull/6181)
 - Remove deprecated elements from Gradle plugin - [#6180](https://github.com/detekt/detekt/pull/6180)
 - Changed name of "FunctionMinLength" rule to "FunctionNameMinLength" - [#6161](https://github.com/detekt/detekt/pull/6161)
+- Changed name of rule from SpacingAfterPackageDeclaration to SpacingAfterPackageAndImports - [#9116](https://github.com/detekt/detekt/pull/9116)
 - Changed name of rule from SpacingBetweenPackageAndImports to SpacingAfterPackageDeclaration - [#6133](https://github.com/detekt/detekt/pull/6133)
 - Changed name of rule from MayBeConst to MayBeConstant - [#6132](https://github.com/detekt/detekt/pull/6132)
 - Changed name of rule from FunctionMaxLength to FunctionNameMaxLength - [#6131](https://github.com/detekt/detekt/pull/6131)
