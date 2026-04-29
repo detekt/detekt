@@ -1,6 +1,5 @@
 package dev.detekt.rules.ktlintwrapper
 
-import com.intellij.lang.ASTNode
 import com.pinterest.ktlint.rule.engine.core.api.AutocorrectDecision
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.CODE_STYLE_PROPERTY
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfig
@@ -10,16 +9,9 @@ import com.pinterest.ktlint.rule.engine.core.api.editorconfig.createRuleExecutio
 import com.pinterest.ktlint.ruleset.standard.StandardRule
 import com.pinterest.ktlint.ruleset.standard.rules.MAX_LINE_LENGTH_RULE_ID
 import dev.detekt.api.Config
-import dev.detekt.api.Entity
-import dev.detekt.api.Finding
-import dev.detekt.api.Location
 import dev.detekt.api.Rule
-import dev.detekt.api.SourceLocation
-import dev.detekt.api.TextLocation
-import dev.detekt.psi.absolutePath
 import org.ec4j.core.model.Property
 import org.jetbrains.kotlin.psi.KtFile
-import java.nio.file.Path
 
 /**
  * Rule to detect formatting violations.
@@ -38,10 +30,6 @@ abstract class KtlintRule(config: Config, description: String) : Rule(config, de
         get() = config.valueOrNull("code_style")
             ?: config.parent?.let { KtlintWrapperProvider.code_style.value(it) }
             ?: KtlintWrapperProvider.code_style.defaultValue
-
-    private lateinit var positionByOffset: (offset: Int) -> Pair<Int, Int>
-    private lateinit var root: KtFile
-    private lateinit var originalFilePath: Path
 
     /**
      * Set the first time [visit] is called. The engine treats a rule as "active for this run"
@@ -74,15 +62,7 @@ abstract class KtlintRule(config: Config, description: String) : Rule(config, de
         }
         val context = KtlintEngine.contextFor(root)
         try {
-            val myFindings = context.findings[wrapping.ruleId]
-            if (!myFindings.isNullOrEmpty()) {
-                this.root = context.fileCopy
-                originalFilePath = root.absolutePath()
-                positionByOffset = context.positionByOffset
-                myFindings.forEach { finding ->
-                    emitFinding(finding.offset, finding.message, finding.canBeAutoCorrected, finding.node)
-                }
-            }
+            context.findings[wrapping.ruleId]?.forEach(::report)
         } finally {
             KtlintEngine.ruleDoneWithFile(root, context)
         }
@@ -119,25 +99,5 @@ abstract class KtlintRule(config: Config, description: String) : Rule(config, de
         }
 
         return EditorConfig(properties)
-    }
-
-    private fun emitFinding(offset: Int, message: String, canBeAutoCorrected: Boolean, node: ASTNode) {
-        // Always convert KtLint offsets to lines/columns.
-        // The node used to report the finding may be not the same used for the offset (e.g. in NoUnusedImports).
-        val (line, column) = positionByOffset(offset)
-        val location = Location(
-            source = SourceLocation(line, column),
-            endSource = SourceLocation(line, column),
-            // Use offset + 1 since ktlint always reports a single location.
-            text = TextLocation(offset, offset + 1),
-            path = originalFilePath
-        )
-        val entity = Entity.from(node.psi, location)
-
-        if (canBeAutoCorrected && autoCorrect) {
-            report(Finding(entity, message, suppressReasons = listOf("Auto correct")))
-        } else {
-            report(Finding(entity, message))
-        }
     }
 }

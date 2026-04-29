@@ -5,9 +5,16 @@ import com.intellij.psi.impl.source.JavaDummyElement
 import com.intellij.psi.impl.source.JavaDummyHolder
 import com.pinterest.ktlint.rule.engine.core.api.RuleId
 import com.pinterest.ktlint.ruleset.standard.StandardRule
+import dev.detekt.api.Entity
+import dev.detekt.api.Finding
+import dev.detekt.api.Location
+import dev.detekt.api.SourceLocation
+import dev.detekt.api.TextLocation
 import dev.detekt.api.modifiedText
+import dev.detekt.psi.absolutePath
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtPsiFactory
+import java.nio.file.Path
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -61,16 +68,8 @@ internal object KtlintEngine {
 
     internal class FileContext(
         val fileCopy: KtFile,
-        val positionByOffset: (Int) -> Pair<Int, Int>,
-        val findings: Map<RuleId, List<RawFinding>>,
+        val findings: Map<RuleId, List<Finding>>,
         val remainingVisits: AtomicInteger,
-    )
-
-    internal data class RawFinding(
-        val offset: Int,
-        val message: String,
-        val canBeAutoCorrected: Boolean,
-        val node: ASTNode,
     )
 
     private fun build(root: KtFile): FileContext {
@@ -79,6 +78,7 @@ internal object KtlintEngine {
             root.modifiedText ?: root.text,
         )
         val positionByOffset = KtLintLineColCalculator.calculateLineColByOffset(fileCopy.text)
+        val originalPath = root.absolutePath()
 
         // Restrict the shared walk to rules that are either active by config or have had their
         // visit() called directly (the test path via `subject.lint(...)`). This stops stale
@@ -86,7 +86,7 @@ internal object KtlintEngine {
         // whose AST mutations would otherwise leak into the test's modifiedText assertions.
         val active = snapshotRegistry().filter { it.triggeredVisit || it.isActiveByConfig() }
         if (active.isEmpty()) {
-            return FileContext(fileCopy, positionByOffset, emptyMap(), AtomicInteger(0))
+            return FileContext(fileCopy, emptyMap(), AtomicInteger(0))
         }
         // Fresh per-file ktlint StandardRule instances so different files dispatching through
         // the engine concurrently do not race on shared per-file state (counters, last-token, etc.).
@@ -96,8 +96,8 @@ internal object KtlintEngine {
             ktlintRule.beforeFirstNode(detektRule.computeEditorConfigProperties())
         }
 
-        val findings = HashMap<RuleId, MutableList<RawFinding>>()
-        walkOnce(fileCopy.node, perFile, findings)
+        val findings = HashMap<RuleId, MutableList<Finding>>()
+        walkOnce(fileCopy.node, perFile, findings, positionByOffset, originalPath)
 
         perFile.forEach { (_, ktlintRule) -> ktlintRule.afterLastNode() }
 
@@ -105,7 +105,7 @@ internal object KtlintEngine {
             root.modifiedText = fileCopy.text
         }
 
-        return FileContext(fileCopy, positionByOffset, findings, AtomicInteger(active.size))
+        return FileContext(fileCopy, findings, AtomicInteger(active.size))
     }
 
     private fun snapshotRegistry(): List<KtlintRule> = synchronized(this) { registry.toList() }
@@ -115,30 +115,72 @@ internal object KtlintEngine {
     private fun walkOnce(
         node: ASTNode,
         rules: List<Pair<KtlintRule, StandardRule>>,
-        findings: HashMap<RuleId, MutableList<RawFinding>>,
+        findings: HashMap<RuleId, MutableList<Finding>>,
+        positionByOffset: (Int) -> Pair<Int, Int>,
+        originalPath: Path,
     ) {
         if (node.isNotDummyElement()) {
             for ((detektRule, ktlintRule) in rules) {
                 ktlintRule.beforeVisitChildNodes(node) { offset, message, canBeAutoCorrected ->
-                    findings.getOrPut(ktlintRule.ruleId) { mutableListOf() }
-                        .add(RawFinding(offset, message, canBeAutoCorrected, node))
+                    appendFinding(
+                        node, offset, message, canBeAutoCorrected, detektRule, ktlintRule,
+                        findings, positionByOffset, originalPath,
+                    )
                     detektRule.autocorrectDecision
                 }
             }
         }
         val children = node.getChildren(null)
         for (i in children.indices) {
-            walkOnce(children[i], rules, findings)
+            walkOnce(children[i], rules, findings, positionByOffset, originalPath)
         }
         if (node.isNotDummyElement()) {
             for ((detektRule, ktlintRule) in rules) {
                 ktlintRule.afterVisitChildNodes(node) { offset, message, canBeAutoCorrected ->
-                    findings.getOrPut(ktlintRule.ruleId) { mutableListOf() }
-                        .add(RawFinding(offset, message, canBeAutoCorrected, node))
+                    appendFinding(
+                        node, offset, message, canBeAutoCorrected, detektRule, ktlintRule,
+                        findings, positionByOffset, originalPath,
+                    )
                     detektRule.autocorrectDecision
                 }
             }
         }
+    }
+
+    @Suppress("LongParameterList")
+    private fun appendFinding(
+        node: ASTNode,
+        offset: Int,
+        message: String,
+        canBeAutoCorrected: Boolean,
+        detektRule: KtlintRule,
+        ktlintRule: StandardRule,
+        findings: HashMap<RuleId, MutableList<Finding>>,
+        positionByOffset: (Int) -> Pair<Int, Int>,
+        originalPath: Path,
+    ) {
+        // Construct the Finding *now* — node.psi is still attached to the tree. Deferring this
+        // until KtlintRule.visit() runs (after the walk completes) was unsafe: autocorrecting
+        // rules mutate the AST mid-walk and may detach previously-visited nodes' PSI by the
+        // time the per-rule visit consumes the findings. Build it eagerly and store an
+        // immutable Finding instead.
+        val psi = node.psi ?: return
+        val (line, column) = positionByOffset(offset)
+        val location = Location(
+            source = SourceLocation(line, column),
+            endSource = SourceLocation(line, column),
+            text = TextLocation(offset, offset + 1),
+            path = originalPath,
+        )
+        // Entity.from walks parents to locate a KtElement; the leaf psi at `node` may not be
+        // one itself but is normally inside a KtElement (function, expression, ...).
+        val entity = Entity.from(psi, location)
+        val finding = if (canBeAutoCorrected && detektRule.autoCorrect) {
+            Finding(entity, message, suppressReasons = listOf("Auto correct"))
+        } else {
+            Finding(entity, message)
+        }
+        findings.getOrPut(ktlintRule.ruleId) { mutableListOf() }.add(finding)
     }
 
     private fun ASTNode.isNotDummyElement(): Boolean {
