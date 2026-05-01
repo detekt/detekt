@@ -7,6 +7,8 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.name.ClassId
+import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
 import org.jetbrains.kotlin.psi.KtCatchClause
 import org.jetbrains.kotlin.psi.KtExpression
@@ -71,10 +73,22 @@ class InstanceOfCheckForException(config: Config) :
             analyze(this) {
                 val rightType = right?.type
                 val catchType = catchParameter.typeReference?.type
-                if (rightType != null && catchType != null) rightType.isSubtypeOf(catchType) else true
+                val cancellationExceptionType = findTypeAlias(CANCELLATION_EXCEPTION_CLASS_ID)?.defaultType
+                if (rightType != null && catchType != null) {
+                    rightType.isSubtypeOf(catchType) &&
+                        (
+                            cancellationExceptionType == null ||
+                                !rightType.semanticallyEquals(cancellationExceptionType)
+                            )
+                } else {
+                    true
+                }
             }
         } else {
             false
         }
     }
 }
+
+private val CANCELLATION_EXCEPTION_CLASS_ID =
+    ClassId.topLevel(FqName("kotlinx.coroutines.CancellationException"))
