@@ -1,11 +1,14 @@
 package dev.detekt.rules.naming
 
 import dev.detekt.api.Config
+import dev.detekt.api.Configuration
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
+import dev.detekt.api.config
 import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.types.KaClassType
 import org.jetbrains.kotlin.analysis.api.types.KaFunctionType
 import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.name.FqName
@@ -17,12 +20,20 @@ import org.jetbrains.kotlin.psi.KtProperty
  * Reports when property with 'is' prefix doesn't have a boolean type.
  * Please check [chapter 8.3.2 on the Java Language Specification](https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.3.2)
  *
+ * When `allowSingleTypedGenerics` is enabled, single-argument generic wrappers over a non-nullable
+ * boolean (e.g. `StateFlow<Boolean>`) are also accepted.
+ *
  * <noncompliant>
  * val isEnabled: Int = 500
+ *
+ * val isLoading: SomeGenericType<Boolean, Int>
  * </noncompliant>
  *
  * <compliant>
  * val isEnabled: Boolean = false
+
+ * // allowSingleTypedGenerics = true
+ * val isLoading: StateFlow<Boolean> = MutableStateFlow(false)
  * </compliant>
  */
 class NonBooleanPropertyPrefixedWithIs(config: Config) :
@@ -31,6 +42,9 @@ class NonBooleanPropertyPrefixedWithIs(config: Config) :
         "Only boolean property names can start with `is` prefix."
     ),
     RequiresAnalysisApi {
+
+    @Configuration("Treat generic types using Boolean as their single argument as boolean-like")
+    private val allowSingleTypedGenerics: Boolean by config(false)
 
     private val booleanTypes = listOf(
         "kotlin.Boolean",
@@ -56,9 +70,19 @@ class NonBooleanPropertyPrefixedWithIs(config: Config) :
         val name = declaration.name ?: return
         if (name.startsWith("is") && name.getOrNull(2)?.isUpperCase() == true) {
             analyze(declaration) {
-                val type = declaration.returnType.let { (it as? KaFunctionType)?.returnType ?: it }
+                val rawType = declaration.returnType
+                val type = rawType.let { (it as? KaFunctionType)?.returnType ?: it }
                 val typeFqName = type.symbol?.classId?.asSingleFqName() ?: return
                 if (typeFqName !in booleanTypes) {
+                    // Function types are not exempted: () -> StateFlow<Boolean> is not boolean-like
+                    if (allowSingleTypedGenerics && rawType !is KaFunctionType) {
+                        val typeArgs = (type as? KaClassType)?.typeArguments
+                        val argType = typeArgs?.singleOrNull()?.type
+                        val argFqName = argType?.symbol?.classId?.asSingleFqName()
+                        if (argFqName in booleanTypes && argType?.isMarkedNullable == false && !type.isMarkedNullable) {
+                            return
+                        }
+                    }
                     report(declaration, name, typeFqName)
                 }
             }

@@ -1,10 +1,13 @@
 package dev.detekt.rules.naming
 
 import dev.detekt.api.Config
+import dev.detekt.test.TestConfig
+import dev.detekt.test.assertj.FindingsAssert
 import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.junit.KotlinCoreEnvironmentTest
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.KotlinEnvironmentContainer
+import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -329,5 +332,206 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinEnvironmentContainer) {
 
             assertThat(findings).isEmpty()
         }
+    }
+
+    @Nested
+    inner class `boolean generics` {
+        private val allowSingleTypedGenerics =
+            NonBooleanPropertyPrefixedWithIs(TestConfig("allowSingleTypedGenerics" to true))
+
+        @Test
+        fun `report StateFlow boolean for default config`() {
+            val code = """
+                import kotlinx.coroutines.flow.StateFlow
+
+                interface Foo { 
+                    val isBar: StateFlow<Boolean> 
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code))
+                .hasSize(1)
+        }
+
+        @Test
+        fun `dont report StateFlow boolean`() {
+            val code = """
+                import kotlinx.coroutines.flow.StateFlow
+
+                interface Foo { 
+                    val isBar: StateFlow<Boolean> 
+                }
+            """.trimIndent()
+            assertThatFindings(code).isEmpty()
+        }
+
+        @Test
+        fun `report StateFlow string`() {
+            val code = """
+                import kotlinx.coroutines.flow.StateFlow
+
+                interface Foo { 
+                    val isBar: StateFlow<String> 
+                }
+            """.trimIndent()
+            assertThatFindings(code).hasSize(1)
+        }
+
+        @Test
+        fun `report inner-nullable StateFlow boolean`() {
+            val code = """
+                import kotlinx.coroutines.flow.StateFlow
+
+                interface Foo { 
+                    val isBar: StateFlow<Boolean?> 
+                }
+            """.trimIndent()
+            assertThatFindings(code).hasSize(1)
+        }
+
+        @Test
+        fun `report outer-nullable StateFlow boolean`() {
+            val code = """
+                import kotlinx.coroutines.flow.StateFlow
+
+                interface Foo { 
+                    val isBar: StateFlow<Boolean>? 
+                }
+            """.trimIndent()
+            assertThatFindings(code).hasSize(1)
+        }
+
+        @Test
+        fun `report multi-type generic`() {
+            val code = """
+                interface DataProvider<A, B>
+
+                interface Foo { 
+                    val isBar: DataProvider<Boolean, Int> 
+                }
+            """.trimIndent()
+            assertThatFindings(code).hasSize(1)
+        }
+
+        @Test
+        fun `report type inheriting from single-arg generic`() {
+            val code = """
+                interface DataProvider<A>
+
+                class BooleanProvider : DataProvider<Boolean>
+
+                interface Foo { 
+                    val isBar: BooleanProvider 
+                }
+            """.trimIndent()
+            assertThatFindings(code).hasSize(1)
+        }
+
+        @Test
+        fun `don't report inferred single-arg generic`() {
+            val code = """
+                import kotlinx.coroutines.flow.MutableStateFlow
+
+                class Foo { 
+                    // no explicit type annotation
+                    val isBar = MutableStateFlow(false)
+
+                    // with explicit type annotation
+                    val isBaz: MutableStateFlow<Boolean> = MutableStateFlow(true)
+                }
+            """.trimIndent()
+            assertThatFindings(code).isEmpty()
+        }
+
+        @Test
+        fun `report lambda returning single-arg generic`() {
+            val code = """
+                import kotlinx.coroutines.flow.StateFlow
+
+                interface Foo { 
+                    val isBar: () -> StateFlow<Boolean>
+                }
+            """.trimIndent()
+            assertThatFindings(code).hasSize(1)
+        }
+
+        @Test
+        fun `don't report AtomicBoolean in single-arg generic`() {
+            val code = """
+                import kotlinx.coroutines.flow.StateFlow
+                import java.util.concurrent.atomic.AtomicBoolean
+
+                interface Foo {
+                    val isBar: StateFlow<AtomicBoolean>
+                }
+            """.trimIndent()
+            assertThatFindings(code).isEmpty()
+        }
+
+        @Test
+        fun `don't report single-arg generic as constructor param`() {
+            val code = """
+                import kotlinx.coroutines.flow.StateFlow
+
+                class Foo(val isBar: StateFlow<Boolean>)
+            """.trimIndent()
+            assertThatFindings(code).isEmpty()
+        }
+
+        @Test
+        fun `don't report typealias representing single-arg generic`() {
+            val code = """
+                import kotlinx.coroutines.flow.StateFlow
+
+                typealias BoolStateFlow = StateFlow<Boolean>
+
+                interface Foo {
+                    val isBar: BoolStateFlow                
+                } 
+            """.trimIndent()
+            assertThatFindings(code).isEmpty()
+        }
+
+        @Test
+        fun `don't report property delegated to single-arg boolean generic`() {
+            val code = """
+                import kotlin.reflect.KProperty                
+
+                interface MutableState<T> {
+                    operator fun <T> getValue(thisRef: Any?, property: KProperty<*>): T = TODO("stub")
+                    operator fun <T> setValue(thisRef: Any?, property: KProperty<*>, value: T) = TODO("stub")
+                }
+                
+                fun <T> mutableStateOf(value: T): MutableState<T> = TODO("stub")
+
+                class Foo {
+                    // resolves to Boolean
+                    var isDelegatedBar by mutableStateOf(false)
+                    // resolves to MutableState<Boolean>
+                    var isDirectBar = mutableStateOf(false)
+                }
+            """.trimIndent()
+            assertThatFindings(code).isEmpty()
+        }
+
+        @Test
+        fun `don't report delegated property from multi-arg boolean generic`() {
+            val code = """
+                import kotlin.reflect.KProperty                
+
+                interface Bar<A, B> {
+                    operator fun getValue(thisRef: Any?, property: KProperty<*>): B = TODO("stub")
+                    operator fun setValue(thisRef: Any?, property: KProperty<*>, value: B) = TODO("stub")
+                }
+
+                class Foo(bar: Bar<Int, Boolean>) {
+                    // resolves to Boolean
+                    var isEnabled by bar
+                }
+            """.trimIndent()
+            assertThatFindings(code).isEmpty()
+        }
+
+        private fun assertThatFindings(@Language("kotlin") code: String): FindingsAssert =
+            assertThat(allowSingleTypedGenerics.lintWithContext(env, code))
     }
 }
