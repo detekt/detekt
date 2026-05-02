@@ -130,17 +130,6 @@ complexity:
   NestedBlockDepth:
     active: true
     allowedDepth: 4
-  NestedScopeFunctions:
-    active: false
-    allowedDepth: 1
-    functions:
-      - 'kotlin.apply'
-      - 'kotlin.run'
-      - 'kotlin.with'
-      - 'kotlin.let'
-      - 'kotlin.also'
-  ReplaceSafeCallChainWithRun:
-    active: false
   StringLiteralDuplication:
     active: false
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
@@ -394,14 +383,6 @@ naming:
 
 performance:
   active: true
-  ArrayPrimitive:
-    active: true
-  CouldBeSequence:
-    active: false
-    allowedOperations: 2
-  ForEachOnRange:
-    active: true
-    excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
   SpreadOperator:
     active: true
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
@@ -425,25 +406,9 @@ potential-bugs:
     ignorePlatformTypes: true
   CastToNullableType:
     active: false
-  CharArrayToStringCall:
-    active: false
   Deprecation:
     active: false
     aliases: ['DEPRECATION']
-  DontDowncastCollectionTypes:
-    active: false
-  DoubleMutabilityForCollection:
-    active: true
-    aliases: ['DoubleMutability']
-    mutableTypes:
-      - 'kotlin.collections.MutableList'
-      - 'kotlin.collections.MutableMap'
-      - 'kotlin.collections.MutableSet'
-      - 'java.util.ArrayList'
-      - 'java.util.LinkedHashSet'
-      - 'java.util.HashSet'
-      - 'java.util.LinkedHashMap'
-      - 'java.util.HashMap'
   ElseCaseInsteadOfExhaustiveWhen:
     active: false
     ignoredSubjectTypes: []
@@ -482,16 +447,10 @@ potential-bugs:
     allowExplicitReturnType: true
   InvalidRange:
     active: true
-  IteratorHasNextCallsNextMethod:
-    active: true
-  IteratorNotThrowingNoSuchElementException:
-    active: true
   LateinitUsage:
     active: false
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
     ignoreOnClassesPattern: ''
-  MapGetWithNotNullAssertionOperator:
-    active: true
   MissingPackageDeclaration:
     active: false
     excludes: ['**/*.kts']
@@ -500,11 +459,6 @@ potential-bugs:
     mustInvokeSuperAnnotations:
       - 'androidx.annotation.CallSuper'
       - 'javax.annotation.OverridingMethodsMustInvokeSuper'
-  MissingUseCall:
-    active: false
-    ignoreClass:
-      - 'java.io.ByteArrayInputStream'
-      - 'java.io.ByteArrayOutputStream'
   NullCheckOnMutableProperty:
     active: false
   NullableToStringCall:
@@ -542,14 +496,110 @@ potential-bugs:
   WrongEqualsTypeParameter:
     active: true
 
+standard-library:
+  active: true
+  AlsoCouldBeApply:
+    active: false
+  ArrayPrimitive:
+    active: true
+  CharArrayToStringCall:
+    active: false
+  CouldBeSequence:
+    active: false
+    allowedOperations: 2
+  DontDowncastCollectionTypes:
+    active: false
+  DoubleMutabilityForCollection:
+    active: true
+    aliases: ['DoubleMutability']
+    mutableTypes:
+      - 'kotlin.collections.MutableList'
+      - 'kotlin.collections.MutableMap'
+      - 'kotlin.collections.MutableSet'
+      - 'java.util.ArrayList'
+      - 'java.util.LinkedHashSet'
+      - 'java.util.HashSet'
+      - 'java.util.LinkedHashMap'
+      - 'java.util.HashMap'
+  ForEachOnRange:
+    active: true
+    excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
+  IteratorHasNextCallsNextMethod:
+    active: true
+  IteratorNotThrowingNoSuchElementException:
+    active: true
+  MapGetWithNotNullAssertionOperator:
+    active: true
+  MissingUseCall:
+    active: false
+    ignoreClass:
+      - 'java.io.ByteArrayInputStream'
+      - 'java.io.ByteArrayOutputStream'
+  MultilineRawStringIndentation:
+    active: false
+    indentSize: 4
+    trimmingMethods:
+      - 'trimIndent'
+      - 'trimMargin'
+  NestedScopeFunctions:
+    active: false
+    allowedDepth: 1
+    functions:
+      - 'kotlin.apply'
+      - 'kotlin.run'
+      - 'kotlin.with'
+      - 'kotlin.let'
+      - 'kotlin.also'
+  RedundantHigherOrderMapUsage:
+    active: true
+  ReplaceSafeCallChainWithRun:
+    active: false
+  TrimMultilineRawString:
+    active: false
+    trimmingMethods:
+      - 'trimIndent'
+      - 'trimMargin'
+  UnnecessaryAny:
+    active: false
+  UnnecessaryApply:
+    active: true
+  UnnecessaryFilter:
+    active: true
+  UnnecessaryLet:
+    active: false
+  UnnecessaryReversed:
+    active: false
+  UseAnyOrNoneInsteadOfFind:
+    active: true
+  UseCheckNotNull:
+    active: true
+  UseCheckOrError:
+    active: true
+  UseEmptyCounterpart:
+    active: false
+  UseIfEmptyOrIfBlank:
+    active: false
+  UseIsNullOrEmpty:
+    active: true
+  UseLet:
+    active: false
+  UseOrEmpty:
+    active: true
+  UseRequire:
+    active: true
+  UseRequireNotNull:
+    active: true
+  UseSumOfInsteadOfFlatMapSize:
+    active: false
+  UselessCallOnNotNull:
+    active: true
+
 style:
   active: true
   AbstractClassCanBeConcreteClass:
     active: true
   AbstractClassCanBeInterface:
     active: true
-  AlsoCouldBeApply:
-    active: false
   BracesOnIfStatements:
     active: false
     singleLine: 'never'
@@ -701,12 +751,6 @@ style:
     active: true
   MultilineLambdaItParameter:
     active: false
-  MultilineRawStringIndentation:
-    active: false
-    indentSize: 4
-    trimmingMethods:
-      - 'trimIndent'
-      - 'trimMargin'
   NestedClassesVisibility:
     active: true
   NewLineAtEndOfFile:
@@ -729,8 +773,6 @@ style:
     active: false
   RedundantExplicitType:
     active: false
-  RedundantHigherOrderMapUsage:
-    active: true
   RedundantVisibilityModifier:
     active: false
   ReturnCount:
@@ -757,38 +799,23 @@ style:
     excludeGuardClauses: false
   TrailingWhitespace:
     active: false
-  TrimMultilineRawString:
-    active: false
-    trimmingMethods:
-      - 'trimIndent'
-      - 'trimMargin'
   UnderscoresInNumericLiterals:
     active: false
     acceptableLength: 4
     allowNonStandardGrouping: false
-  UnnecessaryAny:
-    active: false
-  UnnecessaryApply:
-    active: true
   UnnecessaryBackticks:
     active: false
   UnnecessaryBracesAroundTrailingLambda:
     active: false
-  UnnecessaryFilter:
-    active: true
   UnnecessaryFullyQualifiedName:
     active: false
   UnnecessaryInheritance:
     active: true
   UnnecessaryInnerClass:
     active: false
-  UnnecessaryLet:
-    active: false
   UnnecessaryParentheses:
     active: false
     allowForUnclearPrecedence: false
-  UnnecessaryReversed:
-    active: false
   UnusedImport:
     active: false
     additionalOperatorSet: []
@@ -811,38 +838,14 @@ style:
     active: true
     aliases: ['UNUSED_VARIABLE', 'unused']
     allowedNames: 'ignored|_'
-  UseAnyOrNoneInsteadOfFind:
-    active: true
   UseArrayLiteralsInAnnotations:
-    active: true
-  UseCheckNotNull:
-    active: true
-  UseCheckOrError:
     active: true
   UseDataClass:
     active: false
     allowVars: false
-  UseEmptyCounterpart:
-    active: false
-  UseIfEmptyOrIfBlank:
-    active: false
   UseIfInsteadOfWhen:
     active: false
     ignoreWhenContainingVariableDeclaration: false
-  UseIsNullOrEmpty:
-    active: true
-  UseLet:
-    active: false
-  UseOrEmpty:
-    active: true
-  UseRequire:
-    active: true
-  UseRequireNotNull:
-    active: true
-  UseSumOfInsteadOfFlatMapSize:
-    active: false
-  UselessCallOnNotNull:
-    active: true
   UtilityClassWithPublicConstructor:
     active: true
   VarCouldBeVal:
