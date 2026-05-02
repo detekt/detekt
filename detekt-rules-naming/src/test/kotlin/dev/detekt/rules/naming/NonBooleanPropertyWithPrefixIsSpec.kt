@@ -497,11 +497,11 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinEnvironmentContainer) {
                 import kotlin.reflect.KProperty                
 
                 interface MutableState<T> {
-                    operator fun <T> getValue(thisRef: Any?, property: KProperty<*>): T = TODO("stub")
-                    operator fun <T> setValue(thisRef: Any?, property: KProperty<*>, value: T) = TODO("stub")
+                    operator fun getValue(thisObj: Any?, property: KProperty<*>): T { TODO() }
+                    operator fun setValue(thisObj: Any?, property: KProperty<*>, value: T) { TODO() }
                 }
-                
-                fun <T> mutableStateOf(value: T): MutableState<T> = TODO("stub")
+
+                fun <T> mutableStateOf(value: T): MutableState<T> { TODO("stub") }
 
                 class Foo {
                     // resolves to Boolean
@@ -519,8 +519,8 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinEnvironmentContainer) {
                 import kotlin.reflect.KProperty                
 
                 interface Bar<A, B> {
-                    operator fun getValue(thisRef: Any?, property: KProperty<*>): B = TODO("stub")
-                    operator fun setValue(thisRef: Any?, property: KProperty<*>, value: B) = TODO("stub")
+                    operator fun getValue(thisObj: Any?, property: KProperty<*>): B { TODO() }
+                    operator fun setValue(thisObj: Any?, property: KProperty<*>, value: B) { TODO() }
                 }
 
                 class Foo(bar: Bar<Int, Boolean>) {
