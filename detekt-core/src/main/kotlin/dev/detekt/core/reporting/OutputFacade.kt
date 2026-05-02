@@ -3,6 +3,7 @@ package dev.detekt.core.reporting
 import dev.detekt.api.ConsoleReport
 import dev.detekt.api.Detektion
 import dev.detekt.api.OutputReport
+import dev.detekt.api.valueOrDefault
 import dev.detekt.core.ProcessingSettings
 import dev.detekt.core.extensions.loadExtensions
 import dev.detekt.core.util.isActiveOrDefault
