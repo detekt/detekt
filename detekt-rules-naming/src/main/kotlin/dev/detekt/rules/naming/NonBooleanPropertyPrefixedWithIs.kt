@@ -20,8 +20,9 @@ import org.jetbrains.kotlin.psi.KtProperty
  * Reports when property with 'is' prefix doesn't have a boolean type.
  * Please check [chapter 8.3.2 on the Java Language Specification](https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.3.2)
  *
- * When `allowSingleTypedGenerics` is enabled, single-argument generic wrappers over a non-nullable
- * boolean (e.g. `StateFlow<Boolean>`) are also accepted.
+ * When `allowSingleTypedGenerics` is enabled, single-argument generic wrappers over a boolean (e.g.
+ * `StateFlow<Boolean>`, `StateFlow<Boolean?>`, `StateFlow<Boolean>?`) are also accepted, as well as lambda return
+ * types of such wrappers (e.g. `() -> StateFlow<Boolean>`).
  *
  * <noncompliant>
  * val isEnabled: Int = 500
@@ -74,12 +75,11 @@ class NonBooleanPropertyPrefixedWithIs(config: Config) :
                 val type = rawType.let { (it as? KaFunctionType)?.returnType ?: it }
                 val typeFqName = type.symbol?.classId?.asSingleFqName() ?: return
                 if (typeFqName !in booleanTypes) {
-                    // Function types are not exempted: () -> StateFlow<Boolean> is not boolean-like
-                    if (allowSingleTypedGenerics && rawType !is KaFunctionType) {
+                    if (allowSingleTypedGenerics) {
                         val typeArgs = (type as? KaClassType)?.typeArguments
                         val argType = typeArgs?.singleOrNull()?.type
                         val argFqName = argType?.symbol?.classId?.asSingleFqName()
-                        if (argFqName in booleanTypes && argType?.isMarkedNullable == false && !type.isMarkedNullable) {
+                        if (argFqName in booleanTypes) {
                             return
                         }
                     }

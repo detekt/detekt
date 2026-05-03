@@ -344,8 +344,8 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinEnvironmentContainer) {
             val code = """
                 import kotlinx.coroutines.flow.StateFlow
 
-                interface Foo { 
-                    val isBar: StateFlow<Boolean> 
+                interface Foo {
+                    val isBar: StateFlow<Boolean>
                 }
             """.trimIndent()
             assertThat(subject.lintWithContext(env, code))
@@ -357,8 +357,8 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinEnvironmentContainer) {
             val code = """
                 import kotlinx.coroutines.flow.StateFlow
 
-                interface Foo { 
-                    val isBar: StateFlow<Boolean> 
+                interface Foo {
+                    val isBar: StateFlow<Boolean>
                 }
             """.trimIndent()
             assertThatFindings(code).isEmpty()
@@ -369,35 +369,35 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinEnvironmentContainer) {
             val code = """
                 import kotlinx.coroutines.flow.StateFlow
 
-                interface Foo { 
-                    val isBar: StateFlow<String> 
+                interface Foo {
+                    val isBar: StateFlow<String>
                 }
             """.trimIndent()
             assertThatFindings(code).hasSize(1)
         }
 
         @Test
-        fun `report inner-nullable StateFlow boolean`() {
+        fun `don't report inner-nullable StateFlow boolean`() {
             val code = """
                 import kotlinx.coroutines.flow.StateFlow
 
-                interface Foo { 
-                    val isBar: StateFlow<Boolean?> 
+                interface Foo {
+                    val isBar: StateFlow<Boolean?>
                 }
             """.trimIndent()
-            assertThatFindings(code).hasSize(1)
+            assertThatFindings(code).isEmpty()
         }
 
         @Test
-        fun `report outer-nullable StateFlow boolean`() {
+        fun `don't report outer-nullable StateFlow boolean`() {
             val code = """
                 import kotlinx.coroutines.flow.StateFlow
 
-                interface Foo { 
-                    val isBar: StateFlow<Boolean>? 
+                interface Foo {
+                    val isBar: StateFlow<Boolean>?
                 }
             """.trimIndent()
-            assertThatFindings(code).hasSize(1)
+            assertThatFindings(code).isEmpty()
         }
 
         @Test
@@ -405,8 +405,8 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinEnvironmentContainer) {
             val code = """
                 interface DataProvider<A, B>
 
-                interface Foo { 
-                    val isBar: DataProvider<Boolean, Int> 
+                interface Foo {
+                    val isBar: DataProvider<Boolean, Int>
                 }
             """.trimIndent()
             assertThatFindings(code).hasSize(1)
@@ -419,8 +419,8 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinEnvironmentContainer) {
 
                 class BooleanProvider : DataProvider<Boolean>
 
-                interface Foo { 
-                    val isBar: BooleanProvider 
+                interface Foo {
+                    val isBar: BooleanProvider
                 }
             """.trimIndent()
             assertThatFindings(code).hasSize(1)
@@ -431,7 +431,7 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinEnvironmentContainer) {
             val code = """
                 import kotlinx.coroutines.flow.MutableStateFlow
 
-                class Foo { 
+                class Foo {
                     // no explicit type annotation
                     val isBar = MutableStateFlow(false)
 
@@ -443,15 +443,27 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinEnvironmentContainer) {
         }
 
         @Test
-        fun `report lambda returning single-arg generic`() {
+        fun `don't report lambda returning single-arg generic`() {
             val code = """
                 import kotlinx.coroutines.flow.StateFlow
 
-                interface Foo { 
+                interface Foo {
                     val isBar: () -> StateFlow<Boolean>
                 }
             """.trimIndent()
-            assertThatFindings(code).hasSize(1)
+            assertThatFindings(code).isEmpty()
+        }
+
+        @Test
+        fun `don't report lambda with parameter returning single-arg generic`() {
+            val code = """
+                import kotlinx.coroutines.flow.StateFlow
+
+                interface Foo {
+                    val isBar: (String) -> StateFlow<Boolean>
+                }
+            """.trimIndent()
+            assertThatFindings(code).isEmpty()
         }
 
         @Test
@@ -485,8 +497,8 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinEnvironmentContainer) {
                 typealias BoolStateFlow = StateFlow<Boolean>
 
                 interface Foo {
-                    val isBar: BoolStateFlow                
-                } 
+                    val isBar: BoolStateFlow
+                }
             """.trimIndent()
             assertThatFindings(code).isEmpty()
         }
@@ -494,11 +506,11 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinEnvironmentContainer) {
         @Test
         fun `don't report property delegated to single-arg boolean generic`() {
             val code = """
-                import kotlin.reflect.KProperty                
+                import kotlin.reflect.KProperty
 
                 interface MutableState<T> {
-                    operator fun getValue(thisObj: Any?, property: KProperty<*>): T { TODO() }
-                    operator fun setValue(thisObj: Any?, property: KProperty<*>, value: T) { TODO() }
+                    operator fun getValue(thisObj: Any?, property: KProperty<*>): T
+                    operator fun setValue(thisObj: Any?, property: KProperty<*>, value: T)
                 }
 
                 fun <T> mutableStateOf(value: T): MutableState<T> { TODO("stub") }
@@ -516,11 +528,11 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinEnvironmentContainer) {
         @Test
         fun `don't report delegated property from multi-arg boolean generic`() {
             val code = """
-                import kotlin.reflect.KProperty                
+                import kotlin.reflect.KProperty
 
                 interface Bar<A, B> {
-                    operator fun getValue(thisObj: Any?, property: KProperty<*>): B { TODO() }
-                    operator fun setValue(thisObj: Any?, property: KProperty<*>, value: B) { TODO() }
+                    operator fun getValue(thisObj: Any?, property: KProperty<*>): B
+                    operator fun setValue(thisObj: Any?, property: KProperty<*>, value: B)
                 }
 
                 class Foo(bar: Bar<Int, Boolean>) {
