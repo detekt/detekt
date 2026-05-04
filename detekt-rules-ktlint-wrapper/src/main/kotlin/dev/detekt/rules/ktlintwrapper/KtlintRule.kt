@@ -1,8 +1,5 @@
 package dev.detekt.rules.ktlintwrapper
 
-import com.intellij.lang.ASTNode
-import com.intellij.psi.impl.source.JavaDummyElement
-import com.intellij.psi.impl.source.JavaDummyHolder
 import com.pinterest.ktlint.rule.engine.core.api.AutocorrectDecision
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.CODE_STYLE_PROPERTY
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfig
@@ -12,54 +9,68 @@ import com.pinterest.ktlint.rule.engine.core.api.editorconfig.createRuleExecutio
 import com.pinterest.ktlint.ruleset.standard.StandardRule
 import com.pinterest.ktlint.ruleset.standard.rules.MAX_LINE_LENGTH_RULE_ID
 import dev.detekt.api.Config
-import dev.detekt.api.Entity
-import dev.detekt.api.Finding
-import dev.detekt.api.Location
 import dev.detekt.api.Rule
-import dev.detekt.api.SourceLocation
-import dev.detekt.api.TextLocation
-import dev.detekt.api.modifiedText
-import dev.detekt.psi.absolutePath
 import org.ec4j.core.model.Property
 import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.psi.KtPsiFactory
-import java.nio.file.Path
 
 /**
  * Rule to detect formatting violations.
+ *
+ * Subclasses delegate the actual ktlint dispatch to [KtlintEngine]; each rule's [visit] simply
+ * consumes the findings the engine collected during the shared per-file walk.
  */
 abstract class KtlintRule(config: Config, description: String) : Rule(config, description) {
 
     abstract val wrapping: StandardRule
+
+    internal val autocorrectDecision: AutocorrectDecision
+        get() = if (autoCorrect) AutocorrectDecision.ALLOW_AUTOCORRECT else AutocorrectDecision.NO_AUTOCORRECT
 
     protected val codeStyle: String
         get() = config.valueOrNull("code_style")
             ?: config.parent?.let { KtlintWrapperProvider.code_style.value(it) }
             ?: KtlintWrapperProvider.code_style.defaultValue
 
-    private lateinit var positionByOffset: (offset: Int) -> Pair<Int, Int>
-    private lateinit var root: KtFile
-    private lateinit var originalFilePath: Path
+    /**
+     * Set the first time [visit] is called. The engine treats a rule as "active for this run"
+     * when this flag is true OR the rule's config has `active: true`. The flag covers two cases
+     * the config check alone misses: tests that instantiate a rule with [Config.empty] and call
+     * [dev.detekt.test.lint] directly (config.active is false but the rule is clearly being
+     * exercised), and a defensive guard against stale provider-registered instances participating
+     * in the shared dispatch.
+     */
+    @Volatile
+    internal var triggeredVisit: Boolean = false
+        private set
+
+    /**
+     * Factory for fresh per-file [StandardRule] instances. [KtlintEngine] uses this so each
+     * Kotlin file gets its own ktlint rule instance, preventing cross-thread races on the
+     * wrapping's internal per-file state (counters, last-token, etc.). The default reflective
+     * implementation works for the standard ktlint rule set; override if the wrapped
+     * [StandardRule] has a non-default constructor.
+     */
+    open fun newWrapping(): StandardRule = wrapping::class.java.getDeclaredConstructor().newInstance()
 
     override fun visit(root: KtFile) {
-        val fileCopy = KtPsiFactory(root.project).createPhysicalFile(root.name, root.modifiedText ?: root.text)
-
-        this.root = fileCopy
-        originalFilePath = root.absolutePath()
-        positionByOffset = KtLintLineColCalculator.calculateLineColByOffset(fileCopy.text)
-
-        wrapping.beforeFirstNode(computeEditorConfigProperties())
-        this.root.node.visitASTNodes()
-        wrapping.afterLastNode()
-
-        if (this.root.modificationStamp > 0) {
-            root.modifiedText = this.root.text
+        if (!triggeredVisit) {
+            // Self-register so the engine sees this exact instance — and its config — instead of
+            // any stale registration with the same RuleId. KtlintWrapperProvider also registers
+            // rules at construction time, but tests instantiate rules outside the provider.
+            KtlintEngine.register(this)
+            triggeredVisit = true
+        }
+        val context = KtlintEngine.contextFor(root)
+        try {
+            context.findings[wrapping.ruleId]?.forEach(::report)
+        } finally {
+            KtlintEngine.ruleDoneWithFile(root, context)
         }
     }
 
     open fun overrideEditorConfigProperties(): Map<EditorConfigProperty<*>, String>? = null
 
-    private fun computeEditorConfigProperties(): EditorConfig {
+    internal fun computeEditorConfigProperties(): EditorConfig {
         val usesEditorConfigProperties = overrideEditorConfigProperties()?.toMutableMap()
             ?: mutableMapOf()
 
@@ -88,56 +99,5 @@ abstract class KtlintRule(config: Config, description: String) : Rule(config, de
         }
 
         return EditorConfig(properties)
-    }
-
-    private fun emitFinding(offset: Int, message: String, canBeAutoCorrected: Boolean, node: ASTNode) {
-        // Always convert KtLint offsets to lines/columns.
-        // The node used to report the finding may be not the same used for the offset (e.g. in NoUnusedImports).
-        val (line, column) = positionByOffset(offset)
-        val location = Location(
-            source = SourceLocation(line, column),
-            endSource = SourceLocation(line, column),
-            // Use offset + 1 since ktlint always reports a single location.
-            text = TextLocation(offset, offset + 1),
-            path = originalFilePath
-        )
-        val entity = Entity.from(node.psi, location)
-
-        if (canBeAutoCorrected && autoCorrect) {
-            report(Finding(entity, message, suppressReasons = listOf("Auto correct")))
-        } else {
-            report(Finding(entity, message))
-        }
-    }
-
-    private fun beforeVisitChildNodes(node: ASTNode) {
-        wrapping.beforeVisitChildNodes(node) { offset, errorMessage, canBeAutoCorrected ->
-            emitFinding(offset, errorMessage, canBeAutoCorrected, node)
-            if (autoCorrect) AutocorrectDecision.ALLOW_AUTOCORRECT else AutocorrectDecision.NO_AUTOCORRECT
-        }
-    }
-
-    private fun afterVisitChildNodes(node: ASTNode) {
-        wrapping.afterVisitChildNodes(node) { offset, errorMessage, canBeAutoCorrected ->
-            emitFinding(offset, errorMessage, canBeAutoCorrected, node)
-            if (autoCorrect) AutocorrectDecision.ALLOW_AUTOCORRECT else AutocorrectDecision.NO_AUTOCORRECT
-        }
-    }
-
-    private fun ASTNode.visitASTNodes() {
-        if (isNotDummyElement()) {
-            beforeVisitChildNodes(this)
-        }
-        getChildren(null).forEach {
-            it.visitASTNodes()
-        }
-        if (isNotDummyElement()) {
-            afterVisitChildNodes(this)
-        }
-    }
-
-    private fun ASTNode.isNotDummyElement(): Boolean {
-        val parent = this.psi?.parent
-        return parent !is JavaDummyHolder && parent !is JavaDummyElement
     }
 }
