@@ -1,6 +1,7 @@
 package dev.detekt.gradle.plugin.internal
 
 import com.android.build.api.variant.AndroidComponentsExtension
+import com.android.build.api.variant.Component
 import com.android.build.api.variant.Variant
 import dev.detekt.gradle.extensions.DetektExtension
 import dev.detekt.gradle.plugin.DetektPlugin
@@ -9,12 +10,37 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidExtension
 
 internal object DetektAndroidCompilations {
     fun registerTasks(project: Project, extension: DetektExtension) {
-        project.extensions.getByType(
-            KotlinAndroidExtension::class.java
-        ).target.compilations.configureEach { compilation ->
-            project.registerJvmCompilationDetektTask(extension, compilation)
-            project.registerJvmCompilationCreateBaselineTask(extension, compilation)
+        val kotlinAndroid = project.extensions.getByType(KotlinAndroidExtension::class.java)
+        project.extensions.findByType(AndroidComponentsExtension::class.java)?.onVariants { variant ->
+            variant.registerDetektTasks(project, extension, kotlinAndroid)
+
+            @Suppress("UnstableApiUsage")
+            variant.nestedComponents.forEach { nested ->
+                nested.registerDetektTasks(project, extension, kotlinAndroid)
+            }
         }
+    }
+
+    private fun Component.registerDetektTasks(
+        project: Project,
+        extension: DetektExtension,
+        kotlinAndroid: KotlinAndroidExtension,
+    ) {
+        val kotlin = sources.kotlin?.all ?: return
+        val source = project.objects.fileCollection().from(kotlin)
+        kotlinAndroid.target.compilations.matching { it.name == name }
+            .configureEach { compilation ->
+                project.registerJvmCompilationDetektTask(
+                    extension = extension,
+                    compilation = compilation,
+                    source = source,
+                )
+                project.registerJvmCompilationCreateBaselineTask(
+                    extension = extension,
+                    compilation = compilation,
+                    source = source,
+                )
+            }
     }
 
     private fun DetektExtension.matchesIgnoredConfiguration(variant: Variant): Boolean =
