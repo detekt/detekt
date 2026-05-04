@@ -46,7 +46,7 @@ class UnreachableCode(config: Config) :
 
         val isUnreachableCode = analyze(expression) {
             expression
-                .diagnostics(KaDiagnosticCheckerFilter.EXTENDED_AND_COMMON_CHECKERS)
+                .directDiagnostics(KaDiagnosticCheckerFilter.EXTENDED_AND_COMMON_CHECKERS)
                 .any { it is KaFirDiagnostic.UnreachableCode || it is KaFirDiagnostic.UselessElvis }
         }
 
