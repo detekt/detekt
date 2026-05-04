@@ -21,7 +21,7 @@ import org.jetbrains.kotlin.psi.psiUtil.PsiChildRange
 import org.jetbrains.kotlin.psi.psiUtil.allChildren
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
-import org.jetbrains.kotlin.utils.addToStdlib.ifTrue
+import org.jetbrains.kotlin.util.capitalizeDecapitalize.toLowerCaseAsciiOnly
 
 /**
  * This rule will report any class, function or constructor with KDoc that does not match the declaration signature.
@@ -73,44 +73,50 @@ class OutdatedDocumentation(config: Config) :
     @Configuration("if we allow constructor parameters to be marked as @param instead of @property")
     private val allowParamOnConstructorProperties: Boolean by config(false)
 
+    private inline val DeclarationType.displayName
+        get() = this.name.toLowerCaseAsciiOnly()
+
     override fun visitClass(klass: KtClass) {
         super.visitClass(klass)
         val classDeclarations = getClassDeclarations(klass)
-        (
-            isDocumentationOutdated(klass) { classDeclarations } &&
-                (
-                    // checking below only if constructor in internal or private
-                    isInternalOrPrivate(klass.primaryConstructor).not() ||
-                        isDocumentationOutdated(klass) {
-                            // case when only property can be documented
-                            classDeclarations.filterNot { it.type == DeclarationType.PARAM }
-                        }
-                    )
-            )
-            .ifTrue {
-                reportFinding(klass)
+        val isInternalOrPrivate = isInternalOrPrivate(klass.primaryConstructor)
+        val outdatedFindings = getOutdatedDocumentationViolations(klass) {
+            if (isInternalOrPrivate) {
+                classDeclarations.filterNot { it.type == DeclarationType.PARAM }
+            } else {
+                classDeclarations
             }
+        }
+        outdatedFindings.forEach { msg ->
+            reportFinding(klass, msg)
+        }
     }
 
     override fun visitSecondaryConstructor(constructor: KtSecondaryConstructor) {
         super.visitSecondaryConstructor(constructor)
-        isDocumentationOutdated(constructor) { getSecondaryConstructorDeclarations(constructor) }.ifTrue {
-            reportFinding(constructor)
+        getOutdatedDocumentationViolations(constructor) {
+            getSecondaryConstructorDeclarations(constructor)
+        }.forEach { msg ->
+            reportFinding(constructor, msg)
         }
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
-        isDocumentationOutdated(function) { getFunctionDeclarations(function) }.ifTrue {
-            reportFinding(function)
+        getOutdatedDocumentationViolations(function) { getFunctionDeclarations(function) }.forEach { msg ->
+            reportFinding(function, msg)
         }
     }
 
     private fun getClassDeclarations(klass: KtClass): List<Declaration> {
         val ctor = klass.primaryConstructor
-        val constructorDeclarations = if (ctor != null) getPrimaryConstructorDeclarations(ctor) else emptyList()
+        val constructorDeclarations = if (ctor != null) {
+            getPrimaryConstructorDeclarations(ctor)
+        } else {
+            emptyList()
+        }
         val typeParams = if (matchTypeParameters) {
-            klass.typeParameters.mapNotNull { it.name.toParamOrNull() }
+            klass.typeParameters.mapNotNull { it.name.toTypedParamOrNull() }
         } else {
             emptyList()
         }
@@ -119,7 +125,7 @@ class OutdatedDocumentation(config: Config) :
 
     private fun getFunctionDeclarations(function: KtNamedFunction): List<Declaration> {
         val typeParams = if (matchTypeParameters) {
-            function.typeParameters.mapNotNull { it.name.toParamOrNull() }
+            function.typeParameters.mapNotNull { it.name.toTypedParamOrNull() }
         } else {
             emptyList()
         }
@@ -143,7 +149,11 @@ class OutdatedDocumentation(config: Config) :
                         DeclarationType.PROPERTY
                     }
                 } else {
-                    DeclarationType.PARAM
+                    if (it.isFunctionTypeParameter) {
+                        DeclarationType.TYPED_PARAM
+                    } else {
+                        DeclarationType.PARAM
+                    }
                 }
                 Declaration(name, type)
             }
@@ -173,58 +183,103 @@ class OutdatedDocumentation(config: Config) :
         }
     }
 
-    private fun isDocumentationOutdated(
+    private fun getOutdatedDocumentationViolations(
         element: KtNamedDeclaration,
         elementDeclarationsProvider: () -> List<Declaration>,
-    ): Boolean {
-        val doc = element.docComment ?: return false
+    ): List<String> {
+        val doc = element.docComment ?: return emptyList()
         val docDeclarations = getDocDeclarations(doc)
         return if (docDeclarations.isNotEmpty()) {
             val elementDeclarations = elementDeclarationsProvider()
-            !declarationsMatch(docDeclarations, elementDeclarations)
+            getDeclarationsMismatches(docDeclarations, elementDeclarations)
         } else {
-            false
+            emptyList()
         }
     }
 
     private fun isInternalOrPrivate(primaryConstructor: KtPrimaryConstructor?): Boolean {
-        primaryConstructor ?: return false
+        primaryConstructor ?: return true
         return primaryConstructor.isInternal() || primaryConstructor.isPrivate()
     }
 
-    private fun declarationsMatch(doc: List<Declaration>, element: List<Declaration>): Boolean {
-        if (doc.size != element.size) {
-            return false
-        }
+    private fun getDeclarationsMismatches(doc: List<Declaration>, element: List<Declaration>): List<String> {
+        val docNames = doc.map { it.name }
+        val elementNames = element.map { it.name }
+        val (docWithMissingElement, docWithPresentElement) = doc.partition { it.name !in elementNames }
+        val (elementWithMissingDoc, elementWithPresentDoc) = element.partition { it.name !in docNames }
+
+        val missingElementReasons =
+            docWithMissingElement.map {
+                "@${it.type.displayName} ${it.name} doesn't have corresponding public declaration."
+            }
+        val missingDocReasons = elementWithMissingDoc.map { "Documentation of ${it.name} is missing." }
+
+        val finalWarnings = missingElementReasons + missingDocReasons
 
         val zippedElements = if (matchDeclarationsOrder) {
-            doc.zip(element)
+            docWithPresentElement.zip(elementWithPresentDoc)
         } else {
-            doc.sortedBy { it.name }.zip(element.sortedBy { it.name })
+            docWithPresentElement.sortedBy { it.name }.zip(elementWithPresentDoc.sortedBy { it.name })
         }
 
-        return zippedElements.all { (docItr, elementItr) -> declarationMatches(docItr, elementItr) }
+        return finalWarnings + if (
+            !zippedElements.all { (docItr, elementItr) ->
+                declarationNameMatches(
+                    docItr,
+                    elementItr,
+                )
+            }
+        ) {
+            listOf("Documentation elements order is mismatched with declaration.")
+        } else {
+            zippedElements.mapNotNull { (docItr, elementItr) ->
+                getDeclarationTypeMismatchMsgOrNull(docItr, elementItr)
+            }
+        }
     }
 
-    private fun declarationMatches(doc: Declaration, element: Declaration): Boolean =
-        element.name == doc.name && (element.type == DeclarationType.ANY || element.type == doc.type)
+    private fun getDeclarationTypeMismatchMsgOrNull(doc: Declaration, element: Declaration): String? =
+        if (
+            element.type == DeclarationType.ANY ||
+            DeclarationType.isTypeMatches(doc.type, element.type)
+        ) {
+            null
+        } else {
+            "@${doc.type.displayName} ${doc.name} type doesn't match corresponding " +
+                "declaration of type ${element.type.displayName}."
+        }
 
-    private fun reportFinding(element: KtNamedDeclaration) {
+    private fun declarationNameMatches(doc: Declaration, element: Declaration): Boolean = element.name == doc.name
+
+    private fun reportFinding(element: KtNamedDeclaration, message: String) {
         report(
             Finding(
                 Entity.atName(element),
-                "Documentation of ${element.nameAsSafeName} is outdated"
-            )
+                message,
+            ),
         )
     }
 
     private fun String?.toParamOrNull(): Declaration? = this?.let { Declaration(it, DeclarationType.PARAM) }
 
+    private fun String?.toTypedParamOrNull(): Declaration? = this?.let { Declaration(it, DeclarationType.TYPED_PARAM) }
+
     data class Declaration(val name: String, val type: DeclarationType)
 
     enum class DeclarationType {
         PARAM,
+        TYPED_PARAM,
         PROPERTY,
         ANY,
+        ;
+
+        companion object {
+            fun isTypeMatches(docType: DeclarationType, elementType: DeclarationType): Boolean =
+                if (docType == PARAM) {
+                    elementType == PARAM || elementType == TYPED_PARAM
+                } else {
+                    docType == elementType
+                }
+        }
     }
 }
