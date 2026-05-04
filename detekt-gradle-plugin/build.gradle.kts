@@ -77,7 +77,7 @@ testing {
             dependencies {
                 implementation(libs.assertj.core)
                 implementation(libs.kotlin.gradle.plugin)
-                implementation(gradleKotlinDsl())
+                runtimeOnly(gradleKotlinDsl())
             }
         }
         register<JvmTestSuite>("functionalTest") {
@@ -115,9 +115,15 @@ testing {
     }
 }
 
+val kotlinCompilerVersion = "2.1.21"
+
 kotlin {
     @OptIn(ExperimentalBuildToolsApi::class, ExperimentalKotlinGradlePluginApi::class)
-    compilerVersion = "2.1.21"
+    compilerVersion = kotlinCompilerVersion
+
+    // Pin the kotlin-stdlib (and friends) added by the Kotlin Gradle plugin to match compilerVersion,
+    // so DGP's compile classpath does not receive stdlib 2.3 metadata that Kotlin 2.1 cannot read.
+    coreLibrariesVersion = kotlinCompilerVersion
 
     compilerOptions {
         suppressWarnings = true
@@ -140,13 +146,46 @@ kotlin {
 val testKitRuntimeOnly = configurations.register("testKitRuntimeOnly")
 val testKitGradleMinVersionRuntimeOnly = configurations.register("testKitGradleMinVersionRuntimeOnly")
 
+// Replace Kotlin JARs from Gradle distribution with versions that match the pinned compiler version. The versions in
+// the Gradle distribution carry Kotlin metadata (2.3 at time of writing) that is too new for the pinned compiler (2.1
+// at time of writing) to read.
+configurations.configureEach {
+    withDependencies {
+        filterIsInstance<FileCollectionDependency>().forEach { dependency ->
+            val filteredFiles = files(
+                dependency.files.filter { file ->
+                    !file.name.startsWith("kotlin-stdlib") && !file.name.startsWith("kotlin-reflect")
+                }
+            )
+            if (dependency.files != filteredFiles) {
+                remove(dependency)
+                add(project.dependencies.create(filteredFiles))
+                add(project.dependencies.create("org.jetbrains.kotlin:kotlin-stdlib:$kotlinCompilerVersion"))
+                add(project.dependencies.create("org.jetbrains.kotlin:kotlin-reflect:$kotlinCompilerVersion"))
+            }
+        }
+    }
+}
+
 dependencies {
     compileOnly(libs.android.gradleApi)
     compileOnly(libs.kotlin.gradlePluginApi)
+    compileOnly(libs.gradle.publicApi) {
+        capabilities {
+            // https://github.com/gradle/gradle/issues/29483#issuecomment-2791668178
+            requireCapability("org.gradle.experimental:gradle-public-api-internal")
+        }
+    }
     compileOnly(libs.jetbrains.annotations)
 
     implementation(libs.sarif4k)
     testFixturesCompileOnly(libs.jetbrains.annotations)
+    testFixturesCompileOnlyApi(libs.gradle.publicApi) {
+        capabilities {
+            // https://github.com/gradle/gradle/issues/29483#issuecomment-2791668178
+            requireCapability("org.gradle.experimental:gradle-public-api-internal")
+        }
+    }
 
     testKitRuntimeOnly(libs.kotlin.gradle.plugin)
     testKitRuntimeOnly(libs.android.gradle.plugin)
