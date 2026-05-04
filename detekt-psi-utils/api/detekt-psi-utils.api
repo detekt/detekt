@@ -71,6 +71,10 @@ public final class dev/detekt/psi/KtModifierListKt {
 	public static final fun isPublicNotOverridden (Lorg/jetbrains/kotlin/psi/KtModifierListOwner;Z)Z
 }
 
+public final class dev/detekt/psi/KtNamedDeclarationKt {
+	public static final fun isSingleUnderscore (Lorg/jetbrains/kotlin/psi/KtNamedDeclaration;)Z
+}
+
 public final class dev/detekt/psi/KtValueArgumentKt {
 	public static final fun isEmptyOrSingleStringArgument (Ljava/util/List;)Z
 	public static final fun isString (Lorg/jetbrains/kotlin/psi/KtValueArgument;)Z
