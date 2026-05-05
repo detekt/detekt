@@ -136,7 +136,7 @@ internal fun Project.mapExplicitArgMode(): Provider<String> =
         }
     }
 
-internal fun Project.sourceProvider(compilation: KotlinCompilation<*>): ConfigurableFileCollection =
+private fun Project.sourceProvider(compilation: KotlinCompilation<*>): ConfigurableFileCollection =
     objects.fileCollection().from(
         provider {
             compilation.allKotlinSourceSets.map { it.kotlin.sourceDirectories }
