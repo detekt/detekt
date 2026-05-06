@@ -4,6 +4,8 @@ import dev.detekt.api.Config
 import dev.detekt.test.TestConfig
 import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.kotlin.config.LanguageFeature
+import org.jetbrains.kotlin.config.LanguageVersionSettingsImpl
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -38,8 +40,12 @@ class VariableMinLengthSpec {
                     val _ = 1
                 }
             """.trimIndent()
-            // `val _ = ...` only compiles when Kotlin's experimental unused return value checker is enabled
-            assertThat(variableMinLength.lint(content = code, compile = false)).isEmpty()
+            assertThat(
+                variableMinLength.lint(
+                    content = code,
+                    languageVersionSettings = unnamedLocalVariablesEnabled,
+                )
+            ).isEmpty()
         }
 
         @Test
@@ -95,3 +101,9 @@ class VariableMinLengthSpec {
         ).isEmpty()
     }
 }
+
+private val unnamedLocalVariablesEnabled = LanguageVersionSettingsImpl(
+    languageVersion = LanguageVersionSettingsImpl.DEFAULT.languageVersion,
+    apiVersion = LanguageVersionSettingsImpl.DEFAULT.apiVersion,
+    specificFeatures = mapOf(LanguageFeature.UnnamedLocalVariables to LanguageFeature.State.ENABLED),
+)

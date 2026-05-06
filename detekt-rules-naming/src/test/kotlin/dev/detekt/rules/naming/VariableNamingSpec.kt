@@ -5,6 +5,8 @@ import dev.detekt.test.TestConfig
 import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
+import org.jetbrains.kotlin.config.LanguageFeature
+import org.jetbrains.kotlin.config.LanguageVersionSettingsImpl
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.util.regex.PatternSyntaxException
@@ -124,8 +126,12 @@ class VariableNamingSpec {
                 val _ = 1
             }
         """.trimIndent()
-        // `val _ = ...` only compiles when Kotlin's experimental unused return value checker is enabled
-        assertThat(VariableNaming(Config.empty).lint(content = code, compile = false)).isEmpty()
+        assertThat(
+            VariableNaming(Config.empty).lint(
+                content = code,
+                languageVersionSettings = unnamedLocalVariablesEnabled,
+            )
+        ).isEmpty()
     }
 
     @Test
@@ -139,3 +145,9 @@ class VariableNamingSpec {
         assertThat(VariableNaming(Config.empty).lint(code)).hasSize(1)
     }
 }
+
+private val unnamedLocalVariablesEnabled = LanguageVersionSettingsImpl(
+    languageVersion = LanguageVersionSettingsImpl.DEFAULT.languageVersion,
+    apiVersion = LanguageVersionSettingsImpl.DEFAULT.apiVersion,
+    specificFeatures = mapOf(LanguageFeature.UnnamedLocalVariables to LanguageFeature.State.ENABLED),
+)
