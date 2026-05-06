@@ -2,6 +2,9 @@ package dev.detekt.test.utils
 
 import dev.detekt.test.junit.KotlinAnalysisApiEngineTest
 import org.assertj.core.api.Assertions.assertThatThrownBy
+import org.jetbrains.kotlin.config.AnalysisFlags
+import org.jetbrains.kotlin.config.ExplicitApiMode
+import org.jetbrains.kotlin.config.LanguageVersionSettingsImpl
 import org.junit.jupiter.api.RepeatedTest
 import org.junit.jupiter.api.Test
 import java.io.File
@@ -73,6 +76,35 @@ class KotlinAnalysisApiEngineTest(val analysisApiEngine: KotlinAnalysisApiEngine
         assertThatThrownBy { analysisApiEngine.compile(invalidCode, allowCompilationErrors = false) }
             .isInstanceOf(IllegalStateException::class.java)
     }
+
+    @Test
+    fun `respects custom language version settings`() {
+        val code = """
+            fun foo() = Unit
+        """.trimIndent()
+
+        assertThatThrownBy {
+            analysisApiEngine.compile(
+                code = code,
+                allowCompilationErrors = false,
+                languageVersionSettings = explicitApi(ExplicitApiMode.STRICT),
+            )
+        }.isInstanceOf(IllegalStateException::class.java)
+
+        analysisApiEngine.compile(
+            code = code,
+            allowCompilationErrors = false,
+            languageVersionSettings = explicitApi(ExplicitApiMode.DISABLED),
+        )
+    }
+
+    private fun explicitApi(mode: ExplicitApiMode) =
+        LanguageVersionSettingsImpl(
+            languageVersion = LanguageVersionSettingsImpl.DEFAULT.languageVersion,
+            apiVersion = LanguageVersionSettingsImpl.DEFAULT.apiVersion,
+            analysisFlags = mapOf(AnalysisFlags.explicitApiMode to mode),
+            specificFeatures = emptyMap(),
+        )
 
     @Test
     fun `can compile with an external JAR dependency`() {
