@@ -2,12 +2,10 @@ package dev.detekt.rules.naming
 
 import dev.detekt.api.Config
 import dev.detekt.test.TestConfig
-import dev.detekt.test.assertj.FindingsAssert
 import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.junit.KotlinCoreEnvironmentTest
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.KotlinEnvironmentContainer
-import org.intellij.lang.annotations.Language
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -335,12 +333,12 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinEnvironmentContainer) {
     }
 
     @Nested
-    inner class `boolean generics` {
-        private val allowSingleTypedGenerics =
-            NonBooleanPropertyPrefixedWithIs(TestConfig("allowSingleTypedGenerics" to true))
+    inner class `allowSingleTypedGenerics = false` {
+        private val disallowSingleTypedGenerics =
+            NonBooleanPropertyPrefixedWithIs(TestConfig("allowSingleTypedGenerics" to false))
 
         @Test
-        fun `report StateFlow boolean for default config`() {
+        fun `report StateFlow boolean when allowSingleTypedGenerics is disabled`() {
             val code = """
                 import kotlinx.coroutines.flow.StateFlow
 
@@ -348,9 +346,15 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinEnvironmentContainer) {
                     val isBar: StateFlow<Boolean>
                 }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code))
+            assertThat(disallowSingleTypedGenerics.lintWithContext(env, code))
                 .hasSize(1)
         }
+    }
+
+    @Nested
+    inner class `allowSingleTypedGenerics = true` {
+        private val allowSingleTypedGenerics =
+            NonBooleanPropertyPrefixedWithIs(TestConfig("allowSingleTypedGenerics" to true))
 
         @Test
         fun `dont report StateFlow boolean`() {
@@ -361,7 +365,7 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinEnvironmentContainer) {
                     val isBar: StateFlow<Boolean>
                 }
             """.trimIndent()
-            assertThatFindings(code).isEmpty()
+            assertThat(allowSingleTypedGenerics.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -373,7 +377,7 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinEnvironmentContainer) {
                     val isBar: StateFlow<String>
                 }
             """.trimIndent()
-            assertThatFindings(code).hasSize(1)
+            assertThat(allowSingleTypedGenerics.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -385,7 +389,7 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinEnvironmentContainer) {
                     val isBar: StateFlow<Boolean?>
                 }
             """.trimIndent()
-            assertThatFindings(code).isEmpty()
+            assertThat(allowSingleTypedGenerics.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -397,7 +401,7 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinEnvironmentContainer) {
                     val isBar: StateFlow<Boolean>?
                 }
             """.trimIndent()
-            assertThatFindings(code).isEmpty()
+            assertThat(allowSingleTypedGenerics.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -409,7 +413,7 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinEnvironmentContainer) {
                     val isBar: DataProvider<Boolean, Int>
                 }
             """.trimIndent()
-            assertThatFindings(code).hasSize(1)
+            assertThat(allowSingleTypedGenerics.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -423,7 +427,7 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinEnvironmentContainer) {
                     val isBar: BooleanProvider
                 }
             """.trimIndent()
-            assertThatFindings(code).hasSize(1)
+            assertThat(allowSingleTypedGenerics.lintWithContext(env, code)).hasSize(1)
         }
 
         @Test
@@ -439,7 +443,7 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinEnvironmentContainer) {
                     val isBaz: MutableStateFlow<Boolean> = MutableStateFlow(true)
                 }
             """.trimIndent()
-            assertThatFindings(code).isEmpty()
+            assertThat(allowSingleTypedGenerics.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -451,7 +455,7 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinEnvironmentContainer) {
                     val isBar: () -> StateFlow<Boolean>
                 }
             """.trimIndent()
-            assertThatFindings(code).isEmpty()
+            assertThat(allowSingleTypedGenerics.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -463,7 +467,7 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinEnvironmentContainer) {
                     val isBar: (String) -> StateFlow<Boolean>
                 }
             """.trimIndent()
-            assertThatFindings(code).isEmpty()
+            assertThat(allowSingleTypedGenerics.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -476,7 +480,7 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinEnvironmentContainer) {
                     val isBar: StateFlow<AtomicBoolean>
                 }
             """.trimIndent()
-            assertThatFindings(code).isEmpty()
+            assertThat(allowSingleTypedGenerics.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -486,7 +490,7 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinEnvironmentContainer) {
 
                 class Foo(val isBar: StateFlow<Boolean>)
             """.trimIndent()
-            assertThatFindings(code).isEmpty()
+            assertThat(allowSingleTypedGenerics.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -500,7 +504,7 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinEnvironmentContainer) {
                     val isBar: BoolStateFlow
                 }
             """.trimIndent()
-            assertThatFindings(code).isEmpty()
+            assertThat(allowSingleTypedGenerics.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -522,7 +526,7 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinEnvironmentContainer) {
                     var isDirectBar = mutableStateOf(false)
                 }
             """.trimIndent()
-            assertThatFindings(code).isEmpty()
+            assertThat(allowSingleTypedGenerics.lintWithContext(env, code)).isEmpty()
         }
 
         @Test
@@ -540,10 +544,7 @@ class NonBooleanPropertyWithPrefixIsSpec(val env: KotlinEnvironmentContainer) {
                     var isEnabled by bar
                 }
             """.trimIndent()
-            assertThatFindings(code).isEmpty()
+            assertThat(allowSingleTypedGenerics.lintWithContext(env, code)).isEmpty()
         }
-
-        private fun assertThatFindings(@Language("kotlin") code: String): FindingsAssert =
-            assertThat(allowSingleTypedGenerics.lintWithContext(env, code))
     }
 }

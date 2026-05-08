@@ -25,6 +25,7 @@ import org.jetbrains.kotlin.psi.KtProperty
  * types of such wrappers (e.g. `() -> StateFlow<Boolean>`).
  *
  * <noncompliant>
+ * // allowSingleTypedGenerics = false
  * val isEnabled: Int = 500
  *
  * val isLoading: SomeGenericType<Boolean, Int>
