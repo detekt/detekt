@@ -1,6 +1,6 @@
 [versions]
 agp = "9.1.1"
-coroutines = "1.10.2"
+coroutines = "1.11.0"
 jacoco = "0.8.14"
 junit = "6.0.3"
 kotlin = "2.3.21"
