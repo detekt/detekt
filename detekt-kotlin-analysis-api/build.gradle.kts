@@ -5,34 +5,75 @@ plugins {
     id("com.gradleup.shadow") version "9.4.1"
 }
 
+val aaDependency = configurations.dependencyScope("aaDependency")
+val aaDependencies = configurations.resolvable("aaDependencies") {
+    extendsFrom(aaDependency.get())
+}
+
 dependencies {
     // Exclude transitive dependencies due to https://youtrack.jetbrains.com/issue/KT-61639
-    api(libs.kotlin.analysisApi) { isTransitive = false }
-    api(libs.kotlin.analysisApiK2) { isTransitive = false }
+    aaDependency(libs.kotlin.analysisApi) { isTransitive = false }
+    aaDependency(libs.kotlin.analysisApiK2) { isTransitive = false }
 
-    implementation(libs.kotlin.analysisApiImplBase) { isTransitive = false }
-    implementation(libs.kotlin.analysisApiPlatformInterface) { isTransitive = false }
-    implementation(libs.kotlin.lowLevelApiFir) { isTransitive = false }
-    implementation(libs.kotlin.symbolLightClasses) { isTransitive = false }
-    implementation(libs.caffeine) {
+    aaDependency(libs.kotlin.analysisApiImplBase) { isTransitive = false }
+    aaDependency(libs.kotlin.analysisApiPlatformInterface) { isTransitive = false }
+    aaDependency(libs.kotlin.lowLevelApiFir) { isTransitive = false }
+    aaDependency(libs.kotlin.symbolLightClasses) { isTransitive = false }
+    runtimeOnly(libs.caffeine) {
         attributes {
             // https://github.com/ben-manes/caffeine/issues/716
             // Remove on upgrade to Caffeine 3.x or if https://youtrack.jetbrains.com/issue/KT-73751 is fixed
             attribute(Bundling.BUNDLING_ATTRIBUTE, named(Bundling.EXTERNAL))
         }
     }
-    implementation(libs.kotlinx.serializationCore)
+    runtimeOnly(libs.kotlinx.serializationCore)
     runtimeOnly(libs.kotlinx.coroutinesCore.intellij)
+}
+
+val defaultJarClassifier = "default-jar"
+
+tasks.jar {
+    archiveClassifier = defaultJarClassifier
+}
+
+configurations.runtimeElements {
+    outgoing.artifacts.removeIf { it.classifier == defaultJarClassifier && it.extension == "jar" }
+    outgoing.artifact(tasks.shadowJar)
+}
+
+configurations.apiElements {
+    outgoing.variants.removeIf { it.name == "classes" }
+
+    outgoing.artifacts.removeIf { it.classifier == defaultJarClassifier && it.extension == "jar" }
+    outgoing.artifact(tasks.shadowJar)
+}
+
+tasks.shadowJar {
+    archiveClassifier = ""
+    configurations = aaDependencies.map { listOf(it) }
+}
+
+val sourcesJar = tasks.register<Jar>("sourcesJar") {
+    archiveClassifier = "sources"
+
+    from(
+        aaDependencies.map {
+            it.incoming.artifactView {
+                withVariantReselection()
+                attributes {
+                    attribute(Category.CATEGORY_ATTRIBUTE, named(Category.DOCUMENTATION))
+                    attribute(DocsType.DOCS_TYPE_ATTRIBUTE, named(DocsType.SOURCES))
+                }
+            }.files.map { jar -> zipTree(jar) }
+        }
+    )
 }
 
 java {
     targetCompatibility = JavaVersion.VERSION_1_8
+    withSourcesJar()
 }
 
-val javaComponent = components["java"] as AdhocComponentWithVariants
-javaComponent.withVariantsFromConfiguration(configurations["apiElements"]) {
-    skip()
-}
-javaComponent.withVariantsFromConfiguration(configurations["runtimeElements"]) {
-    skip()
+shadow {
+    addShadowVariantIntoJavaComponent = false
 }

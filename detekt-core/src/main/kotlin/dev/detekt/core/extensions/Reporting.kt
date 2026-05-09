@@ -18,8 +18,7 @@ private fun Detektion.copy(issues: List<Issue> = this.issues): Detektion =
     Detektion(
         issues = issues,
         rules = rules,
-    ).also { copy ->
-        metrics.forEach { copy.add(it) }
-        notifications.forEach { copy.add(it) }
-        copy.userData.putAll(userData)
-    }
+        metrics = metrics,
+        notifications = notifications,
+        userData = userData,
+    )

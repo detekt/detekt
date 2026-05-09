@@ -49,19 +49,19 @@ tasks.shadowJar {
     }
 }
 
-val downloadKotlinCompiler by tasks.registering(Download::class) {
+val downloadKotlinCompiler = tasks.register<Download>("downloadKotlinCompiler") {
     src("https://github.com/JetBrains/kotlin/releases/download/v$kotlinVersion/kotlin-compiler-$kotlinVersion.zip")
     dest(file("$rootDir/build/kotlinc/kotlin-compiler-$kotlinVersion.zip"))
     overwrite(false)
 }
 
-val unzipKotlinCompiler by tasks.registering(Copy::class) {
+val unzipKotlinCompiler = tasks.register<Copy>("unzipKotlinCompiler") {
     dependsOn(downloadKotlinCompiler)
     from(zipTree(downloadKotlinCompiler.get().dest))
     into(file("$rootDir/build/kotlinc/$kotlinVersion"))
 }
 
-val testPluginKotlinc by tasks.registering(Task::class) {
+val testPluginKotlinc = tasks.register<Task>("testPluginKotlinc") {
     enabled = false
 
     val outputDir = layout.buildDirectory.dir("tmp/kotlinc")

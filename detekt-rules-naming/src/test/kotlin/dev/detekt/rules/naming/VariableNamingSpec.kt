@@ -116,4 +116,26 @@ class VariableNamingSpec {
         """.trimIndent()
         assertThat(VariableNaming(Config.empty).lint(code)).isEmpty()
     }
+
+    @Test
+    fun `should not flag a local property named with a single underscore`() {
+        val code = """
+            fun foo() {
+                val _ = 1
+            }
+        """.trimIndent()
+        // `val _ = ...` only compiles when Kotlin's experimental unused return value checker is enabled
+        assertThat(VariableNaming(Config.empty).lint(content = code, compile = false)).isEmpty()
+    }
+
+    @Test
+    fun `should flag a backtick-escaped underscore local property`() {
+        val code = """
+            fun foo() {
+                val `_` = 1
+            }
+        """.trimIndent()
+
+        assertThat(VariableNaming(Config.empty).lint(code)).hasSize(1)
+    }
 }

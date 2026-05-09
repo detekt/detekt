@@ -1003,6 +1003,56 @@ class UnnecessaryFullyQualifiedNameSpec(val env: KotlinEnvironmentContainer) {
         }
     }
 
+    // https://github.com/detekt/detekt/issues/9282
+    @Nested
+    inner class `property named same as kotlin package` {
+        @Test
+        fun `does not report when class property named kotlin calls a stdlib extension`() {
+            val code = """
+                class Foo
+
+                class Test {
+                    val kotlin = Foo()
+
+                    fun method() {
+                        kotlin.run { println("hello") }
+                    }
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report when local variable named kotlin calls a stdlib extension`() {
+            val code = """
+                class Foo
+
+                fun method() {
+                    val kotlin = Foo()
+                    kotlin.run { println("hello") }
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report when function parameter named kotlin calls a member method`() {
+            val code = """
+                class GradleConventionsKotlin {
+                    fun configure() = Unit
+                }
+
+                fun setup(kotlin: GradleConventionsKotlin) {
+                    kotlin.configure()
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+    }
+
     @Nested
     inner class `nested type qualifiers` {
         @Test

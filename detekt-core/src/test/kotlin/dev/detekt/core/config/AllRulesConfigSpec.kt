@@ -30,38 +30,6 @@ class AllRulesConfigSpec {
     }
 
     @Nested
-    inner class ParentPath {
-        private val rulesetId = "style"
-        private val rulesetConfig = yamlConfigFromContent(
-            """
-                style:
-                  MaxLineLength:
-                    maxLineLength: 100
-            """.trimIndent()
-        ).subConfig(rulesetId)
-
-        @Test
-        fun `is derived from the original config`() {
-            val subject = AllRulesConfig(
-                wrapped = rulesetConfig,
-                deprecatedRules = emptySet(),
-            )
-            val actual = subject.parentPath
-            assertThat(actual).isEqualTo(rulesetId)
-        }
-
-        @Test
-        fun `is derived from the default config if unavailable in original config`() {
-            val subject = AllRulesConfig(
-                wrapped = emptyYamlConfig,
-                deprecatedRules = emptySet(),
-            )
-            val actual = subject.parentPath
-            assertThat(actual).isEqualTo(null)
-        }
-    }
-
-    @Nested
     inner class Parent {
         private val rulesetConfig = yamlConfigFromContent(
             """

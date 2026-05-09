@@ -2,7 +2,7 @@ plugins {
     id("module")
 }
 
-val extraDepsToPackage by configurations.registering
+val extraDepsToPackage = configurations.register("extraDepsToPackage")
 
 dependencies {
     compileOnly(projects.detektApi)

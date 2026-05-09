@@ -30,6 +30,28 @@ class VariableMinLengthSpec {
             """.trimIndent()
             assertThat(variableMinLength.lint(code)).isEmpty()
         }
+
+        @Test
+        fun `does not report a local property named with a single underscore`() {
+            val code = """
+                fun foo() {
+                    val _ = 1
+                }
+            """.trimIndent()
+            // `val _ = ...` only compiles when Kotlin's experimental unused return value checker is enabled
+            assertThat(variableMinLength.lint(content = code, compile = false)).isEmpty()
+        }
+
+        @Test
+        fun `does report a backtick-escaped underscore local property`() {
+            val code = """
+                fun foo() {
+                    val `_` = 1
+                }
+            """.trimIndent()
+
+            assertThat(variableMinLength.lint(code)).hasSize(1)
+        }
     }
 
     @Test

@@ -34,7 +34,7 @@ dependencyAnalysis {
     }
 }
 
-val detektReportMergeSarif by tasks.registering(ReportMergeTask::class) {
+val detektReportMergeSarif = tasks.register<ReportMergeTask>("detektReportMergeSarif") {
     output = layout.buildDirectory.file("reports/detekt/merge.sarif.json")
 }
 

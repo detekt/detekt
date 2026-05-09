@@ -35,16 +35,20 @@ class CliArgs {
 
     @Parameter(
         names = ["--includes", "-in"],
+        splitter = FilterSplitter::class,
+        validateValueWith = [FilterValidator::class],
         description = "Globbing patterns describing paths to include in the analysis. " +
             "Useful in combination with 'excludes' patterns."
     )
-    var includes: String? = null
+    var includes: List<String> = emptyList()
 
     @Parameter(
         names = ["--excludes", "-ex"],
+        splitter = FilterSplitter::class,
+        validateValueWith = [FilterValidator::class],
         description = "Globbing patterns describing paths to exclude from the analysis."
     )
-    var excludes: String? = null
+    var excludes: List<String> = emptyList()
 
     @Parameter(
         names = ["--config", "-c"],
