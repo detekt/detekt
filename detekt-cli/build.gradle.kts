@@ -8,12 +8,11 @@ application {
     mainClass = "dev.detekt.cli.Main"
 }
 
-val pluginsJar = configurations.dependencyScope("pluginsJar") {
-    isTransitive = false
-}
+val pluginsJar = configurations.dependencyScope("pluginsJar")
 
 val pluginsJarFiles = configurations.resolvable("pluginsJarFiles") {
     extendsFrom(pluginsJar)
+    isTransitive = false
 }
 
 dependencies {
