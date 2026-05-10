@@ -26,6 +26,12 @@ kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 # This should be set to an 8.x version, however DGP checks android.enableKotlin DSL property which is only in AGP 9 API
 android-gradleApi = { module = "com.android.tools.build:gradle-api", version = "9.0.0" }
 
+# Gradle's experimental public API publication (see https://github.com/gradle/gradle/issues/29483).
+# Pinned so DGP compiles against a fixed Gradle API version, independent of the build-time Gradle.
+# This should be set to the oldest Gradle version supported by KGP, but 8.14.3 is the earliest published Gradle API, so
+# we need to be on a newer version until KGP minimum version gets bumped higher (https://youtrack.jetbrains.com/issue/KT-84114)
+gradle-publicApi = { module = "org.gradle.experimental:gradle-public-api", version = "8.14.3" }
+
 # This represents the oldest JUnit version supported by detekt-test-junit.
 # This should only be updated when updating the minimum version supported by detekt-test-junit.
 junit-jupiterApi = { module = "org.junit.jupiter:junit-jupiter-api", version = "5.1.0" }

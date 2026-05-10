@@ -12,7 +12,7 @@ class IsolatedProjectsSpec {
 
         val buildResult = gradleRunner.runTasks("-Dorg.gradle.unsafe.isolated-projects=true", "detekt")
 
-        assertThat(buildResult.output).contains("Isolated projects is an incubating feature.")
+        assertThat(buildResult.output).contains("Isolated Projects is an incubating feature.")
     }
 
     @Nested
@@ -30,7 +30,7 @@ class IsolatedProjectsSpec {
 
             val buildResult = gradleRunner.runTasks("-Dorg.gradle.unsafe.isolated-projects=true", "detektBaseline")
 
-            assertThat(buildResult.output).contains("Isolated projects is an incubating feature.")
+            assertThat(buildResult.output).contains("Isolated Projects is an incubating feature.")
         }
     }
 
@@ -45,7 +45,7 @@ class IsolatedProjectsSpec {
                 "detektGenerateConfig"
             )
 
-            assertThat(buildResult.output).contains("Isolated projects is an incubating feature.")
+            assertThat(buildResult.output).contains("Isolated Projects is an incubating feature.")
         }
     }
 }
