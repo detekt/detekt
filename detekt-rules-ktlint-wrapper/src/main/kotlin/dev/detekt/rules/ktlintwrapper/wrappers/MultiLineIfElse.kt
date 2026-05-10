@@ -15,7 +15,8 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  */
 @AutoCorrectable(since = "1.0.0")
 @ActiveByDefault(since = "1.22.0")
-class MultiLineIfElse(config: Config) : KtlintRule(config, "Detects multiline if-else statements without braces") {
+internal class MultiLineIfElse(config: Config) :
+    KtlintRule(config, "Detects multiline if-else statements without braces") {
 
     override val wrapping = MultiLineIfElseRule()
 

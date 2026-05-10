@@ -11,7 +11,7 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  */
 @ActiveByDefault(since = "1.0.0")
 @AutoCorrectable(since = "1.0.0")
-class NoUnitReturn(config: Config) : KtlintRule(config, "Detects optional 'Unit' return types") {
+internal class NoUnitReturn(config: Config) : KtlintRule(config, "Detects optional 'Unit' return types") {
 
     override val wrapping = NoUnitReturnRule()
 }

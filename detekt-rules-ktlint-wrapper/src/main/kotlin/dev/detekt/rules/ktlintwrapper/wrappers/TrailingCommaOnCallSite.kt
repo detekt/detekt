@@ -21,7 +21,7 @@ import dev.detekt.rules.ktlintwrapper.configWithAndroidVariants
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "1.22.0")
-class TrailingCommaOnCallSite(config: Config) :
+internal class TrailingCommaOnCallSite(config: Config) :
     KtlintRule(config, "Rule to mandate/forbid trailing commas at call sites") {
 
     override val wrapping = TrailingCommaOnCallSiteRule()

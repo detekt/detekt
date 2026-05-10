@@ -18,7 +18,7 @@ import dev.detekt.rules.ktlintwrapper.configWithAndroidVariants
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "2.0.0")
-class BinaryExpressionWrapping(config: Config) :
+internal class BinaryExpressionWrapping(config: Config) :
     KtlintRule(
         config,
         "Wrap binary expression at the operator reference if the binary expression does not fit on the line"

@@ -12,7 +12,7 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  */
 @AutoCorrectable(since = "1.10.0")
 @ActiveByDefault(since = "1.22.0")
-class SpacingBetweenDeclarationsWithAnnotations(config: Config) :
+internal class SpacingBetweenDeclarationsWithAnnotations(config: Config) :
     KtlintRule(config, "Declarations and declarations with annotations should have an empty space between.") {
 
     override val wrapping = SpacingBetweenDeclarationsWithAnnotationsRule()
