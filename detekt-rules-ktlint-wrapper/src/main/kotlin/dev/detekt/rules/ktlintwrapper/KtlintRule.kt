@@ -37,6 +37,11 @@ internal abstract class KtlintRule(config: Config, description: String) : Rule(c
             ?: config.parent?.let { KtlintWrapperProvider.code_style.value(it) }
             ?: KtlintWrapperProvider.code_style.defaultValue
 
+    protected val indentStyle: String
+        get() = config.valueOrNull("indent_style")
+            ?: config.parent?.let { KtlintWrapperProvider.indent_style.value(it) }
+            ?: KtlintWrapperProvider.indent_style.defaultValue
+
     private lateinit var positionByOffset: (offset: Int) -> Pair<Int, Int>
     private lateinit var root: KtFile
     private lateinit var originalFilePath: Path
@@ -71,7 +76,7 @@ internal abstract class KtlintRule(config: Config, description: String) : Rule(c
 
         usesEditorConfigProperties[INDENT_STYLE_PROPERTY] = usesEditorConfigProperties.getOrDefault(
             INDENT_STYLE_PROPERTY,
-            "space",
+            indentStyle,
         )
 
         val properties = buildMap {
