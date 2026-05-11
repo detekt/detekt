@@ -13,10 +13,10 @@ import org.assertj.core.api.Assertions.assertThat as assertThatJ
 /**
  * Regression test for https://github.com/detekt/detekt/issues/9295.
  *
- * `indent_style` used to only reach the `Indentation` rule, so setting it to `tab` made `Indentation`
- * and `FunctionSignature` disagree on how to indent the parameters of a multi-line signature; with
- * autocorrect on, they'd undo each other's changes. The config below mirrors how detekt resolves it:
- * the value sits on the `ktlint` rule set, with the rules nested under it.
+ * Before the fix, indent style was a per-rule setting on `Indentation` only, so configuring `tab`
+ * left `Indentation` and `FunctionSignature` disagreeing on how to indent the parameters of a
+ * multi-line signature; with autocorrect on, they'd undo each other's changes. The config below sets
+ * it at the `ktlint` rule set level (the way detekt resolves it now), with the rules nested under it.
  */
 class IndentationFunctionSignatureSpec {
 
@@ -24,7 +24,7 @@ class IndentationFunctionSignatureSpec {
     fun `Indentation and FunctionSignature agree on tab-indented multiline signature`() {
         val ktlintConfig = TestConfig(
             "ktlint" to mapOf(
-                "indent_style" to "tab",
+                "indentStyle" to "tab",
                 "autoCorrect" to true,
                 "Indentation" to mapOf("active" to true),
                 "FunctionSignature" to mapOf("active" to true),

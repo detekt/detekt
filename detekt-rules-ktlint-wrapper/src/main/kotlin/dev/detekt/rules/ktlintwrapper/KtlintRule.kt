@@ -38,9 +38,9 @@ internal abstract class KtlintRule(config: Config, description: String) : Rule(c
             ?: KtlintWrapperProvider.code_style.defaultValue
 
     protected val indentStyle: String
-        get() = config.valueOrNull("indent_style")
-            ?: config.parent?.let { KtlintWrapperProvider.indent_style.value(it) }
-            ?: KtlintWrapperProvider.indent_style.defaultValue
+        get() = config.valueOrNull("indentStyle")
+            ?: config.parent?.let { KtlintWrapperProvider.indentStyle.value(it) }
+            ?: KtlintWrapperProvider.indentStyle.defaultValue
 
     private lateinit var positionByOffset: (offset: Int) -> Pair<Int, Int>
     private lateinit var root: KtFile

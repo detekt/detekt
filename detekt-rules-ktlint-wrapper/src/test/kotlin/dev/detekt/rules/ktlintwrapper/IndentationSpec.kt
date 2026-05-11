@@ -48,7 +48,7 @@ class IndentationSpec {
 
         @Test
         fun `does not report when using an indentation level config of 1 and style of tab`() {
-            val config = TestConfig("indentSize" to 1, "indent_style" to "tab")
+            val config = TestConfig("indentSize" to 1, "indentStyle" to "tab")
             val code = """
                 fun main() {
                 ${TAB}println()
@@ -59,7 +59,7 @@ class IndentationSpec {
 
         @Test
         fun `reports usage of space when using an indentation level config of 1 and style of tab`() {
-            val config = TestConfig("indentSize" to 1, "indent_style" to "tab")
+            val config = TestConfig("indentSize" to 1, "indentStyle" to "tab")
             val code = """
                 fun main() {
                   println()

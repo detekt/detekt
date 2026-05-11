@@ -244,7 +244,7 @@ class KtlintWrapperProvider : RuleSetProvider {
         val code_style by ruleSetConfig("intellij_idea")
 
         @Configuration("indentation style applied across all ktlint rules (space or tab)")
-        val indent_style by ruleSetConfig("space")
+        val indentStyle by ruleSetConfig("space")
 
         @Configuration("if rules should auto correct style violation")
         val autoCorrect by ruleSetConfig(true)
