@@ -7,6 +7,7 @@ dependencies {
     compileOnly(projects.detektPsiUtils)
 
     testImplementation(libs.kotlin.compiler)
+    testImplementation(projects.detektKotlinAnalysisApi)
     testImplementation(projects.detektApi)
     testRuntimeOnly(projects.detektPsiUtils)
     testImplementation(projects.detektTest)
