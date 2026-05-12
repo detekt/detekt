@@ -5,7 +5,7 @@ jacoco = "0.8.14"
 junit = "6.0.3"
 kotlin = "2.3.21"
 ktlint = "1.8.0"
-slf4j = "2.0.17"
+slf4j = "2.0.18"
 
 jvm-target = "1.8"
 java-compile-toolchain = "17"
