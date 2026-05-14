@@ -10,7 +10,7 @@
 
 
 <link rel="search" type="application/opensearchdescription+xml" title="detekt" href="/opensearch.xml"><link rel="stylesheet" href="/assets/css/styles.bc76b9d6.css">
-<script src="/assets/js/runtime~main.aca2fdb4.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.beef6b72.js" defer="defer"></script>
 <script src="/assets/js/main.de299fcd.js" defer="defer"></script>
 </head>
 <body>
@@ -59,14 +59,14 @@ Therefore, we recommend using the <code>detekt&lt;Variant&gt;</code> tasks offer
 <p>In case of build related issues, you may try <code>detekt.android.disabled=true</code> in <code>gradle.properties</code> to prevent detekt
 Gradle plugins from configuring Android-specific gradle tasks.</p>
 <h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="enabling-on-a-kmp-project">Enabling on a KMP project<a href="#enabling-on-a-kmp-project" class="hash-link" aria-label="Direct link to Enabling on a KMP project" title="Direct link to Enabling on a KMP project" translate="no">​</a></h2>
-<p>The Detekt Gradle Plugin in a Kotlin Multiplatform project automatically generates platform-specific and common tasks for running analysis with type resolution. In general there will be a <code>detektMetadata&lt;Platform&gt;Main</code> task for each native platform target configured in the multiplatform plugin, specific tasks for JVM and Android modules as listed below, and a <code>detektMetadataCommonMain</code> for the <code>common</code> module.</p>
+<p>In a Kotlin Multiplatform project, the Detekt Gradle Plugin generates the following tasks:</p>
 <ul>
-<li class=""><code>detekt</code> - Runs detekt WITHOUT type resolution</li>
-<li class=""><code>detektMetadataCommonMain</code> - Runs detekt with type resolution on the <code>common</code> module in the <code>main</code> source set</li>
-<li class=""><code>detektJvmMain</code> - Runs detekt with type resolution on the <code>jvm</code> module in the <code>main</code> source set</li>
-<li class=""><code>detektMetadataIosMain</code> - Runs detekt with type resolution on the <code>ios</code> module in the <code>main</code> source set</li>
-<li class=""><code>detektAndroid&lt;Variant&gt;</code> - Runs detekt with type resolution on the <code>android</code> module for the specific variant e.g. <code>detektAndroidRelease</code></li>
+<li class=""><code>detekt</code> - Runs detekt WITHOUT type resolution.</li>
+<li class=""><code>detekt&lt;SourceSet&gt;SourceSet</code> - Runs detekt on a given Kotlin source set WITHOUT type resolution. A task is generated for every Kotlin source set (e.g. <code>detektCommonMainSourceSet</code>, <code>detektJvmMainSourceSet</code>, <code>detektIosMainSourceSet</code>, <code>detektWasmJsMainSourceSet</code>).</li>
+<li class=""><code>detekt&lt;Compilation&gt;&lt;Target&gt;</code> - Runs detekt with type resolution on a given compilation of a JVM or Android target (e.g. <code>detektMainJvm</code>, <code>detektTestJvm</code>, <code>detektMainAndroid</code>).</li>
 </ul>
+<p>Type resolution tasks are currently only generated for JVM and Android targets. Native, JS and Wasm targets are analyzed through their source-set tasks listed above, without type resolution.</p>
+<p>Corresponding <code>detektBaseline&lt;SourceSet&gt;SourceSet</code> and <code>detektBaseline&lt;Compilation&gt;&lt;Target&gt;</code> tasks are also generated to create baselines from each of the analysis tasks.</p>
 <h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="enabling-on-detekt-cli">Enabling on Detekt CLI<a href="#enabling-on-detekt-cli" class="hash-link" aria-label="Direct link to Enabling on Detekt CLI" title="Direct link to Enabling on Detekt CLI" translate="no">​</a></h2>
 <p>If you&#x27;re using <a class="" href="/docs/next/gettingstarted/cli">detekt via CLI</a>, type resolution will be enabled only if you provide the <code>--classpath</code> and
 <code>--jvm-target</code> flags. See the list of <a class="" href="/docs/next/gettingstarted/cli#use-the-cli">CLI options</a> for details.</p>
