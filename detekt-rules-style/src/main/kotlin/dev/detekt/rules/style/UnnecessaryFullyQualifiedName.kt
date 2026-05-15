@@ -220,9 +220,11 @@ class UnnecessaryFullyQualifiedName(config: Config) :
         if (resolvedSymbol !is KaCallableSymbol && isShadowedByTypeParameter(element, simpleName)) return true
 
         // Annotation references resolve to constructors, so their classifier should be checked
-        val symbol = (resolvedSymbol as? KaConstructorSymbol)?.containingClassId
-            ?.let { with(session) { findClass(it) } }
-            ?: resolvedSymbol
+        val symbol = if (resolvedSymbol is KaConstructorSymbol) {
+            resolvedSymbol.containingClassId?.let { with(session) { findClass(it) } } ?: resolvedSymbol
+        } else {
+            resolvedSymbol
+        }
         return findLocalSymbols(element, symbol, simpleName).any { it != symbol }
     }
 
