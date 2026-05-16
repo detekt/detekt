@@ -212,19 +212,30 @@ class UnnecessaryFullyQualifiedName(config: Config) :
     private fun hasNameCollision(element: KtElement, resolvedSymbol: KaSymbol): Boolean {
         val simpleName = when (resolvedSymbol) {
             is KaClassSymbol -> resolvedSymbol.classId?.shortClassName
+            is KaConstructorSymbol -> resolvedSymbol.containingClassId?.shortClassName
             is KaCallableSymbol -> resolvedSymbol.callableId?.callableName
             else -> null
         } ?: return false
 
         if (resolvedSymbol !is KaCallableSymbol && isShadowedByTypeParameter(element, simpleName)) return true
 
-        return findLocalSymbols(element, resolvedSymbol, simpleName).any { it != resolvedSymbol }
+        // Annotation references resolve to constructors, so their classifier should be checked
+        val symbol = if (resolvedSymbol is KaConstructorSymbol) {
+            resolvedSymbol.containingClassId?.let { with(session) { findClass(it) } } ?: resolvedSymbol
+        } else {
+            resolvedSymbol
+        }
+        return findLocalSymbols(element, symbol, simpleName).any { it != symbol }
     }
 
     context(session: KaSession)
     private fun findLocalSymbols(element: KtElement, resolvedSymbol: KaSymbol, name: Name): Sequence<KaSymbol> {
+        // Default imports are overridden by an added explicit import, so a default symbol with the same
+        // name is not a real collision (only explicit imports are).
         val scope = with(session) {
-            element.containingKtFile.scopeContext(element).compositeScope { it !is KaScopeKind.ImportingScope }
+            element.containingKtFile.scopeContext(element).compositeScope {
+                it !is KaScopeKind.DefaultSimpleImportingScope && it !is KaScopeKind.DefaultStarImportingScope
+            }
         }
         return if (resolvedSymbol is KaCallableSymbol) scope.callables(name) else scope.classifiers(name)
     }
