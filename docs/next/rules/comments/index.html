@@ -10,7 +10,7 @@
 
 
 <link rel="search" type="application/opensearchdescription+xml" title="detekt" href="/opensearch.xml"><link rel="stylesheet" href="/assets/css/styles.bc76b9d6.css">
-<script src="/assets/js/runtime~main.beef6b72.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.a69b184e.js" defer="defer"></script>
 <script src="/assets/js/main.de299fcd.js" defer="defer"></script>
 </head>
 <body>
@@ -91,6 +91,8 @@ Clients do not need to know the implementation details.</p>
 If KDoc is not present or does not contain any @param or @property tags, rule violation will not be reported.
 By default, both type and value parameters need to be matched and declarations orders must be preserved. You can
 turn off these features using configuration options.</p>
+<p>Set <code>exhaustive</code> to <code>false</code> to only check that documented parameters are valid without requiring all
+parameters to be documented. This is useful when documentation is used sparingly and only where it is really needed.</p>
 <p><strong>Active by default</strong>: No</p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-2">Configuration options:<a href="#configuration-options-2" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
 <ul>
@@ -105,6 +107,10 @@ turn off these features using configuration options.</p>
 <li class="">
 <p><code>allowParamOnConstructorProperties</code> (default: <code>false</code>)</p>
 <p>if we allow constructor parameters to be marked as @param instead of @property</p>
+</li>
+<li class="">
+<p><code>exhaustive</code> (default: <code>true</code>)</p>
+<p>if true, all parameters must be documented; if false, only documented parameters are validated against the declaration</p>
 </li>
 </ul>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="noncompliant-code-2">Noncompliant Code:<a href="#noncompliant-code-2" class="hash-link" aria-label="Direct link to Noncompliant Code:" title="Direct link to Noncompliant Code:" translate="no">​</a></h4>
