@@ -1,7 +1,7 @@
 package dev.detekt.psi
 
 /**
- * Convert a simple pattern String to a Regex
+ * Convert a simple path pattern String to a Regex
  *
  * The simple pattern is a subset of the shell pattern matching or
  * [glob][https://en.wikipedia.org/wiki/Glob_(programming)]
@@ -14,4 +14,13 @@ fun String.pathGlobToRegex(): Regex =
         .replace(".", "\\.")
         .replace("*", ".*")
         .replace("?", ".")
+        .toRegex()
+
+fun String.fullyQualifiedNameGlobToRegex(): Regex =
+    this
+        .replace(".", """\.""")
+        .replace("**", "//")
+        .replace("*", "[^.]*")
+        .replace("?", "[^.]")
+        .replace("//", """.*(?=\.)""")
         .toRegex()

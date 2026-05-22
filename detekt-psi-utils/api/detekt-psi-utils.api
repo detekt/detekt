@@ -20,6 +20,7 @@ public final class dev/detekt/psi/FunctionMatcher$Companion {
 }
 
 public final class dev/detekt/psi/GlobToRegexKt {
+	public static final fun fullyQualifiedNameGlobToRegex (Ljava/lang/String;)Lkotlin/text/Regex;
 	public static final fun pathGlobToRegex (Ljava/lang/String;)Lkotlin/text/Regex;
 }
 
