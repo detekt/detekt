@@ -10,7 +10,7 @@
 
 
 <link rel="search" type="application/opensearchdescription+xml" title="detekt" href="/opensearch.xml"><link rel="stylesheet" href="/assets/css/styles.bc76b9d6.css">
-<script src="/assets/js/runtime~main.e9bbd3b3.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.4a17c566.js" defer="defer"></script>
 <script src="/assets/js/main.de299fcd.js" defer="defer"></script>
 </head>
 <body>
@@ -220,17 +220,27 @@ except of underscore lambda parameters for unused variables.</p>
 <h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="nonbooleanpropertyprefixedwithis">NonBooleanPropertyPrefixedWithIs<a href="#nonbooleanpropertyprefixedwithis" class="hash-link" aria-label="Direct link to NonBooleanPropertyPrefixedWithIs" title="Direct link to NonBooleanPropertyPrefixedWithIs" translate="no">​</a></h3>
 <p>Reports when property with &#x27;is&#x27; prefix doesn&#x27;t have a boolean type.
 Please check <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.html#jls-8.3.2" target="_blank" rel="noopener noreferrer" class="">chapter 8.3.2 on the Java Language Specification</a></p>
+<p>When <code>allowSingleTypedGenerics</code> is enabled, single-argument generic wrappers over a boolean (e.g.
+<code>StateFlow&lt;Boolean&gt;</code>, <code>StateFlow&lt;Boolean?&gt;</code>, <code>StateFlow&lt;Boolean&gt;?</code>) are also accepted, as well as lambda return
+types of such wrappers (e.g. <code>() -&gt; StateFlow&lt;Boolean&gt;</code>).</p>
 <p><strong>Active by default</strong>: No</p>
 <p><strong>Requires Type Resolution</strong></p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-13">Configuration options:<a href="#configuration-options-13" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>allowSingleTypedGenerics</code> (default: <code>false</code>)</p>
+<p>Treat generic types using Boolean as their single argument as boolean-like</p>
+</li>
+</ul>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="noncompliant-code-4">Noncompliant Code:<a href="#noncompliant-code-4" class="hash-link" aria-label="Direct link to Noncompliant Code:" title="Direct link to Noncompliant Code:" translate="no">​</a></h4>
-<div class="language-kotlin codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-kotlin codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token keyword" style="color:#00009f">val</span><span class="token plain"> isEnabled</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> Int </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">500</span><br></div></code></pre></div></div>
+<div class="language-kotlin codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-kotlin codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token comment" style="color:#999988;font-style:italic">// allowSingleTypedGenerics = false</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">val</span><span class="token plain"> isEnabled</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> Int </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">500</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">val</span><span class="token plain"> isLoading</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> SomeGenericType</span><span class="token operator" style="color:#393A34">&lt;</span><span class="token plain">Boolean</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> Int</span><span class="token operator" style="color:#393A34">&gt;</span><br></div></code></pre></div></div>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="compliant-code-4">Compliant Code:<a href="#compliant-code-4" class="hash-link" aria-label="Direct link to Compliant Code:" title="Direct link to Compliant Code:" translate="no">​</a></h4>
-<div class="language-kotlin codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-kotlin codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token keyword" style="color:#00009f">val</span><span class="token plain"> isEnabled</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> Boolean </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token boolean" style="color:#36acaa">false</span><br></div></code></pre></div></div>
+<div class="language-kotlin codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-kotlin codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token keyword" style="color:#00009f">val</span><span class="token plain"> isEnabled</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> Boolean </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token boolean" style="color:#36acaa">false</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token comment" style="color:#999988;font-style:italic">// allowSingleTypedGenerics = true</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">val</span><span class="token plain"> isLoading</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> StateFlow</span><span class="token operator" style="color:#393A34">&lt;</span><span class="token plain">Boolean</span><span class="token operator" style="color:#393A34">&gt;</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> </span><span class="token function" style="color:#d73a49">MutableStateFlow</span><span class="token punctuation" style="color:#393A34">(</span><span class="token boolean" style="color:#36acaa">false</span><span class="token punctuation" style="color:#393A34">)</span><br></div></code></pre></div></div>
 <h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="objectpropertynaming">ObjectPropertyNaming<a href="#objectpropertynaming" class="hash-link" aria-label="Direct link to ObjectPropertyNaming" title="Direct link to ObjectPropertyNaming" translate="no">​</a></h3>
 <p>Reports property names inside objects that do not follow the specified naming convention.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
 <p><strong>Aliases</strong>: ObjectPropertyName</p>
-<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-13">Configuration options:<a href="#configuration-options-13" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-14">Configuration options:<a href="#configuration-options-14" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
 <ul>
 <li class="">
 <p><code>constantPattern</code> (default: <code>&#x27;[A-Za-z][_A-Za-z0-9]*&#x27;</code>)</p>
@@ -249,7 +259,7 @@ Please check <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.ht
 <p>Reports package names that do not follow the specified naming convention.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
 <p><strong>Aliases</strong>: PackageName</p>
-<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-14">Configuration options:<a href="#configuration-options-14" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-15">Configuration options:<a href="#configuration-options-15" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
 <ul>
 <li class="">
 <p><code>packagePattern</code> (default: <code>&#x27;[a-z]+(\.[a-z][A-Za-z0-9]*)*&#x27;</code>)</p>
@@ -259,7 +269,7 @@ Please check <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.ht
 <h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="toplevelpropertynaming">TopLevelPropertyNaming<a href="#toplevelpropertynaming" class="hash-link" aria-label="Direct link to TopLevelPropertyNaming" title="Direct link to TopLevelPropertyNaming" translate="no">​</a></h3>
 <p>Reports top level property names that do not follow the specified naming convention.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
-<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-15">Configuration options:<a href="#configuration-options-15" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-16">Configuration options:<a href="#configuration-options-16" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
 <ul>
 <li class="">
 <p><code>constantPattern</code> (default: <code>&#x27;[A-Z][_A-Z0-9]*&#x27;</code>)</p>
@@ -277,7 +287,7 @@ Please check <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.ht
 <h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="variablemaxlength">VariableMaxLength<a href="#variablemaxlength" class="hash-link" aria-label="Direct link to VariableMaxLength" title="Direct link to VariableMaxLength" translate="no">​</a></h3>
 <p>Reports when very long variable names are used.</p>
 <p><strong>Active by default</strong>: No</p>
-<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-16">Configuration options:<a href="#configuration-options-16" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-17">Configuration options:<a href="#configuration-options-17" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
 <ul>
 <li class="">
 <p><code>maximumVariableNameLength</code> (default: <code>64</code>)</p>
@@ -287,7 +297,7 @@ Please check <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.ht
 <h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="variableminlength">VariableMinLength<a href="#variableminlength" class="hash-link" aria-label="Direct link to VariableMinLength" title="Direct link to VariableMinLength" translate="no">​</a></h3>
 <p>Reports when very short variable names are used.</p>
 <p><strong>Active by default</strong>: No</p>
-<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-17">Configuration options:<a href="#configuration-options-17" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-18">Configuration options:<a href="#configuration-options-18" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
 <ul>
 <li class="">
 <p><code>minimumVariableNameLength</code> (default: <code>1</code>)</p>
@@ -298,7 +308,7 @@ Please check <a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-8.ht
 <p>Reports variable names that do not follow the specified naming convention.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
 <p><strong>Aliases</strong>: PropertyName</p>
-<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-18">Configuration options:<a href="#configuration-options-18" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-19">Configuration options:<a href="#configuration-options-19" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
 <ul>
 <li class="">
 <p><code>variablePattern</code> (default: <code>&#x27;[a-z][A-Za-z0-9]*&#x27;</code>)</p>
