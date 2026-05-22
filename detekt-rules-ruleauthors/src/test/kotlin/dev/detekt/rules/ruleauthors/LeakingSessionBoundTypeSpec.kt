@@ -22,12 +22,12 @@ private val DEFINITIONS = """
 """.trimIndent()
 
 @KotlinCoreEnvironmentTest
-class AvoidLeakingAnalysisApiTypesFromSessionsSpec(private val env: KotlinEnvironmentContainer) {
-    private lateinit var rule: AvoidLeakingAnalysisApiTypesFromSessions
+class LeakingSessionBoundTypeSpec(private val env: KotlinEnvironmentContainer) {
+    private lateinit var rule: LeakingSessionBoundType
 
     @BeforeEach
     fun setup() {
-        rule = AvoidLeakingAnalysisApiTypesFromSessions()
+        rule = LeakingSessionBoundType()
     }
 
     @Test

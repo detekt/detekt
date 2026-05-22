@@ -38,7 +38,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
  * }
  * </compliant>
  */
-class AvoidLeakingAnalysisApiTypesFromSessions(config: Config = Config.empty) :
+class LeakingSessionBoundType(config: Config = Config.empty) :
     Rule(
         config,
         "Lambda passed to `analyze {}` returns a lifetime-scoped type." +
