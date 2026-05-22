@@ -1,4 +1,4 @@
-package dev.detekt.core.reporting.console
+package dev.detekt.report.statistics
 
 import dev.detekt.api.ConsoleReport
 import dev.detekt.api.Detektion

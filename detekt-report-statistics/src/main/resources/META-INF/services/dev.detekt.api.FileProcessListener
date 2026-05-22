@@ -1,0 +1,5 @@
+dev.detekt.report.statistics.KtFileCountProcessor
+dev.detekt.report.statistics.PackageCountProcessor
+dev.detekt.report.statistics.ClassCountProcessor
+dev.detekt.report.statistics.FunctionCountProcessor
+dev.detekt.report.statistics.PropertyCountProcessor
