@@ -9,7 +9,7 @@ package dev.detekt.psi
  * '*' matches any zero or more characters
  * '?' matches any one character
  */
-fun String.simplePatternToRegex(): Regex =
+fun String.pathGlobToRegex(): Regex =
     this
         .replace(".", "\\.")
         .replace("*", ".*")

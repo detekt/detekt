@@ -19,6 +19,10 @@ public final class dev/detekt/psi/FunctionMatcher$Companion {
 	public final fun getNameForGetterOrSetter (Lorg/jetbrains/kotlin/analysis/api/symbols/KaPropertySymbol;Lorg/jetbrains/kotlin/analysis/api/symbols/KaCallableSymbol;)Ljava/lang/String;
 }
 
+public final class dev/detekt/psi/GlobToRegexKt {
+	public static final fun pathGlobToRegex (Ljava/lang/String;)Lkotlin/text/Regex;
+}
+
 public final class dev/detekt/psi/IsPartOfUtilsKt {
 	public static final fun isPartOfString (Lcom/intellij/psi/PsiElement;)Z
 }
@@ -87,10 +91,6 @@ public final class dev/detekt/psi/MethodSignatureKt {
 	public static final fun isHashCodeFunction (Lorg/jetbrains/kotlin/psi/KtFunction;)Z
 	public static final fun isJvmFinalizeFunction (Lorg/jetbrains/kotlin/psi/KtNamedFunction;)Z
 	public static final fun isMainFunction (Lorg/jetbrains/kotlin/psi/KtNamedFunction;)Z
-}
-
-public final class dev/detekt/psi/SplitPatternKt {
-	public static final fun simplePatternToRegex (Ljava/lang/String;)Lkotlin/text/Regex;
 }
 
 public final class dev/detekt/psi/StringExtensionsKt {
