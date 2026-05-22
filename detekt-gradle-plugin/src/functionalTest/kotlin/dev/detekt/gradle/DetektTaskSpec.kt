@@ -60,6 +60,7 @@ class DetektTaskSpec {
         val gradleRunner = DslTestBuilder.kotlin()
             .withProjectLayout(projectLayoutWithIssues)
             .withDetektConfig(config)
+            .withConfigFile("config/detekt/detekt.yml")
             .build()
 
         gradleRunner.runDetektTaskAndExpectFailure { result ->
@@ -78,6 +79,7 @@ class DetektTaskSpec {
         val gradleRunner = DslTestBuilder.kotlin()
             .withProjectLayout(projectLayoutWithIssues)
             .withDetektConfig(config)
+            .withConfigFile("config/detekt/detekt.yml")
             .build()
 
         gradleRunner.runDetektTaskAndExpectFailure { result ->

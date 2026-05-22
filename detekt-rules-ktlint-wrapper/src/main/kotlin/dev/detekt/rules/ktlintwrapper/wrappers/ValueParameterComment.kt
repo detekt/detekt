@@ -10,7 +10,7 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  * documentation.
  */
 @ActiveByDefault(since = "2.0.0")
-class ValueParameterComment(config: Config) :
+internal class ValueParameterComment(config: Config) :
     KtlintRule(config, "Detect discouraged value parameter comment locations.") {
 
     override val wrapping = ValueParameterCommentRule()

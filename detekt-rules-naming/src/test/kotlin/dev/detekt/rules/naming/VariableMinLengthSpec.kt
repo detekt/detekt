@@ -4,6 +4,8 @@ import dev.detekt.api.Config
 import dev.detekt.test.TestConfig
 import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.kotlin.config.LanguageFeature
+import org.jetbrains.kotlin.config.LanguageVersionSettingsImpl
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -29,6 +31,32 @@ class VariableMinLengthSpec {
                 }
             """.trimIndent()
             assertThat(variableMinLength.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report a local property named with a single underscore`() {
+            val code = """
+                fun foo() {
+                    val _ = 1
+                }
+            """.trimIndent()
+            assertThat(
+                variableMinLength.lint(
+                    content = code,
+                    languageVersionSettings = unnamedLocalVariablesEnabled,
+                )
+            ).isEmpty()
+        }
+
+        @Test
+        fun `does report a backtick-escaped underscore local property`() {
+            val code = """
+                fun foo() {
+                    val `_` = 1
+                }
+            """.trimIndent()
+
+            assertThat(variableMinLength.lint(code)).hasSize(1)
         }
     }
 
@@ -73,3 +101,9 @@ class VariableMinLengthSpec {
         ).isEmpty()
     }
 }
+
+private val unnamedLocalVariablesEnabled = LanguageVersionSettingsImpl(
+    languageVersion = LanguageVersionSettingsImpl.DEFAULT.languageVersion,
+    apiVersion = LanguageVersionSettingsImpl.DEFAULT.apiVersion,
+    specificFeatures = mapOf(LanguageFeature.UnnamedLocalVariables to LanguageFeature.State.ENABLED),
+)

@@ -81,8 +81,10 @@ class MaxChainedCallsOnSameLine(config: Config) :
     private fun KtExpression.isReferenceToPackageOrClass(): Boolean {
         val selectorOrThis = (this as? KtQualifiedExpression)?.selectorExpression ?: this
         if (selectorOrThis !is KtReferenceExpression) return false
-        val symbol = analyze(selectorOrThis) { selectorOrThis.mainReference.resolveToSymbol() }
-        return symbol is KaPackageSymbol || symbol is KaClassSymbol
+        return analyze(selectorOrThis) {
+            val symbol = selectorOrThis.mainReference.resolveToSymbol()
+            symbol is KaPackageSymbol || symbol is KaClassSymbol
+        }
     }
 
     private fun KtQualifiedExpression.callOnNewLine(): Boolean {

@@ -15,13 +15,16 @@ import org.jetbrains.kotlin.analysis.api.symbols.KaCallableSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaConstructorSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaVariableSymbol
 import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtClassLiteralExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtImportDirective
+import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtPackageDirective
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.KtTypeParameterListOwner
@@ -162,6 +165,10 @@ class UnnecessaryFullyQualifiedName(config: Config) :
             val packageFqName = symbol.packageFqName() ?: return
             if (!receiverText.startsWith(packageFqName)) return
 
+            // If the leftmost part of the receiver resolves to a variable/property, this is a method call on an
+            // instance (e.g. `val kotlin = Foo(); kotlin.method()`), not a package-qualified reference
+            if (isReceiverLocalVariableOrProperty(expression.receiverExpression)) return
+
             val classId = symbol.callableId?.classId
             val symbolToCheck = classId?.let { findClass(it) } ?: symbol
             if (hasNameCollision(expression, symbolToCheck)) return
@@ -182,6 +189,18 @@ class UnnecessaryFullyQualifiedName(config: Config) :
         }
     }
 
+    private fun KaSession.isReceiverLocalVariableOrProperty(receiver: KtExpression): Boolean {
+        val leftmost = leftmostReference(receiver) ?: return false
+        return leftmost.mainReference.resolveToSymbol() is KaVariableSymbol
+    }
+
+    private fun leftmostReference(expression: KtExpression): KtNameReferenceExpression? =
+        when (expression) {
+            is KtNameReferenceExpression -> expression
+            is KtDotQualifiedExpression -> leftmostReference(expression.receiverExpression)
+            else -> null
+        }
+
     private fun isInImportOrPackage(element: KtElement): Boolean =
         element.getParentOfType<KtImportDirective>(strict = false) != null ||
             element.getParentOfType<KtPackageDirective>(strict = false) != null
@@ -193,19 +212,30 @@ class UnnecessaryFullyQualifiedName(config: Config) :
     private fun hasNameCollision(element: KtElement, resolvedSymbol: KaSymbol): Boolean {
         val simpleName = when (resolvedSymbol) {
             is KaClassSymbol -> resolvedSymbol.classId?.shortClassName
+            is KaConstructorSymbol -> resolvedSymbol.containingClassId?.shortClassName
             is KaCallableSymbol -> resolvedSymbol.callableId?.callableName
             else -> null
         } ?: return false
 
         if (resolvedSymbol !is KaCallableSymbol && isShadowedByTypeParameter(element, simpleName)) return true
 
-        return findLocalSymbols(element, resolvedSymbol, simpleName).any { it != resolvedSymbol }
+        // Annotation references resolve to constructors, so their classifier should be checked
+        val symbol = if (resolvedSymbol is KaConstructorSymbol) {
+            resolvedSymbol.containingClassId?.let { with(session) { findClass(it) } } ?: resolvedSymbol
+        } else {
+            resolvedSymbol
+        }
+        return findLocalSymbols(element, symbol, simpleName).any { it != symbol }
     }
 
     context(session: KaSession)
     private fun findLocalSymbols(element: KtElement, resolvedSymbol: KaSymbol, name: Name): Sequence<KaSymbol> {
+        // Default imports are overridden by an added explicit import, so a default symbol with the same
+        // name is not a real collision (only explicit imports are).
         val scope = with(session) {
-            element.containingKtFile.scopeContext(element).compositeScope { it !is KaScopeKind.ImportingScope }
+            element.containingKtFile.scopeContext(element).compositeScope {
+                it !is KaScopeKind.DefaultSimpleImportingScope && it !is KaScopeKind.DefaultStarImportingScope
+            }
         }
         return if (resolvedSymbol is KaCallableSymbol) scope.callables(name) else scope.classifiers(name)
     }

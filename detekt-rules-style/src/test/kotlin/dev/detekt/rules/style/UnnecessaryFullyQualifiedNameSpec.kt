@@ -1001,6 +1001,100 @@ class UnnecessaryFullyQualifiedNameSpec(val env: KotlinEnvironmentContainer) {
 
             assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
+
+        @Test
+        fun `does not report annotation call when shadowed`() {
+            val code = """
+                package foo
+
+                import foo.bar1.Foo
+
+                @foo.bar2.Foo
+                object Bar : Foo
+            """.trimIndent()
+            val annotationCode = """
+                package foo.bar1
+                interface Foo
+            """.trimIndent()
+            val interfaceCode = """
+                package foo.bar2
+                annotation class Foo
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code, annotationCode, interfaceCode)).isEmpty()
+        }
+
+        @Test
+        fun `does not report annotation call when shadowed 2`() {
+            val code = """
+                package foo
+
+                import foo.bar2.Foo
+
+                @Foo
+                object Bar : foo.bar1.Foo
+            """.trimIndent()
+            val annotationCode = """
+                package foo.bar1
+                interface Foo
+            """.trimIndent()
+            val interfaceCode = """
+                package foo.bar2
+                annotation class Foo
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code, annotationCode, interfaceCode)).isEmpty()
+        }
+    }
+
+    // https://github.com/detekt/detekt/issues/9282
+    @Nested
+    inner class `property named same as kotlin package` {
+        @Test
+        fun `does not report when class property named kotlin calls a stdlib extension`() {
+            val code = """
+                class Foo
+
+                class Test {
+                    val kotlin = Foo()
+
+                    fun method() {
+                        kotlin.run { println("hello") }
+                    }
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report when local variable named kotlin calls a stdlib extension`() {
+            val code = """
+                class Foo
+
+                fun method() {
+                    val kotlin = Foo()
+                    kotlin.run { println("hello") }
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report when function parameter named kotlin calls a member method`() {
+            val code = """
+                class GradleConventionsKotlin {
+                    fun configure() = Unit
+                }
+
+                fun setup(kotlin: GradleConventionsKotlin) {
+                    kotlin.configure()
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
     }
 
     @Nested

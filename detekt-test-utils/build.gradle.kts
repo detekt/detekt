@@ -9,6 +9,7 @@ dependencies {
     implementation(projects.detektKotlinAnalysisApi)
     implementation(projects.detektKotlinAnalysisApiStandalone)
     implementation(projects.detektParser)
+    implementation(libs.jetbrains.annotations)
     implementation(libs.kotlin.scriptingJvm)
 
     testImplementation(libs.assertj.core)

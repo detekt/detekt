@@ -12,7 +12,8 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  */
 @AutoCorrectable(since = "2.0.0")
 @ActiveByDefault(since = "2.0.0")
-class SpacingAroundSquareBrackets(config: Config) : KtlintRule(config, "Reports spaces around square brackets") {
+internal class SpacingAroundSquareBrackets(config: Config) :
+    KtlintRule(config, "Reports spaces around square brackets") {
 
     override val wrapping = SpacingAroundSquareBracketsRule()
 }

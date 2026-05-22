@@ -73,4 +73,26 @@ class InstanceOfCheckForExceptionSpec(private val env: KotlinEnvironmentContaine
         """.trimIndent()
         assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
+
+    @Test
+    fun `checks for cancellation exception`() {
+        // This is case where instance checking is recommended.
+        // Required to work around https://github.com/Kotlin/kotlinx.coroutines/issues/3658
+
+        val code = """
+            import kotlinx.coroutines.CancellationException
+            import kotlinx.coroutines.currentCoroutineContext
+            import kotlinx.coroutines.ensureActive
+
+
+            suspend fun x() {
+                try {
+                } catch(e: Exception) {
+                    if (e is CancellationException) currentCoroutineContext().ensureActive()
+                }
+            }
+        """.trimIndent()
+
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
 }

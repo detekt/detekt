@@ -44,6 +44,7 @@ constructor(
         style:
           MagicNumber:
             active: true
+            ignorePropertyDeclaration: false
     """.trimIndent()
 
     /**

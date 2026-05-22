@@ -12,7 +12,7 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  */
 @ActiveByDefault(since = "1.23.0")
 @AutoCorrectable(since = "1.22.0")
-class SpacingBetweenFunctionNameAndOpeningParenthesis(config: Config) :
+internal class SpacingBetweenFunctionNameAndOpeningParenthesis(config: Config) :
     KtlintRule(config, "Ensure consistent spacing between function name and opening parenthesis.") {
 
     override val wrapping = SpacingBetweenFunctionNameAndOpeningParenthesisRule()

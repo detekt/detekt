@@ -5,13 +5,13 @@ plugins {
     id("module")
     id("public-api")
     id("java-test-fixtures")
-    id("dev.drewhamilton.poko") version "0.22.0"
+    id("dev.drewhamilton.poko") version "0.22.1"
     id("com.github.gmazzo.buildconfig") version "6.0.9"
 }
 
 dependencies {
     api(libs.kotlin.compiler)
-    api(projects.detektKotlinAnalysisApi)
+    compileOnlyApi(projects.detektKotlinAnalysisApi)
 
     testImplementation(projects.detektTest)
     testImplementation(projects.detektTestUtils)

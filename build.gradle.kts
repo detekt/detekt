@@ -24,6 +24,13 @@ dokka {
 }
 
 dependencyAnalysis {
+    issues {
+        all {
+            onAny {
+                severity("fail")
+            }
+        }
+    }
     structure {
         // Could potentially remove in future if DAGP starts handling this natively https://github.com/autonomousapps/dependency-analysis-gradle-plugin/issues/1269
         bundle("junit-jupiter") {
@@ -34,7 +41,7 @@ dependencyAnalysis {
     }
 }
 
-val detektReportMergeSarif by tasks.registering(ReportMergeTask::class) {
+val detektReportMergeSarif = tasks.register<ReportMergeTask>("detektReportMergeSarif") {
     output = layout.buildDirectory.file("reports/detekt/merge.sarif.json")
 }
 

@@ -7,6 +7,8 @@ import org.jetbrains.kotlin.analysis.api.standalone.buildStandaloneAnalysisAPISe
 import org.jetbrains.kotlin.analysis.project.structure.builder.buildKtLibraryModule
 import org.jetbrains.kotlin.analysis.project.structure.builder.buildKtSdkModule
 import org.jetbrains.kotlin.analysis.project.structure.builder.buildKtSourceModule
+import org.jetbrains.kotlin.config.LanguageVersionSettings
+import org.jetbrains.kotlin.config.LanguageVersionSettingsImpl
 import org.jetbrains.kotlin.platform.jvm.JvmPlatforms
 import org.jetbrains.kotlin.psi.KtFile
 import java.io.File
@@ -30,6 +32,7 @@ class KotlinAnalysisApiEngine : AutoCloseable {
      *
      * @throws IllegalStateException if the given code snippet does not compile
      */
+    @Suppress("LongParameterList")
     fun compile(
         @Language("kotlin") code: String,
         dependencyCodes: List<String> = emptyList(),
@@ -37,6 +40,7 @@ class KotlinAnalysisApiEngine : AutoCloseable {
         jvmClasspathRoots: List<Path> =
             listOf(File(CharRange::class.java.protectionDomain.codeSource.location.path).toPath()),
         allowCompilationErrors: Boolean = shouldCompileTestSnippets,
+        languageVersionSettings: LanguageVersionSettings = LanguageVersionSettingsImpl.DEFAULT,
     ): KtFile {
         val session = buildStandaloneAnalysisAPISession(disposable) {
             buildKtModuleProvider {
@@ -69,6 +73,7 @@ class KotlinAnalysisApiEngine : AutoCloseable {
                         addSourceRoots(javaSourceRoots)
                         platform = targetPlatform
                         moduleName = "source"
+                        this.languageVersionSettings = languageVersionSettings
                     }
                 )
             }

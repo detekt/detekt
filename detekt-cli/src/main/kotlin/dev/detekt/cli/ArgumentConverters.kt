@@ -62,7 +62,7 @@ class ReportPathConverter : IStringConverter<ReportPath> {
 }
 
 class PathSplitter : IParameterSplitter {
-    override fun split(value: String): List<String> = value.split(',', ';')
+    override fun split(value: String): List<String> = value.split(File.pathSeparatorChar)
 }
 
 class PathValidator : IValueValidator<List<Path>> {
@@ -73,12 +73,23 @@ class PathValidator : IValueValidator<List<Path>> {
     }
 }
 
-class ClassPathSplitter : IParameterSplitter {
-    override fun split(value: String): List<String> = value.split(File.pathSeparatorChar)
-}
-
 class DirectoryValidator : IValueValidator<Path> {
     override fun validate(name: String, value: Path) {
         if (!value.isDirectory()) throw ParameterException("Value passed to $name must be a directory.")
+    }
+}
+
+class FilterSplitter : IParameterSplitter {
+    override fun split(value: String): List<String> = value.split(',', ';')
+}
+
+class FilterValidator : IValueValidator<List<String>> {
+    override fun validate(name: String, value: List<String>) {
+        if (value.any { it.isBlank() }) {
+            throw ParameterException("Value passed to $name contains empty globs.")
+        }
+        if (value.any { it.trim() != it }) {
+            throw ParameterException("Value passed to $name contains globs that start or end with space.")
+        }
     }
 }

@@ -11,13 +11,10 @@ internal data class AllRulesConfig(
     private val wrapped: Config,
     private val deprecatedRules: Set<DeprecatedRule>,
     override val parent: Config? = null,
+    private val key: String? = null,
 ) : Config,
     ValidatableConfiguration {
-
-    override val parentPath: String?
-        get() = wrapped.parentPath
-
-    override fun subConfig(key: String) = AllRulesConfig(wrapped.subConfig(key), deprecatedRules, this)
+    override fun subConfig(key: String) = AllRulesConfig(wrapped.subConfig(key), deprecatedRules, this, key)
 
     override fun subConfigKeys(): Set<String> = wrapped.subConfigKeys()
 
@@ -36,9 +33,8 @@ internal data class AllRulesConfig(
     override fun validate(baseline: Config, excludePatterns: Set<Regex>) =
         validateConfig(wrapped, baseline, excludePatterns)
 
-    private fun isDeprecated(): Boolean = deprecatedRules.any { parentPath == it.toPath() }
-
-    private fun DeprecatedRule.toPath() = "$ruleSetId > $ruleName"
+    private fun isDeprecated(): Boolean =
+        deprecatedRules.any { key == it.ruleName && (parent as? AllRulesConfig)?.key == it.ruleSetId }
 
     @Suppress("MagicNumber")
     override fun toString() =

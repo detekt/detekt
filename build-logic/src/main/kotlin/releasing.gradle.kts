@@ -16,8 +16,8 @@ nexusPublishing {
     }
 }
 
-val releaseArtifacts: Configuration by configurations.dependencyScope("releaseArtifacts")
-val releaseAssetFiles by configurations.resolvable("releaseAssetFiles") {
+val releaseArtifacts = configurations.dependencyScope("releaseArtifacts")
+val releaseAssetFiles = configurations.resolvable("releaseAssetFiles") {
     extendsFrom(releaseArtifacts)
 }
 

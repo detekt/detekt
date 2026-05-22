@@ -13,7 +13,7 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#string-template-indent) for documentation.
  */
 @AutoCorrectable(since = "1.23.0")
-class StringTemplateIndent(config: Config) :
+internal class StringTemplateIndent(config: Config) :
     KtlintRule(
         config,
         "Enforce consistent multiline string template indentation which are post-fixed with .trimIndent()"

@@ -15,6 +15,19 @@ import org.jetbrains.kotlin.psi.KtImportDirective
  *
  * This rule allows to set a list of forbidden [forbiddenImports].
  * This can be used to discourage the use of unstable, experimental or deprecated APIs.
+ * Imports are configured as glob patterns and may include a reason that is shown in the finding:
+ *
+ * ```yaml
+ * ForbiddenImport:
+ *   active: true
+ *   forbiddenImports:
+ *     - value: 'kotlin.jvm.JvmField'
+ *       reason: 'Use explicit backing properties instead.'
+ *     - value: 'java.util.*'
+ *       reason: 'Use Kotlin standard library APIs instead.'
+ *   allowedImports:
+ *     - 'java.util.UUID'
+ * ```
  *
  * <noncompliant>
  * import kotlin.jvm.JvmField

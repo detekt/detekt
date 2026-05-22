@@ -19,7 +19,7 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  * intellij_idea by default.
  */
 @AutoCorrectable(since = "1.23.0")
-class MultilineExpressionWrapping(config: Config) :
+internal class MultilineExpressionWrapping(config: Config) :
     KtlintRule(config, "Multiline expression on the right hand side of an expression must start on a separate line.") {
 
     override val wrapping = MultilineExpressionWrappingRule()

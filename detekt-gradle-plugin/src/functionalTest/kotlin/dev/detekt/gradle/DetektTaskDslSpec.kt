@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
+import java.io.File
 
 class DetektTaskDslSpec {
 
@@ -52,7 +53,9 @@ class DetektTaskDslSpec {
             val file2 = gradleRunner.projectFile("src/test/java/My1Root0Class.kt")
             val file3 = gradleRunner.projectFile("src/main/kotlin/My2Root0Class.kt")
             val file4 = gradleRunner.projectFile("src/test/kotlin/My3Root0Class.kt")
-            assertThat(result.output).contains("--input $file1,$file2,$file3,$file4 ")
+            assertThat(result.output).contains(
+                "--input $file1${File.pathSeparator}$file2${File.pathSeparator}$file3${File.pathSeparator}$file4 "
+            )
         }
     }
 
@@ -72,7 +75,7 @@ class DetektTaskDslSpec {
             val firstConfig = gradleRunner.projectFile("firstConfig.yml")
             val secondConfig = gradleRunner.projectFile("secondConfig.yml")
 
-            val expectedConfigParam = "--config $firstConfig,$secondConfig"
+            val expectedConfigParam = "--config $firstConfig${File.pathSeparator}$secondConfig"
             assertThat(result.output).contains(expectedConfigParam)
         }
     }
@@ -145,7 +148,7 @@ class DetektTaskDslSpec {
         fun `sets input parameter to absolute filenames of all source files`() {
             val file1 = gradleRunner.projectFile("$customSrc1/My0Root0Class.kt")
             val file2 = gradleRunner.projectFile("$customSrc2/My1Root0Class.kt")
-            val expectedInputParam = "--input $file1,$file2"
+            val expectedInputParam = "--input $file1${File.pathSeparator}$file2"
             assertThat(result.output).contains(expectedInputParam)
         }
 

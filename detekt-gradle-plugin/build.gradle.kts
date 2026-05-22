@@ -5,8 +5,10 @@
 import dev.detekt.buildlogic.osDependent
 import dev.detekt.gradle.Detekt
 import dev.detekt.gradle.DetektCreateBaselineTask
+import org.gradle.plugin.compatibility.compatibility
 import org.jetbrains.kotlin.buildtools.api.ExperimentalBuildToolsApi
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
 plugins {
     id("module")
@@ -15,7 +17,7 @@ plugins {
     id("idea")
     id("com.gradle.plugin-publish") version "2.1.1"
     // We use this published version of the detekt plugin to self analyse this project.
-    id("dev.detekt") version "2.0.0-alpha.2"
+    id("dev.detekt") version "2.0.0-alpha.3"
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.18.1"
     id("org.jetbrains.dokka") version "2.2.0"
     id("signing")
@@ -77,7 +79,7 @@ testing {
             dependencies {
                 implementation(libs.assertj.core)
                 implementation(libs.kotlin.gradle.plugin)
-                implementation(gradleKotlinDsl())
+                runtimeOnly(gradleKotlinDsl())
             }
         }
         register<JvmTestSuite>("functionalTest") {
@@ -120,14 +122,12 @@ kotlin {
     compilerVersion = "2.1.21"
 
     compilerOptions {
-        suppressWarnings = true
-        // Note: Currently there are warnings for detekt-gradle-plugin that seemingly can't be fixed
-        //       until Gradle releases an update (https://github.com/gradle/gradle/issues/16345)
-        allWarningsAsErrors = false
         // The apiVersion Gradle property cannot be used here, so set api version using free compiler args.
         // https://youtrack.jetbrains.com/issue/KT-72247/KGP-Cannot-use-unsupported-API-version-with-compilerVersion-that-supports-it#focus=Comments-27-11050897.0-0
         freeCompilerArgs.addAll("-language-version", "1.8")
         freeCompilerArgs.addAll("-api-version", "1.7")
+        // Suppress warning about deprecated API version. When DGP compiles with Kotlin 2.4 change this to suppress DEPRECATED_LANGUAGE_VERSION diagnostic (see KT-83765)
+        freeCompilerArgs.add("-Xsuppress-version-warnings")
     }
 
     // Some functional tests reference internal functions in the Gradle plugin. This should become unnecessary as further
@@ -137,16 +137,20 @@ kotlin {
     }
 }
 
-val testKitRuntimeOnly by configurations.registering
-val testKitGradleMinVersionRuntimeOnly by configurations.registering
+val testKitRuntimeOnly = configurations.register("testKitRuntimeOnly")
+val testKitGradleMinVersionRuntimeOnly = configurations.register("testKitGradleMinVersionRuntimeOnly")
 
 dependencies {
     compileOnly(libs.android.gradleApi)
     compileOnly(libs.kotlin.gradlePluginApi)
-    compileOnly(libs.jetbrains.annotations)
+    compileOnlyApi(libs.gradle.publicApi) {
+        capabilities {
+            // https://github.com/gradle/gradle/issues/29483#issuecomment-2791668178
+            requireCapability("org.gradle.experimental:gradle-public-api-internal")
+        }
+    }
 
     implementation(libs.sarif4k)
-    testFixturesCompileOnly(libs.jetbrains.annotations)
 
     testKitRuntimeOnly(libs.kotlin.gradle.plugin)
     testKitRuntimeOnly(libs.android.gradle.plugin)
@@ -159,27 +163,30 @@ dependencies {
     }
 
     // We use this published version of the detekt-rules-ktlint-wrapper to self analyse this project.
-    detektPlugins("dev.detekt:detekt-rules-ktlint-wrapper:2.0.0-alpha.2")
+    detektPlugins("dev.detekt:detekt-rules-ktlint-wrapper:2.0.0-alpha.3")
 }
 
 gradlePlugin {
     website = "https://detekt.dev"
     vcsUrl = "https://github.com/detekt/detekt"
     plugins {
-        create("detektBasePlugin") {
-            id = "dev.detekt.gradle.base"
+        register("dev.detekt.gradle.base") {
             displayName = "Static code analysis for Kotlin - Base Plugin"
             description = "Static code analysis for Kotlin - Base Plugin"
             implementationClass = "dev.detekt.gradle.plugin.DetektBasePlugin"
+            compatibility {
+                features.configurationCache = true
+            }
         }
-        create("detektPlugin") {
-            id = "dev.detekt"
+        register("dev.detekt") {
             displayName = "Static code analysis for Kotlin"
             description = "Static code analysis for Kotlin"
             implementationClass = "dev.detekt.gradle.plugin.DetektPlugin"
+            compatibility {
+                features.configurationCache = true
+            }
         }
-        create("detektCompilerPlugin") {
-            id = "dev.detekt.gradle.compiler-plugin"
+        register("dev.detekt.gradle.compiler-plugin") {
             displayName = "Static code analysis for Kotlin - Compiler Plugin"
             description = "Static code analysis for Kotlin - Compiler Plugin"
             implementationClass = "dev.detekt.gradle.plugin.DetektKotlinCompilerPlugin"
@@ -211,6 +218,30 @@ signing {
 }
 
 tasks {
+    /*
+     * Ignore metadata version checks for tests. Gradle API is on the classpath which includes stdlib and reflect libs
+     * that have Kotlin metadata too new for the Kotlin compiler version used in this build to read. This affects test
+     * compilations only. The suppress-gradle-api system property set for this build does not affect test compilations
+     * at this stage, so replacing the Gradle API with the separately published Gradle API is not currently possible.
+     */
+    named<KotlinJvmCompile>("compileFunctionalTestKotlin") {
+        compilerOptions {
+            freeCompilerArgs.add("-Xskip-metadata-version-check")
+        }
+    }
+
+    named<KotlinJvmCompile>("compileTestFixturesKotlin") {
+        compilerOptions {
+            freeCompilerArgs.add("-Xskip-metadata-version-check")
+        }
+    }
+
+    named<KotlinJvmCompile>("compileFunctionalTestMinSupportedGradleKotlin") {
+        compilerOptions {
+            freeCompilerArgs.add("-Xskip-metadata-version-check")
+        }
+    }
+
     // Manually inject dependency to gradle-testkit since the default injected plugin classpath is from `main.runtime`.
     pluginUnderTestMetadata {
         pluginClasspath.from(testKitRuntimeOnly)

@@ -17,7 +17,7 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "2.0.0")
-class ConditionWrapping(config: Config) :
+internal class ConditionWrapping(config: Config) :
     KtlintRule(config, "Conditions should be wrapped when expression doesn't fit on one line") {
 
     override val wrapping = ConditionWrappingRule()

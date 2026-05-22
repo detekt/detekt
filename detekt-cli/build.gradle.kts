@@ -8,12 +8,11 @@ application {
     mainClass = "dev.detekt.cli.Main"
 }
 
-val pluginsJar by configurations.dependencyScope("pluginsJar") {
-    isTransitive = false
-}
+val pluginsJar = configurations.dependencyScope("pluginsJar")
 
-val pluginsJarFiles by configurations.resolvable("pluginsJarFiles") {
+val pluginsJarFiles = configurations.resolvable("pluginsJarFiles") {
     extendsFrom(pluginsJar)
+    isTransitive = false
 }
 
 dependencies {
@@ -68,19 +67,23 @@ tasks {
     distZip { enabled = false }
     distTar { enabled = false }
 
-    val runWithHelpFlag by registering(JavaExec::class) {
+    val runWithHelpFlag = register<JavaExec>("runWithHelpFlag") {
         outputs.upToDateWhen { true }
         classpath = files(shadowJar)
         args = listOf("--help")
     }
 
-    val runWithArgsFile by registering(JavaExec::class) {
+    val runWithArgsFile = register<JavaExec>("runWithArgsFile") {
         // The task generating these jar files run first.
         inputs.files(pluginsJarFiles)
         doNotTrackState("The entire root directory is read as the input source.")
         classpath = files(shadowJar)
         workingDir = rootDir
-        args = listOf("@./config/detekt/argsfile", "-p", pluginsJarFiles.files.joinToString(",") { it.path })
+        args = listOf(
+            "@./config/detekt/argsfile",
+            "-p",
+            pluginsJarFiles.get().files.joinToString(File.pathSeparator) { it.path },
+        )
     }
 
     withType<Jar>().configureEach {
@@ -95,5 +98,5 @@ tasks {
     }
 }
 
-val shadowDist: Configuration by configurations.consumable("shadowDist")
+val shadowDist = configurations.consumable("shadowDist")
 artifacts.add(shadowDist.name, tasks.shadowDistZip)

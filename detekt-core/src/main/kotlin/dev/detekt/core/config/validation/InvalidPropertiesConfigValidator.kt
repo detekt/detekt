@@ -55,7 +55,7 @@ internal class InvalidPropertiesConfigValidator(
         if (!baseline.contains(propertyName)) {
             val ruleName = extractRuleName(propertyName)
             if (ruleName == null || !baseline.contains(ruleName.value)) {
-                return listOf(propertyDoesNotExists(propertyPath))
+                return listOf(propertyDoesNotExists(propertyPath, propertyName, baseline.keys))
             }
         }
         if (configToValidate[propertyName] is String && baseline[propertyName] is List<*>) {
@@ -80,12 +80,31 @@ internal class InvalidPropertiesConfigValidator(
 
     companion object {
 
-        internal fun propertyDoesNotExists(prop: String): Notification =
-            Notification(
-                "Property '$prop' is misspelled or does not exist. " +
-                    "This error may also indicate a detekt plugin is necessary to handle the '$prop' key.",
-                Level.Error
-            )
+        internal fun propertyDoesNotExists(
+            prop: String,
+            misspelledName: String,
+            allowedProperties: Set<String>,
+        ): Notification {
+            val message = buildString {
+                append("Property '$prop' is misspelled or does not exist.")
+                val closestMatch = findClosestMatch(misspelledName, allowedProperties)
+                if (closestMatch != null) {
+                    append(" Did you mean '$closestMatch'?")
+                }
+                append(" Allowed properties: ${allowedProperties.sorted()}.")
+                append(" This error may also indicate a detekt plugin is necessary to handle the '$prop' key.")
+            }
+            return Notification(message, Level.Error)
+        }
+
+        internal fun findClosestMatch(name: String, candidates: Set<String>): String? {
+            val threshold = maxOf(1, name.length / 3)
+            return candidates
+                .map { it to levenshteinDistance(name.lowercase(), it.lowercase()) }
+                .filter { (_, distance) -> distance <= threshold }
+                .minByOrNull { (_, distance) -> distance }
+                ?.first
+        }
 
         internal fun nestedConfigurationExpected(prop: String): Notification =
             Notification("Nested config expected for '$prop'.", Level.Error)
@@ -96,4 +115,17 @@ internal class InvalidPropertiesConfigValidator(
         internal fun propertyShouldBeAnArray(prop: String): Notification =
             Notification("Property '$prop' should be a YAML array instead of a String.", Level.Error)
     }
+}
+
+private fun levenshteinDistance(a: String, b: String): Int {
+    val dp = Array(a.length + 1) { IntArray(b.length + 1) }
+    for (i in 0..a.length) dp[i][0] = i
+    for (j in 0..b.length) dp[0][j] = j
+    for (i in 1..a.length) {
+        for (j in 1..b.length) {
+            val cost = if (a[i - 1] == b[j - 1]) 0 else 1
+            dp[i][j] = minOf(dp[i - 1][j] + 1, dp[i][j - 1] + 1, dp[i - 1][j - 1] + cost)
+        }
+    }
+    return dp[a.length][b.length]
 }
