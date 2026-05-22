@@ -12,7 +12,6 @@ import dev.detekt.core.extensions.handleReportingExtensions
 import dev.detekt.core.getRules
 import dev.detekt.core.parser.DetektMessageCollector
 import dev.detekt.core.rules.createRuleProviders
-import dev.detekt.core.util.PerformanceMonitor.Phase
 import dev.detekt.tooling.api.AnalysisMode
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.components.KaDiagnosticCheckerFilter
@@ -28,17 +27,14 @@ internal class Lifecycle(
     val processorsProvider: () -> List<FileProcessListener> = { FileProcessorLocator(settings).load() },
     val ruleSetsProvider: () -> List<RuleSetProvider> = { settings.createRuleProviders() },
 ) {
-
-    private fun <R> measure(phase: Phase, block: () -> R): R = settings.monitor.measure(phase, block)
-
     fun analyze(): Detektion {
-        measure(Phase.ValidateConfig) { checkConfiguration(settings, baselineConfig) }
-        val filesToAnalyze = measure(Phase.Parsing) { settings.ktFiles }
+        Tracer.trace("Main", "Validate configuration") { checkConfiguration(settings, baselineConfig) }
+        val filesToAnalyze = Tracer.trace("Main", "Parsing files") { settings.ktFiles }
         if (settings.spec.projectSpec.analysisMode == AnalysisMode.full) {
-            measure(Phase.ValidateClasspath) { validateClasspath(filesToAnalyze) }
+            Tracer.trace("Main", "Validate classpath") { validateClasspath(filesToAnalyze) }
         }
         val analysisMode = settings.spec.projectSpec.analysisMode
-        val (processors, rules) = measure(Phase.LoadingExtensions) {
+        val (processors, rules) = Tracer.trace("Main", "Load extensions") {
             val rules = getRules(
                 analysisMode = analysisMode,
                 ruleSetProviders = ruleSetsProvider.invoke(),
@@ -48,15 +44,21 @@ internal class Lifecycle(
             processorsProvider.invoke() to rules
         }
 
-        val result = measure(Phase.Analyzer) {
+        val result = Tracer.trace("Main", "Analyzer") {
             val analyzer = Analyzer(settings, rules.filter { it.ruleInstance.active }, processors, analysisMode)
-            processors.forEach { it.onStart(filesToAnalyze) }
+            Tracer.trace("Main", "Processors onStart") {
+                processors.forEach { Tracer.trace("Main", it.id) { it.onStart(filesToAnalyze) } }
+            }
             val issues = analyzer.run(filesToAnalyze)
             val detektion = Detektion(issues, rules.map { it.ruleInstance })
-            processors.fold(detektion) { acc, processor -> processor.onFinish(filesToAnalyze, acc) }
+            Tracer.trace("Main", "Processors onFinish") {
+                processors.fold(detektion) { acc, processor ->
+                    Tracer.trace("Main", processor.id) { processor.onFinish(filesToAnalyze, acc) }
+                }
+            }
         }
 
-        return measure(Phase.Reporting) { handleReportingExtensions(settings, result) }
+        return Tracer.trace("Main", "Reporting") { handleReportingExtensions(settings, result) }
     }
 
     private fun validateClasspath(files: List<KtFile>) {

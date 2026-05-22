@@ -98,6 +98,7 @@ dependencyResolutionManagement {
             }
             filter {
                 includeGroupAndSubgroups("com.android")
+                includeGroupAndSubgroups("androidx")
             }
         }
         mavenCentral()

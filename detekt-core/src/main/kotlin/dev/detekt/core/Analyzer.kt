@@ -14,6 +14,7 @@ import dev.detekt.api.internal.whichJava
 import dev.detekt.api.internal.whichOS
 import dev.detekt.core.suppressors.buildSuppressors
 import dev.detekt.core.suppressors.isSuppressedBy
+import dev.detekt.core.tooling.Tracer
 import dev.detekt.core.util.shouldAnalyzeFile
 import dev.detekt.psi.absolutePath
 import dev.detekt.tooling.api.AnalysisMode
@@ -39,13 +40,19 @@ internal class Analyzer(
 
     private fun runSync(ktFiles: Collection<KtFile>, languageVersionSettings: LanguageVersionSettings): List<Issue> =
         ktFiles.flatMap { file ->
-            processors.forEach { it.onProcess(file) }
-            val issues = runCatching { analyze(file, languageVersionSettings) }.fold(
-                onSuccess = { it },
-                onFailure = { throwIllegalStateException(file, it) }
-            )
-            processors.forEach { it.onProcessComplete(file, issues) }
-            issues
+            Tracer.trace("Main", file.virtualFile.path) {
+                Tracer.trace("Main", "Processors onProcess") {
+                    processors.forEach { Tracer.trace("Main", it.id) { it.onProcess(file) } }
+                }
+                val issues = runCatching { analyze(file, languageVersionSettings) }.fold(
+                    onSuccess = { it },
+                    onFailure = { throwIllegalStateException(file, it) }
+                )
+                Tracer.trace("Main", "Processors onProcessComplete") {
+                    processors.forEach { Tracer.trace("Main", it.id) { it.onProcessComplete(file, issues) } }
+                }
+                issues
+            }
         }
 
     private fun runAsync(ktFiles: Collection<KtFile>, languageVersionSettings: LanguageVersionSettings): List<Issue> {
@@ -78,7 +85,11 @@ internal class Analyzer(
             .partition { (_, rule) -> rule.autoCorrect }
 
         return (correctableRules + otherRules).flatMap { (ruleInstance, rule) ->
-            rule.visitFile(file, languageVersionSettings)
+            Tracer.trace(
+                "Main",
+                ruleInstance.id,
+                metadataBlock = { this.addCategory(ruleInstance.ruleSetId.value) }
+            ) { rule.visitFile(file, languageVersionSettings) }
                 .filterNot {
                     it.entity.ktElement.isSuppressedBy(ruleInstance.id, rule.aliases, ruleInstance.ruleSetId)
                 }

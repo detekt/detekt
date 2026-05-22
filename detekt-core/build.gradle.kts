@@ -14,6 +14,8 @@ dependencies {
     implementation(projects.detektParser)
     implementation(projects.detektPsiUtils)
     implementation(projects.detektUtils)
+    implementation("androidx.tracing:tracing:2.0.0-alpha04")
+    implementation("androidx.tracing:tracing-wire:2.0.0-alpha04")
 
     testRuntimeOnly(projects.detektRules)
     testImplementation(projects.detektReportHtml)

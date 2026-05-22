@@ -7,7 +7,7 @@ kotlin = "2.3.21"
 ktlint = "1.8.0"
 slf4j = "2.0.18"
 
-jvm-target = "1.8"
+jvm-target = "11"
 java-compile-toolchain = "17"
 
 [libraries]
