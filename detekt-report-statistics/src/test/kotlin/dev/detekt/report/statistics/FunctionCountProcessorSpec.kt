@@ -1,4 +1,4 @@
-package dev.detekt.metrics.processors
+package dev.detekt.report.statistics
 
 import dev.detekt.api.ProjectMetric
 import dev.detekt.test.invoke

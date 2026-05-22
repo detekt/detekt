@@ -27,6 +27,7 @@ dependencies {
     }
     runtimeOnly(projects.detektCore)
     runtimeOnly(projects.detektRules)
+    runtimeOnly(projects.detektReportStatistics)
     runtimeOnly(projects.detektReportHtml)
     runtimeOnly(projects.detektReportMarkdown)
     runtimeOnly(projects.detektReportSarif)
