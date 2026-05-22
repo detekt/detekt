@@ -1,4 +1,4 @@
-package dev.detekt.api
+package dev.detekt.psi
 
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy

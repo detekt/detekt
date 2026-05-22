@@ -1,4 +1,4 @@
-package dev.detekt.api
+package dev.detekt.psi
 
 /**
  * Convert a simple pattern String to a Regex

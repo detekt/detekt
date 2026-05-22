@@ -6,8 +6,8 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.Rule
 import dev.detekt.api.config
-import dev.detekt.api.simplePatternToRegex
 import dev.detekt.api.valuesWithReason
+import dev.detekt.psi.simplePatternToRegex
 import org.jetbrains.kotlin.psi.KtImportDirective
 
 /**

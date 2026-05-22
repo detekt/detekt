@@ -89,6 +89,10 @@ public final class dev/detekt/psi/MethodSignatureKt {
 	public static final fun isMainFunction (Lorg/jetbrains/kotlin/psi/KtNamedFunction;)Z
 }
 
+public final class dev/detekt/psi/SplitPatternKt {
+	public static final fun simplePatternToRegex (Ljava/lang/String;)Lkotlin/text/Regex;
+}
+
 public final class dev/detekt/psi/StringExtensionsKt {
 	public static final fun lastArgumentMatchesKotlinReferenceUrlSyntax (Ljava/lang/String;)Z
 	public static final fun lastArgumentMatchesMarkdownUrlSyntax (Ljava/lang/String;)Z

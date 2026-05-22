@@ -7,10 +7,10 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.Rule
 import dev.detekt.api.config
-import dev.detekt.api.simplePatternToRegex
 import dev.detekt.psi.isActual
 import dev.detekt.psi.isOpen
 import dev.detekt.psi.isOverride
+import dev.detekt.psi.simplePatternToRegex
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
