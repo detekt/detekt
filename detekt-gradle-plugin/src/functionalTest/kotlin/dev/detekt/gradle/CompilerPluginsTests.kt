@@ -11,18 +11,31 @@ class CompilerPluginsTests {
         val result = GradleRunner.create()
             .withResourceDir("android-parcelize")
             .withPluginClasspath()
-            .withArguments("detektMain")
+            .withArguments("detektRelease")
             .build()
 
         assertThat(result.output)
             .doesNotContainPattern("There were [0-9]+ compiler errors found during analysis".toRegex().toPattern())
     }
+
     @Test
     fun `detekt works with BuildConfig`() {
         val result = GradleRunner.create()
             .withResourceDir("android-buildconfig")
             .withPluginClasspath()
-            .withArguments("detektMain")
+            .withArguments("detektRelease")
+            .build()
+
+        assertThat(result.output)
+            .doesNotContainPattern("There were [0-9]+ compiler errors found during analysis".toRegex().toPattern())
+    }
+
+    @Test
+    fun `detekt works with ViewBinding`() {
+        val result = GradleRunner.create()
+            .withResourceDir("android-viewbinding")
+            .withPluginClasspath()
+            .withArguments("detektRelease")
             .build()
 
         assertThat(result.output)
