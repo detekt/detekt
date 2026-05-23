@@ -17,4 +17,15 @@ class CompilerPluginsTests {
         assertThat(result.output)
             .doesNotContainPattern("There were [0-9]+ compiler errors found during analysis".toRegex().toPattern())
     }
+    @Test
+    fun `detekt works with BuildConfig`() {
+        val result = GradleRunner.create()
+            .withResourceDir("android-buildconfig")
+            .withPluginClasspath()
+            .withArguments("detektMain")
+            .build()
+
+        assertThat(result.output)
+            .doesNotContainPattern("There were [0-9]+ compiler errors found during analysis".toRegex().toPattern())
+    }
 }
