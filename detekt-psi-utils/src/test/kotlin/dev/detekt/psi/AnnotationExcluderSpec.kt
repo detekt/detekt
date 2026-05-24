@@ -1,6 +1,7 @@
 package dev.detekt.psi
 
 import dev.detekt.test.junit.KotlinAnalysisApiEngineTest
+import dev.detekt.test.utils.CompileOptions
 import dev.detekt.test.utils.KotlinAnalysisApiEngine
 import dev.detekt.test.utils.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
@@ -116,7 +117,10 @@ class AnnotationExcluderSpec(val analysisApiEngine: KotlinAnalysisApiEngine) {
             @Test
             @Disabled("This should be doable but it's not imlemented yet")
             fun `correct with Analysis API`() {
-                val file = analysisApiEngine.compile(code, listOf(helloWorldAnnotationsCode))
+                val file = analysisApiEngine.compile(
+                    code = code,
+                    options = CompileOptions(dependencyCodes = listOf(helloWorldAnnotationsCode)),
+                )
                 val ktAnnotation = file.annotationEntry()
                 val excluder = AnnotationExcluder(file, listOf("Hello\\.World".toRegex()), true)
 
@@ -155,7 +159,10 @@ class AnnotationExcluderSpec(val analysisApiEngine: KotlinAnalysisApiEngine) {
 
             @Test
             fun `correct with Analysis API`() {
-                val file = analysisApiEngine.compile(file, listOf(helloWorldAnnotationsKtFile))
+                val file = analysisApiEngine.compile(
+                    code = file,
+                    options = CompileOptions(dependencyCodes = listOf(helloWorldAnnotationsKtFile)),
+                )
                 val ktAnnotation = file.annotationEntry()
                 val excluder = AnnotationExcluder(file, listOf("foo\\.World".toRegex()), true)
 
@@ -184,15 +191,17 @@ private fun KotlinAnalysisApiEngine.createKtFile(
     """.trimIndent()
     val file = if (enableAnalysisApi) {
         compile(
-            code,
-            listOf(
-                """
-                    package dagger
-                    
-                    annotation class Component {
-                        annotation class Factory
-                    }
-                """.trimIndent(),
+            code = code,
+            options = CompileOptions(
+                dependencyCodes = listOf(
+                    """
+                        package dagger
+                        
+                        annotation class Component {
+                            annotation class Factory
+                        }
+                    """.trimIndent(),
+                ),
             ),
         )
     } else {

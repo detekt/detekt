@@ -1,6 +1,7 @@
 package dev.detekt.core.suppressors
 
 import dev.detekt.test.junit.KotlinAnalysisApiEngineTest
+import dev.detekt.test.utils.CompileOptions
 import dev.detekt.test.utils.KotlinAnalysisApiEngine
 import dev.detekt.test.utils.compileContentForTest
 import dev.detekt.tooling.api.AnalysisMode
@@ -314,7 +315,13 @@ class AnnotationSuppressorSpec {
             fun getFile() =
                 listOf(
                     Arguments.of(compileContentForTest(code), AnalysisMode.light),
-                    Arguments.of(analysisApiEngine.compile(code, composableFiles), AnalysisMode.full),
+                    Arguments.of(
+                        analysisApiEngine.compile(
+                            code = code,
+                            options = CompileOptions(dependencyCodes = composableFiles)
+                        ),
+                        AnalysisMode.full,
+                    ),
                 )
 
             @ParameterizedTest
@@ -405,13 +412,13 @@ class AnnotationSuppressorSpec {
             )!!
 
             val root = analysisApiEngine.compile(
-                """
+                code = """
                     package foo.bar
                     
                     @Composable
                     fun function() = Unit
                 """.trimIndent(),
-                composableFiles,
+                options = CompileOptions(dependencyCodes = composableFiles),
             )
             val ktFunction = root.findChildByClass(KtFunction::class.java)!!
 
@@ -426,13 +433,13 @@ class AnnotationSuppressorSpec {
             )!!
 
             val root = analysisApiEngine.compile(
-                """
+                code = """
                     package foo.bar
                     
                     @androidx.compose.runtime.Composable
                     fun function() = Unit
                 """.trimIndent(),
-                composableFiles,
+                options = CompileOptions(dependencyCodes = composableFiles),
             )
             val ktFunction = root.findChildByClass(KtFunction::class.java)!!
 
@@ -447,7 +454,7 @@ class AnnotationSuppressorSpec {
             )!!
 
             val root = analysisApiEngine.compile(
-                """
+                code = """
                     package foo.bar
                     
                     import androidx.compose.runtime.Composable as Bar
@@ -455,7 +462,7 @@ class AnnotationSuppressorSpec {
                     @Bar
                     fun function() = Unit
                 """.trimIndent(),
-                composableFiles,
+                options = CompileOptions(dependencyCodes = composableFiles),
             )
             val ktFunction = root.findChildByClass(KtFunction::class.java)!!
 
@@ -495,7 +502,10 @@ class AnnotationSuppressorSpec {
                 AnalysisMode.full,
             )!!
 
-            val root = analysisApiEngine.compile(code, composableFiles)
+            val root = analysisApiEngine.compile(
+                code = code,
+                options = CompileOptions(dependencyCodes = composableFiles)
+            )
             val ktFunction = root.findChildByClass(KtFunction::class.java)!!
 
             assertThat(suppressor.shouldSuppress(buildFinding(ktFunction))).isTrue()

@@ -31,8 +31,10 @@ fun compileContentForTest(
 
     return kotlinAnalysisApiEngine.compile(
         code = content,
-        javaSourceRoots = environment.javaSourceRoots,
-        jvmClasspathRoots = environment.jvmClasspathRoots,
+        options = CompileOptions(
+            javaSourceRoots = environment.javaSourceRoots,
+            jvmClasspathRoots = environment.jvmClasspathRoots,
+        ),
     )
 }
 

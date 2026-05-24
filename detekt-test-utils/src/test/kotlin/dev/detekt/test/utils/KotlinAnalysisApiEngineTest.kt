@@ -86,15 +86,15 @@ class KotlinAnalysisApiEngineTest(val analysisApiEngine: KotlinAnalysisApiEngine
         assertThatThrownBy {
             analysisApiEngine.compile(
                 code = code,
+                options = CompileOptions(languageVersionSettings = explicitApi(ExplicitApiMode.STRICT)),
                 allowCompilationErrors = false,
-                languageVersionSettings = explicitApi(ExplicitApiMode.STRICT),
             )
         }.isInstanceOf(IllegalStateException::class.java)
 
         analysisApiEngine.compile(
             code = code,
+            options = CompileOptions(languageVersionSettings = explicitApi(ExplicitApiMode.DISABLED)),
             allowCompilationErrors = false,
-            languageVersionSettings = explicitApi(ExplicitApiMode.DISABLED),
         )
     }
 
@@ -123,7 +123,11 @@ class KotlinAnalysisApiEngineTest(val analysisApiEngine: KotlinAnalysisApiEngine
         """.trimIndent()
 
         val junitApiJar = File(Test::class.java.protectionDomain.codeSource.location.path).toPath()
-        analysisApiEngine.compile(code = code, jvmClasspathRoots = listOf(junitApiJar), allowCompilationErrors = false)
+        analysisApiEngine.compile(
+            code = code,
+            options = CompileOptions(jvmClasspathRoots = listOf(junitApiJar)),
+            allowCompilationErrors = false,
+        )
     }
 
     @Test

@@ -4,6 +4,7 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.api.RuleName
+import dev.detekt.test.utils.CompileOptions
 import dev.detekt.test.utils.KotlinAnalysisApiEngine
 import dev.detekt.test.utils.KotlinEnvironmentContainer
 import dev.detekt.test.utils.compileContentForTest
@@ -33,8 +34,10 @@ fun Rule.lint(
             KotlinAnalysisApiEngine().use {
                 it.compile(
                     code = content,
-                    jvmClasspathRoots = createEnvironment().jvmClasspathRoots,
-                    languageVersionSettings = languageVersionSettings,
+                    options = CompileOptions(
+                        jvmClasspathRoots = createEnvironment().jvmClasspathRoots,
+                        languageVersionSettings = languageVersionSettings,
+                    ),
                     allowCompilationErrors = false,
                 )
             }
@@ -56,11 +59,13 @@ fun <T> T.lintWithContext(
     KotlinAnalysisApiEngine().use {
         val ktFile = it.compile(
             code = content,
-            dependencyCodes = dependencyContents.toList(),
-            javaSourceRoots = environment.javaSourceRoots,
-            jvmClasspathRoots = environment.jvmClasspathRoots,
-            languageVersionSettings = languageVersionSettings,
-            allowCompilationErrors = allowCompilationErrors || !shouldCompileTestSnippets
+            options = CompileOptions(
+                dependencyCodes = dependencyContents.toList(),
+                javaSourceRoots = environment.javaSourceRoots,
+                jvmClasspathRoots = environment.jvmClasspathRoots,
+                languageVersionSettings = languageVersionSettings,
+            ),
+            allowCompilationErrors = allowCompilationErrors || !shouldCompileTestSnippets,
         )
         visitFile(ktFile, languageVersionSettings).filterSuppressed(this)
     }

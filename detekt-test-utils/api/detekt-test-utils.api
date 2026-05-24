@@ -7,11 +7,30 @@ public final class dev/detekt/test/utils/CompileExtensionsKt {
 	public static final fun compileForTest (Ljava/nio/file/Path;)Lorg/jetbrains/kotlin/psi/KtFile;
 }
 
+public final class dev/detekt/test/utils/CompileOptions {
+	public fun <init> ()V
+	public fun <init> (Ljava/util/List;Ljava/util/List;Ljava/util/List;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;)V
+	public synthetic fun <init> (Ljava/util/List;Ljava/util/List;Ljava/util/List;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun component2 ()Ljava/util/List;
+	public final fun component3 ()Ljava/util/List;
+	public final fun component4 ()Lorg/jetbrains/kotlin/config/LanguageVersionSettings;
+	public final fun copy (Ljava/util/List;Ljava/util/List;Ljava/util/List;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;)Ldev/detekt/test/utils/CompileOptions;
+	public static synthetic fun copy$default (Ldev/detekt/test/utils/CompileOptions;Ljava/util/List;Ljava/util/List;Ljava/util/List;Lorg/jetbrains/kotlin/config/LanguageVersionSettings;ILjava/lang/Object;)Ldev/detekt/test/utils/CompileOptions;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDependencyCodes ()Ljava/util/List;
+	public final fun getJavaSourceRoots ()Ljava/util/List;
+	public final fun getJvmClasspathRoots ()Ljava/util/List;
+	public final fun getLanguageVersionSettings ()Lorg/jetbrains/kotlin/config/LanguageVersionSettings;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
 public final class dev/detekt/test/utils/KotlinAnalysisApiEngine : java/lang/AutoCloseable {
 	public fun <init> ()V
 	public fun close ()V
-	public final fun compile (Ljava/lang/String;Ljava/util/List;Ljava/util/List;Ljava/util/List;ZLorg/jetbrains/kotlin/config/LanguageVersionSettings;)Lorg/jetbrains/kotlin/psi/KtFile;
-	public static synthetic fun compile$default (Ldev/detekt/test/utils/KotlinAnalysisApiEngine;Ljava/lang/String;Ljava/util/List;Ljava/util/List;Ljava/util/List;ZLorg/jetbrains/kotlin/config/LanguageVersionSettings;ILjava/lang/Object;)Lorg/jetbrains/kotlin/psi/KtFile;
+	public final fun compile (Ljava/lang/String;Ldev/detekt/test/utils/CompileOptions;Z)Lorg/jetbrains/kotlin/psi/KtFile;
+	public static synthetic fun compile$default (Ldev/detekt/test/utils/KotlinAnalysisApiEngine;Ljava/lang/String;Ldev/detekt/test/utils/CompileOptions;ZILjava/lang/Object;)Lorg/jetbrains/kotlin/psi/KtFile;
 }
 
 public final class dev/detekt/test/utils/KotlinEnvironmentContainer {

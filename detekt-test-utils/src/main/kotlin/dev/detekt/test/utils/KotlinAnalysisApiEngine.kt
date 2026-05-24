@@ -32,15 +32,10 @@ class KotlinAnalysisApiEngine : AutoCloseable {
      *
      * @throws IllegalStateException if the given code snippet does not compile
      */
-    @Suppress("LongParameterList")
     fun compile(
         @Language("kotlin") code: String,
-        dependencyCodes: List<String> = emptyList(),
-        javaSourceRoots: List<Path> = emptyList(),
-        jvmClasspathRoots: List<Path> =
-            listOf(File(CharRange::class.java.protectionDomain.codeSource.location.path).toPath()),
+        options: CompileOptions = CompileOptions(),
         allowCompilationErrors: Boolean = shouldCompileTestSnippets,
-        languageVersionSettings: LanguageVersionSettings = LanguageVersionSettingsImpl.DEFAULT,
     ): KtFile {
         val session = buildStandaloneAnalysisAPISession(disposable) {
             buildKtModuleProvider {
@@ -53,14 +48,14 @@ class KotlinAnalysisApiEngine : AutoCloseable {
                 }
 
                 val additionalLibraries = buildKtLibraryModule {
-                    addBinaryRoots(jvmClasspathRoots.distinct())
+                    addBinaryRoots(options.jvmClasspathRoots.distinct())
                     platform = targetPlatform
                     libraryName = "classpath"
                 }
 
                 val vf = LightVirtualFile("dummy.kt", code)
 
-                val depVfs = dependencyCodes.mapIndexed { index, depCode ->
+                val depVfs = options.dependencyCodes.mapIndexed { index, depCode ->
                     LightVirtualFile("dependency_${index + 1}.kt", depCode)
                 }
 
@@ -70,10 +65,10 @@ class KotlinAnalysisApiEngine : AutoCloseable {
                         addRegularDependency(additionalLibraries)
                         addSourceVirtualFile(vf)
                         addSourceVirtualFiles(depVfs)
-                        addSourceRoots(javaSourceRoots)
+                        addSourceRoots(options.javaSourceRoots)
                         platform = targetPlatform
                         moduleName = "source"
-                        this.languageVersionSettings = languageVersionSettings
+                        languageVersionSettings = options.languageVersionSettings
                     }
                 )
             }
@@ -88,3 +83,11 @@ class KotlinAnalysisApiEngine : AutoCloseable {
         Disposer.dispose(disposable)
     }
 }
+
+data class CompileOptions(
+    val dependencyCodes: List<String> = emptyList(),
+    val javaSourceRoots: List<Path> = emptyList(),
+    val jvmClasspathRoots: List<Path> =
+        listOf(File(CharRange::class.java.protectionDomain.codeSource.location.path).toPath()),
+    val languageVersionSettings: LanguageVersionSettings = LanguageVersionSettingsImpl.DEFAULT,
+)
