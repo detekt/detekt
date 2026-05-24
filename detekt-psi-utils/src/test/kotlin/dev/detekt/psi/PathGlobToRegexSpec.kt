@@ -1,14 +1,14 @@
-package dev.detekt.api
+package dev.detekt.psi
 
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-internal class SimplePatternToRegexSpec {
+internal class PathGlobToRegexSpec {
     @Nested
     inner class `empty pattern` {
-        private val subject = "".simplePatternToRegex()
+        private val subject = "".pathGlobToRegex()
 
         @Test
         fun `matches an empty string`() {
@@ -25,7 +25,7 @@ internal class SimplePatternToRegexSpec {
 
     @Nested
     inner class `blank pattern` {
-        private val subject = " \t".simplePatternToRegex()
+        private val subject = " \t".pathGlobToRegex()
 
         @Test
         fun `matches an empty string`() {
@@ -42,7 +42,7 @@ internal class SimplePatternToRegexSpec {
 
     @Nested
     inner class `Static pattern` {
-        private val subject = "abc".simplePatternToRegex()
+        private val subject = "abc".pathGlobToRegex()
 
         @Test
         fun `matches the same string`() {
@@ -63,7 +63,7 @@ internal class SimplePatternToRegexSpec {
         inner class `single wildcard` {
             @Nested
             inner class `pattern with wildcard at the beginning` {
-                private val subject = "*xyz".simplePatternToRegex()
+                private val subject = "*xyz".pathGlobToRegex()
 
                 @Test
                 fun `matches pattern exactly`() {
@@ -86,7 +86,7 @@ internal class SimplePatternToRegexSpec {
 
             @Nested
             inner class `Pattern with wildcard at the end` {
-                private val subject = "xyz*".simplePatternToRegex()
+                private val subject = "xyz*".pathGlobToRegex()
 
                 @Test
                 fun `matches pattern exactly`() {
@@ -109,7 +109,7 @@ internal class SimplePatternToRegexSpec {
 
             @Nested
             inner class `Pattern with wildcard at the middle` {
-                private val subject = "x*yz".simplePatternToRegex()
+                private val subject = "x*yz".pathGlobToRegex()
 
                 @Test
                 fun `matches pattern exactly`() {
@@ -139,7 +139,7 @@ internal class SimplePatternToRegexSpec {
 
         @Nested
         inner class `multiple wildcards` {
-            private val subject = "x*yz*".simplePatternToRegex()
+            private val subject = "x*yz*".pathGlobToRegex()
 
             @Test
             fun `matches pattern`() {
@@ -155,7 +155,7 @@ internal class SimplePatternToRegexSpec {
         inner class `single wildcard` {
             @Nested
             inner class `pattern with wildcard at the beginning` {
-                private val subject = "?xyz".simplePatternToRegex()
+                private val subject = "?xyz".pathGlobToRegex()
 
                 @Test
                 fun `matches with any character before`() {
@@ -178,7 +178,7 @@ internal class SimplePatternToRegexSpec {
 
             @Nested
             inner class `pattern with wildcard at the end` {
-                private val subject = "xyz?".simplePatternToRegex()
+                private val subject = "xyz?".pathGlobToRegex()
 
                 @Test
                 fun `matches with any character after`() {
@@ -201,7 +201,7 @@ internal class SimplePatternToRegexSpec {
 
             @Nested
             inner class `pattern with wildcard at the middle` {
-                private val subject = "x?yz".simplePatternToRegex()
+                private val subject = "x?yz".pathGlobToRegex()
 
                 @Test
                 fun `matches with any single character`() {
@@ -219,7 +219,7 @@ internal class SimplePatternToRegexSpec {
 
         @Nested
         inner class `multiple wildcards` {
-            private val subject = "x?y?z".simplePatternToRegex()
+            private val subject = "x?y?z".pathGlobToRegex()
 
             @Test
             fun `matches pattern`() {
@@ -233,7 +233,7 @@ internal class SimplePatternToRegexSpec {
     inner class `characters that have a special meaning in regular expression must be escaped` {
         @Nested
         inner class Period {
-            private val subject = "a.b.c".simplePatternToRegex()
+            private val subject = "a.b.c".pathGlobToRegex()
 
             @Test
             fun `matches the same string`() {
@@ -250,7 +250,7 @@ internal class SimplePatternToRegexSpec {
 
         @Nested
         inner class `character classes and quantifiers` {
-            private val subject = """ab\d{2,5}\s\wc""".simplePatternToRegex()
+            private val subject = """ab\d{2,5}\s\wc""".pathGlobToRegex()
 
             @Test
             fun `can be used`() {
@@ -264,7 +264,7 @@ internal class SimplePatternToRegexSpec {
     inner class `invalid pattern` {
         @Test
         fun `fails during creation`() {
-            assertThatThrownBy { """a[b""".simplePatternToRegex() }
+            assertThatThrownBy { """a[b""".pathGlobToRegex() }
                 .isInstanceOf(IllegalArgumentException::class.java)
         }
     }

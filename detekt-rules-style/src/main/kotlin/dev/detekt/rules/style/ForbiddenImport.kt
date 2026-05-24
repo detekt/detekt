@@ -6,8 +6,8 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.Rule
 import dev.detekt.api.config
-import dev.detekt.api.simplePatternToRegex
 import dev.detekt.api.valuesWithReason
+import dev.detekt.psi.pathGlobToRegex
 import org.jetbrains.kotlin.psi.KtImportDirective
 
 /**
@@ -46,7 +46,7 @@ class ForbiddenImport(config: Config) :
             "It is recommended to also specify a reason."
     )
     private val forbiddenImports: List<Forbidden> by config(valuesWithReason()) { list ->
-        list.map { Forbidden(it.value.simplePatternToRegex(), it.reason) }
+        list.map { Forbidden(it.value.pathGlobToRegex(), it.reason) }
     }
 
     @Configuration(
@@ -54,7 +54,7 @@ class ForbiddenImport(config: Config) :
             "Use this to specify exceptions to the forbidden imports."
     )
     private val allowedImports: List<Regex> by config(emptyList<String>()) { list ->
-        list.map { it.simplePatternToRegex() }
+        list.map { it.pathGlobToRegex() }
     }
 
     override fun visitImportDirective(importDirective: KtImportDirective) {

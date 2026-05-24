@@ -10,9 +10,9 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.api.config
-import dev.detekt.api.simplePatternToRegex
 import dev.detekt.psi.FunctionMatcher
 import dev.detekt.psi.isCalling
+import dev.detekt.psi.pathGlobToRegex
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
@@ -77,7 +77,7 @@ class IgnoredReturnValue(config: Config) :
             "*.CheckReturnValue"
         )
     ) {
-        it.map(String::simplePatternToRegex)
+        it.map(String::pathGlobToRegex)
     }
 
     @Configuration("Annotations to skip this inspection")
@@ -87,7 +87,7 @@ class IgnoredReturnValue(config: Config) :
             "*.CanIgnoreReturnValue"
         )
     ) {
-        it.map(String::simplePatternToRegex)
+        it.map(String::pathGlobToRegex)
     }
 
     @Configuration("List of return types that should not be ignored")
@@ -98,7 +98,7 @@ class IgnoredReturnValue(config: Config) :
             "kotlinx.coroutines.flow.*Flow",
             "java.util.stream.*Stream",
         ),
-    ) { it.map(String::simplePatternToRegex) }
+    ) { it.map(String::pathGlobToRegex) }
 
     @Configuration(
         "List of function signatures which should be ignored by this rule. " +

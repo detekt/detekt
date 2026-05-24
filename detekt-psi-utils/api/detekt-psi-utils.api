@@ -19,6 +19,11 @@ public final class dev/detekt/psi/FunctionMatcher$Companion {
 	public final fun getNameForGetterOrSetter (Lorg/jetbrains/kotlin/analysis/api/symbols/KaPropertySymbol;Lorg/jetbrains/kotlin/analysis/api/symbols/KaCallableSymbol;)Ljava/lang/String;
 }
 
+public final class dev/detekt/psi/GlobToRegexKt {
+	public static final fun fullyQualifiedNameGlobToRegex (Ljava/lang/String;)Lkotlin/text/Regex;
+	public static final fun pathGlobToRegex (Ljava/lang/String;)Lkotlin/text/Regex;
+}
+
 public final class dev/detekt/psi/IsPartOfUtilsKt {
 	public static final fun isPartOfString (Lcom/intellij/psi/PsiElement;)Z
 }

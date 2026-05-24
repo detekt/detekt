@@ -310,10 +310,6 @@ public final class dev/detekt/api/SourceLocation : java/lang/Comparable {
 	public fun toString ()Ljava/lang/String;
 }
 
-public final class dev/detekt/api/SplitPatternKt {
-	public static final fun simplePatternToRegex (Ljava/lang/String;)Lkotlin/text/Regex;
-}
-
 public final class dev/detekt/api/TextLocation {
 	public fun <init> (II)V
 	public fun equals (Ljava/lang/Object;)Z
