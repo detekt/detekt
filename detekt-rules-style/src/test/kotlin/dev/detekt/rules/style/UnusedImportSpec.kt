@@ -786,6 +786,35 @@ class UnusedImportSpec(val env: KotlinEnvironmentContainer) {
     }
 
     @Test
+    fun `does not report companion object member extension property import`() {
+        val mainFile =
+            """
+            package x.y.z.handler
+
+            import x.y.z.Input
+            import x.y.z.Foo.Companion.isDisabled
+            import x.y.z.Foo.Companion.isEnabled
+
+            fun handle(input: Input) = input.isEnabled || input.isDisabled
+            """.trimIndent()
+        val additionalFile =
+            """
+            package x.y.z
+
+            data class Input(val value: Int)
+
+            open class Foo {
+                companion object : Foo()
+
+                val Input.isEnabled: Boolean get() = value > 0
+                val Input.isDisabled: Boolean get() = value <= 0
+            }
+            """.trimIndent()
+        val findings = subject.lintWithContext(env, mainFile, additionalFile)
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
     fun `does not report named companion object - #8989`() {
         val mainFile =
             """
