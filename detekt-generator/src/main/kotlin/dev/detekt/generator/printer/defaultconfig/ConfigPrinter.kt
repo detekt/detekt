@@ -45,12 +45,6 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
               # - 'ClassCountProcessor'
               # - 'FunctionCountProcessor'
               # - 'PropertyCountProcessor'
-              # - 'ProjectCyclomaticComplexityProcessor'
-              # - 'ProjectCognitiveComplexityProcessor'
-              # - 'ProjectLLOCProcessor'
-              # - 'ProjectCLOCProcessor'
-              # - 'ProjectLOCProcessor'
-              # - 'ProjectSLOCProcessor'
         """.trimIndent()
 
     private fun defaultConsoleReportsConfiguration(): String =
@@ -59,7 +53,6 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
               active: true
               exclude:
                  - 'ProjectStatisticsReport'
-                 - 'ComplexityReport'
                  - 'NotificationReport'
                  - 'IssuesReport'
                  - 'FileBasedIssuesReport'
