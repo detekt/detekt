@@ -4,7 +4,7 @@ import com.intellij.openapi.util.Key
 import dev.detekt.api.testfixtures.TestDetektion
 import dev.detekt.api.testfixtures.createIssue
 import dev.detekt.api.testfixtures.createRuleInstance
-import dev.detekt.metrics.CognitiveComplexity
+import dev.detekt.metrics.processors.cognitiveComplexityKey
 import dev.detekt.metrics.processors.commentLinesKey
 import dev.detekt.metrics.processors.cyclomaticComplexityKey
 import dev.detekt.metrics.processors.linesKey
@@ -20,7 +20,7 @@ class ComplexityReportSpec {
         val detektion = createDetektion(
             mapOf(
                 cyclomaticComplexityKey to 2,
-                CognitiveComplexity.KEY to 2,
+                cognitiveComplexityKey to 2,
                 linesKey to 10,
                 sourceLinesKey to 6,
                 logicalLinesKey to 5,

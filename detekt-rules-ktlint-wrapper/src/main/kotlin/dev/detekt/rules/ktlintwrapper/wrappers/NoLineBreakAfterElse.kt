@@ -11,7 +11,7 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  */
 @ActiveByDefault(since = "1.0.0")
 @AutoCorrectable(since = "1.0.0")
-class NoLineBreakAfterElse(config: Config) : KtlintRule(config, "Reports line breaks after else") {
+internal class NoLineBreakAfterElse(config: Config) : KtlintRule(config, "Reports line breaks after else") {
 
     override val wrapping = NoLineBreakAfterElseRule()
 }

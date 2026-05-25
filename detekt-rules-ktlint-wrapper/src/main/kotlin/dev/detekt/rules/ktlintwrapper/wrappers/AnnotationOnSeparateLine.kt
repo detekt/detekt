@@ -16,7 +16,7 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  */
 @AutoCorrectable(since = "1.0.0")
 @ActiveByDefault(since = "1.22.0")
-class AnnotationOnSeparateLine(config: Config) :
+internal class AnnotationOnSeparateLine(config: Config) :
     KtlintRule(config, "Multiple annotations should be placed on separate lines.") {
 
     override val wrapping = AnnotationRule()

@@ -10,7 +10,7 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#function-naming) for
  * documentation.
  */
-class FunctionName(config: Config) :
+internal class FunctionName(config: Config) :
     KtlintRule(
         config,
         "Function name should start with a lowercase letter (except factory methods) and use camel case."

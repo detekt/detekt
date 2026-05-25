@@ -14,7 +14,7 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  * documentation.
  */
 @AutoCorrectable(since = "2.0.0")
-class ExpressionOperandWrapping(config: Config) :
+internal class ExpressionOperandWrapping(config: Config) :
     KtlintRule(config, "Wraps each operand in a multiline expression to a separate line") {
 
     override val wrapping = ExpressionOperandWrappingRule()

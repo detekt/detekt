@@ -9,7 +9,7 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#no-blank-lines-in-list) for documentation.
  */
 @AutoCorrectable(since = "1.23.0")
-class NoBlankLineInList(config: Config) :
+internal class NoBlankLineInList(config: Config) :
     KtlintRule(config, "Disallow blank lines in lists before, between or after any list element.") {
 
     override val wrapping = NoBlankLineInListRule()

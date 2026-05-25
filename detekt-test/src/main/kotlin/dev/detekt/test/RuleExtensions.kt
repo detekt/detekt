@@ -32,8 +32,9 @@ fun Rule.lint(
         try {
             KotlinAnalysisApiEngine().use {
                 it.compile(
-                    content,
+                    code = content,
                     jvmClasspathRoots = createEnvironment().jvmClasspathRoots,
+                    languageVersionSettings = languageVersionSettings,
                     allowCompilationErrors = false,
                 )
             }
@@ -58,6 +59,7 @@ fun <T> T.lintWithContext(
             dependencyCodes = dependencyContents.toList(),
             javaSourceRoots = environment.javaSourceRoots,
             jvmClasspathRoots = environment.jvmClasspathRoots,
+            languageVersionSettings = languageVersionSettings,
             allowCompilationErrors = allowCompilationErrors || !shouldCompileTestSnippets
         )
         visitFile(ktFile, languageVersionSettings).filterSuppressed(this)

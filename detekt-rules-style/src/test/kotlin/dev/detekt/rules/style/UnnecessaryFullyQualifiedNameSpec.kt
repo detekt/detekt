@@ -1001,6 +1001,50 @@ class UnnecessaryFullyQualifiedNameSpec(val env: KotlinEnvironmentContainer) {
 
             assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
+
+        @Test
+        fun `does not report annotation call when shadowed`() {
+            val code = """
+                package foo
+
+                import foo.bar1.Foo
+
+                @foo.bar2.Foo
+                object Bar : Foo
+            """.trimIndent()
+            val annotationCode = """
+                package foo.bar1
+                interface Foo
+            """.trimIndent()
+            val interfaceCode = """
+                package foo.bar2
+                annotation class Foo
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code, annotationCode, interfaceCode)).isEmpty()
+        }
+
+        @Test
+        fun `does not report annotation call when shadowed 2`() {
+            val code = """
+                package foo
+
+                import foo.bar2.Foo
+
+                @Foo
+                object Bar : foo.bar1.Foo
+            """.trimIndent()
+            val annotationCode = """
+                package foo.bar1
+                interface Foo
+            """.trimIndent()
+            val interfaceCode = """
+                package foo.bar2
+                annotation class Foo
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code, annotationCode, interfaceCode)).isEmpty()
+        }
     }
 
     // https://github.com/detekt/detekt/issues/9282

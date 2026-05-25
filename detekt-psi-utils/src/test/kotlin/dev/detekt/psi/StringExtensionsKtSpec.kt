@@ -40,27 +40,35 @@ internal class StringExtensionsKtSpec {
         @JvmStatic
         fun getAllowedMarkDownUrlPattern() =
             listOf(
-                Arguments.of("""[Label](www.foo.com)"""),
-                Arguments.of("""some other words [Label](www.foo.com)"""),
-                Arguments.of("""[Label with space](www.foo.com)"""),
-                Arguments.of("""[Label](www.foo.com "With title")"""),
-                Arguments.of("[Label with tabs](www.foo.com\t\"With\ttitle\"\t)"),
-                Arguments.of("""[Label](www.foo.com "With title")     """),
-                Arguments.of("""[Label](www.foo.com "With title" )"""),
-                Arguments.of("""[Label](www.foo.com "With title"  )"""),
-                Arguments.of("""[Label](www.foo.com    "With title")"""),
-                Arguments.of("""[Label with "" inside ''](/url 'title "and" title')"""),
-                Arguments.of("""[Label with '' inside ""](/url "title 'and' title")"""),
-                Arguments.of("""[Label ''](www.foo.com 'With title')"""),
-                Arguments.of("""[Label ''](www.foo.com 'With title' )"""),
-                Arguments.of("""[Label ()](/url (title))"""),
-                Arguments.of("""[Label () with "" inside](/url (title "and" title2))"""),
-                Arguments.of("""[Label () with '' inside](/url (title 'and' title2))"""),
-                Arguments.of("""[Label](www.foo.com "With \"title\"")"""),
-                Arguments.of("""[Label second word](www.foo.com "title")"""),
-                Arguments.of("""[Label second \n word](www.foo.com "title")"""),
-                Arguments.of("""See my [About](/about/)"""),
+                """[Label](www.foo.com)""",
+                """some other words [Label](www.foo.com)""",
+                """[Label with space](www.foo.com)""",
+                """[Label](www.foo.com "With title")""",
+                "[Label with tabs](www.foo.com\t\"With\ttitle\"\t)",
+                """[Label](www.foo.com "With title")     """,
+                """[Label](www.foo.com "With title" )""",
+                """[Label](www.foo.com "With title"  )""",
+                """[Label](www.foo.com    "With title")""",
+                """[Label with "" inside ''](/url 'title "and" title')""",
+                """[Label with '' inside ""](/url "title 'and' title")""",
+                """[Label ''](www.foo.com 'With title')""",
+                """[Label ''](www.foo.com 'With title' )""",
+                """[Label ()](/url (title))""",
+                """[Label () with "" inside](/url (title "and" title2))""",
+                """[Label () with '' inside](/url (title 'and' title2))""",
+                """[Label](www.foo.com "With \"title\"")""",
+                """[Label second word](www.foo.com "title")""",
+                """[Label second \n word](www.foo.com "title")""",
+                """See my [About](/about/)""",
             )
+                .flatMap {
+                    listOf(
+                        it,
+                        "${it.substringBeforeLast(")")}).${it.substringAfterLast(")")}",
+                        "${it.substringBeforeLast(")")}),${it.substringAfterLast(")")}",
+                    )
+                }
+                .map { Arguments.of(it) }
 
         @JvmStatic
         fun getDisAllowedMarkDownUrlPattern() =
@@ -83,22 +91,32 @@ internal class StringExtensionsKtSpec {
                 Arguments.of("""[Label](www.foo.com , "With t1")"""),
                 Arguments.of("""[Label](www.foo.com title1")"""),
                 Arguments.of("""[Label](www.foo.com ! & "With t1")"""),
+                Arguments.of("""[Label](www.foo.com "With title")     ."""),
+                Arguments.of("""[Label](www.foo.com "With title")     ,"""),
             )
 
         @JvmStatic
         fun getAllowedKotlinReferenceUrlPattern() =
             listOf(
-                Arguments.of("""This is sample [Label][funName]"""),
-                Arguments.of("""[Label][AClass.funName]"""),
-                Arguments.of("""[Label][funName]"""),
-                Arguments.of("""[Label][funName]"""),
-                Arguments.of("""[Label] [funName]   """),
-                Arguments.of("""[Label]   [funName]"""),
-                Arguments.of("""[Label with words]   [funName]"""),
-                Arguments.of("[Label with words]\t[funName]"),
-                Arguments.of("""[funName]"""),
-                Arguments.of("""[funName]   """),
+                """This is sample [Label][funName]""",
+                """[Label][AClass.funName]""",
+                """[Label][funName]""",
+                """[Label][funName]""",
+                """[Label] [funName]   """,
+                """[Label]   [funName]""",
+                """[Label with words]   [funName]""",
+                "[Label with words]\t[funName]",
+                """[funName]""",
+                """[funName]   """,
             )
+                .flatMap {
+                    listOf(
+                        it,
+                        "${it.substringBeforeLast(")")}).${it.substringAfterLast(")")}",
+                        "${it.substringBeforeLast(")")}),${it.substringAfterLast(")")}",
+                    )
+                }
+                .map { Arguments.of(it) }
 
         @JvmStatic
         fun getDisAllowedKotlinReferenceUrlPattern() =
@@ -108,6 +126,8 @@ internal class StringExtensionsKtSpec {
                 Arguments.of("[fun\tName]"),
                 Arguments.of("""[funName ]"""),
                 Arguments.of("""[ funName]"""),
+                Arguments.of("""[funName]   ."""),
+                Arguments.of("""[funName]   ,"""),
             )
     }
 }

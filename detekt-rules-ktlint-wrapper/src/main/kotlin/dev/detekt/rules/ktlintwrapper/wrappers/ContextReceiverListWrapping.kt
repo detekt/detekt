@@ -17,7 +17,7 @@ import dev.detekt.rules.ktlintwrapper.configWithAndroidVariants
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "2.0.0")
-class ContextReceiverListWrapping(config: Config) :
+internal class ContextReceiverListWrapping(config: Config) :
     KtlintRule(config, "Wraps the context receiver list containing a context parameter") {
 
     override val wrapping = ContextReceiverListWrappingRule()

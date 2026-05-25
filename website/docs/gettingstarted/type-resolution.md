@@ -83,13 +83,15 @@ Gradle plugins from configuring Android-specific gradle tasks.
 
 ## Enabling on a KMP project
 
-The Detekt Gradle Plugin in a Kotlin Multiplatform project automatically generates platform-specific and common tasks for running analysis with type resolution. In general there will be a `detektMetadata<Platform>Main` task for each native platform target configured in the multiplatform plugin, specific tasks for JVM and Android modules as listed below, and a `detektMetadataCommonMain` for the `common` module.
+In a Kotlin Multiplatform project, the Detekt Gradle Plugin generates the following tasks:
 
-- `detekt` - Runs detekt WITHOUT type resolution
-- `detektMetadataCommonMain` - Runs detekt with type resolution on the `common` module in the `main` source set
-- `detektJvmMain` - Runs detekt with type resolution on the `jvm` module in the `main` source set
-- `detektMetadataIosMain` - Runs detekt with type resolution on the `ios` module in the `main` source set
-- `detektAndroid<Variant>` - Runs detekt with type resolution on the `android` module for the specific variant e.g. `detektAndroidRelease`
+- `detekt` - Runs detekt WITHOUT type resolution.
+- `detekt<SourceSet>SourceSet` - Runs detekt on a given Kotlin source set WITHOUT type resolution. A task is generated for every Kotlin source set (e.g. `detektCommonMainSourceSet`, `detektJvmMainSourceSet`, `detektIosMainSourceSet`, `detektWasmJsMainSourceSet`).
+- `detekt<Compilation><Target>` - Runs detekt with type resolution on a given compilation of a JVM or Android target (e.g. `detektMainJvm`, `detektTestJvm`, `detektMainAndroid`).
+
+Type resolution tasks are currently only generated for JVM and Android targets. Native, JS and Wasm targets are analyzed through their source-set tasks listed above, without type resolution.
+
+Corresponding `detektBaseline<SourceSet>SourceSet` and `detektBaseline<Compilation><Target>` tasks are also generated to create baselines from each of the analysis tasks.
 
 ## Enabling on Detekt CLI
 

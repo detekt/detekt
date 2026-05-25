@@ -13,7 +13,7 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#if-else-wrapping) for documentation.
  */
 @AutoCorrectable(since = "1.23.0")
-class IfElseWrapping(config: Config) :
+internal class IfElseWrapping(config: Config) :
     KtlintRule(config, "A single line if-statement may contain no more than one else-branch.") {
 
     override val wrapping = IfElseWrappingRule()

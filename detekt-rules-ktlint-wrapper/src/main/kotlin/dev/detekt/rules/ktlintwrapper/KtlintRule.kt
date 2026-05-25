@@ -19,7 +19,7 @@ import org.jetbrains.kotlin.psi.KtFile
  * Subclasses delegate the actual ktlint dispatch to [KtlintEngine]; each rule's [visit] simply
  * consumes the findings the engine collected during the shared per-file walk.
  */
-abstract class KtlintRule(config: Config, description: String) : Rule(config, description) {
+internal abstract class KtlintRule(config: Config, description: String) : Rule(config, description) {
 
     abstract val wrapping: StandardRule
 
@@ -30,6 +30,11 @@ abstract class KtlintRule(config: Config, description: String) : Rule(config, de
         get() = config.valueOrNull("code_style")
             ?: config.parent?.let { KtlintWrapperProvider.code_style.value(it) }
             ?: KtlintWrapperProvider.code_style.defaultValue
+
+    protected val indentStyle: String
+        get() = config.valueOrNull("indentStyle")
+            ?: config.parent?.let { KtlintWrapperProvider.indentStyle.value(it) }
+            ?: KtlintWrapperProvider.indentStyle.defaultValue
 
     /**
      * Set the first time [visit] is called. The engine treats a rule as "active for this run"
@@ -82,7 +87,7 @@ abstract class KtlintRule(config: Config, description: String) : Rule(config, de
 
         usesEditorConfigProperties[INDENT_STYLE_PROPERTY] = usesEditorConfigProperties.getOrDefault(
             INDENT_STYLE_PROPERTY,
-            "space",
+            indentStyle,
         )
 
         val properties = buildMap {

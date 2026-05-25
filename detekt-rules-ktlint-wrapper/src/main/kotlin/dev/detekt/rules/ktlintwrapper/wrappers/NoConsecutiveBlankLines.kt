@@ -11,7 +11,7 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  */
 @ActiveByDefault(since = "1.0.0")
 @AutoCorrectable(since = "1.0.0")
-class NoConsecutiveBlankLines(config: Config) : KtlintRule(config, "Reports consecutive blank lines") {
+internal class NoConsecutiveBlankLines(config: Config) : KtlintRule(config, "Reports consecutive blank lines") {
 
     override val wrapping = NoConsecutiveBlankLinesRule()
 }

@@ -7,7 +7,7 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.Rule
 import dev.detekt.api.config
-import dev.detekt.api.simplePatternToRegex
+import dev.detekt.psi.pathGlobToRegex
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.psiUtil.visibilityModifierTypeOrDefault
@@ -33,7 +33,7 @@ class ForbiddenPublicDataClass(config: Config) :
 
     @Configuration("ignores classes in the specified packages.")
     private val ignorePackages: List<Regex> by config(listOf("*.internal", "*.internal.*")) { packages ->
-        packages.distinct().map(String::simplePatternToRegex)
+        packages.distinct().map(String::pathGlobToRegex)
     }
 
     override fun visitClass(klass: KtClass) {

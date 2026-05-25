@@ -139,7 +139,7 @@ class DetektPlugin : Plugin<Project> {
             task.detektClasspath.conventionCompat(project.configurations.named(CONFIGURATION_DETEKT))
             task.pluginClasspath.conventionCompat(project.configurations.named(CONFIGURATION_DETEKT_PLUGINS))
             val reportName = if (task.name.startsWith(DETEKT_TASK_NAME) && task.name != DETEKT_TASK_NAME) {
-                task.name.removePrefix(DETEKT_TASK_NAME).decapitalize()
+                task.name.removePrefix(DETEKT_TASK_NAME).replaceFirstChar { it.lowercase() }
             } else {
                 task.name
             }

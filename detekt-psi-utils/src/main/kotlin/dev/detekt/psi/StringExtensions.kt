@@ -19,11 +19,11 @@ fun String.lastArgumentMatchesMarkdownUrlSyntax(): Boolean {
     val markdownUrlTitleRegex =
         """(?:$markdownUrlTitleRegexStrWithSingleOrDoubleQuotes|$markdownUrlTitleRegexStrWithBraces)"""
     val regex =
-        """\[.+\]\($urlNonCapturingRegex(?:\s+$markdownUrlTitleRegex)?\s*\)$""".toRegex()
+        """\[.+\]\($urlNonCapturingRegex(?:\s+$markdownUrlTitleRegex)?\s*\)[.,]?$""".toRegex()
     return trimEnd().contains(regex)
 }
 
 fun String.lastArgumentMatchesKotlinReferenceUrlSyntax(): Boolean {
-    val regex = """\[[\w|\.]*\]$""".toRegex()
+    val regex = """\[[\w|\.]*\][.,]?$""".toRegex()
     return trimEnd().contains(regex)
 }

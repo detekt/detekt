@@ -18,7 +18,7 @@ import dev.detekt.rules.ktlintwrapper.configWithAndroidVariants
  */
 @AutoCorrectable(since = "1.0.0")
 @ActiveByDefault(since = "1.22.0")
-class ArgumentListWrapping(config: Config) : KtlintRule(config, "Reports incorrect argument list wrapping") {
+internal class ArgumentListWrapping(config: Config) : KtlintRule(config, "Reports incorrect argument list wrapping") {
 
     override val wrapping = ArgumentListWrappingRule()
 

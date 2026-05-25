@@ -11,7 +11,7 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "2.0.0")
-class ThenSpacing(config: Config) :
+internal class ThenSpacing(config: Config) :
     KtlintRule(config, "Enforces consistent spacing around the `then` block in an `if`-statement") {
 
     override val wrapping = ThenSpacingRule()

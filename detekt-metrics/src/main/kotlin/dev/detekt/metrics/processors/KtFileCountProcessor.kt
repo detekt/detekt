@@ -9,10 +9,8 @@ import org.jetbrains.kotlin.psi.KtFile
 class KtFileCountProcessor : FileProcessListener {
     override val id: String = "KtFileCountProcessor"
 
-    override fun onFinish(files: List<KtFile>, result: Detektion): Detektion {
-        result.add(ProjectMetric(numberOfFilesKey.toString(), files.count()))
-        return result
-    }
+    override fun onFinish(files: List<KtFile>, result: Detektion): Detektion =
+        result.plus(ProjectMetric(numberOfFilesKey.toString(), files.count()))
 }
 
 val numberOfFilesKey = Key<Int>("number of kt files")

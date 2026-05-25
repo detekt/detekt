@@ -81,6 +81,12 @@ class IndentationSpec {
         assertThat(subject.lint(code)).isEmpty()
     }
 
+    @Test
+    fun `falls back to the default space indent style when the config has no parent`() {
+        val code = "fun main() {\n    println()\n}"
+        assertThat(Indentation(TestConfig(parent = null)).lint(code)).isEmpty()
+    }
+
     @Nested
     inner class `parameter list indent size equals 1` {
 

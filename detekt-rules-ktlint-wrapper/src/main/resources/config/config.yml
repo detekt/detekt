@@ -1,6 +1,7 @@
 ktlint:
   active: true
   code_style: 'intellij_idea'
+  indentStyle: 'space'
   autoCorrect: true
   AnnotationOnSeparateLine:
     active: true
@@ -140,7 +141,6 @@ ktlint:
     active: true
     autoCorrect: true
     indentSize: 4
-    indentStyle: 'space'
     indentWhenArrowOnNewLine: false
   Kdoc:
     active: true

@@ -12,7 +12,7 @@ fun Project.consumeGeneratedConfig(
     val configurationName = "generatedConfigFor${forTask.name.replaceFirstChar { it.titlecase() }}"
     val generatedConfig = configurations.dependencyScope(configurationName)
     val generatedConfigFiles = configurations.resolvable("${configurationName}Files") {
-        extendsFrom(generatedConfig.get())
+        extendsFrom(generatedConfig)
     }
 
     dependencies {
