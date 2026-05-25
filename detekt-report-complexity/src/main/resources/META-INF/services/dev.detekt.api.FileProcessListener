@@ -1,0 +1,6 @@
+dev.detekt.report.complexity.ProjectCyclomaticComplexityProcessor
+dev.detekt.report.complexity.ProjectCognitiveComplexityProcessor
+dev.detekt.report.complexity.ProjectLLOCProcessor
+dev.detekt.report.complexity.ProjectCLOCProcessor
+dev.detekt.report.complexity.ProjectLOCProcessor
+dev.detekt.report.complexity.ProjectSLOCProcessor
