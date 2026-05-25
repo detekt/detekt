@@ -669,6 +669,30 @@ class UnusedImportSpec(val env: KotlinEnvironmentContainer) {
     }
 
     @Test
+    fun `reports unused import when type parameter symbol is present`() {
+        val mainFile =
+            """
+            import x.y.z.Foo
+
+            fun <T> id(value: T): T = value
+
+            fun test() {
+                val value = id("text")
+                println(value)
+            }
+            """.trimIndent()
+        val additionalFile =
+            """
+            package x.y.z
+
+            class Foo
+            """.trimIndent()
+
+        assertThat(subject.lintWithContext(env, mainFile, additionalFile)).singleElement()
+            .hasTextLocation("import x.y.z.Foo")
+    }
+
+    @Test
     fun `does not report when used in a class literal expression`() {
         val code =
             """
@@ -953,6 +977,38 @@ class UnusedImportSpec(val env: KotlinEnvironmentContainer) {
             package additional
 
             inline val myVal get() = 1
+            """.trimIndent()
+
+        assertThat(subject.lintWithContext(env, mainFile, additionalFile)).isEmpty()
+    }
+
+    @Test
+    fun `does not report anything for files without imports`() {
+        val mainFile =
+            """
+            fun main() {
+                println("hello")
+            }
+            """.trimIndent()
+
+        assertThat(subject.lintWithContext(env, mainFile)).isEmpty()
+    }
+
+    @Test
+    fun `ignores wildcard imports`() {
+        val mainFile =
+            """
+            import additional.*
+
+            fun test() {
+                println("unused wildcard import is ignored by this rule")
+            }
+            """.trimIndent()
+        val additionalFile =
+            """
+            package additional
+
+            class Something
             """.trimIndent()
 
         assertThat(subject.lintWithContext(env, mainFile, additionalFile)).isEmpty()
