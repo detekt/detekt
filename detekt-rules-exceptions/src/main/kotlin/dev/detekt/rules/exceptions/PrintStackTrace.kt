@@ -47,6 +47,7 @@ class PrintStackTrace(config: Config) :
     Rule(config, "Do not print a stack trace. These debug statements should be removed or replaced with a logger.") {
 
     override fun visitCallExpression(expression: KtCallExpression) {
+        super.visitCallExpression(expression)
         val callNameExpression = expression.getCallNameExpression()
         if (callNameExpression?.text == "dumpStack" &&
             callNameExpression.getReceiverExpression()?.text == "Thread"
@@ -56,6 +57,7 @@ class PrintStackTrace(config: Config) :
     }
 
     override fun visitCatchSection(catchClause: KtCatchClause) {
+        super.visitCatchSection(catchClause)
         catchClause.catchBody?.forEachDescendantOfType<KtNameReferenceExpression> {
             if (it.text == catchClause.catchParameter?.name && hasPrintStacktraceCallExpression(it)) {
                 report(Finding(Entity.from(it), description))
