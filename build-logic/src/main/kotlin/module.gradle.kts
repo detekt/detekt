@@ -8,7 +8,6 @@ import org.jetbrains.kotlin.gradle.tasks.UsesKotlinJavaToolchain
 plugins {
     id("packaging")
     kotlin("jvm")
-    id("maven-publish")
     id("jacoco")
 }
 
@@ -128,7 +127,6 @@ dependencies {
 
 java {
     withSourcesJar()
-    withJavadocJar()
     sourceCompatibility = JavaVersion.toVersion(jvmTargetVersion)
     targetCompatibility = JavaVersion.toVersion(jvmTargetVersion)
     if (project.name !in setOf("detekt-gradle-plugin", "detekt-test-junit")) {

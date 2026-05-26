@@ -36,7 +36,7 @@ shadow {
 }
 
 publishing {
-    publications.named<MavenPublication>(DETEKT_PUBLICATION) {
+    publications.withType<MavenPublication>().configureEach {
         artifact(tasks.shadowJar)
     }
 }

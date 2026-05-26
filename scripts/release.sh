@@ -2,8 +2,9 @@
 set -e
 gradle publishToMavenLocal
 gradle build
-gradle publishToSonatype closeSonatypeStagingRepository --no-configuration-cache
+# Uploads artifacts to Central Portal. After all steps complete, release manually at
+# https://central.sonatype.com/publishing — or replace with publishAndReleaseToMavenCentral to release automatically.
+gradle publishToMavenCentral
 gradle :detekt-gradle-plugin:publishPlugins
 gradle githubRelease --no-configuration-cache
 gradle applyDocVersion
-gradle releaseSonatypeStagingRepository --no-configuration-cache
