@@ -111,7 +111,7 @@ import dev.detekt.rules.ktlintwrapper.wrappers.Wrapping
 import com.pinterest.ktlint.rule.engine.core.api.RuleSetId as KtlintRuleSetId
 
 /**
- * This rule set provides wrappers for rules implemented by ktlint - https://ktlint.github.io/.
+ * This rule set provides wrappers for rules implemented by ktlint - https://ktlint.github.io/ktlint/.
  *
  * **Note: The `ktlint` rule set is not included in the detekt-cli or Gradle plugin.**
  *

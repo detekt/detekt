@@ -13,7 +13,7 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
 import dev.detekt.rules.ktlintwrapper.configWithAndroidVariants
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#chain-method-continuation)
+ * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/#chain-method-continuation)
  * for documentation.
  */
 @AutoCorrectable(since = "2.0.0")

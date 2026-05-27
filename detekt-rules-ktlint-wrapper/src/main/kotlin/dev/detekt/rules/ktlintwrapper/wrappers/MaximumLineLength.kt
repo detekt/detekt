@@ -12,7 +12,7 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
 import dev.detekt.rules.ktlintwrapper.configWithAndroidVariants
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#max-line-length) for documentation.
+ * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/#max-line-length) for documentation.
  *
  * This rules overlaps with [style>MaxLineLength](https://detekt.dev/style.html#maxlinelength)
  * from the standard rules, make sure to enable just one or keep them aligned.

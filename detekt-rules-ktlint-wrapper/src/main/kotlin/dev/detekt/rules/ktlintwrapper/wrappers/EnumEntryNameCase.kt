@@ -12,7 +12,7 @@ import dev.detekt.api.internal.AutoCorrectable
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#enum-entry) for documentation.
+ * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/#enum-entry) for documentation.
  */
 @AutoCorrectable(since = "1.4.0")
 @ActiveByDefault(since = "1.22.0")
