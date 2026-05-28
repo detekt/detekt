@@ -2,7 +2,7 @@
 
 plugins {
     id("packaging")
-    id("com.gradleup.shadow") version "9.4.1"
+    id("com.gradleup.shadow") version "9.4.2"
 }
 
 val aaDependency = configurations.dependencyScope("aaDependency")
