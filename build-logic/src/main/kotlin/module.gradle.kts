@@ -74,6 +74,7 @@ kotlin {
             // Only enable progressive mode in non-DGP modules. DGP doesn't compile with latest language version so
             // progressive mode is not appropriate.
             progressiveMode = true
+            freeCompilerArgs.add("-Xannotations-in-metadata")
         } else {
             freeCompilerArgs.add("-Xjvm-default=all")
         }
