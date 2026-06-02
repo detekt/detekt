@@ -12,4 +12,5 @@ dependencies {
     testImplementation(projects.detektTestAssertj)
     testImplementation(libs.assertj.core)
     testImplementation(projects.detektApi)
+    testCompileOnly(libs.jetbrains.annotations)
 }

@@ -26,6 +26,7 @@ dependencies {
     testImplementation(testFixtures(projects.detektApi))
     testImplementation(libs.classgraph)
     testImplementation(libs.assertj.core)
+    testCompileOnly(libs.jetbrains.annotations)
     testRuntimeOnly(libs.slf4j.simple)
 }
 

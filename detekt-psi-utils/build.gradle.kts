@@ -10,6 +10,7 @@ dependencies {
     testImplementation(libs.assertj.core)
     testImplementation(projects.detektTestJunit)
     testImplementation(projects.detektTestUtils)
+    testCompileOnly(libs.jetbrains.annotations)
 }
 
 detekt {

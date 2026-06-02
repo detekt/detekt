@@ -28,6 +28,7 @@ dependencies {
 
     testImplementation(libs.assertj.core)
     testImplementation(libs.kctfork.core)
+    testCompileOnly(libs.jetbrains.annotations)
 }
 
 shadow {
