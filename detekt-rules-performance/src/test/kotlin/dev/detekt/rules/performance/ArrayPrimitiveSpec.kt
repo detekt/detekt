@@ -4,6 +4,7 @@ import dev.detekt.api.Config
 import dev.detekt.test.junit.KotlinCoreEnvironmentTest
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.KotlinEnvironmentContainer
+import dev.detekt.test.utils.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
@@ -261,6 +262,33 @@ class ArrayPrimitiveSpec(val env: KotlinEnvironmentContainer) {
         fun isEmptyArrayString() {
             val code = "val a = emptyArray<String>()"
             assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+    }
+
+    @Nested
+    inner class `unresolved types` {
+        @Test
+        fun `does not crash when analysis throws an exception in returnsArrayPrimitive`() {
+            // Resolves #9362
+            val code = "fun foo() { arrayOf(1) }"
+            val ktFile = compileContentForTest(code)
+            val result = subject.visitFile(
+                ktFile,
+                org.jetbrains.kotlin.config.LanguageVersionSettingsImpl.DEFAULT,
+            )
+            assertThat(result).isEmpty()
+        }
+
+        @Test
+        fun `does not crash when analysis throws an exception in isArrayPrimitive`() {
+            // Resolves #9362
+            val code = "fun foo(x: Array<Int>) {}"
+            val ktFile = compileContentForTest(code)
+            val result = subject.visitFile(
+                ktFile,
+                org.jetbrains.kotlin.config.LanguageVersionSettingsImpl.DEFAULT,
+            )
+            assertThat(result).isEmpty()
         }
     }
 }
