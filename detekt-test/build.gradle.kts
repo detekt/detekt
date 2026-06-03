@@ -4,6 +4,7 @@ plugins {
 }
 
 dependencies {
+    compileOnly(libs.jetbrains.annotations)
     api(projects.detektApi)
     implementation(testFixtures(projects.detektApi))
     api(projects.detektTestUtils)

@@ -26,6 +26,7 @@ dependencies {
 
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.assertj.core)
+    testCompileOnly(libs.jetbrains.annotations)
 }
 
 val generateCliOptions = tasks.register<JavaExec>("generateCliOptions") {

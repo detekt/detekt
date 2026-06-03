@@ -17,4 +17,5 @@ dependencies {
     testImplementation(libs.assertj.core)
 
     testRuntimeOnly(libs.kotlinx.coroutinesTest)
+    testCompileOnly(libs.jetbrains.annotations)
 }

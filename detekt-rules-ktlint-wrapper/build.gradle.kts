@@ -25,6 +25,8 @@ dependencies {
     testImplementation(libs.classgraph)
 
     testRuntimeOnly(libs.slf4j.nop)
+    testCompileOnly(libs.jetbrains.annotations)
+
     extraDepsToPackage(libs.slf4j.nop)
 }
 
