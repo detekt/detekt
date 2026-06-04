@@ -11,7 +11,7 @@ import dev.detekt.api.internal.AutoCorrectable
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#multiline-expression-wrapping) for
+ * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/#multiline-expression-wrapping) for
  * documentation.
  *
  * Although this is a standard rule it is not enabled by default like other standard ktlint rules. ktlint only enables

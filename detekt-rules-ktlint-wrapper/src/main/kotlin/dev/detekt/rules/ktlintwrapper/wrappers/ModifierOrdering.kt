@@ -7,7 +7,7 @@ import dev.detekt.api.internal.AutoCorrectable
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#modifier-order) for documentation.
+ * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/#modifier-order) for documentation.
  *
  * This rules overlaps with [style>ModifierOrder](https://detekt.dev/style.html#modifierorder)
  * from the standard rules, make sure to enable just one. The pro of this rule is that it can auto-correct the issue.

@@ -7,7 +7,7 @@ import dev.detekt.api.Config
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#function-naming) for
+ * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/#function-naming) for
  * documentation.
  */
 internal class FunctionName(config: Config) :

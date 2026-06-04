@@ -13,7 +13,7 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
 import dev.detekt.rules.ktlintwrapper.configWithAndroidVariants
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#property-wrapping) for documentation.
+ * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/#property-wrapping) for documentation.
  */
 @AutoCorrectable(since = "1.23.0")
 @ActiveByDefault(since = "1.23.0")

@@ -7,7 +7,7 @@ import dev.detekt.api.internal.AutoCorrectable
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#blank-line-between-declaration-with-comments)
+ * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/#blank-line-between-declaration-with-comments)
  * for documentation.
  */
 @AutoCorrectable(since = "1.10.0")

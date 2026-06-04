@@ -6,7 +6,7 @@ import dev.detekt.api.Config
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#no-empty-file) for documentation.
+ * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/#no-empty-file) for documentation.
  */
 @ActiveByDefault(since = "2.0.0")
 internal class NoEmptyFile(config: Config) : KtlintRule(config, "Kotlin files must contain at least one declaration") {

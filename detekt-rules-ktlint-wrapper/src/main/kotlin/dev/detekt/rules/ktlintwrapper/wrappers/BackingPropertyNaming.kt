@@ -6,7 +6,7 @@ import dev.detekt.api.Config
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#backing-property-naming)
+ * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/#backing-property-naming)
  * for documentation.
  */
 @ActiveByDefault(since = "2.0.0")

@@ -5,7 +5,7 @@ import dev.detekt.api.Config
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#no-consecutive-comments) for documentation.
+ * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/#no-consecutive-comments) for documentation.
  */
 internal class NoConsecutiveComments(config: Config) :
     KtlintRule(config, "Disallow consecutive comments in most cases.") {

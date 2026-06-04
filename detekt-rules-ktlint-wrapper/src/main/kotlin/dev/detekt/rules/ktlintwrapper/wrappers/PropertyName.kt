@@ -9,7 +9,7 @@ import dev.detekt.api.config
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#property-naming) for
+ * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/#property-naming) for
  * documentation.
  */
 @ActiveByDefault(since = "2.0.0")
