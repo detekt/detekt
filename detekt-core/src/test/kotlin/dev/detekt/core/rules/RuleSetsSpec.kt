@@ -111,5 +111,6 @@ val defaultRuleSets = listOf(
     "exceptions",
     "naming",
     "performance",
+    "standard-library",
     "style",
 )

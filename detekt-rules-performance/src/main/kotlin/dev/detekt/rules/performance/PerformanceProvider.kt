@@ -17,13 +17,10 @@ class PerformanceProvider : DefaultRuleSetProvider {
         RuleSet(
             ruleSetId,
             listOf(
-                ::ForEachOnRange,
                 ::SpreadOperator,
                 ::UnnecessaryInitOnArray,
                 ::UnnecessaryTemporaryInstantiation,
                 ::UnnecessaryTypeCasting,
-                ::ArrayPrimitive,
-                ::CouldBeSequence,
                 ::UnnecessaryPartOfBinaryExpression,
             )
         )
