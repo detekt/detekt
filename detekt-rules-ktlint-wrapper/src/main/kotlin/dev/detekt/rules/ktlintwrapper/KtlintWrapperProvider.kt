@@ -236,9 +236,7 @@ class KtlintWrapperProvider : RuleSetProvider {
                 // Wrappers for experimental rules. Disabled by default.
                 // Check ktlint rules that implement com.pinterest.ktlint.rule.engine.core.api.Rule.Experimental
                 ::ExpressionOperandWrapping,
-            ).sorted().map { ctor ->
-                { cfg: Config -> ctor(cfg).also(KtlintEngine::register) }
-            }
+            ).sorted()
         )
 
     companion object {
