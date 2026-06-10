@@ -65,7 +65,6 @@ kotlin {
         jvmTarget = JvmTarget.fromTarget(jvmTargetVersion)
         extraWarnings = true
         allWarningsAsErrors = providers.gradleProperty("warningsAsErrors").orNull.toBoolean()
-        freeCompilerArgs.add("-Xcontext-parameters")
         if (project.name != "detekt-gradle-plugin") {
             // DGP compiles with Kotlin 2.1.21. Support for the stable version of this flag was only added in 2.2.0.
             // See KT-73007 & KT-74590
@@ -74,7 +73,6 @@ kotlin {
             // Only enable progressive mode in non-DGP modules. DGP doesn't compile with latest language version so
             // progressive mode is not appropriate.
             progressiveMode = true
-            freeCompilerArgs.add("-Xannotations-in-metadata")
         } else {
             freeCompilerArgs.add("-Xjvm-default=all")
         }

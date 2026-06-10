@@ -41,7 +41,7 @@ class UnnecessaryNotNullOperator(config: Config) :
         if (expression.operationToken != KtTokens.EXCLEXCL) return
 
         analyze(expression) {
-            val compilerReports = expression.diagnostics(KaDiagnosticCheckerFilter.ONLY_COMMON_CHECKERS)
+            val compilerReports = expression.directDiagnostics(KaDiagnosticCheckerFilter.ONLY_COMMON_CHECKERS)
             if (compilerReports.any { it is KaFirDiagnostic.UnnecessaryNotNullAssertion }) {
                 report(
                     Finding(
