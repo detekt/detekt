@@ -22,7 +22,6 @@ import dev.detekt.api.modifiedText
 import dev.detekt.psi.absolutePath
 import org.ec4j.core.model.Property
 import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.psi.KtPsiFactory
 import java.nio.file.Path
 
 /**
@@ -47,7 +46,8 @@ internal abstract class KtlintRule(config: Config, description: String) : Rule(c
     private lateinit var originalFilePath: Path
 
     override fun visit(root: KtFile) {
-        val fileCopy = KtPsiFactory(root.project).createPhysicalFile(root.name, root.modifiedText ?: root.text)
+        // Reuse the single shared copy of this file instead of re-parsing it for every wrapping.
+        val fileCopy = sharedFileCopy(root)
 
         this.root = fileCopy
         originalFilePath = root.absolutePath()
