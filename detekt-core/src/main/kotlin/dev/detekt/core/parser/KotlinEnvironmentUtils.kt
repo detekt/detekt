@@ -10,7 +10,9 @@ import org.jetbrains.kotlin.cli.common.arguments.K2JVMCompilerArguments
 import org.jetbrains.kotlin.cli.common.arguments.parseCommandLineArguments
 import org.jetbrains.kotlin.cli.common.arguments.validateArguments
 import org.jetbrains.kotlin.cli.common.checkPluginsArguments
+import org.jetbrains.kotlin.cli.common.computeKotlinPaths
 import org.jetbrains.kotlin.cli.common.config.addKotlinSourceRoots
+import org.jetbrains.kotlin.cli.common.kotlinPaths
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity.LOGGING
 import org.jetbrains.kotlin.cli.common.messages.MessageRenderer
 import org.jetbrains.kotlin.cli.common.messages.PrintingMessageCollector
@@ -51,6 +53,7 @@ fun createCompilerConfiguration(
     jdkHome: Path?,
     freeCompilerArgs: List<String>,
     printStream: PrintStream,
+    disposable: Disposable,
 ): CompilerConfiguration {
     val javaFiles = pathsToAnalyze.flatMap { path ->
         path.toFile().walk()
@@ -95,6 +98,13 @@ fun createCompilerConfiguration(
             CommonConfigurationKeys.MESSAGE_COLLECTOR_KEY,
             PrintingMessageCollector(printStream, MessageRenderer.PLAIN_FULL_PATHS, false)
         )
+
+        val paths = computeKotlinPaths(this, jvmCompilerArguments)?.also {
+            kotlinPaths = it
+        }
+
+        loadPlugins(paths, jvmCompilerArguments, this, disposable)
+
         setupLanguageVersionSettings(jvmCompilerArguments)
         setupJvmSpecificArguments(jvmCompilerArguments)
         configureAdvancedJvmOptions(jvmCompilerArguments)

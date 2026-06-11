@@ -57,6 +57,9 @@ internal fun Project.registerJvmCompilationDetektTask(
             detektTask.explicitApi.convention(mapExplicitArgMode())
         }
 
+        detektTask.kotlinPluginClasspath.conventionCompat(siblingTask.map { it.pluginClasspath })
+        detektTask.pluginOptions.convention(siblingTask.flatMap { it.pluginOptions })
+
         detektTask.baseline.convention(
             project.layout.file(
                 extension.baseline.flatMap {
@@ -114,6 +117,9 @@ internal fun Project.registerJvmCompilationCreateBaselineTask(
         if (compilation.name == "main") {
             createBaselineTask.explicitApi.convention(mapExplicitArgMode())
         }
+
+        createBaselineTask.kotlinPluginClasspath.conventionCompat(siblingTask.map { it.pluginClasspath })
+        createBaselineTask.pluginOptions.convention(siblingTask.flatMap { it.pluginOptions })
 
         createBaselineTask.baseline.convention(
             project.layout.file(

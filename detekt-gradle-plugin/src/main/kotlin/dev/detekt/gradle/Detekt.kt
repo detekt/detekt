@@ -26,11 +26,13 @@ import dev.detekt.gradle.invoke.FriendPathArgs
 import dev.detekt.gradle.invoke.InputArgument
 import dev.detekt.gradle.invoke.JdkHomeArgument
 import dev.detekt.gradle.invoke.JvmTargetArgument
+import dev.detekt.gradle.invoke.KotlinPluginClasspathArgument
 import dev.detekt.gradle.invoke.LanguageVersionArgument
 import dev.detekt.gradle.invoke.MultiPlatformEnabledArgument
 import dev.detekt.gradle.invoke.NoJdkArgument
 import dev.detekt.gradle.invoke.OptInArguments
 import dev.detekt.gradle.invoke.ParallelArgument
+import dev.detekt.gradle.invoke.PluginOptionsArgument
 import dev.detekt.gradle.plugin.isWorkerApiEnabled
 import org.gradle.api.Action
 import org.gradle.api.Incubating
@@ -59,6 +61,7 @@ import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.options.Option
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.gradle.workers.WorkerExecutor
+import org.jetbrains.kotlin.gradle.plugin.CompilerPluginConfig
 import javax.inject.Inject
 
 @CacheableTask
@@ -129,6 +132,12 @@ abstract class Detekt @Inject constructor(
 
     @get:Input
     abstract val multiPlatformEnabled: Property<Boolean>
+
+    @get:Classpath
+    abstract val kotlinPluginClasspath: ConfigurableFileCollection
+
+    @get:Nested
+    abstract val pluginOptions: ListProperty<CompilerPluginConfig>
 
     @get:Input
     abstract val ignoreFailures: Property<Boolean>
@@ -201,6 +210,8 @@ abstract class Detekt @Inject constructor(
             NoJdkArgument(noJdk.get()),
             ExplicitApiArgument(explicitApi.orNull),
             MultiPlatformEnabledArgument(multiPlatformEnabled.get()),
+            KotlinPluginClasspathArgument(kotlinPluginClasspath),
+            PluginOptionsArgument(pluginOptions.get())
         ).plus(convertCustomReportsToArguments()).flatMap(CliArgument::toArgument)
             .plus("-no-stdlib")
             .plus("-no-reflect")
