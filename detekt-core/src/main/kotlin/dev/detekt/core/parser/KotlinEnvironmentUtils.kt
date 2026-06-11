@@ -1,9 +1,17 @@
 package dev.detekt.core.parser
 
+import com.intellij.openapi.Disposable
+import org.jetbrains.kotlin.cli.common.CLICompiler.Companion.SCRIPT_PLUGIN_COMMANDLINE_PROCESSOR_NAME
+import org.jetbrains.kotlin.cli.common.CLICompiler.Companion.SCRIPT_PLUGIN_K2_REGISTRAR_NAME
+import org.jetbrains.kotlin.cli.common.CLICompiler.Companion.SCRIPT_PLUGIN_REGISTRAR_NAME
+import org.jetbrains.kotlin.cli.common.ExitCode
+import org.jetbrains.kotlin.cli.common.ExitCode.INTERNAL_ERROR
 import org.jetbrains.kotlin.cli.common.arguments.K2JVMCompilerArguments
 import org.jetbrains.kotlin.cli.common.arguments.parseCommandLineArguments
 import org.jetbrains.kotlin.cli.common.arguments.validateArguments
+import org.jetbrains.kotlin.cli.common.checkPluginsArguments
 import org.jetbrains.kotlin.cli.common.config.addKotlinSourceRoots
+import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity.LOGGING
 import org.jetbrains.kotlin.cli.common.messages.MessageRenderer
 import org.jetbrains.kotlin.cli.common.messages.PrintingMessageCollector
 import org.jetbrains.kotlin.cli.common.setupLanguageVersionSettings
@@ -12,10 +20,19 @@ import org.jetbrains.kotlin.cli.jvm.config.addJavaSourceRoots
 import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoots
 import org.jetbrains.kotlin.cli.jvm.config.configureJdkClasspathRoots
 import org.jetbrains.kotlin.cli.jvm.configureAdvancedJvmOptions
+import org.jetbrains.kotlin.cli.jvm.plugins.PluginCliParser
 import org.jetbrains.kotlin.cli.jvm.setupJvmSpecificArguments
+import org.jetbrains.kotlin.cli.plugins.extractPluginClasspathAndOptions
+import org.jetbrains.kotlin.cli.plugins.processCompilerPluginsOptions
+import org.jetbrains.kotlin.compiler.plugin.CommandLineProcessor
+import org.jetbrains.kotlin.compiler.plugin.CompilerPluginRegistrar
+import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.config.JVMConfigurationKeys
+import org.jetbrains.kotlin.config.messageCollector
+import org.jetbrains.kotlin.utils.KotlinPaths
+import org.jetbrains.kotlin.utils.PathUtil
 import java.io.File
 import java.io.PrintStream
 import java.nio.file.Path
@@ -93,9 +110,9 @@ fun createCompilerConfiguration(
 }
 
 // https://github.com/JetBrains/kotlin/blob/v2.4.0/compiler/cli/src/org/jetbrains/kotlin/cli/common/CLICompiler.kt#L207-L300
-protected fun loadPlugins(
+private fun loadPlugins(
     paths: KotlinPaths?,
-    arguments: A,
+    arguments: K2JVMCompilerArguments,
     configuration: CompilerConfiguration,
     parentDisposable: Disposable,
 ): ExitCode {
@@ -152,6 +169,7 @@ protected fun loadPlugins(
     )
 }
 
+@OptIn(ExperimentalCompilerApi::class)
 private fun tryLoadScriptingPluginFromCurrentClassLoader(
     configuration: CompilerConfiguration,
     pluginOptions: List<String>,
@@ -159,8 +177,9 @@ private fun tryLoadScriptingPluginFromCurrentClassLoader(
 ): Boolean =
     try {
         val pluginRegistrarClass = PluginCliParser::class.java.classLoader.loadClass(SCRIPT_PLUGIN_REGISTRAR_NAME)
-        val pluginRegistrar = (pluginRegistrarClass.getDeclaredConstructor().newInstance() as? ComponentRegistrar)?.also {
-            configuration.add(ComponentRegistrar.PLUGIN_COMPONENT_REGISTRARS, it)
+        @Suppress("DEPRECATION_ERROR")
+        val pluginRegistrar = (pluginRegistrarClass.getDeclaredConstructor().newInstance() as? org.jetbrains.kotlin.compiler.plugin.ComponentRegistrar)?.also {
+            configuration.add(org.jetbrains.kotlin.compiler.plugin.ComponentRegistrar.PLUGIN_COMPONENT_REGISTRARS, it)
         }
         val pluginK2Registrar = if (useK2) {
             val pluginK2RegistrarClass = PluginCliParser::class.java.classLoader.loadClass(SCRIPT_PLUGIN_K2_REGISTRAR_NAME)
@@ -178,6 +197,7 @@ private fun tryLoadScriptingPluginFromCurrentClassLoader(
         false
     }
 
+@OptIn(ExperimentalCompilerApi::class)
 private fun processScriptPluginCliOptions(pluginOptions: List<String>, configuration: CompilerConfiguration) {
     val cmdlineProcessorClass =
         if (pluginOptions.isEmpty()) null
@@ -189,7 +209,7 @@ private fun processScriptPluginCliOptions(pluginOptions: List<String>, configura
 }
 
 // https://github.com/JetBrains/kotlin/blob/v2.4.0/compiler/cli/cli-jvm/src/org/jetbrains/kotlin/cli/jvm/K2JVMCompiler.kt#L182-L193
-override fun MutableList<String>.addPlatformOptions(arguments: K2JVMCompilerArguments) {
+private fun MutableList<String>.addPlatformOptions(arguments: K2JVMCompilerArguments) {
     if (arguments.scriptTemplates?.isNotEmpty() == true) {
         add("plugin:kotlin.scripting:script-templates=${arguments.scriptTemplates!!.joinToString(",")}")
     }
