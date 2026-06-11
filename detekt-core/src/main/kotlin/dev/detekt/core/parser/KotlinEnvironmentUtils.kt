@@ -116,12 +116,12 @@ private fun loadPlugins(
     configuration: CompilerConfiguration,
     parentDisposable: Disposable,
 ): ExitCode {
-    val pluginClasspaths = arguments.pluginClasspaths.orEmpty().toMutableList()
-    val pluginOptions = arguments.pluginOptions.orEmpty().toMutableList()
-    val pluginConfigurations = arguments.pluginConfigurations?.asList().orEmpty()
-    val pluginOrderConstraints = arguments.pluginOrderConstraints?.asList().orEmpty()
+    val pluginClasspaths = arguments.pluginClasspaths.toMutableList()
+    val pluginOptions = arguments.pluginOptions.toMutableList()
+    val pluginConfigurations = arguments.pluginConfigurations.asList()
+    val pluginOrderConstraints = arguments.pluginOrderConstraints.asList()
 
-    val useK2 = configuration.get(CommonConfigurationKeys.USE_FIR) == true
+    val useK2 = configuration[CommonConfigurationKeys.USE_FIR] == true
 
     if (!checkPluginsArguments(configuration, useK2, pluginClasspaths, pluginOptions, pluginConfigurations)) {
         return INTERNAL_ERROR
@@ -148,7 +148,8 @@ private fun loadPlugins(
             } else {
                 configuration.messageCollector.report(
                     LOGGING,
-                    "Scripting plugin will not be loaded: not all required jars are present in the classpath (missing files: $missingJars)"
+                    "Scripting plugin will not be loaded: not all required jars are present in the classpath (missing" +
+                        " files: $missingJars)"
                 )
             }
         }
@@ -173,25 +174,38 @@ private fun loadPlugins(
 private fun tryLoadScriptingPluginFromCurrentClassLoader(
     configuration: CompilerConfiguration,
     pluginOptions: List<String>,
-    useK2: Boolean
+    useK2: Boolean,
 ): Boolean =
     try {
         val pluginRegistrarClass = PluginCliParser::class.java.classLoader.loadClass(SCRIPT_PLUGIN_REGISTRAR_NAME)
+
         @Suppress("DEPRECATION_ERROR")
-        val pluginRegistrar = (pluginRegistrarClass.getDeclaredConstructor().newInstance() as? org.jetbrains.kotlin.compiler.plugin.ComponentRegistrar)?.also {
-            configuration.add(org.jetbrains.kotlin.compiler.plugin.ComponentRegistrar.PLUGIN_COMPONENT_REGISTRARS, it)
+        val pluginRegistrar = (
+            pluginRegistrarClass.getDeclaredConstructor().newInstance()
+                as? org.jetbrains.kotlin.compiler.plugin.ComponentRegistrar
+            )?.also {
+            configuration.add(
+                org.jetbrains.kotlin.compiler.plugin.ComponentRegistrar.PLUGIN_COMPONENT_REGISTRARS,
+                it
+            )
         }
         val pluginK2Registrar = if (useK2) {
-            val pluginK2RegistrarClass = PluginCliParser::class.java.classLoader.loadClass(SCRIPT_PLUGIN_K2_REGISTRAR_NAME)
+            val pluginK2RegistrarClass = PluginCliParser::class.java.classLoader.loadClass(
+                SCRIPT_PLUGIN_K2_REGISTRAR_NAME
+            )
             (pluginK2RegistrarClass.getDeclaredConstructor().newInstance() as? CompilerPluginRegistrar)?.also {
                 configuration.add(CompilerPluginRegistrar.COMPILER_PLUGIN_REGISTRARS, it)
             }
-        } else null
+        } else {
+            null
+        }
         if (pluginRegistrar != null || pluginK2Registrar != null) {
             processScriptPluginCliOptions(pluginOptions, configuration)
             true
-        } else false
-    } catch (e: Throwable) {
+        } else {
+            false
+        }
+    } catch (@Suppress("TooGenericExceptionCaught") e: Throwable) {
         val messageCollector = configuration.getNotNull(CommonConfigurationKeys.MESSAGE_COLLECTOR_KEY)
         messageCollector.report(LOGGING, "Exception on loading scripting plugin: $e")
         false
@@ -200,8 +214,11 @@ private fun tryLoadScriptingPluginFromCurrentClassLoader(
 @OptIn(ExperimentalCompilerApi::class)
 private fun processScriptPluginCliOptions(pluginOptions: List<String>, configuration: CompilerConfiguration) {
     val cmdlineProcessorClass =
-        if (pluginOptions.isEmpty()) null
-        else PluginCliParser::class.java.classLoader.loadClass(SCRIPT_PLUGIN_COMMANDLINE_PROCESSOR_NAME)!!
+        if (pluginOptions.isEmpty()) {
+            null
+        } else {
+            PluginCliParser::class.java.classLoader.loadClass(SCRIPT_PLUGIN_COMMANDLINE_PROCESSOR_NAME)!!
+        }
     val cmdlineProcessor = cmdlineProcessorClass?.getDeclaredConstructor()?.newInstance() as? CommandLineProcessor
     if (cmdlineProcessor != null) {
         processCompilerPluginsOptions(configuration, pluginOptions, listOf(cmdlineProcessor))
@@ -210,14 +227,14 @@ private fun processScriptPluginCliOptions(pluginOptions: List<String>, configura
 
 // https://github.com/JetBrains/kotlin/blob/v2.4.0/compiler/cli/cli-jvm/src/org/jetbrains/kotlin/cli/jvm/K2JVMCompiler.kt#L182-L193
 private fun MutableList<String>.addPlatformOptions(arguments: K2JVMCompilerArguments) {
-    if (arguments.scriptTemplates?.isNotEmpty() == true) {
-        add("plugin:kotlin.scripting:script-templates=${arguments.scriptTemplates!!.joinToString(",")}")
+    if (arguments.scriptTemplates.isNotEmpty()) {
+        add("plugin:kotlin.scripting:script-templates=${arguments.scriptTemplates.joinToString(",")}")
     }
-    if (arguments.scriptResolverEnvironment?.isNotEmpty() == true) {
+    if (arguments.scriptResolverEnvironment.isNotEmpty()) {
         add(
-            "plugin:kotlin.scripting:script-resolver-environment=${arguments.scriptResolverEnvironment!!.joinToString(
-                ","
-            )}"
+            "plugin:kotlin.scripting:script-resolver-environment=${
+                arguments.scriptResolverEnvironment.joinToString(",")
+            }"
         )
     }
 }
