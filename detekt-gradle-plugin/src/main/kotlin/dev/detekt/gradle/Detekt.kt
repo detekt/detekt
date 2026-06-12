@@ -1,5 +1,6 @@
 package dev.detekt.gradle
 
+import dev.detekt.detekt_gradle_plugin.BuildConfig
 import dev.detekt.gradle.extensions.DetektReportType
 import dev.detekt.gradle.extensions.DetektReports
 import dev.detekt.gradle.extensions.FailOnSeverity
@@ -216,6 +217,7 @@ abstract class Detekt @Inject constructor(
 
     @TaskAction
     fun check() {
+        if (debug.get()) printCliCommand()
         if (providers.isWorkerApiEnabled()) {
             logger.info("Executing $name using Worker API")
             val workQueue = workerExecutor.processIsolation()
@@ -236,6 +238,22 @@ abstract class Detekt @Inject constructor(
                 taskName = name
             )
         }
+    }
+
+    private fun printCliCommand() {
+        val separatorLength = 80
+        println(
+            "==== To replicate this task in the cli, please invoke: "
+                .let { it + "=".repeat(separatorLength - it.length) }
+        )
+        val arguments = buildList {
+            if (!pluginClasspath.isEmpty) {
+                add(pluginClasspath.joinToString(",", "--plugins "))
+            }
+            addAll(arguments)
+        }
+        println("java -jar detekt-cli-${BuildConfig.DETEKT_VERSION}-all.jar ${arguments.joinToString(" ")}")
+        println("=".repeat(separatorLength))
     }
 
     private fun convertCustomReportsToArguments(): List<CustomReportArgument> =

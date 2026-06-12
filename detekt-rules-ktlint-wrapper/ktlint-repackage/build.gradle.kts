@@ -1,6 +1,6 @@
 plugins {
-    id("packaging")
-    id("com.gradleup.shadow") version "9.3.1"
+    id("java")
+    id("com.gradleup.shadow") version "9.4.2"
 }
 
 dependencies {

@@ -7,11 +7,11 @@ import dev.detekt.api.internal.AutoCorrectable
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#then-spacing) for documentation.
+ * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/#then-spacing) for documentation.
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "2.0.0")
-class ThenSpacing(config: Config) :
+internal class ThenSpacing(config: Config) :
     KtlintRule(config, "Enforces consistent spacing around the `then` block in an `if`-statement") {
 
     override val wrapping = ThenSpacingRule()

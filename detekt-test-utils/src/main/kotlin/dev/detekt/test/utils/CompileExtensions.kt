@@ -1,7 +1,6 @@
 package dev.detekt.test.utils
 
 import org.intellij.lang.annotations.Language
-import org.jetbrains.kotlin.cli.jvm.config.javaSourceRoots
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
 import kotlin.io.path.Path
@@ -23,15 +22,17 @@ fun compileContentForTest(@Language("kotlin") content: String, filename: String 
 fun compileContentForTest(
     @Language("kotlin") content: String,
     environment: KotlinEnvironmentContainer,
+    kotlinAnalysisApiEngine: KotlinAnalysisApiEngine,
     filename: String = "Test.kt",
 ): KtFile {
     require('/' !in filename && '\\' !in filename) {
         "filename must be a file name only and not contain any path elements"
     }
 
-    return KotlinAnalysisApiEngine.compile(
+    return kotlinAnalysisApiEngine.compile(
         code = content,
-        javaSourceRoots = environment.configuration.javaSourceRoots.map(::Path),
+        javaSourceRoots = environment.javaSourceRoots,
+        jvmClasspathRoots = environment.jvmClasspathRoots,
     )
 }
 

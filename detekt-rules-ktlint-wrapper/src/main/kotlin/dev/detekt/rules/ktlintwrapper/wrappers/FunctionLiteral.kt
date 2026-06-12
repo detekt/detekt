@@ -13,12 +13,12 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
 import dev.detekt.rules.ktlintwrapper.configWithAndroidVariants
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#function-literal) for
+ * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/#function-literal) for
  * documentation.
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "2.0.0")
-class FunctionLiteral(config: Config) :
+internal class FunctionLiteral(config: Config) :
     KtlintRule(config, "Parameters and -> of a function literal should be on the same line as the opening brace.") {
     override val wrapping = FunctionLiteralRule()
 

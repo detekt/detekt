@@ -2,6 +2,7 @@ package dev.detekt.core.suppressors
 
 import dev.detekt.api.Rule
 import dev.detekt.psi.AnnotationExcluder
+import dev.detekt.psi.fullyQualifiedNameGlobToRegex
 import dev.detekt.tooling.api.AnalysisMode
 import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtElement
@@ -16,7 +17,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  */
 internal fun annotationSuppressorFactory(rule: Rule, analysisMode: AnalysisMode): Suppressor? {
     val annotations = rule.config.valueOrDefault("ignoreAnnotated", emptyList<String>()).map {
-        it.qualifiedNameGlobToRegex()
+        it.fullyQualifiedNameGlobToRegex()
     }
     return if (annotations.isNotEmpty()) {
         Suppressor { finding ->
@@ -36,12 +37,3 @@ private fun KtElement.isAnnotatedWith(excluder: AnnotationExcluder): Boolean =
     } else {
         getStrictParentOfType<KtAnnotated>()?.isAnnotatedWith(excluder) ?: false
     }
-
-private fun String.qualifiedNameGlobToRegex(): Regex =
-    this
-        .replace(".", """\.""")
-        .replace("**", "//")
-        .replace("*", "[^.]*")
-        .replace("//", ".*")
-        .replace("?", ".")
-        .toRegex()

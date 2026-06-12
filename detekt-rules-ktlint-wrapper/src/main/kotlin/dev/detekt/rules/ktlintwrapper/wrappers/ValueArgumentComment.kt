@@ -6,11 +6,11 @@ import dev.detekt.api.Config
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/) for
+ * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/) for
  * documentation.
  */
 @ActiveByDefault(since = "2.0.0")
-class ValueArgumentComment(config: Config) :
+internal class ValueArgumentComment(config: Config) :
     KtlintRule(config, "Detect discouraged value argument comment locations.") {
 
     override val wrapping = ValueArgumentCommentRule()

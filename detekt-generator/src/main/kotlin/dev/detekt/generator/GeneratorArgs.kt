@@ -74,7 +74,9 @@ class GeneratorArgs {
 
     class DirectoryValidator : IValueValidator<Path> {
         override fun validate(name: String, value: Path) {
-            if (!value.isDirectory()) throw ParameterException("Value passed to $name must be a directory.")
+            if (value.exists() && !value.isDirectory()) {
+                throw ParameterException("Value passed to $name must be a directory.")
+            }
         }
     }
 }

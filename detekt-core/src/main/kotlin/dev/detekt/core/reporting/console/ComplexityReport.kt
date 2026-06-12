@@ -17,14 +17,13 @@ class ComplexityReport : ConsoleReport {
     override fun render(detektion: Detektion): String? {
         val complexityReportGenerator = ComplexityReportGenerator.create(detektion)
         return complexityReportGenerator.generate()?.let { list ->
-            with(StringBuilder()) {
+            buildString {
                 append("Complexity Report:\n")
                 list.forEach {
                     append("\t- ")
                     append(it)
                     append("\n")
                 }
-                toString()
             }
         }
     }

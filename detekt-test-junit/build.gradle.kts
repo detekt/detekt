@@ -6,5 +6,6 @@ plugins {
 dependencies {
     api(libs.junit.jupiterApi)
     implementation(projects.detektTestUtils)
-    implementation(libs.kotlin.scriptingJvm)
+
+    testImplementation(libs.kotlin.compiler)
 }

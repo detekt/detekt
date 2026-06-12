@@ -6,11 +6,11 @@ import dev.detekt.api.Config
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#package-name) for
+ * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/#package-name) for
  * documentation.
  */
 @ActiveByDefault(since = "1.22.0")
-class PackageName(config: Config) : KtlintRule(config, "Checks package name is formatted correctly") {
+internal class PackageName(config: Config) : KtlintRule(config, "Checks package name is formatted correctly") {
 
     override val wrapping = PackageNameRule()
 }

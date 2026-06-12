@@ -1067,10 +1067,35 @@ class IgnoredReturnValueSpec {
         }
 
         @Test
+        fun `does not report when an anonymous function returns Unit`() {
+            val code = """
+                fun foo(bar: (Int) -> Unit) {
+                    bar(42)
+                }
+            """.trimIndent()
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
         fun `does not report when a function returns Nothing`() {
             val code = """
                 fun foo() {
                     TODO("tbd")
+                }
+            """.trimIndent()
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `does not report when an anonymous function returns Nothing`() {
+            val code = """
+                fun foo() {
+                    val bar: (String) -> Nothing = {
+                        TODO("tbd")
+                    }
+                    bar("Hello")
                 }
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)

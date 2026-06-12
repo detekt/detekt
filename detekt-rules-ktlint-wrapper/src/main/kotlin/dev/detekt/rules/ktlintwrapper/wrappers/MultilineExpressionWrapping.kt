@@ -11,7 +11,7 @@ import dev.detekt.api.internal.AutoCorrectable
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#multiline-expression-wrapping) for
+ * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/#multiline-expression-wrapping) for
  * documentation.
  *
  * Although this is a standard rule it is not enabled by default like other standard ktlint rules. ktlint only enables
@@ -19,7 +19,7 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  * intellij_idea by default.
  */
 @AutoCorrectable(since = "1.23.0")
-class MultilineExpressionWrapping(config: Config) :
+internal class MultilineExpressionWrapping(config: Config) :
     KtlintRule(config, "Multiline expression on the right hand side of an expression must start on a separate line.") {
 
     override val wrapping = MultilineExpressionWrappingRule()

@@ -7,6 +7,7 @@ import dev.detekt.gradle.internal.addVariantName
 import dev.detekt.gradle.internal.existingVariantOrBaseFile
 import dev.detekt.gradle.plugin.DetektPlugin
 import org.gradle.api.Project
+import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.provider.Provider
 import org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode
 import org.jetbrains.kotlin.gradle.dsl.KotlinBaseExtension
@@ -18,23 +19,40 @@ internal fun Project.registerJvmCompilationDetektTask(
     extension: DetektExtension,
     compilation: KotlinCompilation<*>,
     target: KotlinTarget? = null,
+    source: ConfigurableFileCollection = sourceProvider(compilation),
 ) {
-    val taskSuffix = if (target != null) compilation.name + target.name.capitalize() else compilation.name
-    tasks.register(DetektPlugin.DETEKT_TASK_NAME + taskSuffix.capitalize(), Detekt::class.java) { detektTask ->
-        val siblingTask = compilation.compileTaskProvider.get() as KotlinJvmCompile
+    val taskSuffix =
+        if (target != null) compilation.name + target.name.replaceFirstChar { it.uppercase() } else compilation.name
+    tasks.register(
+        DetektPlugin.DETEKT_TASK_NAME + taskSuffix.replaceFirstChar { it.uppercase() },
+        Detekt::class.java
+    ) { detektTask ->
+        val siblingTask = compilation.compileTaskProvider.map { it as KotlinJvmCompile }
 
-        detektTask.setSource(siblingTask.sources)
-        detektTask.classpath.conventionCompat(compilation.output.classesDirs, siblingTask.libraries)
-        detektTask.friendPaths.conventionCompat(compilation.output.classesDirs, siblingTask.friendPaths)
-        detektTask.apiVersion.convention(siblingTask.compilerOptions.apiVersion.map { it.version })
-        detektTask.languageVersion.convention(siblingTask.compilerOptions.languageVersion.map { it.version })
+        detektTask.source(source)
+        detektTask.classpath.conventionCompat(
+            compilation.output.classesDirs,
+            siblingTask.map { it.libraries }
+        )
+        detektTask.friendPaths.conventionCompat(
+            compilation.output.classesDirs,
+            siblingTask.map { it.friendPaths }
+        )
+        detektTask.apiVersion.convention(
+            siblingTask.flatMap { task -> task.compilerOptions.apiVersion.map { it.version } }
+        )
+        detektTask.languageVersion.convention(
+            siblingTask.flatMap { task -> task.compilerOptions.languageVersion.map { it.version } }
+        )
         /* Note: jvmTarget convention is also set in setDetektTaskDefaults. There may be a race between setting it here
            as well, but they should both set the same value. This should possibly be revisited in the future. */
-        detektTask.jvmTarget.convention(siblingTask.compilerOptions.jvmTarget.map { it.target })
-        detektTask.freeCompilerArgs.convention(siblingTask.compilerOptions.freeCompilerArgs)
-        detektTask.optIn.convention(siblingTask.compilerOptions.optIn)
-        detektTask.noJdk.convention(siblingTask.compilerOptions.noJdk)
-        detektTask.multiPlatformEnabled.convention(siblingTask.multiPlatformEnabled)
+        detektTask.jvmTarget.convention(
+            siblingTask.flatMap { task -> task.compilerOptions.jvmTarget.map { it.target } }
+        )
+        detektTask.freeCompilerArgs.convention(siblingTask.flatMap { it.compilerOptions.freeCompilerArgs })
+        detektTask.optIn.convention(siblingTask.flatMap { it.compilerOptions.optIn })
+        detektTask.noJdk.convention(siblingTask.flatMap { it.compilerOptions.noJdk })
+        detektTask.multiPlatformEnabled.convention(siblingTask.flatMap { it.multiPlatformEnabled })
         if (compilation.name == "main") {
             detektTask.explicitApi.convention(mapExplicitArgMode())
         }
@@ -59,26 +77,40 @@ internal fun Project.registerJvmCompilationCreateBaselineTask(
     extension: DetektExtension,
     compilation: KotlinCompilation<*>,
     target: KotlinTarget? = null,
+    source: ConfigurableFileCollection = sourceProvider(compilation),
 ) {
-    val taskSuffix = if (target != null) compilation.name + target.name.capitalize() else compilation.name
+    val taskSuffix =
+        if (target != null) compilation.name + target.name.replaceFirstChar { it.uppercase() } else compilation.name
     tasks.register(
-        DetektPlugin.BASELINE_TASK_NAME + taskSuffix.capitalize(),
+        DetektPlugin.BASELINE_TASK_NAME + taskSuffix.replaceFirstChar { it.uppercase() },
         DetektCreateBaselineTask::class.java,
     ) { createBaselineTask ->
-        val siblingTask = compilation.compileTaskProvider.get() as KotlinJvmCompile
+        val siblingTask = compilation.compileTaskProvider.map { it as KotlinJvmCompile }
 
-        createBaselineTask.setSource(siblingTask.sources)
-        createBaselineTask.classpath.conventionCompat(compilation.output.classesDirs, siblingTask.libraries)
-        createBaselineTask.friendPaths.conventionCompat(compilation.output.classesDirs, siblingTask.friendPaths)
-        createBaselineTask.apiVersion.convention(siblingTask.compilerOptions.apiVersion.map { it.version })
-        createBaselineTask.languageVersion.convention(siblingTask.compilerOptions.languageVersion.map { it.version })
+        createBaselineTask.source(source)
+        createBaselineTask.classpath.conventionCompat(
+            compilation.output.classesDirs,
+            siblingTask.map { it.libraries }
+        )
+        createBaselineTask.friendPaths.conventionCompat(
+            compilation.output.classesDirs,
+            siblingTask.map { it.friendPaths }
+        )
+        createBaselineTask.apiVersion.convention(
+            siblingTask.flatMap { task -> task.compilerOptions.apiVersion.map { it.version } }
+        )
+        createBaselineTask.languageVersion.convention(
+            siblingTask.flatMap { task -> task.compilerOptions.languageVersion.map { it.version } }
+        )
         /* Note: jvmTarget convention is also set in setCreateBaselineTaskDefaults. There may be a race between setting
            it here as well, but they should both set the same value. This should possibly be revisited in the future. */
-        createBaselineTask.jvmTarget.convention(siblingTask.compilerOptions.jvmTarget.map { it.target })
-        createBaselineTask.freeCompilerArgs.convention(siblingTask.compilerOptions.freeCompilerArgs)
-        createBaselineTask.optIn.convention(siblingTask.compilerOptions.optIn)
-        createBaselineTask.noJdk.convention(siblingTask.compilerOptions.noJdk)
-        createBaselineTask.multiPlatformEnabled.convention(siblingTask.multiPlatformEnabled)
+        createBaselineTask.jvmTarget.convention(
+            siblingTask.flatMap { task -> task.compilerOptions.jvmTarget.map { it.target } }
+        )
+        createBaselineTask.freeCompilerArgs.convention(siblingTask.flatMap { it.compilerOptions.freeCompilerArgs })
+        createBaselineTask.optIn.convention(siblingTask.flatMap { it.compilerOptions.optIn })
+        createBaselineTask.noJdk.convention(siblingTask.flatMap { it.compilerOptions.noJdk })
+        createBaselineTask.multiPlatformEnabled.convention(siblingTask.flatMap { it.multiPlatformEnabled })
         if (compilation.name == "main") {
             createBaselineTask.explicitApi.convention(mapExplicitArgMode())
         }
@@ -108,3 +140,10 @@ internal fun Project.mapExplicitArgMode(): Provider<String> =
             else -> null
         }
     }
+
+private fun Project.sourceProvider(compilation: KotlinCompilation<*>): ConfigurableFileCollection =
+    objects.fileCollection().from(
+        provider {
+            compilation.allKotlinSourceSets.map { it.kotlin.sourceDirectories }
+        }
+    )

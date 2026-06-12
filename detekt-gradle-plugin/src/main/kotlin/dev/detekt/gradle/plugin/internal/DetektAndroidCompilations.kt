@@ -1,6 +1,7 @@
 package dev.detekt.gradle.plugin.internal
 
 import com.android.build.api.variant.AndroidComponentsExtension
+import com.android.build.api.variant.Component
 import com.android.build.api.variant.Variant
 import dev.detekt.gradle.extensions.DetektExtension
 import dev.detekt.gradle.plugin.DetektPlugin
@@ -9,10 +10,37 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidExtension
 
 internal object DetektAndroidCompilations {
     fun registerTasks(project: Project, extension: DetektExtension) {
-        project.extensions.getByType(KotlinAndroidExtension::class.java).target.compilations.all { compilation ->
-            project.registerJvmCompilationDetektTask(extension, compilation)
-            project.registerJvmCompilationCreateBaselineTask(extension, compilation)
+        val kotlinAndroid = project.extensions.getByType(KotlinAndroidExtension::class.java)
+        project.extensions.findByType(AndroidComponentsExtension::class.java)?.onVariants { variant ->
+            variant.registerDetektTasks(project, extension, kotlinAndroid)
+
+            @Suppress("UnstableApiUsage")
+            variant.nestedComponents.forEach { nested ->
+                nested.registerDetektTasks(project, extension, kotlinAndroid)
+            }
         }
+    }
+
+    private fun Component.registerDetektTasks(
+        project: Project,
+        extension: DetektExtension,
+        kotlinAndroid: KotlinAndroidExtension,
+    ) {
+        val kotlin = sources.kotlin?.all ?: return
+        val source = project.objects.fileCollection().from(kotlin)
+        kotlinAndroid.target.compilations.matching { it.name == name }
+            .configureEach { compilation ->
+                project.registerJvmCompilationDetektTask(
+                    extension = extension,
+                    compilation = compilation,
+                    source = source,
+                )
+                project.registerJvmCompilationCreateBaselineTask(
+                    extension = extension,
+                    compilation = compilation,
+                    source = source,
+                )
+            }
     }
 
     private fun DetektExtension.matchesIgnoredConfiguration(variant: Variant): Boolean =
@@ -52,18 +80,24 @@ internal object DetektAndroidCompilations {
         project.extensions.findByType(AndroidComponentsExtension::class.java)?.let { componentsExtension ->
             componentsExtension.onVariants { variant ->
                 if (!extension.matchesIgnoredConfiguration(variant)) {
-                    mainTaskProvider.configure {
-                        it.dependsOn(DetektPlugin.DETEKT_TASK_NAME + variant.name.capitalize())
+                    mainTaskProvider.configure { task ->
+                        task.dependsOn(DetektPlugin.DETEKT_TASK_NAME + variant.name.replaceFirstChar { it.uppercase() })
                     }
-                    mainBaselineTaskProvider.configure {
-                        it.dependsOn(DetektPlugin.BASELINE_TASK_NAME + variant.name.capitalize())
+                    mainBaselineTaskProvider.configure { task ->
+                        task.dependsOn(
+                            DetektPlugin.BASELINE_TASK_NAME + variant.name.replaceFirstChar { it.uppercase() }
+                        )
                     }
                     variant.nestedComponents.forEach { testVariant ->
-                        testTaskProvider.configure {
-                            it.dependsOn(DetektPlugin.DETEKT_TASK_NAME + testVariant.name.capitalize())
+                        testTaskProvider.configure { task ->
+                            task.dependsOn(
+                                DetektPlugin.DETEKT_TASK_NAME + testVariant.name.replaceFirstChar { it.uppercase() }
+                            )
                         }
-                        testBaselineTaskProvider.configure {
-                            it.dependsOn(DetektPlugin.BASELINE_TASK_NAME + testVariant.name.capitalize())
+                        testBaselineTaskProvider.configure { task ->
+                            task.dependsOn(
+                                DetektPlugin.BASELINE_TASK_NAME + testVariant.name.replaceFirstChar { it.uppercase() }
+                            )
                         }
                     }
                 }

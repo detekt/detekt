@@ -13,12 +13,12 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
 import dev.detekt.rules.ktlintwrapper.configWithAndroidVariants
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#function-signature) for
+ * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/#function-signature) for
  * documentation.
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "1.22.0")
-class FunctionSignature(config: Config) :
+internal class FunctionSignature(config: Config) :
     KtlintRule(config, "Format signature to be single when possible, multiple lines otherwise.") {
 
     override val wrapping = FunctionSignatureRule()

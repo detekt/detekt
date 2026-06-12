@@ -24,6 +24,7 @@ class CreateBaselineTaskDslSpec {
                 )
             )
             .withDetektConfig(detektConfig)
+            .withConfigFile("config/detekt/detekt.yml")
             .build()
 
         gradleRunner.runTasksAndCheckResult("detektBaseline") { result ->
@@ -47,6 +48,7 @@ class CreateBaselineTaskDslSpec {
                 )
             )
             .withDetektConfig(detektConfig)
+            .withConfigFile("config/detekt/detekt.yml")
             .build()
 
         gradleRunner.runTasksAndCheckResult("detektBaseline") { result ->

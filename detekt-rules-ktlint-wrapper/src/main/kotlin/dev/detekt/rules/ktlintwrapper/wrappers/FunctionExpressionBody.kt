@@ -13,12 +13,12 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
 import dev.detekt.rules.ktlintwrapper.configWithAndroidVariants
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#function-expression-body)
+ * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/#function-expression-body)
  * for documentation.
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "2.0.0")
-class FunctionExpressionBody(config: Config) :
+internal class FunctionExpressionBody(config: Config) :
     KtlintRule(config, "Function body containing only a return or throw expression should be an expression body.") {
 
     override val wrapping = FunctionExpressionBodyRule()

@@ -25,10 +25,10 @@ altering test results or causing crashes on other unrelated tests.
 ```kotlin
 @Test
 fun `test that launches a coroutine`() {
-val scope = CoroutineScope(Dispatchers.Unconfined)
-scope.launch {
-suspendFunction()
-}
+    val scope = CoroutineScope(Dispatchers.Unconfined)
+    scope.launch {
+        suspendFunction()
+    }
 }
 ```
 
@@ -37,9 +37,9 @@ suspendFunction()
 ```kotlin
 @Test
 fun `test that launches a coroutine`() = runTest {
-launch {
-suspendFunction()
-}
+    launch {
+        suspendFunction()
+    }
 }
 ```
 
@@ -61,7 +61,7 @@ See https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.
 
 ```kotlin
 fun foo() {
-GlobalScope.launch { delay(1_000L) }
+    GlobalScope.launch { delay(1_000L) }
 }
 ```
 
@@ -71,11 +71,11 @@ GlobalScope.launch { delay(1_000L) }
 val scope = CoroutineScope(Dispatchers.Default)
 
 fun foo() {
-scope.launch { delay(1_000L) }
+    scope.launch { delay(1_000L) }
 }
 
 fun onDestroy() {
-scope.cancel()
+   scope.cancel()
 }
 ```
 
@@ -99,7 +99,7 @@ https://developer.android.com/kotlin/coroutines/coroutines-best-practices#inject
 
 ```kotlin
 fun myFunc() {
-coroutineScope(Dispatchers.IO)
+    coroutineScope(Dispatchers.IO)
 }
 ```
 
@@ -107,7 +107,7 @@ coroutineScope(Dispatchers.IO)
 
 ```kotlin
 fun myFunc(dispatcher: CoroutineDispatcher = Dispatchers.IO) {
-coroutineScope(dispatcher)
+    coroutineScope(dispatcher)
 }
 
 class MyRepository(dispatchers: CoroutineDispatcher = Dispatchers.IO)
@@ -127,7 +127,7 @@ where it's not needed.
 
 ```kotlin
 suspend fun normalFunction() {
-println("string")
+    println("string")
 }
 ```
 
@@ -135,7 +135,7 @@ println("string")
 
 ```kotlin
 fun normalFunction() {
-println("string")
+    println("string")
 }
 ```
 
@@ -154,7 +154,7 @@ and cause unpredictable behavior.
 
 ```kotlin
 suspend fun foo() {
-Thread.sleep(1_000L)
+    Thread.sleep(1_000L)
 }
 ```
 
@@ -162,7 +162,7 @@ Thread.sleep(1_000L)
 
 ```kotlin
 suspend fun foo() {
-delay(1_000L)
+    delay(1_000L)
 }
 ```
 
@@ -179,11 +179,11 @@ Without a non-cancellable context, these functions will not execute if the paren
 
 ```kotlin
 launch {
-try {
-suspendingWork()
-} finally {
-suspendingCleanup()
-}
+    try {
+        suspendingWork()
+    } finally {
+        suspendingCleanup()
+    }
 }
 ```
 
@@ -191,11 +191,11 @@ suspendingCleanup()
 
 ```kotlin
 launch {
-try {
-suspendingWork()
-} finally {
-withContext(NonCancellable) { suspendingCleanup() }
-}
+    try {
+        suspendingWork()
+    } finally {
+        withContext(NonCancellable) { suspendingCleanup() }
+    }
 }
 ```
 
@@ -235,31 +235,31 @@ combinations by activating this rule.
 ```kotlin
 @Throws(IllegalStateException::class)
 suspend fun bar(delay: Long) {
-check(delay <= 1_000L)
-delay(delay)
+    check(delay <= 1_000L)
+    delay(delay)
 }
 
 suspend fun foo() {
-runCatching {
-bar(1_000L)
-}
+    runCatching {
+        bar(1_000L)
+    }
 }
 
 suspend fun baz() {
-try {
-bar(1_000L)
-} catch (e: IllegalStateException) {
-// catches CancellationException implicitly, since IllegalStateException is a super-class. Should be explicit
-}
+    try {
+        bar(1_000L)
+    } catch (e: IllegalStateException) {
+        // catches CancellationException implicitly, since IllegalStateException is a super-class. Should be explicit
+    }
 }
 
 suspend fun qux() {
-try {
-bar(1_000L)
-} catch (e: CancellationException) {
-doSomeWork() // potentially long-running bit of work before propagating the cancellation
-throw e
-}
+    try {
+        bar(1_000L)
+    } catch (e: CancellationException) {
+        doSomeWork() // potentially long-running bit of work before propagating the cancellation
+        throw e
+    }
 }
 ```
 
@@ -268,24 +268,24 @@ throw e
 ```kotlin
 @Throws(IllegalStateException::class)
 suspend fun bar(delay: Long) {
-check(delay <= 1_000L)
-delay(delay)
+    check(delay <= 1_000L)
+    delay(delay)
 }
 
 suspend fun foo() {
-try {
-bar(1_000L)
-} catch (e: CancellationException) {
-throw e // explicitly caught and immediately re-thrown
-} catch (e: IllegalStateException) {
-// handle error
-}
+    try {
+        bar(1_000L)
+    } catch (e: CancellationException) {
+        throw e // explicitly caught and immediately re-thrown
+    } catch (e: IllegalStateException) {
+        // handle error
+    }
 }
 
 // Alternate
 @Throws(IllegalStateException::class)
 suspend fun foo() {
-bar(1_000L)
+    bar(1_000L)
 }
 ```
 
@@ -308,9 +308,9 @@ See https://kotlinlang.org/docs/coroutines-basics.html#scope-builder-and-concurr
 
 ```kotlin
 suspend fun CoroutineScope.foo() {
-launch {
-delay(1.seconds)
-}
+    launch {
+        delay(1.seconds)
+    }
 }
 ```
 
@@ -318,16 +318,16 @@ delay(1.seconds)
 
 ```kotlin
 fun CoroutineScope.foo() {
-launch {
-delay(1.seconds)
-}
+    launch {
+        delay(1.seconds)
+    }
 }
 
 // Alternative
 suspend fun foo() = coroutineScope {
-launch {
-delay(1.seconds)
-}
+    launch {
+        delay(1.seconds)
+    }
 }
 ```
 
@@ -348,18 +348,18 @@ See https://kotlinlang.org/docs/flow.html#flows-are-cold
 
 ```kotlin
 suspend fun observeSignals(): Flow<Unit> {
-val pollingInterval = getPollingInterval() // Done outside of the flow builder block.
-return flow {
-while (true) {
-delay(pollingInterval)
-emit(Unit)
-}
-}
+    val pollingInterval = getPollingInterval() // Done outside of the flow builder block.
+    return flow {
+        while (true) {
+            delay(pollingInterval)
+            emit(Unit)
+        }
+    }
 }
 
 private suspend fun getPollingInterval(): Long {
-// Return the polling interval from some repository
-// in a suspending manner.
+    // Return the polling interval from some repository
+    // in a suspending manner.
 }
 ```
 
@@ -367,17 +367,17 @@ private suspend fun getPollingInterval(): Long {
 
 ```kotlin
 fun observeSignals(): Flow<Unit> {
-return flow {
-val pollingInterval = getPollingInterval() // Moved into the flow builder block.
-while (true) {
-delay(pollingInterval)
-emit(Unit)
-}
-}
+    return flow {
+        val pollingInterval = getPollingInterval() // Moved into the flow builder block.
+        while (true) {
+            delay(pollingInterval)
+            emit(Unit)
+        }
+    }
 }
 
 private suspend fun getPollingInterval(): Long {
-// Return the polling interval from some repository
-// in a suspending manner.
+    // Return the polling interval from some repository
+    // in a suspending manner.
 }
 ```

@@ -1,7 +1,7 @@
 import java.io.ByteArrayOutputStream
 
 plugins {
-    id("com.gradleup.shadow") version "9.3.1"
+    id("com.gradleup.shadow") version "9.4.2"
     id("module")
     id("application")
 }
@@ -10,8 +10,8 @@ application {
     mainClass = "dev.detekt.generator.Main"
 }
 
-val detektCli by configurations.dependencyScope("detektCli")
-val detektCliClasspath by configurations.resolvable("detektCliClasspath") {
+val detektCli = configurations.dependencyScope("detektCli")
+val detektCliClasspath = configurations.resolvable("detektCliClasspath") {
     extendsFrom(detektCli)
 }
 
@@ -26,10 +26,11 @@ dependencies {
 
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.assertj.core)
+    testCompileOnly(libs.jetbrains.annotations)
 }
 
-val generateCliOptions by tasks.registering(JavaExec::class) {
-    classpath = detektCliClasspath
+val generateCliOptions = tasks.register<JavaExec>("generateCliOptions") {
+    classpath = files(detektCliClasspath)
     mainClass = "dev.detekt.cli.Main"
     args = listOf("--help")
 
@@ -64,8 +65,9 @@ tasks.register("generateWebsite") {
     )
 }
 
-val generateDocumentation by tasks.registering(JavaExec::class) {
+val generateDocumentation = tasks.register<JavaExec>("generateDocumentation") {
     dependsOn(
+        generateCliOptions,
         ":detekt-rules-libraries:sourcesJar",
         ":detekt-rules-ruleauthors:sourcesJar",
     )
@@ -105,10 +107,10 @@ val generateDocumentation by tasks.registering(JavaExec::class) {
     )
 }
 
-val generatedKtlintWrapperConfig by configurations.consumable("generatedKtlintWrapperConfig")
-val generatedLibrariesConfig by configurations.consumable("generatedLibrariesConfig")
-val generatedRuleauthorsConfig by configurations.consumable("generatedRuleauthorsConfig")
-val generatedCoreConfig by configurations.consumable("generatedCoreConfig")
+val generatedKtlintWrapperConfig = configurations.consumable("generatedKtlintWrapperConfig")
+val generatedLibrariesConfig = configurations.consumable("generatedLibrariesConfig")
+val generatedRuleauthorsConfig = configurations.consumable("generatedRuleauthorsConfig")
+val generatedCoreConfig = configurations.consumable("generatedCoreConfig")
 
 artifacts {
     add(generatedKtlintWrapperConfig.name, file(ktlintWrapperConfigFile)) {
@@ -128,7 +130,7 @@ artifacts {
     }
 }
 
-val verifyGeneratorOutput by tasks.registering(Exec::class) {
+val verifyGeneratorOutput = tasks.register<Exec>("verifyGeneratorOutput") {
     dependsOn(generateDocumentation)
     description = "Verifies that generated config files are up-to-date"
     commandLine = listOf(

@@ -164,27 +164,27 @@ class RedundantVisibilityModifierSpec {
     @Nested
     inner class `Explicit API mode` {
         val code = """
-            public class A() {
-                fun f() {}
+            public class A {
+                public fun f() {}
             }
         """.trimIndent()
 
         @Test
-        fun `does not report public function in class if explicit API mode is set to strict`() {
+        fun `does not report public modifiers in strict mode`() {
             val findings = subject.lint(code, FakeLanguageVersionSettings(ExplicitApiMode.STRICT))
             assertThat(findings).isEmpty()
         }
 
         @Test
-        fun `does not report public function in class if explicit API mode is set to warning`() {
+        fun `does not report public modifiers in warning mode`() {
             val findings = subject.lint(code, FakeLanguageVersionSettings(ExplicitApiMode.WARNING))
             assertThat(findings).isEmpty()
         }
 
         @Test
-        fun `reports public function in class if explicit API mode is disabled`() {
+        fun `reports public modifiers in disabled mode`() {
             val findings = subject.lint(code, FakeLanguageVersionSettings(ExplicitApiMode.DISABLED))
-            assertThat(findings).hasSize(1)
+            assertThat(findings).hasSize(2)
         }
     }
 }

@@ -7,7 +7,7 @@ import io.github.classgraph.ClassGraph
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.MethodSource
 
-class WrapperSmokeTestSpec {
+internal class WrapperSmokeTestSpec {
     @ParameterizedTest(name = "for rule: {0}")
     @MethodSource("ktlintRules")
     fun `smoke test`(subject: KtlintRule) {

@@ -7,12 +7,12 @@ import dev.detekt.api.internal.AutoCorrectable
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#unnecessary-parenthesis-before-trailing-lambda)
+ * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/#unnecessary-parenthesis-before-trailing-lambda)
  * for documentation.
  */
 @ActiveByDefault(since = "1.23.0")
 @AutoCorrectable(since = "1.20.0")
-class UnnecessaryParenthesesBeforeTrailingLambda(config: Config) :
+internal class UnnecessaryParenthesesBeforeTrailingLambda(config: Config) :
     KtlintRule(config, "Ensures there are no unnecessary parentheses before a trailing lambda") {
 
     override val wrapping = UnnecessaryParenthesesBeforeTrailingLambdaRule()

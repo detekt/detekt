@@ -9,11 +9,11 @@ import dev.detekt.api.config
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#property-naming) for
+ * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/#property-naming) for
  * documentation.
  */
 @ActiveByDefault(since = "2.0.0")
-class PropertyName(config: Config) : KtlintRule(config, "Reports incorrect property name.") {
+internal class PropertyName(config: Config) : KtlintRule(config, "Reports incorrect property name.") {
     override val wrapping = PropertyNamingRule()
 
     @Configuration("The naming style ('screaming_snake_case', or 'pascal_case') to be applied on constant properties.")

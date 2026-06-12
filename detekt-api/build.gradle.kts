@@ -5,13 +5,13 @@ plugins {
     id("module")
     id("public-api")
     id("java-test-fixtures")
-    id("dev.drewhamilton.poko") version "0.21.1"
-    id("com.github.gmazzo.buildconfig") version "6.0.7"
+    id("dev.drewhamilton.poko") version "0.23.1"
+    id("com.github.gmazzo.buildconfig") version "6.0.10"
 }
 
 dependencies {
     api(libs.kotlin.compiler)
-    api(projects.detektKotlinAnalysisApi)
+    compileOnlyApi(projects.detektKotlinAnalysisApi)
 
     testImplementation(projects.detektTest)
     testImplementation(projects.detektTestUtils)
@@ -52,7 +52,7 @@ kotlin {
     @OptIn(org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation::class)
     abiValidation {
         filters {
-            excluded {
+            exclude {
                 byNames.add("dev.detekt.api.internal.**")
             }
         }

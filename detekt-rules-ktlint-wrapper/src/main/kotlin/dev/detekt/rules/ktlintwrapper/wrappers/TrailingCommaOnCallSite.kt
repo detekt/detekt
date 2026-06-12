@@ -10,7 +10,7 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
 import dev.detekt.rules.ktlintwrapper.configWithAndroidVariants
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#trailing-comma-on-call-site) for documentation.
+ * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/#trailing-comma-on-call-site) for documentation.
  *
  * The default config comes from ktlint and follows these conventions:
  * - [Kotlin coding convention](https://kotlinlang.org/docs/coding-conventions.html#trailing-commas) recommends
@@ -21,7 +21,7 @@ import dev.detekt.rules.ktlintwrapper.configWithAndroidVariants
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "1.22.0")
-class TrailingCommaOnCallSite(config: Config) :
+internal class TrailingCommaOnCallSite(config: Config) :
     KtlintRule(config, "Rule to mandate/forbid trailing commas at call sites") {
 
     override val wrapping = TrailingCommaOnCallSiteRule()

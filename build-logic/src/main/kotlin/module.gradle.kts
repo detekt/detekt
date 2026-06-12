@@ -65,7 +65,6 @@ kotlin {
         jvmTarget = JvmTarget.fromTarget(jvmTargetVersion)
         extraWarnings = true
         allWarningsAsErrors = providers.gradleProperty("warningsAsErrors").orNull.toBoolean()
-        freeCompilerArgs.add("-Xcontext-parameters")
         if (project.name != "detekt-gradle-plugin") {
             // DGP compiles with Kotlin 2.1.21. Support for the stable version of this flag was only added in 2.2.0.
             // See KT-73007 & KT-74590
@@ -107,6 +106,7 @@ dependencies {
     components {
         setOf(
             "com.android.tools.build:gradle-api",
+            "com.android.tools.build:gradle-common-api",
             "org.junit.jupiter:junit-jupiter",
             "org.junit.jupiter:junit-jupiter-api",
             "org.junit.jupiter:junit-jupiter-engine",
@@ -131,7 +131,7 @@ java {
     withJavadocJar()
     sourceCompatibility = JavaVersion.toVersion(jvmTargetVersion)
     targetCompatibility = JavaVersion.toVersion(jvmTargetVersion)
-    if (project.name != "detekt-gradle-plugin") {
+    if (project.name !in setOf("detekt-gradle-plugin", "detekt-test-junit")) {
         // DGP uses different versions of kotlin-gradle-api in test runtime and compile time
         consistentResolution {
             useCompileClasspathVersions()

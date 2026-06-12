@@ -6,7 +6,7 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.Rule
 import dev.detekt.api.config
-import dev.detekt.api.simplePatternToRegex
+import dev.detekt.psi.pathGlobToRegex
 import org.jetbrains.kotlin.psi.KtClassOrObject
 
 /**
@@ -18,7 +18,7 @@ class ForbiddenClassName(config: Config) : Rule(config, "Forbidden class name as
 
     @Configuration("List of glob patterns to be disallowed as class names")
     private val forbiddenName: List<Regex> by config(emptyList<String>()) { patterns ->
-        patterns.map(String::simplePatternToRegex)
+        patterns.map(String::pathGlobToRegex)
     }
 
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {

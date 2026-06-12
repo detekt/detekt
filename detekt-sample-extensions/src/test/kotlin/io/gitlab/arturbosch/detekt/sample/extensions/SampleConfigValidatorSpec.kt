@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.sample.extensions
 
-import dev.detekt.test.yamlConfigFromContent
+import dev.detekt.test.TestConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -8,12 +8,12 @@ class SampleConfigValidatorSpec {
 
     @Test
     fun `it warns if active property is not a boolean`() {
-        val config = yamlConfigFromContent(
-            """
-                sample:
-                  TooManyFunctions:
-                    active: 1
-            """.trimIndent()
+        val config = TestConfig(
+            "sample" to (
+                "TooManyFunctions" to (
+                    "active" to 1
+                    )
+                )
         )
 
         val warnings = SampleConfigValidator().validate(config)

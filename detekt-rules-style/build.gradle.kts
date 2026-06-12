@@ -9,9 +9,12 @@ dependencies {
 
     testImplementation(libs.kotlin.compiler)
     testImplementation(projects.detektApi)
+    testRuntimeOnly(projects.detektPsiUtils)
+    testRuntimeOnly(projects.detektMetrics)
     testImplementation(projects.detektTest)
     testImplementation(projects.detektTestAssertj)
     testImplementation(projects.detektTestJunit)
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.assertj.core)
+    testCompileOnly(libs.jetbrains.annotations)
 }

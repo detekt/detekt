@@ -5,10 +5,10 @@ import dev.detekt.api.Config
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#class-naming) for
+ * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/#class-naming) for
  * documentation.
  */
-class ClassName(config: Config) :
+internal class ClassName(config: Config) :
     KtlintRule(config, "Class or object name should start with an uppercase letter and use camel case.") {
     override val wrapping = ClassNamingRule()
 }

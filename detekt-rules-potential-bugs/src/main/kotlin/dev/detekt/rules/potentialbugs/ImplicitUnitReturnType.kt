@@ -56,7 +56,7 @@ class ImplicitUnitReturnType(config: Config) :
 
         if (function.hasImplicitUnitReturnType()) {
             val message = buildString {
-                append("'${function.name}'  has the implicit return type `Unit`.")
+                append("'${function.name}' has the implicit return type `Unit`.")
                 append(" Prefer using a block statement")
                 if (allowExplicitReturnType) {
                     append(" or specify the return type explicitly")

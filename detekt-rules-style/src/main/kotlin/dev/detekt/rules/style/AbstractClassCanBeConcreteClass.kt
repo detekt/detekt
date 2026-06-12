@@ -85,7 +85,7 @@ class AbstractClassCanBeConcreteClass(config: Config) :
 
             else -> {
                 analyze(this) {
-                    (symbol as? KaClassSymbol)?.memberScope?.declarations.orEmpty().any {
+                    (symbol as? KaClassSymbol)?.memberScope?.callables.orEmpty().any {
                         it.modality == KaSymbolModality.ABSTRACT
                     }
                 }

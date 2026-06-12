@@ -9,7 +9,7 @@ class CompilerSpecBuilder : Builder<CompilerSpec> {
     var jvmTarget: String = "1.8"
     var languageVersion: String? = null
     var apiVersion: String? = null
-    var classpath: String? = null
+    var classpath: List<Path> = emptyList()
     var jdkHome: Path? = null
     var freeCompilerArgs: List<String> = emptyList()
 
@@ -21,7 +21,7 @@ private data class CompilerModel(
     override val jvmTarget: String,
     override val languageVersion: String?,
     override val apiVersion: String?,
-    override val classpath: String?,
+    override val classpath: List<Path>,
     override val jdkHome: Path?,
     override val freeCompilerArgs: List<String>,
 ) : CompilerSpec

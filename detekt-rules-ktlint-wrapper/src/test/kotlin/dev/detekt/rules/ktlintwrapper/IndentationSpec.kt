@@ -1,6 +1,7 @@
 package dev.detekt.rules.ktlintwrapper
 
 import dev.detekt.api.Config
+import dev.detekt.api.Finding
 import dev.detekt.rules.ktlintwrapper.wrappers.Indentation
 import dev.detekt.test.TestConfig
 import dev.detekt.test.assertj.assertThat
@@ -44,12 +45,46 @@ class IndentationSpec {
             val config = TestConfig("indentSize" to 1)
             assertThat(Indentation(config).lint(code)).isEmpty()
         }
+
+        @Test
+        fun `does not report when using an indentation level config of 1 and style of tab`() {
+            val config = TestConfig("indentSize" to 1, "indentStyle" to "tab")
+            val code = """
+                fun main() {
+                ${TAB}println()
+                }
+            """.trimIndent()
+            assertThat(Indentation(config).lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `reports usage of space when using an indentation level config of 1 and style of tab`() {
+            val config = TestConfig("indentSize" to 1, "indentStyle" to "tab")
+            val code = """
+                fun main() {
+                  println()
+                }
+            """.trimIndent()
+            assertThat(Indentation(config).lint(code))
+                .hasSize(2)
+                .extracting<String>(Finding::message)
+                .contains(
+                    "Unexpected space character(s)",
+                    "Unexpected indentation (2) (should be 1)"
+                )
+        }
     }
 
     @Test
     fun `does not report correct indentation level`() {
         val code = "fun main() {\n    println()\n}"
         assertThat(subject.lint(code)).isEmpty()
+    }
+
+    @Test
+    fun `falls back to the default space indent style when the config has no parent`() {
+        val code = "fun main() {\n    println()\n}"
+        assertThat(Indentation(TestConfig(parent = null)).lint(code)).isEmpty()
     }
 
     @Nested
@@ -71,5 +106,9 @@ class IndentationSpec {
             val config = TestConfig("indentSize" to 1)
             assertThat(Indentation(config).lint(code)).isEmpty()
         }
+    }
+
+    companion object {
+        private const val TAB = "${'\t'}"
     }
 }

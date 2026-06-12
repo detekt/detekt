@@ -10,11 +10,11 @@ import dev.detekt.api.internal.AutoCorrectable
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#try-catch-finally-spacing) for
+ * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/#try-catch-finally-spacing) for
  * documentation.
  */
 @AutoCorrectable(since = "1.23.0")
-class TryCatchFinallySpacing(config: Config) :
+internal class TryCatchFinallySpacing(config: Config) :
     KtlintRule(config, "Enforce consistent spacing in try-catch-finally blocks.") {
 
     override val wrapping = TryCatchFinallySpacingRule()

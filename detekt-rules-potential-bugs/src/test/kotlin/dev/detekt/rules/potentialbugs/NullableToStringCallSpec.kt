@@ -5,7 +5,13 @@ import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.junit.KotlinCoreEnvironmentTest
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.KotlinEnvironmentContainer
+import org.jetbrains.kotlin.config.ApiVersion
+import org.jetbrains.kotlin.config.LanguageVersion
+import org.jetbrains.kotlin.config.LanguageVersionSettings
+import org.jetbrains.kotlin.config.LanguageVersionSettingsImpl
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.MethodSource
 
 @KotlinCoreEnvironmentTest
 class NullableToStringCallSpec(private val env: KotlinEnvironmentContainer) {
@@ -227,5 +233,46 @@ class NullableToStringCallSpec(private val env: KotlinEnvironmentContainer) {
         """.trimIndent()
         val actual = subject.lintWithContext(env, code)
         assertThat(actual).hasSize(1)
+    }
+
+    @ParameterizedTest
+    @MethodSource("kotlinVersionSettings")
+    fun `doesn't report when contract implying non null - #9145`(languageVersionSettings: LanguageVersionSettings) {
+        val code = """
+            @OptIn(kotlin.contracts.ExperimentalContracts::class)
+            fun CharSequence?.isNotNullOrBlank(): Boolean {
+                kotlin.contracts.contract {
+                    returns(true) implies (this@isNotNullOrBlank != null)
+                }
+                return !this.isNullOrBlank()
+            }
+            
+            data class Demo(
+                val firstName: String?,
+                val lastName: String?,
+                val default: String,
+            ) {
+                fun getDisplayName(): String {
+                    return if (firstName.isNotNullOrBlank() && lastName.isNotNullOrBlank()) {
+                        "${'$'}firstName ${'$'}lastName"
+                    } else default
+                }
+            }
+        """.trimIndent()
+        val actual = subject.lintWithContext(
+            environment = env,
+            content = code,
+            languageVersionSettings = languageVersionSettings,
+        )
+        assertThat(actual).isEmpty()
+    }
+
+    companion object {
+        @JvmStatic
+        fun kotlinVersionSettings() =
+            listOf(
+                LanguageVersionSettingsImpl.DEFAULT,
+                LanguageVersionSettingsImpl(LanguageVersion.KOTLIN_2_3, ApiVersion.KOTLIN_2_3),
+            )
     }
 }

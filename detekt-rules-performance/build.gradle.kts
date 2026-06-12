@@ -4,7 +4,6 @@ plugins {
 
 dependencies {
     compileOnly(projects.detektApi)
-    compileOnly(projects.detektPsiUtils)
 
     testImplementation(libs.kotlin.compiler)
     testImplementation(projects.detektApi)

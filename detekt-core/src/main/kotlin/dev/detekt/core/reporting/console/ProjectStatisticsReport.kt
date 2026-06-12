@@ -15,7 +15,7 @@ class ProjectStatisticsReport : ConsoleReport {
     override fun render(detektion: Detektion): String? {
         val metrics = detektion.metrics
         if (metrics.isEmpty()) return null
-        return with(StringBuilder()) {
+        return buildString {
             append("Project Statistics:\n")
             metrics.sortedBy { -it.priority }
                 .forEach {
@@ -23,7 +23,6 @@ class ProjectStatisticsReport : ConsoleReport {
                     append(it)
                     append("\n")
                 }
-            toString()
         }
     }
 }

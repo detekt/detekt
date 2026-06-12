@@ -10,8 +10,8 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
+import dev.detekt.psi.hasImplicitParameter
 import dev.detekt.psi.hasImplicitParameterReference
-import dev.detekt.psi.implicitParameterOrNull
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassInitializer
@@ -125,8 +125,7 @@ class NoNameShadowing(config: Config) :
                         if (parent.valueParameters.isNotEmpty()) {
                             parent.valueParameters.any { it.name == declarationName }
                         } else {
-                            parent.implicitParameterOrNull() != null &&
-                                declarationName == Name.identifier("it").asString()
+                            parent.hasImplicitParameter() && declarationName == Name.identifier("it").asString()
                         }
                     }
 
@@ -152,7 +151,7 @@ class NoNameShadowing(config: Config) :
     }
 
     private fun KtLambdaExpression.hasParentImplicitParameterLambda(): Boolean =
-        getStrictParentOfType<KtLambdaExpression>()?.implicitParameterOrNull() != null
+        getStrictParentOfType<KtLambdaExpression>()?.hasImplicitParameter() ?: false
 
     @Suppress("ClassOrdering")
     private val KtDeclaration.accessibleClasses: List<KtClassOrObject>

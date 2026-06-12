@@ -76,9 +76,7 @@ class ForbiddenNamedParam(config: Config) :
                     yield(it.symbol)
                     yieldAll(it.symbol.allOverriddenSymbols)
                 }
-            }
-        }
-            ?.forEach { symbol ->
+            }?.forEach { symbol ->
                 methods.find { it.value.match(symbol) }?.let { matchingMethod ->
                     val message = if (matchingMethod.reason != null) {
                         "The method `${matchingMethod.value}` has been forbidden from using named " +
@@ -90,5 +88,6 @@ class ForbiddenNamedParam(config: Config) :
                     report(Finding(Entity.from(expression), message))
                 }
             }
+        }
     }
 }
