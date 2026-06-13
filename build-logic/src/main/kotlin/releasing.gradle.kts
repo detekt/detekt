@@ -17,7 +17,6 @@ githubRelease {
     repo = "detekt"
     overwrite = true
     dryRun = false
-    draft = true
     prerelease = true
     targetCommitish = "main"
     body = "Detekt Release Body"
