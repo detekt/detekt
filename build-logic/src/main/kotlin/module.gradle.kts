@@ -126,7 +126,6 @@ dependencies {
 }
 
 java {
-    withSourcesJar()
     sourceCompatibility = JavaVersion.toVersion(jvmTargetVersion)
     targetCompatibility = JavaVersion.toVersion(jvmTargetVersion)
     if (project.name !in setOf("detekt-gradle-plugin", "detekt-test-junit")) {
