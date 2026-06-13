@@ -59,7 +59,8 @@ class ForbiddenImport(config: Config) :
         "List of imports, specified as glob patterns, that are forbidden. " +
             "A pattern has to match the whole fully qualified name, where `*` matches zero or more " +
             "characters including `.` and `?` matches exactly one character. " +
-            "Entries may be plain strings or value/reason pairs. It is recommended to also specify a reason."
+            "Entries may either be plain strings or value/reason pairs, allowing you to specify the reason why each " +
+                "individual import is forbidden."
     )
     private val forbiddenImports: List<Forbidden> by config(valuesWithReason()) { list ->
         list.map { Forbidden(it.value.pathGlobToRegex(), it.reason) }
