@@ -12,6 +12,64 @@ Detekt 2.0.0 is still in alpha. While it's stable enough to use in your projects
 
 :::
 
+## 2.0.0-alpha.4 - 2026-06-13
+
+This is an alpha release of Detekt 2.0.0. Is built against Kotlin 2.4.0, Gradle 9.5.1, AGP 9.2.1 and is tested against JDK 25.
+
+### Notable Changes
+
+- Support Kotlin 2.4.0 - [#9218](https://github.com/detekt/detekt/pull/9218)
+- Add new rule `LeakingSessionBoundType` - [#9242](https://github.com/detekt/detekt/pull/9242)
+- Apply the `indent_style` configuration to all the ktlint wrapper rules (previsouly this was applied only to the `Indentation` rule) - [#9315](https://github.com/detekt/detekt/pull/9315)
+
+### Breaking Changes
+
+- Expose Glob-to-Regex functions in `psi-utils` - [#9340](https://github.com/detekt/detekt/pull/9340)
+- Make `Detektion` immutable - [#8583](https://github.com/detekt/detekt/pull/8583)
+
+### Changelog
+
+- fix: prevent ArrayPrimitive crash on unresolved types - [#9364](https://github.com/detekt/detekt/pull/9364)
+- Update ktlint documentation links - [#9354](https://github.com/detekt/detekt/pull/9354)
+- Fix PrintStackTrace nested call detection - [#9352](https://github.com/detekt/detekt/pull/9352)
+- Fix unused import false positive for companion object member extension properties - [#9349](https://github.com/detekt/detekt/pull/9349)
+- Accept punctuation after a link - [#9341](https://github.com/detekt/detekt/pull/9341)
+- Fixes UnnecessaryFullyQualifiedName false positive with explicit import shadowing - [#9329](https://github.com/detekt/detekt/pull/9329)
+- docs: fix KMP type resolution task names - [#9316](https://github.com/detekt/detekt/pull/9316)
+- Stop publishing ktlint-repackage - [#9314](https://github.com/detekt/detekt/pull/9314)
+- Stop exposing ktlint's StandardRule to detekt-rules-ktlint-wrapper consumers - [#9313](https://github.com/detekt/detekt/pull/9313)
+- Include ktlint-repackage in ktlint-wrapper JAR - [#9312](https://github.com/detekt/detekt/pull/9312)
+- Declare DGP compatibility with Gradle's configuration cache - [#9311](https://github.com/detekt/detekt/pull/9311)
+- Forward languageVersionSettings to KotlinAnalysisApiEngine.compile - [#9305](https://github.com/detekt/detekt/pull/9305)
+- docs: add ForbiddenImport configuration example - [#9302](https://github.com/detekt/detekt/pull/9302)
+- Fix `UnnecessaryFullyQualifiedName` clashes with kotlin package name - [#9289](https://github.com/detekt/detekt/pull/9289)
+- Remove excludeImportStatements from Deprecation rule - [#9287](https://github.com/detekt/detekt/pull/9287)
+- Improve repackaging of Analysis API dependencies - [#9285](https://github.com/detekt/detekt/pull/9285)
+- MaxChainedCallsOnSameLine - Fix AA type leaks - [#9261](https://github.com/detekt/detekt/pull/9261)
+- SuspendFunSwallowedCancellation - Fix AA type leaks - [#9256](https://github.com/detekt/detekt/pull/9256)
+- feat: Add exhaustive option to OutdatedDocumentation rule, also improve error messages - [#9255](https://github.com/detekt/detekt/pull/9255)
+- Excluding generated sources by default - [#9251](https://github.com/detekt/detekt/pull/9251)
+- Move `FileProcessListenerExtensions` to `:detekt-test` - [#9212](https://github.com/detekt/detekt/pull/9212)
+- Improve SuspendFunSwallowedCancellation - [#9208](https://github.com/detekt/detekt/pull/9208)
+- Cli filters - [#9200](https://github.com/detekt/detekt/pull/9200)
+- Allow single-argument Boolean generics in `NonBooleanPropertyPrefixedWithIs` - [#9173](https://github.com/detekt/detekt/pull/9173)
+- Remove `Config.parentPath` - [#9036](https://github.com/detekt/detekt/pull/9036)
+
+### Dependency Updates
+
+- Update Poko to v0.23.1 - [#9371](https://github.com/detekt/detekt/pull/9371)
+- Update slf4j monorepo to v2.0.18 - [#9324](https://github.com/detekt/detekt/pull/9324)
+- Update agp to v9.2.1 - [#9268](https://github.com/detekt/detekt/pull/9268)
+
+### Housekeeping & Refactorings
+
+- Update test to avoid typealias to compiler-required annotation - [#9361](https://github.com/detekt/detekt/pull/9361)
+- Remove unnecessary compileOnly dependencies - [#9318](https://github.com/detekt/detekt/pull/9318)
+
+### Contributors
+
+We would like to thank the following contributors that made this release possible: [@3flex](https://github.com/3flex), [@BraisGabin](https://github.com/BraisGabin), [@ChristophyBarth](https://github.com/ChristophyBarth), [@FletchMcKee](https://github.com/FletchMcKee), [@Lucas-FManager](https://github.com/Lucas-FManager), [@ShubhamWorks02](https://github.com/ShubhamWorks02), [@Will-thom](https://github.com/Will-thom), [@e5l](https://github.com/e5l), [@fru1tworld](https://github.com/fru1tworld), [@jonapoul](https://github.com/jonapoul), [@luanpotter](https://github.com/luanpotter), [@matejdro](https://github.com/matejdro), [@mirkoalicastro](https://github.com/mirkoalicastro), [@nchen000](https://github.com/nchen000), [@ninebolt6](https://github.com/ninebolt6), [@paulkagiri](https://github.com/paulkagiri), [@travisMiehm](https://github.com/travisMiehm)
+
 ## 2.0.0-alpha.3 - 2026-04-24
 
 This is an alpha release of Detekt 2.0.0. Is built against Kotlin 2.3.21, Gradle 9.3.1, AGP 9.1.1 and is tested against JDK 25.
