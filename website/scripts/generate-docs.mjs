@@ -751,6 +751,149 @@ function generateFile(provider, rules) {
   return header + '\n' + body;
 }
 
+// ─── CLI options generation ───────────────────────────────────────────────────
+
+// Parse enum entry names from a Kotlin enum class source file.
+// Stops at the trailing `;` that separates entries from member declarations.
+function parseEnumEntries(src) {
+  const stripped = stripBlockComments(src).replace(/\/\/[^\n]*/g, '');
+  const braceIdx = stripped.indexOf('{', stripped.indexOf('enum class'));
+  if (braceIdx === -1) return [];
+  const body = stripped.substring(braceIdx + 1);
+  // Enum entry list ends at the first standalone `;` line
+  const semiIdx = body.search(/^\s*;/m);
+  const entriesSection = semiIdx !== -1 ? body.substring(0, semiIdx) : body;
+  return (entriesSection.match(/^\s*([A-Za-z_]\w*)\s*(?:[,({]|$)/mg) ?? [])
+    .map(m => m.trim().match(/^([A-Za-z_]\w*)/)?.[1])
+    .filter(Boolean);
+}
+
+function wordWrap(text, indent, maxWidth) {
+  const words = text.split(/\s+/).filter(Boolean);
+  const lines = [];
+  let line = ' '.repeat(indent);
+  for (const word of words) {
+    if (line.trim() && line.length + 1 + word.length > maxWidth) {
+      lines.push(line);
+      line = ' '.repeat(indent) + word;
+    } else {
+      line = line.trim() ? line + ' ' + word : ' '.repeat(indent) + word;
+    }
+  }
+  if (line.trim()) lines.push(line);
+  return lines.join('\n');
+}
+
+// Scan string literal(s) (possibly joined by +) starting at position i in src.
+// Returns { value, end } where value is the concatenated string content.
+function scanStringValue(src, i) {
+  let value = '';
+  while (i < src.length) {
+    while (i < src.length && /\s/.test(src[i])) i++;
+    if (src[i] !== '"') break;
+    i++; // skip opening "
+    while (i < src.length && src[i] !== '"') {
+      if (src[i] === '\\') { value += src[i + 1]; i += 2; }
+      else value += src[i++];
+    }
+    i++; // skip closing "
+    // Check for + continuation (may have whitespace/newlines between)
+    let j = i;
+    while (j < src.length && /\s/.test(src[j])) j++;
+    if (src[j] === '+') { i = j + 1; continue; }
+    break;
+  }
+  return { value: value.trim(), end: i };
+}
+
+function generateCliOptionsFile() {
+  const CLI_OPTIONS_OUTPUT = join(WEBSITE_DIR, 'docs/gettingstarted/_cli-options.md');
+
+  const analysisModeEntries = parseEnumEntries(
+    readFileSync(join(ROOT_DIR, 'detekt-tooling/src/main/kotlin/dev/detekt/tooling/api/AnalysisMode.kt'), 'utf8')
+  );
+  const failureSeverityEntries = parseEnumEntries(
+    readFileSync(join(ROOT_DIR, 'detekt-cli/src/main/kotlin/dev/detekt/cli/FailureSeverity.kt'), 'utf8')
+  );
+
+  // JvmTarget and LanguageVersion come from the Kotlin compiler dependency (not in local source)
+  const POSSIBLE_VALUES = {
+    AnalysisMode: `[${analysisModeEntries.join(', ')}]`,
+    FailureSeverityConverter: `[${failureSeverityEntries.join(', ')}]`,
+    JvmTargetConverter: '[1.6, 1.8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26]',
+    LanguageVersionConverter: '[1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4, 2.5]',
+    ApiVersionConverter: '[1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4, 2.5]',
+  };
+
+  const cliArgsSrc = readFileSync(
+    join(ROOT_DIR, 'detekt-cli/src/main/kotlin/dev/detekt/cli/CliArgs.kt'), 'utf8'
+  );
+
+  const AT_PARAM = '@Parameter';
+  const params = [];
+  let searchFrom = 0;
+
+  while (true) {
+    const atIdx = cliArgsSrc.indexOf(AT_PARAM, searchFrom);
+    if (atIdx === -1) break;
+    const parenStart = cliArgsSrc.indexOf('(', atIdx + AT_PARAM.length);
+    if (parenStart === -1) break;
+    const parenEnd = findMatchingParen(cliArgsSrc, parenStart);
+    if (parenEnd === -1) break;
+    searchFrom = parenEnd + 1;
+
+    const annotation = cliArgsSrc.substring(parenStart + 1, parenEnd);
+    if (/\bhidden\s*=\s*true/.test(annotation)) continue;
+
+    // names = ["--foo", "-f"]
+    const namesMatch = annotation.match(/names\s*=\s*\[([^\]]+)\]/);
+    if (!namesMatch) continue;
+    const names = (namesMatch[1].match(/"([^"]+)"/g) ?? []).map(s => s.replace(/"/g, ''));
+
+    // description = "..." (possibly multi-line concatenation) — scan properly
+    const descKeyIdx = annotation.search(/\bdescription\s*=/);
+    let description = '';
+    if (descKeyIdx !== -1) {
+      const valueStart = annotation.indexOf('=', descKeyIdx) + 1;
+      description = scanStringValue(annotation, valueStart).value;
+    }
+
+    // converter = FooConverter::class
+    const converterMatch = annotation.match(/converter\s*=\s*(\w+)/);
+    const converter = converterMatch ? converterMatch[1] : null;
+
+    // var fieldName: FieldType = defaultExpr
+    const afterAnnotation = cliArgsSrc.substring(parenEnd + 1);
+    const varMatch = afterAnnotation.match(/^\s*(?:@\w+[^)]*\)\s*)*(?:var|val)\s+\w+\s*:\s*(\w+)[^=\n]*=\s*([^\n]+)/);
+    const fieldType = varMatch ? varMatch[1] : null;
+    const defaultExpr = varMatch ? varMatch[2].trim() : '';
+
+    let defaultValue = null;
+    if (defaultExpr === 'false' || defaultExpr === 'true') defaultValue = defaultExpr;
+    else if (/^(?:emptyList|mutableListOf)\(\)/.test(defaultExpr)) defaultValue = '[]';
+    else if (/AnalysisMode\.(\w+)/.test(defaultExpr)) defaultValue = defaultExpr.match(/AnalysisMode\.(\w+)/)[1];
+    else if (/FailureSeverity\.(\w+)/.test(defaultExpr)) defaultValue = defaultExpr.match(/FailureSeverity\.(\w+)/)[1];
+    else if (/JvmTarget\.DEFAULT/.test(defaultExpr)) defaultValue = '1.8';
+
+    const possibleValues = POSSIBLE_VALUES[converter] ?? POSSIBLE_VALUES[fieldType] ?? null;
+    const primaryName = names.find(n => n.startsWith('--')) ?? names[0];
+    params.push({ names, description, defaultValue, possibleValues, primaryName });
+  }
+
+  params.sort((a, b) => a.primaryName.localeCompare(b.primaryName));
+
+  let out = 'Usage: detekt [options] Options to pass to the Kotlin compiler.\n  Options:\n';
+  for (const { names, description, defaultValue, possibleValues } of params) {
+    out += `    ${names.join(', ')}\n`;
+    if (description) out += wordWrap(description, 6, 79) + '\n';
+    if (defaultValue !== null) out += `      Default: ${defaultValue}\n`;
+    if (possibleValues !== null) out += `      Possible Values: ${possibleValues}\n`;
+  }
+
+  writeFileSync(CLI_OPTIONS_OUTPUT, '```\n' + out + '\n```\n', 'utf8');
+  console.log(`  Wrote: ${CLI_OPTIONS_OUTPUT}`);
+}
+
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
 function main() {
@@ -795,6 +938,7 @@ function main() {
   }
 
   console.log(`\nGenerated ${generated} rule set documentation files.`);
+  generateCliOptionsFile();
 }
 
 main();
