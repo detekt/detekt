@@ -22,6 +22,11 @@ dependencies {
 
     runtimeOnly(libs.slf4j.api)
 
+    testImplementation(projects.detektRulesKtlintWrapper.ktlintRepackage) {
+        attributes {
+            attribute(Bundling.BUNDLING_ATTRIBUTE, named(Bundling.SHADOWED))
+        }
+    }
     testImplementation(libs.kotlin.compiler)
     testImplementation(projects.detektApi)
     testRuntimeOnly(projects.detektPsiUtils)
