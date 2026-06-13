@@ -18,7 +18,7 @@ android-gradle-builtInKotlin-plugin = { module = "com.android.built-in-kotlin:co
 breadmoirai-githubRelease-plugin = { module = "com.github.breadmoirai:github-release", version = "2.5.2" }
 develocity-plugin = { module = "com.gradle.develocity:com.gradle.develocity.gradle.plugin", version = "4.4.2" }
 dokka-plugin = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version = "2.2.0" }
-gradleNexus-publish-plugin = { module = "io.github.gradle-nexus:publish-plugin", version = "2.0.0" }
+vanniktech-mavenPublish-plugin = { module = "com.vanniktech:gradle-maven-publish-plugin", version = "0.36.0" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 
 # This represents the oldest AGP 9 version that is supported by detekt.

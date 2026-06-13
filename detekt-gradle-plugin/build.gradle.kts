@@ -20,9 +20,7 @@ plugins {
     id("dev.detekt") version "2.0.0-alpha.3"
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.18.1"
     id("org.jetbrains.dokka") version "2.2.0"
-    id("signing")
     id("com.github.gmazzo.buildconfig") version "6.0.10"
-    id("io.github.gradle-nexus.publish-plugin") version "2.0.0"
 }
 
 group = "dev.detekt"
@@ -32,17 +30,6 @@ buildConfig {
     buildConfigField("DETEKT_VERSION", project.version.toString())
     buildConfigField("DETEKT_COMPILER_PLUGIN_VERSION", project.version.toString())
     buildConfigField("KOTLIN_IMPLEMENTATION_VERSION", libs.versions.kotlin.get())
-}
-
-nexusPublishing {
-    repositories {
-        create("sonatype") {
-            nexusUrl = uri("https://ossrh-staging-api.central.sonatype.com/service/local/")
-            snapshotRepositoryUrl = uri("https://central.sonatype.com/repository/maven-snapshots/")
-            username = providers.environmentVariable("ORG_GRADLE_PROJECT_SONATYPE_USERNAME")
-            password = providers.environmentVariable("ORG_GRADLE_PROJECT_SONATYPE_PASSWORD")
-        }
-    }
 }
 
 detekt {
@@ -201,20 +188,6 @@ gradlePlugin {
         sourceSets["functionalTest"],
         sourceSets["functionalTestMinSupportedGradle"],
     )
-}
-
-signing {
-    val signingKey = providers.gradleProperty("SIGNING_KEY").orNull
-    val signingPwd = providers.gradleProperty("SIGNING_PWD").orNull
-    if (signingKey.isNullOrBlank() || signingPwd.isNullOrBlank()) {
-        logger.info("Signing disabled as the GPG key was not found")
-    } else {
-        logger.info("GPG Key found - Signing enabled")
-    }
-
-    useInMemoryPgpKeys(signingKey, signingPwd)
-    sign(publishing.publications)
-    isRequired = !(signingKey.isNullOrBlank() || signingPwd.isNullOrBlank())
 }
 
 tasks {
