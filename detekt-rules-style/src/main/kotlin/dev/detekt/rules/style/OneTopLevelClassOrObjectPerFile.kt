@@ -26,7 +26,7 @@ import org.jetbrains.kotlin.psi.KtFile
  * }
  * </compliant>
  */
-class OneTopLevelTypePerFile(config: Config) :
+class OneTopLevelClassOrObjectPerFile(config: Config) :
     Rule(config, "Each Kotlin source file should declare at most one top-level type.") {
 
     override fun visitKtFile(file: KtFile) {

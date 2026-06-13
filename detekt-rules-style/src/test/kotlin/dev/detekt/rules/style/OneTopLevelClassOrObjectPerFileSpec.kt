@@ -6,9 +6,9 @@ import dev.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class OneTopLevelTypePerFileSpec {
+class OneTopLevelClassOrObjectPerFileSpec {
 
-    private val subject = OneTopLevelTypePerFile(Config.empty)
+    private val subject = OneTopLevelClassOrObjectPerFile(Config.empty)
 
     @Test
     fun `does not report one class in a file`() {
@@ -69,6 +69,21 @@ class OneTopLevelTypePerFileSpec {
             class User {
                 companion object
             }
+        """.trimIndent()
+
+        assertThat(subject.lint(code)).isEmpty()
+    }
+
+    @Test
+    fun `does not report one class with related top-level functions and properties`() {
+        val code = """
+            class User
+
+            const val DEFAULT_USER_NAME = "detekt"
+
+            val defaultUser = User()
+
+            fun createUser() = User()
         """.trimIndent()
 
         assertThat(subject.lint(code)).isEmpty()

@@ -719,7 +719,7 @@ style:
     active: false
   ObjectLiteralToLambda:
     active: true
-  OneTopLevelTypePerFile:
+  OneTopLevelClassOrObjectPerFile:
     active: false
   OptionalAbstractKeyword:
     active: true
