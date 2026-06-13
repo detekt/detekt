@@ -43,4 +43,6 @@ jobs:
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.ORG_GRADLE_PROJECT_SIGNING_PWD }}
           ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.ORG_GRADLE_PROJECT_SONATYPE_USERNAME }}
           ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.ORG_GRADLE_PROJECT_SONATYPE_PASSWORD }}
-        run: ./gradlew publishToMavenCentral -Dsnapshot=true --stacktrace
+        # --no-configuration-cache is required due to a vanniktech bug with MavenCentralBuildService serialization:
+        # https://github.com/vanniktech/gradle-maven-publish-plugin/issues/1264
+        run: ./gradlew publishToMavenCentral -Dsnapshot=true --stacktrace --no-configuration-cache
