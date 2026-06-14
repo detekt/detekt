@@ -52,9 +52,9 @@ val documentationDir = "$rootDir/website/docs/rules"
 val configDir = "$rootDir/detekt-core/src/main/resources"
 val defaultConfigFile = "$configDir/default-detekt-config.yml"
 val deprecationFile = "$configDir/deprecation.properties"
-val ktlintWrapperConfigFile = "$rootDir/detekt-rules-ktlint-wrapper/src/main/resources/config/config.yml"
-val librariesConfigFile = "$rootDir/detekt-rules-libraries/src/main/resources/config/config.yml"
-val ruleauthorsConfigFile = "$rootDir/detekt-rules-ruleauthors/src/main/resources/config/config.yml"
+val ktlintWrapperConfigFile = "$rootDir/detekt-rules/ktlint-wrapper/src/main/resources/config/config.yml"
+val librariesConfigFile = "$rootDir/detekt-rules/libraries/src/main/resources/config/config.yml"
+val ruleauthorsConfigFile = "$rootDir/detekt-rules/ruleauthors/src/main/resources/config/config.yml"
 
 tasks.register("generateWebsite") {
     dependsOn(
@@ -68,15 +68,14 @@ tasks.register("generateWebsite") {
 val generateDocumentation = tasks.register<JavaExec>("generateDocumentation") {
     dependsOn(
         generateCliOptions,
-        ":detekt-rules-libraries:sourcesJar",
-        ":detekt-rules-ruleauthors:sourcesJar",
+        ":detekt-rules:libraries:sourcesJar",
+        ":detekt-rules:ruleauthors:sourcesJar",
     )
     description = "Generates detekt documentation and the default config.yml based on Rule KDoc"
     group = "documentation"
 
-    val ruleModules = rootProject.subprojects.asSequence()
-        .filter { "rules" in it.name }
-        .filterNot { it.name == "detekt-rules" }
+    val ruleModules = rootProject.project("detekt-rules").subprojects.asSequence()
+        .filterNot { it.name == "ktlint-repackage" }
         .flatMap { it.sourceSets.main.get().kotlin.srcDirs }
         .filter { it.exists() }
         .toList()

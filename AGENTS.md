@@ -51,7 +51,7 @@ Key modules:
 - `detekt-core/` - Core analysis engine
 - `detekt-cli/` - Command-line interface
 - `detekt-gradle-plugin/` - Gradle plugin (composite build in `detekt-gradle-plugin/`)
-- `detekt-rules-*/` - Rule implementations by category (style, complexity, performance, etc.)
+- `detekt-rules/*/` - Rule implementations by category (style, complexity, performance, etc.)
 - `detekt-report-*/` - Report format implementations
 - `detekt-test/` - Testing utilities
 

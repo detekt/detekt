@@ -126,7 +126,7 @@ internal class RuleVisitor(textReplacements: Map<String, String>) : KtTreeVisito
             // These references are stringly-typed to prevent dependency cycle:
             // This class requires KtlintRule,
             // which needs detekt-rules-ktlint-wrapper.jar,
-            // which needs :detekt-rules-ktlint-wrapper:processResources task output,
+            // which needs :detekt-rules:ktlint-wrapper:processResources task output,
             // which needs output of this class.
             "Rule", // dev.detekt.api.Rule
             "KtlintRule", // dev.detekt.rules.ktlintwrapper.KtlintRule

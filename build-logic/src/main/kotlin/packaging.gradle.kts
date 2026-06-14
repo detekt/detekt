@@ -3,6 +3,9 @@ plugins {
     id("com.vanniktech.maven.publish")
 }
 
+private fun Project.generateArtifactId(): String =
+    project.parent?.takeIf { it != it.rootProject }?.generateArtifactId()?.let { "$it-$name" } ?: name
+
 val signingKey = providers.gradleProperty("signingInMemoryKey").orNull
 if (signingKey.isNullOrBlank()) {
     logger.info("Signing disabled as the GPG key was not found")
@@ -15,6 +18,7 @@ mavenPublishing {
     if (!signingKey.isNullOrBlank()) {
         signAllPublications()
     }
+    coordinates(artifactId = generateArtifactId())
     pom {
         description = "Static code analysis for Kotlin"
         name = "detekt"
