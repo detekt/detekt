@@ -1,7 +1,9 @@
 package dev.detekt.gradle.plugin.internal
 
+import com.android.build.api.artifact.ScopedArtifact
 import com.android.build.api.variant.AndroidComponentsExtension
 import com.android.build.api.variant.Component
+import com.android.build.api.variant.ScopedArtifacts
 import com.android.build.api.variant.Variant
 import dev.detekt.gradle.extensions.DetektExtension
 import dev.detekt.gradle.plugin.DetektPlugin
@@ -28,18 +30,30 @@ internal object DetektAndroidCompilations {
     ) {
         val kotlin = sources.kotlin?.all ?: return
         val source = project.objects.fileCollection().from(kotlin)
+        val componentArtifacts = artifacts
         kotlinAndroid.target.compilations.matching { it.name == name }
             .configureEach { compilation ->
-                project.registerJvmCompilationDetektTask(
+                val detektTask = project.registerJvmCompilationDetektTask(
                     extension = extension,
                     compilation = compilation,
                     source = source,
                 )
-                project.registerJvmCompilationCreateBaselineTask(
+                val baselineTask = project.registerJvmCompilationCreateBaselineTask(
                     extension = extension,
                     compilation = compilation,
                     source = source,
                 )
+                // Put this component's compiled classes (including classes compiled from generated
+                // Java sources such as BuildConfig and view binding) on detekt's type-resolution
+                // classpath. Built-in Kotlin excludes generated sources from the analyzed source set,
+                // so without their classes type resolution fails on those symbols. ScopedArtifact.CLASSES
+                // (PROJECT scope) also wires the compile dependency.
+                componentArtifacts.forScope(ScopedArtifacts.Scope.PROJECT)
+                    .use(detektTask)
+                    .toGet(ScopedArtifact.CLASSES, { it.generatedClassesJars }, { it.generatedClassesDirs })
+                componentArtifacts.forScope(ScopedArtifacts.Scope.PROJECT)
+                    .use(baselineTask)
+                    .toGet(ScopedArtifact.CLASSES, { it.generatedClassesJars }, { it.generatedClassesDirs })
             }
     }
 
