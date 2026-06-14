@@ -130,7 +130,7 @@ val testKitGradleMinVersionRuntimeOnly = configurations.register("testKitGradleM
 dependencies {
     compileOnly(libs.android.gradleApi)
     compileOnly(libs.kotlin.gradlePluginApi)
-    compileOnlyApi(libs.gradle.publicApi) {
+    compileOnly(libs.gradle.publicApi) {
         capabilities {
             // https://github.com/gradle/gradle/issues/29483#issuecomment-2791668178
             requireCapability("org.gradle.experimental:gradle-public-api-internal")
