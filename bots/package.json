@@ -7,5 +7,14 @@
   "license": "MIT",
   "devDependencies": {
     "danger": "13.0.7"
+  },
+  "resolutions": {
+    "braces": "^3.0.3",
+    "jws": "^3.2.3",
+    "lodash": "^4.18.0",
+    "micromatch": "^4.0.8",
+    "picomatch": "^2.3.2",
+    "qs": "^6.14.2",
+    "semver": "^7.5.2"
   }
 }
