@@ -2,7 +2,7 @@
 id: baseline
 title: "Finding Baseline"
 keywords: [baseline, suppressing, smells]
-sidebar_position: 7
+sidebar_position: 50
 ---
 
 With the cli option `--baseline` or the detekt-gradle-plugin closure-property `baseline` you can specify a file which is used to generate a `baseline.xml`.

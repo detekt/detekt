@@ -2,7 +2,7 @@
 id: extensions
 title: "Extending detekt"
 keywords: [extensions, rulesets]
-sidebar_position: 9
+sidebar_position: 70
 ---
 
 The following page describes how to extend detekt and how to customize it to your domain-specific needs.
