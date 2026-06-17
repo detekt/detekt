@@ -130,10 +130,23 @@ val testKitGradleMinVersionRuntimeOnly = configurations.register("testKitGradleM
 dependencies {
     compileOnly(libs.android.gradleApi)
     compileOnly(libs.kotlin.gradlePluginApi)
-    compileOnlyApi(libs.gradle.publicApi) {
-        capabilities {
-            // https://github.com/gradle/gradle/issues/29483#issuecomment-2791668178
-            requireCapability("org.gradle.experimental:gradle-public-api-internal")
+
+    // gradle-public-api is consumed compile-only across every source set: production code,
+    // tests, fixtures, and functional tests all rely on Gradle types provided by the runtime
+    // (the user's Gradle distribution or the embedded TestKit). compileOnly keeps it out of
+    // the published POM (compileOnlyApi would re-add it as a compile-scope dep). See #9396.
+    listOf(
+        "compileOnly",
+        "testCompileOnly",
+        "testFixturesCompileOnly",
+        "functionalTestCompileOnly",
+        "functionalTestMinSupportedGradleCompileOnly",
+    ).forEach { configurationName ->
+        configurationName(libs.gradle.publicApi) {
+            capabilities {
+                // https://github.com/gradle/gradle/issues/29483#issuecomment-2791668178
+                requireCapability("org.gradle.experimental:gradle-public-api-internal")
+            }
         }
     }
 
