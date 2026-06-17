@@ -136,6 +136,11 @@ dependencies {
             requireCapability("org.gradle.experimental:gradle-public-api-internal")
         }
     }
+    testFixturesCompileOnly(libs.gradle.publicApi) {
+        capabilities {
+            requireCapability("org.gradle.experimental:gradle-public-api-internal")
+        }
+    }
 
     implementation(libs.sarif4k)
 
