@@ -12,6 +12,16 @@ Detekt 2.0.0 is still in alpha. While it's stable enough to use in your projects
 
 :::
 
+## 2.0.0-alpha.5 - 2026-06-17
+
+This is a hotfix release for `2.0.0-alpha.4` where we fixed 2 bugs that were preventing detekt from running correctly.
+
+### Changelog
+
+- fix: stop leaking ktlint-repackage as a transitive dependency - [#9391](https://github.com/detekt/detekt/pull/9391)
+- fix: exclude gradle-public-api from published POM - [#9408](https://github.com/detekt/detekt/pull/9408)
+- Stop accepting unsupported API or language versions passed to CLI - [#9410](https://github.com/detekt/detekt/pull/9410)
+
 ## 2.0.0-alpha.4 - 2026-06-13
 
 This is an alpha release of Detekt 2.0.0. Is built against Kotlin 2.4.0, Gradle 9.5.1, AGP 9.2.1 and is tested against JDK 25.
