@@ -186,11 +186,11 @@ class ReturnCountSpec {
     inner class `a file with guard clauses interleaved with local variable declarations` {
         private val code = """
             fun test(a: Int?, b: Int?): Int {
-                val first = compute(a)
+                val first = a.toString()
                 if (a == null) return 0
-                val second = compute(b)
+                val second = b.toString()
                 if (b == null) return 1
-                return first + second
+                return first.length + second.length
             }
         """.trimIndent()
 

@@ -211,11 +211,11 @@ class ThrowsCountSpec {
     inner class `guard clauses interleaved with local variable declarations` {
         val codeWithGuardClause = """
             fun test(a: Int?, b: Int?): Int {
-                val first = compute(a)
+                val first = a.toString()
                 if (a == null) throw IllegalArgumentException()
-                val second = compute(b)
+                val second = b.toString()
                 if (b == null) throw IllegalArgumentException()
-                throw IllegalStateException((first + second).toString())
+                throw IllegalStateException(first + second)
             }
         """.trimIndent()
 
