@@ -75,6 +75,17 @@ jobs:
       - name: Run Gradle generator
         run: ./gradlew :detekt-generator:generateDocumentation :detekt-generator:generateCliOptions
 
+      # JCommander emits the CWD as the `Default:` value for --base-path and
+      # --input, so _cli-options.md leaks the runner's absolute path. Strip
+      # those lines before diffing so the workflow doesn't flag a difference
+      # that only exists because the JS generator runs from a different cwd.
+      - name: Normalise CWD-dependent defaults in _cli-options.md
+        run: |
+          path_default='Default: \[?/[^]]*detekt-generator\]?$'
+          sed -i -E "/${path_default}/d" \
+            "$RUNNER_TEMP/js-output/gettingstarted/_cli-options.md" \
+            website/docs/gettingstarted/_cli-options.md
+
       - name: Diff JS vs Gradle generator output
         id: diff
         run: |

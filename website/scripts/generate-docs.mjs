@@ -925,7 +925,11 @@ function main() {
 
   let generated = 0;
   for (const [ruleSetId, provider] of providers) {
-    const orderedNames = ruleOrder.get(ruleSetId) ?? [];
+    // Sort by class name (code-point order) to match the Kotlin generator,
+    // which uses `String.compareTo` — keeps the two outputs byte-identical
+    // so the parity check in CI stays meaningful.
+    const orderedNames = [...(ruleOrder.get(ruleSetId) ?? [])]
+      .sort((a, b) => (a < b ? -1 : a > b ? 1 : 0));
     const rules = orderedNames
       .map(name => rulesByName.get(name))
       .filter(Boolean);
