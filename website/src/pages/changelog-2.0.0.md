@@ -30,7 +30,7 @@ This is an alpha release of Detekt 2.0.0. Is built against Kotlin 2.4.0, Gradle 
 
 - Support Kotlin 2.4.0 - [#9218](https://github.com/detekt/detekt/pull/9218)
 - Add new rule `LeakingSessionBoundType` - [#9242](https://github.com/detekt/detekt/pull/9242)
-- Apply the `indent_style` configuration to all the ktlint wrapper rules (previsouly this was applied only to the `Indentation` rule) - [#9315](https://github.com/detekt/detekt/pull/9315)
+- Apply the `indentStyle` configuration to all the ktlint wrapper rules (previously this was applied only to the `Indentation` rule) - [#9315](https://github.com/detekt/detekt/pull/9315)
 
 ### Breaking Changes
 
@@ -122,7 +122,7 @@ As of this release, the workaround of disabling the new DSL and built-in Kotlin 
 - Point to `valOrVarKeyword` for reporting the issue - [#9191](https://github.com/detekt/detekt/pull/9191)
 - Check `Throwable` class - [#9190](https://github.com/detekt/detekt/pull/9190)
 - Do no report when parent has class - [#9189](https://github.com/detekt/detekt/pull/9189)
-- Add support of `indent_style` in ktlint `Indention` rule - [#9180](https://github.com/detekt/detekt/pull/9180)
+- Add support of `indentStyle` in ktlint `Indentation` rule - [#9180](https://github.com/detekt/detekt/pull/9180)
 - Add severity to different md, html reports - [#9167](https://github.com/detekt/detekt/pull/9167)
 - Check local class which can't be converted to interface - [#9166](https://github.com/detekt/detekt/pull/9166)
 - Inline yaml config in the test - [#9154](https://github.com/detekt/detekt/pull/9154)
