@@ -81,8 +81,9 @@ jobs:
       # that only exists because the JS generator runs from a different cwd.
       - name: Normalise CWD-dependent defaults in _cli-options.md
         run: |
-          path_default='Default: \[?/[^]]*detekt-generator\]?$'
-          sed -i -E "/${path_default}/d" \
+          # Use `|` as the sed address delimiter so the `/` inside the pattern
+          # (matching the absolute path) doesn't terminate the address early.
+          sed -i -E '\|Default: \[?/[^]]*detekt-generator\]?$|d' \
             "$RUNNER_TEMP/js-output/gettingstarted/_cli-options.md" \
             website/docs/gettingstarted/_cli-options.md
 
