@@ -76,6 +76,7 @@ class DetektBasePluginSpec {
                 "android.newDsl" to "false",
             ),
             dryRun = true,
+            failOnGradleWarnings = false, // Test uses deprecated sourceSets collection in Kotlin Android
         ).also {
             it.setupProject()
         }
@@ -120,6 +121,7 @@ class DetektBasePluginSpec {
                 "android.disallowKotlinSourceSets" to "false",
             ),
             dryRun = true,
+            failOnGradleWarnings = false, // https://issuetracker.google.com/issues/495889752
         ).also {
             it.setupProject()
         }
@@ -219,6 +221,7 @@ class DetektBasePluginSpec {
                 }
             """.trimIndent(),
             dryRun = true,
+            failOnGradleWarnings = false, // https://issuetracker.google.com/issues/495889752
         ).also {
             it.setupProject()
         }

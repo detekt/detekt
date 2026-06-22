@@ -182,6 +182,7 @@ class ReportMergeSpec {
             settingsContent = settingsFile,
             jvmArgs = jvmArgs,
             disableIP = true,
+            failOnGradleWarnings = false, // https://issuetracker.google.com/issues/495889752
         )
 
         gradleRunner.setupProject()
