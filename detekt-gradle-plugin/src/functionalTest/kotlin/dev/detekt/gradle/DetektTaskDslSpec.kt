@@ -347,7 +347,7 @@ class DetektTaskDslSpec {
             @Test
             fun `fails the build`() {
                 gradleRunner.runDetektTaskAndExpectFailure { result ->
-                    assertThat(result.output).contains("Cannot write a file to a location pointing at a directory.")
+                    assertThat(result.output).contains("Cannot write a file to a location pointing at a directory")
                 }
             }
         }
