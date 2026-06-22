@@ -3,7 +3,7 @@ agp = "9.2.1"
 coroutines = "1.11.0"
 jacoco = "0.8.15"
 junit = "6.1.0"
-kotlin = "2.3.21"
+kotlin = "2.4.0"
 ktlint = "1.8.0"
 slf4j = "2.0.18"
 
@@ -16,9 +16,9 @@ java-compile-toolchain = "17"
 android-gradle-plugin = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 android-gradle-builtInKotlin-plugin = { module = "com.android.built-in-kotlin:com.android.built-in-kotlin.gradle.plugin", version.ref = "agp" }
 breadmoirai-githubRelease-plugin = { module = "com.github.breadmoirai:github-release", version = "2.5.2" }
-develocity-plugin = { module = "com.gradle.develocity:com.gradle.develocity.gradle.plugin", version = "4.4.2" }
+develocity-plugin = { module = "com.gradle.develocity:com.gradle.develocity.gradle.plugin", version = "4.4.3" }
 dokka-plugin = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version = "2.2.0" }
-gradleNexus-publish-plugin = { module = "io.github.gradle-nexus:publish-plugin", version = "2.0.0" }
+vanniktech-mavenPublish-plugin = { module = "com.vanniktech:gradle-maven-publish-plugin", version = "0.36.0" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 
 # This represents the oldest AGP 9 version that is supported by detekt.
@@ -49,7 +49,7 @@ classgraph = { module = "io.github.classgraph:classgraph", version = "4.8.184" }
 jcommander = { module = "org.jcommander:jcommander", version = "1.85" }
 # Version must align to dependency used by Kotlin on compile classpath due to our use of Gradle's consistent resolution
 jetbrains-annotations = { module = "org.jetbrains:annotations", version = "23.0.0" }
-kctfork-core = { module = "dev.zacsweers.kctfork:core", version = "0.12.1" }
+kctfork-core = { module = "dev.zacsweers.kctfork:core", version = "0.13.0" }
 kotlin-compiler = { module = "org.jetbrains.kotlin:kotlin-compiler", version.ref = "kotlin" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 kotlin-scriptingJvm = { module = "org.jetbrains.kotlin:kotlin-scripting-jvm", version.ref = "kotlin" }

@@ -24,7 +24,7 @@ import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 fun KtExpression.isNullable(shouldConsiderPlatformTypeAsNullable: Boolean): Boolean {
     if (this is KtSafeQualifiedExpression) {
         analyze(this) {
-            return diagnostics(KaDiagnosticCheckerFilter.ONLY_COMMON_CHECKERS)
+            return directDiagnostics(KaDiagnosticCheckerFilter.ONLY_COMMON_CHECKERS)
                 .none { it is KaFirDiagnostic.UnnecessarySafeCall }
         }
     }
