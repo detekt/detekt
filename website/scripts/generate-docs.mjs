@@ -81,7 +81,16 @@ function findMatchingBrace(src, openIdx) {
   while (i < src.length) {
     const ch = src[i];
     if (inTriple) {
-      if (src.startsWith('"""', i)) { inTriple = false; i += 3; continue; }
+      // Kotlin raw strings can contain `"` characters and even `""`; the
+      // closing `"""` is the LAST `"""` in a run of quotes. So consume the
+      // whole run when we see `"""` — single/double `"` chars stay as content.
+      if (src.startsWith('"""', i)) {
+        let q = 0;
+        while (i + q < src.length && src[i + q] === '"') q++;
+        inTriple = false;
+        i += q;
+        continue;
+      }
     } else if (inString) {
       if (ch === '\\') { i += 2; continue; }
       if (ch === '"') inString = false;
@@ -105,7 +114,16 @@ function findMatchingParen(src, openIdx) {
   while (i < src.length) {
     const ch = src[i];
     if (inTriple) {
-      if (src.startsWith('"""', i)) { inTriple = false; i += 3; continue; }
+      // Kotlin raw strings can contain `"` characters and even `""`; the
+      // closing `"""` is the LAST `"""` in a run of quotes. So consume the
+      // whole run when we see `"""` — single/double `"` chars stay as content.
+      if (src.startsWith('"""', i)) {
+        let q = 0;
+        while (i + q < src.length && src[i + q] === '"') q++;
+        inTriple = false;
+        i += q;
+        continue;
+      }
     } else if (inString) {
       if (ch === '\\') { i += 2; continue; }
       if (ch === '"') inString = false;
@@ -148,9 +166,14 @@ function extractKDocBefore(src, classIdx) {
   }
 
   if (startIdx === -1 || !src.startsWith('/**', startIdx)) return '';
-  // Only whitespace + annotations allowed between KDoc and class declaration
-  const gap = before.substring(endIdx + 2).trim();
-  if (gap && !/^(@[\s\S]*)?$/.test(gap)) return '';
+  // Only whitespace, annotations, or class modifiers may sit between the KDoc
+  // and the `class` keyword. Without the modifier carve-out, `internal class`
+  // wrappers (most of detekt-rules-ktlint-wrapper) silently lose their KDoc
+  // and fall back to the `TODO: Specify description` placeholder.
+  const gap = before.substring(endIdx + 2);
+  const MODIFIERS = /\b(?:public|private|protected|internal|open|final|abstract|sealed|data|enum|inner|annotation|companion|value)\b/g;
+  const cleanedGap = gap.replace(/@\w+(?:\([^)]*\))?/g, '').replace(MODIFIERS, '').trim();
+  if (cleanedGap) return '';
   return src.substring(startIdx, endIdx + 2);
 }
 
@@ -298,7 +321,16 @@ function splitTopLevelCommas(src) {
   while (i < src.length) {
     const ch = src[i];
     if (inTriple) {
-      if (src.startsWith('"""', i)) { inTriple = false; i += 3; continue; }
+      // Kotlin raw strings can contain `"` characters and even `""`; the
+      // closing `"""` is the LAST `"""` in a run of quotes. So consume the
+      // whole run when we see `"""` — single/double `"` chars stay as content.
+      if (src.startsWith('"""', i)) {
+        let q = 0;
+        while (i + q < src.length && src[i + q] === '"') q++;
+        inTriple = false;
+        i += q;
+        continue;
+      }
     } else if (inString) {
       if (ch === '\\') { i += 2; continue; }
       if (ch === '"') inString = false;
@@ -360,16 +392,48 @@ function extractCompanionConstants(classBody) {
   const compCloseIdx = findMatchingBrace(classBody, compOpenIdx);
   const compBody = classBody.substring(compOpenIdx + 1, compCloseIdx);
 
-  // Match: `const val NAME = value` or `val NAME = value`
-  const re = /(?:const\s+)?val\s+(\w+)\s*=\s*(.+)/g;
+  // Match the start of `[const ]val NAME = `. The value itself may span
+  // multiple lines (e.g. `listOf("a", "b", ...)` with each item on its own
+  // line), so we scan from the `=` to the end of the expression instead of
+  // capturing the rest of the line with a regex.
+  const re = /(?:const\s+)?val\s+(\w+)\s*=\s*/g;
   let m;
   while ((m = re.exec(compBody)) !== null) {
     const name = m[1];
-    const valueExpr = m[2].split('//')[0].trim(); // strip inline comment
-    const parsed = parseLiteral(valueExpr);
+    const valueExpr = readBalancedExpression(compBody, m.index + m[0].length);
+    re.lastIndex = m.index + m[0].length + valueExpr.length;
+    const cleaned = valueExpr.split('//')[0].trim();
+    const parsed = parseDefaultExpr(cleaned, constants);
     if (parsed) constants[name] = parsed;
   }
   return constants;
+}
+
+// Read an expression starting at `start` until we hit a top-level newline or
+// the end. Skips over balanced (), [], {} and string literals, so a multi-line
+// `listOf("a", "b")` reads as one expression.
+function readBalancedExpression(src, start) {
+  let i = start;
+  let depth = 0;
+  let inString = null;
+  while (i < src.length) {
+    const ch = src[i];
+    if (inString) {
+      if (ch === '\\') { i += 2; continue; }
+      if (ch === inString) inString = null;
+    } else if (ch === '"' || ch === "'") {
+      inString = ch;
+    } else if (ch === '(' || ch === '[' || ch === '{') {
+      depth++;
+    } else if (ch === ')' || ch === ']' || ch === '}') {
+      if (depth === 0) break;
+      depth--;
+    } else if (ch === '\n' && depth === 0) {
+      break;
+    }
+    i++;
+  }
+  return src.substring(start, i);
 }
 
 // ─── @Configuration property extraction ──────────────────────────────────────
@@ -428,17 +492,22 @@ function parseConfigurations(classBody, companionConstants = {}, forRuleSet = fa
 
     if (delegateName === 'configWithAndroidVariants') {
       const args = splitTopLevelCommas(argsRaw);
-      defaultValue = parseDefaultExpr(args[0] ?? '', companionConstants);
-      androidDefaultValue = args[1] ? parseDefaultExpr(args[1], companionConstants) : null;
+      const rawDefault = (args[0] ?? '').replace(/^\s*defaultValue\s*=\s*/, '').trim();
+      const rawAndroid = (args[1] ?? '').replace(/^\s*defaultAndroidValue\s*=\s*/, '').trim();
+      defaultValue = parseDefaultExpr(rawDefault, companionConstants);
+      androidDefaultValue = args[1] ? parseDefaultExpr(rawAndroid, companionConstants) : null;
     } else if (delegateName === 'configWithFallback') {
       const args = splitTopLevelCommas(argsRaw);
       const defaultArg = args.find(a => !a.trim().startsWith('::') && !a.includes('fallbackProperty'));
       const rawVal = defaultArg?.replace(/\bdefaultValue\s*=\s*/, '').trim() ?? '';
       defaultValue = parseDefaultExpr(rawVal, companionConstants);
     } else {
-      // config(defaultValue), ruleSetConfig(defaultValue), or any other delegate
+      // config(defaultValue), ruleSetConfig(defaultValue), or any other delegate.
+      // Strip the `defaultValue = ` named-argument prefix when present so we
+      // parse the value itself, not the named-arg syntax.
       const args = splitTopLevelCommas(argsRaw);
-      defaultValue = parseDefaultExpr(args[0] ?? '', companionConstants);
+      const rawVal = (args[0] ?? '').replace(/^\s*defaultValue\s*=\s*/, '').trim();
+      defaultValue = parseDefaultExpr(rawVal, companionConstants);
     }
 
     // For rule set provider configs, android default = default (same value, always shown)
@@ -768,20 +837,38 @@ function parseEnumEntries(src) {
     .filter(Boolean);
 }
 
+// Mirrors JCommander's DefaultUsageFormatter.wrapDescription so the JS-generated
+// _cli-options.md is byte-identical to the Gradle one. Notable quirks:
+//   * the input is the indent-prefixed string, split on a single space (not
+//     collapsed whitespace), so leading spaces become empty "words";
+//   * when a word is appended to the current line, the trailing space is only
+//     added if it is NOT the last word — so non-wrapped final lines have no
+//     trailing space;
+//   * when a word is wrapped onto a new line, a trailing space is ALWAYS
+//     appended, even for the last word — so wrapped final lines DO have a
+//     trailing space.
 function wordWrap(text, indent, maxWidth) {
-  const words = text.split(/\s+/).filter(Boolean);
-  const lines = [];
-  let line = ' '.repeat(indent);
-  for (const word of words) {
-    if (line.trim() && line.length + 1 + word.length > maxWidth) {
-      lines.push(line);
-      line = ' '.repeat(indent) + word;
+  const indented = ' '.repeat(indent) + text;
+  const words = indented.split(' ');
+  let out = '';
+  let current = 0;
+
+  for (let i = 0; i < words.length; i++) {
+    const word = words[i];
+
+    if (word.length > maxWidth || current + 1 + word.length <= maxWidth) {
+      out += word;
+      current += word.length;
+      if (i !== words.length - 1) {
+        out += ' ';
+        current++;
+      }
     } else {
-      line = line.trim() ? line + ' ' + word : ' '.repeat(indent) + word;
+      out += '\n' + ' '.repeat(indent) + word + ' ';
+      current = indent + word.length + 1;
     }
   }
-  if (line.trim()) lines.push(line);
-  return lines.join('\n');
+  return out;
 }
 
 // Scan string literal(s) (possibly joined by +) starting at position i in src.
@@ -816,13 +903,16 @@ function generateCliOptionsFile() {
     readFileSync(join(ROOT_DIR, 'detekt-cli/src/main/kotlin/dev/detekt/cli/FailureSeverity.kt'), 'utf8')
   );
 
-  // JvmTarget and LanguageVersion come from the Kotlin compiler dependency (not in local source)
+  // JCommander emits "Possible Values" for enum-typed fields. JvmTarget and
+  // LanguageVersion come from the Kotlin compiler dependency (not in local
+  // source). ApiVersion is NOT an enum — it's a class with a static factory —
+  // so JCommander emits no possible-values line for --api-version even though
+  // it goes through ApiVersionConverter.
   const POSSIBLE_VALUES = {
     AnalysisMode: `[${analysisModeEntries.join(', ')}]`,
     FailureSeverityConverter: `[${failureSeverityEntries.join(', ')}]`,
     JvmTargetConverter: '[1.6, 1.8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26]',
     LanguageVersionConverter: '[1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4, 2.5]',
-    ApiVersionConverter: '[1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4, 2.5]',
   };
 
   const cliArgsSrc = readFileSync(
@@ -844,6 +934,8 @@ function generateCliOptionsFile() {
 
     const annotation = cliArgsSrc.substring(parenStart + 1, parenEnd);
     if (/\bhidden\s*=\s*true/.test(annotation)) continue;
+    // JCommander suppresses the "Default:" line when @Parameter(help = true).
+    const isHelp = /\bhelp\s*=\s*true/.test(annotation);
 
     // names = ["--foo", "-f"]
     const namesMatch = annotation.match(/names\s*=\s*\[([^\]]+)\]/);
@@ -877,7 +969,13 @@ function generateCliOptionsFile() {
 
     const possibleValues = POSSIBLE_VALUES[converter] ?? POSSIBLE_VALUES[fieldType] ?? null;
     const primaryName = names.find(n => n.startsWith('--')) ?? names[0];
-    params.push({ names, description, defaultValue, possibleValues, primaryName });
+    params.push({
+      names,
+      description,
+      defaultValue: isHelp ? null : defaultValue,
+      possibleValues,
+      primaryName,
+    });
   }
 
   params.sort((a, b) => a.primaryName.localeCompare(b.primaryName));
