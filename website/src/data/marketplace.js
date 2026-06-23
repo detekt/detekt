@@ -350,6 +350,13 @@ export const extensions = [
     usesTypeResolution: true,
   },
   {
+    title: "Project statistics",
+    description: "A collection of processors and one reporter to show you counts statistics of your project.",
+    repo: "https://github.com/detekt/detekt",
+    usesTypeResolution: false,
+    tags: ["processor", "reporter"],
+  },
+  {
     title: "Operator",
     description:
       "Rules to prefer expressions over named functions for kotlin operators.",

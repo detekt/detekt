@@ -40,11 +40,6 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
             processors:
               active: true
               exclude:
-              # - 'KtFileCountProcessor'
-              # - 'PackageCountProcessor'
-              # - 'ClassCountProcessor'
-              # - 'FunctionCountProcessor'
-              # - 'PropertyCountProcessor'
               # - 'ProjectCyclomaticComplexityProcessor'
               # - 'ProjectCognitiveComplexityProcessor'
               # - 'ProjectLLOCProcessor'
@@ -58,7 +53,6 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
             console-reports:
               active: true
               exclude:
-                 - 'ProjectStatisticsReport'
                  - 'ComplexityReport'
                  - 'NotificationReport'
                  - 'IssuesReport'
