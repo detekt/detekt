@@ -243,7 +243,7 @@ export const extensions = [
   {
     title: "Kotlin Security Scanner",
     description:
-      "201 OWASP Top 10 rules for Kotlin — Spring Boot, Quarkus, Dropwizard, Ktor, Micronaut. Active by default.",
+      "200+ OWASP Top 10 rules for Kotlin — Spring Boot, Quarkus, Dropwizard, Ktor, Micronaut. Active by default.",
     repo: "https://github.com/JasminGuberinic/kotlin-security-scanner",
     ruleset: "security-core",
     rules: [
