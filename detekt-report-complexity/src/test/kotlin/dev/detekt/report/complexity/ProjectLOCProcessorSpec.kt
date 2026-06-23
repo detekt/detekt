@@ -1,0 +1,22 @@
+package dev.detekt.report.complexity
+
+import dev.detekt.test.invoke
+import dev.detekt.test.utils.compileContentForTest
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
+
+class ProjectLOCProcessorSpec {
+    @Test
+    fun counts() {
+        val detektion = ProjectLOCProcessor().invoke(
+            compileContentForTest(default),
+            compileContentForTest(emptyEnum),
+            compileContentForTest(emptyInterface),
+            compileContentForTest(classWithFields),
+            compileContentForTest(commentsClass),
+            compileContentForTest(complexClass),
+        )
+
+        assertThat(detektion.userData[linesKey.toString()]).isEqualTo(190)
+    }
+}
