@@ -11,11 +11,11 @@ import dev.detekt.api.internal.AutoCorrectable
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#chain-wrapping) for documentation.
+ * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/#chain-wrapping) for documentation.
  */
 @ActiveByDefault(since = "1.0.0")
 @AutoCorrectable(since = "1.0.0")
-class ChainWrapping(config: Config) : KtlintRule(config, "Checks if condition chaining is wrapped right") {
+internal class ChainWrapping(config: Config) : KtlintRule(config, "Checks if condition chaining is wrapped right") {
 
     override val wrapping = ChainWrappingRule()
 

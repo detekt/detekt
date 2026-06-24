@@ -99,7 +99,7 @@ class SleepInsteadOfDelay(config: Config) :
             with(session) {
                 val functionCall = parent.resolveToCall()?.singleFunctionCallOrNull() ?: return false
                 val functionSymbol = functionCall.symbol as? KaNamedFunctionSymbol ?: return false
-                val parameterSymbol = functionCall.argumentMapping[getArgumentExpression()]?.symbol ?: return false
+                val parameterSymbol = functionCall.valueArgumentMapping[getArgumentExpression()]?.symbol ?: return false
                 return functionSymbol.isInline.not() || parameterSymbol.isNoinline || parameterSymbol.isCrossinline
             }
         }
@@ -132,7 +132,7 @@ class SleepInsteadOfDelay(config: Config) :
         val parent = this.getParentOfTypes(true, KtCallExpression::class.java) ?: return false
         val argumentExpression = this.getArgumentExpression() ?: return false
         with(session) {
-            val parameter = parent.resolveToCall()?.singleFunctionCallOrNull()?.argumentMapping[argumentExpression]
+            val parameter = parent.resolveToCall()?.singleFunctionCallOrNull()?.valueArgumentMapping[argumentExpression]
             return parameter?.returnType?.isSuspendFunctionType == true
         }
     }

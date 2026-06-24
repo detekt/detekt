@@ -11,12 +11,12 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
 import dev.detekt.rules.ktlintwrapper.configWithAndroidVariants
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#function-return-type-spacing) for
+ * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/#function-return-type-spacing) for
  * documentation.
  */
 @ActiveByDefault(since = "1.23.0")
 @AutoCorrectable(since = "1.22.0")
-class FunctionReturnTypeSpacing(config: Config) :
+internal class FunctionReturnTypeSpacing(config: Config) :
     KtlintRule(config, "Checks the spacing between colon and return type.") {
 
     override val wrapping = FunctionReturnTypeSpacingRule()

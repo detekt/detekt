@@ -1,7 +1,6 @@
 package dev.detekt.core.config.validation
 
 import dev.detekt.api.Notification
-import dev.detekt.core.config.YamlConfig
 import dev.detekt.core.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -27,7 +26,7 @@ internal class DeprecatedPropertiesConfigValidatorSpec {
                   FunctionParameterNaming:
                     ignoreOverriddenFunctions: ''
             """.trimIndent()
-        ) as YamlConfig
+        )
 
         val result = subject.validate(config, settings)
 

@@ -106,7 +106,6 @@ class ReportMergeSpec {
                 buildFileContent = """
                     plugins {
                         id("com.android.application")
-                        kotlin("android")
                         id("dev.detekt")
                     }
                     android {
@@ -116,11 +115,6 @@ class ReportMergeSpec {
                            sourceCompatibility = JavaVersion.VERSION_11
                            targetCompatibility = JavaVersion.VERSION_11
                        }
-                    }
-                    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-                        compilerOptions {
-                            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
-                        }
                     }
                     dependencies {
                         implementation(project(":lib"))
@@ -134,7 +128,6 @@ class ReportMergeSpec {
                 buildFileContent = """
                     plugins {
                         id("com.android.library")
-                        kotlin("android")
                     }
                     android {
                         compileSdk = 34
@@ -142,11 +135,6 @@ class ReportMergeSpec {
                         compileOptions {
                             sourceCompatibility = JavaVersion.VERSION_11
                             targetCompatibility = JavaVersion.VERSION_11
-                        }
-                    }
-                    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-                        compilerOptions {
-                            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
                         }
                     }
                 """.trimIndent(),
@@ -194,10 +182,6 @@ class ReportMergeSpec {
             settingsContent = settingsFile,
             jvmArgs = jvmArgs,
             disableIP = true,
-            gradleProperties = mapOf(
-                "android.builtInKotlin" to "false",
-                "android.newDsl" to "false",
-            ),
         )
 
         gradleRunner.setupProject()

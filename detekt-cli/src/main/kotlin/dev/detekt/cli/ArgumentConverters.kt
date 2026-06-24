@@ -7,28 +7,33 @@ import com.beust.jcommander.converters.IParameterSplitter
 import org.jetbrains.kotlin.config.ApiVersion
 import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
+import java.io.File
 import java.net.URL
 import java.nio.file.Path
 import kotlin.io.path.exists
 import kotlin.io.path.isDirectory
 
+private val supportedLanguageVersions = LanguageVersion.entries
+    .filterNot(LanguageVersion::isUnsupported)
+    .joinToString { it.toString() }
 class ApiVersionConverter : IStringConverter<ApiVersion> {
     override fun convert(value: String): ApiVersion {
         val languageVersion = LanguageVersion.fromFullVersionString(value)
-        requireNotNull(languageVersion) {
-            val validValues = LanguageVersion.entries.joinToString { it.toString() }
-            "\"$value\" passed to --api-version, expected one of [$validValues]"
+        require(languageVersion != null && !languageVersion.isUnsupported) {
+            "\"$value\" passed to --api-version, expected one of [$supportedLanguageVersions]"
         }
         return ApiVersion.createByLanguageVersion(languageVersion)
     }
 }
 
 class LanguageVersionConverter : IStringConverter<LanguageVersion> {
-    override fun convert(value: String): LanguageVersion =
-        requireNotNull(LanguageVersion.fromFullVersionString(value)) {
-            val validValues = LanguageVersion.entries.joinToString { it.toString() }
-            "\"$value\" passed to --language-version, expected one of [$validValues]"
+    override fun convert(value: String): LanguageVersion {
+        val languageVersion = LanguageVersion.fromFullVersionString(value)
+        require(languageVersion != null && !languageVersion.isUnsupported) {
+            "\"$value\" passed to --language-version, expected one of [$supportedLanguageVersions]"
         }
+        return languageVersion
+    }
 }
 
 class JvmTargetConverter : IStringConverter<JvmTarget> {
@@ -52,17 +57,22 @@ class FailureSeverityConverter : IStringConverter<FailureSeverity> {
 }
 
 class ReportPathConverter : IStringConverter<ReportPath> {
-    override fun convert(value: String): ReportPath = ReportPath.from(value)
+    override fun convert(value: String): ReportPath =
+        try {
+            ReportPath.from(value)
+        } catch (e: IllegalArgumentException) {
+            throw ParameterException(e.message, e)
+        }
 }
 
 class PathSplitter : IParameterSplitter {
-    override fun split(value: String): List<String> = value.split(',', ';')
+    override fun split(value: String): List<String> = value.split(File.pathSeparatorChar)
 }
 
 class PathValidator : IValueValidator<List<Path>> {
     override fun validate(name: String, value: List<Path>) {
         value.forEach {
-            if (!it.exists()) throw ParameterException("Input path does not exist: '$it'")
+            if (!it.exists()) throw ParameterException("Path '$it' passed to $name does not exist.")
         }
     }
 }
@@ -70,5 +80,20 @@ class PathValidator : IValueValidator<List<Path>> {
 class DirectoryValidator : IValueValidator<Path> {
     override fun validate(name: String, value: Path) {
         if (!value.isDirectory()) throw ParameterException("Value passed to $name must be a directory.")
+    }
+}
+
+class FilterSplitter : IParameterSplitter {
+    override fun split(value: String): List<String> = value.split(',', ';')
+}
+
+class FilterValidator : IValueValidator<List<String>> {
+    override fun validate(name: String, value: List<String>) {
+        if (value.any { it.isBlank() }) {
+            throw ParameterException("Value passed to $name contains empty globs.")
+        }
+        if (value.any { it.trim() != it }) {
+            throw ParameterException("Value passed to $name contains globs that start or end with space.")
+        }
     }
 }

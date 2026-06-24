@@ -6,10 +6,10 @@ import dev.detekt.api.Config
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/experimental/#kdoc) for documentation.
+ * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/experimental/#kdoc) for documentation.
  */
 @ActiveByDefault(since = "2.0.0")
-class Kdoc(config: Config) :
+internal class Kdoc(config: Config) :
     KtlintRule(
         config,
         "Only allow KDoc when comments are in a location that can be converted to public documentation"

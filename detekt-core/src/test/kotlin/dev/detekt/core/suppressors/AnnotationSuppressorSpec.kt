@@ -1,5 +1,6 @@
 package dev.detekt.core.suppressors
 
+import dev.detekt.test.junit.KotlinAnalysisApiEngineTest
 import dev.detekt.test.utils.KotlinAnalysisApiEngine
 import dev.detekt.test.utils.compileContentForTest
 import dev.detekt.tooling.api.AnalysisMode
@@ -284,7 +285,8 @@ class AnnotationSuppressorSpec {
     }
 
     @Nested
-    inner class `Full Qualified names` {
+    @KotlinAnalysisApiEngineTest
+    inner class `Full Qualified names`(val analysisApiEngine: KotlinAnalysisApiEngine) {
         val composableFiles = listOf(
             """
                 package androidx.compose.runtime
@@ -312,7 +314,7 @@ class AnnotationSuppressorSpec {
             fun getFile() =
                 listOf(
                     Arguments.of(compileContentForTest(code), AnalysisMode.light),
-                    Arguments.of(KotlinAnalysisApiEngine.compile(code, composableFiles), AnalysisMode.full),
+                    Arguments.of(analysisApiEngine.compile(code, composableFiles), AnalysisMode.full),
                 )
 
             @ParameterizedTest
@@ -402,7 +404,7 @@ class AnnotationSuppressorSpec {
                 AnalysisMode.full,
             )!!
 
-            val root = KotlinAnalysisApiEngine.compile(
+            val root = analysisApiEngine.compile(
                 """
                     package foo.bar
                     
@@ -423,7 +425,7 @@ class AnnotationSuppressorSpec {
                 AnalysisMode.full,
             )!!
 
-            val root = KotlinAnalysisApiEngine.compile(
+            val root = analysisApiEngine.compile(
                 """
                     package foo.bar
                     
@@ -444,7 +446,7 @@ class AnnotationSuppressorSpec {
                 AnalysisMode.full,
             )!!
 
-            val root = KotlinAnalysisApiEngine.compile(
+            val root = analysisApiEngine.compile(
                 """
                     package foo.bar
                     
@@ -486,13 +488,14 @@ class AnnotationSuppressorSpec {
         """.trimIndent()
 
         @Test
-        fun `suppress if it has parameters with type solving`() {
+        @KotlinAnalysisApiEngineTest
+        fun `suppress if it has parameters with type solving`(analysisApiEngine: KotlinAnalysisApiEngine) {
             val suppressor = annotationSuppressorFactory(
                 buildRule("ignoreAnnotated" to listOf("Preview")),
                 AnalysisMode.full,
             )!!
 
-            val root = KotlinAnalysisApiEngine.compile(code, composableFiles)
+            val root = analysisApiEngine.compile(code, composableFiles)
             val ktFunction = root.findChildByClass(KtFunction::class.java)!!
 
             assertThat(suppressor.shouldSuppress(buildFinding(ktFunction))).isTrue()

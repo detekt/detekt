@@ -11,11 +11,11 @@ import dev.detekt.api.internal.AutoCorrectable
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#enum-wrapping) for documentation.
+ * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/#enum-wrapping) for documentation.
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "1.23.0")
-class EnumWrapping(config: Config) :
+internal class EnumWrapping(config: Config) :
     KtlintRule(config, "An enum should be a single line, or each enum entry has to be placed on a separate line.") {
 
     override val wrapping = EnumWrappingRule()

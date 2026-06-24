@@ -1,5 +1,6 @@
 package dev.detekt.psi
 
+import dev.detekt.test.junit.KotlinAnalysisApiEngineTest
 import dev.detekt.test.utils.KotlinAnalysisApiEngine
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtClass
@@ -9,14 +10,15 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
-internal class TypeUtilsSpec {
+@KotlinAnalysisApiEngineTest
+internal class TypeUtilsSpec(val analysisApiEngine: KotlinAnalysisApiEngine) {
     @Test
     fun `TypeUtils#isNullable returns true for expression that can be null`() {
         val code = """
             var a: Int? = null
             val b = a
         """.trimIndent()
-        val file = KotlinAnalysisApiEngine.compile(code)
+        val file = analysisApiEngine.compile(code)
         val expression = file.children.filterIsInstance<KtProperty>().last().initializer!!
 
         assertThat(expression.isNullable(false)).isTrue()
@@ -35,7 +37,7 @@ internal class TypeUtilsSpec {
             var a: Int? = null
             $codeToTest
         """.trimIndent()
-        val file = KotlinAnalysisApiEngine.compile(code)
+        val file = analysisApiEngine.compile(code)
         val expression = file.children.filterIsInstance<KtProperty>().last().initializer!!
 
         assertThat(expression.isNullable(false)).isFalse()
@@ -48,7 +50,7 @@ internal class TypeUtilsSpec {
                 val f = javaClass.simpleName
             }
         """.trimIndent()
-        val file = KotlinAnalysisApiEngine.compile(code)
+        val file = analysisApiEngine.compile(code)
         val expression = file
             .children
             .filterIsInstance<KtClass>()

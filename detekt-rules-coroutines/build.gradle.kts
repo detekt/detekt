@@ -7,12 +7,15 @@ dependencies {
     compileOnly(projects.detektPsiUtils)
 
     testImplementation(libs.kotlin.compiler)
+    testImplementation(projects.detektKotlinAnalysisApi)
     testImplementation(projects.detektApi)
+    testRuntimeOnly(projects.detektPsiUtils)
     testImplementation(projects.detektTest)
     testImplementation(projects.detektTestAssertj)
     testImplementation(projects.detektTestJunit)
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.assertj.core)
-    testRuntimeOnly(libs.kotlinx.coroutinesCore)
+
     testRuntimeOnly(libs.kotlinx.coroutinesTest)
+    testCompileOnly(libs.jetbrains.annotations)
 }

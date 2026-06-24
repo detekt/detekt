@@ -405,7 +405,7 @@ class OptionalUnitSpec(val env: KotlinEnvironmentContainer) {
         @Test
         fun `should report when a function has an explicit Unit return type when config is strict`() {
             val code = """
-                fun foo(): Unit { }
+                public fun foo(): Unit { }
             """.trimIndent()
             val findings = subject.lintWithContext(
                 env,
@@ -444,7 +444,7 @@ class OptionalUnitSpec(val env: KotlinEnvironmentContainer) {
         @Test
         fun `should not report when a function has expression with Unit return type when config is strict`() {
             val code = """
-                fun foo(): Unit = println("")
+                public fun foo(): Unit = println("")
             """.trimIndent()
             val findings = subject.lintWithContext(
                 env,

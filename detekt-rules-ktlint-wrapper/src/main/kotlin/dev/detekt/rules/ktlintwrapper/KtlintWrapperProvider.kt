@@ -111,7 +111,7 @@ import dev.detekt.rules.ktlintwrapper.wrappers.Wrapping
 import com.pinterest.ktlint.rule.engine.core.api.RuleSetId as KtlintRuleSetId
 
 /**
- * This rule set provides wrappers for rules implemented by ktlint - https://ktlint.github.io/.
+ * This rule set provides wrappers for rules implemented by ktlint - https://ktlint.github.io/ktlint/.
  *
  * **Note: The `ktlint` rule set is not included in the detekt-cli or Gradle plugin.**
  *
@@ -242,6 +242,9 @@ class KtlintWrapperProvider : RuleSetProvider {
     companion object {
         @Configuration("ktlint code style for formatting rules (ktlint_official, intellij_idea or android_studio)")
         val code_style by ruleSetConfig("intellij_idea")
+
+        @Configuration("indentation style applied across all ktlint rules (space or tab)")
+        val indentStyle by ruleSetConfig("space")
 
         @Configuration("if rules should auto correct style violation")
         val autoCorrect by ruleSetConfig(true)

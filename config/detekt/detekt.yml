@@ -202,7 +202,6 @@ style:
     ignoreOverridden: true
   MagicNumber:
     excludes: ['**/test/**', '**/*Test.kt', '**/*Spec.kt']
-    ignorePropertyDeclaration: true
     ignoreAnnotation: true
     ignoreEnums: true
     ignoreNumbers:
@@ -235,7 +234,7 @@ style:
   ReturnCount:
     active: true
     excludeGuardClauses: true
-  SpacingAfterPackageDeclaration:
+  SpacingAfterPackageAndImports:
     active: true
   TrimMultilineRawString:
     active: true

@@ -10,6 +10,7 @@ import dev.detekt.api.config
 import dev.detekt.api.valuesWithReason
 import dev.detekt.psi.FunctionMatcher
 import dev.detekt.psi.FunctionMatcher.Companion.fromFunctionSignature
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.resolution.KaCall
@@ -17,6 +18,8 @@ import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaCompoundAccessCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaCompoundArrayAccessCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaCompoundVariableAccessCall
+import org.jetbrains.kotlin.analysis.api.resolution.KaDelegatedPropertyCall
+import org.jetbrains.kotlin.analysis.api.resolution.KaForLoopCall
 import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaCallableSymbol
@@ -43,12 +46,11 @@ import org.jetbrains.kotlin.resolve.calls.util.getCalleeExpressionIfAny
  *
  * <noncompliant>
  * fun main() {
- *   println()
- *   val myPrintln : () -> Unit = ::println
- *   kotlin.io.print("Hello, World!")
+ *     println()
+ *     val myPrintln : () -> Unit = ::println
+ *     kotlin.io.print("Hello, World!")
  * }
  * </noncompliant>
- *
  */
 class ForbiddenMethodCall(config: Config) :
     Rule(
@@ -147,6 +149,7 @@ class ForbiddenMethodCall(config: Config) :
         }
     }
 
+    @OptIn(KaExperimentalApi::class)
     private fun KaSession.getCallInfos(
         kaCall: KaCall,
         expression: KtExpression,
@@ -169,12 +172,16 @@ class ForbiddenMethodCall(config: Config) :
                 }
 
                 is KaCompoundAccessCall -> sequenceOf(
-                    null to kaCall.compoundOperation.operationPartiallyAppliedSymbol.symbol
+                    null to kaCall.compoundOperation.operationCall.symbol
                 )
 
                 is KaCompoundArrayAccessCall -> null
 
                 is KaCompoundVariableAccessCall -> null
+
+                is KaDelegatedPropertyCall -> null
+
+                is KaForLoopCall -> null
             } ?: return@sequence
 
             yieldAll(symbols)

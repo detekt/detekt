@@ -31,7 +31,7 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  * - __Operators__ `&&`, `||`, `?:`
  * - __Exceptions__ - `catch`, `use`
  * - __Scope Functions__ - `let`, `run`, `with`, `apply`, and `also` ->
- *  [Reference](https://kotlinlang.org/docs/scope-functions.html)
+ * [Reference](https://kotlinlang.org/docs/scope-functions.html)
  */
 @ActiveByDefault(since = "1.0.0")
 class CyclomaticComplexMethod(config: Config) :

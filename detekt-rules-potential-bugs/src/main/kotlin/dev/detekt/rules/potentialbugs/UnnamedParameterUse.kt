@@ -31,7 +31,7 @@ import org.jetbrains.kotlin.psi.KtValueArgument
  *
  * // allowAdjacentDifferentTypeParams = false
  * fun logMsg(msg: String, shouldLog: Boolean) {
- *    if(shouldLog) println(msg)
+ *     if(shouldLog) println(msg)
  * }
  * fun test() {
  *     logMsg("test", true)
@@ -66,7 +66,7 @@ import org.jetbrains.kotlin.psi.KtValueArgument
  *
  * // allowAdjacentDifferentTypeParams = true
  * fun logMsg(msg: String, shouldLog: Boolean) {
- *    if(shouldLog) println(msg)
+ *     if(shouldLog) println(msg)
  * }
  * fun test() {
  *     logMsg("test", true)
@@ -125,7 +125,7 @@ class UnnamedParameterUse(config: Config) :
             if (ignoreFunctionCall.any { it.match(symbol) }) return
 
             val argumentToParameterMap = valueArgumentList.arguments.associateWith {
-                val parameter = call.argumentMapping[it.getArgumentExpression()]?.symbol
+                val parameter = call.valueArgumentMapping[it.getArgumentExpression()]?.symbol
                 ParamInfo(
                     name = parameter?.name,
                     isNamed = it.isNamed(),

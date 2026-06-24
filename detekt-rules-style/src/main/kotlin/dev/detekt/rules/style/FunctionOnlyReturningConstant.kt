@@ -7,10 +7,10 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.Rule
 import dev.detekt.api.config
-import dev.detekt.api.simplePatternToRegex
 import dev.detekt.psi.isActual
 import dev.detekt.psi.isOpen
 import dev.detekt.psi.isOverride
+import dev.detekt.psi.pathGlobToRegex
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -41,7 +41,7 @@ class FunctionOnlyReturningConstant(config: Config) :
     private val ignoreActualFunction: Boolean by config(true)
 
     @Configuration("excluded functions")
-    private val excludedFunctions: List<Regex> by config(emptyList<String>()) { it.map(String::simplePatternToRegex) }
+    private val excludedFunctions: List<Regex> by config(emptyList<String>()) { it.map(String::pathGlobToRegex) }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (isNotIgnored(function) &&

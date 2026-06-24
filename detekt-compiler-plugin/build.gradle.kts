@@ -7,7 +7,7 @@ version = "$kotlinVersion-$detektVersion"
 
 plugins {
     id("module")
-    id("com.gradleup.shadow") version "9.3.1"
+    id("com.gradleup.shadow") version "9.4.2"
     id("de.undercouch.download") version "5.7.0"
 }
 
@@ -28,6 +28,7 @@ dependencies {
 
     testImplementation(libs.assertj.core)
     testImplementation(libs.kctfork.core)
+    testCompileOnly(libs.jetbrains.annotations)
 }
 
 shadow {
@@ -35,8 +36,10 @@ shadow {
 }
 
 publishing {
-    publications.named<MavenPublication>(DETEKT_PUBLICATION) {
-        artifact(tasks.shadowJar)
+    publications.withType<MavenPublication>().configureEach {
+        if (name == "maven") {
+            artifact(tasks.shadowJar)
+        }
     }
 }
 
@@ -49,19 +52,19 @@ tasks.shadowJar {
     }
 }
 
-val downloadKotlinCompiler by tasks.registering(Download::class) {
+val downloadKotlinCompiler = tasks.register<Download>("downloadKotlinCompiler") {
     src("https://github.com/JetBrains/kotlin/releases/download/v$kotlinVersion/kotlin-compiler-$kotlinVersion.zip")
     dest(file("$rootDir/build/kotlinc/kotlin-compiler-$kotlinVersion.zip"))
     overwrite(false)
 }
 
-val unzipKotlinCompiler by tasks.registering(Copy::class) {
+val unzipKotlinCompiler = tasks.register<Copy>("unzipKotlinCompiler") {
     dependsOn(downloadKotlinCompiler)
     from(zipTree(downloadKotlinCompiler.get().dest))
     into(file("$rootDir/build/kotlinc/$kotlinVersion"))
 }
 
-val testPluginKotlinc by tasks.registering(Task::class) {
+val testPluginKotlinc = tasks.register<Task>("testPluginKotlinc") {
     enabled = false
 
     val outputDir = layout.buildDirectory.dir("tmp/kotlinc")

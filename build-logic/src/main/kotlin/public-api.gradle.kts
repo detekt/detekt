@@ -11,12 +11,5 @@ dokka {
 
 kotlin {
     @OptIn(org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation::class)
-    abiValidation {
-        enabled = true
-    }
-}
-
-tasks.check {
-    // Add dependency manually until https://youtrack.jetbrains.com/issue/KT-80614 is fixed
-    dependsOn("checkLegacyAbi")
+    abiValidation()
 }

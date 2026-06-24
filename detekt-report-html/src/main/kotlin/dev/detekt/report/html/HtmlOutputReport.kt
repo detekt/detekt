@@ -154,7 +154,7 @@ class HtmlOutputReport : OutputReport {
         val pathString = issue.location.path.invariantSeparatorsPathString
         span("location") {
             text(
-                "$pathString:${issue.location.source.line}:${issue.location.source.column}"
+                "${issue.severity.name}: $pathString:${issue.location.source.line}:${issue.location.source.column}"
             )
         }
 

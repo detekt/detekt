@@ -10,8 +10,8 @@ internal object DetektKmpJvmCompilations {
     fun registerTasks(project: Project, extension: DetektExtension) {
         val kotlinExtension = project.extensions.getByType(KotlinTargetsContainer::class.java)
 
-        kotlinExtension.targets.matching { it.platformType in setOf(jvm, androidJvm) }.all { target ->
-            target.compilations.all { compilation ->
+        kotlinExtension.targets.matching { it.platformType in setOf(jvm, androidJvm) }.configureEach { target ->
+            target.compilations.configureEach { compilation ->
                 project.registerJvmCompilationDetektTask(extension, compilation, target)
                 project.registerJvmCompilationCreateBaselineTask(extension, compilation, target)
             }

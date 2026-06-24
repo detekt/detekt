@@ -6,11 +6,11 @@ import dev.detekt.api.Config
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/) for
+ * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/) for
  * documentation.
  */
 @ActiveByDefault(since = "2.0.0")
-class TypeParameterComment(config: Config) :
+internal class TypeParameterComment(config: Config) :
     KtlintRule(config, "Detect discouraged type parameter comment locations.") {
 
     override val wrapping = TypeParameterCommentRule()

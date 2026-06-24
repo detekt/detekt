@@ -37,6 +37,7 @@ java -jar detekt-cli-all.jar \
   --config path/to/config/detekt/detekt.yml \
 + --baseline path/to/new/config/detekt/baseline.xml \
 + --create-baseline
+```
 
 #### Gradle
 

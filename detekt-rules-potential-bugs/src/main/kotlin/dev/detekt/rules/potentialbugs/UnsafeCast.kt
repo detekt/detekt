@@ -50,7 +50,7 @@ class UnsafeCast(config: Config) :
 
         val isCastNeverSucceeds = analyze(expression) {
             expression
-                .diagnostics(KaDiagnosticCheckerFilter.ONLY_COMMON_CHECKERS)
+                .directDiagnostics(KaDiagnosticCheckerFilter.ONLY_COMMON_CHECKERS)
                 .any { it is KaFirDiagnostic.CastNeverSucceeds }
         }
 

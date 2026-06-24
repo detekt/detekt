@@ -246,6 +246,23 @@ class AbstractClassCanBeConcreteClassSpec(val env: KotlinEnvironmentContainer) {
             assertThat(findings).singleElement()
                 .hasMessage(message)
         }
+
+        @Test
+        fun `reports when supertype only declares abstract nested class - #9155`() {
+            val code = """
+                abstract class Base {
+                    abstract class Nested
+                }
+
+                abstract class Derived : Base() {
+                    fun f() {}
+                }
+            """.trimIndent()
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings)
+                .singleElement()
+                .hasMessage("An abstract class without an abstract member can be refactored to a concrete class.")
+        }
     }
 
     @Nested

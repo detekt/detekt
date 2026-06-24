@@ -7,11 +7,11 @@ import dev.detekt.api.internal.AutoCorrectable
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#colon-spacing) for documentation.
+ * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/#colon-spacing) for documentation.
  */
 @ActiveByDefault(since = "1.0.0")
 @AutoCorrectable(since = "1.0.0")
-class SpacingAroundColon(config: Config) : KtlintRule(config, "Reports spaces around colons") {
+internal class SpacingAroundColon(config: Config) : KtlintRule(config, "Reports spaces around colons") {
 
     override val wrapping = SpacingAroundColonRule()
 }

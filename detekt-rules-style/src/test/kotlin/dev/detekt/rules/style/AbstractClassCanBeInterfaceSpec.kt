@@ -175,6 +175,35 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
             """.trimIndent()
             assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
+
+        @Test
+        fun `does not report an abstract class extending a class`() {
+            val code = """
+                abstract class A : Throwable()
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does report an abstract class extending an interface`() {
+            val code = """
+                abstract class A : Comparable<Int>
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        }
+
+        @Test
+        fun `does not report an abstract class extending a class only containing abstract member`() {
+            val code = """
+                abstract class A : Throwable() {
+                    abstract val i: Int
+                    abstract fun f()
+                    public abstract fun f2()
+                }
+            """.trimIndent()
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
     }
 
     @Nested
@@ -236,6 +265,44 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
             val code = "abstract class A(i: Int)"
             val findings = subject.lintWithContext(env, code)
             assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `does not report an abstract class with a non-const open val property`() {
+            val code = """
+                fun computeSomething(): Int = 456 * 789
+
+                abstract class A {
+                    open val x: Int = computeSomething()
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `reports an abstract class with only an open literal const property`() {
+            val code = """
+                abstract class A {
+                    open val x: Int = 404
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code))
+                .singleElement()
+                .hasMessage(NO_CONCRETE_MEMBER)
+        }
+
+        @Test
+        fun `reports an abstract class with only an open val property using a getter`() {
+            val code = """
+                fun computeSomething(): Int = 456 * 789
+
+                abstract class A {
+                    open val x: Int get() = computeSomething()
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code))
+                .singleElement()
+                .hasMessage(NO_CONCRETE_MEMBER)
         }
 
         @Test
@@ -367,10 +434,10 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
         }
 
         @Test
-        fun `don't report a sealed class with open methods`() {
+        fun `report a sealed class with open methods`() {
             val code = """
                 sealed class Result {
-                    open fun x() = println("default") 
+                    open fun x() = println("default")
                     data class Success(val data: Int) : Result() {
                         override fun x() = println("success!")
                     }
@@ -378,7 +445,9 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
                 }
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
-            assertThat(findings).isEmpty()
+            assertThat(findings)
+                .singleElement()
+                .hasMessage(SEALED_NO_CONCRETE_MEMBER)
         }
 
         @Test
@@ -412,12 +481,110 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
         }
 
         @Test
-        fun `don't report a sealed class with open properties`() {
+        fun `don't report a sealed class with non-const open val properties`() {
             val code = """
+                fun computeSomething(): Int = 456 * 789
+
                 sealed class Result {
-                    open val x: Int = 123
+                    open val x: Int = computeSomething()
                     data class Success(val data: Int, override val x: Int) : Result()
                     data class Failure(val reason: String) : Result()
+                }
+            """.trimIndent()
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `report a sealed class with open val property using a getter`() {
+            val code = """
+                fun computeSomething(): Int = 456 * 789
+
+                sealed class Result {
+                    open val x: Int get() = computeSomething()
+                    data class Success(val data: Int, override val x: Int) : Result()
+                    data class Failure(val reason: String) : Result()
+                }
+            """.trimIndent()
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings)
+                .singleElement()
+                .hasMessage(SEALED_NO_CONCRETE_MEMBER)
+        }
+
+        @Test
+        fun `report a sealed class with open literal const properties`() {
+            val code = """
+                sealed class Result {
+                    open val code: Int = 404
+                    data class Success(val data: Int, override val code: Int) : Result()
+                    data class Failure(val reason: String) : Result()
+                }
+            """.trimIndent()
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings)
+                .singleElement()
+                .hasMessage(SEALED_NO_CONCRETE_MEMBER)
+        }
+
+        @Test
+        fun `report a sealed class with open const val properties`() {
+            val code = """
+                const val DEFAULT_CODE = 404
+
+                sealed class Result {
+                    open val code: Int = DEFAULT_CODE
+                    data class Success(val data: Int, override val code: Int) : Result()
+                    data class Failure(val reason: String) : Result()
+                }
+            """.trimIndent()
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings)
+                .singleElement()
+                .hasMessage(SEALED_NO_CONCRETE_MEMBER)
+        }
+
+        @Test
+        fun `does not report local abstract class = #9073`() {
+            val code = """
+                class DependencyCollector
+
+                inline fun <reified T> newInstance(): T = T::class.java.newInstance()
+
+                private fun dependencyCollector(): DependencyCollector {
+                    abstract class DependencyCollectorCreator {
+                        abstract val dependencyCollector: DependencyCollector
+                    }
+                    return newInstance<DependencyCollectorCreator>().dependencyCollector
+                }
+            """.trimIndent()
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings)
+                .isEmpty()
+        }
+
+        @Test
+        fun `don't report a sealed class with mixed property types`() {
+            val code = """
+                const val CONST_VALUE = 123
+                fun computeSomething(): Int = 456 * 789
+
+                sealed class Result {
+                    abstract val abstractVal: Int
+                    open val openConstVal: Int = CONST_VALUE
+                    open val openNonConstVal: Int = computeSomething()
+                    val finalVal: Int = 789
+
+                    data class Success(val data: Int, override val abstractVal: Int) : Result()
+
+                    data class Failure(val reason: String) : Result() {
+                        override val abstractVal: Int = 1234
+                        override var openConstVal: Int = 56789
+                            set(value) {
+                                field = value
+                                computeSomething()
+                            }
+                    }
                 }
             """.trimIndent()
             val findings = subject.lintWithContext(env, code)
@@ -504,6 +671,30 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
             assertThat(findings)
                 .singleElement()
                 .hasMessage(SEALED_NO_CONCRETE_MEMBER)
+        }
+
+        @Test
+        fun `don't report a sealed class extending another class - #9182`() {
+            val code = """
+                sealed class MyError : Throwable() {
+                    data class FirstType(val first: String) : MyError()
+                    data class SecondType(val second: Int) : MyError()
+                }
+            """.trimIndent()
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `report a sealed class extending an interface`() {
+            val code = """
+                sealed class MySerializable : java.io.Serializable {
+                    data class FirstType(val first: String) : MySerializable()
+                    data class SecondType(val second: Int) : MySerializable()
+                }
+            """.trimIndent()
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings).hasSize(1)
         }
     }
 }

@@ -1,6 +1,7 @@
 package dev.detekt.metrics.processors
 
 import dev.detekt.api.ProjectMetric
+import dev.detekt.test.invoke
 import dev.detekt.test.utils.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -19,5 +20,16 @@ class PackageCountProcessorSpec {
 
         assertThat(detektion.metrics).singleElement()
             .isEqualTo(ProjectMetric("number of packages", 4))
+    }
+
+    @Test
+    fun twoClassesInSeparatePackage() {
+        val detektion = PackageCountProcessor().invoke(
+            compileContentForTest(default),
+            compileContentForTest(emptyEnum),
+        )
+
+        assertThat(detektion.metrics).singleElement()
+            .isEqualTo(ProjectMetric("number of packages", 2))
     }
 }

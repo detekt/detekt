@@ -5,7 +5,7 @@ plugins {
 dependencies {
     implementation(libs.develocity.plugin)
     implementation(libs.kotlin.gradle.plugin)
-    implementation(libs.gradleNexus.publish.plugin)
+    implementation(libs.vanniktech.mavenPublish.plugin)
     implementation(libs.semver4j)
     implementation(libs.breadmoirai.githubRelease.plugin)
     implementation(libs.dokka.plugin)
@@ -17,12 +17,5 @@ kotlin {
 
     compilerOptions {
         allWarningsAsErrors = providers.gradleProperty("warningsAsErrors").orNull.toBoolean()
-    }
-}
-
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-    val isCiBuild = providers.environmentVariable("CI").isPresent
-    if (isCiBuild) {
-        compilerExecutionStrategy = org.jetbrains.kotlin.gradle.tasks.KotlinCompilerExecutionStrategy.OUT_OF_PROCESS
     }
 }

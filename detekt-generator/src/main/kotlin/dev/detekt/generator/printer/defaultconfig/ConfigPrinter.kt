@@ -40,19 +40,17 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
             processors:
               active: true
               exclude:
-                - 'DetektProgressListener'
               # - 'KtFileCountProcessor'
               # - 'PackageCountProcessor'
               # - 'ClassCountProcessor'
               # - 'FunctionCountProcessor'
               # - 'PropertyCountProcessor'
-              # - 'ProjectComplexityProcessor'
+              # - 'ProjectCyclomaticComplexityProcessor'
               # - 'ProjectCognitiveComplexityProcessor'
               # - 'ProjectLLOCProcessor'
               # - 'ProjectCLOCProcessor'
               # - 'ProjectLOCProcessor'
               # - 'ProjectSLOCProcessor'
-              # - 'LicenseHeaderLoaderExtension'
         """.trimIndent()
 
     private fun defaultConsoleReportsConfiguration(): String =

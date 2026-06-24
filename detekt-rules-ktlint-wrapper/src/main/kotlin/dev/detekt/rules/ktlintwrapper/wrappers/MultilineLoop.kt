@@ -11,11 +11,11 @@ import dev.detekt.api.internal.AutoCorrectable
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#multiline-loop) for documentation.
+ * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/#multiline-loop) for documentation.
  */
 @ActiveByDefault(since = "2.0.0")
 @AutoCorrectable(since = "2.0.0")
-class MultilineLoop(config: Config) : KtlintRule(config, "Detects multiline loop statements without braces") {
+internal class MultilineLoop(config: Config) : KtlintRule(config, "Detects multiline loop statements without braces") {
 
     override val wrapping = MultilineLoopRule()
 

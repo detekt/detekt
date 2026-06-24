@@ -22,9 +22,9 @@ import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
  *
  * <noncompliant>
  * val x = System.getenv()
- *             ?.getValue("HOME")
- *             ?.toLowerCase()
- *             ?.split("/") ?: emptyList()
+ *     ?.getValue("HOME")
+ *     ?.toLowerCase()
+ *     ?.split("/") ?: emptyList()
  * </noncompliant>
  *
  * <compliant>

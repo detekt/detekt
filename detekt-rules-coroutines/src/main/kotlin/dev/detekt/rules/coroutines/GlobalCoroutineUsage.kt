@@ -32,7 +32,7 @@ import org.jetbrains.kotlin.resolve.calls.util.getCalleeExpressionIfAny
  * }
  *
  * fun onDestroy() {
- *    scope.cancel()
+ *     scope.cancel()
  * }
  * </compliant>
  */
