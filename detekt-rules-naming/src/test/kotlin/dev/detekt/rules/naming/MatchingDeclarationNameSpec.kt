@@ -147,6 +147,104 @@ class MatchingDeclarationNameSpec {
             ).lint(ktFile)
             assertThat(findings).isEmpty()
         }
+
+        @Test
+        fun `should pass for class declaration and name with iosSimulatorArm64 suffix`() {
+            val ktFile = compileContentForTest("actual class C", filename = "C.iosSimulatorArm64.kt")
+            val findings = MatchingDeclarationName(Config.empty).lint(ktFile)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `should pass for class declaration and name with macosArm64 suffix`() {
+            val ktFile = compileContentForTest("actual class C", filename = "C.macosArm64.kt")
+            val findings = MatchingDeclarationName(Config.empty).lint(ktFile)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `should pass for class declaration and name with macos shorthand suffix`() {
+            val ktFile = compileContentForTest("actual class C", filename = "C.macos.kt")
+            val findings = MatchingDeclarationName(Config.empty).lint(ktFile)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `should pass for class declaration and name with wasmJs suffix`() {
+            val ktFile = compileContentForTest("actual class C", filename = "C.wasmJs.kt")
+            val findings = MatchingDeclarationName(Config.empty).lint(ktFile)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `should pass for class declaration and name with wasmWasi suffix`() {
+            val ktFile = compileContentForTest("actual class C", filename = "C.wasmWasi.kt")
+            val findings = MatchingDeclarationName(Config.empty).lint(ktFile)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `should pass for class declaration and name with tvos shorthand suffix`() {
+            val ktFile = compileContentForTest("actual class C", filename = "C.tvos.kt")
+            val findings = MatchingDeclarationName(Config.empty).lint(ktFile)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `should pass for class declaration and name with tvosArm64 suffix`() {
+            val ktFile = compileContentForTest("actual class C", filename = "C.tvosArm64.kt")
+            val findings = MatchingDeclarationName(Config.empty).lint(ktFile)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `should pass for class declaration and name with tvosSimulatorArm64 suffix`() {
+            val ktFile = compileContentForTest("actual class C", filename = "C.tvosSimulatorArm64.kt")
+            val findings = MatchingDeclarationName(Config.empty).lint(ktFile)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `should pass for class declaration and name with watchos shorthand suffix`() {
+            val ktFile = compileContentForTest("actual class C", filename = "C.watchos.kt")
+            val findings = MatchingDeclarationName(Config.empty).lint(ktFile)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `should pass for class declaration and name with watchosSimulatorArm64 suffix`() {
+            val ktFile = compileContentForTest("actual class C", filename = "C.watchosSimulatorArm64.kt")
+            val findings = MatchingDeclarationName(Config.empty).lint(ktFile)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `should pass for class declaration and name with watchosDeviceArm64 suffix`() {
+            val ktFile = compileContentForTest("actual class C", filename = "C.watchosDeviceArm64.kt")
+            val findings = MatchingDeclarationName(Config.empty).lint(ktFile)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `should pass for class declaration and name with linuxArm64 suffix`() {
+            val ktFile = compileContentForTest("actual class C", filename = "C.linuxArm64.kt")
+            val findings = MatchingDeclarationName(Config.empty).lint(ktFile)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `should pass for class declaration and name with androidNativeArm64 suffix`() {
+            val ktFile = compileContentForTest("actual class C", filename = "C.androidNativeArm64.kt")
+            val findings = MatchingDeclarationName(Config.empty).lint(ktFile)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `should pass for class declaration and name with androidNativeX64 suffix`() {
+            val ktFile = compileContentForTest("actual class C", filename = "C.androidNativeX64.kt")
+            val findings = MatchingDeclarationName(Config.empty).lint(ktFile)
+            assertThat(findings).isEmpty()
+        }
     }
 
     @Nested
