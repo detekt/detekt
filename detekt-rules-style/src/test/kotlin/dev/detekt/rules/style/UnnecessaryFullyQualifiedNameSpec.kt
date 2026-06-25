@@ -357,11 +357,10 @@ class UnnecessaryFullyQualifiedNameSpec(val env: KotlinEnvironmentContainer) {
         fun `does not report nested classes, if ignored`() {
             val ignored = createRule(ignoredFullyQualifiedNames = listOf("java.util.AbstractMap.*"))
             val findings = ignored.lintWithContext(env, code)
-            assertThat(findings).hasSize(1)
-            assertThat(
-                findings.first(),
-            ).hasMessage("Fully qualified class name 'java.util.AbstractMap' can be replaced with an import.")
-            assertThat(findings.first()).hasStartSourceLocation(8, 18)
+            assertThat(findings)
+                .singleElement()
+                .hasMessage("Fully qualified class name 'java.util.AbstractMap' can be replaced with an import.")
+                .hasStartSourceLocation(8, 18)
         }
 
         @Test
@@ -1269,10 +1268,10 @@ class UnnecessaryFullyQualifiedNameSpec(val env: KotlinEnvironmentContainer) {
             """.trimIndent()
 
             val findings = subject.lintWithContext(env, code)
-            assertThat(findings).hasSize(1)
-            assertThat(findings.first()).hasMessage(
-                "Fully qualified class name 'java.util.AbstractMap.SimpleEntry' can be replaced with an import."
-            )
+            assertThat(findings).singleElement()
+                .hasMessage(
+                    "Fully qualified class name 'java.util.AbstractMap.SimpleEntry' can be replaced with an import."
+                )
         }
     }
 
@@ -1291,10 +1290,8 @@ class UnnecessaryFullyQualifiedNameSpec(val env: KotlinEnvironmentContainer) {
             """.trimIndent()
             val ignored = createRule(ignoredFullyQualifiedNames = listOf("java.lang.*"))
             val findings = ignored.lintWithContext(env, code)
-            assertThat(findings).hasSize(1)
-            assertThat(
-                findings.first(),
-            ).hasMessage("Fully qualified class name 'java.util.List' can be replaced with an import.")
+            assertThat(findings).singleElement()
+                .hasMessage("Fully qualified class name 'java.util.List' can be replaced with an import.")
         }
 
         @Test
@@ -1309,10 +1306,8 @@ class UnnecessaryFullyQualifiedNameSpec(val env: KotlinEnvironmentContainer) {
             """.trimIndent()
             val ignored = createRule(ignoredFullyQualifiedNames = listOf("java.util.concurrent.*"))
             val findings = ignored.lintWithContext(env, code)
-            assertThat(findings).hasSize(1)
-            assertThat(
-                findings.first(),
-            ).hasMessage("Fully qualified class name 'java.util.List' can be replaced with an import.")
+            assertThat(findings).singleElement()
+                .hasMessage("Fully qualified class name 'java.util.List' can be replaced with an import.")
         }
 
         @Test
@@ -1338,10 +1333,8 @@ class UnnecessaryFullyQualifiedNameSpec(val env: KotlinEnvironmentContainer) {
             """.trimIndent()
             val ignored = createRule(ignoredFullyQualifiedNames = listOf("java.lang.Integer"))
             val findings = ignored.lintWithContext(env, code)
-            assertThat(findings).hasSize(1)
-            assertThat(
-                findings.first(),
-            ).hasMessage("Fully qualified class reference 'java.lang.String' can be replaced with an import.")
+            assertThat(findings).singleElement()
+                .hasMessage("Fully qualified class reference 'java.lang.String' can be replaced with an import.")
         }
     }
 
