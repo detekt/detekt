@@ -1,9 +1,9 @@
 package dev.detekt.core.reporting
 
 import dev.detekt.api.ConsoleReport
-import dev.detekt.api.testfixtures.TestDetektion
 import dev.detekt.api.testfixtures.TestSetupContext
 import dev.detekt.api.testfixtures.createIssue
+import dev.detekt.test.TestDetektion
 import org.assertj.core.api.Assertions.assertThat
 
 internal object SuppressedIssueAssert {

@@ -3,13 +3,13 @@ package dev.detekt.core.reporting.console
 import dev.detekt.api.Severity.Error
 import dev.detekt.api.Severity.Info
 import dev.detekt.api.Severity.Warning
-import dev.detekt.api.testfixtures.TestDetektion
 import dev.detekt.api.testfixtures.TestSetupContext
 import dev.detekt.api.testfixtures.createIssue
 import dev.detekt.api.testfixtures.createIssueLocation
 import dev.detekt.api.testfixtures.createRuleInstance
 import dev.detekt.core.reporting.SuppressedIssueAssert
 import dev.detekt.core.reporting.decolorized
+import dev.detekt.test.TestDetektion
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import kotlin.io.path.Path
