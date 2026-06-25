@@ -371,6 +371,28 @@ class MatchingDeclarationNameSpec {
     }
 
     @Nested
+    inner class `default multiplatform targets` {
+
+        @Test
+        fun `should include all officially documented KMP target suffixes`() {
+            val actual = MatchingDeclarationName.COMMON_KOTLIN_KMP_PLATFORM_TARGET_SUFFIXES
+            assertThat(actual).containsExactlyInAnyOrder(
+                "jvm", "android",
+                "js",
+                "wasm", "wasmJs", "wasmWasi",
+                "ios", "iosArm32", "iosArm64", "iosX64", "iosSimulatorArm64",
+                "macos", "macosX64", "macosArm64",
+                "watchos", "watchosArm32", "watchosArm64", "watchosX64",
+                "watchosSimulatorArm64", "watchosDeviceArm64",
+                "tvos", "tvosArm64", "tvosX64", "tvosSimulatorArm64",
+                "native", "linuxX64", "linuxArm64",
+                "mingwX64",
+                "androidNativeArm32", "androidNativeArm64", "androidNativeX64", "androidNativeX86",
+            )
+        }
+    }
+
+    @Nested
     inner class FileNameWithoutSuffix {
 
         @Test
