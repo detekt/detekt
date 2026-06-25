@@ -383,6 +383,47 @@ function parseDefaultExpr(expr, constants = {}) {
 
 // ─── Companion object constant extraction ─────────────────────────────────────
 
+/**
+ * Strip Kotlin `//` line comments from source text, respecting string and
+ * triple-quoted string literals so that `//` inside strings is preserved.
+ */
+function stripLineComments(src) {
+  let result = '';
+  let i = 0;
+  let inString = false;
+  let inTriple = false;
+  while (i < src.length) {
+    if (inTriple) {
+      if (src.startsWith('"""', i)) {
+        let q = 0;
+        while (i + q < src.length && src[i + q] === '"') q++;
+        result += '"'.repeat(q);
+        inTriple = false;
+        i += q;
+        continue;
+      }
+      result += src[i];
+      i++;
+    } else if (inString) {
+      if (src[i] === '\\' && i + 1 < src.length) { result += src[i] + src[i + 1]; i += 2; continue; }
+      if (src[i] === '"') inString = false;
+      result += src[i];
+      i++;
+    } else {
+      if (src.startsWith('"""', i)) { inTriple = true; result += '"""'; i += 3; continue; }
+      if (src[i] === '"') { inString = true; result += '"'; i++; }
+      else if (src[i] === '/' && i + 1 < src.length && src[i + 1] === '/') {
+        while (i < src.length && src[i] !== '\n') i++;
+        if (i < src.length) { result += '\n'; i++; }
+      } else {
+        result += src[i];
+        i++;
+      }
+    }
+  }
+  return result;
+}
+
 function extractCompanionConstants(classBody) {
   const constants = {};
   const compMatch = classBody.match(/\bcompanion\s+object\b[^{]*/);
@@ -391,6 +432,9 @@ function extractCompanionConstants(classBody) {
   if (compOpenIdx === -1) return constants;
   const compCloseIdx = findMatchingBrace(classBody, compOpenIdx);
   const compBody = classBody.substring(compOpenIdx + 1, compCloseIdx);
+  // Strip line comments so `//` inside multi-line listOf(...) doesn't
+  // truncate the expression when the regex loop evaluates it below.
+  const strippedBody = stripLineComments(compBody);
 
   // Match the start of `[const ]val NAME = `. The value itself may span
   // multiple lines (e.g. `listOf("a", "b", ...)` with each item on its own
@@ -398,11 +442,11 @@ function extractCompanionConstants(classBody) {
   // capturing the rest of the line with a regex.
   const re = /(?:const\s+)?val\s+(\w+)\s*=\s*/g;
   let m;
-  while ((m = re.exec(compBody)) !== null) {
+  while ((m = re.exec(strippedBody)) !== null) {
     const name = m[1];
-    const valueExpr = readBalancedExpression(compBody, m.index + m[0].length);
+    const valueExpr = readBalancedExpression(strippedBody, m.index + m[0].length);
     re.lastIndex = m.index + m[0].length + valueExpr.length;
-    const cleaned = valueExpr.split('//')[0].trim();
+    const cleaned = valueExpr.trim();
     const parsed = parseDefaultExpr(cleaned, constants);
     if (parsed) constants[name] = parsed;
   }
