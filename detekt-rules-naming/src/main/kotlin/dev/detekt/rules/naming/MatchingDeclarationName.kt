@@ -55,7 +55,13 @@ class MatchingDeclarationName(config: Config) :
     @Configuration("name should only be checked if the file starts with a class or object")
     private val mustBeFirst: Boolean by config(true)
 
-    @Configuration("kotlin multiplatform targets, used to allow file names like `MyClass.jvm.kt`")
+    @Configuration(
+        "Kotlin Multiplatform target suffixes that are stripped before comparing the file name to " +
+            "the top-level declaration name. For example, `MyClass.iosSimulatorArm64.kt` is treated " +
+            "as `MyClass.kt` so it is not flagged when the file contains `class MyClass`. " +
+            "The default list covers all officially supported KMP targets. " +
+            "Add custom suffixes here to support additional or future targets."
+    )
     private val multiplatformTargets: List<String> by config(COMMON_KOTLIN_KMP_PLATFORM_TARGET_SUFFIXES)
 
     override fun visitKtFile(file: KtFile) {
@@ -90,17 +96,61 @@ class MatchingDeclarationName(config: Config) :
 
     companion object {
 
-        private val COMMON_KOTLIN_KMP_PLATFORM_TARGET_SUFFIXES = listOf(
-            "ios",
-            "android",
-            "js",
+        /**
+         * Default set of Kotlin Multiplatform platform suffixes recognised by this rule.
+         *
+         * The list covers every officially documented Kotlin/Native, Kotlin/JS, and Kotlin/Wasm
+         * target name so that files like `MyClass.iosSimulatorArm64.kt`, `MyClass.wasmJs.kt`,
+         * or `MyClass.macosArm64.kt` are not flagged as non-compliant out of the box.
+         *
+         * Custom or future targets can always be added via the `multiplatformTargets` configuration
+         * option without changing this default.
+         *
+         * See: https://kotlinlang.org/docs/native-target-support.html
+         */
+        val COMMON_KOTLIN_KMP_PLATFORM_TARGET_SUFFIXES = listOf(
+            // ---- JVM / Android ----
             "jvm",
-            "native",
+            "android",
+            // ---- Kotlin/JS ----
+            "js",
+            // ---- Kotlin/Wasm (Kotlin 1.9+) ----
+            "wasm",
+            "wasmJs",
+            "wasmWasi",
+            // ---- iOS ----
+            "ios",
+            "iosArm32",
             "iosArm64",
             "iosX64",
+            "iosSimulatorArm64",
+            // ---- macOS ----
+            "macos",
             "macosX64",
+            "macosArm64",
+            // ---- watchOS ----
+            "watchos",
+            "watchosArm32",
+            "watchosArm64",
+            "watchosX64",
+            "watchosSimulatorArm64",
+            "watchosDeviceArm64",
+            // ---- tvOS ----
+            "tvos",
+            "tvosArm64",
+            "tvosX64",
+            "tvosSimulatorArm64",
+            // ---- Linux ----
+            "native",
+            "linuxX64",
+            "linuxArm64",
+            // ---- Windows (MinGW) ----
             "mingwX64",
-            "linuxX64"
+            // ---- Android Native ----
+            "androidNativeArm32",
+            "androidNativeArm64",
+            "androidNativeX64",
+            "androidNativeX86",
         )
     }
 }
