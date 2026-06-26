@@ -96,19 +96,7 @@ class MatchingDeclarationName(config: Config) :
 
     companion object {
 
-        /**
-         * Default set of Kotlin Multiplatform platform suffixes recognised by this rule.
-         *
-         * The list covers every officially documented Kotlin/Native, Kotlin/JS, and Kotlin/Wasm
-         * target name so that files like `MyClass.iosSimulatorArm64.kt`, `MyClass.wasmJs.kt`,
-         * or `MyClass.macosArm64.kt` are not flagged as non-compliant out of the box.
-         *
-         * Custom or future targets can always be added via the `multiplatformTargets` configuration
-         * option without changing this default.
-         *
-         * See: https://kotlinlang.org/docs/native-target-support.html
-         */
-        val COMMON_KOTLIN_KMP_PLATFORM_TARGET_SUFFIXES = listOf(
+        private val COMMON_KOTLIN_KMP_PLATFORM_TARGET_SUFFIXES = listOf(
             // ---- JVM / Android ----
             "jvm",
             "android",
