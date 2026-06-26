@@ -96,7 +96,7 @@ class MatchingDeclarationName(config: Config) :
 
     companion object {
 
-        private val COMMON_KOTLIN_KMP_PLATFORM_TARGET_SUFFIXES = listOf(
+        val COMMON_KOTLIN_KMP_PLATFORM_TARGET_SUFFIXES = listOf(
             // ---- JVM / Android ----
             "jvm",
             "android",
