@@ -383,10 +383,6 @@ function parseDefaultExpr(expr, constants = {}) {
 
 // ─── Companion object constant extraction ─────────────────────────────────────
 
-/**
- * Strip Kotlin `//` line comments from source text, respecting string and
- * triple-quoted string literals so that `//` inside strings is preserved.
- */
 function stripLineComments(src) {
   let result = '';
   let i = 0;
