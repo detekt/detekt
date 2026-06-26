@@ -15,7 +15,9 @@ import org.jetbrains.kotlin.psi.KtImportDirective
  *
  * This rule allows to set a list of forbidden [forbiddenImports].
  * This can be used to discourage the use of unstable, experimental or deprecated APIs.
- * Imports are configured as glob patterns and may include a reason that is shown in the finding:
+ * Imports are configured as glob patterns and may be exact imports such as `kotlin.jvm.JvmField`
+ * or wildcard imports such as `java.util.*`. Each entry can also include a reason that is shown in the finding.
+ * Use [allowedImports] to declare exceptions to broader forbidden globs:
  *
  * ```yaml
  * ForbiddenImport:
@@ -31,8 +33,12 @@ import org.jetbrains.kotlin.psi.KtImportDirective
  *
  * <noncompliant>
  * import kotlin.jvm.JvmField
- * import kotlin.SinceKotlin
+ * import java.util.Date
  * </noncompliant>
+ *
+ * <compliant>
+ * import java.util.UUID
+ * </compliant>
  */
 class ForbiddenImport(config: Config) :
     Rule(
@@ -43,7 +49,8 @@ class ForbiddenImport(config: Config) :
 
     @Configuration(
         "List of imports, specified as glob patterns, that are forbidden. " +
-            "It is recommended to also specify a reason."
+            "Entries may either be plain strings or value/reason pairs, allowing you to specify the reason why each " +
+            "individual import is forbidden."
     )
     private val forbiddenImports: List<Forbidden> by config(valuesWithReason()) { list ->
         list.map { Forbidden(it.value.pathGlobToRegex(), it.reason) }
@@ -51,7 +58,7 @@ class ForbiddenImport(config: Config) :
 
     @Configuration(
         "List of imports, specified as glob patterns, to explicitly allow. " +
-            "Use this to specify exceptions to the forbidden imports."
+            "Use this to specify exceptions to broader forbidden imports."
     )
     private val allowedImports: List<Regex> by config(emptyList<String>()) { list ->
         list.map { it.pathGlobToRegex() }
