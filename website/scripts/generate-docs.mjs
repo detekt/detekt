@@ -488,7 +488,7 @@ function extractConfigAnnotationDesc(src, annotationIdx) {
   const closeIdx = findMatchingParen(src, parenIdx);
   const raw = src.substring(parenIdx + 1, closeIdx).trim();
   // Remove surrounding quotes and handle concatenation
-  const unquoted = raw.replace(/^"|"$/g, '').replace(/"[ \t]*\+[ \t\r\n]*"/g, '');
+  const unquoted = raw.replace(/^"|"\s*,?\s*$/g, '').replace(/"[ \t]*\+[ \t\r\n]*"/g, '');
   return unquoted.trim();
 }
 
