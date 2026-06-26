@@ -10,7 +10,7 @@
 
 
 <link rel="search" type="application/opensearchdescription+xml" title="detekt" href="/opensearch.xml"><link rel="stylesheet" href="/assets/css/styles.6ef1b9a8.css">
-<script src="/assets/js/runtime~main.413bd45c.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.d94b3838.js" defer="defer"></script>
 <script src="/assets/js/main.4cf6cd4f.js" defer="defer"></script>
 </head>
 <body>
@@ -963,11 +963,19 @@ The fully qualified names can be replaced with imports to make the code more rea
 <li class="">Package declarations</li>
 <li class="">String literals</li>
 <li class="">Nested class references without packages (e.g., Outer.Inner)</li>
+<li class="">Fully qualified names that were ignored by configuration</li>
 </ul>
 <p>See <a href="https://pmd.github.io/latest/pmd_rules_java_codestyle.html#unnecessaryfullyqualifiedname" target="_blank" rel="noopener noreferrer" class="">PMD UnnecessaryFullyQualifiedName</a>
 for a similar rule in the Java ecosystem.</p>
 <p><strong>Active by default</strong>: No</p>
 <p><strong>Requires Type Resolution</strong></p>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-26">Configuration options:<a href="#configuration-options-26" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><code>ignoredFullyQualifiedNames</code> (default: <code>[]</code>)</p>
+<p>fully qualified names that are ignored, for example <code>[&#x27;java.lang.String&#x27;, &#x27;kotlin.**.*&#x27;, &#x27;java.util.*List&#x27;, &#x27;java.net.UR?&#x27;]</code></p>
+</li>
+</ul>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="noncompliant-code-60">Noncompliant Code:<a href="#noncompliant-code-60" class="hash-link" aria-label="Direct link to Noncompliant Code:" title="Direct link to Noncompliant Code:" translate="no">​</a></h4>
 <div class="language-kotlin codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-kotlin codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><div class="token-line" style="color:#393A34"><span class="token keyword" style="color:#00009f">class</span><span class="token plain"> Foo </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">fun</span><span class="token plain"> </span><span class="token function" style="color:#d73a49">bar</span><span class="token punctuation" style="color:#393A34">(</span><span class="token punctuation" style="color:#393A34">)</span><span class="token operator" style="color:#393A34">:</span><span class="token plain"> java</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">util</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">List</span><span class="token operator" style="color:#393A34">&lt;</span><span class="token plain">String</span><span class="token operator" style="color:#393A34">&gt;</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token keyword" style="color:#00009f">val</span><span class="token plain"> date </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> java</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">time</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">LocalDate</span><span class="token punctuation" style="color:#393A34">.</span><span class="token function" style="color:#d73a49">now</span><span class="token punctuation" style="color:#393A34">(</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token keyword" style="color:#00009f">return</span><span class="token plain"> java</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">util</span><span class="token punctuation" style="color:#393A34">.</span><span class="token function" style="color:#d73a49">ArrayList</span><span class="token punctuation" style="color:#393A34">(</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token keyword" style="color:#00009f">fun</span><span class="token plain"> </span><span class="token function" style="color:#d73a49">baz</span><span class="token punctuation" style="color:#393A34">(</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">        kotlin</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">io</span><span class="token punctuation" style="color:#393A34">.</span><span class="token function" style="color:#d73a49">println</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string-literal singleline string" style="color:#e3116c">&quot;Hello&quot;</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token punctuation" style="color:#393A34">}</span><span class="token plain"></span><br></div><div class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token punctuation" style="color:#393A34">}</span><br></div></code></pre></div></div>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="compliant-code-55">Compliant Code:<a href="#compliant-code-55" class="hash-link" aria-label="Direct link to Compliant Code:" title="Direct link to Compliant Code:" translate="no">​</a></h4>
@@ -1000,7 +1008,7 @@ to reduce visual complexity.</p>
 These unnecessary parentheses can safely be removed.</p>
 <p>Added in v1.0.0.RC4</p>
 <p><strong>Active by default</strong>: No</p>
-<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-26">Configuration options:<a href="#configuration-options-26" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-27">Configuration options:<a href="#configuration-options-27" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
 <ul>
 <li class="">
 <p><code>allowForUnclearPrecedence</code> (default: <code>false</code>)</p>
@@ -1026,7 +1034,7 @@ Exempt from this rule are imports resulting from references to elements within K
 from destructuring declarations (componentN imports).</p>
 <p><strong>Active by default</strong>: No</p>
 <p><strong>Requires Type Resolution</strong></p>
-<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-27">Configuration options:<a href="#configuration-options-27" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-28">Configuration options:<a href="#configuration-options-28" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
 <ul>
 <li class="">
 <p><code>additionalOperatorSet</code> (default: <code>[]</code>)</p>
@@ -1037,7 +1045,7 @@ from destructuring declarations (componentN imports).</p>
 <p>An unused parameter can be removed to simplify the signature of the function.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.23.0</p>
 <p><strong>Aliases</strong>: UNUSED_PARAMETER, unused</p>
-<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-28">Configuration options:<a href="#configuration-options-28" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-29">Configuration options:<a href="#configuration-options-29" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
 <ul>
 <li class="">
 <p><code>allowedNames</code> (default: <code>&#x27;ignored|expected&#x27;</code>)</p>
@@ -1060,7 +1068,7 @@ can lead to confusion and potential bugs.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.16.0</p>
 <p><strong>Requires Type Resolution</strong></p>
 <p><strong>Aliases</strong>: unused</p>
-<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-29">Configuration options:<a href="#configuration-options-29" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-30">Configuration options:<a href="#configuration-options-30" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
 <ul>
 <li class="">
 <p><code>allowedNames</code> (default: <code>&#x27;&#x27;</code>)</p>
@@ -1074,7 +1082,7 @@ properties of the class when they are declared with <code>val</code> or <code>va
 <p><strong>Active by default</strong>: Yes - Since v1.23.0</p>
 <p><strong>Requires Type Resolution</strong></p>
 <p><strong>Aliases</strong>: unused</p>
-<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-30">Configuration options:<a href="#configuration-options-30" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-31">Configuration options:<a href="#configuration-options-31" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
 <ul>
 <li class="">
 <p><code>allowedNames</code> (default: <code>&#x27;ignored|expected|serialVersionUID&#x27;</code>)</p>
@@ -1090,7 +1098,7 @@ properties of the class when they are declared with <code>val</code> or <code>va
 <p><strong>Active by default</strong>: Yes - Since v2.0.0</p>
 <p><strong>Requires Type Resolution</strong></p>
 <p><strong>Aliases</strong>: UNUSED_VARIABLE, unused</p>
-<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-31">Configuration options:<a href="#configuration-options-31" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-32">Configuration options:<a href="#configuration-options-32" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
 <ul>
 <li class="">
 <p><code>allowedNames</code> (default: <code>&#x27;ignored|_&#x27;</code>)</p>
@@ -1140,7 +1148,7 @@ and generate <code>hashCode</code>, <code>equals</code> and <code>toString</code
 <p>Read more about <a href="https://kotlinlang.org/docs/data-classes.html" target="_blank" rel="noopener noreferrer" class="">data classes</a></p>
 <p><strong>Active by default</strong>: No</p>
 <p><strong>Requires Type Resolution</strong></p>
-<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-32">Configuration options:<a href="#configuration-options-32" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-33">Configuration options:<a href="#configuration-options-33" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
 <ul>
 <li class="">
 <p><code>allowVars</code> (default: <code>false</code>)</p>
@@ -1172,7 +1180,7 @@ and generate <code>hashCode</code>, <code>equals</code> and <code>toString</code
 <p>Binary expressions are better expressed using an <code>if</code> expression than a <code>when</code> expression.</p>
 <p>See <a href="https://kotlinlang.org/docs/coding-conventions.html#if-versus-when" target="_blank" rel="noopener noreferrer" class="">if versus when</a></p>
 <p><strong>Active by default</strong>: No</p>
-<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-33">Configuration options:<a href="#configuration-options-33" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-34">Configuration options:<a href="#configuration-options-34" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
 <ul>
 <li class="">
 <p><code>ignoreWhenContainingVariableDeclaration</code> (default: <code>false</code>)</p>
@@ -1259,7 +1267,7 @@ the current state easier.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.16.0</p>
 <p><strong>Requires Type Resolution</strong></p>
 <p><strong>Aliases</strong>: CanBeVal</p>
-<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-34">Configuration options:<a href="#configuration-options-34" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-35">Configuration options:<a href="#configuration-options-35" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
 <ul>
 <li class="">
 <p><code>ignoreLateinitVar</code> (default: <code>false</code>)</p>
@@ -1277,7 +1285,7 @@ which classes are imported and helps prevent naming conflicts.</p>
 <p><strong>NOTE</strong>: This rule has a twin implementation NoWildcardImports in the ktlint rule set.
 When suppressing an issue of WildcardImport in the baseline file, make sure to suppress the corresponding NoWildcardImports issue.</p>
 <p><strong>Active by default</strong>: Yes - Since v1.0.0</p>
-<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-35">Configuration options:<a href="#configuration-options-35" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
+<h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="configuration-options-36">Configuration options:<a href="#configuration-options-36" class="hash-link" aria-label="Direct link to Configuration options:" title="Direct link to Configuration options:" translate="no">​</a></h4>
 <ul>
 <li class="">
 <p><code>excludeImports</code> (default: <code>[&#x27;java.util.*&#x27;]</code>)</p>
