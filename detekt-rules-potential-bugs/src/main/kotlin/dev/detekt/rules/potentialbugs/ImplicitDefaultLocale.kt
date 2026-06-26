@@ -14,7 +14,10 @@ import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
+import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
+import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.resolve.calls.util.getCalleeExpressionIfAny
 
 /**
@@ -59,6 +62,13 @@ class ImplicitDefaultLocale(config: Config) :
             val symbol = expression.resolveToCall()?.singleFunctionCallOrNull()?.symbol ?: return
             if (symbol.callableId != formatCallId) return
             if (symbol.valueParameters.firstOrNull()?.returnType?.symbol?.classId == localeClassId) return
+
+            // Don't report when the format string is a compile-time constant whose conversions are
+            // all locale-independent (e.g. hexadecimal `%x`), as the default locale can't affect the
+            // result. See https://github.com/detekt/detekt/issues/3821
+            val formatString = expression.formatStringOrNull()
+            if (formatString != null && formatString.hasOnlyLocaleIndependentConversions()) return
+
             report(
                 Finding(
                     Entity.from(expression),
@@ -68,11 +78,44 @@ class ImplicitDefaultLocale(config: Config) :
         }
     }
 
+    /**
+     * The constant format string of the call, or `null` when it can't be resolved to a compile-time
+     * constant (e.g. it's a variable or contains string interpolation).
+     */
+    private fun KtQualifiedExpression.formatStringOrNull(): String? {
+        // `"…".format(…)`: the format string is the receiver.
+        receiverExpression.constantStringValueOrNull()?.let { return it }
+        // `String.format("…", …)`: the format string is the first argument.
+        val call = selectorExpression as? KtCallExpression
+        return call?.valueArguments?.firstOrNull()?.getArgumentExpression()?.constantStringValueOrNull()
+    }
+
+    private fun KtExpression.constantStringValueOrNull(): String? {
+        val template = this as? KtStringTemplateExpression ?: return null
+        if (template.hasInterpolation()) return null
+        return template.entries.joinToString("") { it.text }
+    }
+
+    private fun String.hasOnlyLocaleIndependentConversions(): Boolean =
+        conversionRegex.findAll(this)
+            .map { it.groupValues[CONVERSION_GROUP_INDEX] }
+            .all { it in localeIndependentConversions }
+
     companion object {
         private val formatCallIds = listOf(
             CallableId(FqName("kotlin.text"), Name.identifier("format")),
         ).associateBy { it.callableName.asString() }
 
         private val localeClassId = ClassId(FqName("java.util"), Name.identifier("Locale"))
+
+        // Matches a Java `Formatter` format specifier; group CONVERSION_GROUP_INDEX holds the
+        // conversion, e.g. `d`, `X`, `tY` (date/time) or `%`.
+        private val conversionRegex = Regex("""%(?:\d+\$)?[-#+ 0,(]*\d*(?:\.\d+)?([tT][a-zA-Z]|[a-zA-Z%])""")
+        private const val CONVERSION_GROUP_INDEX = 1
+
+        // Conversions whose output never depends on the default locale.
+        private val localeIndependentConversions = setOf(
+            "x", "X", "o", "a", "A", "b", "B", "h", "H", "s", "c", "n", "%",
+        )
     }
 }
