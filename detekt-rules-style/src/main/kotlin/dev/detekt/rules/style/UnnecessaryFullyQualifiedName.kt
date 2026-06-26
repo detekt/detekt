@@ -1,10 +1,15 @@
+@file:Suppress("TooManyFunctions")
+
 package dev.detekt.rules.style
 
 import dev.detekt.api.Config
+import dev.detekt.api.Configuration
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
+import dev.detekt.api.config
+import dev.detekt.psi.fullyQualifiedNameGlobToRegex
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.components.KaScopeKind
@@ -12,6 +17,7 @@ import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaCallableSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaClassLikeSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaConstructorSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbol
@@ -42,6 +48,7 @@ import org.jetbrains.kotlin.psi.psiUtil.parents
  * - Package declarations
  * - String literals
  * - Nested class references without packages (e.g., Outer.Inner)
+ * - Fully qualified names that were ignored by configuration
  *
  * See [PMD UnnecessaryFullyQualifiedName](https://pmd.github.io/latest/pmd_rules_java_codestyle.html#unnecessaryfullyqualifiedname)
  * for a similar rule in the Java ecosystem.
@@ -78,6 +85,16 @@ class UnnecessaryFullyQualifiedName(config: Config) :
     Rule(config, "Unnecessary fully qualified names make code harder to read. Use imports instead."),
     RequiresAnalysisApi {
 
+    @Configuration(
+        "fully qualified names that are ignored, for example `['java.lang.String', 'kotlin.**.*', " +
+            "'java.util.*List', 'java.net.UR?']`",
+    )
+    private val ignoredFullyQualifiedNames: List<Regex> by config(emptyList<String>()) {
+        it.distinct().map { fqn ->
+            fqn.fullyQualifiedNameGlobToRegex()
+        }
+    }
+
     @Suppress("ReturnCount")
     override fun visitUserType(type: KtUserType) {
         super.visitUserType(type)
@@ -100,6 +117,8 @@ class UnnecessaryFullyQualifiedName(config: Config) :
 
         analyze(type) {
             val resolvedSymbol = type.referenceExpression?.mainReference?.resolveToSymbol() ?: return
+            val candidate = resolvedSymbol.ignoredFqNameCandidate()
+            if (candidate != null && ignoredFullyQualifiedNames.any { it.matches(candidate) }) return
             val packageFqName = resolvedSymbol.packageFqName() ?: return
             if (!typeText.startsWith(packageFqName)) return
             if (hasNameCollision(type, resolvedSymbol)) return
@@ -127,6 +146,8 @@ class UnnecessaryFullyQualifiedName(config: Config) :
 
         analyze(receiverExpression) {
             val resolvedSymbol = receiverExpression.expressionType?.symbol ?: return
+            val candidate = resolvedSymbol.ignoredFqNameCandidate()
+            if (candidate != null && ignoredFullyQualifiedNames.any { it.matches(candidate) }) return
             val packageFqName = resolvedSymbol.packageFqName() ?: return
             if (!receiverText.startsWith("$packageFqName.")) return
             if (hasNameCollision(expression, resolvedSymbol)) return
@@ -162,6 +183,8 @@ class UnnecessaryFullyQualifiedName(config: Config) :
         analyze(expression) {
             val resolvedCall = expression.resolveToCall()?.successfulCallOrNull<KaCallableMemberCall<*, *>>()
             val symbol = resolvedCall?.partiallyAppliedSymbol?.symbol ?: return
+            val candidate = symbol.ignoredFqNameCandidate()
+            if (candidate != null && ignoredFullyQualifiedNames.any { it.matches(candidate) }) return
             val packageFqName = symbol.packageFqName() ?: return
             if (!receiverText.startsWith(packageFqName)) return
 
@@ -253,4 +276,13 @@ class UnnecessaryFullyQualifiedName(config: Config) :
             is KaCallableSymbol -> callableId?.packageName
             else -> null
         }?.asString()?.takeIf { it.isNotBlank() }
+
+    private fun KaSymbol.ignoredFqNameCandidate(): String? =
+        when (this) {
+            is KaClassSymbol -> classId?.asFqNameString()
+            is KaClassLikeSymbol -> classId?.asFqNameString()
+            is KaConstructorSymbol -> containingClassId?.asFqNameString()
+            is KaCallableSymbol -> callableId?.classId?.asFqNameString() ?: callableId?.asSingleFqName()?.asString()
+            else -> null
+        }?.takeIf { it.isNotBlank() }
 }

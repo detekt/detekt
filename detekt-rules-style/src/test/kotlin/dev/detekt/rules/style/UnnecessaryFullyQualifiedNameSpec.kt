@@ -3,12 +3,15 @@
 package dev.detekt.rules.style
 
 import dev.detekt.api.Config
+import dev.detekt.test.TestConfig
 import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.junit.KotlinCoreEnvironmentTest
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 
 @KotlinCoreEnvironmentTest
 class UnnecessaryFullyQualifiedNameSpec(val env: KotlinEnvironmentContainer) {
@@ -55,22 +58,56 @@ class UnnecessaryFullyQualifiedNameSpec(val env: KotlinEnvironmentContainer) {
 
             assertThat(subject.lintWithContext(env, code)).hasSize(2)
         }
+
+        @ParameterizedTest(name = "{0}")
+        @CsvSource(
+            value = [
+                "java.util.ArrayList",
+                "java.util.*List",
+                "java.util.*",
+                "java.**.*",
+            ],
+        )
+        fun `does not report fully qualified class names in type annotations when ignored`(fqnToIgnore: String) {
+            val ignored = createRule(ignoredFullyQualifiedNames = listOf(fqnToIgnore))
+            val code = """
+                class Test {
+                    fun method(): java.util.ArrayList<String> {
+                        val list: java.util.ArrayList<String> = java.util.ArrayList()
+                        return java.util.ArrayList()
+                    }
+                }
+            """.trimIndent()
+            assertThat(ignored.lintWithContext(env, code)).isEmpty()
+        }
     }
 
     @Nested
     inner class `fully qualified static method calls` {
+        val code = """
+            class Test {
+                fun method() {
+                    val date = java.time.LocalDate.now()
+                    val list = java.util.Collections.emptyList<String>()
+                }
+            }
+        """.trimIndent()
+
         @Test
         fun `reports fully qualified class names in static method calls`() {
-            val code = """
-                class Test {
-                    fun method() {
-                        val date = java.time.LocalDate.now()
-                        val list = java.util.Collections.emptyList<String>()
-                    }
-                }
-            """.trimIndent()
-
             assertThat(subject.lintWithContext(env, code)).hasSize(2)
+        }
+
+        @ParameterizedTest(name = "{0}, {1}")
+        @CsvSource(
+            value = [
+                "java.time.LocalDate, java.util.Collections",
+                "java.time.*, java.util.*",
+            ],
+        )
+        fun `does not report fully qualified class names in static method calls when ignored`(n1: String, n2: String) {
+            val ignored = createRule(ignoredFullyQualifiedNames = listOf(n1, n2))
+            assertThat(ignored.lintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -206,18 +243,30 @@ class UnnecessaryFullyQualifiedNameSpec(val env: KotlinEnvironmentContainer) {
 
     @Nested
     inner class `constructor calls` {
+        val code = """
+            class Test {
+                fun method() {
+                    val list = java.util.ArrayList<String>()
+                    val date = java.time.LocalDate.of(2024, 1, 1)
+                }
+            }
+        """.trimIndent()
+
         @Test
         fun `reports constructor calls with fully qualified names`() {
-            val code = """
-                class Test {
-                    fun method() {
-                        val list = java.util.ArrayList<String>()
-                        val date = java.time.LocalDate.of(2024, 1, 1)
-                    }
-                }
-            """.trimIndent()
-
             assertThat(subject.lintWithContext(env, code)).hasSize(2)
+        }
+
+        @ParameterizedTest(name = "{0}, {1}")
+        @CsvSource(
+            value = [
+                "java.time.LocalDate, java.util.ArrayList",
+                "java.time.*, java.util.*",
+            ],
+        )
+        fun `does not report constructor calls with fully qualified names when ignored`(n1: String, n2: String) {
+            val ignored = createRule(ignoredFullyQualifiedNames = listOf(n1, n2))
+            assertThat(ignored.lintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -290,20 +339,67 @@ class UnnecessaryFullyQualifiedNameSpec(val env: KotlinEnvironmentContainer) {
     }
 
     @Nested
+    inner class `ignore nested classes` {
+        val code = """
+            import java.util.concurrent.ConcurrentHashMap
+
+            class Test {
+                fun method() {
+                    val entry: java.util.AbstractMap.SimpleEntry<String, Int> = java.util.AbstractMap.SimpleEntry("key1", 1)
+                    val key = java.util.AbstractMap.SimpleEntry("key2", 2).key
+                    val immutableEntry: java.util.AbstractMap.SimpleImmutableEntry<String, Int> = java.util.AbstractMap.SimpleImmutableEntry("key3", 3)
+                    val map: java.util.AbstractMap<String, Int> = ConcurrentHashMap()
+                }
+            }
+        """.trimIndent()
+
+        @Test
+        fun `does not report nested classes, if ignored`() {
+            val ignored = createRule(ignoredFullyQualifiedNames = listOf("java.util.AbstractMap.*"))
+            val findings = ignored.lintWithContext(env, code)
+            assertThat(findings)
+                .singleElement()
+                .hasMessage("Fully qualified class name 'java.util.AbstractMap' can be replaced with an import.")
+                .hasStartSourceLocation(8, 18)
+        }
+
+        @Test
+        fun `reports nested classes, if only enclosing class is ignored`() {
+            val ignored = createRule(ignoredFullyQualifiedNames = listOf("java.util.AbstractMap"))
+            val findings = ignored.lintWithContext(env, code)
+            assertThat(findings).hasSize(5)
+            assertThat(findings).allMatch { it.entity.location.source.line != 8 }
+        }
+
+        @Test
+        fun `does not report classes and nested classes, if all ignored`() {
+            val ignored = createRule(ignoredFullyQualifiedNames = listOf("java.util.**.*", "java.util.*"))
+            val findings = ignored.lintWithContext(env, code)
+            assertThat(findings).isEmpty()
+        }
+    }
+
+    @Nested
     inner class `class literals` {
+        val classNamesCode = """
+            class Test {
+                fun method() {
+                    val clazz = java.lang.String::class
+                    val javaClass = java.util.ArrayList::class.java
+                    val kClass = kotlin.collections.List::class
+                }
+            }
+        """.trimIndent()
+
         @Test
         fun `reports fully qualified names in class literals`() {
-            val code = """
-                class Test {
-                    fun method() {
-                        val clazz = java.lang.String::class
-                        val javaClass = java.util.ArrayList::class.java
-                        val kClass = kotlin.collections.List::class
-                    }
-                }
-            """.trimIndent()
+            assertThat(subject.lintWithContext(env, classNamesCode)).hasSize(3)
+        }
 
-            assertThat(subject.lintWithContext(env, code)).hasSize(3)
+        @Test
+        fun `does not report fully qualified names in class literals when ignored`() {
+            val ignored = createRule(ignoredFullyQualifiedNames = listOf("java.**.*", "kotlin.collections.List"))
+            assertThat(ignored.lintWithContext(env, classNamesCode)).isEmpty()
         }
 
         @Test
@@ -626,6 +722,40 @@ class UnnecessaryFullyQualifiedNameSpec(val env: KotlinEnvironmentContainer) {
 
             assertThat(subject.lintWithContext(env, code)).hasSize(3)
         }
+
+        @ParameterizedTest(name = "{0}")
+        @CsvSource(
+            value = [
+                "kotlin.io.println",
+                "kotlin.io.print??",
+                "kotlin.io.*,",
+                "kotlin.**.*",
+            ],
+        )
+        fun `does not report fully qualified top-level function when ignored`(fqnToIgnore: String) {
+            val code = """
+                class Test {
+                    fun method() {
+                        kotlin.io.println("MyString")
+                    }
+                }
+            """.trimIndent()
+            val ignored = createRule(ignoredFullyQualifiedNames = listOf(fqnToIgnore))
+            assertThat(ignored.lintWithContext(env, code)).hasSize(0)
+        }
+
+        @Test
+        fun `does not report fully qualified top-level property when ignored`() {
+            val code = """
+                class Test {
+                    fun method() {
+                        val size = kotlin.io.DEFAULT_BUFFER_SIZE
+                    }
+                }
+            """.trimIndent()
+            val ignored = createRule(ignoredFullyQualifiedNames = listOf("kotlin.io.*"))
+            assertThat(ignored.lintWithContext(env, code)).hasSize(0)
+        }
     }
 
     @Nested
@@ -711,6 +841,25 @@ class UnnecessaryFullyQualifiedNameSpec(val env: KotlinEnvironmentContainer) {
             """.trimIndent()
 
             assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @ParameterizedTest(name = "{0}")
+        @CsvSource(
+            value = [
+                "java.util.Calendar",
+                "java.util.*",
+                "java.**.?alendar",
+                "java.**.*",
+            ],
+        )
+        fun `does not report static property access when ignored`(fqnToIgnore: String) {
+            val code = """
+                class Test {
+                    val month = java.util.Calendar.JANUARY
+                }
+            """.trimIndent()
+            val ignored = createRule(ignoredFullyQualifiedNames = listOf(fqnToIgnore))
+            assertThat(ignored.lintWithContext(env, code)).isEmpty()
         }
     }
 
@@ -1119,10 +1268,78 @@ class UnnecessaryFullyQualifiedNameSpec(val env: KotlinEnvironmentContainer) {
             """.trimIndent()
 
             val findings = subject.lintWithContext(env, code)
-            assertThat(findings).hasSize(1)
-            assertThat(findings.first()).hasMessage(
-                "Fully qualified class name 'java.util.AbstractMap.SimpleEntry' can be replaced with an import."
-            )
+            assertThat(findings).singleElement()
+                .hasMessage(
+                    "Fully qualified class name 'java.util.AbstractMap.SimpleEntry' can be replaced with an import."
+                )
         }
     }
+
+    @Nested
+    inner class `ignoredFullyQualifiedNames validations` {
+        @Test
+        fun `ignores only configured fully qualified names`() {
+            val code = """
+                class Test {
+                    fun method(obj: Any) {
+                        val list = obj as java.util.List<String>
+                        val date = java.lang.Integer.MAX_VALUE
+                        val str = java.lang.String::class
+                    }
+                }
+            """.trimIndent()
+            val ignored = createRule(ignoredFullyQualifiedNames = listOf("java.lang.*"))
+            val findings = ignored.lintWithContext(env, code)
+            assertThat(findings).singleElement()
+                .hasMessage("Fully qualified class name 'java.util.List' can be replaced with an import.")
+        }
+
+        @Test
+        fun `does not ignore parent packages when only a subpackage is ignored`() {
+            val code = """
+                class Test {
+                    fun method(obj: Any) {
+                        val list = obj as java.util.List<String>
+                        val second = java.util.concurrent.TimeUnit.SECONDS
+                    }
+                }
+            """.trimIndent()
+            val ignored = createRule(ignoredFullyQualifiedNames = listOf("java.util.concurrent.*"))
+            val findings = ignored.lintWithContext(env, code)
+            assertThat(findings).singleElement()
+                .hasMessage("Fully qualified class name 'java.util.List' can be replaced with an import.")
+        }
+
+        @Test
+        fun `does not ignore subpackages when only a parent package is ignored`() {
+            val code = """
+                class Test {
+                    val charset = java.nio.charset.StandardCharsets.UTF_8
+                }
+            """.trimIndent()
+            val ignored = createRule(ignoredFullyQualifiedNames = listOf("java.nio.*"))
+            assertThat(ignored.lintWithContext(env, code)).hasSize(1)
+        }
+
+        @Test
+        fun `does not ignore other classes in a package when a single class is ignored`() {
+            val code = """
+                class Test {
+                    fun method() {
+                        val date = java.lang.Integer.MAX_VALUE
+                        val str = java.lang.String::class
+                    }
+                }
+            """.trimIndent()
+            val ignored = createRule(ignoredFullyQualifiedNames = listOf("java.lang.Integer"))
+            val findings = ignored.lintWithContext(env, code)
+            assertThat(findings).singleElement()
+                .hasMessage("Fully qualified class reference 'java.lang.String' can be replaced with an import.")
+        }
+    }
+
+    private fun createRule(ignoredFullyQualifiedNames: List<String>) =
+        UnnecessaryFullyQualifiedName(
+            TestConfig("ignoredFullyQualifiedNames" to ignoredFullyQualifiedNames),
+        )
 }
