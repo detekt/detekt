@@ -446,7 +446,8 @@ function extractConfigAnnotationDesc(src, annotationIdx) {
   const parenIdx = src.indexOf('(', annotationIdx);
   if (parenIdx === -1) return '';
   const closeIdx = findMatchingParen(src, parenIdx);
-  const raw = src.substring(parenIdx + 1, closeIdx).trim();
+  // Strip trailing comma (Kotlin allows trailing commas in argument lists)
+  const raw = src.substring(parenIdx + 1, closeIdx).trim().replace(/,\s*$/, '');
   // Remove surrounding quotes and handle concatenation
   const unquoted = raw.replace(/^"|"$/g, '').replace(/"[ \t]*\+[ \t\r\n]*"/g, '');
   return unquoted.trim();
