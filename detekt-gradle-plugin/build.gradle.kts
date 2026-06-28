@@ -12,14 +12,13 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
 plugins {
     id("module")
+    id("public-api")
     id("java-gradle-plugin")
     id("java-test-fixtures")
     id("idea")
     id("com.gradle.plugin-publish") version "2.1.1"
     // We use this published version of the detekt plugin to self analyse this project.
     id("dev.detekt") version "2.0.0-alpha.3"
-    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.18.1"
-    id("org.jetbrains.dokka") version "2.2.0"
     id("com.github.gmazzo.buildconfig") version "6.0.10"
 }
 
@@ -40,10 +39,6 @@ detekt {
 }
 
 dokka {
-    dokkaPublications.configureEach {
-        failOnWarning = true
-    }
-
     dokkaSourceSets.configureEach {
         apiVersion = "1.4"
 
