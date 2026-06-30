@@ -13,11 +13,11 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
 import dev.detekt.rules.ktlintwrapper.configWithAndroidVariants
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#chain-method-continuation)
+ * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/#chain-method-continuation)
  * for documentation.
  */
 @AutoCorrectable(since = "2.0.0")
-class ChainMethodContinuation(config: Config) :
+internal class ChainMethodContinuation(config: Config) :
     KtlintRule(config, "Checks if condition chaining is wrapped right") {
 
     override val wrapping = ChainMethodContinuationRule()

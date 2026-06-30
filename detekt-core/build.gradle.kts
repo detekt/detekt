@@ -6,6 +6,7 @@ dependencies {
     api(projects.detektApi)
     api(projects.detektTooling)
     api(libs.kotlin.compiler)
+    implementation(projects.detektKotlinAnalysisApi)
     implementation(projects.detektKotlinAnalysisApiStandalone)
     implementation(libs.snakeyaml.engine)
     implementation(libs.kotlin.reflect)
@@ -25,6 +26,7 @@ dependencies {
     testImplementation(testFixtures(projects.detektApi))
     testImplementation(libs.classgraph)
     testImplementation(libs.assertj.core)
+    testCompileOnly(libs.jetbrains.annotations)
     testRuntimeOnly(libs.slf4j.simple)
 }
 

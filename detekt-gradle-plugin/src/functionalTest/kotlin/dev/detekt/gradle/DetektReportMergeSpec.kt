@@ -15,7 +15,7 @@ class DetektReportMergeSpec {
         val buildFileContent = """
             ${builder.gradlePlugins.reIndent()}
             
-            val sarifReportMerge by tasks.registering(dev.detekt.gradle.report.ReportMergeTask::class) {
+            val sarifReportMerge = tasks.register<dev.detekt.gradle.report.ReportMergeTask>("sarifReportMerge") {
                 output.set(project.layout.buildDirectory.file("reports/detekt/merge.sarif"))
             }
             
@@ -53,6 +53,7 @@ class DetektReportMergeSpec {
             buildFileContent,
             settingsFile,
             disableIP = true,
+            configFileOrNone = "config/detekt/detekt.yml",
         )
         gradleRunner.setupProject()
         gradleRunner.runTasksAndExpectFailure("detekt", "sarifReportMerge", "--continue") { result ->
@@ -86,7 +87,7 @@ class DetektReportMergeSpec {
         val buildFileContent = """
             ${builder.gradlePlugins.reIndent()}
             
-            val checkstyleReportMerge by tasks.registering(dev.detekt.gradle.report.ReportMergeTask::class) {
+            val checkstyleReportMerge = tasks.register<dev.detekt.gradle.report.ReportMergeTask>("checkstyleReportMerge") {
                 output.set(project.layout.buildDirectory.file("reports/detekt/merge.xml"))
             }
             
@@ -124,6 +125,7 @@ class DetektReportMergeSpec {
             buildFileContent,
             settingsFile,
             disableIP = true,
+            configFileOrNone = "config/detekt/detekt.yml",
         )
         gradleRunner.setupProject()
         gradleRunner.runTasksAndExpectFailure("detekt", "checkstyleReportMerge", "--continue") { result ->

@@ -5,7 +5,6 @@ plugins {
 dependencies {
     compileOnly(projects.detektApi)
     compileOnly(projects.detektPsiUtils)
-    compileOnly(libs.jetbrains.annotations)
 
     testImplementation(libs.kotlin.compiler)
     testRuntimeOnly(projects.detektPsiUtils)
@@ -13,4 +12,5 @@ dependencies {
     testImplementation(projects.detektTestAssertj)
     testImplementation(libs.assertj.core)
     testImplementation(projects.detektApi)
+    testCompileOnly(libs.jetbrains.annotations)
 }

@@ -57,7 +57,7 @@ class UseOrEmpty(config: Config) :
         val right = expression.right ?: return
         if (!right.isEmptyElement()) return
 
-        val leftType = analyze(left) {
+        analyze(expression) {
             val leftType = left.expressionType ?: return
             if (!leftType.isMarkedNullable) return
             KtPsiUtil.safeDeparenthesize(left).let {
@@ -66,10 +66,7 @@ class UseOrEmpty(config: Config) :
                     if (called?.isOperator == true && called.typeParameters.isNotEmpty()) return
                 }
             }
-            leftType
-        }
 
-        analyze(right) {
             val rightClassId = right.expressionType?.symbol?.classId ?: return
             if (!leftType.isSubtypeOf(rightClassId)) return
         }

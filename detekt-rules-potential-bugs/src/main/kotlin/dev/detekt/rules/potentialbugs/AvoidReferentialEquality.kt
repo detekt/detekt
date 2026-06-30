@@ -8,7 +8,7 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.api.config
-import dev.detekt.api.simplePatternToRegex
+import dev.detekt.psi.pathGlobToRegex
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.lexer.KtTokens.EQEQEQ
@@ -47,7 +47,7 @@ class AvoidReferentialEquality(config: Config) :
         listOf(
             "kotlin.String"
         )
-    ) { it.map(String::simplePatternToRegex) }
+    ) { it.map(String::pathGlobToRegex) }
 
     override fun visitBinaryExpression(expression: KtBinaryExpression) {
         super.visitBinaryExpression(expression)

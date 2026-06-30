@@ -40,7 +40,6 @@ class ForbiddenAnnotationSpec(val env: KotlinEnvironmentContainer) {
             import java.lang.annotation.Documented
             import java.lang.annotation.Target
             import java.lang.annotation.Repeatable
-            import java.lang.annotation.Inherited
             import java.lang.annotation.RetentionPolicy
             import java.lang.annotation.ElementType
             import java.lang.Deprecated
@@ -49,7 +48,6 @@ class ForbiddenAnnotationSpec(val env: KotlinEnvironmentContainer) {
             @Retention(RetentionPolicy.RUNTIME)
             @Target(ElementType.TYPE)
             @Repeatable(value = SomeClass::class)
-            @Inherited
             annotation class SomeClass(val value: Array<SomeClass>)
         """.trimIndent()
         val findings = ForbiddenAnnotation(Config.empty).lintWithContext(env, code)
@@ -59,7 +57,6 @@ class ForbiddenAnnotationSpec(val env: KotlinEnvironmentContainer) {
             { assertThat(it).hasTextLocation("@Retention") },
             { assertThat(it).hasTextLocation("@Target") },
             { assertThat(it).hasTextLocation("@Repeatable") },
-            { assertThat(it).hasTextLocation("@Inherited") },
         )
     }
 
@@ -218,13 +215,13 @@ class ForbiddenAnnotationSpec(val env: KotlinEnvironmentContainer) {
     @Test
     fun `should report aliased annotations`() {
         val code = """
-            typealias Dep = java.lang.Deprecated
-            @Dep
-            fun f() = Unit
+            typealias Doc = java.lang.annotation.Documented
+            @Doc
+            annotation class AnnotationClass
         """.trimIndent()
         val findings = ForbiddenAnnotation(Config.empty).lintWithContext(env, code)
         assertThat(findings).singleElement()
-            .hasTextLocation("@Dep")
+            .hasTextLocation("@Doc")
     }
 
     @Test

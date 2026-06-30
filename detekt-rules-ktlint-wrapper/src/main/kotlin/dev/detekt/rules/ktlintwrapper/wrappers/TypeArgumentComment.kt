@@ -6,11 +6,12 @@ import dev.detekt.api.Config
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/) for
+ * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/) for
  * documentation.
  */
 @ActiveByDefault(since = "2.0.0")
-class TypeArgumentComment(config: Config) : KtlintRule(config, "Detect discouraged type argument comment locations.") {
+internal class TypeArgumentComment(config: Config) :
+    KtlintRule(config, "Detect discouraged type argument comment locations.") {
 
     override val wrapping = TypeArgumentCommentRule()
 }

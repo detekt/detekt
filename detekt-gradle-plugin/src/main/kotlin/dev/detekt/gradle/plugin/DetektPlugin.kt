@@ -1,5 +1,8 @@
 package dev.detekt.gradle.plugin
 
+import com.android.build.api.AndroidPluginVersion
+import com.android.build.api.dsl.CommonExtension
+import com.android.build.api.variant.AndroidComponentsExtension
 import dev.detekt.detekt_gradle_plugin.BuildConfig
 import dev.detekt.gradle.Detekt
 import dev.detekt.gradle.DetektCreateBaselineTask
@@ -61,9 +64,38 @@ class DetektPlugin : Plugin<Project> {
     }
 
     private fun Project.registerDetektAndroidTasks(extension: DetektExtension) {
-        plugins.withId("kotlin-android") {
-            DetektAndroidCompilations.registerTasks(project, extension)
-            DetektAndroidCompilations.linkTasks(project, extension)
+        plugins.withId("com.android.base") {
+            @Suppress("MagicNumber")
+            fun agp9() =
+                extensions.getByType(AndroidComponentsExtension::class.java).pluginVersion >= AndroidPluginVersion(9, 0)
+
+            fun enableKotlinDslEnabled() = extensions.getByType(CommonExtension::class.java).enableKotlin
+
+            fun builtInGradlePropertyEnabled() =
+                providers
+                    .gradleProperty("android.builtInKotlin")
+                    .getOrElse("true")
+                    .toBooleanStrict()
+
+            // AGP 9.x, enabling built-in Kotlin with the Gradle property
+            if (builtInGradlePropertyEnabled() && agp9() && enableKotlinDslEnabled()) {
+                DetektAndroidCompilations.registerTasks(project, extension)
+                DetektAndroidCompilations.linkTasks(project, extension)
+            }
+
+            // Enabling built-in Kotlin with the plugin (only available in AGP 9 and higher)
+            plugins.withId("com.android.built-in-kotlin") {
+                if (!builtInGradlePropertyEnabled() && enableKotlinDslEnabled()) {
+                    DetektAndroidCompilations.registerTasks(project, extension)
+                    DetektAndroidCompilations.linkTasks(project, extension)
+                }
+            }
+
+            // AGP 9.x but not using built-in Kotlin, or AGP 8.x
+            plugins.withId("kotlin-android") {
+                DetektAndroidCompilations.registerTasks(project, extension)
+                DetektAndroidCompilations.linkTasks(project, extension)
+            }
         }
     }
 
@@ -107,7 +139,7 @@ class DetektPlugin : Plugin<Project> {
             task.detektClasspath.conventionCompat(project.configurations.named(CONFIGURATION_DETEKT))
             task.pluginClasspath.conventionCompat(project.configurations.named(CONFIGURATION_DETEKT_PLUGINS))
             val reportName = if (task.name.startsWith(DETEKT_TASK_NAME) && task.name != DETEKT_TASK_NAME) {
-                task.name.removePrefix(DETEKT_TASK_NAME).decapitalize()
+                task.name.removePrefix(DETEKT_TASK_NAME).replaceFirstChar { it.lowercase() }
             } else {
                 task.name
             }

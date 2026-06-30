@@ -7,6 +7,7 @@ import org.jetbrains.kotlin.cli.common.config.addKotlinSourceRoots
 import org.jetbrains.kotlin.cli.common.messages.MessageRenderer
 import org.jetbrains.kotlin.cli.common.messages.PrintingMessageCollector
 import org.jetbrains.kotlin.cli.common.setupLanguageVersionSettings
+import org.jetbrains.kotlin.cli.create
 import org.jetbrains.kotlin.cli.jvm.config.addJavaSourceRoots
 import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoots
 import org.jetbrains.kotlin.cli.jvm.config.configureJdkClasspathRoots
@@ -26,7 +27,7 @@ import java.nio.file.Path
 @Suppress("LongParameterList")
 fun createCompilerConfiguration(
     pathsToAnalyze: List<Path>,
-    classpath: List<String>,
+    classpath: List<Path>,
     apiVersion: String?,
     languageVersion: String?,
     jvmTarget: String,
@@ -47,7 +48,7 @@ fun createCompilerConfiguration(
             .toList()
     }
 
-    val classpathFiles = classpath.map { File(it) }
+    val classpathFiles = classpath.map(Path::toFile)
 
     val jvmCompilerArguments = K2JVMCompilerArguments()
 
@@ -69,7 +70,7 @@ fun createCompilerConfiguration(
 
     validateArguments(jvmCompilerArguments.errors)?.let { throw IllegalStateException(it) }
 
-    return CompilerConfiguration().apply {
+    return CompilerConfiguration.create().apply {
         addJavaSourceRoots(javaFiles)
         addKotlinSourceRoots(kotlinFiles)
         addJvmClasspathRoots(classpathFiles)

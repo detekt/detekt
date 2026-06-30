@@ -1,6 +1,5 @@
 package dev.detekt.metrics
 
-import com.intellij.openapi.util.Key
 import com.intellij.psi.tree.IElementType
 import dev.detekt.api.DetektVisitor
 import org.jetbrains.kotlin.KtNodeTypes
@@ -18,6 +17,7 @@ import org.jetbrains.kotlin.psi.KtForExpression
 import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.KtObjectLiteralExpression
 import org.jetbrains.kotlin.psi.KtParenthesizedExpression
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtReturnExpression
@@ -26,6 +26,7 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.jetbrains.kotlin.psi.KtWhileExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
+import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 
 /**
  * Kotlin implementation of the cognitive complexity metric.
@@ -136,12 +137,15 @@ class CognitiveComplexity private constructor() : DetektVisitor() {
         }
 
         override fun visitNamedFunction(function: KtNamedFunction) {
-            if (function != givenFunction) {
-                nestAround { super.visitNamedFunction(function) }
-            } else {
+            if (function == givenFunction) {
                 super.visitNamedFunction(function)
+            } else if (!isInsideObjectLiteral(function)) {
+                nestAround { super.visitNamedFunction(function) }
             }
         }
+
+        private fun isInsideObjectLiteral(function: KtNamedFunction) =
+            function.getStrictParentOfType<KtObjectLiteralExpression>() != null
 
         override fun visitCatchSection(catchClause: KtCatchClause) {
             addComplexity()
@@ -200,9 +204,6 @@ class CognitiveComplexity private constructor() : DetektVisitor() {
     }
 
     companion object {
-
-        val KEY = Key<Int>("detekt.metrics.cognitive_complexity")
-
         private val logicalOps = setOf(KtTokens.ANDAND, KtTokens.OROR)
 
         fun calculate(element: KtElement): Int {

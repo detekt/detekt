@@ -26,6 +26,22 @@ class PrintStackTraceSpec {
         }
 
         @Test
+        fun `prints a stacktrace in nested call expression`() {
+            val code = """
+                fun x() {
+                    run {
+                        try {
+                            check(false)
+                        } catch (e: IllegalStateException) {
+                            e.printStackTrace()
+                        }
+                    }
+                }
+            """.trimIndent()
+            assertThat(subject.lint(code)).hasSize(1)
+        }
+
+        @Test
         fun `does not print a stacktrace`() {
             val code = """
                 fun x() {

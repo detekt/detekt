@@ -732,7 +732,7 @@ class ForbiddenMethodCallSpec(val env: KotlinEnvironmentContainer) {
             """.trimIndent()
 
             val findings = ForbiddenMethodCall(
-                TestConfig(METHODS to listOf("kotlin.String.getLength()", "kotlin.collections.MutableList.size"))
+                TestConfig(METHODS to listOf("kotlin.String.getLength()", "kotlin.collections.MutableList.getSize()"))
             ).lintWithContext(env, code)
             assertThat(findings).hasSize(2)
         }

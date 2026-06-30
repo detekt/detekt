@@ -7,7 +7,7 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.Rule
 import dev.detekt.api.config
-import dev.detekt.api.simplePatternToRegex
+import dev.detekt.psi.pathGlobToRegex
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtReturnExpression
@@ -47,7 +47,7 @@ class ReturnCount(config: Config) : Rule(config, "Restrict the number of return 
     private val max: Int by config(2)
 
     @Configuration("define a list of function names to be ignored by this check")
-    private val excludedFunctions: List<Regex> by config(listOf("equals")) { it.map(String::simplePatternToRegex) }
+    private val excludedFunctions: List<Regex> by config(listOf("equals")) { it.map(String::pathGlobToRegex) }
 
     @Configuration("if labeled return statements should be ignored")
     private val excludeLabeled: Boolean by config(false)

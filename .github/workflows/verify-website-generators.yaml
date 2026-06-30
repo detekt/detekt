@@ -1,0 +1,132 @@
+name: Verify Website Generators Parity
+
+# Ensures the JS generator at website/scripts/generate-docs.mjs (used by
+# Cloudflare Pages preview builds) produces identical output to the
+# :detekt-generator:generateWebsite Gradle task. If they diverge, the
+# Cloudflare preview docs will silently drift from what we publish from CI.
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+env:
+  DEVELOCITY_ACCESS_KEY: ${{ secrets.GRADLE_ENTERPRISE_ACCESS_KEY }}
+  ORG_GRADLE_PROJECT_enablePTS: ${{ github.ref_name != 'main' }}
+
+permissions:
+  contents: read
+
+jobs:
+  verify-generators-parity:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+
+      - name: Setup Java
+        uses: actions/setup-java@1bcf9fb12cf4aa7d266a90ae39939e61372fe520 # v5
+        with:
+          java-version: 25
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@3f131e8634966bd73d06cc69884922b02e6faf92 # v6
+        with:
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
+
+      - name: Setup Node
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
+        with:
+          node-version: 24
+          cache: 'yarn'
+          cache-dependency-path: 'website/yarn.lock'
+
+      - name: Install yarn dependencies
+        working-directory: website/
+        run: yarn install --frozen-lockfile
+
+      # Both generators write into existing directories without clearing them
+      # first. To compare what each generator actually produces (vs. what was
+      # checked in), wipe the targets before each run so leftover files can't
+      # mask a missing-output bug.
+      - name: Clear generator outputs (for JS run)
+        run: |
+          rm -f website/docs/rules/*.md
+          rm -f website/docs/gettingstarted/_cli-options.md
+
+      - name: Run JS generator
+        working-directory: website/
+        run: node scripts/generate-docs.mjs
+
+      - name: Capture JS generator output
+        run: |
+          mkdir -p "$RUNNER_TEMP/js-output/rules" "$RUNNER_TEMP/js-output/gettingstarted"
+          cp website/docs/rules/*.md "$RUNNER_TEMP/js-output/rules/"
+          cp website/docs/gettingstarted/_cli-options.md "$RUNNER_TEMP/js-output/gettingstarted/"
+
+      - name: Clear generator outputs (for Gradle run)
+        run: |
+          rm -f website/docs/rules/*.md
+          rm -f website/docs/gettingstarted/_cli-options.md
+
+      - name: Run Gradle generator
+        run: ./gradlew :detekt-generator:generateDocumentation :detekt-generator:generateCliOptions
+
+      # JCommander emits the CWD as the `Default:` value for --base-path and
+      # --input, so _cli-options.md leaks the runner's absolute path. Strip
+      # those lines before diffing so the workflow doesn't flag a difference
+      # that only exists because the JS generator runs from a different cwd.
+      - name: Normalise CWD-dependent defaults in _cli-options.md
+        run: |
+          # Use `|` as the sed address delimiter so the `/` inside the pattern
+          # (matching the absolute path) doesn't terminate the address early.
+          sed -i -E '\|Default: \[?/[^]]*detekt-generator\]?$|d' \
+            "$RUNNER_TEMP/js-output/gettingstarted/_cli-options.md" \
+            website/docs/gettingstarted/_cli-options.md
+
+      - name: Diff JS vs Gradle generator output
+        id: diff
+        run: |
+          set +e
+          rules_diff=$(diff -ruN "$RUNNER_TEMP/js-output/rules" website/docs/rules \
+            --exclude='_category_.json')
+          rules_status=$?
+          cli_diff=$(diff -uN \
+            "$RUNNER_TEMP/js-output/gettingstarted/_cli-options.md" \
+            website/docs/gettingstarted/_cli-options.md)
+          cli_status=$?
+
+          if [[ $rules_status -eq 0 && $cli_status -eq 0 ]]; then
+            echo "Generators are in sync. No differences detected."
+            exit 0
+          fi
+
+          {
+            echo "# Website generators are out of sync"
+            echo
+            echo "The output of \`node website/scripts/generate-docs.mjs\` (used by Cloudflare Pages)"
+            echo "differs from \`:detekt-generator:generateWebsite\` (used by GitHub Pages)."
+            echo "Update the JS generator to match the Kotlin generator, or vice versa."
+            echo
+            if [[ $rules_status -ne 0 ]]; then
+              echo "## Diff in \`website/docs/rules/\`"
+              echo
+              echo '```diff'
+              echo "$rules_diff"
+              echo '```'
+              echo
+            fi
+            if [[ $cli_status -ne 0 ]]; then
+              echo "## Diff in \`website/docs/gettingstarted/_cli-options.md\`"
+              echo
+              echo '```diff'
+              echo "$cli_diff"
+              echo '```'
+            fi
+          } | tee -a "$GITHUB_STEP_SUMMARY"
+
+          echo "::error::Website generators diverge — see job summary for the diff."
+          exit 1

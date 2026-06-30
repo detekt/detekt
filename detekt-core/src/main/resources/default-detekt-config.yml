@@ -8,19 +8,17 @@ config:
 processors:
   active: true
   exclude:
-    - 'DetektProgressListener'
   # - 'KtFileCountProcessor'
   # - 'PackageCountProcessor'
   # - 'ClassCountProcessor'
   # - 'FunctionCountProcessor'
   # - 'PropertyCountProcessor'
-  # - 'ProjectComplexityProcessor'
+  # - 'ProjectCyclomaticComplexityProcessor'
   # - 'ProjectCognitiveComplexityProcessor'
   # - 'ProjectLLOCProcessor'
   # - 'ProjectCLOCProcessor'
   # - 'ProjectLOCProcessor'
   # - 'ProjectSLOCProcessor'
-  # - 'LicenseHeaderLoaderExtension'
 
 console-reports:
   active: true
@@ -55,6 +53,7 @@ comments:
     matchTypeParameters: true
     matchDeclarationsOrder: true
     allowParamOnConstructorProperties: false
+    exhaustive: true
   UndocumentedPublicClass:
     active: false
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
@@ -366,6 +365,7 @@ naming:
     active: true
   NonBooleanPropertyPrefixedWithIs:
     active: false
+    allowSingleTypedGenerics: false
   ObjectPropertyNaming:
     active: true
     aliases: ['ObjectPropertyName']
@@ -432,7 +432,6 @@ potential-bugs:
   Deprecation:
     active: false
     aliases: ['DEPRECATION']
-    excludeImportStatements: false
   DontDowncastCollectionTypes:
     active: false
   DoubleMutabilityForCollection:
@@ -505,6 +504,9 @@ potential-bugs:
       - 'javax.annotation.OverridingMethodsMustInvokeSuper'
   MissingUseCall:
     active: false
+    ignoreClass:
+      - 'java.io.ByteArrayInputStream'
+      - 'java.io.ByteArrayOutputStream'
   NullCheckOnMutableProperty:
     active: false
   NullableToStringCall:
@@ -617,8 +619,6 @@ style:
         value: 'java.lang.annotation.Retention'
       - reason: 'it is a java annotation. Use `kotlin.annotation.Repeatable` instead.'
         value: 'java.lang.annotation.Repeatable'
-      - reason: 'Kotlin does not support @Inherited annotation, see https://youtrack.jetbrains.com/issue/KT-22265'
-        value: 'java.lang.annotation.Inherited'
   ForbiddenComment:
     active: true
     comments:
@@ -676,8 +676,8 @@ style:
       - '1'
       - '2'
     ignoreHashCodeFunction: true
-    ignorePropertyDeclaration: false
-    ignoreLocalVariableDeclaration: false
+    ignorePropertyDeclaration: true
+    ignoreLocalVariableDeclaration: true
     ignoreConstantDeclaration: true
     ignoreCompanionObjectPropertyDeclaration: true
     ignoreAnnotation: false
@@ -782,6 +782,7 @@ style:
     active: true
   UnnecessaryFullyQualifiedName:
     active: false
+    ignoredFullyQualifiedNames: []
   UnnecessaryInheritance:
     active: true
   UnnecessaryInnerClass:

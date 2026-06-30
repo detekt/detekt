@@ -29,6 +29,7 @@ import org.jetbrains.kotlin.psi.KtVariableDeclaration
 import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
 import org.jetbrains.kotlin.resolve.source.getPsi
 import org.jetbrains.kotlin.resolve.source.toSourceElement
+import org.jetbrains.kotlin.utils.addIfNotNull
 
 /**
  * An unused variable can be removed to simplify the source file.
@@ -114,10 +115,10 @@ private class UnusedVariableVisitor(private val allowedNames: Regex) : DetektVis
     override fun visitReferenceExpression(expression: KtReferenceExpression) {
         super.visitReferenceExpression(expression)
 
-        val references = when (expression) {
+        when (expression) {
             is KtNameReferenceExpression -> {
                 analyze(expression) {
-                    listOfNotNull(expression.resolveToLocalVariableSymbol())
+                    usedVariables.addIfNotNull(expression.resolveToLocalVariableSymbol()?.psi)
                 }
             }
 
@@ -125,19 +126,13 @@ private class UnusedVariableVisitor(private val allowedNames: Regex) : DetektVis
                 val arguments = expression.getChildrenOfType<KtValueArgumentList>().flatMap { it.arguments }
                 if (arguments.isNotEmpty()) {
                     analyze(expression) {
-                        arguments.mapNotNull {
-                            it.getArgumentExpression()?.resolveToLocalVariableSymbol()
+                        arguments.forEach {
+                            usedVariables.addIfNotNull(it.getArgumentExpression()?.resolveToLocalVariableSymbol()?.psi)
                         }
                     }
-                } else {
-                    emptyList()
                 }
             }
-
-            else -> return
         }
-
-        references.forEach(::registerVariableUse)
     }
 
     context(session: KaSession)
@@ -145,12 +140,6 @@ private class UnusedVariableVisitor(private val allowedNames: Regex) : DetektVis
         with(session) {
             mainReference?.resolveToSymbol() as? KaVariableSymbol
         }
-
-    private fun registerVariableUse(symbol: KaVariableSymbol) {
-        symbol.psi?.also {
-            usedVariables.add(it)
-        }
-    }
 
     private fun registerNewDeclaration(declaration: KtNamedDeclaration) {
         declaration.toSourceElement().getPsi()?.also {

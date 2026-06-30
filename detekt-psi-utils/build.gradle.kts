@@ -5,12 +5,12 @@ plugins {
 
 dependencies {
     api(libs.kotlin.compiler)
-
-    implementation(projects.detektKotlinAnalysisApi)
+    compileOnly(projects.detektKotlinAnalysisApi)
 
     testImplementation(libs.assertj.core)
     testImplementation(projects.detektTestJunit)
     testImplementation(projects.detektTestUtils)
+    testCompileOnly(libs.jetbrains.annotations)
 }
 
 detekt {

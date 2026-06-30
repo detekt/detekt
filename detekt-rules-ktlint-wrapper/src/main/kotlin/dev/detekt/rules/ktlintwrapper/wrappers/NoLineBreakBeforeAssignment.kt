@@ -7,12 +7,13 @@ import dev.detekt.api.internal.AutoCorrectable
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
- * See [ktlint docs](https://pinterest.github.io/ktlint/<ktlintVersion/>/rules/standard/#no-line-break-before-assignment) for
+ * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/#no-line-break-before-assignment) for
  * documentation.
  */
 @ActiveByDefault(since = "1.0.0")
 @AutoCorrectable(since = "1.0.0")
-class NoLineBreakBeforeAssignment(config: Config) : KtlintRule(config, "Reports line breaks before assignment") {
+internal class NoLineBreakBeforeAssignment(config: Config) :
+    KtlintRule(config, "Reports line breaks before assignment") {
 
     override val wrapping = NoLineBreakBeforeAssignmentRule()
 }

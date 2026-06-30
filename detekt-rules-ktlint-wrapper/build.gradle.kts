@@ -2,12 +2,19 @@ plugins {
     id("module")
 }
 
-val extraDepsToPackage by configurations.registering
+val extraDepsToPackage = configurations.register("extraDepsToPackage")
+val ktlintToBundle = configurations.register("ktlintToBundle")
 
 dependencies {
     compileOnly(projects.detektApi)
     compileOnly(projects.detektPsiUtils)
-    implementation(projects.detektRulesKtlintWrapper.ktlintRepackage) {
+    // compileOnly so ktlint-repackage is not listed in the published POM (it's bundled into the JAR)
+    compileOnly(projects.detektRulesKtlintWrapper.ktlintRepackage) {
+        attributes {
+            attribute(Bundling.BUNDLING_ATTRIBUTE, named(Bundling.SHADOWED))
+        }
+    }
+    ktlintToBundle(projects.detektRulesKtlintWrapper.ktlintRepackage) {
         attributes {
             attribute(Bundling.BUNDLING_ATTRIBUTE, named(Bundling.SHADOWED))
         }
@@ -15,6 +22,11 @@ dependencies {
 
     runtimeOnly(libs.slf4j.api)
 
+    testImplementation(projects.detektRulesKtlintWrapper.ktlintRepackage) {
+        attributes {
+            attribute(Bundling.BUNDLING_ATTRIBUTE, named(Bundling.SHADOWED))
+        }
+    }
     testImplementation(libs.kotlin.compiler)
     testImplementation(projects.detektApi)
     testRuntimeOnly(projects.detektPsiUtils)
@@ -25,6 +37,8 @@ dependencies {
     testImplementation(libs.classgraph)
 
     testRuntimeOnly(libs.slf4j.nop)
+    testCompileOnly(libs.jetbrains.annotations)
+
     extraDepsToPackage(libs.slf4j.nop)
 }
 
@@ -39,19 +53,11 @@ consumeGeneratedConfig(
     forTask = tasks.processResources
 )
 
-val depsToPackage = setOf(
-    "org.ec4j.core",
-    "com.pinterest.ktlint",
-    "io.github.oshai",
-)
-
 tasks.jar {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE // allow duplicates
-    dependsOn(configurations.runtimeClasspath, extraDepsToPackage)
+    dependsOn(ktlintToBundle, extraDepsToPackage)
     from(
-        configurations.runtimeClasspath.get()
-            .filter { dependency -> depsToPackage.any { it in dependency.toString() } }
-            .map { if (it.isDirectory) it else zipTree(it) },
+        ktlintToBundle.get().map { zipTree(it) },
         extraDepsToPackage.get().map { zipTree(it) },
     )
 }

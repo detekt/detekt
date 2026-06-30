@@ -27,7 +27,6 @@ import org.jetbrains.kotlin.config.jvmTarget
 import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.platform.jvm.JvmPlatforms
 import org.jetbrains.kotlin.psi.KtFile
-import java.io.File
 import java.io.OutputStream
 import java.io.PrintStream
 import kotlin.io.path.Path
@@ -48,7 +47,7 @@ internal class EnvironmentFacade(projectSpec: ProjectSpec, compilerSpec: Compile
 
     private val configuration: CompilerConfiguration = createCompilerConfiguration(
         projectSpec.inputPaths.toList(),
-        compilerSpec.classpathEntries(),
+        compilerSpec.classpath,
         compilerSpec.apiVersion,
         compilerSpec.languageVersion,
         compilerSpec.jvmTarget,
@@ -127,8 +126,6 @@ internal class EnvironmentFacade(projectSpec: ProjectSpec, compilerSpec: Compile
         Disposer.dispose(disposable)
     }
 }
-
-internal fun CompilerSpec.classpathEntries(): List<String> = classpath?.split(File.pathSeparator).orEmpty()
 
 private object NullPrintStream : PrintStream(
     object : OutputStream() {

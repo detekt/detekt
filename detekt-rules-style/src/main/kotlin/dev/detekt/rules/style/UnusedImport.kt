@@ -63,18 +63,18 @@ class UnusedImport(config: Config) :
             staticReferences.mapTo(mutableSetOf()) { it.text.trim('`') }
         }
         private val fqNames: Set<FqName> by lazy {
-            namedReferences.mapNotNullTo(mutableSetOf()) { it.fqNameOrNull() }
+            namedReferences.flatMapTo(mutableSetOf()) { it.fqNamesOrEmpty() }
         }
 
         /**
-         * All [namedReferences] whose [KtReferenceExpression.fqNameOrNull] cannot be resolved
+         * All [namedReferences] whose [KtReferenceExpression.fqNamesOrEmpty] cannot be resolved
          * mapped to their text. String matches to such references shouldn't be marked as unused
          * imports since they could match the unknown value being imported.
          */
         @Suppress("DocumentationOverPrivateProperty")
         private val unresolvedNamedReferencesAsString: Set<String> by lazy {
             namedReferences.mapNotNullTo(mutableSetOf()) {
-                if (it.fqNameOrNull() == null) it.text.trim('`') else null
+                if (it.fqNamesOrEmpty().isEmpty()) it.text.trim('`') else null
             }
         }
 
@@ -85,7 +85,7 @@ class UnusedImport(config: Config) :
                 if (aliasName in (namedReferencesInKDoc + namedReferencesAsString)) return false
                 val identifier = identifier()
                 if (identifier in namedReferencesInKDoc || identifier in staticReferencesAsString) return false
-                val fqNameUsed = importPath?.fqName?.let { it in fqNames } == true
+                val fqNameUsed = importPath?.fqName in fqNames
                 val unresolvedNameUsed = identifier in unresolvedNamedReferencesAsString
 
                 return !fqNameUsed && !unresolvedNameUsed
@@ -160,23 +160,39 @@ class UnusedImport(config: Config) :
         }
 
         @Suppress("ClassOrdering")
-        private val KaSymbol.fqNameForImport: FqName?
+        private val KaSymbol.fqNamesForImport: Set<FqName>
             get() = when (this) {
-                is KaClassLikeSymbol -> when {
-                    this is KaClassSymbol && classKind == KaClassKind.COMPANION_OBJECT ->
-                        classId?.outerClassId
+                is KaClassLikeSymbol ->
+                    setOfNotNull(
+                        when {
+                            this is KaClassSymbol && classKind == KaClassKind.COMPANION_OBJECT ->
+                                classId?.outerClassId
 
-                    else -> classId
-                }?.asSingleFqName()
+                            else -> classId
+                        }?.asSingleFqName()
+                    )
 
-                is KaCallableSymbol -> callableId?.asSingleFqName()
+                is KaCallableSymbol -> callableFqNamesForImport()
 
-                else -> null
+                else -> emptySet()
             }
 
-        private fun KtReferenceExpression.fqNameOrNull(): FqName? =
+        private fun KaCallableSymbol.callableFqNamesForImport(): Set<FqName> {
+            val callableFqName = callableId?.asSingleFqName() ?: return emptySet()
+            val callableName = callableId?.callableName?.asString().orEmpty()
+            val classFqName = callableId?.classId?.asSingleFqName()?.asString()
+
+            val companionCallableFqName =
+                classFqName
+                    ?.takeIf { callableName.isNotEmpty() }
+                    ?.let { FqName("$it.Companion.$callableName") }
+
+            return setOfNotNull(callableFqName, companionCallableFqName)
+        }
+
+        private fun KtReferenceExpression.fqNamesOrEmpty(): Set<FqName> =
             analyze(this) {
-                mainReference.resolveToSymbol()?.fqNameForImport
+                mainReference.resolveToSymbol()?.fqNamesForImport.orEmpty()
             }
     }
 

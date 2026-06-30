@@ -52,12 +52,17 @@ class ArrayPrimitive(config: Config) :
         }
     }
 
+    // Workaround for KT-77222: analyze() throws InvalidFirElementTypeException
+    // when PSI elements have no FIR representation (e.g. unresolved types).
+    // Remove runCatching once the upstream issue is fixed.
     private fun KtCallExpression.returnsArrayPrimitive(): Boolean =
-        analyze(this) {
-            val functionCall = resolveToCall()?.singleFunctionCallOrNull() ?: return false
-            val returnType = functionCall.signature.returnType
-            return returnType.arrayElementType?.isPrimitive == true
-        }
+        runCatching {
+            analyze(this) {
+                val functionCall = resolveToCall()?.singleFunctionCallOrNull() ?: return false
+                val returnType = functionCall.signature.returnType
+                returnType.arrayElementType?.isPrimitive == true
+            }
+        }.getOrDefault(false)
 
     override fun visitNamedDeclaration(declaration: KtNamedDeclaration) {
         super.visitNamedDeclaration(declaration)
@@ -72,10 +77,13 @@ class ArrayPrimitive(config: Config) :
             .forEach { report(Finding(Entity.from(it), description)) }
     }
 
+    // Workaround for KT-77222: see returnsArrayPrimitive above.
     private fun KtTypeReference.isArrayPrimitive(): Boolean =
-        analyze(this) {
-            type.symbol?.classId == StandardClassIds.Array && type.arrayElementType?.isPrimitive == true
-        }
+        runCatching {
+            analyze(this) {
+                type.symbol?.classId == StandardClassIds.Array && type.arrayElementType?.isPrimitive == true
+            }
+        }.getOrDefault(false)
 
     companion object {
         private val factoryMethodFqNames = listOf(
