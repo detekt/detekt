@@ -50,7 +50,7 @@
     "@babel/runtime": "^7.26.10",
     "ajv-formats/ajv": "^8.18.0",
     "ajv-keywords/ajv": "^8.18.0",
-    "brace-expansion": "^1.1.12",
+    "brace-expansion": "^5.0.0",
     "braces": "^3.0.3",
     "cross-spawn": "^7.0.5",
     "estree-util-value-to-estree": "^3.3.3",
