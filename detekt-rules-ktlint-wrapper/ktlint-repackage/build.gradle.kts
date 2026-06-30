@@ -15,7 +15,7 @@ tasks.shadowJar {
 }
 
 java {
-    targetCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 val javaComponent = components["java"] as AdhocComponentWithVariants

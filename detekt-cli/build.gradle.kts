@@ -15,6 +15,7 @@ val pluginsJarFiles = configurations.resolvable("pluginsJarFiles") {
     isTransitive = false
 }
 
+@Suppress("MagicNumber")
 dependencies {
     implementation(libs.jcommander)
     implementation(projects.detektApi)
@@ -34,9 +35,17 @@ dependencies {
 
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.assertj.core)
-    testRuntimeOnly(projects.detektRulesKtlintWrapper)
+    testRuntimeOnly(projects.detektRulesKtlintWrapper) {
+        attributes {
+            attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 17)
+        }
+    }
 
-    pluginsJar(projects.detektRulesKtlintWrapper)
+    pluginsJar(projects.detektRulesKtlintWrapper) {
+        attributes {
+            attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 17)
+        }
+    }
     pluginsJar(projects.detektRulesLibraries)
     pluginsJar(projects.detektRulesRuleauthors)
 }
