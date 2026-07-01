@@ -5,7 +5,6 @@ import dev.detekt.api.Issue
 import dev.detekt.api.ProjectMetric
 import dev.detekt.api.Severity
 import dev.detekt.api.internal.whichDetekt
-import dev.detekt.api.testfixtures.TestDetektion
 import dev.detekt.api.testfixtures.TestSetupContext
 import dev.detekt.api.testfixtures.createIssue
 import dev.detekt.api.testfixtures.createIssueEntity
@@ -17,6 +16,7 @@ import dev.detekt.metrics.processors.cyclomaticComplexityKey
 import dev.detekt.metrics.processors.linesKey
 import dev.detekt.metrics.processors.logicalLinesKey
 import dev.detekt.metrics.processors.sourceLinesKey
+import dev.detekt.test.TestDetektion
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import kotlin.io.path.Path

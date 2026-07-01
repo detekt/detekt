@@ -1,7 +1,6 @@
 package dev.detekt.core.reporting.console
 
 import com.intellij.openapi.util.Key
-import dev.detekt.api.testfixtures.TestDetektion
 import dev.detekt.api.testfixtures.createIssue
 import dev.detekt.api.testfixtures.createRuleInstance
 import dev.detekt.metrics.processors.cognitiveComplexityKey
@@ -10,6 +9,7 @@ import dev.detekt.metrics.processors.cyclomaticComplexityKey
 import dev.detekt.metrics.processors.linesKey
 import dev.detekt.metrics.processors.logicalLinesKey
 import dev.detekt.metrics.processors.sourceLinesKey
+import dev.detekt.test.TestDetektion
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
