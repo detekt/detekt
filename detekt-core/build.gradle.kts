@@ -10,12 +10,12 @@ dependencies {
     implementation(projects.detektKotlinAnalysisApiStandalone)
     implementation(libs.snakeyaml.engine)
     implementation(libs.kotlin.reflect)
-    implementation(projects.detektMetrics)
     implementation(projects.detektParser)
     implementation(projects.detektPsiUtils)
     implementation(projects.detektUtils)
 
     testRuntimeOnly(projects.detektRules)
+    runtimeOnly(projects.detektMetrics)
     testImplementation(projects.detektReportHtml)
     testImplementation(projects.detektReportMarkdown)
     testImplementation(projects.detektReportCheckstyle)

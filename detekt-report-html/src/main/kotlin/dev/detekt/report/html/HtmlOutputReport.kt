@@ -10,7 +10,7 @@ import dev.detekt.api.SetupContext
 import dev.detekt.api.TextLocation
 import dev.detekt.api.internal.whichDetekt
 import dev.detekt.api.suppressed
-import dev.detekt.metrics.ComplexityReportGenerator
+import dev.detekt.report.complexity.ComplexityReportGenerator
 import dev.detekt.utils.openSafeStream
 import kotlinx.html.CommonAttributeGroupFacadeFlowInteractiveContent
 import kotlinx.html.FlowContent
@@ -171,7 +171,11 @@ class HtmlOutputReport : OutputReport {
     }
 
     private fun getComplexityMetrics(detektion: Detektion): List<String> =
-        ComplexityReportGenerator.create(detektion).generate().orEmpty()
+        try {
+            ComplexityReportGenerator.create(detektion).generate().orEmpty()
+        } catch (_: NoClassDefFoundError) {
+            emptyList()
+        }
 }
 
 private fun FlowOrInteractiveContent.summary(classes: String, block: SUMMARY.() -> Unit = {}): Unit =

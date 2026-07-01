@@ -28,6 +28,7 @@ dependencies {
     }
     runtimeOnly(projects.detektCore)
     runtimeOnly(projects.detektRules)
+    runtimeOnly(projects.detektReportComplexity)
     runtimeOnly(projects.detektReportHtml)
     runtimeOnly(projects.detektReportMarkdown)
     runtimeOnly(projects.detektReportSarif)
