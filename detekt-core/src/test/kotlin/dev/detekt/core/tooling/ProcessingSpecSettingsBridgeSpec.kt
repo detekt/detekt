@@ -1,5 +1,7 @@
 package dev.detekt.core.tooling
 
+import dev.detekt.api.valueOrDefault
+import dev.detekt.api.valueOrNull
 import dev.detekt.test.utils.resourceUrl
 import dev.detekt.tooling.api.spec.ProcessingSpec
 import org.assertj.core.api.Assertions.assertThat
