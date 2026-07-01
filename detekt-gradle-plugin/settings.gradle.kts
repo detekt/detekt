@@ -36,7 +36,7 @@ dependencyResolutionManagement {
 }
 
 plugins {
-    id("com.gradle.develocity") version "4.4.3"
+    id("com.gradle.develocity") version "4.5.0"
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
     id("com.autonomousapps.build-health") version "3.16.0"
     // Kotlin plugin must be added to classpath to support build-health analysis
