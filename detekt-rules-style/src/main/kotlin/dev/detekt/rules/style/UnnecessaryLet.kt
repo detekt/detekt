@@ -21,6 +21,7 @@ import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.psi.KtSimpleNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 
 /**
  * `let` expressions are used extensively in our code for null-checking and chaining functions,
@@ -122,18 +123,17 @@ private fun KtExpression?.getRootExpression(): KtExpression? {
 
 private fun KtLambdaExpression.countLambdaParameterReference(): Int {
     val bodyExpression = bodyExpression ?: return 0
+    val receiver = this.getStrictParentOfType<KtQualifiedExpression>()?.receiverExpression
     return analyze(this) {
-        if (valueParameters.isNotEmpty()) {
-            valueParameters.first().destructuringDeclaration?.symbol?.entries ?: listOf(firstParameterOrNull())
-        } else {
-            // implicit it param
-            listOf(firstParameterOrNull())
+        val parameters = buildList {
+            val destructuringDeclaration = valueParameters.singleOrNull()?.destructuringDeclaration
+            addAll(destructuringDeclaration?.symbol?.entries ?: listOfNotNull(firstParameterOrNull()))
+            receiver?.mainReference?.resolveToSymbol()?.let { add(it) }
         }
-            .filterNotNull()
-            .sumOf { variableSymbol ->
-                bodyExpression.collectDescendantsOfType<KtSimpleNameExpression> {
-                    it.mainReference.resolveToSymbol() == variableSymbol
-                }.count()
-            }
+        parameters.sumOf { variableSymbol ->
+            bodyExpression.collectDescendantsOfType<KtSimpleNameExpression> {
+                it.mainReference.resolveToSymbol() == variableSymbol
+            }.count()
+        }
     }
 }
