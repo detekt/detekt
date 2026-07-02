@@ -49,7 +49,7 @@ class RuleDescriptorKtTest {
     @Test
     fun returns4RulesAndIgnoreUnknownRule() {
         val rules = getRules(
-            AnalysisMode.full,
+            AnalysisMode.Full,
             listOf(TestDefaultRuleSetProvider()),
             yamlConfigFromContent(
                 """
@@ -82,7 +82,7 @@ class RuleDescriptorKtTest {
     @Test
     fun doesntCrashWhenConfigHasWrongType() {
         val rules = getRules(
-            AnalysisMode.full,
+            AnalysisMode.Full,
             listOf(TestDefaultRuleSetProvider()),
             yamlConfigFromContent(
                 """
@@ -116,7 +116,7 @@ class RuleDescriptorKtTest {
     @Test
     fun `when fullAnalysis is disabled the rules that require full analysis are inactive`() {
         val rules = getRules(
-            AnalysisMode.light,
+            AnalysisMode.Light,
             listOf(TestDefaultRuleSetProvider()),
             yamlConfigFromContent(
                 """
@@ -150,7 +150,7 @@ class RuleDescriptorKtTest {
     @Test
     fun `when fullAnalysis is disabled but the rule is disabled we log nothing`() {
         val rules = getRules(
-            AnalysisMode.light,
+            AnalysisMode.Light,
             listOf(TestDefaultRuleSetProvider()),
             yamlConfigFromContent(
                 """
@@ -172,7 +172,7 @@ class RuleDescriptorKtTest {
     @Test
     fun whenRuleSetIsInactiveReturnsAllRuleAreDisabled() {
         val rules = getRules(
-            AnalysisMode.light,
+            AnalysisMode.Light,
             listOf(TestDefaultRuleSetProvider()),
             yamlConfigFromContent(
                 """
@@ -208,7 +208,7 @@ class RuleDescriptorKtTest {
         @Test
         fun whenRuleSetIsInactiveReturnsAllRuleAreDisabled() {
             val rules = getRules(
-                AnalysisMode.light,
+                AnalysisMode.Light,
                 listOf(TestCustomRuleSetProvider()),
                 yamlConfigFromContent(
                     """
@@ -241,7 +241,7 @@ class RuleDescriptorKtTest {
         @ValueSource(strings = ["warning", "WARNING", "wArNiNg"])
         fun ignoreCase(candidate: String) {
             val rules = getRules(
-                AnalysisMode.light,
+                AnalysisMode.Light,
                 listOf(TestDefaultRuleSetProvider()),
                 yamlConfigFromContent(
                     """
@@ -271,7 +271,7 @@ class RuleDescriptorKtTest {
         @EnumSource(Severity::class)
         fun supportsAll(severity: Severity) {
             val rules = getRules(
-                AnalysisMode.light,
+                AnalysisMode.Light,
                 listOf(TestDefaultRuleSetProvider()),
                 yamlConfigFromContent(
                     """
@@ -301,7 +301,7 @@ class RuleDescriptorKtTest {
         fun unknownSeverityThrows() {
             assertThatThrownBy {
                 getRules(
-                    AnalysisMode.light,
+                    AnalysisMode.Light,
                     listOf(TestDefaultRuleSetProvider()),
                     yamlConfigFromContent(
                         """
@@ -324,7 +324,7 @@ class RuleDescriptorKtTest {
         @Test
         fun severityOnRuleSet() {
             val rules = getRules(
-                AnalysisMode.light,
+                AnalysisMode.Light,
                 listOf(TestDefaultRuleSetProvider()),
                 yamlConfigFromContent(
                     """

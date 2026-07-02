@@ -55,8 +55,8 @@ private fun RuleSet.getRules(
                 val ruleConfig = config.subConfig(ruleId)
                 val active = config.isActiveOrDefault(true) && ruleConfig.isActiveOrDefault(false)
                 val executable = when (analysisMode) {
-                    AnalysisMode.full -> true
-                    AnalysisMode.light -> rule !is RequiresAnalysisApi
+                    AnalysisMode.Full -> true
+                    AnalysisMode.Light -> rule !is RequiresAnalysisApi
                 }
                 if (active && !executable) {
                     log { "The rule '$ruleId' requires type resolution but it was run without it." }
