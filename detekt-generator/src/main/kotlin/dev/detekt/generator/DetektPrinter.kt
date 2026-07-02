@@ -9,14 +9,15 @@ import dev.detekt.generator.printer.RuleSetPagePrinter
 import dev.detekt.generator.printer.defaultconfig.ConfigPrinter
 import dev.detekt.generator.printer.defaultconfig.printRuleSetPage
 import dev.detekt.utils.yaml
+import java.io.PrintStream
 import java.nio.file.Path
 import kotlin.io.path.Path
 
-class DetektPrinter(private val documentationPath: Path?, private val configPath: Path?) {
+class DetektPrinter(private val documentationPath: Path?, private val configPath: Path?, outPrinter: PrintStream) {
 
-    private val markdownWriter = MarkdownWriter(System.out)
-    private val yamlWriter = YamlWriter(System.out)
-    private val propertiesWriter = PropertiesWriter(System.out)
+    private val markdownWriter = MarkdownWriter(outPrinter)
+    private val yamlWriter = YamlWriter(outPrinter)
+    private val propertiesWriter = PropertiesWriter(outPrinter)
 
     fun print(pages: List<RuleSetPage>) {
         if (documentationPath != null) {
