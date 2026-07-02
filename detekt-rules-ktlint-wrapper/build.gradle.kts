@@ -1,5 +1,6 @@
 plugins {
     id("module")
+    id("generator")
 }
 
 val extraDepsToPackage = configurations.register("extraDepsToPackage")
@@ -41,17 +42,6 @@ dependencies {
 
     extraDepsToPackage(libs.slf4j.nop)
 }
-
-consumeGeneratedConfig(
-    fromProject = projects.detektGenerator,
-    fromConfiguration = "generatedKtlintWrapperConfig",
-    forTask = tasks.sourcesJar
-)
-consumeGeneratedConfig(
-    fromProject = projects.detektGenerator,
-    fromConfiguration = "generatedKtlintWrapperConfig",
-    forTask = tasks.processResources
-)
 
 tasks.jar {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE // allow duplicates
