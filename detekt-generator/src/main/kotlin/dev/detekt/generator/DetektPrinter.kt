@@ -55,12 +55,6 @@ class DetektPrinter(private val documentationPath: Path?, private val configPath
         }
     }
 
-    fun printCustomRuleConfig(pages: List<RuleSetPage>, folder: Path) {
-        yamlWriter.write(folder, "config") {
-            ConfigPrinter.printCustomRuleConfig(pages)
-        }
-    }
-
     private fun markdownHeader(ruleSetName: String): String =
         """
             ---
