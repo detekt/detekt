@@ -9,6 +9,7 @@ import dev.detekt.gradle.plugin.DetektPlugin
 import org.gradle.api.Project
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.provider.Provider
+import org.gradle.api.tasks.TaskProvider
 import org.jetbrains.kotlin.gradle.dsl.ExplicitApiMode
 import org.jetbrains.kotlin.gradle.dsl.KotlinBaseExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
@@ -20,19 +21,23 @@ internal fun Project.registerJvmCompilationDetektTask(
     compilation: KotlinCompilation<*>,
     target: KotlinTarget? = null,
     source: ConfigurableFileCollection = sourceProvider(compilation),
-) {
+): TaskProvider<Detekt> {
     val taskSuffix =
         if (target != null) compilation.name + target.name.replaceFirstChar { it.uppercase() } else compilation.name
-    tasks.register(
+    return tasks.register(
         DetektPlugin.DETEKT_TASK_NAME + taskSuffix.replaceFirstChar { it.uppercase() },
         Detekt::class.java
     ) { detektTask ->
         val siblingTask = compilation.compileTaskProvider.map { it as KotlinJvmCompile }
 
         detektTask.source(source)
+        // classpath also carries this project's generated classes (populated for Android variants in
+        // DetektAndroidCompilations; empty for JVM/KMP), so type resolution can resolve generated types.
         detektTask.classpath.conventionCompat(
             compilation.output.classesDirs,
-            siblingTask.map { it.libraries }
+            siblingTask.map { it.libraries },
+            detektTask.generatedClassesJars,
+            detektTask.generatedClassesDirs
         )
         detektTask.friendPaths.conventionCompat(
             compilation.output.classesDirs,
@@ -78,19 +83,23 @@ internal fun Project.registerJvmCompilationCreateBaselineTask(
     compilation: KotlinCompilation<*>,
     target: KotlinTarget? = null,
     source: ConfigurableFileCollection = sourceProvider(compilation),
-) {
+): TaskProvider<DetektCreateBaselineTask> {
     val taskSuffix =
         if (target != null) compilation.name + target.name.replaceFirstChar { it.uppercase() } else compilation.name
-    tasks.register(
+    return tasks.register(
         DetektPlugin.BASELINE_TASK_NAME + taskSuffix.replaceFirstChar { it.uppercase() },
         DetektCreateBaselineTask::class.java,
     ) { createBaselineTask ->
         val siblingTask = compilation.compileTaskProvider.map { it as KotlinJvmCompile }
 
         createBaselineTask.source(source)
+        // classpath also carries this project's generated classes (populated for Android variants in
+        // DetektAndroidCompilations; empty for JVM/KMP), so type resolution can resolve generated types.
         createBaselineTask.classpath.conventionCompat(
             compilation.output.classesDirs,
-            siblingTask.map { it.libraries }
+            siblingTask.map { it.libraries },
+            createBaselineTask.generatedClassesJars,
+            createBaselineTask.generatedClassesDirs
         )
         createBaselineTask.friendPaths.conventionCompat(
             compilation.output.classesDirs,
