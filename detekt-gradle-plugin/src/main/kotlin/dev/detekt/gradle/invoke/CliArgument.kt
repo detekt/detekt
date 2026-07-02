@@ -5,6 +5,7 @@ import dev.detekt.gradle.extensions.FailOnSeverity
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.FileCollection
 import org.gradle.api.file.RegularFile
+import org.jetbrains.kotlin.gradle.plugin.CompilerPluginConfig
 import java.io.File
 
 private const val DEBUG_PARAMETER = "--debug"
@@ -65,6 +66,24 @@ internal data class ClasspathArgument(val fileCollection: FileCollection) : CliA
             )
         } else {
             listOf(ANALYSIS_MODE, "light")
+        }
+}
+
+internal data class KotlinPluginClasspathArgument(val fileCollection: FileCollection) : CliArgument {
+    override fun toArgument() =
+        fileCollection.flatMap {
+            listOf("-Xplugin", it.absolutePath)
+        }
+}
+
+internal data class PluginOptionsArgument(val list: List<CompilerPluginConfig>) : CliArgument {
+    override fun toArgument() =
+        list.flatMap { config ->
+            config.allOptions().flatMap { (pluginId, pluginOptions) ->
+                pluginOptions.flatMap { option ->
+                    listOf("-P", "plugin:${pluginId}:${option.key}=${option.value}")
+                }
+            }
         }
 }
 
