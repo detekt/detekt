@@ -71,7 +71,7 @@
     "picomatch": "^4.0.0",
     "postcss": "^8.5.10",
     "prismjs": "^1.30.0",
-    "react-router/path-to-regexp": "1.9.0",
+    "react-router/path-to-regexp": "8.4.2",
     "schema-utils/ajv": "^8.0.0",
     "semver": "^7.5.2",
     "serialize-javascript": "^7.0.3",
