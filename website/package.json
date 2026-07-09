@@ -54,7 +54,7 @@
     "braces": "^3.0.3",
     "cross-spawn": "^7.0.5",
     "estree-util-value-to-estree": "^3.3.3",
-    "express/path-to-regexp": "0.2.5",
+    "express/path-to-regexp": "1.9.0",
     "follow-redirects": "^1.15.6",
     "human-signals/ajv": "^8.0.0",
     "mdn-data/ajv": "^8.0.0",
