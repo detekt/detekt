@@ -76,7 +76,7 @@
     "semver": "^7.5.2",
     "serialize-javascript": "^7.0.3",
     "shell-quote": "^1.8.4",
-    "svgo": "^3.3.3",
+    "svgo": "^4.0.0",
     "terser": "^5.14.2",
     "webpack": "^5.94.0",
     "webpack-bundle-analyzer/ws": "7.5.11",
