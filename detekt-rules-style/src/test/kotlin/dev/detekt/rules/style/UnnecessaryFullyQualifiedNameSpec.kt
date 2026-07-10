@@ -1194,6 +1194,41 @@ class UnnecessaryFullyQualifiedNameSpec(val env: KotlinEnvironmentContainer) {
 
             assertThat(subject.lintWithContext(env, code, annotationCode, interfaceCode)).isEmpty()
         }
+
+        @Test
+        fun `does not report when there is another import`() {
+            val code = """
+                import foo.bar1.Foo
+
+                fun main() {
+                    Foo()
+                    foo.bar2.Foo(
+                        foo.bar2.Foo.Color("dark")
+                    )
+                    foo.bar2.Foo(
+                        foo.bar2.Foo.Color.white
+                    )
+                }  
+            """.trimIndent()
+            val annotationCode = """
+                package foo.bar1
+                fun Foo() {}
+            """.trimIndent()
+            val interfaceCode = """
+                package foo.bar2
+                data class Foo(
+                    val color: Color
+                ) {
+                    class Color(name: String) {
+                        companion object {
+                            val white = Color("white")
+                        }
+                    }    
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code, annotationCode, interfaceCode)).isEmpty()
+        }
     }
 
     // https://github.com/detekt/detekt/issues/9282
