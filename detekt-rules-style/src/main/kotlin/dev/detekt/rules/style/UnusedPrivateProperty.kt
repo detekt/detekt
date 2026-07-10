@@ -1,6 +1,7 @@
 package dev.detekt.rules.style
 
 import com.intellij.psi.PsiElement
+import com.intellij.psi.util.PsiTreeUtil
 import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.Alias
 import dev.detekt.api.Config
@@ -21,6 +22,7 @@ import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolVisibility
 import org.jetbrains.kotlin.analysis.api.symbols.KaValueParameterSymbol
 import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtCallableReferenceExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtConstructor
 import org.jetbrains.kotlin.psi.KtFile
@@ -29,11 +31,13 @@ import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtSecondaryConstructor
 import org.jetbrains.kotlin.psi.KtValueArgumentList
 import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
 import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
+import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
 
@@ -185,12 +189,42 @@ private class UnusedPrivatePropertyVisitor(private val allowedNames: Regex) : De
                     val psi = it.psi ?: return@forEach
                     when {
                         psi is KtProperty && psi.isTopLevel -> usedTopLevelProperties.add(psi)
-                        psi is KtProperty || (psi is KtParameter && psi.hasValOrVar()) -> usedClassProperties.add(psi)
+
+                        psi is KtProperty -> usedClassProperties.add(psi)
+
+                        psi is KtParameter && psi.hasValOrVar() -> {
+                            if (!expression.isInPropertyInitializer(psi)) {
+                                usedClassProperties.add(psi)
+                            }
+                        }
+
                         else -> usedConstructorParameters.add(psi)
                     }
                 }
         }
     }
+
+    private fun KtReferenceExpression.isInPropertyInitializer(parameter: KtParameter): Boolean {
+        if (isExplicitPropertyReference()) return false
+
+        // Local or nested-class properties can themselves be inside the containing class's property initializer.
+        var property = getStrictParentOfType<KtProperty>()
+        while (property != null) {
+            if (!property.isLocal && property.containingClassOrObject == parameter.containingClassOrObject) {
+                val initializer = property.initializer
+                if (initializer != null && PsiTreeUtil.isAncestor(initializer, this, false)) return true
+            }
+            property = property.getStrictParentOfType<KtProperty>()
+        }
+        return false
+    }
+
+    private fun KtReferenceExpression.isExplicitPropertyReference(): Boolean =
+        when (val parent = parent) {
+            is KtCallableReferenceExpression -> parent.callableReference == this
+            is KtQualifiedExpression -> parent.selectorExpression == this
+            else -> false
+        }
 
     private fun KtConstructor<*>.isExpectClassConstructor() = containingClassOrObject?.isExpect() == true
 

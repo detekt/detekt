@@ -726,6 +726,111 @@ class UnusedPrivatePropertySpec(val env: KotlinEnvironmentContainer) {
         }
 
         @Test
+        fun `reports constructor property used only to initialize another property`() {
+            val code = """
+                class Foo(private val text: String) {
+                    val count: Int = text.length
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        }
+
+        @Test
+        fun `reports constructor property used by local property inside another property initializer`() {
+            val code = """
+                class Foo(private val text: String) {
+                    val count: Int = run {
+                        val local = text.length
+                        local
+                    }
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        }
+
+        @Test
+        fun `reports constructor property captured by anonymous object in another property initializer`() {
+            val code = """
+                class Foo(private val text: String) {
+                    val holder = object {
+                        val count: Int = text.length
+                    }
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        }
+
+        @Test
+        fun `does not report constructor property used in a local property initializer`() {
+            val code = """
+                class Foo(private val text: String) {
+                    fun length(): Int {
+                        val count = text.length
+                        return count
+                    }
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report constructor property referenced with explicit this in a property initializer`() {
+            val code = """
+                class Foo(private val text: String) {
+                    val count: Int = this.text.length
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report constructor property accessed on another instance in a property initializer`() {
+            val code = """
+                class Foo(private val text: String, other: Foo?) {
+                    val count: Int = other?.text?.length ?: 0
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report constructor property callable reference in a property initializer`() {
+            val code = """
+                class Foo(private val text: String) {
+                    val reference = this::text
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report constructor property referenced by an inner class property initializer`() {
+            val code = """
+                class Foo(private val text: String) {
+                    inner class Bar {
+                        val count: Int = text.length
+                    }
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report constructor property referenced by a local class property initializer`() {
+            val code = """
+                class Foo(private val text: String) {
+                    fun length(): Int {
+                        class Bar {
+                            val count: Int = text.length
+                        }
+                        return Bar().count
+                    }
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
         fun `does not report unused private property in data class - #6142`() {
             val code = """
                 data class Foo(
