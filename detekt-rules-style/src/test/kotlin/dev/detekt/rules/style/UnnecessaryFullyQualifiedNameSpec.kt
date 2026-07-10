@@ -1229,6 +1229,31 @@ class UnnecessaryFullyQualifiedNameSpec(val env: KotlinEnvironmentContainer) {
 
             assertThat(subject.lintWithContext(env, code, annotationCode, interfaceCode)).isEmpty()
         }
+
+        @Test
+        fun `does not report deeply nested type when a top-level outer class name is claimed`() {
+            val code = """
+                import foo.bar1.Outer
+
+                fun main() {
+                    foo.bar2.Outer.Middle.Leaf()
+                }
+            """.trimIndent()
+            val importedOuter = """
+                package foo.bar1
+                class Outer
+            """.trimIndent()
+            val otherOuter = """
+                package foo.bar2
+                class Outer {
+                    class Middle {
+                        class Leaf
+                    }
+                }
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code, importedOuter, otherOuter)).isEmpty()
+        }
     }
 
     // https://github.com/detekt/detekt/issues/9282

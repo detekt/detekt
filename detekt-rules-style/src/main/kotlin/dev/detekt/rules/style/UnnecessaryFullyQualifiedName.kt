@@ -262,17 +262,12 @@ class UnnecessaryFullyQualifiedName(config: Config) :
     }
 
     context(session: KaSession)
-    private fun hasOuterClassCollision(element: KtElement, symbol: KaClassSymbol): Boolean {
+    private fun hasOuterClassCollision(element: KtElement, symbol: KaClassSymbol): Boolean =
         // If any class in the outer chain has a name collision, the FQN can't be simplified
         // because the import path through the outer class would be ambiguous.
-        for (outerClassId in generateSequence(symbol.classId?.outerClassId) { it.outerClassId }) {
-            val outerClass = with(session) {
-                findClass(outerClassId)
-            } ?: return false
-            if (hasNameCollision(element, outerClass)) return true
-        }
-        return false
-    }
+        generateSequence(symbol.classId?.outerClassId) { it.outerClassId }
+            .mapNotNull { with(session) { findClass(it) } }
+            .any { hasNameCollision(element, it) }
 
     private fun isShadowedByTypeParameter(element: KtElement, name: Name): Boolean =
         element.parents
