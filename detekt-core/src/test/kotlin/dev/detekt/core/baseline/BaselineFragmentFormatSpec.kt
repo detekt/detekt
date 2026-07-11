@@ -94,6 +94,16 @@ class BaselineFragmentFormatSpec {
     }
 
     @Test
+    fun `rejects a whitespace-only ID`() {
+        fragmentsDirectory.createDirectories()
+        fragmentsDirectory.resolve("invalid.xml").writeText("<ID>   </ID>\n")
+
+        assertThatIllegalStateException()
+            .isThrownBy { BaselineFragmentFormat().read(fragmentsDirectory) }
+            .withMessageContaining("exactly one")
+    }
+
+    @Test
     fun `escapes IDs and verifies the hash from their decoded value`() {
         val id = "one & <two>"
         val format = BaselineFragmentFormat()
@@ -302,5 +312,19 @@ class BaselineFragmentFormatSpec {
         )
 
         assertThat(fragmentsDirectory.walk().filter { it.name.endsWith(".tmp") }.toList()).isEmpty()
+    }
+
+    @Test
+    fun `removes stale temporary files when writing fragments`() {
+        val staleTemporaryFile = fragmentsDirectory.resolve("nested/orphan.tmp")
+        staleTemporaryFile.parent.createDirectories()
+        staleTemporaryFile.writeText("stale")
+
+        BaselineFragmentFormat().write(
+            fragmentsDirectory,
+            DefaultBaseline(emptySet(), setOf("one")),
+        )
+
+        assertThat(staleTemporaryFile).doesNotExist()
     }
 }

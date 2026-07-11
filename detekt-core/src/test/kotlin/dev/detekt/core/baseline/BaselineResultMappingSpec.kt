@@ -6,6 +6,7 @@ import dev.detekt.api.testfixtures.createIssueEntity
 import dev.detekt.api.testfixtures.createRuleInstance
 import dev.detekt.test.utils.resourceAsPath
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
@@ -139,6 +140,31 @@ class BaselineResultMappingSpec {
         assertThat(filtered).isEmpty()
         assertThat(BaselineFragmentFormat().read(fragmentDirectory).currentIssues)
             .containsExactlyInAnyOrderElementsOf(issues.map { it.baselineId })
+    }
+
+    @Test
+    fun `rejects baseline file and fragment directory configured together`() {
+        val mapping = resultMapping(
+            baselineFile = baselineFile,
+            createBaseline = false,
+            fragmentDirectory = dir.resolve("baseline.d"),
+        )
+
+        assertThatIllegalArgumentException()
+            .isThrownBy { mapping.transformIssues(issues) }
+            .withMessage("Invalid baseline options invariant.")
+    }
+
+    @Test
+    fun `rejects baseline creation without a storage path`() {
+        val mapping = resultMapping(
+            baselineFile = null,
+            createBaseline = true,
+        )
+
+        assertThatIllegalArgumentException()
+            .isThrownBy { mapping.transformIssues(issues) }
+            .withMessage("Invalid baseline options invariant.")
     }
 
     @Test
