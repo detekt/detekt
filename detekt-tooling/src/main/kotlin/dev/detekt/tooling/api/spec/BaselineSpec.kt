@@ -12,6 +12,12 @@ interface BaselineSpec {
     val path: Path?
 
     /**
+     * Path to a directory containing one hash-addressed baseline ID fragment per XML file.
+     */
+    val fragmentDirectory: Path?
+        get() = null
+
+    /**
      * Should this analysis write all findings to a new baseline.
      */
     val shouldCreateDuringAnalysis: Boolean

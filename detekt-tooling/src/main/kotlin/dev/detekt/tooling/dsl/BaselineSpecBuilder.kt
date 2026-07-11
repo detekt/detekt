@@ -7,10 +7,14 @@ import java.nio.file.Path
 class BaselineSpecBuilder : Builder<BaselineSpec> {
 
     var path: Path? = null
+    var fragmentDirectory: Path? = null
     var shouldCreateDuringAnalysis: Boolean = false
 
-    override fun build(): BaselineSpec = BaselineModel(path, shouldCreateDuringAnalysis)
+    override fun build(): BaselineSpec = BaselineModel(path, fragmentDirectory, shouldCreateDuringAnalysis)
 }
 
-private data class BaselineModel(override val path: Path?, override val shouldCreateDuringAnalysis: Boolean) :
-    BaselineSpec
+private data class BaselineModel(
+    override val path: Path?,
+    override val fragmentDirectory: Path?,
+    override val shouldCreateDuringAnalysis: Boolean,
+) : BaselineSpec

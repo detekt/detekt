@@ -21,6 +21,8 @@ interface DetektExtension {
 
     val baseline: RegularFileProperty
 
+    val baselineFragments: DirectoryProperty
+
     val basePath: DirectoryProperty
 
     val enableCompilerPlugin: Property<Boolean>

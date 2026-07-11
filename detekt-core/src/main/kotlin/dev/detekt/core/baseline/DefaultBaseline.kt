@@ -27,6 +27,7 @@ internal data class DefaultBaseline(
 }
 
 const val DETEKT_BASELINE_PATH_KEY = "detekt.baseline.path.key"
+const val DETEKT_BASELINE_FRAGMENTS_PATH_KEY = "detekt.baseline.fragments.path.key"
 const val DETEKT_BASELINE_CREATION_KEY = "detekt.baseline.creation.key"
 
 internal const val SMELL_BASELINE = "SmellBaseline"

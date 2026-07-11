@@ -213,6 +213,10 @@ detekt {
     
     // Specifying a baseline file. All findings stored in this file in subsequent runs of detekt.
     baseline = file("path/to/baseline.xml")
+
+    // Alternatively, store every unique baseline ID in a hash-addressed file.
+    // When set, this option takes precedence over `baseline`.
+    baselineFragments = file("path/to/baseline.d")
     
     // Disables all default detekt rulesets and will only run detekt with custom rules
     // defined in plugins passed in with `detektPlugins` configuration. `false` by default.
@@ -274,6 +278,10 @@ detekt {
     
     // Specifying a baseline file. All findings stored in this file in subsequent runs of detekt.
     baseline = file("path/to/baseline.xml")
+
+    // Alternatively, store every unique baseline ID in a hash-addressed file.
+    // When set, this option takes precedence over `baseline`.
+    baselineFragments.set(layout.projectDirectory.dir("path/to/baseline.d"))
     
     // Disables all default detekt rulesets and will only run detekt with custom rules
     // defined in plugins passed in with `detektPlugins` configuration. `false` by default.

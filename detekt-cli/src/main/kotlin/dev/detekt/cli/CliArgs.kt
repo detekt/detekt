@@ -101,6 +101,13 @@ class CliArgs {
     var baseline: Path? = null
 
     @Parameter(
+        names = ["--baseline-fragments"],
+        description = "Directory containing one hash-addressed baseline ID fragment per XML file.",
+        converter = PathConverter::class
+    )
+    var baselineFragments: Path? = null
+
+    @Parameter(
         names = ["--create-baseline", "-cb"],
         description = "Treats current analysis findings as a smell baseline for future detekt runs."
     )

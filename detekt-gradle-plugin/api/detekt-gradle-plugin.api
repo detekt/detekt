@@ -6,6 +6,7 @@ public abstract class dev/detekt/gradle/Detekt : org/gradle/api/tasks/SourceTask
 	public abstract fun getAutoCorrect ()Lorg/gradle/api/provider/Property;
 	public abstract fun getBasePath ()Lorg/gradle/api/provider/Property;
 	public abstract fun getBaseline ()Lorg/gradle/api/file/RegularFileProperty;
+	public abstract fun getBaselineFragments ()Lorg/gradle/api/file/DirectoryProperty;
 	public abstract fun getBuildUponDefaultConfig ()Lorg/gradle/api/provider/Property;
 	public abstract fun getClasspath ()Lorg/gradle/api/file/ConfigurableFileCollection;
 	public abstract fun getConfig ()Lorg/gradle/api/file/ConfigurableFileCollection;
@@ -37,6 +38,7 @@ public abstract class dev/detekt/gradle/DetektCreateBaselineTask : org/gradle/ap
 	public abstract fun getAutoCorrect ()Lorg/gradle/api/provider/Property;
 	public abstract fun getBasePath ()Lorg/gradle/api/provider/Property;
 	public abstract fun getBaseline ()Lorg/gradle/api/file/RegularFileProperty;
+	public abstract fun getBaselineFragments ()Lorg/gradle/api/file/DirectoryProperty;
 	public abstract fun getBuildUponDefaultConfig ()Lorg/gradle/api/provider/Property;
 	public abstract fun getClasspath ()Lorg/gradle/api/file/ConfigurableFileCollection;
 	public abstract fun getConfig ()Lorg/gradle/api/file/ConfigurableFileCollection;
@@ -85,6 +87,7 @@ public abstract interface class dev/detekt/gradle/extensions/DetektExtension {
 	public abstract fun getAutoCorrect ()Lorg/gradle/api/provider/Property;
 	public abstract fun getBasePath ()Lorg/gradle/api/file/DirectoryProperty;
 	public abstract fun getBaseline ()Lorg/gradle/api/file/RegularFileProperty;
+	public abstract fun getBaselineFragments ()Lorg/gradle/api/file/DirectoryProperty;
 	public abstract fun getBuildUponDefaultConfig ()Lorg/gradle/api/provider/Property;
 	public abstract fun getConfig ()Lorg/gradle/api/file/ConfigurableFileCollection;
 	public abstract fun getDebug ()Lorg/gradle/api/provider/Property;

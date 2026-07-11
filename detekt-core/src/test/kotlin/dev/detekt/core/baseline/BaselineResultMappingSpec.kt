@@ -107,6 +107,41 @@ class BaselineResultMappingSpec {
     }
 
     @Test
+    fun `filters issues found in a baseline fragment directory`() {
+        val fragmentDirectory = dir.resolve("baseline.d")
+        val suppressed = issues.first()
+        BaselineFragmentFormat().write(
+            fragmentDirectory,
+            DefaultBaseline(emptySet(), setOf(suppressed.baselineId)),
+        )
+        val mapping = resultMapping(
+            baselineFile = null,
+            createBaseline = false,
+            fragmentDirectory = fragmentDirectory,
+        )
+
+        val filtered = mapping.transformIssues(issues)
+
+        assertThat(filtered).containsExactlyElementsOf(issues.drop(1))
+    }
+
+    @Test
+    fun `creates one fragment per unique issue and filters all created issues`() {
+        val fragmentDirectory = dir.resolve("baseline.d")
+        val mapping = resultMapping(
+            baselineFile = null,
+            createBaseline = true,
+            fragmentDirectory = fragmentDirectory,
+        )
+
+        val filtered = mapping.transformIssues(issues + issues.first())
+
+        assertThat(filtered).isEmpty()
+        assertThat(BaselineFragmentFormat().read(fragmentDirectory).currentIssues)
+            .containsExactlyInAnyOrderElementsOf(issues.map { it.baselineId })
+    }
+
+    @Test
     fun `should update an existing baseline file if a file is configured`() {
         existingBaselineFile.copyTo(baselineFile)
         val existing = DefaultBaseline.load(baselineFile)
@@ -210,12 +245,13 @@ class BaselineResultMappingSpec {
     }
 }
 
-private fun resultMapping(baselineFile: Path?, createBaseline: Boolean?) =
+private fun resultMapping(baselineFile: Path?, createBaseline: Boolean?, fragmentDirectory: Path? = null) =
     BaselineResultMapping().apply {
         init(
             TestSetupContext(
                 properties = mapOf(
                     DETEKT_BASELINE_PATH_KEY to baselineFile,
+                    DETEKT_BASELINE_FRAGMENTS_PATH_KEY to fragmentDirectory,
                     DETEKT_BASELINE_CREATION_KEY to createBaseline,
                 )
             )

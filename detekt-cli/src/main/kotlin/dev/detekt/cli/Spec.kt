@@ -44,6 +44,7 @@ internal fun CliArgs.createSpec(output: Appendable, error: Appendable): Processi
 
         baseline {
             path = args.baseline
+            fragmentDirectory = args.baselineFragments
             shouldCreateDuringAnalysis = args.createBaseline
         }
 

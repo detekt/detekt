@@ -16,6 +16,8 @@ import org.junit.jupiter.api.io.TempDir
 import java.io.PrintStream
 import java.nio.file.Path
 import kotlin.io.path.absolutePathString
+import kotlin.io.path.isRegularFile
+import kotlin.io.path.walk
 
 class RunnerSpec {
 
@@ -35,6 +37,25 @@ class RunnerSpec {
         )
 
         assertThat(baseline).content().contains("<SmellBaseline>")
+    }
+
+    @Test
+    fun `creates and reuses hash-addressed baseline fragments`(@TempDir tempDir: Path) {
+        val fragments = tempDir.resolve("baseline.d")
+        val arguments = arrayOf(
+            "--input",
+            inputPath.toString(),
+            "--config-resource",
+            "/configs/valid-config.yml",
+            "--baseline-fragments",
+            fragments.toString(),
+        )
+
+        executeDetekt(*arguments, "--create-baseline")
+
+        assertThat(fragments.walk().filter { it.isRegularFile() && it.fileName.toString().endsWith(".xml") }.toList())
+            .hasSize(1)
+        assertThatCode { executeDetekt(*arguments) }.doesNotThrowAnyException()
     }
 
     @Nested

@@ -2,6 +2,8 @@ package dev.detekt.cli
 
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.ParameterException
+import java.nio.file.Path
+import kotlin.io.path.isDirectory
 import kotlin.io.path.isRegularFile
 import kotlin.io.path.notExists
 
@@ -33,22 +35,37 @@ private fun JCommander.usageAsString(): String {
 }
 
 private fun CliArgs.validate(jCommander: JCommander) {
-    var violation: String? = null
     val baseline = baseline
+    val baselineFragments = baselineFragments
+    val violation = when {
+        baseline != null && baselineFragments != null ->
+            "--baseline and --baseline-fragments cannot be used together."
 
-    if (createBaseline && baseline == null) {
-        violation = "Creating a baseline.xml requires the --baseline parameter to specify a path."
-    }
+        createBaseline && baseline == null && baselineFragments == null ->
+            "Creating a baseline requires either --baseline or --baseline-fragments to specify an output path."
 
-    if (!createBaseline && baseline != null) {
-        if (baseline.notExists()) {
-            violation = "The file specified by --baseline should exist '$baseline'."
-        } else if (!baseline.isRegularFile()) {
-            violation = "The path specified by --baseline should be a file '$baseline'."
-        }
+        !createBaseline && baseline != null -> baseline.validationError()
+
+        baselineFragments != null -> baselineFragments.validationError(createBaseline)
+
+        else -> null
     }
 
     if (violation != null) {
         throw HandledArgumentViolation(violation, jCommander.usageAsString())
     }
 }
+
+private fun Path.validationError(): String? =
+    when {
+        notExists() -> "The file specified by --baseline should exist '$this'."
+        !isRegularFile() -> "The path specified by --baseline should be a file '$this'."
+        else -> null
+    }
+
+private fun Path.validationError(createBaseline: Boolean): String? =
+    when {
+        !createBaseline && notExists() -> "The directory specified by --baseline-fragments should exist '$this'."
+        !notExists() && !isDirectory() -> "The path specified by --baseline-fragments should be a directory '$this'."
+        else -> null
+    }

@@ -9,6 +9,7 @@ import dev.detekt.gradle.invoke.ApiVersionArgument
 import dev.detekt.gradle.invoke.AutoCorrectArgument
 import dev.detekt.gradle.invoke.BasePathArgument
 import dev.detekt.gradle.invoke.BaselineArgumentOrEmpty
+import dev.detekt.gradle.invoke.BaselineFragmentsArgument
 import dev.detekt.gradle.invoke.BuildUponDefaultConfigArgument
 import dev.detekt.gradle.invoke.ClasspathArgument
 import dev.detekt.gradle.invoke.CliArgument
@@ -59,6 +60,7 @@ import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.options.Option
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.gradle.workers.WorkerExecutor
+import java.io.File
 import javax.inject.Inject
 
 @CacheableTask
@@ -74,10 +76,24 @@ abstract class Detekt @Inject constructor(
     @get:Classpath
     abstract val pluginClasspath: ConfigurableFileCollection
 
+    @get:Internal
+    abstract val baseline: RegularFileProperty
+
+    @get:Internal
+    abstract val baselineFragments: DirectoryProperty
+
     @get:InputFiles // Why not InputFile? See https://github.com/gradle/gradle/issues/2016
     @get:Optional
     @get:PathSensitive(PathSensitivity.NONE)
-    abstract val baseline: RegularFileProperty
+    internal val baselineInputs: List<File>
+        get() = if (baselineFragments.isPresent) {
+            listOfNotNull(existingBaselineFragments)
+        } else {
+            listOfNotNull(baseline.orNull?.asFile?.takeIf(File::exists))
+        }
+
+    private val existingBaselineFragments: File?
+        get() = baselineFragments.orNull?.asFile?.takeIf(File::isDirectory)
 
     @get:InputFiles
     @get:Optional
@@ -179,7 +195,8 @@ abstract class Detekt @Inject constructor(
             JvmTargetArgument(jvmTarget.orNull),
             JdkHomeArgument(jdkHome),
             ConfigArgument(config),
-            BaselineArgumentOrEmpty(baseline.orNull),
+            BaselineArgumentOrEmpty(baseline.orNull.takeIf { !baselineFragments.isPresent }),
+            BaselineFragmentsArgument(baselineFragments.orNull.takeIf { existingBaselineFragments != null }),
             DefaultReportArgument(reports.checkstyle),
             DefaultReportArgument(reports.html),
             DefaultReportArgument(reports.sarif),

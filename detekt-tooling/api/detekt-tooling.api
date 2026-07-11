@@ -96,6 +96,7 @@ public final class dev/detekt/tooling/api/VersionProvider$Companion {
 }
 
 public abstract interface class dev/detekt/tooling/api/spec/BaselineSpec {
+	public fun getFragmentDirectory ()Ljava/nio/file/Path;
 	public abstract fun getPath ()Ljava/nio/file/Path;
 	public abstract fun getShouldCreateDuringAnalysis ()Z
 }
@@ -225,8 +226,10 @@ public final class dev/detekt/tooling/dsl/BaselineSpecBuilder : dev/detekt/tooli
 	public fun <init> ()V
 	public fun build ()Ldev/detekt/tooling/api/spec/BaselineSpec;
 	public synthetic fun build ()Ljava/lang/Object;
+	public final fun getFragmentDirectory ()Ljava/nio/file/Path;
 	public final fun getPath ()Ljava/nio/file/Path;
 	public final fun getShouldCreateDuringAnalysis ()Z
+	public final fun setFragmentDirectory (Ljava/nio/file/Path;)V
 	public final fun setPath (Ljava/nio/file/Path;)V
 	public final fun setShouldCreateDuringAnalysis (Z)V
 }

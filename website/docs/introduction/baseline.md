@@ -8,6 +8,11 @@ sidebar_position: 7
 With the cli option `--baseline` or the detekt-gradle-plugin closure-property `baseline` you can specify a file which is used to generate a `baseline.xml`.
 It is a file where ignored findings are defined.
 
+Alternatively, `--baseline-fragments` and the Gradle `baselineFragments` property store every unique current issue in
+an individual file. This layout avoids merge conflicts when independent changes remove different baseline entries.
+The CLI options are mutually exclusive. In the Gradle DSL, `baselineFragments` takes precedence over `baseline`,
+including its conventional default value.
+
 The intention of `CurrentIssues` is that only new findings are printed on further analysis.
 The `ManuallySuppressedIssues` can be used to write down false positive detections (instead of suppressing them and pollute your code base).
 
@@ -27,6 +32,20 @@ When adding a custom issue to the xml file, make sure the `RuleID` should be sel
 </SmellBaseline>
 ```
 
+To create a conflict-free fragment baseline, pass a directory instead of a baseline file:
+
+```shell
+java -jar detekt-cli-all.jar \
+  --config path/to/config/detekt/detekt.yml \
+  --baseline-fragments path/to/config/detekt/baseline.d \
+  --create-baseline
+```
+
+Each file contains exactly one `<ID>...</ID>` element and is stored at
+`<first-two-sha256-characters>/<sha256>.xml`. The hash is calculated from the UTF-8 encoded, XML-escaped element;
+the file ends with a newline that is not part of the hash. Duplicate IDs are stored once. Fragment baselines represent `CurrentIssues`; use the
+single baseline format when `ManuallySuppressedIssues` are required.
+
 #### CLI
 To generate yourself a `baseline.xml` you need to provide the same config as the the rules you are going to scan your project.
 
@@ -45,6 +64,15 @@ If you are using the gradle-plugin run the `detektBaseline` task to generate you
 This will create one baseline file per Gradle module.
 As this might not be the desired behavior for a multi module project, think about implementing
 a custom meta baseline task:
+
+To create and consume baseline fragments instead, configure a directory. Running `detektBaseline` then replaces the
+managed directory with the current set of findings.
+
+```kotlin
+detekt {
+    baselineFragments.set(layout.projectDirectory.dir("config/detekt/baseline.d"))
+}
+```
 
 ###### Groovy DSL
 ```groovy

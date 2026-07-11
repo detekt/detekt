@@ -5,6 +5,7 @@ import dev.detekt.gradle.invoke.ApiVersionArgument
 import dev.detekt.gradle.invoke.AutoCorrectArgument
 import dev.detekt.gradle.invoke.BasePathArgument
 import dev.detekt.gradle.invoke.BaselineArgument
+import dev.detekt.gradle.invoke.BaselineFragmentsArgument
 import dev.detekt.gradle.invoke.BuildUponDefaultConfigArgument
 import dev.detekt.gradle.invoke.ClasspathArgument
 import dev.detekt.gradle.invoke.CliArgument
@@ -42,6 +43,7 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.Optional
+import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
@@ -63,8 +65,21 @@ abstract class DetektCreateBaselineTask @Inject constructor(
         group = LifecycleBasePlugin.VERIFICATION_GROUP
     }
 
-    @get:OutputFile
+    @get:Internal
     abstract val baseline: RegularFileProperty
+
+    @get:Internal
+    abstract val baselineFragments: DirectoryProperty
+
+    @get:OutputFile
+    @get:Optional
+    internal val baselineOutput: java.io.File?
+        get() = baseline.orNull?.asFile?.takeIf { !baselineFragments.isPresent }
+
+    @get:OutputDirectory
+    @get:Optional
+    internal val baselineFragmentsOutput: java.io.File?
+        get() = baselineFragments.orNull?.asFile
 
     @get:InputFiles
     @get:Optional
@@ -158,7 +173,8 @@ abstract class DetektCreateBaselineTask @Inject constructor(
             LanguageVersionArgument(languageVersion.orNull),
             JvmTargetArgument(jvmTarget.orNull),
             JdkHomeArgument(jdkHome),
-            BaselineArgument(baseline.get()),
+            BaselineArgument(baseline.orNull.takeIf { !baselineFragments.isPresent }),
+            BaselineFragmentsArgument(baselineFragments.orNull),
             InputArgument(source),
             ConfigArgument(config),
             DebugArgument(debug.get()),

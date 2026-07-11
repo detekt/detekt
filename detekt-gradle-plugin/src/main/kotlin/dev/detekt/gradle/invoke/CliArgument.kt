@@ -2,6 +2,7 @@ package dev.detekt.gradle.invoke
 
 import dev.detekt.gradle.extensions.DetektReport
 import dev.detekt.gradle.extensions.FailOnSeverity
+import org.gradle.api.file.Directory
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.FileCollection
 import org.gradle.api.file.RegularFile
@@ -12,6 +13,7 @@ private const val INPUT_PARAMETER = "--input"
 private const val ANALYSIS_MODE = "--analysis-mode"
 private const val CONFIG_PARAMETER = "--config"
 private const val BASELINE_PARAMETER = "--baseline"
+private const val BASELINE_FRAGMENTS_PARAMETER = "--baseline-fragments"
 private const val PARALLEL_PARAMETER = "--parallel"
 private const val DISABLE_DEFAULT_RULESETS_PARAMETER = "--disable-default-rulesets"
 private const val BUILD_UPON_DEFAULT_CONFIG_PARAMETER = "--build-upon-default-config"
@@ -95,6 +97,11 @@ internal data class BaselineArgumentOrEmpty(val baseline: RegularFile?) : CliArg
         } else {
             emptyList()
         }
+}
+
+internal data class BaselineFragmentsArgument(val directory: Directory?) : CliArgument {
+    override fun toArgument() =
+        directory?.let { listOf(BASELINE_FRAGMENTS_PARAMETER, it.asFile.absolutePath) }.orEmpty()
 }
 
 internal data class DefaultReportArgument(val report: DetektReport) : CliArgument {

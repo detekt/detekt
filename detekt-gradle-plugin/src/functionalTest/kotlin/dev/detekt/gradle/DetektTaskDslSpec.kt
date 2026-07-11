@@ -126,6 +126,54 @@ class DetektTaskDslSpec {
     }
 
     @Nested
+    inner class `with baseline fragments directory` {
+        private val directoryName = "detekt-baseline.d"
+        private val config = """
+            file("$directoryName").mkdirs()
+            detekt {
+                baselineFragments.set(layout.projectDirectory.dir("$directoryName"))
+            }
+        """.trimIndent()
+        private val gradleRunner = kotlin()
+            .dryRun()
+            .withDetektConfig(config)
+            .build()
+        private val result = gradleRunner.runDetektTask()
+
+        @Test
+        fun `passes only the baseline fragments directory to detekt cli`() {
+            val fragmentsDirectory = gradleRunner.projectFile(directoryName)
+
+            assertThat(result.output).contains("--baseline-fragments $fragmentsDirectory")
+            assertThat(result.output).doesNotContain("--baseline ")
+        }
+    }
+
+    @Nested
+    inner class `with baseline fragments directory that does not exist` {
+        private val directoryName = "missing-baseline.d"
+        private val baselineFilename = "existing-baseline.xml"
+        private val config = """
+            detekt {
+                baseline = file("$baselineFilename")
+                baselineFragments.set(layout.projectDirectory.dir("$directoryName"))
+            }
+        """.trimIndent()
+        private val gradleRunner = kotlin()
+            .dryRun()
+            .withDetektConfig(config)
+            .withBaseline(baselineFilename)
+            .build()
+        private val result = gradleRunner.runDetektTask()
+
+        @Test
+        fun `does not pass the missing directory to detekt cli`() {
+            assertThat(result.output).doesNotContain("--baseline-fragments")
+            assertThat(result.output).doesNotContain("--baseline ")
+        }
+    }
+
+    @Nested
     inner class `with custom input directories` {
         val customSrc1 = "gensrc/kotlin"
         val customSrc2 = "src/main/kotlin"

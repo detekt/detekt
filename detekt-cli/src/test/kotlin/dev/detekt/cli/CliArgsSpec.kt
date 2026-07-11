@@ -288,10 +288,57 @@ internal class CliArgsSpec {
         inner class `Baseline feature` {
 
             @Test
-            fun `reports an error when using --create-baseline without a --baseline file`() {
+            fun `passes --baseline-fragments directory to the processing spec`() {
+                val directory = resourceAsPath("/cases")
+
+                val spec = parseArguments(arrayOf("--baseline-fragments", directory.toString())).toSpec()
+
+                assertThat(spec.baselineSpec.fragmentDirectory).isEqualTo(directory)
+            }
+
+            @Test
+            fun `reports an error when --baseline-fragments directory does not exist`() {
+                assertThatCode { parseArguments(arrayOf("--baseline-fragments", "nonExistent")) }
+                    .isInstanceOf(HandledArgumentViolation::class.java)
+                    .hasMessage("The directory specified by --baseline-fragments should exist 'nonExistent'.")
+            }
+
+            @Test
+            fun `allows a missing --baseline-fragments directory when creating a baseline`() {
+                val spec = parseArguments(
+                    arrayOf("--create-baseline", "--baseline-fragments", "nonExistent")
+                ).toSpec()
+
+                assertThat(spec.baselineSpec.fragmentDirectory).isEqualTo(Path("nonExistent"))
+                assertThat(spec.baselineSpec.shouldCreateDuringAnalysis).isTrue()
+            }
+
+            @Test
+            fun `reports an error when both baseline storage modes are configured`() {
+                val baseline = resourceAsPath("/configs/baseline-empty.xml")
+                val fragments = resourceAsPath("/cases")
+
+                assertThatCode {
+                    parseArguments(
+                        arrayOf(
+                            "--baseline",
+                            baseline.toString(),
+                            "--baseline-fragments",
+                            fragments.toString(),
+                        )
+                    )
+                }
+                    .isInstanceOf(HandledArgumentViolation::class.java)
+                    .hasMessage("--baseline and --baseline-fragments cannot be used together.")
+            }
+
+            @Test
+            fun `reports an error when using --create-baseline without a baseline storage path`() {
                 assertThatCode { parseArguments(arrayOf("--create-baseline")) }
                     .isInstanceOf(HandledArgumentViolation::class.java)
-                    .hasMessage("Creating a baseline.xml requires the --baseline parameter to specify a path.")
+                    .hasMessage(
+                        "Creating a baseline requires either --baseline or --baseline-fragments to specify an output path."
+                    )
             }
 
             @Test
