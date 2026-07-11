@@ -28,10 +28,6 @@ const config = {
           editUrl: "https://github.com/detekt/detekt/edit/main/website/",
           remarkPlugins: [detektVersionReplacePlugin],
         },
-        blog: {
-          showReadingTime: true,
-          editUrl: "https://github.com/detekt/detekt/edit/main/website/",
-        },
         theme: {
           customCss: require.resolve("./src/css/custom.css"),
         },
@@ -44,6 +40,14 @@ const config = {
       "@docusaurus/plugin-client-redirects",
       {
         redirects: [
+          { to: "/", from: "/blog/2018/02/11/website-online" },
+          { to: "/", from: "/blog/2019/03/03/build-upon-the-default-config" },
+          { to: "/", from: "/blog/2019/03/03/configure-detekt-on-root-project" },
+          { to: "/", from: "/blog/2019/06/08/migrating-the-test-pattern" },
+          { to: "/", from: "/blog/2019/06/29/using-detekt-snapshots" },
+          { to: "/", from: "/blog/2019/08/04/calling-it-one-zero" },
+          { to: "/", from: "/blog/2019/08/14/custom-console-reports" },
+          { to: "/", from: "/blog/2020/09/27/additional-diff-config-task" },
           { to: "/changelog", from: "/docs/introduction/changelog" },
           { to: "/changelog-rc", from: "/docs/introduction/changelog-rc" },
           { to: "/changelog", from: "/changelog.html" },
@@ -126,11 +130,6 @@ const config = {
             label: "Docs",
           },
           {
-            to: "/blog",
-            label: "Blog",
-            position: "left",
-          },
-          {
             to: "https://detekt.dev/kdoc/",
             label: "APIs",
             position: "left",
@@ -196,10 +195,6 @@ const config = {
           {
             title: "More",
             items: [
-              {
-                label: "Blog",
-                to: "/blog",
-              },
               {
                 label: "GitHub",
                 href: "https://github.com/detekt/detekt",
