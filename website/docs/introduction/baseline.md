@@ -46,6 +46,10 @@ Each file contains exactly one `<ID>...</ID>` element and is stored at
 the file ends with a newline that is not part of the hash. Duplicate IDs are stored once. Fragment baselines represent `CurrentIssues`; use the
 single baseline format when `ManuallySuppressedIssues` are required.
 
+Readers and writers coordinate through lock files in `~/.detekt/detekt-baseline-locks`, outside the managed baseline
+directory. Environments where the user home is read-only can set the `dev.detekt.baseline.lock.directory` system
+property to a writable directory. Lock files are coordination state and are not removed after each analysis.
+
 #### CLI
 To generate yourself a `baseline.xml` you need to provide the same config as the the rules you are going to scan your project.
 
@@ -65,8 +69,8 @@ This will create one baseline file per Gradle module.
 As this might not be the desired behavior for a multi module project, think about implementing
 a custom meta baseline task:
 
-To create and consume baseline fragments instead, configure a directory. Running `detektBaseline` then replaces the
-managed directory with the current set of findings.
+To create and consume baseline fragments instead, configure a directory. Running `detektBaseline` then reconciles the
+managed fragment XML files with the current set of findings.
 
 ```kotlin
 detekt {

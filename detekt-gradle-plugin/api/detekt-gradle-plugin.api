@@ -151,6 +151,7 @@ public class dev/detekt/gradle/extensions/KotlinCompileTaskDetektExtension {
 	public fun <init> (Lorg/gradle/api/Project;)V
 	public final fun getAllRules ()Lorg/gradle/api/provider/Property;
 	public final fun getBaseline ()Lorg/gradle/api/file/RegularFileProperty;
+	public final fun getBaselineFragments ()Lorg/gradle/api/file/DirectoryProperty;
 	public final fun getBuildUponDefaultConfig ()Lorg/gradle/api/provider/Property;
 	public final fun getCheckstyle ()Ldev/detekt/gradle/extensions/DetektCompilerPluginReport;
 	public final fun getConfig ()Lorg/gradle/api/file/ConfigurableFileCollection;

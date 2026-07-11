@@ -3,6 +3,7 @@ package dev.detekt.gradle.extensions
 import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.Project
 import org.gradle.api.file.ConfigurableFileCollection
+import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.Property
@@ -28,6 +29,7 @@ open class KotlinCompileTaskDetektExtension(project: Project) {
     val parallel: Property<Boolean> = objects.property(Boolean::class.java)
 
     val baseline: RegularFileProperty = objects.fileProperty()
+    val baselineFragments: DirectoryProperty = objects.directoryProperty()
     val config: ConfigurableFileCollection = objects.fileCollection()
     val excludes: SetProperty<String> = objects.setProperty(String::class.java)
 

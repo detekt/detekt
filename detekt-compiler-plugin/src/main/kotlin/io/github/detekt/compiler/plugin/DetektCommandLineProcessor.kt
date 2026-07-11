@@ -36,6 +36,12 @@ class DetektCommandLineProcessor : CommandLineProcessor {
             false
         ),
         CliOption(
+            Options.BASELINE_FRAGMENTS,
+            "<path>",
+            "Path to a detekt baseline fragments directory.",
+            false
+        ),
+        CliOption(
             Options.DEBUG,
             "<true|false>",
             "Print debug messages.",
@@ -97,6 +103,8 @@ class DetektCommandLineProcessor : CommandLineProcessor {
     override fun processOption(option: AbstractCliOption, value: String, configuration: CompilerConfiguration) {
         when (option.optionName) {
             Options.BASELINE -> configuration.put(Keys.BASELINE, Path(value))
+
+            Options.BASELINE_FRAGMENTS -> configuration.put(Keys.BASELINE_FRAGMENTS, Path(value))
 
             Options.CONFIG -> configuration.appendList(Keys.CONFIG, Path(value))
 

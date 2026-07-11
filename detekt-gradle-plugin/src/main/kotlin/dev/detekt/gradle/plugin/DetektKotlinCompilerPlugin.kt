@@ -3,10 +3,14 @@ package dev.detekt.gradle.plugin
 import dev.detekt.detekt_gradle_plugin.BuildConfig
 import dev.detekt.gradle.extensions.DetektExtension
 import dev.detekt.gradle.extensions.KotlinCompileTaskDetektExtension
+import dev.detekt.gradle.internal.addVariantName
+import dev.detekt.gradle.internal.existingVariantOrBaseFile
 import dev.detekt.gradle.plugin.DetektBasePlugin.Companion.DETEKT_EXTENSION
+import dev.detekt.gradle.plugin.internal.baselineFragmentVariant
 import org.gradle.api.Project
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.provider.Provider
+import org.gradle.api.tasks.PathSensitivity
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilerPluginSupportPlugin
 import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType
@@ -30,6 +34,7 @@ class DetektKotlinCompilerPlugin : KotlinCompilerPluginSupportPlugin {
             task.extensions.create(DETEKT_EXTENSION, KotlinCompileTaskDetektExtension::class.java, target).apply {
                 isEnabled.convention(extension.enableCompilerPlugin)
                 baseline.convention(extension.baseline)
+                baselineFragments.convention(extension.baselineFragments)
                 debug.convention(extension.debug)
                 buildUponDefaultConfig.convention(extension.buildUponDefaultConfig)
                 allRules.convention(extension.allRules)
@@ -81,7 +86,26 @@ class DetektKotlinCompilerPlugin : KotlinCompilerPluginSupportPlugin {
             }
         }
 
-        taskExtension.get().baseline.getOrNull()?.let { options.add(SubpluginOption("baseline", it.toString())) }
+        val fragments = taskExtension.get().baselineFragments
+        if (fragments.isPresent) {
+            val target = kotlinCompilation.target.takeIf {
+                project.plugins.hasPlugin("org.jetbrains.kotlin.multiplatform")
+            }
+            val variant = kotlinCompilation.baselineFragmentVariant(target)
+            val baseDirectory = fragments.get().asFile
+            val variantDirectory = baseDirectory.addVariantName(variant)
+            kotlinCompilation.compileTaskProvider.configure { task ->
+                task.inputs.files(baseDirectory, variantDirectory)
+                    .withPropertyName("detektBaselineFragments")
+                    .withPathSensitivity(PathSensitivity.RELATIVE)
+                    .optional()
+            }
+            baseDirectory.existingVariantOrBaseFile(variant)?.let {
+                options.add(SubpluginOption("baselineFragments", it.absolutePath))
+            }
+        } else {
+            taskExtension.get().baseline.getOrNull()?.let { options.add(SubpluginOption("baseline", it.toString())) }
+        }
         taskExtension.get().config.forEach {
             options.add(SubpluginOption("config", it.absolutePath))
         }

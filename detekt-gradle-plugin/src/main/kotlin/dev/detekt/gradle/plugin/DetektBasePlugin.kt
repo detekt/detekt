@@ -93,6 +93,11 @@ class DetektBasePlugin : Plugin<Project> {
                                 }
                             )
                         )
+                        detektTask.setBaselineFragmentsConvention(
+                            project,
+                            extension,
+                            "${sourceSet.name}SourceSet",
+                        )
                         if (sourceSet.name == "main") {
                             detektTask.explicitApi.convention(mapExplicitArgMode())
                         }
@@ -111,6 +116,11 @@ class DetektBasePlugin : Plugin<Project> {
                                     providers.provider { it.asFile.addVariantName("${sourceSet.name}SourceSet") }
                                 }
                             )
+                        )
+                        createBaselineTask.setBaselineFragmentsConvention(
+                            project,
+                            extension,
+                            "${sourceSet.name}SourceSet",
                         )
 
                         if (sourceSet.name == "main") {
@@ -146,6 +156,26 @@ class DetektBasePlugin : Plugin<Project> {
         // This flag is ignored unless the compiler plugin is applied to the project
         private const val DEFAULT_COMPILER_PLUGIN_ENABLED = true
     }
+}
+
+private fun Detekt.setBaselineFragmentsConvention(project: Project, extension: DetektExtension, variant: String) {
+    baselineFragments.convention(
+        project.layout.dir(
+            extension.baselineFragments.flatMap {
+                project.providers.provider { it.asFile.existingVariantOrBaseFile(variant) }
+            }
+        )
+    )
+}
+
+private fun DetektCreateBaselineTask.setBaselineFragmentsConvention(
+    project: Project,
+    extension: DetektExtension,
+    variant: String,
+) {
+    baselineFragments.convention(
+        project.layout.dir(extension.baselineFragments.map { it.asFile.addVariantName(variant) })
+    )
 }
 
 internal const val CONFIGURATION_DETEKT_PLUGINS = "detektPlugins"

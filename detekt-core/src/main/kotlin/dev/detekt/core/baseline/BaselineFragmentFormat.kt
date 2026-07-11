@@ -29,7 +29,10 @@ import kotlin.io.path.outputStream
 import kotlin.io.path.relativeTo
 import kotlin.io.path.walk
 
-internal class BaselineFragmentFormat {
+internal class BaselineFragmentFormat(
+    private val beforeFileLock: (Path) -> Unit = {},
+    private val afterProcessLockRegistered: () -> Unit = {},
+) {
 
     fun read(directory: Path): DefaultBaseline {
         require(directory.isDirectory()) { "Baseline fragment path must be a directory: $directory" }
@@ -114,27 +117,29 @@ internal class BaselineFragmentFormat {
     }
 
     private fun <T> withDirectoryLock(directory: Path, action: () -> T): T {
-        val lockIdentity = runCatching { directory.toRealPath() }
-            .getOrElse { directory.toAbsolutePath().normalize() }
-        val processLock = processLocks.computeIfAbsent(lockIdentity) { ReentrantLock() }
-        processLock.lock()
+        val lockIdentity = directory.baselineFragmentLockIdentity()
+        val processLock = processLocks.compute(lockIdentity) { _, existing ->
+            (existing ?: ProcessLock()).also { it.users++ }
+        } ?: error("Could not register baseline fragment lock.")
+        afterProcessLockRegistered()
+        processLock.lock.lock()
         try {
-            val lockFile = lockFileFor(lockIdentity)
+            val lockFile = baselineFragmentLockFileForIdentity(lockIdentity)
             return FileChannel.open(lockFile, CREATE, WRITE).use { channel ->
+                beforeFileLock(lockFile)
                 channel.lock().use { action() }
             }
         } finally {
-            processLock.unlock()
+            processLock.lock.unlock()
+            processLocks.compute(lockIdentity) { _, current ->
+                if (current === processLock) {
+                    processLock.users--
+                    processLock.takeUnless { it.users == 0 }
+                } else {
+                    current
+                }
+            }
         }
-    }
-
-    private fun lockFileFor(lockIdentity: Path): Path {
-        // A user-scoped directory keeps coordination files outside checkouts without exposing a shared tmp namespace.
-        val lockDirectory = Path.of(System.getProperty("user.home"), ".detekt", LOCK_DIRECTORY_NAME).createDirectories()
-        val digest = MessageDigest.getInstance("SHA-256")
-            .digest(lockIdentity.toString().toByteArray(UTF_8))
-            .joinToString("") { byte -> "%02x".format(Locale.ROOT, byte) }
-        return lockDirectory.resolve("$digest.lock")
     }
 
     private fun deleteEmptyShardDirectories(directory: Path) {
@@ -181,13 +186,39 @@ internal class BaselineFragmentFormat {
         }
     }
 
-    private companion object {
-        val processLocks = ConcurrentHashMap<Path, ReentrantLock>()
+    private class ProcessLock(val lock: ReentrantLock = ReentrantLock(), var users: Int = 0)
+
+    internal companion object {
+        private val processLocks = ConcurrentHashMap<Path, ProcessLock>()
         const val XML_EXTENSION = "xml"
         const val LOCK_DIRECTORY_NAME = "detekt-baseline-locks"
+        const val LOCK_DIRECTORY_PROPERTY = "dev.detekt.baseline.lock.directory"
         const val TEMPORARY_SUFFIX = ".tmp"
+
+        internal fun processLockUsers(lockIdentity: Path): Int = processLocks[lockIdentity]?.users ?: 0
     }
 }
+
+internal fun baselineFragmentLockFile(directory: Path): Path =
+    baselineFragmentLockFileForIdentity(directory.baselineFragmentLockIdentity())
+
+internal fun baselineFragmentProcessLockUsers(directory: Path): Int =
+    BaselineFragmentFormat.processLockUsers(directory.baselineFragmentLockIdentity())
+
+private fun baselineFragmentLockFileForIdentity(lockIdentity: Path): Path {
+    // A user-scoped directory keeps coordination files outside checkouts without exposing a shared tmp namespace.
+    val configuredLockDirectory = System.getProperty(BaselineFragmentFormat.LOCK_DIRECTORY_PROPERTY)
+    val lockDirectory = configuredLockDirectory?.let(Path::of)
+        ?: Path.of(System.getProperty("user.home"), ".detekt", BaselineFragmentFormat.LOCK_DIRECTORY_NAME)
+    lockDirectory.createDirectories()
+    val digest = MessageDigest.getInstance("SHA-256")
+        .digest(lockIdentity.toString().toByteArray(UTF_8))
+        .joinToString("") { byte -> "%02x".format(Locale.ROOT, byte) }
+    return lockDirectory.resolve("$digest.lock")
+}
+
+private fun Path.baselineFragmentLockIdentity(): Path =
+    runCatching { toRealPath() }.getOrElse { toAbsolutePath().normalize() }
 
 private fun canonicalElement(id: String): String = "<ID>${id.escapeXml()}</ID>"
 
@@ -199,6 +230,7 @@ private fun String.escapeXml(): String =
                     '&' -> "&amp;"
                     '<' -> "&lt;"
                     '>' -> "&gt;"
+                    '\r' -> "&#13;"
                     else -> character
                 }
             )

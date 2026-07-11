@@ -5,7 +5,10 @@ import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
+import org.junit.jupiter.api.parallel.ResourceLock
+import org.junit.jupiter.api.parallel.Resources
 import java.nio.file.Path
+import java.util.concurrent.Callable
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -16,6 +19,7 @@ import kotlin.io.path.name
 import kotlin.io.path.walk
 import kotlin.io.path.writeText
 
+@ResourceLock(Resources.SYSTEM_PROPERTIES)
 class BaselineFragmentFormatSpec {
 
     private val oneHash = "eaf9bfb60bc3201b682726631958d1ad05bfcc3382d08a3963823f00aa56eeb1"
@@ -102,6 +106,19 @@ class BaselineFragmentFormatSpec {
     }
 
     @Test
+    fun `preserves carriage returns in canonical XML and its hash path`() {
+        val id = "one\rtwo"
+        val hash = "db8eed34a90a4e3edbb620b45c73f2047983dc901e746fa343ca66440be27544"
+        val format = BaselineFragmentFormat()
+
+        format.write(fragmentsDirectory, DefaultBaseline(emptySet(), setOf(id)))
+
+        val fragment = fragmentsDirectory.resolve("${hash.take(2)}/$hash.xml")
+        assertThat(fragment).hasContent("<ID>one&#13;two</ID>\n")
+        assertThat(format.read(fragmentsDirectory).currentIssues).containsExactly(id)
+    }
+
+    @Test
     fun `rejects document type declarations`() {
         fragmentsDirectory.createDirectories()
         val fragment = fragmentsDirectory.resolve("invalid.xml")
@@ -162,6 +179,118 @@ class BaselineFragmentFormatSpec {
             }
         } finally {
             executor.shutdownNow()
+        }
+    }
+
+    @Test
+    fun `reader waits for a lock held by another process`() {
+        val expected = setOf("one", "two")
+        BaselineFragmentFormat().write(fragmentsDirectory, DefaultBaseline(emptySet(), expected))
+        val lockFile = baselineFragmentLockFile(fragmentsDirectory)
+        val lockHolderSource = tempDir.resolve("LockHolder.java")
+        lockHolderSource.writeText(
+            """
+                import java.nio.channels.FileChannel;
+                import java.nio.file.Path;
+                import static java.nio.file.StandardOpenOption.CREATE;
+                import static java.nio.file.StandardOpenOption.WRITE;
+
+                class LockHolder {
+                    public static void main(String[] args) throws Exception {
+                        try (var channel = FileChannel.open(Path.of(args[0]), CREATE, WRITE);
+                             var ignored = channel.lock()) {
+                            System.out.println("LOCKED");
+                            System.out.flush();
+                            System.in.read();
+                        }
+                    }
+                }
+            """.trimIndent()
+        )
+        val process = ProcessBuilder(
+            Path.of(System.getProperty("java.home"), "bin", "java").toString(),
+            lockHolderSource.toString(),
+            lockFile.toString(),
+        ).redirectErrorStream(true).start()
+        val executor = Executors.newFixedThreadPool(2)
+
+        try {
+            val childReady = executor.submit(Callable { process.inputStream.bufferedReader().readLine() })
+            assertThat(childReady.get(10, TimeUnit.SECONDS)).isEqualTo("LOCKED")
+            val beforeFileLock = CountDownLatch(1)
+            val reader = executor.submit<Set<String>> {
+                BaselineFragmentFormat(beforeFileLock = { beforeFileLock.countDown() })
+                    .read(fragmentsDirectory)
+                    .currentIssues
+            }
+            assertThat(beforeFileLock.await(10, TimeUnit.SECONDS)).isTrue()
+            assertThat(reader).isNotDone()
+
+            process.outputStream.write(1)
+            process.outputStream.close()
+
+            assertThat(reader.get(10, TimeUnit.SECONDS)).isEqualTo(expected)
+            assertThat(process.waitFor(10, TimeUnit.SECONDS)).isTrue()
+            assertThat(process.exitValue()).isZero()
+        } finally {
+            process.destroyForcibly()
+            executor.shutdownNow()
+        }
+    }
+
+    @Test
+    fun `retains a process lock for a waiting user and releases it after both finish`() {
+        val firstRegistered = CountDownLatch(1)
+        val releaseFirst = CountDownLatch(1)
+        val secondRegistered = CountDownLatch(1)
+        val executor = Executors.newFixedThreadPool(2)
+
+        try {
+            val first = executor.submit {
+                BaselineFragmentFormat(
+                    afterProcessLockRegistered = {
+                        firstRegistered.countDown()
+                        releaseFirst.await()
+                    }
+                ).write(fragmentsDirectory, DefaultBaseline(emptySet(), setOf("one")))
+            }
+            assertThat(firstRegistered.await(10, TimeUnit.SECONDS)).isTrue()
+            val second = executor.submit {
+                BaselineFragmentFormat(afterProcessLockRegistered = { secondRegistered.countDown() })
+                    .write(fragmentsDirectory, DefaultBaseline(emptySet(), setOf("two")))
+            }
+            assertThat(secondRegistered.await(10, TimeUnit.SECONDS)).isTrue()
+            assertThat(baselineFragmentProcessLockUsers(fragmentsDirectory)).isEqualTo(2)
+
+            releaseFirst.countDown()
+            first.get(10, TimeUnit.SECONDS)
+            second.get(10, TimeUnit.SECONDS)
+
+            assertThat(baselineFragmentProcessLockUsers(fragmentsDirectory)).isZero()
+        } finally {
+            releaseFirst.countDown()
+            executor.shutdownNow()
+        }
+    }
+
+    @Test
+    fun `uses a configured lock directory`() {
+        val configuredLockDirectory = tempDir.resolve("locks")
+        val previous = System.setProperty(
+            BaselineFragmentFormat.LOCK_DIRECTORY_PROPERTY,
+            configuredLockDirectory.toString(),
+        )
+
+        try {
+            BaselineFragmentFormat().write(fragmentsDirectory, DefaultBaseline(emptySet(), setOf("one")))
+
+            assertThat(configuredLockDirectory.listDirectoryEntries("*.lock")).hasSize(1)
+        } finally {
+            if (previous == null) {
+                System.clearProperty(BaselineFragmentFormat.LOCK_DIRECTORY_PROPERTY)
+            } else {
+                System.setProperty(BaselineFragmentFormat.LOCK_DIRECTORY_PROPERTY, previous)
+            }
         }
     }
 

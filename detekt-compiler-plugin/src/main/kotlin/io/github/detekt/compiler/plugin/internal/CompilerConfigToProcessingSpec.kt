@@ -15,6 +15,7 @@ internal fun CompilerConfiguration.toSpec(log: MessageCollector) =
         }
         baseline {
             path = get(Keys.BASELINE)
+            fragmentDirectory = get(Keys.BASELINE_FRAGMENTS)
         }
         logging {
             debug = get(Keys.DEBUG, false)

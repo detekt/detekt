@@ -11,6 +11,7 @@ object Options {
     const val CONFIG = "config"
     const val CONFIG_DIGEST: String = "configDigest"
     const val BASELINE: String = "baseline"
+    const val BASELINE_FRAGMENTS: String = "baselineFragments"
     const val USE_DEFAULT_CONFIG: String = "useDefaultConfig"
     const val ALL_RULES: String = "allRules"
     const val DISABLE_DEFAULT_RULE_SETS: String = "disableDefaultRuleSets"
@@ -27,6 +28,7 @@ object Keys {
     val CONFIG = CompilerConfigurationKey.create<List<Path>>(Options.CONFIG)
     val CONFIG_DIGEST = CompilerConfigurationKey.create<String>(Options.CONFIG_DIGEST)
     val BASELINE = CompilerConfigurationKey.create<Path>(Options.BASELINE)
+    val BASELINE_FRAGMENTS = CompilerConfigurationKey.create<Path>(Options.BASELINE_FRAGMENTS)
     val USE_DEFAULT_CONFIG = CompilerConfigurationKey.create<Boolean>(Options.USE_DEFAULT_CONFIG)
     val ALL_RULES = CompilerConfigurationKey.create<Boolean>(Options.ALL_RULES)
     val DISABLE_DEFAULT_RULE_SETS = CompilerConfigurationKey.create<Boolean>(Options.DISABLE_DEFAULT_RULE_SETS)

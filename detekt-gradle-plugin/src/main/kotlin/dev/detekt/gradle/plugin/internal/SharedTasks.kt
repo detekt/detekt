@@ -21,8 +21,7 @@ internal fun Project.registerJvmCompilationDetektTask(
     target: KotlinTarget? = null,
     source: ConfigurableFileCollection = sourceProvider(compilation),
 ) {
-    val taskSuffix =
-        if (target != null) compilation.name + target.name.replaceFirstChar { it.uppercase() } else compilation.name
+    val taskSuffix = compilation.baselineFragmentVariant(target)
     tasks.register(
         DetektPlugin.DETEKT_TASK_NAME + taskSuffix.replaceFirstChar { it.uppercase() },
         Detekt::class.java
@@ -64,6 +63,13 @@ internal fun Project.registerJvmCompilationDetektTask(
                 }
             )
         )
+        detektTask.baselineFragments.convention(
+            project.layout.dir(
+                extension.baselineFragments.flatMap {
+                    providers.provider { it.asFile.existingVariantOrBaseFile(taskSuffix) }
+                }
+            )
+        )
         detektTask.description = if (target != null) {
             "Run detekt analysis for compilation ${compilation.name} on target " +
                 "${compilation.target.name} with type resolution"
@@ -79,8 +85,7 @@ internal fun Project.registerJvmCompilationCreateBaselineTask(
     target: KotlinTarget? = null,
     source: ConfigurableFileCollection = sourceProvider(compilation),
 ) {
-    val taskSuffix =
-        if (target != null) compilation.name + target.name.replaceFirstChar { it.uppercase() } else compilation.name
+    val taskSuffix = compilation.baselineFragmentVariant(target)
     tasks.register(
         DetektPlugin.BASELINE_TASK_NAME + taskSuffix.replaceFirstChar { it.uppercase() },
         DetektCreateBaselineTask::class.java,
@@ -122,6 +127,11 @@ internal fun Project.registerJvmCompilationCreateBaselineTask(
                 }
             )
         )
+        createBaselineTask.baselineFragments.convention(
+            project.layout.dir(
+                extension.baselineFragments.map { it.asFile.addVariantName(taskSuffix) }
+            )
+        )
         createBaselineTask.description = if (target != null) {
             "Creates detekt baseline for compilation ${compilation.name} on target " +
                 "${compilation.target.name} with type resolution"
@@ -130,6 +140,9 @@ internal fun Project.registerJvmCompilationCreateBaselineTask(
         }
     }
 }
+
+internal fun KotlinCompilation<*>.baselineFragmentVariant(target: KotlinTarget?): String =
+    if (target == null) name else name + target.name.replaceFirstChar { it.uppercase() }
 
 internal fun Project.mapExplicitArgMode(): Provider<String> =
     provider {

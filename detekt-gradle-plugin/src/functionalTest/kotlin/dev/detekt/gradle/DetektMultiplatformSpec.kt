@@ -131,6 +131,42 @@ class DetektMultiplatformSpec {
                 assertDetektWithClasspath(it)
             }
         }
+
+        @Test
+        fun `uses target-qualified fragment directory for a KMP JVM target`() {
+            val fragmentsRunner = setupProject {
+                addSubmodule(
+                    "shared",
+                    1,
+                    1,
+                    buildFileContent = joinGradleBlocks(
+                        KMM_PLUGIN_BLOCK,
+                        """
+                            kotlin {
+                                jvm("desktop")
+                            }
+                            file("detekt-baseline-mainDesktop.d").mkdirs()
+                        """.trimIndent(),
+                        DETEKT_BLOCK,
+                        """
+                            detekt {
+                                baselineFragments.set(layout.projectDirectory.dir("detekt-baseline.d"))
+                            }
+                        """.trimIndent(),
+                    ),
+                    srcDirs = listOf(
+                        "src/commonMain/kotlin",
+                        "src/desktopMain/kotlin",
+                    ),
+                )
+            }
+
+            fragmentsRunner.runTasksAndCheckResult(":shared:detektMainDesktop") {
+                assertThat(it.output).containsPattern(
+                    """--baseline-fragments \S*[/\\]detekt-baseline-mainDesktop.d"""
+                )
+            }
+        }
     }
 
     @Nested
