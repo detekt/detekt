@@ -28,6 +28,8 @@ dependencies {
 
     testImplementation(libs.assertj.core)
     testImplementation(libs.kctfork.core)
+    testImplementation(libs.kotlin.compiler)
+    testImplementation("org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion")
     testCompileOnly(libs.jetbrains.annotations)
 }
 

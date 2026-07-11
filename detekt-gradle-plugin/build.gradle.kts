@@ -147,6 +147,8 @@ dependencies {
 
     implementation(libs.sarif4k)
 
+    testImplementation(libs.kotlin.gradlePluginApi)
+
     testKitRuntimeOnly(libs.kotlin.gradle.plugin)
     testKitRuntimeOnly(libs.android.gradle.plugin)
     testKitRuntimeOnly(libs.android.gradle.builtInKotlin.plugin)
