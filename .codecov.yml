@@ -14,6 +14,3 @@ coverage:
         target: 80%
         # Only post a patch status to pull requests
         only_pulls: true
-
-ignore:
-  - "detekt-gradle-plugin/"
