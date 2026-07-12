@@ -4,8 +4,14 @@ plugins {
 
 reporting {
     reports {
-        create("jacocoMergedReport", JacocoCoverageReport::class) {
+        create<JacocoCoverageReport>("jacocoMergedTestReport") {
             testSuiteName = "test"
+            reportTask {
+                dependsOn(":detekt-generator:generateDocumentation")
+            }
+        }
+        create<JacocoCoverageReport>("jacocoMergedFunctionalTestReport") {
+            testSuiteName = "functionalTest"
             reportTask {
                 dependsOn(":detekt-generator:generateDocumentation")
             }
