@@ -233,12 +233,7 @@ class UnnecessaryFullyQualifiedName(config: Config) :
 
     context(session: KaSession)
     private fun hasNameCollision(element: KtElement, resolvedSymbol: KaSymbol): Boolean {
-        val simpleName = when (resolvedSymbol) {
-            is KaClassSymbol -> resolvedSymbol.classId?.shortClassName
-            is KaConstructorSymbol -> resolvedSymbol.containingClassId?.shortClassName
-            is KaCallableSymbol -> resolvedSymbol.callableId?.callableName
-            else -> null
-        } ?: return false
+        val simpleName = resolvedSymbol.collisionCheckName() ?: return false
 
         if (resolvedSymbol !is KaCallableSymbol && isShadowedByTypeParameter(element, simpleName)) return true
 
@@ -248,11 +243,14 @@ class UnnecessaryFullyQualifiedName(config: Config) :
         } else {
             resolvedSymbol
         }
-        return findLocalSymbols(element, symbol, simpleName).any { it != symbol }
+
+        if (findLocalSymbols(element, simpleName).any { it != symbol }) return true
+        if (symbol is KaClassSymbol && hasOuterClassCollision(element, symbol)) return true
+        return false
     }
 
     context(session: KaSession)
-    private fun findLocalSymbols(element: KtElement, resolvedSymbol: KaSymbol, name: Name): Sequence<KaSymbol> {
+    private fun findLocalSymbols(element: KtElement, name: Name): Sequence<KaSymbol> {
         // Default imports are overridden by an added explicit import, so a default symbol with the same
         // name is not a real collision (only explicit imports are).
         val scope = with(session) {
@@ -260,14 +258,30 @@ class UnnecessaryFullyQualifiedName(config: Config) :
                 it !is KaScopeKind.DefaultSimpleImportingScope && it !is KaScopeKind.DefaultStarImportingScope
             }
         }
-        return if (resolvedSymbol is KaCallableSymbol) scope.callables(name) else scope.classifiers(name)
+        return scope.classifiers(name) + scope.callables(name)
     }
+
+    context(session: KaSession)
+    private fun hasOuterClassCollision(element: KtElement, symbol: KaClassSymbol): Boolean =
+        // If any class in the outer chain has a name collision, the FQN can't be simplified
+        // because the import path through the outer class would be ambiguous.
+        generateSequence(symbol.classId?.outerClassId) { it.outerClassId }
+            .mapNotNull { with(session) { findClass(it) } }
+            .any { hasNameCollision(element, it) }
 
     private fun isShadowedByTypeParameter(element: KtElement, name: Name): Boolean =
         element.parents
             .filterIsInstance<KtTypeParameterListOwner>()
             .flatMap { it.typeParameters }
             .any { it.nameAsName == name }
+
+    private fun KaSymbol.collisionCheckName(): Name? =
+        when (this) {
+            is KaClassSymbol -> classId?.shortClassName
+            is KaConstructorSymbol -> containingClassId?.shortClassName
+            is KaCallableSymbol -> callableId?.callableName
+            else -> null
+        }
 
     private fun KaSymbol.packageFqName(): String? =
         when (this) {
