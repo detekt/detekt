@@ -31,7 +31,7 @@ jobs:
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
       - name: Generate Coverage Report
-        run: ./gradlew jacocoMergedReport
+        run: ./gradlew jacocoMergedTestReport jacocoMergedFunctionalTestReport
         env:
           DEVELOCITY_ACCESS_KEY: ${{ secrets.GRADLE_ENTERPRISE_ACCESS_KEY }}
 
@@ -39,6 +39,8 @@ jobs:
         if: success()
         uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7
         with:
-          files: ./code-coverage-report/build/reports/jacoco/jacocoMergedReport/jacocoMergedReport.xml
+          files: >-
+            ./code-coverage-report/build/reports/jacoco/jacocoMergedTestReport/jacocoMergedTestReport.xml,
+            ./code-coverage-report/build/reports/jacoco/jacocoMergedFunctionalTestReport/jacocoMergedFunctionalTestReport.xml,
           verbose: true
           token: ${{ secrets.CODECOV_TOKEN }}
