@@ -17,6 +17,10 @@ const config = {
   organizationName: "detekt",
   projectName: "detekt",
 
+  future: {
+    v4: true,
+  },
+
   markdown: {
     hooks: {
       onBrokenMarkdownLinks: "throw",
