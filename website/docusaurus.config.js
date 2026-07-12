@@ -12,11 +12,16 @@ const config = {
   baseUrl: "/",
   onBrokenLinks: "throw",
   onBrokenAnchors: "throw",
-  onBrokenMarkdownLinks: "throw",
   onDuplicateRoutes: "throw",
   favicon: "/img/favicon.svg",
   organizationName: "detekt",
   projectName: "detekt",
+
+  markdown: {
+    hooks: {
+      onBrokenMarkdownLinks: "throw",
+    },
+  },
 
   presets: [
     [
