@@ -148,6 +148,7 @@ constructor(
             if (failOnGradleWarnings) {
                 add("--warning-mode=fail")
             }
+            add("-Pkotlin.internal.collectFUSMetrics=false") // https://github.com/gradle/gradle/issues/31278
             addAll(gradleProperties.toList().map { (key, value) -> "-P$key=$value" })
             addAll(tasks)
         }
