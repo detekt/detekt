@@ -2,7 +2,7 @@
 agp = "9.2.1"
 coroutines = "1.11.0"
 jacoco = "0.8.15"
-junit = "6.1.1"
+junit = "6.1.2"
 kotlin = "2.4.0"
 ktlint = "1.8.0"
 slf4j = "2.0.18"
