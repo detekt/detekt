@@ -25,6 +25,9 @@ const config = {
     hooks: {
       onBrokenMarkdownLinks: "throw",
     },
+    mdx1Compat: {
+      headingIds: true,
+    },
   },
 
   presets: [
