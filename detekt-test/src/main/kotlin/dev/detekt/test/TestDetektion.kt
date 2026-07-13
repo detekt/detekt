@@ -1,4 +1,4 @@
-package dev.detekt.api.testfixtures
+package dev.detekt.test
 
 import dev.detekt.api.Detektion
 import dev.detekt.api.Issue

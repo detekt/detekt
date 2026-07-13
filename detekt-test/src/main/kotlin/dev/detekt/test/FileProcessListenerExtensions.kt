@@ -3,7 +3,6 @@ package dev.detekt.test
 import dev.detekt.api.Detektion
 import dev.detekt.api.FileProcessListener
 import dev.detekt.api.Issue
-import dev.detekt.api.testfixtures.TestDetektion
 import org.jetbrains.kotlin.psi.KtFile
 
 fun FileProcessListener.invoke(

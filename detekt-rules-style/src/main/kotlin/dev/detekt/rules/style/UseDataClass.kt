@@ -84,12 +84,12 @@ class UseDataClass(config: Config) :
                 }
                 val containsPropertyOrPropertyParameters = properties.isNotEmpty() || propertyParameters.isNotEmpty()
                 val containsVars = properties.any { it.isVar } || propertyParameters.any { it.isMutable }
-                val containsDelegatedProperty = properties.any { it.hasDelegate() }
+                val containsPropertyWithLogic = properties.any { it.hasLogic() }
                 val containsNonPropertyParameter = klass.extractConstructorNonPropertyParameters().isNotEmpty()
                 val containsOnlyPropertyParameters =
                     containsPropertyOrPropertyParameters && !containsNonPropertyParameter
 
-                if (containsFunctions && !containsDelegatedProperty && containsOnlyPropertyParameters) {
+                if (containsFunctions && !containsPropertyWithLogic && containsOnlyPropertyParameters) {
                     if (allowVars && containsVars) {
                         return
                     }
@@ -143,6 +143,11 @@ class UseDataClass(config: Config) :
             ?.parameters
             ?.filter { !it.isPropertyParameter() }
             .orEmpty()
+
+    // A property that is delegated, has a custom getter (a computed property), or a custom setter with a
+    // body holds logic rather than data, so the class is not a pure data holder. A visibility-only accessor
+    // such as `private set` is intentionally ignored.
+    private fun KtProperty.hasLogic(): Boolean = hasDelegate() || getter != null || setter?.hasBody() == true
 
     private fun KaSession.isDefaultFunction(
         function: KtNamedFunction,

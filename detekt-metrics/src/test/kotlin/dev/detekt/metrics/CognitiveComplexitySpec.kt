@@ -164,6 +164,34 @@ class CognitiveComplexitySpec {
         assertThat(CognitiveComplexity.calculate(code)).isEqualTo(2)
     }
 
+    @Test
+    fun `does not count functions declared inside an object literal`() {
+        val code = compileContentForTest(
+            """
+                fun main() = object {
+                    fun run() { if (true) {} }
+                }
+            """.trimIndent()
+        )
+
+        assertThat(CognitiveComplexity.calculate(code)).isEqualTo(0)
+    }
+
+    @Test
+    fun `does not count functions in an object literal returned from a function`() {
+        val code = compileContentForTest(
+            """
+                fun makeRunnable(): Runnable {
+                    return object : Runnable {
+                        override fun run() { if (true) {} }
+                    }
+                }
+            """.trimIndent()
+        )
+
+        assertThat(CognitiveComplexity.calculate(code)).isEqualTo(0)
+    }
+
     @Nested
     inner class `binary expressions` {
 

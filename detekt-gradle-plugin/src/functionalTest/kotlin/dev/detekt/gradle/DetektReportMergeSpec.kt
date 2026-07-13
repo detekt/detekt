@@ -15,7 +15,7 @@ class DetektReportMergeSpec {
         val buildFileContent = """
             ${builder.gradlePlugins.reIndent()}
             
-            val sarifReportMerge by tasks.registering(dev.detekt.gradle.report.ReportMergeTask::class) {
+            val sarifReportMerge = tasks.register<dev.detekt.gradle.report.ReportMergeTask>("sarifReportMerge") {
                 output.set(project.layout.buildDirectory.file("reports/detekt/merge.sarif"))
             }
             
@@ -87,7 +87,7 @@ class DetektReportMergeSpec {
         val buildFileContent = """
             ${builder.gradlePlugins.reIndent()}
             
-            val checkstyleReportMerge by tasks.registering(dev.detekt.gradle.report.ReportMergeTask::class) {
+            val checkstyleReportMerge = tasks.register<dev.detekt.gradle.report.ReportMergeTask>("checkstyleReportMerge") {
                 output.set(project.layout.buildDirectory.file("reports/detekt/merge.xml"))
             }
             

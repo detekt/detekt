@@ -113,25 +113,22 @@ private class UnusedFunctionVisitor(private val allowedNames: Regex) : DetektVis
                         } else {
                             emptyList()
                         }
-                        val referenceSymbols = (references + referencesViaOperator)
+                        val referencePsis = (references + referencesViaOperator)
                             .mapNotNull {
                                 analyze(it) {
-                                    it.resolveToCall()?.singleFunctionCallOrNull()?.symbol
+                                    val symbol = it.resolveToCall()?.singleFunctionCallOrNull()?.symbol
                                         ?: it.mainReference.resolveToSymbol() as? KaFunctionSymbol
+                                    symbol?.psi
                                 }
                             }
                             .let {
                                 if (functionNameAsName in OperatorNameConventions.DELEGATED_PROPERTY_OPERATORS) {
-                                    it + propertyDelegateSymbols
+                                    it + propertyDelegateSymbols.mapNotNull { symbol -> symbol.psi }
                                 } else {
                                     it
                                 }
                             }
-                        functions.filterNot {
-                            analyze(it) {
-                                it.symbol in referenceSymbols
-                            }
-                        }
+                        functions.filterNot { it in referencePsis }
                     }
 
                     references.isEmpty() -> functions

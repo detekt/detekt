@@ -717,6 +717,40 @@ class UnusedPrivateFunctionSpec(val env: KotlinEnvironmentContainer) {
             """.trimIndent()
             assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
+
+        @Test
+        fun `Does not report used private extension functions on Java classes`() {
+            val code = """
+                import java.io.File
+                
+                class Test {
+                    private fun File.foo() {}
+                    private fun String.foo() {}
+                    
+                    fun bar(files: List<File>, strings: List<String>) {
+                        files.forEach { it.foo() }
+                        strings.forEach { it.foo() }
+                    }
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `Does not report used private overloaded functions referenced via callable reference`() {
+            val code = """
+                class Test {
+                    private fun foo() {}
+                    private fun foo(x: Int) {}
+                    
+                    fun bar() {
+                        val ref1: () -> Unit = ::foo
+                        val ref2: (Int) -> Unit = ::foo
+                    }
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
     }
 
     @Nested

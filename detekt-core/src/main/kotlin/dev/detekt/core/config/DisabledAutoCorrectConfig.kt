@@ -6,7 +6,6 @@ import dev.detekt.core.config.validation.ValidatableConfiguration
 import dev.detekt.core.config.validation.validateConfig
 import dev.detekt.core.util.indentCompat
 
-@Suppress("UNCHECKED_CAST")
 class DisabledAutoCorrectConfig(private val wrapped: Config, override val parent: Config? = null) :
     Config,
     ValidatableConfiguration {
@@ -16,12 +15,14 @@ class DisabledAutoCorrectConfig(private val wrapped: Config, override val parent
     override fun subConfigKeys(): Set<String> = wrapped.subConfigKeys()
 
     override fun <T : Any> valueOrDefault(key: String, default: T): T =
+        @Suppress("UNCHECKED_CAST")
         when (key) {
             Config.AUTO_CORRECT_KEY -> false as T
             else -> wrapped.valueOrDefault(key, default)
         }
 
     override fun <T : Any> valueOrNull(key: String): T? =
+        @Suppress("UNCHECKED_CAST")
         when (key) {
             Config.AUTO_CORRECT_KEY -> false as T
             else -> wrapped.valueOrNull(key)

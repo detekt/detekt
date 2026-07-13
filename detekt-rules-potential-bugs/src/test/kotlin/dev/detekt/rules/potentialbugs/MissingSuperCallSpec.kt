@@ -114,6 +114,35 @@ class MissingSuperCallSpec(private val env: KotlinEnvironmentContainer) {
     }
 
     @Test
+    fun `super super methods has the annotation 2`() {
+        val subject = MissingSuperCall(
+            TestConfig("mustInvokeSuperAnnotations" to listOf("Ann"))
+        )
+
+        val code = """
+            annotation class Ann
+            open class Foo {
+                @Ann
+                open fun x() {}
+            }
+            open class Bar: Foo() {
+                override fun x() {
+                    super.x()
+                    println("Bar")
+                }
+            }
+            class Baz: Bar() {
+                override fun x() {
+                    super.x()
+                    println("Baz")
+                }
+            }
+        """.trimIndent()
+        val actual = subject.lintWithContext(env, code)
+        assertThat(actual).isEmpty()
+    }
+
+    @Test
     fun `super methods has no annotation`() {
         val subject = MissingSuperCall(
             TestConfig("mustInvokeSuperAnnotations" to listOf("Ann"))

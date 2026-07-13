@@ -8,7 +8,6 @@ import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtIfExpression
-import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtSuperExpression
@@ -34,7 +33,7 @@ inline fun <reified T : KtExpression> KtNamedFunction.yieldStatementsSkippingGua
         this@yieldStatementsSkippingGuardClauses.bodyBlockExpression?.statements?.forEach {
             if (firstNonGuardFound) {
                 yield(it)
-            } else if (!it.isGuardClause<T>() && !it.isSuperCall() && !it.isScopedAssignment()) {
+            } else if (!it.isGuardClause<T>() && !it.isSuperCall() && !it.isLocalVariableDeclaration()) {
                 firstNonGuardFound = true
                 yield(it)
             }
@@ -43,8 +42,7 @@ inline fun <reified T : KtExpression> KtNamedFunction.yieldStatementsSkippingGua
 
 fun KtExpression.isSuperCall(): Boolean = (this as? KtDotQualifiedExpression)?.receiverExpression is KtSuperExpression
 
-fun KtExpression.isScopedAssignment(): Boolean =
-    this is KtProperty && !isVar && (initializer as? KtNameReferenceExpression)?.getReferencedName() == name
+fun KtExpression.isLocalVariableDeclaration(): Boolean = this is KtProperty
 
 inline fun <reified T : KtExpression> KtExpression.isGuardClause(): Boolean {
     val descendantExpr = this.findDescendantOfType<T>() ?: return false
