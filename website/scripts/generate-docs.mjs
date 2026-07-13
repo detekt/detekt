@@ -1034,7 +1034,7 @@ function main() {
       .filter(Boolean);
 
     const content = generateFile(provider, rules);
-    const outPath = join(OUTPUT_DIR, `${ruleSetId}.md`);
+    const outPath = join(OUTPUT_DIR, `${ruleSetId}.mdx`);
     writeFileSync(outPath, content, 'utf8');
     console.log(`  Wrote: ${outPath}`);
     generated++;

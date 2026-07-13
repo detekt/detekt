@@ -54,7 +54,7 @@ jobs:
       # mask a missing-output bug.
       - name: Clear generator outputs (for JS run)
         run: |
-          rm -f website/docs/rules/*.md
+          rm -f website/docs/rules/*.mdx
           rm -f website/docs/gettingstarted/_cli-options.mdx
 
       - name: Run JS generator
@@ -64,12 +64,12 @@ jobs:
       - name: Capture JS generator output
         run: |
           mkdir -p "$RUNNER_TEMP/js-output/rules" "$RUNNER_TEMP/js-output/gettingstarted"
-          cp website/docs/rules/*.md "$RUNNER_TEMP/js-output/rules/"
+          cp website/docs/rules/*.mdx "$RUNNER_TEMP/js-output/rules/"
           cp website/docs/gettingstarted/_cli-options.mdx "$RUNNER_TEMP/js-output/gettingstarted/"
 
       - name: Clear generator outputs (for Gradle run)
         run: |
-          rm -f website/docs/rules/*.md
+          rm -f website/docs/rules/*.mdx
           rm -f website/docs/gettingstarted/_cli-options.mdx
 
       - name: Run Gradle generator
