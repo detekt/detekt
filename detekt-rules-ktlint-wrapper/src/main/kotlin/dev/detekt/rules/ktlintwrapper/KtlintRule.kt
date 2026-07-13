@@ -46,7 +46,6 @@ internal abstract class KtlintRule(config: Config, description: String) : Rule(c
     private lateinit var originalFilePath: Path
 
     override fun visit(root: KtFile) {
-        // Reuse the single shared copy of this file instead of re-parsing it for every wrapping.
         val fileCopy = sharedFileCopy(root)
 
         this.root = fileCopy
