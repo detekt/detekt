@@ -15,10 +15,10 @@ class Generator(
     private val textReplacements: Map<String, String>,
     documentationPath: Path?,
     configPath: Path?,
-    private val outPrinter: PrintStream = System.out,
+    private val outPrinter: PrintStream,
 ) {
     private val collector = DetektCollector(textReplacements)
-    private val printer = DetektPrinter(documentationPath, configPath)
+    private val printer = DetektPrinter(documentationPath, configPath, outPrinter)
 
     fun execute() {
         val time = measureTime {
