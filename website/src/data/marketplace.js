@@ -113,6 +113,14 @@ export const extensions = [
     tags: ["ruleset"],
   },
   {
+    title: "detekt-baseline-fragments",
+    description:
+      "Conflict-resistant, hash-addressed baseline fragments for detekt.",
+    repo: "https://github.com/JunggiKim/detekt-baseline-fragments",
+    docs: "https://github.com/JunggiKim/detekt-baseline-fragments#readme",
+    tags: ["plugin"],
+  },
+  {
     title: "Compiler",
     description:
       "A ruleset that wraps the warnings and info messages of the Kotlin compiler as detekt findings..",
