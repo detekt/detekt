@@ -8,7 +8,7 @@ sidebar_position: 9
 The following page describes how to extend detekt and how to customize it to your domain-specific needs.
 The associated **code samples** to this guide can be found in the package [detekt/detekt-sample-extensions](https://github.com/detekt/detekt/tree/main/detekt-sample-extensions).
 
-## Custom RuleSets {#customrulesets}
+## Custom RuleSets {/* #customrulesets */}
 
 _detekt_ uses the `ServiceLoader` pattern to collect all instances of the `RuleSetProvider` interface, making it possible to define rules/rule sets and enhance _detekt_ with your own flavor.
 
@@ -73,7 +73,7 @@ MyRuleSet:
 
 By specifying the rule set and rule IDs, _detekt_ will use the sub-configuration of `TooManyFunctions`.
 
-### Testing custom rules {#testing}
+### Testing custom rules {/* #testing */}
 
 To test your rules, add the `detekt-test` dependency to your project:
 
@@ -179,7 +179,7 @@ assertThat(findings)
     .hasStartSourceLocation(3, 5)
 ```
 
-## Custom Processors {#customprocessors}
+## Custom Processors {/* #customprocessors */}
 
 Custom processors can be used, for example, to implement additional project metrics.
 
@@ -238,7 +238,7 @@ class NumberOfLoopsProcessorTest {
 }
 ```
 
-## Custom Reports {#customreports}
+## Custom Reports {/* #customreports */}
 
 _detekt_ allows you to extend the console output and to create custom output formats.
 If you want to customize the output, take a look at the `ConsoleReport` and `OutputReport` classes.
@@ -249,7 +249,7 @@ Each requires an implementation of the `render()` function, which takes an objec
 abstract fun render(detektion: Detektion): String?
 ```
 
-## Integrating extensions with detekt {#configureextensions}
+## Integrating extensions with detekt {/* #configureextensions */}
 
 So you have implemented your own rules or other extensions and want to integrate them
 into your `detekt` run? Great, make sure to have a `jar` with all your needed dependencies 
