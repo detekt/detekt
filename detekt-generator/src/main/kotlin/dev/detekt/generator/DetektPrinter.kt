@@ -1,7 +1,7 @@
 package dev.detekt.generator
 
 import dev.detekt.generator.collection.RuleSetPage
-import dev.detekt.generator.out.MarkdownWriter
+import dev.detekt.generator.out.MarkdownEnhancedWriter
 import dev.detekt.generator.out.PropertiesWriter
 import dev.detekt.generator.out.YamlWriter
 import dev.detekt.generator.printer.DeprecatedPrinter
@@ -14,14 +14,14 @@ import kotlin.io.path.Path
 
 class DetektPrinter(private val documentationPath: Path?, private val configPath: Path?) {
 
-    private val markdownWriter = MarkdownWriter(System.out)
+    private val markdownEnhancedWriter = MarkdownEnhancedWriter(System.out)
     private val yamlWriter = YamlWriter(System.out)
     private val propertiesWriter = PropertiesWriter(System.out)
 
     fun print(pages: List<RuleSetPage>) {
         if (documentationPath != null) {
             pages.forEach {
-                markdownWriter.write(documentationPath, it.ruleSet.name) {
+                markdownEnhancedWriter.write(documentationPath, it.ruleSet.name) {
                     markdownHeader(it.ruleSet.name) + "\n" + RuleSetPagePrinter.print(it)
                 }
             }
