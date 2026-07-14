@@ -30,10 +30,6 @@ const config = {
     hooks: {
       onBrokenMarkdownLinks: "throw",
     },
-    mdx1Compat: {
-      comments: true,
-      headingIds: true,
-    },
   },
 
   presets: [
