@@ -48,7 +48,7 @@ enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
 buildscript {
     dependencies {
         // https://github.com/autonomousapps/dependency-analysis-gradle-plugin/issues/1661
-        classpath("org.jetbrains.kotlin:kotlin-metadata-jvm:2.4.0")
+        classpath("org.jetbrains.kotlin:kotlin-metadata-jvm:2.4.10")
     }
 }
 
@@ -58,7 +58,7 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
     id("com.autonomousapps.build-health") version "3.16.1"
     // Kotlin plugin must be added to classpath to support build-health analysis
-    id("org.jetbrains.kotlin.jvm") version "2.4.0" apply false
+    id("org.jetbrains.kotlin.jvm") version "2.4.10" apply false
 }
 
 val isCiBuild = providers.environmentVariable("CI").isPresent
