@@ -52,6 +52,11 @@
       "matchPackageNames": ["org.assertj:assertj-core"],
       "matchCurrentValue": "3.27.4",
       "enabled": false
+    },
+    {
+      "description": "loader-utils v3 removed the getOptions() API that file-loader, url-loader and html-webpack-plugin still rely on, so the website build breaks. Keep it pinned to v2 until those loaders migrate.",
+      "matchPackageNames": ["loader-utils"],
+      "allowedVersions": "<3"
     }
   ]
 }
