@@ -19,11 +19,6 @@ const config = {
 
   future: {
     v4: true,
-
-    faster: {
-      rspackBundler: false,
-      rspackPersistentCache: false,
-    },
   },
 
   markdown: {
