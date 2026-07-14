@@ -839,7 +839,7 @@ function parseEnumEntries(src) {
 }
 
 // Mirrors JCommander's DefaultUsageFormatter.wrapDescription so the JS-generated
-// _cli-options.md is byte-identical to the Gradle one. Notable quirks:
+// _cli-options.mdx is byte-identical to the Gradle one. Notable quirks:
 //   * the input is the indent-prefixed string, split on a single space (not
 //     collapsed whitespace), so leading spaces become empty "words";
 //   * when a word is appended to the current line, the trailing space is only
@@ -895,7 +895,7 @@ function scanStringValue(src, i) {
 }
 
 function generateCliOptionsFile() {
-  const CLI_OPTIONS_OUTPUT = join(WEBSITE_DIR, 'docs/gettingstarted/_cli-options.md');
+  const CLI_OPTIONS_OUTPUT = join(WEBSITE_DIR, 'docs/gettingstarted/_cli-options.mdx');
 
   const analysisModeEntries = parseEnumEntries(
     readFileSync(join(ROOT_DIR, 'detekt-tooling/src/main/kotlin/dev/detekt/tooling/api/AnalysisMode.kt'), 'utf8')
@@ -1034,7 +1034,7 @@ function main() {
       .filter(Boolean);
 
     const content = generateFile(provider, rules);
-    const outPath = join(OUTPUT_DIR, `${ruleSetId}.md`);
+    const outPath = join(OUTPUT_DIR, `${ruleSetId}.mdx`);
     writeFileSync(outPath, content, 'utf8');
     console.log(`  Wrote: ${outPath}`);
     generated++;

@@ -16,9 +16,9 @@ internal abstract class AbstractWriter(private val outputPrinter: PrintStream) {
     }
 }
 
-internal class MarkdownWriter(outputPrinter: PrintStream) : AbstractWriter(outputPrinter) {
+internal class MarkdownEnhancedWriter(outputPrinter: PrintStream) : AbstractWriter(outputPrinter) {
 
-    override val ending = "md"
+    override val ending = "mdx"
 }
 
 internal class YamlWriter(outputPrinter: PrintStream) : AbstractWriter(outputPrinter) {

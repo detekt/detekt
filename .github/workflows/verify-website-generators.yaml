@@ -54,8 +54,8 @@ jobs:
       # mask a missing-output bug.
       - name: Clear generator outputs (for JS run)
         run: |
-          rm -f website/docs/rules/*.md
-          rm -f website/docs/gettingstarted/_cli-options.md
+          rm -f website/docs/rules/*.mdx
+          rm -f website/docs/gettingstarted/_cli-options.mdx
 
       - name: Run JS generator
         working-directory: website/
@@ -64,28 +64,28 @@ jobs:
       - name: Capture JS generator output
         run: |
           mkdir -p "$RUNNER_TEMP/js-output/rules" "$RUNNER_TEMP/js-output/gettingstarted"
-          cp website/docs/rules/*.md "$RUNNER_TEMP/js-output/rules/"
-          cp website/docs/gettingstarted/_cli-options.md "$RUNNER_TEMP/js-output/gettingstarted/"
+          cp website/docs/rules/*.mdx "$RUNNER_TEMP/js-output/rules/"
+          cp website/docs/gettingstarted/_cli-options.mdx "$RUNNER_TEMP/js-output/gettingstarted/"
 
       - name: Clear generator outputs (for Gradle run)
         run: |
-          rm -f website/docs/rules/*.md
-          rm -f website/docs/gettingstarted/_cli-options.md
+          rm -f website/docs/rules/*.mdx
+          rm -f website/docs/gettingstarted/_cli-options.mdx
 
       - name: Run Gradle generator
         run: ./gradlew :detekt-generator:generateDocumentation :detekt-generator:generateCliOptions
 
       # JCommander emits the CWD as the `Default:` value for --base-path and
-      # --input, so _cli-options.md leaks the runner's absolute path. Strip
+      # --input, so _cli-options.mdx leaks the runner's absolute path. Strip
       # those lines before diffing so the workflow doesn't flag a difference
       # that only exists because the JS generator runs from a different cwd.
-      - name: Normalise CWD-dependent defaults in _cli-options.md
+      - name: Normalise CWD-dependent defaults in _cli-options.mdx
         run: |
           # Use `|` as the sed address delimiter so the `/` inside the pattern
           # (matching the absolute path) doesn't terminate the address early.
           sed -i -E '\|Default: \[?/[^]]*detekt-generator\]?$|d' \
-            "$RUNNER_TEMP/js-output/gettingstarted/_cli-options.md" \
-            website/docs/gettingstarted/_cli-options.md
+            "$RUNNER_TEMP/js-output/gettingstarted/_cli-options.mdx" \
+            website/docs/gettingstarted/_cli-options.mdx
 
       - name: Diff JS vs Gradle generator output
         id: diff
@@ -95,8 +95,8 @@ jobs:
             --exclude='_category_.json')
           rules_status=$?
           cli_diff=$(diff -uN \
-            "$RUNNER_TEMP/js-output/gettingstarted/_cli-options.md" \
-            website/docs/gettingstarted/_cli-options.md)
+            "$RUNNER_TEMP/js-output/gettingstarted/_cli-options.mdx" \
+            website/docs/gettingstarted/_cli-options.mdx)
           cli_status=$?
 
           if [[ $rules_status -eq 0 && $cli_status -eq 0 ]]; then
@@ -120,7 +120,7 @@ jobs:
               echo
             fi
             if [[ $cli_status -ne 0 ]]; then
-              echo "## Diff in \`website/docs/gettingstarted/_cli-options.md\`"
+              echo "## Diff in \`website/docs/gettingstarted/_cli-options.mdx\`"
               echo
               echo '```diff'
               echo "$cli_diff"
