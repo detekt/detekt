@@ -59,7 +59,7 @@
     "follow-redirects": "^1.15.6",
     "human-signals/ajv": "^8.0.0",
     "mdn-data/ajv": "^8.0.0",
-    "http2-wrapper/ws": "8.21.0",
+    "http2-wrapper/ws": "8.21.1",
     "joi": "^18.0.0",
     "json5": "^2.2.2",
     "loader-utils": "^2.0.3",
@@ -79,8 +79,8 @@
     "svgo": "^4.0.0",
     "terser": "^5.14.2",
     "webpack": "^5.94.0",
-    "webpack-bundle-analyzer/ws": "8.21.0",
+    "webpack-bundle-analyzer/ws": "8.21.1",
     "webpack-dev-server": "^6.0.0",
-    "webpack-dev-server/ws": "8.21.0"
+    "webpack-dev-server/ws": "8.21.1"
   }
 }
