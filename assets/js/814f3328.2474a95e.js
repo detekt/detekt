@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunk_detekt_website=self.webpackChunk_detekt_website||[]).push([["61833"],{55513(e){e.exports=JSON.parse('{"title":"Recent posts","items":[]}')}}]);

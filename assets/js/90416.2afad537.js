@@ -1,1 +1,0 @@
-"use strict";(globalThis.webpackChunk_detekt_website=globalThis.webpackChunk_detekt_website||[]).push([[90416],{90416(e,t,s){s.r(t)}}]);
