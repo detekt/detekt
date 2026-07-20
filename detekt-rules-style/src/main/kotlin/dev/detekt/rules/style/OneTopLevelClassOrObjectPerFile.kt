@@ -12,6 +12,10 @@ import org.jetbrains.kotlin.psi.KtFile
  * Top-level functions and properties do not count toward this limit. Nested classes, interfaces, objects,
  * companion objects, and local classes are ignored.
  *
+ * Note: This rule is stricter than Kotlin's official coding conventions, which encourage placing multiple
+ * declarations (classes, top-level functions, or properties) in the same source file. This rule is disabled
+ * by default. See https://kotlinlang.org/docs/coding-conventions.html#source-file-organization
+ *
  * <noncompliant>
  * class User
  *
