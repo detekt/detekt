@@ -714,6 +714,17 @@ class UnusedPrivatePropertySpec(val env: KotlinEnvironmentContainer) {
         }
 
         @Test
+        fun `should report when the parameter is used but not the property`() {
+            val code = """
+                class Foo(private val text: String) {
+                    val count2: Int = text.length
+                }
+            """.trimIndent()
+            val findings = subject.lintWithContext(env, code)
+            assertThat(findings).hasSize(1)
+        }
+
+        @Test
         fun `does not report private property used in function`() {
             val code = """
                 class Test(private val used: Any) {

@@ -181,14 +181,46 @@ private class UnusedPrivatePropertyVisitor(private val allowedNames: Regex) : De
 
             references
                 .filter { it.isPrivateProperty() || it.isConstructorParameter() }
-                .forEach {
-                    val psi = it.psi ?: return@forEach
-                    when {
-                        psi is KtProperty && psi.isTopLevel -> usedTopLevelProperties.add(psi)
-                        psi is KtProperty || (psi is KtParameter && psi.hasValOrVar()) -> usedClassProperties.add(psi)
-                        else -> usedConstructorParameters.add(psi)
-                    }
-                }
+                .forEach { registerUsage(expression, it.psi ?: return@forEach) }
+        }
+    }
+
+    private fun registerUsage(expression: KtReferenceExpression, psi: PsiElement) {
+        when {
+            psi is KtProperty && psi.isTopLevel -> usedTopLevelProperties.add(psi)
+
+            // A usage of a constructor property from a property initializer of
+            // the same class reads the constructor parameter, not the backing
+            // field, so it justifies the PARAMETER and not the property (#9467).
+            psi is KtParameter && psi.hasValOrVar() &&
+                expression.isInSameClassPropertyInitializer(psi) ->
+                usedConstructorParameters.add(psi)
+
+            psi is KtProperty || (psi is KtParameter && psi.hasValOrVar()) -> usedClassProperties.add(psi)
+
+            else -> usedConstructorParameters.add(psi)
+        }
+    }
+
+    // A reference to a constructor property from a property initializer of the
+    // SAME class reads the constructor parameter, not the backing field — the
+    // initializer runs during construction, where a plain (non-val) parameter
+    // would serve identically. Such a usage therefore justifies the constructor
+    // PARAMETER, never the property; crediting it to the property hid
+    // constructor properties whose only usages are initializers (#9467).
+    // Usages anywhere else (member bodies, accessors, init blocks, super-call
+    // arguments, other classes) keep crediting the property. A local property's
+    // initializer is NOT construction scope, so the walk stops crediting the
+    // parameter at the first non-matching property boundary.
+    private fun KtReferenceExpression.isInSameClassPropertyInitializer(parameter: KtParameter): Boolean {
+        val parameterClass = parameter.containingClassOrObject ?: return false
+        var node: PsiElement = this
+        while (true) {
+            val parent = node.parent ?: return false
+            if (parent is KtProperty && parent.initializer === node) {
+                return !parent.isLocal && parent.containingClassOrObject === parameterClass
+            }
+            node = parent
         }
     }
 
