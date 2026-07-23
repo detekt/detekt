@@ -13,6 +13,8 @@ import dev.detekt.utils.paragraph
 
 internal object RulePrinter : DocumentationPrinter<Rule> {
 
+    private val javaAutolinkRegex = Regex("""\[((?:java|javax)\.[\w.]+)](?!\()""")
+
     override fun print(item: Rule): String =
         markdown {
             if (item.isDeprecated()) {
@@ -23,7 +25,7 @@ internal object RulePrinter : DocumentationPrinter<Rule> {
             }
 
             if (item.description.isNotEmpty()) {
-                paragraph { item.description }
+                paragraph { item.description.withJavadocLinks() }
             } else {
                 paragraph { "TODO: Specify description" }
             }
@@ -48,6 +50,41 @@ internal object RulePrinter : DocumentationPrinter<Rule> {
             markdown { ConfigurationsPrinter.print(item.configurations) }
 
             printRuleCodeExamples(item)
+        }
+
+    // KDoc autolinks to Java types (e.g. `[java.util.Locale]`) resolve nowhere in
+    // the rendered markdown — without a target they reach the website as literal
+    // bracketed text (#9533). Rewrite them as links to the Java SE API docs, using
+    // the module-less javase/8 URL scheme the docs already use elsewhere. Segment
+    // heuristic: lowercase segments are packages; the first capitalized segment
+    // starts the class chain; following CamelCase segments are nested classes;
+    // anything after that (ALL_CAPS constants, lowercase members) becomes the
+    // anchor. A pure package reference has nothing stable to link to and is left
+    // untouched, as are regular `[text](url)` markdown links (lookahead).
+    private fun String.withJavadocLinks(): String =
+        javaAutolinkRegex.replace(this) { match ->
+            val reference = match.groupValues[1]
+            val segments = reference.split('.')
+            val classIndex = segments.indexOfFirst { it.first().isUpperCase() }
+            if (classIndex == -1) {
+                match.value
+            } else {
+                val packagePath = segments.take(classIndex).joinToString("/")
+                val classChain = mutableListOf(segments[classIndex])
+                var next = classIndex + 1
+                while (next < segments.size &&
+                    segments[next].first().isUpperCase() &&
+                    segments[next] != segments[next].uppercase()
+                ) {
+                    classChain += segments[next]
+                    next++
+                }
+                val anchor = segments.drop(next).joinToString(".")
+                    .let { if (it.isEmpty()) "" else "#$it" }
+                val url = "https://docs.oracle.com/javase/8/docs/api/" +
+                    "$packagePath/${classChain.joinToString(".")}.html$anchor"
+                "[`$reference`]($url)"
+            }
         }
 
     private fun MarkdownContent.printRuleCodeExamples(rule: Rule) {
