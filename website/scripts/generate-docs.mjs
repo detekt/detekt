@@ -710,6 +710,38 @@ function crossOut(text) { return `~~${text}~~`; }
 function code(text) { return `\`\`${text}\`\``; }
 function codeBlock(content) { return `\`\`\`kotlin\n${content}\n\`\`\``; }
 
+// KDoc autolinks to Java types (e.g. `[java.util.Locale]`) resolve nowhere in
+// the rendered markdown — without a target they reach the website as literal
+// bracketed text (#9533). Rewrite them as links to the Java SE API docs, using
+// the module-less javase/8 URL scheme the docs already use elsewhere. Mirrors
+// RulePrinter.kt's withJavadocLinks exactly, so both website generators stay
+// byte-identical (verify-generators-parity CI job).
+const JAVA_AUTOLINK_REGEX = /\[((?:java|javax)\.[\w.]+)\](?!\()/g;
+
+function withJavadocLinks(text) {
+  return text.replace(JAVA_AUTOLINK_REGEX, (match, reference) => {
+    const segments = reference.split('.');
+    const classIndex = segments.findIndex(s => /[A-Z]/.test(s[0]));
+    if (classIndex === -1) return match;
+
+    const packagePath = segments.slice(0, classIndex).join('/');
+    const classChain = [segments[classIndex]];
+    let next = classIndex + 1;
+    while (
+      next < segments.length &&
+      /[A-Z]/.test(segments[next][0]) &&
+      segments[next] !== segments[next].toUpperCase()
+    ) {
+      classChain.push(segments[next]);
+      next++;
+    }
+    const anchorSegments = segments.slice(next).join('.');
+    const anchor = anchorSegments ? `#${anchorSegments}` : '';
+    const url = `https://docs.oracle.com/javase/8/docs/api/${packagePath}/${classChain.join('.')}.html${anchor}`;
+    return `[\`${reference}\`](${url})`;
+  });
+}
+
 function printConfigurations(configs) {
   if (!configs.length) return '';
   const md = new MarkdownBuilder();
@@ -748,7 +780,7 @@ function printRule(rule) {
   }
 
   if (rule.description) {
-    md.paragraph(rule.description);
+    md.paragraph(withJavadocLinks(rule.description));
   } else {
     md.paragraph('TODO: Specify description');
   }
