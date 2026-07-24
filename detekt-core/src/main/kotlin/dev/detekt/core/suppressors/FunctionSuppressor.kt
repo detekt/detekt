@@ -36,7 +36,7 @@ private fun functionSuppressor(
     element: KtElement,
     functionMatchers: List<FunctionMatcher>,
     analysisMode: AnalysisMode,
-): Boolean = element.isInFunctionNamed(functionMatchers, analysisMode == AnalysisMode.full)
+): Boolean = element.isInFunctionNamed(functionMatchers, analysisMode == AnalysisMode.Full)
 
 private fun KtElement.isInFunctionNamed(functionMatchers: List<FunctionMatcher>, fullAnalysis: Boolean): Boolean =
     if (this is KtNamedFunction && functionMatchers.any { it.match(this, fullAnalysis) }) {
