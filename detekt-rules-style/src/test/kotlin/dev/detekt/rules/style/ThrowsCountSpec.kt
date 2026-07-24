@@ -208,6 +208,33 @@ class ThrowsCountSpec {
     }
 
     @Nested
+    inner class `guard clauses interleaved with local variable declarations` {
+        val codeWithGuardClause = """
+            fun test(a: Int?, b: Int?): Int {
+                val first = a.toString()
+                if (a == null) throw IllegalArgumentException()
+                val second = b.toString()
+                if (b == null) throw IllegalArgumentException()
+                throw IllegalStateException(first + second)
+            }
+        """.trimIndent()
+
+        @Test
+        fun `should not count guard clauses that follow local variable declarations`() {
+            val config = TestConfig(EXCLUDE_GUARD_CLAUSES to true)
+            val subject = ThrowsCount(config)
+            assertThat(subject.lint(codeWithGuardClause)).isEmpty()
+        }
+
+        @Test
+        fun `should count the throws when the guard clause option is disabled`() {
+            val config = TestConfig(EXCLUDE_GUARD_CLAUSES to false)
+            val subject = ThrowsCount(config)
+            assertThat(subject.lint(codeWithGuardClause)).hasSize(1)
+        }
+    }
+
+    @Nested
     inner class `reports a too-complicated if statement for being a guard clause` {
         val codeWithIfCondition = """
             fun test(x: Int): Int {

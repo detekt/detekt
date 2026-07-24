@@ -49,6 +49,41 @@ internal class RulePrinterTest {
             val actual = RulePrinter.print(rule)
             assertThat(actual).contains("The return type is `Array<String>`")
         }
+
+        @Test
+        fun `renders a KDoc autolink to a Java class as a Javadoc link`() {
+            val rule = ruleTemplate.copy(description = "Prefer passing [java.util.Locale] explicitly.")
+            val actual = RulePrinter.print(rule)
+            assertThat(actual).contains(
+                "Prefer passing [`java.util.Locale`](https://docs.oracle.com/javase/8/docs/api/java/util/Locale.html) explicitly."
+            )
+        }
+
+        @Test
+        fun `renders a KDoc autolink to a Java class member with an anchor`() {
+            val rule = ruleTemplate.copy(description = "[java.util.Locale.US] is recommended.")
+            val actual = RulePrinter.print(rule)
+            assertThat(actual).contains(
+                "[`java.util.Locale.US`](https://docs.oracle.com/javase/8/docs/api/java/util/Locale.html#US) is recommended."
+            )
+        }
+
+        @Test
+        fun `renders a KDoc autolink to a nested Java class`() {
+            val rule = ruleTemplate.copy(description = "See [java.util.Map.Entry] for details.")
+            val actual = RulePrinter.print(rule)
+            assertThat(actual).contains(
+                "See [`java.util.Map.Entry`](https://docs.oracle.com/javase/8/docs/api/java/util/Map.Entry.html) for details."
+            )
+        }
+
+        @Test
+        fun `keeps regular markdown links and non-Java autolinks untouched`() {
+            val description = "See [the docs](https://example.org) and [kotlin.String] and [java.util]."
+            val rule = ruleTemplate.copy(description = description)
+            val actual = RulePrinter.print(rule)
+            assertThat(actual).contains(description)
+        }
     }
 
     @Nested

@@ -12,17 +12,14 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
 plugins {
     id("module")
+    id("public-api")
     id("java-gradle-plugin")
     id("java-test-fixtures")
     id("idea")
     id("com.gradle.plugin-publish") version "2.1.1"
     // We use this published version of the detekt plugin to self analyse this project.
     id("dev.detekt") version "2.0.0-alpha.3"
-    id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.18.1"
-    id("org.jetbrains.dokka") version "2.2.0"
-    id("signing")
     id("com.github.gmazzo.buildconfig") version "6.0.10"
-    id("io.github.gradle-nexus.publish-plugin") version "2.0.0"
 }
 
 group = "dev.detekt"
@@ -34,17 +31,6 @@ buildConfig {
     buildConfigField("KOTLIN_IMPLEMENTATION_VERSION", libs.versions.kotlin.get())
 }
 
-nexusPublishing {
-    repositories {
-        create("sonatype") {
-            nexusUrl = uri("https://ossrh-staging-api.central.sonatype.com/service/local/")
-            snapshotRepositoryUrl = uri("https://central.sonatype.com/repository/maven-snapshots/")
-            username = providers.environmentVariable("ORG_GRADLE_PROJECT_SONATYPE_USERNAME")
-            password = providers.environmentVariable("ORG_GRADLE_PROJECT_SONATYPE_PASSWORD")
-        }
-    }
-}
-
 detekt {
     source.from("src/functionalTest/kotlin")
     buildUponDefaultConfig = true
@@ -53,10 +39,6 @@ detekt {
 }
 
 dokka {
-    dokkaPublications.configureEach {
-        failOnWarning = true
-    }
-
     dokkaSourceSets.configureEach {
         apiVersion = "1.4"
 
@@ -143,10 +125,23 @@ val testKitGradleMinVersionRuntimeOnly = configurations.register("testKitGradleM
 dependencies {
     compileOnly(libs.android.gradleApi)
     compileOnly(libs.kotlin.gradlePluginApi)
-    compileOnlyApi(libs.gradle.publicApi) {
-        capabilities {
-            // https://github.com/gradle/gradle/issues/29483#issuecomment-2791668178
-            requireCapability("org.gradle.experimental:gradle-public-api-internal")
+
+    // gradle-public-api is consumed compile-only across every source set: production code,
+    // tests, fixtures, and functional tests all rely on Gradle types provided by the runtime
+    // (the user's Gradle distribution or the embedded TestKit). compileOnly keeps it out of
+    // the published POM (compileOnlyApi would re-add it as a compile-scope dep). See #9396.
+    listOf(
+        "compileOnly",
+        "testCompileOnly",
+        "testFixturesCompileOnly",
+        "functionalTestCompileOnly",
+        "functionalTestMinSupportedGradleCompileOnly",
+    ).forEach { configurationName ->
+        configurationName(libs.gradle.publicApi) {
+            capabilities {
+                // https://github.com/gradle/gradle/issues/29483#issuecomment-2791668178
+                requireCapability("org.gradle.experimental:gradle-public-api-internal")
+            }
         }
     }
 
@@ -201,20 +196,6 @@ gradlePlugin {
         sourceSets["functionalTest"],
         sourceSets["functionalTestMinSupportedGradle"],
     )
-}
-
-signing {
-    val signingKey = providers.gradleProperty("SIGNING_KEY").orNull
-    val signingPwd = providers.gradleProperty("SIGNING_PWD").orNull
-    if (signingKey.isNullOrBlank() || signingPwd.isNullOrBlank()) {
-        logger.info("Signing disabled as the GPG key was not found")
-    } else {
-        logger.info("GPG Key found - Signing enabled")
-    }
-
-    useInMemoryPgpKeys(signingKey, signingPwd)
-    sign(publishing.publications)
-    isRequired = !(signingKey.isNullOrBlank() || signingPwd.isNullOrBlank())
 }
 
 tasks {

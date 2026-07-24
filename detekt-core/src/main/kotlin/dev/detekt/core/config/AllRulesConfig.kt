@@ -6,7 +6,6 @@ import dev.detekt.core.config.validation.ValidatableConfiguration
 import dev.detekt.core.config.validation.validateConfig
 import dev.detekt.core.util.indentCompat
 
-@Suppress("UNCHECKED_CAST")
 internal data class AllRulesConfig(
     private val wrapped: Config,
     private val deprecatedRules: Set<DeprecatedRule>,
@@ -19,12 +18,14 @@ internal data class AllRulesConfig(
     override fun subConfigKeys(): Set<String> = wrapped.subConfigKeys()
 
     override fun <T : Any> valueOrDefault(key: String, default: T): T =
+        @Suppress("UNCHECKED_CAST")
         when (key) {
             Config.ACTIVE_KEY -> if (isDeprecated()) false as T else wrapped.valueOrDefault(key, true) as T
             else -> wrapped.valueOrDefault(key, default)
         }
 
     override fun <T : Any> valueOrNull(key: String): T? =
+        @Suppress("UNCHECKED_CAST")
         when (key) {
             Config.ACTIVE_KEY -> if (isDeprecated()) false as T else wrapped.valueOrNull(key) ?: true as? T
             else -> wrapped.valueOrNull(key)

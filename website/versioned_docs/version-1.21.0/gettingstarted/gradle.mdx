@@ -8,7 +8,7 @@ summary:
 sidebar_position: 2
 ---
 
-Detekt requires **Gradle 6.1** or higher. We, however, recommend using the version of Gradle that is [listed in this table](../introduction/compatibility.md).
+Detekt requires **Gradle 6.1** or higher. We, however, recommend using the version of Gradle that is [listed in this table](../introduction/compatibility.mdx).
 
 ## <a name="tasks">Available plugin tasks</a>
 
@@ -26,7 +26,7 @@ The Detekt Gradle Plugin will generate multiple tasks:
 - `detektBaseline` - Similar to `detekt`, but creates a code smell baseline. Further detekt runs will only feature new smells not in this list.
 
 In addition to these standard tasks, the plugin will also generate a set of experimental tasks that have
-[type resolution](type-resolution.md) enabled. This happens for both, pure JVM projects and Android projects that have
+[type resolution](type-resolution.mdx) enabled. This happens for both, pure JVM projects and Android projects that have
 the Android Gradle Plugin applied:
 
 - `detektMain` - Similar to `detekt`, but runs only on the `main` source set
@@ -331,7 +331,7 @@ tasks.named("detekt").configure {
 Type resolution is experimental and works only for [predefined tasks listed above](#available-plugin-tasks)
 or when implementing a custom detekt task with the `classpath` and `jvmTarget` properties present.
 
-More information on type resolution are available on the [type resolution](type-resolution.md) page.
+More information on type resolution are available on the [type resolution](type-resolution.mdx) page.
 
 #### Groovy DSL
 

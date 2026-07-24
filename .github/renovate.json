@@ -12,6 +12,7 @@
   ],
   "extends": [
     "config:recommended",
+    ":maintainLockFilesWeekly",
     "helpers:pinGitHubActionDigests"
   ],
   "packageRules": [

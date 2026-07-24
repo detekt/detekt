@@ -71,8 +71,10 @@ class MissingSuperCall(config: Config) :
                 it.annotations.any { ann -> ann.classId?.asSingleFqName() in mustInvokeSuperAnnotations }
             }?.callableId ?: return
 
-            val hasSuperCall = function.anyDescendantOfType<KtQualifiedExpression> {
-                it.resolveToCall()?.singleFunctionCallOrNull()?.symbol?.callableId == superFunctionId
+            val hasSuperCall = function.anyDescendantOfType<KtQualifiedExpression> { expression ->
+                val symbol = expression.resolveToCall()?.singleFunctionCallOrNull()?.symbol
+                    ?: return@anyDescendantOfType false
+                (symbol.allOverriddenSymbols + symbol).any { it.callableId == superFunctionId }
             }
 
             if (!hasSuperCall) {
