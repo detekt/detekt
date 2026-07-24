@@ -4,8 +4,14 @@ plugins {
 
 reporting {
     reports {
-        create("jacocoMergedReport", JacocoCoverageReport::class) {
+        create<JacocoCoverageReport>("jacocoMergedTestReport") {
             testSuiteName = "test"
+            reportTask {
+                dependsOn(":detekt-generator:generateDocumentation")
+            }
+        }
+        create<JacocoCoverageReport>("jacocoMergedFunctionalTestReport") {
+            testSuiteName = "functionalTest"
             reportTask {
                 dependsOn(":detekt-generator:generateDocumentation")
             }
@@ -16,6 +22,7 @@ reporting {
 jacoco.toolVersion = libs.versions.jacoco.get()
 
 dependencies {
+    jacocoAggregation("dev.detekt:detekt-gradle-plugin")
     jacocoAggregation(projects.detektApi)
     jacocoAggregation(projects.detektCli)
     jacocoAggregation(projects.detektCompilerPlugin)
