@@ -24,6 +24,9 @@ internal class ClassSignature(config: Config) :
 
     override val wrapping = ClassSignatureRule()
 
+    @Configuration("parameter count means multiline threshold")
+    private val forceMultilineWhenParameterCountGreaterOrEqualThan by config("unset")
+
     @Configuration("indentation size")
     private val indentSize by config(4)
 
@@ -32,8 +35,9 @@ internal class ClassSignature(config: Config) :
 
     override fun overrideEditorConfigProperties(): Map<EditorConfigProperty<*>, String> =
         mapOf(
+            FORCE_MULTILINE_WHEN_PARAMETER_COUNT_GREATER_OR_EQUAL_THAN_PROPERTY to
+                forceMultilineWhenParameterCountGreaterOrEqualThan,
             INDENT_SIZE_PROPERTY to indentSize.toString(),
             MAX_LINE_LENGTH_PROPERTY to maxLineLength.toString(),
-            FORCE_MULTILINE_WHEN_PARAMETER_COUNT_GREATER_OR_EQUAL_THAN_PROPERTY to "unset",
         )
 }
