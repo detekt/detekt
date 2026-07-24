@@ -41,6 +41,7 @@ import org.gradle.api.tasks.IgnoreEmptyDirectories
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Internal
+import org.gradle.api.tasks.Nested
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.PathSensitive
@@ -50,6 +51,7 @@ import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.gradle.workers.WorkerExecutor
+import org.jetbrains.kotlin.gradle.plugin.CompilerPluginConfig
 import javax.inject.Inject
 
 @CacheableTask
@@ -114,6 +116,12 @@ abstract class DetektCreateBaselineTask @Inject constructor(
 
     @get:Input
     abstract val multiPlatformEnabled: Property<Boolean>
+
+    @get:Classpath
+    abstract val kotlinPluginClasspath: ConfigurableFileCollection
+
+    @get:Nested
+    abstract val pluginOptions: ListProperty<CompilerPluginConfig>
 
     @get:Input
     @get:Optional
