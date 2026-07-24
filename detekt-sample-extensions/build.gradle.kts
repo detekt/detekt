@@ -3,9 +3,9 @@ plugins {
 }
 
 dependencies {
-    compileOnly("dev.detekt:detekt-api:2.0.0-alpha.3")
-    testImplementation("dev.detekt:detekt-test:2.0.0-alpha.3")
-    testImplementation("dev.detekt:detekt-test-assertj:2.0.0-alpha.3")
+    compileOnly("dev.detekt:detekt-api:2.0.0-alpha.5")
+    testImplementation("dev.detekt:detekt-test:2.0.0-alpha.5")
+    testImplementation("dev.detekt:detekt-test-assertj:2.0.0-alpha.5")
     testImplementation("org.assertj:assertj-core:3.27.7")
 }
 
