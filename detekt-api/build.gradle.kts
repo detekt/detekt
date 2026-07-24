@@ -39,15 +39,6 @@ tasks {
     }
 }
 
-val javaComponent = components["java"] as AdhocComponentWithVariants
-listOf(configurations.testFixturesApiElements, configurations.testFixturesRuntimeElements).forEach { config ->
-    config.configure {
-        javaComponent.withVariantsFromConfiguration(this) {
-            skip()
-        }
-    }
-}
-
 kotlin {
     @OptIn(org.jetbrains.kotlin.gradle.dsl.abi.ExperimentalAbiValidation::class)
     abiValidation {
