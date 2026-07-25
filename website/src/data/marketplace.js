@@ -239,7 +239,7 @@ export const extensions = [
     ],
     usesTypeResolution: true,
     tags: ["ruleset"],
-   },
+  },
   {
     title: "detekt-rules-koin",
     description:
