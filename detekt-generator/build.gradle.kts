@@ -1,7 +1,7 @@
 import java.io.ByteArrayOutputStream
 
 plugins {
-    id("com.gradleup.shadow") version "9.4.2"
+    id("com.gradleup.shadow") version "9.6.1"
     id("module")
     id("application")
 }
@@ -34,7 +34,7 @@ val generateCliOptions = tasks.register<JavaExec>("generateCliOptions") {
     mainClass = "dev.detekt.cli.Main"
     args = listOf("--help")
 
-    val cliOptionsOutput = isolated.rootProject.projectDirectory.file("website/docs/gettingstarted/_cli-options.md")
+    val cliOptionsOutput = isolated.rootProject.projectDirectory.file("website/docs/gettingstarted/_cli-options.mdx")
     outputs.file(cliOptionsOutput)
     doFirst {
         standardOutput = ByteArrayOutputStream()

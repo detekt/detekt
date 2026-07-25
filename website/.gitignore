@@ -20,6 +20,6 @@ yarn-debug.log*
 yarn-error.log*
 
 # Avoid committing generated documentation to the repo
-/docs/rules/*.md
-/docs/gettingstarted/_cli-options.md
+/docs/rules/*.mdx
+/docs/gettingstarted/_cli-options.mdx
 /static/kdoc

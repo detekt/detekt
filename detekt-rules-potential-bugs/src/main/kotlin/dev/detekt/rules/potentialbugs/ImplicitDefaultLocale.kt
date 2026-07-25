@@ -24,18 +24,16 @@ import org.jetbrains.kotlin.resolve.calls.util.getCalleeExpressionIfAny
  * The default locale is almost always inappropriate for machine-readable text like HTTP headers.
  * For example, if locale with tag `ar-SA-u-nu-arab` is a current default then `%d` placeholders
  * will be evaluated to a number consisting of Eastern-Arabic (non-ASCII) digits.
- * [java.util.Locale.US] is recommended for machine-readable output.
+ * [java.util.Locale.ROOT] is recommended for machine-readable output.
  *
  * <noncompliant>
  * String.format("Timestamp: %d", System.currentTimeMillis())
  * "Timestamp: %d".format(System.currentTimeMillis())
- *
  * </noncompliant>
  *
  * <compliant>
- * String.format(Locale.US, "Timestamp: %d", System.currentTimeMillis())
- * "Timestamp: %d".format(Locale.US, System.currentTimeMillis())
- *
+ * String.format(Locale.ROOT, "Timestamp: %d", System.currentTimeMillis())
+ * "Timestamp: %d".format(Locale.ROOT, System.currentTimeMillis())
  * </compliant>
  */
 @ActiveByDefault(since = "1.16.0")

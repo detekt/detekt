@@ -1,6 +1,5 @@
 package dev.detekt.core.reporting
 
-import dev.detekt.api.testfixtures.TestDetektion
 import dev.detekt.api.testfixtures.createIssue
 import dev.detekt.api.testfixtures.createIssueEntity
 import dev.detekt.api.testfixtures.createIssueLocation
@@ -11,6 +10,7 @@ import dev.detekt.report.html.HtmlOutputReport
 import dev.detekt.report.markdown.MarkdownOutputReport
 import dev.detekt.report.sarif.SarifOutputReport
 import dev.detekt.report.xml.CheckstyleOutputReport
+import dev.detekt.test.TestDetektion
 import dev.detekt.test.utils.StringPrintStream
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode

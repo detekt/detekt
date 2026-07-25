@@ -2,18 +2,6 @@ import org.semver4j.Semver
 
 plugins {
     id("com.github.breadmoirai.github-release")
-    id("io.github.gradle-nexus.publish-plugin")
-}
-
-nexusPublishing {
-    repositories {
-        create("sonatype") {
-            nexusUrl = uri("https://ossrh-staging-api.central.sonatype.com/service/local/")
-            snapshotRepositoryUrl = uri("https://central.sonatype.com/repository/maven-snapshots/")
-            username = providers.environmentVariable("ORG_GRADLE_PROJECT_SONATYPE_USERNAME")
-            password = providers.environmentVariable("ORG_GRADLE_PROJECT_SONATYPE_PASSWORD")
-        }
-    }
 }
 
 val releaseArtifacts = configurations.dependencyScope("releaseArtifacts")
@@ -29,7 +17,6 @@ githubRelease {
     repo = "detekt"
     overwrite = true
     dryRun = false
-    draft = true
     prerelease = true
     targetCommitish = "main"
     body = "Detekt Release Body"
@@ -105,15 +92,12 @@ tasks.register("publishToMavenLocal") {
     dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":publishToMavenLocal"))
 }
 
-tasks.register("publishToSonatype") {
-    description = "Publish included builds to Sonatype"
-    dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":publishToSonatype"))
+tasks.register("publishToMavenCentral") {
+    description = "Publish included builds to Maven Central"
+    dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":publishToMavenCentral"))
 }
 
-tasks.named("closeSonatypeStagingRepository").configure {
-    dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":closeSonatypeStagingRepository"))
-}
-
-tasks.named("releaseSonatypeStagingRepository").configure {
-    dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":releaseSonatypeStagingRepository"))
+tasks.register("publishAndReleaseToMavenCentral") {
+    description = "Publish and release included builds to Maven Central"
+    dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":publishAndReleaseToMavenCentral"))
 }

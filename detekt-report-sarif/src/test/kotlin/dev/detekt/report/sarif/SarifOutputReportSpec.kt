@@ -3,11 +3,11 @@ package dev.detekt.report.sarif
 import dev.detekt.api.RuleInstance
 import dev.detekt.api.RuleSetId
 import dev.detekt.api.Severity
-import dev.detekt.api.testfixtures.TestDetektion
 import dev.detekt.api.testfixtures.TestSetupContext
 import dev.detekt.api.testfixtures.createIssue
 import dev.detekt.api.testfixtures.createIssueEntity
 import dev.detekt.api.testfixtures.createIssueLocation
+import dev.detekt.test.TestDetektion
 import dev.detekt.test.utils.readResourceContent
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

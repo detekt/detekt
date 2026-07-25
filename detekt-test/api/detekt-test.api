@@ -38,3 +38,8 @@ public final class dev/detekt/test/TestConfigKt {
 	public static final fun toConfig (Ldev/detekt/api/ValueWithReason;)Ljava/util/Map;
 }
 
+public final class dev/detekt/test/TestDetektionKt {
+	public static final fun TestDetektion ([Ldev/detekt/api/Issue;Ljava/util/List;Ljava/util/List;Ljava/util/List;Ljava/util/Map;)Ldev/detekt/api/Detektion;
+	public static synthetic fun TestDetektion$default ([Ldev/detekt/api/Issue;Ljava/util/List;Ljava/util/List;Ljava/util/List;Ljava/util/Map;ILjava/lang/Object;)Ldev/detekt/api/Detektion;
+}
+

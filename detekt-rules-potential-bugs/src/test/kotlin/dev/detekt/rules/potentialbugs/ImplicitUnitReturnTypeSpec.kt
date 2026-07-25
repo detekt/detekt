@@ -65,4 +65,71 @@ class ImplicitUnitReturnTypeSpec(private val env: KotlinEnvironmentContainer) {
         val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
     }
+
+    @Test
+    fun `does not report non-public functions`() {
+        val code = """
+            private fun privateUnit() = println("Hello Unit")
+            internal fun internalUnit() = println("Hello Unit")
+        """.trimIndent()
+
+        val findings = subject.lintWithContext(env, code)
+
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `reports protected functions`() {
+        val code = """
+            open class C {
+                protected fun protectedUnit() = println("Hello Unit")
+            }
+        """.trimIndent()
+
+        val findings = subject.lintWithContext(env, code)
+
+        assertThat(findings).hasSize(1)
+    }
+
+    @Test
+    fun `does not report local functions`() {
+        val code = """
+            fun outer() {
+                fun localUnit() = println("Hello Unit")
+            }
+        """.trimIndent()
+
+        val findings = subject.lintWithContext(env, code)
+
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `reports public overrides`() {
+        val code = """
+            open class Base {
+                open fun base(): Unit = println("Hello Unit")
+            }
+            class Derived : Base() {
+                override fun base() = println("Hello Unit")
+            }
+        """.trimIndent()
+
+        val findings = subject.lintWithContext(env, code)
+
+        assertThat(findings).hasSize(1)
+    }
+
+    @Test
+    fun `does not report public members of private classes`() {
+        val code = """
+            private class Hidden {
+                fun publicButHidden() = println("Hello Unit")
+            }
+        """.trimIndent()
+
+        val findings = subject.lintWithContext(env, code)
+
+        assertThat(findings).isEmpty()
+    }
 }

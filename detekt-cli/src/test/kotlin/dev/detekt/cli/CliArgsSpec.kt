@@ -368,29 +368,47 @@ internal class CliArgsSpec {
         }
 
         @Test
-        fun `--api-version is accepted`() {
-            val spec = parseArguments(arrayOf("--api-version", "1.9")).toSpec()
-            assertThat(spec.compilerSpec.apiVersion).isEqualTo("1.9")
+        fun `supported --api-version is accepted`() {
+            val spec = parseArguments(arrayOf("--api-version", "2.5")).toSpec()
+            assertThat(spec.compilerSpec.apiVersion).isEqualTo("2.5")
+        }
+
+        @Test
+        fun `unsupported --api-version returns error message`() {
+            assertThatIllegalArgumentException()
+                .isThrownBy { parseArguments(arrayOf("--api-version", "1.9")) }
+                .withMessageStartingWith("\"1.9\" passed to --api-version, expected one of [2.0, 2.1, 2.2, 2.3, 2.4, ")
         }
 
         @Test
         fun `invalid --api-version returns error message`() {
             assertThatIllegalArgumentException()
-                .isThrownBy { parseArguments(arrayOf("--api-version", "0.1")) }
-                .withMessageStartingWith("\"0.1\" passed to --api-version, expected one of [1.0, 1.1, 1.2, 1.3, 1.4, ")
+                .isThrownBy { parseArguments(arrayOf("--api-version", "x")) }
+                .withMessageStartingWith("\"x\" passed to --api-version, expected one of [2.0, 2.1, 2.2, 2.3, 2.4, ")
         }
 
         @Test
-        fun `--language-version is accepted`() {
-            val spec = parseArguments(arrayOf("--language-version", "1.6")).toSpec()
-            assertThat(spec.compilerSpec.languageVersion).isEqualTo("1.6")
+        fun `supported --language-version is accepted`() {
+            val spec = parseArguments(arrayOf("--language-version", "2.5")).toSpec()
+            assertThat(spec.compilerSpec.languageVersion).isEqualTo("2.5")
+        }
+
+        @Test
+        fun `unsupported --language-version returns error message`() {
+            assertThatIllegalArgumentException()
+                .isThrownBy { parseArguments(arrayOf("--language-version", "1.9")) }
+                .withMessageStartingWith(
+                    "\"1.9\" passed to --language-version, expected one of [2.0, 2.1, 2.2, 2.3, 2.4, "
+                )
         }
 
         @Test
         fun `invalid --language-version returns error message`() {
             assertThatIllegalArgumentException()
-                .isThrownBy { parseArguments(arrayOf("--language-version", "2")) }
-                .withMessageStartingWith("\"2\" passed to --language-version, expected one of [1.0, 1.1, 1.2, 1.3, ")
+                .isThrownBy { parseArguments(arrayOf("--language-version", "x")) }
+                .withMessageStartingWith(
+                    "\"x\" passed to --language-version, expected one of [2.0, 2.1, 2.2, 2.3, 2.4, "
+                )
         }
 
         @Test

@@ -13,23 +13,27 @@ import java.nio.file.Path
 import kotlin.io.path.exists
 import kotlin.io.path.isDirectory
 
+private val supportedLanguageVersions = LanguageVersion.entries
+    .filterNot(LanguageVersion::isUnsupported)
+    .joinToString { it.toString() }
 class ApiVersionConverter : IStringConverter<ApiVersion> {
     override fun convert(value: String): ApiVersion {
         val languageVersion = LanguageVersion.fromFullVersionString(value)
-        requireNotNull(languageVersion) {
-            val validValues = LanguageVersion.entries.joinToString { it.toString() }
-            "\"$value\" passed to --api-version, expected one of [$validValues]"
+        require(languageVersion != null && !languageVersion.isUnsupported) {
+            "\"$value\" passed to --api-version, expected one of [$supportedLanguageVersions]"
         }
         return ApiVersion.createByLanguageVersion(languageVersion)
     }
 }
 
 class LanguageVersionConverter : IStringConverter<LanguageVersion> {
-    override fun convert(value: String): LanguageVersion =
-        requireNotNull(LanguageVersion.fromFullVersionString(value)) {
-            val validValues = LanguageVersion.entries.joinToString { it.toString() }
-            "\"$value\" passed to --language-version, expected one of [$validValues]"
+    override fun convert(value: String): LanguageVersion {
+        val languageVersion = LanguageVersion.fromFullVersionString(value)
+        require(languageVersion != null && !languageVersion.isUnsupported) {
+            "\"$value\" passed to --language-version, expected one of [$supportedLanguageVersions]"
         }
+        return languageVersion
+    }
 }
 
 class JvmTargetConverter : IStringConverter<JvmTarget> {

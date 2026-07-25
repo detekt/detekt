@@ -7,7 +7,7 @@ version = "$kotlinVersion-$detektVersion"
 
 plugins {
     id("module")
-    id("com.gradleup.shadow") version "9.4.2"
+    id("com.gradleup.shadow") version "9.6.1"
     id("de.undercouch.download") version "5.7.0"
 }
 
@@ -36,8 +36,10 @@ shadow {
 }
 
 publishing {
-    publications.named<MavenPublication>(DETEKT_PUBLICATION) {
-        artifact(tasks.shadowJar)
+    publications.withType<MavenPublication>().configureEach {
+        if (name == "maven") {
+            artifact(tasks.shadowJar)
+        }
     }
 }
 

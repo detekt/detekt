@@ -898,4 +898,5 @@ private fun createGradleRunnerAndSetupProject(projectLayout: ProjectLayout, dryR
             "android.newDsl" to "false",
         ),
         dryRun = dryRun,
+        failOnGradleWarnings = false, // https://issuetracker.google.com/issues/495889752
     ).also { it.setupProject() }

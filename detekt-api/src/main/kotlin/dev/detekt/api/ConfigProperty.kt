@@ -83,14 +83,15 @@ private fun <T : Any> getValueOrDefault(config: Config, propertyName: String, de
     }
 }
 
-private fun Config.getListOrDefault(propertyName: String, defaultValue: List<*>): List<String> =
-    if (defaultValue.all { it is String }) {
+private fun Config.getListOrDefault(propertyName: String, defaultValue: List<*>): List<String> {
+    val value = valueOrDefault(propertyName, defaultValue)
+    return if (value.all { it is String }) {
         @Suppress("UNCHECKED_CAST")
-        val defaultValueAsListOfStrings = defaultValue as List<String>
-        valueOrDefault(propertyName, defaultValueAsListOfStrings)
+        value as List<String>
     } else {
         error("Only lists of strings are supported. '$propertyName' is invalid. ")
     }
+}
 
 private fun Config.getValuesWithReasonOrDefault(
     propertyName: String,

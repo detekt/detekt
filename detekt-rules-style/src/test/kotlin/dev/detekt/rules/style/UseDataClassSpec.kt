@@ -154,6 +154,31 @@ class UseDataClassSpec(val env: KotlinEnvironmentContainer) {
 
             assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
+
+        @Test
+        fun `does not report a class with a computed property that has a custom getter - #5339`() {
+            val code = """
+                class NoDataClassCandidateWithComputedProperty(private val root: String) {
+                    val startTime: Int
+                        get() = root.length
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report a class with a property that has a custom setter with a body - #5339`() {
+            val code = """
+                class NoDataClassCandidateWithCustomSetter(private val sink: StringBuilder) {
+                    var lastMessage: String = ""
+                        set(value) {
+                            field = value
+                            sink.append(value)
+                        }
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
     }
 
     @Nested
@@ -240,6 +265,17 @@ class UseDataClassSpec(val env: KotlinEnvironmentContainer) {
                 class DataClass(override val i: Int): SimpleInterface
             """.trimIndent()
 
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        }
+
+        @Test
+        fun `does report a class whose only property has a visibility-only setter - #5339`() {
+            val code = """
+                class DataClassCandidateWithPrivateSetter(val i: Int) {
+                    var mutable: Int = 0
+                        private set
+                }
+            """.trimIndent()
             assertThat(subject.lintWithContext(env, code)).hasSize(1)
         }
     }

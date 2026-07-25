@@ -23,11 +23,7 @@ class YamlConfig internal constructor(
     override fun subConfig(key: String): YamlConfig {
         @Suppress("UNCHECKED_CAST")
         val subProperties = properties.getOrElse(key) { emptyMap<String, Any>() } as Map<String, Any>
-        return YamlConfig(
-            subProperties,
-            if (parentPath == null) key else "$parentPath $CONFIG_SEPARATOR $key",
-            this,
-        )
+        return YamlConfig(subProperties, keySequence(key), this)
     }
 
     override fun subConfigKeys(): Set<String> = properties.keys
@@ -55,7 +51,6 @@ class YamlConfig internal constructor(
         validateConfig(this, baseline, excludePatterns)
 
     companion object {
-        const val CONFIG_SEPARATOR: String = ">"
         private const val YAML_DOC_LIMIT = 102_400 // limit the YAML size to 100 kB
 
         // limit the anchors/aliases for collections to prevent attacks from for untrusted sources
@@ -88,6 +83,8 @@ class YamlConfig internal constructor(
             )
     }
 }
+
+internal fun YamlConfig.keySequence(key: String): String = if (parentPath == null) key else "$parentPath > $key"
 
 internal class InvalidConfigurationError(throwable: Throwable) :
     RuntimeException(

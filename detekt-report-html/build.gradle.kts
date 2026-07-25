@@ -12,6 +12,7 @@ dependencies {
 
     testImplementation(libs.kotlin.compiler)
     testImplementation(projects.detektMetrics)
+    testImplementation(projects.detektTest)
     testImplementation(projects.detektTestUtils)
     testImplementation(testFixtures(projects.detektApi))
     testImplementation(libs.assertj.core)

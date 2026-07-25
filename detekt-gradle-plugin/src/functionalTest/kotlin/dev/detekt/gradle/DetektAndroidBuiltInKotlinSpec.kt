@@ -841,4 +841,5 @@ private fun createGradleRunnerAndSetupProject(
         "android.builtInKotlin" to gradleKotlinPropertyEnabled.toString(),
     ),
     dryRun = dryRun,
+    failOnGradleWarnings = false, // https://issuetracker.google.com/issues/495889752
 ).also { it.setupProject() }

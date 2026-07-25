@@ -61,6 +61,65 @@ class PropertyUsedBeforeDeclarationSpec(private val env: KotlinEnvironmentContai
     }
 
     @Test
+    fun `used before declaration through private function called in init`() {
+        val code = """
+            class C {
+                init {
+                    setup()
+                }
+                private val isValid = true
+                private fun setup() {
+                    println(isValid)
+                }
+            }
+            fun main() {
+                C()
+            }
+        """.trimIndent()
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).hasSize(1)
+    }
+
+    @Test
+    fun `used before declaration through private function called in property initializer`() {
+        val code = """
+            class C {
+                val list = listOf(number())
+                private val isValid = true
+                private fun number() = if (isValid) 1 else 0
+            }
+            fun main() {
+                println(C().list) // [0]
+            }
+        """.trimIndent()
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).singleElement()
+            .hasMessage("'isValid' is used before declaration.")
+    }
+
+    @Test
+    fun `used before declaration through nested private function calls from init`() {
+        val code = """
+            class C {
+                init {
+                    setup()
+                }
+                private val isValid = true
+                private fun setup() {
+                    number()
+                }
+                private fun number() = if (isValid) 1 else 0
+            }
+            fun main() {
+                C()
+            }
+        """.trimIndent()
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).singleElement()
+            .hasMessage("'isValid' is used before declaration.")
+    }
+
+    @Test
     fun `used after declaration in getter`() {
         val code = """
             class C {
@@ -71,6 +130,41 @@ class PropertyUsedBeforeDeclarationSpec(private val env: KotlinEnvironmentContai
         """.trimIndent()
         val findings = subject.lintWithContext(env, code)
         assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `used after declaration through private function called in init`() {
+        val code = """
+            class C {
+                private val isValid = true
+                init {
+                    setup()
+                }
+                private fun setup() {
+                    println(isValid) // true
+                }
+            }
+        """.trimIndent()
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
+    fun `does not duplicate direct and indirect reports`() {
+        val code = """
+            class C {
+                init {
+                    setup()
+                }
+                private fun setup() {
+                    println(isValid) // false
+                }
+                private val isValid = true
+            }
+        """.trimIndent()
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).singleElement()
+            .hasMessage("'isValid' is used before declaration.")
     }
 
     @Test

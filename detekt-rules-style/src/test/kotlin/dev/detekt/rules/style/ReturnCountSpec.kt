@@ -183,6 +183,33 @@ class ReturnCountSpec {
     }
 
     @Nested
+    inner class `a file with guard clauses interleaved with local variable declarations` {
+        private val code = """
+            fun test(a: Int?, b: Int?): Int {
+                val first = a.toString()
+                if (a == null) return 0
+                val second = b.toString()
+                if (b == null) return 1
+                return first.length + second.length
+            }
+        """.trimIndent()
+
+        @Test
+        fun `should not count guard clauses that follow local variable declarations`() {
+            val findings = ReturnCount(TestConfig(EXCLUDE_GUARD_CLAUSES to true))
+                .lint(code)
+            assertThat(findings).isEmpty()
+        }
+
+        @Test
+        fun `should count the returns when the guard clause option is disabled`() {
+            val findings = ReturnCount(TestConfig(EXCLUDE_GUARD_CLAUSES to false))
+                .lint(code)
+            assertThat(findings).hasSize(1)
+        }
+    }
+
+    @Nested
     inner class `a file with multiple guard clauses` {
         val code = """
             var x = 1
@@ -725,7 +752,7 @@ class ReturnCountSpec {
         }
 
         @Test
-        fun `should not ignore scoped assignments that don't use the same name`() {
+        fun `should ignore local variable declarations that don't use the same name`() {
             val code = """
                 open class A {
                     var data: ByteArray = ByteArray(0)
@@ -749,7 +776,7 @@ class ReturnCountSpec {
                     MAX to 1,
                 )
             ).lint(code)
-            assertThat(findings).hasSize(1)
+            assertThat(findings).isEmpty()
         }
     }
 }

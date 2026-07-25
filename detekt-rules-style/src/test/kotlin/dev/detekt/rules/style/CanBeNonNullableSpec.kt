@@ -933,6 +933,73 @@ class CanBeNonNullableSpec(val env: KotlinEnvironmentContainer) {
     }
 
     @Nested
+    inner class `evaluating local properties` {
+        @Test
+        fun `reports when a local var is never assigned a nullable value`() {
+            val code = """
+                fun baz() {
+                    var g: Int? = 1
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        }
+
+        @Test
+        fun `reports when a local var is only ever reassigned non-nullable values`() {
+            val code = """
+                fun baz() {
+                    var g: Int? = 1
+                    g = 2
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        }
+
+        @Test
+        fun `reports a local val with a non-nullable initializer`() {
+            val code = """
+                fun baz() {
+                    val g: Int? = 1
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        }
+
+        @Test
+        fun `does not report when a local var is reassigned a nullable value`() {
+            val code = """
+                fun baz() {
+                    var g: Int? = 1
+                    g = null
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report when a local var is initialized with null`() {
+            val code = """
+                fun baz() {
+                    var g: Int? = null
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `reports a local var inside an interface default method`() {
+            val code = """
+                interface Foo {
+                    fun bar() {
+                        var g: Int? = 1
+                    }
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        }
+    }
+
+    @Nested
     inner class `nullable function parameters` {
         @Nested
         inner class `using a de-nullifier` {

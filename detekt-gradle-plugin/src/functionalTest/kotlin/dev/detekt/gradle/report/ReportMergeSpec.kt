@@ -37,7 +37,7 @@ class ReportMergeSpec {
                 id("dev.detekt")
             }
             
-            val reportMerge by tasks.registering(dev.detekt.gradle.report.ReportMergeTask::class) {
+            val reportMerge = tasks.register<dev.detekt.gradle.report.ReportMergeTask>("reportMerge") {
                 output.set(project.layout.buildDirectory.file("reports/detekt/merge.xml"))
                 outputs.cacheIf { false }
                 outputs.upToDateWhen { false }
@@ -146,7 +146,7 @@ class ReportMergeSpec {
                 id("dev.detekt")
             }
             
-            val reportMerge by tasks.registering(dev.detekt.gradle.report.ReportMergeTask::class) {
+            val reportMerge = tasks.register<dev.detekt.gradle.report.ReportMergeTask>("reportMerge") {
                 output.set(project.layout.buildDirectory.file("reports/detekt/merge.xml"))
                 outputs.cacheIf { false }
                 outputs.upToDateWhen { false }
@@ -182,6 +182,7 @@ class ReportMergeSpec {
             settingsContent = settingsFile,
             jvmArgs = jvmArgs,
             disableIP = true,
+            failOnGradleWarnings = false, // https://issuetracker.google.com/issues/495889752
         )
 
         gradleRunner.setupProject()

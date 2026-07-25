@@ -8,6 +8,7 @@ import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.api.config
 import dev.detekt.psi.hasImplicitUnitReturnType
+import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
@@ -15,6 +16,9 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * Changing the type of the expression accidentally, changes the functions return type.
  * This may lead to backward incompatibility.
  * Use a block statement to make clear this function will never return a value.
+ *
+ * Only functions that are part of the public API are reported, as the implicit return type
+ * is only relevant there. Private, internal and local functions are not reported.
  *
  * <noncompliant>
  * fun errorProneUnit() = println("Hello Unit")
@@ -29,6 +33,9 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  *
  * // explicit Unit is compliant by default; can be configured to enforce block statement
  * fun safeUnitReturn(): Unit = println("Hello Unit")
+ *
+ * // private, internal and local functions are not reported
+ * private fun privateUnit() = println("Hello Unit")
  * </compliant>
  *
  */
@@ -45,8 +52,14 @@ class ImplicitUnitReturnType(config: Config) :
     @Configuration("if functions with explicit `Unit` return type should be allowed")
     private val allowExplicitReturnType: Boolean by config(true)
 
+    @Suppress("ReturnCount")
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
+
+        if (function.isLocal) return
+        analyze(function) {
+            if (!isPublicApi(function.symbol)) return
+        }
 
         if (allowExplicitReturnType && function.hasDeclaredReturnType()) {
             return

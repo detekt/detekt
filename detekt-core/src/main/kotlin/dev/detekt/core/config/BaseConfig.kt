@@ -1,10 +1,6 @@
 package dev.detekt.core.config
 
-import dev.detekt.core.config.YamlConfig.Companion.CONFIG_SEPARATOR
 import kotlin.reflect.KClass
-
-private fun YamlConfig.keySequence(key: String): String =
-    if (parentPath == null) key else "$parentPath $CONFIG_SEPARATOR $key"
 
 fun YamlConfig.valueOrDefaultInternal(
     key: String,

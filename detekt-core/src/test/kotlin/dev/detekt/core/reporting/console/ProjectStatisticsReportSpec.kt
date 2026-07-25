@@ -1,7 +1,7 @@
 package dev.detekt.core.reporting.console
 
 import dev.detekt.api.ProjectMetric
-import dev.detekt.api.testfixtures.TestDetektion
+import dev.detekt.test.TestDetektion
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

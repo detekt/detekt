@@ -780,6 +780,7 @@ style:
     active: true
   UnnecessaryFullyQualifiedName:
     active: false
+    ignoredFullyQualifiedNames: []
   UnnecessaryInheritance:
     active: true
   UnnecessaryInnerClass:

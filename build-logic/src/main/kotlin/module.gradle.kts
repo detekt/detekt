@@ -8,7 +8,6 @@ import org.jetbrains.kotlin.gradle.tasks.UsesKotlinJavaToolchain
 plugins {
     id("packaging")
     kotlin("jvm")
-    id("maven-publish")
     id("jacoco")
 }
 
@@ -101,7 +100,7 @@ testing {
     }
 }
 
-// Pretend AGP API and JUnit targets JVM 8. Required while detekt itself targets JVM 8 while AGP API targets JVM 11 and JUnit 6 targets JVM 17.
+// Pretend AGP API, JUnit and detekt-rules-ktlint-wrapper target JVM 8. Required while detekt itself targets JVM 8 and these dependencies target newer JVM versions.
 dependencies {
     components {
         setOf(
@@ -114,6 +113,7 @@ dependencies {
             "org.junit.platform:junit-platform-commons",
             "org.junit.platform:junit-platform-engine",
             "org.junit.platform:junit-platform-launcher",
+            "dev.detekt:detekt-rules-ktlint-wrapper",
         ).forEach {
             withModule(it) {
                 allVariants {
@@ -128,7 +128,6 @@ dependencies {
 
 java {
     withSourcesJar()
-    withJavadocJar()
     sourceCompatibility = JavaVersion.toVersion(jvmTargetVersion)
     targetCompatibility = JavaVersion.toVersion(jvmTargetVersion)
     if (project.name !in setOf("detekt-gradle-plugin", "detekt-test-junit")) {

@@ -1,8 +1,8 @@
 package dev.detekt.core.config
 
 import dev.detekt.api.Severity
-import dev.detekt.api.testfixtures.TestDetektion
 import dev.detekt.api.testfixtures.createIssue
+import dev.detekt.test.TestDetektion
 import dev.detekt.tooling.api.spec.RulesSpec
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested

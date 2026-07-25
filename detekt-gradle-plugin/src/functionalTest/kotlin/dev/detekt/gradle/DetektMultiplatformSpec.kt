@@ -544,6 +544,7 @@ private fun setupProject(projectLayoutAction: ProjectLayout.() -> Unit): DslGrad
 
 private fun setupAndroidProject(projectLayoutAction: ProjectLayout.() -> Unit): DslGradleRunner {
     val gradleRunner = setupProject { projectLayoutAction() }
+        .also { it.failOnGradleWarnings = false } // https://issuetracker.google.com/issues/495889752
     gradleRunner.writeProjectFile("shared/src/androidMain/AndroidManifest.xml", manifestContent)
     gradleRunner.writeProjectFile("shared/src/androidDebug/AndroidManifest.xml", manifestContent)
     gradleRunner.writeProjectFile("shared/src/androidRelease/AndroidManifest.xml", manifestContent)

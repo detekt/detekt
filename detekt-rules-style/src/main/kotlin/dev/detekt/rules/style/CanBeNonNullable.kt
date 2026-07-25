@@ -22,7 +22,6 @@ import org.jetbrains.kotlin.analysis.api.symbols.KaVariableSymbol
 import org.jetbrains.kotlin.analysis.api.types.KaTypeParameterType
 import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.lexer.KtTokens
-import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -83,6 +82,11 @@ import org.jetbrains.kotlin.util.OperatorNameConventions
  *         get() = 5
  * }
  *
+ * fun foo() {
+ *     var a: Int? = 5
+ *     a = 6
+ * }
+ *
  * fun foo(a: Int?) {
  *     val b = a!! + 2
  * }
@@ -111,6 +115,11 @@ import org.jetbrains.kotlin.util.OperatorNameConventions
  * class A {
  *     val a: Int
  *         get() = 5
+ * }
+ *
+ * fun foo() {
+ *     var a: Int = 5
+ *     a = 6
  * }
  *
  * fun foo(a: Int) {
@@ -474,7 +483,7 @@ class CanBeNonNullable(config: Config) :
         // the declaration, so they could potentially be marked as non-nullable
         // if the file does not encounter these properties being assigned
         // a nullable value.
-        private val candidateProps = mutableMapOf<FqName, KtProperty>()
+        private val candidateProps = mutableSetOf<KtProperty>()
 
         override fun visitKtFile(file: KtFile) {
             file.collectCandidateProps()
@@ -482,7 +491,7 @@ class CanBeNonNullable(config: Config) :
             // Any candidate properties that were not removed during the inspection
             // of the Kotlin file were never assigned nullable values in the code,
             // thus they can be converted to non-nullable.
-            candidateProps.forEach { (_, property) ->
+            candidateProps.forEach { property ->
                 report(
                     Finding(
                         Entity.from(property),
@@ -494,41 +503,43 @@ class CanBeNonNullable(config: Config) :
 
         private fun KtFile.collectCandidateProps() {
             forEachDescendantOfType<KtProperty> { property ->
-                val fqName = property.fqName
-                if (fqName != null && property.isCandidate()) {
-                    candidateProps[fqName] = property
+                // Locals have no FqName, so admit them explicitly.
+                if ((property.fqName != null || property.isLocal) && property.isCandidate()) {
+                    candidateProps.add(property)
                 }
             }
         }
 
         override fun visitBinaryExpression(expression: KtBinaryExpression) {
             if (expression.operationToken == KtTokens.EQ) {
-                val fqName = expression.left
+                val assignedProperty = expression.left
                     ?.let {
                         analyze(it) {
                             it.resolveToCall()
                                 ?.singleVariableAccessCall()
                                 ?.symbol
-                                ?.callableId
-                                ?.asSingleFqName()
+                                ?.psi as? KtProperty
                         }
                     }
                 if (
-                    fqName != null &&
-                    candidateProps.containsKey(fqName) &&
+                    assignedProperty != null &&
+                    assignedProperty in candidateProps &&
                     expression.right?.isNullableType() == true
                 ) {
-                    // A candidate property has been assigned a nullable value
-                    // in the file's code, so it can be removed from the map of
-                    // candidates for flagging.
-                    candidateProps.remove(fqName)
+                    // Assigned a nullable value, so it can't be made non-nullable.
+                    candidateProps.remove(assignedProperty)
                 }
             }
             super.visitBinaryExpression(expression)
         }
 
+        private fun KtProperty.isExcludedMember(): Boolean =
+            isOpen() || isAbstract() || containingClass()?.isInterface() == true
+
         private fun KtProperty.isCandidate(): Boolean {
-            if (isOpen() || isAbstract() || containingClass()?.isInterface() == true) return false
+            // containingClass() crosses function boundaries, so without the isLocal check a local
+            // var inside an interface's default method would be wrongly excluded.
+            if (!isLocal && isExcludedMember()) return false
             val propertyType = this.typeReference ?: return false
 
             analyze(propertyType) {
@@ -539,7 +550,7 @@ class CanBeNonNullable(config: Config) :
                 getter?.isNullableType() != true &&
                 delegate?.returnsNullable() != true
             val cannotSetViaNonPrivateMeans =
-                !isVar || (isPrivate() || (setter?.isPrivate() == true))
+                isLocal || !isVar || (isPrivate() || (setter?.isPrivate() == true))
             return isSetToNonNullable && cannotSetViaNonPrivateMeans
         }
 
