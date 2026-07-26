@@ -74,7 +74,7 @@ jobs:
           rm -f website/docs/gettingstarted/_cli-options.mdx
 
       - name: Run Gradle generator
-        run: ./gradlew :detekt-generator:generateDocumentation :detekt-generator:generateCliOptions
+        run: ./gradlew :detekt-generator:copyDocumentation :detekt-generator:generateCliOptions
 
       # JCommander emits the CWD as the `Default:` value for --base-path and
       # --input, so _cli-options.mdx leaks the runner's absolute path. Strip
