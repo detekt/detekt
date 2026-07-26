@@ -4,9 +4,9 @@ plugins {
     id("module")
 }
 
-val generatedConfig by configurations.dependencyScope("generatedConfig")
+val generatedConfig = configurations.dependencyScope("generatedConfig")
 val generatedConfigFiles = configurations.resolvable("generatedConfigFiles") { extendsFrom(generatedConfig) }
-val generatedDeprecations by configurations.dependencyScope("generatedDeprecations")
+val generatedDeprecations = configurations.dependencyScope("generatedDeprecations")
 val generatedDeprecationsFiles = configurations.resolvable("generatedDeprecationsFiles") {
     extendsFrom(generatedDeprecations)
 }
@@ -60,7 +60,7 @@ dependencies {
     testRuntimeOnly(libs.slf4j.simple)
 }
 
-val generateDefaultDetektConfig by tasks.registering {
+val generateDefaultDetektConfig = tasks.register("generateDefaultDetektConfig") {
     inputs.files(generatedConfigFiles)
         .withPropertyName(generatedConfig.name)
         .withPathSensitivity(PathSensitivity.RELATIVE)
@@ -117,7 +117,7 @@ val generateDefaultDetektConfig by tasks.registering {
     }
 }
 
-val generateDeprecationList by tasks.registering {
+val generateDeprecationList = tasks.register("generateDeprecationList") {
     inputs.files(generatedDeprecationsFiles)
         .withPropertyName(generatedDeprecations.name)
         .withPathSensitivity(PathSensitivity.RELATIVE)
@@ -144,7 +144,7 @@ tasks.sourcesJar.configure {
     inputs.files(generateDeprecationList)
 }
 
-val verifyGeneratorOutput by tasks.registering(Exec::class) {
+val verifyGeneratorOutput = tasks.register<Exec>("verifyGeneratorOutput") {
     dependsOn(generateDefaultDetektConfig, generateDeprecationList)
     description = "Verifies that generated config files are up-to-date"
     commandLine = listOf(
