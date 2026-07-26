@@ -18,7 +18,6 @@ fun main(args: Array<String>) {
 
     val generator = Generator(
         inputPaths = options.inputPath,
-        textReplacements = options.textReplacements,
         documentationPath = options.documentationPath,
         configPath = options.configPath,
     )

@@ -3,16 +3,10 @@ package dev.detekt.generator.collection
 import dev.detekt.generator.collection.exception.InvalidCodeExampleDocumentationException
 import org.jetbrains.kotlin.psi.KtClassOrObject
 
-class DocumentationCollector(private val textReplacements: Map<String, String>) {
+class DocumentationCollector {
 
     private var name: String = ""
     var description: String = ""
-        private set(newValue) {
-            field = textReplacements.toList()
-                .fold(newValue) { acc, replacement ->
-                    acc.replace(replacement.first, replacement.second)
-                }
-        }
     var compliant: String = ""
         private set
     var nonCompliant: String = ""

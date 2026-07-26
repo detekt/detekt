@@ -3,10 +3,10 @@ package dev.detekt.generator.collection
 import dev.detekt.generator.collection.exception.InvalidDocumentationException
 import org.jetbrains.kotlin.psi.KtFile
 
-class DetektCollector(textReplacements: Map<String, String>) : Collector<RuleSetPage> {
+class DetektCollector : Collector<RuleSetPage> {
 
     private val ruleSetProviderCollector = RuleSetProviderCollector()
-    private val ruleCollector = RuleCollector(textReplacements)
+    private val ruleCollector = RuleCollector()
 
     private val collectors = listOf(
         ruleSetProviderCollector,
