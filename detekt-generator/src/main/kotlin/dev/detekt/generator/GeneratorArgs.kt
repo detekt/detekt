@@ -1,6 +1,5 @@
 package dev.detekt.generator
 
-import com.beust.jcommander.DynamicParameter
 import com.beust.jcommander.IValueValidator
 import com.beust.jcommander.Parameter
 import com.beust.jcommander.ParameterException
@@ -51,14 +50,6 @@ class GeneratorArgs {
             "Path to user rules can be specified with --input option"
     )
     var generateCustomRuleConfig: Boolean = false
-
-    @DynamicParameter(
-        names = ["--replace", "-r"],
-        description = "Any number of key and value pairs that are used to replace placeholders " +
-            "during data collection and output generation. Key and value are separated by '='. " +
-            "The property may be used multiple times."
-    )
-    var textReplacements: Map<String, String> = mutableMapOf()
 
     class PathSplitter : IParameterSplitter {
         override fun split(value: String): List<String> = value.split(',', ';')
