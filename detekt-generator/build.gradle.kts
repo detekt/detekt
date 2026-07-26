@@ -76,7 +76,7 @@ tasks.register("generateWebsite") {
     )
 }
 
-val copyDocumentation by tasks.registering(Copy::class) {
+val copyDocumentation = tasks.register<Copy>("copyDocumentation") {
     from(generatedDocumentationFiles)
     into("$rootDir/website/docs/rules")
 }

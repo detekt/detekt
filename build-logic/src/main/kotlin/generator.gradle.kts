@@ -2,8 +2,8 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
 import kotlin.io.path.createDirectories
 
 project.plugins.withId("org.jetbrains.kotlin.jvm") {
-    val detektGenerator by configurations.dependencyScope("detektGenerator")
-    val detektGeneratorClasspath by configurations.resolvable("detektGeneratorClasspath") {
+    val detektGenerator = configurations.dependencyScope("detektGenerator")
+    val detektGeneratorClasspath = configurations.resolvable("detektGeneratorClasspath") {
         extendsFrom(detektGenerator)
     }
 
@@ -22,7 +22,7 @@ project.plugins.withId("org.jetbrains.kotlin.jvm") {
         inputs.files(kotlinDirs)
         outputs.dir(generatedDetektDir)
 
-        classpath = detektGeneratorClasspath
+        classpath = files(detektGeneratorClasspath)
         mainClass = "dev.detekt.generator.Main"
 
         doFirst {
@@ -43,15 +43,15 @@ project.plugins.withId("org.jetbrains.kotlin.jvm") {
         }
     }
 
-    val copyConfigToResources by tasks.registering(Copy::class) {
+    val copyConfigToResources = tasks.register<Copy>("copyConfigToResources") {
         from(generateConfig)
         into(mainSourceSet.resources.srcDirs.single().resolve("config"))
         include("config.yml")
     }
 
-    val generatedConfig by configurations.consumable("generatedConfig")
-    val generatedDeprecations by configurations.consumable("generatedDeprecations")
-    val generatedDocumentation by configurations.consumable("generatedDocumentation")
+    val generatedConfig = configurations.consumable("generatedConfig")
+    val generatedDeprecations = configurations.consumable("generatedDeprecations")
+    val generatedDocumentation = configurations.consumable("generatedDocumentation")
 
     artifacts {
         add(generatedConfig.name, configDir.map { it.resolve("config.yml") }) {
