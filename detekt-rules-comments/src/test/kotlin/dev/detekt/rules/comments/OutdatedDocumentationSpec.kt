@@ -462,6 +462,107 @@ class OutdatedDocumentationSpec {
     }
 
     @Nested
+    inner class `inline code descriptions` {
+
+        @Test
+        fun `should not report when aligned params are documented with backtick-only descriptions`() {
+            val backtickOnlyDescriptions = """
+                /**
+                 * @param hue        `[0, 1]`
+                 * @param saturation `[0, 1]`
+                 * @param brightness `[0, 1]`
+                 * @param alpha      `[0, 1]`
+                 */
+                fun fromHsb(hue: Float, saturation: Float, brightness: Float, alpha: Float) = Unit
+            """.trimIndent()
+            assertThat(subject.lint(backtickOnlyDescriptions)).isEmpty()
+        }
+
+        @Test
+        fun `should not report when unaligned params are documented with backtick-only descriptions`() {
+            val backtickOnlyDescriptions = """
+                /**
+                 * @param hue `[0, 1]`
+                 * @param saturation `[0, 1]`
+                 */
+                fun fromHsb(hue: Float, saturation: Float) = Unit
+            """.trimIndent()
+            assertThat(subject.lint(backtickOnlyDescriptions)).isEmpty()
+        }
+
+        @Test
+        fun `should not report when class params and properties are documented with backtick-only descriptions`() {
+            val backtickOnlyDescriptions = """
+                /**
+                 * @param someParam `[0, 1]`
+                 * @property someProp `[0, 1]`
+                 */
+                class MyClass(someParam: String, val someProp: String)
+            """.trimIndent()
+            assertThat(subject.lint(backtickOnlyDescriptions)).isEmpty()
+        }
+
+        @Test
+        fun `should report when a param documented with backtick-only description is not present in the declaration`() {
+            val backtickOnlyDescriptions = """
+                /**
+                 * @param hue `[0, 1]`
+                 * @param saturation `[0, 1]`
+                 */
+                fun fromHsb(hue: Float) = Unit
+            """.trimIndent()
+            assertThat(subject.lint(backtickOnlyDescriptions)).singleElement()
+                .hasMessage(
+                    "Documentation of fromHsb is outdated: documented parameters 'saturation' are not present in the declaration"
+                )
+        }
+
+        @Test
+        fun `should report when params documented with backtick-only descriptions have mismatching order`() {
+            val backtickOnlyDescriptions = """
+                /**
+                 * @param saturation `[0, 1]`
+                 * @param hue `[0, 1]`
+                 */
+                fun fromHsb(hue: Float, saturation: Float) = Unit
+            """.trimIndent()
+            assertThat(subject.lint(backtickOnlyDescriptions)).singleElement()
+                .hasMessage(
+                    "Documentation of fromHsb is outdated: order of documented parameters does not match the declaration order"
+                )
+        }
+
+        @Test
+        fun `should report when not all params are documented with backtick-only descriptions`() {
+            val backtickOnlyDescriptions = """
+                /**
+                 * @param hue `[0, 1]`
+                 * @param saturation `[0, 1]`
+                 */
+                fun fromHsb(hue: Float, saturation: Float, brightness: Float) = Unit
+            """.trimIndent()
+            assertThat(subject.lint(backtickOnlyDescriptions)).singleElement()
+                .hasMessage(
+                    "Documentation of fromHsb is outdated: parameters 'brightness' are not documented"
+                )
+        }
+
+        @Test
+        fun `should not report param tags inside fenced code blocks as documentation`() {
+            val fencedCodeBlock = """
+                /**
+                 * @param someParam usage:
+                 * ```
+                 * @param fake
+                 * ```
+                 */
+                fun myFun(someParam: String) {}
+            """.trimIndent()
+            assertThat(subject.lint(fencedCodeBlock)).isEmpty()
+        }
+    }
+
+    @Nested
     inner class `function with type params` {
 
         @Test

@@ -168,13 +168,40 @@ class OutdatedDocumentation(config: Config) :
 
     @Suppress("ElseCaseInsteadOfExhaustiveWhen")
     private fun processDocTag(docTag: KDocTag): List<Declaration> {
-        val knownTag = docTag.knownTag
-        val subjectName = docTag.getSubjectName() ?: return emptyList()
-        return when (knownTag) {
-            KDocKnownTag.PARAM -> listOf(Declaration(subjectName, DeclarationType.PARAM))
-            KDocKnownTag.PROPERTY -> listOf(Declaration(subjectName, DeclarationType.PROPERTY))
-            else -> emptyList()
+        val declaration = docTag.getSubjectName()?.let { subjectName ->
+            when (docTag.knownTag) {
+                KDocKnownTag.PARAM -> Declaration(subjectName, DeclarationType.PARAM)
+                KDocKnownTag.PROPERTY -> Declaration(subjectName, DeclarationType.PROPERTY)
+                else -> null
+            }
         }
+        return listOfNotNull(declaration) + findSwallowedDeclarations(docTag)
+    }
+
+    /**
+     * The KDoc lexer treats a tag description consisting only of an inline code span (e.g. ``@param x `[0, 1]` ``)
+     * as a code span that continues on the following lines, so subsequent tags are merged into the current
+     * [KDocTag] as raw text instead of being parsed as separate tags. Recover them from the tag text.
+     */
+    private fun findSwallowedDeclarations(docTag: KDocTag): List<Declaration> {
+        var inFencedCodeBlock = false
+        return docTag.text
+            .lineSequence()
+            .drop(1)
+            .map { it.trimStart().removePrefix("*").trim() }
+            .mapNotNull { line ->
+                if (line.startsWith("```")) {
+                    inFencedCodeBlock = !inFencedCodeBlock
+                    return@mapNotNull null
+                }
+                if (inFencedCodeBlock) return@mapNotNull null
+                swallowedTagRegex.find(line)?.let { match ->
+                    val (tagName, subjectName) = match.destructured
+                    val type = if (tagName == "param") DeclarationType.PARAM else DeclarationType.PROPERTY
+                    Declaration(subjectName, type)
+                }
+            }
+            .toList()
     }
 
     private fun findDocumentationMismatch(
@@ -254,3 +281,5 @@ class OutdatedDocumentation(config: Config) :
         ANY,
     }
 }
+
+private val swallowedTagRegex = Regex("""^@(param|property)\s+\[?([^\s\[\]]+)]?""")
