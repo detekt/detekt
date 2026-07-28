@@ -12,7 +12,7 @@ The associated **code samples** to this guide can be found in the package [detek
 
 _detekt_ uses the `ServiceLoader` pattern to collect all instances of the `RuleSetProvider` interface, making it possible to define rules/rule sets and enhance _detekt_ with your own flavor.
 
-:::caution Attention
+:::caution[Attention]
 
 You need a `resources/META-INF/services/dev.detekt.api.RuleSetProvider` file containing the fully qualified name of
 your `RuleSetProvider`. For example: 
