@@ -3,6 +3,7 @@ package dev.detekt.rules.style
 import dev.detekt.api.Config
 import dev.detekt.rules.style.AbstractClassCanBeInterface.Companion.NO_CONCRETE_MEMBER
 import dev.detekt.rules.style.AbstractClassCanBeInterface.Companion.SEALED_NO_CONCRETE_MEMBER
+import dev.detekt.test.TestConfig
 import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.junit.KotlinCoreEnvironmentTest
 import dev.detekt.test.lintWithContext
@@ -383,6 +384,61 @@ class AbstractClassCanBeInterfaceSpec(val env: KotlinEnvironmentContainer) {
                 abstract class Test(val x: Int) : I
             """.trimIndent()
             assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+    }
+
+    @Nested
+    inner class `ignoreSealedClasses config` {
+        private val ignoringSealed =
+            AbstractClassCanBeInterface(TestConfig("ignoreSealedClasses" to true))
+
+        @Test
+        fun `does not report a sealed class that would otherwise be reported`() {
+            val code = """
+                sealed class Result {
+                    data class Success(val data: Int) : Result()
+                    data class Failure(val reason: String) : Result()
+                }
+            """.trimIndent()
+            assertThat(ignoringSealed.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report a sealed class with only abstract members`() {
+            val code = """
+                sealed class Result {
+                    abstract val value: Int
+                    abstract fun f()
+                }
+            """.trimIndent()
+            assertThat(ignoringSealed.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
+        fun `still reports a plain abstract class`() {
+            // The opt-out is scoped to sealed hierarchies: an abstract class carries no
+            // dispatch trade-off, so enabling it must not silence the rule wholesale.
+            val code = """
+                abstract class A {
+                    abstract val i: Int
+                    abstract fun f()
+                }
+            """.trimIndent()
+            assertThat(ignoringSealed.lintWithContext(env, code))
+                .singleElement()
+                .hasMessage(NO_CONCRETE_MEMBER)
+        }
+
+        @Test
+        fun `defaults to false so sealed classes are reported`() {
+            val code = """
+                sealed class Result {
+                    data class Success(val data: Int) : Result()
+                }
+            """.trimIndent()
+            assertThat(AbstractClassCanBeInterface(Config.empty).lintWithContext(env, code))
+                .singleElement()
+                .hasMessage(SEALED_NO_CONCRETE_MEMBER)
         }
     }
 
