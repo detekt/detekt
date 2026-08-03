@@ -3,10 +3,12 @@ package dev.detekt.rules.style
 import com.intellij.psi.PsiElement
 import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.Config
+import dev.detekt.api.Configuration
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
+import dev.detekt.api.config
 import dev.detekt.psi.isAbstract
 import dev.detekt.psi.isConstant
 import dev.detekt.psi.isInternal
@@ -77,6 +79,13 @@ class AbstractClassCanBeInterface(config: Config) :
     ),
     RequiresAnalysisApi {
 
+    @Configuration(
+        "if sealed classes should be ignored. `sealed class` dispatches virtually while `sealed interface` " +
+            "dispatches through an interface table, so projects with heavy sealed hierarchies may prefer to keep " +
+            "classes and opt out of this check."
+    )
+    private val ignoreSealedClasses: Boolean by config(false)
+
     override fun visitClass(klass: KtClass) {
         check(klass)
         super.visitClass(klass)
@@ -103,7 +112,7 @@ class AbstractClassCanBeInterface(config: Config) :
         when {
             klass.isInterface() -> false
             klass.isLocal -> false
-            klass.isSealed() -> true
+            klass.isSealed() -> !ignoreSealedClasses
             else -> klass.isAbstract()
         }
 
