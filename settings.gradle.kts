@@ -60,7 +60,8 @@ develocity {
     buildScan {
         // Publish to scans.gradle.com when `--scan` is used explicitly
         if (!gradle.startParameter.isBuildScan) {
-            server = "https://ge.detekt.dev"
+            server = "https://community.develocity.cloud"
+            projectId = "detekt"
             publishing.onlyIf { it.isAuthenticated }
         }
 
@@ -74,7 +75,7 @@ buildCache {
         isEnabled = !isCiBuild
     }
     remote(develocity.buildCache) {
-        server = "https://ge.detekt.dev"
+        server = "https://community.develocity.cloud"
         isEnabled = true
         isPush = isCiBuild
     }
