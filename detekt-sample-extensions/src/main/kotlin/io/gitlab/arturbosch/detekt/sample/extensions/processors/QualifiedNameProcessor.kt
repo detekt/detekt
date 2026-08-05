@@ -25,8 +25,7 @@ class QualifiedNameProcessor : FileProcessListener {
             .mapNotNull { it.getUserData(fqNamesKey) }
             .flatMapTo(HashSet()) { it }
 
-        result.userData[fqNamesKey.toString()] = fqNames
-        return result
+        return result.plus(userData = fqNamesKey.toString() to fqNames)
     }
 
     class ClassNameVisitor : DetektVisitor() {
