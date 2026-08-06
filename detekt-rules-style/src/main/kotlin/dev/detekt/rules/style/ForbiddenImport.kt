@@ -29,19 +29,8 @@ import org.jetbrains.kotlin.psi.KtImportDirective
  *     - 'java.util.UUID'
  * ```
  *
- * A pattern is matched against the fully qualified name of the import and has to match it
- * completely, so `java.util.Date` does not match the import `java.util.DateFormat`.
- * Two wildcards are supported:
- *
- * - `*` matches zero or more characters, **including** the package separator `.`. The pattern
- *   `java.util.*` therefore reports `import java.util.Date` as well as
- *   `import java.util.concurrent.Future`.
- * - `?` matches exactly one character, so `java.util.Dat?` reports `import java.util.Date`
- *   but neither `import java.util.Dat` nor `import java.util.Dates`.
- *
- * A `.` is always a literal character and cannot be escaped: a pattern written as
- * `java\.util\.Date` matches nothing at all. Write `java.util.Date` instead.
- * A pattern that is not a valid expression fails the analysis with a pattern syntax error.
+ * Patterns are matched against the fully qualified name of the import and follow detekt's
+ * [simple glob syntax](https://detekt.dev/docs/next/introduction/glob-patterns#simple-patterns).
  *
  * An import is reported only if it matches [forbiddenImports] and no entry of
  * [allowedImports], so `allowedImports` always wins. Aliased imports are matched by their
