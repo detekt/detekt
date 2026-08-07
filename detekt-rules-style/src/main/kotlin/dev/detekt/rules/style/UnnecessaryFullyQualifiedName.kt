@@ -29,14 +29,18 @@ import org.jetbrains.kotlin.psi.KtClassLiteralExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtImportDirective
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtPackageDirective
+import org.jetbrains.kotlin.psi.KtSimpleNameExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.KtTypeParameterListOwner
 import org.jetbrains.kotlin.psi.KtUserType
+import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.getPossiblyQualifiedCallExpression
+import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
 import org.jetbrains.kotlin.psi.psiUtil.parents
 
 /**
@@ -251,15 +255,27 @@ class UnnecessaryFullyQualifiedName(config: Config) :
 
     context(session: KaSession)
     private fun findLocalSymbols(element: KtElement, name: Name): Sequence<KaSymbol> {
+        // Same-package declarations are overridden by an added explicit import, so they only collide
+        // when the simple name is actually used unqualified somewhere in the file.
+        val packageScopeCollides = isUsedUnqualified(element.containingKtFile, name)
         // Default imports are overridden by an added explicit import, so a default symbol with the same
         // name is not a real collision (only explicit imports are).
         val scope = with(session) {
             element.containingKtFile.scopeContext(element).compositeScope {
-                it !is KaScopeKind.DefaultSimpleImportingScope && it !is KaScopeKind.DefaultStarImportingScope
+                it !is KaScopeKind.DefaultSimpleImportingScope &&
+                    it !is KaScopeKind.DefaultStarImportingScope &&
+                    (packageScopeCollides || it !is KaScopeKind.PackageMemberScope)
             }
         }
         return scope.classifiers(name) + scope.callables(name)
     }
+
+    private fun isUsedUnqualified(file: KtFile, name: Name): Boolean =
+        file.anyDescendantOfType<KtSimpleNameExpression> {
+            it.getReferencedNameAsName() == name &&
+                it.getReceiverExpression() == null &&
+                !isInImportOrPackage(it)
+        }
 
     context(session: KaSession)
     private fun hasOuterClassCollision(element: KtElement, symbol: KaClassSymbol): Boolean =
