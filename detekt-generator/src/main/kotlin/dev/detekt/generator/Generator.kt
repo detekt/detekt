@@ -12,12 +12,11 @@ import kotlin.time.measureTime
 
 class Generator(
     private val inputPaths: List<Path>,
-    private val textReplacements: Map<String, String>,
     documentationPath: Path?,
     configPath: Path?,
     private val outPrinter: PrintStream = System.out,
 ) {
-    private val collector = DetektCollector(textReplacements)
+    private val collector = DetektCollector()
     private val printer = DetektPrinter(documentationPath, configPath)
 
     fun execute() {
@@ -65,7 +64,7 @@ class Generator(
             }
 
             session.modulesWithFiles.forEach { (sourceModule, files) ->
-                val collector = DetektCollector(textReplacements)
+                val collector = DetektCollector()
                 files.forEach { file ->
                     collector.visit(file as KtFile)
                 }
