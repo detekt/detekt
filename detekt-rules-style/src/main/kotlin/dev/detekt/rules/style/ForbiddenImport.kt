@@ -29,10 +29,28 @@ import org.jetbrains.kotlin.psi.KtImportDirective
  *     - 'java.util.UUID'
  * ```
  *
+ * Patterns are matched against the fully qualified name of the import and follow detekt's
+ * [simple glob syntax](https://detekt.dev/docs/next/introduction/glob-patterns#simple-patterns).
+ *
+ * An import is reported only if it matches [forbiddenImports] and no entry of
+ * [allowedImports], so `allowedImports` always wins. Aliased imports are matched by their
+ * original name, which means `import java.util.List as JList` is reported by the pattern
+ * `java.util.List`.
+ *
+ * Star imports are matched without their trailing star, so `import java.util.*` is checked
+ * as `java.util`. The pattern `java.util.*` consequently does not report it, while the
+ * pattern `java.util` does, and `allowedImports: ['java.util.UUID']` also exempts
+ * `import java.util.UUID.*`. This is tracked in
+ * [#9564](https://github.com/detekt/detekt/issues/9564).
+ *
  * <noncompliant>
  * import kotlin.jvm.JvmField
- * import kotlin.SinceKotlin
+ * import java.util.Date
  * </noncompliant>
+ *
+ * <compliant>
+ * import java.util.UUID
+ * </compliant>
  */
 class ForbiddenImport(config: Config) :
     Rule(
@@ -43,6 +61,8 @@ class ForbiddenImport(config: Config) :
 
     @Configuration(
         "List of imports, specified as glob patterns, that are forbidden. " +
+            "A pattern has to match the whole fully qualified name, where `*` matches zero or more " +
+            "characters including `.` and `?` matches exactly one character. " +
             "It is recommended to also specify a reason."
     )
     private val forbiddenImports: List<Forbidden> by config(valuesWithReason()) { list ->
@@ -51,7 +71,8 @@ class ForbiddenImport(config: Config) :
 
     @Configuration(
         "List of imports, specified as glob patterns, to explicitly allow. " +
-            "Use this to specify exceptions to the forbidden imports."
+            "Use this to specify exceptions to the forbidden imports. " +
+            "An import that matches both lists is not reported."
     )
     private val allowedImports: List<Regex> by config(emptyList<String>()) { list ->
         list.map { it.pathGlobToRegex() }

@@ -7,6 +7,7 @@ import dev.detekt.api.Finding
 import dev.detekt.api.Rule
 import dev.detekt.api.config
 import dev.detekt.psi.isInternal
+import dev.detekt.psi.isOverride
 import org.jetbrains.kotlin.kdoc.parser.KDocKnownTag
 import org.jetbrains.kotlin.kdoc.psi.api.KDoc
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocSection
@@ -84,10 +85,11 @@ class OutdatedDocumentation(config: Config) :
     override fun visitClass(klass: KtClass) {
         super.visitClass(klass)
         val classDeclarations = getClassDeclarations(klass)
-        val reason = findDocumentationMismatch(klass) { classDeclarations }
+        val overridePropertyNames = getOverridePropertyNames(klass)
+        val reason = findDocumentationMismatch(klass, overridePropertyNames) { classDeclarations }
         if (reason != null && (
                 isInternalOrPrivate(klass.primaryConstructor).not() ||
-                    findDocumentationMismatch(klass) {
+                    findDocumentationMismatch(klass, overridePropertyNames) {
                         classDeclarations.filterNot { it.type == DeclarationType.PARAM }
                     } != null
                 )
@@ -121,6 +123,14 @@ class OutdatedDocumentation(config: Config) :
         return typeParams + constructorDeclarations
     }
 
+    private fun getOverridePropertyNames(klass: KtClass): Set<String> =
+        klass.primaryConstructor
+            ?.valueParameters
+            ?.filter { it.isOverride() }
+            ?.mapNotNull { it.name }
+            ?.toSet()
+            .orEmpty()
+
     private fun getFunctionDeclarations(function: KtNamedFunction): List<Declaration> {
         val typeParams = if (matchTypeParameters) {
             function.typeParameters.mapNotNull { it.name.toParamOrNull() }
@@ -139,6 +149,7 @@ class OutdatedDocumentation(config: Config) :
 
     private fun getDeclarationsForValueParameters(valueParameters: List<KtParameter>): List<Declaration> =
         valueParameters.mapNotNull {
+            if (it.isOverride()) return@mapNotNull null
             it.name?.let { name ->
                 val type = if (it.isPropertyParameter() && it.isPrivate().not()) {
                     if (allowParamOnConstructorProperties) {
@@ -206,10 +217,12 @@ class OutdatedDocumentation(config: Config) :
 
     private fun findDocumentationMismatch(
         element: KtNamedDeclaration,
+        overridePropertyNames: Set<String> = emptySet(),
         elementDeclarationsProvider: () -> List<Declaration>,
     ): String? {
         val doc = element.docComment ?: return null
         val docDeclarations = getDocDeclarations(doc)
+            .filterNot { it.name in overridePropertyNames }
         if (docDeclarations.isEmpty()) return null
         val elementDeclarations = elementDeclarationsProvider()
         return findMismatchReason(docDeclarations, elementDeclarations)

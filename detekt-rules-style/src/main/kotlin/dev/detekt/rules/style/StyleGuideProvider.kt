@@ -55,6 +55,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
                 ::UnnecessaryInnerClass,
                 ::UtilityClassWithPublicConstructor,
                 ::ObjectLiteralToLambda,
+                ::OneTopLevelClassOrObjectPerFile,
                 ::OptionalAbstractKeyword,
                 ::OptionalUnit,
                 ::ProtectedMemberInFinalClass,
