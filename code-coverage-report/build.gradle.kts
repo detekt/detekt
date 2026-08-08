@@ -48,6 +48,7 @@ dependencies {
     jacocoAggregation(projects.detektRulesNaming)
     jacocoAggregation(projects.detektRulesPerformance)
     jacocoAggregation(projects.detektRulesRuleauthors)
+    jacocoAggregation(projects.detektRulesStandardLibrary)
     jacocoAggregation(projects.detektRulesStyle)
     jacocoAggregation(projects.detektTestUtils)
     jacocoAggregation(projects.detektTooling)
