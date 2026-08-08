@@ -5,6 +5,8 @@ import dev.detekt.api.Notification
 import dev.detekt.core.config.validation.ValidatableConfiguration
 import dev.detekt.core.config.validation.validateConfig
 import dev.detekt.core.util.indentCompat
+import kotlin.reflect.KClass
+import kotlin.reflect.cast
 
 class DisabledAutoCorrectConfig(private val wrapped: Config, override val parent: Config? = null) :
     Config,
@@ -14,18 +16,10 @@ class DisabledAutoCorrectConfig(private val wrapped: Config, override val parent
 
     override fun subConfigKeys(): Set<String> = wrapped.subConfigKeys()
 
-    override fun <T : Any> valueOrDefault(key: String, default: T): T =
-        @Suppress("UNCHECKED_CAST")
+    override fun <T : Any> valueOrNull(key: String, type: KClass<T>): T? =
         when (key) {
-            Config.AUTO_CORRECT_KEY -> false as T
-            else -> wrapped.valueOrDefault(key, default)
-        }
-
-    override fun <T : Any> valueOrNull(key: String): T? =
-        @Suppress("UNCHECKED_CAST")
-        when (key) {
-            Config.AUTO_CORRECT_KEY -> false as T
-            else -> wrapped.valueOrNull(key)
+            Config.AUTO_CORRECT_KEY -> type.cast(false)
+            else -> wrapped.valueOrNull(key, type)
         }
 
     override fun validate(baseline: Config, excludePatterns: Set<Regex>): List<Notification> =

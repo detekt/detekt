@@ -15,6 +15,7 @@ import dev.detekt.api.Severity.Warning
 import dev.detekt.api.config
 import dev.detekt.api.internal.DefaultRuleSetProvider
 import dev.detekt.api.internal.whichDetekt
+import dev.detekt.api.valueOrNull
 import dev.detekt.tooling.api.AnalysisMode
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
@@ -380,7 +381,7 @@ private class RuleDescriptionMatcher(
 private fun Config.toMap(): Map<String, Any?> =
     buildMap {
         subConfigKeys().forEach {
-            put(it, valueOrNull(it))
+            put(it, valueOrNull<Any>(it)!!)
         }
     }
 
