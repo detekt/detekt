@@ -99,10 +99,7 @@ class UnnamedParameterUse(config: Config) :
 
     @Configuration(
         "List of function signatures which should be ignored by this rule. " +
-            "Specifying fully-qualified function signature with name only (i.e. `kotlin.collections.maxOf`) will " +
-            "ignore all function calls matching the name. Specifying fully-qualified function signature with " +
-            "parameters (i.e. `kotlin.collections.maxOf(kotlin.Long, kotlin.Long)`) will ignore only " +
-            "function calls matching the name and parameters exactly."
+            FunctionMatcher.FUNCTION_MATCHER_DOC
     )
     private val ignoreFunctionCall: List<FunctionMatcher> by config(emptyList<String>()) {
         it.map(FunctionMatcher::fromFunctionSignature)
