@@ -415,6 +415,14 @@ export const extensions = [
     usesTypeResolution: true,
   },
   {
+    title: "MegaLinter",
+    description:
+      "Open-source linters aggregator for CI that runs detekt out of the box on Kotlin projects, alongside 100+ other linters.",
+    repo: "https://github.com/oxsecurity/megalinter",
+    docs: "https://megalinter.io/latest/descriptors/kotlin_detekt/",
+    tags: ["plugin"],
+  },
+  {
     title: "Operator",
     description:
       "Rules to prefer expressions over named functions for kotlin operators.",
