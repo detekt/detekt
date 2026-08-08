@@ -45,13 +45,6 @@ class GeneratorArgs {
     )
     var help: Boolean = false
 
-    @Parameter(
-        names = ["--generate-custom-rule-config", "-gcrc"],
-        description = "Generate config for user-defined rules. " +
-            "Path to user rules can be specified with --input option"
-    )
-    var generateCustomRuleConfig: Boolean = false
-
     @DynamicParameter(
         names = ["--replace", "-r"],
         description = "Any number of key and value pairs that are used to replace placeholders " +
