@@ -373,9 +373,10 @@ The rule ID, the file name and the signature are now separated by `:` instead of
 +<ID>TooGenericExceptionCaught:Junk.kt:Junk$e: RuntimeException</ID>
 ```
 
-This was tracked as [#2680](https://github.com/detekt/detekt/issues/2680) and could only be fixed
-in a major release. Delete your old baseline and regenerate it with `detektBaseline…` (Gradle) or
-`--create-baseline` (CLI) after upgrading.
+The 1.x signature builder deliberately preserved the old, slightly broken format because fixing it
+would invalidate every baseline; a major release was the only place it could change. Delete your
+old baseline and regenerate it with `detektBaseline…` (Gradle) or `--create-baseline` (CLI) after
+upgrading.
 
 If you run the same rule several times with different configurations, the ID carries the rule
 instance name too, for example `FeatureEnvy/my-instance:Junk.kt:signature`.
@@ -571,7 +572,7 @@ migration PRs we landed during the 2.0 alpha cycle — there are over 100 of the
 lines, so finding one that's structurally close to your rule is usually quick. A few good starting
 points by category:
 
-- **Style / complexity** — [#8220](https://github.com/detekt/detekt/pull/8220),
+- **Style / complexity** — [#8422](https://github.com/detekt/detekt/pull/8422),
   [#8408](https://github.com/detekt/detekt/pull/8408),
   [#8482](https://github.com/detekt/detekt/pull/8482)
 - **Potential bugs** — [#8157](https://github.com/detekt/detekt/pull/8157),
@@ -585,7 +586,7 @@ points by category:
   [#8290](https://github.com/detekt/detekt/pull/8290)
 - **Naming** — [#8201](https://github.com/detekt/detekt/pull/8201),
   [#8202](https://github.com/detekt/detekt/pull/8202),
-  [#8330](https://github.com/detekt/detekt/pull/8330)
+  [#8325](https://github.com/detekt/detekt/pull/8325)
 
 ### Findings, Issues and Detektion
 
