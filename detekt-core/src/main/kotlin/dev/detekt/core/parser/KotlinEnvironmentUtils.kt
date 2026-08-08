@@ -1,9 +1,19 @@
 package dev.detekt.core.parser
 
+import com.intellij.openapi.Disposable
+import org.jetbrains.kotlin.cli.common.CLICompiler.Companion.SCRIPT_PLUGIN_COMMANDLINE_PROCESSOR_NAME
+import org.jetbrains.kotlin.cli.common.CLICompiler.Companion.SCRIPT_PLUGIN_K2_REGISTRAR_NAME
+import org.jetbrains.kotlin.cli.common.CLICompiler.Companion.SCRIPT_PLUGIN_REGISTRAR_NAME
+import org.jetbrains.kotlin.cli.common.ExitCode
+import org.jetbrains.kotlin.cli.common.ExitCode.INTERNAL_ERROR
 import org.jetbrains.kotlin.cli.common.arguments.K2JVMCompilerArguments
 import org.jetbrains.kotlin.cli.common.arguments.parseCommandLineArguments
 import org.jetbrains.kotlin.cli.common.arguments.validateArguments
+import org.jetbrains.kotlin.cli.common.checkPluginsArguments
+import org.jetbrains.kotlin.cli.common.computeKotlinPaths
 import org.jetbrains.kotlin.cli.common.config.addKotlinSourceRoots
+import org.jetbrains.kotlin.cli.common.kotlinPaths
+import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity.LOGGING
 import org.jetbrains.kotlin.cli.common.messages.MessageRenderer
 import org.jetbrains.kotlin.cli.common.messages.PrintingMessageCollector
 import org.jetbrains.kotlin.cli.common.setupLanguageVersionSettings
@@ -12,10 +22,19 @@ import org.jetbrains.kotlin.cli.jvm.config.addJavaSourceRoots
 import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoots
 import org.jetbrains.kotlin.cli.jvm.config.configureJdkClasspathRoots
 import org.jetbrains.kotlin.cli.jvm.configureAdvancedJvmOptions
+import org.jetbrains.kotlin.cli.jvm.plugins.PluginCliParser
 import org.jetbrains.kotlin.cli.jvm.setupJvmSpecificArguments
+import org.jetbrains.kotlin.cli.plugins.extractPluginClasspathAndOptions
+import org.jetbrains.kotlin.cli.plugins.processCompilerPluginsOptions
+import org.jetbrains.kotlin.compiler.plugin.CommandLineProcessor
+import org.jetbrains.kotlin.compiler.plugin.CompilerPluginRegistrar
+import org.jetbrains.kotlin.compiler.plugin.ExperimentalCompilerApi
 import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.config.JVMConfigurationKeys
+import org.jetbrains.kotlin.config.messageCollector
+import org.jetbrains.kotlin.utils.KotlinPaths
+import org.jetbrains.kotlin.utils.PathUtil
 import java.io.File
 import java.io.PrintStream
 import java.nio.file.Path
@@ -34,6 +53,7 @@ fun createCompilerConfiguration(
     jdkHome: Path?,
     freeCompilerArgs: List<String>,
     printStream: PrintStream,
+    disposable: Disposable,
 ): CompilerConfiguration {
     val javaFiles = pathsToAnalyze.flatMap { path ->
         path.toFile().walk()
@@ -78,6 +98,13 @@ fun createCompilerConfiguration(
             CommonConfigurationKeys.MESSAGE_COLLECTOR_KEY,
             PrintingMessageCollector(printStream, MessageRenderer.PLAIN_FULL_PATHS, false)
         )
+
+        val paths = computeKotlinPaths(this, jvmCompilerArguments)?.also {
+            kotlinPaths = it
+        }
+
+        loadPlugins(paths, jvmCompilerArguments, this, disposable)
+
         setupLanguageVersionSettings(jvmCompilerArguments)
         setupJvmSpecificArguments(jvmCompilerArguments)
         configureAdvancedJvmOptions(jvmCompilerArguments)
@@ -89,5 +116,135 @@ fun createCompilerConfiguration(
         }
 
         configureJdkClasspathRoots()
+    }
+}
+
+// https://github.com/JetBrains/kotlin/blob/v2.4.0/compiler/cli/src/org/jetbrains/kotlin/cli/common/CLICompiler.kt#L207-L300
+private fun loadPlugins(
+    paths: KotlinPaths?,
+    arguments: K2JVMCompilerArguments,
+    configuration: CompilerConfiguration,
+    parentDisposable: Disposable,
+): ExitCode {
+    val pluginClasspaths = arguments.pluginClasspaths.toMutableList()
+    val pluginOptions = arguments.pluginOptions.toMutableList()
+    val pluginConfigurations = arguments.pluginConfigurations.asList()
+    val pluginOrderConstraints = arguments.pluginOrderConstraints.asList()
+
+    val useK2 = configuration[CommonConfigurationKeys.USE_FIR] == true
+
+    if (!checkPluginsArguments(configuration, useK2, pluginClasspaths, pluginOptions, pluginConfigurations)) {
+        return INTERNAL_ERROR
+    }
+
+    val scriptingPluginClasspath = mutableListOf<String>()
+    val scriptingPluginOptions = mutableListOf<String>()
+
+    if (!arguments.disableDefaultScriptingPlugin) {
+        scriptingPluginOptions.addPlatformOptions(arguments)
+        val explicitScriptingPlugin =
+            extractPluginClasspathAndOptions(pluginConfigurations).any { (_, classpath, _) ->
+                classpath.any { File(it).name.startsWith(PathUtil.KOTLIN_SCRIPTING_COMPILER_PLUGIN_NAME) }
+            } || pluginClasspaths.any { File(it).name.startsWith(PathUtil.KOTLIN_SCRIPTING_COMPILER_PLUGIN_NAME) }
+        val explicitOrLoadedScriptingPlugin = explicitScriptingPlugin ||
+            tryLoadScriptingPluginFromCurrentClassLoader(configuration, pluginOptions, useK2)
+        if (!explicitOrLoadedScriptingPlugin) {
+            val kotlinPaths = paths ?: PathUtil.kotlinPathsForCompiler
+            val libPath = kotlinPaths.libPath.takeIf { it.exists() && it.isDirectory } ?: File(".")
+            val (jars, missingJars) =
+                PathUtil.KOTLIN_SCRIPTING_PLUGIN_CLASSPATH_JARS.map { File(libPath, it) }.partition { it.exists() }
+            if (missingJars.isEmpty()) {
+                scriptingPluginClasspath.addAll(0, jars.map { it.canonicalPath })
+            } else {
+                configuration.messageCollector.report(
+                    LOGGING,
+                    "Scripting plugin will not be loaded: not all required jars are present in the classpath (missing" +
+                        " files: $missingJars)"
+                )
+            }
+        }
+    } else {
+        scriptingPluginOptions.add("plugin:kotlin.scripting:disable=true")
+    }
+
+    pluginClasspaths.addAll(scriptingPluginClasspath)
+    pluginOptions.addAll(scriptingPluginOptions)
+
+    return PluginCliParser.loadPluginsSafe(
+        pluginClasspaths,
+        pluginOptions,
+        pluginConfigurations,
+        pluginOrderConstraints,
+        configuration,
+        parentDisposable
+    )
+}
+
+@OptIn(ExperimentalCompilerApi::class)
+private fun tryLoadScriptingPluginFromCurrentClassLoader(
+    configuration: CompilerConfiguration,
+    pluginOptions: List<String>,
+    useK2: Boolean,
+): Boolean =
+    try {
+        val pluginRegistrarClass = PluginCliParser::class.java.classLoader.loadClass(SCRIPT_PLUGIN_REGISTRAR_NAME)
+
+        @Suppress("DEPRECATION_ERROR")
+        val pluginRegistrar = (
+            pluginRegistrarClass.getDeclaredConstructor().newInstance()
+                as? org.jetbrains.kotlin.compiler.plugin.ComponentRegistrar
+            )?.also {
+            configuration.add(
+                org.jetbrains.kotlin.compiler.plugin.ComponentRegistrar.PLUGIN_COMPONENT_REGISTRARS,
+                it
+            )
+        }
+        val pluginK2Registrar = if (useK2) {
+            val pluginK2RegistrarClass = PluginCliParser::class.java.classLoader.loadClass(
+                SCRIPT_PLUGIN_K2_REGISTRAR_NAME
+            )
+            (pluginK2RegistrarClass.getDeclaredConstructor().newInstance() as? CompilerPluginRegistrar)?.also {
+                configuration.add(CompilerPluginRegistrar.COMPILER_PLUGIN_REGISTRARS, it)
+            }
+        } else {
+            null
+        }
+        if (pluginRegistrar != null || pluginK2Registrar != null) {
+            processScriptPluginCliOptions(pluginOptions, configuration)
+            true
+        } else {
+            false
+        }
+    } catch (@Suppress("TooGenericExceptionCaught") e: Throwable) {
+        val messageCollector = configuration.getNotNull(CommonConfigurationKeys.MESSAGE_COLLECTOR_KEY)
+        messageCollector.report(LOGGING, "Exception on loading scripting plugin: $e")
+        false
+    }
+
+@OptIn(ExperimentalCompilerApi::class)
+private fun processScriptPluginCliOptions(pluginOptions: List<String>, configuration: CompilerConfiguration) {
+    val cmdlineProcessorClass =
+        if (pluginOptions.isEmpty()) {
+            null
+        } else {
+            PluginCliParser::class.java.classLoader.loadClass(SCRIPT_PLUGIN_COMMANDLINE_PROCESSOR_NAME)!!
+        }
+    val cmdlineProcessor = cmdlineProcessorClass?.getDeclaredConstructor()?.newInstance() as? CommandLineProcessor
+    if (cmdlineProcessor != null) {
+        processCompilerPluginsOptions(configuration, pluginOptions, listOf(cmdlineProcessor))
+    }
+}
+
+// https://github.com/JetBrains/kotlin/blob/v2.4.0/compiler/cli/cli-jvm/src/org/jetbrains/kotlin/cli/jvm/K2JVMCompiler.kt#L182-L193
+private fun MutableList<String>.addPlatformOptions(arguments: K2JVMCompilerArguments) {
+    if (arguments.scriptTemplates.isNotEmpty()) {
+        add("plugin:kotlin.scripting:script-templates=${arguments.scriptTemplates.joinToString(",")}")
+    }
+    if (arguments.scriptResolverEnvironment.isNotEmpty()) {
+        add(
+            "plugin:kotlin.scripting:script-resolver-environment=${
+                arguments.scriptResolverEnvironment.joinToString(",")
+            }"
+        )
     }
 }

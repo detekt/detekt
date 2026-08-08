@@ -1,11 +1,16 @@
 plugins {
     id("org.jetbrains.kotlin.jvm")
+    id("org.jetbrains.kotlin.plugin.serialization")
     id("dev.detekt")
 }
 
 repositories {
     mavenLocal()
     mavenCentral()
+}
+
+detekt {
+    debug = true
 }
 
 tasks.detektMain {
@@ -21,4 +26,8 @@ kotlin {
     compilerOptions {
         jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
     }
+}
+
+dependencies {
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.10.0")
 }
