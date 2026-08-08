@@ -15,6 +15,7 @@ import dev.detekt.gradle.plugin.internal.DetektAndroidCompilations
 import dev.detekt.gradle.plugin.internal.DetektJvmCompilations
 import dev.detekt.gradle.plugin.internal.DetektKmpJvmCompilations
 import dev.detekt.gradle.plugin.internal.conventionCompat
+import dev.detekt.gradle.plugin.internal.setVisibleCompat
 import org.gradle.api.Incubating
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -121,7 +122,7 @@ class DetektPlugin : Plugin<Project> {
 
     private fun configurePluginDependencies(project: Project, extension: DetektExtension) {
         project.configurations.register(CONFIGURATION_DETEKT) { configuration ->
-            configuration.isVisible = false
+            configuration.setVisibleCompat(false)
             configuration.isTransitive = true
             configuration.description = "The $CONFIGURATION_DETEKT dependencies to be used for this project."
             configuration.isCanBeResolved = true
