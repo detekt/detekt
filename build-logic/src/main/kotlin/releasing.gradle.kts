@@ -9,8 +9,6 @@ val releaseAssetFiles = configurations.resolvable("releaseAssetFiles") {
     extendsFrom(releaseArtifacts)
 }
 
-val version = Versions.currentOrSnapshot()
-
 githubRelease {
     token(providers.gradleProperty("github.token"))
     owner = "detekt"

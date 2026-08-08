@@ -13,7 +13,7 @@ The associated **code samples** to this guide can be found in the package [detek
 _detekt_ uses the `ServiceLoader` pattern to collect all instances of `RuleSetProvider` interfaces. 
 So it is possible to define rules/rule sets and enhance _detekt_ with your own flavor. 
 
-:::caution Attention
+:::caution[Attention]
 
 You need a `resources/META-INF/services/io.gitlab.arturbosch.detekt.api.RuleSetProvider` file which 
 has as content the fully qualified name of your `RuleSetProvider` e.g. `io.gitlab.arturbosch.detekt.sample.extensions.SampleProvider`.

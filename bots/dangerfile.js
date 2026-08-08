@@ -1,4 +1,4 @@
-import { danger, fail, markdown, warn, message } from "danger";
+import { danger, fail, markdown, warn, message, schedule } from "danger";
 
 // API reference: https://danger.systems/js/reference.html
 const pr = danger.github.pr;
@@ -21,6 +21,9 @@ const websiteUnversionedChanges = danger.git.fileMatch(
 const websiteVersionedChanges = danger.git.fileMatch(
     "website/versioned_docs/**/*.md",
     "website/versioned_docs/**/*.mdx");
+const websiteMarkdownChanges = danger.git.fileMatch(
+    "website/**/*.md",
+    "website/**/*.mdx");
 const milestone = danger.github.pr.milestone;
 const prReviews = danger.github.reviews;
 
@@ -93,3 +96,42 @@ if (websiteUnversionedChanges.edited && !websiteVersionedChanges.edited) {
       "Most of the time you want to update also the docs inside `website/docs/` as well, so this change will reflect also for documentation on **future versions** of detekt."
   );
 }
+
+// Docusaurus 3 only understands the `:::keyword[Title]` form of admonition titles.
+// The Docusaurus 2 form, `:::keyword Title`, is no longer parsed as an admonition:
+// it silently renders as a literal `:::` paragraph and the website still builds fine,
+// so nothing but a human reading the published page will catch it.
+const legacyAdmonitionTitle = /^[ \t]*:{3,}[a-z]+[ \t]+\S/;
+
+schedule(async () => {
+  const offenders = [];
+
+  for (const file of websiteMarkdownChanges.getKeyedPaths().edited) {
+    const diff = await danger.git.structuredDiffForFile(file);
+    if (!diff) {
+      continue;
+    }
+    for (const chunk of diff.chunks) {
+      for (const change of chunk.changes) {
+        if (change.type !== "add") {
+          continue;
+        }
+        // `content` keeps the leading `+` from the diff, so drop it before matching.
+        const line = change.content.slice(1);
+        if (legacyAdmonitionTitle.test(line)) {
+          offenders.push(`- \`${file}:${change.ln}\` — \`${line.trim()}\``);
+        }
+      }
+    }
+  }
+
+  if (offenders.length > 0) {
+    fail(
+      "This PR adds admonitions written with the Docusaurus 2 title syntax `:::keyword Title`. " +
+        "Docusaurus 3 only recognises `:::keyword[Title]`, so these blocks won't render as admonitions — " +
+        "they'll appear as literal `:::` text on the website, and the build won't fail. " +
+        "Please move the titles into square brackets:\n\n" +
+        offenders.join("\n")
+    );
+  }
+});

@@ -11,6 +11,7 @@ import dev.detekt.gradle.internal.setCreateBaselineTaskDefaults
 import dev.detekt.gradle.internal.setDetektTaskDefaults
 import dev.detekt.gradle.plugin.internal.mapExplicitArgMode
 import dev.detekt.gradle.plugin.internal.rootProjectDirectoryCompat
+import dev.detekt.gradle.plugin.internal.setVisibleCompat
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.ReportingBasePlugin
@@ -57,7 +58,7 @@ class DetektBasePlugin : Plugin<Project> {
         }
 
         project.configurations.register(CONFIGURATION_DETEKT_PLUGINS) { configuration ->
-            configuration.isVisible = false
+            configuration.setVisibleCompat(false)
             configuration.isTransitive = true
             configuration.description = "The $CONFIGURATION_DETEKT_PLUGINS libraries to be used for this project."
             configuration.isCanBeResolved = true

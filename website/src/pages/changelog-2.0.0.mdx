@@ -12,6 +12,54 @@ Detekt 2.0.0 is still in alpha. While it's stable enough to use in your projects
 
 :::
 
+## 2.0.0-alpha.6 - 2026-08-04
+
+This is an alpha release of Detekt 2.0.0. It's built against Kotlin 2.4.10, Gradle 9.6.1, AGP 9.3.1 and is tested against JDK 25.
+
+### Notable Changes
+
+- `detekt-rules-ktlint-wrapper` now targets JVM 17, in preparation for the next ktlint major release which requires JVM 17+, the rest of detekt still targets JVM 8+ - [#9453](https://github.com/detekt/detekt/pull/9453)
+
+### Changelog
+
+- feat(rules): add ignoreSealedClasses option to AbstractClassCanBeInterface - [#9557](https://github.com/detekt/detekt/pull/9557)
+- docs: drop stale Android compile classpath warning note - [#9550](https://github.com/detekt/detekt/pull/9550)
+- Recommend to use Locale.ROOT instead of Locale.US - [#9532](https://github.com/detekt/detekt/pull/9532)
+- Recognize params swallowed by KDoc lexer in OutdatedDocumentation - [#9529](https://github.com/detekt/detekt/pull/9529)
+- Fix UnusedPrivateProperty false negative for constructor properties - [#9491](https://github.com/detekt/detekt/pull/9491)
+- Fix MissingSuperCall false positive when annotation is in grandparent - [#9469](https://github.com/detekt/detekt/pull/9469)
+- Fix UseDataClass false positive for properties with a custom accessor - [#9462](https://github.com/detekt/detekt/pull/9462)
+- Fix a potential bug on `Config.getListOrDefault` - [#9461](https://github.com/detekt/detekt/pull/9461)
+- Fix `UnusedPrivateFunction` false positive for overloaded private extension functions with a Java (or generated) receiver type - [#9450](https://github.com/detekt/detekt/pull/9450)
+- Fix `CanBeNonNullable` false negative on local variables - [#9432](https://github.com/detekt/detekt/pull/9432)
+- Fix CognitiveComplexMethod false positive for object literal methods - [#9431](https://github.com/detekt/detekt/pull/9431)
+- Fix `ReturnCount`/`ThrowsCount` false positive where a guard clause following a local variable declaration was still counted (with `excludeGuardClauses` enabled) - [#9424](https://github.com/detekt/detekt/pull/9424)
+- Extend `PropertyUsedBeforeDeclaration` to follow private init calls - [#9334](https://github.com/detekt/detekt/pull/9334)
+- Add configuration ignoredFullyQualifiedNames to UnnecessaryFullyQualifiedName rule - [#9301](https://github.com/detekt/detekt/pull/9301)
+- Expose multiline parameter in `ClassSignature` - [#9084](https://github.com/detekt/detekt/pull/9084)
+- Extract interfaces from detekt Gradle tasks - [#7662](https://github.com/detekt/detekt/pull/7662)
+- Allow setting default autocorrect mode with Gradle property - [#7040](https://github.com/detekt/detekt/pull/7040)
+
+### Dependency Updates
+
+- Update agp to v9.3.1 - [#9538](https://github.com/detekt/detekt/pull/9538)
+- Update kotlin monorepo to v2.4.10 - [#9518](https://github.com/detekt/detekt/pull/9518)
+- Update Gradle to v9.6.1 - [#9444](https://github.com/detekt/detekt/pull/9444)
+- Update Gradle to v9.6.0 - [#9420](https://github.com/detekt/detekt/pull/9420)
+
+### Housekeeping & Refactorings
+
+- Reduce scope of `@Suppress("UNCHECKED_CAST")` - [#9459](https://github.com/detekt/detekt/pull/9459)
+- Remove irrelevant test for YamlConfig - [#9457](https://github.com/detekt/detekt/pull/9457)
+- fix: handle trailing commas in @Configuration annotation parsing in JS generator - [#9447](https://github.com/detekt/detekt/pull/9447)
+- Production code should not depend on fixtures - [#9439](https://github.com/detekt/detekt/pull/9439)
+
+### Contributors
+
+We would like to thank the following contributors that made this release possible: [@3flex](https://github.com/3flex), [@BraisGabin](https://github.com/BraisGabin), [@ChristophyBarth](https://github.com/ChristophyBarth), [@FilippoVigani](https://github.com/FilippoVigani), [@Phoenix1808](https://github.com/Phoenix1808), [@ShubhamWorks02](https://github.com/ShubhamWorks02), [@cortinico](https://github.com/cortinico), [@e5l](https://github.com/e5l), [@eyupcanakman](https://github.com/eyupcanakman), [@iuryeng](https://github.com/iuryeng), [@loganrosen](https://github.com/loganrosen), [@marpalat](https://github.com/marpalat), [@roian6](https://github.com/roian6), [@sahilpatel2521](https://github.com/sahilpatel2521), [@tonytonycoder11](https://github.com/tonytonycoder11)
+
+See all issues at: [2.0.0](https://github.com/detekt/detekt/milestone/42)
+
 ## 2.0.0-alpha.5 - 2026-06-17
 
 This is a hotfix release for `2.0.0-alpha.4` where we fixed 2 bugs that were preventing detekt from running correctly.

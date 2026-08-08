@@ -1,0 +1,65 @@
+---
+id: glob-patterns
+title: "Glob Patterns"
+keywords: [glob, pattern, wildcard, configuration]
+sidebar_position: 12
+---
+
+Several rule configuration options accept glob patterns instead of literal names, so that a
+single entry can cover a whole package or a family of declarations. detekt supports two
+pattern flavors. They differ in whether `*` and `?` stop at the package separator, so check
+the documentation of the option you are configuring to see which one applies.
+
+Both flavors are anchored: a pattern has to match the **whole** name, not just a part of it.
+`java.util.Date` therefore never matches `java.util.DateFormat`.
+
+In either flavor, a pattern that is not a valid expression, such as `a[b`, fails the analysis
+with a pattern syntax error.
+
+Neither flavor is related to the file path globs used by `excludes` and `includes`, which are
+described in [detekt Configuration File](configurations.mdx).
+
+## Simple patterns
+
+In this flavor `*` matches zero or more characters and `?` matches exactly one character.
+Neither one stops at the package separator, so `*` and `?` can both match a `.`.
+
+| Pattern | Matches | Does not match |
+| --- | --- | --- |
+| `java.util.Date` | `java.util.Date` | `java.util.DateFormat` |
+| `java.util.*` | `java.util.Date`, `java.util.concurrent.Future` | `java.util` |
+| `java.util.Dat?` | `java.util.Date` | `java.util.Dat`, `java.util.Dates` |
+| `java?util` | `java.util`, `java_util` | `javautil` |
+| `*.internal.*` | `com.example.internal.Foo` | `com.example.Foo` |
+
+Because `*` also matches an empty string, `java.util.*` covers everything below `java.util`
+but not `java.util` itself. Write two entries if you need both.
+
+A `.` is always a literal character and cannot be escaped. A pattern written as
+`java\.util\.Date` does not match `java.util.Date`, or any other ordinary qualified name, so
+write `java.util.Date` instead.
+
+## Package-aware patterns
+
+In this flavor `*` and `?` stop at the package separator, and `**` is used to cross it:
+
+- `*` matches zero or more characters within a single segment.
+- `?` matches exactly one character within a single segment.
+- `**` crosses package separators and must be followed by a `.`. Write it as a complete
+  segment, as in `a.**.Foo`; attached to other characters, as in `pre**.Foo`, it no longer
+  matches whole segments.
+
+| Pattern | Matches | Does not match |
+| --- | --- | --- |
+| `test.Foo` | `test.Foo` | `test.bar.Foo` |
+| `test?Foo` | `testXFoo` | `test.Foo` |
+| `**.Foo` | `test.Foo`, `test.bar.Foo` | `Foo` |
+| `**.F*` | `test.Foo`, `test.bar.Foo` | `Foo` |
+| `a.**.d.Foo` | `a.b.c.d.Foo` | `a.d.Foo` |
+
+Written as a complete segment, `**` needs at least one segment to match, so
+`a.**.b.c.d.Foo` does not match `a.b.c.d.Foo`.
+
+This flavor is used by options that treat `.` as a package separator, most notably the
+`ignoreAnnotated` option described in [Suppressors](suppressors.mdx). It is the only flavor
+that understands `**`.

@@ -462,6 +462,107 @@ class OutdatedDocumentationSpec {
     }
 
     @Nested
+    inner class `inline code descriptions` {
+
+        @Test
+        fun `should not report when aligned params are documented with backtick-only descriptions`() {
+            val backtickOnlyDescriptions = """
+                /**
+                 * @param hue        `[0, 1]`
+                 * @param saturation `[0, 1]`
+                 * @param brightness `[0, 1]`
+                 * @param alpha      `[0, 1]`
+                 */
+                fun fromHsb(hue: Float, saturation: Float, brightness: Float, alpha: Float) = Unit
+            """.trimIndent()
+            assertThat(subject.lint(backtickOnlyDescriptions)).isEmpty()
+        }
+
+        @Test
+        fun `should not report when unaligned params are documented with backtick-only descriptions`() {
+            val backtickOnlyDescriptions = """
+                /**
+                 * @param hue `[0, 1]`
+                 * @param saturation `[0, 1]`
+                 */
+                fun fromHsb(hue: Float, saturation: Float) = Unit
+            """.trimIndent()
+            assertThat(subject.lint(backtickOnlyDescriptions)).isEmpty()
+        }
+
+        @Test
+        fun `should not report when class params and properties are documented with backtick-only descriptions`() {
+            val backtickOnlyDescriptions = """
+                /**
+                 * @param someParam `[0, 1]`
+                 * @property someProp `[0, 1]`
+                 */
+                class MyClass(someParam: String, val someProp: String)
+            """.trimIndent()
+            assertThat(subject.lint(backtickOnlyDescriptions)).isEmpty()
+        }
+
+        @Test
+        fun `should report when a param documented with backtick-only description is not present in the declaration`() {
+            val backtickOnlyDescriptions = """
+                /**
+                 * @param hue `[0, 1]`
+                 * @param saturation `[0, 1]`
+                 */
+                fun fromHsb(hue: Float) = Unit
+            """.trimIndent()
+            assertThat(subject.lint(backtickOnlyDescriptions)).singleElement()
+                .hasMessage(
+                    "Documentation of fromHsb is outdated: documented parameters 'saturation' are not present in the declaration"
+                )
+        }
+
+        @Test
+        fun `should report when params documented with backtick-only descriptions have mismatching order`() {
+            val backtickOnlyDescriptions = """
+                /**
+                 * @param saturation `[0, 1]`
+                 * @param hue `[0, 1]`
+                 */
+                fun fromHsb(hue: Float, saturation: Float) = Unit
+            """.trimIndent()
+            assertThat(subject.lint(backtickOnlyDescriptions)).singleElement()
+                .hasMessage(
+                    "Documentation of fromHsb is outdated: order of documented parameters does not match the declaration order"
+                )
+        }
+
+        @Test
+        fun `should report when not all params are documented with backtick-only descriptions`() {
+            val backtickOnlyDescriptions = """
+                /**
+                 * @param hue `[0, 1]`
+                 * @param saturation `[0, 1]`
+                 */
+                fun fromHsb(hue: Float, saturation: Float, brightness: Float) = Unit
+            """.trimIndent()
+            assertThat(subject.lint(backtickOnlyDescriptions)).singleElement()
+                .hasMessage(
+                    "Documentation of fromHsb is outdated: parameters 'brightness' are not documented"
+                )
+        }
+
+        @Test
+        fun `should not report param tags inside fenced code blocks as documentation`() {
+            val fencedCodeBlock = """
+                /**
+                 * @param someParam usage:
+                 * ```
+                 * @param fake
+                 * ```
+                 */
+                fun myFun(someParam: String) {}
+            """.trimIndent()
+            assertThat(subject.lint(fencedCodeBlock)).isEmpty()
+        }
+    }
+
+    @Nested
     inner class `function with type params` {
 
         @Test
@@ -681,6 +782,82 @@ class OutdatedDocumentationSpec {
                 class MyClass(someParam: String, val someProp: String)
             """.trimIndent()
             assertThat(configuredSubject.lint(propertyAsParam)).isEmpty()
+        }
+    }
+
+    @Nested
+    inner class `override properties in class hierarchy` {
+        @Test
+        fun `should not report when subclass overrides documented property from base class`() {
+            val code = """
+                /**
+                 * @property name The name
+                 */
+                open class Named(open val name: String)
+
+                /**
+                 * @property age The age
+                 */
+                class Person(
+                    override val name: String,
+                    val age: Int
+                ) : Named(name)
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `should not report when subclass overrides and has own documented properties`() {
+            val code = """
+                /**
+                 * @property id The identifier
+                 */
+                abstract class Entity(open val id: String)
+
+                /**
+                 * @property name The user name
+                 * @property email The user email
+                 */
+                class User(
+                    override val id: String,
+                    val name: String,
+                    val email: String
+                ) : Entity(id)
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `should not report when data class overrides property from superclass`() {
+            val code = """
+                open class HasId(open val id: Long)
+
+                /**
+                 * @property name The name
+                 */
+                data class Item(
+                    override val id: Long,
+                    val name: String
+                ) : HasId(id)
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `should report when override property is incorrectly documented`() {
+            val code = """
+                interface Named {
+                    val name: String
+                }
+
+                /**
+                 * @property wrongName Wrong documentation
+                 */
+                class Person(
+                    override val name: String
+                ) : Named
+            """.trimIndent()
+            assertThat(subject.lint(code)).hasSize(1)
         }
     }
 

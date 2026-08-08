@@ -38,7 +38,7 @@ dependencyResolutionManagement {
 plugins {
     id("com.gradle.develocity") version "4.5.0"
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
-    id("com.autonomousapps.build-health") version "3.17.0"
+    id("com.autonomousapps.build-health") version "3.18.0"
     // Kotlin plugin must be added to classpath to support build-health analysis
     id("org.jetbrains.kotlin.jvm") version "2.4.10" apply false
 }
@@ -51,7 +51,7 @@ buildCache {
         isEnabled = !isCiBuild
     }
     remote(develocity.buildCache) {
-        server = "https://ge.detekt.dev"
+        server = "https://community.develocity.cloud"
         isEnabled = true
         isPush = isCiBuild
     }

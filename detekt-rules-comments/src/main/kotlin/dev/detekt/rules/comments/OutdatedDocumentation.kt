@@ -7,6 +7,7 @@ import dev.detekt.api.Finding
 import dev.detekt.api.Rule
 import dev.detekt.api.config
 import dev.detekt.psi.isInternal
+import dev.detekt.psi.isOverride
 import org.jetbrains.kotlin.kdoc.parser.KDocKnownTag
 import org.jetbrains.kotlin.kdoc.psi.api.KDoc
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocSection
@@ -84,10 +85,11 @@ class OutdatedDocumentation(config: Config) :
     override fun visitClass(klass: KtClass) {
         super.visitClass(klass)
         val classDeclarations = getClassDeclarations(klass)
-        val reason = findDocumentationMismatch(klass) { classDeclarations }
+        val overridePropertyNames = getOverridePropertyNames(klass)
+        val reason = findDocumentationMismatch(klass, overridePropertyNames) { classDeclarations }
         if (reason != null && (
                 isInternalOrPrivate(klass.primaryConstructor).not() ||
-                    findDocumentationMismatch(klass) {
+                    findDocumentationMismatch(klass, overridePropertyNames) {
                         classDeclarations.filterNot { it.type == DeclarationType.PARAM }
                     } != null
                 )
@@ -121,6 +123,14 @@ class OutdatedDocumentation(config: Config) :
         return typeParams + constructorDeclarations
     }
 
+    private fun getOverridePropertyNames(klass: KtClass): Set<String> =
+        klass.primaryConstructor
+            ?.valueParameters
+            ?.filter { it.isOverride() }
+            ?.mapNotNull { it.name }
+            ?.toSet()
+            .orEmpty()
+
     private fun getFunctionDeclarations(function: KtNamedFunction): List<Declaration> {
         val typeParams = if (matchTypeParameters) {
             function.typeParameters.mapNotNull { it.name.toParamOrNull() }
@@ -139,6 +149,7 @@ class OutdatedDocumentation(config: Config) :
 
     private fun getDeclarationsForValueParameters(valueParameters: List<KtParameter>): List<Declaration> =
         valueParameters.mapNotNull {
+            if (it.isOverride()) return@mapNotNull null
             it.name?.let { name ->
                 val type = if (it.isPropertyParameter() && it.isPrivate().not()) {
                     if (allowParamOnConstructorProperties) {
@@ -168,21 +179,50 @@ class OutdatedDocumentation(config: Config) :
 
     @Suppress("ElseCaseInsteadOfExhaustiveWhen")
     private fun processDocTag(docTag: KDocTag): List<Declaration> {
-        val knownTag = docTag.knownTag
-        val subjectName = docTag.getSubjectName() ?: return emptyList()
-        return when (knownTag) {
-            KDocKnownTag.PARAM -> listOf(Declaration(subjectName, DeclarationType.PARAM))
-            KDocKnownTag.PROPERTY -> listOf(Declaration(subjectName, DeclarationType.PROPERTY))
-            else -> emptyList()
+        val declaration = docTag.getSubjectName()?.let { subjectName ->
+            when (docTag.knownTag) {
+                KDocKnownTag.PARAM -> Declaration(subjectName, DeclarationType.PARAM)
+                KDocKnownTag.PROPERTY -> Declaration(subjectName, DeclarationType.PROPERTY)
+                else -> null
+            }
         }
+        return listOfNotNull(declaration) + findSwallowedDeclarations(docTag)
+    }
+
+    /**
+     * The KDoc lexer treats a tag description consisting only of an inline code span (e.g. ``@param x `[0, 1]` ``)
+     * as a code span that continues on the following lines, so subsequent tags are merged into the current
+     * [KDocTag] as raw text instead of being parsed as separate tags. Recover them from the tag text.
+     */
+    private fun findSwallowedDeclarations(docTag: KDocTag): List<Declaration> {
+        var inFencedCodeBlock = false
+        return docTag.text
+            .lineSequence()
+            .drop(1)
+            .map { it.trimStart().removePrefix("*").trim() }
+            .mapNotNull { line ->
+                if (line.startsWith("```")) {
+                    inFencedCodeBlock = !inFencedCodeBlock
+                    return@mapNotNull null
+                }
+                if (inFencedCodeBlock) return@mapNotNull null
+                swallowedTagRegex.find(line)?.let { match ->
+                    val (tagName, subjectName) = match.destructured
+                    val type = if (tagName == "param") DeclarationType.PARAM else DeclarationType.PROPERTY
+                    Declaration(subjectName, type)
+                }
+            }
+            .toList()
     }
 
     private fun findDocumentationMismatch(
         element: KtNamedDeclaration,
+        overridePropertyNames: Set<String> = emptySet(),
         elementDeclarationsProvider: () -> List<Declaration>,
     ): String? {
         val doc = element.docComment ?: return null
         val docDeclarations = getDocDeclarations(doc)
+            .filterNot { it.name in overridePropertyNames }
         if (docDeclarations.isEmpty()) return null
         val elementDeclarations = elementDeclarationsProvider()
         return findMismatchReason(docDeclarations, elementDeclarations)
@@ -254,3 +294,5 @@ class OutdatedDocumentation(config: Config) :
         ANY,
     }
 }
+
+private val swallowedTagRegex = Regex("""^@(param|property)\s+\[?([^\s\[\]]+)]?""")

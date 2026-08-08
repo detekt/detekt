@@ -312,22 +312,22 @@ Check the [README.md inside website/](https://github.com/detekt/detekt/blob/main
 
 ## Develocity Access
 
-We do have access to a managed [Develocity instance][6] that is publishing
+We do have access to the [OSS Community Develocity Instance][6] that is publishing
 build scans for all the builds executed on CI (not from forks).
 
 This is extremely helpful to debug build failures and have access to remote build cache.
 Build scans are public so everyone can get insights on our build status.
 
-If you're a **maintainer** of a project under github.com/detekt/, you can request an access token
+If you're a **maintainer** of a project under github.com/detekt/, you can provision an access key
 to connect your local machine to the Develocity instance, so you will also be publishing scans.
 
 You must follow the steps below:
 
-1. Email us at [info@detekt.dev][7] or get in touch with one of the existing maintainers.
-2. An account on https://ge.detekt.dev/ will be created for you, which you need to configure upon login (e.g. reset your password).
-3. Run the `./gradlew provisionGradleEnterpriseAccessKey` task from the detekt root folder
+1. Email us at [info@detekt.dev][7] or get in touch with one of the existing maintainers to be granted access to the `detekt` project on the instance.
+2. Sign in at https://community.develocity.cloud/.
+3. Run the `./gradlew provisionDevelocityAccessKey` task from the detekt root folder
 4. Complete the access key provisioning process (you will have to go through a browser).
-5. Verify that the access key is correctly stored inside `~/.gradle/enterprise/keys.properties`
+5. Verify that the access key is correctly stored inside `~/.gradle/develocity/keys.properties`
 6. Do a test run (say with `./gradlew tasks`) to verify that a scan is correctly published.
 
 More information on this process could be found on the [official Develocity documentation][8].
@@ -337,6 +337,6 @@ More information on this process could be found on the [official Develocity docu
 [3]: https://kotlinlang.org/docs/kotlin-doc.html
 [4]: https://daringfireball.net/projects/markdown/syntax
 [5]: https://kotlinlang.org/docs/functions.html#named-arguments
-[6]: https://ge.detekt.dev/
+[6]: https://community.develocity.cloud/
 [7]: mailto:info@detekt.dev
 [8]: https://docs.gradle.com/develocity/gradle-plugin/current/#automated_access_key_provisioning

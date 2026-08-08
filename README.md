@@ -4,7 +4,7 @@
 [![Visit the website at detekt.dev/](https://img.shields.io/badge/visit-website-red.svg?logo=firefox)](https://detekt.dev/)
 [![Maven Central](https://img.shields.io/maven-central/v/io.gitlab.arturbosch.detekt/detekt-cli?label=MavenCentral&logo=apache-maven)](https://search.maven.org/artifact/io.gitlab.arturbosch.detekt/detekt-cli)
 [![Gradle Plugin](https://img.shields.io/maven-central/v/io.gitlab.arturbosch.detekt/detekt-gradle-plugin?label=Gradle&logo=gradle)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
-[![Revved up by Develocity](https://img.shields.io/badge/Revved%20up%20by-Develocity-06A0CE?logo=Gradle&labelColor=02303A)](https://ge.detekt.dev/scans)
+[![Revved up by Develocity](https://img.shields.io/badge/Revved%20up%20by-Develocity-06A0CE?logo=Gradle&labelColor=02303A)](https://community.develocity.cloud/scans?search.rootProjectNames=detekt)
 [![License](https://img.shields.io/github/license/detekt/detekt.svg)](LICENSE)
 
 ![Pre Merge Checks](https://github.com/detekt/detekt/workflows/Pre%20Merge%20Checks/badge.svg?branch=main)
@@ -112,6 +112,7 @@ Gradle 6.8.3+ is the minimum requirement. However, the recommended versions toge
 
 | Detekt Version  | Gradle   | Kotlin   | AGP      | Java Target Level | JDK Max Version |
 |-----------------|----------|----------|----------|-------------------|-----------------|
+| `2.0.0-alpha.6` | `9.6.1`  | `2.4.10` | `9.3.1`  | `1.8`             | `25`            |
 | `2.0.0-alpha.5` | `9.5.1`  | `2.4.0`  | `9.2.1`  | `1.8`             | `25`            |
 | `2.0.0-alpha.3` | `9.3.1`  | `2.3.21` | `9.1.1`  | `1.8`             | `25`            |
 | `2.0.0-alpha.2` | `9.3.0`  | `2.3.0`  | `9.0.0`  | `1.8`             | `25`            |
