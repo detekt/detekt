@@ -720,6 +720,8 @@ style:
     active: true
   ObjectLiteralToLambda:
     active: true
+  OneTopLevelClassOrObjectPerFile:
+    active: false
   OptionalAbstractKeyword:
     active: true
   OptionalUnit:
