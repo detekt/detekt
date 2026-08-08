@@ -4,8 +4,12 @@ on:
   push:
     branches:
       - main
-      - release/1.xs
   pull_request:
+    # The website is built and deployed from main only. On release/1.x the Docusaurus build has been
+    # failing on its own (SSR of introduction/configurations throws "React is not defined"), and
+    # fixing 1.x docs tooling is not worth it, so PRs targeting that branch skip it.
+    branches-ignore:
+      - release/1.x
 
 env:
   GRADLE_ENTERPRISE_ACCESS_KEY: ${{ secrets.GRADLE_ENTERPRISE_ACCESS_KEY }}
