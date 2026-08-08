@@ -110,6 +110,64 @@ If you upgraded module names above, the matching keys in your `detekt.yml` also 
 
 The `formatting` ruleset key is unchanged (only the artifact name moved).
 
+### New `standard-library` rule set
+
+Rules that report on usages of the Kotlin standard library were spread across `complexity`,
+`performance`, `potential-bugs` and `style`. In 2.x they all live in a new `standard-library` rule
+set, shipped by the new `detekt-rules-standard-library` module (part of `detekt-rules`, so no extra
+dependency is needed).
+
+If you configured any of the rules below, move them under the `standard-library:` key in your
+`detekt.yml`:
+
+```diff
+-style:
+-  UnnecessaryLet:
+-    active: true
++standard-library:
++  UnnecessaryLet:
++    active: true
+```
+
+| Rule                                       | 1.x rule set    |
+|--------------------------------------------|-----------------|
+| `AlsoCouldBeApply`                         | `style`         |
+| `ArrayPrimitive`                           | `performance`   |
+| `CharArrayToStringCall`                    | `potential-bugs`|
+| `CouldBeSequence`                          | `performance`   |
+| `DontDowncastCollectionTypes`              | `potential-bugs`|
+| `DoubleMutabilityForCollection`            | `potential-bugs`|
+| `ForEachOnRange`                           | `performance`   |
+| `IteratorHasNextCallsNextMethod`           | `potential-bugs`|
+| `IteratorNotThrowingNoSuchElementException` | `potential-bugs`|
+| `MapGetWithNotNullAssertionOperator`       | `potential-bugs`|
+| `MissingUseCall`                           | `potential-bugs`|
+| `MultilineRawStringIndentation`            | `style`         |
+| `NestedScopeFunctions`                     | `complexity`    |
+| `RedundantHigherOrderMapUsage`             | `style`         |
+| `ReplaceSafeCallChainWithRun`              | `complexity`    |
+| `TrimMultilineRawString`                   | `style`         |
+| `UnnecessaryAny`                           | `style`         |
+| `UnnecessaryApply`                         | `style`         |
+| `UnnecessaryFilter`                        | `style`         |
+| `UnnecessaryLet`                           | `style`         |
+| `UnnecessaryReversed`                      | `style`         |
+| `UseAnyOrNoneInsteadOfFind`                | `style`         |
+| `UseCheckNotNull`                          | `style`         |
+| `UseCheckOrError`                          | `style`         |
+| `UseEmptyCounterpart`                      | `style`         |
+| `UseIfEmptyOrIfBlank`                      | `style`         |
+| `UseIsNullOrEmpty`                         | `style`         |
+| `UseLet`                                   | `style`         |
+| `UseOrEmpty`                               | `style`         |
+| `UseRequire`                               | `style`         |
+| `UseRequireNotNull`                        | `style`         |
+| `UseSumOfInsteadOfFlatMapSize`             | `style`         |
+| `UselessCallOnNotNull`                     | `style`         |
+
+The rule IDs themselves are unchanged, so baseline files and `@Suppress("...")` annotations keep
+working.
+
 ### Rule renames
 
 Several rules were renamed for consistency:
