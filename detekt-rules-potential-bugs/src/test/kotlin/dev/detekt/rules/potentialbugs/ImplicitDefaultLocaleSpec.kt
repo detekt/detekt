@@ -1,10 +1,10 @@
 package dev.detekt.rules.potentialbugs
 
 import dev.detekt.api.Config
+import dev.detekt.test.assertj.assertThat
 import dev.detekt.test.junit.KotlinCoreEnvironmentTest
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.KotlinEnvironmentContainer
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
@@ -18,7 +18,9 @@ class ImplicitDefaultLocaleSpec(private val env: KotlinEnvironmentContainer) {
                 String.format("%d", 1)
             }
         """.trimIndent()
-        assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        assertThat(subject.lintWithContext(env, code))
+            .singleElement()
+            .hasStartSourceLocation(2, 5)
     }
 
     @Test
@@ -51,7 +53,9 @@ class ImplicitDefaultLocaleSpec(private val env: KotlinEnvironmentContainer) {
                 "%d".format(1)
             }
         """.trimIndent()
-        assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        assertThat(subject.lintWithContext(env, code))
+            .singleElement()
+            .hasStartSourceLocation(2, 5)
     }
 
     @Test
@@ -135,7 +139,9 @@ class ImplicitDefaultLocaleSpec(private val env: KotlinEnvironmentContainer) {
                 String.format("%.2f", 1.0)
             }
         """.trimIndent()
-        assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        assertThat(subject.lintWithContext(env, code))
+            .singleElement()
+            .hasStartSourceLocation(2, 5)
     }
 
     @Test
@@ -145,7 +151,9 @@ class ImplicitDefaultLocaleSpec(private val env: KotlinEnvironmentContainer) {
                 "%tY".format(0L)
             }
         """.trimIndent()
-        assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        assertThat(subject.lintWithContext(env, code))
+            .singleElement()
+            .hasStartSourceLocation(2, 5)
     }
 
     @Test
@@ -155,7 +163,9 @@ class ImplicitDefaultLocaleSpec(private val env: KotlinEnvironmentContainer) {
                 "id 0x%X count %d".format(255, 1)
             }
         """.trimIndent()
-        assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        assertThat(subject.lintWithContext(env, code))
+            .singleElement()
+            .hasStartSourceLocation(2, 5)
     }
 
     @Test
@@ -165,7 +175,9 @@ class ImplicitDefaultLocaleSpec(private val env: KotlinEnvironmentContainer) {
                 "${'$'}prefix %x".format(255)
             }
         """.trimIndent()
-        assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        assertThat(subject.lintWithContext(env, code))
+            .singleElement()
+            .hasStartSourceLocation(2, 5)
     }
 
     @Test
@@ -176,6 +188,8 @@ class ImplicitDefaultLocaleSpec(private val env: KotlinEnvironmentContainer) {
                 pattern.format(255)
             }
         """.trimIndent()
-        assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        assertThat(subject.lintWithContext(env, code))
+            .singleElement()
+            .hasStartSourceLocation(3, 5)
     }
 }
