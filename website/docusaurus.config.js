@@ -58,6 +58,18 @@ const config = {
           { to: "/", from: "/blog/2019/08/14/custom-console-reports" },
           { to: "/", from: "/blog/2020/09/27/additional-diff-config-task" },
           { to: "/changelog", from: "/docs/introduction/changelog" },
+          // The migration guide used to be a versioned doc; it is now a single
+          // unversioned page at /migration.
+          { to: "/migration", from: "/docs/introduction/migration" },
+          { to: "/migration", from: "/docs/next/introduction/migration" },
+          {
+            to: "/migration",
+            from: "/docs/2.0.0-alpha.5/introduction/migration",
+          },
+          {
+            to: "/migration",
+            from: "/docs/2.0.0-alpha.6/introduction/migration",
+          },
           { to: "/changelog-rc", from: "/docs/introduction/changelog-rc" },
           { to: "/changelog", from: "/changelog.html" },
           { to: "/changelog-rc", from: "/changelog-rc.html" },
