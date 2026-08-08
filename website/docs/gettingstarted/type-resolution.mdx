@@ -41,7 +41,7 @@ With type resolution, detekt has access to all the symbols and types of your cod
 
 If you're running detekt **without** type resolution, all the rules that require type resolution **will not run**.
 
-All the rules that require type resolution are annotated with [`@RequiresFullAnalysis`](https://github.com/detekt/detekt/search?q=%40RequiresFullAnalysis). 
+All the rules that require type resolution implement the [`RequiresAnalysisApi`](https://github.com/detekt/detekt/blob/main/detekt-api/src/main/kotlin/dev/detekt/api/RequiresAnalysisApi.kt) marker interface. 
 
 Moreover, their official documentation in the detekt website will mention _Requires Type Resolution_ ([like here](../rules/potential-bugs.mdx#unnecessarysafecall)).
 
@@ -95,39 +95,60 @@ Corresponding `detektBaseline<SourceSet>SourceSet` and `detektBaseline<Compilati
 
 ## Enabling on Detekt CLI
 
-If you're using [detekt via CLI](cli.mdx), type resolution will be enabled only if you provide the `--classpath` and
-`--jvm-target` flags. See the list of [CLI options](cli.mdx#use-the-cli) for details.
+If you're using [detekt via CLI](cli.mdx), you need to pass `--analysis-mode full` together with the
+`--classpath` and `--jvm-target` flags. The default is `--analysis-mode light`, which runs only the
+rules that don't need type resolution. See the list of [CLI options](cli.mdx#use-the-cli) for details.
 
 ## Writing a rule that uses type resolution
 
 If you're [writing a custom rule](../introduction/extensions.mdx) or if you're willing to write a rule to contribute to detekt, you might want to leverage type resolution.
 
-Rules that are using type resolution, access the [bindingContext](https://github.com/JetBrains/kotlin/blob/master/compiler/frontend/src/org/jetbrains/kotlin/resolve/BindingContext.java)
-from the `Rule` class ([source](https://github.com/detekt/detekt/blob/main/detekt-api/src/main/kotlin/dev/detekt/api/Rule.kt#L20)).
-
-By default, the `bindingContext` is initialized as `BindingContext.EMPTY`. This is the **default value** that the rule receives if type resolution is **not enabled**.
-
-Therefore, is generally advised to annotate your `Rule` with `@RequiresFullAnalysis` to ensure that your rule doesn't run if you don't have a proper `BindingContext`.
-
-If your rule is annotated with `@RequiresFullAnalysis` you are free to use it to resolve types and get access to all the information needed for your rules. As a rule of thumb, we recommend to get inspiration from other rules on how they're using the `bindingContext`.
-
-## Testing a rule that uses type resolution
-
-To test a rule that uses type resolution, you can use the [`lintWithContext`](https://github.com/detekt/detekt/blob/d3546ff0d539d57e7a502dacbf66e91587fff098/detekt-test/src/main/kotlin/io/gitlab/arturbosch/detekt/test/RuleExtensions.kt#L40-L44) and [`compileAndLintWithContext`](https://github.com/detekt/detekt/blob/cd659ce8737fb177caf140f46f73a1a86b22be56/detekt-test/src/main/kotlin/io/gitlab/arturbosch/detekt/test/RuleExtensions.kt#L63-L72) extension functions.
-
-If you're using JUnit 5 for testing, you can use the `@KotlinCoreEnvironmentTest` annotation on your test class, and
-accept a parameter of type `KotlinCoreEnvironment` in the class constructor. You can then access the environment by
-referencing the parameter specified in the constructor:
+Rules that use type resolution implement the `RequiresAnalysisApi` marker interface and resolve
+types through the Kotlin [Analysis API](https://kotlin.github.io/analysis-api/) inside an
+`analyze {}` block:
 
 ```kotlin
-@KotlinCoreEnvironmentTest
-class MyRuleSpec(private val env: KotlinCoreEnvironment) {
-    @Test
-    fun `reports cast that cannot succeed`() {
-        val code = """/* The code you want to test */"""
-        assertThat(MyRuleSpec().compileAndLintWithContext(env, code)).hasSize(1)
+class MyRule(config: Config) : Rule(
+    config,
+    description = "Reports something that can only be detected with type information."
+), RequiresAnalysisApi {
+    override fun visitCallExpression(expression: KtCallExpression) {
+        analyze(expression) {
+            val symbol = expression.resolveToCall()?.successfulFunctionCallOrNull()?.symbol ?: return
+            // ...
+        }
     }
 }
 ```
 
-If you're using another testing framework (e.g. JUnit 4), you can use the [`createEnvironment()`](https://github.com/detekt/detekt/blob/cd659ce8737fb177caf140f46f73a1a86b22be56/detekt-test-utils/src/main/kotlin/io/github/detekt/test/utils/KotlinCoreEnvironmentWrapper.kt#L26-L31) method from `detekt-test-utils`.
+Implementing `RequiresAnalysisApi` guarantees that your rule only runs in `full` analysis mode, so
+you never have to deal with missing type information. As a rule of thumb, we recommend getting
+inspiration from other rules on how they use the Analysis API.
+
+The legacy K1 `BindingContext` was removed in detekt 2.0. JetBrains maintains a
+[K1 to Analysis API migration guide](https://kotlin.github.io/analysis-api/migrating-from-k1.html)
+if you are porting an existing rule.
+
+## Testing a rule that uses type resolution
+
+To test a rule that uses type resolution, use the [`lintWithContext`](https://github.com/detekt/detekt/blob/main/detekt-test/src/main/kotlin/dev/detekt/test/RuleExtensions.kt) extension function
+from `dev.detekt:detekt-test`. It only accepts rules that implement `RequiresAnalysisApi`, so the
+compiler keeps you honest — use plain `lint` for rules that don't need type information.
+
+If you're using JUnit 5 for testing, you can use the `@KotlinCoreEnvironmentTest` annotation from
+`dev.detekt:detekt-test-junit` on your test class, and accept a parameter of type
+`KotlinEnvironmentContainer` in the class constructor. You can then access the environment by
+referencing the parameter specified in the constructor:
+
+```kotlin
+@KotlinCoreEnvironmentTest
+class MyRuleSpec(private val env: KotlinEnvironmentContainer) {
+    @Test
+    fun `reports cast that cannot succeed`() {
+        val code = """/* The code you want to test */"""
+        assertThat(MyRule(Config.empty).lintWithContext(env, code)).hasSize(1)
+    }
+}
+```
+
+If you're using another testing framework (e.g. JUnit 4), you can use the [`createEnvironment()`](https://github.com/detekt/detekt/blob/main/detekt-test-utils/src/main/kotlin/dev/detekt/test/utils/KotlinEnvironmentContainer.kt) method from `detekt-test-utils`.
