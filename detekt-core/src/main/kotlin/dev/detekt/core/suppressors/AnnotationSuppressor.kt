@@ -35,5 +35,5 @@ private fun KtElement.isAnnotatedWith(excluder: AnnotationExcluder): Boolean =
     if (this is KtAnnotated && excluder.shouldExclude(annotationEntries)) {
         true
     } else {
-        getStrictParentOfType<KtAnnotated>()?.isAnnotatedWith(excluder) ?: false
+        getStrictParentOfType<KtAnnotated>()?.isAnnotatedWith(excluder) == true
     }

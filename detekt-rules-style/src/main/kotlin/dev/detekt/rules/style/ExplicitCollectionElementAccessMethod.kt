@@ -1,5 +1,6 @@
 package dev.detekt.rules.style
 
+import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
@@ -36,6 +37,7 @@ import org.jetbrains.kotlin.psi.KtFunctionLiteral
  * val value = map["key"]
  * </compliant>
  */
+@ActiveByDefault(since = "2.0.0")
 class ExplicitCollectionElementAccessMethod(config: Config) :
     Rule(
         config,

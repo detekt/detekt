@@ -96,7 +96,7 @@ class RedundantSuspendModifier(config: Config) :
                         resolveToSymbols()
                             .filterIsInstance<KaNamedFunctionSymbol>()
                             .any { it.isSuspend }
-                    } ?: false
+                    } == true
                 }
             }
 

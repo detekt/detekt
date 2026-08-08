@@ -1,3 +1,5 @@
+@file:Suppress("StringShouldBeRawString")
+
 package dev.detekt.rules.style
 
 import dev.detekt.api.Config

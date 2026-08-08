@@ -18,8 +18,8 @@ fun YamlConfig.valueOrDefaultInternal(
                         throw ClassCastException()
                     }
                     check(result.all { it is String }) {
-                        "Only lists of strings are supported. Value \"$result\" set " +
-                            "for config parameter \"${keySequence(key)}\" contains non-string values"
+                        """Only lists of strings are supported. Value "$result" set """ +
+                            """for config parameter "${keySequence(key)}" contains non-string values"""
                     }
                     result.map { it as String }
                 }
@@ -34,12 +34,12 @@ fun YamlConfig.valueOrDefaultInternal(
         }
     } catch (_: ClassCastException) {
         error(
-            "Value \"$result\" set for config parameter \"${keySequence(key)}\" is not of" +
+            """Value "$result" set for config parameter "${keySequence(key)}" is not of""" +
                 " required type `${default::class.qualifiedName?.let { getDefaultName(it) }}`"
         )
     } catch (_: NumberFormatException) {
         error(
-            "Value \"$result\" set for config parameter \"${keySequence(key)}\" is not of" +
+            """Value "$result" set for config parameter "${keySequence(key)}" is not of""" +
                 " required type `${default::class.qualifiedName?.let { getDefaultName(it) }}`"
         )
     }

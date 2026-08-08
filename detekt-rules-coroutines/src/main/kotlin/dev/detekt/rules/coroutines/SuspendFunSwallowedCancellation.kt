@@ -234,7 +234,7 @@ class SuspendFunSwallowedCancellation(config: Config) :
                         ?.get(elementArgument)
                         ?.symbol
 
-                    valueSymbol?.let { it.isCrossinline.not() && it.isNoinline.not() } ?: false
+                    valueSymbol?.let { it.isCrossinline.not() && it.isNoinline.not() } == true
                 }
             }
 
@@ -253,16 +253,17 @@ class SuspendFunSwallowedCancellation(config: Config) :
 
             is KtCallExpression, is KtOperationExpression -> {
                 analyze(this) {
-                    resolveToCall()
-                        ?.successfulCallOrNull<KaCompoundVariableAccessCall>()
-                        ?.compoundOperation
-                        ?.operationCall
-                        ?.signature
-                        ?.symbol
-                        ?.isSuspend
-                        ?: (resolveToCall()?.successfulFunctionCallOrNull()?.symbol as? KaNamedFunctionSymbol)
+                    (
+                        resolveToCall()
+                            ?.successfulCallOrNull<KaCompoundVariableAccessCall>()
+                            ?.compoundOperation
+                            ?.operationCall
+                            ?.signature
+                            ?.symbol
                             ?.isSuspend
-                        ?: false
+                            ?: (resolveToCall()?.successfulFunctionCallOrNull()?.symbol as? KaNamedFunctionSymbol)
+                                ?.isSuspend
+                        ) == true
                 }
             }
 

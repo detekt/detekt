@@ -25,7 +25,7 @@ class OutputReportsSpec {
         private val reports = ReportsSpecBuilder().apply {
             report { "checkstyle" to Path("/tmp/path1") }
             report { "yml" to Path("/tmp/path3") }
-            report { "html" to Path("D:_Gradle\\xxx\\xxx\\build\\reports\\detekt\\detekt.html") }
+            report { "html" to Path("""D:_Gradle\xxx\xxx\build\reports\detekt\detekt.html""") }
             report { "markdown" to Path("/tmp/path4") }
         }.build().reports.toList()
 
@@ -53,7 +53,7 @@ class OutputReportsSpec {
             val htmlReport = reports[2]
             assertThat(htmlReport.type).isEqualTo(HtmlOutputReport().id)
             assertThat(htmlReport.path).isEqualTo(
-                Path("D:_Gradle\\xxx\\xxx\\build\\reports\\detekt\\detekt.html")
+                Path("""D:_Gradle\xxx\xxx\build\reports\detekt\detekt.html""")
             )
         }
 

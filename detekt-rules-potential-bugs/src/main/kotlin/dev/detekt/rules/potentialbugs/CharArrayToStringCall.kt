@@ -1,5 +1,6 @@
 package dev.detekt.rules.potentialbugs
 
+import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
@@ -38,6 +39,7 @@ import org.jetbrains.kotlin.psi.KtStringTemplateEntry
  * println(s + charArray.concatToString()) // hello😅
  * </compliant>
  */
+@ActiveByDefault(since = "2.0.0")
 class CharArrayToStringCall(config: Config) :
     Rule(
         config,
