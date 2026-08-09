@@ -31,6 +31,7 @@ jobs:
         with:
           java-version: 25
           distribution: 'temurin'
+          verify-signature: true
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6
