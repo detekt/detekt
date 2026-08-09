@@ -45,6 +45,19 @@ plugins {
 
 val isCiBuild = providers.environmentVariable("CI").isPresent
 
+develocity {
+    buildScan {
+        // Publish to scans.gradle.com when `--scan` is used explicitly
+        if (!gradle.startParameter.isBuildScan) {
+            server = "https://community.develocity.cloud"
+            projectId = "detekt"
+            publishing.onlyIf { it.isAuthenticated }
+        }
+
+        uploadInBackground = !isCiBuild
+    }
+}
+
 // Ensure buildCache config is kept in sync with all builds (root, build-logic & detekt-gradle-plugin)
 buildCache {
     local {
