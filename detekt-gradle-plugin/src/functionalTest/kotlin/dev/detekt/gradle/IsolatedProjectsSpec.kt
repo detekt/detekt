@@ -10,7 +10,7 @@ class IsolatedProjectsSpec {
     fun `detekt task supports isolated projects`() {
         val gradleRunner = DslTestBuilder.kotlin().build()
 
-        val buildResult = gradleRunner.runTasks("-Dorg.gradle.unsafe.isolated-projects=true", "detekt")
+        val buildResult = gradleRunner.runTasks("--isolated-projects", "detekt")
 
         assertThat(buildResult.output).contains("Isolated Projects is an incubating feature.")
     }
@@ -28,7 +28,7 @@ class IsolatedProjectsSpec {
                 .withDetektConfig(detektConfig)
                 .build()
 
-            val buildResult = gradleRunner.runTasks("-Dorg.gradle.unsafe.isolated-projects=true", "detektBaseline")
+            val buildResult = gradleRunner.runTasks("--isolated-projects", "detektBaseline")
 
             assertThat(buildResult.output).contains("Isolated Projects is an incubating feature.")
         }
@@ -41,7 +41,7 @@ class IsolatedProjectsSpec {
             val gradleRunner = DslTestBuilder.kotlin().build()
 
             val buildResult = gradleRunner.runTasks(
-                "-Dorg.gradle.unsafe.isolated-projects=true",
+                "--isolated-projects",
                 "detektGenerateConfig"
             )
 

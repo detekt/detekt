@@ -143,7 +143,7 @@ constructor(
                 add("-Pdetekt-dry-run=true")
             }
             if (!disableIP) {
-                add("-Dorg.gradle.unsafe.isolated-projects=true")
+                add("--isolated-projects")
             }
             if (failOnGradleWarnings) {
                 add("--warning-mode=fail")
