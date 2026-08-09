@@ -20,12 +20,6 @@ const sidebars = {
       dirName: ".",
     },
     {
-      // Unversioned: a single page shared by every docs version.
-      type: "link",
-      label: "Migration guide to 2.0",
-      href: "/migration",
-    },
-    {
       type: "category",
       label: "Changelogs",
       items: [
