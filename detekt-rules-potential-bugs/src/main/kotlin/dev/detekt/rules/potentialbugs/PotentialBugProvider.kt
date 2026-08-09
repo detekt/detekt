@@ -46,7 +46,6 @@ class PotentialBugProvider : DefaultRuleSetProvider {
                 ::UnsafeCast,
                 ::UselessPostfixExpression,
                 ::WrongEqualsTypeParameter,
-                ::IgnoredReturnValue,
                 ::ImplicitUnitReturnType,
                 ::NullableToStringCall,
                 ::UnreachableCatchBlock,

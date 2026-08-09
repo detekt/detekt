@@ -114,8 +114,6 @@ potential-bugs:
     active: false
   HasPlatformType:
     active: true
-  IgnoredReturnValue:
-    active: true
   ImplicitUnitReturnType:
     active: true
   MapGetWithNotNullAssertionOperator:

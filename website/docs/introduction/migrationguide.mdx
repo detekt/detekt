@@ -138,9 +138,29 @@ were superseded by ktlint rules or compiler warnings:
 - `OptionalWhenBraces`
 - `PreferToOverPairSyntax`
 - `UnnecessaryAnnotationUseSiteTarget`
+- `IgnoredReturnValue`
 
-Remove them from your `detekt.yml`. The `MultiRule` mechanism was also removed; if you maintained
-a custom multi-rule, see the **rule author guide** below.
+Remove them from your `detekt.yml`. Leaving a removed rule in your configuration fails the run with
+`Property '<ruleset>><RuleName>' is misspelled or does not exist`, so this is not optional.
+
+The `MultiRule` mechanism was also removed; if you maintained a custom multi-rule, see the
+**rule author guide** below.
+
+#### Replacing `IgnoredReturnValue`
+
+`IgnoredReturnValue` existed because the Kotlin compiler had no unused-return-value checking. Since
+Kotlin 2.3.0 it does, as an experimental opt-in:
+
+```
+kotlinc -Xreturn-value-checker=check
+```
+
+The compiler check is driven by the `@MustUseReturnValue` and `@IgnorableReturnValue` annotations
+described in [KEEP-0412](https://github.com/Kotlin/KEEP/blob/main/proposals/KEEP-0412-unused-return-value-checker.md),
+rather than by detekt's `returnValueAnnotations` / `ignoreReturnValueAnnotations` /
+`ignoreFunctionCall` / `returnValueTypes` configuration. It is deliberately less configurable, so
+the two do not behave identically — if you relied on the rule's configurability, the rule can also
+be maintained as a third-party rule set.
 
 ### Report format ID renames
 
