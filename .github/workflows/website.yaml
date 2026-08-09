@@ -25,6 +25,7 @@ jobs:
         with:
           java-version: 25
           distribution: 'temurin'
+          verify-signature: true
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6
@@ -50,7 +51,7 @@ jobs:
         run: yarn build
 
       - name: Deploy GitHub Pages (only on main)
-        uses: JamesIves/github-pages-deploy-action@d92aa235d04922e8f08b40ce78cc5442fcfbfa2f # v4
+        uses: JamesIves/github-pages-deploy-action@fa24774553152dd7873cd16ebd8d959b010c5445 # v4
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         with:
           branch: gh-pages
