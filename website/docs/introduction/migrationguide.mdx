@@ -156,7 +156,7 @@ kotlinc -Xreturn-value-checker=check
 ```
 
 The compiler check is driven by the `@MustUseReturnValue` and `@IgnorableReturnValue` annotations
-described in [KEEP-0412](https://github.com/Kotlin/KEEP/blob/master/proposals/KEEP-0412-unused-return-value-checker.md),
+described in [KEEP-0412](https://github.com/Kotlin/KEEP/blob/main/proposals/KEEP-0412-unused-return-value-checker.md),
 rather than by detekt's `returnValueAnnotations` / `ignoreReturnValueAnnotations` /
 `ignoreFunctionCall` / `returnValueTypes` configuration. It is deliberately less configurable, so
 the two do not behave identically — if you relied on the rule's configurability, the rule can also
