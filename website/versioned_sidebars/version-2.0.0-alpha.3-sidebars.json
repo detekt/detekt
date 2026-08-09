@@ -5,6 +5,11 @@
       "dirName": "."
     },
     {
+      "type": "link",
+      "label": "Migration guide to 2.0",
+      "href": "/docs/next/introduction/migration"
+    },
+    {
       "type": "category",
       "label": "Changelogs",
       "items": [

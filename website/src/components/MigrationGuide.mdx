@@ -1,10 +1,3 @@
----
-id: migration
-title: "Migration guide to 2.0.0"
-keywords: [migration, upgrade, 2.0]
-sidebar_position: 80
----
-
 This page is a migration guide from **detekt 1.x to detekt 2.x**. It is split in two sections:
 
 - **[User guide](#user-guide)** — for people consuming detekt through the Gradle plugin, the CLI or
@@ -202,7 +195,7 @@ Several configuration concepts were removed or replaced:
 | `StringLiteralDuplication`    | `threshold`                                | `allowedDuplications`|
 | `CouldBeSequence`             | `threshold`                                | `allowedOperations`  |
 
-- `ForbiddenImport` config keys changed — see the [updated rule docs](../rules/style#forbiddenimport).
+- `ForbiddenImport` config keys changed — see the [updated rule docs](/docs/rules/style#forbiddenimport).
 - `FunctionOnlyReturningConstant` no longer accepts `excludeAnnotatedFunction`; use
   `ignoreAnnotated` instead.
 - `LateinitUsage` no longer accepts `excludeAnnotatedProperties`; use `ignoreAnnotated` instead.
