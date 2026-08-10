@@ -276,10 +276,7 @@ class OutdatedDocumentation(config: Config) :
 
         return finalWarnings + if (
             !zippedElements.all { (docItr, elementItr) ->
-                declarationNameMatches(
-                    docItr,
-                    elementItr,
-                )
+                declarationNameMatches(docItr, elementItr)
             }
         ) {
             listOf("Documentation elements order is mismatched with declaration.")
