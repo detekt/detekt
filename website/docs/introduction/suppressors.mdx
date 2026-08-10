@@ -28,6 +28,11 @@ Suppress all the issues that are raised under a code that is annotated with the 
 
 `ignoreAnnotated: List<String>`: The annotations can be defined just by its name or with its fully qualified name. If you don't run detekt with type solving the fully qualified name does not work.
 
+`ignoreAnnotated` checks annotations applied directly to the reported code or its containing
+declarations. It does not follow meta-annotations. For example, ignoring `Preview` does not
+suppress findings under a declaration annotated with `@AppPreviews` when `AppPreviews` is itself
+annotated with `@Preview`; add `AppPreviews` explicitly.
+
 ### Function Suppressor
 
 Suppress any issue raised under a function definition that matches the signatures defined at `ignoreFunction`.
