@@ -138,7 +138,7 @@ constructor(
             add("--stacktrace")
             add("--info")
             add("--build-cache")
-            add("-Dorg.gradle.jvmargs=$jvmArgs")
+            add("-Dorg.gradle.jvmargs=${listOfNotNull(jvmArgs, jacocoAgentArg()).joinToString(" ")}")
             if (dryRun) {
                 add("-Pdetekt-dry-run=true")
             }
@@ -148,6 +148,7 @@ constructor(
             if (failOnGradleWarnings) {
                 add("--warning-mode=fail")
             }
+            add("-Pkotlin.internal.collectFUSMetrics=false") // https://github.com/gradle/gradle/issues/31278
             addAll(gradleProperties.toList().map { (key, value) -> "-P$key=$value" })
             addAll(tasks)
         }
@@ -162,6 +163,19 @@ constructor(
             withArguments(args)
             gradleVersionOrNone?.let(::withGradleVersion)
         }
+    }
+
+    /**
+     * When the functional test task injects the JaCoCo agent (via the `jacoco.agent.jar` and
+     * `jacoco.agent.destfile` system properties), return a `-javaagent` argument so the
+     * TestKit-spawned Gradle JVMs are instrumented. JaCoCo does not instrument these spawned JVMs
+     * out of the box, so without this functional tests contribute no coverage of the plugin.
+     */
+    private fun jacocoAgentArg(): String? {
+        val agentJar = System.getProperty("jacoco.agent.jar")
+        val destFile = System.getProperty("jacoco.agent.destfile")
+        if (agentJar == null || destFile == null) return null
+        return "-javaagent:$agentJar=destfile=$destFile"
     }
 
     fun runTasksAndCheckResult(vararg tasks: String, doAssert: DslGradleRunner.(BuildResult) -> Unit) {
