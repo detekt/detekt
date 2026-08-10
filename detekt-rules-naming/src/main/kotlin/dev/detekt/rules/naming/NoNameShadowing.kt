@@ -151,7 +151,7 @@ class NoNameShadowing(config: Config) :
     }
 
     private fun KtLambdaExpression.hasParentImplicitParameterLambda(): Boolean =
-        getStrictParentOfType<KtLambdaExpression>()?.hasImplicitParameter() == true
+        getStrictParentOfType<KtLambdaExpression>()?.hasImplicitParameter() ?: false
 
     @Suppress("ClassOrdering")
     private val KtDeclaration.accessibleClasses: List<KtClassOrObject>

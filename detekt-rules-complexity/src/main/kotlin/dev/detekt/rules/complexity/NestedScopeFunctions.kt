@@ -112,7 +112,7 @@ class NestedScopeFunctions(config: Config) :
         }
 
         private fun KtCallExpression.isScopeFunction(): Boolean =
-            analyze(this) { callableSymbols()?.any { it.matchesScopeFunction() } == true }
+            analyze(this) { callableSymbols()?.any { it.matchesScopeFunction() } ?: false }
 
         context(session: KaSession)
         private fun KtCallExpression.callableSymbols() =

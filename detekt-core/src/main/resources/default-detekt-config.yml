@@ -717,7 +717,7 @@ style:
   NoTabs:
     active: false
   NullableBooleanCheck:
-    active: true
+    active: false
   ObjectLiteralToLambda:
     active: true
   OneTopLevelClassOrObjectPerFile:

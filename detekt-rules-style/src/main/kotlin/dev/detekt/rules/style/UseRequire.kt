@@ -47,5 +47,5 @@ class UseRequire(config: Config) :
     }
 
     private fun KtThrowExpression.hasMoreExpressionsInBlock(): Boolean =
-        (parent as? KtBlockExpression)?.run { statements.size > 1 } == true
+        (parent as? KtBlockExpression)?.run { statements.size > 1 } ?: false
 }

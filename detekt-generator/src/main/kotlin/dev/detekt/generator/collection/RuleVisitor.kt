@@ -55,7 +55,8 @@ internal class RuleVisitor(textReplacements: Map<String, String>) : KtTreeVisito
         val isRule = list.entries
             ?.asSequence()
             ?.map { it.typeAsUserType?.referencedName }
-            ?.any { ruleClasses.contains(it) } == true
+            ?.any { ruleClasses.contains(it) }
+            ?: false
 
         val containingClass = list.containingClass()
         val className = containingClass?.name

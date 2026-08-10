@@ -227,17 +227,17 @@ class MagicNumber(config: Config) :
         return containingFunction?.isHashCodeFunction() == true
     }
 
-    private fun KtConstantExpression.isLocalProperty() = getNonStrictParentOfType<KtProperty>()?.isLocal == true
+    private fun KtConstantExpression.isLocalProperty() = getNonStrictParentOfType<KtProperty>()?.isLocal ?: false
 
-    private fun KtConstantExpression.isProperty() = getNonStrictParentOfType<KtProperty>()?.let { !it.isLocal } == true
+    private fun KtConstantExpression.isProperty() = getNonStrictParentOfType<KtProperty>()?.let { !it.isLocal } ?: false
 
     private fun KtConstantExpression.isCompanionObjectProperty() = isProperty() && isInCompanionObject()
 
     private fun KtConstantExpression.isInCompanionObject() =
-        getNonStrictParentOfType<KtObjectDeclaration>()?.isCompanion() == true
+        getNonStrictParentOfType<KtObjectDeclaration>()?.isCompanion() ?: false
 
     private fun KtConstantExpression.isConstantProperty(): Boolean =
-        isProperty() && getNonStrictParentOfType<KtProperty>()?.isConstant() == true
+        isProperty() && getNonStrictParentOfType<KtProperty>()?.isConstant() ?: false
 
     private fun PsiElement.hasUnaryMinusPrefix(): Boolean =
         this is KtPrefixExpression &&
