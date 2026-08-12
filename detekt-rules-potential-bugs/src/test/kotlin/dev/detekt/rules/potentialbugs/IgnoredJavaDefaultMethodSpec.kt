@@ -140,7 +140,7 @@ class IgnoredJavaDefaultMethodSpec(private val env: KotlinEnvironmentContainer) 
             .singleElement()
             .hasMessage(
                 "Delegating to `KotlinSub` ignores what the delegate does for the default " +
-                    "method `optional`. Override it to delegate explicitly."
+                    "method `optional()`. Override it to delegate explicitly."
             )
     }
 
@@ -159,7 +159,7 @@ class IgnoredJavaDefaultMethodSpec(private val env: KotlinEnvironmentContainer) 
     }
 
     @Test
-    fun `does not report a private method of a Java interface`() {
+    fun `reports the default method but not the private method of a Java interface`() {
         val code = """
             import com.example.delegation.JavaInterfaceWithPrivate
 
@@ -170,12 +170,12 @@ class IgnoredJavaDefaultMethodSpec(private val env: KotlinEnvironmentContainer) 
             .singleElement()
             .hasMessage(
                 "Delegating to `JavaInterfaceWithPrivate` ignores what the delegate does for the " +
-                    "default method `run`. Override it to delegate explicitly."
+                    "default method `run()`. Override it to delegate explicitly."
             )
     }
 
     @Test
-    fun `reports a default method of a generic Java interface`() {
+    fun `reports the default methods of a generic Java interface`() {
         val code = """
             import com.example.delegation.JavaGenericInterface
 
@@ -186,7 +186,7 @@ class IgnoredJavaDefaultMethodSpec(private val env: KotlinEnvironmentContainer) 
             .singleElement()
             .hasMessage(
                 "Delegating to `JavaGenericInterface` ignores what the delegate does for the " +
-                    "default methods `substituted`, `unsubstituted`. Override them to delegate explicitly."
+                    "default methods `substituted(T)`, `unsubstituted()`. Override them to delegate explicitly."
             )
     }
 
@@ -217,7 +217,45 @@ class IgnoredJavaDefaultMethodSpec(private val env: KotlinEnvironmentContainer) 
     }
 
     @Test
-    fun `does not report an overload of the same name that the class overrides`() {
+    fun `reports both overloads with their parameter types`() {
+        val code = """
+            import com.example.delegation.JavaOverloadedDefaults
+
+            class Wrapper(
+                private val delegate: JavaOverloadedDefaults,
+            ) : JavaOverloadedDefaults by delegate
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code))
+            .singleElement()
+            .hasMessage(
+                "Delegating to `JavaOverloadedDefaults` ignores what the delegate does for the " +
+                    "default methods `write(Int)`, `write(String)`. Override them to delegate explicitly."
+            )
+    }
+
+    @Test
+    fun `reports only the overload the class leaves unforwarded`() {
+        val code = """
+            import com.example.delegation.JavaOverloadedDefaults
+
+            class Wrapper(
+                private val delegate: JavaOverloadedDefaults,
+            ) : JavaOverloadedDefaults by delegate {
+                override fun write(text: String) {
+                    delegate.write(text)
+                }
+            }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code))
+            .singleElement()
+            .hasMessage(
+                "Delegating to `JavaOverloadedDefaults` ignores what the delegate does for the " +
+                    "default method `write(Int)`. Override it to delegate explicitly."
+            )
+    }
+
+    @Test
+    fun `reports only the same-named overload the class leaves unforwarded`() {
         val code = """
             import com.example.delegation.JavaOverloadA
             import com.example.delegation.JavaOverloadB
@@ -235,7 +273,7 @@ class IgnoredJavaDefaultMethodSpec(private val env: KotlinEnvironmentContainer) 
             .singleElement()
             .hasMessage(
                 "Delegating to `JavaOverloadA` ignores what the delegate does for the default " +
-                    "method `foo`. Override it to delegate explicitly."
+                    "method `foo()`. Override it to delegate explicitly."
             )
     }
 
@@ -267,5 +305,102 @@ class IgnoredJavaDefaultMethodSpec(private val env: KotlinEnvironmentContainer) 
             ) : JavaInterfaceWithDefaults by first, JavaOtherInterface by second
         """.trimIndent()
         assertThat(subject.lintWithContext(env, code)).hasSize(2)
+    }
+
+    @Test
+    fun `reports a vararg parameter as a vararg`() {
+        val code = """
+            import com.example.delegation.JavaVarargDefault
+
+            class Wrapper(private val delegate: JavaVarargDefault) : JavaVarargDefault by delegate
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code))
+            .singleElement()
+            .hasMessage(
+                "Delegating to `JavaVarargDefault` ignores what the delegate does for the default " +
+                    "method `log(vararg String)`. Override it to delegate explicitly."
+            )
+    }
+
+    @Test
+    fun `reports both overloads that differ only by array element type`() {
+        val code = """
+            import com.example.delegation.JavaArrayOverloads
+
+            class Wrapper(private val delegate: JavaArrayOverloads) : JavaArrayOverloads by delegate
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code))
+            .singleElement()
+            .hasMessage(
+                "Delegating to `JavaArrayOverloads` ignores what the delegate does for the default " +
+                    "methods `put(Array<Int>)`, `put(Array<String>)`. Override them to delegate explicitly."
+            )
+    }
+
+    @Test
+    fun `reports the whole declaration when two overloads render the same`() {
+        val code = """
+            import com.example.delegation.JavaBoxedOverloads
+
+            class Wrapper(private val delegate: JavaBoxedOverloads) : JavaBoxedOverloads by delegate
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code))
+            .singleElement()
+            .hasMessage(
+                "Delegating to `JavaBoxedOverloads` ignores what the delegate does for the default " +
+                    "methods `fun write(number: kotlin.Int)`, `fun write(number: kotlin.Int?)`. " +
+                    "Override them to delegate explicitly."
+            )
+    }
+
+    @Test
+    fun `reports the whole declaration when parameter types share a simple name`() {
+        val code = """
+            import com.example.delegation.JavaCrossPackageOverloads
+
+            class Wrapper(private val delegate: JavaCrossPackageOverloads) :
+                JavaCrossPackageOverloads by delegate
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code))
+            .singleElement()
+            .hasMessage(
+                "Delegating to `JavaCrossPackageOverloads` ignores what the delegate does for the " +
+                    "default methods `fun handle(stamp: com.example.delegation.Stamp?)`, " +
+                    "`fun handle(stamp: com.example.other.Stamp?)`. Override them to delegate explicitly."
+            )
+    }
+
+    @Test
+    fun `reports the whole declaration when two overloads differ only by type parameter bound`() {
+        val code = """
+            import com.example.delegation.JavaGenericBoundOverloads
+
+            class Wrapper(private val delegate: JavaGenericBoundOverloads) :
+                JavaGenericBoundOverloads by delegate
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code))
+            .singleElement()
+            .hasMessage(
+                "Delegating to `JavaGenericBoundOverloads` ignores what the delegate does for the " +
+                    "default methods `fun <T : kotlin.CharSequence?> accept(value: T?)`, " +
+                    "`fun <T : kotlin.Number?> accept(value: T?)`. Override them to delegate explicitly."
+            )
+    }
+
+    @Test
+    fun `reports a deprecated overload on one line`() {
+        val code = """
+            import com.example.delegation.JavaDeprecatedOverloads
+
+            class Wrapper(private val delegate: JavaDeprecatedOverloads) :
+                JavaDeprecatedOverloads by delegate
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code))
+            .singleElement()
+            .hasMessage(
+                "Delegating to `JavaDeprecatedOverloads` ignores what the delegate does for the " +
+                    "default methods `fun write(number: kotlin.Int)`, " +
+                    "`fun write(number: kotlin.Int?)`. Override them to delegate explicitly."
+            )
     }
 }
