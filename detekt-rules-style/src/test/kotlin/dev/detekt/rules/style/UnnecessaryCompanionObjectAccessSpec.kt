@@ -29,7 +29,9 @@ class UnnecessaryCompanionObjectAccessSpec(val env: KotlinEnvironmentContainer) 
                 }
             """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code))
+                .singleElement()
+                .hasMessage("Omit the explicit companion object qualifier (for example use `A.<member>`.")
         }
 
         @Test
@@ -223,7 +225,11 @@ class UnnecessaryCompanionObjectAccessSpec(val env: KotlinEnvironmentContainer) 
                 }
             """.trimIndent()
 
-            assertThat(subject.lintWithContext(env, code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code))
+                .singleElement()
+                .hasMessage(
+                    "Omit the explicit companion object qualifier for callable references to companion members."
+                )
         }
 
         @Test
@@ -246,7 +252,7 @@ class UnnecessaryCompanionObjectAccessSpec(val env: KotlinEnvironmentContainer) 
 
     @Test
     fun `reports explicit Companion inside string template interpolation`() {
-        val stringTemplateRhs = "\"\${A.Companion.foo()}\""
+        val stringTemplateRhs = $$"\"${A.Companion.foo()}\""
         val code = """
             class A {
                 companion object {
