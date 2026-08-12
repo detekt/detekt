@@ -40,7 +40,10 @@ class FunctionOnlyReturningConstant(config: Config) :
     @Configuration("if actual functions should be ignored")
     private val ignoreActualFunction: Boolean by config(true)
 
-    @Configuration("excluded functions")
+    @Configuration(
+        "Simple glob patterns for function names to exclude from this rule. " +
+            "See the [simple glob syntax](https://detekt.dev/docs/introduction/glob-patterns#simple-patterns)."
+    )
     private val excludedFunctions: List<Regex> by config(emptyList<String>()) { it.map(String::pathGlobToRegex) }
 
     override fun visitNamedFunction(function: KtNamedFunction) {

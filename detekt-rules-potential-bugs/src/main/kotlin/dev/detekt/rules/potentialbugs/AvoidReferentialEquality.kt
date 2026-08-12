@@ -40,8 +40,8 @@ class AvoidReferentialEquality(config: Config) :
 
     @Configuration(
         "Specifies those types for which referential equality checks are considered a rule violation. " +
-            "The types are defined by a list of simple glob patterns (supporting `*` and `?` wildcards) " +
-            "that match the fully qualified type name."
+            "Each simple glob pattern is matched against the fully qualified type name. " +
+            "See the [simple glob syntax](https://detekt.dev/docs/introduction/glob-patterns#simple-patterns)."
     )
     private val forbiddenTypePatterns: List<Regex> by config(
         listOf(
