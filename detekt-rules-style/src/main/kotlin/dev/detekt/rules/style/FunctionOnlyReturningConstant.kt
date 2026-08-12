@@ -42,7 +42,7 @@ class FunctionOnlyReturningConstant(config: Config) :
 
     @Configuration(
         "Simple glob patterns for function names to exclude from this rule. " +
-            "See the [simple glob syntax](https://detekt.dev/docs/next/introduction/glob-patterns#simple-patterns)."
+            "See the [simple glob syntax](https://detekt.dev/docs/introduction/glob-patterns#simple-patterns)."
     )
     private val excludedFunctions: List<Regex> by config(emptyList<String>()) { it.map(String::pathGlobToRegex) }
 

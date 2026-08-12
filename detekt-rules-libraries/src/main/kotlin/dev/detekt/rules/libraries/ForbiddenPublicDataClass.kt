@@ -34,7 +34,7 @@ class ForbiddenPublicDataClass(config: Config) :
     @Configuration(
         "Ignores classes in packages matched by these simple glob patterns. Each pattern is matched against " +
             "the package name. " +
-            "See the [simple glob syntax](https://detekt.dev/docs/next/introduction/glob-patterns#simple-patterns)."
+            "See the [simple glob syntax](https://detekt.dev/docs/introduction/glob-patterns#simple-patterns)."
     )
     private val ignorePackages: List<Regex> by config(listOf("*.internal", "*.internal.*")) { packages ->
         packages.distinct().map(String::pathGlobToRegex)

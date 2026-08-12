@@ -48,7 +48,7 @@ class ReturnCount(config: Config) : Rule(config, "Restrict the number of return 
 
     @Configuration(
         "Define a list of simple glob patterns for function names to be ignored by this check. " +
-            "See the [simple glob syntax](https://detekt.dev/docs/next/introduction/glob-patterns#simple-patterns)."
+            "See the [simple glob syntax](https://detekt.dev/docs/introduction/glob-patterns#simple-patterns)."
     )
     private val excludedFunctions: List<Regex> by config(listOf("equals")) { it.map(String::pathGlobToRegex) }
 
