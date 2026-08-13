@@ -779,6 +779,8 @@ style:
     active: false
   UnnecessaryBracesAroundTrailingLambda:
     active: true
+  UnnecessaryCompanionObjectAccess:
+    active: false
   UnnecessaryFilter:
     active: true
   UnnecessaryFullyQualifiedName:

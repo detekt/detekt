@@ -79,6 +79,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
                 ::UnnecessaryApply,
                 ::UnnecessaryAny,
                 ::UnnecessaryBracesAroundTrailingLambda,
+                ::UnnecessaryCompanionObjectAccess,
                 ::UnnecessaryFilter,
                 ::UnnecessaryLet,
                 ::MayBeConstant,
