@@ -5,6 +5,8 @@ import dev.detekt.cli.createSpec
 import dev.detekt.tooling.api.AnalysisResult
 import dev.detekt.tooling.api.Detekt
 import dev.detekt.tooling.api.DetektProvider
+import dev.detekt.tooling.api.InvalidConfig
+import dev.detekt.tooling.api.IssuesFound
 import dev.detekt.tooling.api.UnexpectedError
 import dev.detekt.tooling.api.spec.ProcessingSpec
 import dev.detekt.tooling.internal.NotApiButProbablyUsedByUsers
@@ -25,7 +27,8 @@ class Runner(private val spec: ProcessingSpec) :
         val result = call()
         when (val error = result.error) {
             is UnexpectedError -> throw error.cause
-            else -> error?.let { throw it }
+            is InvalidConfig, is IssuesFound -> throw error
+            null -> Unit
         }
     }
 

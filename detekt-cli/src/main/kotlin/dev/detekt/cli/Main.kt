@@ -38,7 +38,7 @@ fun main(args: Array<String>) {
             }
         }
 
-        else -> Unit // print nothing extra when there is no error
+        null -> Unit // print nothing extra when there is no error
     }
     exitProcess(result.exitCode())
 }
