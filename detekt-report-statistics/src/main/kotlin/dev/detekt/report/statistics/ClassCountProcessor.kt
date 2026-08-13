@@ -1,4 +1,4 @@
-package dev.detekt.metrics.processors
+package dev.detekt.report.statistics
 
 import com.intellij.openapi.util.Key
 import dev.detekt.api.Detektion
