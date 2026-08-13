@@ -42,7 +42,7 @@ class YamlConfig internal constructor(
             type.cast(parsedValue)
         } catch (cce: ClassCastException) {
             throw IllegalArgumentException(
-                "Value \"$value\" set for config parameter \"${keySequence(key)}\" is not of required type " +
+                """Value "$value" set for config parameter "${keySequence(key)}" is not of required type """ +
                     "`${type.qualifiedName}`",
                 cce,
             )

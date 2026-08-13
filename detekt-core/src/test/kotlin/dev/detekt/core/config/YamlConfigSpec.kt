@@ -122,7 +122,7 @@ class YamlConfigSpec {
             assertThatIllegalArgumentException()
                 .isThrownBy { config.valueOrDefault("bool", false) }
                 .withMessage(
-                    "Value \"fasle\" set for config parameter \"bool\" is not of required type `kotlin.Boolean`"
+                    """Value "fasle" set for config parameter "bool" is not of required type `kotlin.Boolean`"""
                 )
         }
 
@@ -357,8 +357,7 @@ class YamlConfigSpec {
                             assertThatIllegalArgumentException()
                                 .isThrownBy { testCase.read(config, key) }
                                 .withMessage(
-                                    "Value \"$value\" set for config parameter \"$key\" is not of required type " +
-                                        "`${testCase.name}`"
+                                    """Value "$value" set for config parameter "$key" is not of required type `${testCase.name}`"""
                                 )
                         }
                     }
