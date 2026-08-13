@@ -252,8 +252,7 @@ class UnnecessaryCompanionObjectAccessSpec(val env: KotlinEnvironmentContainer) 
 
     @Test
     fun `reports explicit Companion inside string template interpolation`() {
-        val stringTemplateRhs = $$"\"${A.Companion.foo()}\""
-        val code = """
+        val code = $$"""
             class A {
                 companion object {
                     fun foo() = 1
@@ -261,7 +260,7 @@ class UnnecessaryCompanionObjectAccessSpec(val env: KotlinEnvironmentContainer) 
             }
 
             fun test() {
-                val msg = $stringTemplateRhs
+                val msg = "${A.Companion.foo()}"
             }
         """.trimIndent()
 
