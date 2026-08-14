@@ -12,6 +12,12 @@ Detekt 2.0.0 is still in alpha. While it's stable enough to use in your projects
 
 :::
 
+## UNRELEASED
+
+### Notable Changes
+
+- The yaml configuration parser is now more strict with the types. Before it parsed `active: "true"` correctly but that's not the case anymore. You need to use the correct yaml type: `active: true`. [#9049](https://github.com/detekt/detekt/pull/9049)
+
 ## 2.0.0-alpha.6 - 2026-08-04
 
 This is an alpha release of Detekt 2.0.0. It's built against Kotlin 2.4.10, Gradle 9.6.1, AGP 9.3.1 and is tested against JDK 25.

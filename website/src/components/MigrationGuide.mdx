@@ -206,6 +206,9 @@ Several configuration concepts were removed or replaced:
 Run `./gradlew detektGenerateConfig` and diff against your existing `detekt.yml` for a quick
 overview of changes that apply to your project.
 
+Also, the YAML configuration parser is now stricter with the types. Before it parsed `active: "true"` correctly but
+that's not the case anymore. You need to use the correct YAML types: `active: true`.
+
 ### Type resolution is the new default
 
 In 1.x, rules requiring type information were opt-in and gated by the `@RequiresTypeResolution`

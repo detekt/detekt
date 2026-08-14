@@ -2,6 +2,7 @@ package dev.detekt.core
 
 import dev.detekt.api.Config
 import dev.detekt.api.FileProcessListener
+import dev.detekt.api.valueOrDefault
 import dev.detekt.core.extensions.loadExtensions
 import dev.detekt.core.util.isActiveOrDefault
 
