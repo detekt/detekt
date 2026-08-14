@@ -184,11 +184,6 @@ gradlePlugin {
                 features.configurationCache = true
             }
         }
-        register("dev.detekt.gradle.compiler-plugin") {
-            displayName = "Static code analysis for Kotlin - Compiler Plugin"
-            description = "Static code analysis for Kotlin - Compiler Plugin"
-            implementationClass = "dev.detekt.gradle.plugin.DetektKotlinCompilerPlugin"
-        }
         configureEach {
             tags = listOf("kotlin", "detekt", "code-analysis", "linter", "codesmells", "android")
         }

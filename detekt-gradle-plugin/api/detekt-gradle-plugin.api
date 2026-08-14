@@ -73,13 +73,6 @@ public abstract class dev/detekt/gradle/extensions/CustomDetektReport {
 	public fun toString ()Ljava/lang/String;
 }
 
-public class dev/detekt/gradle/extensions/DetektCompilerPluginReport {
-	public fun <init> (Ljava/lang/String;Lorg/gradle/api/model/ObjectFactory;)V
-	public final fun getDestination ()Lorg/gradle/api/file/RegularFileProperty;
-	public final fun getEnabled ()Lorg/gradle/api/provider/Property;
-	public final fun getName ()Ljava/lang/String;
-}
-
 public abstract interface class dev/detekt/gradle/extensions/DetektExtension {
 	public abstract fun getAllRules ()Lorg/gradle/api/provider/Property;
 	public abstract fun getAutoCorrect ()Lorg/gradle/api/provider/Property;
@@ -144,38 +137,10 @@ public final class dev/detekt/gradle/extensions/FailOnSeverity : java/lang/Enum 
 	public static fun values ()[Ldev/detekt/gradle/extensions/FailOnSeverity;
 }
 
-public class dev/detekt/gradle/extensions/KotlinCompileTaskDetektExtension {
-	public fun <init> (Lorg/gradle/api/Project;)V
-	public final fun getAllRules ()Lorg/gradle/api/provider/Property;
-	public final fun getBaseline ()Lorg/gradle/api/file/RegularFileProperty;
-	public final fun getBuildUponDefaultConfig ()Lorg/gradle/api/provider/Property;
-	public final fun getCheckstyle ()Ldev/detekt/gradle/extensions/DetektCompilerPluginReport;
-	public final fun getConfig ()Lorg/gradle/api/file/ConfigurableFileCollection;
-	public final fun getDebug ()Lorg/gradle/api/provider/Property;
-	public final fun getDisableDefaultRuleSets ()Lorg/gradle/api/provider/Property;
-	public final fun getExcludes ()Lorg/gradle/api/provider/SetProperty;
-	public final fun getHtml ()Ldev/detekt/gradle/extensions/DetektCompilerPluginReport;
-	public final fun getParallel ()Lorg/gradle/api/provider/Property;
-	public final fun getReports ()Lorg/gradle/api/NamedDomainObjectContainer;
-	public final fun getSarif ()Ldev/detekt/gradle/extensions/DetektCompilerPluginReport;
-	public final fun isEnabled ()Lorg/gradle/api/provider/Property;
-}
-
 public final class dev/detekt/gradle/plugin/DetektBasePlugin : org/gradle/api/Plugin {
 	public fun <init> ()V
 	public synthetic fun apply (Ljava/lang/Object;)V
 	public fun apply (Lorg/gradle/api/Project;)V
-}
-
-public final class dev/detekt/gradle/plugin/DetektKotlinCompilerPlugin : org/jetbrains/kotlin/gradle/plugin/KotlinCompilerPluginSupportPlugin {
-	public fun <init> ()V
-	public synthetic fun apply (Ljava/lang/Object;)V
-	public fun apply (Lorg/gradle/api/Project;)V
-	public fun applyToCompilation (Lorg/jetbrains/kotlin/gradle/plugin/KotlinCompilation;)Lorg/gradle/api/provider/Provider;
-	public fun getCompilerPluginId ()Ljava/lang/String;
-	public fun getPluginArtifact ()Lorg/jetbrains/kotlin/gradle/plugin/SubpluginArtifact;
-	public fun getPluginArtifactForNative ()Lorg/jetbrains/kotlin/gradle/plugin/SubpluginArtifact;
-	public fun isApplicable (Lorg/jetbrains/kotlin/gradle/plugin/KotlinCompilation;)Z
 }
 
 public final class dev/detekt/gradle/plugin/DetektPlugin : org/gradle/api/Plugin {

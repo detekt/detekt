@@ -8,7 +8,6 @@ pluginManagement {
 include("code-coverage-report")
 include("detekt-api")
 include("detekt-cli")
-include("detekt-compiler-plugin")
 include("detekt-core")
 include("detekt-generator")
 includeBuild("detekt-gradle-plugin")

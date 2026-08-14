@@ -15,14 +15,10 @@ import dev.detekt.tooling.api.IssuesFound
 import dev.detekt.tooling.api.UnexpectedError
 import dev.detekt.tooling.api.spec.ProcessingSpec
 import dev.detekt.tooling.internal.DefaultAnalysisResult
-import org.jetbrains.kotlin.psi.KtFile
 
 class AnalysisFacade(private val spec: ProcessingSpec) : Detekt {
 
     override fun run(): AnalysisResult = runAnalysis { Lifecycle(spec.getDefaultConfiguration(), it) }
-
-    override fun run(files: Collection<KtFile>): AnalysisResult =
-        runAnalysis { Lifecycle(spec.getDefaultConfiguration(), it) }
 
     internal fun runAnalysis(createLifecycle: (ProcessingSettings) -> Lifecycle): AnalysisResult =
         spec.withSettings {
