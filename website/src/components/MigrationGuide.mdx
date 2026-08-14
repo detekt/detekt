@@ -24,18 +24,21 @@ search-and-replace; the only conceptually new piece is the Analysis API for rule
 
 ### Minimum supported versions
 
-| Tool                | detekt 1.23.x | detekt 2.0.x |
-|---------------------|---------------|--------------|
-| JDK (to run detekt) | 8             | 17           |
-| Kotlin              | 1.9 / 2.0     | 2.4          |
-| Gradle              | 6.7.1         | 7.6.3        |
-| Android Gradle Plugin | 4.x         | 8.2.2        |
+| Tool                  | detekt 1.23.x | detekt 2.0.x |
+|-----------------------|---------------|--------------|
+| Gradle                | 6.7.1         | 7.6.3        |
+| Android Gradle Plugin | 4.x           | 8.2.2        |
 
 detekt itself is built and tested against the latest JDK 25, Kotlin 2.4, Gradle 9.x and AGP 9.x.
+See the [compatibility table](/docs/introduction/compatibility) for the exact versions each release was built with.
 
-### Gradle plugin ID change
+Most detekt artifacts still target JVM 8 bytecode, with one exception:
+`detekt-rules-ktlint-wrapper` targets **JVM 17**, in preparation for the next ktlint major release.
+If you use the ktlint wrapper, detekt must run on JDK 17 or newer.
 
-The plugin ID changed from `io.gitlab.arturbosch.detekt` to `dev.detekt`:
+### Gradle plugin IDs
+
+The main plugin ID changed from `io.gitlab.arturbosch.detekt` to `dev.detekt`:
 
 ```diff
  plugins {
@@ -47,11 +50,18 @@ The plugin ID changed from `io.gitlab.arturbosch.detekt` to `dev.detekt`:
 If you used the legacy `apply plugin:` form, replace `"io.gitlab.arturbosch.detekt"` with `"dev.detekt"`
 the same way.
 
+There are now three plugin IDs:
+
+| Plugin ID                          | Purpose                                                            |
+|------------------------------------|--------------------------------------------------------------------|
+| `dev.detekt`                       | The main plugin — registers all analysis tasks. Use this one.       |
+| `dev.detekt.gradle.base`           | Only the `detekt {}` extension and shared conventions, no tasks.    |
+| `dev.detekt.gradle.compiler-plugin`| The Kotlin compiler plugin (was `io.github.detekt.gradle.compiler-plugin`). |
+
 ### Maven coordinates change
 
-All published artifacts moved from the `io.gitlab.arturbosch.detekt` group to `dev.detekt`. This
-affects every direct dependency on a detekt module — custom rule sets, the CLI, the compiler plugin,
-and any test utilities.
+All published artifacts moved to the `dev.detekt` group. In 1.x, artifacts were split across
+`io.gitlab.arturbosch.detekt` and — for a few modules — `io.github.detekt`. Both are now `dev.detekt`.
 
 ```diff
 -implementation("io.gitlab.arturbosch.detekt:detekt-api:1.23.8")
@@ -60,16 +70,19 @@ and any test utilities.
 
 ### Module renames
 
-A few modules were renamed to make their purpose clearer:
+Several modules were renamed to make their purpose clearer:
 
 | 1.x module                        | 2.x module                          |
 |-----------------------------------|-------------------------------------|
 | `detekt-formatting`               | `detekt-rules-ktlint-wrapper`       |
 | `detekt-rules-documentation`      | `detekt-rules-comments`             |
 | `detekt-rules-empty`              | `detekt-rules-empty-blocks`         |
-| `detekt-rules-bugs`               | `detekt-rules-potential-bugs`       |
+| `detekt-rules-errorprone`         | `detekt-rules-potential-bugs`       |
 | `detekt-report-xml`               | `detekt-report-checkstyle`          |
 | `detekt-report-md`                | `detekt-report-markdown`            |
+
+`detekt-report-txt` and `detekt-sample-extensions` were removed. `detekt-test` was split — see
+[Testing rules](#testing-rules).
 
 If you referenced any of these artifacts directly (for example through `detektPlugins(...)` for
 the formatting wrapper), update the coordinates accordingly:
@@ -81,68 +94,104 @@ the formatting wrapper), update the coordinates accordingly:
  }
 ```
 
-### Rule set ID renames in YAML config
+### The `detekt` extension is now lazy
 
-If you upgraded module names above, the matching keys in your `detekt.yml` also change:
+`DetektExtension` is an interface whose members are all Gradle
+`Property` / `ListProperty` / `ConfigurableFileCollection` types. It no longer extends
+`CodeQualityExtension`, and the long-deprecated `reports {}` block on the extension is gone —
+configure reports on the tasks instead.
+
+On Gradle 8.2 and newer you can keep using `=` thanks to lazy property assignment. On older
+supported Gradle versions, use `.set(...)`:
 
 ```diff
--documentation:
-+comments:
-   UndocumentedPublicClass:
-     active: true
-
--empty-blocks:
-+empty-blocks: # was: empty
-   EmptyFunctionBlock:
-     active: true
-
--potential-bugs:
-+potential-bugs: # was: potential-bugs in 1.x already, the *module* was bugs, the ruleset id changed
-   ...
+ detekt {
+-    parallel = true
+-    buildUponDefaultConfig = true
++    parallel.set(true)
++    buildUponDefaultConfig.set(true)
+ }
 ```
 
-The `formatting` ruleset key is unchanged (only the artifact name moved).
+`baseline` is now a `RegularFileProperty` and `basePath` a `DirectoryProperty`, so they take
+`File`/`Directory` values rather than `File?`/`String?`.
 
-### Rule renames
+### `maxIssues` is replaced by `failOnSeverity`
 
-Several rules were renamed for consistency:
+The weight-based `build { maxIssues }` mechanism is gone. detekt now fails the build when it finds
+an issue at or above a configured severity, which defaults to `Error`:
 
-| 1.x rule                          | 2.x rule                              |
-|-----------------------------------|---------------------------------------|
-| `UnusedImports`                   | `UnusedImport`                        |
-| `UnusedPrivateMember`             | `UnusedPrivateFunction` + `UnusedPrivateProperty` (split) |
-| `CommentOverPrivateFunction`      | `DocumentationOverPrivateFunction`    |
-| `CommentOverPrivateProperty`      | `DocumentationOverPrivateProperty`    |
-| `MayBeConst`                      | `MayBeConstant`                       |
-| `FunctionMinLength`               | `FunctionNameMinLength`               |
-| `FunctionMaxLength`               | `FunctionNameMaxLength`               |
-| `SpacingBetweenPackageAndImports` | `SpacingAfterPackageDeclaration`      |
-| `UntilInsteadOfRangeTo`           | `RangeUntilInsteadOfRangeTo`          |
-| `RedundantVisibilityModifierRule` | `RedundantVisibilityModifier`         |
+```diff
+ detekt {
+-    // build.maxIssues in detekt.yml
++    failOnSeverity.set(FailOnSeverity.Error) // Info | Warning | Error | Never
+ }
+```
 
-Update your `detekt.yml`, baseline files, and any `@Suppress("...")` annotations referencing the
-old names.
+Use `FailOnSeverity.Never` for the old "never fail" behaviour. On the CLI this is
+`--fail-on-severity`, and `--max-issues` was removed.
 
-### Rules removed
+Severity is configured per rule in `detekt.yml` through the `severity` key, and the severity values
+are now only `Info`, `Warning` and `Error`.
 
-The following rules were removed in 2.x because they no longer matched the official Kotlin style or
-were superseded by ktlint rules or compiler warnings:
+### New and renamed Gradle tasks
 
-- `OptionalWhenBraces`
-- `PreferToOverPairSyntax`
-- `UnnecessaryAnnotationUseSiteTarget`
+detekt 2.x registers analysis tasks both **per Kotlin compilation** and **per Kotlin source set**:
 
-Remove them from your `detekt.yml`. The `MultiRule` mechanism was also removed; if you maintained
-a custom multi-rule, see the **rule author guide** below.
+| Task                                        | Analysis mode | Notes                                        |
+|---------------------------------------------|---------------|----------------------------------------------|
+| `detekt`                                     | light         | Plain task, wired to `check`. Unchanged.     |
+| `detektMain`, `detektTest`, …                | full          | One per Kotlin compilation. Has a classpath. |
+| `detektMainSourceSet`, `detektTestSourceSet`, … | light      | **New.** One per Kotlin source set.          |
+| `detektBaselineMain`, `detektBaselineMainSourceSet`, … | —   | Baseline counterparts of the above.          |
+
+On Android you also get `detekt<Variant>` per build variant, with `detektMain` and `detektTest`
+acting as aggregate lifecycle tasks across variants. On Kotlin Multiplatform, compilation tasks are
+named `detekt<Compilation><Target>` (e.g. `detektMainJvm`), and only JVM and Android targets get
+`full` analysis. See [Using Type Resolution](/docs/gettingstarted/type-resolution) for the full
+task list.
+
+Baseline files for the new source-set tasks get a `SourceSet` suffix, e.g.
+`detekt-baseline-mainSourceSet.xml`.
+
+If you had custom `Detekt` task registrations purely to wire up `classpath` and `jvmTarget`,
+delete them — the generated compilation tasks already do it for you.
+
+The Worker API is still **opt-in**, unchanged from 1.x. Enable it with
+`detekt.use.worker.api=true` in `gradle.properties`.
+
+### Analysis modes: `light` and `full`
+
+Type-aware rules are no longer gated behind an opt-in annotation, but they still need compiler
+information. detekt now has an explicit **analysis mode**:
+
+- `light` — only the PSI/AST is available. Rules that need type information **do not run**.
+- `full` — the [Kotlin Analysis API](https://kotlin.github.io/analysis-api/) is available and all
+  rules run.
+
+The Gradle plugin picks the mode for you: a task with a non-empty `classpath` runs in `full` mode,
+otherwise `light`. On the CLI, pass `--analysis-mode full` together with `--classpath`. The default
+is `light`.
+
+This replaces the 1.x `@RequiresTypeResolution` opt-in and the `BindingContext` plumbing.
+
+:::note
+
+Rules skipped in `light` mode do not fail the run — they are simply marked inactive. detekt logs
+`The rule '…' requires type resolution but it was run without it.` only when `--debug` is enabled.
+If a rule you expect seems to have stopped reporting after the upgrade, re-run with `--debug` (or
+`detekt { debug = true }`) and check the analysis mode.
+
+:::
 
 ### Report format ID renames
 
 The IDs used on the CLI and Gradle plugin for the XML and Markdown reports changed:
 
-| 1.x report id    | 2.x report id |
-|------------------|---------------|
-| `xml`            | `checkstyle`  |
-| `md`             | `markdown`    |
+| 1.x report id | 2.x report id |
+|---------------|---------------|
+| `xml`         | `checkstyle`  |
+| `md`          | `markdown`    |
 
 ```diff
 -detekt --report xml:report.xml --report md:report.md
@@ -164,108 +213,204 @@ In Gradle:
 
 The plain-text (`txt`) report was removed entirely.
 
-### Configuration changes
+### Configuration file changes
 
-Several configuration concepts were removed or replaced:
+Run `./gradlew detektGenerateConfig` and diff against your existing `detekt.yml` for an overview of
+the changes that apply to your project. The most impactful ones:
 
-- **`maxIssues`** is gone. The build now fails on **any issue with severity `error`** instead of
-  comparing a global count.
-- **Issue weights / `excludeCorrectable` / per-ruleset `excludes`** were removed alongside the
-  weight-based exit calculation.
-- The **`output-report`** config block is removed — configure reports through the Gradle plugin or
-  CLI flags instead.
-- The deprecated `Severity` enum (`CodeSmell`, `Style`, `Defect`, …) is removed. Severity is now a
-  three-value enum (`Info`, `Warning`, `Error`) configurable per rule via the standard
-  `excludes` / `severity` keys.
-- Threshold-style configs were renamed everywhere to `allowed...`:
+#### Removed top-level blocks
 
-| Rule                          | Old key                                    | New key              |
-|-------------------------------|--------------------------------------------|----------------------|
-| `LongMethod`                  | `threshold`                                | `allowedLines`       |
-| `LargeClass`                  | `threshold`                                | `allowedLines`       |
-| `LongParameterList`           | `functionThreshold` / `constructorThreshold` | `allowedFunctionParameters` / `allowedConstructorParameters` |
-| `CyclomaticComplexMethod`     | `threshold`                                | `allowedComplexity`  |
-| `CognitiveComplexMethod`      | `threshold`                                | `allowedComplexity`  |
-| `ComplexCondition`            | `threshold`                                | `allowedComplexity`  |
-| `ComplexInterface`            | `threshold`                                | `allowedDefinitions` |
-| `NestedBlockDepth`            | `threshold`                                | `allowedDepth`       |
-| `NestedScopeFunctions`        | `threshold`                                | `allowedDepth`       |
-| `MethodOverloading`           | `threshold`                                | `allowedOverloads`   |
-| `NamedArguments`              | `threshold`                                | `allowedArguments`   |
-| `StringLiteralDuplication`    | `threshold`                                | `allowedDuplications`|
-| `CouldBeSequence`             | `threshold`                                | `allowedOperations`  |
+- **`build`** — including `maxIssues`, `excludeCorrectable` and `weights`. See
+  [`failOnSeverity`](#maxissues-is-replaced-by-failonseverity).
+- **`output-reports`** — configure reports through the Gradle plugin or CLI flags instead.
 
-- `ForbiddenImport` config keys changed — see the [updated rule docs](/docs/rules/style#forbiddenimport).
-- `FunctionOnlyReturningConstant` no longer accepts `excludeAnnotatedFunction`; use
-  `ignoreAnnotated` instead.
-- `LateinitUsage` no longer accepts `excludeAnnotatedProperties`; use `ignoreAnnotated` instead.
-- Comma-separated string values are no longer accepted where a list is expected — use proper YAML
-  lists.
-- Some XML-style baseline tags that were already deprecated in 1.x are now removed.
-
-Run `./gradlew detektGenerateConfig` and diff against your existing `detekt.yml` for a quick
-overview of changes that apply to your project.
-
-### Type resolution is the new default
-
-In 1.x, rules requiring type information were opt-in and gated by the `@RequiresTypeResolution`
-annotation. In 2.x:
-
-- The legacy K1 compiler (`BindingContext`) is gone. All type-aware rules use the official Kotlin
-  [Analysis API](https://kotlin.github.io/analysis-api/).
-- The Gradle plugin registers analysis tasks **per source set** and **per compilation**, so type
-  resolution is wired up automatically when classpath information is available.
-- You no longer need to register custom tasks just to enable type resolution.
-
-If you had custom `Detekt` task registrations purely to wire up `classpath` and `jvmTarget`,
-delete them — the autogenerated `detekt<SourceSet>` and `detekt<Compilation>` tasks already do it
-for you.
-
-### Gradle plugin behaviour
-
-- The Worker API is now used by default — this lets detekt run in a separate classloader and
-  isolates it from the rest of the Gradle build.
-- The plugin compiles against the AGP API only (not against KGP itself), so it works with both
-  the standalone Kotlin Gradle Plugin and AGP 9's built-in Kotlin support.
-- The plugin's package moved from `io.gitlab.arturbosch.detekt.*` to `dev.detekt.gradle.*`. If you
-  imported task classes in `buildSrc` or convention plugins, update the imports:
+#### `config.excludes` is a list
 
 ```diff
--import io.gitlab.arturbosch.detekt.Detekt
--import io.gitlab.arturbosch.detekt.extensions.DetektExtension
-+import dev.detekt.gradle.Detekt
-+import dev.detekt.gradle.extensions.DetektExtension
+ config:
+-  excludes: 'my_rule_set,.*>.*>[my_property]'
++  excludes: ['my_rule_set', '.*>.*>[my_property]']
 ```
 
-- The `detekt-gradle-plugin` artifact is now built lazily using Gradle's `Property` API. If you
-  set values from `buildSrc`, prefer `.set(...)` / `.convention(...)` over `=` assignment.
+More generally, comma-separated strings are no longer accepted where a list is expected — use
+proper YAML lists.
+
+#### Renamed processors and console reports
+
+If you customised the `processors` or `console-reports` exclusion lists, several entries changed
+name:
+
+| 1.x name                    | 2.x name                             |
+|-----------------------------|--------------------------------------|
+| `ProjectComplexityProcessor`| `ProjectCyclomaticComplexityProcessor` |
+| `FindingsReport`            | `IssuesReport`                       |
+| `FileBasedFindingsReport`   | `FileBasedIssuesReport`              |
+| `LiteFindingsReport`        | `LiteIssuesReport`                   |
+
+`DetektProgressListener` and `LicenseHeaderLoaderExtension` are no longer processors and must be
+removed from the `processors` list.
+
+:::caution
+
+These lists are matched by plain string comparison and are **not** config-validated, so a stale
+entry fails open: the processor or console report you meant to exclude silently becomes enabled
+again. Renaming them is easy to forget and produces no warning.
+
+:::
+
+#### The `formatting` rule set is now `ktlint`
+
+The ktlint wrapper rule set changed its ID, and its `android` flag was replaced by `code_style`
+and `indentStyle`:
+
+```diff
+-formatting:
++ktlint:
+   active: true
+-  android: false
++  code_style: 'intellij_idea' # or 'android_studio', 'ktlint_official'
++  indentStyle: 'space'
+   autoCorrect: true
+```
+
+The `DiscouragedCommentLocation` rule was removed; many new ktlint rules were added.
+
+All other rule set keys (`comments`, `complexity`, `empty-blocks`, `potential-bugs`, …) are
+unchanged — only the *module* names moved.
+
+#### Rule renames
+
+| 1.x rule                          | 2.x rule                                                    |
+|-----------------------------------|-------------------------------------------------------------|
+| `UnusedImports`                   | `UnusedImport`                                              |
+| `UnusedPrivateMember`             | Split into `UnusedPrivateFunction` and `UnusedVariable` (`UnusedPrivateProperty` already existed) |
+| `UnnecessaryAbstractClass`        | Split into `AbstractClassCanBeConcreteClass` and `AbstractClassCanBeInterface` |
+| `CommentOverPrivateFunction`      | `DocumentationOverPrivateFunction`                          |
+| `CommentOverPrivateProperty`      | `DocumentationOverPrivateProperty`                          |
+| `EmptyKtFile`                     | `EmptyKotlinFile`                                           |
+| `MayBeConst`                      | `MayBeConstant`                                             |
+| `FunctionMinLength`               | `FunctionNameMinLength`                                     |
+| `FunctionMaxLength`               | `FunctionNameMaxLength`                                     |
+| `SpacingBetweenPackageAndImports` | `SpacingAfterPackageAndImports`                             |
+| `UntilInsteadOfRangeTo`           | `RangeUntilInsteadOfRangeTo`                                |
+| `RedundantVisibilityModifierRule` | `RedundantVisibilityModifier`                               |
+
+Update your `detekt.yml`, baseline files, and any `@Suppress("...")` annotations referencing the
+old names.
+
+#### Rules removed
+
+`PreferToOverPairSyntax` and `UnnecessaryAnnotationUseSiteTarget` were removed. Rules that were
+already deprecated in 1.x are gone too, most notably:
+
+| Removed rule                    | Replacement                             |
+|---------------------------------|------------------------------------------|
+| `ComplexMethod`                 | `CyclomaticComplexMethod`                |
+| `MandatoryBracesIfStatements`   | `BracesOnIfStatements` with `always`     |
+| `OptionalWhenBraces`            | `BracesOnWhenStatements`                 |
+| `TrailingComma`                 | `TrailingCommaOnCallSite` / `TrailingCommaOnDeclarationSite` |
+| `DuplicateCaseInWhenExpression`, `MissingWhenCase`, `RedundantElseInWhen` | Reported by the Kotlin compiler |
+| `ForbiddenPublicDataClass`, `LibraryCodeMustSpecifyReturnType`, `LibraryEntitiesShouldNotBePublic` | The `libraries` rule set plugin |
+| `ViolatesTypeResolutionRequirements` (`ruleauthors`) | Obsolete — `RequiresAnalysisApi` is enforced by the compiler |
+
+The `MultiRule` mechanism was also removed; if you maintained a custom multi-rule, see the
+**[rule author guide](#other-removed--renamed-extension-points)** below.
+
+#### Renamed configuration keys
+
+Threshold-style configs were renamed to `allowed…`:
+
+| Rule                       | Old key(s)                                   | New key(s)                                              |
+|----------------------------|----------------------------------------------|---------------------------------------------------------|
+| `LongMethod`               | `threshold`                                  | `allowedLines`                                          |
+| `LargeClass`               | `threshold`                                  | `allowedLines`                                          |
+| `LongParameterList`        | `functionThreshold` / `constructorThreshold` | `allowedFunctionParameters` / `allowedConstructorParameters` |
+| `CyclomaticComplexMethod`  | `threshold`                                  | `allowedComplexity`                                     |
+| `CognitiveComplexMethod`   | `threshold`                                  | `allowedComplexity`                                     |
+| `ComplexCondition`         | `threshold`                                  | `allowedConditions`                                     |
+| `ComplexInterface`         | `threshold`                                  | `allowedDefinitions`                                    |
+| `NestedBlockDepth`         | `threshold`                                  | `allowedDepth`                                          |
+| `NestedScopeFunctions`     | `threshold`                                  | `allowedDepth`                                          |
+| `MethodOverloading`        | `threshold`                                  | `allowedOverloads`                                      |
+| `NamedArguments`           | `threshold`                                  | `allowedArguments`                                      |
+| `CouldBeSequence`          | `threshold`                                  | `allowedOperations`                                     |
+| `StringLiteralDuplication` | `threshold` / `excludeStringsWithLessThan5Characters` | `allowedDuplications` / `allowedWithLengthLessThan` |
+| `TooManyFunctions`         | `thresholdInFiles`, `thresholdInClasses`, `thresholdInInterfaces`, `thresholdInObjects`, `thresholdInEnums` | `allowedFunctionsPerFile`, `allowedFunctionsPerClass`, `allowedFunctionsPerInterface`, `allowedFunctionsPerObject`, `allowedFunctionsPerEnum` |
+
+Other key renames:
+
+| Rule                        | Old key                     | New key                          |
+|-----------------------------|-----------------------------|-----------------------------------|
+| `ForbiddenImport`           | `imports` / `forbiddenPatterns` | `forbiddenImports` (plus a new `allowedImports`) |
+| `AbsentOrWrongFileLicense`  | `licenseTemplateFile`       | `licenseTemplate`                 |
+| `UnderscoresInNumericLiterals` | `acceptableDecimalLength` | `acceptableLength`                |
+| `IgnoredReturnValue`        | `restrictToAnnotatedMethods`| `restrictToConfig`                |
+| `ForbiddenComment`          | `values` / `customMessage`  | `comments` (a list of value/reason pairs) |
+| `EmptyFunctionBlock`        | `ignoreOverriddenFunctions` | `ignoreOverridden`                |
+| `MemberNameEqualsClassName` | `ignoreOverriddenFunction`  | `ignoreOverridden`                |
+| `FunctionOnlyReturningConstant` | `excludeAnnotatedFunction` | `ignoreAnnotated`              |
+| `LateinitUsage`             | `excludeAnnotatedProperties`| `ignoreAnnotated`                 |
+| `UseDataClass`, `UnnecessaryAbstractClass` | `excludeAnnotatedClasses` | `ignoreAnnotated`  |
+
+The `ignoreOverridden` option on `BooleanPropertyNaming`, `ConstructorParameterNaming`,
+`FunctionNaming`, `FunctionParameterNaming` and `VariableNaming` was ignored in 1.x and is now
+removed.
+
+### Baselines must be regenerated
+
+:::danger[Your 1.x baseline will silently stop working]
+
+**Baseline files written by detekt 1.x do not work with detekt 2.x.** The XML structure is the
+same, so nothing fails loudly — but the `ID` format changed, so no 1.x entry matches and every
+previously suppressed issue is reported again.
+
+:::
+
+The rule ID, the file name and the signature are now separated by `:` instead of `$`:
+
+```diff
+-<ID>TooGenericExceptionCaught:Junk.kt$Junk$e: RuntimeException</ID>
++<ID>TooGenericExceptionCaught:Junk.kt:Junk$e: RuntimeException</ID>
+```
+
+The 1.x signature builder deliberately preserved the old, slightly broken format because fixing it
+would invalidate every baseline; a major release was the only place it could change. Delete your
+old baseline and regenerate it with `detektBaseline…` (Gradle) or `--create-baseline` (CLI) after
+upgrading.
+
+If you run the same rule several times with different configurations, the ID carries the rule
+instance name too, for example `FeatureEnvy/my-instance:Junk.kt:signature`.
 
 ### CLI changes
 
-- The CLI uses **system-dependent path separators** consistently — on Windows, separators in
-  reports and logs will be `\` rather than the mixed behaviour of 1.x.
-- `--report` validation is stricter and emits clearer error messages for unknown formats.
-- `--classpath` is validated when the CLI starts so misconfigured classpaths fail fast.
-- A new `--filter` flag lets you exclude paths from analysis without modifying the config file.
+- **List separators changed.** `--input`, `--config`, `--plugins` and `--classpath` accepted `,`
+  (and sometimes `;`) in 1.x. They now use the platform path separator only: `:` on \*nix, `;` on
+  Windows.
 
-### Compiler plugin coordinates
+  ```diff
+  -detekt --input src/main/kotlin,src/test/kotlin
+  +detekt --input src/main/kotlin:src/test/kotlin
+  ```
 
-The compiler plugin moved too. If you applied it via Gradle's compiler plugin DSL:
+- `--max-issues` was removed — use [`--fail-on-severity`](#maxissues-is-replaced-by-failonseverity).
+- `--analysis-mode light|full` was added — see [Analysis modes](#analysis-modes-light-and-full).
+- `--api-version` was added, alongside the existing `--language-version`.
+- `--classpath` is no longer marked experimental, and paths are validated when the CLI starts so
+  misconfigured classpaths fail fast.
+- `--report` accepts the [new report IDs](#report-format-id-renames).
+
+### Compiler plugin
+
+The compiler plugin's Gradle plugin ID and Maven coordinates both moved:
 
 ```diff
  plugins {
--    id("io.gitlab.arturbosch.detekt") version "1.23.8"
-+    id("dev.detekt.compiler-plugin") version "2.0.0"
+-    id("io.github.detekt.gradle.compiler-plugin") version "1.23.8"
++    id("dev.detekt.gradle.compiler-plugin") version "2.0.0"
  }
 ```
 
-The compiler-plugin Maven coordinates also changed to `dev.detekt:detekt-compiler-plugin`.
-
-### Baseline file format
-
-Baseline files written by 1.x are still readable in 2.x, but new baselines created with
-`detektBaseline` will be slightly cleaner (redundant empty tags and the deprecated XML tags are no
-longer emitted). Re-generate baselines after upgrading for the best diff.
+The compiler-plugin Maven coordinates are now `dev.detekt:detekt-compiler-plugin`.
 
 ---
 
@@ -276,21 +421,27 @@ extension, you'll need to update both your dependency coordinates and your code.
 
 ### Coordinates and imports
 
-The mechanical part: replace `io.gitlab.arturbosch.detekt` with `dev.detekt` throughout your
-project — both in your `build.gradle.kts` and in `import` statements.
+The mechanical part: every detekt package moved under `dev.detekt`, and detekt no longer uses the
+Kotlin compiler's shaded IntelliJ classes.
 
-The `detekt-api` artifact now lives at `dev.detekt:detekt-api`; its types moved from the
-`io.gitlab.arturbosch.detekt.api` package to `dev.detekt.api`.
+| 1.x package                                | 2.x package        |
+|--------------------------------------------|--------------------|
+| `io.gitlab.arturbosch.detekt.api`           | `dev.detekt.api`   |
+| `io.gitlab.arturbosch.detekt.api.internal`  | `dev.detekt.api` (most of it is public now) |
+| `io.gitlab.arturbosch.detekt.rules` (psi-utils helpers) | `dev.detekt.psi` |
+| `io.github.detekt.psi`                      | `dev.detekt.psi`   |
+| `io.github.detekt.tooling`                  | `dev.detekt.tooling` |
+| `io.github.detekt.test.utils`               | `dev.detekt.test.utils` |
+| `org.jetbrains.kotlin.com.intellij.*`       | `com.intellij.*`   |
 
-| 1.x module / package                                   | 2.x module / package                          |
-|--------------------------------------------------------|-----------------------------------------------|
-| `io.gitlab.arturbosch.detekt:detekt-api`               | `dev.detekt:detekt-api`                       |
-| `io.gitlab.arturbosch.detekt.api`                      | `dev.detekt.api`                              |
-| `io.gitlab.arturbosch.detekt:detekt-psi-utils`         | `dev.detekt:detekt-psi-utils`                 |
-| `io.gitlab.arturbosch.detekt.rules.*` packages         | `dev.detekt.rules.*`                          |
-| `io.gitlab.arturbosch.detekt:detekt-test`              | `dev.detekt:detekt-test`                      |
-| `io.gitlab.arturbosch.detekt:detekt-test-utils`        | `dev.detekt:detekt-test-utils`                |
-| Tooling, parser, generator, etc.                       | All moved to the `dev.detekt.*` namespace     |
+```diff
+-import io.gitlab.arturbosch.detekt.api.Rule
+-import io.gitlab.arturbosch.detekt.rules.isPartOf
+-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
++import dev.detekt.api.Rule
++import dev.detekt.psi.isPartOf
++import com.intellij.psi.PsiElement
+```
 
 New artifacts were introduced for testing:
 
@@ -328,28 +479,32 @@ The `Rule` class signature changed:
 
 Key points:
 
-- `Rule` now takes the `description` as a constructor parameter — move the text out of `Issue`.
-- The `Issue` class and the `issue` override are gone.
+- `Rule` takes the `description` as a constructor parameter — move the text out of `Issue`. An
+  optional third parameter takes a documentation `URI`.
+- The 1.x `Issue` class and the `issue` override are gone. Note that `dev.detekt.api.Issue` **does**
+  exist in 2.x, but it is a different concept — see [Findings and Issues](#findings-issues-and-detektion).
 - `Debt` is gone — detekt no longer tracks per-issue debt minutes.
-- `CodeSmell` was renamed to `Finding`. Its constructor no longer takes an `Issue`.
-- `Severity` is now configured at the **rule level via YAML config**, not via an enum on `Issue`.
-  Default severity is set when the rule's `RuleInstance` is constructed by the engine; you don't
-  declare it in code anymore.
-- The `Rule.severity` property and the per-call severity overrides are removed.
-- `Rule` no longer carries an `aliases` set; aliases are declared through the `@Alias` annotation.
+- `CodeSmell` was renamed to `Finding`, and its constructor no longer takes an `Issue`:
+  `Finding(entity, message, references, suppressReasons)`.
+- `Severity` is configured per rule via YAML config, not via an enum in code. `Rule.severity` and
+  per-call severity overrides are gone. The enum is now `Info`, `Warning`, `Error`.
+- `Rule` no longer carries an `aliases` set; declare aliases with the `@Alias` annotation.
+- The rule's name comes from `Rule.ruleName` (a `RuleName` value class), defaulting to the class
+  name. Override it if you need a different reported name.
+- `ThresholdedCodeSmell` and `ThresholdRule` were removed — emit a plain `Finding` and put the
+  threshold information into the message.
 
-The `ThresholdedCodeSmell` type was also removed — emit a plain `Finding` instead and put the
-threshold information into the message.
+`Entity` also changed: `name` and `compact()` are gone and `ktElement` is now non-null.
 
 ### `RuleSetProvider`
 
-`RuleSetProvider` returns rule **factories**, not rule instances, and uses the
-`RuleSet.Id` value class:
+`RuleSetProvider` returns rule **factories**, not rule instances, and uses the `RuleSetId` class
+(this was `RuleSet.Id` in earlier 2.0 alphas):
 
 ```diff
  class MyRuleSetProvider : RuleSetProvider {
 -    override val ruleSetId = "MyRuleSet"
-+    override val ruleSetId = RuleSet.Id("MyRuleSet")
++    override val ruleSetId = RuleSetId("MyRuleSet")
 
 -    override fun instance(config: Config) = RuleSet(
 -        ruleSetId,
@@ -368,6 +523,9 @@ threshold information into the message.
 
 This lets detekt construct each rule lazily with its own scoped config, and is the foundation for
 running the same rule multiple times with different configurations.
+
+Remember to rename the service file under `META-INF/services/` from
+`io.gitlab.arturbosch.detekt.api.RuleSetProvider` to `dev.detekt.api.RuleSetProvider`.
 
 ### Type resolution: Analysis API instead of `BindingContext`
 
@@ -404,6 +562,9 @@ class MyRule(config: Config) : Rule(
 `KotlinType.fqNameOrNull`, `DataFlowValueFactory` and all other K1 helpers are removed from the
 public API.
 
+A rule marked with `RequiresAnalysisApi` only runs in [`full` analysis mode](#analysis-modes-light-and-full);
+in `light` mode it is skipped.
+
 JetBrains maintains an official
 [K1 → Analysis API migration guide](https://kotlin.github.io/analysis-api/migrating-from-k1.html)
 that covers the API mapping in depth. For concrete detekt-flavoured examples, look at the rule
@@ -411,7 +572,7 @@ migration PRs we landed during the 2.0 alpha cycle — there are over 100 of the
 lines, so finding one that's structurally close to your rule is usually quick. A few good starting
 points by category:
 
-- **Style / complexity** — [#8220](https://github.com/detekt/detekt/pull/8220),
+- **Style / complexity** — [#8422](https://github.com/detekt/detekt/pull/8422),
   [#8408](https://github.com/detekt/detekt/pull/8408),
   [#8482](https://github.com/detekt/detekt/pull/8482)
 - **Potential bugs** — [#8157](https://github.com/detekt/detekt/pull/8157),
@@ -425,68 +586,111 @@ points by category:
   [#8290](https://github.com/detekt/detekt/pull/8290)
 - **Naming** — [#8201](https://github.com/detekt/detekt/pull/8201),
   [#8202](https://github.com/detekt/detekt/pull/8202),
-  [#8330](https://github.com/detekt/detekt/pull/8330)
+  [#8325](https://github.com/detekt/detekt/pull/8325)
+
+### Findings, Issues and Detektion
+
+detekt now distinguishes the two halves of what 1.x called a "finding":
+
+- **`Finding`** is what a rule reports: an `Entity`, a message, optional references and suppress
+  reasons. It knows nothing about the rule that produced it.
+- **`Issue`** is what the engine produces after attaching the `RuleInstance` and the resolved
+  `Severity`. This is what reports consume.
+
+`Detektion` changed accordingly, and is now an immutable class rather than an interface:
+
+```diff
+-detektion.findings          // Map<RuleSetId, List<Finding>>
+-detektion.add(notification) // mutates in place
+-detektion.addData(key, value) / getData(key)
++detektion.issues            // List<Issue>
++detektion + notification    // returns a new Detektion
++detektion.userData          // Map<String, Any>; use `detektion + (key to value)`
+```
+
+`Detektion` no longer implements `UserDataHolder`, and `Notification.isError` was removed.
+
+### Custom reports
+
+If you implemented a custom `OutputReport` or `ConsoleReport`:
+
+- Both are now **interfaces** with a single `render(Detektion): String` method.
+- `OutputReport.ending`, `OutputReport.name` and `OutputReport.write(...)` are gone — the engine
+  decides where output goes, so your report can be written to any path and extension.
+- `Extension.init(Config)` was removed; only `init(SetupContext)` remains. `Extension.id` is still
+  required, `Extension.priority` now has a default.
+- `FileProcessListener.onFinish(files, result)` returns a `Detektion` instead of mutating one, and
+  no longer receives a `BindingContext`.
 
 ### Testing rules
 
 The testing API was streamlined:
 
-- `compileAndLint(...)` → `lint(...)` (when no type info is needed)
-- `compileAndLintWithContext(env, ...)` → `lintWithContext(env, ...)`
-- AssertJ-style assertions live in a new module: add
-  `testImplementation("dev.detekt:detekt-test-assertj:2.0.0")`
-- The JUnit 5 environment extension lives in `dev.detekt:detekt-test-junit`. Annotate type-resolving
-  test classes with `@KotlinCoreEnvironmentTest` as before.
-
-If your test extended a `Spec` class that used `RequiresFullAnalysis`, that helper is no longer
-exported — implement `RequiresAnalysisApi` on the rule itself and use `lintWithContext`.
+- `compileAndLint(...)` → `lint(...)`. Snippet compilation is now controlled by the `compile`
+  parameter and the `compile-test-snippets` system property.
+- `compileAndLintWithContext(env, ...)` → `lintWithContext(env, ...)`. The environment parameter is
+  a `dev.detekt.test.utils.KotlinEnvironmentContainer`, not a `KotlinCoreEnvironment`.
+- `lintWithContext` only accepts rules that implement `RequiresAnalysisApi`, and `lint` rejects
+  them — the compiler enforces the split for you.
+- `getContextForPaths(...)` is gone along with `BindingContext`.
+- AssertJ-style assertions moved to a new module: add
+  `testImplementation("dev.detekt:detekt-test-assertj:2.0.0")`. `ThresholdedCodeSmellAssert`,
+  `FindingsAssert.hasStartSourceLocations`, `hasEndSourceLocations` and
+  `hasTextLocations(String)` were removed.
+- The JUnit 5 extensions live in `dev.detekt:detekt-test-junit`: `@KotlinCoreEnvironmentTest` for
+  tests that need a classpath, and the new `@KotlinAnalysisApiEngineTest`.
+- `TestConfig` is constructed directly, e.g. `TestConfig("active" to "true")`.
 
 ### Configuration annotations
 
-`@Configuration`, `@ActiveByDefault`, and `@RequiresTypeResolution` used to live in an internal
-package. They moved to the public API and you should import them from
-`dev.detekt.api.internal` (or the new public package, depending on the annotation):
+`@Configuration`, `@ActiveByDefault` and `@Alias` used to live in an internal package. They are now
+part of the public API:
 
 ```diff
 -import io.gitlab.arturbosch.detekt.api.internal.Configuration
 +import dev.detekt.api.Configuration
 ```
 
-Most existing usages keep working with a simple package update.
+`@RequiresTypeResolution` has no equivalent — implement `RequiresAnalysisApi` instead.
 
-### Custom reports
-
-If you implemented a custom `OutputReport` or `ConsoleReport`:
-
-- `OutputReport`'s `name` property is removed; provide the file path via the engine instead.
-- The default file extension is no longer hard-coded — your report can pick any extension that
-  makes sense.
-- `ConsoleReport` is now an interface rather than an abstract class.
-- `Detektion` is now immutable. If you needed to attach data to it, use the `Notification`
-  mechanism or store state on your `Extension` instance.
+`Config` itself changed slightly: `parentPath` was replaced by `parent`, and `subConfigKeys()` was
+added.
 
 ### Other removed / renamed extension points
 
 - `MultiRule` is gone — split it into individual `Rule`s.
 - `BaseRule`, `ThresholdRule`, `LazyRegex`, `SingleAssign`, `SplitPattern`,
-  `CommaSeparatedPattern`, `Compactable`, `HasEntity`, `Context` interface,
-  `DefaultContext`, `FilePath`, `safeAs` extension — all removed.
-- `FileProcessListener` no longer exposes a `BindingContext`. If your listener needed type info,
-  port it to the Analysis API.
+  `CommaSeparatedPattern`, `Compactable`, `HasEntity`, `HasMetrics`, `Metric`, `Context`,
+  `DefaultContext`, `ConfigAware`, `AnnotationExcluder`, `FilePath`, `UnstableApi`, `safeAs` — all
+  removed.
 - `txt` report support is removed.
 - `LicenseHeaderLoaderExtension` is no longer auto-registered as a processor.
 - `DetektProgressListener` and `InvalidConfigurationError` are no longer part of the public API.
+- `configWithAndroidVariants` moved from `detekt-api` to `detekt-rules-ktlint-wrapper`.
+- If you embed detekt programmatically through `detekt-tooling`, `MaxIssuesReached` was replaced by
+  `IssuesFound`, `FunctionMatcher` moved to `dev.detekt.psi` in `detekt-psi-utils`, and
+  `ProjectSpec` gained an `analysisMode` property.
 
 ### Gradle plugin extension points
 
 If you extended the Gradle plugin (custom task type, custom convention plugin):
 
-- The plugin's task classes live in `dev.detekt.gradle.*` (and concrete tasks in
-  `dev.detekt.gradle.plugin.*`).
-- All inputs are exposed as Gradle `Property` / `ListProperty` / `ConfigurableFileCollection` —
-  the old eager `var` properties are gone.
-- The `Detekt` plain task is being retired in favour of source-set and compilation-aware tasks.
-  Prefer wiring custom logic to the `detekt<SourceSet>` and `detekt<Compilation>` tasks.
+```diff
+-import io.gitlab.arturbosch.detekt.Detekt
+-import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
+-import io.gitlab.arturbosch.detekt.extensions.DetektExtension
+-import io.gitlab.arturbosch.detekt.report.ReportMergeTask
++import dev.detekt.gradle.Detekt
++import dev.detekt.gradle.DetektCreateBaselineTask
++import dev.detekt.gradle.extensions.DetektExtension
++import dev.detekt.gradle.report.ReportMergeTask
+```
+
+- The plugin classes themselves live in `dev.detekt.gradle.plugin.*`.
+- `DetektExtension` is an interface of lazy Gradle properties — see
+  [The `detekt` extension is now lazy](#the-detekt-extension-is-now-lazy).
+- The plugin compiles against the Kotlin Gradle plugin API and the AGP API only, so it works with
+  both the standalone Kotlin Gradle Plugin and AGP 9's built-in Kotlin support.
 
 ---
 
