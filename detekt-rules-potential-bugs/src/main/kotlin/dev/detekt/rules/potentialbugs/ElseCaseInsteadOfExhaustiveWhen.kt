@@ -69,11 +69,13 @@ class ElseCaseInsteadOfExhaustiveWhen(config: Config) :
     }
 
     private fun checkForElseCaseInsteadOfExhaustiveWhenExpression(whenExpression: KtWhenExpression) {
-        val subjectExpression = whenExpression.subjectExpression ?: return
+        val subjectVariable = whenExpression.subjectVariable
+        val subjectExpression = whenExpression.subjectExpression
+        if (subjectVariable == null && subjectExpression == null) return
         if (whenExpression.elseExpression == null) return
 
         analyze(whenExpression) {
-            val subjectType = subjectExpression.expressionType
+            val subjectType = subjectVariable?.returnType ?: subjectExpression?.expressionType
             val subjectSymbol = subjectType?.symbol as? KaClassSymbol
             if (ignoredSubjectTypes.contains(subjectSymbol?.classId?.asFqNameString())) {
                 return

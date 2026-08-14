@@ -58,6 +58,47 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinEnvironmentCont
         }
 
         @Test
+        fun `reports when enum _when_ expression with subject variable contains _else_ case`() {
+            val code = """
+                enum class Color {
+                    RED,
+                    GREEN,
+                    BLUE
+                }
+                
+                fun whenOnEnumFail(c: Color) {
+                    val x = when (val subject = c) {
+                        Color.BLUE -> 1
+                        Color.GREEN -> 2
+                        else -> 100
+                    }
+                }
+            """.trimIndent()
+            val actual = subject.lintWithContext(env, code)
+            assertThat(actual).hasSize(1)
+        }
+
+        @Test
+        fun `does not report when enum _when_ expression with subject variable does not contain _else_ case`() {
+            val code = """
+                enum class Color {
+                    RED,
+                    GREEN,
+                    BLUE
+                }
+                
+                fun whenOnEnumPass(c: Color) {
+                    val x = when (val subject = c) {
+                        Color.BLUE -> 1
+                        Color.GREEN -> 2
+                        Color.RED -> 3
+                    }
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).isEmpty()
+        }
+
+        @Test
         fun `does not report when enum _when_ expression does not contain _else_ case`() {
             val code = """
                 enum class Color {
@@ -134,6 +175,26 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinEnvironmentCont
         }
 
         @Test
+        fun `reports when sealed _when_ expression with subject variable contains _else_ case`() {
+            val code = """
+                sealed class Variant {
+                    object VariantA : Variant()
+                    class VariantB : Variant()
+                    object VariantC : Variant()
+                }
+                
+                fun whenOnSealedFail(v: Variant) {
+                    val x = when (val subject = v) {
+                        is Variant.VariantA -> "a"
+                        is Variant.VariantB -> "b"
+                        else -> "other"
+                    }
+                }
+            """.trimIndent()
+            assertThat(subject.lintWithContext(env, code)).hasSize(1)
+        }
+
+        @Test
         fun `does not report when sealed _when_ expression does not contain _else_ case`() {
             val code = """
                 sealed class Variant {
@@ -169,6 +230,32 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinEnvironmentCont
                 
                 fun whenOnEnumPasses(c: Color) {
                     when (c) {
+                        Color.BLUE -> {}
+                        Color.GREEN -> {}
+                        else -> {}
+                    }
+                }
+            """.trimIndent()
+            assertThat(
+                ElseCaseInsteadOfExhaustiveWhen(
+                    TestConfig("ignoredSubjectTypes" to listOf("com.example.Color"))
+                ).lintWithContext(env, code)
+            ).isEmpty()
+        }
+
+        @Test
+        fun `does not report if _when_ with subject variable contains _else_ case for ignored _enum_ subject type`() {
+            val code = """
+                package com.example
+                
+                enum class Color {
+                    RED,
+                    GREEN,
+                    BLUE
+                }
+                
+                fun whenOnEnumPasses(c: Color) {
+                    when (val subject = c) {
                         Color.BLUE -> {}
                         Color.GREEN -> {}
                         else -> {}
@@ -328,6 +415,20 @@ class ElseCaseInsteadOfExhaustiveWhenSpec(private val env: KotlinEnvironmentCont
                         true -> 1
                         false -> 2
                         else -> 100
+                    }
+                }
+            """.trimIndent()
+            val actual = subject.lintWithContext(env, code)
+            assertThat(actual).hasSize(1)
+        }
+
+        @Test
+        fun `reports when boolean _when_ expression with subject variable contains _else_ case`() {
+            val code = """
+                fun whenOnBooleanFail(b: Boolean) {
+                    when (val subject = b) {
+                        true -> {}
+                        else -> {}
                     }
                 }
             """.trimIndent()
