@@ -33,6 +33,7 @@ dependencies {
     jacocoAggregation(projects.detektPsiUtils)
     jacocoAggregation(projects.detektReportHtml)
     jacocoAggregation(projects.detektReportSarif)
+    jacocoAggregation(projects.detektReportStatistics)
     jacocoAggregation(projects.detektReportCheckstyle)
     jacocoAggregation(projects.detektReportMarkdown)
     jacocoAggregation(projects.detektRulesComplexity)
