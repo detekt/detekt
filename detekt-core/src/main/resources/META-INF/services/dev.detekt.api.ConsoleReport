@@ -1,4 +1,3 @@
-dev.detekt.core.reporting.console.ComplexityReport
 dev.detekt.core.reporting.console.IssuesReport
 dev.detekt.core.reporting.console.FileBasedIssuesReport
 dev.detekt.core.reporting.console.LiteIssuesReport
