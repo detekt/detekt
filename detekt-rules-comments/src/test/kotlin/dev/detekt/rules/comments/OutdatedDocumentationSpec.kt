@@ -53,9 +53,12 @@ class OutdatedDocumentationSpec {
                  */
                 class MyClass(otherParam: String)
             """.trimIndent()
-            assertThat(subject.lint(incorrectParamName)).singleElement()
-                .hasMessage(
-                    "Documentation of MyClass is outdated: documented parameters 'someParam' are not present in the declaration"
+            assertThat(subject.lint(incorrectParamName))
+                .hasSize(2)
+                .extracting("message")
+                .containsExactlyInAnyOrder(
+                    "@param someParam doesn't have corresponding public declaration.",
+                    "Documentation of otherParam is missing.",
                 )
         }
 
@@ -69,9 +72,7 @@ class OutdatedDocumentationSpec {
                 class MyClass(someParam: String)
             """.trimIndent()
             assertThat(subject.lint(incorrectListOfParams)).singleElement()
-                .hasMessage(
-                    "Documentation of MyClass is outdated: documented parameters 'someSecondParam' are not present in the declaration"
-                )
+                .hasMessage("@param someSecondParam doesn't have corresponding public declaration.")
         }
 
         @Test
@@ -84,9 +85,7 @@ class OutdatedDocumentationSpec {
                 class MyClass(otherParam: String, someParam: String)
             """.trimIndent()
             assertThat(subject.lint(incorrectParamOrder)).singleElement()
-                .hasMessage(
-                    "Documentation of MyClass is outdated: order of documented parameters does not match the declaration order"
-                )
+                .hasMessage("Documentation elements order is mismatched with declaration.")
         }
 
         @Test
@@ -110,9 +109,12 @@ class OutdatedDocumentationSpec {
                  */
                 class MyClass(someParam: String, val otherProp: String)
             """.trimIndent()
-            assertThat(subject.lint(correctParamIncorrectProp)).singleElement()
-                .hasMessage(
-                    "Documentation of MyClass is outdated: documented parameters 'someProp' are not present in the declaration"
+            assertThat(subject.lint(correctParamIncorrectProp))
+                .hasSize(2)
+                .extracting("message")
+                .containsExactlyInAnyOrder(
+                    "@property someProp doesn't have corresponding public declaration.",
+                    "Documentation of otherProp is missing.",
                 )
         }
 
@@ -125,9 +127,12 @@ class OutdatedDocumentationSpec {
                  */
                 class MyClass(otherParam: String, val someProp: String)
             """.trimIndent()
-            assertThat(subject.lint(incorrectParamCorrectProp)).singleElement()
-                .hasMessage(
-                    "Documentation of MyClass is outdated: documented parameters 'someParam' are not present in the declaration"
+            assertThat(subject.lint(incorrectParamCorrectProp))
+                .hasSize(2)
+                .extracting("message")
+                .containsExactlyInAnyOrder(
+                    "@param someParam doesn't have corresponding public declaration.",
+                    "Documentation of otherParam is missing.",
                 )
         }
 
@@ -141,9 +146,12 @@ class OutdatedDocumentationSpec {
                     constructor(otherParam: String)
                 }
             """.trimIndent()
-            assertThat(subject.lint(incorrectConstructorDoc)).singleElement()
-                .hasMessage(
-                    "Documentation of MyClass is outdated: documented parameters 'someParam' are not present in the declaration"
+            assertThat(subject.lint(incorrectConstructorDoc))
+                .hasSize(2)
+                .extracting("message")
+                .containsExactlyInAnyOrder(
+                    "@param someParam doesn't have corresponding public declaration.",
+                    "Documentation of otherParam is missing.",
                 )
         }
 
@@ -169,9 +177,12 @@ class OutdatedDocumentationSpec {
                  */
                 class MyClass(someParam: String, val someProp: String)
             """.trimIndent()
-            assertThat(subject.lint(propertyAsParam)).singleElement()
-                .hasMessage(
-                    "Documentation of MyClass is outdated: documented parameters 'someParam', 'someProp' are not present in the declaration"
+            assertThat(subject.lint(propertyAsParam))
+                .hasSize(2)
+                .extracting("message")
+                .containsExactlyInAnyOrder(
+                    "@property someParam type doesn't match corresponding declaration of type param.",
+                    "@param someProp type doesn't match corresponding declaration of type property.",
                 )
         }
 
@@ -185,9 +196,7 @@ class OutdatedDocumentationSpec {
                 class MyClass(someParam: String, val someProp: String)
             """.trimIndent()
             assertThat(subject.lint(incorrectDeclarationsOrder)).singleElement()
-                .hasMessage(
-                    "Documentation of MyClass is outdated: order of documented parameters does not match the declaration order"
-                )
+                .hasMessage("Documentation elements order is mismatched with declaration.")
         }
 
         @Test
@@ -212,6 +221,31 @@ class OutdatedDocumentationSpec {
                 class A internal constructor(a: String, val b: String)
             """.trimIndent()
             assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `should not report when only public property is documented in internal constructor with param`() {
+            val onlyPropertyDocumented = """
+                /**
+                 * Doc
+                 * @property b desc
+                 */
+                class A internal constructor(val b: String, c: String)
+            """.trimIndent()
+            assertThat(subject.lint(onlyPropertyDocumented)).isEmpty()
+        }
+
+        @Test
+        fun `should not report when only public property and type is documented in internal constructor with param`() {
+            val propertyAndTypeDocumented = """
+                /**
+                 * Doc
+                 * @param T desc
+                 * @property b desc
+                 */
+                class A<T> internal constructor(val b: String, c: String)
+            """.trimIndent()
+            assertThat(subject.lint(propertyAndTypeDocumented)).isEmpty()
         }
 
         @Test
@@ -252,9 +286,7 @@ class OutdatedDocumentationSpec {
                 class A internal constructor(val a: String, val b: String)
             """.trimIndent()
             assertThat(subject.lint(incorrectDeclarationsOrder)).singleElement()
-                .hasMessage(
-                    "Documentation of A is outdated: parameters 'b' are not documented"
-                )
+                .hasMessage("Documentation of b is missing.")
         }
 
         @Test
@@ -268,9 +300,7 @@ class OutdatedDocumentationSpec {
                 class A internal constructor(val a: String, val b: String)
             """.trimIndent()
             assertThat(subject.lint(incorrectDeclarationsOrder)).singleElement()
-                .hasMessage(
-                    "Documentation of A is outdated: order of documented parameters does not match the declaration order"
-                )
+                .hasMessage("Documentation elements order is mismatched with declaration.")
         }
 
         @Test
@@ -288,9 +318,7 @@ class OutdatedDocumentationSpec {
                 )
             """.trimIndent()
             assertThat(subject.lint(incorrectDeclarationsOrder)).singleElement()
-                .hasMessage(
-                    "Documentation of A is outdated: parameters 'c' are not documented"
-                )
+                .hasMessage("@param b doesn't have corresponding public declaration.")
         }
 
         @Test
@@ -306,9 +334,12 @@ class OutdatedDocumentationSpec {
                     c: Int,
                 )
             """.trimIndent()
-            assertThat(subject.lint(incorrectDeclarationsOrder)).singleElement()
-                .hasMessage(
-                    "Documentation of A is outdated: parameters 'b', 'c' are not documented"
+            assertThat(subject.lint(incorrectDeclarationsOrder))
+                .hasSize(2)
+                .extracting("message")
+                .containsExactlyInAnyOrder(
+                    "Documentation of b is missing.",
+                    "Documentation of c is missing.",
                 )
         }
 
@@ -324,9 +355,7 @@ class OutdatedDocumentationSpec {
                 )
             """.trimIndent()
             assertThat(subject.lint(code)).singleElement()
-                .hasMessage(
-                    "Documentation of A is outdated: documented parameters 'a' are not present in the declaration"
-                )
+                .hasMessage("@property a type doesn't match corresponding declaration of type param.")
         }
 
         @Test
@@ -396,9 +425,7 @@ class OutdatedDocumentationSpec {
                 class MyClass<T>(someParam: String)
             """.trimIndent()
             assertThat(subject.lint(missingTypeParam)).singleElement()
-                .hasMessage(
-                    "Documentation of MyClass is outdated: parameters 'T' are not documented"
-                )
+                .hasMessage("Documentation of T is missing.")
         }
 
         @Test
@@ -410,9 +437,12 @@ class OutdatedDocumentationSpec {
                  */
                 class MyClass<T>(someParam: String)
             """.trimIndent()
-            assertThat(subject.lint(incorrectTypeParamName)).singleElement()
-                .hasMessage(
-                    "Documentation of MyClass is outdated: documented parameters 'S' are not present in the declaration"
+            assertThat(subject.lint(incorrectTypeParamName))
+                .hasSize(2)
+                .extracting("message")
+                .containsExactlyInAnyOrder(
+                    "@param S doesn't have corresponding public declaration.",
+                    "Documentation of T is missing.",
                 )
         }
 
@@ -426,9 +456,7 @@ class OutdatedDocumentationSpec {
                 class MyClass<T, S>(someParam: String)
             """.trimIndent()
             assertThat(subject.lint(incorrectTypeParamList)).singleElement()
-                .hasMessage(
-                    "Documentation of MyClass is outdated: parameters 'S' are not documented"
-                )
+                .hasMessage("Documentation of S is missing.")
         }
     }
 
@@ -454,9 +482,12 @@ class OutdatedDocumentationSpec {
                  */
                 fun myFun(otherParam: String) {}
             """.trimIndent()
-            assertThat(subject.lint(incorrectParamName)).singleElement()
-                .hasMessage(
-                    "Documentation of myFun is outdated: documented parameters 'someParam' are not present in the declaration"
+            assertThat(subject.lint(incorrectParamName))
+                .hasSize(2)
+                .extracting("message")
+                .containsExactlyInAnyOrder(
+                    "@param someParam doesn't have corresponding public declaration.",
+                    "Documentation of otherParam is missing.",
                 )
         }
     }
@@ -512,9 +543,7 @@ class OutdatedDocumentationSpec {
                 fun fromHsb(hue: Float) = Unit
             """.trimIndent()
             assertThat(subject.lint(backtickOnlyDescriptions)).singleElement()
-                .hasMessage(
-                    "Documentation of fromHsb is outdated: documented parameters 'saturation' are not present in the declaration"
-                )
+                .hasMessage("@param saturation doesn't have corresponding public declaration.")
         }
 
         @Test
@@ -527,9 +556,7 @@ class OutdatedDocumentationSpec {
                 fun fromHsb(hue: Float, saturation: Float) = Unit
             """.trimIndent()
             assertThat(subject.lint(backtickOnlyDescriptions)).singleElement()
-                .hasMessage(
-                    "Documentation of fromHsb is outdated: order of documented parameters does not match the declaration order"
-                )
+                .hasMessage("Documentation elements order is mismatched with declaration.")
         }
 
         @Test
@@ -542,9 +569,7 @@ class OutdatedDocumentationSpec {
                 fun fromHsb(hue: Float, saturation: Float, brightness: Float) = Unit
             """.trimIndent()
             assertThat(subject.lint(backtickOnlyDescriptions)).singleElement()
-                .hasMessage(
-                    "Documentation of fromHsb is outdated: parameters 'brightness' are not documented"
-                )
+                .hasMessage("Documentation of brightness is missing.")
         }
 
         @Test
@@ -586,9 +611,7 @@ class OutdatedDocumentationSpec {
                 fun <T> myFun(someParam: String) {}
             """.trimIndent()
             assertThat(subject.lint(missingTypeParam)).singleElement()
-                .hasMessage(
-                    "Documentation of myFun is outdated: parameters 'T' are not documented"
-                )
+                .hasMessage("Documentation of T is missing.")
         }
 
         @Test
@@ -600,9 +623,12 @@ class OutdatedDocumentationSpec {
                  */
                 fun <T> myFun(someParam: String) {}
             """.trimIndent()
-            assertThat(subject.lint(incorrectTypeParamName)).singleElement()
-                .hasMessage(
-                    "Documentation of myFun is outdated: documented parameters 'S' are not present in the declaration"
+            assertThat(subject.lint(incorrectTypeParamName))
+                .hasSize(2)
+                .extracting("message")
+                .containsExactlyInAnyOrder(
+                    "@param S doesn't have corresponding public declaration.",
+                    "Documentation of T is missing.",
                 )
         }
 
@@ -616,9 +642,7 @@ class OutdatedDocumentationSpec {
                 fun <T, S> myFun(someParam: String) {}
             """.trimIndent()
             assertThat(subject.lint(incorrectTypeParamList)).singleElement()
-                .hasMessage(
-                    "Documentation of myFun is outdated: parameters 'S' are not documented"
-                )
+                .hasMessage("Documentation of S is missing.")
         }
 
         @Test
@@ -632,9 +656,7 @@ class OutdatedDocumentationSpec {
                 fun <T, S> myFun(someParam: String) {}
             """.trimIndent()
             assertThat(subject.lint(incorrectTypeParamsOrder)).singleElement()
-                .hasMessage(
-                    "Documentation of myFun is outdated: order of documented parameters does not match the declaration order"
-                )
+                .hasMessage("Documentation elements order is mismatched with declaration.")
         }
     }
 
@@ -678,7 +700,18 @@ class OutdatedDocumentationSpec {
                     class MyNestedClass(otherParam: String)
                 }
             """.trimIndent()
-            assertThat(subject.lint(incorrectClassWithTwoIncorrectFunctions)).hasSize(4)
+            assertThat(subject.lint(incorrectClassWithTwoIncorrectFunctions))
+                .hasSize(7)
+                .extracting("message")
+                .containsExactlyInAnyOrder(
+                    "@param someParam doesn't have corresponding public declaration.",
+                    "@param someParam doesn't have corresponding public declaration.",
+                    "@param someParam doesn't have corresponding public declaration.",
+                    "Documentation of someProp is missing.",
+                    "Documentation of someSecondParam is missing.",
+                    "Documentation of otherParam is missing.",
+                    "Documentation of otherParam is missing.",
+                )
         }
     }
 
@@ -857,7 +890,8 @@ class OutdatedDocumentationSpec {
                     override val name: String
                 ) : Named
             """.trimIndent()
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.lint(code)).singleElement()
+                .hasMessage("@property wrongName doesn't have corresponding public declaration.")
         }
     }
 
@@ -906,9 +940,7 @@ class OutdatedDocumentationSpec {
                 )
             """.trimIndent()
             assertThat(subject.lint(code)).singleElement()
-                .hasMessage(
-                    "Documentation of A is outdated: documented parameters 'a' are not present in the declaration"
-                )
+                .hasMessage("@property a type doesn't match corresponding declaration of type param.")
         }
     }
 
@@ -959,9 +991,7 @@ class OutdatedDocumentationSpec {
                 fun foo(bar: Int) {}
             """.trimIndent()
             assertThat(configuredSubject.lint(code)).singleElement()
-                .hasMessage(
-                    "Documentation of foo is outdated: documented parameters 'baz' are not present in the declaration"
-                )
+                .hasMessage("@param baz doesn't have corresponding public declaration.")
         }
 
         @Test
@@ -973,9 +1003,7 @@ class OutdatedDocumentationSpec {
                 class MyClass(val actual: String)
             """.trimIndent()
             assertThat(configuredSubject.lint(code)).singleElement()
-                .hasMessage(
-                    "Documentation of MyClass is outdated: documented parameters 'missing' are not present in the declaration"
-                )
+                .hasMessage("@property missing doesn't have corresponding public declaration.")
         }
 
         @Test
@@ -988,9 +1016,7 @@ class OutdatedDocumentationSpec {
                 fun myFun(a: String, b: Int, c: Int) {}
             """.trimIndent()
             assertThat(configuredSubject.lint(code)).singleElement()
-                .hasMessage(
-                    "Documentation of myFun is outdated: order of documented parameters does not match the declaration order"
-                )
+                .hasMessage("Documentation elements order is mismatched with declaration.")
         }
 
         @Test
@@ -1027,9 +1053,7 @@ class OutdatedDocumentationSpec {
                 fun <T> myFun(someParam: String) {}
             """.trimIndent()
             assertThat(configuredSubject.lint(code)).singleElement()
-                .hasMessage(
-                    "Documentation of myFun is outdated: documented parameters 'X' are not present in the declaration"
-                )
+                .hasMessage("@param X doesn't have corresponding public declaration.")
         }
 
         @Test
