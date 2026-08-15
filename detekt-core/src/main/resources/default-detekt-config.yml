@@ -8,11 +8,6 @@ config:
 processors:
   active: true
   exclude:
-  # - 'KtFileCountProcessor'
-  # - 'PackageCountProcessor'
-  # - 'ClassCountProcessor'
-  # - 'FunctionCountProcessor'
-  # - 'PropertyCountProcessor'
   # - 'ProjectCyclomaticComplexityProcessor'
   # - 'ProjectCognitiveComplexityProcessor'
   # - 'ProjectLLOCProcessor'
@@ -23,7 +18,6 @@ processors:
 console-reports:
   active: true
   exclude:
-     - 'ProjectStatisticsReport'
      - 'ComplexityReport'
      - 'NotificationReport'
      - 'IssuesReport'
