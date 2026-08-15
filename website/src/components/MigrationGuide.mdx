@@ -251,18 +251,9 @@ for you.
 - `--classpath` is validated when the CLI starts so misconfigured classpaths fail fast.
 - A new `--filter` flag lets you exclude paths from analysis without modifying the config file.
 
-### Compiler plugin coordinates
+### Removed Compiler plugin
 
-The compiler plugin moved too. If you applied it via Gradle's compiler plugin DSL:
-
-```diff
- plugins {
--    id("io.gitlab.arturbosch.detekt") version "1.23.8"
-+    id("dev.detekt.compiler-plugin") version "2.0.0"
- }
-```
-
-The compiler-plugin Maven coordinates also changed to `dev.detekt:detekt-compiler-plugin`.
+The compiler plugin was removed.
 
 ### Baseline file format
 

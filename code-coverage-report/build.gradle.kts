@@ -25,7 +25,6 @@ dependencies {
     jacocoAggregation("dev.detekt:detekt-gradle-plugin")
     jacocoAggregation(projects.detektApi)
     jacocoAggregation(projects.detektCli)
-    jacocoAggregation(projects.detektCompilerPlugin)
     jacocoAggregation(projects.detektCore)
     jacocoAggregation(projects.detektGenerator)
     jacocoAggregation(projects.detektMetrics)

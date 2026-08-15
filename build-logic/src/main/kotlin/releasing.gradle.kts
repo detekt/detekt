@@ -31,9 +31,6 @@ dependencies {
     releaseArtifacts(project(":detekt-generator")) {
         targetConfiguration = "shadow" // com.github.jengelman.gradle.plugins.shadow.ShadowBasePlugin.CONFIGURATION_NAME
     }
-    releaseArtifacts(project(":detekt-compiler-plugin")) {
-        targetConfiguration = "shadow" // com.github.jengelman.gradle.plugins.shadow.ShadowBasePlugin.CONFIGURATION_NAME
-    }
     releaseArtifacts(project(":detekt-rules-ktlint-wrapper")) {
         targetConfiguration = Dependency.DEFAULT_CONFIGURATION
         isTransitive = false

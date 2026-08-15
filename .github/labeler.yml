@@ -40,10 +40,6 @@ gradle-plugin:
   - changed-files:
       - any-glob-to-any-file: ["detekt-gradle-plugin/src/**/*"]
 
-compiler-plugin:
-  - changed-files:
-      - any-glob-to-any-file: ["detekt-compiler-plugin/src/**/*"]
-
 parser:
   - changed-files:
       - any-glob-to-any-file: ["detekt-parser/src/**/*"]
