@@ -5,10 +5,20 @@ plugins {
 }
 
 val generatedConfig = configurations.dependencyScope("generatedConfig")
-val generatedConfigFiles = configurations.resolvable("generatedConfigFiles") { extendsFrom(generatedConfig) }
+val generatedConfigFiles = configurations.resolvable("generatedConfigFiles") {
+    extendsFrom(generatedConfig)
+
+    attributes {
+        attribute(LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE, objects.named("generated-config"))
+    }
+}
 val generatedDeprecations = configurations.dependencyScope("generatedDeprecations")
 val generatedDeprecationsFiles = configurations.resolvable("generatedDeprecationsFiles") {
     extendsFrom(generatedDeprecations)
+
+    attributes {
+        attribute(LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE, objects.named("generated-deprecations"))
+    }
 }
 
 dependencies {
@@ -22,27 +32,27 @@ dependencies {
     implementation(projects.detektParser)
     implementation(projects.detektPsiUtils)
     implementation(projects.detektUtils)
-    generatedConfig(projects.detektRulesComments) { targetConfiguration = "generatedConfig" }
-    generatedConfig(projects.detektRulesComplexity) { targetConfiguration = "generatedConfig" }
-    generatedConfig(projects.detektRulesCoroutines) { targetConfiguration = "generatedConfig" }
-    generatedConfig(projects.detektRulesEmptyBlocks) { targetConfiguration = "generatedConfig" }
-    generatedConfig(projects.detektRulesExceptions) { targetConfiguration = "generatedConfig" }
-    generatedConfig(projects.detektRulesNaming) { targetConfiguration = "generatedConfig" }
-    generatedConfig(projects.detektRulesPerformance) { targetConfiguration = "generatedConfig" }
-    generatedConfig(projects.detektRulesPotentialBugs) { targetConfiguration = "generatedConfig" }
-    generatedConfig(projects.detektRulesStyle) { targetConfiguration = "generatedConfig" }
-    generatedDeprecations(projects.detektRulesComments) { targetConfiguration = "generatedDeprecations" }
-    generatedDeprecations(projects.detektRulesComplexity) { targetConfiguration = "generatedDeprecations" }
-    generatedDeprecations(projects.detektRulesCoroutines) { targetConfiguration = "generatedDeprecations" }
-    generatedDeprecations(projects.detektRulesEmptyBlocks) { targetConfiguration = "generatedDeprecations" }
-    generatedDeprecations(projects.detektRulesKtlintWrapper) { targetConfiguration = "generatedDeprecations" }
-    generatedDeprecations(projects.detektRulesExceptions) { targetConfiguration = "generatedDeprecations" }
-    generatedDeprecations(projects.detektRulesLibraries) { targetConfiguration = "generatedDeprecations" }
-    generatedDeprecations(projects.detektRulesNaming) { targetConfiguration = "generatedDeprecations" }
-    generatedDeprecations(projects.detektRulesPerformance) { targetConfiguration = "generatedDeprecations" }
-    generatedDeprecations(projects.detektRulesPotentialBugs) { targetConfiguration = "generatedDeprecations" }
-    generatedDeprecations(projects.detektRulesRuleauthors) { targetConfiguration = "generatedDeprecations" }
-    generatedDeprecations(projects.detektRulesStyle) { targetConfiguration = "generatedDeprecations" }
+    generatedConfig(projects.detektRulesComments)
+    generatedConfig(projects.detektRulesComplexity)
+    generatedConfig(projects.detektRulesCoroutines)
+    generatedConfig(projects.detektRulesEmptyBlocks)
+    generatedConfig(projects.detektRulesExceptions)
+    generatedConfig(projects.detektRulesNaming)
+    generatedConfig(projects.detektRulesPerformance)
+    generatedConfig(projects.detektRulesPotentialBugs)
+    generatedConfig(projects.detektRulesStyle)
+    generatedDeprecations(projects.detektRulesComments)
+    generatedDeprecations(projects.detektRulesComplexity)
+    generatedDeprecations(projects.detektRulesCoroutines)
+    generatedDeprecations(projects.detektRulesEmptyBlocks)
+    generatedDeprecations(projects.detektRulesKtlintWrapper)
+    generatedDeprecations(projects.detektRulesExceptions)
+    generatedDeprecations(projects.detektRulesLibraries)
+    generatedDeprecations(projects.detektRulesNaming)
+    generatedDeprecations(projects.detektRulesPerformance)
+    generatedDeprecations(projects.detektRulesPotentialBugs)
+    generatedDeprecations(projects.detektRulesRuleauthors)
+    generatedDeprecations(projects.detektRulesStyle)
 
     testRuntimeOnly(projects.detektRules)
     runtimeOnly(projects.detektMetrics)
