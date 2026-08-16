@@ -134,17 +134,15 @@ val generateDeprecationList = tasks.register("generateDeprecationList") {
     }
 }
 
-tasks.processResources.configure {
-    inputs.files(generateDefaultDetektConfig)
-    inputs.files(generateDeprecationList)
+tasks.processResources {
+    inputs.files(generateDefaultDetektConfig, generateDeprecationList)
 }
 
-tasks.sourcesJar.configure {
-    inputs.files(generateDefaultDetektConfig)
-    inputs.files(generateDeprecationList)
+tasks.sourcesJar {
+    inputs.files(generateDefaultDetektConfig, generateDeprecationList)
 }
 
-val verifyGeneratorOutput = tasks.register<Exec>("verifyGeneratorOutput") {
+tasks.register<Exec>("verifyGeneratorOutput") {
     dependsOn(generateDefaultDetektConfig, generateDeprecationList)
     description = "Verifies that generated config files are up-to-date"
     commandLine = listOf(
