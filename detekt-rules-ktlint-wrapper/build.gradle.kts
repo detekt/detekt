@@ -1,5 +1,6 @@
 plugins {
     id("module")
+    id("generator")
 }
 
 val extraDepsToPackage = configurations.register("extraDepsToPackage")
@@ -42,17 +43,6 @@ dependencies {
     extraDepsToPackage(libs.slf4j.nop)
 }
 
-consumeGeneratedConfig(
-    fromProject = projects.detektGenerator,
-    fromConfiguration = "generatedKtlintWrapperConfig",
-    forTask = tasks.sourcesJar
-)
-consumeGeneratedConfig(
-    fromProject = projects.detektGenerator,
-    fromConfiguration = "generatedKtlintWrapperConfig",
-    forTask = tasks.processResources
-)
-
 tasks.jar {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE // allow duplicates
     dependsOn(ktlintToBundle, extraDepsToPackage)
@@ -77,4 +67,16 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>().configureEa
 java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
+}
+
+tasks.named("generateConfig") {
+    val ktlintVersion = libs.versions.ktlint
+    inputs.property("ktlintVersion", ktlintVersion)
+    doLast {
+        outputs.files.asFileTree.forEach {
+            if (it.isFile) {
+                it.writeText(it.readText().replace("<ktlintVersion/>", ktlintVersion.get()))
+            }
+        }
+    }
 }

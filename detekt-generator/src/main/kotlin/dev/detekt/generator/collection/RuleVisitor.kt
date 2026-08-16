@@ -13,12 +13,12 @@ import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
 import org.jetbrains.kotlin.psi.psiUtil.containingClass
 import org.jetbrains.kotlin.psi.psiUtil.getSuperNames
 
-internal class RuleVisitor(textReplacements: Map<String, String>) : KtTreeVisitorVoid() {
+internal class RuleVisitor : KtTreeVisitorVoid() {
 
     val containsRule
         get() = classesMap.any { it.value }
     private var name = ""
-    private val documentationCollector = DocumentationCollector(textReplacements)
+    private val documentationCollector = DocumentationCollector()
     private var defaultActivationStatus: DefaultActivationStatus = Inactive
     private var autoCorrect = false
     private var requiresFullAnalysis = false

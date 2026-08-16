@@ -6,9 +6,6 @@ reporting {
     reports {
         create<JacocoCoverageReport>("jacocoMergedTestReport") {
             testSuiteName = "test"
-            reportTask {
-                dependsOn(":detekt-generator:generateDocumentation")
-            }
         }
         create<JacocoCoverageReport>("jacocoMergedFunctionalTestReport") {
             testSuiteName = "functionalTest"
