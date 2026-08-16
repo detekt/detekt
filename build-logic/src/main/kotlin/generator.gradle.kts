@@ -49,18 +49,32 @@ project.plugins.withId("org.jetbrains.kotlin.jvm") {
         include("config.yml")
     }
 
-    val generatedConfig = configurations.consumable("generatedConfig")
-    val generatedDeprecations = configurations.consumable("generatedDeprecations")
-    val generatedDocumentation = configurations.consumable("generatedDocumentation")
+    configurations {
+        consumable("generatedConfig") {
+            attributes {
+                attribute(LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE, objects.named("generated-config"))
+            }
+        }
+        consumable("generatedDeprecations") {
+            attributes {
+                attribute(LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE, objects.named("generated-deprecations"))
+            }
+        }
+        configurations.consumable("generatedDocumentation") {
+            attributes {
+                attribute(DocsType.DOCS_TYPE_ATTRIBUTE, objects.named("generated-documentation"))
+            }
+        }
+    }
 
     artifacts {
-        add(generatedConfig.name, configDir.map { it.resolve("config.yml") }) {
+        add("generatedConfig", configDir.map { it.resolve("config.yml") }) {
             builtBy(generateConfig)
         }
-        add(generatedDeprecations.name, configDir.map { it.resolve("deprecation.properties") }) {
+        add("generatedDeprecations", configDir.map { it.resolve("deprecation.properties") }) {
             builtBy(generateConfig)
         }
-        add(generatedDocumentation.name, documentationDir) {
+        add("generatedDocumentation", documentationDir) {
             builtBy(generateConfig)
         }
     }
