@@ -78,16 +78,20 @@ class TopLevelAutoCorrectSpec {
         @TempDir tempDir: Path,
     ) {
         val fileUnderTest = tempDir.resolve("Foo.kt")
+        val untouched = tempDir.resolve("Bar.kt")
         val originalContent = """
             class Foo {
             }
 
-        """.trimIndent()
+        """.trimIndent() + "\n"
+        val untouchedContent = "fun unused() = Unit\n"
         fileUnderTest.writeText(originalContent)
+        untouched.writeText(untouchedContent)
+        val untouchedModified = java.nio.file.Files.getLastModifiedTime(untouched)
 
         val spec = ProcessingSpec {
             project {
-                inputPaths = listOf(fileUnderTest)
+                inputPaths = listOf(fileUnderTest, untouched)
                 basePath = tempDir
             }
             config {
@@ -112,7 +116,9 @@ class TopLevelAutoCorrectSpec {
         }
 
         assertThat(result.error).isNull()
-        assertThat(fileUnderTest.readText()).contains("// autoCorrect")
+        assertThat(fileUnderTest.readText()).isEqualTo("class Foo {\n// autoCorrect}\n\n")
+        assertThat(untouched.readText()).isEqualTo(untouchedContent)
+        assertThat(java.nio.file.Files.getLastModifiedTime(untouched)).isEqualTo(untouchedModified)
     }
 }
 

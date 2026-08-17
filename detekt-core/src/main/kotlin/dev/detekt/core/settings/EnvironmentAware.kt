@@ -3,6 +3,7 @@ package dev.detekt.core.settings
 import com.intellij.core.CoreApplicationEnvironment
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.util.Disposer
+import com.intellij.openapi.util.io.FileUtil
 import com.intellij.openapi.util.text.StringUtilRt
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.pom.PomModel
@@ -127,6 +128,7 @@ internal class EnvironmentFacade(
                 sourceModule = buildKtSourceModule {
                     val sourcePaths = configuration.kotlinSourceRoots.map { Path(it.path) }
                     if (autoCorrect) {
+                        // Writable lights require in-memory content; large projects pay a full read of every source.
                         addSourceVirtualFiles(sourcePaths.map { it.toWritableKotlinVirtualFile() })
                     } else {
                         addSourceRoots(sourcePaths)
@@ -160,7 +162,7 @@ internal class EnvironmentFacade(
  * Auto-correct rules need a writable PSI tree while still resolving to the original path on disk.
  */
 private fun Path.toWritableKotlinVirtualFile(): VirtualFile {
-    val originalPath = toAbsolutePath().normalize().toString()
+    val originalPath = FileUtil.toSystemIndependentName(toAbsolutePath().normalize().toString())
     val rawText = readText()
     val lineSeparator = when {
         "\r\n" in rawText -> "\r\n"

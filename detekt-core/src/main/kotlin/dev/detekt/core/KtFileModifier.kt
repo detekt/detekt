@@ -16,8 +16,10 @@ class KtFileModifier : FileProcessListener {
     override fun onFinish(files: List<KtFile>, result: Detektion): Detektion {
         var finalResult = result
         files.forEach { ktFile ->
-            if (ktFile.modifiedText == null && ktFile.modificationStamp > 0) {
-                ktFile.modifiedText = ktFile.node.text
+            // Live PSI edits bump modificationStamp. Prefer that over a ktlint modifiedText
+            // buffer for the same file when both ran.
+            if (ktFile.modificationStamp > 0) {
+                ktFile.modifiedText = ktFile.text
             }
         }
         files.filter { it.modifiedText != null }
