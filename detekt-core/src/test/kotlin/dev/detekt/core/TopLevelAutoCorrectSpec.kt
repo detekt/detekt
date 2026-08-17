@@ -115,8 +115,13 @@ class TopLevelAutoCorrectSpec {
             )
         }
 
+        val expectedContent = """
+            class Foo {
+            // autoCorrect}
+
+        """.trimIndent() + "\n"
         assertThat(result.error).isNull()
-        assertThat(fileUnderTest.readText()).isEqualTo("class Foo {\n// autoCorrect}\n\n")
+        assertThat(fileUnderTest.readText()).isEqualTo(expectedContent)
         assertThat(untouched.readText()).isEqualTo(untouchedContent)
         assertThat(java.nio.file.Files.getLastModifiedTime(untouched)).isEqualTo(untouchedModified)
     }
