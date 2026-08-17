@@ -23,15 +23,19 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.elementsInRange
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.io.TempDir
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import java.net.URI
+import java.nio.file.Path
 import java.util.concurrent.CompletionException
 import kotlin.io.path.Path
+import kotlin.io.path.writeText
 
 class AnalyzerSpec {
 
@@ -408,6 +412,59 @@ class AnalyzerSpec {
             assertThat(findings).isEmpty()
         }
     }
+
+    @Nested
+    inner class `issue order` {
+        // written to disk rather than compiled from a string: an issue location is relativized against
+        // the base path, and on Windows a drive-relative path cannot be relativized against an absolute
+        // one, which is what a string-compiled file gives us
+        @Test
+        fun `sorts issues in source order when a rule reports out of order`(@TempDir tempDir: Path) {
+            val file = tempDir.resolve("Test.kt")
+            file.writeText(
+                """
+                    fun alpha() = Unit
+                    fun bravo() = Unit
+                    fun charlie() = Unit
+                """.trimIndent()
+            )
+
+            val issues = createProcessingSettings { project { basePath = tempDir } }.use { settings ->
+                Analyzer(settings, createRuleDescriptor(::FunctionReporter, Config.empty))
+                    .run(listOf(compileForTest(file)))
+            }
+
+            assertThat(issues.map { it.message })
+                .containsExactly("Function alpha", "Function bravo", "Function charlie")
+        }
+
+        @Test
+        fun `sorts issues at the same location by rule id`(@TempDir tempDir: Path) {
+            val file = tempDir.resolve("Test.kt")
+            file.writeText(
+                """
+                    fun alpha() = Unit
+                    fun bravo() = Unit
+                """.trimIndent()
+            )
+
+            val issues = createProcessingSettings { project { basePath = tempDir } }.use { settings ->
+                Analyzer(
+                    settings,
+                    createRuleDescriptor(::FunctionReporter, Config.empty),
+                    createRuleDescriptor(::AnotherFunctionReporter, Config.empty),
+                )
+                    .run(listOf(compileForTest(file)))
+            }
+
+            assertThat(issues.map { it.ruleInstance.id }).containsExactly(
+                "AnotherFunctionReporter",
+                "FunctionReporter",
+                "AnotherFunctionReporter",
+                "FunctionReporter",
+            )
+        }
+    }
 }
 
 private class NoEmptyFile(config: Config) : Rule(config, "TestDescription") {
@@ -442,6 +499,20 @@ private open class MaxLineLength(config: Config) : Rule(config, "TestDescription
             .mapNotNull { it?.getNonStrictParentOfType() }
             .first { it.text.isNotBlank() }
 }
+
+private open class FunctionReporter(config: Config) : Rule(config, "TestDescription") {
+    private val functions = mutableListOf<KtNamedFunction>()
+
+    override fun visitNamedFunction(function: KtNamedFunction) {
+        functions.add(function)
+    }
+
+    override fun postVisit(root: KtFile) {
+        functions.asReversed().forEach { report(Finding(Entity.atName(it), "Function ${it.name}")) }
+    }
+}
+
+private class AnotherFunctionReporter(config: Config) : FunctionReporter(config)
 
 private class FaultyRule(config: Config) : Rule(config, "") {
     override fun visitKtFile(file: KtFile): Unit =

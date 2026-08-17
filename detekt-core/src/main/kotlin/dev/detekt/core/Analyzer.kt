@@ -31,11 +31,12 @@ internal class Analyzer(
     fun run(ktFiles: Collection<KtFile>): List<Issue> {
         val languageVersionSettings = settings.languageVersionSettings
 
-        return if (settings.spec.executionSpec.parallelAnalysis) {
+        val issues = if (settings.spec.executionSpec.parallelAnalysis) {
             runAsync(ktFiles, languageVersionSettings)
         } else {
             runSync(ktFiles, languageVersionSettings)
         }
+        return issues.sortedWith(issueComparator)
     }
 
     private fun runSync(ktFiles: Collection<KtFile>, languageVersionSettings: LanguageVersionSettings): List<Issue> =
@@ -86,6 +87,16 @@ internal class Analyzer(
                 .filterSuppressedFindings(rule, analysisMode)
                 .map { it.toIssue(ruleInstance, ruleInstance.severity, settings.spec.projectSpec.basePath) }
         }
+    }
+
+    companion object {
+        private val issueComparator = compareBy<Issue>(
+            { it.location.path },
+            { it.location.source },
+            { it.location.endSource },
+            { it.ruleInstance.id },
+            { it.message },
+        )
     }
 }
 
