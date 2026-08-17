@@ -1,0 +1,5 @@
+test-rule-set:
+  autoCorrect: true
+  MinimalAutoCorrectRule:
+    active: true
+    autoCorrect: true

@@ -1,9 +1,14 @@
 package dev.detekt.core.settings
 
+import com.intellij.core.CoreApplicationEnvironment
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.util.Disposer
+import com.intellij.openapi.util.text.StringUtilRt
+import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.pom.PomModel
 import com.intellij.pom.tree.TreeAspect
+import com.intellij.psi.impl.source.tree.TreeCopyHandler
+import com.intellij.testFramework.LightVirtualFile
 import dev.detekt.core.parser.createCompilerConfiguration
 import dev.detekt.parser.DetektPomModel
 import dev.detekt.tooling.api.spec.CompilerSpec
@@ -29,15 +34,23 @@ import org.jetbrains.kotlin.platform.jvm.JvmPlatforms
 import org.jetbrains.kotlin.psi.KtFile
 import java.io.OutputStream
 import java.io.PrintStream
+import java.nio.charset.StandardCharsets
+import java.nio.file.Path
 import kotlin.io.path.Path
+import kotlin.io.path.name
+import kotlin.io.path.readText
 
 interface EnvironmentAware {
     val languageVersionSettings: LanguageVersionSettings
     val ktFiles: List<KtFile>
 }
 
-internal class EnvironmentFacade(projectSpec: ProjectSpec, compilerSpec: CompilerSpec, loggingSpec: LoggingSpec) :
-    AutoCloseable,
+internal class EnvironmentFacade(
+    projectSpec: ProjectSpec,
+    compilerSpec: CompilerSpec,
+    loggingSpec: LoggingSpec,
+    private val autoCorrect: Boolean,
+) : AutoCloseable,
     EnvironmentAware {
 
     private val printStream = if (loggingSpec.debug) loggingSpec.errorChannel.asPrintStream() else NullPrintStream
@@ -70,6 +83,16 @@ internal class EnvironmentFacade(projectSpec: ProjectSpec, compilerSpec: Compile
             // Required for autocorrect support
             registerProjectService(TreeAspect::class.java)
             registerProjectService(PomModel::class.java, DetektPomModel(project))
+            if (autoCorrect) {
+                val area = application.extensionArea
+                if (!area.hasExtensionPoint(TreeCopyHandler.EP_NAME)) {
+                    CoreApplicationEnvironment.registerExtensionPoint(
+                        area,
+                        TreeCopyHandler.EP_NAME,
+                        TreeCopyHandler::class.java,
+                    )
+                }
+            }
 
             configuration.putIfAbsent(CommonConfigurationKeys.MODULE_NAME, "<no module name provided>")
 
@@ -102,7 +125,12 @@ internal class EnvironmentFacade(projectSpec: ProjectSpec, compilerSpec: Compile
                 }
 
                 sourceModule = buildKtSourceModule {
-                    addSourceRoots(configuration.kotlinSourceRoots.map { Path(it.path) })
+                    val sourcePaths = configuration.kotlinSourceRoots.map { Path(it.path) }
+                    if (autoCorrect) {
+                        addSourceVirtualFiles(sourcePaths.map { it.toWritableKotlinVirtualFile() })
+                    } else {
+                        addSourceRoots(sourcePaths)
+                    }
                     platform = targetPlatform
                     moduleName = "source"
 
@@ -124,6 +152,28 @@ internal class EnvironmentFacade(projectSpec: ProjectSpec, compilerSpec: Compile
 
     override fun close() {
         Disposer.dispose(disposable)
+    }
+}
+
+/**
+ * Standalone Analysis API source roots use the core VFS, which reports files as read-only.
+ * Auto-correct rules need a writable PSI tree while still resolving to the original path on disk.
+ */
+private fun Path.toWritableKotlinVirtualFile(): VirtualFile {
+    val originalPath = toAbsolutePath().normalize().toString()
+    val rawText = readText()
+    val lineSeparator = when {
+        "\r\n" in rawText -> "\r\n"
+        "\r" in rawText -> "\r"
+        else -> "\n"
+    }
+    return object : LightVirtualFile(name, StringUtilRt.convertLineSeparators(rawText)) {
+        init {
+            charset = StandardCharsets.UTF_8
+            detectedLineSeparator = lineSeparator
+        }
+
+        override fun getPath(): String = originalPath
     }
 }
 

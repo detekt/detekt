@@ -51,7 +51,12 @@ class ProcessingSettings private constructor(
         spec,
         config,
         monitor,
-        EnvironmentFacade(spec.projectSpec, spec.compilerSpec, spec.loggingSpec),
+        EnvironmentFacade(
+            spec.projectSpec,
+            spec.compilerSpec,
+            spec.loggingSpec,
+            spec.rulesSpec.autoCorrect,
+        ),
     )
 
     override fun close() {

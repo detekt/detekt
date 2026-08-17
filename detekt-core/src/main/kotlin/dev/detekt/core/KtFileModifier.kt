@@ -15,6 +15,11 @@ class KtFileModifier : FileProcessListener {
 
     override fun onFinish(files: List<KtFile>, result: Detektion): Detektion {
         var finalResult = result
+        files.forEach { ktFile ->
+            if (ktFile.modifiedText == null && ktFile.modificationStamp > 0) {
+                ktFile.modifiedText = ktFile.node.text
+            }
+        }
         files.filter { it.modifiedText != null }
             .forEach { ktFile ->
                 val path = ktFile.absolutePath()
