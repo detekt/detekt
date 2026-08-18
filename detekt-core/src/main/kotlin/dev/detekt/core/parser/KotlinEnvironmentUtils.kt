@@ -132,6 +132,7 @@ private class PrintingReporter(private val printStream: PrintStream) : CommonCom
         printStream.println(message)
     }
 
-    override fun withLanguageVersionSettings(settings: LanguageVersionSettings): CommonCompilerArgumentsConfigurator.Reporter =
-        this
+    override fun withLanguageVersionSettings(
+        settings: LanguageVersionSettings,
+    ): CommonCompilerArgumentsConfigurator.Reporter = this
 }

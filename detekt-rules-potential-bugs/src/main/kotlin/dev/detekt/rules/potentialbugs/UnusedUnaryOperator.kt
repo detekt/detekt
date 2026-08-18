@@ -9,7 +9,6 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -58,7 +57,9 @@ class UnusedUnaryOperator(config: Config) :
         analyze(expression) {
             val parentOrSelf = expression.parentBinaryExpressionOrThis()
             if (parentOrSelf.isUsedAsExpression) return
-            if (expression.operationReference.mainReference.resolveToSymbol() != null) return
+            // A unary operator that is not constant-foldable resolves to an operator function which may
+            // have side effects, e.g. an overloaded unaryMinus on a user-defined type.
+            if (expression.evaluate() == null) return
             val message = "This '${parentOrSelf.text}' is not used"
             report(Finding(Entity.from(expression), message))
         }
