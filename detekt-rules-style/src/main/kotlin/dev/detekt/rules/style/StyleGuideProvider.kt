@@ -82,6 +82,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
                 ::UnnecessaryCompanionObjectAccess,
                 ::UnnecessaryFilter,
                 ::UnnecessaryLet,
+                ::UnnecessaryRun,
                 ::MayBeConstant,
                 ::BracesOnIfStatements,
                 ::BracesOnWhenStatements,
