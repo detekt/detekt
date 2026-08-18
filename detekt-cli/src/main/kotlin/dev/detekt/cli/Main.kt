@@ -2,7 +2,6 @@
 
 package dev.detekt.cli
 
-import dev.detekt.api.internal.whichKotlin
 import dev.detekt.cli.runners.ConfigExporter
 import dev.detekt.cli.runners.Executable
 import dev.detekt.cli.runners.Runner
@@ -12,7 +11,6 @@ import dev.detekt.tooling.api.InvalidConfig
 import dev.detekt.tooling.api.IssuesFound
 import dev.detekt.tooling.api.UnexpectedError
 import dev.detekt.tooling.internal.NotApiButProbablyUsedByUsers
-import org.jetbrains.kotlin.config.KotlinCompilerVersion
 import java.io.PrintStream
 import kotlin.system.exitProcess
 
@@ -52,12 +50,6 @@ fun main(args: Array<String>) {
     )
 )
 fun buildRunner(args: Array<String>, outputPrinter: PrintStream, errorPrinter: PrintStream): Executable {
-    check(KotlinCompilerVersion.VERSION == whichKotlin()) {
-        """
-            detekt was compiled with Kotlin ${whichKotlin()} but is currently running with ${KotlinCompilerVersion.VERSION}.
-            This is not supported. See https://detekt.dev/docs/gettingstarted/gradle#dependencies for more information.
-        """.trimIndent()
-    }
     val arguments = parseArguments(args)
     return when {
         arguments.showVersion -> VersionPrinter(outputPrinter)

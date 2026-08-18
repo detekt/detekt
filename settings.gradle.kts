@@ -11,8 +11,6 @@ include("detekt-cli")
 include("detekt-core")
 include("detekt-generator")
 includeBuild("detekt-gradle-plugin")
-include("detekt-kotlin-analysis-api")
-include("detekt-kotlin-analysis-api-standalone")
 include("detekt-metrics")
 include("detekt-parser")
 include("detekt-psi-utils")
@@ -86,15 +84,6 @@ buildCache {
 dependencyResolutionManagement {
     repositoriesMode = RepositoriesMode.FAIL_ON_PROJECT_REPOS
     repositories {
-        exclusiveContent {
-            forRepository {
-                // Remove when this is closed: https://youtrack.jetbrains.com/issue/KT-56203/AA-Publish-analysis-api-standalone-and-dependencies-to-Maven-Central
-                maven("https://redirector.kotlinlang.org/maven/intellij-dependencies")
-            }
-            filter {
-                includeModuleByRegex("org.jetbrains.kotlin", ".*-for-ide")
-            }
-        }
         exclusiveContent {
             forRepository {
                 google()

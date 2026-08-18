@@ -8,7 +8,7 @@ dependencies {
     compileOnly(projects.detektMetrics)
     compileOnly(projects.detektPsiUtils)
 
-    testImplementation(libs.kotlin.compiler)
+    testImplementation(libs.ksp.symbolProcessingAa)
     testImplementation(projects.detektApi)
     testRuntimeOnly(projects.detektPsiUtils)
     testRuntimeOnly(projects.detektMetrics)

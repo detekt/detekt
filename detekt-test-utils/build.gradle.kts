@@ -4,10 +4,8 @@ plugins {
 }
 
 dependencies {
-    api(libs.kotlin.compiler)
+    api(libs.ksp.symbolProcessingAa)
 
-    implementation(projects.detektKotlinAnalysisApi)
-    implementation(projects.detektKotlinAnalysisApiStandalone)
     implementation(projects.detektParser)
     implementation(libs.jetbrains.annotations)
     implementation(libs.kotlin.scriptingJvm)

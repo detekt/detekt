@@ -4,7 +4,7 @@ plugins {
 
 dependencies {
     api(projects.detektApi)
-    api(libs.kotlin.compiler)
+    api(libs.ksp.symbolProcessingAa)
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.assertj.core)
 }

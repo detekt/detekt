@@ -10,14 +10,13 @@ plugins {
 }
 
 dependencies {
-    api(libs.kotlin.compiler)
-    compileOnlyApi(projects.detektKotlinAnalysisApi)
+    api(libs.ksp.symbolProcessingAa)
 
     testImplementation(projects.detektTest)
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.assertj.core)
 
-    testFixturesApi(libs.kotlin.compiler)
+    testFixturesApi(libs.ksp.symbolProcessingAa)
     testFixturesImplementation(projects.detektTestUtils)
 }
 

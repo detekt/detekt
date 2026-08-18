@@ -6,7 +6,7 @@ plugins {
 dependencies {
     compileOnly(projects.detektApi)
 
-    testImplementation(libs.kotlin.compiler)
+    testImplementation(libs.ksp.symbolProcessingAa)
     testImplementation(projects.detektApi)
     testImplementation(projects.detektTest)
     testImplementation(projects.detektTestAssertj)

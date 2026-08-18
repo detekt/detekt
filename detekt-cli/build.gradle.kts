@@ -21,11 +21,7 @@ dependencies {
     implementation(projects.detektApi)
     implementation(projects.detektTooling)
     implementation(projects.detektUtils)
-    implementation(libs.kotlin.compiler) {
-        version {
-            strictly(libs.versions.kotlin.get())
-        }
-    }
+    implementation(libs.ksp.symbolProcessingAa)
     runtimeOnly(projects.detektCore)
     runtimeOnly(projects.detektRules)
     runtimeOnly(projects.detektReportHtml)

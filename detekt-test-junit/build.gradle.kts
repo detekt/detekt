@@ -7,5 +7,5 @@ dependencies {
     api(libs.junit.jupiterApi)
     implementation(projects.detektTestUtils)
 
-    testImplementation(libs.kotlin.compiler)
+    testImplementation(libs.ksp.symbolProcessingAa)
 }

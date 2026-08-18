@@ -3,7 +3,6 @@ package dev.detekt.core.parser
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSourceLocation
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
-import org.jetbrains.kotlin.cli.common.messages.PlainTextMessageRenderer
 
 class DetektMessageCollector(
     private val minSeverity: CompilerMessageSeverity,
@@ -15,7 +14,7 @@ class DetektMessageCollector(
 
     override fun report(severity: CompilerMessageSeverity, message: String, location: CompilerMessageSourceLocation?) {
         if (severity.ordinal <= minSeverity.ordinal) {
-            debugPrinter { DetektMessageRenderer.render(severity, message, location) }
+            debugPrinter { renderCompilerMessage(severity, message, location) }
             messages++
         }
     }
@@ -34,7 +33,21 @@ class DetektMessageCollector(
     }
 }
 
-private object DetektMessageRenderer : PlainTextMessageRenderer() {
-    override fun getName() = "detekt message renderer"
-    override fun getPath(location: CompilerMessageSourceLocation) = location.path
-}
+internal fun renderCompilerMessage(
+    severity: CompilerMessageSeverity,
+    message: String,
+    location: CompilerMessageSourceLocation?,
+): String =
+    buildString {
+        if (location != null) {
+            append(location.path)
+            append(':')
+            append(location.line)
+            append(':')
+            append(location.column)
+            append(' ')
+        }
+        append(severity.presentableName)
+        append(": ")
+        append(message)
+    }

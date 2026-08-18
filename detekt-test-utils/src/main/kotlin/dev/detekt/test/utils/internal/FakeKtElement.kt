@@ -17,6 +17,7 @@ import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.search.SearchScope
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.KtNonPublicApi
 import org.jetbrains.kotlin.psi.KtVisitor
 import javax.swing.Icon
 
@@ -81,6 +82,11 @@ class FakeKtElement(private val psiFile: PsiFile = FakePsiFile("")) : KtElement 
     }
 
     override fun delete() {
+        // no-op
+    }
+
+    @KtNonPublicApi
+    override fun rawDelete() {
         // no-op
     }
 

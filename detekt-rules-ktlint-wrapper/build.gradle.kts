@@ -28,7 +28,7 @@ dependencies {
             attribute(Bundling.BUNDLING_ATTRIBUTE, named(Bundling.SHADOWED))
         }
     }
-    testImplementation(libs.kotlin.compiler)
+    testImplementation(libs.ksp.symbolProcessingAa)
     testImplementation(projects.detektApi)
     testRuntimeOnly(projects.detektPsiUtils)
     testImplementation(projects.detektTest)
