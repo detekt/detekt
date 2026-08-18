@@ -255,20 +255,29 @@ class UnnecessaryFullyQualifiedName(config: Config) :
 
     context(session: KaSession)
     private fun findLocalSymbols(element: KtElement, name: Name): Sequence<KaSymbol> {
-        // Same-package declarations are overridden by an added explicit import, so they only collide
-        // when the simple name is actually used unqualified somewhere in the file.
-        val packageScopeCollides = isUsedUnqualified(element.containingKtFile, name)
         // Default imports are overridden by an added explicit import, so a default symbol with the same
-        // name is not a real collision (only explicit imports are).
+        // name is not a real collision (only explicit imports are). Same-package declarations are
+        // overridden too, so they only collide when the simple name is actually used unqualified
+        // somewhere in the file.
         val scope = with(session) {
             element.containingKtFile.scopeContext(element).compositeScope {
                 it !is KaScopeKind.DefaultSimpleImportingScope &&
                     it !is KaScopeKind.DefaultStarImportingScope &&
-                    (packageScopeCollides || it !is KaScopeKind.PackageMemberScope)
+                    (it !is KaScopeKind.PackageMemberScope || collidesWithPackageScope(element.containingKtFile, name))
             }
         }
         return scope.classifiers(name) + scope.callables(name)
     }
+
+    // An explicit import already shadows the same-package declaration, so any unqualified use in the
+    // file resolves to the import, not to the package member -- there is nothing left to collide with.
+    private fun collidesWithPackageScope(file: KtFile, name: Name): Boolean =
+        !hasExplicitImport(file, name) && isUsedUnqualified(file, name)
+
+    private fun hasExplicitImport(file: KtFile, name: Name): Boolean =
+        file.importDirectives.any {
+            !it.isAllUnder && (it.aliasName?.let(Name::identifier) ?: it.importedFqName?.shortName()) == name
+        }
 
     private fun isUsedUnqualified(file: KtFile, name: Name): Boolean =
         file.anyDescendantOfType<KtSimpleNameExpression> {
