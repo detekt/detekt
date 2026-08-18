@@ -88,7 +88,9 @@ fun createCompilerConfiguration(
             "Unknown JVM target version: $jvmTarget, supported versions: ${JvmTarget.supportedValues()}"
         }
         put(JVMConfigurationKeys.JVM_TARGET, parsedJvmTarget)
-        jvmCompilerArguments.friendPaths?.let { put(JVMConfigurationKeys.FRIEND_PATHS, it.toList()) }
+        if (jvmCompilerArguments.friendPaths.isNotEmpty()) {
+            put(JVMConfigurationKeys.FRIEND_PATHS, jvmCompilerArguments.friendPaths.toList())
+        }
 
         if (jdkHome != null) {
             put(JVMConfigurationKeys.JDK_HOME, jdkHome.toFile())
