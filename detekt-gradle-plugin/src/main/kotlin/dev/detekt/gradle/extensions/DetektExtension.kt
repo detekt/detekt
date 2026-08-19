@@ -23,8 +23,6 @@ interface DetektExtension {
 
     val basePath: DirectoryProperty
 
-    val enableCompilerPlugin: Property<Boolean>
-
     val config: ConfigurableFileCollection
 
     val debug: Property<Boolean>
