@@ -841,6 +841,8 @@ style:
     active: true
   UseLet:
     active: false
+  UseMultiDollarInterpolation:
+    active: false
   UseOrEmpty:
     active: true
   UseRequire:

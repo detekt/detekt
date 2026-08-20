@@ -115,6 +115,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
                 ::MaxChainedCallsOnSameLine,
                 ::AlsoCouldBeApply,
                 ::UseSumOfInsteadOfFlatMapSize,
+                ::UseMultiDollarInterpolation,
                 ::DoubleNegativeLambda,
                 ::UseLet,
                 ::DoubleNegativeExpression,
