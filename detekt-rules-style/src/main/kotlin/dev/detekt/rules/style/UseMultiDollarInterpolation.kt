@@ -49,16 +49,18 @@ class UseMultiDollarInterpolation(config: Config) :
             expression.entries
                 .filterIsInstance<KtStringTemplateEntryWithExpression>()
                 .filter { it.expressions.singleOrNull()?.isStaticallyKnownDollar() == true }
-                .forEach {
-                    report(
-                        Finding(
-                            Entity.from(it),
-                            "Interpolation `${it.text}` inserts a literal dollar sign. " +
-                                "Express it directly with multi-dollar interpolation when needed."
-                        )
-                    )
-                }
+                .forEach { reportFinding(it) }
         }
+    }
+
+    private fun reportFinding(expression: KtStringTemplateEntryWithExpression) {
+        report(
+            Finding(
+                Entity.from(expression),
+                "Interpolation `${expression.text}` inserts a literal dollar sign. " +
+                    "Express it directly with multi-dollar interpolation when needed."
+            )
+        )
     }
 
     private fun KtStringTemplateExpression.usesMultiDollarInterpolation(): Boolean =

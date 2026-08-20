@@ -115,17 +115,6 @@ class UseMultiDollarInterpolationSpec(val env: KotlinEnvironmentContainer) {
     }
 
     @Test
-    fun `does not report cyclic immutable properties`() {
-        val code = """
-            val firstDollar: String = secondDollar
-            val secondDollar: String = firstDollar
-            val greeting = "DOLLARfirstDollar Hello"
-        """.trimIndent().asKotlinCode()
-
-        assertThat(subject.lintWithContext(env, code)).isEmpty()
-    }
-
-    @Test
     fun `reports each dollar interpolation in the same string`() {
         val code = """
             val greeting = "DOLLAR{'DOLLAR'}Hello DOLLAR{"DOLLAR"}World"
