@@ -407,5 +407,36 @@ class UnnecessaryRunSpec(val env: KotlinEnvironmentContainer) {
                 )
             ).isEmpty()
         }
+
+        @Test
+        fun `does not report a shadowed run variable invoked without a trailing lambda`() {
+            assertThat(
+                subject.lintWithContext(
+                    env,
+                    """
+                        fun f() {
+                            val run = { 1 }
+                            val value = run()
+                        }
+                    """.trimIndent()
+                )
+            ).isEmpty()
+        }
+
+        @Test
+        fun `does not report an aliased import of run`() {
+            assertThat(
+                subject.lintWithContext(
+                    env,
+                    """
+                        import kotlin.run as runAlias
+
+                        fun f() {
+                            val value = runAlias { 1 }
+                        }
+                    """.trimIndent()
+                )
+            ).isEmpty()
+        }
     }
 }
