@@ -55,7 +55,9 @@ class UnnecessaryRun(config: Config) :
         analyze(expression) {
             val call = expression.resolveToCall()?.singleFunctionCallOrNull() ?: return
             if (call.symbol.callableId != RUN_CALLABLE_ID) return
-            if (call.dispatchReceiver != null || call.extensionReceiver != null) return
+            // `RUN_CALLABLE_ID` only matches the top-level `run` and the extension `T.run`, neither of which has a
+            // dispatch receiver, so only the extension receiver needs to be checked here.
+            if (call.extensionReceiver != null) return
 
             report(Finding(Entity.from(expression), "run expression can be omitted"))
         }
