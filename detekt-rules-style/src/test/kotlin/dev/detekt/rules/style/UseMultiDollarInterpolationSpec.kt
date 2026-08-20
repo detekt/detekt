@@ -16,13 +16,15 @@ class UseMultiDollarInterpolationSpec(val env: KotlinEnvironmentContainer) {
         val code = """
             val regularString = "DOLLAR{"DOLLAR"}Hello"
             val regularCharacter = "DOLLAR{'DOLLAR'}Hello"
+            val regularEscapedString = "DOLLAR{"BACKSLASHDOLLAR"}Hello"
             val rawString = TRIPLE_QUOTEDOLLAR{"DOLLAR"}HelloTRIPLE_QUOTE
             val rawCharacter = TRIPLE_QUOTEDOLLAR{'DOLLAR'}HelloTRIPLE_QUOTE
+            val rawEscapedString = TRIPLE_QUOTEDOLLAR{"BACKSLASHDOLLAR"}HelloTRIPLE_QUOTE
         """.trimIndent().asKotlinCode()
 
         val findings = subject.lintWithContext(env, code)
 
-        assertThat(findings).hasSize(4)
+        assertThat(findings).hasSize(6)
     }
 
     @Test
@@ -55,6 +57,17 @@ class UseMultiDollarInterpolationSpec(val env: KotlinEnvironmentContainer) {
     }
 
     @Test
+    fun `does not report interpolated string expressions that are not a dollar sign`() {
+        val code = """
+            val currency = "USD"
+            val interpolated = "DOLLAR{"DOLLARcurrency"}"
+            val escaped = "DOLLAR{"BACKSLASHn"}"
+        """.trimIndent().asKotlinCode()
+
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
     fun `does not report interpolation that is already multi-dollar`() {
         val code = """
             val dollar = "DOLLAR"
@@ -75,6 +88,15 @@ class UseMultiDollarInterpolationSpec(val env: KotlinEnvironmentContainer) {
                 val customDollar get() = "DOLLAR"
             }
 
+            class CurrencyFromParameter(val dollar: String) {
+                fun display() = "DOLLARdollar"
+            }
+
+            abstract class AbstractCurrency {
+                abstract val dollar: String
+                fun display() = "DOLLARdollar"
+            }
+
             fun currencySymbol() = "DOLLAR"
 
             fun test(currency: Currency) {
@@ -87,6 +109,17 @@ class UseMultiDollarInterpolationSpec(val env: KotlinEnvironmentContainer) {
                 println("DOLLARcomputedDollar Hello")
                 println("DOLLARother Hello")
             }
+        """.trimIndent().asKotlinCode()
+
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
+    fun `does not report cyclic immutable properties`() {
+        val code = """
+            val firstDollar: String = secondDollar
+            val secondDollar: String = firstDollar
+            val greeting = "DOLLARfirstDollar Hello"
         """.trimIndent().asKotlinCode()
 
         assertThat(subject.lintWithContext(env, code)).isEmpty()
