@@ -38,7 +38,6 @@ class DetektBasePlugin : Plugin<Project> {
                 DEFAULT_TEST_SRC_DIR_KOTLIN,
             )
             baseline.convention(project.layout.projectDirectory.file("detekt-baseline.xml"))
-            enableCompilerPlugin.convention(DEFAULT_COMPILER_PLUGIN_ENABLED)
             debug.convention(DEFAULT_DEBUG_VALUE)
             parallel.convention(DEFAULT_PARALLEL_VALUE)
             allRules.convention(DEFAULT_ALL_RULES_VALUE)
@@ -143,9 +142,6 @@ class DetektBasePlugin : Plugin<Project> {
         private const val DEFAULT_DISABLE_RULESETS_VALUE = false
         private const val DEFAULT_ALL_RULES_VALUE = false
         private const val DEFAULT_BUILD_UPON_DEFAULT_CONFIG_VALUE = false
-
-        // This flag is ignored unless the compiler plugin is applied to the project
-        private const val DEFAULT_COMPILER_PLUGIN_ENABLED = true
     }
 }
 
