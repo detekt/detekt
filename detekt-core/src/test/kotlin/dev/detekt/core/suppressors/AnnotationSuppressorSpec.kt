@@ -24,7 +24,7 @@ class AnnotationSuppressorSpec {
     inner class AnnotationSuppressorFactory {
         @Test
         fun `Factory returns null if ignoreAnnotated is not set`() {
-            val suppressor = annotationSuppressorFactory(buildRule(), AnalysisMode.full)
+            val suppressor = annotationSuppressorFactory(buildRule(), AnalysisMode.Full)
 
             assertThat(suppressor).isNull()
         }
@@ -33,7 +33,7 @@ class AnnotationSuppressorSpec {
         fun `Factory returns null if ignoreAnnotated is set to empty`() {
             val suppressor = annotationSuppressorFactory(
                 buildRule("ignoreAnnotated" to emptyList<String>()),
-                AnalysisMode.full,
+                AnalysisMode.Full,
             )
 
             assertThat(suppressor).isNull()
@@ -43,7 +43,7 @@ class AnnotationSuppressorSpec {
         fun `Factory returns not null if ignoreAnnotated is set to a not empty list`() {
             val suppressor = annotationSuppressorFactory(
                 buildRule("ignoreAnnotated" to listOf("Composable")),
-                AnalysisMode.full,
+                AnalysisMode.Full,
             )
 
             assertThat(suppressor).isNotNull()
@@ -54,7 +54,7 @@ class AnnotationSuppressorSpec {
     inner class AnnotationSuppressor {
         val suppressor = annotationSuppressorFactory(
             buildRule("ignoreAnnotated" to listOf("Composable")),
-            AnalysisMode.light,
+            AnalysisMode.Light,
         )!!
 
         @Test
@@ -313,8 +313,8 @@ class AnnotationSuppressorSpec {
 
             fun getFile() =
                 listOf(
-                    Arguments.of(compileContentForTest(code), AnalysisMode.light),
-                    Arguments.of(analysisApiEngine.compile(code, composableFiles), AnalysisMode.full),
+                    Arguments.of(compileContentForTest(code), AnalysisMode.Light),
+                    Arguments.of(analysisApiEngine.compile(code, composableFiles), AnalysisMode.Full),
                 )
 
             @ParameterizedTest
@@ -401,7 +401,7 @@ class AnnotationSuppressorSpec {
         fun `Doesn't mix annotations`() {
             val suppressor = annotationSuppressorFactory(
                 buildRule("ignoreAnnotated" to listOf("androidx.compose.runtime.Composable")),
-                AnalysisMode.full,
+                AnalysisMode.Full,
             )!!
 
             val root = analysisApiEngine.compile(
@@ -422,7 +422,7 @@ class AnnotationSuppressorSpec {
         fun `Works when no using imports`() {
             val suppressor = annotationSuppressorFactory(
                 buildRule("ignoreAnnotated" to listOf("androidx.compose.runtime.Composable")),
-                AnalysisMode.full,
+                AnalysisMode.Full,
             )!!
 
             val root = analysisApiEngine.compile(
@@ -443,7 +443,7 @@ class AnnotationSuppressorSpec {
         fun `Works when using import alias`() {
             val suppressor = annotationSuppressorFactory(
                 buildRule("ignoreAnnotated" to listOf("androidx.compose.runtime.Composable")),
-                AnalysisMode.full,
+                AnalysisMode.Full,
             )!!
 
             val root = analysisApiEngine.compile(
@@ -492,7 +492,7 @@ class AnnotationSuppressorSpec {
         fun `suppress if it has parameters with type solving`(analysisApiEngine: KotlinAnalysisApiEngine) {
             val suppressor = annotationSuppressorFactory(
                 buildRule("ignoreAnnotated" to listOf("Preview")),
-                AnalysisMode.full,
+                AnalysisMode.Full,
             )!!
 
             val root = analysisApiEngine.compile(code, composableFiles)
@@ -505,7 +505,7 @@ class AnnotationSuppressorSpec {
         fun `suppress if it has parameters without type solving`() {
             val suppressor = annotationSuppressorFactory(
                 buildRule("ignoreAnnotated" to listOf("Preview")),
-                AnalysisMode.light,
+                AnalysisMode.Light,
             )!!
 
             val ktFunction = compileContentForTest(code).findChildByClass(KtFunction::class.java)!!
