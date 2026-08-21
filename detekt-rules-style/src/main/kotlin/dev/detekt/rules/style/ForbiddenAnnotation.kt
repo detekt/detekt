@@ -10,6 +10,7 @@ import dev.detekt.api.Rule
 import dev.detekt.api.TextLocation
 import dev.detekt.api.ValueWithReason
 import dev.detekt.api.config
+import dev.detekt.api.from
 import dev.detekt.api.valuesWithReason
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.types.KaType
