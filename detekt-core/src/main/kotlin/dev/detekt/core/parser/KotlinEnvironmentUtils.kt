@@ -1,26 +1,22 @@
 package dev.detekt.core.parser
 
-import org.jetbrains.kotlin.cli.common.arguments.CommonCompilerArgumentsConfigurator
 import org.jetbrains.kotlin.cli.common.arguments.K2JVMCompilerArguments
 import org.jetbrains.kotlin.cli.common.arguments.parseCommandLineArguments
-import org.jetbrains.kotlin.cli.common.arguments.toLanguageVersionSettings
 import org.jetbrains.kotlin.cli.common.arguments.validateArguments
 import org.jetbrains.kotlin.cli.common.config.addKotlinSourceRoots
-import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity
-import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSourceLocation
-import org.jetbrains.kotlin.cli.common.messages.MessageCollector
+import org.jetbrains.kotlin.cli.common.messages.MessageRenderer
+import org.jetbrains.kotlin.cli.common.messages.PrintingMessageCollector
+import org.jetbrains.kotlin.cli.common.setupLanguageVersionSettings
 import org.jetbrains.kotlin.cli.create
 import org.jetbrains.kotlin.cli.jvm.config.addJavaSourceRoots
 import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoots
 import org.jetbrains.kotlin.cli.jvm.config.configureJdkClasspathRoots
+import org.jetbrains.kotlin.cli.jvm.configureAdvancedJvmOptions
+import org.jetbrains.kotlin.cli.jvm.setupJvmSpecificArguments
+import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.config.JVMConfigurationKeys
-import org.jetbrains.kotlin.config.JvmTarget
-import org.jetbrains.kotlin.config.LanguageVersionSettings
 import org.jetbrains.kotlin.config.MessageCollectorAccess
-import org.jetbrains.kotlin.config.languageVersionSettings
-import org.jetbrains.kotlin.config.messageCollector
-import org.jetbrains.kotlin.diagnostics.KtSourcelessDiagnosticFactory
 import java.io.File
 import java.io.PrintStream
 import java.nio.file.Path
@@ -76,21 +72,17 @@ fun createCompilerConfiguration(
 
     validateArguments(jvmCompilerArguments.errors)?.let { throw IllegalStateException(it) }
 
-    val collector = PrintStreamMessageCollector(printStream)
-
     return CompilerConfiguration.create().apply {
-        messageCollector = collector
         addJavaSourceRoots(javaFiles)
         addKotlinSourceRoots(kotlinFiles)
         addJvmClasspathRoots(classpathFiles)
-        languageVersionSettings = jvmCompilerArguments.toLanguageVersionSettings(PrintingReporter(printStream))
-        val parsedJvmTarget = requireNotNull(JvmTarget.fromString(checkNotNull(jvmCompilerArguments.jvmTarget))) {
-            "Unknown JVM target version: $jvmTarget, supported versions: ${JvmTarget.supportedValues()}"
-        }
-        put(JVMConfigurationKeys.JVM_TARGET, parsedJvmTarget)
-        if (jvmCompilerArguments.friendPaths.isNotEmpty()) {
-            put(JVMConfigurationKeys.FRIEND_PATHS, jvmCompilerArguments.friendPaths.toList())
-        }
+        put(
+            CommonConfigurationKeys.MESSAGE_COLLECTOR_KEY,
+            PrintingMessageCollector(printStream, MessageRenderer.PLAIN_FULL_PATHS, false)
+        )
+        setupLanguageVersionSettings(jvmCompilerArguments)
+        setupJvmSpecificArguments(jvmCompilerArguments)
+        configureAdvancedJvmOptions(jvmCompilerArguments)
 
         if (jdkHome != null) {
             put(JVMConfigurationKeys.JDK_HOME, jdkHome.toFile())
@@ -100,41 +92,4 @@ fun createCompilerConfiguration(
 
         configureJdkClasspathRoots()
     }
-}
-
-private class PrintStreamMessageCollector(private val printStream: PrintStream) : MessageCollector {
-    private var hasErrors = false
-
-    override fun clear() {
-        hasErrors = false
-    }
-
-    override fun hasErrors(): Boolean = hasErrors
-
-    override fun report(severity: CompilerMessageSeverity, message: String, location: CompilerMessageSourceLocation?) {
-        hasErrors = hasErrors || severity.isError
-        printStream.println(renderCompilerMessage(severity, message, location))
-    }
-}
-
-private class PrintingReporter(private val printStream: PrintStream) : CommonCompilerArgumentsConfigurator.Reporter {
-    override fun reportError(message: String) {
-        printStream.println("error: $message")
-    }
-
-    override fun reportWarning(message: String) {
-        printStream.println("warning: $message")
-    }
-
-    override fun info(message: String) {
-        printStream.println("info: $message")
-    }
-
-    override fun report(diagnosticFactory: KtSourcelessDiagnosticFactory, message: String) {
-        printStream.println(message)
-    }
-
-    override fun withLanguageVersionSettings(
-        settings: LanguageVersionSettings,
-    ): CommonCompilerArgumentsConfigurator.Reporter = this
 }

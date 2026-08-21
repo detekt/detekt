@@ -20,6 +20,8 @@ dependencies {
     implementation(projects.detektParser)
     implementation(projects.detektPsiUtils)
     implementation(projects.detektUtils)
+    implementation(projects.detektKotlinCompiler)
+
     generatedConfig(projects.detektRulesComments) { targetConfiguration = "generatedConfig" }
     generatedConfig(projects.detektRulesComplexity) { targetConfiguration = "generatedConfig" }
     generatedConfig(projects.detektRulesCoroutines) { targetConfiguration = "generatedConfig" }

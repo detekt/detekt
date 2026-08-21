@@ -12,6 +12,7 @@ include("detekt-core")
 include("detekt-generator")
 includeBuild("detekt-gradle-plugin")
 include("detekt-metrics")
+include("detekt-kotlin-compiler")
 include("detekt-parser")
 include("detekt-psi-utils")
 include("detekt-report-complexity")
@@ -84,6 +85,15 @@ buildCache {
 dependencyResolutionManagement {
     repositoriesMode = RepositoriesMode.FAIL_ON_PROJECT_REPOS
     repositories {
+        exclusiveContent {
+            forRepository {
+                // Remove when this is closed: https://youtrack.jetbrains.com/issue/KT-56203/AA-Publish-analysis-api-standalone-and-dependencies-to-Maven-Central
+                maven("https://redirector.kotlinlang.org/maven/intellij-dependencies")
+            }
+            filter {
+                includeModuleByRegex("org.jetbrains.kotlin", ".*-for-ide")
+            }
+        }
         exclusiveContent {
             forRepository {
                 google()

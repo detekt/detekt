@@ -5,6 +5,9 @@ jacoco = "0.8.15"
 junit = "6.1.3"
 kotlin = "2.4.10"
 ksp = "2.3.11"
+# Get the correct version based on the ksp version above from
+# https://github.com/google/ksp/blob/<VERSION>/gradle/libs.versions.toml
+aa-kotlin-base = "2.4.20-dev-6138"
 ktlint = "1.8.0"
 slf4j = "2.0.18"
 
@@ -67,6 +70,7 @@ snakeyaml-engine = { module = "org.snakeyaml:snakeyaml-engine", version = "2.10"
 # by the KSP project. Can be replaced with JetBrains artifacts when https://youtrack.jetbrains.com/issue/KT-56203 is
 # fixed. The bundled compiler is a dev build - see META-INF/compiler.version in the jar for the exact version.
 ksp-symbolProcessingAa = { module = "com.google.devtools.ksp:symbol-processing-aa", version.ref = "ksp" }
+kotlin-compilerCli = { module = "org.jetbrains.kotlin:kotlin-compiler-cli-for-ide", version.ref = "aa-kotlin-base" }
 
 # Add dummy lib references so Renovate auto updates the version. Only the version number is referenced in build scripts so Renovate will ignore these otherwise.
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
