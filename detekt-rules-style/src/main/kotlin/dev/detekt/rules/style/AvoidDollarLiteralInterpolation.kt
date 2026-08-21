@@ -57,7 +57,9 @@ class AvoidDollarLiteralInterpolation(config: Config) :
             .forEach { violation -> reportFindingBy(violation) }
     }
 
-    private fun KtStringTemplateExpression.findViolationIn(entry: KtStringTemplateEntryWithExpression): DollarLiteralViolation? {
+    private fun KtStringTemplateExpression.findViolationIn(
+        entry: KtStringTemplateEntryWithExpression,
+    ): DollarLiteralViolation? {
         if (entry.expressions.singleOrNull()?.isStaticallyKnownDollar() != true) return null
 
         return when {
@@ -132,22 +134,17 @@ class AvoidDollarLiteralInterpolation(config: Config) :
 
         fun getRecommendationMessage(): String
 
-        data class InRegularString(
-            override val entry: KtStringTemplateEntryWithExpression,
-        ) : DollarLiteralViolation {
+        data class InRegularString(override val entry: KtStringTemplateEntryWithExpression) : DollarLiteralViolation {
             override fun getRecommendationMessage(): String =
                 "Escape it or use multi-dollar interpolation to express it directly."
         }
 
-        data class InRawString(
-            override val entry: KtStringTemplateEntryWithExpression,
-        ) : DollarLiteralViolation {
+        data class InRawString(override val entry: KtStringTemplateEntryWithExpression) : DollarLiteralViolation {
             override fun getRecommendationMessage(): String = "Use multi-dollar interpolation to express it directly."
         }
 
-        data class InMultiDollarString(
-            override val entry: KtStringTemplateEntryWithExpression,
-        ) : DollarLiteralViolation {
+        data class InMultiDollarString(override val entry: KtStringTemplateEntryWithExpression) :
+            DollarLiteralViolation {
             override fun getRecommendationMessage(): String =
                 "Express it directly using the existing multi-dollar interpolation prefix."
         }
