@@ -6,10 +6,11 @@ import dev.detekt.test.junit.KotlinCoreEnvironmentTest
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.KotlinEnvironmentContainer
 import org.junit.jupiter.api.Test
+import org.assertj.core.api.Assertions.assertThat as assertThatJ
 
 @KotlinCoreEnvironmentTest
-class UseMultiDollarInterpolationSpec(val env: KotlinEnvironmentContainer) {
-    private val subject = UseMultiDollarInterpolation(Config.empty)
+class AvoidDollarLiteralInterpolationSpec(val env: KotlinEnvironmentContainer) {
+    private val subject = AvoidDollarLiteralInterpolation(Config.empty)
 
     @Test
     fun `reports direct dollar interpolation in regular and raw strings`() {
@@ -68,14 +69,37 @@ class UseMultiDollarInterpolationSpec(val env: KotlinEnvironmentContainer) {
     }
 
     @Test
-    fun `does not report interpolation that is already multi-dollar`() {
+    fun `reports unnecessary interpolation in strings that are already multi-dollar`() {
         val code = """
             val dollar = "DOLLAR"
-            val greeting = DOLLARDOLLAR"DOLLARDOLLARdollar Hello"
-            val rawGreeting = DOLLARDOLLARTRIPLE_QUOTEDOLLARDOLLARdollar HelloTRIPLE_QUOTE
+            val regularDirect = DOLLARDOLLAR"DOLLARDOLLAR{"DOLLAR"}Hello"
+            val regularReference = DOLLARDOLLAR"DOLLARDOLLARdollar Hello"
+            val rawDirect = DOLLARDOLLARTRIPLE_QUOTEDOLLARDOLLAR{'DOLLAR'}HelloTRIPLE_QUOTE
+            val rawReference = DOLLARDOLLARTRIPLE_QUOTEDOLLARDOLLAR{dollar}HelloTRIPLE_QUOTE
         """.trimIndent().asKotlinCode()
 
-        assertThat(subject.lintWithContext(env, code)).isEmpty()
+        val findings = subject.lintWithContext(env, code)
+
+        assertThat(findings).hasSize(4)
+        assertThat(findings).allMatch {
+            it.message.endsWith("Express it directly using the existing multi-dollar interpolation prefix.")
+        }
+    }
+
+    @Test
+    fun `recommends replacements based on the string context`() {
+        val code = """
+            val regular = "DOLLAR{"DOLLAR"}Hello"
+            val raw = TRIPLE_QUOTEDOLLAR{"DOLLAR"}HelloTRIPLE_QUOTE
+            val multiDollar = DOLLARDOLLAR"DOLLARDOLLAR{"DOLLAR"}Hello"
+        """.trimIndent().asKotlinCode()
+
+        val messages = subject.lintWithContext(env, code).map { it.message }
+
+        assertThatJ(messages[0]).endsWith("Escape it or use multi-dollar interpolation to express it directly.")
+        assertThatJ(messages[1]).endsWith("Use multi-dollar interpolation to express it directly.")
+        assertThatJ(messages[2])
+            .endsWith("Express it directly using the existing multi-dollar interpolation prefix.")
     }
 
     @Test

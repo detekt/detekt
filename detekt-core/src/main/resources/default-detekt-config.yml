@@ -553,6 +553,8 @@ style:
     ignoreSealedClasses: false
   AlsoCouldBeApply:
     active: false
+  AvoidDollarLiteralInterpolation:
+    active: false
   BracesOnIfStatements:
     active: false
     singleLine: 'never'
@@ -840,8 +842,6 @@ style:
   UseIsNullOrEmpty:
     active: true
   UseLet:
-    active: false
-  UseMultiDollarInterpolation:
     active: false
   UseOrEmpty:
     active: true
