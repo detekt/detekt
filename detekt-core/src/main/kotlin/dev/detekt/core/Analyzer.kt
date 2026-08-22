@@ -10,8 +10,7 @@ import dev.detekt.api.Rule
 import dev.detekt.api.RuleInstance
 import dev.detekt.api.Severity
 import dev.detekt.api.internal.whichDetekt
-import dev.detekt.api.internal.whichJava
-import dev.detekt.api.internal.whichOS
+import dev.detekt.api.valueOrDefault
 import dev.detekt.core.suppressors.buildSuppressors
 import dev.detekt.core.suppressors.isSuppressedBy
 import dev.detekt.core.util.shouldAnalyzeFile

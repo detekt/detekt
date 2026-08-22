@@ -46,7 +46,10 @@ class ReturnCount(config: Config) : Rule(config, "Restrict the number of return 
     @Configuration("define the maximum number of return statements allowed per function")
     private val max: Int by config(2)
 
-    @Configuration("define a list of function names to be ignored by this check")
+    @Configuration(
+        "Define a list of simple glob patterns for function names to be ignored by this check. " +
+            "See the [simple glob syntax](https://detekt.dev/docs/introduction/glob-patterns#simple-patterns)."
+    )
     private val excludedFunctions: List<Regex> by config(listOf("equals")) { it.map(String::pathGlobToRegex) }
 
     @Configuration("if labeled return statements should be ignored")

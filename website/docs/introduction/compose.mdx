@@ -97,9 +97,16 @@ private fun FooLazyColumnPreview() { // Violation for FooLazyColumnPreview()
 }
 ```
 
+[Multipreview annotations](https://developer.android.com/develop/ui/compose/tooling/previews#multi-preview)
+are themselves annotated with `@Preview`, but `ignoreAnnotated` does not follow meta-annotations.
+Add every multipreview annotation used on preview functions explicitly. This includes custom
+annotations and AndroidX templates such as `PreviewScreenSizes`, `PreviewFontScale`,
+`PreviewLightDark`, and `PreviewDynamicColors`.
+
 #### Recommended configuration
 
-* Set `ignoreAnnotated` to `['Preview']`
+* Set `ignoreAnnotated` to include `Preview` and every multipreview annotation used by the project,
+  for example `['Preview', 'PreviewLightDark', 'AppPreviews']`
 
 ### TooManyFunctions for Compose
 

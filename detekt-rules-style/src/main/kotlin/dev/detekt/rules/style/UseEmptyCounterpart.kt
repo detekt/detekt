@@ -1,5 +1,6 @@
 package dev.detekt.rules.style
 
+import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
@@ -31,6 +32,7 @@ import org.jetbrains.kotlin.psi.KtCallExpression
  * </compliant>
  *
  */
+@ActiveByDefault(since = "2.0.0")
 class UseEmptyCounterpart(config: Config) :
     Rule(
         config,

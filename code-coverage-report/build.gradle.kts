@@ -7,13 +7,28 @@ reporting {
         create<JacocoCoverageReport>("jacocoMergedTestReport") {
             testSuiteName = "test"
             reportTask {
-                dependsOn(":detekt-generator:generateDocumentation")
+                dependsOn(":detekt-core:generateDefaultDetektConfig", ":detekt-core:generateDeprecationList")
             }
         }
         create<JacocoCoverageReport>("jacocoMergedFunctionalTestReport") {
             testSuiteName = "functionalTest"
             reportTask {
-                dependsOn(":detekt-generator:generateDocumentation")
+                dependsOn(
+                    ":detekt-core:generateDefaultDetektConfig",
+                    ":detekt-core:generateDeprecationList",
+                    ":detekt-rules-comments:copyConfigToResources",
+                    ":detekt-rules-complexity:copyConfigToResources",
+                    ":detekt-rules-coroutines:copyConfigToResources",
+                    ":detekt-rules-empty-blocks:copyConfigToResources",
+                    ":detekt-rules-exceptions:copyConfigToResources",
+                    ":detekt-rules-ktlint-wrapper:copyConfigToResources",
+                    ":detekt-rules-libraries:copyConfigToResources",
+                    ":detekt-rules-naming:copyConfigToResources",
+                    ":detekt-rules-performance:copyConfigToResources",
+                    ":detekt-rules-potential-bugs:copyConfigToResources",
+                    ":detekt-rules-ruleauthors:copyConfigToResources",
+                    ":detekt-rules-style:copyConfigToResources",
+                )
             }
         }
     }
@@ -25,7 +40,6 @@ dependencies {
     jacocoAggregation("dev.detekt:detekt-gradle-plugin")
     jacocoAggregation(projects.detektApi)
     jacocoAggregation(projects.detektCli)
-    jacocoAggregation(projects.detektCompilerPlugin)
     jacocoAggregation(projects.detektCore)
     jacocoAggregation(projects.detektGenerator)
     jacocoAggregation(projects.detektMetrics)
@@ -33,7 +47,9 @@ dependencies {
     jacocoAggregation(projects.detektPsiUtils)
     jacocoAggregation(projects.detektReportHtml)
     jacocoAggregation(projects.detektReportSarif)
+    jacocoAggregation(projects.detektReportStatistics)
     jacocoAggregation(projects.detektReportCheckstyle)
+    jacocoAggregation(projects.detektReportComplexity)
     jacocoAggregation(projects.detektReportMarkdown)
     jacocoAggregation(projects.detektRulesComplexity)
     jacocoAggregation(projects.detektRulesCoroutines)

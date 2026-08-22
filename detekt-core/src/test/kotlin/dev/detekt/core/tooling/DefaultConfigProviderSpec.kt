@@ -15,13 +15,6 @@ class DefaultConfigProviderSpec {
         private val extensionsSpec = createNullLoggingSpec {}.extensionsSpec
 
         @Test
-        fun gets() {
-            val config = DefaultConfigProvider().apply { init(extensionsSpec) }.get()
-
-            assertThat(config.valueOrNull<Any>("sample")).isNull()
-        }
-
-        @Test
         fun copies(@TempDir tempDir: Path) {
             val path = tempDir.resolve("test.test")
             DefaultConfigProvider().apply { init(extensionsSpec) }.copy(path)
@@ -38,13 +31,6 @@ class DefaultConfigProviderSpec {
                 fromPaths { listOf(resourceAsPath("sample-rule-set.jar")) }
             }
         }.extensionsSpec
-
-        @Test
-        fun gets() {
-            val config = DefaultConfigProvider().apply { init(extensionsSpec) }.get()
-
-            assertThat(config.valueOrNull<Any>("sample")).isNotNull()
-        }
 
         @Test
         fun copies(@TempDir tempDir: Path) {

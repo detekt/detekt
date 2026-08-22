@@ -16,7 +16,10 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
  */
 class ForbiddenClassName(config: Config) : Rule(config, "Forbidden class name as per configuration detected.") {
 
-    @Configuration("List of glob patterns to be disallowed as class names")
+    @Configuration(
+        "List of simple glob patterns to be disallowed. Each pattern is matched against the class name. " +
+            "See the [simple glob syntax](https://detekt.dev/docs/introduction/glob-patterns#simple-patterns)."
+    )
     private val forbiddenName: List<Regex> by config(emptyList<String>()) { patterns ->
         patterns.map(String::pathGlobToRegex)
     }

@@ -44,6 +44,7 @@ internal class StringExtensionsKtSpec {
                 """some other words [Label](www.foo.com)""",
                 """[Label with space](www.foo.com)""",
                 """[Label](www.foo.com "With title")""",
+                @Suppress("StringShouldBeRawString")
                 "[Label with tabs](www.foo.com\t\"With\ttitle\"\t)",
                 """[Label](www.foo.com "With title")     """,
                 """[Label](www.foo.com "With title" )""",

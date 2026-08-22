@@ -1,5 +1,7 @@
 package dev.detekt.core.config
 
+import dev.detekt.api.valueOrDefault
+import dev.detekt.api.valueOrNull
 import dev.detekt.core.yamlConfigFromContent
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

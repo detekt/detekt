@@ -31,7 +31,11 @@ import org.jetbrains.kotlin.psi.psiUtil.visibilityModifierTypeOrDefault
 class ForbiddenPublicDataClass(config: Config) :
     Rule(config, "The data classes are bad for the binary compatibility in public APIs. Avoid to use it.") {
 
-    @Configuration("ignores classes in the specified packages.")
+    @Configuration(
+        "Ignores classes in packages matched by these simple glob patterns. Each pattern is matched against " +
+            "the package name. " +
+            "See the [simple glob syntax](https://detekt.dev/docs/introduction/glob-patterns#simple-patterns)."
+    )
     private val ignorePackages: List<Regex> by config(listOf("*.internal", "*.internal.*")) { packages ->
         packages.distinct().map(String::pathGlobToRegex)
     }

@@ -68,7 +68,10 @@ class IgnoredReturnValue(config: Config) :
     @Configuration("If the rule should check only methods matching to configuration, or all methods")
     private val restrictToConfig: Boolean by config(defaultValue = true)
 
-    @Configuration("List of glob patterns to be used as inspection annotation")
+    @Configuration(
+        "List of simple glob patterns for annotation names that require return values to be used. " +
+            "See the [simple glob syntax](https://detekt.dev/docs/introduction/glob-patterns#simple-patterns)."
+    )
     private val returnValueAnnotations: List<Regex> by config(
         listOf(
             "CheckResult",
@@ -80,7 +83,10 @@ class IgnoredReturnValue(config: Config) :
         it.map(String::pathGlobToRegex)
     }
 
-    @Configuration("Annotations to skip this inspection")
+    @Configuration(
+        "List of simple glob patterns for annotation names that skip this inspection. " +
+            "See the [simple glob syntax](https://detekt.dev/docs/introduction/glob-patterns#simple-patterns)."
+    )
     private val ignoreReturnValueAnnotations: List<Regex> by config(
         listOf(
             "CanIgnoreReturnValue",
@@ -90,7 +96,10 @@ class IgnoredReturnValue(config: Config) :
         it.map(String::pathGlobToRegex)
     }
 
-    @Configuration("List of return types that should not be ignored")
+    @Configuration(
+        "List of simple glob patterns for return type names that should not be ignored. " +
+            "See the [simple glob syntax](https://detekt.dev/docs/introduction/glob-patterns#simple-patterns)."
+    )
     private val returnValueTypes: List<Regex> by config(
         listOf(
             "kotlin.Function*",

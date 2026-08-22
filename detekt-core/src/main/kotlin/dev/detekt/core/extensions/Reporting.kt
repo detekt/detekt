@@ -9,10 +9,18 @@ fun handleReportingExtensions(settings: ProcessingSettings, initialResult: Detek
     val extensions = loadExtensions<ReportingExtension>(settings)
     extensions.forEach { it.onRawResult(initialResult) }
     val finalIssues = extensions.fold(initialResult.issues) { acc, extension -> extension.transformIssues(acc) }
-    val finalResult = initialResult.copy(issues = finalIssues)
+    val finalResult = initialResult.copy(issues = finalIssues.sortedWith(issueComparator))
     extensions.forEach { it.onFinalResult(finalResult) }
     return finalResult
 }
+
+private val issueComparator = compareBy<Issue>(
+    { it.location.path },
+    { it.location.source },
+    { it.location.endSource },
+    { it.ruleInstance.id },
+    { it.message },
+)
 
 private fun Detektion.copy(issues: List<Issue> = this.issues): Detektion =
     Detektion(
