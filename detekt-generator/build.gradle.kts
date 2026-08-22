@@ -17,6 +17,10 @@ val detektCliClasspath = configurations.resolvable("detektCliClasspath") { exten
 val generatedDocumentation = configurations.dependencyScope("generatedDocumentation")
 val generatedDocumentationFiles = configurations.resolvable("generatedDocumentationFiles") {
     extendsFrom(generatedDocumentation)
+
+    attributes {
+        attribute(DocsType.DOCS_TYPE_ATTRIBUTE, objects.named("generated-documentation"))
+    }
 }
 
 dependencies {
@@ -27,18 +31,18 @@ dependencies {
     detektCli(projects.detektCli)
     implementation(projects.detektUtils)
     implementation(libs.jcommander)
-    generatedDocumentation(projects.detektRulesComments) { targetConfiguration = "generatedDocumentation" }
-    generatedDocumentation(projects.detektRulesComplexity) { targetConfiguration = "generatedDocumentation" }
-    generatedDocumentation(projects.detektRulesCoroutines) { targetConfiguration = "generatedDocumentation" }
-    generatedDocumentation(projects.detektRulesEmptyBlocks) { targetConfiguration = "generatedDocumentation" }
-    generatedDocumentation(projects.detektRulesKtlintWrapper) { targetConfiguration = "generatedDocumentation" }
-    generatedDocumentation(projects.detektRulesExceptions) { targetConfiguration = "generatedDocumentation" }
-    generatedDocumentation(projects.detektRulesLibraries) { targetConfiguration = "generatedDocumentation" }
-    generatedDocumentation(projects.detektRulesNaming) { targetConfiguration = "generatedDocumentation" }
-    generatedDocumentation(projects.detektRulesPerformance) { targetConfiguration = "generatedDocumentation" }
-    generatedDocumentation(projects.detektRulesPotentialBugs) { targetConfiguration = "generatedDocumentation" }
-    generatedDocumentation(projects.detektRulesRuleauthors) { targetConfiguration = "generatedDocumentation" }
-    generatedDocumentation(projects.detektRulesStyle) { targetConfiguration = "generatedDocumentation" }
+    generatedDocumentation(projects.detektRulesComments)
+    generatedDocumentation(projects.detektRulesComplexity)
+    generatedDocumentation(projects.detektRulesCoroutines)
+    generatedDocumentation(projects.detektRulesEmptyBlocks)
+    generatedDocumentation(projects.detektRulesKtlintWrapper)
+    generatedDocumentation(projects.detektRulesExceptions)
+    generatedDocumentation(projects.detektRulesLibraries)
+    generatedDocumentation(projects.detektRulesNaming)
+    generatedDocumentation(projects.detektRulesPerformance)
+    generatedDocumentation(projects.detektRulesPotentialBugs)
+    generatedDocumentation(projects.detektRulesRuleauthors)
+    generatedDocumentation(projects.detektRulesStyle)
 
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.assertj.core)
