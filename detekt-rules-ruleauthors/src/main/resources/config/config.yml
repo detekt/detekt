@@ -1,6 +1,0 @@
-ruleauthors:
-  active: true
-  LeakingSessionBoundType:
-    active: false
-  UseEntityAtName:
-    active: true
