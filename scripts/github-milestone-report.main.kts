@@ -44,8 +44,6 @@ class GithubMilestoneReport : CliktCommand() {
     @Suppress("LongMethod")
     override fun run() {
         // connect to GitHub
-        // A token is optional, but recommended: the merged check below costs one request per pull
-        // request, and anonymous access is capped at 60 requests per hour.
         val token: String? = githubToken()
         val github: GitHub = if (token != null) {
             GitHub.connectUsingOAuth(token)
@@ -72,15 +70,6 @@ class GithubMilestoneReport : CliktCommand() {
             ghIssues = ghIssues.filter { "pick request" in it.labels.map { it.name } }
         }
 
-        // `GHIssueState.CLOSED` also matches pull requests that were closed without ever being
-        // merged, and the issue payload carries no merged flag, so every remaining candidate has to
-        // be resolved to a `GHPullRequest`. Crediting an unmerged pull request advertises a feature
-        // that never shipped: the 2.0.0-alpha.6 notes credited #7025, #7040 and #7662, all three of
-        // which were closed unmerged two days before that release.
-        //
-        // This costs one request per candidate, so it deliberately runs last, once the free local
-        // filters above have narrowed the set. Prefer `-f` (and a `github.token`) on a milestone
-        // that already has changelog entries, otherwise this walks every pull request in it.
         ghIssues = ghIssues.filter { ghRepository.getPullRequest(it.number).isMerged }
 
         val ghContributors = ghIssues.map { it.user.login }.distinct().sorted()
