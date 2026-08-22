@@ -553,6 +553,8 @@ style:
     ignoreSealedClasses: false
   AlsoCouldBeApply:
     active: false
+  AvoidDollarLiteralInterpolation:
+    active: false
   BracesOnIfStatements:
     active: false
     singleLine: 'never'
