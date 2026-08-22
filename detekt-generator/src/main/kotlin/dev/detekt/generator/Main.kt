@@ -21,9 +21,5 @@ fun main(args: Array<String>) {
         documentationPath = options.documentationPath,
         configPath = options.configPath,
     )
-    if (options.generateCustomRuleConfig) {
-        generator.executeCustomRuleConfig()
-    } else {
-        generator.execute()
-    }
+    generator.execute()
 }
