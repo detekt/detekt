@@ -360,6 +360,118 @@ class UnusedParameterSpec {
     }
 
     @Nested
+    inner class `constructor parameters` {
+        @Test
+        fun `reports unused parameter of a primary constructor`() {
+            val code = """
+                class A(unused: String)
+            """.trimIndent()
+
+            assertThat(subject.lint(code)).hasSize(1)
+        }
+
+        @Test
+        fun `reports unused parameter of a secondary constructor`() {
+            val code = """
+                class A {
+                    constructor(unused: String)
+                }
+            """.trimIndent()
+
+            assertThat(subject.lint(code)).hasSize(1)
+        }
+
+        @Test
+        fun `does not report a used parameter of a primary constructor`() {
+            val code = """
+                class A(used: String) {
+                    val length = used.length
+                }
+            """.trimIndent()
+
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `reports unused parameter`() {
+            val code = """
+                class Test(unused: Any)
+            """.trimIndent()
+            assertThat(subject.lint(code)).hasSize(1)
+        }
+
+        @Test
+        fun `does not report used parameter in init block`() {
+            val code = """
+                class Test(used: Any) {
+                    init {
+                        used.toString()
+                    }
+                }
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report used parameter to initialize property`() {
+            val code = """
+                class Test(used: Any) {
+                    val usedString = used.toString()
+                }
+            """.trimIndent()
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `report unused parameters in secondary constructors`() {
+            val code = """
+                private class ClassWithSecondaryConstructor {
+                    constructor(used: Any, unused: Any) {
+                        used.toString()
+                    }
+                
+                    constructor(used: Any)
+                }
+            """.trimIndent()
+            assertThat(subject.lint(code)).hasSize(2)
+        }
+
+        @Test
+        fun `reports unused vararg parameter`() {
+            val code = """
+               class Test(vararg unused: Any)
+            """.trimIndent()
+
+            assertThat(subject.lint(code))
+                .hasSize(1)
+        }
+
+        @Test
+        fun `reports for multiple classes with same properties name in the same file`() {
+            val code = """
+                class C(initial:Int = 0){
+                
+                constructor(c:Float, d:Float):this(c.toInt()){
+                   println(c)
+                }
+                  
+               }
+            """.trimIndent()
+
+            assertThat(subject.lint(code)).isNotEmpty()
+        }
+
+        @Test
+        fun `does not report a constructor property`() {
+            val code = """
+                class A(val unused: String)
+            """.trimIndent()
+
+            assertThat(subject.lint(code)).isEmpty()
+        }
+    }
+
+    @Nested
     inner class `actual functions and classes` {
 
         @Test

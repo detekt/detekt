@@ -19,12 +19,18 @@ import dev.detekt.psi.isOperator
 import dev.detekt.psi.isOverride
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
+import org.jetbrains.kotlin.psi.KtConstructor
+import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
+import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtReferenceExpression
+import org.jetbrains.kotlin.psi.KtSecondaryConstructor
 import org.jetbrains.kotlin.psi.KtValueArgumentName
+import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
+import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
 import org.jetbrains.kotlin.psi.psiUtil.isProtected
 
 /**
@@ -84,21 +90,39 @@ private class UnusedParameterVisitor(private val allowedNames: Regex) : DetektVi
             return
         }
 
-        collectParameters(function)
+        collectParameters(function.valueParameterList?.parameters.orEmpty(), function)
 
         super.visitNamedFunction(function)
     }
 
-    private fun collectParameters(function: KtNamedFunction) {
+    override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {
+        val klass = constructor.containingClassOrObject
+        if (constructor.isRelevant() && klass != null) {
+            // A parameter declared with `val` or `var` is a property, so UnusedPrivateProperty owns it.
+            collectParameters(constructor.valueParameters.filterNot { it.isPropertyParameter() }, klass)
+        }
+
+        super.visitPrimaryConstructor(constructor)
+    }
+
+    override fun visitSecondaryConstructor(constructor: KtSecondaryConstructor) {
+        if (constructor.isRelevant()) {
+            collectParameters(constructor.valueParameters, constructor)
+        }
+
+        super.visitSecondaryConstructor(constructor)
+    }
+
+    private fun collectParameters(candidates: List<KtParameter>, scope: KtElement) {
         val parameters = mutableMapOf<String, KtParameter>()
-        function.valueParameterList?.parameters?.forEach { parameter ->
+        candidates.forEach { parameter ->
             val name = parameter.nameAsSafeName.identifier
             if (!allowedNames.matches(name)) {
                 parameters[name] = parameter
             }
         }
 
-        function.accept(object : DetektVisitor() {
+        scope.accept(object : DetektVisitor() {
             override fun visitProperty(property: KtProperty) {
                 if (property.isLocal) {
                     val name = property.nameAsSafeName.identifier
@@ -119,6 +143,12 @@ private class UnusedParameterVisitor(private val allowedNames: Regex) : DetektVi
     }
 
     private fun KtNamedFunction.isRelevant() = !isAllowedToHaveUnusedParameters()
+
+    private fun KtConstructor<*>.isRelevant(): Boolean {
+        if (isExpect() || isActual()) return false
+        val klass = containingClassOrObject as? KtClass ?: return false
+        return !klass.isExpect() && !klass.isData() && !klass.isValue() && !klass.isInline()
+    }
 
     private fun KtNamedFunction.isAllowedToHaveUnusedParameters() =
         isAbstract() ||
