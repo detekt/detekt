@@ -732,8 +732,22 @@ part of the public API:
 
 `@RequiresTypeResolution` has no equivalent — implement `RequiresAnalysisApi` instead.
 
-`Config` itself changed slightly: `parentPath` was replaced by `parent`, and `subConfigKeys()` was
-added.
+`Config` itself changed too. `parentPath` was replaced by `parent`, `subConfigKeys()` was added,
+and lookups are now type-safe: the single abstract member takes the expected type, so a value of
+the wrong YAML type no longer gets silently coerced.
+
+```diff
+ class MyConfig : Config {
+-    override fun valueOrNull(key: String): Any? = ...
+-    override fun valueOrDefault(key: String, default: Any): Any = ...
++    override fun <T : Any> valueOrNull(key: String, type: KClass<T>): T? = ...
+ }
+```
+
+`valueOrDefault(key, default)` and the single-argument `valueOrNull(key)` still exist as reified
+extension functions, so call sites are unchanged — only custom `Config` implementations need
+updating. This is the API side of the
+[stricter YAML parsing](#the-yaml-parser-is-stricter-about-types) users see.
 
 ### Other removed / renamed extension points
 
