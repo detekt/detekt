@@ -38,6 +38,7 @@ dependencies {
     generatedDocumentation(projects.detektRulesPerformance) { targetConfiguration = "generatedDocumentation" }
     generatedDocumentation(projects.detektRulesPotentialBugs) { targetConfiguration = "generatedDocumentation" }
     generatedDocumentation(projects.detektRulesRuleauthors) { targetConfiguration = "generatedDocumentation" }
+    generatedDocumentation(projects.detektRulesStandardLibrary) { targetConfiguration = "generatedDocumentation" }
     generatedDocumentation(projects.detektRulesStyle) { targetConfiguration = "generatedDocumentation" }
 
     testImplementation(projects.detektTestUtils)
