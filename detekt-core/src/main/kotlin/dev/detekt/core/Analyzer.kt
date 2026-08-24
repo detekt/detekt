@@ -11,9 +11,9 @@ import dev.detekt.api.RuleInstance
 import dev.detekt.api.Severity
 import dev.detekt.api.internal.whichDetekt
 import dev.detekt.api.valueOrDefault
-import dev.detekt.core.suppressors.buildSuppressors
 import dev.detekt.core.suppressors.isSuppressedBy
 import dev.detekt.core.util.shouldAnalyzeFile
+import dev.detekt.suppressors.buildSuppressors
 import dev.detekt.tooling.api.AnalysisMode
 import org.jetbrains.kotlin.config.LanguageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
