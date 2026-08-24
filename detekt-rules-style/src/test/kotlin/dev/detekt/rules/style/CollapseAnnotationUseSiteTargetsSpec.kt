@@ -10,7 +10,7 @@ import org.jetbrains.kotlin.config.LanguageVersionSettingsImpl
 import org.junit.jupiter.api.Test
 
 @KotlinCoreEnvironmentTest
-class UseAllUseSiteTargetSpec(val env: KotlinEnvironmentContainer) {
+class CollapseAnnotationUseSiteTargetsSpec(val env: KotlinEnvironmentContainer) {
 
     @Test
     fun `reports every applicable target on a primary constructor property`() {
@@ -32,7 +32,7 @@ class UseAllUseSiteTargetSpec(val env: KotlinEnvironmentContainer) {
             )
         """.trimIndent()
 
-        val findings = UseAllUseSiteTarget(Config.empty).lintWithContext(env, code)
+        val findings = CollapseAnnotationUseSiteTargets(Config.empty).lintWithContext(env, code)
 
         assertThat(findings).singleElement()
             .hasTextLocation("@param:Marker")
@@ -63,7 +63,7 @@ class UseAllUseSiteTargetSpec(val env: KotlinEnvironmentContainer) {
             )
         """.trimIndent()
 
-        val findings = UseAllUseSiteTarget(Config.empty).lintWithContext(env, code)
+        val findings = CollapseAnnotationUseSiteTargets(Config.empty).lintWithContext(env, code)
 
         assertThat(findings).hasSize(1)
     }
@@ -87,7 +87,7 @@ class UseAllUseSiteTargetSpec(val env: KotlinEnvironmentContainer) {
             }
         """.trimIndent()
 
-        val findings = UseAllUseSiteTarget(Config.empty).lintWithContext(env, code)
+        val findings = CollapseAnnotationUseSiteTargets(Config.empty).lintWithContext(env, code)
 
         assertThat(findings).hasSize(1)
     }
@@ -109,7 +109,7 @@ class UseAllUseSiteTargetSpec(val env: KotlinEnvironmentContainer) {
             }
         """.trimIndent()
 
-        val findings = UseAllUseSiteTarget(Config.empty).lintWithContext(env, code)
+        val findings = CollapseAnnotationUseSiteTargets(Config.empty).lintWithContext(env, code)
 
         assertThat(findings).hasSize(1)
     }
@@ -131,7 +131,7 @@ class UseAllUseSiteTargetSpec(val env: KotlinEnvironmentContainer) {
                 get() = first()
         """.trimIndent()
 
-        val findings = UseAllUseSiteTarget(Config.empty).lintWithContext(env, code)
+        val findings = CollapseAnnotationUseSiteTargets(Config.empty).lintWithContext(env, code)
 
         assertThat(findings).hasSize(1)
     }
@@ -149,7 +149,7 @@ class UseAllUseSiteTargetSpec(val env: KotlinEnvironmentContainer) {
             }
         """.trimIndent()
 
-        val findings = UseAllUseSiteTarget(Config.empty).lintWithContext(env, code)
+        val findings = CollapseAnnotationUseSiteTargets(Config.empty).lintWithContext(env, code)
 
         assertThat(findings).hasSize(1)
     }
@@ -167,7 +167,7 @@ class UseAllUseSiteTargetSpec(val env: KotlinEnvironmentContainer) {
             }
         """.trimIndent()
 
-        val findings = UseAllUseSiteTarget(Config.empty).lintWithContext(env, code)
+        val findings = CollapseAnnotationUseSiteTargets(Config.empty).lintWithContext(env, code)
 
         assertThat(findings).hasSize(1)
     }
@@ -184,7 +184,7 @@ class UseAllUseSiteTargetSpec(val env: KotlinEnvironmentContainer) {
             }
         """.trimIndent()
 
-        val findings = UseAllUseSiteTarget(Config.empty).lintWithContext(env, code)
+        val findings = CollapseAnnotationUseSiteTargets(Config.empty).lintWithContext(env, code)
 
         assertThat(findings).isEmpty()
     }
@@ -203,7 +203,7 @@ class UseAllUseSiteTargetSpec(val env: KotlinEnvironmentContainer) {
             )
         """.trimIndent()
 
-        val findings = UseAllUseSiteTarget(Config.empty).lintWithContext(env, code)
+        val findings = CollapseAnnotationUseSiteTargets(Config.empty).lintWithContext(env, code)
 
         assertThat(findings).hasSize(1)
     }
@@ -227,7 +227,7 @@ class UseAllUseSiteTargetSpec(val env: KotlinEnvironmentContainer) {
             )
         """.trimIndent()
 
-        val findings = UseAllUseSiteTarget(Config.empty).lintWithContext(env, code)
+        val findings = CollapseAnnotationUseSiteTargets(Config.empty).lintWithContext(env, code)
 
         assertThat(findings).isEmpty()
     }
@@ -252,7 +252,7 @@ class UseAllUseSiteTargetSpec(val env: KotlinEnvironmentContainer) {
             )
         """.trimIndent()
 
-        val findings = UseAllUseSiteTarget(Config.empty).lintWithContext(env, code)
+        val findings = CollapseAnnotationUseSiteTargets(Config.empty).lintWithContext(env, code)
 
         assertThat(findings).isEmpty()
     }
@@ -277,7 +277,7 @@ class UseAllUseSiteTargetSpec(val env: KotlinEnvironmentContainer) {
             )
         """.trimIndent()
 
-        val findings = UseAllUseSiteTarget(Config.empty).lintWithContext(env, code)
+        val findings = CollapseAnnotationUseSiteTargets(Config.empty).lintWithContext(env, code)
 
         assertThat(findings).isEmpty()
     }
@@ -291,7 +291,7 @@ class UseAllUseSiteTargetSpec(val env: KotlinEnvironmentContainer) {
             class Example(@param:Marker value: String)
         """.trimIndent()
 
-        val findings = UseAllUseSiteTarget(Config.empty).lintWithContext(env, code)
+        val findings = CollapseAnnotationUseSiteTargets(Config.empty).lintWithContext(env, code)
 
         assertThat(findings).isEmpty()
     }
@@ -310,7 +310,7 @@ class UseAllUseSiteTargetSpec(val env: KotlinEnvironmentContainer) {
             class Example(@all:Marker val value: String)
         """.trimIndent()
 
-        val findings = UseAllUseSiteTarget(Config.empty).lintWithContext(env, code)
+        val findings = CollapseAnnotationUseSiteTargets(Config.empty).lintWithContext(env, code)
 
         assertThat(findings).isEmpty()
     }
@@ -328,7 +328,7 @@ class UseAllUseSiteTargetSpec(val env: KotlinEnvironmentContainer) {
             }
         """.trimIndent()
 
-        val findings = UseAllUseSiteTarget(Config.empty).lintWithContext(env, code)
+        val findings = CollapseAnnotationUseSiteTargets(Config.empty).lintWithContext(env, code)
 
         assertThat(findings).isEmpty()
     }
@@ -353,7 +353,7 @@ class UseAllUseSiteTargetSpec(val env: KotlinEnvironmentContainer) {
             }
         """.trimIndent()
 
-        val findings = UseAllUseSiteTarget(Config.empty).lintWithContext(env, code)
+        val findings = CollapseAnnotationUseSiteTargets(Config.empty).lintWithContext(env, code)
 
         assertThat(findings).isEmpty()
     }
@@ -379,7 +379,7 @@ class UseAllUseSiteTargetSpec(val env: KotlinEnvironmentContainer) {
             )
         """.trimIndent()
 
-        val findings = UseAllUseSiteTarget(Config.empty).lintWithContext(env, code)
+        val findings = CollapseAnnotationUseSiteTargets(Config.empty).lintWithContext(env, code)
 
         assertThat(findings).isEmpty()
     }
@@ -397,7 +397,7 @@ class UseAllUseSiteTargetSpec(val env: KotlinEnvironmentContainer) {
             }
         """.trimIndent()
 
-        val findings = UseAllUseSiteTarget(Config.empty).lintWithContext(
+        val findings = CollapseAnnotationUseSiteTargets(Config.empty).lintWithContext(
             environment = env,
             content = code,
             languageVersionSettings = allUseSiteTargetDisabled,

@@ -618,6 +618,8 @@ style:
     includeElvis: true
   ClassOrdering:
     active: false
+  CollapseAnnotationUseSiteTargets:
+    active: false
   CollapsibleIfStatements:
     active: false
   DataClassContainsFunctions:
@@ -846,8 +848,6 @@ style:
     active: true
     aliases: ['UNUSED_VARIABLE', 'unused']
     allowedNames: 'ignored|_'
-  UseAllUseSiteTarget:
-    active: false
   UseArrayLiteralsInAnnotations:
     active: true
   UseDataClass:

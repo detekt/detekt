@@ -61,7 +61,7 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
  * </compliant>
  */
 @OptIn(KaExperimentalApi::class)
-class UseAllUseSiteTarget(config: Config) :
+class CollapseAnnotationUseSiteTargets(config: Config) :
     Rule(
         config,
         "Use the `all` use-site target instead of listing every applicable property target."
