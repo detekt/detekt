@@ -173,6 +173,23 @@ class UseAllUseSiteTargetSpec(val env: KotlinEnvironmentContainer) {
     }
 
     @Test
+    fun `does not report an annotation with a single applicable property target`() {
+        val code = """
+            @Target(AnnotationTarget.PROPERTY)
+            annotation class Marker
+
+            class Example {
+                @property:Marker
+                val value: String = "value"
+            }
+        """.trimIndent()
+
+        val findings = UseAllUseSiteTarget(Config.empty).lintWithContext(env, code)
+
+        assertThat(findings).isEmpty()
+    }
+
+    @Test
     fun `uses the default annotation targets`() {
         val code = """
             annotation class Marker
