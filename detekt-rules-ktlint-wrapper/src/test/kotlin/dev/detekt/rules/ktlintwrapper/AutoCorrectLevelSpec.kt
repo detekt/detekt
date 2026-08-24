@@ -18,14 +18,14 @@ class AutoCorrectLevelSpec {
 
     @ParameterizedTest
     @CsvSource(
-        "Undefined, Undefined, false",
+        "Undefined, Undefined, true",
         "Undefined, True,      true",
         "Undefined, False,     false",
-        "True,      Undefined, false",
+        "True,      Undefined, true",
         "True,      True,      true",
         "True,      False,     false",
         "False,     Undefined, false",
-        "False,     True,      false",
+        "False,     True,      true",
         "False,     False,     false",
     )
     fun autoCorrect(ruleSet: AutoCorrectConfig, rule: AutoCorrectConfig, wasFormatted: Boolean) {

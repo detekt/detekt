@@ -1,5 +1,6 @@
 package dev.detekt.core
 
+import dev.detekt.api.AutoCorrectable
 import dev.detekt.api.Config
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
@@ -61,6 +62,14 @@ private fun RuleSet.getRules(
                 }
                 if (active && !executable) {
                     log { "The rule '$ruleId' requires type resolution but it was run without it." }
+                }
+                // Only warn about an explicit opt-in: a rule set wide `autoCorrect` legitimately
+                // covers rule sets which mix correctable and non-correctable rules.
+                if (active &&
+                    rule !is AutoCorrectable &&
+                    ruleConfig.valueOrNull<Boolean>(Config.AUTO_CORRECT_KEY) == true
+                ) {
+                    log { "The rule '$ruleId' is not able to correct, so 'autoCorrect' has no effect on it." }
                 }
                 RuleDescriptor(
                     ruleProvider = ruleProvider,

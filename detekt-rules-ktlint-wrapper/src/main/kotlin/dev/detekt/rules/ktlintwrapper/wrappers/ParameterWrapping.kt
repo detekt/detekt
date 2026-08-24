@@ -5,23 +5,23 @@ import com.pinterest.ktlint.rule.engine.core.api.editorconfig.INDENT_SIZE_PROPER
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.MAX_LINE_LENGTH_PROPERTY
 import com.pinterest.ktlint.ruleset.standard.rules.ParameterWrappingRule
 import dev.detekt.api.ActiveByDefault
+import dev.detekt.api.AutoCorrectable
 import dev.detekt.api.Config
 import dev.detekt.api.Configuration
 import dev.detekt.api.config
-import dev.detekt.api.internal.AutoCorrectable
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 import dev.detekt.rules.ktlintwrapper.configWithAndroidVariants
 
 /**
  * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/#parameter-wrapping) for documentation.
  */
-@AutoCorrectable(since = "1.23.0")
 @ActiveByDefault(since = "1.23.0")
 internal class ParameterWrapping(config: Config) :
     KtlintRule(
         config,
         "Type or value of functions and class parameters must wrap if parameters don't fit on a single line"
-    ) {
+    ),
+    AutoCorrectable {
 
     override val wrapping = ParameterWrappingRule()
 

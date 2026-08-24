@@ -28,9 +28,25 @@ open class Rule(val config: Config, val description: String, val url: URI? = nul
 
     protected lateinit var languageVersionSettings: LanguageVersionSettings
 
+    /**
+     * Whether this rule should correct the code it reports on.
+     *
+     * Only rules implementing [AutoCorrectable] can correct anything, so for every other rule this
+     * is always `false`. For those that can, the value is resolved in priority order:
+     * - the `autoCorrect` property of the rule
+     * - the `autoCorrect` property of the parent rule set
+     * - `true`, as a rule which is able to correct is expected to do so
+     *
+     * The `--auto-correct` CLI flag (and its Gradle counterpart) remains the master switch: when it
+     * is off, detekt forces `autoCorrect` to `false` for every rule regardless of configuration.
+     */
     val autoCorrect: Boolean
-        get() = config.valueOrDefault(Config.AUTO_CORRECT_KEY, false) &&
-            (config.parent?.valueOrDefault(Config.AUTO_CORRECT_KEY, true) != false)
+        get() = this is AutoCorrectable &&
+            (
+                config.valueOrNull<Boolean>(Config.AUTO_CORRECT_KEY)
+                    ?: config.parent?.valueOrNull<Boolean>(Config.AUTO_CORRECT_KEY)
+                    ?: true
+                )
 
     private val findings: MutableList<Finding> = mutableListOf()
 
