@@ -5,7 +5,6 @@ import dev.detekt.api.Detektion
 import dev.detekt.api.FileProcessListener
 import dev.detekt.api.Notification
 import dev.detekt.api.modifiedText
-import dev.detekt.psi.absolutePath
 import org.jetbrains.kotlin.psi.KtFile
 import kotlin.io.path.writeText
 
