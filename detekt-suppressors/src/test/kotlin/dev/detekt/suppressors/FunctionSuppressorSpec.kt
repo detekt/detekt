@@ -1,4 +1,4 @@
-package dev.detekt.core.suppressors
+package dev.detekt.suppressors
 
 import dev.detekt.test.utils.compileContentForTest
 import dev.detekt.tooling.api.AnalysisMode
