@@ -25,6 +25,7 @@ import java.io.File
 import java.net.URL
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Properties
 
 class GithubMilestoneReport : CliktCommand() {
 
@@ -43,7 +44,12 @@ class GithubMilestoneReport : CliktCommand() {
     @Suppress("LongMethod")
     override fun run() {
         // connect to GitHub
-        val github: GitHub = GitHub.connectAnonymously()
+        val token: String? = githubToken()
+        val github: GitHub = if (token != null) {
+            GitHub.connectUsingOAuth(token)
+        } else {
+            GitHub.connectAnonymously()
+        }
         val ghRepository: GHRepository = github.getUser(user).getRepository(project)
         val milestones = ghRepository.listMilestones(GHIssueState.OPEN).toMutableList()
         milestones.sortBy { it.number }
@@ -63,6 +69,9 @@ class GithubMilestoneReport : CliktCommand() {
         if (filterPickRequests) {
             ghIssues = ghIssues.filter { "pick request" in it.labels.map { it.name } }
         }
+
+        ghIssues = ghIssues.filter { ghRepository.getPullRequest(it.number).isMerged }
+
         val ghContributors = ghIssues.map { it.user.login }.distinct().sorted()
 
         val milestoneTitle = ghMilestone.title.trim()
@@ -125,6 +134,21 @@ class GithubMilestoneReport : CliktCommand() {
         tempFile.writeText(content)
 
         println("\nContent saved to ${tempFile.path}")
+    }
+
+    /**
+     * Reads `github.token` from the user's Gradle properties, the same property the release build
+     * already uses (see `build-logic/src/main/kotlin/releasing.gradle.kts`), so the credential does
+     * not need storing in a second place. Returns `null` when it is absent, in which case the
+     * script falls back to anonymous access.
+     */
+    private fun githubToken(): String? {
+        val propertiesFile = File(System.getProperty("user.home"), ".gradle/gradle.properties")
+        if (!propertiesFile.isFile) return null
+        val properties = Properties().apply {
+            propertiesFile.inputStream().use { load(it) }
+        }
+        return properties.getProperty("github.token")?.takeIf { it.isNotBlank() }
     }
 
     private fun formatContributors(ghContributors: List<String>): String {

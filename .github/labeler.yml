@@ -70,6 +70,7 @@ rules:
             "detekt-rules-performance/src/**/*",
             "detekt-rules-potential-bugs/src/**/*",
             "detekt-rules-ruleauthors/src/**/*",
+            "detekt-rules-standard-library/src/**/*",
             "detekt-rules-style/src/**/*",
           ]
 
