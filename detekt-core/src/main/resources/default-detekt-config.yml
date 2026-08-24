@@ -846,6 +846,8 @@ style:
     active: true
     aliases: ['UNUSED_VARIABLE', 'unused']
     allowedNames: 'ignored|_'
+  UseAllUseSiteTarget:
+    active: false
   UseArrayLiteralsInAnnotations:
     active: true
   UseDataClass:

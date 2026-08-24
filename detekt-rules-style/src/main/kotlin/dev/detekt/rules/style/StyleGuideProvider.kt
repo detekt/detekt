@@ -91,6 +91,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
                 ::UseIfInsteadOfWhen,
                 ::RedundantConstructorKeyword,
                 ::RedundantExplicitType,
+                ::UseAllUseSiteTarget,
                 ::UseArrayLiteralsInAnnotations,
                 ::MultilineLambdaItParameter,
                 ::StringShouldBeRawString,
