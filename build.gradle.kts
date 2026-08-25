@@ -9,7 +9,7 @@ plugins {
 
 dependencies {
     dokka(projects.detektApi)
-    dokka(projects.detektPsiUtils)
+    dokka(projects.detektRuleHelpers)
     dokka(projects.detektTest)
     dokka(projects.detektTestAssertj)
     dokka(projects.detektTestUtils)

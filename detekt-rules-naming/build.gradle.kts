@@ -5,10 +5,10 @@ plugins {
 
 dependencies {
     compileOnly(projects.detektApi)
-    compileOnly(projects.detektPsiUtils)
+    compileOnly(projects.detektRuleHelpers)
 
     testImplementation(projects.detektApi)
-    testRuntimeOnly(projects.detektPsiUtils)
+    testRuntimeOnly(projects.detektRuleHelpers)
     testImplementation(projects.detektTest)
     testImplementation(projects.detektTestAssertj)
     testImplementation(projects.detektTestJunit)
