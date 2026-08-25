@@ -52,7 +52,7 @@ assertj-coreMinimum = { module = "org.assertj:assertj-core", version = "3.27.4" 
 classgraph = { module = "io.github.classgraph:classgraph", version = "4.8.194" }
 jcommander = { module = "org.jcommander:jcommander", version = "1.85" }
 # Version must align to dependency used by Kotlin on compile classpath due to our use of Gradle's consistent resolution
-jetbrains-annotations = { module = "org.jetbrains:annotations", version = "23.0.0" }
+jetbrains-annotations = { module = "org.jetbrains:annotations", version = "13.0" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 kotlin-scriptingJvm = { module = "org.jetbrains.kotlin:kotlin-scripting-jvm", version.ref = "kotlin" }
 kotlinx-coroutinesTest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
