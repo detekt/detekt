@@ -10,9 +10,9 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.api.config
-import dev.detekt.psi.FunctionMatcher
-import dev.detekt.psi.isCalling
-import dev.detekt.psi.pathGlobToRegex
+import dev.detekt.rulehelpers.FunctionMatcher
+import dev.detekt.rulehelpers.isCalling
+import dev.detekt.rulehelpers.pathGlobToRegex
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull

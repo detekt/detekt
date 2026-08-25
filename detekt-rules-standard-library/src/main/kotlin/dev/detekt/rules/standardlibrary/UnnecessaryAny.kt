@@ -5,8 +5,8 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
-import dev.detekt.psi.firstParameterOrNull
-import dev.detekt.psi.isCalling
+import dev.detekt.rulehelpers.firstParameterOrNull
+import dev.detekt.rulehelpers.isCalling
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall

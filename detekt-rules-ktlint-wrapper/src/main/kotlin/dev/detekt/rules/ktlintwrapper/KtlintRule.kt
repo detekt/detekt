@@ -20,7 +20,7 @@ import dev.detekt.api.SourceLocation
 import dev.detekt.api.TextLocation
 import dev.detekt.api.modifiedText
 import dev.detekt.api.valueOrNull
-import dev.detekt.psi.absolutePath
+import dev.detekt.rulehelpers.absolutePath
 import org.ec4j.core.model.Property
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtPsiFactory

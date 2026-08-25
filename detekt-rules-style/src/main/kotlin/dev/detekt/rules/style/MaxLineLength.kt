@@ -12,10 +12,10 @@ import dev.detekt.api.Rule
 import dev.detekt.api.SourceLocation
 import dev.detekt.api.TextLocation
 import dev.detekt.api.config
-import dev.detekt.psi.absolutePath
-import dev.detekt.psi.lastArgumentMatchesKotlinReferenceUrlSyntax
-import dev.detekt.psi.lastArgumentMatchesMarkdownUrlSyntax
-import dev.detekt.psi.lastArgumentMatchesUrl
+import dev.detekt.rulehelpers.absolutePath
+import dev.detekt.rulehelpers.lastArgumentMatchesKotlinReferenceUrlSyntax
+import dev.detekt.rulehelpers.lastArgumentMatchesMarkdownUrlSyntax
+import dev.detekt.rulehelpers.lastArgumentMatchesUrl
 import org.jetbrains.kotlin.KtPsiSourceFileLinesMapping
 import org.jetbrains.kotlin.diagnostics.DiagnosticUtils.getLineAndColumnRangeInPsiFile
 import org.jetbrains.kotlin.psi.KtFile

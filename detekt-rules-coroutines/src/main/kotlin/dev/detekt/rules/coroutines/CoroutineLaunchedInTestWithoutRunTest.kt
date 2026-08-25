@@ -5,7 +5,7 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
-import dev.detekt.psi.hasAnnotation
+import dev.detekt.rulehelpers.hasAnnotation
 import dev.detekt.rules.coroutines.utils.isCoroutineScope
 import dev.detekt.rules.coroutines.utils.isCoroutinesFlow
 import org.jetbrains.kotlin.analysis.api.KaSession

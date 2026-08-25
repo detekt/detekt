@@ -6,7 +6,7 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.Rule
 import dev.detekt.api.config
-import dev.detekt.psi.isPublicNotOverridden
+import dev.detekt.rulehelpers.isPublicNotOverridden
 import dev.detekt.rules.comments.internal.isPublicInherited
 import org.jetbrains.kotlin.psi.KtEnumEntry
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
