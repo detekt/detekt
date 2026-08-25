@@ -8,7 +8,7 @@ val ktlintToBundle = configurations.register("ktlintToBundle")
 
 dependencies {
     compileOnly(projects.detektApi)
-    compileOnly(projects.detektPsiUtils)
+    compileOnly(projects.detektRuleHelpers)
     // compileOnly so ktlint-repackage is not listed in the published POM (it's bundled into the JAR)
     compileOnly(projects.detektRulesKtlintWrapper.ktlintRepackage) {
         attributes {
@@ -30,7 +30,7 @@ dependencies {
     }
     testImplementation(libs.kotlin.compiler)
     testImplementation(projects.detektApi)
-    testRuntimeOnly(projects.detektPsiUtils)
+    testRuntimeOnly(projects.detektRuleHelpers)
     testImplementation(projects.detektTest)
     testImplementation(projects.detektTestAssertj)
     testImplementation(projects.detektTestUtils)

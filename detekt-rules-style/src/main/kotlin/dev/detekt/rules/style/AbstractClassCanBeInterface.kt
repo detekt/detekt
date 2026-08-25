@@ -9,11 +9,11 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.api.config
-import dev.detekt.psi.isAbstract
-import dev.detekt.psi.isConstant
-import dev.detekt.psi.isInternal
-import dev.detekt.psi.isOpen
-import dev.detekt.psi.isProtected
+import dev.detekt.rulehelpers.isAbstract
+import dev.detekt.rulehelpers.isConstant
+import dev.detekt.rulehelpers.isInternal
+import dev.detekt.rulehelpers.isOpen
+import dev.detekt.rulehelpers.isProtected
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassKind

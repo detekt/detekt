@@ -69,6 +69,7 @@ A few modules were renamed to make their purpose clearer:
 | `detekt-rules-bugs`               | `detekt-rules-potential-bugs`       |
 | `detekt-report-xml`               | `detekt-report-checkstyle`          |
 | `detekt-report-md`                | `detekt-report-markdown`            |
+| `detekt-psi-utils`                | `detekt-rule-helpers`               |
 
 If you referenced any of these artifacts directly (for example through `detektPlugins(...)` for
 the formatting wrapper), update the coordinates accordingly:
@@ -337,7 +338,8 @@ The `detekt-api` artifact now lives at `dev.detekt:detekt-api`; its types moved 
 |--------------------------------------------------------|-----------------------------------------------|
 | `io.gitlab.arturbosch.detekt:detekt-api`               | `dev.detekt:detekt-api`                       |
 | `io.gitlab.arturbosch.detekt.api`                      | `dev.detekt.api`                              |
-| `io.gitlab.arturbosch.detekt:detekt-psi-utils`         | `dev.detekt:detekt-psi-utils`                 |
+| `io.gitlab.arturbosch.detekt:detekt-psi-utils`         | `dev.detekt:detekt-rule-helpers`              |
+| `io.gitlab.arturbosch.detekt.rules` (PSI helpers)      | `dev.detekt.rulehelpers`                      |
 | `io.gitlab.arturbosch.detekt.rules.*` packages         | `dev.detekt.rules.*`                          |
 | `io.gitlab.arturbosch.detekt:detekt-test`              | `dev.detekt:detekt-test`                      |
 | `io.gitlab.arturbosch.detekt:detekt-test-utils`        | `dev.detekt:detekt-test-utils`                |

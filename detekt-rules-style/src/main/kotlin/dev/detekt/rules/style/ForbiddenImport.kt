@@ -7,7 +7,7 @@ import dev.detekt.api.Finding
 import dev.detekt.api.Rule
 import dev.detekt.api.config
 import dev.detekt.api.valuesWithReason
-import dev.detekt.psi.pathGlobToRegex
+import dev.detekt.rulehelpers.pathGlobToRegex
 import org.jetbrains.kotlin.psi.KtImportDirective
 
 /**

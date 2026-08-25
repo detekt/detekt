@@ -5,9 +5,9 @@ import java.nio.file.Path
 import kotlin.io.path.Path
 
 /**
- * Local copy of `dev.detekt.psi.absolutePath`.
+ * Local copy of `dev.detekt.rulehelpers.absolutePath`.
  *
- * `:detekt-psi-utils` exists to support rule authors, so `:detekt-core` should not depend on it
+ * `:detekt-rule-helpers` exists to support rule authors, so `:detekt-core` should not depend on it
  * (#7279). Copying this one function removes every non-suppressor use core makes of that module;
  * what remains is `AnnotationSuppressor` and `FunctionSuppressor`, which is a separate change.
  *

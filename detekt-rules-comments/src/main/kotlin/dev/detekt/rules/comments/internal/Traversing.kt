@@ -1,6 +1,6 @@
 package dev.detekt.rules.comments.internal
 
-import dev.detekt.psi.isProtected
+import dev.detekt.rulehelpers.isProtected
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
 import org.jetbrains.kotlin.psi.psiUtil.isPublic

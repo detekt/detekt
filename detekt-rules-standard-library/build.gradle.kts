@@ -5,10 +5,10 @@ plugins {
 
 dependencies {
     compileOnly(projects.detektApi)
-    compileOnly(projects.detektPsiUtils)
+    compileOnly(projects.detektRuleHelpers)
 
     testImplementation(libs.kotlin.compiler)
-    testRuntimeOnly(projects.detektPsiUtils)
+    testRuntimeOnly(projects.detektRuleHelpers)
     testImplementation(projects.detektApi)
     testImplementation(projects.detektTest)
     testImplementation(projects.detektTestAssertj)

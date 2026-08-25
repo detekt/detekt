@@ -2,8 +2,8 @@ package dev.detekt.suppressors
 
 import dev.detekt.api.Rule
 import dev.detekt.api.valueOrDefault
-import dev.detekt.psi.AnnotationExcluder
-import dev.detekt.psi.fullyQualifiedNameGlobToRegex
+import dev.detekt.rulehelpers.AnnotationExcluder
+import dev.detekt.rulehelpers.fullyQualifiedNameGlobToRegex
 import dev.detekt.tooling.api.AnalysisMode
 import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtElement

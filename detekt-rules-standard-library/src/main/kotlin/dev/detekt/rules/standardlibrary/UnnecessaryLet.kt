@@ -5,9 +5,9 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
-import dev.detekt.psi.firstParameterOrNull
-import dev.detekt.psi.isCalling
-import dev.detekt.psi.receiverIsUsed
+import dev.detekt.rulehelpers.firstParameterOrNull
+import dev.detekt.rulehelpers.isCalling
+import dev.detekt.rulehelpers.receiverIsUsed
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.name.CallableId
