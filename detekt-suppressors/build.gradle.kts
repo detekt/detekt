@@ -6,7 +6,7 @@ dependencies {
     api(projects.detektApi)
     api(projects.detektTooling)
     implementation(libs.kotlin.compiler)
-    implementation(projects.detektPsiUtils)
+    implementation(projects.detektRuleHelpers)
 
     testImplementation(projects.detektTest)
     testImplementation(projects.detektTestJunit)

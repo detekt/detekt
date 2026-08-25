@@ -45,7 +45,7 @@ dependencies {
     jacocoAggregation(projects.detektGenerator)
     jacocoAggregation(projects.detektMetrics)
     jacocoAggregation(projects.detektParser)
-    jacocoAggregation(projects.detektPsiUtils)
+    jacocoAggregation(projects.detektRuleHelpers)
     jacocoAggregation(projects.detektReportHtml)
     jacocoAggregation(projects.detektReportSarif)
     jacocoAggregation(projects.detektReportStatistics)
