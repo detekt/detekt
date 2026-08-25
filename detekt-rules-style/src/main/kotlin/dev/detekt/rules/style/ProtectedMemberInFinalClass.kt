@@ -6,9 +6,9 @@ import dev.detekt.api.DetektVisitor
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.Rule
-import dev.detekt.psi.isJvmFinalizeFunction
-import dev.detekt.psi.isOpen
-import dev.detekt.psi.isOverride
+import dev.detekt.rulehelpers.isJvmFinalizeFunction
+import dev.detekt.rulehelpers.isOpen
+import dev.detekt.rulehelpers.isOverride
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction

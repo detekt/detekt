@@ -7,7 +7,7 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.Rule
 import dev.detekt.api.config
-import dev.detekt.psi.pathGlobToRegex
+import dev.detekt.rulehelpers.pathGlobToRegex
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtReturnExpression
