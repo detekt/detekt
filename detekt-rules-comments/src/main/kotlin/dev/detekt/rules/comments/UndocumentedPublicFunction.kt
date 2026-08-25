@@ -6,8 +6,8 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.Rule
 import dev.detekt.api.config
-import dev.detekt.psi.isProtected
-import dev.detekt.psi.isPublicNotOverridden
+import dev.detekt.rulehelpers.isProtected
+import dev.detekt.rulehelpers.isPublicNotOverridden
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.isPublic
