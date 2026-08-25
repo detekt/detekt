@@ -2,7 +2,7 @@ package dev.detekt.core.util
 
 import dev.detekt.api.Config
 import dev.detekt.api.valueOrDefault
-import dev.detekt.psi.absolutePath
+import dev.detekt.core.absolutePath
 import dev.detekt.utils.PathFilters
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
