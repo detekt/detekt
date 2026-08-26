@@ -462,6 +462,40 @@ class UnusedParameterSpec {
         }
 
         @Test
+        fun `does not report unused parameters of a data class secondary constructor`() {
+            val code = """
+                data class A(val x: Int) {
+                    constructor(x: Int, unused: Int) : this(x)
+                }
+            """.trimIndent()
+
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        @Test
+        fun `does not report unused parameters of a value class constructor`() {
+            val code = """
+                @JvmInline
+                value class A(private val x: Int) {
+                    constructor(x: Int, unused: Int) : this(x)
+                }
+            """.trimIndent()
+
+            assertThat(subject.lint(code, compile = false)).isEmpty()
+        }
+
+        @Test
+        fun `does not report unused parameters of an inline class constructor`() {
+            val code = """
+                inline class A(private val x: Int) {
+                    constructor(x: Int, unused: Int) : this(x)
+                }
+            """.trimIndent()
+
+            assertThat(subject.lint(code, compile = false)).isEmpty()
+        }
+
+        @Test
         fun `does not report a constructor property`() {
             val code = """
                 class A(val unused: String)

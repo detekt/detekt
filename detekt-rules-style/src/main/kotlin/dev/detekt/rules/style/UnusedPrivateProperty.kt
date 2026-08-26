@@ -134,8 +134,8 @@ private class UnusedPrivatePropertyVisitor(private val allowedNames: Regex) : De
 
         constructor.valueParameters
             .filter {
-                it.isPrivate() &&
-                    it.isPropertyParameter() &&
+                it.isPropertyParameter() &&
+                    it.isPrivate() &&
                     !constructor.isExpectClassConstructor() &&
                     !constructor.isDataOrValueClassConstructor()
             }

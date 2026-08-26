@@ -90,16 +90,18 @@ private class UnusedParameterVisitor(private val allowedNames: Regex) : DetektVi
             return
         }
 
-        collectParameters(function.valueParameterList?.parameters.orEmpty(), function)
+        collectParameters(function.valueParameters, function)
 
         super.visitNamedFunction(function)
     }
 
     override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {
-        val klass = constructor.containingClassOrObject
-        if (constructor.isRelevant() && klass != null) {
+        if (constructor.isRelevant()) {
             // A parameter declared with `val` or `var` is a property, so UnusedPrivateProperty owns it.
-            collectParameters(constructor.valueParameters.filterNot { it.isPropertyParameter() }, klass)
+            collectParameters(
+                constructor.valueParameters.filterNot { it.isPropertyParameter() },
+                constructor.getContainingClassOrObject(),
+            )
         }
 
         super.visitPrimaryConstructor(constructor)
@@ -144,10 +146,12 @@ private class UnusedParameterVisitor(private val allowedNames: Regex) : DetektVi
 
     private fun KtNamedFunction.isRelevant() = !isAllowedToHaveUnusedParameters()
 
-    private fun KtConstructor<*>.isRelevant(): Boolean {
-        if (isExpect() || isActual()) return false
+    private fun KtConstructor<*>.isRelevant() = !isAllowedToHaveUnusedParameters()
+
+    private fun KtConstructor<*>.isAllowedToHaveUnusedParameters(): Boolean {
+        if (isActual()) return true
         val klass = containingClassOrObject as? KtClass ?: return false
-        return !klass.isExpect() && !klass.isData() && !klass.isValue() && !klass.isInline()
+        return klass.isData() || klass.isValue() || klass.isInline()
     }
 
     private fun KtNamedFunction.isAllowedToHaveUnusedParameters() =
