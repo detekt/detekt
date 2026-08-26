@@ -628,7 +628,6 @@ class UnusedPrivatePropertySpec(val env: KotlinEnvironmentContainer) {
     @Nested
     inner class `properties in primary constructors` {
 
-        
         @Test
         fun `not reports used vararg parameter`() {
             val code = """
@@ -668,10 +667,12 @@ class UnusedPrivatePropertySpec(val env: KotlinEnvironmentContainer) {
             val code = """
                 class Test(private val unused: Any)
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code))
+                .singleElement()
+                .hasMessage("Private property `unused` is unused.")
+                .hasTextLocation("unused")
         }
 
-        
         @Test
         fun `does not report public property`() {
             val code = """
@@ -722,7 +723,10 @@ class UnusedPrivatePropertySpec(val env: KotlinEnvironmentContainer) {
                     }
                 }
             """.trimIndent()
-            assertThat(subject.lintWithContext(env, code)).hasSize(1)
+            assertThat(subject.lintWithContext(env, code))
+                .singleElement()
+                .hasMessage("Private property `text` is only used as constructor parameter.")
+                .hasTextLocation(18 to 21)
         }
 
         @Test
@@ -841,7 +845,7 @@ class UnusedPrivatePropertySpec(val env: KotlinEnvironmentContainer) {
 
     @Nested
     inner class `parameters in primary constructors` {
-        
+
         @Test
         fun `does not report used parameter for calling super`() {
             val code = """
@@ -851,8 +855,6 @@ class UnusedPrivatePropertySpec(val env: KotlinEnvironmentContainer) {
             assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
 
-        
-        
         @Test
         fun `reports parameter used for delegation`() {
             val code = """
@@ -865,8 +867,4 @@ class UnusedPrivatePropertySpec(val env: KotlinEnvironmentContainer) {
             assertThat(subject.lintWithContext(env, code)).isEmpty()
         }
     }
-
-    @Nested
-    inner class `secondary parameters` {
-            }
 }

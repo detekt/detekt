@@ -71,6 +71,8 @@ tasks {
         filesMatching("META-INF/services/**") {
             duplicatesStrategy = DuplicatesStrategy.INCLUDE
         }
+        @Suppress("DEPRECATION") // This flag will be disabled and removed in the next major version of Shadow.
+        enableKotlinModuleRemapping = false
     }
 
     shadowDistZip {

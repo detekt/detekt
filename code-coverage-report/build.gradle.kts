@@ -27,6 +27,7 @@ reporting {
                     ":detekt-rules-performance:copyConfigToResources",
                     ":detekt-rules-potential-bugs:copyConfigToResources",
                     ":detekt-rules-ruleauthors:copyConfigToResources",
+                    ":detekt-rules-standard-library:copyConfigToResources",
                     ":detekt-rules-style:copyConfigToResources",
                 )
             }

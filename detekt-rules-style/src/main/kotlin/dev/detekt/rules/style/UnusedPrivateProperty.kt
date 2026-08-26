@@ -94,15 +94,26 @@ private class UnusedPrivatePropertyVisitor(private val allowedNames: Regex) : De
     private val classProperties = hashSetOf<KtNamedDeclaration>()
     private val usedClassProperties = hashSetOf<PsiElement>()
 
+    private val usedConstructorParameters = hashSetOf<PsiElement>()
+
     fun getUnusedReports(): List<Finding> {
         val propertiesReport = classProperties
             .filter { it.psiOrParent !in usedClassProperties }
             .filter { !allowedNames.matches(it.nameAsSafeName.identifier) }
             .map {
-                Finding(
-                    entity = Entity.atName(it),
-                    message = "Private property `${it.nameAsSafeName.identifier}` is unused."
-                )
+                if (it.psiOrParent in usedConstructorParameters) {
+                    it as KtParameter
+                    Finding(
+                        entity = Entity.from(checkNotNull(it.valOrVarKeyword)),
+                        message = "Private property `${it.nameAsSafeName.identifier}` is only used as constructor " +
+                            "parameter."
+                    )
+                } else {
+                    Finding(
+                        entity = Entity.atName(it),
+                        message = "Private property `${it.nameAsSafeName.identifier}` is unused."
+                    )
+                }
             }
 
         val topLevelPropertyReport = topLevelProperties
@@ -171,6 +182,8 @@ private class UnusedPrivatePropertyVisitor(private val allowedNames: Regex) : De
                         psi is KtParameter && psi.hasValOrVar() -> {
                             if (!expression.isInPropertyInitializer(psi)) {
                                 usedClassProperties.add(psi)
+                            } else {
+                                usedConstructorParameters.add(psi)
                             }
                         }
                     }
