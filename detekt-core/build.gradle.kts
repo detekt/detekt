@@ -90,18 +90,11 @@ val generateDefaultDetektConfig = tasks.register("generateDefaultDetektConfig") 
                           # - 'ClassCountProcessor'
                           # - 'FunctionCountProcessor'
                           # - 'PropertyCountProcessor'
-                          # - 'ProjectCyclomaticComplexityProcessor'
-                          # - 'ProjectCognitiveComplexityProcessor'
-                          # - 'ProjectLLOCProcessor'
-                          # - 'ProjectCLOCProcessor'
-                          # - 'ProjectLOCProcessor'
-                          # - 'ProjectSLOCProcessor'
                         
                         console-reports:
                           active: true
                           exclude:
                              - 'ProjectStatisticsReport'
-                             - 'ComplexityReport'
                              - 'NotificationReport'
                              - 'IssuesReport'
                              - 'FileBasedIssuesReport'
