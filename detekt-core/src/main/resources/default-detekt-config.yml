@@ -558,6 +558,8 @@ standard-library:
     active: false
   UnnecessaryApply:
     active: true
+  UnnecessaryChainedSafeCall:
+    active: false
   UnnecessaryFilter:
     active: true
   UnnecessaryLet:
