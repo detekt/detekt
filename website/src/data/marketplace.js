@@ -57,6 +57,13 @@ export const tagTypes = {
       "https://github.com/topics/detekt-plugin"
     ],
   },
+  integration: {
+    color: "#3578e5",
+    description: "A tool that integrates detekt as part of a larger solution",
+    communityUrls: [
+      "https://github.com/topics/detekt"
+    ],
+  },
 };
 
 // Add sites to this list
@@ -420,6 +427,14 @@ export const extensions = [
       "LibraryEntitiesShouldNotBePublic",
     ],
     usesTypeResolution: true,
+  },
+  {
+    title: "MegaLinter",
+    description:
+      "Open-source linters aggregator for CI that runs detekt out of the box on Kotlin projects, alongside 100+ other linters.",
+    repo: "https://github.com/oxsecurity/megalinter",
+    docs: "https://megalinter.io/latest/descriptors/kotlin_detekt/",
+    tags: ["integration"],
   },
   {
     title: "Operator",
