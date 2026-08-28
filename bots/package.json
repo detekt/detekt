@@ -6,7 +6,7 @@
   "main": "index.js",
   "license": "MIT",
   "devDependencies": {
-    "danger": "13.0.10"
+    "danger": "14.0.7"
   },
   "resolutions": {
   }
