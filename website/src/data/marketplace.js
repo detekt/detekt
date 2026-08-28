@@ -184,6 +184,13 @@ export const extensions = [
     tags: ["ruleset"],
   },
   {
+    title: "Complexity Report",
+    description: "A collection of processors and one reporter to show the complexity of your project.",
+    repo: "https://github.com/detekt/detekt",
+    usesTypeResolution: false,
+    tags: ["processor", "reporter"],
+  },
+  {
     title: "Detekt Rule Authors",
     description:
       "The rule authors ruleset provides rules that ensures good practices when writing detekt rules.",
@@ -413,6 +420,13 @@ export const extensions = [
       "LibraryEntitiesShouldNotBePublic",
     ],
     usesTypeResolution: true,
+  },
+  {
+    title: "Project statistics",
+    description: "A collection of processors and one reporter to show you counts statistics of your project.",
+    repo: "https://github.com/detekt/detekt",
+    usesTypeResolution: false,
+    tags: ["processor", "reporter"],
   },
   {
     title: "Operator",

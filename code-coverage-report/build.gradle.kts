@@ -27,6 +27,7 @@ reporting {
                     ":detekt-rules-performance:copyConfigToResources",
                     ":detekt-rules-potential-bugs:copyConfigToResources",
                     ":detekt-rules-ruleauthors:copyConfigToResources",
+                    ":detekt-rules-standard-library:copyConfigToResources",
                     ":detekt-rules-style:copyConfigToResources",
                 )
             }
@@ -62,6 +63,7 @@ dependencies {
     jacocoAggregation(projects.detektRulesNaming)
     jacocoAggregation(projects.detektRulesPerformance)
     jacocoAggregation(projects.detektRulesRuleauthors)
+    jacocoAggregation(projects.detektRulesStandardLibrary)
     jacocoAggregation(projects.detektRulesStyle)
     jacocoAggregation(projects.detektTestUtils)
     jacocoAggregation(projects.detektTooling)

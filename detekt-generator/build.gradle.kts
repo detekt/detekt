@@ -38,6 +38,7 @@ dependencies {
     generatedDocumentation(projects.detektRulesPerformance) { targetConfiguration = "generatedDocumentation" }
     generatedDocumentation(projects.detektRulesPotentialBugs) { targetConfiguration = "generatedDocumentation" }
     generatedDocumentation(projects.detektRulesRuleauthors) { targetConfiguration = "generatedDocumentation" }
+    generatedDocumentation(projects.detektRulesStandardLibrary) { targetConfiguration = "generatedDocumentation" }
     generatedDocumentation(projects.detektRulesStyle) { targetConfiguration = "generatedDocumentation" }
 
     testImplementation(projects.detektTestUtils)
@@ -74,6 +75,11 @@ tasks.register("generateWebsite") {
         ":dokkaGenerate",
         gradle.includedBuild("detekt-gradle-plugin").task(":dokkaGenerate"),
     )
+}
+
+tasks.shadowJar {
+    @Suppress("DEPRECATION") // This flag will be disabled and removed in the next major version of Shadow.
+    enableKotlinModuleRemapping = false
 }
 
 val copyDocumentation = tasks.register<Copy>("copyDocumentation") {

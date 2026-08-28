@@ -32,7 +32,6 @@ public final class dev/detekt/tooling/api/BaselineProvider$Companion {
 public abstract interface class dev/detekt/tooling/api/DefaultConfigurationProvider {
 	public static final field Companion Ldev/detekt/tooling/api/DefaultConfigurationProvider$Companion;
 	public abstract fun copy (Ljava/nio/file/Path;)V
-	public abstract fun get ()Ldev/detekt/api/Config;
 	public abstract fun init (Ldev/detekt/tooling/api/spec/ExtensionsSpec;)V
 }
 

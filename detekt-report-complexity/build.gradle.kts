@@ -4,10 +4,8 @@ plugins {
 
 dependencies {
     compileOnly(projects.detektApi)
-    compileOnly(projects.detektPsiUtils)
     compileOnly(projects.detektMetrics)
 
-    testRuntimeOnly(projects.detektPsiUtils)
     testRuntimeOnly(projects.detektApi)
     testRuntimeOnly(projects.detektMetrics)
     testImplementation(projects.detektTest)
