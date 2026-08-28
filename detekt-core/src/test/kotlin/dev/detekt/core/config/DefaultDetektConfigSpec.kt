@@ -12,7 +12,6 @@ class DefaultDetektConfigSpec {
 
     private val generalConfigKeys = listOf(
         "config",
-        "processors",
         "console-reports",
     )
 

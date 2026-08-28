@@ -1,16 +1,6 @@
-processors:
-  active: true
-  exclude:
-  # - 'KtFileCountProcessor'
-  # - 'PackageCountProcessor'
-  # - 'ClassCountProcessor'
-  # - 'FunctionCountProcessor'
-  # - 'PropertyCountProcessor'
-
 console-reports:
   active: true
   exclude:
-    - 'ProjectStatisticsReport'
     - 'NotificationReport'
     - 'IssuesReport'
     - 'FileBasedIssuesReport'
