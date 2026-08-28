@@ -8,6 +8,7 @@ import dev.detekt.test.lint
 import dev.detekt.test.toConfig
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.util.regex.PatternSyntaxException
 
@@ -24,6 +25,7 @@ class ForbiddenImportSpec {
         import com.example.R.string
         import net.example.R.dimen
         import net.example.R.dimension
+        import java.util.*
     """.trimIndent()
 
     @Test
@@ -169,22 +171,39 @@ class ForbiddenImportSpec {
         assertThat(findings).hasSize(1)
     }
 
-    @Test
-    @DisplayName("should match a star import without its trailing star")
-    fun starImportIsMatchedWithoutItsStar() {
-        val starCode = "import kotlin.jvm.*"
-        val findings = ForbiddenImport(TestConfig(FORBIDDEN_IMPORTS to listOf("kotlin.jvm")))
-            .lint(starCode, compile = false)
-        assertThat(findings).singleElement()
-            .hasMessage("The import `kotlin.jvm` has been forbidden in the detekt config.")
-    }
+    @Nested
+    inner class `Star imports - 9564` {
 
-    @Test
-    @DisplayName("should not report a star import for the pattern kotlin.jvm.*")
-    fun starImportIsNotMatchedByAPatternWithATrailingStar() {
-        val starCode = "import kotlin.jvm.*"
-        val findings = ForbiddenImport(TestConfig(FORBIDDEN_IMPORTS to listOf("kotlin.jvm.*")))
-            .lint(starCode, compile = false)
-        assertThat(findings).isEmpty()
+        val code = """
+            import java.util.*
+            import java.util.Date
+            import java.util.UUID.*
+            import java.util.UUID
+        """.trimIndent()
+
+        @Test
+        fun `matches all`() {
+            assertThat(
+                ForbiddenImport(TestConfig(FORBIDDEN_IMPORTS to listOf("java.util.*")))
+                    .lint(code, compile = false)
+            )
+                .hasSize(4)
+                .extracting("message")
+                .containsExactlyInAnyOrder(
+                    "The import `java.util.*` has been forbidden in the detekt config.",
+                    "The import `java.util.Date` has been forbidden in the detekt config.",
+                    "The import `java.util.UUID.*` has been forbidden in the detekt config.",
+                    "The import `java.util.UUID` has been forbidden in the detekt config.",
+                )
+        }
+
+        @Test
+        fun `matches none`() {
+            assertThat(
+                ForbiddenImport(TestConfig(FORBIDDEN_IMPORTS to listOf("java.util")))
+                    .lint(code, compile = false)
+            )
+                .isEmpty()
+        }
     }
 }
