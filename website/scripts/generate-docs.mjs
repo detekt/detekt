@@ -1000,6 +1000,7 @@ function generateCliOptionsFile() {
     else if (/AnalysisMode\.(\w+)/.test(defaultExpr)) defaultValue = defaultExpr.match(/AnalysisMode\.(\w+)/)[1];
     else if (/FailureSeverity\.(\w+)/.test(defaultExpr)) defaultValue = defaultExpr.match(/FailureSeverity\.(\w+)/)[1];
     else if (/JvmTarget\.DEFAULT/.test(defaultExpr)) defaultValue = '1.8';
+    else if (/JvmTarget\.JVM_17/.test(defaultExpr)) defaultValue = '17';
 
     const possibleValues = POSSIBLE_VALUES[converter] ?? POSSIBLE_VALUES[fieldType] ?? null;
     const primaryName = names.find(n => n.startsWith('--')) ?? names[0];
