@@ -86,12 +86,6 @@ abstract class DetektCreateBaselineTask @Inject constructor(
     @get:Internal
     abstract val friendPaths: ConfigurableFileCollection
 
-    /**
-     * Classes compiled from this project's generated sources (e.g. BuildConfig and view binding),
-     * folded into [classpath] so generated types resolve under AGP built-in Kotlin. Empty for
-     * JVM/KMP. Internal wiring: AGP only exposes these via `ScopedArtifact.CLASSES`, whose `toGet`
-     * requires task-owned [ListProperty] sinks.
-     */
     @get:Internal
     internal abstract val generatedClassesJars: ListProperty<RegularFile>
 

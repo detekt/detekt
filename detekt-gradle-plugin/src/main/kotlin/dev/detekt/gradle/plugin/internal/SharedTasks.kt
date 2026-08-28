@@ -31,8 +31,6 @@ internal fun Project.registerJvmCompilationDetektTask(
         val siblingTask = compilation.compileTaskProvider.map { it as KotlinJvmCompile }
 
         detektTask.source(source)
-        // classpath also carries this project's generated classes (populated for Android variants in
-        // DetektAndroidCompilations; empty for JVM/KMP), so type resolution can resolve generated types.
         detektTask.classpath.conventionCompat(
             compilation.output.classesDirs,
             siblingTask.map { it.libraries },
@@ -93,8 +91,6 @@ internal fun Project.registerJvmCompilationCreateBaselineTask(
         val siblingTask = compilation.compileTaskProvider.map { it as KotlinJvmCompile }
 
         createBaselineTask.source(source)
-        // classpath also carries this project's generated classes (populated for Android variants in
-        // DetektAndroidCompilations; empty for JVM/KMP), so type resolution can resolve generated types.
         createBaselineTask.classpath.conventionCompat(
             compilation.output.classesDirs,
             siblingTask.map { it.libraries },

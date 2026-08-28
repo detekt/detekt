@@ -676,13 +676,6 @@ class DetektAndroidBuiltInKotlinSpec {
                         it.writeProjectFile("app/src/main/java/Sample.kt", SAMPLE_USING_GENERATED_SOURCES)
                     }
 
-                // Regression for AGP built-in Kotlin: classes compiled from generated Java sources
-                // (BuildConfig, and view binding in real projects) must be on detekt's type-resolution
-                // classpath, else detekt logs "compiler errors found during analysis" and silently
-                // degrades type-aware rules. (R already resolves via the Kotlin compile classpath.)
-                // --rerun-tasks so the always-on build cache cannot mask a regression with a cached
-                // result; the load-bearing assertion is the absence of the "compiler errors found
-                // during analysis" header, which detekt prints unconditionally on unresolved symbols.
                 @Test
                 @DisplayName("task :app:detektMain resolves generated BuildConfig")
                 fun detektMainResolvesGeneratedClasses() {

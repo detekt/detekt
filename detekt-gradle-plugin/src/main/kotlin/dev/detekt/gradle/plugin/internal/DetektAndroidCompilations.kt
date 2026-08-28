@@ -43,11 +43,6 @@ internal object DetektAndroidCompilations {
                     compilation = compilation,
                     source = source,
                 )
-                // Put this component's compiled classes (including classes compiled from generated
-                // Java sources such as BuildConfig and view binding) on detekt's type-resolution
-                // classpath. Built-in Kotlin excludes generated sources from the analyzed source set,
-                // so without their classes type resolution fails on those symbols. ScopedArtifact.CLASSES
-                // (PROJECT scope) also wires the compile dependency.
                 componentArtifacts.forScope(ScopedArtifacts.Scope.PROJECT)
                     .use(detektTask)
                     .toGet(ScopedArtifact.CLASSES, { it.generatedClassesJars }, { it.generatedClassesDirs })
