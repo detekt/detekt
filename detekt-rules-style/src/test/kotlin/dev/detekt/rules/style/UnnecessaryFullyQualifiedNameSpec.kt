@@ -1254,6 +1254,67 @@ class UnnecessaryFullyQualifiedNameSpec(val env: KotlinEnvironmentContainer) {
 
             assertThat(subject.lintWithContext(env, code, importedOuter, otherOuter)).isEmpty()
         }
+
+        @Test
+        fun `does report when a class is defined in the same package but not used`() {
+            val code = """
+                package foo
+
+                class Asdf
+
+                fun main() {
+                    bar.Asdf("")
+                }
+            """.trimIndent()
+            val extraClassCode = """
+                package bar
+                class Asdf(string: String)
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code, extraClassCode)).hasSize(1)
+        }
+
+        @Test
+        fun `does not report when a class is defined in the same package and it is used`() {
+            val code = """
+                package foo
+
+                class Asdf
+
+                fun main() {
+                    Asdf()
+                    bar.Asdf("")
+                }
+            """.trimIndent()
+            val extraClassCode = """
+                package bar
+                class Asdf(string: String)
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code, extraClassCode)).isEmpty()
+        }
+
+        @Test
+        fun `does report when the same-package class is shadowed by an explicit import`() {
+            val code = """
+                package foo
+
+                import bar.Asdf
+
+                class Asdf
+
+                fun main() {
+                    Asdf("")
+                    bar.Asdf("")
+                }
+            """.trimIndent()
+            val extraClassCode = """
+                package bar
+                class Asdf(string: String)
+            """.trimIndent()
+
+            assertThat(subject.lintWithContext(env, code, extraClassCode)).hasSize(1)
+        }
     }
 
     // https://github.com/detekt/detekt/issues/9282
