@@ -1,4 +1,4 @@
-package dev.detekt.rules.standardlibrary
+package dev.detekt.rules.style
 
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
@@ -70,7 +70,8 @@ class UnnecessaryChainedSafeCall(config: Config) :
     private fun KtCallExpression.checkedValue(): KtExpression? = valueArguments.firstOrNull()?.getArgumentExpression()
 
     private fun findingMessage(check: String): String =
-        "`$check` checks the result of a safe call chain. Check nullable values before later calls."
+        "`$check` evaluates the result of the entire safe call chain. " +
+            "Assert non-nullability on the specific nullable values before chaining further calls."
 
     companion object {
         private val kotlinNullCheckFunctions = listOf(

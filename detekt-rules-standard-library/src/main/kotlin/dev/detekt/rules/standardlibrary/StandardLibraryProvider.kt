@@ -35,7 +35,6 @@ class StandardLibraryProvider : DefaultRuleSetProvider {
                 ::TrimMultilineRawString,
                 ::UnnecessaryAny,
                 ::UnnecessaryApply,
-                ::UnnecessaryChainedSafeCall,
                 ::UnnecessaryFilter,
                 ::UnnecessaryLet,
                 ::UnnecessaryReversed,

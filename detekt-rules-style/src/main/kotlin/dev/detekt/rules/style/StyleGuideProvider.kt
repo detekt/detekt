@@ -95,6 +95,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
                 ::MultilineLambdaItParameter,
                 ::StringShouldBeRawString,
                 ::UnnecessaryBackticks,
+                ::UnnecessaryChainedSafeCall,
                 ::MaxChainedCallsOnSameLine,
                 ::DoubleNegativeLambda,
                 ::DoubleNegativeExpression,

@@ -1,4 +1,4 @@
-package dev.detekt.rules.standardlibrary
+package dev.detekt.rules.style
 
 import dev.detekt.api.Config
 import dev.detekt.test.junit.KotlinCoreEnvironmentTest
@@ -27,7 +27,8 @@ class UnnecessaryChainedSafeCallSpec(private val env: KotlinEnvironmentContainer
 
         assertThat(findings).hasSize(2)
         assertThat(findings).allMatch {
-            it.message == "`!!` checks the result of a safe call chain. Check nullable values before later calls."
+            it.message == "`!!` evaluates the result of the entire safe call chain. " +
+                "Assert non-nullability on the specific nullable values before chaining further calls."
         }
     }
 
@@ -45,8 +46,10 @@ class UnnecessaryChainedSafeCallSpec(private val env: KotlinEnvironmentContainer
         val findings = rule.lintWithContext(env, code)
 
         assertThat(findings.map { it.message }).containsExactly(
-            "`requireNotNull` checks the result of a safe call chain. Check nullable values before later calls.",
-            "`checkNotNull` checks the result of a safe call chain. Check nullable values before later calls.",
+            "`requireNotNull` evaluates the result of the entire safe call chain. " +
+                "Assert non-nullability on the specific nullable values before chaining further calls.",
+            "`checkNotNull` evaluates the result of the entire safe call chain. " +
+                "Assert non-nullability on the specific nullable values before chaining further calls."
         )
     }
 
@@ -60,6 +63,21 @@ class UnnecessaryChainedSafeCallSpec(private val env: KotlinEnvironmentContainer
                 val assertedValue = a.b!!.value
                 val requiredValue = requireNotNull(a.b).value
                 val checkedValue = checkNotNull(a.b).value
+            }
+        """.trimIndent()
+
+        assertThat(rule.lintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
+    fun `does not report safe call chains without a null check`() {
+        val code = """
+            class A(val b: B?)
+            class B(val c: String?)
+
+            fun test(nullableA: A?) {
+                val shortChain = nullableA?.b
+                val longChain = nullableA?.b?.c
             }
         """.trimIndent()
 

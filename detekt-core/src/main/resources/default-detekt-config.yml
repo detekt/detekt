@@ -558,8 +558,6 @@ standard-library:
     active: false
   UnnecessaryApply:
     active: true
-  UnnecessaryChainedSafeCall:
-    active: false
   UnnecessaryFilter:
     active: true
   UnnecessaryLet:
@@ -807,6 +805,8 @@ style:
     active: false
   UnnecessaryBracesAroundTrailingLambda:
     active: true
+  UnnecessaryChainedSafeCall:
+    active: false
   UnnecessaryCompanionObjectAccess:
     active: false
   UnnecessaryFullyQualifiedName:
