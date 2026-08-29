@@ -137,7 +137,7 @@ If you want to use a SNAPSHOT version, you can find more info on [this documenta
 
 ##### Executing detekt
 
-detekt 2.0 requires Gradle 7.6.3 or newer. detekt 1.23.8 requires Gradle 6.8.3 or newer.
+detekt 2.0 requires Gradle 8.14.3 or newer. detekt 1.23.8 requires Gradle 6.8.3 or newer.
 The recommended versions together with the other tools recommended versions are:
 
 | Detekt Version  | Gradle   | Kotlin   | AGP      | Java Target Level | JDK Max Version |
