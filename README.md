@@ -56,9 +56,16 @@ You can find [other ways to install detekt here](https://detekt.dev/cli.html)
 
 #### with Gradle
 
+detekt 2.0 is recommended for its new features, but it is still available only as a pre-release.
+Use the stable 1.x setup below if your project cannot adopt an alpha release yet.
+
+##### detekt 2.0 preview (recommended)
+
+This example uses the current `2.0.0-alpha.6` release and the Kotlin DSL:
+
 ```kotlin
 plugins {
-    id("io.gitlab.arturbosch.detekt") version "[version]"
+    id("dev.detekt") version "2.0.0-alpha.6"
 }
 
 repositories {
@@ -67,40 +74,62 @@ repositories {
 
 detekt {
     buildUponDefaultConfig = true // preconfigure defaults
-    allRules = false // activate all available (even unstable) rules.
+    allRules = false // do not activate every rule by default
     config.setFrom("$projectDir/config/detekt.yml") // point to your custom config defining rules to run, overwriting default behavior
     baseline = file("$projectDir/config/baseline.xml") // a way of suppressing issues before introducing detekt
 }
 
-tasks.withType<Detekt>().configureEach {
+tasks.withType<dev.detekt.gradle.Detekt>().configureEach {
     reports {
         html.required.set(true) // observe findings in your browser with structure and code snippets
         checkstyle.required.set(true) // checkstyle(xml) like format mainly for integrations like Jenkins
         sarif.required.set(true) // standardized SARIF format (https://sarifweb.azurewebsites.net/) to support integrations with GitHub Code Scanning
         markdown.required.set(true) // simple Markdown format
     }
+    jvmTarget.set("1.8")
+}
+tasks.withType<dev.detekt.gradle.DetektCreateBaselineTask>().configureEach {
+    jvmTarget.set("1.8")
+}
+```
+
+##### detekt 1.x stable
+
+Use this setup for the latest final 1.x release, `1.23.8`:
+
+```kotlin
+plugins {
+    id("io.gitlab.arturbosch.detekt") version "1.23.8"
 }
 
-// Groovy DSL
-tasks.withType(Detekt).configureEach {
-    jvmTarget = "1.8"
-}
-tasks.withType(DetektCreateBaselineTask).configureEach {
-    jvmTarget = "1.8"
+repositories {
+    mavenCentral()
 }
 
-// or
+detekt {
+    buildUponDefaultConfig = true // preconfigure defaults
+    allRules = false // do not activate every rule by default
+    config.setFrom("$projectDir/config/detekt.yml") // point to your custom config defining rules to run, overwriting default behavior
+    baseline = file("$projectDir/config/baseline.xml") // a way of suppressing issues before introducing detekt
+}
 
-// Kotlin DSL
-tasks.withType<Detekt>().configureEach {
+tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+    reports {
+        html.required.set(true) // observe findings in your browser with structure and code snippets
+        xml.required.set(true) // checkstyle-compatible XML format, mainly for integrations like Jenkins
+        sarif.required.set(true) // standardized SARIF format (https://sarifweb.azurewebsites.net/) to support integrations with GitHub Code Scanning
+        md.required.set(true) // simple Markdown format
+    }
     jvmTarget = "1.8"
 }
-tasks.withType<DetektCreateBaselineTask>().configureEach {
+tasks.withType<io.gitlab.arturbosch.detekt.DetektCreateBaselineTask>().configureEach {
     jvmTarget = "1.8"
 }
 ```
 
-See [maven central](https://search.maven.org/artifact/io.gitlab.arturbosch.detekt/detekt-cli) for releases and [sonatype](https://central.sonatype.com/repository/maven-snapshots/) for snapshots.
+See [Maven Central](https://central.sonatype.com/artifact/dev.detekt/detekt-cli) for 2.0 releases,
+[Maven Central](https://central.sonatype.com/artifact/io.gitlab.arturbosch.detekt/detekt-cli) for 1.x releases,
+and [Sonatype](https://central.sonatype.com/repository/maven-snapshots/) for snapshots.
 
 If you want to use a SNAPSHOT version, you can find more info on [this documentation page](https://detekt.dev/snapshots.html).
 
@@ -108,7 +137,8 @@ If you want to use a SNAPSHOT version, you can find more info on [this documenta
 
 ##### Executing detekt
 
-Gradle 6.8.3+ is the minimum requirement. However, the recommended versions together with the other tools recommended versions are:
+detekt 2.0 requires Gradle 8.14.3 or newer. detekt 1.23.8 requires Gradle 6.8.3 or newer.
+The recommended versions together with the other tools recommended versions are:
 
 | Detekt Version  | Gradle   | Kotlin   | AGP      | Java Target Level | JDK Max Version |
 |-----------------|----------|----------|----------|-------------------|-----------------|
@@ -131,17 +161,29 @@ Java 17 or higher is required to build detekt.
 detekt itself provides a wrapper over [ktlint](https://github.com/pinterest/ktlint) as the `ktlint` rule set
 which can be easily added to the Gradle configuration:
 
+For detekt `2.0.0-alpha.6`:
+
 ```kotlin
 dependencies {
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-rules-ktlint-wrapper:[version]")
+    detektPlugins("dev.detekt:detekt-rules-ktlint-wrapper:2.0.0-alpha.6")
 }
 ```
 
 Similarly, there are extra rule sets available for detekt from detekt:
 ```kotlin
 dependencies {
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-rules-libraries:[version]")
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-rules-ruleauthors:[version]")
+    detektPlugins("dev.detekt:detekt-rules-libraries:2.0.0-alpha.6")
+    detektPlugins("dev.detekt:detekt-rules-ruleauthors:2.0.0-alpha.6")
+}
+```
+
+For detekt `1.23.8`, the ktlint wrapper keeps its former `detekt-formatting` artifact name:
+
+```kotlin
+dependencies {
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.8")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-rules-libraries:1.23.8")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-rules-ruleauthors:1.23.8")
 }
 ```
 For more info visit the [Detekt Marketplace](https://detekt.dev/marketplace).
