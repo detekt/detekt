@@ -13,23 +13,7 @@ reporting {
         create<JacocoCoverageReport>("jacocoMergedFunctionalTestReport") {
             testSuiteName = "functionalTest"
             reportTask {
-                dependsOn(
-                    ":detekt-core:generateDefaultDetektConfig",
-                    ":detekt-core:generateDeprecationList",
-                    ":detekt-rules-comments:copyConfigToResources",
-                    ":detekt-rules-complexity:copyConfigToResources",
-                    ":detekt-rules-coroutines:copyConfigToResources",
-                    ":detekt-rules-empty-blocks:copyConfigToResources",
-                    ":detekt-rules-exceptions:copyConfigToResources",
-                    ":detekt-rules-ktlint-wrapper:copyConfigToResources",
-                    ":detekt-rules-libraries:copyConfigToResources",
-                    ":detekt-rules-naming:copyConfigToResources",
-                    ":detekt-rules-performance:copyConfigToResources",
-                    ":detekt-rules-potential-bugs:copyConfigToResources",
-                    ":detekt-rules-ruleauthors:copyConfigToResources",
-                    ":detekt-rules-standard-library:copyConfigToResources",
-                    ":detekt-rules-style:copyConfigToResources",
-                )
+                dependsOn(":detekt-core:generateDefaultDetektConfig", ":detekt-core:generateDeprecationList")
             }
         }
     }

@@ -43,12 +43,6 @@ project.plugins.withId("org.jetbrains.kotlin.jvm") {
         }
     }
 
-    val copyConfigToResources = tasks.register<Copy>("copyConfigToResources") {
-        from(generateConfig)
-        into(mainSourceSet.resources.srcDirs.single().resolve("config"))
-        include("config.yml")
-    }
-
     val generatedConfig = configurations.consumable("generatedConfig")
     val generatedDeprecations = configurations.consumable("generatedDeprecations")
     val generatedDocumentation = configurations.consumable("generatedDocumentation")
@@ -69,12 +63,18 @@ project.plugins.withId("org.jetbrains.kotlin.jvm") {
         addConfigToResources.convention(true)
     }
 
-    if (extension.addConfigToResources.get()) {
-        tasks.named("processResources").configure {
-            inputs.files(copyConfigToResources)
+    tasks.named<ProcessResources>("processResources") {
+        if (extension.addConfigToResources.get()) {
+            from(generateConfig.map { it.outputs.files }) {
+                include("config/")
+            }
         }
-        tasks.named("sourcesJar").configure {
-            inputs.files(copyConfigToResources)
+    }
+    tasks.named<Jar>("sourcesJar") {
+        if (extension.addConfigToResources.get()) {
+            from(generateConfig.map { it.outputs.files }) {
+                include("config/")
+            }
         }
     }
 }
