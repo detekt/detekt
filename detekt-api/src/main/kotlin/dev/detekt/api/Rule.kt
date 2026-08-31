@@ -29,7 +29,8 @@ open class Rule(val config: Config, val description: String, val url: URI? = nul
     protected lateinit var languageVersionSettings: LanguageVersionSettings
 
     val autoCorrect: Boolean
-        get() = config.valueOrDefault(Config.AUTO_CORRECT_KEY, false) &&
+        get() = this is AutoCorrectable &&
+            config.valueOrDefault(Config.AUTO_CORRECT_KEY, false) &&
             (config.parent?.valueOrDefault(Config.AUTO_CORRECT_KEY, true) != false)
 
     private val findings: MutableList<Finding> = mutableListOf()
