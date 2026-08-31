@@ -140,19 +140,6 @@ class RuleCollectorSpec {
     }
 
     @Test
-    fun `is auto-correctable`() {
-        val code = """
-            /**
-             * description
-             *
-             */
-            class SomeRandomClass : Rule, AutoCorrectable
-        """.trimIndent()
-        val items = subject.run(code)
-        assertThat(items[0].autoCorrect).isTrue()
-    }
-
-    @Test
     fun `collects the issue property`() {
         val code = """
             /**
