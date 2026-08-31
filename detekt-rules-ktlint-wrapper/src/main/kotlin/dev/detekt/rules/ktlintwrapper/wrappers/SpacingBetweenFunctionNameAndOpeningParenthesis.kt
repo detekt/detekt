@@ -2,8 +2,8 @@ package dev.detekt.rules.ktlintwrapper.wrappers
 
 import com.pinterest.ktlint.ruleset.standard.rules.SpacingBetweenFunctionNameAndOpeningParenthesisRule
 import dev.detekt.api.ActiveByDefault
+import dev.detekt.api.AutoCorrectable
 import dev.detekt.api.Config
-import dev.detekt.api.internal.AutoCorrectable
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
@@ -11,9 +11,9 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  * documentation.
  */
 @ActiveByDefault(since = "1.23.0")
-@AutoCorrectable(since = "1.22.0")
 internal class SpacingBetweenFunctionNameAndOpeningParenthesis(config: Config) :
-    KtlintRule(config, "Ensure consistent spacing between function name and opening parenthesis.") {
+    KtlintRule(config, "Ensure consistent spacing between function name and opening parenthesis."),
+    AutoCorrectable {
 
     override val wrapping = SpacingBetweenFunctionNameAndOpeningParenthesisRule()
 }

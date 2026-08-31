@@ -6,10 +6,10 @@ import com.pinterest.ktlint.rule.engine.core.api.editorconfig.MAX_LINE_LENGTH_PR
 import com.pinterest.ktlint.ruleset.standard.rules.ClassSignatureRule
 import com.pinterest.ktlint.ruleset.standard.rules.ClassSignatureRule.Companion.FORCE_MULTILINE_WHEN_PARAMETER_COUNT_GREATER_OR_EQUAL_THAN_PROPERTY
 import dev.detekt.api.ActiveByDefault
+import dev.detekt.api.AutoCorrectable
 import dev.detekt.api.Config
 import dev.detekt.api.Configuration
 import dev.detekt.api.config
-import dev.detekt.api.internal.AutoCorrectable
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 import dev.detekt.rules.ktlintwrapper.configWithAndroidVariants
 
@@ -18,9 +18,9 @@ import dev.detekt.rules.ktlintwrapper.configWithAndroidVariants
  * documentation.
  */
 @ActiveByDefault(since = "2.0.0")
-@AutoCorrectable(since = "2.0.0")
 internal class ClassSignature(config: Config) :
-    KtlintRule(config, "Ensure class signatures have a consistent format.") {
+    KtlintRule(config, "Ensure class signatures have a consistent format."),
+    AutoCorrectable {
 
     override val wrapping = ClassSignatureRule()
 

@@ -4,9 +4,9 @@ import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfigProper
 import com.pinterest.ktlint.ruleset.standard.rules.ImportOrderingRule
 import com.pinterest.ktlint.ruleset.standard.rules.ImportOrderingRule.Companion.IJ_KOTLIN_IMPORTS_LAYOUT_PROPERTY
 import dev.detekt.api.ActiveByDefault
+import dev.detekt.api.AutoCorrectable
 import dev.detekt.api.Config
 import dev.detekt.api.Configuration
-import dev.detekt.api.internal.AutoCorrectable
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 import dev.detekt.rules.ktlintwrapper.configWithAndroidVariants
 
@@ -16,8 +16,9 @@ import dev.detekt.rules.ktlintwrapper.configWithAndroidVariants
  * For defining import layout patterns see the [KtLint Source Code](https://github.com/pinterest/ktlint/blob/0.50.0/ktlint-ruleset-standard/src/main/kotlin/com/pinterest/ktlint/ruleset/standard/rules/ImportOrderingRule.kt)
  */
 @ActiveByDefault(since = "1.19.0")
-@AutoCorrectable(since = "1.0.0")
-internal class ImportOrdering(config: Config) : KtlintRule(config, "Detects imports in non default order") {
+internal class ImportOrdering(config: Config) :
+    KtlintRule(config, "Detects imports in non default order"),
+    AutoCorrectable {
 
     override val wrapping = ImportOrderingRule()
 

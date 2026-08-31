@@ -2,8 +2,8 @@ package dev.detekt.rules.ktlintwrapper.wrappers
 
 import com.pinterest.ktlint.ruleset.standard.rules.ModifierOrderRule
 import dev.detekt.api.ActiveByDefault
+import dev.detekt.api.AutoCorrectable
 import dev.detekt.api.Config
-import dev.detekt.api.internal.AutoCorrectable
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
@@ -13,8 +13,9 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  * from the standard rules, make sure to enable just one. The pro of this rule is that it can auto-correct the issue.
  */
 @ActiveByDefault(since = "1.0.0")
-@AutoCorrectable(since = "1.0.0")
-internal class ModifierOrdering(config: Config) : KtlintRule(config, "Detects modifiers in non default order") {
+internal class ModifierOrdering(config: Config) :
+    KtlintRule(config, "Detects modifiers in non default order"),
+    AutoCorrectable {
 
     override val wrapping = ModifierOrderRule()
 }
