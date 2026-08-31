@@ -13,14 +13,14 @@ class RuleSpec {
         "undefined, undefined, false",
         "undefined, true,      true",
         "undefined, false,     false",
-        "true,      undefined, false",
+        "true,      undefined, true",
         "true,      true,      true",
         "true,      false,     false",
         "false,     undefined, false",
-        "false,     true,      false",
+        "false,     true,      true",
         "false,     false,     false",
     )
-    fun `preserves autoCorrect configuration behavior for a capable rule`(
+    fun `resolves autoCorrect preferring the rule level over the rule set level`(
         ruleSetLevel: String,
         ruleLevel: String,
         expected: Boolean,
