@@ -2,8 +2,8 @@ package dev.detekt.rules.ktlintwrapper.wrappers
 
 import com.pinterest.ktlint.ruleset.standard.rules.NoEmptyClassBodyRule
 import dev.detekt.api.ActiveByDefault
+import dev.detekt.api.AutoCorrectable
 import dev.detekt.api.Config
-import dev.detekt.api.internal.AutoCorrectable
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
@@ -13,8 +13,9 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  * from the standard rules, make sure to enable just one.
  */
 @ActiveByDefault(since = "1.0.0")
-@AutoCorrectable(since = "1.0.0")
-internal class NoEmptyClassBody(config: Config) : KtlintRule(config, "Reports empty class bodies") {
+internal class NoEmptyClassBody(config: Config) :
+    KtlintRule(config, "Reports empty class bodies"),
+    AutoCorrectable {
 
     override val wrapping = NoEmptyClassBodyRule()
 }
