@@ -7,9 +7,6 @@ kotlin = "2.4.10"
 ktlint = "1.8.0"
 slf4j = "2.0.18"
 
-jvm-target = "1.8"
-java-compile-toolchain = "17"
-
 [libraries]
 # This version of AGP is used for testing and should be updated when new AGP versions are released to ensure detekt's
 # Gradle plugin remains compatible.
