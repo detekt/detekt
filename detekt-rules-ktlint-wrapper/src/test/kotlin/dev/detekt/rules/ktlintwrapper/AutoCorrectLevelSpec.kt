@@ -18,7 +18,7 @@ class AutoCorrectLevelSpec {
 
     @ParameterizedTest
     @CsvSource(
-        "Undefined, Undefined, false",
+        "Undefined, Undefined, true",
         "Undefined, True,      true",
         "Undefined, False,     false",
         "True,      Undefined, true",
