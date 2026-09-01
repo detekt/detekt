@@ -40,13 +40,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ ubuntu-latest ]
-        jdk: [ 17, 21, 25 ]
-        include:
-          - os: windows-latest
-            jdk: 25
-          - os: macos-latest
-            jdk: 25
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout Repo
@@ -55,7 +49,7 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@dd06d9cba3e5552c54d9f8ea23572deb30010f7c # v6
         with:
-          java-version: ${{ matrix.jdk }}
+          java-version: 25
           distribution: 'temurin'
           verify-signature: true
 
