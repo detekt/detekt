@@ -44,7 +44,7 @@ class ReportingSpec {
     }
 
     @Test
-    fun `always applies baseline when its former extension id is disabled`() {
+    fun `always applies baseline when BaselineResultMapping is listed as a disabled extensions`() {
         val issue = createIssue(
             ruleId = "FeatureEnvy/id",
             entity = createIssueEntity(signature = "Signature"),

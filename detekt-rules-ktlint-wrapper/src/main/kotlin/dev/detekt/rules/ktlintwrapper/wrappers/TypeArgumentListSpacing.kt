@@ -4,10 +4,10 @@ import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfigProper
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.INDENT_SIZE_PROPERTY
 import com.pinterest.ktlint.ruleset.standard.rules.TypeArgumentListSpacingRule
 import dev.detekt.api.ActiveByDefault
+import dev.detekt.api.AutoCorrectable
 import dev.detekt.api.Config
 import dev.detekt.api.Configuration
 import dev.detekt.api.config
-import dev.detekt.api.internal.AutoCorrectable
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
@@ -15,9 +15,9 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  * documentation.
  */
 @ActiveByDefault(since = "2.0.0")
-@AutoCorrectable(since = "1.20.0")
 internal class TypeArgumentListSpacing(config: Config) :
-    KtlintRule(config, "Reports spaces in the type reference before a function.") {
+    KtlintRule(config, "Reports spaces in the type reference before a function."),
+    AutoCorrectable {
 
     override val wrapping = TypeArgumentListSpacingRule()
 
