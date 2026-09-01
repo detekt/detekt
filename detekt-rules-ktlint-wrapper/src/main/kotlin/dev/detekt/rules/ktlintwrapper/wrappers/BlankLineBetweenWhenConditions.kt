@@ -4,20 +4,20 @@ import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfigProper
 import com.pinterest.ktlint.ruleset.standard.rules.BlankLineBetweenWhenConditions
 import com.pinterest.ktlint.ruleset.standard.rules.BlankLineBetweenWhenConditions.Companion.LINE_BREAK_AFTER_WHEN_CONDITION_PROPERTY
 import dev.detekt.api.ActiveByDefault
+import dev.detekt.api.AutoCorrectable
 import dev.detekt.api.Config
 import dev.detekt.api.Configuration
 import dev.detekt.api.config
-import dev.detekt.api.internal.AutoCorrectable
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
  * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/experimental/#blank-lines-between-when-conditions)
  * for documentation.
  */
-@AutoCorrectable(since = "2.0.0")
 @ActiveByDefault(since = "2.0.0")
 internal class BlankLineBetweenWhenConditions(config: Config) :
-    KtlintRule(config, "Consistently add or remove blank lines between when-conditions in a when-statement") {
+    KtlintRule(config, "Consistently add or remove blank lines between when-conditions in a when-statement"),
+    AutoCorrectable {
 
     override val wrapping = BlankLineBetweenWhenConditions()
 

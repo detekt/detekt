@@ -2,8 +2,8 @@ package dev.detekt.rules.ktlintwrapper.wrappers
 
 import com.pinterest.ktlint.ruleset.standard.rules.FunctionTypeModifierSpacingRule
 import dev.detekt.api.ActiveByDefault
+import dev.detekt.api.AutoCorrectable
 import dev.detekt.api.Config
-import dev.detekt.api.internal.AutoCorrectable
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
@@ -11,9 +11,9 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  * for documentation.
  */
 @ActiveByDefault(since = "2.0.0")
-@AutoCorrectable(since = "2.0.0")
 internal class FunctionTypeModifierSpacing(config: Config) :
-    KtlintRule(config, "Enforce a single whitespace between the modifier list and the function type.") {
+    KtlintRule(config, "Enforce a single whitespace between the modifier list and the function type."),
+    AutoCorrectable {
 
     override val wrapping = FunctionTypeModifierSpacingRule()
 }
