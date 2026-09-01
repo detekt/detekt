@@ -204,11 +204,6 @@ public class dev/detekt/api/ProjectMetric {
 	public fun toString ()Ljava/lang/String;
 }
 
-public abstract interface class dev/detekt/api/PropertiesAware {
-	public abstract fun getProperties ()Ljava/util/Map;
-	public abstract fun register (Ljava/lang/String;Ljava/lang/Object;)V
-}
-
 public abstract interface class dev/detekt/api/ReportingExtension : dev/detekt/api/Extension {
 	public fun onFinalResult (Ldev/detekt/api/Detektion;)V
 	public fun onRawResult (Ldev/detekt/api/Detektion;)V
@@ -281,7 +276,7 @@ public abstract interface class dev/detekt/api/RuleSetProvider {
 	public abstract fun instance ()Ldev/detekt/api/RuleSet;
 }
 
-public abstract interface class dev/detekt/api/SetupContext : dev/detekt/api/PropertiesAware {
+public abstract interface class dev/detekt/api/SetupContext {
 	public abstract fun getBasePath ()Ljava/nio/file/Path;
 	public abstract fun getConfig ()Ldev/detekt/api/Config;
 	public abstract fun getConfigUris ()Ljava/util/Collection;

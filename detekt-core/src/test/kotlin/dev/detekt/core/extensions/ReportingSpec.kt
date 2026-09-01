@@ -4,9 +4,11 @@ import dev.detekt.api.Detektion
 import dev.detekt.api.Issue
 import dev.detekt.api.RuleInstance
 import dev.detekt.api.testfixtures.createIssue
+import dev.detekt.api.testfixtures.createIssueEntity
 import dev.detekt.api.testfixtures.createIssueLocation
 import dev.detekt.api.testfixtures.createRuleInstance
 import dev.detekt.core.createProcessingSettings
+import dev.detekt.test.utils.resourceAsPath
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -39,6 +41,29 @@ class ReportingSpec {
 
         assertThat(report(issues, listOf(alpha, zulu)).map { "${it.ruleInstance.id}: ${it.message}" })
             .containsExactly("AlphaRule: a", "AlphaRule: b", "ZuluRule: a", "ZuluRule: b")
+    }
+
+    @Test
+    fun `always applies baseline when its former extension id is disabled`() {
+        val issue = createIssue(
+            ruleId = "FeatureEnvy/id",
+            entity = createIssueEntity(signature = "Signature"),
+        )
+        val finalResult = createProcessingSettings {
+            baseline {
+                path = resourceAsPath("/baseline_feature/valid-baseline.xml")
+            }
+            extensions {
+                disableExtension("BaselineResultMapping")
+            }
+        }.use { settings ->
+            handleReportingExtensions(
+                settings,
+                Detektion(issues = listOf(issue), rules = listOf(issue.ruleInstance)),
+            )
+        }
+
+        assertThat(finalResult.issues).isEmpty()
     }
 
     private fun issue(rule: RuleInstance, path: String, line: Int, message: String): Issue =

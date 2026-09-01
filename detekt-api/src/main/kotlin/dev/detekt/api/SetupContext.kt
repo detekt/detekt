@@ -6,7 +6,7 @@ import java.nio.file.Path
 /**
  * Context providing useful processing settings to initialize extensions.
  */
-interface SetupContext : PropertiesAware {
+interface SetupContext {
     /**
      * All config locations which where used to create [config].
      */
