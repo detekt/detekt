@@ -14,14 +14,14 @@ val generatedDeprecationsFiles = configurations.resolvable("generatedDeprecation
 dependencies {
     api(projects.detektApi)
     api(projects.detektTooling)
-    api(libs.kotlin.compiler)
-    implementation(projects.detektKotlinAnalysisApi)
-    implementation(projects.detektKotlinAnalysisApiStandalone)
+    api(libs.ksp.symbolProcessingAa)
     implementation(libs.snakeyaml.engine)
     implementation(libs.kotlin.reflect)
     implementation(projects.detektParser)
     implementation(projects.detektPsiUtils)
     implementation(projects.detektUtils)
+    implementation(projects.detektKotlinCompiler)
+
     generatedConfig(projects.detektRulesComments) { targetConfiguration = "generatedConfig" }
     generatedConfig(projects.detektRulesComplexity) { targetConfiguration = "generatedConfig" }
     generatedConfig(projects.detektRulesCoroutines) { targetConfiguration = "generatedConfig" }

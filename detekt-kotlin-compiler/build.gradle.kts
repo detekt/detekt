@@ -12,7 +12,7 @@ val aaDependencies = configurations.resolvable("aaDependencies") {
 
 dependencies {
     // Exclude transitive dependencies due to https://youtrack.jetbrains.com/issue/KT-61639
-    aaDependency(libs.kotlin.analysisApiStandalone) { isTransitive = false }
+    aaDependency(libs.kotlin.compilerCli) { isTransitive = false }
 }
 
 val defaultJarClassifier = "default-jar"
@@ -36,8 +36,6 @@ configurations.apiElements {
 tasks.shadowJar {
     archiveClassifier = ""
     configurations = aaDependencies.map { listOf(it) }
-    @Suppress("DEPRECATION") // This flag will be disabled and removed in the next major version of Shadow.
-    enableKotlinModuleRemapping = false
 }
 
 val sourcesJar = tasks.register<Jar>("sourcesJar") {

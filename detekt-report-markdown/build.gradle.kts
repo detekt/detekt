@@ -11,5 +11,5 @@ dependencies {
     testImplementation(testFixtures(projects.detektApi))
     testImplementation(libs.assertj.core)
     testImplementation(projects.detektReportComplexity)
-    testImplementation(libs.kotlin.compiler)
+    testImplementation(libs.ksp.symbolProcessingAa)
 }

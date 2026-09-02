@@ -4,6 +4,10 @@ coroutines = "1.11.0"
 jacoco = "0.8.15"
 junit = "6.1.3"
 kotlin = "2.4.10"
+ksp = "2.3.11"
+# Get the correct version based on the ksp version above from
+# https://github.com/google/ksp/blob/<VERSION>/gradle/libs.versions.toml
+aa-kotlin-base = "2.4.20-dev-6138"
 ktlint = "1.8.0"
 slf4j = "2.0.18"
 
@@ -48,11 +52,9 @@ assertj-coreMinimum = { module = "org.assertj:assertj-core", version = "3.27.4" 
 classgraph = { module = "io.github.classgraph:classgraph", version = "4.8.194" }
 jcommander = { module = "org.jcommander:jcommander", version = "1.85" }
 # Version must align to dependency used by Kotlin on compile classpath due to our use of Gradle's consistent resolution
-jetbrains-annotations = { module = "org.jetbrains:annotations", version = "23.0.0" }
-kotlin-compiler = { module = "org.jetbrains.kotlin:kotlin-compiler", version.ref = "kotlin" }
+jetbrains-annotations = { module = "org.jetbrains:annotations", version = "13.0" }
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 kotlin-scriptingJvm = { module = "org.jetbrains.kotlin:kotlin-scripting-jvm", version.ref = "kotlin" }
-kotlinx-serializationCore = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version = "1.11.0" }
 kotlinx-coroutinesTest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 kotlinx-html = { module = "org.jetbrains.kotlinx:kotlinx-html-jvm", version = "0.12.0" }
 ktlint-rulesetStandard = { module = "com.pinterest.ktlint:ktlint-ruleset-standard", version.ref = "ktlint"  }
@@ -64,18 +66,11 @@ slf4j-nop = { module = "org.slf4j:slf4j-nop", version.ref = "slf4j" }
 slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j" }
 snakeyaml-engine = { module = "org.snakeyaml:snakeyaml-engine", version = "2.10" }
 
-# Kotlin Analysis API artifacts
-kotlin-analysisApiPlatformInterface = { module = "org.jetbrains.kotlin:analysis-api-platform-interface-for-ide", version.ref = "kotlin" }
-kotlin-analysisApiK2 = { module = "org.jetbrains.kotlin:analysis-api-k2-for-ide", version.ref = "kotlin" }
-kotlin-analysisApi = { module = "org.jetbrains.kotlin:analysis-api-for-ide", version.ref = "kotlin" }
-kotlin-analysisApiStandalone = { module = "org.jetbrains.kotlin:analysis-api-standalone-for-ide", version.ref = "kotlin" }
-kotlin-lowLevelApiFir = { module = "org.jetbrains.kotlin:low-level-api-fir-for-ide", version.ref = "kotlin" }
-kotlin-symbolLightClasses = { module = "org.jetbrains.kotlin:symbol-light-classes-for-ide", version.ref = "kotlin" }
-kotlin-analysisApiImplBase = { module = "org.jetbrains.kotlin:analysis-api-impl-base-for-ide", version.ref = "kotlin" }
-# Should be possible to remove when https://youtrack.jetbrains.com/issue/KT-81457 fixed
-kotlinx-coroutinesCore-intellij = { module = "org.jetbrains.intellij.deps.kotlinx:kotlinx-coroutines-core", version = "1.10.2-intellij-2" }
-# Can likely be removed in future - https://youtrack.jetbrains.com/issue/KT-73751/Analysis-API-Caffeine-dependency
-caffeine = { module = "com.github.ben-manes.caffeine:caffeine", version = "2.9.3" }
+# Bundles the Kotlin compiler and the Kotlin Analysis API (including standalone mode), republished to Maven Central
+# by the KSP project. Can be replaced with JetBrains artifacts when https://youtrack.jetbrains.com/issue/KT-56203 is
+# fixed. The bundled compiler is a dev build - see META-INF/compiler.version in the jar for the exact version.
+ksp-symbolProcessingAa = { module = "com.google.devtools.ksp:symbol-processing-aa", version.ref = "ksp" }
+kotlin-compilerCli = { module = "org.jetbrains.kotlin:kotlin-compiler-cli-for-ide", version.ref = "aa-kotlin-base" }
 
 # Add dummy lib references so Renovate auto updates the version. Only the version number is referenced in build scripts so Renovate will ignore these otherwise.
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }

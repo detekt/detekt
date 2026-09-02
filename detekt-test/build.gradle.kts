@@ -7,7 +7,7 @@ dependencies {
     compileOnly(libs.jetbrains.annotations)
     api(projects.detektApi)
     api(projects.detektTestUtils)
-    api(libs.kotlin.compiler)
+    api(libs.ksp.symbolProcessingAa)
     implementation(libs.kotlin.reflect)
 }
 

@@ -42,8 +42,7 @@ internal class EnvironmentFacade(projectSpec: ProjectSpec, compilerSpec: Compile
 
     private val printStream = if (loggingSpec.debug) loggingSpec.errorChannel.asPrintStream() else NullPrintStream
 
-    // This lateinit var can be changed to val if https://github.com/JetBrains/kotlin/pull/5703 is merged
-    private lateinit var sourceModule: KaSourceModule
+    private var sourceModule: KaSourceModule
 
     private val configuration: CompilerConfiguration = createCompilerConfiguration(
         projectSpec.inputPaths.toList(),

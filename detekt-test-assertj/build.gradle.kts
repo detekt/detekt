@@ -7,7 +7,7 @@ dependencies {
     compileOnly(projects.detektApi)
     api(libs.assertj.coreMinimum)
 
-    testImplementation(libs.kotlin.compiler)
+    testImplementation(libs.ksp.symbolProcessingAa)
     testImplementation(testFixtures(projects.detektApi))
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.opentest4j)

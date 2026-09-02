@@ -16,6 +16,7 @@ import org.jetbrains.kotlin.cli.jvm.setupJvmSpecificArguments
 import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.config.JVMConfigurationKeys
+import org.jetbrains.kotlin.config.MessageCollectorAccess
 import java.io.File
 import java.io.PrintStream
 import java.nio.file.Path
@@ -25,6 +26,7 @@ import java.nio.file.Path
  * Be aware that if any path of [pathsToAnalyze] is a directory it is scanned for java and kotlin files.
  */
 @Suppress("LongParameterList")
+@OptIn(MessageCollectorAccess::class)
 fun createCompilerConfiguration(
     pathsToAnalyze: List<Path>,
     classpath: List<Path>,

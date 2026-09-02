@@ -10,7 +10,7 @@ dependencies {
         exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib")
     }
 
-    testImplementation(libs.kotlin.compiler)
+    testImplementation(libs.ksp.symbolProcessingAa)
     testImplementation(projects.detektTest)
     testImplementation(projects.detektReportComplexity)
     testImplementation(projects.detektTestUtils)
