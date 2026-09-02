@@ -15,7 +15,6 @@ java-compile-toolchain = "17"
 # Gradle plugin remains compatible.
 android-gradle-plugin = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 android-gradle-builtInKotlin-plugin = { module = "com.android.built-in-kotlin:com.android.built-in-kotlin.gradle.plugin", version.ref = "agp" }
-breadmoirai-githubRelease-plugin = { module = "com.github.breadmoirai:github-release", version = "2.5.2" }
 develocity-plugin = { module = "com.gradle.develocity:com.gradle.develocity.gradle.plugin", version = "4.5.0" }
 dokka-plugin = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version = "2.2.0" }
 vanniktech-mavenPublish-plugin = { module = "com.vanniktech:gradle-maven-publish-plugin", version = "0.37.0" }
@@ -31,6 +30,8 @@ android-gradleApi = { module = "com.android.tools.build:gradle-api", version = "
 # This should be set to the oldest Gradle version supported by KGP, but 8.14.3 is the earliest published Gradle API, so
 # we need to be on a newer version until KGP minimum version gets bumped higher (https://youtrack.jetbrains.com/issue/KT-84114)
 gradle-publicApi = { module = "org.gradle.experimental:gradle-public-api", version = "8.14.3" }
+github-api = { module = "org.kohsuke:github-api", version = "1.330" }
+jackson-bom = { module = "com.fasterxml.jackson:jackson-bom", version = "2.22.2" }
 
 # This represents the oldest JUnit version supported by detekt-test-junit.
 # This should only be updated when updating the minimum version supported by detekt-test-junit.
