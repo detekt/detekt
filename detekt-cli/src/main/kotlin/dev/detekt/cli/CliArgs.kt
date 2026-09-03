@@ -27,11 +27,13 @@ class CliArgs {
 
     @Parameter(
         names = ["--analysis-mode"],
+        validateWith = [AnalysisModeValidator::class],
+        converter = AnalysisModeConverter::class,
         description = "Analysis mode used by detekt. " +
             "'full' analysis mode is comprehensive but requires the correct compiler options to be provided. " +
             "'light' analysis cannot utilise compiler information and some rules cannot be run in this mode."
     )
-    var analysisMode: AnalysisMode = AnalysisMode.light
+    var analysisMode: AnalysisMode = AnalysisMode.Light
 
     @Parameter(
         names = ["--includes", "-in"],

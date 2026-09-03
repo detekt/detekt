@@ -24,7 +24,7 @@ internal fun annotationSuppressorFactory(rule: Rule, analysisMode: AnalysisMode)
         Suppressor { finding ->
             val element = finding.entity.ktElement
             element.isAnnotatedWith(
-                AnnotationExcluder(element.containingKtFile, annotations, analysisMode == AnalysisMode.full),
+                AnnotationExcluder(element.containingKtFile, annotations, analysisMode == AnalysisMode.Full),
             )
         }
     } else {
