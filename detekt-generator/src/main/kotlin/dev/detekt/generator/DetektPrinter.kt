@@ -7,13 +7,14 @@ import dev.detekt.generator.out.YamlWriter
 import dev.detekt.generator.printer.DeprecatedPrinter
 import dev.detekt.generator.printer.RuleSetPagePrinter
 import dev.detekt.generator.printer.defaultconfig.ConfigPrinter
+import java.io.PrintStream
 import java.nio.file.Path
 
-class DetektPrinter(private val documentationPath: Path?, private val configPath: Path?) {
+class DetektPrinter(private val documentationPath: Path?, private val configPath: Path?, outPrinter: PrintStream) {
 
-    private val markdownEnhancedWriter = MarkdownEnhancedWriter(System.out)
-    private val yamlWriter = YamlWriter(System.out)
-    private val propertiesWriter = PropertiesWriter(System.out)
+    private val markdownEnhancedWriter = MarkdownEnhancedWriter(outPrinter)
+    private val yamlWriter = YamlWriter(outPrinter)
+    private val propertiesWriter = PropertiesWriter(outPrinter)
 
     fun print(pages: List<RuleSetPage>) {
         if (documentationPath != null) {
