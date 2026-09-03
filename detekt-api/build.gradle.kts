@@ -11,6 +11,7 @@ plugins {
 
 dependencies {
     api(libs.kotlin.compiler)
+    api(projects.detektCommonApi)
     compileOnlyApi(projects.detektKotlinAnalysisApi)
 
     testImplementation(projects.detektTest)
