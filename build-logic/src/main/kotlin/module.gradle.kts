@@ -2,13 +2,12 @@ import com.gradle.develocity.agent.gradle.test.DevelocityTestConfiguration
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.dsl.JvmDefaultMode
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.tasks.UsesKotlinJavaToolchain
 
 plugins {
     id("packaging")
     kotlin("jvm")
     id("jacoco")
+    id("com.gradleup.tapmoc")
 }
 
 val versionCatalog = versionCatalogs.named("libs")
@@ -56,12 +55,8 @@ tasks.withType<Test>().configureEach {
     }
 }
 
-val jvmTargetVersion = versionCatalog.findVersion("jvm-target").get().requiredVersion
-val jvmMajorVersion = jvmTargetVersion.toIntOrNull() ?: 8
-
 kotlin {
     compilerOptions {
-        jvmTarget = JvmTarget.fromTarget(jvmTargetVersion)
         extraWarnings = true
         allWarningsAsErrors = providers.gradleProperty("warningsAsErrors").orNull.toBoolean()
         if (project.name != "detekt-gradle-plugin") {
@@ -78,20 +73,6 @@ kotlin {
     }
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>().configureEach {
-    compilerOptions {
-        jvmTarget = JvmTarget.fromTarget(jvmTargetVersion)
-    }
-}
-
-val javaLauncher = javaToolchains.launcherFor {
-    languageVersion = JavaLanguageVersion.of(versionCatalog.findVersion("java-compile-toolchain").get().requiredVersion)
-}
-
-project.tasks.withType<UsesKotlinJavaToolchain>().configureEach {
-    kotlinJavaToolchain.toolchain.use(javaLauncher)
-}
-
 testing {
     suites {
         withType<JvmTestSuite> {
@@ -99,6 +80,8 @@ testing {
         }
     }
 }
+
+val jvmMajorVersion = 8
 
 // Pretend AGP API, JUnit and detekt-rules-ktlint-wrapper target JVM 8. Required while detekt itself targets JVM 8 and these dependencies target newer JVM versions.
 dependencies {
@@ -126,10 +109,12 @@ dependencies {
     }
 }
 
+tapmoc {
+    java(jvmMajorVersion)
+}
+
 java {
     withSourcesJar()
-    sourceCompatibility = JavaVersion.toVersion(jvmTargetVersion)
-    targetCompatibility = JavaVersion.toVersion(jvmTargetVersion)
     if (project.name !in setOf("detekt-gradle-plugin", "detekt-test-junit")) {
         // DGP uses different versions of kotlin-gradle-api in test runtime and compile time
         consistentResolution {
