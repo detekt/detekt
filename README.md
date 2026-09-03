@@ -86,10 +86,10 @@ tasks.withType<dev.detekt.gradle.Detekt>().configureEach {
         sarif.required.set(true) // standardized SARIF format (https://sarifweb.azurewebsites.net/) to support integrations with GitHub Code Scanning
         markdown.required.set(true) // simple Markdown format
     }
-    jvmTarget.set("1.8")
+    jvmTarget.set("17")
 }
 tasks.withType<dev.detekt.gradle.DetektCreateBaselineTask>().configureEach {
-    jvmTarget.set("1.8")
+    jvmTarget.set("17")
 }
 ```
 
@@ -120,10 +120,10 @@ tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
         sarif.required.set(true) // standardized SARIF format (https://sarifweb.azurewebsites.net/) to support integrations with GitHub Code Scanning
         md.required.set(true) // simple Markdown format
     }
-    jvmTarget = "1.8"
+    jvmTarget = "17"
 }
 tasks.withType<io.gitlab.arturbosch.detekt.DetektCreateBaselineTask>().configureEach {
-    jvmTarget = "1.8"
+    jvmTarget = "17"
 }
 ```
 
@@ -142,6 +142,7 @@ The recommended versions together with the other tools recommended versions are:
 
 | Detekt Version  | Gradle   | Kotlin   | AGP      | Java Target Level | JDK Max Version |
 |-----------------|----------|----------|----------|-------------------|-----------------|
+| `2.0.0-alpha.7` | `9.6.1`  | `2.4.10` | `9.3.1`  | `17`              | `25`            |
 | `2.0.0-alpha.6` | `9.6.1`  | `2.4.10` | `9.3.1`  | `1.8`             | `25`            |
 | `2.0.0-alpha.5` | `9.5.1`  | `2.4.0`  | `9.2.1`  | `1.8`             | `25`            |
 | `2.0.0-alpha.3` | `9.3.1`  | `2.3.21` | `9.1.1`  | `1.8`             | `25`            |
