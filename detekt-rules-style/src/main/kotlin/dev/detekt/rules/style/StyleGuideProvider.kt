@@ -97,6 +97,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
                 ::UnnecessaryBackticks,
                 ::UnnecessaryChainedSafeCall,
                 ::MaxChainedCallsOnSameLine,
+                ::AvoidDollarLiteralInterpolation,
                 ::DoubleNegativeLambda,
                 ::DoubleNegativeExpression,
                 ::UnnecessaryFullyQualifiedName,

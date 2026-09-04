@@ -586,6 +586,8 @@ style:
   AbstractClassCanBeInterface:
     active: true
     ignoreSealedClasses: false
+  AvoidDollarLiteralInterpolation:
+    active: false
   BracesOnIfStatements:
     active: false
     singleLine: 'never'
