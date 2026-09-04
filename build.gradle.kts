@@ -89,4 +89,9 @@ setOf(
     }
 }
 
-tasks.build { dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":build")) }
+tasks.build {
+    logger.warn(
+        "Executing `build` task from root build will not build the Gradle plugin. " +
+            "Use `/gradlew -pdetekt-gradle-plugin check`"
+    )
+}
