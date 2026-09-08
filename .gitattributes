@@ -7,6 +7,9 @@
 *.html          diff=html
 *.md            diff=markdown
 
+# Exclude old docs from being counted as code.
+website/** linguist-detectable=false
+
 *.jar           binary
 *.png           binary
 *.otf           binary
