@@ -8,6 +8,7 @@ import dev.detekt.api.Location
 import dev.detekt.api.Rule
 import dev.detekt.api.TextLocation
 import dev.detekt.api.config
+import dev.detekt.api.from
 import dev.detekt.psi.absolutePath
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
