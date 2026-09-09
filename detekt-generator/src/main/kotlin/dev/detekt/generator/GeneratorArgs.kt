@@ -44,13 +44,6 @@ class GeneratorArgs {
     )
     var help: Boolean = false
 
-    @Parameter(
-        names = ["--generate-custom-rule-config", "-gcrc"],
-        description = "Generate config for user-defined rules. " +
-            "Path to user rules can be specified with --input option"
-    )
-    var generateCustomRuleConfig: Boolean = false
-
     class PathSplitter : IParameterSplitter {
         override fun split(value: String): List<String> = value.split(',', ';')
     }
