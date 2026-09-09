@@ -1,6 +1,6 @@
 package dev.detekt.rules.ktlintwrapper.wrappers
 
-import com.pinterest.ktlint.ruleset.standard.rules.TypeParameterCommentRule
+import io.github.ktlint.core.ruleset.standard.rules.TypeParameterCommentRule
 import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.Config
 import dev.detekt.rules.ktlintwrapper.KtlintRule

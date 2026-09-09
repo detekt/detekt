@@ -1,9 +1,6 @@
 package dev.detekt.rules.ktlintwrapper
 
-import com.pinterest.ktlint.rule.engine.core.api.Rule
-import com.pinterest.ktlint.rule.engine.core.api.RuleId
 import dev.detekt.api.ActiveByDefault
-import dev.detekt.api.Config
 import dev.detekt.api.Configuration
 import dev.detekt.api.RuleSet
 import dev.detekt.api.RuleSetId
@@ -22,8 +19,6 @@ import dev.detekt.rules.ktlintwrapper.wrappers.ClassName
 import dev.detekt.rules.ktlintwrapper.wrappers.ClassSignature
 import dev.detekt.rules.ktlintwrapper.wrappers.CommentSpacing
 import dev.detekt.rules.ktlintwrapper.wrappers.CommentWrapping
-import dev.detekt.rules.ktlintwrapper.wrappers.ConditionWrapping
-import dev.detekt.rules.ktlintwrapper.wrappers.ContextReceiverListWrapping
 import dev.detekt.rules.ktlintwrapper.wrappers.ContextReceiverMapping
 import dev.detekt.rules.ktlintwrapper.wrappers.EnumEntryNameCase
 import dev.detekt.rules.ktlintwrapper.wrappers.EnumWrapping
@@ -108,7 +103,6 @@ import dev.detekt.rules.ktlintwrapper.wrappers.ValueArgumentComment
 import dev.detekt.rules.ktlintwrapper.wrappers.ValueParameterComment
 import dev.detekt.rules.ktlintwrapper.wrappers.WhenEntryBracing
 import dev.detekt.rules.ktlintwrapper.wrappers.Wrapping
-import com.pinterest.ktlint.rule.engine.core.api.RuleSetId as KtlintRuleSetId
 
 /**
  * This rule set provides wrappers for rules implemented by ktlint - https://ktlint.github.io/ktlint/.
@@ -144,9 +138,7 @@ class KtlintWrapperProvider : RuleSetProvider {
                 ::ClassSignature,
                 ::CommentSpacing,
                 ::CommentWrapping,
-                ::ConditionWrapping,
                 ::ContextReceiverMapping,
-                ::ContextReceiverListWrapping,
                 ::EnumEntryNameCase,
                 ::EnumWrapping,
                 ::Filename,
@@ -220,7 +212,7 @@ class KtlintWrapperProvider : RuleSetProvider {
                 ::ValueParameterComment,
                 ::Wrapping,
                 // Wrappers for rules that are only enabled when using ktlint_official code style. Disabled by default.
-                // Check ktlint rules that implement com.pinterest.ktlint.rule.engine.core.api.Rule.OfficialCodeStyle
+                // Check ktlint rules that implement io.github.ktlint.core.rule.engine.core.api.Rule.OfficialCodeStyle
                 ::BlankLineBeforeDeclaration,
                 ::ChainMethodContinuation,
                 ::IfElseBracing,
@@ -234,9 +226,9 @@ class KtlintWrapperProvider : RuleSetProvider {
                 ::TryCatchFinallySpacing,
                 ::WhenEntryBracing,
                 // Wrappers for experimental rules. Disabled by default.
-                // Check ktlint rules that implement com.pinterest.ktlint.rule.engine.core.api.Rule.Experimental
+                // Check ktlint rules that implement io.github.ktlint.core.rule.engine.core.api.Rule.Experimental
                 ::ExpressionOperandWrapping,
-            ).sorted()
+            )
         )
 
     companion object {
@@ -251,69 +243,5 @@ class KtlintWrapperProvider : RuleSetProvider {
     }
 }
 
-/**
- * Return a list of [KtlintRule] that respects
- * [Rule.VisitorModifier.RunAsLateAsPossible] and [Rule.VisitorModifier.RunAfterRule].
- * Algorithm is based on [com.pinterest.ktlint.rule.engine.internal.RuleProviderSorter].
- */
-internal fun List<(Config) -> KtlintRule>.sorted(): List<(Config) -> KtlintRule> {
-    val sortedRules = mutableListOf<(Config) -> KtlintRule>()
-    val sortedRuleIds = mutableSetOf<RuleId>()
-    val unprocessedRules = this
-        .map { it to it(Config.empty) }
-        .sortedWith(defaultRuleOrderComparator())
-        .toMutableList()
-
-    // Initially the list only contains the rules without any VisitorModifiers
-    unprocessedRules
-        .filter { (_, rule) -> !rule.runAsLateAsPossible && rule.hasNoRunAfterRules() }
-        .forEach { (provider, rule) ->
-            sortedRules.add(provider)
-            sortedRuleIds.add(rule.wrappingRuleId)
-        }
-    unprocessedRules.removeAll { (provider, _) -> provider in sortedRules }
-
-    // Then we add the rules that have a RunAsLateAsPossible modifier
-    // and we obey the RunAfterRule modifiers as well.
-    while (unprocessedRules.isNotEmpty()) {
-        val (provider, rule) =
-            checkNotNull(
-                unprocessedRules
-                    .firstOrNull { (_, rule) ->
-                        rule
-                            .runAfterRules()
-                            .all { it.ruleId in sortedRuleIds }
-                    }
-            ) {
-                "Can not complete sorting of rule providers as next item can not be determined."
-            }
-        sortedRuleIds.add(rule.wrappingRuleId)
-        sortedRules.add(provider)
-        unprocessedRules.removeAll { (provider, _) -> provider in sortedRules }
-    }
-
-    return sortedRules
-}
-
-private fun defaultRuleOrderComparator() =
-// The sort order below should guarantee a stable order of the rule between multiple invocations of KtLint given
-    // the same set of input parameters. There should be no dependency on data ordering outside this class.
-    compareBy<Pair<(Config) -> KtlintRule, KtlintRule>> { (_, rule) ->
-        if (rule.runAsLateAsPossible) 1 else 0
-    }.thenBy { (_, rule) ->
-        if (rule.wrappingRuleId.ruleSetId == KtlintRuleSetId.STANDARD) 0 else 1
-    }.thenBy { (_, rule) -> rule.wrappingRuleId.value }
-
 internal val KtlintRule.wrappingRuleId
     get() = wrapping.ruleId
-
-internal val KtlintRule.visitorModifiers
-    get() = wrapping.visitorModifiers
-
-internal val KtlintRule.runAsLateAsPossible
-    get() = Rule.VisitorModifier.RunAsLateAsPossible in visitorModifiers
-
-private fun KtlintRule.runAfterRules() = visitorModifiers.filterIsInstance<Rule.VisitorModifier.RunAfterRule>()
-
-private fun KtlintRule.hasNoRunAfterRules() =
-    visitorModifiers.filterIsInstance<Rule.VisitorModifier.RunAfterRule>().isEmpty()

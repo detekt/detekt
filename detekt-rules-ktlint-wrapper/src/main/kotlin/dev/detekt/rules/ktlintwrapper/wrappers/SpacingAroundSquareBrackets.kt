@@ -1,6 +1,6 @@
 package dev.detekt.rules.ktlintwrapper.wrappers
 
-import com.pinterest.ktlint.ruleset.standard.rules.SpacingAroundSquareBracketsRule
+import io.github.ktlint.core.ruleset.standard.rules.SpacingAroundSquareBracketsRule
 import dev.detekt.api.ActiveByDefault
 import dev.detekt.api.AutoCorrectable
 import dev.detekt.api.Config
