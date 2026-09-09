@@ -25,6 +25,8 @@ internal class Analyzer(
     private val processors: List<FileProcessListener>,
     private val analysisMode: AnalysisMode,
 ) {
+    private val lock = Any()
+
     fun run(ktFiles: Collection<KtFile>): List<Issue> {
         val languageVersionSettings = settings.languageVersionSettings
 
@@ -59,7 +61,16 @@ internal class Analyzer(
         return awaitAll(tasks).filterNotNull().flatten()
     }
 
-    private fun analyze(file: KtFile, languageVersionSettings: LanguageVersionSettings): List<Issue> {
+    private fun analyze(file: KtFile, languageVersionSettings: LanguageVersionSettings): List<Issue> =
+        if (analysisMode == AnalysisMode.full) {
+            synchronized(lock) {
+                analyzeFile(file, languageVersionSettings)
+            }
+        } else {
+            analyzeFile(file, languageVersionSettings)
+        }
+
+    private fun analyzeFile(file: KtFile, languageVersionSettings: LanguageVersionSettings): List<Issue> {
         val (correctableRules, otherRules) = rules.asSequence()
             .filter { ruleDescriptor ->
                 ruleDescriptor.config.parent?.shouldAnalyzeFile(file, settings.spec.projectSpec.basePath) != false
