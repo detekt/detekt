@@ -1,24 +1,8 @@
 import org.semver4j.Semver
 
-plugins {
-    id("com.github.breadmoirai.github-release")
-}
-
 val releaseArtifacts = configurations.dependencyScope("releaseArtifacts")
 val releaseAssetFiles = configurations.resolvable("releaseAssetFiles") {
     extendsFrom(releaseArtifacts)
-}
-
-githubRelease {
-    token(providers.gradleProperty("github.token"))
-    owner = "detekt"
-    repo = "detekt"
-    overwrite = true
-    dryRun = false
-    prerelease = true
-    targetCommitish = "main"
-    body = "Detekt Release Body"
-    releaseAssets.setFrom(releaseAssetFiles)
 }
 
 dependencies {
@@ -43,6 +27,23 @@ dependencies {
         targetConfiguration = Dependency.DEFAULT_CONFIGURATION
         isTransitive = false
     }
+}
+
+val releaseTag = providers.provider { "v${project.version}" }
+
+tasks.register<GithubReleaseTask>("githubRelease") {
+    group = "publishing"
+    description = "Creates the GitHub release"
+
+    token.set(providers.gradleProperty("github.token"))
+    owner.set("detekt")
+    repositoryName.set("detekt")
+    tagName.set(releaseTag)
+    releaseName.set(releaseTag)
+    targetCommitish.set("main")
+    body.set("Detekt Release Body")
+    prerelease.set(true)
+    releaseAssets.from(releaseAssetFiles)
 }
 
 fun updateVersion(increment: (Semver) -> Semver) {
