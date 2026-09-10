@@ -16,7 +16,7 @@ plugins {
     id("java-gradle-plugin")
     id("java-test-fixtures")
     id("idea")
-    id("com.gradle.plugin-publish") version "2.1.1"
+    id("com.gradle.plugin-publish") version "2.2.0"
     // We use this published version of the detekt plugin to self analyse this project.
     id("dev.detekt") version "2.0.0-alpha.6"
     id("com.github.gmazzo.buildconfig") version "6.0.10"
