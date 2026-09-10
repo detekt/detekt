@@ -173,7 +173,10 @@ gradlePlugin {
             description = "Static code analysis for Kotlin - Base Plugin"
             implementationClass = "dev.detekt.gradle.plugin.DetektBasePlugin"
             compatibility {
-                features.configurationCache = true
+                features {
+                    configurationCache = true
+                    isolatedProjects = true
+                }
             }
         }
         register("dev.detekt") {
@@ -181,7 +184,10 @@ gradlePlugin {
             description = "Static code analysis for Kotlin"
             implementationClass = "dev.detekt.gradle.plugin.DetektPlugin"
             compatibility {
-                features.configurationCache = true
+                features {
+                    configurationCache = true
+                    isolatedProjects = true
+                }
             }
         }
         configureEach {
