@@ -1,4 +1,4 @@
-package dev.detekt.core.suppressors
+package dev.detekt.suppressors
 
 import dev.detekt.api.Rule
 import dev.detekt.api.valueOrDefault
