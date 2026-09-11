@@ -1,7 +1,8 @@
 package dev.detekt.generator
 
-import com.beust.jcommander.JCommander
-import org.assertj.core.api.Assertions.assertThat
+import com.github.ajalt.clikt.core.PrintHelpMessage
+import com.github.ajalt.clikt.core.parse
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
@@ -9,28 +10,21 @@ class GeneratorArgsSpec {
 
     @ParameterizedTest
     @ValueSource(strings = ["-h", "--help"])
-    fun `parses help flag and outputs usage text`(helpFlag: String) {
+    fun `throws PrintHelpMessage with full usage text on help flag`(helpFlag: String) {
         val args = GeneratorArgs()
-        val parser = JCommander(args)
-        parser.parse(helpFlag)
-        assertThat(args.help).isTrue()
-
-        val usage = StringBuilder()
-        parser.usageFormatter.usage(usage)
-        assertThat(usage.toString().trim()).isEqualTo(expectedHelp)
+        assertThatThrownBy { args.parse(listOf(helpFlag)) }
+            .isInstanceOf(PrintHelpMessage::class.java)
+            .extracting { args.getFormattedHelp(it as PrintHelpMessage)?.trim() }
+            .isEqualTo(expectedHelp)
     }
 }
 
 private val expectedHelp = """
-    |Usage: <main class> [options]
-    |  Options:
-    |    --config, -c
-    |      Output path for generated detekt config.
-    |    --documentation, -d
-    |      Output path for generated documentation.
-    |    --help, -h
-    |      Shows the usage.
-    |  * --input, -i
-    |      Input paths to analyze.
-    |      Default: []
+    |Usage: detekt-generator [<options>]
+    |
+    |Options:
+    |  -i, --input=<path>          Input paths to analyze.
+    |  -d, --documentation=<path>  Output path for generated documentation.
+    |  -c, --config=<path>         Output path for generated detekt config.
+    |  -h, --help                  Show this message and exit
 """.trimMargin()
