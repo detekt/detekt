@@ -856,54 +856,6 @@ function generateFile(provider, rules) {
 
 // ─── CLI options generation ───────────────────────────────────────────────────
 
-// Parse enum entry names from a Kotlin enum class source file.
-// Stops at the trailing `;` that separates entries from member declarations.
-function parseEnumEntries(src) {
-  const stripped = stripBlockComments(src).replace(/\/\/[^\n]*/g, '');
-  const braceIdx = stripped.indexOf('{', stripped.indexOf('enum class'));
-  if (braceIdx === -1) return [];
-  const body = stripped.substring(braceIdx + 1);
-  // Enum entry list ends at the first standalone `;` line
-  const semiIdx = body.search(/^\s*;/m);
-  const entriesSection = semiIdx !== -1 ? body.substring(0, semiIdx) : body;
-  return (entriesSection.match(/^\s*([A-Za-z_]\w*)\s*(?:[,({]|$)/mg) ?? [])
-    .map(m => m.trim().match(/^([A-Za-z_]\w*)/)?.[1])
-    .filter(Boolean);
-}
-
-// Mirrors JCommander's DefaultUsageFormatter.wrapDescription so the JS-generated
-// _cli-options.mdx is byte-identical to the Gradle one. Notable quirks:
-//   * the input is the indent-prefixed string, split on a single space (not
-//     collapsed whitespace), so leading spaces become empty "words";
-//   * when a word is appended to the current line, the trailing space is only
-//     added if it is NOT the last word — so non-wrapped final lines have no
-//     trailing space;
-//   * when a word is wrapped onto a new line, a trailing space is ALWAYS
-//     appended, even for the last word — so wrapped final lines DO have a
-//     trailing space.
-function wordWrap(text, indent, maxWidth) {
-  const indented = ' '.repeat(indent) + text;
-  const words = indented.split(' ');
-  let out = '';
-  let current = 0;
-
-  for (let i = 0; i < words.length; i++) {
-    const word = words[i];
-
-    if (word.length > maxWidth || current + 1 + word.length <= maxWidth) {
-      out += word;
-      current += word.length;
-      if (i !== words.length - 1) {
-        out += ' ';
-        current++;
-      }
-    } else {
-      out += '\n' + ' '.repeat(indent) + word + ' ';
-      current = indent + word.length + 1;
-    }
-  }
-  return out;
-}
 
 // Scan string literal(s) (possibly joined by +) starting at position i in src.
 // Returns { value, end } where value is the concatenated string content.
@@ -930,99 +882,93 @@ function scanStringValue(src, i) {
 function generateCliOptionsFile() {
   const CLI_OPTIONS_OUTPUT = join(WEBSITE_DIR, 'docs/gettingstarted/_cli-options.mdx');
 
-  const analysisModeEntries = parseEnumEntries(
-    readFileSync(join(ROOT_DIR, 'detekt-cli/src/main/kotlin/dev/detekt/cli/AnalysisMode.kt'), 'utf8')
-  );
-  const failureSeverityEntries = parseEnumEntries(
-    readFileSync(join(ROOT_DIR, 'detekt-cli/src/main/kotlin/dev/detekt/cli/FailureSeverity.kt'), 'utf8')
-  );
-
-  // JCommander emits "Possible Values" for enum-typed fields. JvmTarget and
-  // LanguageVersion come from the Kotlin compiler dependency (not in local
-  // source). ApiVersion is NOT an enum — it's a class with a static factory —
-  // so JCommander emits no possible-values line for --api-version even though
-  // it goes through ApiVersionConverter.
-  const POSSIBLE_VALUES = {
-    AnalysisMode: `[${analysisModeEntries.join(', ')}]`,
-    FailureSeverityConverter: `[${failureSeverityEntries.join(', ')}]`,
-    JvmTargetConverter: '[1.6, 1.8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26]',
-    LanguageVersionConverter: '[1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4, 2.5]',
-  };
-
   const cliArgsSrc = readFileSync(
     join(ROOT_DIR, 'detekt-cli/src/main/kotlin/dev/detekt/cli/CliArgs.kt'), 'utf8'
   );
 
-  const AT_PARAM = '@Parameter';
-  const params = [];
-  let searchFrom = 0;
+  const options = [];
+  let searchIdx = 0;
 
   while (true) {
-    const atIdx = cliArgsSrc.indexOf(AT_PARAM, searchFrom);
-    if (atIdx === -1) break;
-    const parenStart = cliArgsSrc.indexOf('(', atIdx + AT_PARAM.length);
-    if (parenStart === -1) break;
-    const parenEnd = findMatchingParen(cliArgsSrc, parenStart);
-    if (parenEnd === -1) break;
-    searchFrom = parenEnd + 1;
+    const optIdx = cliArgsSrc.indexOf('by option(', searchIdx);
+    if (optIdx === -1) break;
+    const parenOpen = optIdx + 'by option'.length;
+    const parenClose = findMatchingParen(cliArgsSrc, parenOpen);
+    if (parenClose === -1) break;
+    const optionArgs = cliArgsSrc.substring(parenOpen + 1, parenClose);
 
-    const annotation = cliArgsSrc.substring(parenStart + 1, parenEnd);
-    if (/\bhidden\s*=\s*true/.test(annotation)) continue;
-    // JCommander suppresses the "Default:" line when @Parameter(help = true).
-    const isHelp = /\bhelp\s*=\s*true/.test(annotation);
+    const afterParen = cliArgsSrc.substring(parenClose + 1);
+    const nextPropIdx = afterParen.search(/\n\s*(?:val|fun|override|init|companion|\})/);
+    const chainedCalls = nextPropIdx !== -1 ? afterParen.substring(0, nextPropIdx) : afterParen;
 
-    // names = ["--foo", "-f"]
-    const namesMatch = annotation.match(/names\s*=\s*\[([^\]]+)\]/);
-    if (!namesMatch) continue;
-    const names = (namesMatch[1].match(/"([^"]+)"/g) ?? []).map(s => s.replace(/"/g, ''));
+    searchIdx = parenClose + 1;
 
-    // description = "..." (possibly multi-line concatenation) — scan properly
-    const descKeyIdx = annotation.search(/\bdescription\s*=/);
-    let description = '';
-    if (descKeyIdx !== -1) {
-      const valueStart = annotation.indexOf('=', descKeyIdx) + 1;
-      description = scanStringValue(annotation, valueStart).value;
+    if (/\bhidden\s*=\s*true/.test(optionArgs)) continue;
+
+    // Extract names: "-i", "--input"
+    const names = (optionArgs.match(/"(-[^"]+)"/g) ?? []).map(s => s.replace(/"/g, ''));
+    if (!names.length) continue;
+
+    // Extract help string
+    const helpIdx = optionArgs.search(/\bhelp\s*=/);
+    let help = '';
+    if (helpIdx !== -1) {
+      const valueStart = optionArgs.indexOf('=', helpIdx) + 1;
+      help = scanStringValue(optionArgs, valueStart).value;
     }
 
-    // converter = FooConverter::class
-    const converterMatch = annotation.match(/converter\s*=\s*(\w+)/);
-    const converter = converterMatch ? converterMatch[1] : null;
+    // Determine metavar
+    let metavar = '';
+    if (chainedCalls.includes('.flag(')) {
+      metavar = '';
+    } else if (chainedCalls.includes('.path(') || chainedCalls.includes('.path()')) {
+      metavar = '=<path>';
+    } else if (chainedCalls.includes('.enum<AnalysisMode>')) {
+      metavar = '=(full|light)';
+    } else if (chainedCalls.includes('.convert')) {
+      metavar = '=<value>';
+    } else {
+      metavar = '=<text>';
+    }
 
-    // var fieldName: FieldType = defaultExpr
-    const afterAnnotation = cliArgsSrc.substring(parenEnd + 1);
-    const varMatch = afterAnnotation.match(/^\s*(?:@\w+[^)]*\)\s*)*(?:var|val)\s+\w+\s*:\s*(\w+)[^=\n]*=\s*([^\n]+)/);
-    const fieldType = varMatch ? varMatch[1] : null;
-    const defaultExpr = varMatch ? varMatch[2].trim() : '';
-
-    let defaultValue = null;
-    if (defaultExpr === 'false' || defaultExpr === 'true') defaultValue = defaultExpr;
-    else if (/^(?:emptyList|mutableListOf)\(\)/.test(defaultExpr)) defaultValue = '[]';
-    else if (/AnalysisMode\.(\w+)/.test(defaultExpr)) defaultValue = defaultExpr.match(/AnalysisMode\.(\w+)/)[1];
-    else if (/FailureSeverity\.(\w+)/.test(defaultExpr)) defaultValue = defaultExpr.match(/FailureSeverity\.(\w+)/)[1];
-    else if (/JvmTarget\.DEFAULT/.test(defaultExpr)) defaultValue = '1.8';
-
-    const possibleValues = POSSIBLE_VALUES[converter] ?? POSSIBLE_VALUES[fieldType] ?? null;
-    const primaryName = names.find(n => n.startsWith('--')) ?? names[0];
-    params.push({
-      names,
-      description,
-      defaultValue: isHelp ? null : defaultValue,
-      possibleValues,
-      primaryName,
-    });
+    const optionStr = names.join(', ') + metavar;
+    options.push({ optionStr, help });
   }
 
-  params.sort((a, b) => a.primaryName.localeCompare(b.primaryName));
+  // Built-in help option in Clikt
+  options.push({ optionStr: '-h, --help', help: 'Show this message and exit' });
 
-  let out = 'Usage: detekt [options] Options to pass to the Kotlin compiler.\n  Options:\n';
-  for (const { names, description, defaultValue, possibleValues } of params) {
-    out += `    ${names.join(', ')}\n`;
-    if (description) out += wordWrap(description, 6, 79) + '\n';
-    if (defaultValue !== null) out += `      Default: ${defaultValue}\n`;
-    if (possibleValues !== null) out += `      Possible Values: ${possibleValues}\n`;
+  // Calculate column width (max option length + 2 padding, minimum margin)
+  const maxOptionLen = Math.max(...options.map(o => o.optionStr.length));
+  const colWidth = maxOptionLen + 2;
+
+  let out = 'Usage: detekt [<options>] [<freecompilerargs>]...\n\nOptions:\n';
+  for (const { optionStr, help } of options) {
+    const pad = ' '.repeat(colWidth - optionStr.length);
+    out += `  ${optionStr}${pad}${help}\n`;
   }
 
-  writeFileSync(CLI_OPTIONS_OUTPUT, '```\n' + out + '\n```\n', 'utf8');
+  // Arguments
+  const argIdx = cliArgsSrc.indexOf('by argument(');
+  if (argIdx !== -1) {
+    const argParenOpen = argIdx + 'by argument'.length;
+    const argParenClose = findMatchingParen(cliArgsSrc, argParenOpen);
+    if (argParenClose !== -1) {
+      const argArgs = cliArgsSrc.substring(argParenOpen + 1, argParenClose);
+      const nameMatch = argArgs.match(/name\s*=\s*"([^"]+)"/);
+      const argName = nameMatch ? nameMatch[1] : 'freeCompilerArgs';
+      const helpIdx = argArgs.search(/\bhelp\s*=/);
+      let help = '';
+      if (helpIdx !== -1) {
+        const valueStart = argArgs.indexOf('=', helpIdx) + 1;
+        help = scanStringValue(argArgs, valueStart).value;
+      }
+      const argStr = `<${argName.toLowerCase()}>`;
+      out += `\nArguments:\n  ${argStr}  ${help}\n`;
+    }
+  }
+
+  writeFileSync(CLI_OPTIONS_OUTPUT, '```\n' + out + '```\n', 'utf8');
   console.log(`  Wrote: ${CLI_OPTIONS_OUTPUT}`);
 }
 
