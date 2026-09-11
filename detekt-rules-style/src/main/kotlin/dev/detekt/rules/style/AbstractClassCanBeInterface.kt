@@ -26,7 +26,9 @@ import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.psi.KtSecondaryConstructor
 import org.jetbrains.kotlin.psi.psiUtil.isAbstract
+import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 
 /**
  * This rule inspects `abstract` classes. In case an `abstract class` does not define any
@@ -99,8 +101,13 @@ class AbstractClassCanBeInterface(config: Config) :
         analyze(klass) {
             when {
                 isAnyParentClass(klass) -> return
+
                 members.isNotEmpty() -> checkMembers(klass, members, nameIdentifier)
-                klass.hasConstructorParameter() || klass.containsInternalClass() -> return
+
+                klass.hasConstructorParameter() ||
+                    klass.hasNonEmptySecondaryConstructorBody() ||
+                    klass.containsInternalClass() -> return
+
                 else -> report(Finding(Entity.from(nameIdentifier), klass.message()))
             }
         }
@@ -112,8 +119,15 @@ class AbstractClassCanBeInterface(config: Config) :
         when {
             klass.isInterface() -> false
             klass.isLocal -> false
+            klass.hasOnlyPrivateConstructors() -> false
             klass.isSealed() -> !ignoreSealedClasses
             else -> klass.isAbstract()
+        }
+
+    private fun KtClass.hasOnlyPrivateConstructors(): Boolean =
+        when (val primaryConstructor = primaryConstructor) {
+            null -> secondaryConstructors.isNotEmpty() && secondaryConstructors.all { it.isPrivate() }
+            else -> primaryConstructor.isPrivate() && secondaryConstructors.all { it.isPrivate() }
         }
 
     private fun KaSession.checkMembers(
@@ -135,6 +149,7 @@ class AbstractClassCanBeInterface(config: Config) :
 
             abstractMembers.any { it.isInternal() || it.isProtected() } ||
                 klass.hasConstructorParameter() ||
+                klass.hasNonEmptySecondaryConstructorBody() ||
                 klass.containsInternalClass() -> return
 
             concreteMembers.isEmpty() && !hasInheritedMember(klass, isAbstract = false) ->
@@ -143,10 +158,20 @@ class AbstractClassCanBeInterface(config: Config) :
     }
 
     private fun KtClass.members() =
-        body?.children?.filterIsInstance<KtCallableDeclaration>().orEmpty() +
+        body?.children
+            ?.filterIsInstance<KtCallableDeclaration>()
+            ?.filterNot {
+                it is KtSecondaryConstructor
+            }
+            .orEmpty() +
             primaryConstructor?.valueParameters?.filter { it.hasValOrVar() }.orEmpty()
 
-    private fun KtClass.hasConstructorParameter() = primaryConstructor?.valueParameters?.isNotEmpty() == true
+    private fun KtClass.hasConstructorParameter() =
+        primaryConstructor?.valueParameters?.isNotEmpty() == true ||
+            secondaryConstructors.any { it.valueParameters.isNotEmpty() }
+
+    private fun KtClass.hasNonEmptySecondaryConstructorBody() =
+        secondaryConstructors.any { it.bodyExpression?.statements?.isNotEmpty() == true }
 
     // Kotlin doesn't allow internal classes within an interface, but it does allow them within a sealed class
     private fun KtClass.containsInternalClass() =
