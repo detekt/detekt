@@ -6,7 +6,7 @@ import java.nio.file.Path
 @ProcessingModelDsl
 class CompilerSpecBuilder : Builder<CompilerSpec> {
 
-    var jvmTarget: String = "1.8"
+    var jvmTarget: String = "17"
     var languageVersion: String? = null
     var apiVersion: String? = null
     var classpath: List<Path> = emptyList()
