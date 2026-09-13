@@ -15,8 +15,10 @@ import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.name.StandardClassIds
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForReceiver
+import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelector
 import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelectorOrThis
 
 /**
@@ -24,12 +26,16 @@ import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelectorOrThis
  *
  * <noncompliant>
  * listOf(1, 2, 3, 4).map { it*2 }.filter { it < 4 }.map { it*it }
+ *
+ * "a, b, c".split(",").dropWhile { it.isEmpty() }.drop(1).takeWhile { it.isNotBlank() }
  * </noncompliant>
  *
  * <compliant>
  * listOf(1, 2, 3, 4).asSequence().map { it*2 }.filter { it < 4 }.map { it*it }.toList()
  *
  * listOf(1, 2, 3, 4).map { it*2 }
+ *
+ * "a, b, c".splitToSequence(",").dropWhile { it.isEmpty() }.drop(1).takeWhile { it.isNotBlank() }
  * </compliant>
  */
 class CouldBeSequence(config: Config) :
@@ -64,8 +70,14 @@ class CouldBeSequence(config: Config) :
         }
 
         if (counter > allowedOperations) {
-            val message = "${expression.text} could be .asSequence().${expression.text}"
-            report(Finding(Entity.from(expression), message))
+            val splitCall = expression.previousChainedCall()?.takeIf { it.isStringSplitCall() }
+            if (splitCall != null) {
+                val message = "${splitCall.text} could be ${splitCall.text.replaceFirst(SPLIT, SPLIT_TO_SEQUENCE)}"
+                report(Finding(Entity.from(splitCall), message))
+            } else {
+                val message = "${expression.text} could be .asSequence().${expression.text}"
+                report(Finding(Entity.from(expression), message))
+            }
         }
     }
 
@@ -84,13 +96,36 @@ class CouldBeSequence(config: Config) :
         }
     }
 
+    private fun KtCallExpression.isStringSplitCall(): Boolean {
+        if (getCallNameExpression()?.getReferencedName() != SPLIT) return false
+        return analyze(this) {
+            val callableId = resolveToCall()
+                ?.singleCallOrNull<KaCallableMemberCall<*, *>>()
+                ?.symbol
+                ?.callableId
+            callableId?.packageName == StandardClassIds.BASE_TEXT_PACKAGE &&
+                callableId.callableName.asString() == SPLIT
+        }
+    }
+
     private fun KtExpression.nextChainedCall(): KtExpression? {
         val expression = this.getQualifiedExpressionForSelectorOrThis()
         return expression.getQualifiedExpressionForReceiver()?.selectorExpression
     }
 
+    private fun KtExpression.previousChainedCall(): KtCallExpression? {
+        val qualified = getQualifiedExpressionForSelector() ?: return null
+        return when (val receiver = qualified.receiverExpression) {
+            is KtCallExpression -> receiver
+            is KtQualifiedExpression -> receiver.selectorExpression as? KtCallExpression
+            else -> null
+        }
+    }
+
     companion object {
         private const val SEQUENCE_CLASS_STR = "kotlin.sequences.Sequence"
+        private const val SPLIT = "split"
+        private const val SPLIT_TO_SEQUENCE = "splitToSequence"
         private val listOfAllowedFunFromCollections = listOf("asSequence")
     }
 }

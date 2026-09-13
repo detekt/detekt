@@ -225,4 +225,46 @@ class CouldBeSequenceSpec(val env: KotlinEnvironmentContainer) {
         """.trimIndent()
         assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
+
+    @Test
+    fun `String split chain should suggest splitToSequence - #9720`() {
+        val code = """
+            val text = "a, b, c"
+            val processed = text
+                .split(",")
+                .dropWhile { it.isEmpty() }
+                .drop(1)
+                .takeWhile { it.isNotBlank() }
+                .joinToString(",")
+                .trim()
+        """.trimIndent()
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).hasSize(1)
+        assertThat(findings[0].message).contains("splitToSequence")
+        assertThat(findings[0].message).doesNotContain("asSequence")
+    }
+
+    @Test
+    fun `String splitToSequence chain should not trigger rule - #9720`() {
+        val code = """
+            val text = "a, b, c"
+            val processed = text
+                .splitToSequence(",")
+                .dropWhile { it.isEmpty() }
+                .drop(1)
+                .takeWhile { it.isNotBlank() }
+                .joinToString(",")
+                .trim()
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
+    fun `String split with only allowed operations should not trigger rule`() {
+        val code = """
+            val text = "a, b, c"
+            val processed = text.split(",").map { it.trim() }.filter { it.isNotEmpty() }
+        """.trimIndent()
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
 }
