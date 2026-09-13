@@ -178,6 +178,42 @@ class NullableBooleanCheckSpec(val env: KotlinEnvironmentContainer) {
     }
 
     @Test
+    fun `does not report elvis in init block by default`() {
+        val code = """
+            class Foo(value: Boolean?) {
+                init {
+                    println(value ?: true)
+                }
+            }
+        """.trimIndent()
+
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
+    fun `does not report elvis with missing right operand`() {
+        val code = """
+            fun foo(value: Boolean?) {
+                if (value ?:) println("foo")
+            }
+        """.trimIndent()
+
+        assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true)).isEmpty()
+    }
+
+    @Test
+    fun `does not report elvis with missing left operand`() {
+        // Parser recovery leaves the second Elvis expression without a left operand.
+        val code = """
+            fun foo() {
+                if (true || ?: ?: true) println("foo")
+            }
+        """.trimIndent()
+
+        assertThat(subject.lintWithContext(env, code, allowCompilationErrors = true)).isEmpty()
+    }
+
+    @Test
     fun `does not report elvis in if then-branch by default`() {
         val code = """
             import kotlin.random.Random
