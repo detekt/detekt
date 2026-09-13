@@ -13,7 +13,6 @@ import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
-import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtIfExpression
@@ -88,24 +87,17 @@ class NullableBooleanCheck(config: Config) :
             type?.isBooleanType == true && type.isMarkedNullable
         }
 
-    private fun KtExpression.isUsedInCondition(): Boolean {
-        val parent = parents.first {
-            it is KtIfExpression ||
-                it is KtWhileExpressionBase ||
-                it is KtWhenExpression ||
-                it is KtWhenCondition ||
-                it is KtBlockExpression ||
-                it is KtFunction ||
-                it is KtProperty
-        }
-        return when (parent) {
-            is KtIfExpression -> isInside(parent.condition)
-            is KtWhileExpressionBase -> isInside(parent.condition)
-            is KtWhenExpression -> isInside(parent.subjectExpression)
-            is KtWhenCondition -> true
-            else -> false
-        }
-    }
+    private fun KtExpression.isUsedInCondition(): Boolean =
+        parents.firstNotNullOfOrNull { parent ->
+            when (parent) {
+                is KtIfExpression -> isInside(parent.condition)
+                is KtWhileExpressionBase -> isInside(parent.condition)
+                is KtWhenExpression -> isInside(parent.subjectExpression)
+                is KtWhenCondition -> true
+                is KtFunction, is KtProperty -> false
+                else -> null
+            }
+        } == true
 
     private fun PsiElement.isInside(ancestor: PsiElement?): Boolean =
         ancestor != null && PsiTreeUtil.isAncestor(ancestor, this, false)
