@@ -49,6 +49,7 @@ class PotentialBugProvider : DefaultRuleSetProvider {
                 ::UnusedUnaryOperator,
                 ::PropertyUsedBeforeDeclaration,
                 ::MissingSuperCall,
+                ::IgnoredJavaDefaultMethod,
             )
         )
 }
