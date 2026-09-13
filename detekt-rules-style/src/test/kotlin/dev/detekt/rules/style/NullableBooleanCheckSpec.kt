@@ -14,11 +14,122 @@ import org.junit.jupiter.params.provider.ValueSource
 class NullableBooleanCheckSpec(val env: KotlinEnvironmentContainer) {
     val subject = NullableBooleanCheck(Config.empty)
 
+    /**
+     * The recommended replacement string for `?: [fallback]`.
+     */
+    private fun replacementForElvis(fallback: Boolean): String = if (fallback) "!= false" else "== true"
+
+    @ParameterizedTest
+    @ValueSource(booleans = [true, false])
+    fun `reports elvis in statement`(bool: Boolean) {
+        val code = """
+            import kotlin.random.Random
+            
+            fun nullableBoolean(): Boolean? = true.takeIf { Random.nextBoolean() }
+            
+            fun foo(): Boolean {
+                return nullableBoolean() ?: $bool
+            }
+        """.trimIndent()
+
+        val findings = NullableBooleanCheck(TestConfig("onlyConditionals" to false))
+            .lintWithContext(env, code)
+        assertThat(findings).singleElement()
+            .hasMessage(
+                "The nullable boolean check `nullableBoolean() ?: $bool` should use " +
+                    "`${replacementForElvis(bool)}` rather than `?: $bool`"
+            )
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = [true, false])
+    fun `reports elvis in if condition`(bool: Boolean) {
+        val code = """
+            import kotlin.random.Random
+            
+            fun nullableBoolean(): Boolean? = true.takeIf { Random.nextBoolean() }
+            
+            fun foo() {
+                if (nullableBoolean() ?: $bool) println("foo")
+            }
+        """.trimIndent()
+
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).singleElement()
+            .hasMessage(
+                "The nullable boolean check `nullableBoolean() ?: $bool` should use " +
+                    "`${replacementForElvis(bool)}` rather than `?: $bool`"
+            )
+    }
+
+    @Test
+    fun `does not report for non-constant fallback`() {
+        val code = """
+            import kotlin.random.Random
+            
+            fun nullableBoolean(): Boolean? = true.takeIf { Random.nextBoolean() }
+            
+            fun foo(): Boolean {
+                return nullableBoolean() ?: Random.nextBoolean()
+            }
+        """.trimIndent()
+
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = [true, false])
+    fun `does not report elvis for non-boolean statement with boolean default`(bool: Boolean) {
+        val code = """
+            import kotlin.random.Random
+            
+            fun nullableAny(): Any? = Unit.takeIf { Random.nextBoolean() }
+            
+            fun foo(): Any {
+                return nullableAny() ?: $bool
+            }
+        """.trimIndent()
+
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
+    fun `does not report non-boolean elvis`() {
+        val code = """
+            import kotlin.random.Random
+            
+            fun nullableInt(): Int? = 42.takeIf { Random.nextBoolean() }
+            
+            fun foo(): Int {
+                return nullableInt() ?: 0
+            }
+        """.trimIndent()
+
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
+
+    @Test
+    fun `does not report non-elvis binary expression`() {
+        val code = """
+            import kotlin.random.Random
+            
+            fun foo(): Boolean {
+                return Random.nextBoolean() || false
+            }
+        """.trimIndent()
+
+        assertThat(subject.lintWithContext(env, code)).isEmpty()
+    }
+
     @Test
     fun `does not report elvis in statement by default`() {
         val code = """
-            fun foo(value: Boolean?): Boolean {
-                return value ?: true
+            import kotlin.random.Random
+
+            fun nullableBoolean(): Boolean? = true.takeIf { Random.nextBoolean() }
+
+            fun foo(): Boolean {
+                return nullableBoolean() ?: true
             }
         """.trimIndent()
 
@@ -28,8 +139,12 @@ class NullableBooleanCheckSpec(val env: KotlinEnvironmentContainer) {
     @Test
     fun `does not report elvis in property initializer by default`() {
         val code = """
-            fun foo(value: Boolean?) {
-                val isFlag = value ?: true
+            import kotlin.random.Random
+
+            fun nullableBoolean(): Boolean? = true.takeIf { Random.nextBoolean() }
+
+            fun foo() {
+                val isFlag = nullableBoolean() ?: true
             }
         """.trimIndent()
 
@@ -39,7 +154,11 @@ class NullableBooleanCheckSpec(val env: KotlinEnvironmentContainer) {
     @Test
     fun `does not report elvis in expression-body function by default`() {
         val code = """
-            fun foo(value: Boolean?): Boolean = value ?: true
+            import kotlin.random.Random
+
+            fun nullableBoolean(): Boolean? = true.takeIf { Random.nextBoolean() }
+
+            fun foo(): Boolean = nullableBoolean() ?: true
         """.trimIndent()
 
         assertThat(subject.lintWithContext(env, code)).isEmpty()
@@ -48,7 +167,11 @@ class NullableBooleanCheckSpec(val env: KotlinEnvironmentContainer) {
     @Test
     fun `does not report elvis in constructor default by default`() {
         val code = """
-            class Foo(value: Boolean?, flag: Boolean = value ?: true)
+            import kotlin.random.Random
+
+            fun nullableBoolean(): Boolean? = true.takeIf { Random.nextBoolean() }
+
+            class Foo(flag: Boolean = nullableBoolean() ?: true)
         """.trimIndent()
 
         assertThat(subject.lintWithContext(env, code)).isEmpty()
@@ -57,8 +180,12 @@ class NullableBooleanCheckSpec(val env: KotlinEnvironmentContainer) {
     @Test
     fun `does not report elvis in if then-branch by default`() {
         val code = """
-            fun foo(value: Boolean?): Boolean {
-                return if (true) value ?: true else false
+            import kotlin.random.Random
+
+            fun nullableBoolean(): Boolean? = true.takeIf { Random.nextBoolean() }
+
+            fun foo(): Boolean {
+                return if (true) nullableBoolean() ?: true else false
             }
         """.trimIndent()
 
@@ -68,8 +195,12 @@ class NullableBooleanCheckSpec(val env: KotlinEnvironmentContainer) {
     @Test
     fun `does not report elvis in while body by default`() {
         val code = """
-            fun foo(value: Boolean?): Boolean {
-                while (true) return value ?: true
+            import kotlin.random.Random
+
+            fun nullableBoolean(): Boolean? = true.takeIf { Random.nextBoolean() }
+
+            fun foo(): Boolean {
+                while (true) return nullableBoolean() ?: true
             }
         """.trimIndent()
 
@@ -79,9 +210,13 @@ class NullableBooleanCheckSpec(val env: KotlinEnvironmentContainer) {
     @Test
     fun `does not report elvis in when branch by default`() {
         val code = """
-            fun foo(value: Boolean?, x: Int): Boolean {
+            import kotlin.random.Random
+
+            fun nullableBoolean(): Boolean? = true.takeIf { Random.nextBoolean() }
+
+            fun foo(x: Int): Boolean {
                 return when (x) {
-                    1 -> value ?: true
+                    1 -> nullableBoolean() ?: true
                     else -> false
                 }
             }
@@ -93,9 +228,13 @@ class NullableBooleanCheckSpec(val env: KotlinEnvironmentContainer) {
     @Test
     fun `does not report elvis in subjectless when branch by default`() {
         val code = """
-            fun foo(value: Boolean?): Boolean {
+            import kotlin.random.Random
+
+            fun nullableBoolean(): Boolean? = true.takeIf { Random.nextBoolean() }
+
+            fun foo(): Boolean {
                 return when {
-                    true -> value ?: true
+                    true -> nullableBoolean() ?: true
                     else -> false
                 }
             }
@@ -105,35 +244,14 @@ class NullableBooleanCheckSpec(val env: KotlinEnvironmentContainer) {
     }
 
     @Test
-    fun `reports elvis in statement when onlyConditionals is false`() {
-        val code = """
-            fun foo(value: Boolean?): Boolean {
-                return value ?: true
-            }
-        """.trimIndent()
-
-        val findings = NullableBooleanCheck(TestConfig("onlyConditionals" to false))
-            .lintWithContext(env, code)
-        assertThat(findings).hasSize(1)
-    }
-
-    @ParameterizedTest
-    @ValueSource(booleans = [true, false])
-    fun `reports elvis in if condition`(fallback: Boolean) {
-        val code = """
-            fun foo(value: Boolean?) {
-                if (value ?: $fallback) println("foo")
-            }
-        """.trimIndent()
-
-        assertThat(subject.lintWithContext(env, code)).hasSize(1)
-    }
-
-    @Test
     fun `reports elvis in while condition`() {
         val code = """
-            fun foo(value: Boolean?) {
-                while (value ?: true) println("foo")
+            import kotlin.random.Random
+
+            fun nullableBoolean(): Boolean? = true.takeIf { Random.nextBoolean() }
+
+            fun foo() {
+                while (nullableBoolean() ?: true) println("foo")
             }
         """.trimIndent()
 
@@ -143,8 +261,12 @@ class NullableBooleanCheckSpec(val env: KotlinEnvironmentContainer) {
     @Test
     fun `reports elvis in do-while condition`() {
         val code = """
-            fun foo(value: Boolean?) {
-                do { println("foo") } while (value ?: true)
+            import kotlin.random.Random
+
+            fun nullableBoolean(): Boolean? = true.takeIf { Random.nextBoolean() }
+
+            fun foo() {
+                do { println("foo") } while (nullableBoolean() ?: true)
             }
         """.trimIndent()
 
@@ -154,8 +276,12 @@ class NullableBooleanCheckSpec(val env: KotlinEnvironmentContainer) {
     @Test
     fun `reports elvis in when subject`() {
         val code = """
-            fun foo(value: Boolean?) {
-                when (value ?: true) {
+            import kotlin.random.Random
+
+            fun nullableBoolean(): Boolean? = true.takeIf { Random.nextBoolean() }
+
+            fun foo() {
+                when (nullableBoolean() ?: true) {
                     true -> println("foo")
                     false -> println("bar")
                 }
@@ -168,9 +294,13 @@ class NullableBooleanCheckSpec(val env: KotlinEnvironmentContainer) {
     @Test
     fun `reports elvis in when condition without subject`() {
         val code = """
-            fun foo(value: Boolean?) {
+            import kotlin.random.Random
+
+            fun nullableBoolean(): Boolean? = true.takeIf { Random.nextBoolean() }
+
+            fun foo() {
                 when {
-                    value ?: true -> println("foo")
+                    nullableBoolean() ?: true -> println("foo")
                 }
             }
         """.trimIndent()
@@ -181,8 +311,12 @@ class NullableBooleanCheckSpec(val env: KotlinEnvironmentContainer) {
     @Test
     fun `reports elvis nested in compound if condition`() {
         val code = """
-            fun foo(value: Boolean?, other: Boolean) {
-                if ((value ?: true) && other) println("foo")
+            import kotlin.random.Random
+
+            fun nullableBoolean(): Boolean? = true.takeIf { Random.nextBoolean() }
+
+            fun foo(other: Boolean) {
+                if ((nullableBoolean() ?: true) && other) println("foo")
             }
         """.trimIndent()
 
@@ -190,54 +324,10 @@ class NullableBooleanCheckSpec(val env: KotlinEnvironmentContainer) {
     }
 
     @Test
-    fun `does not report for non-constant fallback`() {
-        val code = """
-            fun foo(value: Boolean?, fallback: Boolean): Boolean {
-                return value ?: fallback
-            }
-        """.trimIndent()
-
-        assertThat(subject.lintWithContext(env, code)).isEmpty()
-    }
-
-    @Test
-    fun `does not report elvis for non-boolean statement with boolean default`() {
-        val code = """
-            fun foo(value: Any?): Any {
-                return value ?: true
-            }
-        """.trimIndent()
-
-        assertThat(subject.lintWithContext(env, code)).isEmpty()
-    }
-
-    @Test
-    fun `does not report non-boolean elvis`() {
-        val code = """
-            fun foo(value: Int?): Int {
-                return value ?: 0
-            }
-        """.trimIndent()
-
-        assertThat(subject.lintWithContext(env, code)).isEmpty()
-    }
-
-    @Test
     fun `does not report non-nullable boolean elvis`() {
         val code = """
             fun foo(value: Boolean): Boolean {
                 return value ?: true
-            }
-        """.trimIndent()
-
-        assertThat(subject.lintWithContext(env, code)).isEmpty()
-    }
-
-    @Test
-    fun `does not report non-elvis binary expression`() {
-        val code = """
-            fun foo(value: Boolean): Boolean {
-                return value || false
             }
         """.trimIndent()
 
