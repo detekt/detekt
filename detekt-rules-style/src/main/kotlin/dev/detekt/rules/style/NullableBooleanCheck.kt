@@ -55,11 +55,7 @@ class NullableBooleanCheck(config: Config) :
     private val onlyConditionals: Boolean by config(true)
 
     override fun visitBinaryExpression(expression: KtBinaryExpression) {
-        if (expression.operationToken == KtTokens.ELVIS &&
-            expression.right?.isBooleanConstant() == true &&
-            expression.left?.isNullableBoolean() == true &&
-            (!onlyConditionals || expression.isUsedInCondition())
-        ) {
+        if (expression.shouldReport()) {
             val messageSuffix =
                 if (expression.right?.text == "true") {
                     "`!= false` rather than `?: true`"
@@ -77,6 +73,13 @@ class NullableBooleanCheck(config: Config) :
         super.visitBinaryExpression(expression)
     }
 
+    private fun KtBinaryExpression.shouldReport(): Boolean {
+        if (operationToken != KtTokens.ELVIS) return false
+        if (right?.isBooleanConstant() != true) return false
+        if (left?.isNullableBoolean() != true) return false
+        return !onlyConditionals || isUsedInCondition()
+    }
+
     private fun KtExpression.isBooleanConstant() = node.elementType == KtNodeTypes.BOOLEAN_CONSTANT
 
     private fun KtExpression.isNullableBoolean() =
@@ -86,16 +89,22 @@ class NullableBooleanCheck(config: Config) :
         }
 
     private fun KtExpression.isUsedInCondition(): Boolean {
-        for (parent in parents) {
-            when (parent) {
-                is KtIfExpression -> return isInside(parent.condition)
-                is KtWhileExpressionBase -> return isInside(parent.condition)
-                is KtWhenExpression -> return isInside(parent.subjectExpression)
-                is KtWhenCondition -> return true
-                is KtBlockExpression, is KtFunction, is KtProperty -> return false
-            }
+        val parent = parents.first {
+            it is KtIfExpression ||
+                it is KtWhileExpressionBase ||
+                it is KtWhenExpression ||
+                it is KtWhenCondition ||
+                it is KtBlockExpression ||
+                it is KtFunction ||
+                it is KtProperty
         }
-        return false
+        return when (parent) {
+            is KtIfExpression -> isInside(parent.condition)
+            is KtWhileExpressionBase -> isInside(parent.condition)
+            is KtWhenExpression -> isInside(parent.subjectExpression)
+            is KtWhenCondition -> true
+            else -> false
+        }
     }
 
     private fun PsiElement.isInside(ancestor: PsiElement?): Boolean =
