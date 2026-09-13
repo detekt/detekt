@@ -267,4 +267,55 @@ class CouldBeSequenceSpec(val env: KotlinEnvironmentContainer) {
         """.trimIndent()
         assertThat(subject.lintWithContext(env, code)).isEmpty()
     }
+
+    @Test
+    fun `custom split before long chain should suggest asSequence`() {
+        val code = """
+            class TextHolder(private val value: String) {
+                fun split(delimiter: String): List<String> = value.split(delimiter)
+            }
+
+            val processed = TextHolder("a, b, c")
+                .split(",")
+                .dropWhile { it.isEmpty() }
+                .drop(1)
+                .takeWhile { it.isNotBlank() }
+        """.trimIndent()
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).hasSize(1)
+        assertThat(findings[0].message).contains("asSequence")
+        assertThat(findings[0].message).doesNotContain("splitToSequence")
+    }
+
+    @Test
+    fun `long chain after property access should suggest asSequence`() {
+        val code = """
+            class Box(val items: List<Int>)
+
+            val processed = Box(listOf(1, 2, 3, 4, 5))
+                .items
+                .map { it * 2 }
+                .filter { it > 2 }
+                .map { it + 1 }
+        """.trimIndent()
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).hasSize(1)
+        assertThat(findings[0].message).contains("asSequence")
+    }
+
+    @Test
+    fun `long chain with implicit receiver has no previous qualified call`() {
+        // First `map` is the receiver of `map.filter`, not a selector, so
+        // previousChainedCall() hits getQualifiedExpressionForSelector() == null.
+        val code = """
+            val processed = listOf(1, 2, 3, 4, 5).run {
+                map { it * 2 }
+                    .filter { it > 2 }
+                    .map { it + 1 }
+            }
+        """.trimIndent()
+        val findings = subject.lintWithContext(env, code)
+        assertThat(findings).hasSize(1)
+        assertThat(findings[0].message).contains("asSequence")
+    }
 }

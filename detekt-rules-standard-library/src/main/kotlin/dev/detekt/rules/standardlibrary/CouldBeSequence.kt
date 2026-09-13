@@ -99,12 +99,11 @@ class CouldBeSequence(config: Config) :
     private fun KtCallExpression.isStringSplitCall(): Boolean {
         if (getCallNameExpression()?.getReferencedName() != SPLIT) return false
         return analyze(this) {
-            val callableId = resolveToCall()
+            resolveToCall()
                 ?.singleCallOrNull<KaCallableMemberCall<*, *>>()
                 ?.symbol
                 ?.callableId
-            callableId?.packageName == StandardClassIds.BASE_TEXT_PACKAGE &&
-                callableId.callableName.asString() == SPLIT
+                ?.packageName == StandardClassIds.BASE_TEXT_PACKAGE
         }
     }
 
