@@ -14,7 +14,6 @@ import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBlockExpression
-import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtIfExpression
@@ -93,7 +92,7 @@ class NullableBooleanCheck(config: Config) :
                 is KtWhileExpressionBase -> return isInside(parent.condition)
                 is KtWhenExpression -> return isInside(parent.subjectExpression)
                 is KtWhenCondition -> return true
-                is KtBlockExpression, is KtFunction, is KtProperty, is KtClassOrObject -> return false
+                is KtBlockExpression, is KtFunction, is KtProperty -> return false
             }
         }
         return false
