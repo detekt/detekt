@@ -7,11 +7,14 @@ import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.api.config
+import dev.detekt.psi.isCalling
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.singleCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.types.symbol
+import org.jetbrains.kotlin.name.CallableId
+import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.name.StandardClassIds
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -96,16 +99,7 @@ class CouldBeSequence(config: Config) :
         }
     }
 
-    private fun KtCallExpression.isStringSplitCall(): Boolean {
-        if (getCallNameExpression()?.getReferencedName() != SPLIT) return false
-        return analyze(this) {
-            resolveToCall()
-                ?.singleCallOrNull<KaCallableMemberCall<*, *>>()
-                ?.symbol
-                ?.callableId
-                ?.packageName == StandardClassIds.BASE_TEXT_PACKAGE
-        }
-    }
+    private fun KtCallExpression.isStringSplitCall(): Boolean = isCalling(splitCallableId)
 
     private fun KtExpression.nextChainedCall(): KtExpression? {
         val expression = this.getQualifiedExpressionForSelectorOrThis()
@@ -125,6 +119,7 @@ class CouldBeSequence(config: Config) :
         private const val SEQUENCE_CLASS_STR = "kotlin.sequences.Sequence"
         private const val SPLIT = "split"
         private const val SPLIT_TO_SEQUENCE = "splitToSequence"
+        private val splitCallableId = CallableId(StandardClassIds.BASE_TEXT_PACKAGE, Name.identifier(SPLIT))
         private val listOfAllowedFunFromCollections = listOf("asSequence")
     }
 }
