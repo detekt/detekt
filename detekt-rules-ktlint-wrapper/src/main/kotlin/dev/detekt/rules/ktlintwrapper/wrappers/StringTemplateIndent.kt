@@ -1,8 +1,8 @@
 package dev.detekt.rules.ktlintwrapper.wrappers
 
-import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfigProperty
-import com.pinterest.ktlint.rule.engine.core.api.editorconfig.INDENT_SIZE_PROPERTY
-import com.pinterest.ktlint.ruleset.standard.rules.StringTemplateIndentRule
+import io.github.ktlint.core.rule.engine.core.api.editorconfig.EditorConfigProperty
+import io.github.ktlint.core.rule.engine.core.api.editorconfig.INDENT_SIZE_PROPERTY
+import io.github.ktlint.core.ruleset.standard.rules.StringTemplateIndentRule
 import dev.detekt.api.AutoCorrectable
 import dev.detekt.api.Config
 import dev.detekt.api.Configuration
