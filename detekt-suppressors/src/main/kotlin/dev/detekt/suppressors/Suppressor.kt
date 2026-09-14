@@ -1,4 +1,4 @@
-package dev.detekt.core.suppressors
+package dev.detekt.suppressors
 
 import dev.detekt.api.Finding
 import dev.detekt.api.Rule
@@ -11,7 +11,7 @@ fun interface Suppressor {
     fun shouldSuppress(finding: Finding): Boolean
 }
 
-internal fun buildSuppressors(rule: Rule, analysisMode: AnalysisMode): List<Suppressor> =
+fun buildSuppressors(rule: Rule, analysisMode: AnalysisMode): List<Suppressor> =
     listOfNotNull(
         annotationSuppressorFactory(rule, analysisMode),
         functionSuppressorFactory(rule, analysisMode),
