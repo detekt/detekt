@@ -3,6 +3,7 @@
 @file:Suppress("StringLiteralDuplication")
 
 import dev.detekt.buildlogic.osDependent
+import dev.detekt.buildlogic.testInMultipleJvms
 import dev.detekt.gradle.Detekt
 import dev.detekt.gradle.DetektCreateBaselineTask
 import org.gradle.plugin.compatibility.compatibility
@@ -305,3 +306,6 @@ dependencyAnalysis {
         }
     }
 }
+
+testInMultipleJvms("functionalTest")
+testInMultipleJvms("functionalTestMinSupportedGradle")
