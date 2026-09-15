@@ -24,7 +24,7 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6
         with:
-          java-version: 25
+          java-version: 25.0.4+101.0.LTS
           distribution: 'temurin'
           verify-signature: true
 
@@ -88,7 +88,7 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6
         with:
-          java-version: 25
+          java-version: 25.0.4+101.0.LTS
           distribution: 'temurin'
           verify-signature: true
 
@@ -109,7 +109,7 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6
         with:
-          java-version: 25
+          java-version: 25.0.4+101.0.LTS
           distribution: 'temurin'
           verify-signature: true
 
@@ -130,7 +130,7 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6
         with:
-          java-version: 25
+          java-version: 25.0.4+101.0.LTS
           distribution: 'temurin'
           verify-signature: true
 
