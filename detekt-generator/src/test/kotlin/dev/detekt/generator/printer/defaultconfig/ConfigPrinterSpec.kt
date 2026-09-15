@@ -34,7 +34,6 @@ class ConfigPrinterSpec {
                 active: false
               NoUnitKeyword:
                 active: true
-                autoCorrect: true
 
         """.trimIndent()
 
