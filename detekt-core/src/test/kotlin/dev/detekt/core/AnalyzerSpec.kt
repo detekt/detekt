@@ -461,7 +461,7 @@ internal fun Analyzer(
     settings: ProcessingSettings,
     vararg ruleDescriptors: RuleDescriptor,
     processors: List<FileProcessListener> = emptyList(),
-    analysisMode: AnalysisMode = AnalysisMode.light,
+    analysisMode: AnalysisMode = AnalysisMode.Light,
 ): Analyzer =
     Analyzer(
         settings,
