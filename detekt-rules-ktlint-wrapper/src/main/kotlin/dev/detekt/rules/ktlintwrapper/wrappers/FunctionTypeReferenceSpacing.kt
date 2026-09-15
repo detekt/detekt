@@ -2,8 +2,8 @@ package dev.detekt.rules.ktlintwrapper.wrappers
 
 import com.pinterest.ktlint.ruleset.standard.rules.FunctionTypeReferenceSpacingRule
 import dev.detekt.api.ActiveByDefault
+import dev.detekt.api.AutoCorrectable
 import dev.detekt.api.Config
-import dev.detekt.api.internal.AutoCorrectable
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
@@ -11,9 +11,9 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  * documentation.
  */
 @ActiveByDefault(since = "1.23.0")
-@AutoCorrectable(since = "1.20.0")
 internal class FunctionTypeReferenceSpacing(config: Config) :
-    KtlintRule(config, "Checks the spacing before and after the angle brackets of a type argument list.") {
+    KtlintRule(config, "Checks the spacing before and after the angle brackets of a type argument list."),
+    AutoCorrectable {
 
     override val wrapping = FunctionTypeReferenceSpacingRule()
 }

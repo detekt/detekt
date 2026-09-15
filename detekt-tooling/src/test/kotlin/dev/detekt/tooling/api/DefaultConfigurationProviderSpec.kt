@@ -1,6 +1,5 @@
 package dev.detekt.tooling.api
 
-import dev.detekt.api.Config
 import dev.detekt.tooling.api.spec.ExtensionId
 import dev.detekt.tooling.api.spec.ExtensionsSpec
 import org.assertj.core.api.Assertions.assertThatCode
@@ -23,8 +22,6 @@ internal class TestConfigurationProvider : DefaultConfigurationProvider {
     override fun init(extensionsSpec: ExtensionsSpec) {
         // no-op
     }
-
-    override fun get(): Config = Config.empty
 
     override fun copy(targetLocation: Path) {
         // nothing

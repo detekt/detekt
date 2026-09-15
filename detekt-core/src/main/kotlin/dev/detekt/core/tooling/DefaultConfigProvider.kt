@@ -22,8 +22,6 @@ class DefaultConfigProvider : DefaultConfigurationProvider {
         this.extensionsSpec = extensionsSpec
     }
 
-    override fun get(): Config = extensionsSpec.getDefaultConfiguration()
-
     override fun copy(targetLocation: Path) {
         Files.copy(configInputStream(extensionsSpec), targetLocation, StandardCopyOption.REPLACE_EXISTING)
     }

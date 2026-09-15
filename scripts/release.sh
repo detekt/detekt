@@ -2,6 +2,7 @@
 set -e
 gradle publishToMavenLocal
 gradle build
+gradle -pdetekt-gradle-plugin build
 # Uploads artifacts to Central Portal. After all steps complete, release manually at
 # https://central.sonatype.com/publishing — or replace with publishAndReleaseToMavenCentral to release automatically.
 # --no-configuration-cache is required due to a vanniktech bug with MavenCentralBuildService serialization:

@@ -3,19 +3,19 @@ package dev.detekt.rules.ktlintwrapper.wrappers
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfigProperty
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.INDENT_SIZE_PROPERTY
 import com.pinterest.ktlint.ruleset.standard.rules.WhenEntryBracing
+import dev.detekt.api.AutoCorrectable
 import dev.detekt.api.Config
 import dev.detekt.api.Configuration
 import dev.detekt.api.config
-import dev.detekt.api.internal.AutoCorrectable
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
  * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/experimental/#when-entry-bracing) for
  * documentation.
  */
-@AutoCorrectable(since = "2.0.0")
 internal class WhenEntryBracing(config: Config) :
-    KtlintRule(config, "Enforce consistent usages of braces inside the when-statement.") {
+    KtlintRule(config, "Enforce consistent usages of braces inside the when-statement."),
+    AutoCorrectable {
 
     override val wrapping = WhenEntryBracing()
 
