@@ -5,18 +5,19 @@ import com.pinterest.ktlint.rule.engine.core.api.editorconfig.INDENT_SIZE_PROPER
 import com.pinterest.ktlint.ruleset.standard.rules.IndentationRule
 import com.pinterest.ktlint.ruleset.standard.rules.IndentationRule.Companion.INDENT_WHEN_ARROW_ON_NEW_LINE
 import dev.detekt.api.ActiveByDefault
+import dev.detekt.api.AutoCorrectable
 import dev.detekt.api.Config
 import dev.detekt.api.Configuration
 import dev.detekt.api.config
-import dev.detekt.api.internal.AutoCorrectable
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
  * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/#indentation) for documentation.
  */
 @ActiveByDefault(since = "1.19.0")
-@AutoCorrectable(since = "1.0.0")
-internal class Indentation(config: Config) : KtlintRule(config, "Reports mis-indented code") {
+internal class Indentation(config: Config) :
+    KtlintRule(config, "Reports mis-indented code"),
+    AutoCorrectable {
 
     override val wrapping = IndentationRule()
 

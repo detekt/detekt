@@ -4,19 +4,19 @@ import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfigProper
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.INDENT_SIZE_PROPERTY
 import com.pinterest.ktlint.ruleset.standard.rules.EnumWrappingRule
 import dev.detekt.api.ActiveByDefault
+import dev.detekt.api.AutoCorrectable
 import dev.detekt.api.Config
 import dev.detekt.api.Configuration
 import dev.detekt.api.config
-import dev.detekt.api.internal.AutoCorrectable
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
  * See [ktlint docs](https://ktlint.github.io/ktlint/<ktlintVersion/>/rules/standard/#enum-wrapping) for documentation.
  */
 @ActiveByDefault(since = "2.0.0")
-@AutoCorrectable(since = "1.23.0")
 internal class EnumWrapping(config: Config) :
-    KtlintRule(config, "An enum should be a single line, or each enum entry has to be placed on a separate line.") {
+    KtlintRule(config, "An enum should be a single line, or each enum entry has to be placed on a separate line."),
+    AutoCorrectable {
 
     override val wrapping = EnumWrappingRule()
 

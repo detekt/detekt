@@ -9,5 +9,4 @@ dependencies {
     testImplementation(projects.detektTest)
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.assertj.core)
-    testImplementation(libs.kotlin.compiler)
 }

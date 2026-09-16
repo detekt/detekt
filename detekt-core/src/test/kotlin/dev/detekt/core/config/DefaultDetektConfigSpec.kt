@@ -12,7 +12,6 @@ class DefaultDetektConfigSpec {
 
     private val generalConfigKeys = listOf(
         "config",
-        "processors",
         "console-reports",
     )
 
@@ -30,6 +29,7 @@ class DefaultDetektConfigSpec {
             arguments("naming", "dev.detekt.rules.naming"),
             arguments("performance", "dev.detekt.rules.performance"),
             arguments("potential-bugs", "dev.detekt.rules.potentialbugs"),
+            arguments("standard-library", "dev.detekt.rules.standardlibrary"),
             arguments("style", "dev.detekt.rules.style"),
         )
 

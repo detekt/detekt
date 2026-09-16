@@ -1,6 +1,5 @@
 package dev.detekt.core.tooling
 
-import dev.detekt.api.valueOrNull
 import dev.detekt.core.createNullLoggingSpec
 import dev.detekt.test.utils.resourceAsPath
 import org.assertj.core.api.Assertions.assertThat
@@ -14,13 +13,6 @@ class DefaultConfigProviderSpec {
     @Nested
     inner class `defaultConfigProvider without plugins` {
         private val extensionsSpec = createNullLoggingSpec {}.extensionsSpec
-
-        @Test
-        fun gets() {
-            val config = DefaultConfigProvider().apply { init(extensionsSpec) }.get()
-
-            assertThat(config.valueOrNull<Any>("sample")).isNull()
-        }
 
         @Test
         fun copies(@TempDir tempDir: Path) {
@@ -39,13 +31,6 @@ class DefaultConfigProviderSpec {
                 fromPaths { listOf(resourceAsPath("sample-rule-set.jar")) }
             }
         }.extensionsSpec
-
-        @Test
-        fun gets() {
-            val config = DefaultConfigProvider().apply { init(extensionsSpec) }.get()
-
-            assertThat(config.valueOrNull<Any>("sample")).isNotNull()
-        }
 
         @Test
         fun copies(@TempDir tempDir: Path) {

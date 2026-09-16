@@ -131,8 +131,6 @@ Uncomment the reports you don't care about.
 console-reports:
   active: true
   exclude:
-  #  - 'ProjectStatisticsReport'
-  #  - 'ComplexityReport'
   #  - 'NotificationReport'
   #  - 'FindingsReport'
   #  - 'FileBasedFindingsReport'
@@ -151,33 +149,6 @@ It's simply a way of alerting users to information that they have opted-in to.
 
 **FileBasedFindingsReport** is similar to the FindingsReport shown above. 
 The rule violations are grouped by file location.
-
-## Processors
-
-Count processors are used to calculate project metrics.
-For example, when all count processors are enabled, a detekt html report might look like this:
-
-![Processor metrics in html report](/img/tutorial/processor_metrics_in_html_report.png)
-
-Uncomment the processors you don't care about.
-
-```yaml
-processors:
-    active: true
-    exclude:
-        # - 'KtFileCountProcessor'
-        # - 'PackageCountProcessor'
-        # - 'ClassCountProcessor'
-        # - 'FunctionCountProcessor'
-        # - 'PropertyCountProcessor'
-        # - 'ProjectCyclomaticComplexityProcessor'
-        # - 'ProjectCognitiveComplexityProcessor'
-        # - 'ProjectLLOCProcessor'
-        # - 'ProjectCLOCProcessor'
-        # - 'ProjectLOCProcessor'
-        # - 'ProjectSLOCProcessor'
-        # - 'LicenseHeaderLoaderExtension'
-```
 
 ## Config JSON Schema
 

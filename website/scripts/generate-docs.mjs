@@ -35,6 +35,7 @@ const RULE_MODULES = [
   'detekt-rules-performance',
   'detekt-rules-potential-bugs',
   'detekt-rules-ruleauthors',
+  'detekt-rules-standard-library',
   'detekt-rules-style',
 ];
 
