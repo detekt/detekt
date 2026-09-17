@@ -28,10 +28,6 @@ private val expectedHelp = """
     |      Output path for generated detekt config.
     |    --documentation, -d
     |      Output path for generated documentation.
-    |    --generate-custom-rule-config, -gcrc
-    |      Generate config for user-defined rules. Path to user rules can be 
-    |      specified with --input option
-    |      Default: false
     |    --help, -h
     |      Shows the usage.
     |  * --input, -i
