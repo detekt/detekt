@@ -36,8 +36,7 @@ In short: use AI as a tool, not as a replacement for human context, care, and re
 When implementing a new rule, do not forget to perform the following steps:
 - Add the new rule to a `RuleSetProvider` (such as `StyleGuideProvider`).
 - Test the new rule and/or add tests for any changes made to a rule. Run detekt on itself and other
-  Kotlin projects with the `--run-rule RuleSet:RuleId` option to test your rule in isolation. Make use of
-  the `scripts/get_analysis_projects.kts` script to automatically establish a set of analysis projects.
+  Kotlin projects with the `--run-rule RuleSet:RuleId` option to test your rule in isolation.
 - Run `./gradlew generateDefaultDetektConfig` to add your rule and its config options to the `default-detekt-config.yml`.
 - Run `./gradlew build`. This will execute tests locally.
 

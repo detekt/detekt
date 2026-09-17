@@ -30,6 +30,7 @@ dependencies {
     generatedConfig(projects.detektRulesNaming) { targetConfiguration = "generatedConfig" }
     generatedConfig(projects.detektRulesPerformance) { targetConfiguration = "generatedConfig" }
     generatedConfig(projects.detektRulesPotentialBugs) { targetConfiguration = "generatedConfig" }
+    generatedConfig(projects.detektRulesStandardLibrary) { targetConfiguration = "generatedConfig" }
     generatedConfig(projects.detektRulesStyle) { targetConfiguration = "generatedConfig" }
     generatedDeprecations(projects.detektRulesComments) { targetConfiguration = "generatedDeprecations" }
     generatedDeprecations(projects.detektRulesComplexity) { targetConfiguration = "generatedDeprecations" }
@@ -42,6 +43,7 @@ dependencies {
     generatedDeprecations(projects.detektRulesPerformance) { targetConfiguration = "generatedDeprecations" }
     generatedDeprecations(projects.detektRulesPotentialBugs) { targetConfiguration = "generatedDeprecations" }
     generatedDeprecations(projects.detektRulesRuleauthors) { targetConfiguration = "generatedDeprecations" }
+    generatedDeprecations(projects.detektRulesStandardLibrary) { targetConfiguration = "generatedDeprecations" }
     generatedDeprecations(projects.detektRulesStyle) { targetConfiguration = "generatedDeprecations" }
 
     testRuntimeOnly(projects.detektRules)
@@ -80,26 +82,9 @@ val generateDefaultDetektConfig = tasks.register("generateDefaultDetektConfig") 
                           # when writing own rules with new properties, exclude the property path e.g.: ['my_rule_set', '.*>.*>[my_property]']
                           excludes: []
                         
-                        processors:
-                          active: true
-                          exclude:
-                          # - 'KtFileCountProcessor'
-                          # - 'PackageCountProcessor'
-                          # - 'ClassCountProcessor'
-                          # - 'FunctionCountProcessor'
-                          # - 'PropertyCountProcessor'
-                          # - 'ProjectCyclomaticComplexityProcessor'
-                          # - 'ProjectCognitiveComplexityProcessor'
-                          # - 'ProjectLLOCProcessor'
-                          # - 'ProjectCLOCProcessor'
-                          # - 'ProjectLOCProcessor'
-                          # - 'ProjectSLOCProcessor'
-                        
                         console-reports:
                           active: true
                           exclude:
-                             - 'ProjectStatisticsReport'
-                             - 'ComplexityReport'
                              - 'NotificationReport'
                              - 'IssuesReport'
                              - 'FileBasedIssuesReport'

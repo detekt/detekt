@@ -36,6 +36,8 @@ configurations.apiElements {
 tasks.shadowJar {
     archiveClassifier = ""
     configurations = aaDependencies.map { listOf(it) }
+    @Suppress("DEPRECATION") // This flag will be disabled and removed in the next major version of Shadow.
+    enableKotlinModuleRemapping = false
 }
 
 val sourcesJar = tasks.register<Jar>("sourcesJar") {

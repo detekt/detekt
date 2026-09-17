@@ -1,6 +1,5 @@
 package dev.detekt.tooling.api
 
-import dev.detekt.api.Config
 import dev.detekt.tooling.api.spec.ExtensionsSpec
 import java.nio.file.Path
 import java.util.ServiceLoader
@@ -8,8 +7,6 @@ import java.util.ServiceLoader
 interface DefaultConfigurationProvider {
 
     fun init(extensionsSpec: ExtensionsSpec)
-
-    fun get(): Config
 
     fun copy(targetLocation: Path)
 

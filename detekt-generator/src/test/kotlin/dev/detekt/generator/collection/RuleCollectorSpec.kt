@@ -146,8 +146,7 @@ class RuleCollectorSpec {
              * description
              *
              */
-            @AutoCorrectable(since = "1.0.0")
-            class SomeRandomClass : Rule
+            class SomeRandomClass : Rule, AutoCorrectable
         """.trimIndent()
         val items = subject.run(code)
         assertThat(items[0].autoCorrect).isTrue()

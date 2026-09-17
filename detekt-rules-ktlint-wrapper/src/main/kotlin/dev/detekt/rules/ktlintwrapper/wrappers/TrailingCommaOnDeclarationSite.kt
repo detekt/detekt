@@ -3,9 +3,9 @@ package dev.detekt.rules.ktlintwrapper.wrappers
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfigProperty
 import com.pinterest.ktlint.ruleset.standard.rules.TrailingCommaOnDeclarationSiteRule
 import dev.detekt.api.ActiveByDefault
+import dev.detekt.api.AutoCorrectable
 import dev.detekt.api.Config
 import dev.detekt.api.Configuration
-import dev.detekt.api.internal.AutoCorrectable
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 import dev.detekt.rules.ktlintwrapper.configWithAndroidVariants
 
@@ -20,9 +20,9 @@ import dev.detekt.rules.ktlintwrapper.configWithAndroidVariants
  * trailing comma usage yet.
  */
 @ActiveByDefault(since = "2.0.0")
-@AutoCorrectable(since = "1.22.0")
 internal class TrailingCommaOnDeclarationSite(config: Config) :
-    KtlintRule(config, "Rule to mandate/forbid trailing commas at declaration sites") {
+    KtlintRule(config, "Rule to mandate/forbid trailing commas at declaration sites"),
+    AutoCorrectable {
 
     override val wrapping = TrailingCommaOnDeclarationSiteRule()
 

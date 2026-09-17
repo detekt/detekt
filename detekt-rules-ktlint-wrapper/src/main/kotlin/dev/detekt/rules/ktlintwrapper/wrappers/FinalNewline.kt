@@ -4,10 +4,10 @@ import com.pinterest.ktlint.rule.engine.core.api.editorconfig.EditorConfigProper
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.INSERT_FINAL_NEWLINE_PROPERTY
 import com.pinterest.ktlint.ruleset.standard.rules.FinalNewlineRule
 import dev.detekt.api.ActiveByDefault
+import dev.detekt.api.AutoCorrectable
 import dev.detekt.api.Config
 import dev.detekt.api.Configuration
 import dev.detekt.api.config
-import dev.detekt.api.internal.AutoCorrectable
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 
 /**
@@ -17,8 +17,9 @@ import dev.detekt.rules.ktlintwrapper.KtlintRule
  * from the standard rules, make sure to enable just one. The pro of this rule is that it can auto-correct the issue.
  */
 @ActiveByDefault(since = "1.0.0")
-@AutoCorrectable(since = "1.0.0")
-internal class FinalNewline(config: Config) : KtlintRule(config, "Detects missing final newlines") {
+internal class FinalNewline(config: Config) :
+    KtlintRule(config, "Detects missing final newlines"),
+    AutoCorrectable {
 
     override val wrapping = FinalNewlineRule()
 

@@ -82,7 +82,6 @@ public abstract interface class dev/detekt/gradle/extensions/DetektExtension {
 	public abstract fun getConfig ()Lorg/gradle/api/file/ConfigurableFileCollection;
 	public abstract fun getDebug ()Lorg/gradle/api/provider/Property;
 	public abstract fun getDisableDefaultRuleSets ()Lorg/gradle/api/provider/Property;
-	public abstract fun getEnableCompilerPlugin ()Lorg/gradle/api/provider/Property;
 	public abstract fun getFailOnSeverity ()Lorg/gradle/api/provider/Property;
 	public abstract fun getIgnoreFailures ()Lorg/gradle/api/provider/Property;
 	public abstract fun getIgnoredBuildTypes ()Lorg/gradle/api/provider/ListProperty;

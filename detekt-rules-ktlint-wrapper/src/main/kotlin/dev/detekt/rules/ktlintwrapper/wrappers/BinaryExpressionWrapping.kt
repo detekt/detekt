@@ -5,10 +5,10 @@ import com.pinterest.ktlint.rule.engine.core.api.editorconfig.INDENT_SIZE_PROPER
 import com.pinterest.ktlint.rule.engine.core.api.editorconfig.MAX_LINE_LENGTH_PROPERTY
 import com.pinterest.ktlint.ruleset.standard.rules.BinaryExpressionWrappingRule
 import dev.detekt.api.ActiveByDefault
+import dev.detekt.api.AutoCorrectable
 import dev.detekt.api.Config
 import dev.detekt.api.Configuration
 import dev.detekt.api.config
-import dev.detekt.api.internal.AutoCorrectable
 import dev.detekt.rules.ktlintwrapper.KtlintRule
 import dev.detekt.rules.ktlintwrapper.configWithAndroidVariants
 
@@ -17,12 +17,12 @@ import dev.detekt.rules.ktlintwrapper.configWithAndroidVariants
  * documentation.
  */
 @ActiveByDefault(since = "2.0.0")
-@AutoCorrectable(since = "2.0.0")
 internal class BinaryExpressionWrapping(config: Config) :
     KtlintRule(
         config,
         "Wrap binary expression at the operator reference if the binary expression does not fit on the line"
-    ) {
+    ),
+    AutoCorrectable {
 
     override val wrapping = BinaryExpressionWrappingRule()
 

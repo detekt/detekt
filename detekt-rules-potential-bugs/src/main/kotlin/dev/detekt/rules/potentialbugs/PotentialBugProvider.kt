@@ -19,8 +19,6 @@ class PotentialBugProvider : DefaultRuleSetProvider {
             listOf(
                 ::AvoidReferentialEquality,
                 ::Deprecation,
-                ::DontDowncastCollectionTypes,
-                ::DoubleMutabilityForCollection,
                 ::ElseCaseInsteadOfExhaustiveWhen,
                 ::EqualsAlwaysReturnsTrueOrFalse,
                 ::EqualsWithHashCodeExist,
@@ -29,12 +27,8 @@ class PotentialBugProvider : DefaultRuleSetProvider {
                 ::HasPlatformType,
                 ::ImplicitDefaultLocale,
                 ::InvalidRange,
-                ::IteratorHasNextCallsNextMethod,
-                ::IteratorNotThrowingNoSuchElementException,
                 ::LateinitUsage,
-                ::MapGetWithNotNullAssertionOperator,
                 ::MissingPackageDeclaration,
-                ::MissingUseCall,
                 ::NullCheckOnMutableProperty,
                 ::UnconditionalJumpStatementInLoop,
                 ::UnnamedParameterUse,
@@ -54,7 +48,6 @@ class PotentialBugProvider : DefaultRuleSetProvider {
                 ::CastNullableToNonNullableType,
                 ::UnusedUnaryOperator,
                 ::PropertyUsedBeforeDeclaration,
-                ::CharArrayToStringCall,
                 ::MissingSuperCall,
             )
         )
