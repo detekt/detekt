@@ -4,11 +4,13 @@ import dev.detekt.api.Detektion
 import dev.detekt.api.Issue
 import dev.detekt.api.ReportingExtension
 import dev.detekt.core.ProcessingSettings
+import dev.detekt.core.baseline.BaselineResultMapping
 
 fun handleReportingExtensions(settings: ProcessingSettings, initialResult: Detektion): Detektion {
     val extensions = loadExtensions<ReportingExtension>(settings)
     extensions.forEach { it.onRawResult(initialResult) }
-    val finalIssues = extensions.fold(initialResult.issues) { acc, extension -> extension.transformIssues(acc) }
+    val baselineIssues = BaselineResultMapping(settings.spec.baselineSpec).transformIssues(initialResult.issues)
+    val finalIssues = extensions.fold(baselineIssues) { acc, extension -> extension.transformIssues(acc) }
     val finalResult = initialResult.copy(issues = finalIssues.sortedWith(issueComparator))
     extensions.forEach { it.onFinalResult(finalResult) }
     return finalResult
