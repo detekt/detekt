@@ -19,7 +19,7 @@ plugins {
     id("com.gradle.plugin-publish") version "2.2.1"
     // We use this published version of the detekt plugin to self analyse this project.
     id("dev.detekt") version "2.0.0-alpha.6"
-    id("com.github.gmazzo.buildconfig") version "6.0.10"
+    id("com.github.gmazzo.buildconfig") version "6.1.1"
 }
 
 group = "dev.detekt"
