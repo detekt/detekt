@@ -115,12 +115,15 @@ internal data class FreeArgs(val args: List<String>) : CliArgument {
 }
 
 internal data class FriendPathArgs(val fileCollection: FileCollection) : CliArgument {
-    override fun toArgument() =
-        if (!fileCollection.isEmpty) {
-            listOf(FRIEND_PATHS_PARAMETER, fileCollection.joinToString(",") { it.absolutePath })
-        } else {
+    override fun toArgument(): List<String> {
+        // a module with a disabled jar task still contributes its jar, so an entry can be absent
+        val existing = fileCollection.files.filter(File::exists)
+        return if (existing.isEmpty()) {
             emptyList()
+        } else {
+            listOf(FRIEND_PATHS_PARAMETER, existing.joinToString(",") { it.absolutePath })
         }
+    }
 }
 
 internal data class BasePathArgument(val basePath: String?) : CliArgument {
