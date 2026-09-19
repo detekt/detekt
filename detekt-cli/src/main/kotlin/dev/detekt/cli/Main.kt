@@ -2,6 +2,9 @@
 
 package dev.detekt.cli
 
+import com.github.ajalt.clikt.core.CliktError
+import com.github.ajalt.clikt.core.PrintHelpMessage
+import com.github.ajalt.clikt.core.parse
 import dev.detekt.api.internal.whichKotlin
 import dev.detekt.cli.runners.ConfigExporter
 import dev.detekt.cli.runners.Executable
@@ -64,6 +67,20 @@ fun buildRunner(args: Array<String>, outputPrinter: PrintStream, errorPrinter: P
         arguments.generateConfig != null -> ConfigExporter(arguments, outputPrinter)
         else -> Runner(arguments, outputPrinter, errorPrinter)
     }
+}
+
+internal fun parseArguments(args: Array<out String>): CliArgs {
+    val cli = CliArgs()
+
+    try {
+        cli.parse(args.toList())
+    } catch (ex: PrintHelpMessage) {
+        throw HelpRequest(cli.getFormattedHelp(ex).orEmpty())
+    } catch (ex: CliktError) {
+        throw HandledArgumentViolation(ex.message, cli.getFormattedHelp(ex).orEmpty())
+    }
+
+    return cli
 }
 
 @Suppress("detekt.MagicNumber")
