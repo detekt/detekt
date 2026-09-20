@@ -13,6 +13,7 @@ import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.api.config
 import dev.detekt.psi.isExpect
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.symbols.KaConstructorSymbol
@@ -20,7 +21,7 @@ import org.jetbrains.kotlin.analysis.api.symbols.KaPropertySymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolVisibility
 import org.jetbrains.kotlin.analysis.api.symbols.KaValueParameterSymbol
-import org.jetbrains.kotlin.idea.references.mainReference
+import org.jetbrains.kotlin.analysis.api.types.symbol
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCallableReferenceExpression
 import org.jetbrains.kotlin.psi.KtClass
@@ -182,12 +183,13 @@ private class UnusedPrivatePropertyVisitor(private val allowedNames: Regex) : De
         super.visitReferenceExpression(expression)
 
         analyze(expression) {
+            @OptIn(KaExperimentalApi::class)
             val references = when (expression) {
-                is KtNameReferenceExpression -> listOfNotNull(expression.mainReference.resolveToSymbol())
+                is KtNameReferenceExpression -> listOfNotNull(expression.resolveSymbol())
 
                 is KtCallExpression -> expression.getChildrenOfType<KtValueArgumentList>()
                     .flatMap { it.arguments }
-                    .mapNotNull { it.getArgumentExpression()?.mainReference?.resolveToSymbol() }
+                    .mapNotNull { it.getArgumentExpression()?.expressionType?.symbol }
 
                 else -> return
             }

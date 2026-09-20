@@ -12,12 +12,12 @@ import dev.detekt.api.Rule
 import dev.detekt.api.config
 import dev.detekt.psi.isLateinit
 import dev.detekt.psi.isOverride
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.resolution.singleVariableAccessCall
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbol
-import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBlockExpression
@@ -152,7 +152,8 @@ class VarCouldBeVal(config: Config) :
                 val expressionRight = expression.right
                 if (expressionRight != null) {
                     analyze(expression) {
-                        val symbol = (expression.left as? KtNameReferenceExpression)?.mainReference?.resolveToSymbol()
+                        @OptIn(KaExperimentalApi::class)
+                        val symbol = (expression.left as? KtNameReferenceExpression)?.resolveSymbol()
                         if (symbol != null) {
                             evaluateAssignmentExpression(symbol, expressionRight)
                         }
@@ -198,7 +199,8 @@ class VarCouldBeVal(config: Config) :
                 }
 
                 is KtNameReferenceExpression -> {
-                    returnedExpression.mainReference.resolveToSymbol()?.let {
+                    @OptIn(KaExperimentalApi::class)
+                    returnedExpression.resolveSymbol()?.let {
                         escapeCandidates[it]?.forEach(declarationCandidates::remove)
                     }
                 }

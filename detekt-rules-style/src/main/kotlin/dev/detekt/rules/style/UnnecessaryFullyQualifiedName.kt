@@ -10,9 +10,12 @@ import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import dev.detekt.api.config
 import dev.detekt.psi.fullyQualifiedNameGlobToRegex
+import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
+import org.jetbrains.kotlin.analysis.api.KaImplementationDetail
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.components.KaScopeKind
+import org.jetbrains.kotlin.analysis.api.impl.base.references.KaBaseSimpleNameReference
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
@@ -23,7 +26,6 @@ import org.jetbrains.kotlin.analysis.api.symbols.KaConstructorSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaVariableSymbol
 import org.jetbrains.kotlin.analysis.api.types.symbol
-import org.jetbrains.kotlin.idea.references.mainReference
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtClassLiteralExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
@@ -120,7 +122,11 @@ class UnnecessaryFullyQualifiedName(config: Config) :
         if (!typeText.contains(".")) return
 
         analyze(type) {
-            val resolvedSymbol = type.referenceExpression?.mainReference?.resolveToSymbol() ?: return
+            @OptIn(KaImplementationDetail::class)
+            @Suppress("DEPRECATION")
+            val resolvedSymbol = (type.referenceExpression?.reference as? KaBaseSimpleNameReference)
+                ?.resolveToSymbol()
+                ?: return
             val candidate = resolvedSymbol.ignoredFqNameCandidate()
             if (candidate != null && ignoredFullyQualifiedNames.any { it.matches(candidate) }) return
             val packageFqName = resolvedSymbol.packageFqName() ?: return
@@ -218,7 +224,8 @@ class UnnecessaryFullyQualifiedName(config: Config) :
 
     private fun KaSession.isReceiverLocalVariableOrProperty(receiver: KtExpression): Boolean {
         val leftmost = leftmostReference(receiver) ?: return false
-        return leftmost.mainReference.resolveToSymbol() is KaVariableSymbol
+        @OptIn(KaExperimentalApi::class)
+        return leftmost.resolveSymbol() is KaVariableSymbol
     }
 
     private fun leftmostReference(expression: KtExpression): KtNameReferenceExpression? =
