@@ -219,7 +219,7 @@ class CliArgs {
         description = "Target version of the generated JVM bytecode that was generated during " +
             "compilation and is now being used for type resolution"
     )
-    var jvmTarget: JvmTarget = JvmTarget.JVM_17
+    var jvmTarget: JvmTarget = JvmTarget.DEFAULT
 
     @Parameter(
         names = ["--jdk-home"],

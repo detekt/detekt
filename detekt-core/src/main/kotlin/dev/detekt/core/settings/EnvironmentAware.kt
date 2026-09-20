@@ -75,7 +75,7 @@ internal class EnvironmentFacade(projectSpec: ProjectSpec, compilerSpec: Compile
 
             buildKtModuleProvider {
                 val targetPlatform =
-                    JvmPlatforms.jvmPlatformByTargetVersion(configuration.jvmTarget ?: JvmTarget.JVM_17)
+                    JvmPlatforms.jvmPlatformByTargetVersion(configuration.jvmTarget ?: JvmTarget.DEFAULT)
                 platform = targetPlatform
 
                 val jdk = configuration.jdkHome?.let { jdkHome ->

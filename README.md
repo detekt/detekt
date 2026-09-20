@@ -86,10 +86,10 @@ tasks.withType<dev.detekt.gradle.Detekt>().configureEach {
         sarif.required.set(true) // standardized SARIF format (https://sarifweb.azurewebsites.net/) to support integrations with GitHub Code Scanning
         markdown.required.set(true) // simple Markdown format
     }
-    jvmTarget.set("17")
+    jvmTarget.set("1.8")
 }
 tasks.withType<dev.detekt.gradle.DetektCreateBaselineTask>().configureEach {
-    jvmTarget.set("17")
+    jvmTarget.set("1.8")
 }
 ```
 
@@ -120,10 +120,10 @@ tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
         sarif.required.set(true) // standardized SARIF format (https://sarifweb.azurewebsites.net/) to support integrations with GitHub Code Scanning
         md.required.set(true) // simple Markdown format
     }
-    jvmTarget = "17"
+    jvmTarget = "1.8"
 }
 tasks.withType<io.gitlab.arturbosch.detekt.DetektCreateBaselineTask>().configureEach {
-    jvmTarget = "17"
+    jvmTarget = "1.8"
 }
 ```
 
