@@ -4,7 +4,10 @@ plugins {
 }
 
 dependencies {
+    api(libs.kotlin.analysisApiSurface)
     compileOnly(projects.detektApi)
+    implementation(libs.kotlin.analysisApiImplementation)
+    implementation(libs.kotlin.analysisApiIntellijApiSurfaceComponents)
 
     testImplementation(projects.detektApi)
     testImplementation(projects.detektTest)

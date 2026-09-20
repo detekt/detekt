@@ -4,8 +4,10 @@ plugins {
 }
 
 dependencies {
-    api(libs.kotlin.compiler)
-    compileOnly(projects.detektKotlinAnalysisApi)
+    implementation(libs.kotlin.analysisApiFirDiagnostics)
+    implementation(libs.kotlin.analysisApiImplementation)
+    api(libs.kotlin.analysisApiIntellijApiSurfaceComponents)
+    api(libs.kotlin.analysisApiSurface)
 
     testImplementation(libs.assertj.core)
     testImplementation(projects.detektTestJunit)

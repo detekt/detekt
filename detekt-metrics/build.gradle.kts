@@ -4,7 +4,9 @@ plugins {
 
 dependencies {
     api(projects.detektApi)
-    api(libs.kotlin.compiler)
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.assertj.core)
+    api(libs.kotlin.analysisApiSurface)
+    implementation(libs.kotlin.analysisApiImplementation)
+    api(libs.kotlin.analysisApiIntellijApiSurfaceComponents)
 }

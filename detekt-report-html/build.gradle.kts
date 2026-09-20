@@ -10,7 +10,7 @@ dependencies {
         exclude(group = "org.jetbrains.kotlin", module = "kotlin-stdlib")
     }
 
-    testImplementation(libs.kotlin.compiler)
+    testImplementation(libs.kotlin.analysisApiIntellijApiSurfaceComponents)
     testImplementation(projects.detektTest)
     testImplementation(projects.detektReportComplexity)
     testImplementation(projects.detektTestUtils)

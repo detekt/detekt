@@ -28,6 +28,8 @@ dependencies {
             attribute(Bundling.BUNDLING_ATTRIBUTE, named(Bundling.SHADOWED))
         }
     }
+    implementation(libs.kotlin.analysisApiIntellijApiSurfaceComponents)
+    implementation(libs.kotlin.analysisApiIntellijImplementationComponents)
     testImplementation(projects.detektApi)
     testRuntimeOnly(projects.detektPsiUtils)
     testImplementation(projects.detektTest)
