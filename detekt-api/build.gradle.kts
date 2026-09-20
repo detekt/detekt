@@ -10,14 +10,16 @@ plugins {
 }
 
 dependencies {
-    api(libs.kotlin.compiler)
-    compileOnlyApi(projects.detektKotlinAnalysisApi)
+    api(libs.kotlin.analysisApiSurface)
+    api(libs.kotlin.analysisApiIntellijApiSurfaceComponents)
+
+    implementation(libs.kotlin.analysisApiImplementation)
 
     testImplementation(projects.detektTest)
     testImplementation(projects.detektTestUtils)
     testImplementation(libs.assertj.core)
 
-    testFixturesApi(libs.kotlin.compiler)
+    testFixturesApi(libs.kotlin.analysisApiSurface)
     testFixturesImplementation(projects.detektTestUtils)
 }
 

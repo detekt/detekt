@@ -14,9 +14,10 @@ val generatedDeprecationsFiles = configurations.resolvable("generatedDeprecation
 dependencies {
     api(projects.detektApi)
     api(projects.detektTooling)
-    api(libs.kotlin.compiler)
-    implementation(projects.detektKotlinAnalysisApi)
-    implementation(projects.detektKotlinAnalysisApiStandalone)
+    api(libs.kotlin.analysisApiImplementation)
+    implementation(libs.kotlin.analysisApiIntellijApiSurfaceComponents)
+    api(libs.kotlin.analysisApiSurface)
+    implementation(libs.kotlin.analysisApiStandaloneSurface)
     implementation(libs.snakeyaml.engine)
     implementation(libs.kotlin.reflect)
     implementation(projects.detektParser)

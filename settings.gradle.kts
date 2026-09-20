@@ -93,6 +93,7 @@ dependencyResolutionManagement {
             }
             filter {
                 includeModuleByRegex("org.jetbrains.kotlin", ".*-for-ide")
+                includeModuleByRegex("org.jetbrains.kotlin", "kotlin-analysis-api-.*")
             }
         }
         exclusiveContent {

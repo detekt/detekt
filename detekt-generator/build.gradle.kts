@@ -20,10 +20,11 @@ val generatedDocumentationFiles = configurations.resolvable("generatedDocumentat
 }
 
 dependencies {
-    implementation(libs.kotlin.compiler)
     implementation(projects.detektApi)
-    implementation(projects.detektKotlinAnalysisApi)
-    implementation(projects.detektKotlinAnalysisApiStandalone)
+    implementation(libs.kotlin.analysisApiIntellijApiSurfaceComponents)
+    implementation(libs.kotlin.analysisApiStandaloneSurface)
+    runtimeOnly(libs.kotlin.analysisApiStandaloneImplementation)
+    implementation(libs.kotlin.analysisApiSurface)
     detektCli(projects.detektCli)
     implementation(projects.detektUtils)
     implementation(libs.jcommander)
