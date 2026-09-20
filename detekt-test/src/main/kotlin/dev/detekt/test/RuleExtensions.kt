@@ -95,7 +95,7 @@ private fun KtElement.isSuppressedBy(id: RuleName): Boolean {
     return allAnnotationEntries()
         .filter { it.typeReference?.text == "Suppress" }
         .flatMap { it.valueArguments }
-        .mapNotNull { it.getArgumentExpression()?.text }
+        .mapNotNull { it.getArgumentExpression()?.text.toString() }
         .map { it.replace("\"", "") }
         .any { it == id.value }
 }

@@ -28,7 +28,7 @@ fun KtElement.isSuppressedBy(id: String, aliases: Set<String>, ruleSetId: RuleSe
     return allAnnotationEntries()
         .filter { it.typeReference?.text in suppressionAnnotations }
         .flatMap { it.valueArguments }
-        .mapNotNull { it.getArgumentExpression()?.text }
+        .mapNotNull { it.getArgumentExpression()?.text.toString() }
         .map { it.replace(detektSuppressionPrefixRegex, "") }
         .map { it.replace(QUOTES, "") }
         .any { it in acceptedSuppressionIds }
